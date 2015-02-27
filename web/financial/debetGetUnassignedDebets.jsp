@@ -9,8 +9,8 @@
 <%!
     //--- GROUP DEBETS ----------------------------------------------------------------------------
     // group type by type (prestation type)
-    private Hashtable groupDebets(Vector vDebets){
-	    Hashtable groupedDebets = new Hashtable();
+    private SortedMap groupDebets(Vector vDebets){
+	    SortedMap groupedDebets = new TreeMap();
 
         if(vDebets!=null){
             String sDebetUID;
@@ -23,14 +23,14 @@
                     debet = Debet.get(sDebetUID);
                    
                     if(debet!=null){
-                        String sDebetType = debet.getPrestation().getType();
+                        String sDebetUid = debet.getPrestation().getDescription()+"."+debet.getPrestation().getUid();
                         
-                        Vector oneGroup = (Vector)groupedDebets.get(sDebetType);
+                        Vector oneGroup = (Vector)groupedDebets.get(sDebetUid);
                         if(oneGroup==null){
                         	oneGroup = new Vector();
                         }
                     	oneGroup.add(debet);
-                    	groupedDebets.put(sDebetType,oneGroup);                        
+                    	groupedDebets.put(sDebetUid,oneGroup);                        
                     }
                 }
             }
@@ -44,7 +44,7 @@
     // These are the vectors containing debets of the same prestation-type.
     // Only the most recent debet is initially shown.
     // On click the other debets of that group will be shown. 
-    private String debetsToHtml(Hashtable hDebetGroups, String sClass, String sWebLanguage, String sGroupIdx){
+    private String debetsToHtml(SortedMap hDebetGroups, String sClass, String sWebLanguage, String sGroupIdx){
         String sHtml = "", sJS = "";
 
         if(hDebetGroups!=null){
@@ -113,14 +113,14 @@
 	                
 	            	// main-row for group : info about 'mostRecentDebet' or summed info 
 	            	sHtml+= "<tr class='list1' "+sOnClick+">"+
-	            	         "<td width='17'>"+sIcons+"</td>"+
-	            	         "<td>"+ScreenHelper.getSQLDate(mostRecentDebet.getDate())+"</td>"+
-	            	         "<td>"+HTMLEntities.htmlentities(sEncounterName)+" ("+MedwanQuery.getInstance().getUser(mostRecentDebet.getUpdateUser()).getPersonVO().getFullName()+")</td>"+
-	                         "<td>"+HTMLEntities.htmlentities(sPrestationDescription)+" ("+(String)groupInfo.get("quantity")+"x)</td>"+
-	                         "<td style='text-align:right' "+(checkString(mostRecentDebet.getExtraInsurarUid2()).length()>0?"style='text-decoration:line-through'":"")+">"+(String)groupInfo.get("amount")+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"+
-	                         "<td style='text-align:right' >"+(String)groupInfo.get("insurarAmount")+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"+
-	                         "<td style='text-align:right' >"+(String)groupInfo.get("extraInsurarAmount")+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"+
-	                         "<td>"+(String)groupInfo.get("credited")+"</td>"+
+	            	         "<td "+(oneGroup.size()>1?"":" style='cursor:pointer'")+">"+sIcons+"</td>"+
+	            	         "<td "+(oneGroup.size()>1?"":" style='cursor:pointer'")+">"+(oneGroup.size()>1?"":ScreenHelper.getSQLDate(mostRecentDebet.getDate()))+"</td>"+
+	            	         "<td "+(oneGroup.size()>1?"":" style='cursor:pointer'")+">"+HTMLEntities.htmlentities(sEncounterName)+" ("+MedwanQuery.getInstance().getUser(mostRecentDebet.getUpdateUser()).getPersonVO().getFullName()+")</td>"+
+	                         "<td "+(oneGroup.size()>1?"":" style='cursor:pointer'")+">"+HTMLEntities.htmlentities(sPrestationDescription)+" ("+(String)groupInfo.get("quantity")+"x)</td>"+
+	                         "<td "+(oneGroup.size()>1?"":" style='cursor:pointer'")+" "+(checkString(mostRecentDebet.getExtraInsurarUid2()).length()>0?"style='text-decoration:line-through'":"")+">"+(String)groupInfo.get("amount")+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"+
+	                         "<td "+(oneGroup.size()>1?"":" style='cursor:pointer'")+">"+(String)groupInfo.get("insurarAmount")+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"+
+	                         "<td "+(oneGroup.size()>1?"":" style='cursor:pointer'")+">"+(String)groupInfo.get("extraInsurarAmount")+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"+
+	                         "<td "+(oneGroup.size()>1?"":" style='cursor:pointer'")+">"+(String)groupInfo.get("credited")+"</td>"+
 	                        "</tr>";
 
 	                // hidden rows for group
@@ -157,7 +157,9 @@
     		credited+= debet.getCredited(); 
     		amount+= debet.getAmount(); 
     		insurarAmount+= debet.getInsurarAmount(); 
-    		extraInsurarAmount+= debet.getExtraInsurarAmount(); 
+            if(debet.getCredited() == 0){
+            	extraInsurarAmount+= debet.getExtraInsurarAmount(); 
+            }
     	}
 
     	// put sums in hash
@@ -166,12 +168,7 @@
     	info.put("insurarAmount",Double.toString(insurarAmount));
     	info.put("extraInsurarAmount",Double.toString(extraInsurarAmount));
     	
-    	if(credited > 0){
-    	    info.put("credited",getTran("web.occup","medwan.common.yes",sWebLanguage));
-    	}
-    	else{
-    	    info.put("credited",""); // empty string
-    	}
+   	    info.put("credited",""); // empty string
     	
     	return info;
     }
@@ -185,28 +182,40 @@
 
     	// column-width row
     	sHtml+= "<tr>"+
-                 "<td width='17'></td>"+
-                 "<td width='80'></td>"+
-                 "<td width='*'></td>"+
-                 "<td width='100'></td>"+
-                 "<td width='80'></td>"+
-                 "<td width='100'></td>"+
-                 "<td width='100'></td>"+
-                 "<td width='80'></td>"+
+                 "<td width='4%'></td>"+
+                 "<td width='8%'></td>"+
+                 "<td width='40%'></td>"+
+                 "<td width='20%'></td>"+
+                 "<td width='7%'></td>"+
+                 "<td width='7%'></td>"+
+                 "<td width='7%'></td>"+
+                 "<td width='7%'></td>"+
                 "</tr>";
                         
         if(debetGroup!=null){
+        	//Sort the debetgroup
+        	SortedMap sortedGroup = new TreeMap();
+            for(int i=0; i<debetGroup.size(); i++){
+            	Debet debet = (Debet)debetGroup.elementAt(i);
+                if(debet!=null){
+                	sortedGroup.put(debet.getDate().getTime()+"="+debet.getUid(),debet);
+                }
+            }
+        	
             sHtml+= "<tbody class='hand'>";
             
             Debet debet;
             Encounter encounter = null;
             Prestation prestation = null;
             String sEncounterName, sPrestationDescription, sDebetUID, sPatientName, sCredited;
-            Hashtable hSorted = new Hashtable();
+            SortedMap hSorted = new TreeMap();
 
-            for(int i=0; i<debetGroup.size(); i++){
-            	debet = (Debet)debetGroup.elementAt(i);
+            Iterator groupDebets = sortedGroup.keySet().iterator();
+            int i= 0;
+            while(groupDebets.hasNext()){
+            	debet = (Debet)sortedGroup.get(groupDebets.next());
                 if(debet!=null){
+                	i++;
 	           	    // encounter and patient
 	                sEncounterName = "";
 	                sPatientName = "";
@@ -226,29 +235,31 @@
 	                        sPrestationDescription = checkString(prestation.getDescription());
 	                    }
 	                }
-	
+
+	                double dExtraInsurarAmount=debet.getExtraInsurarAmount();
+
 	                // credited ?
 	                sCredited = "";
 	                if(debet.getCredited() > 0){
 	                    sCredited = getTran("web.occup","medwan.common.yes",sWebLanguage);
+	                    dExtraInsurarAmount=0;
 	                }
 	                
 	                // no TRs
 	                hSorted.put(sPatientName.toUpperCase()+"="+debet.getDate().getTime()+"="+debet.getUid()," onclick=\"setDebet('"+debet.getUid()+"','"+groupIdx+"');\">"
-	                        +"<td>&nbsp;<i>"+(i+1)+"</i></td>"
+	                        +"<td>&nbsp;<i>"+i+"</i></td>"
 	                        +"<td style='padding-left:5px;'>"+ScreenHelper.getSQLDate(debet.getDate())+"</td>"
 	                        +"<td style='padding-left:5px;'>"+HTMLEntities.htmlentities(sEncounterName)+" ("+MedwanQuery.getInstance().getUser(debet.getUpdateUser()).getPersonVO().getFullName()+")</td>"
-	                        +"<td style='padding-left:7px;'>"+HTMLEntities.htmlentities(sPrestationDescription)+" ("+debet.getQuantity()+"x)</td>"
-	                        +"<td style='text-align:right' "+(checkString(debet.getExtraInsurarUid2()).length()>0?"style='text-decoration:line-through'":"")+">"+debet.getAmount()+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"
-	                        +"<td style='text-align:right'>"+debet.getInsurarAmount()+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"
-	                        +"<td style='text-align:right'>"+debet.getExtraInsurarAmount()+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"
-	                        +"<td>"+sCredited+"</td>");
+	                        +"<td style='padding-left:5px;'>"+HTMLEntities.htmlentities(sPrestationDescription)+" ("+debet.getQuantity()+"x)</td>"
+	                        +"<td style='padding-left:5px;' "+(checkString(debet.getExtraInsurarUid2()).length()>0?"style='text-decoration:line-through'":"")+">"+debet.getAmount()+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"
+	                        +"<td style='padding-left:5px;'>"+debet.getInsurarAmount()+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"
+	                        +"<td style='padding-left:5px;'>"+dExtraInsurarAmount+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"
+	                        +"<td style='padding-left:5px;'>"+sCredited+"</td>");
                 }
             }
 
             // sort and reverse order
             Vector keys = new Vector(hSorted.keySet());
-            Collections.sort(keys);
             Collections.reverse(keys);
             Iterator it = keys.iterator();
 
@@ -284,14 +295,14 @@
 %>    
 <table width="100%" cellspacing="0" cellpadding="0" id="debetsTable" style="padding:1px;">
     <tr class="admin">
-        <td width="17">&nbsp;</td>
-        <td width="80"><%=HTMLEntities.htmlentities(getTran("web","date",sWebLanguage))%></td>
-        <td width="*"><%=HTMLEntities.htmlentities(getTran("web.finance","encounter",sWebLanguage))%></td>
-        <td width="100"><%=HTMLEntities.htmlentities(getTran("web","prestation",sWebLanguage))%></td>
-        <td width="80"><%=HTMLEntities.htmlentities(getTran("web","amount",sWebLanguage))%></td>
-        <td width="100"><%=HTMLEntities.htmlentities(getTranNoLink("web.finance","amount.insurar",sWebLanguage))%></td>
-        <td width="100"><%=HTMLEntities.htmlentities(getTranNoLink("web.finance","amount.complementaryinsurar",sWebLanguage))%></td>
-        <td width="80"><%=HTMLEntities.htmlentities(getTran("web","canceled",sWebLanguage))%></td>
+        <td width="4%">&nbsp;</td>
+        <td width="8%"><%=HTMLEntities.htmlentities(getTran("web","date",sWebLanguage))%></td>
+        <td width="40%"><%=HTMLEntities.htmlentities(getTran("web.finance","encounter",sWebLanguage))%></td>
+        <td width="20%"><%=HTMLEntities.htmlentities(getTran("web","prestation",sWebLanguage))%></td>
+        <td width="7%"><%=HTMLEntities.htmlentities(getTran("web","amount",sWebLanguage))%></td>
+        <td width="7%"><%=HTMLEntities.htmlentities(getTranNoLink("web.finance","amount.insurar",sWebLanguage))%></td>
+        <td width="7%"><%=HTMLEntities.htmlentities(getTranNoLink("web.finance","amount.complementaryinsurar",sWebLanguage))%></td>
+        <td width="7%"><%=HTMLEntities.htmlentities(getTran("web","canceled",sWebLanguage))%></td>
     </tr>
     
 	<%		

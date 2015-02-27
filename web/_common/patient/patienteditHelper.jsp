@@ -21,7 +21,7 @@
             }
 
             if(bUpperCase){
-                sReturn+=" style='text-transform=uppercase' ";
+                sReturn+=" style='text-transform: uppercase' ";
             }
             sReturn += ">";
         }

@@ -19,13 +19,13 @@
                 
                 if(sField.equals("findFirstname") || (!sFirstname.equals("") && sName.equals(""))){
                     out.write("<li>");
-                     out.write(HTMLEntities.htmlentities("<b>"+person.firstname+"</b> "+person.lastname));
+                     out.write(HTMLEntities.htmlentities(person.lastname+"<b> "+person.firstname+"</b> °"+person.dateOfBirth));
                      out.write("<span style='display:none'>"+person.personid+"-idcache</span>");
                     out.write("</li>");
                 }
                 else if(sField.equals("findName") || (!sName.equals("") && sFirstname.equals(""))){
                     out.write("<li>");
-                     out.write(HTMLEntities.htmlentities("<b>"+person.lastname+"</b> "+person.firstname));
+                     out.write(HTMLEntities.htmlentities("<b>"+person.lastname+"</b> "+person.firstname+" °"+person.dateOfBirth));
                      out.write("<span style='display:none'>"+person.personid+"-idcache</span>");
                     out.write("</li>");
                 }
@@ -34,7 +34,6 @@
     %>
 </ul>
 <%
-
     boolean hasMoreResults = (lResults.size() >= iMaxRows);
     if(hasMoreResults){
         out.write("<ul id='autocompletion'><li>...</li></ul>");

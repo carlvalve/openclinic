@@ -90,11 +90,12 @@
         </table>
     </div>
     <div id="messages" class="messagesnofields">
-        GA Open Source Edition by:        <% if (MedwanQuery.getInstance().getConfigString("mxsref", "rw").equalsIgnoreCase("rw")) { %>
-        <img src="_img/flags/rwandaflag.jpg" height="15px" width="30px" alt="Rwanda"/>
-        <a href="http://mxs.rwandamed.org" target="_new"><b>MXS Central Africa SARL</b></a>
-        <BR/> PO Box 3242 - Kigali Rwanda Tel +250 07884 32 435 -
-        <a href="mailto:mxs@rwandamed.org">mxs@rwandamed.org</a>
+        <%=MedwanQuery.getInstance().getConfigString("edition", "GA Open Source Edition") %> by:
+        <% if (MedwanQuery.getInstance().getConfigString("mxsref", "rw").equalsIgnoreCase("rw")) { %>
+	        <img src="_img/flags/rwandaflag.jpg" height="15px" width="30px" alt="Rwanda"/>
+	        <a href="http://mxs.rwandamed.org" target="_new"><b>MXS Central Africa SARL</b></a>
+	        <BR/> PO Box 3242 - Kigali Rwanda Tel +250 07884 32 435 -
+	        <a href="mailto:mxs@rwandamed.org">mxs@rwandamed.org</a>
         <% } else if (MedwanQuery.getInstance().getConfigString("mxsref", "rw").equalsIgnoreCase("bi")){ 
         	if(MedwanQuery.getInstance().getConfigString("projectref","").equalsIgnoreCase("paiss")){
 	        %>
@@ -112,16 +113,27 @@
 	        <% 
         	}
         } else if (MedwanQuery.getInstance().getConfigString("mxsref", "rw").equalsIgnoreCase("ml")) { %>
-        <img src="_img/flags/maliflag.jpg" height="15px" width="30px" alt="Mali"/>
-        <a href="http://www.sante.gov.ml/" target="_new"><b>ANTIM</b></a> et <a href="http://www.mxs.be" target="_new"><b>MXS</b></a>
-        <BR/> Hamdalaye ACI 2000, Rue 340, Porte 541, Bamako - Mali<br/>
-        <a href="mailto:info@openit-burundi.net">ousmanely@sante.gov.ml</a>
-        <% } else { %>
-        <img src="_img/flags/belgiumflag.jpg" height="10px" width="20px" alt="Belgium"/>
-        <a href="http://www.mxs.be" target="_new"><b>MXS SA/NV</b></a>
-        <BR/> Pastoriestraat 58, 3370 Boutersem Belgium Tel: +32 16 721047 -
-        <a href="mailto:mxs@rwandamed.org">info@mxs.be</a>
-        <% } %>
+	        <img src="_img/flags/maliflag.jpg" height="15px" width="30px" alt="Mali"/>
+	        <a href="http://www.sante.gov.ml/" target="_new"><b>ANTIM</b></a> et <a href="http://www.mxs.be" target="_new"><b>MXS</b></a>
+	        <BR/> Hamdalaye ACI 2000, Rue 340, Porte 541, Bamako - Mali<br/>
+	        <a href="mailto:info@openit-burundi.net">ousmanely@sante.gov.ml</a>
+        <% } else {         	
+	        	if(MedwanQuery.getInstance().getConfigString("projectref","").equalsIgnoreCase("vub")){
+		        %>
+			        <img src="_img/flags/vub.png" height="20px" alt="Vrije Universiteit Brussel"/>
+			        <a href="http://bisi.vub.ac.be" target="_new"><b>VUB - ICT4Development</b></a>
+			        <BR/>Laarbeeklaan 103, B-1090 Brussel, +32(2)477.44.30 <a href="mailto:info@ict4development.org">info@ict4development.org</a>
+		        <% 
+	        	}
+	        	else {
+	        		%>
+			        <img src="_img/flags/belgiumflag.jpg" height="10px" width="20px" alt="Belgium"/>
+			        <a href="http://www.mxs.be" target="_new"><b>MXS SA/NV</b></a>
+			        <BR/> Pastoriestraat 58, 3370 Boutersem Belgium Tel: +32 16 721047 -
+			        <a href="mailto:mxs@rwandamed.org">info@mxs.be</a>
+			        <%
+	        	}
+		 } %>
     </div>
 </div>
 </body>

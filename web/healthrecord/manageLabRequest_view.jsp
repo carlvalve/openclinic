@@ -129,7 +129,6 @@
             	else if(analysis.getEditor().equalsIgnoreCase("antibiogram")||analysis.getEditor().equalsIgnoreCase("antibiogramnew")){
             		sTmpResultValue="";
                 	Map ab = RequestedLabAnalysis.getAntibiogrammes(labAnalysis.getServerId()+"."+labAnalysis.getTransactionId()+"."+labAnalysis.getAnalysisCode());
-                	System.out.println("map:"+ab.size());
                 	if(ab.get("germ1")!=null && !(ab.get("germ1")+"").equalsIgnoreCase("")){
                 		sTmpResultValue+=ab.get("germ1");
                 	}
