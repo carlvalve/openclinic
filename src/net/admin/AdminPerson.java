@@ -130,6 +130,20 @@ public class AdminPerson extends OC_Object{
     }
 
     //--- GET ADMIN PERSON ------------------------------------------------------------------------
+    public static AdminPerson getAdminHistoryPerson (String sPersonID, java.util.Date updatetime){
+        AdminPerson adminPerson = new AdminPerson();
+        try{
+	        Connection conn = MedwanQuery.getInstance().getAdminConnection();
+	        adminPerson.initializeHistory(conn,sPersonID,updatetime);
+	        conn.close();
+        }
+        catch(Exception e){
+        	e.printStackTrace();
+        }
+        return adminPerson;
+    }
+
+    //--- GET ADMIN PERSON ------------------------------------------------------------------------
     public static AdminPerson getAdminPerson(String sPersonID){
     	AdminPerson adminPerson=null;
     	
@@ -1993,7 +2007,7 @@ public class AdminPerson extends OC_Object{
            List lResultList = new ArrayList();
 
 
-           String sSQLSelect = " SELECT "+MedwanQuery.getInstance().topFunction(""+iMaxRows)+" searchname,personid, lastname, firstname";
+           String sSQLSelect = " SELECT "+MedwanQuery.getInstance().topFunction(""+iMaxRows)+" searchname,personid, lastname, firstname,dateofbirth";
            String sSQLFrom   = " FROM AdminView a";
            String sSQLWhere  = " 1=1 AND";
 
@@ -2033,6 +2047,8 @@ public class AdminPerson extends OC_Object{
                        tempPat.personid = ScreenHelper.checkString(rs.getString("personid"));
                        tempPat.lastname = ScreenHelper.checkString(rs.getString("lastname"));
                        tempPat.firstname = ScreenHelper.checkString(rs.getString("firstname"));
+                       Date d = rs.getDate("dateofbirth");
+                       tempPat.dateOfBirth = d!=null?ScreenHelper.formatDate(d):"";
                        lResultList.add(tempPat);
                    }
 

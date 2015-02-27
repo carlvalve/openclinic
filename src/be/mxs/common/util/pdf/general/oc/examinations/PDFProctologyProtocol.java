@@ -123,7 +123,6 @@ public class PDFProctologyProtocol extends PDFGeneralBasic {
 
     //--- DRAW DOT --------------------------------------------------------------------------------
     private void drawDot(Graphics2D graphics, double x, double y, Color color, int size){
-    	System.out.println("DRAWDOT : x="+x+", y="+y+", s="+size); ///////////////////////////////////////////
         graphics.setColor(color);
         graphics.fillOval(new Double(x).intValue(),new Double(y).intValue(),size,size);
     }
