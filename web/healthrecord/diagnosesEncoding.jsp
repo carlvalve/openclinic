@@ -48,7 +48,6 @@
     	long period=days*24;
     	period = period*3600*1000;
     	String sDateBegin=ScreenHelper.getSQLDate(new java.util.Date(new java.util.Date().getTime()-period));
-    	System.out.println("start="+sDateBegin);
     	Vector debets = Debet.getPatientDebetPrestations(MedwanQuery.getInstance().getConfigString("showRecentEchographies",""),activePatient.personid, sDateBegin, "", "", "");
 		if(debets.size()>0){
 	    	for(int n=0;n<debets.size();n++){

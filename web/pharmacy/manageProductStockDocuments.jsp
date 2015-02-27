@@ -194,7 +194,6 @@
 						}
 						else{
 							sDestination = "";
-							System.out.println("3.4: "+document.getDestinationuid());
 							
 						}
 						

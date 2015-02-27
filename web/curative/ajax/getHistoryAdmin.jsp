@@ -20,7 +20,7 @@
 		if(i<iNb){
             t = rs.getTimestamp("updatetime");
             u = User.getUserName(rs.getString("updateuserid"));
-        	s+= "\n<li style=\"width:100%;\" "+((i%2==0)?"class='odd'":"")+"><div><a href='javascript:openPopup(\"/_common/patient/patientdataHistoryPopup.jsp&ts="+getTs()+"&updatetime="+new SimpleDateFormat("yyyyMMddHHmmssSSS").format(t)+"&personid="+activePatient.personid+"\");'>"+ dateformat.format(t)+"</a> "+getTranNoLink("web","by",sWebLanguage)+" "+u.get("firstname")+" "+u.get("lastname")+"</div></li>";
+        	s+= "\n<li style=\"width:100%;\" "+((i%2==0)?"class='odd'":"")+"><div><a href='javascript:openPopup(\"/_common/patient/patientdataHistoryPopup.jsp&ts="+getTs()+"&updatetime="+new SimpleDateFormat("yyyyMMddHHmmssSSS").format(t)+"&personid="+activePatient.personid+"\");'>"+ ScreenHelper.formatDate(t)+"</a> "+getTranNoLink("web","by",sWebLanguage)+" "+u.get("firstname")+" "+u.get("lastname")+"</div></li>";
 		}
 		i++;
 	}

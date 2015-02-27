@@ -1,8 +1,10 @@
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
 <%
+try{
 	String personid = request.getParameter("personid");
 	java.util.Date updatetime = new SimpleDateFormat("yyyyMMddHHmmssSSS").parse(request.getParameter("updatetime"));
+	System.out.println("updatetime="+updatetime);
 	AdminPerson activeHistoryPatient = AdminPerson.getAdminHistoryPerson(personid,updatetime);
 
 	String sGender = "&nbsp;", sComment = "&nbsp;", sNativeCountry = "&nbsp;", sLanguage = "&nbsp;", sNatreg = "&nbsp;"
@@ -71,16 +73,15 @@
 <%-- MAIN TABLE ----------------------------------------------------------------------------------%>
 <table width='100%' cellspacing="1" class="list" style="border-top:none;">
     <%=(
-        setRow("Web","nativecountry",sNativeCountry,sWebLanguage)
+        setRow("Web","date",ScreenHelper.formatDate(updatetime),sWebLanguage)
+        +setRow("Web","nativecountry",sNativeCountry,sWebLanguage)
         +setRow("Web","Language",sLanguage,sWebLanguage)
         +setRow("Web","Gender",sGender,sWebLanguage)
         +setRow("Web","natreg",sNatreg,sWebLanguage)
-        +setRow("Web","tracnetid",sTracnetID,sWebLanguage)
         +setRow("Web","treating-physician",sTreatingPhysician,sWebLanguage)
         +setRow("Web","civilstatus",sCivilStatus,sWebLanguage)
         +setRow("Web","comment3",sComment3,sWebLanguage)
         +setRow("Web","comment",sComment,sWebLanguage)
-        +(activeHistoryPatient.isDead()!=null?setRow("Web","deathcertificateon",sDeathCertificateOn,sWebLanguage)+setRow("Web","deathcertificateto",sDeathCertificateTo,sWebLanguage):"")
         )
     %>
     <tr height='1'><td width='<%=sTDAdminWidth%>'/></tr>
@@ -101,4 +102,8 @@
 <%=ScreenHelper.alignButtonsStop()%>
 <%
     }
+}
+catch(Exception e){
+	e.printStackTrace();
+}
 %>

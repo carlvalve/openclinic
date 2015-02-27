@@ -6,12 +6,25 @@
 <script src='<%=sCONTEXTPATH%>/_common/_script/prototype.js'></script>
 
 <%
-	String sEditDebetUID = checkString(request.getParameter("EditDebetUID"));
+String sEditDebetUID = checkString(request.getParameter("EditDebetUID")),
+sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
 
     String sFindDateBegin = checkString(request.getParameter("FindDateBegin")),
            sFindDateEnd   = checkString(request.getParameter("FindDateEnd")),
            sFindAmountMin = checkString(request.getParameter("FindAmountMin")),
            sFindAmountMax = checkString(request.getParameter("FindAmountMax"));
+
+    /// DEBUG /////////////////////////////////////////////////////////////////////////////////////
+    if(Debug.enabled){
+    	Debug.println("\n*********************** financial/debetEdit.jsp **********************");
+    	Debug.println("sEditDebetUID  : "+sEditDebetUID);
+    	Debug.println("sEditGroupIdx  : "+sEditGroupIdx);  // Stijn   	
+    	Debug.println("sFindDateBegin : "+sFindDateBegin);
+    	Debug.println("sFindDateEnd   : "+sFindDateEnd);
+    	Debug.println("sFindAmountMin : "+sFindAmountMin);
+    	Debug.println("sFindAmountMax : "+sFindAmountMax+"\n");
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////
 
     String sEditEncounterName = "",sEditDebetServiceUid="",sEditDebetServiceName="",sDefaultServiceUid="",sDefaultServiceName="";
     Debet debet;
@@ -279,28 +292,35 @@
         </tr>
         <tr><td colspan='2' class='admin2' id='prestationcontent'>
         <%
-        	if(sEditDebetUID.length() > 0 && debet!=null && debet.getPrestation()!=null){
-        		String serviceName="";
-        		Service service = Service.getService(debet.getServiceUid());
-        		if(service!=null){
-        			serviceName=service.getLabel(sWebLanguage);
-        		}
-                String prestationcontent ="<table width='100%' id='mytable'>";
-                prestationcontent+="<tr><td><b>"+getTran("web","prestation",sWebLanguage)+"</b></td>"+
-                "<td><b>"+getTran("web.finance","amount.patient",sWebLanguage)+"</b></td>"+
-                "<td><b>"+getTran("web.finance","amount.insurar",sWebLanguage)+"</b></td>"+
-                "<td><b>"+getTranNoLink("web.finance","amount.complementaryinsurar",sWebLanguage)+"</b></td>"+
-                "<td><b>"+getTran("web","service",sWebLanguage)+"</b></td>"+
-                "</tr>";
-                prestationcontent+="<td><input type='hidden' name='PPC_"+debet.getPrestationUid()+"'/>"+debet.getPrestation().getCode()+": "+debet.getPrestation().getDescription()+"</td>";
-                prestationcontent+="<td "+(debet.getExtraInsurarUid2()!=null && debet.getExtraInsurarUid2().length()>0?"class='strikeonly'":"")+"><input type='hidden' name='PPP_"+debet.getPrestationUid()+"' value='"+debet.getAmount()+"'/>"+debet.getAmount()+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>";
-                prestationcontent+="<td><input type='hidden' name='PPI_"+debet.getPrestationUid()+"' value='"+debet.getInsurarAmount()+"'/>"+debet.getInsurarAmount()+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>";
-    	        prestationcontent+="<td><input type='hidden' name='PPE_"+debet.getPrestationUid()+"' value='"+debet.getExtraInsurarAmount()+"'/>"+debet.getExtraInsurarAmount()+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>";
-    	        prestationcontent+="<td>"+serviceName+"</td>";
-                prestationcontent+="</tr>";
-                prestationcontent+="</table>";
-       			out.print(prestationcontent);
-        	}
+	    	if(sEditDebetUID.length() > 0 && debet!=null && debet.getPrestation()!=null){
+	    		// Stijn : updated whole paragraph below (contained mixed-up html)
+	    		// Stijn : BUT I suppose you can just leave this static part out,
+	    		// Stijn : these data are loaded by ajax at the end of the page
+	    		out.print("<table class='list' width='100%' cellpadding='1' cellspacing='0'>");
+	    		
+	    		// header
+	    	    out.print("<tr class='admin'>"+
+	                       "<td width='20%'><b>"+getTran("web","prestation",sWebLanguage)+"</b></td>"+
+					       "<td width='15%'><b>"+getTran("web.finance","amount.patient",sWebLanguage)+"</b></td>"+
+					       "<td><b>"+getTran("web.finance","amount.insurar",sWebLanguage)+"</b></td>"+
+					       "<td><b>"+getTranNoLink("web.finance","amount.complementaryinsurar",sWebLanguage)+"</b></td>"+
+	                      "</tr>");
+	    		
+	    		// data
+	    		out.print("<tr class='list1'>"+
+	    		           "<td "+(debet.getExtraInsurarUid2()!=null && debet.getExtraInsurarUid2().length()>0?"class='strikeonly'":"")+">"+debet.getPrestation().getCode()+"</td>"+
+	    		           "<td>"+debet.getAmount()+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"+
+	    		           "<td>"+debet.getInsurarAmount()+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"+
+	    		           "<td>"+debet.getExtraInsurarAmount()+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"+
+	                      "</tr>");
+	    				
+	            out.print("</table>");
+	                       
+				out.print("<input type='hidden' name='PPC_"+debet.getPrestationUid()+"' value='"+debet.getPrestation().getCode()+"'/>"+
+				          "<input type='hidden' name='PPP_"+debet.getPrestationUid()+"' value='"+debet.getAmount()+"'/>"+
+	                      "<input type='hidden' name='PPI_"+debet.getPrestationUid()+"' value='"+debet.getInsurarAmount()+"'/>"+
+		                  "<input type='hidden' name='PPE_"+debet.getPrestationUid()+"' value='"+debet.getExtraInsurarAmount()+"'/>");
+	    	}
         %>
         </td></tr>
         <tr>
@@ -428,6 +448,7 @@
     <%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%>.
     <div id="divMessage" name="divMessage"></div>
     <input type='hidden' id="EditDebetUID" name='EditDebetUID' value='<%=sEditDebetUID%>'>
+    <input type='hidden' id="EditGroupIdx" name='EditGroupIdx' value='<%=sEditGroupIdx%>'> <%-- // Stijn --%>
     <input type='hidden' id="prestationids" name="prestationids" value=""/>
 </form>
 <script>
@@ -842,6 +863,7 @@
 
   function doNew(){
     EditForm.EditDebetUID.value = "";
+    EditForm.EditGroupIdx.value = ""; // Stijn : whole function
     EditForm.EditPrestationUID.value = "";
     EditForm.EditPrestationGroup.selectedIndex=-1;
     EditForm.EditPrestationName.selectedIndex = -1;
@@ -866,8 +888,9 @@
     checkQuickInvoice();
   }
 
-  function setDebet(sUid){
+  function setDebet(sUid,groupIdx){
     EditForm.EditDebetUID.value = sUid;
+    EditForm.EditGroupIdx.value = groupIdx; // Stijn : extra field which specifies debet to open after click on it which invokes a submit
     EditForm.submit();
   }
 
@@ -911,7 +934,8 @@
     var params = 'FindDateBegin=' + EditForm.FindDateBegin.value
                 +"&FindDateEnd="+EditForm.FindDateEnd.value
                 +"&FindAmountMin="+EditForm.FindAmountMin.value
-                +"&FindAmountMax="+EditForm.FindAmountMax.value;
+                "&FindAmountMax="+EditForm.FindAmountMax.value+
+                "&GroupIdx="+EditForm.EditGroupIdx.value; // Stijn
     var today = new Date();
     var url= '<c:url value="/financial/debetGetUnassignedDebets.jsp"/>?ts='+today;
 	new Ajax.Request(url,{
@@ -921,6 +945,24 @@
         $('divUnassignedDebets').innerHTML=resp.responseText;
       }
 	});
+  }
+
+  <%-- TOGGLE DEBET GROUP --%> // Stijn : whole function
+  function toggleDebetGroup(groupIdx){
+	var groupTr = document.getElementById("groupTable_"+groupIdx);
+	
+	if(groupTr.style.display=="none"){
+	  groupTr.style.display = "table-row";
+
+	  document.getElementById("group"+groupIdx+"Plus").style.display = "none";
+	  document.getElementById("group"+groupIdx+"Min").style.display = "block";
+	}
+	else{
+	  groupTr.style.display = "none";
+
+	  document.getElementById("group"+groupIdx+"Plus").style.display = "block";
+	  document.getElementById("group"+groupIdx+"Min").style.display = "none";
+	}
   }
 
   function clearFindFields(){
@@ -951,4 +993,5 @@
   checkSaveButtonRights();
   checkQuickInvoice();
   checkAdmissionDaysInvoiced();
+  changePrestation(false); // Stijn
 </script>
