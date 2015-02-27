@@ -691,7 +691,6 @@ public class LabAnalysis {
             ps.setInt(1, Integer.parseInt(sSearchProfileID));
             ps.setString(2, sWebLanguage.toLowerCase());
             rs = ps.executeQuery();
-            System.out.println(sQuery);
 
             LabAnalysis objLabAnalysis;
             String sName;

@@ -130,12 +130,6 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
 
             // copy the CurrentTransactionVO
             TransactionVO oldTransaction = new TransactionVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()),sessionContainerWO.getCurrentTransactionVO().getTransactionType(),new Date(),new Date(),IConstants.TRANSACTION_STATUS_CLOSED, sessionContainerWO.getCurrentTransactionVO().getUser(),items,sessionContainerWO.getCurrentTransactionVO().getServerId(),sessionContainerWO.getCurrentTransactionVO().getVersion(),sessionContainerWO.getCurrentTransactionVO().getVersionserverId(),sessionContainerWO.getCurrentTransactionVO().getTimestamp());
-            System.out.println("TransactionUpdatetime="+oldTransaction.getUpdateTime());
-            System.out.println("TransactionType="+oldTransaction.getTransactionType());
-            System.out.println("TransactionID="+oldTransaction.getTransactionId());
-            System.out.println("UserID="+oldTransaction.getUser().userId);
-            System.out.println("HealthrecordId="+oldTransaction.getHealthrecordId());
-            System.out.println("PersonID="+MedwanQuery.getInstance().getPersonIdFromHealthrecordId(oldTransaction.getHealthrecordId()));
 
             Hashtable dirtyRequestParameters = RequestParameterParser.getInstance().parseRequestParameters(request, "currentTransactionVO");
             Hashtable requestParameters = new Hashtable();
@@ -143,7 +137,6 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
             while(dirtypars.hasMoreElements()){
             	String key = (String)dirtypars.nextElement();
             	if(key.indexOf("_currentTransactionVO")<0){
-            		System.out.println(key+"="+dirtyRequestParameters.get(key));
             		requestParameters.put(key,dirtyRequestParameters.get(key));
             	}
             }
@@ -218,6 +211,7 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
                         baseTransactionVO.setTransactionType(sessionContainerWO.getCurrentTransactionVO().getTransactionType());
                         baseTransactionVO.setUpdateTime(sessionContainerWO.getCurrentTransactionVO().getUpdateTime());
                         baseTransactionVO.setUser(sessionContainerWO.getCurrentTransactionVO().getUser());
+                        baseTransactionVO.setVersion(sessionContainerWO.getCurrentTransactionVO().getVersion());
 
                         baseTransactionVO2.setCreationDate(sessionContainerWO.getCurrentTransactionVO().getCreationDate());
                         baseTransactionVO2.setStatus(sessionContainerWO.getCurrentTransactionVO().getStatus());
@@ -226,6 +220,7 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
                         baseTransactionVO2.setTransactionType(sessionContainerWO.getCurrentTransactionVO().getTransactionType());
                         baseTransactionVO2.setUpdateTime(sessionContainerWO.getCurrentTransactionVO().getUpdateTime());
                         baseTransactionVO2.setUser(sessionContainerWO.getCurrentTransactionVO().getUser());
+                        baseTransactionVO2.setVersion(sessionContainerWO.getCurrentTransactionVO().getVersion());
 
                         df.populateTransaction(baseTransactionVO,newTransactionVO);
                         df.populateTransaction(oldTransaction,baseTransactionVO);

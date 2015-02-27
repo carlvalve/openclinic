@@ -323,7 +323,6 @@ public class LabProcedure extends OC_Object{
 				String procedureUid = rs.getString("procedureuid");
 				java.util.Date date = rs.getTimestamp("updatetime");
 				int totalsamples	= rs.getInt("totalsamples");
-				System.out.println("total samples for procedure "+procedureUid+" on "+date+" = "+totalsamples);
 				if(procedureUid!=null && procedureUid.length()>0){
 					if(!activeProcedureUid.equalsIgnoreCase(procedureUid)){
 						if(procedure!=null){
@@ -360,25 +359,21 @@ public class LabProcedure extends OC_Object{
 					//First we are going to count how many maximum batch sizes can be analyzed
 					double q=Math.floor(remainingsamples / procedure.getMaxBatchSize());
 					if(q>0){
-						System.out.println("adding "+q+" batches of "+procedure.getMaxBatchSize()+" samples to procedure "+procedure.getUid());
 						consumedquantity+= q;
 						lastrequestdate=date;
 						remainingsamples = remainingsamples - q*procedure.getMaxBatchSize();
 					}
 					//Now we will see if the remainder is bigger than MinBatchSize
 					if(remainingsamples>=procedure.getMinBatchSize()){
-						System.out.println("adding 1 batch of "+remainingsamples+" samples to procedure "+procedure.getUid());
 						consumedquantity++;
 						remainingsamples=0;
 						lastrequestdate=date;
 					}
 					if(remainingsamples>0 && (date.getTime()-lastrequestdate.getTime())/day>procedure.getMaxDelayInDays()){
-						System.out.println("adding 1 batch of "+remainingsamples+" samples to procedure "+procedure.getUid()+" because delay of "+procedure.getMaxDelayInDays()+" days was exceeded");
 						consumedquantity++;
 						remainingsamples=0;
 						lastrequestdate=date;
 					}
-					System.out.println("Remaining samples = "+remainingsamples);
 				}
 			}
 			if(procedure!=null){
