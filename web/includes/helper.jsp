@@ -948,17 +948,16 @@
     String sPREFIX = "be.mxs.common.model.vo.healthrecord.IConstants.";
 
     String sUserTheme = checkString((String)session.getAttribute("UserTheme"));
-    if(sUserTheme.equals("default")) sUserTheme = "";
         
     // stylesheets
     String sCSSPRINT         = "<link href='"+sCONTEXTPATH+"/_common/_css/print.css' rel='stylesheet' type='text/css'>";
-    String sCSSNORMAL        = "<link href='"+sCONTEXTPATH+"/_common/_css/web"+(sUserTheme.length()>0?"_"+sUserTheme:"")+".css' rel='stylesheet' type='text/css'>"+
-                               "<link href='"+sCONTEXTPATH+"/"+sAPPDIR+"/_common/_css/web"+(sUserTheme.length()>0?"_"+sUserTheme:"")+".css' rel='stylesheet' type='text/css'>";
+    String sCSSNORMAL        = "<link href='"+sCONTEXTPATH+"/_common/_css/web"+(sUserTheme.equals("default")?"":"_"+sUserTheme)+".css' rel='stylesheet' type='text/css'>"+
+                               "<link href='"+sCONTEXTPATH+"/"+sAPPDIR+"/_common/_css/web"+(sUserTheme.equals("default")?"":"_"+sUserTheme)+".css' rel='stylesheet' type='text/css'>";
     String sCSSDEFAULT       = "<link href='"+sCONTEXTPATH+"/_common/_css/web.css' rel='stylesheet' type='text/css'>"+
                                "<link href='"+sCONTEXTPATH+"/"+sAPPDIR+"/_common/_css/web.css' rel='stylesheet' type='text/css'>";
     String sCSSRTEDITOR      = "<link href='"+sCONTEXTPATH+"/_common/_css/rteditor.css' rel='stylesheet' type='text/css'>";
     String sCSSWEEKPLANNER   = "<link href='"+sCONTEXTPATH+"/_common/_css/weekPlanner.css' rel='stylesheet' type='text/css'>";
-    String sCSSMONTHPLANNER  = "<link href='"+sCONTEXTPATH+"/_common/_css/monthPlanner"+(sUserTheme.length()>0?"_"+sUserTheme:"")+".css' rel='stylesheet' type='text/css'>";
+    String sCSSMONTHPLANNER  = "<link href='"+sCONTEXTPATH+"/_common/_css/monthPlanner"+(sUserTheme.equals("default")?"":"_"+sUserTheme)+".css' rel='stylesheet' type='text/css'>";
     String sCSSMODALBOX      = "<link href='"+sCONTEXTPATH+"/_common/_css/modalbox.css' rel='stylesheet' type='text/css'>";
     String sCSSMODALBOXDATACENTER   = "<link href='"+sCONTEXTPATH+"/_common/_css/modalboxdatacenter.css' rel='stylesheet' type='text/css'>";
     String sCSSGNOOCALENDAR  = "<link href='"+sCONTEXTPATH+"/_common/_css/gnoocalendar.css' rel='stylesheet' type='text/css'>";
