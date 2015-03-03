@@ -182,7 +182,7 @@
 
   <%-- AJAX CHANGE SEARCH RESULTS --%>
   function ajaxChangeSearchResults(urlForm,SearchForm,moreParams){
-    document.getElementById('divFindRecords').innerHTML = "<div style='text-align:center;padding-top:2px;'><img src='<%=sCONTEXTPATH%>/_img/themes/<%=sUserTheme%>/ajax-loader.gif'/><br/>Loading..</div>";
+    document.getElementById('divFindRecords').innerHTML = "<div style='text-align:center;padding-top:2px;'><img src='<%=sCONTEXTPATH%>/_img/themes/<%=checkString((String)session.getAttribute("UserTheme"))%>/ajax-loader.gif'/><br/>Loading..</div>";
     var url = urlForm;
     var params = Form.serialize(SearchForm)+moreParams;
     var myAjax = new Ajax.Updater("divFindRecords",url,{
