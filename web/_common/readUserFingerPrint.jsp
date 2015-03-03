@@ -122,7 +122,8 @@
 		<td>
 			<table width='100%'>
 				<tr>
-					<td><%=("<img src='" + request.getParameter("referringServer") + "/_img/themes/"+(sUserTheme.length()==0?"default":sUserTheme)+"/ajax-loader.gif'/><br><br>"+MedwanQuery.getInstance().getLabel("web","waiting_for_fingerprint","en")+"</br>")%></td>
+					<td><%=("<img src='"+request.getParameter("referringServer")+"/_img/themes/"+sUserTheme+"/ajax-loader.gif'/>"+
+				            "<br><br>"+MedwanQuery.getInstance().getLabel("web","waiting_for_fingerprint","en")+"</br>")%></td>
 				</tr>
 				<tr>
 					<td>
