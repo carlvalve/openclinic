@@ -856,7 +856,7 @@
                   if(transactionForm.EditServiceEmail.value.length > 0){
                     if(!validEmailAddress(transactionForm.EditServiceEmail.value)){
                       maySubmit = false;
-                      alertDialog("web","invalidEmailAddress",sWebLanguage)%>");
+                      alertDialog("web","invalidEmailAddress");
                       transactionForm.EditServiceEmail.focus();
                     }
                   }
@@ -927,7 +927,6 @@
                   }
                 }
               }
-
               <%-- FIND ZIPCODE LANGUAGE SPECIFIED --%>
               function findZipcodeLanguageSpecified(oZipcode,oCity,buttonId,sDisplayLang){
                 if(oZipcode.value.length==0){
