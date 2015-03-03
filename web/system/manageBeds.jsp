@@ -379,28 +379,20 @@
   }
 
   <%-- DO SAVE --%>
-  function doSave(){
+  function doSave(){	  
     if(EditBedForm.EditBedService.value.length==0){
       alertDialog("web","no_bed_service");
     }
     else if(EditBedForm.EditName.value.length==0){
       alertDialog("web","no_bed_name");
     }
-    else if(!isNumber(EditBedForm.EditPriority.value)){
+    else if(!isNumber(EditBedForm.EditPriority)){
       alertDialog("web","bed_invalid_priority");
     }
     else{
       EditBedForm.saveButton.disabled = true;
       EditBedForm.Action.value = "SAVE";
       EditBedForm.submit();
-    }
-  }
-
-  <%-- IS NUMBER --%>
-  function isNumber(val){
-    if(isNaN(val)){
-      if(isNaN(val)) return false;
-      else           return true;
     }
   }
 
