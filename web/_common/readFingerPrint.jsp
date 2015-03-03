@@ -122,7 +122,8 @@
 				<tr>
 					<td>
 						<%
-							out.print("<img src='" + request.getParameter("referringServer") + "/_img/themes/"+(sUserTheme.length()==0?"default":sUserTheme)+"/ajax-loader.gif'/><br><br>"+MedwanQuery.getInstance().getLabel("web","waiting_for_fingerprint",((User)session.getAttribute("activeUser")).person.language)+"</br>");
+							out.print("<img src='"+request.getParameter("referringServer")+"/_img/themes/"+sUserTheme+"/ajax-loader.gif'/>"+
+						              "<br><br>"+MedwanQuery.getInstance().getLabel("web","waiting_for_fingerprint",((User)session.getAttribute("activeUser")).person.language)+"</br>");
 							//Lanceer de jsp-pagina op de locale server
 						%>
 					</td>
