@@ -340,21 +340,22 @@
         %>
             <%=writeTableHeader("Web.manage","ManageServices",sWebLanguage," doBackToMenu();")%>
 
-            <table width="100%" class="menu" cellspacing="0">
+            <table width="100%" class="list" cellspacing="0">
                 <tr>
-                    <td class="menu">
-                        &nbsp;<%=getTran("Web","Unit",sWebLanguage)%>
+                    <td class="admin2" width="160">&nbsp;<%=getTran("web","service",sWebLanguage)%></td>
+                    <td class="admin2">
                         <input class="text" type="text" name="FindServiceText" READONLY size="<%=sTextWidth%>" title="<%=sFindServiceText%>" value="<%=sFindServiceText%>">
+                        <input type="hidden" name="FindServiceCode" value="<%=sFindServiceCode%>">
+                       
                         <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchService('FindServiceCode','FindServiceText');">
-                        <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="transactionForm.FindServiceCode.value='';transactionForm.FindServiceText.value='';">
-                        <input type="hidden" name="FindServiceCode" value="<%=sFindServiceCode%>">&nbsp;
-                   
+                        <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="transactionForm.FindServiceCode.value='';transactionForm.FindServiceText.value='';">&nbsp;&nbsp;&nbsp;
+                                          
                         <%-- BUTTONS --%>
-                        <input type="button" class="button" name="editButton" value="<%=getTranNoLink("Web","Edit",sWebLanguage)%>" onclick="doEdit(transactionForm.FindServiceCode.value);">
-                        <input type="button" class="button" name="clearButton" value="<%=getTranNoLink("Web","Clear",sWebLanguage)%>" onclick="clearFields();">
-                        <input type="button" class="button" name="newButton" value="<%=getTranNoLink("Web","new",sWebLanguage)%>" onclick="doNew();">
-                        <input type="button" class="button" name="deleteButton" value="<%=getTranNoLink("Web","delete",sWebLanguage)%>" onclick="doDelete(transactionForm.FindServiceCode.value);">
-                        <input type="button" class="button" name="backButton" value="<%=getTranNoLink("Web","Back",sWebLanguage)%>" OnClick="doBackToMenu();">
+                        <input type="button" class="button" name="editButton" value="<%=getTranNoLink("web","edit",sWebLanguage)%>" onClick="doEdit(transactionForm.FindServiceCode.value);">
+                        <input type="button" class="button" name="clearButton" value="<%=getTranNoLink("web","clear",sWebLanguage)%>" onClick="clearFields();">
+                        <input type="button" class="button" name="newButton" value="<%=getTranNoLink("web","new",sWebLanguage)%>" onClick="doNew();">
+                        <input type="button" class="button" name="deleteButton" value="<%=getTranNoLink("web","delete",sWebLanguage)%>" onClick="doDelete(transactionForm.FindServiceCode.value);">
+                        <input type="button" class="button" name="backButton" value="<%=getTranNoLink("web","back",sWebLanguage)%>" onClick="doBackToMenu();">
                     </td>
                 </tr>
             </table>

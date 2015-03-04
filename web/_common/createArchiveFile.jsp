@@ -1,4 +1,3 @@
-
 <%@include file="/includes/validateUser.jsp"%>
 <%
     if(MedwanQuery.getInstance().updateArchiveFile(Integer.parseInt(activePatient.personid))){

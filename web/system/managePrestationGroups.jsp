@@ -91,13 +91,15 @@
 			ps.setString(2,sEditPrestationName);
 			ps.execute();
 			ps.close();
+			
+			sMsg = getTran("web","prestationAdded",sWebLanguage);
 		}
 		else{
 			rs.close();
 			ps.close();
+			
+			sMsg = getTran("web","prestationAlreadyExists",sWebLanguage);
 		}
-		
-		sMsg = getTran("web","prestationAdded",sWebLanguage);
 	}
     //*** DELETE prestation ***
 	else if(sAction.equals("deletePrestation")){
@@ -121,8 +123,8 @@
 	<table width="100%" class="list" cellpadding="0" cellspacing="1">
 		<%-- PRESTATION GROUP --%>
 		<tr>
-			<td width="100" class="admin2"><%=getTran("web","prestationgroup",sWebLanguage)%></td>
-			<td width="150" class="admin2" nowrap>
+			<td width="120" class="admin2"><%=getTran("web","prestationgroup",sWebLanguage)%></td>
+			<td width="180" class="admin2" nowrap>
 				<select class="text" name="EditPrestationGroup" id="EditPrestationGroup" onchange="loadPrestations();">
                     <option/>
 					<%
@@ -140,8 +142,10 @@
 					%>
 				</select> <a href='javascript:deleteGroup();'><img class="link" src='<c:url value="/_img/icons/icon_delete.gif"/>'/></a>
 			</td>
+			
+			<%-- NEW GROUP NAME --%>
 			<td class="admin2">
-				<input type='text' class='text' name='newgroupname' id='newgroupname' size='25'/>
+				<input type='text' class='text' name='newgroupname' id='newgroupname' size='25' maxLength='50'/>
 				<input type='button' class='button' name='newgroup' value='<%=getTranNoLink("web","new",sWebLanguage)%>' onclick='createNewGroup();'/>
 			</td>
 		</tr>
@@ -179,10 +183,10 @@
         </tr>
 	</table>
 	
-	<div id="msgDiv">
+	<div id="msgDiv" style="height:18px">
 	<%
 	    if(sMsg.length() > 0){
-	        %><%=sMsg%><br><br><%
+	        %><%=sMsg%><br><%
 	    }
 	%>		
 	</div>

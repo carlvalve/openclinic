@@ -60,7 +60,7 @@
     <%-- SEARCH SERVICE --%>
     <table width="100%" class="menu" cellspacing="0">
         <tr height="22">
-            <td class="admin2" width="<%=sTDAdminWidth%>">&nbsp;<%=getTran("Web","Unit",sWebLanguage)%></td>
+            <td class="admin2" width="160">&nbsp;<%=getTran("web","service",sWebLanguage)%></td>
             <td class="admin2">
                 <input class="text" type="text" name="FindServiceText" READONLY size="<%=sTextWidth%>" title="<%=sFindServiceText%>" value="<%=sFindServiceText%>">                
                 <img src='<%=sCONTEXTPATH%>/_img/icons/icon_search.gif' id='buttonService' class='link' alt='<%=getTranNoLink("Web","select",sWebLanguage)%>'
@@ -235,7 +235,10 @@
   function clearServiceSelection(){
     document.getElementsByName("FindServiceCode")[0].value = "";
     document.getElementsByName("FindServiceText")[0].value = "";
-    document.getElementById("servicesTable").style.display = "none";
+    
+    if(document.getElementById("servicesTable")){
+      document.getElementById("servicesTable").style.display = "none";
+    }
     document.getElementById("msgDiv").innerHTML = "";
   }
   
