@@ -30,6 +30,8 @@
 		PreparedStatement ps = oc_conn.prepareStatement(sSql);
 		ps.setString(1,sGroupName);
 		ResultSet rs = ps.executeQuery();
+		int newGroupCounter = MedwanQuery.getInstance().getOpenclinicCounter("OC_PRESTATION_GROUP");
+		
 		if(!rs.next()){
 			rs.close();
 			ps.close();
@@ -38,16 +40,19 @@
 			       " values(?,?,?)";
 			ps = oc_conn.prepareStatement(sSql);
 			ps.setInt(1,MedwanQuery.getInstance().getConfigInt("serverId",1));
-			ps.setInt(2,MedwanQuery.getInstance().getOpenclinicCounter("OC_PRESTATION_GROUP"));
+			ps.setInt(2,newGroupCounter);
 			ps.setString(3,sGroupName);
 			ps.execute();
 			ps.close();
+			
+			
 		}
 		else{
 			rs.close();
 			ps.close();
 		}
 		
+		sEditPrestationGroup = MedwanQuery.getInstance().getConfigInt("serverId",1)+"."+newGroupCounter;
 		sMsg = getTran("web","groupAdded",sWebLanguage);
 	}
     //*** DELETE group ***
@@ -174,7 +179,14 @@
         </tr>
 	</table>
 	
-	<div id="msgDiv"><%=sMsg%></div>	
+	<div id="msgDiv">
+	<%
+	    if(sMsg.length() > 0){
+	        %><%=sMsg%><br><br><%
+	    }
+	%>		
+	</div>
+	
 	<div id="prestationcontent"></div>
 	
     <input type="hidden" name="tmpPrestationUID">
@@ -205,7 +217,6 @@
 	if(EditForm.EditPrestationGroup.selectedIndex > 0){
       document.getElementById("prestationcontent").innerHTML = "<img src='<%=sCONTEXTPATH%>/_img/themes/<%=sUserTheme%>/ajax-loader.gif'/><br>Loading..";
 	}
-	document.getElementById("msgDiv").innerHTML = "";
 	
     var url = '<c:url value="/financial/getGroupPrestations.jsp"/>?ts='+new Date().getTime();
     new Ajax.Request(url,{
@@ -288,9 +299,11 @@
   }
   
   <%
-      // do not load prestations on creation of a new group, nor on page-load
+      // do not load prestations on creation of a new group, nor on initial page-load
       if(sAction.length() > 0 && !sAction.equals("newGroup")){
     	%>loadPrestations();<%  
       }		
   %>
+  
+  window.setTimeout("document.getElementById('msgDiv').innerHTML = '';",2500);
 </script>
