@@ -138,7 +138,7 @@
             <td class="admin2">&nbsp;</td>
             <td class="admin2">
                 <input class='button' type='button' name='buttonfind' value='<%=getTranNoLink("Web","search",sWebLanguage)%>' onclick='doFind();'>&nbsp;
-                <input class='button' type='button' name='buttonclear' value='<%=getTranNoLink("Web","Clear",sWebLanguage)%>' onclick='doClear();'>&nbsp;
+                <input class='button' type='button' name='buttonclear' value='<%=getTranNoLink("Web","Clear",sWebLanguage)%>' onclick='clearSearchFields();'>&nbsp;
                 <input class='button' type='button' name='buttonnew' value='<%=getTranNoLink("Web","new",sWebLanguage)%>' onclick='doNew();'>&nbsp;
                 <input class='button' type="button" name="Backbutton" value='<%=getTranNoLink("Web","Back",sWebLanguage)%>' onclick="doBack();">
             </td>
@@ -161,14 +161,14 @@
 
             Iterator iter = vBeds.iterator();
             Bed bTmp;
-            String sClass = "";
+            String sClass = "1";
             String sServiceUID = "";
             String sServiceName = "";
 
             while(iter.hasNext()){
             	// alternate row-style
-                if(sClass.equals("")) sClass = "1";
-                else                  sClass = "";
+                if(sClass.length()==0) sClass = "1";
+                else                   sClass = "";
 
                 bTmp = (Bed)iter.next();
                 sServiceUID = checkString(bTmp.getServiceUID());
@@ -204,6 +204,10 @@
 	            </table>
 	
 	            <div><%=vBeds.size()%> <%=getTran("web","recordsfound",sWebLanguage)%></div>
+	      
+	            <%=ScreenHelper.alignButtonsStart()%>      
+	              <input class='button' type="button" name="Backbutton" value='<%=getTranNoLink("Web","Back",sWebLanguage)%>' onclick="doBack();">	            
+	            <%=ScreenHelper.alignButtonsStop()%>          
 	        <%
         }
     }
@@ -313,7 +317,7 @@
 %>
 
 <script>
-  function doClear(){
+  function clearSearchFields(){
     FindBedForm.FindBedService.value = "";
     FindBedForm.FindBedServiceName.value = "";
     FindBedForm.FindBedName.value = "";
@@ -347,7 +351,7 @@
     window.location.href="<c:url value='/main.do'/>?Page=system/manageBeds.jsp&ts=<%=getTs()%>";
   }
 
-  <%-- search service --%>
+  <%-- search infoservice --%>
   function searchInfoService(sObject){
     if(sObject.value.length > 0){
       openPopup("/_common/search/serviceInformation.jsp&ServiceID="+sObject.value+"&ViewCode=on");

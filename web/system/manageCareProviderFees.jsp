@@ -29,14 +29,17 @@
 		// Save these fee data
 		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
 		PreparedStatement ps = conn.prepareStatement("delete from OC_CAREPROVIDERFEES"+
-		                                             " where OC_CAREPROVIDERFEE_USERID=? and OC_CAREPROVIDERFEE_TYPE=? and OC_CAREPROVIDERFEE_ID=?");
+		                                             " where OC_CAREPROVIDERFEE_USERID=?"+
+		                                             "  and OC_CAREPROVIDERFEE_TYPE=?"+
+		                                             "  and OC_CAREPROVIDERFEE_ID=?");
 		ps.setString(1,userid);
 		ps.setString(2,feetype);
 		ps.setString(3,feeid);
 		ps.execute();
 		ps.close();
-		ps = conn.prepareStatement("insert into OC_CAREPROVIDERFEES(OC_CAREPROVIDERFEE_USERID,OC_CAREPROVIDERFEE_TYPE,OC_CAREPROVIDERFEE_ID,OC_CAREPROVIDERFEE_AMOUNT)"+
-		                         " values(?,?,?,?)");
+		ps = conn.prepareStatement("insert into OC_CAREPROVIDERFEES(OC_CAREPROVIDERFEE_USERID,OC_CAREPROVIDERFEE_TYPE,"+
+		                           "OC_CAREPROVIDERFEE_ID,OC_CAREPROVIDERFEE_AMOUNT)"+
+		                           " values(?,?,?,?)");
 		ps.setString(1,userid);
 		ps.setString(2,feetype);
 		ps.setString(3,feeid);
@@ -177,7 +180,7 @@
 
   <%-- LIST CARE PROVIDER FEES --%>
   function listcareproviderfees(){
-    var url = '<c:url value="/system/getCareProviderFees.jsp"/>?ts='+new Date();
+    var url = '<c:url value="/system/getCareProviderFees.jsp"/>?ts='+new Date().getTime();
     new Ajax.Request(url,{
 	  method: "POST",
 	  postBody: 'userid='+$("EditCareProvider").value,
@@ -212,7 +215,7 @@
   <%-- DELETE LINE --%>
   function deleteline(feetype,feeid,userid){
     if(yesnoDeleteDialog()){
-	  var url = '<c:url value="/system/deleteCareProviderFee.jsp"/>?ts='+new Date();
+	  var url = '<c:url value="/system/deleteCareProviderFee.jsp"/>?ts='+new Date().getTime();
       new Ajax.Request(url,{
 	    method: "POST",
 	    postBody: 'userid='+userid+"&feetype="+feetype+"&feeid="+feeid,

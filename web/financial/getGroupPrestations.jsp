@@ -17,9 +17,10 @@
 	
 	if(sPrestationGroupUID.length() > 0){
 	    try{
+	    	// header
 	        prestationcontent = "<table class='list' cellpadding='0' cellspacing='1' width='100%'>"+
 	                             "<tr class='admin'>"+
-	          	                  "<td width='20'>&nbsp;</td>"+
+	          	                  "<td width='25'>&nbsp;</td>"+
 	          	     	          "<td width='80'>"+getTran("web","code",sWebLanguage)+"</td>"+
 		                          "<td width='*'>"+getTran("web","description",sWebLanguage)+"</td>"+
 	                             "</tr>";
@@ -31,14 +32,19 @@
 	    	ps.setString(1,sPrestationGroupUID);
 	    	ResultSet rs = ps.executeQuery();
 	    	
-	    	String sPrestationUid;
+	    	String sPrestationUid, sClass = "1";
 	    	while(rs.next()){
 	    		sPrestationUid = rs.getString("oc_prestationgroup_prestationuid");
 	    		
 	    		Prestation prestation = Prestation.get(sPrestationUid);
 	    		if(prestation!=null){
 	    			recCount++;
-	    	        prestationcontent+= "<tr>"+ 
+	    			
+	    			// alternate row-style
+	    			if(sClass.length()==0) sClass = "1";
+	    			else                   sClass = "";
+	    			
+	    	        prestationcontent+= "<tr class='list"+sClass+"'>"+ 
 	    		                         "<td><img class='link' src='"+sCONTEXTPATH+"/_img/icons/icon_delete.gif' onClick='deletePrestation(\\\""+prestation.getUid()+"\\\");'/></a></td>"+
 	    		                      	 "<td>"+prestation.getCode()+"</td>"+
 	    	        		             "<td><b>"+prestation.getDescription()+"</b></td>"+
