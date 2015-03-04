@@ -6,8 +6,8 @@
 <%=checkPermission("system.manageexaminations","select",activeUser)%>
 <%
     String msg = "", sEditPriority = "", sEditData = "", sEditTranType = "", sEditExamName = "", 
-    		sEditRequiredInvoicable = "", sEditRequiredPrestation = "", sEditRequiredPrestationClass = "", sEditRequiredPrestationInvoiced = "",
-           sEditRequiredPrestationClassInvoiced = "";
+    	   sEditRequiredInvoicable = "", sEditRequiredPrestation = "", sEditRequiredPrestationClass = "",
+    	   sEditRequiredPrestationInvoiced = "", sEditRequiredPrestationClassInvoiced = "";
     boolean bQueryInsert = false;
     boolean bQueryUpdate = false;
 
@@ -122,7 +122,7 @@
         objExam.setUpdateuserid(Integer.parseInt(activeUser.userid));
         objExam.setId(Integer.parseInt(sExamID));
 
-        Examination.deleteExamination(objExam);
+        Examination.deleteExamination(objExam.getId());
         sExamID = "-1";
         msg = getTran("web.manage","examinationdeleted",sWebLanguage);
     }
