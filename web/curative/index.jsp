@@ -54,7 +54,7 @@
 	
 	String sDiscontinued="";
 	Encounter activeEncounter= Encounter.getActiveEncounter(activePatient.personid);
-	if(activeEncounter!=null && activeEncounter.discontinuedAccident()){
+	if(MedwanQuery.getInstance().getConfigInt("enableEncounterStatusWarning",0)==1 && activeEncounter!=null){
 		sDiscontinued="<img border='0' src='"+sCONTEXTPATH+"/_img/icons/icon_warning.gif'/> <font style='font-size:15px' color='red'>"+getTran("web","discontinuedaccident",sWebLanguage)+"</font>";
 	}
 %>

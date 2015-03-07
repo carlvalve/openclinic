@@ -49,7 +49,11 @@ if(request.getParameter("modifyquantityoperation")!=null){
 	n3months = n3months*24*92;
 	
 	String sExpiryDate = ScreenHelper.formatDate(new java.util.Date(new java.util.Date().getTime()-n3months));
-	if(request.getParameter("submit")!=null){
+	Encounter er = Encounter.getActiveEncounter(activePatient.personid);
+	if(er!=null && er.getBegin()!=null){
+		sExpiryDate = ScreenHelper.formatDate(er.getBegin());
+	}
+	if(request.getParameter("search")!=null){
 		sExpiryDate = request.getParameter("expirydate");
 	}
 	
@@ -88,8 +92,8 @@ if(request.getParameter("modifyquantityoperation")!=null){
 
 	try{
 		java.util.Date dDate = ScreenHelper.parseDate(sExpiryDate);
-		String sQuery = " select oc_stock_name,oc_operation_productstockuid,sum(quantity) quantity from ("+
-						" select oc_operation_objectid,c.oc_stock_name,oc_operation_productstockuid,oc_operation_unitschanged quantity from oc_productstockoperations a,oc_productstocks b,oc_servicestocks c"+
+		String sQuery = " select oc_stock_productuid,sum(quantity) quantity from ("+
+						" select oc_operation_objectid,c.oc_stock_name,oc_stock_productuid,oc_operation_unitschanged quantity from oc_productstockoperations a,oc_productstocks b,oc_servicestocks c"+
 		                " where oc_operation_srcdesttype='patient'"+
 		                "  and oc_operation_date>?"+
 		                "  and oc_operation_description like '%delivery%'"+
@@ -97,14 +101,14 @@ if(request.getParameter("modifyquantityoperation")!=null){
 		                "  and b.oc_stock_objectid=replace(a.oc_operation_productstockuid,'"+MedwanQuery.getInstance().getConfigInt("serverId")+".','')"+
 		                "  and c.oc_stock_objectid=replace(b.oc_stock_servicestockuid,'"+MedwanQuery.getInstance().getConfigInt("serverId")+".','')"+
 		                " union"+
-		                " select oc_operation_objectid,c.oc_stock_name,oc_operation_productstockuid,-oc_operation_unitschanged quantity from oc_productstockoperations a,oc_productstocks b,oc_servicestocks c"+
+		                " select oc_operation_objectid,c.oc_stock_name,oc_stock_productuid,-oc_operation_unitschanged quantity from oc_productstockoperations a,oc_productstocks b,oc_servicestocks c"+
 		                " where oc_operation_srcdesttype='patient'"+
 		                "  and oc_operation_date>?"+
 		                "  and oc_operation_description like '%receipt%'"+
 		                "  and oc_operation_srcdestuid=?"+
 		                "  and b.oc_stock_objectid=replace(a.oc_operation_productstockuid,'"+MedwanQuery.getInstance().getConfigInt("serverId")+".','')"+
 		                "  and c.oc_stock_objectid=replace(b.oc_stock_servicestockuid,'"+MedwanQuery.getInstance().getConfigInt("serverId")+".','')) q"+
-		                " group by oc_stock_name,oc_operation_productstockuid";
+		                " group by oc_stock_productuid";
 		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
 		PreparedStatement ps = conn.prepareStatement(sQuery);
 		ps.setDate(1,new java.sql.Date(dDate.getTime()));
@@ -117,28 +121,26 @@ if(request.getParameter("modifyquantityoperation")!=null){
 			<table width="100%" class="sortable" id="searchresultssummary" cellpadding="0" cellspacing="1">    
 			    <%-- HEADER --%>
 				<tr class='admin'>
-					<td width="150"><%=getTran("web","servicestock",sWebLanguage)%></td>
 					<td width="150"><%=getTran("web","productstock",sWebLanguage)%></td>
 					<td width="100"><%=getTran("web","quantity",sWebLanguage)%></td>
 					<td width="100"><%=getTran("web","packageunits",sWebLanguage)%></td>
 				</tr>
         <%
 
-		ProductStock productstock;
+		Product product;
 		String sClass = "1";
 		
 		while(rs.next()){
-			productstock = ProductStock.get(rs.getString("oc_operation_productstockuid"));
-			if(productstock!=null){
+			product = Product.get(rs.getString("oc_stock_productuid"));
+			if(product!=null){
 				// alternate row-style
 				if(sClass.length()==0) sClass = "1";
 				else                   sClass = ""; 
 				
 				out.print("<tr class='list"+sClass+"'>"+
-			               "<td>"+rs.getString("OC_STOCK_NAME")+"</td>"+
-			               "<td>"+productstock.getProduct().getName()+"</td>"+
+			               "<td>"+product.getName()+"</td>"+
 			               "<td>"+rs.getInt("quantity")+"</td>"+
-			               "<td>"+productstock.getProduct().getPackageUnits()+" "+getTran("product.unit",productstock.getProduct().getUnit(),sWebLanguage)+"</td>"+
+			               "<td>"+product.getPackageUnits()+" "+getTran("product.unit",product.getUnit(),sWebLanguage)+"</td>"+
 			              "</tr>");
 				
 				recCount++;
