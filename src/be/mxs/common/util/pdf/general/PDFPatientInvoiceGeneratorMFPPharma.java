@@ -605,10 +605,22 @@ public class PDFPatientInvoiceGeneratorMFPPharma extends PDFInvoiceGenerator {
             table.addCell(cell);
 
             double patientshare=0,insureramount=0,supplements=0;
+            SortedMap prestations = new TreeMap();
             for(int n=0;n<debets.size();n++){
             	Debet debet = (Debet)debets.elementAt(n);
             	if(debet.getPrestation()!=null && debet.getQuantity()>0){
-        			printDebet(debet,table);
+            		//printDebet(debet,table);
+            		if(prestations.get(debet.getPrestation().getDescription()+"."+debet.getInsuranceUid()+"."+debet.getPrestationUid())==null){
+            			prestations.put(debet.getPrestation().getDescription()+"."+debet.getInsuranceUid()+"."+debet.getPrestationUid(), debet);
+            		}
+            		else {
+            			Debet olddebet = (Debet)prestations.get(debet.getPrestation().getDescription()+"."+debet.getInsuranceUid()+"."+debet.getPrestationUid());
+            			olddebet.setQuantity(olddebet.getQuantity()+debet.getQuantity());
+            			olddebet.setAmount(olddebet.getAmount()+debet.getAmount());
+            			olddebet.setInsurarAmount(olddebet.getInsurarAmount()+debet.getInsurarAmount());
+            			olddebet.setExtraInsurarAmount(olddebet.getExtraInsurarAmount()+debet.getExtraInsurarAmount());
+            			olddebet.setDate(debet.getDate());
+            		}
         			patientshare+=debet.getAmount()+debet.getExtraInsurarAmount();
         			insureramount+=debet.getInsurarAmount();
         	    	if(debet==null || debet.getInsurance()==null || debet.getInsurance().getInsurar()==null || debet.getInsurance().getInsurar().getNoSupplements()==0){
@@ -616,7 +628,13 @@ public class PDFPatientInvoiceGeneratorMFPPharma extends PDFInvoiceGenerator {
         	    	}
             	}
             }
-
+            
+            Iterator iPrestations = prestations.keySet().iterator();
+            while(iPrestations.hasNext()){
+            	Debet debet = (Debet)prestations.get(iPrestations.next());
+            	printDebet(debet,table);
+            }
+            
             cell=createValueCell("",60,7,Font.BOLD);
             cell.setBorder(PdfPCell.TOP);
             table.addCell(cell);

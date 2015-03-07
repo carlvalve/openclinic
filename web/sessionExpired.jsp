@@ -128,9 +128,9 @@
 	        	else {
 	        		%>
 			        <img src="_img/flags/belgiumflag.jpg" height="10px" width="20px" alt="Belgium"/>
-			        <a href="http://www.mxs.be" target="_new"><b>MXS SA/NV</b></a>
+			        <b>Post-Factum bvba</b>
 			        <BR/> Pastoriestraat 58, 3370 Boutersem Belgium Tel: +32 16 721047 -
-			        <a href="mailto:mxs@rwandamed.org">info@mxs.be</a>
+			        <a href="mailto:info@post-factum.be">info@post-factum.be</a>
 			        <%
 	        	}
 		 } %>
