@@ -7,8 +7,6 @@
             sLabelId   = checkString(request.getParameter("LabelId")),
             sLabelLang = checkString(request.getParameter("LabelLang"));
 
-    if(sLabelLang.length()==0) sLabelLang = sWebLanguage;
-
     /// DEBUG /////////////////////////////////////////////////////////////////////////////////////
     if(Debug.enabled){
     	Debug.println("\n************************** _common/getLabel.jsp ***********************");
@@ -18,13 +16,8 @@
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
-    String sLabel = ScreenHelper.getTranNoLink(sLabelType,sLabelId,sLabelLang);
-    
-    if(sLabel.length() > 0){
-        Debug.println("--> "+sLabel);
-        %><%=HTMLEntities.htmlentities(sLabel)%><%
-    }
-    else{
-        Debug.println("--> no found");
-    }
+    String sLabel = ScreenHelper.getTranNoLink(sLabelType,sLabelId,sWebLanguage);
 %>    
+{
+"label":"<%=HTMLEntities.htmlentities(sLabel)%>"
+}

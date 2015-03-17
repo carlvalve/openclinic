@@ -109,6 +109,7 @@
         <Menu labelid="ministats" url="/main.do?Page=system/getConnectedUsers.jsp&amp;nousers=true"/>
 		<Menu labelid="print" dossierselected="true">
 			<Menu labelid="printmedicaldossier" accessrights="system.printrecord" patientselected="true" url="/main.do?Page=print/printMedicalDossier.jsp"/>
+			<Menu labelid="printmedicaldossiertoclinix" accessrights="system.printrecord" patientselected="true" url="javascript:printClinixRecord();"/>
         <!-- 
 			<Menu labelid="printfinancialdossier" patientselected="true" url="/main.do?Page=print/printFinancialDossier.jsp"/>
 			<Menu labelid="printstaffdossier" employeeselected="true" url="/main.do?Page=print/printStaffDossier.jsp"/>	

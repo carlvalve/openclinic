@@ -271,7 +271,7 @@
         <img class="link" onclick="initBarcode2();" border='0' src="<c:url value='/_img/icons/icon_barcode.gif'/>" title="<%=getTranNoLink("web","barcode",sWebLanguage)%>"/>
         <%
 			if(activePatient!=null && activePatient.personid!=null && activePatient.personid.length()>0){
-				if(MedwanQuery.getInstance().getConfigInt("enableImageHub",0)==1){
+				if(MedwanQuery.getInstance().getConfigInt("enableImageHub",0)==1 && activePatient!=null && activePatient.comment5.length()>0){
                     %><img class="link" onclick="openImageHub()" border='0' src="<c:url value='/_img/icons/icon_imagehub.png'/>" title="<%=getTranNoLink("web","imagehub",sWebLanguage)%>"/><%
 				}
 		        %><img class="link" onclick="clickMenuItem('<c:url value="/mobile/patientMenu.jsp"/>');" border='0' src="<c:url value='/_img/icons/icon_mobile.gif'/>" title="<%=getTranNoLink("web","mobile.interface",sWebLanguage)%>"/>&nbsp;<%

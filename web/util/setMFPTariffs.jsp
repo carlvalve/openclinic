@@ -3,7 +3,7 @@
 <%@ include file="/includes/validateUser.jsp" %>
 <%
 	String mfpid=MedwanQuery.getInstance().getConfigString("MFP");
-	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+	Connection conn = MedwanQuery.getInstance().getLongOpenclinicConnection();
 	PreparedStatement ps2;
 	PreparedStatement ps = conn.prepareStatement("delete FROM OC_TARIFFS where OC_TARIFF_INSURARUID=?");
 	ps.setString(1,mfpid);

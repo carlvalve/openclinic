@@ -108,7 +108,7 @@
            </table>
        </div>
        <div id="messages" class="messagesnofields">
-           <img src="_img/rwandaflag.jpg" height="15px" width="30px" alt="Rwanda"/> Copyright:&nbsp;<a href="http://mxs.rwandamed.org" target="_new"><b>MXS Central Africa SARL</b></a> - PO Box 3242 - Kigali Rwanda - Tel +250 084 32 435 - <a href="mailto:mxs@rwandamed.org">mxs@rwandamed.org</a>
+           <img src="_img/rwandaflag.jpg" height="15px" width="30px" alt="Rwanda"/> Copyright:&nbsp;<a href="http://mxs.rwandamed.org" target="_new"><b>The Open-IT Group Ltd</b></a> - PO Box 3242 - Kigali Rwanda - Tel +250 084 32 435 - <a href="mailto:mxs@rwandamed.org">mxs@rwandamed.org</a>
        </div>
     </div>
 </body>

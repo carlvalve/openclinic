@@ -103,7 +103,7 @@
 		}
 		else if(sFindType.length()==0 && sFindSource.length()==0 && sFindDestination.length()==0 &&
 				sFindMinDate.length()==0 && sFindMaxDate.length()==0 && sFindReference.length()==0){
-			sFindMinDate = ScreenHelper.formatDate(new java.util.Date().getTime()-7*24*3600*1000);			
+			sFindMinDate = ScreenHelper.formatDate(new java.util.Date(new java.util.Date().getTime()-7*24*3600*1000));			
 		}
 		
 		// show search header

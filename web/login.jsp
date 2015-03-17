@@ -274,7 +274,7 @@
         	}
         } else if (MedwanQuery.getInstance().getConfigString("mxsref", "rw").equalsIgnoreCase("ml")){ %>
         <img src="_img/flags/maliflag.jpg" height="15px" width="30px" alt="Mali"/>
-        <a href="http://www.sante.gov.ml/" target="_new"><b>ANTIM</b></a> et <a href="http://www.mxs.be" target="_new"><b>MXS</b></a>
+        <a href="http://www.sante.gov.ml/" target="_new"><b>ANTIM</b></a> et <a href="http://www.mxs.be" target="_new"><b>Post-Factum</b></a>
         <BR/> Hamdalaye ACI 2000, Rue 340, Porte 541, Bamako - Mali<br/>
         <a href="mailto:info@openit-burundi.net">antim@sante.gov.ml</a>
         <% } else { 

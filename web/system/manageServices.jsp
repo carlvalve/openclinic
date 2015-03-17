@@ -83,7 +83,13 @@
                sEditCareProvider = checkString(request.getParameter("EditCareProvider")),
                sEditStayPrestationUid = checkString(request.getParameter("EditStayPrestationUid")),
                sEditServiceInactive =checkString(request.getParameter("EditServiceInactive"));
-
+		
+        try{
+        	int i = Integer.parseInt(sEditServiceAdmissionLimit);
+        }
+        catch (Exception e){
+        	sEditServiceAdmissionLimit="0";
+        }
         // codes
         String //sEditServiceCode1 = checkString(request.getParameter("EditServiceCode1")),
                 //sEditServiceCode2 = checkString(request.getParameter("EditServiceCode2")),
@@ -421,7 +427,6 @@
         String sServiceParentCodeText = "", sServiceCountryText = "", sContactCountryText = "";
         Label label = new Label();
         Service service;
-
         service = Service.getService(sFindServiceCode);
         if(service!=null){
             // translate

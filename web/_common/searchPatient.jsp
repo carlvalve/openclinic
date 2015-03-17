@@ -227,7 +227,7 @@ new Ajax.Autocompleter('ac1','ac1update','_common/search/searchByAjax/patientsli
 });
 
 function afterAutoComplete(field,item){
-  var regex = new RegExp('[0123456789]*-idcache','i');
+  var regex = new RegExp('[-0123456789]*-idcache','i');
   var nomimage = regex.exec(item.innerHTML);
   var id = nomimage[0].replace('-idcache','');
   clearPatient();

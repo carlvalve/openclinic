@@ -15,7 +15,7 @@
 <%
     // credits
     if(!sUriPage.endsWith("welcome.jsp") && !sUriPage.endsWith("login.jsp")){
-	    %><div style="color:#999;text-align:right;font-size:9px">GA Open Source Edition by MXS SA/NV</div><%
+	    %><div style="color:#999;text-align:right;font-size:9px">GA Open Source Edition by Post-Factum bvba</div><%
 	}
 %>
 </body>

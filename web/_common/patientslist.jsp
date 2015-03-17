@@ -72,7 +72,8 @@
     boolean bRS = false;
 
     if(lResults.size() > 0){
-        String sResult = "", sLink = "", sClass = "", sPage;
+        StringBuffer sResult = new StringBuffer(); 
+        String sLink = "", sClass = "", sPage;
         sPage = activeUser.getParameter("DefaultPage");
 
         // put a new SessionContainerWO in het session when a patient is searched,
@@ -176,11 +177,13 @@
 	                    if(duration > days || duration < 0){
 	                        sHospDate = "<td style='color: red'>"+ScreenHelper.formatDate(enc.getBegin())+" "+img+ "</td>";
 	                    }
-	                    sTmpServiceID = "<td>"+sTmpServiceID+" "+getTran("Service",sTmpServiceID,sWebLanguage)+"</td><td>"+sBed+"</td>"+sHospDate;
+                    
+	                    String manager= (!(enc==null) && enc.getManagerUID()!=null && enc.getManagerUID().length()>0? User.getFullUserName(enc.getManagerUID()):"");
+	                    sTmpServiceID = "<td>"+sTmpServiceID+" "+getTran("Service",sTmpServiceID,sWebLanguage)+"</td><td>"+manager+"</td><td>"+sBed+"</td>"+sHospDate;
                     }
                 }
                 else {
-                    sTmpServiceID = "<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>";
+                    sTmpServiceID = "<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>";
                 }
             }
 
@@ -190,11 +193,11 @@
             
             if(sPage.trim().length() > 0){
                 sLink = sPage+checkString(tempPat.personid);
-                sResult+= ("<tr onClick='window.location.href=\""+sLink+"\";'");
+                sResult.append("<tr onClick='window.location.href=\""+sLink+"\";'");
             }
             else{
                 sLink = "";
-                sResult+= ("<tr");
+                sResult.append("<tr");
             }
             
             String sImmatNew = "";
@@ -212,7 +215,7 @@
                     sNatReg = tempAdminID.value;
                 }
             }
-            sResult+= (" class=list"+sInactive+sClass+" >"
+            sResult.append(" class=list"+sInactive+sClass+" >"
                    +"<td><img src='"+sCONTEXTPATH+"/_img/icons/icon_view.gif' alt='"+getTranNoLink("Web","view",sWebLanguage)+"'></td>"
                    +"<td>"+checkString(sImmatNew)+"</td>"
                    +"<td>"+checkString(sNatReg)+"</td>"
@@ -258,6 +261,7 @@
 				            if("On".equalsIgnoreCase(MedwanQuery.getInstance().getConfigString("showServiceInPatientList"))){
 				                %>
 				                    <td><%=getTran("Web","service",sWebLanguage)%></td>
+				                    <td><%=getTran("Web","manager",sWebLanguage)%></td>
 				                    <td><%=getTran("Web","bed",sWebLanguage)%></td>
 				                    <td><%=getTran("Web","date",sWebLanguage)%></td>
 				                <%
@@ -268,7 +272,7 @@
 				            }
 				        %>
 				    </tr>
-				    <tbody class="hand"><%=sResult%></tbody>
+				    <tbody class="hand"><%=sResult.toString()%></tbody>
 				</table>
 
                 <%-- previous, patient-count, next --%>

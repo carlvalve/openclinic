@@ -35,7 +35,7 @@
                             +"<td><input type='checkbox' name='cbPatientInvoice"+patientcredit.getUid()+"="+patientcredit.getAmount()+"' id='"+patientcredit.getType()+"."+patientcredit.getUid()+"' onclick='doBalance(this, false)'"+sChecked+"></td>"
                             +"<td>"+ScreenHelper.getSQLDate(patientcredit.getDate())+"</td>"
                             +"<td>"+getTran("credit.type",checkString(patientcredit.getType()),sWebLanguage)+"</td>"
-                            +"<td align='right'>"+patientcredit.getAmount()+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"
+                            +"<td align='right'>"+new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat")).format(patientcredit.getAmount())+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"
                         +"</tr>");
                     }
                 }
@@ -174,7 +174,13 @@
 	                <input type="button" class="button" name="ButtonFind" value="<%=getTran("web","find",sWebLanguage)%>" onclick="doFind()">
 	                <% if(!isInsuranceAgent){ %>
 	                <input type="button" class="button" name="ButtonNew" value="<%=getTran("web","new",sWebLanguage)%>" onclick="doNew()">
-	                <% } %>
+	                <% } 
+	                	if(true || request.getParameter("showpatientname")!=null){
+	                %>
+	                &nbsp;&nbsp;&nbsp;&nbsp;<font style='font-size: 16px'><%=patientInvoice==null || patientInvoice.getPatient()==null?"":patientInvoice.getPatient().getFullName()%></font>
+	                <%
+	                	}
+	                %>
 	            </td>
 	        </tr>
 	    </table>
@@ -331,7 +337,7 @@
 	            <td class='admin2'><%=writeDateField("EditDate","EditForm",ScreenHelper.getSQLDate(patientInvoice.getDate()),sWebLanguage)%></td>
 	            <td class='admin' nowrap><%=getTran("Web.finance","patientinvoice.status",sWebLanguage)%> *</td>
 	            <td class='admin2'>
-	                <select id="invoiceStatus" class="text" name="EditStatus" onchange="doStatus()"  <%=patientInvoice.getStatus().equalsIgnoreCase("closed") || patientInvoice.getStatus().equalsIgnoreCase("canceled")?"disabled":""%>>
+	                <select id="invoiceStatus" class="text" name="EditStatus" onchange="doStatus()"  <%=!activeUser.getAccessRight("financial.modifyinvoicestatus.select") || patientInvoice.getStatus().equalsIgnoreCase("closed") || patientInvoice.getStatus().equalsIgnoreCase("canceled")?"disabled":""%>>
 	                    <%
 	
 	                        if(checkString(patientInvoice.getStatus()).equalsIgnoreCase("canceled")){
@@ -348,6 +354,7 @@
 	            <td class='admin' nowrap><%=getTran("web.finance","balance",sWebLanguage)%></td>
 	            <td class='admin2'>
 	                <input class='text' readonly type='text' name='EditBalance' id='EditBalance' value='<%=checkString(Double.toString(patientInvoice.getBalance())).length()>0?new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat")).format(dBalance):""%>' size='20'> <%=MedwanQuery.getInstance().getConfigParam("currency","€")%>
+	                <input type='hidden' name='EditBalanceDetailed' id='EditBalanceDetailed' value='<%=""+dBalance%>' size='20'>
 	                &nbsp;<%=getTran("web","total",sWebLanguage) %>: <label id='invoiceValue'></label> <%=MedwanQuery.getInstance().getConfigString("currency","EUR") %>
 	                &nbsp;<%=getTran("web","paid",sWebLanguage) %>: <label id='invoicePaid'></label> <%=MedwanQuery.getInstance().getConfigString("currency","EUR") %>
 	                &nbsp;100%: <label id='invoice100pct'></label> <%=MedwanQuery.getInstance().getConfigString("currency","EUR") %>
@@ -572,6 +579,7 @@
 	                        <%
 	                            	}
 	                            }
+	                            System.out.println("isInsuranceAgent="+isInsuranceAgent);
 	                        if(isInsuranceAgent && checkString(patientInvoice.getUid()).split("\\.").length==2 && checkString(patientInvoice.getAcceptationUid()).length()==0 && Pointer.getPointer("NOVALIDATE."+patientInvoice.getUid()).length()==0){
 	                        %>
                                	<input class="button" type="button" name="buttonAcceptation" value='<%=getTranNoLink("Web.finance","validation",sWebLanguage)%>' onclick="doValidate('<%=patientInvoice.getUid()%>');">
@@ -676,7 +684,7 @@
 	        	}
 	        %>
 	            else {
-		            if ((document.getElementById('EditBalance').value*1==0)&&(document.getElementById('invoiceStatus').value!="closed")&&(document.getElementById('invoiceStatus').value!="canceled")){
+		            if (<%=MedwanQuery.getInstance().getConfigInt("enableAutomaticInvoiceClosure",1)%>==1 && (document.getElementById('EditBalance').value*1==0)&&(document.getElementById('invoiceStatus').value!="closed")&&(document.getElementById('invoiceStatus').value!="canceled")){
 		                var popupUrl = "<c:url value='/popup.jsp'/>?Page=_common/search/yesnoPopup.jsp&ts=<%=getTs()%>&labelType=web.finance&labelID=closetheinvoice";
 		                var modalities = "dialogWidth:266px;dialogHeight:143px;center:yes;scrollbars:no;resizable:no;status:no;location:no;";
 		                var answer = (window.showModalDialog)?window.showModalDialog(popupUrl,"",modalities):window.confirm("<%=getTranNoLink("web.finance","closetheinvoice",sWebLanguage)%>");
@@ -811,6 +819,7 @@
 		    	}
 			}
 	    	document.getElementById('EditBalance').value = (total-paid-(total*reduction/100)).toFixed(<%=MedwanQuery.getInstance().getConfigInt("currencyDecimals",2)%>);
+	    	document.getElementById('EditBalanceDetailed').value = (total-paid-(total*reduction/100)).toFixed(2);
 	    }
 	
 	    function doPrintPdf(invoiceUid){
@@ -953,7 +962,7 @@
 	  }
 	  
 	  function doPayment(invoiceUid){
-	    openPopup("/financial/patientCreditEdit.jsp&ts=<%=getTs()%>&EditCreditInvoiceUid="+invoiceUid+"&ScreenType=doPayment&EditBalance="+document.getElementById('EditBalance').value);
+	    openPopup("/financial/patientCreditEdit.jsp&ts=<%=getTs()%>&EditCreditInvoiceUid="+invoiceUid+"&ScreenType=doPayment&EditBalance="+document.getElementById('EditBalanceDetailed').value);
 	  }
 	
 	  function doInvoiceCancel(invoiceUid){
@@ -973,6 +982,7 @@
 	  loadOpenPatientInvoices();
 	  doBalance();
 	  document.getElementById('EditBalance').value = formatNumber(document.getElementById('EditBalance').value,<%=MedwanQuery.getInstance().getConfigInt("currencyDecimals",2)%>);
+	  document.getElementById('EditBalanceDetailed').value = formatNumber(document.getElementById('EditBalance').value,2);
 	  
 	  <%
 	  	if(automaticPayment){

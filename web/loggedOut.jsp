@@ -88,7 +88,7 @@
         <%
             if(MedwanQuery.getInstance().getConfigString("mxsref", "rw").equalsIgnoreCase("rw")){
 %><img src="_img/flags/rwandaflag.jpg" height="15px" width="30px" alt="Rwanda"/>
-  <a href="http://mxs.rwandamed.org" target="_new"><b>MXS Central Africa SARL</b></a>
+  <a href="http://mxs.rwandamed.org" target="_new"><b>The Open-IT Group Ltd</b></a>
   <BR/> PO Box 3242 - Kigali Rwanda Tel +250 07884 32 435 -
   <a href="mailto:mxs@rwandamed.org">mxs@rwandamed.org</a><%
             }
@@ -111,7 +111,7 @@
             }
             else if(MedwanQuery.getInstance().getConfigString("mxsref", "rw").equalsIgnoreCase("ml")){
 %><img src="_img/flags/maliflag.jpg" height="15px" width="30px" alt="Mali"/>
-  <a href="http://www.sante.gov.ml/" target="_new"><b>ANTIM</b></a> et <a href="http://www.mxs.be" target="_new"><b>MXS</b></a>
+  <a href="http://www.sante.gov.ml/" target="_new"><b>ANTIM</b></a> et <a href="http://www.post-factum.be" target="_new"><b>Post-Factum</b></a>
   <BR/> Hamdalaye ACI 2000, Rue 340, Porte 541, Bamako - Mali<br/>
   <a href="mailto:antim@sante.gov.ml">antim@sante.gov.ml</a><%
             }

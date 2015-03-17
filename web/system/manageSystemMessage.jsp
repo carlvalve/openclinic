@@ -249,11 +249,8 @@
 	          %>msgForm.Message<%=languages[l].toUpperCase()%>.value = "";<%
 	      }
 	  %>
-
       msgForm.saveButton.disabled = true;
 	  msgForm.clearButton.disabled = true;
-	  msgForm.backButton.disabled = true;
-	      
 	  msgForm.Action.value = "save";
 	  msgForm.submit();
 	}
@@ -286,7 +283,6 @@
 	if(okToSubmit){
       msgForm.saveButton.disabled = true;
       msgForm.clearButton.disabled = true;
-      msgForm.backButton.disabled = true;
       
 	  msgForm.Action.value = "save";
 	  msgForm.submit();
@@ -310,7 +306,7 @@
     		  "&LabelLang="+labelLang;
     new Ajax.Request(url,{
       onSuccess:function(resp){
-        var label = resp.responseText.trim();
+          var label = eval('('+resp.responseText+')').label.trim();
         label = convertSpecialCharsToHTML(label);
         eval("msgForm.Message"+labelLang.toUpperCase()+".value = label;");
       }
@@ -322,7 +318,6 @@
     if(yesnoDeleteDialog()){
       msgForm.saveButton.disabled = true;
       msgForm.clearButton.disabled = true;
-      msgForm.backButton.disabled = true;
 	      
       msgForm.Action.value = "deletePrevMsg";
       msgForm.deleteMsgId.value = msgId;

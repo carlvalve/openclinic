@@ -87,7 +87,7 @@
 	                                    olddate=sDate;
 	                                }
 	                                else {
-	                                    sDate="";
+	                                    sDate = ScreenHelper.stdDateFormat.format(debet.getDate());
 	                                }
 	                            }
 	                        }
@@ -108,8 +108,9 @@
 
 	                        sReturn.append("<tr class='list"+sClass+"'><td><img src='"+sImage+"' name='cbDebet"+debet.getUid()+"="+debet.getInsurarAmount()+"' onclick='doBalance(this, true)'></td>"
 	                                       +"<td>"+HTMLEntities.htmlentities(sPatientName)+"</td>"
-	                                       +"<td>"+HTMLEntities.htmlentities(sDate)+"</td>"
 	                                       +"<td>"+HTMLEntities.htmlentities(sEncounterName)+"</td>"
+	                                       +"<td><a href='javascript:openPatientInvoice("+debet.getPatientInvoiceUid().replaceAll(MedwanQuery.getInstance().getConfigInt("serverId")+"\\.","")+");'>"+HTMLEntities.htmlentities(debet.getPatientInvoiceUid().replaceAll(MedwanQuery.getInstance().getConfigInt("serverId")+"\\.",""))+"</a></td>"
+	                                       +"<td>"+HTMLEntities.htmlentities(sDate)+"</td>"
 	                                       +"<td>" +debet.getQuantity()+" x "+ HTMLEntities.htmlentities(sPrestationDescription)+"</td>"
 	                                       +"<td>"+new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","0.00")).format(debet.getInsurarAmount())+" "+MedwanQuery.getInstance().getConfigParam("currency", "€")+"</td>"
 	                                       +"</tr>");
@@ -130,6 +131,7 @@
     private String addPeriodDebets(Vector vDebets, String sClass, String sWebLanguage, boolean bChecked,
     		                       java.util.Date begin, java.util.Date end, String sServiceUid){
         StringBuffer sReturn = new StringBuffer();
+        boolean bBaseInvoicingOnPatientInvoiceDate=false;
 
         if (vDebets != null) {
             Debet debet;
@@ -147,6 +149,9 @@
             for (int i=0;i<vDebets.size(); i++){
                 debet = (Debet) vDebets.elementAt(i);
                 if(debet!=null){
+                	if(i==0){
+                		bBaseInvoicingOnPatientInvoiceDate=(debet.getInsurance()!=null && debet.getInsurance().getInsurar()!=null && debet.getInsurance().getInsurar().getIncludeAllPatientInvoiceDebets()==1);
+                	}
                     hSort.put(debet.getPatientName()+"="+debet.getDate().getTime()+"="+debet.getUid(),debet);
                 }
             }
@@ -160,10 +165,10 @@
                 if (checkString(debet.getUid()).length() > 0) {
                     if (debet != null) {
                         if(begin!=null & begin.after(debet.getDate())){
-                            continue;
+                            //continue;
                         }
                         if(end!=null & end.before(debet.getDate())){
-                            continue;
+                            //continue;
                         }
                         if(sServiceUid.length()>0){
                        		if(sServiceUid.indexOf("'"+debet.determineServiceUid()+"'")<0){
@@ -181,7 +186,7 @@
                                 sEncounterName=debet.getEncounterUid();
                             }
                             oldencounter=sEncounterName;
-                            sDate = ScreenHelper.stdDateFormat.format(debet.getDate());
+                           	sDate = ScreenHelper.stdDateFormat.format(debet.getDate());
                             olddate=sDate;
                         }
                         else {
@@ -196,7 +201,7 @@
                                     sEncounterName=debet.getEncounterUid();
                                 }
                                 oldencounter=sEncounterName;
-                                sDate = ScreenHelper.stdDateFormat.format(debet.getDate());
+                               	sDate = ScreenHelper.stdDateFormat.format(debet.getDate());
                                 olddate=sDate;
                             }
                             else {
@@ -211,11 +216,11 @@
                                         sEncounterName=debet.getEncounterUid();
                                     }
                                     oldencounter=sEncounterName;
-                                    sDate = ScreenHelper.stdDateFormat.format(debet.getDate());
+                                   	sDate = ScreenHelper.stdDateFormat.format(debet.getDate());
                                     olddate=sDate;
                                 }
                                 else {
-                                    sDate="";
+                                   	sDate = ScreenHelper.stdDateFormat.format(debet.getDate());
                                 }
                             }
                         }
@@ -236,8 +241,9 @@
 
                         sReturn.append("<tr class='list"+sClass+"'><td><img src='"+sImage+"' name='cbDebet"+debet.getUid()+"="+debet.getInsurarAmount()+"' onclick='doBalance(this, true)'></td>"
                                        +"<td>"+HTMLEntities.htmlentities(sPatientName)+"</td>"
-                                       +"<td>"+HTMLEntities.htmlentities(sDate)+"</td>"
                                        +"<td>"+HTMLEntities.htmlentities(sEncounterName)+"</td>"
+                                       +"<td><a href='javascript:openPatientInvoice("+debet.getPatientInvoiceUid().replaceAll(MedwanQuery.getInstance().getConfigInt("serverId")+"\\.","")+");'>"+HTMLEntities.htmlentities(debet.getPatientInvoiceUid().replaceAll(MedwanQuery.getInstance().getConfigInt("serverId")+"\\.",""))+"</a>"+(bBaseInvoicingOnPatientInvoiceDate?" [<b>"+ScreenHelper.stdDateFormat.format(debet.getCreateDateTime())+"</b>]":"")+"</td>"
+                                       +"<td>"+HTMLEntities.htmlentities(sDate)+"</td>"
                                        +"<td>" +debet.getQuantity()+" x "+ HTMLEntities.htmlentities(sPrestationDescription)+"</td>"
                                        +"<td>"+new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","0.00")).format(debet.getInsurarAmount())+" "+MedwanQuery.getInstance().getConfigParam("currency", "€")+"</td>"
                                        +"</tr>");
@@ -252,11 +258,12 @@
 <table width="100%" cellspacing="1" cellpadding="0">
     <tr class="gray">
         <td width="50"/>
-        <td width="200"><%=HTMLEntities.htmlentities(getTran("web.control","output_h_4",sWebLanguage))%></td>
-        <td width="80"><%=HTMLEntities.htmlentities(getTran("web", "date", sWebLanguage))%></td>
+        <td><%=HTMLEntities.htmlentities(getTran("web.control","output_h_4",sWebLanguage))%></td>
         <td><%=HTMLEntities.htmlentities(getTran("web.finance","encounter",sWebLanguage))%></td>
+        <td><%=HTMLEntities.htmlentities(getTran("web.finance","patientinvoice",sWebLanguage))%></td>
+        <td><%=HTMLEntities.htmlentities(getTran("web", "date", sWebLanguage))%></td>
         <td><%=HTMLEntities.htmlentities(getTran("web","prestation",sWebLanguage))%></td>
-        <td width="100"><%=HTMLEntities.htmlentities(getTran("web","amount",sWebLanguage))%></td>
+        <td><%=HTMLEntities.htmlentities(getTran("web","amount",sWebLanguage))%></td>
     </tr>
 <%
 	String sWarning="";

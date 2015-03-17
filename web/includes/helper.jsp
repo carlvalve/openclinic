@@ -37,7 +37,7 @@
 
 <%!
     String sAPPTITLE = "Openclinic";
-    String sWEBTITLE = "MXS - "+MedwanQuery.getInstance().getConfigString("edition").toUpperCase();
+    String sWEBTITLE = "Post-Factum - "+MedwanQuery.getInstance().getConfigString("edition").toUpperCase();
     String sAPPDIR = "";
     String sAPPFULLDIR = "";
     String sBackgroundColor = "CEFFCE;";
