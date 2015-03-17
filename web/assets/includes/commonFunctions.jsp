@@ -202,7 +202,7 @@
     var url = "<c:url value='/_common/getLabel.jsp'/>?ts=<%=ScreenHelper.getTs()%>&LabelType="+labelType+"&LabelId="+labelId;
     new Ajax.Request(url,{
       onSuccess:function(resp){
-        var label = resp.responseText.trim();
+        var label = eval('('+resp.responseText+')').label.trim();
         if(label.length > 0){
           label = label.unhtmlEntities();
           alertDialogDirectText(label);
@@ -233,7 +233,7 @@
       new Ajax.Request(url,{
         async:false,
         onSuccess:function(resp){
-          var label = resp.responseText.trim();
+            var label = eval('('+resp.responseText+')').label.trim();
           if(label.length > 0){
             label = label.unhtmlEntities();
         	if(yesnoDialogDirectText(label)){

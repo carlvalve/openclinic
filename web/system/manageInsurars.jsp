@@ -58,6 +58,7 @@
       	   sEditInsurarAllowedReductions   = checkString(request.getParameter("EditInsurarAllowedReductions")),
     	   sEditInsurarRequiresAffiliateID = checkString(request.getParameter("EditInsurarRequiresAffiliateID")),
     	   sEditInsurarRequiresValidation  = checkString(request.getParameter("EditInsurarRequiresValidation")),
+    	   sEditInsurarIncludeAllPatientInvoiceDebets  = checkString(request.getParameter("EditInsurarIncludeAllPatientInvoiceDebets")),
            sEditInsurarType     = checkString(request.getParameter("EditInsurarType"));
 
     /// DEBUG /////////////////////////////////////////////////////////////////////////////////////
@@ -164,6 +165,7 @@
 		}
 		
 		insurar.setRequireAffiliateID(nRequireAffiliateID);
+
 		int nRequireValidation = 0;
 		try{
 			nRequireValidation = Integer.parseInt(sEditInsurarRequiresValidation);
@@ -173,7 +175,18 @@
 		}
 		
 		insurar.setRequireValidation(nRequireValidation);
-        //*** save categories ***
+
+		int nEditInsurarIncludeAllPatientInvoiceDebets = 0;
+		try{
+			nEditInsurarIncludeAllPatientInvoiceDebets = Integer.parseInt(sEditInsurarIncludeAllPatientInvoiceDebets);
+		}
+		catch(Exception e){
+			//e.printStackTrace();
+		}
+		
+		insurar.setIncludeAllPatientInvoiceDebets(nEditInsurarIncludeAllPatientInvoiceDebets);
+
+		//*** save categories ***
         if(sCategoriesToSave.length() > 0){
             String catName, catLabel, catPatientShare, sOneCategory, catUid;
             Vector categories = new Vector();
@@ -574,6 +587,12 @@
                         <td class="admin"><%=getTran("web","requirevalidation",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="checkbox" name="EditInsurarRequiresValidation" <%=insurar.getRequireValidation()==1?"checked":""%> value="1"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="admin"><%=getTran("web","includeallpatientinvoicedebets",sWebLanguage)%></td>
+                        <td class="admin2">
+                            <input type="checkbox" name="EditInsurarIncludeAllPatientInvoiceDebets" <%=insurar.getIncludeAllPatientInvoiceDebets()==1?"checked":""%> value="1"/>
                         </td>
                     </tr>
                     <%-- SELECTED CATEGORIES --%>

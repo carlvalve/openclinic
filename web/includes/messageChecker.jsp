@@ -21,11 +21,12 @@
 <script>  
   var snoozeTimeInMillis = "<%=snoozeTimeInMillis%>",
       checkTimeInMillis = "<%=checkTimeInMillis%>";
-  var interval;      
-      
+  var interval;   
   <%
       Long snoozeDueTime = 0L;
-  
+  	  if(ScreenHelper.getTranExists("systemMessages","mainMessage","en").length()==0){
+  		session.removeAttribute("snoozeDueTime");
+  	  }
       if(session.getAttribute("snoozeDueTime")!=null){
     	  // message displayed before, only check for message when snooze due time is passed
     	  snoozeDueTime = Long.parseLong((String)session.getAttribute("snoozeDueTime"));
@@ -54,11 +55,10 @@
   <%-- CHECK FOR MESSAGE --%>
   function checkForMessage(){
     var url = "<c:url value='/includes/ajax/checkForMessage.jsp'/>?ts="+new Date().getTime();
-    
+   
     new Ajax.Request(url,{
-      onComplete: function(resp){
+      onSuccess: function(resp){
         var data = eval("("+resp.responseText+")");
-        
     	if(data.labelType.length > 0){	
           yesnoModalbox(data.message);
     	}
@@ -92,11 +92,19 @@
     });
   }
   
-  <%-- CLEAR SNOOZE IN SESSION (after doNotSnooze) --%>
+  <%-- SET SNOOZE IN SESSION (after doSnooze) --%>
   function clearSnoozeInSession(){
     var url = "<c:url value='/includes/ajax/setSnoozeInSession.jsp'/>?ts="+new Date().getTime();
     new Ajax.Request(url,{
       parameters: "Action=clear"
+    });
+  }
+  
+  function logmessage(msg){
+    var url = "<c:url value='/includes/logmessage.jsp'/>";
+    new Ajax.Request(url,{
+    	method: 'post',
+      parameters: "msg="+msg
     });
   }
   

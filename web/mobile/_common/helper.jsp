@@ -217,7 +217,7 @@
     // common stuff
     final SimpleDateFormat stdDateFormat = ScreenHelper.stdDateFormat;
     final String sAPPNAME = "OpenClinic Mobile",
-                 sWEBTITLE = "MXS - "+sAPPNAME;  
+                 sWEBTITLE = "Post-Factum - "+sAPPNAME;  
     final String ITEM_PREFIX = "be.mxs.common.model.vo.healthrecord.IConstants.";
     final String sCONTEXTPATH = "http://"+request.getServerName()+request.getRequestURI().replaceAll(request.getServletPath(),"");
     

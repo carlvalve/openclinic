@@ -110,6 +110,10 @@
 	                	// content below, so open hidden table
 	                	sOnClick = "onClick=\"toggleDebetGroup('"+groupIdx+"');\" style='cursor:hand;'";
 	                }
+	                String sInsurer="";
+	                if(mostRecentDebet.getInsurance()!=null && mostRecentDebet.getInsurance().getInsurar()!=null){
+	                	sInsurer=mostRecentDebet.getInsurance().getInsurar().getName();
+	                }
 	                
 	            	// main-row for group : info about 'mostRecentDebet' or summed info 
 	            	sHtml+= "<tr class='list1' "+sOnClick+">"+
@@ -117,6 +121,8 @@
 	            	         "<td "+(oneGroup.size()>1?"":" style='cursor:pointer'")+">"+(oneGroup.size()>1?"":ScreenHelper.getSQLDate(mostRecentDebet.getDate()))+"</td>"+
 	            	         "<td "+(oneGroup.size()>1?"":" style='cursor:pointer'")+">"+HTMLEntities.htmlentities(sEncounterName)+" ("+MedwanQuery.getInstance().getUser(mostRecentDebet.getUpdateUser()).getPersonVO().getFullName()+")</td>"+
 	                         "<td "+(oneGroup.size()>1?"":" style='cursor:pointer'")+">"+HTMLEntities.htmlentities(sPrestationDescription)+" ("+(String)groupInfo.get("quantity")+"x)</td>"+
+  	                         "<td style='padding-left:5px;'>"+HTMLEntities.htmlentities(sInsurer)+"</td>"+
+	                         "<td "+(oneGroup.size()>1?"":" style='cursor:pointer'")+">"+(Double.parseDouble((String)groupInfo.get("amount"))+Double.parseDouble((String)groupInfo.get("insurarAmount"))+Double.parseDouble((String)groupInfo.get("extraInsurarAmount")))+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"+
 	                         "<td "+(oneGroup.size()>1?"":" style='cursor:pointer'")+" "+(checkString(mostRecentDebet.getExtraInsurarUid2()).length()>0?"style='text-decoration:line-through'":"")+">"+(String)groupInfo.get("amount")+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"+
 	                         "<td "+(oneGroup.size()>1?"":" style='cursor:pointer'")+">"+(String)groupInfo.get("insurarAmount")+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"+
 	                         "<td "+(oneGroup.size()>1?"":" style='cursor:pointer'")+">"+(String)groupInfo.get("extraInsurarAmount")+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"+
@@ -126,7 +132,7 @@
 	                // hidden rows for group
 	                if(oneGroup.size() > 1){
 		            	sHtml+= "<tr id='groupTable_"+groupIdx+"' style='display:none'>"+
-		                         "<td colspan='8'>"+
+		                         "<td colspan='10'>"+
 		                          "<table width='100%' cellpadding='0' cellspacing='0'>"+
 		                           groupToHtml(sDebetType,oneGroup,sClass,sWebLanguage,groupIdx)+
 		                          "</table>"+
@@ -184,8 +190,10 @@
     	sHtml+= "<tr>"+
                  "<td width='4%'></td>"+
                  "<td width='8%'></td>"+
-                 "<td width='40%'></td>"+
-                 "<td width='20%'></td>"+
+                 "<td width='23%'></td>"+
+                 "<td width='23%'></td>"+
+                 "<td width='7%'></td>"+
+                 "<td width='7%'></td>"+
                  "<td width='7%'></td>"+
                  "<td width='7%'></td>"+
                  "<td width='7%'></td>"+
@@ -244,6 +252,10 @@
 	                    sCredited = getTran("web.occup","medwan.common.yes",sWebLanguage);
 	                    dExtraInsurarAmount=0;
 	                }
+	                String sInsurer="";
+	                if(debet.getInsurance()!=null && debet.getInsurance().getInsurar()!=null){
+	                	sInsurer=debet.getInsurance().getInsurar().getName();
+	                }
 	                
 	                // no TRs
 	                hSorted.put(sPatientName.toUpperCase()+"="+debet.getDate().getTime()+"="+debet.getUid()," onclick=\"setDebet('"+debet.getUid()+"','"+groupIdx+"');\">"
@@ -251,6 +263,8 @@
 	                        +"<td style='padding-left:5px;'>"+ScreenHelper.getSQLDate(debet.getDate())+"</td>"
 	                        +"<td style='padding-left:5px;'>"+HTMLEntities.htmlentities(sEncounterName)+" ("+MedwanQuery.getInstance().getUser(debet.getUpdateUser()).getPersonVO().getFullName()+")</td>"
 	                        +"<td style='padding-left:5px;'>"+HTMLEntities.htmlentities(sPrestationDescription)+" ("+debet.getQuantity()+"x)</td>"
+  	                        +"<td style='padding-left:5px;'>"+HTMLEntities.htmlentities(sInsurer)+"</td>"
+   	                        +"<td style='padding-left:5px;'>"+(debet.getAmount()+debet.getInsurarAmount()+dExtraInsurarAmount)+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"
 	                        +"<td style='padding-left:5px;' "+(checkString(debet.getExtraInsurarUid2()).length()>0?"style='text-decoration:line-through'":"")+">"+debet.getAmount()+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"
 	                        +"<td style='padding-left:5px;'>"+debet.getInsurarAmount()+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"
 	                        +"<td style='padding-left:5px;'>"+dExtraInsurarAmount+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"
@@ -297,8 +311,10 @@
     <tr class="admin">
         <td width="4%">&nbsp;</td>
         <td width="8%"><%=HTMLEntities.htmlentities(getTran("web","date",sWebLanguage))%></td>
-        <td width="40%"><%=HTMLEntities.htmlentities(getTran("web.finance","encounter",sWebLanguage))%></td>
-        <td width="20%"><%=HTMLEntities.htmlentities(getTran("web","prestation",sWebLanguage))%></td>
+        <td width="23%"><%=HTMLEntities.htmlentities(getTran("web.finance","encounter",sWebLanguage))%></td>
+        <td width="23%"><%=HTMLEntities.htmlentities(getTran("web","prestation",sWebLanguage))%></td>
+        <td width="7%"><%=HTMLEntities.htmlentities(getTran("web","insurar",sWebLanguage))%></td>
+        <td width="7%"><%=HTMLEntities.htmlentities(getTran("web","total",sWebLanguage))%></td>
         <td width="7%"><%=HTMLEntities.htmlentities(getTran("web","amount",sWebLanguage))%></td>
         <td width="7%"><%=HTMLEntities.htmlentities(getTranNoLink("web.finance","amount.insurar",sWebLanguage))%></td>
         <td width="7%"><%=HTMLEntities.htmlentities(getTranNoLink("web.finance","amount.complementaryinsurar",sWebLanguage))%></td>
@@ -306,7 +322,7 @@
     </tr>
     
 	<%		
-	    Vector vUnassignedDebets;
+    Vector vUnassignedDebets;
 	    if(sFindDateBegin.length()==0 && sFindDateEnd.length()==0 && sFindAmountMin.length()==0 && sFindAmountMax.length()==0){
 	    	// no search-criteria
 	        vUnassignedDebets = Debet.getUnassignedPatientDebets(activePatient.personid);

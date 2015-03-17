@@ -1,3 +1,4 @@
+<%@page import="be.mxs.common.model.vo.healthrecord.HealthRecordVO"%>
 <%@page import="be.dpms.medwan.common.model.vo.occupationalmedicine.VerifiedExaminationVO,
                 java.util.*"%>
 <%@include file="/includes/validateUser.jsp"%>
@@ -54,9 +55,8 @@
     //--- 2 - GLOBAL EXAMINATIONS -----------------------------------------------------------------
     SessionContainerWO sessionContainerWO = (SessionContainerWO) SessionContainerFactory.getInstance().getSessionContainerWO(request,SessionContainerWO.class.getName());
     sessionContainerWO.init(activePatient.personid);
-
     Vector userServiceExams = ScreenHelper.getExaminationsForServiceIncludingParents(activeUser.activeService.code,activeUser.person.language);
-    userServiceExams = sessionContainerWO.getHealthRecordVO().getVerifiedExaminations(sessionContainerWO,userServiceExams);
+   	userServiceExams = sessionContainerWO.getHealthRecordVO().getVerifiedExaminations(sessionContainerWO,userServiceExams);
 
     VerifiedExaminationVO verifiedExaminationVO;
     Hashtable exams = new Hashtable();
@@ -100,7 +100,7 @@
 	    String sTTLabo = "be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_LAB_REQUEST";
 	    String sTranLabo = getTran("web.occup",sTTLabo,sWebLanguage);
 	    TransactionVO tranLabo = sessionContainerWO.getLastTransaction(sTTLabo);
-	
+
 	    String sLaboTranId = "";
 	    String sLaboServerId = "";
 	    String sLaboDate = "";
@@ -200,6 +200,7 @@
     //--- 3 - SPECIFIC EXAMINATIONS ---------------------------------------------------------------
     Vector examNames = new Vector(exams.keySet());
     if(activeUser.getAccessRight("examinations.specific.select")){
+
     	String sServiceSuffix = "";
     	if(activeUser.activeService.code.length() > 0){
     		sServiceSuffix = "("+getTran("Service",activeUser.activeService.code,sWebLanguage)+")";
@@ -214,7 +215,7 @@
 	    <%
 	        String sClass = "1";
 	        Collections.sort(examNames);
-	        
+
 	        for(int n=0; n<examNames.size(); n++){
 	            examName = (String)examNames.get(n);
 	            verifiedExaminationVO = (VerifiedExaminationVO)exams.get(examName);
@@ -268,6 +269,7 @@
 	    </tr>
 	<%
     }
+
 %>
         </td>
     </tr>

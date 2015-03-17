@@ -22,7 +22,7 @@
 		else{
 			MedwanQuery.getInstance().setConfigString("lastOpenClinicExport", request.getParameter("lastOpenClinicExport"));
 		}
-		if(checkString(request.getParameter("isslaveserver")).equalsIgnoreCase("1")){
+		if(checkString(request.getParameter("initializeslavecounters")).equalsIgnoreCase("1")){
 			OpenclinicSlaveExporter openclinicSlaveExporter = new OpenclinicSlaveExporter(new SessionMessage());
 			openclinicSlaveExporter.initializeCounters();
 		}

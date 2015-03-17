@@ -95,27 +95,29 @@
 		<tr>
 			<td class='admin'><%=getTran("web","destination",sWebLanguage)%>&nbsp;*&nbsp;</td>
 			<td class='admin2'>
-                <input type='radio' name='destination' id='destination1' value='download' <%=(sDestination.equals("download")?"checked":"")%>/><%=getLabel("web","download.file",sWebLanguage,"destination1")%><br>
+				<table><tr><td>
+                <input type='radio' name='destination' id='destination1' value='download' <%=(sDestination.equals("download")?"checked":"")%>/><%=getLabel("web","download.file",sWebLanguage,"destination1")%></td></tr>
 
 				<%
 				    // DESTINATION:FTP
 					String ftpserver = MedwanQuery.getInstance().getConfigString("WHONetDestinationFtpServer","");
 					if(ftpserver.split("@").length > 1){
-						%><input type='radio' name='destination' id='destination2' value='ftp' <%=(sDestination.equals("ftp")?"checked":"")%>/><%=getLabel("web","send.to.ftpserver",sWebLanguage,"destination2")+" "+getTran("web","towards",sWebLanguage)+" ["+ftpserver.split("@")[1]+"]"%><br><%
+						%><tr><td><input type='radio' name='destination' id='destination2' value='ftp' <%=(sDestination.equals("ftp")?"checked":"")%>/><%=getLabel("web","send.to.ftpserver",sWebLanguage,"destination2")+" "+getTran("web","towards",sWebLanguage)+" ["+ftpserver.split("@")[1]+"]"%></td></tr><%
 					} 
 	
 				    // DESTINATION:SMTP
 					String smtpserver = MedwanQuery.getInstance().getConfigString("WHONetDestinationSmtpServer","");
 					if(smtpserver.split("@").length > 1){
-						%><input type='radio' name='destination' id='destination3' value='smtp' <%=(sDestination.equals("smtp")?"checked":"")%>/><%=getLabel("web","send.to.smtpserver",sWebLanguage,"destination3")+" "+getTran("web","towards",sWebLanguage)+" ["+smtpserver+"]"%><br><%
+						%><tr><td><input type='radio' name='destination' id='destination3' value='smtp' <%=(sDestination.equals("smtp")?"checked":"")%>/><%=getLabel("web","send.to.smtpserver",sWebLanguage,"destination3")+" "+getTran("web","towards",sWebLanguage)+" ["+smtpserver+"]"%></td></tr><%
 					} 
 		
 				    // DESTINATION:DIRECTORY
 					String directory = MedwanQuery.getInstance().getConfigString("WHONetDestinationDirectory","");
 					if(directory.length() > 1){
-						%><input type='radio' name='destination' id='destination4' value='directory' <%=(sDestination.equals("directory")?"checked":"")%>/><%=getLabel("web","send.to.directory",sWebLanguage,"destination4")+" "+getTran("web","towards",sWebLanguage)+" ["+directory+"]"%><br><%
+						%><tr><td><input type='radio' name='destination' id='destination4' value='directory' <%=(sDestination.equals("directory")?"checked":"")%>/><%=getLabel("web","send.to.directory",sWebLanguage,"destination4")+" "+getTran("web","towards",sWebLanguage)+" ["+directory+"]"%></td></tr><%
 					} 
 				%>
+				</table>
 			</td>
 		</tr>
 		

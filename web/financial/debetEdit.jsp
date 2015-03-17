@@ -346,21 +346,20 @@ sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
             	<select class='text' name='EditCareProvider' id='EditCareProvider'>
             		<option value=''></option>
 		            <%
-		            	Vector users = UserParameter.getUserIds("invoicingcareprovider", "on");
-		            	SortedMap usernames = new TreeMap();
+		            	Vector users = UserParameter.getUserIdsExtended("invoicingcareprovider", "on");
+		            	SortedSet usernames = new TreeSet();
 		            	for(int n=0;n<users.size();n++){
-		            		User user = User.get(Integer.parseInt((String)users.elementAt(n)));
-		            		usernames.put(user.person.lastname.toUpperCase()+", "+user.person.firstname,user.userid);
+		            		usernames.add(users.elementAt(n));
 		            	}
 		            	//Determine selected value
 		            	String sSelectedValue="";
 		            	if(!sEditDebetUID.equalsIgnoreCase("-1")){
 		            		sSelectedValue=checkString(debet.getPerformeruid());
 		            	}
-		            	Iterator i = usernames.keySet().iterator();
+		            	Iterator i = usernames.iterator();
 		            	while(i.hasNext()){
-		            		String username=(String)i.next();
-		            		out.println("<option value='"+usernames.get(username)+"'"+(sSelectedValue.equals(usernames.get(username))?" selected":"")+">"+username+"</option>");
+		            		String u=(String)i.next();
+		            		out.println("<option value='"+u.split(";")[2]+"'"+(sSelectedValue.equals(u.split(";")[2])?" selected":"")+">"+u.split(";")[0].toUpperCase()+", "+u.split(";")[1]+"</option>");
 		            	}
 		            %>
             	</select>
@@ -993,5 +992,5 @@ sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
   checkSaveButtonRights();
   checkQuickInvoice();
   checkAdmissionDaysInvoiced();
-  changePrestation(false); // Stijn
+  window.setTimeout("changePrestation(false);",300); // Stijn
 </script>

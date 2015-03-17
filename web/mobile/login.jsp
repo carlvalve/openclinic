@@ -54,12 +54,12 @@ GA Open Source Edition by
 <a href="mailto:info@openit-burundi.net">info@openit-burundi.net</a>
 <% } else if(MedwanQuery.getInstance().getConfigString("mxsref","rw").equalsIgnoreCase("ml")){ %>
 <img src="../_img/flags/maliflag.jpg" height="15px" width="30px" alt="Mali"/>
-<a href="http://www.sante.gov.ml/" target="_new"><b>ANTIM</b></a> et <a href="http://www.mxs.be" target="_new"><b>MXS</b></a>
+<a href="http://www.sante.gov.ml/" target="_new"><b>ANTIM</b></a> et <a href="http://www.post-factum.be" target="_new"><b>Post-Factum</b></a>
 <br>Hamdalaye ACI 2000, Rue 340, Porte 541, Bamako - Mali<br>
 <a href="mailto:info@openit-burundi.net">antim@sante.gov.ml</a>
 <% } else { %>
 <img src="../_img/flags/belgiumflag.jpg" height="10px" width="20px" alt="Belgium"/>
-<b>MXS SA/NV</b>
+<b>Post-Factum SA/NV</b>
 <br>Pastoriestraat 58, 3370 Boutersem Belgium<br>Tel: +32 16 721047 -
 <a href="mailto:mxs@rwandamed.org">info@mxs.be</a>
 <% } %>

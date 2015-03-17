@@ -20,7 +20,7 @@
 	    document.open();
 	
 	    String sProject = checkString((String)session.getAttribute("activeProjectTitle")).toLowerCase();
-	    String sFooterText = MedwanQuery.getInstance().getConfigString("footer."+sProject,"OpenClinic pdf engine (c)2007-"+new SimpleDateFormat("yyyy").format(new java.util.Date())+", MXS nv");
+	    String sFooterText = MedwanQuery.getInstance().getConfigString("footer."+sProject,"OpenClinic pdf engine (c)2007-"+new SimpleDateFormat("yyyy").format(new java.util.Date())+", Post-Factum bvba");
 	    
 	    // Loop over the pages of the baos
 	    com.itextpdf.text.pdf.PdfImportedPage pdfPage;

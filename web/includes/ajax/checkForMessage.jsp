@@ -3,9 +3,7 @@
 
 <%   
     String sSnoozeTimeInMinutes = MedwanQuery.getInstance().getConfigString("messageCheckerSnoozeTimeInMinutes","5");
-
     String sMessage = ScreenHelper.getTranExists("systemMessages","mainMessage",sWebLanguage);
-
     /// DEBUG /////////////////////////////////////////////////////////////////////////////////////
     if(Debug.enabled && 1==2){
         Debug.println("\n****************** includes/ajax/checkForMessage.jsp ******************");

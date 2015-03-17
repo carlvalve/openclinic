@@ -55,6 +55,7 @@
 %>
 
 <%	
+	session.removeAttribute("snoozeDueTime");
 	String ag = request.getHeader("User-Agent"), browser="", version="";
 	try{
 		int tmpPos; 

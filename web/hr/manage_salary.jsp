@@ -101,29 +101,29 @@
                     <%-- header --%>                        
                     <tr class="admin">
                         <%-- 0 - empty --%>
-                        <td width="40" nowrap/>
+                        <td width="5%" nowrap/>
                         <%-- 1 - beginDate --%>
-                        <td width="70" nowrap style="padding-left:0px;">
+                        <td width="15%" nowrap>
                             <%=getTran("web.hr","beginDate",sWebLanguage)%>&nbsp;*&nbsp;
                         </td>
                         <%-- 2 - endDate --%>
-                        <td width="70" nowrap style="padding-left:0px;">
+                        <td width="15%" nowrap>
                             <%=getTran("web.hr","endDate",sWebLanguage)%>&nbsp;
                         </td>
                         <%-- 3 - period --%>
-                        <td width="70" nowrap style="padding-left:0px;">
+                        <td width="15%" nowrap>
                             <%=getTran("web.hr","period",sWebLanguage)%>&nbsp;*&nbsp;
                         </td>    
                         <%-- 4 - type --%>
-                        <td width="70" nowrap style="padding-left:0px;">
+                        <td width="15%" nowrap>
                             <%=getTran("web.hr","type",sWebLanguage)%>&nbsp;*&nbsp;
                         </td>    
                         <%-- 5 - amount --%>
-                        <td width="80" nowrap style="padding-left:0px;">
+                        <td width="20%" nowrap>
                             <%=getTran("web.hr","amount",sWebLanguage)%>&nbsp;
                         </td>    
                         <%-- 6 - empty --%>
-                        <td width="300" nowrap>&nbsp;</td>      
+                        <td nowrap>&nbsp;</td>      
                     </tr>
         
                     <%-- content by ajax and javascript --%>
@@ -178,33 +178,33 @@
                     <%-- header --%>                        
                     <tr class="admin">
                         <%-- 0 - empty --%>
-                        <td width="40" nowrap/>
+                        <td width="5%" nowrap/>
                         <%-- 1 - beginDate --%>
-                        <td width="70" nowrap style="padding-left:0px;">
+                        <td width="15%" nowrap>
                             <%=getTran("web.hr","beginDate",sWebLanguage)%>&nbsp;*&nbsp;
                         </td>
                         <%-- 2 - endDate --%>
-                        <td width="70" nowrap style="padding-left:0px;">
+                        <td width="15%" nowrap>
                             <%=getTran("web.hr","endDate",sWebLanguage)%>&nbsp;
                         </td>
                         <%-- 3 - period --%>
-                        <td width="70" nowrap style="padding-left:0px;">
+                        <td width="15%" nowrap>
                             <%=getTran("web.hr","period",sWebLanguage)%>&nbsp;*&nbsp;
                         </td>    
                         <%-- 4 - type --%>
-                        <td width="70" nowrap style="padding-left:0px;">
+                        <td width="15%" nowrap>
                             <%=getTran("web.hr","type",sWebLanguage)%>&nbsp;*&nbsp;
                         </td>   
                         <%-- 5 - percentage --%>
-                        <td width="70" nowrap style="padding-left:0px;">
+                        <td width="10%" nowrap>
                             <%=getTran("web","percentage",sWebLanguage)%>&nbsp;
                         </td>    
                         <%-- 6 - amount --%>
-                        <td width="80" nowrap style="padding-left:0px;">
+                        <td width="10%" nowrap>
                             <%=getTran("web.hr","amount",sWebLanguage)%>&nbsp;*&nbsp;
                         </td>    
                         <%-- 7 - empty --%>
-                        <td width="200" nowrap>&nbsp;</td>    
+                        <td >&nbsp;</td>    
                     </tr>
         
                     <%-- content by ajax and javascript --%>
@@ -263,29 +263,29 @@
                     <%-- header --%>                        
                     <tr class="admin">
                         <%-- 0 - empty --%>
-                        <td width="40" nowrap/>
+                        <td width="5%" nowrap/>
                         <%-- 1 - beginDate --%>
-                        <td width="70" nowrap style="padding-left:0px;">
+                        <td width="15%">
                             <%=getTran("web.hr","beginDate",sWebLanguage)%>&nbsp;*&nbsp;
                         </td>
                         <%-- 2 - endDate --%>
-                        <td width="70" nowrap style="padding-left:0px;">
+                        <td width="15%">
                             <%=getTran("web.hr","endDate",sWebLanguage)%>&nbsp;
                         </td>
                         <%-- 3 - period --%>
-                        <td width="70" nowrap style="padding-left:0px;">
+                        <td width="15%">
                             <%=getTran("web.hr","period",sWebLanguage)%>&nbsp;
                         </td>    
                         <%-- 4 - type --%>
-                        <td width="70" nowrap style="padding-left:0px;">
+                        <td width="15%">
                             <%=getTran("web.hr","type",sWebLanguage)%>&nbsp;*&nbsp;
                         </td>    
                         <%-- 5 - amount --%>
-                        <td width="80" nowrap style="padding-left:0px;">
+                        <td width="20%" nowrap>
                             <%=getTran("web.hr","amount",sWebLanguage)%>&nbsp;*&nbsp;
                         </td>    
                         <%-- 6 - empty --%>
-                        <td width="300" nowrap>&nbsp;</td>   
+                        <td nowrap>&nbsp;</td>   
                     </tr>
         
                     <%-- content by ajax and javascript --%>
@@ -340,29 +340,29 @@
                     <%-- header --%>                        
                     <tr class="admin">
                         <%-- 0 - empty --%>
-                        <td width="40" nowrap/>
+                        <td width="5%" nowrap/>
                         <%-- 1 - beginDate --%>
-                        <td width="70" nowrap style="padding-left:0px;">
+                        <td width="15%" nowrap>
                             <%=getTran("web.hr","beginDate",sWebLanguage)%>&nbsp;*&nbsp;
                         </td>
                         <%-- 2 - endDate --%>
-                        <td width="70" nowrap style="padding-left:0px;">
+                        <td width="15%" nowrap>
                             <%=getTran("web.hr","endDate",sWebLanguage)%>&nbsp;
                         </td>
                         <%-- 3 - period --%>
-                        <td width="70" nowrap style="padding-left:0px;">
+                        <td width="15%" nowrap>
                             <%=getTran("web.hr","period",sWebLanguage)%>&nbsp;
                         </td>    
                         <%-- 4 - type --%>
-                        <td width="70" nowrap style="padding-left:0px;">
+                        <td width="15%" nowrap>
                             <%=getTran("web.hr","type",sWebLanguage)%>&nbsp;*&nbsp;
                         </td>    
                         <%-- 5 - amount --%>
-                        <td width="80" nowrap style="padding-left:0px;">
+                        <td width="20%" nowrap>
                             <%=getTran("web.hr","amount",sWebLanguage)%>&nbsp;*&nbsp;
                         </td>    
                         <%-- 6 - empty --%>
-                        <td width="300" nowrap>&nbsp;</td>      
+                        <td nowrap>&nbsp;</td>      
                     </tr>
         
                     <%-- content by ajax and javascript --%>

@@ -24,7 +24,7 @@
 	    document.open();
 	
 	    String sProject = checkString((String)session.getAttribute("activeProjectTitle")).toLowerCase();
-	    String sFooterText = MedwanQuery.getInstance().getConfigString("footer."+sProject,"OpenClinic pdf engine (c)2007-"+new SimpleDateFormat("yyyy").format(new java.util.Date())+", MXS nv");
+	    String sFooterText = MedwanQuery.getInstance().getConfigString("footer."+sProject,"OpenClinic pdf engine (c)2007-"+new SimpleDateFormat("yyyy").format(new java.util.Date())+", Post-Factum bvba");
 	    
 	    // Loop over the pages of the baos
 	    com.itextpdf.text.pdf.PdfImportedPage pdfPage;
@@ -262,7 +262,6 @@
             		     sOutEnc2 = new StringBuffer();    
             String sClass = "1";
             int cbCounter = 1;
-	        
 	        //*** 1 - visits ***
 		    Vector visits = (Vector)Encounter.getInactiveEncounters(activePatient.personid,"visit",new java.util.Date());
 		    if(visits.size() > 0){
@@ -287,7 +286,7 @@
 		        Encounter encounter;
 				for(int i=0; i<visits.size(); i++){
 			        encounter = (Encounter)visits.get(i);
-	
+
                     // alternate row-style
                     if(sClass.length()==0) sClass = "1";
                     else                   sClass = "";
@@ -301,7 +300,7 @@
                              .append("<td onClick=\"clickCheckBox('visitUID_"+cbCounter+"')\">&nbsp;"+ScreenHelper.formatDate(encounter.getBegin())+"</td>")
                              .append("<td onClick=\"clickCheckBox('visitUID_"+cbCounter+"')\">&nbsp;"+ScreenHelper.formatDate(encounter.getEnd())+"</td>")
                              .append("<td onClick=\"clickCheckBox('visitUID_"+cbCounter+"')\">&nbsp;"+getTran("urgency.origin",encounter.getOrigin(),sWebLanguage)+"</td>")
-                             .append("<td onClick=\"clickCheckBox('visitUID_"+cbCounter+"')\">&nbsp;"+encounter.getService().getLabel(sWebLanguage)+"</td>")
+                             .append("<td onClick=\"clickCheckBox('visitUID_"+cbCounter+"')\">&nbsp;"+(encounter.getService()==null?"":encounter.getService().getLabel(sWebLanguage))+"</td>")
                              .append("<td onClick=\"clickCheckBox('visitUID_"+cbCounter+"')\" style='padding-left:5px;'>"+ReasonForEncounter.getReasonsForEncounterAsText(encounter.getUid(),sWebLanguage).replaceAll("\n","<br>")+"</td>")
                             .append("</tr>");
 

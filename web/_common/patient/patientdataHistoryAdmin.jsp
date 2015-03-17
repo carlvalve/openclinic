@@ -4,7 +4,6 @@
 try{
 	String personid = request.getParameter("personid");
 	java.util.Date updatetime = new SimpleDateFormat("yyyyMMddHHmmssSSS").parse(request.getParameter("updatetime"));
-	System.out.println("updatetime="+updatetime);
 	AdminPerson activeHistoryPatient = AdminPerson.getAdminHistoryPerson(personid,updatetime);
 
 	String sGender = "&nbsp;", sComment = "&nbsp;", sNativeCountry = "&nbsp;", sLanguage = "&nbsp;", sNatreg = "&nbsp;"

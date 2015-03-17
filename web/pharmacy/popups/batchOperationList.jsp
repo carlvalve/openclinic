@@ -60,15 +60,15 @@ String productStockUid=checkString(request.getParameter("productStockUid"));
 							thirdparty=person.lastname.toUpperCase()+", "+person.firstname.toUpperCase();
 						}
 					}
-					out.println("<tr><td class='admin2'>&lt;- "+getTran("productstockoperation.medicationreceipt",productStockOperation.getDescription(),sWebLanguage)+"</td>");
+					out.println("<tr><td class='admin2'>&lt;- "+getTranNoLink("productstockoperation.medicationreceipt",productStockOperation.getDescription(),sWebLanguage)+"</td>");
 					out.println("<td class='admin2'>"+date+"</td>");
-					out.println("<td class='admin2'>"+getTran("productstockoperation.sourcedestinationtype",productStockOperation.getSourceDestination().getObjectType(),sWebLanguage)+"</td>");
+					out.println("<td class='admin2'>"+getTranNoLink("productstockoperation.sourcedestinationtype",productStockOperation.getSourceDestination().getObjectType(),sWebLanguage)+"</td>");
 					out.println("<td class='admin2'>"+thirdparty+"</td>");
 					out.println("<td class='admin2'>"+(endLevel-unitsChanged)+"</td>");
 					out.println("<td class='admin2'>+"+unitsChanged+"</td>");
 					out.println("<td class='admin2'>"+endLevel+"</td>");
 					out.println("<td class='admin2'>"+user+"</td>");
-					out.println("<td class='admin2'></td>");
+					out.println("<td class='admin2'></td></tr>");
 					endLevel-=unitsChanged;			
 				}
 			}
@@ -80,7 +80,7 @@ String productStockUid=checkString(request.getParameter("productStockUid"));
 						if(person!=null){
 							thirdparty=person.lastname.toUpperCase()+", "+person.firstname.toUpperCase();
 						}
-						out.println("<tr><td class='admin2'>-&gt; "+getTran("productstockoperation.medicationdelivery",productStockOperation.getDescription(),sWebLanguage)+"</td>");
+						out.println("<tr><td class='admin2'>-&gt; "+getTranNoLink("productstockoperation.medicationdelivery",productStockOperation.getDescription(),sWebLanguage)+"</td>");
 					}
 					else if(productStockOperation.getSourceDestination()!=null && productStockOperation.getSourceDestination().getObjectType()!=null && productStockOperation.getSourceDestination().getObjectType().equalsIgnoreCase("servicestock")){
 						thirdparty=	productStockOperation.getSourceDestination().getObjectUid();
@@ -90,16 +90,22 @@ String productStockUid=checkString(request.getParameter("productStockUid"));
 								thirdparty=service.getName();
 							}
 						}
-						out.println("<tr><td class='admin2'>-&gt; "+getTran("productstockoperation.medicationdelivery",productStockOperation.getDescription(),sWebLanguage)+"</td>");
+						out.println("<tr><td class='admin2'>-&gt; "+getTranNoLink("productstockoperation.medicationdelivery",productStockOperation.getDescription(),sWebLanguage)+"</td>");
+					}
+					else if(productStockOperation.getSourceDestination()!=null && productStockOperation.getSourceDestination().getObjectType()!=null && productStockOperation.getSourceDestination().getObjectType().equalsIgnoreCase("supplier")){
+						thirdparty=	productStockOperation.getSourceDestination().getObjectUid();
+					}
+					else {
+						out.println("<tr><td class='admin2'>-&gt; "+getTranNoLink("productstockoperation.medicationdelivery",productStockOperation.getDescription(),sWebLanguage)+"</td>");
 					}
 					out.println("<td class='admin2'>"+date+"</td>");
-					out.println("<td class='admin2'>"+getTran("productstockoperation.sourcedestinationtype",productStockOperation.getSourceDestination().getObjectType(),sWebLanguage)+"</td>");
+					out.println("<td class='admin2'>"+getTranNoLink("productstockoperation.sourcedestinationtype",productStockOperation.getSourceDestination().getObjectType(),sWebLanguage)+"</td>");
 					out.println("<td class='admin2'>"+thirdparty+"</td>");
 					out.println("<td class='admin2'>"+(endLevel+unitsChanged)+"</td>");
 					out.println("<td class='admin2'>"+(-unitsChanged)+"</td>");
 					out.println("<td class='admin2'>"+endLevel+"</td>");
 					out.println("<td class='admin2'>"+user+"</td>");
-					out.println("<td class='admin2'>"+(productStockOperation.getSourceDestination().getObjectType().equalsIgnoreCase("patient")?prescription:"")+"</td>");
+					out.println("<td class='admin2'>"+(productStockOperation.getSourceDestination().getObjectType().equalsIgnoreCase("patient")?prescription:"")+"</td></tr>");
 					endLevel+=unitsChanged;			
 				}
 			}
