@@ -268,6 +268,40 @@ public class UserParameter {
         return vIds;
     }
     
+    public static Vector getUserIdsExtended(String sParameter,String sValue){
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        Vector vIds = new Vector();
+
+        String sSelect = "SELECT p.userid,lastname,firstname FROM UserParameters p,Users u,Admin a WHERE p.userid=u.userid and u.personid=a.personid and parameter = ? AND value = ? and active=1";
+
+    	Connection ad_conn = MedwanQuery.getInstance().getAdminConnection();
+        try{
+            ps = ad_conn.prepareStatement(sSelect);
+            ps.setString(1,sParameter);
+            ps.setString(2,sValue);
+            rs = ps.executeQuery();
+
+            while(rs.next()){
+                vIds.addElement(ScreenHelper.checkString(rs.getString("lastname")).toUpperCase()+";"+ScreenHelper.checkString(rs.getString("firstname"))+";"+ScreenHelper.checkString(rs.getString("userid")));
+            }
+            rs.close();
+            ps.close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+            try{
+                if(rs!=null)rs.close();
+                if(ps!=null)ps.close();
+                ad_conn.close();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        return vIds;
+    }
+    
     public static String getParameter(String sUserId,String sParameter){
         PreparedStatement ps = null;
         ResultSet rs = null;

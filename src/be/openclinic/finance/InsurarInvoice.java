@@ -984,6 +984,8 @@ public class InsurarInvoice extends Invoice {
 
     //--- GET DEBETS FOR INVOICE ------------------------------------------------------------------
     public static Vector getDebetsForInvoiceSortByDate(String sInvoiceUid){
+        InsurarInvoice invoice = InsurarInvoice.get(sInvoiceUid);
+        boolean bInvoicebased=(invoice!=null && invoice.getInsurar()!=null && invoice.getInsurar().getIncludeAllPatientInvoiceDebets()==1);
         PreparedStatement ps = null;
         ResultSet rs = null;
 
@@ -1002,6 +1004,17 @@ public class InsurarInvoice extends Invoice {
                       "   AND c.OC_PRESTATION_OBJECTID = replace(d.OC_DEBET_PRESTATIONUID,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','')"+
                       "   AND e.OC_ENCOUNTER_PATIENTUID = a.personid"+
                       " ORDER BY OC_DEBET_DATE,lastname,firstname,OC_DEBET_PATIENTINVOICEUID";
+            if(bInvoicebased){
+                sSelect = "SELECT a.lastname, a.firstname, d.*,e.*,c.*,pi.OC_PATIENTINVOICE_DATE"+
+                        " FROM OC_DEBETS d, OC_INSURARINVOICES i, OC_ENCOUNTERS e, AdminView a, OC_PRESTATIONS c, OC_PATIENTINVOICES pi"+
+                        "  WHERE d.OC_DEBET_INSURARINVOICEUID = ?"+
+                        "   AND i.OC_INSURARINVOICE_OBJECTID = replace(d.OC_DEBET_INSURARINVOICEUID,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','')"+
+                        "   AND e.OC_ENCOUNTER_OBJECTID = replace(d.OC_DEBET_ENCOUNTERUID,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','')"+
+                        "   AND c.OC_PRESTATION_OBJECTID = replace(d.OC_DEBET_PRESTATIONUID,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','')"+
+                        "   AND pi.OC_PATIENTINVOICE_OBJECTID=replace(d.OC_DEBET_PATIENTINVOICEUID,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','')"+
+                        "   AND e.OC_ENCOUNTER_PATIENTUID = a.personid"+
+                        " ORDER BY OC_PATIENTINVOICE_DATE,lastname,firstname,OC_DEBET_PATIENTINVOICEUID";
+            }
             ps = loc_conn.prepareStatement(sSelect);
             ps.setString(1,sInvoiceUid);
 
@@ -1011,7 +1024,14 @@ public class InsurarInvoice extends Invoice {
                 debet = new Debet();
 
                 debet.setUid(rs.getInt("OC_DEBET_SERVERID")+"."+rs.getInt("OC_DEBET_OBJECTID"));
-                debet.setDate(rs.getTimestamp("OC_DEBET_DATE"));
+                if(bInvoicebased){
+                	debet.setDate(rs.getTimestamp("OC_PATIENTINVOICE_DATE"));
+                    debet.setCreateDateTime(rs.getDate("OC_DEBET_DATE"));
+                }
+                else {
+                	debet.setDate(rs.getTimestamp("OC_DEBET_DATE"));
+                }
+                debet.setComment(rs.getString("OC_DEBET_COMMENT"));
                 debet.setAmount(rs.getDouble("OC_DEBET_AMOUNT"));
                 debet.setInsurarAmount(rs.getDouble("OC_DEBET_INSURARAMOUNT"));
                 debet.setInsuranceUid(rs.getString("OC_DEBET_INSURANCEUID"));
@@ -1022,7 +1042,6 @@ public class InsurarInvoice extends Invoice {
                 debet.setSupplierUid(rs.getString("OC_DEBET_SUPPLIERUID"));
                 debet.setPatientInvoiceUid(rs.getString("OC_DEBET_PATIENTINVOICEUID"));
                 debet.setInsurarInvoiceUid(rs.getString("OC_DEBET_INSURARINVOICEUID"));
-                debet.setComment(rs.getString("OC_DEBET_COMMENT"));
                 debet.setCredited(rs.getInt("OC_DEBET_CREDITED"));
                 debet.setQuantity(rs.getInt("OC_DEBET_QUANTITY"));
                 debet.setServiceUid(rs.getString("OC_DEBET_SERVICEUID"));

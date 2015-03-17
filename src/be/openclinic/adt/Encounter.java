@@ -221,10 +221,13 @@ public class Encounter extends OC_Object {
     }
     
     public boolean discontinuedAccident(){
-    	boolean bDiscontinued=false;
     	if(this.getCategories()!=null && this.getCategories().length()>0 && this.getCategories().indexOf("A")<0){
-    		return bDiscontinued;
+    		return false;
     	}
+    	if(this.getPatientUID()==null || this.getPatientUID().length()==0){
+    		return false;
+    	}
+    	boolean bDiscontinued=false;
     	PreparedStatement ps = null;
     	ResultSet rs = null;
         Connection conn = null;

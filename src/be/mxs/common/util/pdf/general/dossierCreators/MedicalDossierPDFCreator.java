@@ -1235,7 +1235,9 @@ public class MedicalDossierPDFCreator extends PDFDossierCreator {
     //--- LOAD TRANSACTION ------------------------------------------------------------------------
     protected void loadTransaction(TransactionVO transactionVO, int partsOfTransactionToPrint){
         transactionVO = MedwanQuery.getInstance().loadTransaction(transactionVO.getServerId(),transactionVO.getTransactionId().intValue());
-
+        if(transactionVO==null || transactionVO.getTransactionType()==null){
+        	return;
+        }
         if(transactionVO.getTransactionType().equalsIgnoreCase(IConstants_PREFIX+"TRANSACTION_TYPE_VACCINATION")){
             // do nothing : transactions are displayed separately
         }

@@ -97,7 +97,7 @@ public class GeneralPDFCreator extends PDFCreator {
 			doc.setPageSize(PageSize.A4);
 
 			//*** FOOTER **************************************************************************
-			PDFFooter footer = new PDFFooter("OpenClinic pdf engine (c)2007, MXS nv\n"+MedwanQuery.getInstance().getLabel("web.occup","medwan.common.patientrecord",sPrintLanguage)+" "+patient.getID("immatnew")+" "+patient.firstname+" "+patient.lastname);
+			PDFFooter footer = new PDFFooter("OpenClinic pdf engine (c)2007, Post-Factum bvba\n"+MedwanQuery.getInstance().getLabel("web.occup","medwan.common.patientrecord",sPrintLanguage)+" "+patient.getID("immatnew")+" "+patient.firstname+" "+patient.lastname);
 			docWriter.setPageEvent(footer);
             doc.open();
 

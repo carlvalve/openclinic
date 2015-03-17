@@ -331,7 +331,7 @@ public class Insurance extends OC_Object {
                         insurance.setExtraInsurarUid2(ScreenHelper.checkString(rs.getString("OC_INSURANCE_EXTRAINSURARUID2")));
                         insurance.setDefaultInsurance(rs.getInt("OC_INSURANCE_DEFAULT"));
 
-                        if(insurance.getInsuranceCategory()!=null){
+                        if(insurance.getInsuranceCategory()!=null && insurance.getInsuranceCategory().getPatientShare()!=null && insurance.getInsuranceCategory().getPatientShare().length()>0){
                         	insurance.setPatientShare(Integer.parseInt(insurance.getInsuranceCategory().getPatientShare()));
                         }
                     }

@@ -1143,7 +1143,7 @@ public class ScreenHelper {
             }
             else{
                 // screen and permission specified
-                if(sPermission.length() > 0 && !sPermission.equals("all")){
+                if(activeUser!=null && sPermission.length() > 0 && !sPermission.equals("all")){
                     if(sPermission.equals("none")){
                     	jsAlert = "";
                     }
@@ -1153,7 +1153,7 @@ public class ScreenHelper {
                 }
                 // no permission specified -> interprete as all permissions required
                 // Managing a page, means you can add, edit and delete.
-                else if(activeUser.getAccessRight(sScreen+".edit") &&
+                else if(activeUser!=null && activeUser.getAccessRight(sScreen+".edit") &&
                          activeUser.getAccessRight(sScreen+".add") &&
                          //activeUser.getAccessRight(sScreen+".select") &&
                          activeUser.getAccessRight(sScreen+".delete")){

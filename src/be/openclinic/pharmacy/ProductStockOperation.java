@@ -287,47 +287,49 @@ public class ProductStockOperation extends OC_Object{
 
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
-            String sSelect = "SELECT * FROM OC_PRODUCTSTOCKOPERATIONS"+
-                             " WHERE OC_OPERATION_SERVERID = ? AND OC_OPERATION_OBJECTID = ?";
-            ps = oc_conn.prepareStatement(sSelect);
-            ps.setInt(1,Integer.parseInt(operationUid.substring(0,operationUid.indexOf("."))));
-            ps.setInt(2,Integer.parseInt(operationUid.substring(operationUid.indexOf(".")+1)));
-            rs = ps.executeQuery();
-
-            // get data from DB
-            if(rs.next()){
-                operation = new ProductStockOperation();
-                operation.setUid(operationUid);
-
-                operation.setDescription(rs.getString("OC_OPERATION_DESCRIPTION"));
-                operation.setDate(rs.getDate("OC_OPERATION_DATE"));
-                operation.setUnitsChanged(rs.getInt("OC_OPERATION_UNITSCHANGED"));
-                operation.setProductStockUid(rs.getString("OC_OPERATION_PRODUCTSTOCKUID"));
-                operation.setPrescriptionUid(rs.getString("OC_OPERATION_PRESCRIPTIONUID"));
-
-                // sourceDestination (Patient|Med|Service)
-                ObjectReference sourceDestination = new ObjectReference();
-                sourceDestination.setObjectType(rs.getString("OC_OPERATION_SRCDESTTYPE"));
-                sourceDestination.setObjectUid(rs.getString("OC_OPERATION_SRCDESTUID"));
-                operation.setSourceDestination(sourceDestination);
-
-                // OBJECT variables
-                operation.setCreateDateTime(rs.getTimestamp("OC_OPERATION_CREATETIME"));
-                operation.setUpdateDateTime(rs.getTimestamp("OC_OPERATION_UPDATETIME"));
-                operation.setUpdateUser(ScreenHelper.checkString(rs.getString("OC_OPERATION_UPDATEUID")));
-                operation.setVersion(rs.getInt("OC_OPERATION_VERSION"));
-                operation.setBatchUid(rs.getString("OC_OPERATION_BATCHUID"));
-                operation.setOperationUID(rs.getString("OC_OPERATION_UID"));
-                operation.setReceiveComment(rs.getString("OC_OPERATION_RECEIVECOMMENT"));
-                operation.setUnitsReceived(rs.getInt("OC_OPERATION_UNITSRECEIVED"));
-                operation.setReceiveProductStockUid(rs.getString("OC_OPERATION_RECEIVEPRODUCTSTOCKUID"));
-                operation.setDocumentUID(rs.getString("OC_OPERATION_DOCUMENTUID"));
-                operation.setEncounterUID(rs.getString("OC_OPERATION_ENCOUNTERUID"));
-                operation.setOrderUID(rs.getString("OC_OPERATION_ORDERUID"));
-            }
-            else{
-                throw new Exception("ERROR : PRODUCTSTOCKOPERATION "+operationUid+" NOT FOUND");
-            }
+        	if(operationUid!=null && operationUid.length()>0 && operationUid.split("\\.").length>1 ){
+	            String sSelect = "SELECT * FROM OC_PRODUCTSTOCKOPERATIONS"+
+	                             " WHERE OC_OPERATION_SERVERID = ? AND OC_OPERATION_OBJECTID = ?";
+	            ps = oc_conn.prepareStatement(sSelect);
+	            ps.setInt(1,Integer.parseInt(operationUid.substring(0,operationUid.indexOf("."))));
+	            ps.setInt(2,Integer.parseInt(operationUid.substring(operationUid.indexOf(".")+1)));
+	            rs = ps.executeQuery();
+	
+	            // get data from DB
+	            if(rs.next()){
+	                operation = new ProductStockOperation();
+	                operation.setUid(operationUid);
+	
+	                operation.setDescription(rs.getString("OC_OPERATION_DESCRIPTION"));
+	                operation.setDate(rs.getDate("OC_OPERATION_DATE"));
+	                operation.setUnitsChanged(rs.getInt("OC_OPERATION_UNITSCHANGED"));
+	                operation.setProductStockUid(rs.getString("OC_OPERATION_PRODUCTSTOCKUID"));
+	                operation.setPrescriptionUid(rs.getString("OC_OPERATION_PRESCRIPTIONUID"));
+	
+	                // sourceDestination (Patient|Med|Service)
+	                ObjectReference sourceDestination = new ObjectReference();
+	                sourceDestination.setObjectType(rs.getString("OC_OPERATION_SRCDESTTYPE"));
+	                sourceDestination.setObjectUid(rs.getString("OC_OPERATION_SRCDESTUID"));
+	                operation.setSourceDestination(sourceDestination);
+	
+	                // OBJECT variables
+	                operation.setCreateDateTime(rs.getTimestamp("OC_OPERATION_CREATETIME"));
+	                operation.setUpdateDateTime(rs.getTimestamp("OC_OPERATION_UPDATETIME"));
+	                operation.setUpdateUser(ScreenHelper.checkString(rs.getString("OC_OPERATION_UPDATEUID")));
+	                operation.setVersion(rs.getInt("OC_OPERATION_VERSION"));
+	                operation.setBatchUid(rs.getString("OC_OPERATION_BATCHUID"));
+	                operation.setOperationUID(rs.getString("OC_OPERATION_UID"));
+	                operation.setReceiveComment(rs.getString("OC_OPERATION_RECEIVECOMMENT"));
+	                operation.setUnitsReceived(rs.getInt("OC_OPERATION_UNITSRECEIVED"));
+	                operation.setReceiveProductStockUid(rs.getString("OC_OPERATION_RECEIVEPRODUCTSTOCKUID"));
+	                operation.setDocumentUID(rs.getString("OC_OPERATION_DOCUMENTUID"));
+	                operation.setEncounterUID(rs.getString("OC_OPERATION_ENCOUNTERUID"));
+	                operation.setOrderUID(rs.getString("OC_OPERATION_ORDERUID"));
+	            }
+	            else{
+	                throw new Exception("ERROR : PRODUCTSTOCKOPERATION "+operationUid+" NOT FOUND");
+	            }
+        	}
         }
         catch(Exception e){
             if(e.getMessage().endsWith("NOT FOUND")){
@@ -1669,6 +1671,7 @@ public class ProductStockOperation extends OC_Object{
         		" OC_OPERATION_UNITSRECEIVED<OC_OPERATION_UNITSCHANGED";
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
+        	ps=oc_conn.prepareStatement(sSelect);
             rs = ps.executeQuery();
             while(rs.next()){
             	deliveries.add(rs.getString("OC_OPERATION_SRCDESTUID")+"$"+rs.getString("OC_OPERATION_PRODUCTSTOCKUID"));

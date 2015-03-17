@@ -1815,7 +1815,7 @@ public class OpenclinicSlaveExporter implements Runnable{
 		try {
 			while(true){
 				counter++;
-				sessionMessage.setMessage(translate("creating.batch")+counter+translate("for.export"));
+				sessionMessage.setMessage(translate("creating.batch")+" "+counter+" "+translate("for.export"));
 				Document message = exportToXML();
 				Element export = message.getRootElement();
 				sessionMessage.setMessage(translate("created.batch")+" <b>"+counter+"</b> "+translate("with")+" <b>"+export.attributeValue("patientrecords")+"</b> "+translate("patient.records"));
@@ -1880,6 +1880,49 @@ public class OpenclinicSlaveExporter implements Runnable{
 		addLab();
 		addRFEs();
 		addDiagnoses();
+		//Now we move the recordblocks to patientrecords
+		Iterator i = patientrecordblocks.keySet().iterator();
+		while(i.hasNext()){
+			String key = (String)i.next();
+			addToRecord(Integer.parseInt(key.split("\\.")[1]), (Element)patientrecordblocks.get(key));
+		}
+		Document document = DocumentHelper.createDocument();
+		Element export = document.addElement("export");
+		export.addAttribute("date", new SimpleDateFormat("yyyyMMddHHmmssSSSS").format(new java.util.Date()));
+		export.addAttribute("begin", new SimpleDateFormat("yyyyMMddHHmmssSSSS").format(begin));
+		export.addAttribute("sourceid", MedwanQuery.getInstance().getConfigString("slaveId",""));
+		export.addAttribute("sourcename", MedwanQuery.getInstance().getConfigString("slaveName",""));
+		export.addAttribute("project", MedwanQuery.getInstance().getConfigString("slaveProject","openclinic"));
+		Enumeration e = patientrecords.keys();
+		while(e.hasMoreElements()){
+			int personid = (Integer)e.nextElement();
+			export.add((Element)patientrecords.get(personid));
+		}
+		if(patientrecordblocks.size()>0){
+			export.addAttribute("end", ((String)patientrecordblocks.lastKey()).split("\\.")[0]);
+		}
+		export.addAttribute("patientrecords", patientrecords.size()+"");
+		
+		return document;
+	}
+	
+	public Document exportToXML(String sPersonid){
+		patientrecords=new Hashtable();
+		patientrecordblocks=new TreeMap();
+		begin = getLastExport();
+		addAdmin(sPersonid);
+		addPrivate(sPersonid);
+		addExtends(sPersonid);
+		addEncounters(sPersonid);
+		addInsurances(sPersonid);
+		addDebets(sPersonid);
+		addInvoices(sPersonid);
+		addCredits(sPersonid);
+		addTransactions(sPersonid);
+		addProblems(sPersonid);
+		addLab(sPersonid);
+		addRFEs(sPersonid);
+		addDiagnoses(sPersonid);
 		//Now we move the recordblocks to patientrecords
 		Iterator i = patientrecordblocks.keySet().iterator();
 		while(i.hasNext()){
@@ -2962,11 +3005,102 @@ public class OpenclinicSlaveExporter implements Runnable{
 		}
 	}
 
+	public void addCredits(String sPersonid){
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		try {
+			PreparedStatement ps = conn.prepareStatement("select p.*,e.oc_encounter_patientuid from oc_patientcredits p,oc_encounters e where oc_encounter_patientuid="+sPersonid+" and oc_encounter_objectid=replace(oc_patientcredit_encounteruid,'"+MedwanQuery.getInstance().getConfigInt("serverId")+".','') order by oc_patientcredit_updatetime asc");
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				try{
+					int personid= Integer.parseInt(rs.getString("oc_encounter_patientuid"));
+					Timestamp updatetime = rs.getTimestamp("oc_patientcredit_updatetime");
+			        Element element = DocumentHelper.createElement("credit");
+			        addTimestampElement(element, "updatetime", updatetime);
+			        addTimestampElement(element, "createtime", rs.getTimestamp("oc_patientcredit_createtime"));
+			        addStringElement(element, "updateuid", rs.getString("oc_patientcredit_updateuid"));
+			        addStringElement(element, "version", rs.getString("oc_patientcredit_version"));
+			        addStringElement(element, "serverid", rs.getString("oc_patientcredit_serverid"));
+			        String objectid=rs.getString("oc_patientcredit_objectid");
+			        addStringElement(element, "objectid", objectid);
+			        addTimestampElement(element, "date", rs.getTimestamp("oc_patientcredit_date"));
+			        addStringElement(element, "invoiceuid", rs.getString("oc_patientcredit_invoiceuid"));
+			        addStringElement(element, "amount", rs.getString("oc_patientcredit_amount"));
+			        addStringElement(element, "type", rs.getString("oc_patientcredit_type"));
+			        addStringElement(element, "encounteruid", rs.getString("oc_patientcredit_encounteruid"));
+			        addStringElement(element, "comment", rs.getString("oc_patientcredit_comment"));
+			        if(!addRecordBlock(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(updatetime)+"."+personid+".C."+objectid, element)){
+			        	break;
+			        }
+				}
+				catch(Exception e2){
+					e2.printStackTrace();
+				}
+			}
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally{
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	public void addProblems(){
 		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
 		try {
 			PreparedStatement ps = conn.prepareStatement("select * from oc_problems where oc_problem_updatetime>=? order by oc_problem_updatetime asc");
 			ps.setTimestamp(1, new java.sql.Timestamp(begin.getTime()));
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				try{
+					int personid= Integer.parseInt(rs.getString("oc_problem_patientuid"));
+					Timestamp updatetime = rs.getTimestamp("oc_problem_updatetime");
+			        Element element = DocumentHelper.createElement("problem");
+			        addTimestampElement(element, "updatetime", updatetime);
+			        addTimestampElement(element, "createtime", rs.getTimestamp("oc_problem_createtime"));
+			        addStringElement(element, "updateuid", rs.getString("oc_problem_updateuid"));
+			        addStringElement(element, "version", rs.getString("oc_problem_version"));
+			        addStringElement(element, "serverid", rs.getString("oc_problem_serverid"));
+			        String objectid=rs.getString("oc_problem_objectid");
+			        addStringElement(element, "objectid", objectid);
+			        addTimestampElement(element, "begin", rs.getTimestamp("oc_problem_begin"));
+			        addTimestampElement(element, "end", rs.getTimestamp("oc_problem_end"));
+			        addStringElement(element, "codetype", rs.getString("oc_problem_codetype"));
+			        addStringElement(element, "code", rs.getString("oc_problem_code"));
+			        addStringElement(element, "gravity", rs.getString("oc_problem_gravity"));
+			        addStringElement(element, "certainty", rs.getString("oc_problem_certainty"));
+			        addStringElement(element, "comment", rs.getString("oc_problem_comment"));
+			        if(!addRecordBlock(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(updatetime)+"."+personid+".O."+objectid, element)){
+			        	break;
+			        }
+				}
+				catch(Exception e2){
+					e2.printStackTrace();
+				}
+			}
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally{
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void addProblems(String sPersonid){
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		try {
+			PreparedStatement ps = conn.prepareStatement("select * from oc_problems where oc_problem_patientuid="+sPersonid);
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()){
 				try{
@@ -3064,6 +3198,60 @@ public class OpenclinicSlaveExporter implements Runnable{
 		}
 	}
 
+	public void addDiagnoses(String sPersonid){
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		try {
+			PreparedStatement ps = conn.prepareStatement("select d.* from oc_diagnoses d,oc_encounters e where oc_encounter_objectid=replace(oc_diagnosis_encounteruid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and oc_encounter_patientuid="+sPersonid);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				try{
+					Timestamp updatetime = rs.getTimestamp("oc_diagnosis_updatetime");
+			        Element element = DocumentHelper.createElement("diagnosis");
+			        addStringElement(element, "serverid", rs.getString("oc_diagnosis_serverid"));
+			        String objectid=rs.getString("oc_diagnosis_objectid");
+			        addStringElement(element, "objectid", objectid);
+			        addTimestampElement(element, "date", rs.getTimestamp("oc_diagnosis_date"));
+			        addStringElement(element, "encounteruid", rs.getString("oc_diagnosis_encounteruid"));
+			        addStringElement(element, "authoruid", rs.getString("oc_diagnosis_authoruid"));
+			        addStringElement(element, "code", rs.getString("oc_diagnosis_code"));
+			        addStringElement(element, "certainty", rs.getString("oc_diagnosis_certainty"));
+			        addStringElement(element, "gravity", rs.getString("oc_diagnosis_gravity"));
+			        addTimestampElement(element, "createtime", rs.getTimestamp("oc_diagnosis_createtime"));
+			        addTimestampElement(element, "updatetime", updatetime);
+			        addStringElement(element, "updateuid", rs.getString("oc_diagnosis_updateuid"));
+			        addStringElement(element, "version", rs.getString("oc_diagnosis_version"));
+			        addStringElement(element, "lateralisation", rs.getString("oc_diagnosis_lateralisation"));
+			        addStringElement(element, "codetype", rs.getString("oc_diagnosis_codetype"));
+			        addTimestampElement(element, "enddate", rs.getTimestamp("oc_diagnosis_enddate"));
+			        addStringElement(element, "referencetype", rs.getString("oc_diagnosis_referencetype"));
+			        addStringElement(element, "referenceuid", rs.getString("oc_diagnosis_referenceuid"));
+			        addStringElement(element, "poa", rs.getString("oc_diagnosis_poa"));
+			        addStringElement(element, "encounterobjectid", rs.getString("oc_diagnosis_encounterobjectid"));
+			        addStringElement(element, "nc", rs.getString("oc_diagnosis_nc"));
+			        addStringElement(element, "serviceuid", rs.getString("oc_diagnosis_serviceuid"));
+			        addStringElement(element, "flags", rs.getString("oc_diagnosis_flags"));
+			        if(!addRecordBlock(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(updatetime)+"."+objectid+".G.", element)){
+			        	break;
+			        }
+				}
+				catch(Exception e2){
+					e2.printStackTrace();
+				}
+			}
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally{
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	public void addRFEs(){
 		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
 		try {
@@ -3108,11 +3296,113 @@ public class OpenclinicSlaveExporter implements Runnable{
 		}
 	}
 
+	public void addRFEs(String sPersonid){
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		try {
+			PreparedStatement ps = conn.prepareStatement("select r.* from oc_RFE r,oc_encounters e where oc_encounter_objectid=replace(oc_rfe_encounteruid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and oc_encounter_patientuid="+sPersonid);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				try{
+					Timestamp updatetime = rs.getTimestamp("oc_rfe_updatetime");
+			        Element element = DocumentHelper.createElement("rfe");
+			        addStringElement(element, "serverid", rs.getString("oc_rfe_serverid"));
+			        String objectid=rs.getString("oc_rfe_objectid");
+			        addStringElement(element, "objectid", objectid);
+			        addStringElement(element, "encounteruid", rs.getString("oc_rfe_encounteruid"));
+			        addStringElement(element, "codetype", rs.getString("oc_rfe_codetype"));
+			        addStringElement(element, "code", rs.getString("oc_rfe_code"));
+			        addTimestampElement(element, "date", rs.getTimestamp("oc_rfe_date"));
+			        addStringElement(element, "flags", rs.getString("oc_rfe_flags"));
+			        addStringElement(element, "version", rs.getString("oc_rfe_version"));
+			        addTimestampElement(element, "createtime", rs.getTimestamp("oc_rfe_createtime"));
+			        addTimestampElement(element, "updatetime", updatetime);
+			        addStringElement(element, "updateuid", rs.getString("oc_rfe_updateuid"));
+			        if(!addRecordBlock(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(updatetime)+"."+objectid+".R.", element)){
+			        	break;
+			        }
+				}
+				catch(Exception e2){
+					e2.printStackTrace();
+				}
+			}
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally{
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	public void addLab(){
 		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
 		try {
 			PreparedStatement ps = conn.prepareStatement("select * from requestedlabanalyses where updatetime>=? order by updatetime asc");
 			ps.setTimestamp(1, new java.sql.Timestamp(begin.getTime()));
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				try{
+					int personid= Integer.parseInt(rs.getString("patientid"));
+					Timestamp updatetime = rs.getTimestamp("updatetime");
+			        Element element = DocumentHelper.createElement("lab");
+			        addTimestampElement(element, "updatetime", updatetime);
+			        addStringElement(element, "serverid", rs.getString("serverid"));
+			        String objectid=rs.getString("objectid");
+			        addStringElement(element, "objectid", objectid);
+			        String transactionid= rs.getString("transactionid");
+			        addStringElement(element, "transactionid",transactionid);
+			        String analysiscode=rs.getString("analysiscode");
+			        addStringElement(element, "analysiscode", analysiscode);
+			        addStringElement(element, "comment", rs.getString("comment"));
+			        addStringElement(element, "resultvalue", rs.getString("resultvalue"));
+			        addStringElement(element, "resultunit", rs.getString("resultunit"));
+			        addStringElement(element, "resultmodifier", rs.getString("resultmodifier"));
+			        addStringElement(element, "resultcomment", rs.getString("resultcomment"));
+			        addStringElement(element, "resultrefmax", rs.getString("resultrefmax"));
+			        addStringElement(element, "resultrefmin", rs.getString("resultrefmin"));
+			        addStringElement(element, "resultuserid", rs.getString("resultuserid"));
+			        addStringElement(element, "resultprovisional", rs.getString("resultprovisional"));
+			        addStringElement(element, "technicalvalidator", rs.getString("technicalvalidator"));
+			        addTimestampElement(element, "technicalvalidationdatetime", rs.getTimestamp("technicalvalidationdatetime"));
+			        addTimestampElement(element, "resultdate", rs.getTimestamp("resultdate"));
+			        addStringElement(element, "finalvalidator", rs.getString("finalvalidator"));
+			        addTimestampElement(element, "finalvalidationdatetime", rs.getTimestamp("finalvalidationdatetime"));
+			        addTimestampElement(element, "requestdatetime", rs.getTimestamp("requestdatetime"));
+			        addTimestampElement(element, "samplereceptiondatetime", rs.getTimestamp("samplereceptiondatetime"));
+			        addTimestampElement(element, "sampletakendatetime", rs.getTimestamp("sampletakendatetime"));
+			        addStringElement(element, "sampler", rs.getString("sampler"));
+			        addTimestampElement(element, "worklisteddatetime", rs.getTimestamp("worklisteddatetime"));
+			        if(!addRecordBlock(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(updatetime)+"."+personid+".L."+transactionid+"."+analysiscode, element)){
+			        	break;
+			        }
+				}
+				catch(Exception e2){
+					e2.printStackTrace();
+				}
+			}
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally{
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void addLab(String sPersonid){
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		try {
+			PreparedStatement ps = conn.prepareStatement("select * from requestedlabanalyses where patientid="+sPersonid);
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()){
 				try{
@@ -3219,6 +3509,56 @@ public class OpenclinicSlaveExporter implements Runnable{
 		}
 	}
 
+	public void addInvoices(String sPersonid){
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		try {
+			PreparedStatement ps = conn.prepareStatement("select * from oc_patientinvoices where oc_patientinvoice_patientuid="+sPersonid);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				try{
+					int personid= Integer.parseInt(rs.getString("oc_patientinvoice_patientuid"));
+					Timestamp updatetime = rs.getTimestamp("oc_patientinvoice_updatetime");
+			        Element element = DocumentHelper.createElement("invoice");
+			        addTimestampElement(element, "updatetime", updatetime);
+			        addTimestampElement(element, "createtime", rs.getTimestamp("oc_patientinvoice_createtime"));
+			        addStringElement(element, "updateuid", rs.getString("oc_patientinvoice_updateuid"));
+			        addStringElement(element, "version", rs.getString("oc_patientinvoice_version"));
+			        addStringElement(element, "serverid", rs.getString("oc_patientinvoice_serverid"));
+			        String objectid=rs.getString("oc_patientinvoice_objectid");
+			        addStringElement(element, "objectid", objectid);
+			        addStringElement(element, "id", rs.getString("oc_patientinvoice_id"));
+			        addTimestampElement(element, "date", rs.getTimestamp("oc_patientinvoice_date"));
+			        addStringElement(element, "status", rs.getString("oc_patientinvoice_status"));
+			        addStringElement(element, "balance", rs.getString("oc_patientinvoice_balance"));
+			        addStringElement(element, "number", rs.getString("oc_patientinvoice_number"));
+			        addStringElement(element, "insurarreference", rs.getString("oc_patientinvoice_insurarreference"));
+			        addStringElement(element, "acceptationuid", rs.getString("oc_patientinvoice_acceptationuid"));
+			        addStringElement(element, "insurarreferencedate", rs.getString("oc_patientinvoice_insurarreferencedate"));
+			        addStringElement(element, "verifier", rs.getString("oc_patientinvoice_verifier"));
+			        addStringElement(element, "comment", rs.getString("oc_patientinvoice_comment"));
+			        addStringElement(element, "modifiers", rs.getString("oc_patientinvoice_modifiers"));
+			        if(!addRecordBlock(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(updatetime)+"."+personid+".F."+objectid, element)){
+			        	break;
+			        }
+				}
+				catch(Exception e2){
+					e2.printStackTrace();
+				}
+			}
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally{
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	public void addInsurances(){
 		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
 		try {
@@ -3273,11 +3613,129 @@ public class OpenclinicSlaveExporter implements Runnable{
 		}
 	}
 
+	public void addInsurances(String sPersonid){
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		try {
+			PreparedStatement ps = conn.prepareStatement("select * from oc_insurances where oc_insurance_patientuid="+sPersonid);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				try{
+					int personid= Integer.parseInt(rs.getString("oc_insurance_patientuid"));
+					Timestamp updatetime = rs.getTimestamp("oc_insurance_updatetime");
+			        Element element = DocumentHelper.createElement("insurance");
+			        addTimestampElement(element, "updatetime", updatetime);
+			        addStringElement(element, "serverid", rs.getString("oc_insurance_serverid"));
+			        String objectid=rs.getString("oc_insurance_objectid");
+			        addStringElement(element, "objectid", objectid);
+			        addStringElement(element, "nr", rs.getString("oc_insurance_nr"));
+			        addStringElement(element, "insuraruid", rs.getString("oc_insurance_insuraruid"));
+			        addStringElement(element, "type", rs.getString("oc_insurance_type"));
+			        addTimestampElement(element, "start", rs.getTimestamp("oc_insurance_start"));
+			        addTimestampElement(element, "stop", rs.getTimestamp("oc_insurance_stop"));
+			        addStringElement(element, "comment", rs.getString("oc_insurance_comment"));
+			        addTimestampElement(element, "createtime", rs.getTimestamp("oc_insurance_createtime"));
+			        addStringElement(element, "updateuid", rs.getString("oc_insurance_updateuid"));
+			        addStringElement(element, "version", rs.getString("oc_insurance_version"));
+			        addStringElement(element, "insurancecategoryletter", rs.getString("oc_insurance_insurancecategoryletter"));
+			        addStringElement(element, "member", rs.getString("oc_insurance_member"));
+			        addStringElement(element, "memberimmat", rs.getString("oc_insurance_member_immat"));
+			        addStringElement(element, "memberemployer", rs.getString("oc_insurance_member_employer"));
+			        addStringElement(element, "status", rs.getString("oc_insurance_status"));
+			        addStringElement(element, "extrainsuraruid", rs.getString("oc_insurance_extrainsuraruid"));
+			        addStringElement(element, "extrainsuraruid2", rs.getString("oc_insurance_extrainsuraruid2"));
+			        addStringElement(element, "default", rs.getString("oc_insurance_default"));
+			        if(!addRecordBlock(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(updatetime)+"."+personid+".I."+objectid, element)){
+			        	break;
+			        }
+				}
+				catch(Exception e2){
+					e2.printStackTrace();
+				}
+			}
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally{
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	public void addDebets(){
 		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
 		try {
 			PreparedStatement ps = conn.prepareStatement("select d.*,e.oc_encounter_patientuid from oc_debets d,oc_encounters e where oc_encounter_objectid=replace(oc_debet_encounteruid,'"+MedwanQuery.getInstance().getConfigInt("serverId")+".','') and oc_debet_updatetime>=? order by oc_debet_updatetime asc limit "+maxrecordblocks);
 			ps.setTimestamp(1, new java.sql.Timestamp(begin.getTime()));
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				try{
+					int personid= Integer.parseInt(rs.getString("oc_encounter_patientuid"));
+					Timestamp updatetime = rs.getTimestamp("oc_debet_updatetime");
+			        Element element = DocumentHelper.createElement("debet");
+			        addTimestampElement(element, "updatetime", updatetime);
+			        addStringElement(element, "serverid", rs.getString("oc_debet_serverid"));
+			        String objectid=rs.getString("oc_debet_objectid");
+			        addStringElement(element, "objectid", objectid);
+			        addStringElement(element, "amount", rs.getString("oc_debet_amount"));
+			        addStringElement(element, "balanceuid", rs.getString("oc_debet_balanceuid"));
+			        addTimestampElement(element, "date", rs.getTimestamp("oc_debet_date"));
+			        addStringElement(element, "description", rs.getString("oc_debet_description"));
+			        addStringElement(element, "encounteruid", rs.getString("oc_debet_encounteruid"));
+			        addStringElement(element, "prestationuid", rs.getString("oc_debet_prestationuid"));
+			        addStringElement(element, "suppliertype", rs.getString("oc_debet_suppliertype"));
+			        addStringElement(element, "supplieruid", rs.getString("oc_debet_supplieruid"));
+			        addStringElement(element, "reftype", rs.getString("oc_debet_reftype"));
+			        addStringElement(element, "refuid", rs.getString("oc_debet_refuid"));
+			        addTimestampElement(element, "createtime", rs.getTimestamp("oc_debet_createtime"));
+			        addStringElement(element, "updatetuid", rs.getString("oc_debet_updateuid"));
+			        addStringElement(element, "version", rs.getString("oc_debet_version"));
+			        addStringElement(element, "quantity", rs.getString("oc_debet_quantity"));
+			        addStringElement(element, "credited", rs.getString("oc_debet_credited"));
+			        addStringElement(element, "insuranceuid", rs.getString("oc_debet_insuranceuid"));
+			        addStringElement(element, "patientinvoiceuid", rs.getString("oc_debet_patientinvoiceuid"));
+			        addStringElement(element, "comment", rs.getString("oc_debet_comment"));
+			        addStringElement(element, "insuraramount", rs.getString("oc_debet_insuraramount"));
+			        addStringElement(element, "extrainsuraruid", rs.getString("oc_debet_extrainsuraruid"));
+			        addStringElement(element, "extrainsurarinvoiceuid", rs.getString("oc_debet_extrainsurarinvoiceuid"));
+			        addStringElement(element, "extrainsuraramount", rs.getString("oc_debet_extrainsuraramount"));
+			        addStringElement(element, "renewalinterval", rs.getString("oc_debet_renewalinterval"));
+			        addStringElement(element, "renewaldate", rs.getString("oc_debet_renewaldate"));
+			        addStringElement(element, "performeruid", rs.getString("oc_debet_performeruid"));
+			        addStringElement(element, "extrainsuraruid2", rs.getString("oc_debet_extrainsuraruid2"));
+			        addStringElement(element, "extrainsurarinvoiceuid2", rs.getString("oc_debet_extrainsurarinvoiceuid2"));
+			        addStringElement(element, "extrainsuraramount2", rs.getString("oc_debet_extrainsuraramount2"));
+			        addStringElement(element, "serviceuid", rs.getString("oc_debet_serviceuid"));
+			        if(!addRecordBlock(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(updatetime)+"."+personid+".D."+objectid, element)){
+			        	break;
+			        }
+				}
+				catch(Exception e2){
+					e2.printStackTrace();
+				}
+			}
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally{
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void addDebets(String sPersonid){
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		try {
+			PreparedStatement ps = conn.prepareStatement("select d.*,e.oc_encounter_patientuid from oc_debets d,oc_encounters e where oc_encounter_objectid=replace(oc_debet_encounteruid,'"+MedwanQuery.getInstance().getConfigInt("serverId")+".','') and oc_encounter_patientuid="+sPersonid+" limit "+maxrecordblocks);
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()){
 				try{
@@ -3406,11 +3864,131 @@ public class OpenclinicSlaveExporter implements Runnable{
 		}
 	}
 	
+	public void addEncounters(String sPersonid){
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		try {
+			PreparedStatement ps = conn.prepareStatement("select * from oc_encounters where oc_encounter_patientuid="+sPersonid);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				try{
+					int personid= Integer.parseInt(rs.getString("oc_encounter_patientuid"));
+					Timestamp updatetime = rs.getTimestamp("oc_encounter_updatetime");
+			        Element element = DocumentHelper.createElement("encounter");
+			        addTimestampElement(element, "updatetime", updatetime);
+			        int serverid = rs.getInt("oc_encounter_serverid");
+			        addStringElement(element, "serverid", serverid+"");
+			        int objectid=rs.getInt("oc_encounter_objectid");
+			        addStringElement(element, "objectid", objectid+"");
+			        addStringElement(element, "type", rs.getString("oc_encounter_type"));
+			        addTimestampElement(element, "begindate", rs.getTimestamp("oc_encounter_begindate"));
+			        addTimestampElement(element, "enddate", rs.getTimestamp("oc_encounter_enddate"));
+			        addTimestampElement(element, "createtime", rs.getTimestamp("oc_encounter_createtime"));
+			        addStringElement(element, "updatetuid", rs.getString("oc_encounter_updateuid"));
+			        addStringElement(element, "version", rs.getString("oc_encounter_version"));
+			        addStringElement(element, "outcome", rs.getString("oc_encounter_outcome"));
+			        addStringElement(element, "destinationuid", rs.getString("oc_encounter_destinationuid"));
+			        addStringElement(element, "origin", rs.getString("oc_encounter_origin"));
+			        addTimestampElement(element, "processed", rs.getTimestamp("oc_encounter_processed"));
+			        addStringElement(element, "categories", rs.getString("oc_encounter_categories"));
+			        addStringElement(element, "newcase", rs.getString("oc_encounter_newcase"));
+			        addStringElement(element, "etiology", rs.getString("oc_encounter_etiology"));
+			        //Now add the encounterservices
+			        Element services = element.addElement("services");
+			        PreparedStatement ps2 = conn.prepareStatement("select * from oc_encounter_services where oc_encounter_serverid=? and oc_encounter_objectid=?");
+			        ps2.setInt(1, serverid);
+			        ps2.setInt(2, objectid);
+			        ResultSet rs2=ps2.executeQuery();
+			        while(rs2.next()){
+			        	Element service = services.addElement("service");
+			        	addStringElement(service, "serviceuid", rs2.getString("oc_encounter_serviceuid"));
+			        	addStringElement(service, "beduid", rs2.getString("oc_encounter_beduid"));
+			        	addStringElement(service, "manageruid", rs2.getString("oc_encounter_manageruid"));
+				        addTimestampElement(service, "servicebegindate", rs2.getTimestamp("oc_encounter_servicebegindate"));
+				        addTimestampElement(service, "serviceenddate", rs2.getTimestamp("oc_encounter_serviceenddate"));
+			        }
+			        rs2.close();
+			        ps2.close();
+			        if(!addRecordBlock(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(updatetime)+"."+personid+".E."+objectid, element)){
+			        	break;
+			        }
+				}
+				catch(Exception e2){
+					e2.printStackTrace();
+				}
+			}
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally{
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	public void addTransactions(){
 		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
 		try {
 			PreparedStatement ps = conn.prepareStatement("select t.*,h.personid from transactions t, healthrecord h where t.healthrecordid=h.healthrecordid and ts>=? order by ts asc");
 			ps.setTimestamp(1, new java.sql.Timestamp(begin.getTime()));
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				int personid= rs.getInt("personid");
+		        Timestamp updatetime = rs.getTimestamp("ts");
+		        Element element = DocumentHelper.createElement("transaction");
+		        addTimestampElement(element, "ts", updatetime);
+		        addDateElement(element, "updatetime", rs.getDate("updatetime"));
+		        int transactionid=rs.getInt("transactionid");
+		        addStringElement(element, "transactionid", transactionid+"");
+		        addDateElement(element, "creationdate", rs.getDate("creationdate"));
+		        addStringElement(element, "transactiontype", rs.getString("transactiontype"));
+		        addStringElement(element, "status", rs.getString("status"));
+		        addStringElement(element, "userid", rs.getString("userid"));
+		        int serverid=rs.getInt("serverid");
+		        addStringElement(element, "serverid", serverid+"");
+		        addStringElement(element, "version", rs.getString("version"));
+		        addStringElement(element, "versionserverid", rs.getString("versionserverid"));
+		        //Now add the items for this transaction
+		        Element items = element.addElement("items");
+				PreparedStatement ps2 = conn.prepareStatement("select * from items where serverid=? and transactionid=?");
+				ps2.setInt(1,serverid);
+				ps2.setInt(2,transactionid);
+				ResultSet rs2 = ps2.executeQuery();
+				while(rs2.next()){
+					Element item = items.addElement("item");
+			        addStringElement(item, "itemid", rs2.getString("itemid"));
+			        addStringElement(item, "type", rs2.getString("type"));
+			        addStringElement(item, "value", rs2.getString("value"));
+			        addStringElement(item, "priority", rs2.getString("priority"));
+				}
+				rs2.close();
+				ps2.close();
+		        if(!addRecordBlock(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(updatetime)+"."+personid+".T."+transactionid, element)){
+		        	break;
+		        }
+			}
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally{
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void addTransactions(String sPersonid){
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		try {
+			PreparedStatement ps = conn.prepareStatement("select t.*,h.personid from transactions t, healthrecord h where t.healthrecordid=h.healthrecordid and h.personid="+sPersonid);
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()){
 				int personid= rs.getInt("personid");
@@ -3496,11 +4074,95 @@ public class OpenclinicSlaveExporter implements Runnable{
 		}
 	}
 	
+	public void addExtends(String sPersonid){
+		Connection conn = MedwanQuery.getInstance().getAdminConnection();
+		try {
+			PreparedStatement ps = conn.prepareStatement("select * from adminextends where personid="+sPersonid);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				int personid= rs.getInt("personid");
+		        Timestamp updatetime = rs.getTimestamp("updatetime");
+		        Element element = DocumentHelper.createElement("adminextends");
+		        addTimestampElement(element, "updatetime", updatetime);
+		        addStringElement(element, "extendid", rs.getString("extendid"));
+		        addStringElement(element, "extendtype", rs.getString("extendtype"));
+		        addStringElement(element, "labelid", rs.getString("labelid"));
+		        addStringElement(element, "extendvalue", rs.getString("extendvalue"));
+		        addStringElement(element, "updateuserid", rs.getString("updateuserid"));
+		        addStringElement(element, "updateserverid", rs.getString("updateserverid"));
+		        if(!addRecordBlock(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(updatetime)+"."+personid+".X", element)){
+		        	break;
+		        }
+			}
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally{
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	public void addPrivate(){
 		Connection conn = MedwanQuery.getInstance().getAdminConnection();
 		try {
-			PreparedStatement ps = conn.prepareStatement("select * from adminprivate where updatetime>=? order by updatetime asc");
+			PreparedStatement ps = conn.prepareStatement("select * from adminprivate where updatetime>=? and updateserverid order by updatetime asc");
 			ps.setTimestamp(1, new java.sql.Timestamp(begin.getTime()));
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				int personid= rs.getInt("personid");
+		        Timestamp updatetime = rs.getTimestamp("updatetime");
+		        Element element = DocumentHelper.createElement("adminprivate");
+		        addTimestampElement(element, "updatetime", updatetime);
+		        addStringElement(element, "privateid", rs.getString("privateid"));
+		        addDateElement(element, "start", rs.getDate("start"));
+		        addDateElement(element, "stop", rs.getDate("stop"));
+		        addStringElement(element, "address", rs.getString("address"));
+		        addStringElement(element, "city", rs.getString("city"));
+		        addStringElement(element, "zipcode", rs.getString("zipcode"));
+		        addStringElement(element, "country", rs.getString("country"));
+		        addStringElement(element, "telephone", rs.getString("telephone"));
+		        addStringElement(element, "fax", rs.getString("fax"));
+		        addStringElement(element, "mobile", rs.getString("mobile"));
+		        addStringElement(element, "email", rs.getString("email"));
+		        addStringElement(element, "comment", rs.getString("comment"));
+		        addStringElement(element, "type", rs.getString("type"));
+		        addStringElement(element, "updateserverid", rs.getString("updateserverid"));
+		        addStringElement(element, "district", rs.getString("district"));
+		        addStringElement(element, "sanitarydistrict", rs.getString("sanitarydistrict"));
+		        addStringElement(element, "province", rs.getString("province"));
+		        addStringElement(element, "sector", rs.getString("sector"));
+		        addStringElement(element, "cell", rs.getString("cell"));
+		        addStringElement(element, "quarter", rs.getString("quarter"));
+		        addStringElement(element, "business", rs.getString("business"));
+		        addStringElement(element, "businessfunction", rs.getString("businessfunction"));
+		        if(!addRecordBlock(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(updatetime)+"."+personid+".P", element)){
+		        	break;
+		        }
+			}
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally{
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void addPrivate(String sPersonId){
+		Connection conn = MedwanQuery.getInstance().getAdminConnection();
+		try {
+			PreparedStatement ps = conn.prepareStatement("select * from adminprivate where personid="+sPersonId);
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()){
 				int personid= rs.getInt("personid");
@@ -3552,6 +4214,72 @@ public class OpenclinicSlaveExporter implements Runnable{
 		try {
 			PreparedStatement ps = conn.prepareStatement("select * from admin where updatetime>=? and updateserverid order by updatetime asc");
 			ps.setTimestamp(1, new java.sql.Timestamp(begin.getTime()));
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				int personid= rs.getInt("personid");
+		        Timestamp updatetime = rs.getTimestamp("updatetime");
+		        Element element = DocumentHelper.createElement("admin");
+		        addStringElement(element, "immatold", rs.getString("immatold"));
+		        addStringElement(element, "immatnew", rs.getString("immatnew"));
+		        addStringElement(element, "candidate", rs.getString("candidate"));
+		        addStringElement(element, "lastname", rs.getString("lastname"));
+		        addStringElement(element, "firstname", rs.getString("firstname"));
+		        addStringElement(element, "gender", rs.getString("gender"));
+		        addDateElement(element, "dateofbirth", rs.getDate("dateofbirth"));
+		        addStringElement(element, "comment", rs.getString("comment"));
+		        addStringElement(element, "sourceid", rs.getString("sourceid"));
+		        addStringElement(element, "language", rs.getString("language"));
+		        addStringElement(element, "gender", rs.getString("gender"));
+		        addDateElement(element, "engagement", rs.getDate("engagement"));
+		        addDateElement(element, "pension", rs.getDate("pension"));
+		        addStringElement(element, "claimant", rs.getString("claimant"));
+		        addStringElement(element, "searchname", rs.getString("searchname"));
+		        addTimestampElement(element, "updatetime", updatetime);
+		        addDateElement(element, "claimant_expiration", rs.getDate("claimant_expiration"));
+		        addStringElement(element, "native_country", rs.getString("native_country"));
+		        addStringElement(element, "native_town", rs.getString("native_town"));
+		        addStringElement(element, "motive_end_of_service", rs.getString("motive_end_of_service"));
+		        addDateElement(element, "startdate_inactivity", rs.getDate("startdate_inactivity"));
+		        addDateElement(element, "enddate_inactivity", rs.getDate("enddate_inactivity"));
+		        addStringElement(element, "code_inactivity", rs.getString("code_inactivity"));
+		        addStringElement(element, "update_status", rs.getString("update_status"));
+		        addStringElement(element, "person_type", rs.getString("person_type"));
+		        addStringElement(element, "situation_end_of_service", rs.getString("situation_end_of_service"));
+		        addStringElement(element, "updateuserid", rs.getString("updateuserid"));
+		        addStringElement(element, "updateserverid", rs.getString("updateserverid"));
+		        addStringElement(element, "comment1", rs.getString("comment1"));
+		        addStringElement(element, "comment2", rs.getString("comment2"));
+		        addStringElement(element, "comment3", rs.getString("comment3"));
+		        addStringElement(element, "comment4", rs.getString("comment4"));
+		        addStringElement(element, "comment5", rs.getString("comment5"));
+		        addStringElement(element, "natreg", rs.getString("natreg"));
+		        addStringElement(element, "middlename", rs.getString("middlename"));
+		        addDateElement(element, "begindate", rs.getDate("begindate"));
+		        addDateElement(element, "enddate", rs.getDate("enddate"));
+		        addStringElement(element, "archivefilecode", rs.getString("archivefilecode"));
+		        if(!addRecordBlock(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(updatetime)+"."+personid+".A", element)){
+		        	break;
+		        }
+			}
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally{
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void addAdmin(String sPersonid){
+		Connection conn = MedwanQuery.getInstance().getAdminConnection();
+		try {
+			PreparedStatement ps = conn.prepareStatement("select * from admin where personid=?");
+			ps.setInt(1, Integer.parseInt(sPersonid));
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()){
 				int personid= rs.getInt("personid");

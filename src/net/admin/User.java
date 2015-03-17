@@ -440,6 +440,10 @@ public class User extends OC_Object {
     	user.person = AdminPerson.getAdminPerson(user.personid);
     	return user;
     }
+    
+    public static boolean validate(String login,byte[] password){
+    	return new User().initialize(login, password);
+    }
 
     public boolean initialize (int userid){
          boolean bReturn = false;
@@ -675,6 +679,13 @@ public class User extends OC_Object {
         return bReturn;
     }
 
+    public static boolean hasAccessRight(String login,String screenid, String permission){
+    	User user = new User();
+    	if(user.initialize(Integer.parseInt(login))){
+    		return user.getAccessRight(screenid+"."+permission);
+    	}
+    	return false;
+    }
     //--- LOAD ACCESSRIGHTS -----------------------------------------------------------------------
     public void loadAccessRights(String sUserProfileID, Connection connection){
         String sSelect = "";
@@ -1293,7 +1304,7 @@ public class User extends OC_Object {
     //--- GET FULL USERNAME -----------------------------------------------------------------------
     public static String getFullUserName(String sUserId){
     	Hashtable userNameHash = getUserName(sUserId);
-    	if(userNameHash.size() > 0){
+    	if(!(userNameHash==null) && userNameHash.size() > 0){
     	    return userNameHash.get("lastname")+", "+userNameHash.get("firstname");
     	}
     	else{
