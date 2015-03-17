@@ -25,6 +25,33 @@
 		}
 		MedwanQuery.getInstance().reloadConfigValues();
 		MedwanQuery.getInstance().reloadLabels();
+		
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		PreparedStatement ps = conn.prepareStatement("select value from Items where itemid=(select min(itemid) from Items)");
+		ResultSet rs = ps.executeQuery();
+		int oldSize=rs.getMetaData().getColumnDisplaySize(1);
+		int newSize=Integer.parseInt(request.getParameter("itemvaluesize"));
+		if(oldSize!=newSize){
+			String server = conn.getMetaData().getDatabaseProductName();
+			String sQuery1="alter table Items modify column value varchar("+newSize+")";
+			String sQuery2="alter table ItemsHistory modify column value varchar("+newSize+")";
+			if(!server.startsWith("MySQL")){
+				sQuery1="alter table Items alter column value varchar("+newSize+")";
+				sQuery2="alter table ItemsHistory alter column value varchar("+newSize+")";
+			}
+			rs.close();
+			ps.close();
+			ps = conn.prepareStatement(sQuery1);
+			ps.execute();
+			ps.close();
+			ps = conn.prepareStatement(sQuery2);
+			ps.execute();
+		}
+		else{
+			rs.close();
+		}
+		ps.close();
+		conn.close();
 	}
 %>
 
@@ -96,6 +123,26 @@
 			<td class='admin'><%=getTran("web","updatedatabase",sWebLanguage)%>&nbsp</td>
 			<td class='admin2'>
 				<input class='text' type='checkbox' name='updatedb' id='undatedb'/>
+			</td>
+		</tr>
+		<tr>
+			<%
+				Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+				PreparedStatement ps = conn.prepareStatement("select value from Items where itemid=(select min(itemid) from Items)");
+				ResultSet rs = ps.executeQuery();
+				int nSize=rs.getMetaData().getColumnDisplaySize(1);
+				rs.close();
+				ps.close();
+				conn.close();
+			%>
+			<td class='admin'><%=getTran("web","itemvaluesize",sWebLanguage)%>&nbsp</td>
+			<td class='admin2'>
+				<select name='itemvaluesize' id ='itemvaluesize'>
+					<option value='255' <%=nSize==255?"selected":"" %>>255</option>
+					<option value='1000' <%=nSize==1000?"selected":"" %>>1000</option>
+					<option value='3000' <%=nSize==3000?"selected":"" %>>3000</option>
+					<option value='5000' <%=nSize==5000?"selected":"" %>>5000</option>
+				</select>
 			</td>
 		</tr>
 	</table>
