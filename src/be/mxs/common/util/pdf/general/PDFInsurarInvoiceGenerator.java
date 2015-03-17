@@ -19,6 +19,7 @@ import net.admin.*;
 
 public class PDFInsurarInvoiceGenerator extends PDFInvoiceGenerator {
     String PrintType;
+    boolean bInvoicingBasedOnPatientInvoiceDate=false;
 
     //--- CONSTRUCTOR -----------------------------------------------------------------------------
     public PDFInsurarInvoiceGenerator(User user, String sProject, String sPrintLanguage, String PrintType){
@@ -53,6 +54,7 @@ public class PDFInsurarInvoiceGenerator extends PDFInvoiceGenerator {
 
             // get specified invoice
             InsurarInvoice invoice = InsurarInvoice.get(sInvoiceUid);
+            bInvoicingBasedOnPatientInvoiceDate=(invoice!=null && invoice.getInsurar()!=null && invoice.getInsurar().getIncludeAllPatientInvoiceDebets()==1);
 
             addHeading(invoice);
             addInsurarData(invoice);
@@ -717,7 +719,13 @@ public class PDFInsurarInvoiceGenerator extends PDFInvoiceGenerator {
             invoiceTable.addCell(createEmptyCell(10));
             invoiceTable.addCell(createValueCell(counter+". "+debet.getPatientName()+" °"+debet.getEncounter().getPatient().dateOfBirth+" "+debet.getEncounter().getPatient().gender+" "+insuranceMemberNumber,190,7,Font.BOLD));
         }
-        invoiceTable.addCell(createEmptyCell(30));
+        if(bInvoicingBasedOnPatientInvoiceDate){
+        	invoiceTable.addCell(createEmptyCell(12));
+            invoiceTable.addCell(createValueCell(ScreenHelper.stdDateFormat.format(debet.getCreateDateTime()),18,7,Font.NORMAL));
+        }
+        else {
+        	invoiceTable.addCell(createEmptyCell(30));
+        }
         invoiceTable.addCell(createValueCell(sEncounterName,35));
         invoiceTable.addCell(createValueCell(ScreenHelper.checkString(debet.getPatientInvoiceUid()).replaceAll("1\\.",""),15));
         invoiceTable.addCell(createValueCell(sPrestationCode+sPrestationDescr,65));

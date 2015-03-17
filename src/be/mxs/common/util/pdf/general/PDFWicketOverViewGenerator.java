@@ -365,12 +365,16 @@ public class PDFWicketOverViewGenerator extends PDFBasic {
 
             Hashtable ventilatedIncome = new Hashtable();
             Hashtable ventilatedIncomePerService = new Hashtable();
+            HashSet includedInvoices=new HashSet();
             double totalinsurars=0;
             for(int i=0; i<vCredits.size(); i++){
                 WicketCredit credit = (WicketCredit)vCredits.get(i);
-                double[] amounts= printCredit(table,credit,i+1);
+            	double[] amounts= printCredit(table,credit,i+1);
+                if(!includedInvoices.contains(credit.getInvoiceUID())){
+                    totalinsurars+= amounts[1];
+                }
+                includedInvoices.add(credit.getInvoiceUID());
                 total+= amounts[0];
-                totalinsurars+= amounts[1];
                 ventilateIncome(ventilatedIncome,ventilatedIncomePerService,credit);
             }
 

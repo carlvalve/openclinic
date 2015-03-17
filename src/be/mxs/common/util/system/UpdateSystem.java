@@ -110,7 +110,6 @@ public class UpdateSystem implements Runnable {
 	
 	//--- UPDATE DB -------------------------------------------------------------------------------
 	public void updateDb(){
-		System.out.println(new SimpleDateFormat("HH:mm:ss.SSS").format(new java.util.Date())+": start updatedb");
 		try {
 			String sDoc="";
 			Connection loc_conn = MedwanQuery.getInstance().getLongOpenclinicConnection();
@@ -660,7 +659,7 @@ public class UpdateSystem implements Runnable {
 	    		HttpClient client = new HttpClient();
 	    		MedwanQuery.getInstance().reloadLabels();
 	    		String lookupUrl=ScreenHelper.getTran("professional.council.url",council,"fr");
-	    		System.out.println("launching post to "+lookupUrl);
+	    		Debug.println("launching post to "+lookupUrl);
 	    		PostMethod method = new PostMethod(lookupUrl);
 	    		method.setRequestHeader("Content-type","text/xml; charset=windows-1252");
 	    		NameValuePair nvp1= new NameValuePair("regnrs",regs);
@@ -668,7 +667,7 @@ public class UpdateSystem implements Runnable {
 	    		method.setQueryString(new NameValuePair[]{nvp1,nvp2});
 	    		try{
 	    			int statusCode = client.executeMethod(method);
-		    		System.out.println("resultcode = "+statusCode);
+		    		Debug.println("resultcode = "+statusCode);
 	    			if(statusCode==200){
 	    				String xml = method.getResponseBodyAsString();
 	    				org.dom4j.Document document=null;
@@ -676,7 +675,7 @@ public class UpdateSystem implements Runnable {
 	    				BufferedReader br = new BufferedReader(new StringReader(xml));
 	    				SAXReader reader=new SAXReader(false);
 	    				document=reader.read(br);
-			    		System.out.println("xml = "+document.asXML());
+			    		Debug.println("xml = "+document.asXML());
 	    				root=document.getRootElement();
 	    				if(root.getName().equalsIgnoreCase("registration")){
 	    					Iterator elements = root.elementIterator("status");

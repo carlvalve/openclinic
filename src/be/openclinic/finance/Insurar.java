@@ -118,6 +118,23 @@ public class Insurar extends OC_Object {
 		setModifier(4,n+"");
 	}
 	
+	public int getIncludeAllPatientInvoiceDebets(){
+		int n=0;
+		if(getModifiers()!=null){
+			try{
+				n=Integer.parseInt(getModifiers().split(";")[5]);
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return n;
+	}
+
+	public void setIncludeAllPatientInvoiceDebets(int n){
+		setModifier(5,n+"");
+	}
+	
 	public void setModifier(int index,String value){
 		if(getModifiers()==null){
 			setModifiers("");

@@ -194,7 +194,7 @@ public class WHONetUtils {
 						if(updatetime.after(maxdate)){
 							maxdate=updatetime;
 						}
-						header+=(new SimpleDateFormat("yyyyMMddHHmmss").format(updatetime)+";");
+						header+="'"+(new SimpleDateFormat("yyyyMMddHHmmss").format(updatetime)+";");
 					}
 					rs2.close();
 					ps2.close();
@@ -224,9 +224,9 @@ public class WHONetUtils {
 									if(sensitivity.length()>0){
 										exportstring.append(header);
 										exportstring.append(specimentype+";");
-										exportstring.append(specimendate+";");
-										exportstring.append(MedwanQuery.getInstance().getGermCode(germ)+";");
-										exportstring.append(germ+";");
+										exportstring.append("'"+specimendate+";");
+										exportstring.append(MedwanQuery.getInstance().getGermCode(germ.split(",").length>1?germ.split(",")[1].trim():germ.trim())+";");
+										exportstring.append((germ.split(",").length>1?germ.split(",")[1].trim():germ.trim())+";");
 										exportstring.append(code+";");
 										exportstring.append(ScreenHelper.getTranNoLink("antibiotics", code, "en")+";");
 										exportstring.append(sensitivity+"\n\r");

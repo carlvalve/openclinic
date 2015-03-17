@@ -902,6 +902,8 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
 
     public static Vector getUnassignedInsurarDebets(String sInsurarUid, Date begin, Date end, int limit) {
         String sSelect = "";
+        Insurar insurar = Insurar.get(sInsurarUid);
+        boolean bBaseInvoicingOnPatientInvoiceDate=(insurar!=null && insurar.getIncludeAllPatientInvoiceDebets()==1);
         PreparedStatement ps = null;
         ResultSet rs = null;
         Vector vUnassignedDebets = new Vector();
@@ -920,6 +922,20 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                     + " AND " + MedwanQuery.getInstance().convert("int", "replace(d.OC_DEBET_PRESTATIONUID,'" + serverid + "','')") + "=p.OC_PRESTATION_OBJECTID"
                     + " AND " + MedwanQuery.getInstance().convert("int", "e.OC_ENCOUNTER_PATIENTUID") + "=a.personid" 
                     + " ORDER BY d.OC_DEBET_DATE";
+            if(bBaseInvoicingOnPatientInvoiceDate){
+                sSelect = "SELECT d.*,e.*,p.*,a.*,pi.OC_PATIENTINVOICE_DATE FROM OC_DEBETS d, OC_INSURANCES i, OC_ENCOUNTERS e, adminview a, OC_PRESTATIONS p, OC_PATIENTINVOICES pi"
+                        + " WHERE i.OC_INSURANCE_INSURARUID = ?"
+                        + " AND d.OC_DEBET_CREDITED=0"
+                        + " AND " + MedwanQuery.getInstance().convert("int", "replace(d.OC_DEBET_INSURANCEUID,'" + serverid + "','')") + " = i.oc_insurance_objectid"
+                        + " AND " + MedwanQuery.getInstance().convert("int", "replace(d.OC_DEBET_ENCOUNTERUID,'" + serverid + "','')") + " = e.oc_encounter_objectid"
+                        + " AND d.OC_DEBET_PATIENTINVOICEUID='"+serverid+"'"+MedwanQuery.getInstance().concatSign()+"pi.OC_PATIENTINVOICE_OBJECTID"
+                        + " AND (d.OC_DEBET_INSURARINVOICEUID = ' ' or d.OC_DEBET_INSURARINVOICEUID is null)"
+                        + " AND pi.OC_PATIENTINVOICE_DATE>=?"
+                        + " AND pi.OC_PATIENTINVOICE_DATE<=?"
+                        + " AND " + MedwanQuery.getInstance().convert("int", "replace(d.OC_DEBET_PRESTATIONUID,'" + serverid + "','')") + "=p.OC_PRESTATION_OBJECTID"
+                        + " AND " + MedwanQuery.getInstance().convert("int", "e.OC_ENCOUNTER_PATIENTUID") + "=a.personid" 
+                        + " ORDER BY OC_PATIENTINVOICE_DATE,d.OC_DEBET_DATE";
+            }
             ps = loc_conn.prepareStatement(sSelect);
             ps.setString(1, sInsurarUid);
             ps.setTimestamp(2, new java.sql.Timestamp(begin.getTime()));
@@ -928,7 +944,14 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
             while (rs.next() && (limit==0 || vUnassignedDebets.size()<limit)) {
                 Debet debet = new Debet();
                 debet.setUid(rs.getString("OC_DEBET_SERVERID") + "." + rs.getString("OC_DEBET_OBJECTID"));
-                debet.setDate(rs.getTimestamp("OC_DEBET_DATE"));
+                if(bBaseInvoicingOnPatientInvoiceDate){
+                	debet.setDate(rs.getTimestamp("OC_PATIENTINVOICE_DATE"));
+                    debet.setCreateDateTime(rs.getTimestamp("OC_DEBET_DATE"));
+                }
+                else {
+                	debet.setDate(rs.getTimestamp("OC_DEBET_DATE"));
+                    debet.setCreateDateTime(rs.getTimestamp("OC_DEBET_CREATETIME"));
+                }
                 debet.setAmount(rs.getDouble("OC_DEBET_AMOUNT"));
                 debet.setInsurarAmount(rs.getDouble("OC_DEBET_INSURARAMOUNT"));
                 debet.insuranceUid = rs.getString("OC_DEBET_INSURANCEUID");
@@ -943,7 +966,6 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 debet.extraInsurarUid = rs.getString("OC_DEBET_EXTRAINSURARUID");
                 debet.extraInsurarInvoiceUid = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID");
                 debet.extraInsurarAmount = rs.getDouble("OC_DEBET_EXTRAINSURARAMOUNT");
-                debet.setCreateDateTime(rs.getTimestamp("OC_DEBET_CREATETIME"));
                 debet.setUpdateDateTime(rs.getTimestamp("OC_DEBET_UPDATETIME"));
                 debet.setUpdateUser(rs.getString("OC_DEBET_UPDATEUID"));
                 debet.setVersion(rs.getInt("OC_DEBET_VERSION"));
@@ -1031,6 +1053,8 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
     }
     
     public static Vector getUnassignedValidatedAndSignedInsurarDebets(String sInsurarUid, Date begin, Date end, int limit) {
+        Insurar insurar = Insurar.get(sInsurarUid);
+        boolean bBaseInvoicingOnPatientInvoiceDate=(insurar!=null && insurar.getIncludeAllPatientInvoiceDebets()==1);
         String sSelect = "";
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -1052,6 +1076,22 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                     + " AND " + MedwanQuery.getInstance().convert("int", "e.OC_ENCOUNTER_PATIENTUID") + "=a.personid"
                     + " AND EXISTS (select * from OC_POINTERS where OC_POINTER_KEY='INVSIGN.'"+MedwanQuery.getInstance().concatSign()+"OC_DEBET_PATIENTINVOICEUID)" 
                     + " ORDER BY d.OC_DEBET_DATE";
+            if(bBaseInvoicingOnPatientInvoiceDate){
+                sSelect = "SELECT d.*,e.*,p.*,a.*,v.OC_PATIENTINVOICE_DATE FROM OC_DEBETS d, OC_INSURANCES i, OC_ENCOUNTERS e, adminview a, OC_PRESTATIONS p, OC_PATIENTINVOICES v"
+                        + " WHERE i.OC_INSURANCE_INSURARUID = ?"
+                        + " AND d.OC_DEBET_CREDITED=0"
+                        + " AND " + MedwanQuery.getInstance().convert("int", "replace(d.OC_DEBET_INSURANCEUID,'" + serverid + "','')") + " = i.oc_insurance_objectid"
+                        + " AND " + MedwanQuery.getInstance().convert("int", "replace(d.OC_DEBET_ENCOUNTERUID,'" + serverid + "','')") + " = e.oc_encounter_objectid"
+                        + " AND d.OC_DEBET_PATIENTINVOICEUID='"+serverid+"'"+MedwanQuery.getInstance().concatSign()+"v.OC_PATIENTINVOICE_OBJECTID"
+                        + " AND v.OC_PATIENTINVOICE_ACCEPTATIONUID IS NOT NULL AND v.OC_PATIENTINVOICE_ACCEPTATIONUID<>''"
+                        + " AND (d.OC_DEBET_INSURARINVOICEUID = ' ' or d.OC_DEBET_INSURARINVOICEUID is null)"
+                        + " AND v.OC_PATIENTINVOICE_DATE>=?"
+                        + " AND v.OC_PATIENTINVOICE_DATE<=?"
+                        + " AND " + MedwanQuery.getInstance().convert("int", "replace(d.OC_DEBET_PRESTATIONUID,'" + serverid + "','')") + "=p.OC_PRESTATION_OBJECTID"
+                        + " AND " + MedwanQuery.getInstance().convert("int", "e.OC_ENCOUNTER_PATIENTUID") + "=a.personid"
+                        + " AND EXISTS (select * from OC_POINTERS where OC_POINTER_KEY='INVSIGN.'"+MedwanQuery.getInstance().concatSign()+"OC_DEBET_PATIENTINVOICEUID)" 
+                        + " ORDER BY OC_PATIENTINVOICE_DATE,d.OC_DEBET_DATE";
+            }
             ps = loc_conn.prepareStatement(sSelect);
             ps.setString(1, sInsurarUid);
             ps.setTimestamp(2, new java.sql.Timestamp(begin.getTime()));
@@ -1060,7 +1100,14 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
             while (rs.next() && (limit==0 || vUnassignedDebets.size()<limit)) {
                 Debet debet = new Debet();
                 debet.setUid(rs.getString("OC_DEBET_SERVERID") + "." + rs.getString("OC_DEBET_OBJECTID"));
-                debet.setDate(rs.getTimestamp("OC_DEBET_DATE"));
+                if(bBaseInvoicingOnPatientInvoiceDate){
+                	debet.setDate(rs.getTimestamp("OC_PATIENTINVOICE_DATE"));
+                    debet.setCreateDateTime(rs.getTimestamp("OC_DEBET_DATE"));
+                }
+                else {
+                	debet.setDate(rs.getTimestamp("OC_DEBET_DATE"));
+                    debet.setCreateDateTime(rs.getTimestamp("OC_DEBET_CREATETIME"));
+                }
                 debet.setAmount(rs.getDouble("OC_DEBET_AMOUNT"));
                 debet.setInsurarAmount(rs.getDouble("OC_DEBET_INSURARAMOUNT"));
                 debet.insuranceUid = rs.getString("OC_DEBET_INSURANCEUID");
@@ -1075,7 +1122,6 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 debet.extraInsurarUid = rs.getString("OC_DEBET_EXTRAINSURARUID");
                 debet.extraInsurarInvoiceUid = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID");
                 debet.extraInsurarAmount = rs.getDouble("OC_DEBET_EXTRAINSURARAMOUNT");
-                debet.setCreateDateTime(rs.getTimestamp("OC_DEBET_CREATETIME"));
                 debet.setUpdateDateTime(rs.getTimestamp("OC_DEBET_UPDATETIME"));
                 debet.setUpdateUser(rs.getString("OC_DEBET_UPDATEUID"));
                 debet.setVersion(rs.getInt("OC_DEBET_VERSION"));
