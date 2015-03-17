@@ -175,7 +175,7 @@
 	                <% if(!isInsuranceAgent){ %>
 	                <input type="button" class="button" name="ButtonNew" value="<%=getTran("web","new",sWebLanguage)%>" onclick="doNew()">
 	                <% } 
-	                	if(true || request.getParameter("showpatientname")!=null){
+	                	if(request.getParameter("showpatientname")!=null){
 	                %>
 	                &nbsp;&nbsp;&nbsp;&nbsp;<font style='font-size: 16px'><%=patientInvoice==null || patientInvoice.getPatient()==null?"":patientInvoice.getPatient().getFullName()%></font>
 	                <%

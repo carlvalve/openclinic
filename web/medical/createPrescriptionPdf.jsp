@@ -8,7 +8,6 @@
 <%@ page import="be.openclinic.medical.PaperPrescription" %>
 <%
     ByteArrayOutputStream baosPDF = null;
-
     try {
         // Save the prescription first
         java.util.Date date = new java.util.Date();

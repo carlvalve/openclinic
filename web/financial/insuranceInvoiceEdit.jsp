@@ -541,7 +541,7 @@ function changeInsurar(counter){
 }
 
 function openPatientInvoice(uid){
-    openPopup("/financial/patientInvoiceEdit.jsp&ts=<%=getTs()%>&PopupWidth="+(screen.width-200)+"&PopupHeight=600&FindPatientInvoiceUID="+uid);
+    openPopup("/financial/patientInvoiceEdit.jsp&ts=<%=getTs()%>&PopupWidth="+(screen.width-200)+"&PopupHeight=600&showpatientname=true&FindPatientInvoiceUID="+uid);
 }
 
   function searchService(serviceUidField,serviceNameField){

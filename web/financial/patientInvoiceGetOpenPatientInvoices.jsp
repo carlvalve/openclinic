@@ -22,9 +22,9 @@
         patientinvoice = (PatientInvoice)vOpenPatientInvoices.elementAt(i);
 
         if (patientinvoice!=null){
-            hSort.put(patientinvoice.getDate().getTime()+"="+patientinvoice.getUid()," onclick=\"setPatientInvoice('"+patientinvoice.getInvoiceUid()+"');\">"
+            hSort.put(patientinvoice.getDate().getTime()+"="+patientinvoice.getUid()," onclick=\"setPatientInvoice('"+patientinvoice.getUid().split("\\.")[1]+"');\">"
                  +"<td class='hand'>&nbsp;"+ScreenHelper.getSQLDate(patientinvoice.getDate())+"</td>"
-                 +"<td class='hand'>&nbsp;"+patientinvoice.getInvoiceUid()+"</td>"
+                 +"<td class='hand'>&nbsp;"+patientinvoice.getUid().split("\\.")[1]+"</td>"
                  +"<td class='hand' style='text-align:right;'>"+patientinvoice.getBalance()+"&nbsp;</td>"
                  +"<td class='hand'>&nbsp;"+getTran("finance.patientinvoice.status",patientinvoice.getStatus(),sWebLanguage)+"</td></tr>");
         }
