@@ -4,6 +4,36 @@
 <%=checkPermission("adt.managebeds","all",activeUser)%>
 <%=sJSSORTTABLE%>
 
+<%!
+    //--- BED EXISTS IN SERVICE -------------------------------------------------------------------
+    // bed with same name exists in specified service
+    public boolean bedExistsInService(String sBedName, String sBedService){
+	    boolean bedExistsInService = false;
+	    Vector vBeds = null;
+
+        try{
+            vBeds = Bed.selectBeds("","",sBedName,sBedService,"","","");
+
+            Iterator bedIter = vBeds.iterator();
+            Bed tmpBed;
+
+            while(bedIter.hasNext()){
+                tmpBed = (Bed)bedIter.next();
+                
+                if(tmpBed.getName().equalsIgnoreCase(sBedName)){
+                	bedExistsInService = true;
+                    break;
+                }
+            }
+        } 
+        catch(Exception e){
+            e.printStackTrace();
+        }	    
+	    
+	    return bedExistsInService; 
+    }
+%>
+
 <%
     String sAction = checkString(request.getParameter("Action"));
 
@@ -43,55 +73,68 @@
     
     String sMsg = "";
 
-    //--- SAVE ------------------------------------------------------------------------------------
+    //*** SAVE ************************************************************************************
     if(sAction.equals("SAVE")){
-        Bed tmpBed = new Bed();
+    	boolean bedExists = false;
+    	
+           Bed tmpBed = new Bed();
         if(sEditUID.length() > 0 ){
             tmpBed = Bed.get(sEditUID);
         }
-        else{
-            tmpBed.setCreateDateTime(ScreenHelper.getSQLDate(getDate()));
-        }
-        tmpBed.setName(sEditName);
-        
-        Service sTMP = Service.getService(sEditBedService);
-        if(sTMP==null){
-            sTMP = new Service();
-        }
-        tmpBed.setService(sTMP);
-        
-        int priority = 1;
-        try{
-            priority = Integer.parseInt(sEditPriority);
-        }
-        catch(Exception e){
-        	// empty
+        else{   	
+        	if(bedExistsInService(sEditName,sEditBedService)){
+                sMsg = "<font color='red'>"+getTran("web","bedAllreadyExistsInService",sWebLanguage)+"</font>";
+                bedExists = true;
+        	}
+        	else{
+                tmpBed.setCreateDateTime(ScreenHelper.getSQLDate(getDate()));
+        	}
         }
         
-        tmpBed.setPriority(priority);
-        tmpBed.setLocation(sEditLocation);
-        tmpBed.setComment(sEditComment);
-        tmpBed.setUpdateDateTime(ScreenHelper.getSQLDate(getDate()));
-        tmpBed.setUpdateUser(activeUser.userid);
-        tmpBed.store();
-        
-        sEditUID = tmpBed.getUid();
-        sMsg = getTran("web","dataIsSaved",sWebLanguage);
+        if(!bedExists){
+	        tmpBed.setName(sEditName);
+	        
+	        Service tmpService = Service.getService(sEditBedService);
+	        if(tmpService==null){
+	        	tmpService = new Service();
+	        }
+	        tmpBed.setService(tmpService);
+	        
+	        int priority = 1;
+	        try{
+	            priority = Integer.parseInt(sEditPriority);
+	        }
+	        catch(Exception e){
+	        	// empty
+	        }
+	        
+	        tmpBed.setPriority(priority);
+	        tmpBed.setLocation(sEditLocation);
+	        tmpBed.setComment(sEditComment);
+	        tmpBed.setUpdateDateTime(ScreenHelper.getSQLDate(getDate()));
+	        tmpBed.setUpdateUser(activeUser.userid);
+	        tmpBed.store();
+	        
+	        sEditUID = tmpBed.getUid();
+	        sMsg = "<font color='green'>"+getTran("web","dataIsSaved",sWebLanguage)+"</font>";
+    	}
     }
     //*** DELETE **********************************************************************************
     if(sAction.equals("DELETE")){
         if(sEditUID.length() > 0 ){
 			Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
         	PreparedStatement ps = conn.prepareStatement("delete from OC_BEDS where OC_BED_SERVERID=? and OC_BED_OBJECTID=?");
+        	
         	ps.setInt(1,Integer.parseInt(sEditUID.split("\\.")[0]));
         	ps.setInt(2,Integer.parseInt(sEditUID.split("\\.")[1]));
         	ps.execute();
+        	
         	ps.close();
         	conn.close();
         }
         
         sEditUID = "";
-        sMsg = getTran("web","dataIsDeleted",sWebLanguage);
+        sMsg = "<font color='green'>"+getTran("web","dataIsDeleted",sWebLanguage)+"</font>";
     }
     
     if(sEditUID.length() > 0){
@@ -110,118 +153,71 @@
     if(sAction.equals("SEARCH") || sAction.equals("") || sAction.equals("DELETE")){
 %>
 
-<%-- BEGIN FIND BLOCK --%>
-<form name='FindBedForm' method='POST' action='<c:url value="/main.do"/>?Page=system/manageBeds.jsp&ts=<%=getTs()%>'>
-    <%=writeTableHeader("Web","manageBeds",sWebLanguage," doBack();")%>
+<%-- 1 : SEARCH FORM --%>
+<form name="FindBedForm" method="POST" action='<c:url value="/main.do"/>?Page=system/manageBeds.jsp&ts=<%=getTs()%>'>
+    <input type="hidden" name="Action" value="">
     
-    <table class='list' width='100%' cellspacing='1' onKeyDown='if(enterEvent(event,13)){doFind();return false;}else{return true;}'>
+    <%=writeTableHeader("web","manageBeds",sWebLanguage," doBack();")%>    
+    <table class="list" width="100%" cellspacing="1" onKeyDown="if(enterEvent(event,13)){doFind();return false;}else{return true;}">
         <%-- service --%>
         <tr>
-            <td class="admin2" width="<%=sTDAdminWidth%>"><%=getTran("Web","service",sWebLanguage)%></td>
+            <td class="admin2" width="<%=sTDAdminWidth%>"><%=getTran("web","service",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="hidden" name="FindBedService" value="<%=sFindBedService%>">
                 <input class="text" type="text" name="FindBedServiceName" readonly size="<%=sTextWidth%>" value="<%=sFindBedServiceName%>">
                 
-                <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchService('FindBedService','FindBedServiceName');">
-                <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="FindBedForm.FindBedService.value='';FindBedForm.FindBedServiceName.value='';">
+                <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("web","select",sWebLanguage)%>" onclick="searchService('FindBedService','FindBedServiceName');">
+                <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("web","clear",sWebLanguage)%>" onclick="FindBedForm.FindBedService.value='';FindBedForm.FindBedServiceName.value='';">
             </td>
         </tr>
         
         <%-- name --%>
         <tr>
-            <td class="admin2"><%=getTran("Web","name",sWebLanguage)%></td>
-            <td class="admin2"><input class='text' name='FindBedName' value='<%=sFindBedName%>' size="<%=sTextWidth%>"></td>
+            <td class="admin2"><%=getTran("web","name",sWebLanguage)%></td>
+            <td class="admin2"><input class="text" name="FindBedName" value="<%=sFindBedName%>" size="<%=sTextWidth%>"></td>
         </tr>
         
         <%-- buttons --%>
         <tr>
             <td class="admin2">&nbsp;</td>
             <td class="admin2">
-                <input class='button' type='button' name='buttonfind' value='<%=getTranNoLink("Web","search",sWebLanguage)%>' onclick='doFind();'>&nbsp;
-                <input class='button' type='button' name='buttonclear' value='<%=getTranNoLink("Web","Clear",sWebLanguage)%>' onclick='clearSearchFields();'>&nbsp;
-                <input class='button' type='button' name='buttonnew' value='<%=getTranNoLink("Web","new",sWebLanguage)%>' onclick='doNew();'>&nbsp;
-                <input class='button' type="button" name="Backbutton" value='<%=getTranNoLink("Web","Back",sWebLanguage)%>' onclick="doBack();">
+                <input class="button" type="button" name="buttonfind" value="<%=getTranNoLink("web","search",sWebLanguage)%>" onclick="doFind();">&nbsp;
+                <input class="button" type="button" name="buttonclear" value="<%=getTranNoLink("web","Clear",sWebLanguage)%>" onclick="clearSearchFields();">&nbsp;
+                <input class="button" type="button" name="buttonnew" value="<%=getTranNoLink("web","new",sWebLanguage)%>" onclick="doNew();">&nbsp;
+                <input class="button" type="button" name="Backbutton" value="<%=getTranNoLink("web","back",sWebLanguage)%>" onclick="doBack();">
             </td>
         </tr>
     </table>
-    
-    <input type='hidden' name='Action' value=''>
+
+	<%
+	    if(sMsg.length() > 0){
+	        %><%=sMsg%><%
+	    }
+	%>
 </form>
 
 <%
-    }
-
-    //--- SEARCH ----------------------------------------------------------------------------------
-    if(sAction.equals("SEARCH")){
-        StringBuffer sbResults = new StringBuffer();
-        Vector vBeds = null;
-
-        try{
-            vBeds = Bed.selectBeds("","",sFindBedName,sFindBedService,"","","");
-
-            Iterator iter = vBeds.iterator();
-            Bed bTmp;
-            String sClass = "1";
-            String sServiceUID = "";
-            String sServiceName = "";
-
-            while(iter.hasNext()){
-            	// alternate row-style
-                if(sClass.length()==0) sClass = "1";
-                else                   sClass = "";
-
-                bTmp = (Bed)iter.next();
-                sServiceUID = checkString(bTmp.getServiceUID());
-                if(sServiceUID.length() > 0){
-                    sServiceName = getTran("Service",sServiceUID,sWebLanguage);
-                } 
-                else{
-                    sServiceName = "";
-                }
-
-                sbResults.append("<tr class='list"+sClass+"' onclick=\"doSelect('"+checkString(bTmp.getUid())+"');\">"+
-		                          "<td>"+checkString(bTmp.getName())+"</td>"+
-		                          "<td>"+sServiceName+"</td>"+
-		                         "</tr>"
-                );
-            }
-        } 
-        catch(Exception e){
-            e.printStackTrace();
-        }
-        
-        if(sbResults.length()==0){
-            out.print(getTran("web","norecordsfound",sWebLanguage));
-        }
-        else{
-	        %>
-	            <table width='100%' cellspacing="0" cellpadding="0" class="sortable" id="searchresults">
-	                <tr class="admin">
-	                    <td width='30%'><%=getTran("Web","name",sWebLanguage)%></td>
-	                    <td width='*'><%=getTran("Web","service",sWebLanguage)%></td>
-	                </tr>
-	                <tbody class="hand"><%=sbResults%></tbody>
-	            </table>
-	
-	            <div><%=vBeds.size()%> <%=getTran("web","recordsfound",sWebLanguage)%></div>
-	      
-	            <%=ScreenHelper.alignButtonsStart()%>      
-	              <input class='button' type="button" name="Backbutton" value='<%=getTranNoLink("Web","Back",sWebLanguage)%>' onclick="doBack();">	            
-	            <%=ScreenHelper.alignButtonsStop()%>          
-	        <%
-        }
-    }
+}
     
     //--- EDIT ------------------------------------------------------------------------------------
     if(sAction.equals("NEW") || sAction.equals("SELECT") || sAction.equals("SAVE")){
+        if(sEditBedService.length()==0) sEditBedService = sFindBedService;
+        if(sEditBedServiceName.length()==0) sEditBedServiceName = sFindBedServiceName;
+        if(sEditName.length()==0) sEditName = sFindBedName;    	
+
+        Debug.println("--> sEditBedService     : "+sEditBedService);
+        Debug.println("--> sEditBedServiceName : "+sEditBedServiceName);
+        Debug.println("--> sEditName           : "+sEditName);
+    
 %>
-<form name='EditBedForm' method='POST' action='<c:url value="/main.do"/>?Page=system/manageBeds.jsp&ts=<%=getTs()%>'>
-    <%=writeTableHeader("Web","manageBeds",sWebLanguage," doBack();")%>
+<%-- 2 : EDIT FORM --%>
+<form name="EditBedForm" method="POST" action='<c:url value="/main.do"/>?Page=system/manageBeds.jsp&ts=<%=getTs()%>'>
+    <%=writeTableHeader("web","manageBeds",sWebLanguage," doBack();")%>
     
     <table class="list" width="100%" cellspacing="1">
         <%-- service --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","service",sWebLanguage)%> *</td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","service",sWebLanguage)%> *</td>
             <td class="admin2">
                 <input type="hidden" name="EditBedService" value="<%=sEditBedService%>">
                 <input class="text" type="text" name="EditBedServiceName" readonly size="<%=sTextWidth%>" value="<%=sEditBedServiceName%>">
@@ -233,56 +229,63 @@
         
         <%-- name --%>
         <tr>
-            <td class="admin"><%=getTran("Web","name",sWebLanguage)%> *</td>
-            <td class="admin2"><input class='text' type='text' name='EditName' value='<%=sEditName%>' size="<%=sTextWidth%>"></td>
+            <td class="admin"><%=getTran("web","name",sWebLanguage)%> *</td>
+            <td class="admin2"><input class="text" type="text" name="EditName" value="<%=sEditName%>" size="<%=sTextWidth%>"></td>
         </tr>
 
         <%-- priority --%>
         <tr>
-            <td class="admin"><%=getTran("Web","priority",sWebLanguage)%></td>
-            <td class="admin2"><input class='text' type='text' name='EditPriority' value='<%=sEditPriority%>' size="2"></td>
+            <td class="admin"><%=getTran("web","priority",sWebLanguage)%></td>
+            <td class="admin2"><input class="text" type="text" name="EditPriority" value="<%=sEditPriority%>" size="2"></td>
         </tr>
         
         <%-- location --%>
         <tr>
-            <td class="admin"><%=getTran("Web","location",sWebLanguage)%></td>
+            <td class="admin"><%=getTran("web","location",sWebLanguage)%></td>
             <td class="admin2">
-                <input class='text' type='text' name='EditLocation' value='<%=sEditLocation%>' size="<%=sTextWidth%>">
+                <input class="text" type="text" name="EditLocation" value="<%=sEditLocation%>" size="<%=sTextWidth%>">
                
                 <%
-                    // icon to open location-document
-                    if(sEditLocation.length() > 0){
-                        %><img src="<c:url value="/_img/icons/icon_view.gif"/>" class="link" alt="<%=getTranNoLink("Web","view",sWebLanguage)%>" onclick="openFile()"><%
-                    }
-                %>
-                <br>
-                <%
-                    if(sEditLocation.length() > 0 && sEditLocation.indexOf(".") > -1){
-                        String sExtension = sEditLocation.substring(sEditLocation.indexOf(".")+1).toLowerCase();
-
-                        if(MedwanQuery.getInstance().getConfigString("image_extensions","gif,jpg,bmp").toLowerCase().indexOf(sExtension)>-1){
-                            %><img id="myImg" src="<%=MedwanQuery.getInstance().getConfigString("documentsdir","adt/documents/")+"/"+sEditLocation%>" alt="" width="<%=MedwanQuery.getInstance().getConfigString("adt.bed.imagewidth","250")%>" border=1><%
-                        }
-                    }
+                    String sExtension = ""; 
+	                if(sEditLocation.length() > 0){
+	                	if(sEditLocation.indexOf(".") > -1){
+	                        sExtension = sEditLocation.substring(sEditLocation.indexOf(".")+1).toLowerCase();
+		                    
+		                    // icon to open location-document
+		                    if(MedwanQuery.getInstance().getConfigString("image_extensions","gif,jpg,bmp").toLowerCase().indexOf(sExtension)>-1){
+		                        %>
+		                            <div style="padding-top:5px"></div>
+		                            <img src="<%=MedwanQuery.getInstance().getConfigString("documentsdir","adt/documents/")+"/"+sEditLocation%>" class="link" onclick="openLocationFile();" alt="<%=getTranNoLink("web","view",sWebLanguage)%>" width="<%=MedwanQuery.getInstance().getConfigString("adt.bed.imagewidth","250")%>">
+		                        <%
+		                    }
+	                	}
+	                }
                 %>
             </td>
         </tr>
         
         <%-- comment --%>
         <tr>
-            <td class="admin"><%=getTran("Web","comment",sWebLanguage)%></td>
+            <td class="admin"><%=getTran("web","comment",sWebLanguage)%></td>
             <td class="admin2"><%=writeTextarea("EditComment","","","",sEditComment)%></td>
         </tr>
         
-        <input type='hidden' name='Action' value=''>
-        <input type='hidden' name='EditUID' value='<%=sEditUID%>'>
+        <input type="hidden" name="Action" value="">
+        <input type="hidden" name="EditUID" value="<%=sEditUID%>">
         
         <%-- buttons --%>
         <%=ScreenHelper.setFormButtonsStart()%>
-            <input class='button' type="button" name="saveButton" value='<%=getTranNoLink("Web","save",sWebLanguage)%>' onclick="doSave();">&nbsp;
-            <input class='button' type="button" name="Backbutton" value='<%=getTranNoLink("Web","Back",sWebLanguage)%>' onclick="doBackToSearch();">
-            <input class='button' type="button" name="newButton" value='<%=getTranNoLink("Web","new",sWebLanguage)%>' onclick="doNewBed();">
-            <input class='button' type="button" name="deleteButton" value='<%=getTranNoLink("Web","delete",sWebLanguage)%>' onclick="doDeleteBed();">
+            <input class="button" type="button" name="saveButton" value="<%=getTranNoLink("web","save",sWebLanguage)%>" onclick="doSave();">&nbsp;
+            <input class="button" type="button" name="Backbutton" value="<%=getTranNoLink("web","back",sWebLanguage)%>" onclick="doBackToSearch();">
+            
+            <%
+                if(!sAction.equals("NEW")){
+                    %>
+                        <input class="button" type="button" name="newButton" value="<%=getTranNoLink("web","new",sWebLanguage)%>" onclick="doNewBed();">
+                        <input class="button" type="button" name="deleteButton" value="<%=getTranNoLink("web","delete",sWebLanguage)%>" onclick="doDeleteBed('<%=sEditUID%>');">
+                    <%
+                }
+            %>
         <%=ScreenHelper.setFormButtonsStop()%>
     </table>
 
@@ -293,8 +296,9 @@
 	%>
 </form>
 
-<form target="_newForm" name="uploadForm" action="<c:url value='/adt/storeDocument.jsp'/>" method="post" enctype="multipart/form-data">
-    <%=writeTableHeader("Web","upload_file",sWebLanguage," doBack();")%>
+<%-- 3 : UPLOAD FORM --%>
+<form name="uploadForm" target="_newForm" action="<c:url value='/adt/storeDocument.jsp'/>" method="post" enctype="multipart/form-data">
+    <%=writeTableHeader("web","location",sWebLanguage," doBack();")%>
     
     <table class="list" width="100%" cellspacing="1">
         <input name="ReturnField" value="EditLocation" type="hidden"/>
@@ -312,19 +316,79 @@
     
     <%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%>
 </form>
+
+<%-- 4 : BACK TO SEARCH FORM --%>
+<form name="BackToSearchForm" method="POST" action='<c:url value="/main.do"/>?Page=system/manageBeds.jsp&ts=<%=getTs()%>'>
+    <input type="hidden" name="Action" value="SEARCH"/>
+    
+    <input type="hidden" name="FindBedService" value="<%=sEditBedService%>"/>
+    <input type="hidden" name="FindBedServiceName" value="<%=sEditBedServiceName%>"/>
+    <input type="hidden" name="FindBedName" value="<%=sEditName%>"/>
+</form>
 <%
     }
 %>
 
+<div id="bedsDiv"><%-- Ajax --%></div>
+
+<%-- 5 : DELETE BED FORM --%>
+<form name="DeleteBedForm" method="POST" action='<c:url value="/main.do"/>?Page=system/manageBeds.jsp&ts=<%=getTs()%>'>
+    <input type="hidden" name="Action" value="DELETE"/>    
+    <input type="hidden" name="EditUID" value=""/>
+    
+    <input type="hidden" name="FindBedService" value="<%=sFindBedService%>"/>
+    <input type="hidden" name="FindBedServiceName" value="<%=sFindBedServiceName%>"/>
+    <input type="hidden" name="FindBedName" value="<%=sFindBedName%>"/>
+</form>
+
 <script>
+  <%-- SEARCH BEDS --%>
+  function searchBeds(bedName,serviceId){
+	enableButtons(false);
+    $("bedsDiv").innerHTML = "<img src='<%=sCONTEXTPATH%>/_img/themes/<%=sUserTheme%>/ajax-loader.gif'/>&nbsp;Loading..";
+	  
+    var url = "<c:url value='/system/ajax/searchBeds.jsp'/>?ts="+new Date().getTime();
+    var params = "FindBedName="+replaceAll(bedName,"%","[pct]")+
+                 "&FindBedService="+serviceId+
+                 "&EditUID=<%=sEditUID%>";
+    
+    new Ajax.Updater("bedsDiv",url,{
+      evalScripts:true,
+      method:"post",
+      parameters: params,
+      onSuccess: function(resp){
+        $("bedsDiv").innerHTML = resp.responseText.trim();
+    	enableButtons(true);
+      },
+      onFailure: function(resp){
+        $("bedsDiv").innerHTML = "Error in 'system/ajax/searchBeds.jsp' : "+resp.responseText.trim();
+      	enableButtons(true);
+      }
+    });
+  }
+  
+  <%-- ENABLE BUTTONS --%>
+  function enableButtons(key){
+	if(document.FindBedForm!=null){
+      if(FindBedForm.buttonfind) FindBedForm.buttonfind.disabled = !key;
+      if(FindBedForm.buttonclear) FindBedForm.buttonclear.disabled = !key;
+      if(FindBedForm.buttonnew) FindBedForm.buttonnew.disabled = !key;
+      if(FindBedForm.Backbutton) FindBedForm.Backbutton.disabled = !key;
+	}
+  }
+  
+  <%-- CLEAR SEARCH FIELDS --%>
   function clearSearchFields(){
     FindBedForm.FindBedService.value = "";
     FindBedForm.FindBedServiceName.value = "";
     FindBedForm.FindBedName.value = "";
+    
+    $("bedsDiv").innerHTML = "";
   }
 
+  <%-- DO FIND --%>
   function doFind(){
-    if(FindBedForm.FindBedService.value != "" || FindBedForm.FindBedName.value != ""){
+    if(FindBedForm.FindBedService.value!="" || FindBedForm.FindBedName.value!=""){
       FindBedForm.Action.value = "SEARCH";
       FindBedForm.buttonfind.disabled = true;
       FindBedForm.submit();
@@ -334,24 +398,21 @@
     }
   }
 
+  <%-- DO NEW--%>
   function doNew(){
     FindBedForm.Action.value = "NEW";
     FindBedForm.submit();
   }
 
+  <%-- DO SELECT --%>
   function doSelect(id){
-    window.location.href="<c:url value='/main.do'/>?Page=system/manageBeds.jsp&Action=SELECT&EditUID="+id+"&ts=<%=getTs()%>";
+    window.location.href = "<c:url value='/main.do'/>?Page=system/manageBeds.jsp"+
+    		               "&Action=SELECT"+
+    		               "&EditUID="+id+
+    		               "&ts="+new Date().getTime();
   }
 
-  function doBack(){
-    window.location.href="<c:url value='/main.do'/>?Page=system/menu.jsp&ts=<%=getTs()%>";
-  }
-
-  function doBackToSearch(){
-    window.location.href="<c:url value='/main.do'/>?Page=system/manageBeds.jsp&ts=<%=getTs()%>";
-  }
-
-  <%-- search infoservice --%>
+  <%-- SEARCH INFO SERVICE --%>
   function searchInfoService(sObject){
     if(sObject.value.length > 0){
       openPopup("/_common/search/serviceInformation.jsp&ServiceID="+sObject.value+"&ViewCode=on");
@@ -360,25 +421,26 @@
 
   <%-- DO NEW BED --%>
   function doNewBed(){
-    EditBedForm.newButton.disabled = true;
-    
+    EditBedForm.newButton.disabled = true;    
     EditBedForm.Action.value = "NEW";
+    
     EditBedForm.EditName.value = "";
     EditBedForm.EditPriority.value = "";
     EditBedForm.EditLocation.value = "";
     EditBedForm.EditComment.value = "";
     EditBedForm.EditUID.value = "";
     
+    EditBedForm.EditBedService.value = "<%=sFindBedService%>";
+    EditBedForm.EditBedServiceName.value = "<%=sFindBedServiceName%>";
+    
     EditBedForm.submit();
   }
 
   <%-- DO DELETE BED --%>
-  function doDeleteBed(){
-    EditBedForm.deleteButton.disabled = true;
-    
+  function doDeleteBed(deleteBedUid){    
     if(yesnoDeleteDialog()){
-	  EditBedForm.Action.value = "DELETE";
-	  EditBedForm.submit();
+	  DeleteBedForm.EditUID.value = deleteBedUid;
+	  DeleteBedForm.submit();
 	}
   }
 
@@ -390,7 +452,7 @@
     else if(EditBedForm.EditName.value.length==0){
       alertDialog("web","no_bed_name");
     }
-    else if(!isNumber(EditBedForm.EditPriority)){
+    else if(EditBedForm.EditPriority.value.length > 0 && !isNumber(EditBedForm.EditPriority)){
       alertDialog("web","bed_invalid_priority");
     }
     else{
@@ -400,20 +462,41 @@
     }
   }
 
-  <%-- OPEN FILE --%>
-  function openFile(){
+  <%-- OPEN LOCATION FILE --%>
+  function openLocationFile(){
     if(EditBedForm.EditLocation.value.length > 0){
       var url = "<%=MedwanQuery.getInstance().getConfigString("documentsdir","adt/documents/")+"/"+sEditLocation%>";
-      window.open(url,"Location","height=500,width=550,toolbar=no,status=no,scrollbars=no,resizable=no,menubar=no");
+      window.open(url,"Location","toolbar=no,status=no,scrollbars=no,resizable=yes,menubar=no");
     }
   }
 
   <%-- SEARCH SERVICE --%>
   function searchService(serviceUidField,serviceNameField){
-    openPopup("/_common/search/searchService.jsp&ts=<%=getTs()%>&VarCode="+serviceUidField+"&VarText="+serviceNameField);
+    openPopup("/_common/search/searchService.jsp&ts="+new Date().getTime()+"&VarCode="+serviceUidField+"&VarText="+serviceNameField);
+  }
+  
+  <%-- DO BACK --%>
+  function doBack(){
+    window.location.href = "<c:url value='/main.do'/>?Page=system/menu.jsp&ts="+new Date().getTime();
   }
 
+  <%-- DO BACK TO SEARCH --%>
+  function doBackToSearch(){
+	BackToSearchForm.submit();
+  }
+  
   <%
+	  if(sAction.equals("SAVE") || sAction.equals("NEW") || sAction.equals("SELECT")){
+		  if(sEditBedService.length() > 0){
+	          %>searchBeds('','<%=sEditBedService%>');<%
+		  }
+	  }
+	  else if(sAction.equals("SEARCH") || sAction.equals("DELETE")){
+		  if(sFindBedName.length() > 0 || sFindBedService.length() > 0){
+		      %>searchBeds('<%=sFindBedName%>','<%=sFindBedService%>');<%
+		  }
+	  }
+
       if(sAction.equals("NEW") || sAction.equals("SELECT") || sAction.equals("SAVE")){
           %>setTimeout('EditBedForm.EditName.focus();',500);<%
       }
