@@ -135,16 +135,14 @@
   function writeWeekScheduleOptions(){
     var url = "<c:url value='/system/ajax/defaultWeekschedules/getWeekscheduleOptions.jsp'/>?ts="+new Date().getTime();
     
-    new Ajax.Request(url,
-      {                     
-        onSuccess: function(resp){
-          $("weekScheduleTypeSelectTR").innerHTML = resp.responseText.trim();
-        },
-        onFailure: function(resp){
-          $("divMessage").innerHTML = "Error in 'system/ajax/defaultWeekschedules/getWeekscheduleOptions.jsp' : "+resp.responseText.trim();
-        }
+    new Ajax.Request(url,{
+      onSuccess: function(resp){
+        $("weekScheduleTypeSelectTR").innerHTML = resp.responseText.trim();
+      },
+      onFailure: function(resp){
+        $("divMessage").innerHTML = "Error in 'system/ajax/defaultWeekschedules/getWeekscheduleOptions.jsp' : "+resp.responseText.trim();
       }
-    );
+    });
   }
 
   <%-- CALCULATE HOURS PER WEEK --%>
