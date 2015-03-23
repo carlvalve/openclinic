@@ -865,7 +865,7 @@
 	             .append("window.opener.document.transactionForm.saveButton.disabled = false;\n")
 	             .append("window.opener.document.transactionForm.saveAndPrintButton.disabled = false;\n")
 	             .append("window.opener.bSaveHasNotChanged = true;")
-	             .append("window.opener.location.reload();")
+	             //.append("window.opener.location.reload();")
 	             .append("window.opener.location.href = '").append(sCONTEXTPATH).append("/main.do?Page=curative/index.jsp&ts=").append(getTs()).append("';\n")
 	            .append("}");
        	}
