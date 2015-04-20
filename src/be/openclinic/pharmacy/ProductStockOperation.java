@@ -688,7 +688,7 @@ public class ProductStockOperation extends OC_Object{
             		debet.setDate(new java.util.Date());
             		debet.setEncounter(activeEncounter);
             		debet.setPrestation(prestation);
-            		debet.setQuantity(product.getPrestationquantity()*getUnitsChanged());
+            		debet.setQuantity(product.getPrestationquantity()*getUnitsChanged()*(this.getDescription().indexOf("receipt") > -1?-1:1));
             		debet.setComment("");
             		debet.setSupplierUid("");
             		debet.setCredited(0);

@@ -3,15 +3,18 @@ package be.mxs.common.util.pdf.general;
 import be.mxs.common.util.pdf.PDFBasic;
 import be.mxs.common.util.pdf.official.PDFOfficialBasic;
 import be.mxs.common.util.db.MedwanQuery;
+import be.mxs.common.util.system.PdfBarcode;
 import be.mxs.common.util.system.ScreenHelper;
 import be.openclinic.adt.Encounter;
 import net.admin.User;
 import net.admin.AdminPerson;
+
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
 import java.util.Vector;
@@ -136,10 +139,7 @@ public class PDFPatientLabelGenerator extends PDFOfficialBasic {
             PdfPTable wrapperTable = new PdfPTable(3);
             wrapperTable.setWidthPercentage(100);
 
-            PdfContentByte cb = docWriter.getDirectContent();
-            Barcode39 barcode39 = new Barcode39();
-            barcode39.setCode("0"+person.personid);
-            Image image = barcode39.createImageWithBarcode(cb, null, null);
+            Image image = PdfBarcode.getBarcode("0"+person.personid, docWriter);            
             cell = new PdfPCell(image);
             cell.setBorder(PdfPCell.NO_BORDER);
             cell.setVerticalAlignment(PdfPCell.ALIGN_TOP);
@@ -196,10 +196,6 @@ public class PDFPatientLabelGenerator extends PDFOfficialBasic {
                 //Date of birth & gender
                 cell=createLabel(person.dateOfBirth+" "+person.gender,7,1,Font.NORMAL);
                 cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
-                table.addCell(cell);
-                //Service & Bed
-                cell=createLabel(encounter!=null && encounter.getService()!=null?encounter.getService().getLabel(user.person.language)+(encounter.getBed()!=null?" ("+encounter.getBed().getName()+")":""):"",7,3,Font.NORMAL);
-                cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
                 table.addCell(cell);
             }
 

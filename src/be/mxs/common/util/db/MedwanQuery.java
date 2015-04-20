@@ -802,7 +802,6 @@ public class MedwanQuery {
             ps.setString(1, oc_key);
             ps.execute();
             ps.close();
-
             // insert
             ps = connection.prepareStatement("insert into OC_Config(oc_key,oc_value,updatetime) values(?,?,?)");
             ps.setString(1, oc_key);

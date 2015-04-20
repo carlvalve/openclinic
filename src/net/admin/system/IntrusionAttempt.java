@@ -141,7 +141,7 @@ public class IntrusionAttempt {
 
         String sSelect = " SELECT * FROM intrusionAttempts"+
                          " WHERE intruderID NOT LIKE '%.%.%.%'"+
-                         " ORDER BY intruderID";
+                         " ORDER BY intruderID*1";
 
     	Connection ad_conn = MedwanQuery.getInstance().getAdminConnection();
         try{

@@ -16,6 +16,7 @@ import be.dpms.medwan.webapp.wo.common.system.SessionContainerWO;
 import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.pdf.PDFCreator;
 import be.mxs.common.util.system.Debug;
+import be.mxs.common.util.system.PdfBarcode;
 import be.mxs.common.util.system.Picture;
 import be.mxs.common.util.system.ScreenHelper;
 import be.openclinic.finance.Insurance;
@@ -27,7 +28,6 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.Barcode39;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -237,15 +237,7 @@ public abstract class PDFDossierCreator extends PDFCreator {
         imgCell.setColspan(3);            
         table.addCell(imgCell);
         
-        // barcode in table
-        PdfContentByte contentByte = docWriter.getDirectContent();
-        Barcode39 barcode39 = new Barcode39();
-        barcode39.setCode("0"+person.personid);
-        barcode39.setSize(8);
-        barcode39.setBaseline(10);
-        barcode39.setBarHeight(65);
-        
-        Image barcodeImg = barcode39.createImageWithBarcode(contentByte,null,null);            
+        Image barcodeImg = PdfBarcode.getBarcode("0"+person.personid, docWriter);            
         cell = new PdfPCell(barcodeImg);
         cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
         cell.setBorder(PdfPCell.NO_BORDER);

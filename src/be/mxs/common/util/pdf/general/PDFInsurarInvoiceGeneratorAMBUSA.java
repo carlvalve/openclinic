@@ -8,12 +8,14 @@ import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.hnrw.report.Report_Identification;
 
 import be.mxs.common.util.system.Miscelaneous;
 import be.mxs.common.util.system.Debug;
+import be.mxs.common.util.system.PdfBarcode;
 import be.mxs.common.util.system.ScreenHelper;
 import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.webapp.wl.struts.actions.healthrecord.CreateTransactionAction;
@@ -1326,10 +1328,7 @@ public class PDFInsurarInvoiceGeneratorAMBUSA extends PDFInvoiceGenerator {
             table2.addCell(cell);
             if(invoice.getStatus().equalsIgnoreCase("closed")){
                 //*** barcode ***
-                PdfContentByte cb = docWriter.getDirectContent();
-                Barcode39 barcode39 = new Barcode39();
-                barcode39.setCode("6"+invoice.getInvoiceUid());
-                Image image = barcode39.createImageWithBarcode(cb,null,null);
+                Image image = PdfBarcode.getBarcode("6"+invoice.getInvoiceUid(), docWriter);            
                 image.scaleAbsoluteWidth(75);
                 cell = new PdfPCell(image);
                 cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);

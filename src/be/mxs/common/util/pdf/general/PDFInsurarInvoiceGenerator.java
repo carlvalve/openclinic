@@ -7,10 +7,12 @@ import java.util.*;
 import java.io.ByteArrayOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
 import javax.servlet.http.HttpServletRequest;
 
 import be.mxs.common.util.system.Miscelaneous;
 import be.mxs.common.util.system.Debug;
+import be.mxs.common.util.system.PdfBarcode;
 import be.mxs.common.util.system.ScreenHelper;
 import be.mxs.common.util.db.MedwanQuery;
 import be.openclinic.finance.*;
@@ -118,10 +120,7 @@ public class PDFInsurarInvoiceGenerator extends PDFInvoiceGenerator {
             }
 
             //*** barcode ***
-            PdfContentByte cb = docWriter.getDirectContent();
-            Barcode39 barcode39 = new Barcode39();
-            barcode39.setCode("6"+invoice.getInvoiceUid());
-            Image image = barcode39.createImageWithBarcode(cb,null,null);
+            Image image = PdfBarcode.getBarcode("6"+invoice.getInvoiceUid(), docWriter);            
             cell = new PdfPCell(image);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
             cell.setBorder(PdfPCell.NO_BORDER);

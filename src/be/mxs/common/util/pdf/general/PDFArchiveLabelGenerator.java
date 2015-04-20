@@ -1,15 +1,19 @@
 package be.mxs.common.util.pdf.general;
 
 import be.mxs.common.util.pdf.official.PDFOfficialBasic;
+import be.mxs.common.util.system.PdfBarcode;
 import be.mxs.common.util.db.MedwanQuery;
 import be.openclinic.adt.Encounter;
+
 import com.itextpdf.text.pdf.*;
 import com.itextpdf.text.*;
+
 import net.admin.User;
 import net.admin.AdminPerson;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
 import java.io.ByteArrayOutputStream;
 import java.util.Vector;
 
@@ -120,10 +124,7 @@ public class PDFArchiveLabelGenerator extends PDFOfficialBasic {
             PdfPTable wrapperTable = new PdfPTable(3);
             wrapperTable.setWidthPercentage(100);
 
-            PdfContentByte cb = docWriter.getDirectContent();
-            Barcode39 barcode39 = new Barcode39();
-            barcode39.setCode("0"+person.personid);
-            Image image = barcode39.createImageWithBarcode(cb, null, null);
+            Image image = PdfBarcode.getBarcode("0"+person.personid, docWriter);            
             cell = new PdfPCell(image);
             cell.setBorder(PdfPCell.NO_BORDER);
             cell.setVerticalAlignment(PdfPCell.ALIGN_TOP);

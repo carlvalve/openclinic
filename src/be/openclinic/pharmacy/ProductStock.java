@@ -28,7 +28,16 @@ public class ProductStock extends OC_Object implements Comparable {
     private Date end;
     private String defaultImportance; // (native|high|low)
     private Service supplier;
-    // non-db data
+    private String location;
+    
+    public String getLocation() {
+		return location;
+	}
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	// non-db data
     private String serviceStockUid;
     private String productUid;
     private String supplierUid;
@@ -266,6 +275,7 @@ public class ProductStock extends OC_Object implements Comparable {
                 stock.setUpdateDateTime(rs.getTimestamp("OC_STOCK_UPDATETIME"));
                 stock.setUpdateUser(ScreenHelper.checkString(rs.getString("OC_STOCK_UPDATEUID")));
                 stock.setVersion(rs.getInt("OC_STOCK_VERSION"));
+                stock.setLocation(rs.getString("OC_STOCK_LOCATION"));
             } else {
                 throw new Exception("ERROR : PRODUCTSTOCK " + stockUid + " NOT FOUND");
             }
@@ -341,8 +351,8 @@ public class ProductStock extends OC_Object implements Comparable {
                         "  OC_STOCK_SERVICESTOCKUID, OC_STOCK_PRODUCTUID, OC_STOCK_LEVEL," +
                         "  OC_STOCK_MINIMUMLEVEL, OC_STOCK_MAXIMUMLEVEL, OC_STOCK_ORDERLEVEL," +
                         "  OC_STOCK_BEGIN, OC_STOCK_END, OC_STOCK_DEFAULTIMPORTANCE, OC_STOCK_SUPPLIERUID," +
-                        "  OC_STOCK_CREATETIME, OC_STOCK_UPDATETIME, OC_STOCK_UPDATEUID, OC_STOCK_VERSION)" +
-                        " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,1)";
+                        "  OC_STOCK_CREATETIME, OC_STOCK_UPDATETIME, OC_STOCK_UPDATEUID, OC_STOCK_VERSION,OC_STOCK_LOCATION)" +
+                        " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,1,?)";
                 ps = oc_conn.prepareStatement(sSelect);
                 int questionMarkIdx = 1;
 
@@ -387,6 +397,7 @@ public class ProductStock extends OC_Object implements Comparable {
                 ps.setTimestamp(questionMarkIdx++, new java.sql.Timestamp(new java.util.Date().getTime())); // now
                 ps.setTimestamp(questionMarkIdx++, new java.sql.Timestamp(new java.util.Date().getTime())); // now
                 ps.setString(questionMarkIdx++, this.getUpdateUser());
+                ps.setString(questionMarkIdx++, this.getLocation());
                 ps.executeUpdate();
                 if(this.getLevel()!=0){
                     //An initial productstockoperation must be created for generating the first stock level
@@ -408,12 +419,29 @@ public class ProductStock extends OC_Object implements Comparable {
                 
             } else {
                 //***** UPDATE *****
+            	//First copy record to history
+                sSelect = "INSERT INTO OC_PRODUCTSTOCKS_HISTORY(OC_STOCK_SERVERID, OC_STOCK_OBJECTID," +
+                        "  OC_STOCK_SERVICESTOCKUID, OC_STOCK_PRODUCTUID, OC_STOCK_LEVEL," +
+                        "  OC_STOCK_MINIMUMLEVEL, OC_STOCK_MAXIMUMLEVEL, OC_STOCK_ORDERLEVEL," +
+                        "  OC_STOCK_BEGIN, OC_STOCK_END, OC_STOCK_DEFAULTIMPORTANCE, OC_STOCK_SUPPLIERUID," +
+                        "  OC_STOCK_CREATETIME, OC_STOCK_UPDATETIME, OC_STOCK_UPDATEUID, OC_STOCK_VERSION,OC_STOCK_LOCATION) "
+                        + "SELECT OC_STOCK_SERVERID, OC_STOCK_OBJECTID," +
+                        "  OC_STOCK_SERVICESTOCKUID, OC_STOCK_PRODUCTUID, OC_STOCK_LEVEL," +
+                        "  OC_STOCK_MINIMUMLEVEL, OC_STOCK_MAXIMUMLEVEL, OC_STOCK_ORDERLEVEL," +
+                        "  OC_STOCK_BEGIN, OC_STOCK_END, OC_STOCK_DEFAULTIMPORTANCE, OC_STOCK_SUPPLIERUID," +
+                        "  OC_STOCK_CREATETIME, OC_STOCK_UPDATETIME, OC_STOCK_UPDATEUID, OC_STOCK_VERSION,OC_STOCK_LOCATION FROM OC_PRODUCTSTOCKS WHERE OC_STOCK_SERVERID = ? AND OC_STOCK_OBJECTID = ?";
+	            ps = oc_conn.prepareStatement(sSelect);
+	            ps.setInt(1,Integer.parseInt(this.getUid().substring(0,this.getUid().indexOf("."))));
+	            ps.setInt(2,Integer.parseInt(this.getUid().substring(this.getUid().indexOf(".")+1)));
+	            ps.executeUpdate();
+	            if(ps!=null) ps.close();
+
                 if (Debug.enabled) Debug.println("@@@ PRODUCTSTOCK UPDATE @@@");
                 sSelect = "UPDATE OC_PRODUCTSTOCKS SET" +
                         "  OC_STOCK_SERVICESTOCKUID=?, OC_STOCK_PRODUCTUID=?, OC_STOCK_LEVEL=?," +
                         "  OC_STOCK_MINIMUMLEVEL=?, OC_STOCK_MAXIMUMLEVEL=?, OC_STOCK_ORDERLEVEL=?," +
                         "  OC_STOCK_BEGIN=?, OC_STOCK_END=?, OC_STOCK_DEFAULTIMPORTANCE=?, OC_STOCK_SUPPLIERUID=?," +
-                        "  OC_STOCK_UPDATETIME=?, OC_STOCK_UPDATEUID=?, OC_STOCK_VERSION=(OC_STOCK_VERSION+1)" +
+                        "  OC_STOCK_UPDATETIME=?, OC_STOCK_UPDATEUID=?, OC_STOCK_VERSION=(OC_STOCK_VERSION+1),OC_STOCK_LOCATION=?" +
                         " WHERE OC_STOCK_SERVERID=? AND OC_STOCK_OBJECTID=?";
                 ps = oc_conn.prepareStatement(sSelect);
                 ps.setString(1, this.getServiceStockUid());
@@ -448,10 +476,11 @@ public class ProductStock extends OC_Object implements Comparable {
                 // OBJECT variables
                 ps.setTimestamp(11, new java.sql.Timestamp(new java.util.Date().getTime())); // now
                 ps.setString(12, this.getUpdateUser());
+                ps.setString(13, this.getLocation());
 
                 // where
-                ps.setInt(13, Integer.parseInt(this.getUid().substring(0, this.getUid().indexOf("."))));
-                ps.setInt(14, Integer.parseInt(this.getUid().substring(this.getUid().indexOf(".") + 1)));
+                ps.setInt(14, Integer.parseInt(this.getUid().substring(0, this.getUid().indexOf("."))));
+                ps.setInt(15, Integer.parseInt(this.getUid().substring(this.getUid().indexOf(".") + 1)));
                 ps.executeUpdate();
             }
         }
@@ -517,6 +546,37 @@ public class ProductStock extends OC_Object implements Comparable {
         return uid;
     }
     
+    public boolean hasExpiringProducts(int days){
+    	boolean bHas=false;
+    	long time = days*24*3600;
+    	time=time*1000;
+    	java.util.Date date = new java.util.Date(new java.util.Date().getTime()+time);
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+        	ps = oc_conn.prepareStatement("select * from OC_BATCHES where OC_BATCH_LEVEL>0 and OC_BATCH_PRODUCTSTOCKUID=? and OC_BATCH_END>=? and OC_BATCH_END<=?");
+        	ps.setString(1, this.getUid());
+        	ps.setDate(2, new java.sql.Date(new java.util.Date().getTime()));
+        	ps.setDate(3, new java.sql.Date(date.getTime()));
+        	rs=ps.executeQuery();
+        	bHas=rs.next();
+        }
+        catch(Exception e){
+        	e.printStackTrace();
+        }
+        finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                oc_conn.close();
+            }
+            catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+    	return bHas;
+    }
     //--- CHANGED ---------------------------------------------------------------------------------
     // checks the database for a record with the same DATA as 'this'.
     public boolean changed() {

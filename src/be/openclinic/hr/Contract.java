@@ -420,6 +420,36 @@ public class Contract extends OC_Object {
         return foundObjects;
     }
     
+    public static boolean hasActiveContract(int personId){
+    	boolean bActive=false;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection oc_conn = MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+            String sSql = "SELECT * FROM hr_contracts WHERE HR_CONTRACT_PERSONID = ? and (HR_CONTRACT_ENDDATE is null or HR_CONTRACT_ENDDATE>?)";
+            ps = oc_conn.prepareStatement(sSql);
+            ps.setInt(1,personId);
+            ps.setTimestamp(2, new java.sql.Timestamp(new java.util.Date().getTime()));
+            rs = ps.executeQuery();
+            bActive=rs.next();
+        }
+        catch(Exception e){
+        	if(Debug.enabled) e.printStackTrace();
+            Debug.printProjectErr(e,Thread.currentThread().getStackTrace());
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                oc_conn.close();
+            }
+            catch(SQLException se){
+                Debug.printProjectErr(se,Thread.currentThread().getStackTrace());
+            }
+        }
+        return bActive;
+    }
+    
     //--- GET CONTRACTS FOR PERSON ----------------------------------------------------------------
     public static List<Contract> getContractsForPerson(int personId){
         List<Contract> foundObjects = new LinkedList();

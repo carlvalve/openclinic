@@ -8,28 +8,31 @@ import be.mxs.common.model.vo.healthrecord.IConstants;
 import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.pdf.PDFCreator;
 import be.mxs.common.util.system.Debug;
+import be.mxs.common.util.system.PdfBarcode;
 import be.mxs.common.util.system.Picture;
 import be.mxs.common.util.system.ScreenHelper;
 import be.openclinic.medical.ChronicMedication;
 import be.openclinic.medical.Prescription;
 import be.openclinic.medical.Problem;
+
 import com.itextpdf.text.*;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.Barcode39;
 import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfPageEventHelper;
 import com.itextpdf.text.pdf.PdfWriter;
+
 import net.admin.AdminPerson;
 import net.admin.AdminPrivateContact;
 import net.admin.User;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Constructor;
@@ -774,15 +777,7 @@ public class GeneralPDFCreator extends PDFCreator {
         imgCell.setColspan(3);            
         table.addCell(imgCell);
         
-        // barcode in table
-        PdfContentByte contentByte = docWriter.getDirectContent();
-        Barcode39 barcode39 = new Barcode39();
-        barcode39.setCode("0"+person.personid);
-        barcode39.setSize(8);
-        barcode39.setBaseline(10);
-        barcode39.setBarHeight(65);
-        
-        Image barcodeImg = barcode39.createImageWithBarcode(contentByte,null,null);            
+        Image barcodeImg = PdfBarcode.getBarcode("0"+person.personid, docWriter);            
         cell = new PdfPCell(barcodeImg);
         cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
         cell.setBorder(PdfPCell.NO_BORDER);

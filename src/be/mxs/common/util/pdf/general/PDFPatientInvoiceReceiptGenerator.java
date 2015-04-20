@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import be.mxs.common.util.system.Miscelaneous;
 import be.mxs.common.util.system.Debug;
 import be.mxs.common.util.system.HTMLEntities;
+import be.mxs.common.util.system.PdfBarcode;
 import be.mxs.common.util.system.ScreenHelper;
 import be.mxs.common.util.db.MedwanQuery;
 import be.openclinic.finance.*;
@@ -293,10 +294,7 @@ public class PDFPatientInvoiceReceiptGenerator extends PDFInvoiceGenerator {
 		        table.addCell(cell);
 	        }
 
-	        PdfContentByte cb = docWriter.getDirectContent();
-	        Barcode39 barcode39 = new Barcode39();
-	        barcode39.setCode("7"+invoice.getInvoiceNumber());
-	        Image image = barcode39.createImageWithBarcode(cb, null, null);
+            Image image = PdfBarcode.getBarcode("7"+invoice.getInvoiceUid(), docWriter);            
 	        cell = new PdfPCell(image);
 	        cell.setBorder(PdfPCell.NO_BORDER);
 	        cell.setVerticalAlignment(PdfPCell.ALIGN_TOP);

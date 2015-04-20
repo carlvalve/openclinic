@@ -4,6 +4,7 @@ import be.mxs.common.util.pdf.PDFBasic;
 import be.mxs.common.util.pdf.official.EndPage;
 import be.mxs.common.util.pdf.official.PDFOfficialBasic;
 import be.mxs.common.util.system.Miscelaneous;
+import be.mxs.common.util.system.PdfBarcode;
 import be.mxs.common.util.system.ScreenHelper;
 import be.mxs.common.util.system.Debug;
 import be.mxs.common.util.db.MedwanQuery;
@@ -208,14 +209,7 @@ public class PDFAMCPatientCardsGenerator extends PDFOfficialBasic {
             
             
             //Barcode
-            PdfContentByte cb = docWriter.getDirectContent();
-            Barcode39 barcode39 = new Barcode39();
-            barcode39.setCode("A"+person.comment);
-            barcode39.setAltText("");
-            barcode39.setSize(1);
-            barcode39.setBaseline(0);
-            barcode39.setBarHeight(20);
-            Image image = barcode39.createImageWithBarcode(cb, null, null);
+            Image image = PdfBarcode.getCode39("A"+person.personid, docWriter, 1, 0, 20);
             cell = new PdfPCell(image);
             cell.setBorder(PdfPCell.NO_BORDER);
             cell.setVerticalAlignment(PdfPCell.ALIGN_TOP);
