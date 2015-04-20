@@ -1,21 +1,16 @@
-<%@ page import="be.mxs.common.util.system.*,java.awt.image.*,java.awt.geom.*,java.awt.*,javax.imageio.*,java.util.*,java.io.*,be.openclinic.finance.*" %>
-<%@page errorPage="/includes/error.jsp"%>
-<%@include file="/includes/validateUser.jsp"%>
-<%
-	Connection conn = MedwanQuery.getInstance().getAdminConnection();
-	PreparedStatement ps = conn.prepareStatement("select personid from admin");
-	ResultSet rs = ps.executeQuery();
-	while(rs.next()){
-		String personid = rs.getString("personid");
-		AdminPerson person = AdminPerson.getAdminPerson(personid);
-		Encounter firstEncounter = Encounter.getFirstEncounter(personid);
-		java.util.Date cd = person.getCreationDate();
-		if(cd==null && firstEncounter!=null && firstEncounter.getBegin()!=null){
-        	AccessLog.insert(activeUser.userid,"C."+personid,firstEncounter.getBegin());
-		}
-		else if(firstEncounter!=null && firstEncounter.getBegin()!=null && cd.after(firstEncounter.getBegin())){
-			person.setCreationDate(firstEncounter.getBegin());
-		}
-	}
+<%@ page import="be.mxs.common.util.system.*,org.dcm4che2.data.*,be.openclinic.archiving.*,java.awt.image.*,java.awt.geom.*,java.awt.*,javax.imageio.*,java.util.*,java.io.*,be.openclinic.finance.*" %>
 
+
+<%
+	System.out.println("start dicom");
+	DicomObject obj = Dicom.getDicomObject("E:/projects/openclinicnew/web/pacs/20010101/MR2/20088");
+	System.out.println("obj="+obj);
+	out.println(obj.getString(Tag.PatientName)+"<br/>");
+	out.println(obj.getString(Tag.PatientBirthDate)+"<br/>");
+	out.println(obj.getString(Tag.PatientID)+"<br/>");
+	out.println(obj.getString(Tag.StudyID)+"<br/>");
+	out.println(obj.getString(Tag.StudyDate)+"<br/>");
+	out.println(obj.getString(Tag.StudyDescription)+"<br/>");
+	out.println(obj.getString(Tag.DocumentTitle)+"<br/>");
+	out.println(obj.getString(Tag.InstanceNumber)+"<br/>");
 %>
