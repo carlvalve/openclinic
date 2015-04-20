@@ -1,6 +1,5 @@
 package be.mxs.common.util.pdf.general;
 
-import com.itextpdf.text.pdf.Barcode39;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;

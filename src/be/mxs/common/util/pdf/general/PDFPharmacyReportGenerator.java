@@ -338,8 +338,8 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 			bInitialized=true;
 			//Nu printen we de gegevens van de productstock
 	        row =t.addElement("row");
-			addCol(row,80,stock.getProduct()==null?"":stock.getProduct().getName()+" ("+getTran("web","batchnumber.short")+": "+key.split("\\|")[4]+")");
-			addCol(row,20,key.split("\\|")[2]);
+			addCol(row,80,stock.getProduct()==null?"":stock.getProduct().getName()+" ("+getTran("web","batchnumber.short")+": "+(key.split("\\|").length>4?key.split("\\|")[4]:"")+")");
+			addCol(row,20,key.split("\\|").length>2?key.split("\\|")[2]:"");
 			int level=0;
 			try{
 				level=Integer.parseInt(key.split("\\|")[3]);
@@ -888,7 +888,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 			addCol(row,90,stock.getProduct()==null?"":stock.getProduct().getName());
 			int in = stock.getTotalUnitsInForPeriod(begin, end);
 			addCol(row,20,in+"");
-			addCol(row,20,stock.getProductUid()==null?"":ScreenHelper.getTranNoLink("product.unit",stock.getProduct().getUnit(),sPrintLanguage),7);
+			addCol(row,20,stock.getProduct()==null?"":ScreenHelper.getTranNoLink("product.unit",stock.getProduct().getUnit(),sPrintLanguage),7);
 			double pump=0;
 			if(stock.getProduct()!=null){
 				pump=stock.getProduct().getLooseLastYearsAveragePrice(new java.util.Date(end.getTime()+day));
@@ -1165,9 +1165,10 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 			if(operation.getDocument()!=null){
 				docid=operation.getDocument().getUid();
 			}
-			operations.put(provname+";"+docid+";"+operation.getUid(), operation);
+			operations.put(provname+";"+docid+";"+(operation.getDate()==null?"?":new SimpleDateFormat("yyyyMMdd").format(operation.getDate()))+";"+operation.getUid(), operation);
 		}
 		Iterator iOperations = operations.keySet().iterator();
+		String operationdate="";
 		while(iOperations.hasNext()){
 			String key=(String)iOperations.next();
 			ProductStockOperation operation = (ProductStockOperation)operations.get(key);
@@ -1212,6 +1213,11 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 				addBoldCol(row, 40, getTran("web","date")+": "+docdate);
 				addBoldCol(row, 140, getTran("web","docnr")+": "+docref);
 				activedocument=docid;
+				operationdate="";
+			}
+			if(!operationdate.equalsIgnoreCase(ScreenHelper.getSQLDate(operation.getDate()))){
+				operationdate=ScreenHelper.getSQLDate(operation.getDate());
+				addBoldCol(row, 180, getTran("web","deliverydate")+": "+operationdate);
 			}
 			//Now we print the operation data
 			row =t.addElement("row");
@@ -1425,6 +1431,9 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 						ServiceStock serviceStock = ServiceStock.get(operation.getSourceDestination().getObjectUid());
 						if(serviceStock!=null){
 							addCol(row,40,serviceStock.getName());
+						}
+						else {
+							addCol(row,40,"?");
 						}
 					}
 					else if (operation.getSourceDestination().getObjectType().equalsIgnoreCase("patient")){

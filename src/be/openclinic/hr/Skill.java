@@ -64,7 +64,7 @@ public class Skill extends OC_Object {
                 ps = oc_conn.prepareStatement(sSql);
                 
                 int serverId = MedwanQuery.getInstance().getConfigInt("serverId"),
-                    objectId = MedwanQuery.getInstance().getOpenclinicCounter("HR_CAREER");
+                    objectId = MedwanQuery.getInstance().getOpenclinicCounter("HR_SKILL");
                 this.setUid(serverId+"."+objectId);
                 
                 int psIdx = 1;

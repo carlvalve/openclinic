@@ -9,6 +9,7 @@ import be.mxs.common.util.pdf.official.PDFOfficialBasic;
 import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.system.Debug;
 import be.mxs.common.util.system.Evaluate;
+import be.mxs.common.util.system.PdfBarcode;
 import be.mxs.common.util.system.ScreenHelper;
 import be.openclinic.adt.Encounter;
 import be.openclinic.medical.LabRequest;
@@ -17,13 +18,23 @@ import be.openclinic.medical.LabAnalysis;
 import net.admin.User;
 import net.admin.AdminPerson;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.*;
 import java.net.URL;
 import java.sql.Connection;
@@ -787,7 +798,7 @@ public class PDFLabResultGenerator extends PDFOfficialBasic {
                 	
                 }
                 //*** 3 - NUMERIC *****************************************************************
-                else if(LabAnalysis.getLabAnalysisByLabcode(analysisCode).getEditor().equalsIgnoreCase("numeric")){
+                else if(LabAnalysis.getLabAnalysisByLabcode(analysisCode).getEditor().startsWith("numeric")){
                 	Debug.println("*** 3 - numeric ***");
                 	
 	                cell=createLabelCourier(result,8,15,Font.BOLD);
@@ -1295,10 +1306,7 @@ public class PDFLabResultGenerator extends PDFOfficialBasic {
         table2.setWidthPercentage(100);
        
         //*** barcode ***
-        PdfContentByte cb = docWriter.getDirectContent();
-        Barcode39 barcode39 = new Barcode39();
-        barcode39.setCode("7"+labRequest.getTransactionid());
-        Image image = barcode39.createImageWithBarcode(cb,null,null);
+        Image image = PdfBarcode.getBarcode("7"+labRequest.getTransactionid(), docWriter);
         cell = new PdfPCell(image);
         cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
         cell.setBorder(PdfPCell.NO_BORDER);

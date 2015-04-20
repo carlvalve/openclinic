@@ -4,6 +4,7 @@ import be.mxs.common.util.pdf.PDFBasic;
 import be.mxs.common.util.pdf.official.EndPage;
 import be.mxs.common.util.pdf.official.PDFOfficialBasic;
 import be.mxs.common.util.system.Miscelaneous;
+import be.mxs.common.util.system.PdfBarcode;
 import be.mxs.common.util.system.ScreenHelper;
 import be.mxs.common.util.system.Debug;
 import be.mxs.common.util.db.MedwanQuery;
@@ -12,12 +13,14 @@ import be.openclinic.pharmacy.Product;
 import net.admin.User;
 import net.admin.Service;
 import net.admin.AdminPerson;
+
 import com.itextpdf.text.*;
 import com.itextpdf.text.html.HtmlTags;
 import com.itextpdf.text.pdf.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
 import java.io.ByteArrayOutputStream;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -117,10 +120,7 @@ public class PDFPatientCardGenerator extends PDFOfficialBasic {
             PdfPTable wrapperTable = new PdfPTable(3);
             wrapperTable.setWidthPercentage(100);
 
-            PdfContentByte cb = docWriter.getDirectContent();
-            Barcode39 barcode39 = new Barcode39();
-            barcode39.setCode("0"+person.personid);
-            image = barcode39.createImageWithBarcode(cb, null, null);
+            image = PdfBarcode.getBarcode("0"+person.personid, docWriter);            
             cell = new PdfPCell(image);
             cell.setBorder(PdfPCell.NO_BORDER);
             cell.setVerticalAlignment(PdfPCell.ALIGN_TOP);

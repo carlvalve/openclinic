@@ -2,8 +2,10 @@ package be.mxs.common.util.pdf.general;
 
 import be.mxs.common.util.pdf.official.PDFOfficialBasic;
 import be.mxs.common.util.system.Debug;
+import be.mxs.common.util.system.PdfBarcode;
 import be.mxs.common.util.db.MedwanQuery;
 import be.openclinic.adt.Encounter;
+
 import com.itextpdf.text.pdf.*;
 import com.itextpdf.text.*;
 
@@ -12,6 +14,7 @@ import net.admin.AdminPerson;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
 import java.io.ByteArrayOutputStream;
 import java.util.Vector;
 
@@ -71,9 +74,9 @@ public class PDFArchiveDocumentBarcodeGenerator extends PDFOfficialBasic {
 			doc.addCreationDate();
 			doc.addCreator("OpenClinic Software");  
 			
-			Rectangle rectangle = new Rectangle(0,0,new Float(MedwanQuery.getInstance().getConfigInt("archiveDocumentBarcodeWidth",600)*72/254).floatValue(),
-					                                new Float(MedwanQuery.getInstance().getConfigInt("archiveDocumentBarcodeHeight",100)*72/254).floatValue());
-            doc.setPageSize(rectangle);
+			Rectangle rectangle = new Rectangle(0,0,new Float(MedwanQuery.getInstance().getConfigInt("archiveDocumentBarcodeWidth",360)*72/254).floatValue(),
+					                                new Float(MedwanQuery.getInstance().getConfigInt("archiveDocumentBarcodeHeight",890)*72/254).floatValue());
+            doc.setPageSize(rectangle.rotate());
             doc.setMargins(0,0,0,0);
          
             doc.setJavaScript_onLoad(MedwanQuery.getInstance().getConfigString("cardJavaScriptOnLoad","document.print();"));
@@ -107,19 +110,36 @@ public class PDFArchiveDocumentBarcodeGenerator extends PDFOfficialBasic {
     //--- PRINT BARCODE ---------------------------------------------------------------------------
     protected void printBarcode(String sCode){
         try {
-            table = new PdfPTable(1);
+            table = new PdfPTable(MedwanQuery.getInstance().getConfigInt("archiveDocumentBarcodeColumns",1));
             table.setWidthPercentage(100);
 
-            PdfContentByte cb = docWriter.getDirectContent();
-            Barcode39 barcode39 = new Barcode39();
-            barcode39.setCode(sCode);
-            Image image = barcode39.createImageWithBarcode(cb,null,null);
+            Image image = PdfBarcode.getQRCode(sCode, docWriter, MedwanQuery.getInstance().getConfigInt("archiveDocumentBarcodeSize",200));
+            image.scaleToFit(doc.right()/2, doc.top());
+
             cell = new PdfPCell(image);
             cell.setBorder(PdfPCell.NO_BORDER);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+            cell.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
             cell.setPaddingTop(0);
             cell.setPaddingBottom(0);
 
+            table.addCell(cell);
+            
+            for (int n=0;n<sCode.length();n++){
+            	if(!sCode.substring(n,n+1).equalsIgnoreCase("0")){
+            		sCode=sCode.substring(n);
+            		break;
+            	}
+            }
+            if(sCode.length()>2){
+            	sCode=sCode.substring(0,sCode.length()-2)+"."+sCode.substring(sCode.length()-2);
+            }
+            cell = createBoldBorderlessCell(sCode,1,1,MedwanQuery.getInstance().getConfigInt("archiveDocumentBarcodeFontSize",10));
+            cell.setBorder(PdfPCell.NO_BORDER);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+            cell.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
+            cell.setPaddingTop(0);
+            cell.setPaddingBottom(0);
             table.addCell(cell);
 
             doc.add(table);

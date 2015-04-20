@@ -1,14 +1,18 @@
 package be.mxs.common.util.pdf.general;
 
 import be.mxs.common.util.pdf.official.PDFOfficialBasic;
+import be.mxs.common.util.system.PdfBarcode;
 import be.mxs.common.util.db.MedwanQuery;
+
 import com.itextpdf.text.pdf.*;
 import com.itextpdf.text.*;
+
 import net.admin.User;
 import net.admin.AdminPerson;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
 import java.io.ByteArrayOutputStream;
 import java.util.Vector;
 
@@ -90,10 +94,7 @@ public class PDFAnatomopathologyLabelGenerator extends PDFOfficialBasic {
 
     protected void printImageLabel(String imageid, String trandate, AdminPerson activePatient){
         try {
-            PdfContentByte cb = docWriter.getDirectContent();
-            Barcode39 barcode39 = new Barcode39();
-            barcode39.setCode(imageid);
-            Image image = barcode39.createImageWithBarcode(cb, null, null);
+            Image image = PdfBarcode.getBarcode(imageid, docWriter);            
             image.scaleAbsoluteHeight((doc.getPageSize().getHeight()-doc.topMargin()-doc.bottomMargin())*2/3);
             image.scaleAbsoluteWidth((doc.getPageSize().getWidth()-doc.leftMargin()-doc.rightMargin())*2/3);
             table = new PdfPTable(3);
