@@ -179,7 +179,7 @@
         if(sEditUnitsChanged.length() > 0) operation.setUnitsChanged(Integer.parseInt(sEditUnitsChanged));
         operation.setUpdateUser(activeUser.userid);
 
-        String sResult = operation.store(false);
+        String sResult = operation.store(true);
         if(sResult==null){
         	// In case this is a receipt operation linked to a delivery operation, update the delivery operation
         	if(sEditReferenceOperationUid.length() > 0){

@@ -102,8 +102,6 @@
             <Menu labelid="executive.bedoccupancy" accessrights="occup.bedoccupation.select" url="/main.do?Page=statistics/bedoccupancyStatus.jsp"/>
             <Menu labelid="accountancy" accessrights="accountancy.select" url="/main.do?Page=accounting/index.jsp"/>
             <Menu labelid="payroll" accessrights="payroll.select" url="/main.do?Page=payroll/index.jsp"/>
-            <Menu labelid="maintenance" accessrights="maintenance.select" url="/main.do?Page=maintenance/index.jsp"/>
-            <Menu labelid="capital" accessrights="capital.select" url="/main.do?Page=capital/index.jsp"/>
         </Menu>
         <Menu labelid="printlabel" accessrights="system.printlabel" patientselected="true" url="javascript:printPatientLabel();"/>
         <Menu labelid="ministats" url="/main.do?Page=system/getConnectedUsers.jsp&amp;nousers=true"/>

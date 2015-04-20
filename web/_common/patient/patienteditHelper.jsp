@@ -25,6 +25,17 @@
             }
             sReturn += ">";
         }
+        else if(sTypeContent.toUpperCase().equals("N")){
+            sReturn+= "<input class='text' type='text' name='"+sFieldName+"' id='"+sFieldName+"' value=\""+sValue.trim()+"\" size='"+sTextWidth+"' onKeyUp='limitLength(this,125);'";
+            if(!bEditable){
+                sReturn+=" readonly ";
+            }
+
+            if(bUpperCase){
+                sReturn+=" style='text-transform: uppercase' ";
+            }
+            sReturn += ">";
+        }
         else if (sTypeContent.toUpperCase().equals("D")) {
             sReturn += writeDateField(sFieldName,"PatientEditForm",sValue, sWebLanguage);
         }

@@ -3,10 +3,7 @@
                 java.io.PrintWriter,
                 be.mxs.common.util.pdf.general.PDFPatientLabelGenerator,
                 be.mxs.common.util.pdf.general.PDFArchiveLabelGenerator"%>
-<%@include file="/includes/validateUser.jsp"%>
-<%@page errorPage="/includes/error.jsp"%>
-
-<%
+<%@include file="/includes/validateUser.jsp"%><%@page errorPage="/includes/error.jsp"%><%
     String sLabelCount = checkString(request.getParameter("labelcount")),
            sLabelType  = checkString(request.getParameter("type"));
 
@@ -31,7 +28,7 @@
                 PDFPatientLabelGenerator pdfPatientLabelGenerator = new PDFPatientLabelGenerator(activeUser,sProject);
                 baosPDF = pdfPatientLabelGenerator.generatePDFDocumentBytes(request,activePatient,Integer.parseInt(request.getParameter("labelcount")),request.getParameter("type"));
             }
-            
+
             StringBuffer sbFilename = new StringBuffer();
             sbFilename.append("filename_").append(System.currentTimeMillis()).append(".pdf");
 
@@ -90,10 +87,10 @@
             </tr>
         </table>
     </form>
+    
+	<script>
+	  window.open("<c:url value='/'/>/util/setprinter.jsp?printer=labelprinter","Popup"+new Date().getTime(),"toolbar=no,status=no,scrollbars=no,resizable=no,width=1,height=1,menubar=no").moveBy(-1000,-1000);
+	</script>
 <%
     }
 %>
-
-<script>
-  window.open("<c:url value='/'/>/util/setprinter.jsp?printer=labelprinter","Popup"+new Date().getTime(),"toolbar=no,status=no,scrollbars=no,resizable=no,width=1,height=1,menubar=no").moveBy(-1000,-1000);
-</script>

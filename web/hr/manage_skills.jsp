@@ -205,12 +205,13 @@
     if(maySubmit){
       <%-- compose string containing language skills --%>
       var sTmpBegin, sTmpEnd;
-      while(sLS.indexOf("rowLS") > -1){
-        sTmpBegin = sLS.substring(sLS.indexOf("rowLS"));
+      var sLScopy=sLS;
+      while(sLScopy.indexOf("rowLS") > -1){
+        sTmpBegin = sLScopy.substring(sLScopy.indexOf("rowLS"));
         sTmpEnd = sTmpBegin.substring(sTmpBegin.indexOf("=")+1);
-        sLS = sLS.substring(0,sLS.indexOf("rowLS"))+sTmpEnd;
+        sLScopy = sLScopy.substring(0,sLScopy.indexOf("rowLS"))+sTmpEnd;
       }
-      document.getElementById("languages").value = sLS.substring(0,255);
+      document.getElementById("languages").value = sLScopy.substring(0,255);
        
       document.getElementById("divMessage").innerHTML = "<img src='<%=sCONTEXTPATH%>/_img/themes/<%=sUserTheme%>/ajax-loader.gif'/><br>Saving";  
       var url = "<c:url value='/hr/ajax/skills/saveSkill.jsp'/>?ts="+new Date().getTime();
@@ -605,7 +606,6 @@
   <%-- EDIT LANGUAGE SKILL --%>
   function editLS(rowid){
     var row = getRowFromArrayString(sLS,rowid.id);
-    
     EditForm.lsLanguage.value = getCelFromRowString(row,0);
     EditForm.lsSpoken.value   = getCelFromRowString(row,1);
     EditForm.lsReading.value  = getCelFromRowString(row,2);

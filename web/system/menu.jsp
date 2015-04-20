@@ -115,7 +115,7 @@
                     hMenu.put(getTran("web.manage","recalculate.stocklevels",sWebLanguage),"main.do?Page=system/recalculateStockLevels.jsp");
                     hMenu.put(getTran("web.manage","update.all",sWebLanguage),"main.do?Page=util/updateSystem.jsp");
                     hMenu.put(getTran("web.manage","update.examinations",sWebLanguage),"main.do?Page=util/updateExaminations.jsp");
-                    hMenu.put(getTran("web.manage","reset.defaults",sWebLanguage),"main.do?Page=system/resetDefaults.jsp");
+                    hMenu.put(getTran("web.manage","configure.core",sWebLanguage),"main.do?Page=system/resetDefaults.jsp");
                     hMenu.put(getTran("web.manage","load.file",sWebLanguage),"main.do?Page=system/loadTable.jsp");
                     hMenu.put(getTran("web.manage","export.labels",sWebLanguage),"main.do?Page=system/exportLabels.jsp");
 

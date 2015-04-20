@@ -176,11 +176,11 @@
   	<Query id="QUERY.hr.training.enableDiplomaCode.3" db="openclinic" date="14/05/2013" dbserver="MySQL">  	    
 	  	insert into oc_config(oc_key,oc_value,updateuserid,updatetime) values('enableDiplomaCode3','1',4,now())	  	 	
   	</Query>  	
-  	<Query id="QUERY.kigarama" db="admin" date="17/06/2013" dbserver="MySQL">  	    
+  	<Query id="QUERY.kigarama" db="ocadmin" date="17/06/2013" dbserver="MySQL">  	    
 	  	delete from rwandazipcodes where zipcode='050513';
 	  	insert into rwandazipcodes(zipcode,district,city) values('050513','KIREHE','KIGARAMA')	  	 	
   	</Query>  	
-  	<Query id="QUERY.kigarama" db="admin" date="17/06/2013" dbserver="Microsoft SQL Server">  	    
+  	<Query id="QUERY.kigarama" db="ocadmin" date="17/06/2013" dbserver="Microsoft SQL Server">  	    
 	  	delete from rwandazipcodes where zipcode='050513';
 	  	insert into rwandazipcodes(zipcode,district,city) values('050513','KIREHE','KIGARAMA')	  	 	
   	</Query>  	
@@ -232,6 +232,23 @@
   	<Query id='QUERY.correct.itemtypeid.1' db='openclinic' date='09/01/2014' dbserver='MySQL'>
   	    update transactionitems set itemtypeid = 'be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID'
          where itemtypeid = 'xs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID'
+  	</Query>	
+  	<Query id='QUERY.update_productstocks_history' db='openclinic' date='18/04/2015' dbserver='MySQL'>
+		ALTER TABLE oc_productstocks_history MODIFY COLUMN OC_STOCK_MINIMUMLEVEL INT(10) DEFAULT NULL,
+		MODIFY COLUMN OC_STOCK_MAXIMUMLEVEL INT(10) DEFAULT NULL,
+		MODIFY COLUMN OC_STOCK_ORDERLEVEL INT(10) DEFAULT NULL,
+		MODIFY COLUMN OC_STOCK_BEGIN DATETIME DEFAULT NULL,
+		MODIFY COLUMN OC_STOCK_END DATETIME DEFAULT NULL,
+		MODIFY COLUMN OC_STOCK_DEFAULTIMPORTANCE VARCHAR(255) DEFAULT NULL;
+  	</Query>	
+  	<Query id='QUERY.dropranksview' db='ocadmin' date='18/04/2015' dbserver='MySQL'>
+		drop view ranksview;
+  	</Query>	
+  	<Query id='QUERY.dropranksview2' db='ocadmin' date='18/04/2015' dbserver='MySQL'>
+		drop view ranksview2;
+  	</Query>	
+  	<Query id='QUERY.dropfunctionsview' db='openclinic' date='18/04/2015' dbserver='MySQL'>
+		drop view functionsview;
   	</Query>	
   	
 </Queries>

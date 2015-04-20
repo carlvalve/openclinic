@@ -67,7 +67,6 @@
 	        <%-- HEADER --%>
 	        <tr class="gray">
 	           <td width="250"><%=getTran("web","patient",sWebLanguage)%></td>
-	           <td width="120"><%=getTran("web","diagnoses",sWebLanguage)%></td>
 	           <td width="*"><%=getTran("web","encounters",sWebLanguage)%></td>
 	        </tr>
 	    <%

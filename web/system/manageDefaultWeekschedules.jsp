@@ -112,9 +112,9 @@
         <tr>     
             <td class="admin"/>
             <td class="admin2">
-                <input class="button" type="button" name="buttonSave" value=" <%=getTranNoLink("web","save",sWebLanguage)%> " onclick="saveWeekschedule();">&nbsp;&nbsp;
-                <input class="button" type="button" name="buttonAdd" value="<%=getTranNoLink("web","add",sWebLanguage)%>" onclick="addWeekschedule();" style="visibility:hidden;">&nbsp;
-                <input class="button" type="button" name="buttonDelete" value="<%=getTranNoLink("web","delete",sWebLanguage)%>" onclick="deleteWeekschedule();" style="visibility:hidden;">&nbsp;
+                <input class="button" type="button" name="buttonSave" id="buttonSave" value=" <%=getTranNoLink("web","save",sWebLanguage)%> " onclick="saveWeekschedule();">&nbsp;&nbsp;
+                <input class="button" type="button" name="buttonAdd" id="buttonAdd" value="<%=getTranNoLink("web","add",sWebLanguage)%>" onclick="addWeekschedule();" style="visibility:hidden;">&nbsp;
+                <input class="button" type="button" name="buttonDelete" id="buttonDelete" value="<%=getTranNoLink("web","delete",sWebLanguage)%>" onclick="deleteWeekschedule();" style="visibility:hidden;">&nbsp;
             </td>
         </tr>
     </table>

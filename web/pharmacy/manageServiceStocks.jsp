@@ -22,7 +22,7 @@
     }
 
     //--- OBJECTS TO HTML -------------------------------------------------------------------------
-    private StringBuffer objectsToHtml(Vector objects, String sWebLanguage, User activeUser){
+    private StringBuffer objectsToHtml(Vector objects, String sWebLanguage, User activeUser,String showHidden){
         StringBuffer html = new StringBuffer();
         Vector authorizedUserIds;
         String sClass = "1", sServiceStockUid = "", sServiceUid = "", sServiceName = "", sAuthorizedUserIds,
@@ -39,63 +39,65 @@
         ServiceStock serviceStock;
         for(int i=0; i<objects.size(); i++){
             serviceStock = (ServiceStock) objects.get(i);
-            sServiceStockUid = serviceStock.getUid();
-
-            // translate service name
-            sServiceUid = serviceStock.getServiceUid();
-            sServiceName = getTranNoLink("Service",sServiceUid,sWebLanguage);
-
-            // only search manager-name when different manager-UID
-            sManagerUid = checkString(serviceStock.getStockManagerUid());
-            if(sManagerUid.length() > 0){
-                if(!sManagerUid.equals(sPreviousManagerUid)){
-                    sPreviousManagerUid = sManagerUid;
-                    sManagerName = ScreenHelper.getFullUserName(sManagerUid);
-                }
+            if(serviceStock.getHidden()<1 || showHidden!=null){
+	            sServiceStockUid = serviceStock.getUid();
+	
+	            // translate service name
+	            sServiceUid = serviceStock.getServiceUid();
+	            sServiceName = getTranNoLink("Service",sServiceUid,sWebLanguage);
+	
+	            // only search manager-name when different manager-UID
+	            sManagerUid = checkString(serviceStock.getStockManagerUid());
+	            if(sManagerUid.length() > 0){
+	                if(!sManagerUid.equals(sPreviousManagerUid)){
+	                    sPreviousManagerUid = sManagerUid;
+	                    sManagerName = ScreenHelper.getFullUserName(sManagerUid);
+	                }
+	            }
+	
+	            // number of products in serviceStock
+	            int productCount = ServiceStock.getProductStockCount(sServiceStockUid);
+	
+	            // alternate row-style
+	            if(sClass.equals("")) sClass = "1";
+	            else                  sClass = "";
+	
+	            //*** display stock in one row ***
+	            html.append("<tr class='list"+sClass+"' title='"+detailsTran+"'>")
+	                 .append("<td>");
+	            
+	            if((serviceStock.isAuthorizedUser(activeUser.userid) || activeUser.getAccessRight("sa")) && activeUser.getAccessRight("pharmacy.manageservicestocks.delete")){
+	                html.append("<img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.gif' class='link' onclick=\"doDelete('"+sServiceStockUid+"');\" title='"+deleteTran+"'/>").
+	                     append("<img src='"+sCONTEXTPATH+"/_img/icons/icon_edit.gif' class='link' onclick=\"printFiche('"+sServiceStockUid+"','"+serviceStock.getName()+"');\" title='"+getTranNoLink("web","stockfiche",sWebLanguage)+"'/>");
+	            }
+	            
+	            if(serviceStock.getNosync()==0){
+	                html.append("&nbsp;<img src='"+sCONTEXTPATH+"/_img/icons/icon_sync.gif' class='link' alt='"+getTranNoLink("web","sync",sWebLanguage)+"'/>");
+	            }
+	            if(serviceStock.hasOpenDeliveries()){
+	                html.append("&nbsp;<img src='"+sCONTEXTPATH+"/_img/icons/icon_incoming.gif' class='link' alt='"+getTranNoLink("web","incoming",sWebLanguage)+"'' onclick='javascript:bulkReceive(\""+serviceStock.getUid()+"\");'/></a>");
+	            }
+	            html.append("</td>");
+	            
+	            html.append("<td onclick=\"doShowDetails('"+sServiceStockUid+"');\">"+serviceStock.getName()+"</td>")
+	                .append("<td onclick=\"doShowDetails('"+sServiceStockUid+"');\">"+sServiceName+"</td>")
+	                .append("<td onclick=\"doShowDetails('"+sServiceStockUid+"');\">"+sManagerName+"</td>")
+	                .append("<td onclick=\"doShowDetails('"+sServiceStockUid+"');\">"+productCount+"</td>");
+	
+	            // display "manage product stocks"-button when user is authorized
+	            if(serviceStock.isAuthorizedUser(activeUser.userid)){
+	                html.append("<td>")
+	                     .append("<input type='button' class='button' value='"+calculateOrderTran+"' onclick=\"doCalculateOrder('"+sServiceStockUid+"','"+sServiceName+"');\">&nbsp;")
+	                     .append("<input type='button' class='button' value='"+productStockTran+"' onclick=\"displayProductStockManagement('"+sServiceStockUid+"','"+sServiceUid+"');\">&nbsp;")
+	                     .append(activeUser.getAccessRight("patient.copypharmacystocks.select")?"<input type='button' class='button' value='"+getTranNoLink("web","copy",sWebLanguage)+"' onclick=\"copyProducts('"+sServiceStockUid+"');\">&nbsp;":"")
+	                    .append("</td>");
+	            } 
+	            else{
+	                html.append("<td onclick=\"doShowDetails('"+sServiceStockUid+"');\">&nbsp;</td>");
+	            }
+	
+	            html.append("</tr>");
             }
-
-            // number of products in serviceStock
-            int productCount = ServiceStock.getProductStockCount(sServiceStockUid);
-
-            // alternate row-style
-            if(sClass.equals("")) sClass = "1";
-            else                  sClass = "";
-
-            //*** display stock in one row ***
-            html.append("<tr class='list"+sClass+"' title='"+detailsTran+"'>")
-                 .append("<td>");
-            
-            if((serviceStock.isAuthorizedUser(activeUser.userid) || activeUser.getAccessRight("sa")) && activeUser.getAccessRight("pharmacy.manageservicestocks.delete")){
-                html.append("<img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.gif' class='link' onclick=\"doDelete('"+sServiceStockUid+"');\" title='"+deleteTran+"'/>").
-                     append("<img src='"+sCONTEXTPATH+"/_img/icons/icon_edit.gif' class='link' onclick=\"printFiche('"+sServiceStockUid+"','"+serviceStock.getName()+"');\" title='"+getTranNoLink("web","stockfiche",sWebLanguage)+"'/>");
-            }
-            
-            if(serviceStock.getNosync()==0){
-                html.append("&nbsp;<img src='"+sCONTEXTPATH+"/_img/icons/icon_sync.gif' class='link' alt='"+getTranNoLink("web","sync",sWebLanguage)+"'/>");
-            }
-            if(serviceStock.hasOpenDeliveries()){
-                html.append("&nbsp;<img src='"+sCONTEXTPATH+"/_img/icons/icon_incoming.gif' class='link' alt='"+getTranNoLink("web","incoming",sWebLanguage)+"'' onclick='javascript:bulkReceive(\""+serviceStock.getUid()+"\");'/></a>");
-            }
-            html.append("</td>");
-            
-            html.append("<td onclick=\"doShowDetails('"+sServiceStockUid+"');\">"+serviceStock.getName()+"</td>")
-                .append("<td onclick=\"doShowDetails('"+sServiceStockUid+"');\">"+sServiceName+"</td>")
-                .append("<td onclick=\"doShowDetails('"+sServiceStockUid+"');\">"+sManagerName+"</td>")
-                .append("<td onclick=\"doShowDetails('"+sServiceStockUid+"');\">"+productCount+"</td>");
-
-            // display "manage product stocks"-button when user is authorized
-            if(serviceStock.isAuthorizedUser(activeUser.userid)){
-                html.append("<td>")
-                     .append("<input type='button' class='button' value='"+calculateOrderTran+"' onclick=\"doCalculateOrder('"+sServiceStockUid+"','"+sServiceName+"');\">&nbsp;")
-                     .append("<input type='button' class='button' value='"+productStockTran+"' onclick=\"displayProductStockManagement('"+sServiceStockUid+"','"+sServiceUid+"');\">&nbsp;")
-                     .append(activeUser.getAccessRight("patient.copypharmacystocks.select")?"<input type='button' class='button' value='"+getTranNoLink("web","copy",sWebLanguage)+"' onclick=\"copyProducts('"+sServiceStockUid+"');\">&nbsp;":"")
-                    .append("</td>");
-            } 
-            else{
-                html.append("<td onclick=\"doShowDetails('"+sServiceStockUid+"');\">&nbsp;</td>");
-            }
-
-            html.append("</tr>");
         }
 
         return html;
@@ -119,12 +121,17 @@
            sEditManagerUid         = checkString(request.getParameter("EditManagerUid")),
            sEditDefaultSupplierUid = checkString(request.getParameter("EditDefaultSupplierUid")),
            sEditOrderPeriod        = checkString(request.getParameter("EditOrderPeriodInMonths")),
+           sEditHidden        	   = checkString(request.getParameter("EditHidden")),
     	   sEditNosync        	   = checkString(request.getParameter("EditNosync"));
     
-    	   if(sEditNosync.equalsIgnoreCase("")){
-    		   sEditNosync = "0";
-    	   }
-	
+	   if(sEditNosync.equalsIgnoreCase("")){
+		   sEditNosync = "0";
+	   }
+
+	   if(sEditHidden.equalsIgnoreCase("")){
+		   sEditHidden = "0";
+	   }
+
     // afgeleide data
     String sEditServiceName         = checkString(request.getParameter("EditServiceName")),
            sEditManagerName         = checkString(request.getParameter("EditManagerName")),
@@ -143,6 +150,7 @@
         Debug.println("sEditOrderPeriod     : "+sEditOrderPeriod);
         Debug.println("sEditServiceName     : "+sEditServiceName);
         Debug.println("sEditManagerName     : "+sEditManagerName);
+        Debug.println("sEditHidden          : "+sEditHidden);
         Debug.println("sEditDefSupplierName : "+sEditDefaultSupplierName+"\n");
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -153,7 +161,7 @@
            sSelectedServiceName = "", sSelectedManagerName = "", authorizedUserId = "",
            authorizedUserName = "", sFindDefaultSupplierUid = "", sFindDefaultSupplierName = "",
            sSelectedDefaultSupplierUid = "", sSelectedDefaultSupplierName = "", sSelectedOrderPeriod = "",
-           sSelectedNosync="";
+           sSelectedNosync="",sSelectedHidden="";
 
     StringBuffer stocksHtml = null;
     int foundStockCount = 0, authorisedUsersIdx = 1;
@@ -189,6 +197,7 @@
         if(sEditEnd.length() > 0)         stock.setEnd(ScreenHelper.parseDate(sEditEnd));
         if(sEditOrderPeriod.length() > 0) stock.setOrderPeriodInMonths(Integer.parseInt(sEditOrderPeriod));
         if(sEditNosync.length() > 0) stock.setNosync(Integer.parseInt(sEditNosync));
+        if(sEditHidden.length() > 0) stock.setHidden(Integer.parseInt(sEditHidden));
         stock.setStockManagerUid(sEditManagerUid);
         stock.setDefaultSupplierUid(sEditDefaultSupplierUid);
 
@@ -218,13 +227,13 @@
 
                 // show saved data
                 sAction = "findShowOverview"; // showDetails
-                msg = getTran("web","dataissaved",sWebLanguage);
+                msg = " | "+getTran("web","dataissaved",sWebLanguage);
             }
             //***** reject new addition thru update *****
             else{
                 // show rejected data
                 sAction = "showDetailsAfterAddReject";
-                msg = "<font color='red'>"+getTran("web.manage","stockexists",sWebLanguage)+"</font>";
+                msg = " | <font color='red'>"+getTran("web.manage","stockexists",sWebLanguage)+"</font>";
             }
         }
         else{
@@ -234,7 +243,7 @@
 
                 // show saved data
                 sAction = "findShowOverview"; // showDetails
-                msg = getTran("web","dataissaved",sWebLanguage);
+                msg = " | "+getTran("web","dataissaved",sWebLanguage);
             }
             //***** reject double record thru update *****
             else{
@@ -242,7 +251,7 @@
                     // nothing : just updating a record with its own data
                     if(stock.changed()){
                         stock.store();
-                        msg = getTran("web","dataissaved",sWebLanguage);
+                        msg = " | "+getTran("web","dataissaved",sWebLanguage);
                     }
                     sAction = "findShowOverview"; // showDetails
                 }
@@ -250,7 +259,7 @@
                     // tried to update one stock with exact the same data as an other stock
                     // show rejected data
                     sAction = "showDetailsAfterUpdateReject";
-                    msg = "<font color='red'>"+getTran("web.manage","stockexists",sWebLanguage)+"</font>";
+                    msg = " | "+"<font color='red'>"+getTran("web.manage","stockexists",sWebLanguage)+"</font>";
                 }
             }
         }
@@ -261,7 +270,7 @@
     else if(sAction.equals("delete") && sEditStockUid.length()>0){
         ServiceStock.deleteProductStocks(sEditStockUid);
         ServiceStock.delete(sEditStockUid);
-        msg = getTran("web","dataisdeleted",sWebLanguage);
+        msg = " | "+getTran("web","dataisdeleted",sWebLanguage);
         sAction = "findShowOverview"; // display overview even if only one record remains
     }
 
@@ -285,7 +294,7 @@
 
         Vector serviceStocks = ServiceStock.find(sFindStockName,sFindServiceUid,sFindBegin,sFindEnd,
                                                  sFindManagerUid,sFindDefaultSupplierUid,"OC_STOCK_NAME","DESC");
-        stocksHtml = objectsToHtml(serviceStocks,sWebLanguage,activeUser);
+        stocksHtml = objectsToHtml(serviceStocks,sWebLanguage,activeUser,request.getParameter("showhidden"));
         foundStockCount = serviceStocks.size();
     }
 
@@ -305,6 +314,7 @@
                 sSelectedDefaultSupplierUid = checkString(serviceStock.getDefaultSupplierUid());
                 sSelectedOrderPeriod        = (serviceStock.getOrderPeriodInMonths()<0?"":serviceStock.getOrderPeriodInMonths()+"");
 				sSelectedNosync				= serviceStock.getNosync()+"";
+				sSelectedHidden				= serviceStock.getHidden()+"";
 
                 // format dates
                 java.util.Date tmpDate = serviceStock.getBegin();
@@ -352,6 +362,7 @@
             sSelectedDefaultSupplierUid = sEditDefaultSupplierUid;
             sSelectedOrderPeriod        = sEditOrderPeriod;
             sSelectedNosync				= sEditNosync;
+            sSelectedHidden				= sEditHidden;
 
             // afgeleide data
             sSelectedServiceName         = sEditServiceName;
@@ -367,6 +378,7 @@
 
             // default Nosync
             if(sEditNosync.length()==0) sEditNosync = "1"; // todo : needed ?
+            if(sEditHidden.length()==0) sEditHidden = "0"; // todo : needed ?
 
             // active user service as default service
             sSelectedServiceUid = activeUser.activeService.code;
@@ -475,7 +487,7 @@
                                     %><input type="button" class="button" name="newButton" value="<%=getTranNoLink("Web","new",sWebLanguage)%>" onclick="doNew();"><%
                                 }
                             %>
-                            
+                            <input type="checkbox" name="showhidden" id="showhidden" <%=request.getParameter("showhidden")!=null?"checked":"" %> onclick="doSearch();"/><%=getTran("web","hidden",sWebLanguage) %>
                             <%-- display message --%>
                             <span id="msgArea"><%=msg%></span>
                         </td>
@@ -654,6 +666,14 @@
                         </td>
                     </tr>
                     
+                    <%-- Hidden --%>
+                    <tr>
+                        <td class="admin" nowrap><%=getTran("Web.manage","hidden",sWebLanguage)%> *</td>
+                        <td class="admin2">
+                            <input type="checkbox" name="EditHidden" class="hand" <%=sSelectedHidden!=null && sSelectedHidden.equalsIgnoreCase("1")?"checked":""%> value="1" onKeyUp="isInteger(this);">
+                        </td>
+                    </tr>
+                    
                     <%-- EDIT BUTTONS --%>
                     <tr>
                         <td class="admin2"/>
@@ -723,7 +743,7 @@
             sFindServiceName = getTranNoLink("service",sFindServiceUid,sWebLanguage);
 
             Vector serviceStocks = Service.getActiveServiceStocks(sFindServiceUid);
-            stocksHtml = objectsToHtml(serviceStocks,sWebLanguage,activeUser);
+            stocksHtml = objectsToHtml(serviceStocks,sWebLanguage,activeUser,request.getParameter("showhidden"));
             foundStockCount = serviceStocks.size();
 
             //*** display found records ***
@@ -1027,7 +1047,7 @@
 
   <%-- DO SEARCH SERVICE STOCK --%>
   function doSearch(){
-    if(transactionForm.FindStockName.value.length>0 || transactionForm.FindServiceUid.value.length>0 ||
+    if(true || transactionForm.FindStockName.value.length>0 || transactionForm.FindServiceUid.value.length>0 ||
        transactionForm.FindBegin.value.length>0 || transactionForm.FindEnd.value.length>0 ||
        transactionForm.FindManagerUid.value.length>0 || transactionForm.FindDefaultSupplierUid.value.length>0){
       transactionForm.searchButton.disabled = true;

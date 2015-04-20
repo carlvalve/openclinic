@@ -44,10 +44,10 @@
 			+(bCanModifyCore?inputRow("Web","Dateofbirth","DateOfBirth","Admin",activePatient.dateOfBirth,"Dp",true,false,sWebLanguage):
             inputRow("Web","Dateofbirth","DateOfBirth","Admin",activePatient.dateOfBirth,"T",bCanModifyCore,true,sWebLanguage)
 			)
-            +inputRow("Web","NativeTown","NativeTown","Admin",activePatient.nativeTown,"T",true,true,sWebLanguage)
+            +inputRow("Web","NativeTown","NativeTown","Admin",activePatient.nativeTown,"N",true,true,sWebLanguage)
             +writeCountry(activePatient.nativeCountry, "NativeCountry","Admin","NativeCountryDescription",true,"NativeCountry",sWebLanguage)
             +"<tr><td class='admin'>"+getTran("web","personid",sWebLanguage)+"</td><td class='admin2'>"+activePatient.personid+"</td></tr>"
-            +inputRow("Web","immatnew","ImmatNew","Admin",activePatient.getID("immatnew"),"T",true,true,sWebLanguage)
+            +inputRow("Web","immatnew","ImmatNew","Admin",activePatient.getID("immatnew"),"N",true,true,sWebLanguage)
             +"<tr><td class='admin'>"+getTran("web","archiveFileCode",sWebLanguage)+"</td><td class='admin2'><input type='hidden' name='archiveFileCode' value='"+activePatient.getID("archiveFileCode")+"'/>"
             +activePatient.getID("archiveFileCode").toUpperCase()+"</td></tr>");
 
@@ -98,14 +98,14 @@
             +ScreenHelper.writeSelect("civil.status",activePatient.comment2,sWebLanguage)+"</select>";
 
       out.print(normalRow("Web","gender","Gender","Admin",sWebLanguage)+sGender+"</select></td></tr>"
-          +inputRow("Web","tracnetid","TracnetID","Admin",checkString((String)activePatient.adminextends.get("tracnetid")),"T",true,false,sWebLanguage)
-          +inputRow("Web","treating-physician","Comment1","Admin",activePatient.comment1,"T",true,false,sWebLanguage)
+          +inputRow("Web","tracnetid","TracnetID","Admin",checkString((String)activePatient.adminextends.get("tracnetid")),"N",true,false,sWebLanguage)
+          +inputRow("Web","treating-physician","Comment1","Admin",activePatient.comment1,"N",true,false,sWebLanguage)
           +normalRow("Web","civilstatus","CivilStatus","Admin",sWebLanguage)+sCivilStatus+"</td></tr>"
-          +inputRow("Web","comment3","Comment3","Admin",activePatient.comment3,"T",true, false,sWebLanguage) 
-          +inputRow("Web","comment5","Comment5","Admin",activePatient.comment5,"T",true, false,sWebLanguage) 
+          +inputRow("Web","comment3","Comment3","Admin",activePatient.comment3,"N",true, false,sWebLanguage) 
+          +inputRow("Web","comment5","Comment5","Admin",activePatient.comment5,"N",true, false,sWebLanguage) 
           +(activePatient.isDead()!=null?inputRow("Web","deathcertificateon","DeathCertificateOn","Admin",checkString((String)activePatient.adminextends.get("deathcertificateon")),"T",true,false,sWebLanguage)
           +inputRow("Web","deathcertificateto","DeathCertificateTo","Admin",checkString((String)activePatient.adminextends.get("deathcertificateto")),"T",true,false,sWebLanguage):"")
-	      +inputRow("Web","comment","Comment","Admin",activePatient.comment,"T",true, false,sWebLanguage)
+	      +inputRow("Web","comment","Comment","Admin",activePatient.comment,"N",true, false,sWebLanguage)
 	      +(MedwanQuery.getInstance().getConfigInt("enableVip",0)==1 && activeUser.getAccessRight("vipaccess.select")?
 	      normalRow("Web","vip","Vip","Admin",sWebLanguage)+"<input type='radio' name='Vip' id='Vip' value='0' "+(!"1".equalsIgnoreCase((String)activePatient.adminextends.get("vip"))?"checked":"")+">"+getTran("vipstatus","0",sWebLanguage)+" <input type='radio' name='Vip' id='Vip' value='1' "+("1".equalsIgnoreCase((String)activePatient.adminextends.get("vip"))?"checked":"")+">"+getTran("vipstatus","1",sWebLanguage)+"</td></tr>":
 	      "<input type='hidden' name='Vip' id='Vip' value='"+checkString((String)activePatient.adminextends.get("vip"))+"'/>"	  
@@ -125,46 +125,47 @@
 function checkSubmitAdmin(){
   var maySubmit = true;
   displayGenericAlert = true;
-
-  var sObligatoryFields = "<%=MedwanQuery.getInstance().getConfigString("ObligatoryFields_Admin")%>";
-  var aObligatoryFields = sObligatoryFields.split(",");
-
-  for(var i=0; i<aObligatoryFields.length; i++){
-    var obligatoryField = document.all(aObligatoryFields[i]);
-
-    if(obligatoryField != null){
-      if(obligatoryField.type==undefined){
-        if(obligatoryField.innerHTML==""){
-          maySubmit = false;
-          break;
-        }
-      }
-      else{
-    	if(obligatoryField.value==""){
-          if(obligatoryField.type != "hidden"){
-            activateTab('Admin');
-            obligatoryField.focus();
-          }
-          maySubmit = false;
-          break;
-        }
-    	else{
-    	  // selected option should be 1 or 2 (preventing data-input through "Inspect element")
-          if(obligatoryField.name=="Gender"){
-          	if(document.all("Gender").value.length > 0){
-          	  if(document.all("Gender").selectedIndex!=1 && document.all("Gender").selectedIndex!=2){
-                if(obligatoryField.type != "hidden"){
-                  activateTab('Admin');
-                  obligatoryField.focus();
-                }
-          	    maySubmit = false;
-                break;
-          	  }    
-          	}
-          }
-    	}
-      }
-    }
+  if(checkDate(document.getElementById("DateOfBirth"))){
+	  var sObligatoryFields = "<%=MedwanQuery.getInstance().getConfigString("ObligatoryFields_Admin")%>";
+	  var aObligatoryFields = sObligatoryFields.split(",");
+	
+	  for(var i=0; i<aObligatoryFields.length; i++){
+	    var obligatoryField = document.all(aObligatoryFields[i]);
+	
+	    if(obligatoryField != null){
+	      if(obligatoryField.type==undefined){
+	        if(obligatoryField.innerHTML==""){
+	          maySubmit = false;
+	          break;
+	        }
+	      }
+	      else{
+	    	if(obligatoryField.value==""){
+	          if(obligatoryField.type != "hidden"){
+	            activateTab('Admin');
+	            obligatoryField.focus();
+	          }
+	          maySubmit = false;
+	          break;
+	        }
+	    	else{
+	    	  // selected option should be 1 or 2 (preventing data-input through "Inspect element")
+	          if(obligatoryField.name=="Gender"){
+	          	if(document.all("Gender").value.length > 0){
+	          	  if(document.all("Gender").selectedIndex!=1 && document.all("Gender").selectedIndex!=2){
+	                if(obligatoryField.type != "hidden"){
+	                  activateTab('Admin');
+	                  obligatoryField.focus();
+	                }
+	          	    maySubmit = false;
+	                break;
+	          	  }    
+	          	}
+	          }
+	    	}
+	      }
+	    }
+	  }
   }
   
   return maySubmit;

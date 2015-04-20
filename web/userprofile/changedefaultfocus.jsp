@@ -42,6 +42,7 @@
                                 <%=writeOption("DefaultFocus","Web","natreg",activeUser,sWebLanguage)%>
                                 <%=writeOption("DefaultFocus","Web","immatnew",activeUser,sWebLanguage)%>
                                 <%=writeOption("DefaultFocus","Web","immatold",activeUser,sWebLanguage)%>
+                                <%=writeOption("DefaultFocus","Web","PersonID",activeUser,sWebLanguage)%>
                             </select>
                         </td>
                     </tr>

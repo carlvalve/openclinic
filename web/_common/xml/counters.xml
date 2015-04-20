@@ -60,5 +60,16 @@
     <counter name="PrivateID" table="AdminPrivate" field="privateid" bd='admin'/>
     <counter name="SocSecID" table="AdminSocSec" field="socsecid" bd='admin'/>
     <counter name="UserID" table="Users" field="userid" bd='admin'/>
-
+    <counter name="HR_CAREER" table="HR_CAREERS" field="HR_CAREER_OBJECTID" bd='openclinic'/>
+    <counter name="HR_CONTRACT" table="HR_CONTRACTS" field="HR_CONTRACT_OBJECTID" bd='openclinic'/>
+    <counter name="HR_DISCIPLINARY_RECORD" table="HR_DISCIPLINARY_RECORDS" field="HR_DISCREC_OBJECTID" bd='openclinic'/>
+    <counter name="HR_LEAVE" table="HR_LEAVE" field="HR_LEAVE_OBJECTID" bd='openclinic'/>
+    <counter name="HR_TRAINING" table="HR_TRAINING" field="HR_TRAINING_OBJECTID" bd='openclinic'/>
+    <counter name="HR_WORKSCHEDULE" table="HR_WORKSCHEDULE" field="HR_WORKSCHEDULE_OBJECTID" bd='openclinic'/>
+    <counter name="HR_SALARY" table="HR_SALARIES" field="HR_SALARY_OBJECTID" bd='openclinic'/>
+    <counter name="HR_SKILL" table="HR_SKILLS" field="HR_SKILL_OBJECTID" bd='openclinic'/>
+    <counter name="OC_ASSETS" table="OC_ASSETS" field="OC_ASSET_OBJECTID" bd='openclinic'/>
+    <counter name="OC_MAINTENANCEPLANS" table="OC_MAINTENANCEPLANS" field="OC_MAINTENANCEPLAN_OBJECTID" bd='openclinic'/>
+    <counter name="OC_MAINTENANCEOPERATIONS" table="OC_MAINTENANCEOPERATIONS" field="OC_MAINTENANCEOPERATION_OBJECTID" bd='openclinic'/>
+	
 </counters>

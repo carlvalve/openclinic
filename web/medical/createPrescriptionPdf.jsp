@@ -24,13 +24,11 @@
         StringBuffer sbFilename = new StringBuffer();
         sbFilename.append("filename_").append(System.currentTimeMillis()).append(".pdf");
 
-        StringBuffer sbContentDispValue = new StringBuffer();
-        sbContentDispValue.append("inline; filename=").append(sbFilename);
-
         // prepare response
         response.setHeader("Cache-Control", "max-age=30");
         response.setContentType("application/pdf");
-        response.setHeader("Content-disposition", sbContentDispValue.toString());
+        String sFileName = "filename_"+System.currentTimeMillis()+".pdf";
+        response.setHeader("Content-disposition","inline; filename="+sFileName);
         response.setContentLength(baosPDF.size());
 
         // write PDF to servlet

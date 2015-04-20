@@ -416,8 +416,6 @@
 		<config key="tempDirectory" value="/tmp"/>
 	</os>
 	<database code="mysql">
-		<config key="admindbName" value="ocadmin_dbo"/>
-		<config key="openclinicdbName" value="openclinic_dbo"/>
 		<config key="charindexFunction" value="locate"/>
 		<config key="concatSign" value="||"/>
 		<config key="convertDataTypeFloat" value="decimal"/>
@@ -438,8 +436,6 @@
 		<config key="lengthFunction" value="length"/>
 	</database>
 	<database code="sqlserver">
-		<config key="admindbName" value="ocadmin"/>
-		<config key="openclinicdbName" value="openclinic"/>
 		<config key="charindexFunction" value="charindex"/>
 		<config key="concatSign" value="+"/>
 		<config key="convertDataTypeFloat" value="float"/>

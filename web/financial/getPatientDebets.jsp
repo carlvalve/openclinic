@@ -174,7 +174,8 @@
 	
     String sClass = "";
     out.print(addDebets(vDebets,sClass,sWebLanguage,true,null,null,activeUser,patientInvoice));
-    
+
+
     if(!isInsuranceAgent && (patientInvoice==null || checkString(patientInvoice.getAcceptationUid()).length()==0) && (patientInvoice==null || (!(checkString(patientInvoice.getStatus()).equalsIgnoreCase("closed") || checkString(patientInvoice.getStatus()).equalsIgnoreCase("canceled"))))){
         Vector vUnassignedDebets;
         if(sInvoiceService.length()==0){

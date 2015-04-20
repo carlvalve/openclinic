@@ -28,8 +28,8 @@
 	if(patientId.length()==0){
 		patientId=MedwanQuery.getInstance().getConfigString("imageHubServerId","0")+"."+activePatient.personid;
 	}
-	String securityCode = MedwanQuery.getInstance().getConfigString("imageHubGetStudiesSecurityCode","1234");
-	String imageHubURL = MedwanQuery.getInstance().getConfigString("imageHubGetStudiesURL","https://imagehub.aexist.nl/imagehub/rest/demo");
+	String securityCode = MedwanQuery.getInstance().getConfigString("imageHubGetStudiesSecurityCode","2Q7mDjc7SJEJtmqt");
+	String imageHubURL = MedwanQuery.getInstance().getConfigString("imageHubGetStudiesURL","https://ihpacs.aexist.nl/imagehub/rest/get_studies");
 
 	HttpClient client = new HttpClient();
 	PostMethod method = new PostMethod(imageHubURL);
@@ -76,7 +76,7 @@
 	}
 %>
 </table>
-<form id='imageHubForm' target='hidden-form' method='POST' action='<%=MedwanQuery.getInstance().getConfigString("imageHubGetStudyURL","https://imagehub.aexist.nl/imagehub/view_study")%>'>
+<form id='imageHubForm' target='hidden-form' method='POST' action='<%=MedwanQuery.getInstance().getConfigString("imageHubGetStudyURL","https://ihpacs.aexist.nl/imagehub/view_study")%>'>
 	<input type='hidden' name='security_code' value='<%=MedwanQuery.getInstance().getConfigString("imageHubGetStudySecurityCode","q48FfCyeuOy1oeR")%>'/>
 	<input type='hidden' name='studyUID' id='studyUID' value=''/>
 </form>

@@ -93,6 +93,7 @@
            sEditTimeUnitCount    = checkString(request.getParameter("EditTimeUnitCount")),
            sEditUnitsPerTimeUnit = checkString(request.getParameter("EditUnitsPerTimeUnit")),
            sEditBarcode          = checkString(request.getParameter("EditBarcode")),
+           sEditAtccode          = checkString(request.getParameter("EditAtccode")),
            sEditPrestationCode   = checkString(request.getParameter("EditPrestationCode")),
            sEditPrestationQuantity = checkString(request.getParameter("EditPrestationQuantity")),
            sEditMargin           = checkString(request.getParameter("EditMargin")),
@@ -144,7 +145,7 @@
            sSelectedPackageUnits = "", sSelectedMinOrderPackages = "", sSelectedSupplierUid = "",
            sSelectedTimeUnit = "", sFindSupplierName, sSelectedTimeUnitCount = "", sAverageUnitPrice="0",
            sSelectedUnitsPerTimeUnit = "", sSelectedSupplierName = "", sSelectedProductGroup = "",
-           sSelectedProductSubGroup = "", sSelectedBarcode = "", sSelectedPrestationCode = "", 
+           sSelectedProductSubGroup = "", sSelectedBarcode = "", sSelectedAtccode = "", sSelectedPrestationCode = "", 
            sSelectedPrestationQuantity = "", sSelectedApplyLowerPrices = "", sSelectedAutomaticInvoicing = "";
     String sSelectedMargin = MedwanQuery.getInstance().getConfigString("defaultProductsMargin","");
 
@@ -212,6 +213,7 @@
         product.setProductGroup(sEditProductGroup);
         product.setProductSubGroup(sEditProductSubGroup);
         product.setBarcode(sEditBarcode);
+        product.setAtccode(sEditAtccode);
         product.setPrestationcode(sEditPrestationCode);
         
         if(sEditUnitPrice.length() > 0) product.setUnitPrice(Double.parseDouble(sEditUnitPrice));
@@ -345,6 +347,7 @@
         sSelectedTimeUnitCount = "";
         sSelectedUnitsPerTimeUnit = "";
         sSelectedBarcode = "";
+        sSelectedAtccode = "";
         sSelectedPrestationCode = "";
         sSelectedPrestationQuantity = "0";
         sSelectedMargin = MedwanQuery.getInstance().getConfigString("defaultProductsMargin","");
@@ -379,6 +382,7 @@
                 sSelectedProductSubGroup = checkString(product.getProductSubGroup());
                 sSelectedSupplierName = getTranNoLink("Service",sSelectedSupplierUid,sWebLanguage);
                 sSelectedBarcode = checkString(product.getBarcode());
+                sSelectedAtccode = checkString(product.getAtccode());
                 sSelectedPrestationCode = checkString(product.getPrestationcode());
                 sAverageUnitPrice = product.getLastYearsAveragePrice()+"";
                 sSelectedPrestationQuantity = product.getPrestationquantity()+"";
@@ -405,6 +409,7 @@
             sSelectedProductSubGroup = sEditProductSubGroup;
             sSelectedSupplierName = sEditSupplierName;
             sSelectedBarcode = sEditBarcode;
+            sSelectedAtccode = sEditAtccode;
             sSelectedPrestationCode = sEditPrestationCode;
             sSelectedPrestationQuantity = sEditPrestationQuantity;
             sSelectedMargin = sEditMargin;
@@ -423,6 +428,7 @@
             sSelectedTimeUnitCount = "";
             sSelectedUnitsPerTimeUnit = "";
             sSelectedBarcode = "";
+            sSelectedAtccode = "";
             sSelectedPrestationCode = "";
             sSelectedPrestationQuantity = "0";
             sSelectedMargin=MedwanQuery.getInstance().getConfigString("defaultProductsMargin","");
@@ -775,6 +781,14 @@
                         <td class="admin" nowrap><%=getTran("Web","barcode",sWebLanguage)%></td>
                         <td class="admin2">
                             <input class="text" type="text" name="EditBarcode" size="50" maxLength="50" value="<%=sSelectedBarcode%>" >
+                        </td>
+                    </tr>
+                    
+                    <%-- ATCcode --%>
+                    <tr>
+                        <td class="admin" nowrap><%=getTran("Web","atccode",sWebLanguage)%></td>
+                        <td class="admin2">
+                            <input class="text" type="text" name="EditAtccode" size="50" maxLength="50" value="<%=sSelectedAtccode%>" >
                         </td>
                     </tr>
                     
