@@ -221,6 +221,10 @@ public double getLastYearsAveragePrice(Product product){
             // no buttons for unexisting product
             if(productnames.get(productStock.getProductUid()) != null){
                 if(productStock.getLevel() > 0){
+                	//Verify if products are to expire
+                	if(productStock.hasExpiringProducts(MedwanQuery.getInstance().getConfigInt("pharmacyExpiryWarningInDays",90))){
+                        html.append("<img src='"+sCONTEXTPATH+"/_img/icons/icon_warning.gif'>&nbsp;");
+                	}
                     html.append("<input type='button' title='"+changeLevelOutTran+"' class='button' style='width:30px;' value=\""+outTran+"\" onclick=\"deliverProduct('"+sStockUid+"','"+sProductName+"','"+stockLevel+"');\">&nbsp;");
                 }
                 html.append("<input type='button' title='"+changeLevelInTran+"' class='button' style='width:30px;' value=\""+inTran+"\" onclick=\"receiveProduct('"+sStockUid+"','"+sProductName+"');\">&nbsp;");
@@ -290,6 +294,7 @@ public double getLastYearsAveragePrice(Product product){
            sEditBegin             = checkString(request.getParameter("EditBegin")),
            sEditEnd               = checkString(request.getParameter("EditEnd")),
            sEditDefaultImportance = checkString(request.getParameter("EditDefaultImportance")),
+           sEditLocation          = checkString(request.getParameter("EditLocation")),
            sEditSupplierUid       = checkString(request.getParameter("EditSupplierUid"));
 
     // afgeleide data
@@ -317,6 +322,7 @@ public double getLastYearsAveragePrice(Product product){
         Debug.println("sEditSupplierUid       : "+sEditSupplierUid);
         Debug.println("sEditServiceStockName  : "+sEditServiceStockName);
         Debug.println("sEditSupplierName      : "+sEditSupplierName);
+        Debug.println("sEditLocation          : "+sEditLocation);
         Debug.println("sEditProductName       : "+sEditProductName+"\n");
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -327,7 +333,7 @@ public double getLastYearsAveragePrice(Product product){
            sSelectedLevel = "", sSelectedMinimumLevel = "", sSelectedMaximumLevel = "", sSelectedOrderLevel = "",
            sSelectedBegin = "", sSelectedEnd = "", sSelectedServiceStockName = "",
            sSelectedProductName = "", sFindSupplierUid = "", sFindSupplierName = "",
-           sSelectedSupplierUid = "", sSelectedSupplierName = "";
+           sSelectedSupplierUid = "", sSelectedSupplierName = "", sSelectedLocation = "";
     
     String sSelectedDefaultImportance = MedwanQuery.getInstance().getConfigString("productStockDefaultImportance","type1native");
 
@@ -360,6 +366,7 @@ public double getLastYearsAveragePrice(Product product){
         stock.setDefaultImportance(sEditDefaultImportance);
         stock.setSupplierUid(sEditSupplierUid);
         stock.setUpdateUser(activeUser.userid);
+        stock.setLocation(sEditLocation);
 
         if(sEditLevel.length() > 0)        stock.setLevel(Integer.parseInt(sEditLevel));
         if(sEditMinimumLevel.length() > 0) stock.setMinimumLevel(Integer.parseInt(sEditMinimumLevel));
@@ -499,6 +506,7 @@ public double getLastYearsAveragePrice(Product product){
                 sSelectedOrderLevel        = (productStock.getOrderLevel()<0?"":productStock.getOrderLevel()+"");
                 sSelectedDefaultImportance = checkString(productStock.getDefaultImportance());
                 sSelectedSupplierUid       = checkString(productStock.getSupplierUid());
+                sSelectedLocation          = checkString(productStock.getLocation());
 
                 // format begin date
                 java.util.Date tmpDate = productStock.getBegin();
@@ -534,6 +542,7 @@ public double getLastYearsAveragePrice(Product product){
             sSelectedEnd               = sEditEnd;
             sSelectedDefaultImportance = sEditDefaultImportance;
             sSelectedSupplierUid       = sEditSupplierUid;
+            sSelectedLocation          = sEditLocation;
 
             // afgeleide data
             sSelectedServiceStockName = sEditServiceStockName;
@@ -964,6 +973,14 @@ public double getLastYearsAveragePrice(Product product){
                            
                             <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchSupplier('EditSupplierUid','EditSupplierName');">
                             <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="transactionForm.EditSupplierUid.value='';transactionForm.EditSupplierName.value='';">
+                        </td>
+                    </tr>
+                    
+                    <%-- location --%>
+                    <tr>
+                        <td class="admin" nowrap><%=getTran("Web","location",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2">
+                            <input class="text" type="text" name="EditLocation" id="EditLocation" size="<%=sTextWidth%>" value="<%=sSelectedLocation%>">
                         </td>
                     </tr>
                     

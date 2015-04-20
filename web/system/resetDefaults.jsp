@@ -5,6 +5,21 @@
 	String country=request.getParameter("country");
 	String os=request.getParameter("os");
 	String database=request.getParameter("database");
+	String admindb=request.getParameter("admindb");
+	String openclinicdb=request.getParameter("openclinicdb");
+	boolean bUpdateDb=request.getParameter("updatedb")!=null;
+	if(admindb!=null){
+		if(!admindb.equalsIgnoreCase(MedwanQuery.getInstance().getConfigString("admindbName", "ocadmin_dbo"))){
+			bUpdateDb=true;
+			MedwanQuery.getInstance().setConfigString("admindbName", admindb);
+		}
+	}
+	if(openclinicdb!=null){
+		if(!openclinicdb.equalsIgnoreCase(MedwanQuery.getInstance().getConfigString("openclinicdbName", "openclinic_dbo"))){
+			bUpdateDb=true;
+			MedwanQuery.getInstance().setConfigString("openclinicdbName", openclinicdb);
+		}
+	}
 	if(country==null) country=MedwanQuery.getInstance().getConfigString("setup.country","");
 	if(os==null) os=MedwanQuery.getInstance().getConfigString("setup.os","");
 	if(database==null) database=MedwanQuery.getInstance().getConfigString("setup.database","");
@@ -14,7 +29,7 @@
         systemUpdate.updateSetup("country",country,request);
         systemUpdate.updateSetup("os",os,request);
         systemUpdate.updateSetup("database",database,request);
-		if(request.getParameter("updatedb")!=null){
+		if(bUpdateDb){
 			systemUpdate.updateDb();
 		}
 		if(request.getParameter("updatelabels")!=null){
@@ -57,7 +72,7 @@
 
 <form name='resetDefaults' method='post'>
 	<table class="list" cellpadding="0" cellspacing="1" width="100%"> 
-		<tr class='admin'><td colspan='2'><%=getTran("web","reset.defaults",sWebLanguage)%>&nbsp</td></tr>
+		<tr class='admin'><td colspan='2'><%=getTran("web","configure.core",sWebLanguage)%>&nbsp</td></tr>
 		<tr>
 			<td class='admin' width="<%=sTDAdminWidth%>"><%=getTran("web","country",sWebLanguage)%></td>
 			<td class='admin2'>
@@ -88,23 +103,58 @@
 		<tr>
 			<td class='admin'><%=getTran("web","os",sWebLanguage)%>&nbsp</td>
 			<td class='admin2'>
+				<%
+					String detectedos=System.getProperty("os.name").toLowerCase();
+					if(detectedos.contains("windows")){
+						detectedos="windows";
+					}
+					else if(detectedos.contains("linux")){
+						detectedos="linux";
+					}
+					else if(detectedos.contains("solaris")){
+						detectedos="solaris";
+					}
+					else if(detectedos.contains("mac")){
+						detectedos="mac";
+					}
+				%>
+			
 				<select name='os' class='text'>
 					<option value=''></option>
-					<option value='linux' <%="linux".equals(os)?"selected":""%>><%=getTran("web","mac",sWebLanguage).toUpperCase() %></option>
-					<option value='linux' <%="linux".equals(os)?"selected":""%>><%=getTran("web","solaris",sWebLanguage).toUpperCase() %></option>
-					<option value='linux' <%="linux".equals(os)?"selected":""%>><%=getTran("web","linux",sWebLanguage).toUpperCase() %></option>
-					<option value='windows' <%="windows".equals(os)?"selected":""%>><%=getTran("web","windows",sWebLanguage).toUpperCase() %></option>
+					<option value='linux' <%="mac".equals(detectedos)?"selected":""%>><%=getTran("web","mac",sWebLanguage).toUpperCase() %></option>
+					<option value='linux' <%="solaris".equals(detectedos)?"selected":""%>><%=getTran("web","solaris",sWebLanguage).toUpperCase() %></option>
+					<option value='linux' <%="linux".equals(detectedos)?"selected":""%>><%=getTran("web","linux",sWebLanguage).toUpperCase() %></option>
+					<option value='windows' <%="windows".equals(detectedos)?"selected":""%>><%=getTran("web","windows",sWebLanguage).toUpperCase() %></option>
 				</select>
+				<%
+					if(!detectedos.equals(os)){
+				%>
+				<font color="red"><img src="<c:url value="_img/icons/icon_warning.gif"/>"/> <%=getTran("web","wrong.os",sWebLanguage)+": "+os %></font>
+				<%
+					}
+				%>
 			</td>
 		</tr>
 		<tr>
 			<td class='admin'><%=getTran("web","databaseserver",sWebLanguage)%>&nbsp</td>
 			<td class='admin2'>
+				<%
+					//Autodetect database
+					Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+			        String detecteddatabase = conn.getMetaData().getDatabaseProductName().toLowerCase();
+				%>
 				<select name='database' class='text'>
 					<option value=''></option>
-					<option value='mysql' <%="mysql".equals(database)?"selected":""%>><%=getTran("web","mysql",sWebLanguage).toUpperCase() %></option>
-					<option value='sqlserver' <%="sqlserver".equals(database)?"selected":""%>><%=getTran("web","sqlserver",sWebLanguage).toUpperCase() %></option>
+					<option value='mysql' <%="mysql".equals(detecteddatabase)?"selected":""%>><%=getTran("web","mysql",sWebLanguage).toUpperCase() %></option>
+					<option value='sqlserver' <%="sqlserver".equals(detecteddatabase)?"selected":""%>><%=getTran("web","sqlserver",sWebLanguage).toUpperCase() %></option>
 				</select>
+				<%
+					if(!detecteddatabase.equals(database)){
+				%>
+				<font color="red"><img src="<c:url value="_img/icons/icon_warning.gif"/>"/> <%=getTran("web","wrong.database",sWebLanguage)+": "+database %></font>
+				<%
+					}
+				%>
 			</td>
 		</tr>
 		<tr>
@@ -127,7 +177,6 @@
 		</tr>
 		<tr>
 			<%
-				Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
 				PreparedStatement ps = conn.prepareStatement("select value from Items where itemid=(select min(itemid) from Items)");
 				ResultSet rs = ps.executeQuery();
 				int nSize=rs.getMetaData().getColumnDisplaySize(1);
@@ -143,6 +192,38 @@
 					<option value='3000' <%=nSize==3000?"selected":"" %>>3000</option>
 					<option value='5000' <%=nSize==5000?"selected":"" %>>5000</option>
 				</select>
+			</td>
+		</tr>
+		<tr>
+			<%
+				String detectedadmindb=MedwanQuery.getInstance().getAdminConnection().getCatalog();
+			%>
+			<td class='admin'><%=getTran("web","admindb",sWebLanguage)%>&nbsp</td>
+			<td class='admin2'>
+				<input class='text' type='text' name='admindb' id='admindb' value='<%=detectedadmindb%>'/>
+				<%
+					if(!detectedadmindb.equals(MedwanQuery.getInstance().getConfigString("admindbName","openclinic_dbo"))){
+				%>
+				<font color="red"><img src="<c:url value="_img/icons/icon_warning.gif"/>"/> <%=getTran("web","wrong.openclinicdb",sWebLanguage)+": <b>"+MedwanQuery.getInstance().getConfigString("admindbName","openclinic_dbo") %></b></font>
+				<%
+					}
+				%>
+			</td>
+		</tr>
+		<tr>
+			<%
+				String detectedopenclinicdb=conn.getCatalog();
+			%>
+			<td class='admin'><%=getTran("web","openclinicdb",sWebLanguage)%>&nbsp</td>
+			<td class='admin2'>
+				<input class='text' type='text' name='openclinicdb' id='openclinicdb' value='<%=detectedopenclinicdb%>'/>
+				<%
+					if(!detectedopenclinicdb.equals(MedwanQuery.getInstance().getConfigString("openclinicdbName","openclinic_dbo"))){
+				%>
+				<font color="red"><img src="<c:url value="_img/icons/icon_warning.gif"/>"/> <%=getTran("web","wrong.openclinicdb",sWebLanguage)+": <b>"+MedwanQuery.getInstance().getConfigString("openclinicdbName","openclinic_dbo") %></b></font>
+				<%
+					}
+				%>
 			</td>
 		</tr>
 	</table>

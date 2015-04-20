@@ -201,13 +201,11 @@
   <%-- SEARCH MAINTENANCE PLANS --%>
   function searchMaintenancePlans(){
     var okToSubmit = true;
-    
     if(document.getElementById("searchName").value.length > 0 ||
-       document.getElementById("searchAssetUid").value.length > 0 ||
+       document.getElementById("searchAssetUID").value.length > 0 ||
        document.getElementById("searchOperator").value.length > 0){
       okToSubmit = true;
     }
-        
     if(okToSubmit==true){
       document.getElementById("buttonSearch").disabled = true;
       document.getElementById("buttonClear").disabled = true;

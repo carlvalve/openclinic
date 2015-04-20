@@ -1,3 +1,4 @@
+<%@page import="be.openclinic.pharmacy.OperationDocument"%>
 <%@page import="be.openclinic.pharmacy.ProductStock,
                 be.openclinic.pharmacy.ProductStockOperation,
                 be.openclinic.pharmacy.ServiceStock,
@@ -78,6 +79,12 @@
 	        }
             else if(sourceDestination.getObjectType().equalsIgnoreCase("supplier")){
 	            sd = sourceDestination.getObjectUid();
+	            if(sd.length()==0){
+	            	OperationDocument doc = OperationDocument.get(operation.getDocumentUID());
+	            	if(doc!=null && doc.getSourceName(sWebLanguage)!=null){
+	            		sd=doc.getSourceName(sWebLanguage);
+	            	}
+	            }
 	        }
         }
 

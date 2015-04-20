@@ -33,7 +33,7 @@
 	    <%-- PERIOD --%>
 		<tr>
 			<td class='admin2' width="<%=sTDAdminWidth%>">
-				<%=getTran("web","from",sWebLanguage)%> <%=writeDateField("FindBeginDate","transactionForm",sBegin),sWebLanguage)%>
+				<%=getTran("web","from",sWebLanguage)%> <%=writeDateField("FindBeginDate","transactionForm",sBegin,sWebLanguage)%>
 				<%=getTran("web","to",sWebLanguage)%> <%=writeDateField("FindEndDate","transactionForm",sEnd,sWebLanguage)%>
 			</td>
 			<td class='admin2'>

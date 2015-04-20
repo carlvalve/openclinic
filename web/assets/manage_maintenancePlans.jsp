@@ -181,6 +181,7 @@
                 <input class="button" type="button" name="buttonSave" id="buttonSave" value="<%=getTranNoLink("web","save",sWebLanguage)%>" onclick="saveMaintenancePlan();">&nbsp;
                 <input class="button" type="button" name="buttonDelete" id="buttonDelete" value="<%=getTranNoLink("web","delete",sWebLanguage)%>" onclick="deleteMaintenancePlan();" style="visibility:hidden;">&nbsp;
                 <input class="button" type="button" name="buttonNew" id="buttonNew" value="<%=getTranNoLink("web","new",sWebLanguage)%>" onclick="newMaintenancePlan();" style="visibility:hidden;">&nbsp;
+                <input class="button" type="button" name="buttonOperations" id="buttonOperations" value="<%=getTranNoLink("web","operations",sWebLanguage)%>" onclick="showOperations();" style="visibility:hidden;">&nbsp;
             </td>
         </tr>
     </table>
@@ -190,6 +191,9 @@
 </form>
     
 <script>
+  function showOperations(){
+	  this.location.href='<c:url value="main.do?Page=assets/manage_maintenanceOperations.jsp"/>&ts=<%=getTs()%>&PlanUID='+document.getElementById('EditPlanUID').value;
+  }
   <%-- SAVE MAINTENANCE PLAN --%>
   function saveMaintenancePlan(){
     var okToSubmit = true;
@@ -279,7 +283,6 @@
       parameters: "planUID="+planUID,
       onSuccess: function(resp){
         var data = eval("("+resp.responseText+")");
-         
         $("EditPlanUID").value = data.planUID;
         $("name").value = data.name.unhtmlEntities();
         $("assetUID").value = data.assetUID;
@@ -295,6 +298,7 @@
 
         <%-- display hidden buttons --%>
         document.getElementById("buttonDelete").style.visibility = "visible";
+        document.getElementById("buttonOperations").style.visibility = "visible";
         document.getElementById("buttonNew").style.visibility = "visible";
       },
       onFailure: function(resp){
@@ -332,6 +336,7 @@
   function newMaintenancePlan(){                   
     <%-- hide irrelevant buttons --%>
     document.getElementById("buttonDelete").style.visibility = "hidden";
+    document.getElementById("buttonOperations").style.visibility = "hidden";
     document.getElementById("buttonNew").style.visibility = "hidden";
     
     $("EditPlanUID").value = "-1";  
@@ -352,6 +357,7 @@
   function disableButtons(){
     document.getElementById("buttonSave").disabled = true;
     document.getElementById("buttonDelete").disabled = true;
+    document.getElementById("buttonOperations").disabled = true;
     document.getElementById("buttonNew").disabled = true;
   }
   
@@ -359,6 +365,7 @@
   function enableButtons(){
     document.getElementById("buttonSave").disabled = false;
     document.getElementById("buttonDelete").disabled = false;
+    document.getElementById("buttonOperations").disabled = false;
     document.getElementById("buttonNew").disabled = false;
   }
 

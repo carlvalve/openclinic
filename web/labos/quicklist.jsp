@@ -96,7 +96,7 @@
 					hasContent=true;
 					labAnalysis = LabAnalysis.getLabAnalysisByLabcode(val);
 					if(labAnalysis!=null && LabAnalysis.labelForCode(val, sWebLanguage)!=null){
-						sLine+="<td width='"+(100/cols)+"%' bgcolor='"+getItemColor(sLabAnalyses,i,n)+"'><input type='checkbox' "+(sSelectedLabCodes.indexOf(val)>-1?"checked":"")+" name='anal."+labAnalysis.getLabId()+"' id='anal."+labAnalysis.getLabId()+"'/><b>"+val+"</b> - "+LabAnalysis.labelForCode(val, sWebLanguage)+"</td>";
+						sLine+="<td width='"+(100/cols)+"%' bgcolor='"+getItemColor(sLabAnalyses,i,n)+"'><input "+(labAnalysis.getUnavailable()>0?"disabled":"")+" type='checkbox' "+(sSelectedLabCodes.indexOf(val)>-1?"checked":"")+" name='anal."+labAnalysis.getLabId()+"' id='anal."+labAnalysis.getLabId()+"'/><b>"+val+"</b> - "+LabAnalysis.labelForCode(val, sWebLanguage)+"</td>";
 					}
 					else {
 						sLine+="<td width='"+(100/cols)+"%'><font color='red'>Error loading "+val+"</font></td>";

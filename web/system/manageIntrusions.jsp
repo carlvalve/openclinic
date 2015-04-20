@@ -120,6 +120,7 @@
                 .append("</a>")
                 .append("</td>")
                 .append("<td>" + sIntruderID + "</td>")
+                .append("<td>" + User.getFirstUserName(sIntruderID) + "</td>")
                 .append("<td><input type='text' class='text' size='5' name='EditIntrusionCount_" + recCounter + "' value='" + objIA.getIntrusionCount() + "' onBlur='isNumber(this);'></td>")
                 .append("<td><input type='checkbox' name='EditBlocked_" + recCounter + "' value='1' " + (objIA.getBlocked().equals("1") ? "checked" : "") + "></td>")
                 .append("<td>" + (releaseTime == null ? "" : fullDateFormat.format(releaseTime)) + "</td>");
@@ -167,7 +168,7 @@
         // alternate row-styles
         if (sClass.equals("")) sClass = "1";
         else sClass = "";
-
+		
         sOutIPs.append("<input type='hidden' name='EditIntruderID_" + recCounter + "' value='" + sIntruderID + "'>");
         sOutIPs.append("<tr class='list" + sClass + "'>")
                 .append("<td>")
@@ -198,11 +199,12 @@
         <%-- LOGINS-HEADER --%>
         <tr height="18">
             <td class="titleadmin" width="27">&nbsp;</td>
-            <td class="titleadmin" width="150" nowrap>&nbsp;<%=getTran("web.manage","loginIntrusion",sWebLanguage)%></td>
-            <td class="titleadmin" width="100" nowrap>&nbsp;<%=getTran("web.manage","intrusionCount",sWebLanguage)%></td>
-            <td class="titleadmin" width="150" nowrap>&nbsp;<%=getTran("web.manage","permanentlyBlocked",sWebLanguage)%></td>
-            <td class="titleadmin" width="150" nowrap>&nbsp;<%=getTran("web.manage","releasetime",sWebLanguage)%></td>
-            <td class="titleadmin" width="500">&nbsp;<%=getTran("web.manage","remainingBlockTime",sWebLanguage)%></td>
+            <td class="titleadmin" nowrap>&nbsp;<%=getTran("web.manage","loginIntrusion",sWebLanguage)%></td>
+            <td class="titleadmin" nowrap>&nbsp;<%=getTran("web","name",sWebLanguage)%></td>
+            <td class="titleadmin" nowrap>&nbsp;<%=getTran("web.manage","intrusionCount",sWebLanguage)%></td>
+            <td class="titleadmin" nowrap>&nbsp;<%=getTran("web.manage","permanentlyBlocked",sWebLanguage)%></td>
+            <td class="titleadmin" nowrap>&nbsp;<%=getTran("web.manage","releasetime",sWebLanguage)%></td>
+            <td class="titleadmin" >&nbsp;<%=getTran("web.manage","remainingBlockTime",sWebLanguage)%></td>
         </tr>
         <%
             if(sOutLogins.length() > 0){

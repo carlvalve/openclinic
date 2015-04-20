@@ -59,6 +59,7 @@
         <permission type="Web.Occup" id="vitalsigns">occup.vitalsigns</permission>
         <permission type="Web.Occup" id="minimalclinicaldata">occup.minimalclinicaldata</permission>
         <permission type="Web.Occup" id="external.documents">occup.externaldocuments</permission>
+        <permission type="Web.Occup" id="occup.arch.documents">occup.arch.documents</permission>
         <permission type="web" id="emg">occup.emg</permission>
         <permission type="web" id="eeg">occup.eeg</permission>
         <permission type="web" id="ep">occup.ep</permission>
@@ -197,6 +198,7 @@
         <permission type="web" id="samplereception">labos.samplereception</permission>
         <permission type="web" id="printnewresults">labos.printnewresults</permission>
         <permission type="web" id="limitedvisibility">labos.limitedvisibility</permission>
+        <permission type="web" id="modifyvalidatedresults">labos.modifyvalidatedresults</permission>
     </application>
     <application type="Web" id="xrays">
         <permission type="web" id="rx">rx</permission>
@@ -248,5 +250,6 @@
         <permission type="web" id="manageProductStockDocuments">pharmacy.manageproductstockdocuments</permission>
         <permission type="Web.manage" id="viewOrderTickets">pharmacy.viewordertickets</permission>
         <permission type="Web.manage" id="viewProductStockFiches">pharmacy.viewproductstockfiches</permission>
+        <permission type="Web.manage" id="pharmacy.modifybatch">pharmacy.modifybatch</permission>
     </application>
 </permissions>

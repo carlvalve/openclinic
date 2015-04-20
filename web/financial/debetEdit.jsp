@@ -244,15 +244,16 @@ sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
                             out.print("<option selected value='"+checkString(prestation.getUid())+"'>"+checkString(prestation.getCode())+": "+checkString(prestation.getDescription())+"</option>");
                         }
 
-                        Vector vPopularPrestations = activeUser.getTopPopularPrestations(10);
+                        Vector vPopularPrestations = activeUser.getTopPopularPrestations(50);
                         if (vPopularPrestations!=null){
                             String sPrestationUid;
+                            int total = 0;
                             for (int i=0;i<vPopularPrestations.size();i++){
                                 sPrestationUid = checkString((String)vPopularPrestations.elementAt(i));
                                 if (sPrestationUid.length()>0){
                                     prestation = Prestation.get(sPrestationUid);
 
-                                    if (prestation!=null && prestation.getDescription()!=null && prestation.getDescription().trim().length()>0 && !(debet.getPrestation()!=null && prestation.getUid().equals(debet.getPrestation().getUid()))){
+                                    if (prestation!=null && prestation.getInactive()==0 && prestation.getDescription()!=null && prestation.getDescription().trim().length()>0 && !(debet.getPrestation()!=null && prestation.getUid().equals(debet.getPrestation().getUid()))){
                                         out.print("<option value='"+checkString(prestation.getUid())+"'");
 
                                         if ((debet.getPrestationUid()!=null)&&(prestation!=null)&&(prestation.getUid()!=null)&&(prestation.getUid().equals(debet.getPrestationUid()))){
@@ -260,6 +261,10 @@ sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
                                         }
 
                                         out.print(">"+checkString(prestation.getCode())+": "+checkString(prestation.getDescription())+"</option>");
+                                        total++;
+                                        if(total>10){
+                                        	break;
+                                        }
                                     }
                                 }
                             }

@@ -59,7 +59,7 @@
    	userServiceExams = sessionContainerWO.getHealthRecordVO().getVerifiedExaminations(sessionContainerWO,userServiceExams);
 
     VerifiedExaminationVO verifiedExaminationVO;
-    Hashtable exams = new Hashtable();
+    SortedMap exams = new TreeMap();
     int counter = 0;
     String examName;
 
@@ -126,6 +126,21 @@
 	        sAnaDate = ScreenHelper.stdDateFormat.format(tranAna.getUpdateTime());
 	    }
 	
+		//*** ARCHIVE ***
+	    String sTTArc = "be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_ARCHIVE_DOCUMENT";
+	    String sTranArc = getTran("web.occup",sTTArc,sWebLanguage);
+	    TransactionVO tranArc = sessionContainerWO.getLastTransaction(sTTArc);
+	
+	    String sArcTranId = "";
+	    String sArcServerId = "";
+	    String sArcDate = "";
+
+	    if(tranArc!=null){
+	        sArcTranId = tranArc.getTransactionId().intValue()+"";
+	        sArcServerId = tranArc.getServerId()+"";
+	        sArcDate = ScreenHelper.stdDateFormat.format(tranArc.getUpdateTime());
+	    }
+	
 		//*** MIR2 ***
 	    String sTTMir = "be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MIR2";
 	    String sTranMir = getTran("web.occup",sTTMir,sWebLanguage);
@@ -162,6 +177,7 @@
 	    if(activeUser.getAccessRight("occup.medicalimagingrequest.select")) out.print(writeExamination(activeUser,counter++,sTranMir,sMirDate,sTTMir,sMirTranId,sMirServerId,sWebLanguage,sCONTEXTPATH));
 	    if(activeUser.getAccessRight("occup.anatomopathology.select")) out.print(writeExamination(activeUser,counter++,sTranAna,sAnaDate,sTTAna,sAnaTranId,sAnaServerId,sWebLanguage,sCONTEXTPATH));
 	    if(activeUser.getAccessRight("occup.reference.select")) out.print(writeExamination(activeUser,counter++,sTranReference,sReferenceDate,sTTReference,sReferenceTranId,sReferenceServerId,sWebLanguage,sCONTEXTPATH));
+	    if(activeUser.getAccessRight("occup.arch.documents.select")) out.print(writeExamination(activeUser,counter++,sTranArc,sArcDate,sTTArc,sArcTranId,sArcServerId,sWebLanguage,sCONTEXTPATH));
 	 
 	    if(activeUser.getAccessRight("prescriptions.care.select")){
 			// alternate row-style
@@ -195,6 +211,7 @@
 			    </tr>
 		    <%
         }
+
     }
 
     //--- 3 - SPECIFIC EXAMINATIONS ---------------------------------------------------------------
@@ -218,6 +235,7 @@
 
 	        for(int n=0; n<examNames.size(); n++){
 	            examName = (String)examNames.get(n);
+	            System.out.println(examName);
 	            verifiedExaminationVO = (VerifiedExaminationVO)exams.get(examName);
 	            
 	            if(MedwanQuery.getInstance().getConfigString("noShowExaminationsGender"+activePatient.gender,"").indexOf(verifiedExaminationVO.getTransactionType())<0){
@@ -288,10 +306,19 @@
         String serviceId, defaultContext, sClass = "";
         String showExamsTran = getTran("web.manage","showExaminations",sWebLanguage);
         Vector otherServiceExams;
-
+		
+        SortedMap otherServicesSorted = new TreeMap();
         Enumeration servicesEnum = otherServices.keys();
         while(servicesEnum.hasMoreElements()){
-            serviceId = (String)servicesEnum.nextElement();
+        	serviceId=(String)servicesEnum.nextElement();
+        	otherServicesSorted.put(getTran("service",serviceId,sWebLanguage).toUpperCase()+";"+serviceId,otherServices.get(serviceId));
+        }        
+        
+        Iterator servicesIterator = otherServicesSorted.keySet().iterator();
+        while(servicesIterator.hasNext()){
+        	String s=(String)servicesIterator.next();
+        	String serviceName=s.split(";")[0];
+            serviceId = s.split(";")[1];
             defaultContext = (String)otherServices.get(serviceId);
 
             // get examinations linked to current service
@@ -323,7 +350,7 @@
                     <tr class="list<%=sClass%>" id="otherServiceHeader_<%=serviceId%>" title="<%=showExamsTran%>" onclick="hideAllServiceExaminations('<%=serviceId%>');toggleServiceRow('<%=serviceId%>');" onmouseover='this.style.cursor="hand"' onmouseout='this.style.cursor="default"'>
                         <%-- plus-sign and servicename --%>
                         <td colspan="4">
-                            <img id="img_<%=serviceId%>" src="<%=sCONTEXTPATH%>/_img/icons/icon_plus.png" class="link" style="vertical-align:-3px;"/>&nbsp;<%=getTran("service",serviceId,sWebLanguage).toUpperCase()%>
+                            <img id="img_<%=serviceId%>" src="<%=sCONTEXTPATH%>/_img/icons/icon_plus.png" class="link" style="vertical-align:-3px;"/>&nbsp;<%=serviceName%>
                             (<%=examNames.size()%> <%=getTran("web.manage","examinations",sWebLanguage).toLowerCase()%>)
                         </td>
                     </tr>

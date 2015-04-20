@@ -21,15 +21,27 @@
 			Batch batch = (Batch)batches.elementAt(n);
 			if(batch!=null){
 				if(batch.getLevel()>0 && (batch.getEnd()==null || !batch.getEnd().before(new java.util.Date()))){
-					sActiveBatches.append("<tr><td class='admin2'><a href='javascript:showBatchOperations(\""+batch.getUid()+"\");'>"+batch.getBatchNumber()+"</a></td><td class='admin2right'>"+batch.getLevel()+"</td><td class='admin2'>"+(batch.getEnd()==null?"":ScreenHelper.formatDate(batch.getEnd()))+"</td><td class='admin2'>"+batch.getComment()+"</td></tr>");
+					sActiveBatches.append("<tr><td class='admin2'>");
+					if(activeUser.getAccessRight("pharmacy.modifybatch.select")){
+						sActiveBatches.append("<img src='"+sCONTEXTPATH+"/_img/icons/icon_edit.gif' onclick='editbatch(\""+batch.getUid()+"\")'/>");
+					}
+					sActiveBatches.append("<a href='javascript:showBatchOperations(\""+batch.getUid()+"\");'>"+batch.getBatchNumber()+"</a></td><td class='admin2right'>"+batch.getLevel()+"</td><td class='admin2'>"+(batch.getEnd()==null?"":ScreenHelper.formatDate(batch.getEnd()))+"</td><td class='admin2'>"+batch.getComment()+"</td></tr>");
 					totalActive+=batch.getLevel();
 				}
 				else if(batch.getLevel()<=0){
-					sUsedBatches.append("<tr><td class='admin2'><a href='javascript:showBatchOperations("+batch.getUid()+");'>"+batch.getBatchNumber()+"</a></td><td class='admin2right'>"+batch.getLevel()+"</td><td class='admin2'>"+(batch.getEnd()==null?"":ScreenHelper.formatDate(batch.getEnd()))+"</td><td class='admin2'>"+batch.getComment()+"</td></tr>");
+					sUsedBatches.append("<tr><td class='admin2'>");
+					if(activeUser.getAccessRight("pharmacy.modifybatch.select")){
+						sUsedBatches.append("<img src='"+sCONTEXTPATH+"/_img/icons/icon_edit.gif' onclick='editbatch(\""+batch.getUid()+"\")'/>");
+					}
+					sUsedBatches.append("<a href='javascript:showBatchOperations("+batch.getUid()+");'>"+batch.getBatchNumber()+"</a></td><td class='admin2right'>"+batch.getLevel()+"</td><td class='admin2'>"+(batch.getEnd()==null?"":ScreenHelper.formatDate(batch.getEnd()))+"</td><td class='admin2'>"+batch.getComment()+"</td></tr>");
 					totalUsed+=batch.getLevel();
 				}
 				else {
-					sExpiredBatches.append("<tr><td class='admin2'><a href='javascript:showBatchOperations("+batch.getUid()+");'>"+batch.getBatchNumber()+"</a></td><td class='admin2right'>"+batch.getLevel()+"</td><td class='admin2'>"+(batch.getEnd()==null?"":ScreenHelper.formatDate(batch.getEnd()))+"</td><td class='admin2'>"+batch.getComment()+"</td></tr>");
+					sExpiredBatches.append("<tr><td class='admin2'>");
+					if(activeUser.getAccessRight("pharmacy.modifybatch.select")){
+						sExpiredBatches.append("<img src='"+sCONTEXTPATH+"/_img/icons/icon_edit.gif' onclick='editbatch(\""+batch.getUid()+"\")'/>");
+					}
+					sExpiredBatches.append("<a href='javascript:showBatchOperations("+batch.getUid()+");'>"+batch.getBatchNumber()+"</a></td><td class='admin2right'>"+batch.getLevel()+"</td><td class='admin2'>"+(batch.getEnd()==null?"":ScreenHelper.formatDate(batch.getEnd()))+"</td><td class='admin2'>"+batch.getComment()+"</td></tr>");
 					totalExpired+=batch.getLevel();
 				}
 				totalStock-=batch.getLevel();
@@ -74,7 +86,15 @@
 		document.getElementById("transactionForm").submit();
 	}
 
+	function editbatch(batchUid){
+	    openPopup("pharmacy/popups/batchedit.jsp&batchUid="+batchUid+"&productStockUid=<%=productStockUid%>&ts=<%=getTs()%>",10,60);
+	}
+
 	function showBatchOperations(batchUid){
 	    openPopup("pharmacy/popups/batchOperationList.jsp&batchUid="+batchUid+"&productStockUid=<%=productStockUid%>&ts=<%=getTs()%>",800,400);
+	}
+	
+	function refreshlist(){
+		transactionForm.submit();
 	}
 </script>

@@ -85,7 +85,7 @@
 				label.language = sLanguage;
 	            label.showLink = "1";	
 	            label.updateUserId = activeUser.userid;
-				label.value = (String)messagesHash.get(sLanguage);
+				label.value = ((String)messagesHash.get(sLanguage)).replaceAll("\r"," ").replaceAll("\n"," ");
 
                 label.saveToDB();	            
 			}

@@ -345,8 +345,21 @@
 
       tblAuthorizedUsers.deleteRow(rowid.rowIndex);
       clearAuthorizedUserFields();
+
     }
   }
+  
+  <%-- DELETE ROW FROM ARRAY STRING --%>
+  function deleteRowFromArrayString(sArray,rowid){
+    var array = sArray.split("$");
+    for (var i=0;i<array.length;i++){
+      if (array[i].indexOf(rowid)>-1){
+        array.splice(i,1);
+      }
+    }
+    return array.join("$");
+  }
+
 
   <%-- EXTRACT USER IDS (between '=' and '£') --%>
   function extractUserIds(sourceString){

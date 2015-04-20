@@ -115,6 +115,19 @@
         		" ORDER BY oc_debet_date, lastname, firstname";
         		System.out.println(query);
     }
+	//*** LAB RESULTS *****************************************************
+    else if("lab.list".equalsIgnoreCase(sQueryType)){
+        query = "select a.personid PERSONID,lastname LASTNAME,firstname FIRSTNAME,dateofbirth DATE_OF_BIRTH,gender GENDER,resultdate RESULTDATE,analysiscode ANALYSIS,resultvalue RESULTVALUE,resultcomment COMMENT,"+
+    			" (select max(oc_encounter_serviceuid) from oc_encounter_services where oc_encounter_objectid=replace(e.value,'1.','')) DEPARTMENT"+
+        		" from adminview a,healthrecord b,transactions c,requestedlabanalyses d, items e"+
+    			" where"+
+        		" a.personid=b.personid and b.healthrecordid=c.healthrecordid and c.serverid=d.serverid and c.transactionid=d.transactionid and"+
+    			" finalvalidationdatetime is not null and resultdate>="+MedwanQuery.getInstance().convertStringToDate("'<begin>'")+
+    			" and resultdate<="+MedwanQuery.getInstance().convertStringToDate("'<end>'")+" and "+
+    			" c.transactionid=e.transactionid and e.type='be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID'"+
+        		" order by personid,resultdate";
+        		System.out.println(query);
+    }
 	//*** 6 - DEBETS *****************************************************
     else if("debet.list.per.encounter".equalsIgnoreCase(sQueryType)){
         query = "select count(*) as TOTAL_ENCOUNTERS, "+MedwanQuery.getInstance().convert("int","avg(PATIENT)")+" as PATIENT,"+MedwanQuery.getInstance().convert("int",MedwanQuery.getInstance().getConfigString("stddevFunction","stdev")+"("+MedwanQuery.getInstance().convert("int","PATIENT")+")")+" as PATIENT_STDEV, "+MedwanQuery.getInstance().convert("int","avg(ASSUREUR)")+" as ASSUREUR,"+MedwanQuery.getInstance().convert("int",MedwanQuery.getInstance().getConfigString("stddevFunction","stdev")+"("+MedwanQuery.getInstance().convert("int","ASSUREUR")+")")+" as ASSUREUR_STDEV, "+MedwanQuery.getInstance().convert("int","avg(ASSUREUR_COMPL)")+" as ASSUREUR_COMPL,"+MedwanQuery.getInstance().convert("int",MedwanQuery.getInstance().getConfigString("stddevFunction","stdev")+"("+MedwanQuery.getInstance().convert("int","ASSUREUR_COMPL")+")")+" as ASSUREUR_COMPL_STDEV, ENCOUNTER_TYPE from (select sum("+MedwanQuery.getInstance().convert("int","oc_debet_amount")+") as PATIENT,sum("+

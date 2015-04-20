@@ -42,7 +42,7 @@
   "frequency":"<%=plan.frequency%>",
   "operator":"<%=HTMLEntities.htmlentities(plan.operator)%>",
   "planManager":"<%=HTMLEntities.htmlentities(plan.planManager)%>",
-  "instructions":"<%=HTMLEntities.htmlentities(plan.instructions.replaceAll("\r\n","<br>"))%>"
+  "instructions":"<%=HTMLEntities.htmlentities(plan.instructions.replaceAll("\r\n","<br>").replaceAll("\r","<br>").replaceAll("\n","<br>").replaceAll("'", "´").replaceAll("\"","´"))%>"
 }
         <%
     }

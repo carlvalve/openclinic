@@ -200,7 +200,7 @@
             SAXReader xmlReader = new SAXReader();
         	String sXMLValue = MedwanQuery.getInstance().getConfigString("defaultWeekschedules");
         	Document document = xmlReader.read(new StringReader(sXMLValue));
-            
+
             if(document!=null){
                 Element root = document.getRootElement();
                 Iterator scheduleElems = root.elementIterator("WeekSchedule");
@@ -235,7 +235,9 @@
             }
         }
         catch(Exception e){
-            if(Debug.enabled) e.printStackTrace();
+            if(Debug.enabled) {
+            	e.printStackTrace();
+            }
             Debug.printProjectErr(e,Thread.currentThread().getStackTrace());
         }
 
@@ -316,7 +318,7 @@
         <tr id="dayScheduleTr" style="display:none;">
             <td class="admin"/>
             <td class="admin2" style="padding:5px;">
-                <table width="40%" cellpadding="0" cellspacing="1" class="list">
+                <table width="100%" cellpadding="0" cellspacing="1" class="list">
                     <%-- startHour --%>
                     <tr>
                         <td class="admin" width="150" nowrap><%=getTran("web.hr","startHour",sWebLanguage)%>&nbsp;</td>
@@ -345,13 +347,13 @@
         </tr>
                 
         <%-- type2 - weekSchedule ---------------------------------------%>
-        <tr id="weekScheduleTr" style="display:none;">
-            <td class="admin" width="<%=sTDAdminWidth%>">&nbsp;</td>
+        <tr id="weekScheduleTr" style="display: none;">
+            <td class="admin" >&nbsp;</td>
             <td class="admin2" style="padding:5px;">
-                <table width="40%" cellpadding="0" cellspacing="1" class="list">
+                <table width="100%" cellpadding="0" cellspacing="1" class="list">
                     <%-- weekScheduleType (predefined weekSchedule) --%>
                     <tr>
-                        <td class="admin" width="150" nowrap><%=getTran("web.hr","weekScheduleType",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin" nowrap><%=getTran("web.hr","weekScheduleType",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <select class="text" id="weekScheduleType" name="weekScheduleType" onChange="setTimeBlocksString(this.options[this.selectedIndex].value);">
                                 <option/>
@@ -460,9 +462,9 @@
         <tr>     
             <td class="admin"/>
             <td class="admin2" colspan="2">
-                <input class="button" type="button" name="buttonSave" value="<%=getTranNoLink("web","save",sWebLanguage)%>" onclick="saveWorkschedule();">&nbsp;
-                <input class="button" type="button" name="buttonDelete" value="<%=getTranNoLink("web","delete",sWebLanguage)%>" onclick="deleteWorkschedule();" style="visibility:hidden;">&nbsp;
-                <input class="button" type="button" name="buttonNew" value="<%=getTranNoLink("web","new",sWebLanguage)%>" onclick="newWorkschedule();" style="visibility:hidden;">&nbsp;
+                <input class="button" type="button" name="buttonSave" id="buttonSave" value="<%=getTranNoLink("web","save",sWebLanguage)%>" onclick="saveWorkschedule();">&nbsp;
+                <input class="button" type="button" name="buttonDelete" id="buttonDelete" value="<%=getTranNoLink("web","delete",sWebLanguage)%>" onclick="deleteWorkschedule();" style="visibility:hidden;">&nbsp;
+                <input class="button" type="button" name="buttonNew" id="buttonNew" value="<%=getTranNoLink("web","new",sWebLanguage)%>" onclick="newWorkschedule();" style="visibility:hidden;">&nbsp;
             </td>
         </tr>
     </table>
@@ -523,6 +525,7 @@
   
   <%-- CHECK INTERFERENCE --%>
   function checkInterference(){
+	if(document.getElementById('EditScheduleUid').value.split('.').length>1) return false;
 	var interference = false;
 	    
     var beginDate = null;
@@ -680,11 +683,9 @@
       if(okToSubmit){
         document.getElementById("divMessage").innerHTML = "<img src='<%=sCONTEXTPATH%>/_img/themes/<%=sUserTheme%>/ajax-loader.gif'/><br>Saving";  
         var url = "<c:url value='/hr/ajax/workschedule/saveWorkschedule.jsp'/>?ts="+new Date().getTime();
-
         document.getElementById("buttonSave").disabled = true;
         document.getElementById("buttonDelete").disabled = true;
         document.getElementById("buttonNew").disabled = true;
-        
         <%-- parameters --%>
         var sParameters = "EditScheduleUid="+EditForm.EditScheduleUid.value+
                           "&PersonId=<%=activePatient.personid%>"+
@@ -717,7 +718,6 @@
         else if(document.getElementById("scheduleTypeMonth").checked){
           sParameters+= "&scheduleType=month";
         }
-        
         new Ajax.Request(url,{
           method: "POST",
           postBody: sParameters,                        
@@ -835,9 +835,9 @@
         }
           
         <%-- open tr --%>
-             if(data.type=="day")   document.getElementById("dayScheduleTr").style.display = "block";
-        else if(data.type=="week")  document.getElementById("weekScheduleTr").style.display = "block";
-        else if(data.type=="month") document.getElementById("monthScheduleTr").style.display = "block";
+             if(data.type=="day")   document.getElementById("dayScheduleTr").style.display = "";
+        else if(data.type=="week")  document.getElementById("weekScheduleTr").style.display = "";
+        else if(data.type=="month") document.getElementById("monthScheduleTr").style.display = "";
                     
         <%-- type --%>
              if(data.type=="day")   document.getElementById("scheduleTypeDay").checked = true;
@@ -969,7 +969,7 @@
   
   <%-- DISPLAY DAY SCHEDULE --%>
   function displayDaySchedule(){
-    document.getElementById("dayScheduleTr").style.display = "block";
+    document.getElementById("dayScheduleTr").style.display = "";
     document.getElementById("weekScheduleTr").style.display = "none";
     document.getElementById("monthScheduleTr").style.display = "none";
 
@@ -982,7 +982,7 @@
   <%-- DISPLAY WEEK SCHEDULE --%>
   function displayWeekSchedule(){
     document.getElementById("dayScheduleTr").style.display = "none";
-    document.getElementById("weekScheduleTr").style.display = "block";
+    document.getElementById("weekScheduleTr").style.display = "";
     document.getElementById("monthScheduleTr").style.display = "none";
 
     clearDayScheduleFields();
@@ -995,7 +995,7 @@
   function displayMonthSchedule(){
     document.getElementById("dayScheduleTr").style.display = "none";
     document.getElementById("weekScheduleTr").style.display = "none";
-    document.getElementById("monthScheduleTr").style.display = "block";
+    document.getElementById("monthScheduleTr").style.display = "";
     
     clearDayScheduleFields();
     clearWeekScheduleFields();

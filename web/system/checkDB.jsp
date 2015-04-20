@@ -570,7 +570,6 @@
             <td class="admin">&nbsp;</td><td class="admin2">
                 <input id="5" type="checkbox" name="verify" value="verify" checked/>Verify objects &nbsp;
                 <input id="6" type="checkbox" name="create" value="create" checked/>Create objects &nbsp;
-                <input id="7" type="checkbox" name="synchronize" value="synchronize" checked/>Synchronize objects
             </td>
         </tr>
         <tr>
@@ -586,34 +585,14 @@
 <script>
     if ("<%= request.getParameter("verify")+""%>" == "verify") {document.getElementById(5).checked=true} else {document.getElementById(5).checked=false};
     if ("<%= request.getParameter("create")+""%>" == "create") {document.getElementById(6).checked=true} else {document.getElementById(6).checked=false};
-    if ("<%= request.getParameter("synchronize")+""%>" == "synchronize") {document.getElementById(7).checked=true} else {document.getElementById(7).checked=false};
 </script>
-
-<a href="javascript:checkAll(true);"><%=MedwanQuery.getInstance().getLabel("Web.Manage.CheckDb","CheckAll","N")%></a>
-<a href="javascript:checkAll(false);"><%=MedwanQuery.getInstance().getLabel("Web.Manage.CheckDb","UncheckAll","N")%></a>
-<a href="javascript:checkAllReset(true);"><%=MedwanQuery.getInstance().getLabel("Web.Manage.CheckDb","CheckAllReset","N")%></a>
-<a href="javascript:checkAllReset(false);"><%=MedwanQuery.getInstance().getLabel("Web.Manage.CheckDb","UncheckAllReset","N")%></a>
-<a href="javascript:checkAllFullSync(true);"><%=MedwanQuery.getInstance().getLabel("Web.Manage.CheckDb","CheckAllFullSync","N")%></a>
-<a href="javascript:checkAllFullSync(false);"><%=MedwanQuery.getInstance().getLabel("Web.Manage.CheckDb","UncheckAllFullSync","N")%></a>
 
 <table width="100%" class="list" cellspacing="1">
 <%
-    comment(out, "Sync tables:", 1);
     Iterator tables = document.getRootElement().elementIterator("table");
     Element table;
     String sMessage = "";
 
-    while (tables.hasNext()) {
-        table = (Element) tables.next();
-        if (table.attribute("sync") != null && !table.attribute("sync").getValue().equalsIgnoreCase("NONE")) {
-            out.print("<tr class='list'><td>&nbsp;</td><td><input type='checkbox' name='" + table.attribute("name").getValue() + "'"
-                    + (bInit || request.getParameter(table.attribute("name").getValue()) != null ? " checked " : "") + "/>"
-                    + table.attribute("name").getValue() + " (" + table.attribute("sync").getValue() + ")");
-            out.print("&nbsp;&nbsp;&nbsp;<input type='checkbox' name='" + table.attribute("name").getValue() + ".fullreset' value='medwan.common.true'/>Reset");
-            out.print("&nbsp;&nbsp;&nbsp;<input type='checkbox' name='" + table.attribute("name").getValue() + ".fullsync' value='medwan.common.true'/>Full sync");
-            out.print("</td></tr>");
-        }
-    }
 
     if (request.getParameter("submit") != null) {
 

@@ -142,7 +142,7 @@
     }
 %>
 
-<form name="printForm" id="printForm" method="POST">
+<form name="printForm" id="printForm" method="post">
     <input type="hidden" name="Action" value="print">
     
     <%=writeTableHeader("web","printMedicalDossier",sWebLanguage)%>

@@ -124,7 +124,7 @@
                     
                     RequestedLabAnalysis requestedLabAnalysis = (RequestedLabAnalysis)labRequest.getAnalyses().get(analysisCode);
                     String sEdit = " ";
-                    if(activeUser.getAccessRight("labos.worklists.select") && (requestedLabAnalysis.getTechnicalvalidation()>0 || requestedLabAnalysis.getFinalvalidation()>0)){
+                    if(activeUser.getAccessRight("labos.modifyvalidatedresults.select") && (requestedLabAnalysis.getTechnicalvalidation()>0 || requestedLabAnalysis.getFinalvalidation()>0)){
                     	sEdit = "<img src='"+sCONTEXTPATH+"/_img/icons/icon_edit.gif' onclick='reactivate("+labRequest.getServerid()+","+labRequest.getTransactionid()+",\""+requestedLabAnalysis.getAnalysisCode()+"\")'/>";
                     }
                     out.print("<tr bgcolor='#FFFCD6'><td width='25%' nowrap>"+sEdit+" <b>"+MedwanQuery.getInstance().getLabel("labanalysis",c,sWebLanguage)+" "+u+refs+"</b></td>");

@@ -204,7 +204,7 @@ try{
                                                                         
                                                                         String sStorageName = transactionVO.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DOC_STORAGENAME");
                                                                         if(sStorageName.length()==0){
-                                                                            %>&nbsp;<img src='<c:url value="_img/icons/icon_upload.gif"/>' class="link" onclick='document.getElementById("fileuploadid").value="<%=sReference %>";document.getElementById("uploadtransactionid").value="<%=transactionVO.getServerId()+"."+transactionVO.getTransactionId()%>";document.getElementById("fileupload").click();return false'/><%                                                                                    	
+                                                                            %>&nbsp;<img src='<c:url value="_img/icons/icon_barcode.gif"/>' onclick="printArchiveBarcode('<%=sReference %>');" class="link" />&nbsp;<img src='<c:url value="_img/icons/icon_upload.gif"/>' class="link" onclick='document.getElementById("fileuploadid").value="<%=sReference %>";document.getElementById("uploadtransactionid").value="<%=transactionVO.getServerId()+"."+transactionVO.getTransactionId()%>";document.getElementById("fileupload").click();return false'/><%                                                                                    	
                                                                         }
                                                                     }
                                                                     // no Document
@@ -285,6 +285,15 @@ function uploadFile(){
     }
     window.setTimeout('checkArchiveDocument()','1000');
   }
+
+function printArchiveBarcode(udi){
+	var url = "<%=sCONTEXTPATH%>/archiving/printBarcode.jsp?barcodeValue="+udi+"&numberOfPrints=1";
+	var w = 430;
+    var h = 200;
+    var left = (screen.width/2)-(w/2);
+    var topp = (screen.height/2)-(h/2);
+    window.open(url,"PrintBarcode<%=getTs()%>","toolbar=no,status=no,scrollbars=yes,resizable=yes,menubar=yes,width="+w+",height="+h+",top="+topp+",left="+left);
+}
 
 function checkArchiveDocument(){
     var url = "<%=sCONTEXTPATH%>/util/checkArchiveDocument.jsp?ts="+new Date().getTime();

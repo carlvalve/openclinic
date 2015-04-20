@@ -1,3 +1,4 @@
+<%@page import="be.openclinic.assets.MaintenancePlan"%>
 <%@page import="be.openclinic.assets.MaintenanceOperation,
                java.text.*"%>
 <%@page errorPage="/includes/error.jsp"%>
@@ -409,4 +410,11 @@
   //EditForm.maintenancePlanName.focus();
   //loadMaintenanceOperations();
   resizeAllTextareas(8);
+  
+  var planuid='<%=checkString(request.getParameter("PlanUID"))%>';
+  if(planuid.length>0){
+	  SearchForm.searchMaintenancePlanUID.value=planuid;
+	  SearchForm.searchMaintenancePlanName.value='<%=MaintenancePlan.get(request.getParameter("PlanUID"))==null?"":MaintenancePlan.get(request.getParameter("PlanUID")).name%>';
+	  searchMaintenanceOperations();
+  }
 </script>

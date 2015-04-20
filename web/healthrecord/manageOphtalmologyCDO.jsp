@@ -79,14 +79,14 @@
 			                        }
 			                        counter++;
 			                        
-			       					%><input type="checkbox" name="complaints.<%=sLabelID%>" id="complaints.<%=sLabelID%>" value="<%=sLabelID%>" <%=sComplaints.indexOf("*"+sLabelID+"*")>-1?"checked":"" %>/><label for="complaints.<%=sLabelID%>" class="hand"><%=sLabelValue%></label></td><%
+			       					%><td width='25%'><input class='hand' type="checkbox" name="complaints.<%=sLabelID%>" id="complaints.<%=sLabelID%>" value="<%=sLabelID%>" <%=sComplaints.indexOf("*"+sLabelID+"*")>-1?"checked":"" %>/><label for="complaints.<%=sLabelID%>" class="hand"><%=sLabelValue%></label></td><%
 			                    }
 			                }
 			        	}
 			        %>
 		        	</tr>
 	        	</table>
-	            <textarea onKeyup="this.value=this.value.toUpperCase();resizeTextarea(this,10);" id="complaints_comment" class="text" cols="80" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_1_COMMENT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_1_COMMENT" translate="false" property="value"/></textarea>
+	            <textarea <%=setRightClickMini("ITEM_TYPE_CDO_1_COMMENT")%> onKeyup="this.value=this.value.toUpperCase();resizeTextarea(this,10);" id="complaints_comment" class="text" cols="80" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_1_COMMENT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_1_COMMENT" translate="false" property="value"/></textarea>
 	        </td>
     	</tr>
     	
@@ -596,19 +596,29 @@
 	        		<tr>
 				        <td class="admin"><%=getTran("web","cdo.general.diagnosis",sWebLanguage)%></td>
 				        <td class="admin2">
-				            <select id='physician' class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_42_GENERAL_1" property="itemId"/>]>.value" >
-				                <option></option>
-				                <%=ScreenHelper.writeSelectUpperCase("cdo.general.diagnosis",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_42_GENERAL_1"),sWebLanguage,false,false)%>
-				            </select><br/>
-				            <select id='physician' class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_42_GENERAL_2" property="itemId"/>]>.value" >
-				                <option></option>
-				                <%=ScreenHelper.writeSelectUpperCase("cdo.general.diagnosis",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_42_GENERAL_2"),sWebLanguage,false,false)%>
-				            </select><br/>
-				            <select id='physician' class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_42_GENERAL_3" property="itemId"/>]>.value" >
-				                <option></option>
-				                <%=ScreenHelper.writeSelectUpperCase("cdo.general.diagnosis",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_42_GENERAL_3"),sWebLanguage,false,false)%>
-				            </select><br/>
-				            <input onKeyup="this.value=this.value.toUpperCase();" type="text" class="text" size="60" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_42_GENERAL" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_42_GENERAL" translate="false" property="value"/>"/>
+				        	<table>
+				        		<tr><td>
+						            <select id='physician' class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_42_GENERAL_1" property="itemId"/>]>.value" >
+						                <option></option>
+						                <%=ScreenHelper.writeSelectUpperCase("cdo.general.diagnosis",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_42_GENERAL_1"),sWebLanguage,false,false)%>
+						            </select>
+						        </td></tr>
+				        		<tr><td>
+						            <select id='physician' class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_42_GENERAL_2" property="itemId"/>]>.value" >
+						                <option></option>
+						                <%=ScreenHelper.writeSelectUpperCase("cdo.general.diagnosis",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_42_GENERAL_2"),sWebLanguage,false,false)%>
+						            </select>
+						        </td></tr>
+				        		<tr><td>
+						            <select id='physician' class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_42_GENERAL_3" property="itemId"/>]>.value" >
+						                <option></option>
+						                <%=ScreenHelper.writeSelectUpperCase("cdo.general.diagnosis",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_42_GENERAL_3"),sWebLanguage,false,false)%>
+						            </select>
+						        </td></tr>
+				        		<tr><td>
+						            <input onKeyup="this.value=this.value.toUpperCase();" type="text" class="text" size="60" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_42_GENERAL" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_42_GENERAL" translate="false" property="value"/>"/>
+						        </td></tr>
+						    </table>
 				        </td>
 	        		</tr>
 	        		
@@ -616,19 +626,29 @@
 	        		<tr>
 				        <td class="admin"><%=getTran("web","cdo.specific.diagnosis",sWebLanguage)%></td>
 				        <td class="admin2">
-				            <select id='physician' class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_42_SPECIFIC_1" property="itemId"/>]>.value" >
-				                <option></option>
-				                <%=ScreenHelper.writeSelectUpperCase("cdo.specific.diagnosis",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_42_SPECIFIC_1"),sWebLanguage,false,false)%>
-				            </select><br/>
-				            <select id='physician' class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_42_SPECIFIC_2" property="itemId"/>]>.value" >
-				                <option></option>
-				                <%=ScreenHelper.writeSelectUpperCase("cdo.specific.diagnosis",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_42_SPECIFIC_2"),sWebLanguage,false,false)%>
-				            </select><br/>
-				            <select id='physician' class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_42_SPECIFIC_3" property="itemId"/>]>.value" >
-				                <option></option>
-				                <%=ScreenHelper.writeSelectUpperCase("cdo.specific.diagnosis",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_42_SPECIFIC_3"),sWebLanguage,false,false)%>
-				            </select><br/>
-				            <input onKeyup="this.value=this.value.toUpperCase();" type="text" class="text" size="60" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_42_SPECIFIC" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_42_SPECIFIC" translate="false" property="value"/>"/>
+				        	<table>
+				        		<tr><td>
+						            <select id='physician' class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_42_SPECIFIC_1" property="itemId"/>]>.value" >
+						                <option></option>
+						                <%=ScreenHelper.writeSelectUpperCase("cdo.specific.diagnosis",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_42_SPECIFIC_1"),sWebLanguage,false,false)%>
+						            </select>
+						        </td></tr>
+				        		<tr><td>
+						            <select id='physician' class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_42_SPECIFIC_2" property="itemId"/>]>.value" >
+						                <option></option>
+						                <%=ScreenHelper.writeSelectUpperCase("cdo.specific.diagnosis",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_42_SPECIFIC_2"),sWebLanguage,false,false)%>
+						            </select>
+						        </td></tr>
+				        		<tr><td>
+						            <select id='physician' class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_42_SPECIFIC_3" property="itemId"/>]>.value" >
+						                <option></option>
+						                <%=ScreenHelper.writeSelectUpperCase("cdo.specific.diagnosis",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_42_SPECIFIC_3"),sWebLanguage,false,false)%>
+						            </select>
+						        </td></tr>
+				        		<tr><td>
+						            <input onKeyup="this.value=this.value.toUpperCase();" type="text" class="text" size="60" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_42_SPECIFIC" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_42_SPECIFIC" translate="false" property="value"/>"/>
+						        </td></tr>
+						    </table>
 				        </td>
 	        		</tr>
 	        	</table>

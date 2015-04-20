@@ -169,8 +169,8 @@
         
         if(hiddenprescriptions.length() > 0){
             out.print("<tr>"+
-                       "<td width='1%' valign='top' align='right'>"+
-                        "<img src='"+sCONTEXTPATH+"/_img/icons/icon_plus.png' onclick='togglehiddenprescriptions();'/>"+
+                       "<td class='admin2'>"+
+                        "<right><img src='"+sCONTEXTPATH+"/_img/icons/icon_plus.png' onclick='togglehiddenprescriptions();'/></right>"+
                        "</td>"+
                        "<td colspan='3'>"+
                         "<div id='hiddenprescriptions' style='display:none'>"+
