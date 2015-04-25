@@ -1,5 +1,5 @@
 <%
-	String filelist="http://localhost/openclinic/pacs/20010101/MR2/19997 http://localhost/openclinic/pacs/20010101/MR2/19665";
+	String filelist="http://10.1.4.26/openclinic/pacs/20010101/MR2/19997 http://10.1.4.26/openclinic/pacs/20010101/MR2/19665";
     // prepare response
     response.setHeader("Cache-Control", "max-age=30");
     response.setContentType("application/x-java-jnlp-file");
