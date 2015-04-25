@@ -79,6 +79,8 @@
         <Menu labelid="examenstechniques" accessrights="technicalexaminations.select">
    		    <Menu labelid="labos" accessrights="labos.select" url="/main.do?Page=labos/index.jsp"/>
             <Menu labelid="xrays" accessrights="rx.select" url="/main.do?Page=xrays/index.jsp"/>
+		    <Menu labelid="imagestore" accessrights="occup.pacs.select" url="javascript:showPACS();"/>
+		    <Menu labelid="uploaddocuments" accessrights="occup.uploaddocuments.select" url="javascript:uploadDocs();"/>
        	</Menu>
         <Menu labelid="adt" accessrights="adt.encounter.select">
             <Menu labelid="newEncounter" accessrights="adt.encounter" patientselected="true" url="javascript:newEncounter();"/>

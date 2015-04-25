@@ -24,7 +24,6 @@
 	       sArchiveFileCode = checkString(request.getParameter("findArchiveFileCode")),
 	       sPersonID    = checkString(request.getParameter("findPersonID")),
 	       sDistrict    = checkString(request.getParameter("findDistrict"));
-    
     String sAction = checkString(request.getParameter("findSearchButtonClick"));
     String sScript = "";
 

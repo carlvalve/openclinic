@@ -46,6 +46,7 @@
            sEditPrestationMfpPercentage  = checkString(request.getParameter("EditPrestationMfpPercentage")),
            sEditPrestationMfpAdmissionPercentage  = checkString(request.getParameter("EditPrestationMfpAdmissionPercentage")),
            sEditPrestationAnesthesiaPercentage  = checkString(request.getParameter("EditPrestationAnesthesiaPercentage")),
+           sEditPrestationAnesthesiaSupplementPercentage  = checkString(request.getParameter("EditPrestationAnesthesiaSupplementPercentage")),
            sEditPrestationSupplement  = checkString(request.getParameter("EditPrestationSupplement")),
            sEditPrestationClass  = checkString(request.getParameter("EditPrestationClass")),
            sEditPrestationVariablePrice = checkString(request.getParameter("EditPrestationVariablePrice")),
@@ -92,6 +93,12 @@
 	   }
 	   catch(Exception e){
 		   sEditPrestationAnesthesiaPercentage="0";
+	   }
+	   try{
+		   sEditPrestationAnesthesiaSupplementPercentage =""+Double.parseDouble(sEditPrestationAnesthesiaSupplementPercentage);
+	   }
+	   catch(Exception e){
+		   sEditPrestationAnesthesiaSupplementPercentage="0";
 	   }
 	   String sEditPrestationServiceName="";
 	   if(sEditPrestationServiceUid.length()>0){
@@ -149,6 +156,7 @@
         prestation.setMfpPercentage(Integer.parseInt(sEditPrestationMfpPercentage));
         prestation.setMfpAdmissionPercentage(Double.parseDouble(sEditPrestationMfpAdmissionPercentage));
         prestation.setAnesthesiaPercentage(Double.parseDouble(sEditPrestationAnesthesiaPercentage));
+        prestation.setAnesthesiaSupplementPercentage(Double.parseDouble(sEditPrestationAnesthesiaSupplementPercentage));
         prestation.setSupplement(Double.parseDouble(sEditPrestationSupplement));
         prestation.setInactive(Integer.parseInt(sEditPrestationInactive));
         prestation.setPerformerUid(sEditCareProvider);
@@ -421,6 +429,12 @@
                         <td class="admin"><%=getTran("web","anesthesiapercentage",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="text" class="text" name="EditPrestationAnesthesiaPercentage" size="4" maxlength="3" value="<%=prestation.getAnesthesiaPercentage()%>" onKeyup="if(!isNumber(this)){this.value='';}">%
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="admin"><%=getTran("web","anesthesiasupplementpercentage",sWebLanguage)%></td>
+                        <td class="admin2">
+                            <input type="text" class="text" name="EditPrestationAnesthesiaSupplementPercentage" size="4" maxlength="3" value="<%=prestation.getAnesthesiaSupplementPercentage()%>" onKeyup="if(!isNumber(this)){this.value='';}">%
                         </td>
                     </tr>
                     <%

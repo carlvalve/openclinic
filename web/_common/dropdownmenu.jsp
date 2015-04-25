@@ -416,9 +416,17 @@
 
   <%-- READ BARCODE --%>
   function readBarcode(){
-    openPopup("/_common/readBarcode.jsp&ts=<%=getTs()%>");
-  }
-    
+	    openPopup("/_common/readBarcode.jsp&ts=<%=getTs()%>");
+	  }
+	    
+  function showPACS(){
+	    openPopup("/pacs/studyList.jsp&ts=<%=getTs()%>",800,400).focus();
+	  }
+	    
+  function uploadDocs(){
+	    openPopup("/util/uploadDocuments.jsp&ts=<%=getTs()%>",400,400).focus();
+	  }
+	    
   function readBarcode2(barcode){
     var transform = "<%=MedwanQuery.getInstance().getConfigString("CCDKeyboardTransformString","à&é\\\"'(§è!ç")%>";
     var oldbarcode = barcode;

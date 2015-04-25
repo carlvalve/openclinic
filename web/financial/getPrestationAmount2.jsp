@@ -181,10 +181,16 @@
 	    	                baseInsurar=dPrice*quantity;
 	                        if(insurance.getInsurar()!=null && insurance.getInsurar().getNoSupplements()==0 && insurance.getInsurar().getCoverSupplements()==1){
 	                        	dPrice+=prestation.getSupplement()*(prestation.getAnesthesiaPercentage()/100);
+		                    	/* anesthesia supplement */
+		                    	dPrice+=prestation.getPrice(type)*(prestation.getAnesthesiaSupplementPercentage()/100);
+		                    	dPrice+=prestation.getSupplement()*(prestation.getAnesthesiaSupplementPercentage()/100);
 	                        }
 	    	                double dInsuranceMaxPrice = prestation.getInsuranceTariff(insurance.getInsurar().getUid(),insurance.getInsuranceCategoryLetter())*(prestation.getAnesthesiaPercentage()/100);
 	    	                if(encounter!=null && encounter.getType().equalsIgnoreCase("admission") && prestation.getMfpAdmissionPercentage()>0){
 	    	                	dInsuranceMaxPrice = prestation.getInsuranceTariff(insurance.getInsurar().getUid(),"*H")*(prestation.getAnesthesiaPercentage()/100);
+		                    	/* anesthesia supplement */
+		                    	dPatientAmount2+=quantity*prestation.getPrice(type)*(prestation.getAnesthesiaSupplementPercentage()/100);
+		                    	dPatientAmount2+=quantity*prestation.getSupplement()*(prestation.getAnesthesiaSupplementPercentage()/100);
 	    	                }
 	    	                String sShare=checkString(prestation.getPatientShare(insurance)+"");
 	    	                if (sShare.length()>0){
@@ -197,6 +203,9 @@
 	    	                    }
 	    	                    if(insurance.getInsurar()!=null && insurance.getInsurar().getNoSupplements()==0 && insurance.getInsurar().getCoverSupplements()==0){
 	    	                    	dPatientAmount2+=quantity*prestation.getSupplement()*(prestation.getAnesthesiaPercentage()/100);
+			                    	/* anesthesia supplement */
+			                    	dPatientAmount2+=quantity*prestation.getPrice(type)*(prestation.getAnesthesiaSupplementPercentage()/100);
+			                    	dPatientAmount2+=quantity*prestation.getSupplement()*(prestation.getAnesthesiaSupplementPercentage()/100);
 	    	                    }
 	    	                    dPatientAmount+=dPatientAmount2;
 	    	                    dInsurarAmount+=dInsurarAmount2;
@@ -207,6 +216,9 @@
 		    	        }
 		    	        else {
 		    	            dPatientAmount2=quantity * (prestation.getPrice("C")+prestation.getSupplement())*(prestation.getAnesthesiaPercentage()/100);
+	                    	/* anesthesia supplement */
+	                    	dPatientAmount2+=quantity*prestation.getPrice(type)*(prestation.getAnesthesiaSupplementPercentage()/100);
+	                    	dPatientAmount2+=quantity*prestation.getSupplement()*(prestation.getAnesthesiaSupplementPercentage()/100);
 		                    dPatientAmount+=dPatientAmount2;
 		    	            dInsurarAmount2= 0;
 		    	        }
@@ -222,6 +234,9 @@
 		    	        		}
 		    	        		else{
 		    	        			dCoverage1=dPatientAmount2-quantity * prestation.getSupplement()*(prestation.getAnesthesiaPercentage()/100);
+		                        	/* anesthesia supplement */
+		                        	dCoverage1-=quantity*prestation.getPrice(type)*(prestation.getAnesthesiaSupplementPercentage()/100);
+		                        	dCoverage1-=prestation.getSupplement()*(prestation.getAnesthesiaSupplementPercentage()/100);
 		    	        		}
 		    	    			dPatientAmount=dPatientAmount-dCoverage1;
 		    	    			dPatientAmount2=dPatientAmount2-dCoverage1;
@@ -433,6 +448,9 @@
 		                baseInsurar=dPrice*quantity;
 	                    if(insurance.getInsurar()!=null && insurance.getInsurar().getNoSupplements()==0 && insurance.getInsurar().getCoverSupplements()==1){
 	                    	dPrice+=prestation.getSupplement()*(prestation.getAnesthesiaPercentage()/100);
+	                    	/* anesthesia supplement */
+	                    	dPrice+=prestation.getPrice(type)*(prestation.getAnesthesiaSupplementPercentage()/100);
+	                    	dPrice+=prestation.getSupplement()*(prestation.getAnesthesiaSupplementPercentage()/100);
 	                    }
 		                double dInsuranceMaxPrice = prestation.getInsuranceTariff(insurance.getInsurar().getUid(),insurance.getInsuranceCategoryLetter())*(prestation.getAnesthesiaPercentage()/100);
 		                if(encounter!=null && encounter.getType().equalsIgnoreCase("admission") && prestation.getMfpAdmissionPercentage()>0){
@@ -448,6 +466,9 @@
 		                    }
 		                    if(insurance.getInsurar()!=null && insurance.getInsurar().getNoSupplements()==0 && insurance.getInsurar().getCoverSupplements()==0){
 		                    	dPatientAmount2+=quantity*prestation.getSupplement()*(prestation.getAnesthesiaPercentage()/100);
+		                    	/* anesthesia supplement */
+		                    	dPatientAmount2+=quantity*prestation.getPrice(type)*(prestation.getAnesthesiaSupplementPercentage()/100);
+		                    	dPatientAmount2+=quantity*prestation.getSupplement()*(prestation.getAnesthesiaSupplementPercentage()/100);
 		                    }
 		                    dPatientAmount+=dPatientAmount2;
 		                    dInsurarAmount+=dInsurarAmount2;
@@ -455,6 +476,9 @@
 	    	        }
 	    	        else {
 	    	            dPatientAmount2=quantity * (prestation.getPrice("C")+prestation.getSupplement())*(prestation.getAnesthesiaPercentage()/100);
+                    	/* anesthesia supplement */
+                    	dPatientAmount2+=quantity*prestation.getPrice(type)*(prestation.getAnesthesiaSupplementPercentage()/100);
+                    	dPatientAmount2+=quantity*prestation.getSupplement()*(prestation.getAnesthesiaSupplementPercentage()/100);
 	                    dPatientAmount+=dPatientAmount2;
 	    	            dInsurarAmount2= 0;
 	    	        }
@@ -468,6 +492,9 @@
 	    	        		}
 	    	        		else{
 	    	        			dCoverage1=dPatientAmount2-quantity * prestation.getSupplement()*(prestation.getAnesthesiaPercentage()/100);
+	                        	/* anesthesia supplement */
+	                        	dCoverage1-=quantity*prestation.getPrice(type)*(prestation.getAnesthesiaSupplementPercentage()/100);
+	                        	dCoverage1-=prestation.getSupplement()*(prestation.getAnesthesiaSupplementPercentage()/100);
 	    	        		}
 	    	    			dPatientAmount2=dPatientAmount2-dCoverage1;
 	    	    			dPatientAmount=dPatientAmount-dCoverage1;
@@ -681,6 +708,9 @@
 			                baseInsurar=dPrice*quantity;
 	                        if(insurance.getInsurar()!=null && insurance.getInsurar().getNoSupplements()==0 && insurance.getInsurar().getCoverSupplements()==1){
 	                        	dPrice+=prestation.getSupplement()*(prestation.getAnesthesiaPercentage()/100);
+		                    	/* anesthesia supplement */
+		                    	dPrice+=prestation.getPrice(type)*(prestation.getAnesthesiaSupplementPercentage()/100);
+		                    	dPrice+=prestation.getSupplement()*(prestation.getAnesthesiaSupplementPercentage()/100);
 	                        }
 	    	                double dInsuranceMaxPrice = prestation.getInsuranceTariff(insurance.getInsurar().getUid(),insurance.getInsuranceCategoryLetter())*(prestation.getAnesthesiaPercentage()/100);
 	    	                if(encounter!=null && encounter.getType().equalsIgnoreCase("admission") && prestation.getMfpAdmissionPercentage()>0){
@@ -697,6 +727,9 @@
 			                    }
 	    	                    if(insurance.getInsurar()!=null && insurance.getInsurar().getNoSupplements()==0 && insurance.getInsurar().getCoverSupplements()==0){
 			                    	dPatientAmount2+=quantity*prestation.getSupplement()*(prestation.getAnesthesiaPercentage()/100);
+			                    	/* anesthesia supplement */
+			                    	dPatientAmount2+=quantity*prestation.getPrice(type)*(prestation.getAnesthesiaSupplementPercentage()/100);
+			                    	dPatientAmount2+=quantity*prestation.getSupplement()*(prestation.getAnesthesiaSupplementPercentage()/100);
 			                    }
 			                    dPatientAmount+=dPatientAmount2;
 			                    dInsurarAmount+=dInsurarAmount2;
@@ -707,6 +740,9 @@
 		    	        }
 		    	        else {
 		    	            dPatientAmount2=quantity * (prestation.getPrice("C")+prestation.getSupplement())*(prestation.getAnesthesiaPercentage()/100);
+	                    	/* anesthesia supplement */
+	                    	dPatientAmount2+=quantity*prestation.getPrice(type)*(prestation.getAnesthesiaSupplementPercentage()/100);
+	                    	dPatientAmount2+=quantity*prestation.getSupplement()*(prestation.getAnesthesiaSupplementPercentage()/100);
 		                    dPatientAmount+=dPatientAmount2;
 		    	            dInsurarAmount2= 0;
 		    	        }
@@ -722,6 +758,9 @@
 		    	        		}
 		    	        		else{
 		    	        			dCoverage1=dPatientAmount2-quantity * prestation.getSupplement()*(prestation.getAnesthesiaPercentage()/100);
+		                        	/* anesthesia supplement */
+		                        	dCoverage1-=quantity*prestation.getPrice(type)*(prestation.getAnesthesiaSupplementPercentage()/100);
+		                        	dCoverage1-=prestation.getSupplement()*(prestation.getAnesthesiaSupplementPercentage()/100);
 		    	        		}
 		    	    			dPatientAmount=dPatientAmount-dCoverage1;
 		    	    			dPatientAmount2=dPatientAmount2-dCoverage1;

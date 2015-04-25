@@ -117,6 +117,23 @@ public class Prestation extends OC_Object{
 		setModifier(2,flag);
 	}
 	
+	public double getAnesthesiaSupplementPercentage(){
+		double pct = 0;
+		if(getModifiers()!=null){
+			try{
+				pct =Double.parseDouble(getModifiers().split(";")[3]);
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return pct;
+	}
+	
+	public void setAnesthesiaSupplementPercentage(double pct){
+		setModifier(3,pct+"");
+	}
+	
 	//--- SET MODIFIER ----------------------------------------------------------------------------
 	public void setModifier(int index, String value){
 		if(getModifiers()==null){
