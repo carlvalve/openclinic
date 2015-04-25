@@ -35,6 +35,23 @@
 	    </indexes>
     </table>
     
+    <table name="OC_VACCINATIONS" db="openclinic" sync="NONE">
+    	<columns>
+	    	<column name="OC_VACCINATION_PATIENTUID" dbtype="int" javatype="integer"/>
+	    	<column name="OC_VACCINATION_TYPE" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="OC_VACCINATION_DATE" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="OC_VACCINATION_BATCHNUMBER" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="OC_VACCINATION_EXPIRY" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="OC_VACCINATION_LOCATION" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="OC_VACCINATION_UPDATETIME" dbtype="datetime" javatype="date" />
+    	</columns>
+	    <indexes>
+	    	<index name="OC_VACCINATION_PATIENTUID">
+	    		<indexcolumn order="ASC" name="OC_VACCINATION_PATIENTUID"/>
+	    	</index>
+	    </indexes>
+    </table>
+    
     <table name="OC_PATIENTCREDITS" db="openclinic" sync="NONE">
     	<columns>
 	    	<column name="OC_PATIENTCREDIT_SERVERID" dbtype="int" javatype="integer"/>

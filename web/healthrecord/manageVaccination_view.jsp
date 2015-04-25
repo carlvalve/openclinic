@@ -24,7 +24,7 @@
     
     <input type="hidden" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VACCINATION_TYPE" property="itemId"/>]>.itemId" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VACCINATION_TYPE" property="itemId"/>"/>
     <input type="hidden" readonly id="vaccination-type" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VACCINATION_TYPE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VACCINATION_TYPE" property="value" translate="false"/>"/>
-    <input type="hidden" readonly name="be.mxs.healthrecord.updateTransaction.actionForwardKey" value="/healthrecord/showVaccinationSummary.do?ts=<%=getTs()%>"/>
+    <input type="hidden" readonly name="be.mxs.healthrecord.updateTransaction.actionForwardKey" value="<%=MedwanQuery.getInstance().getConfigString("vaccinationForwardKey","/healthrecord/showVaccinationSummary.do")%>?ts=<%=getTs()%>"/>
     <input type="hidden" readonly name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>">
    
     <%=writeTableHeader("web.occup","be.mxs.healthrecord.vaccination.Vaccination",sWebLanguage,"doBack();")%>
