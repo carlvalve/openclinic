@@ -1,10 +1,24 @@
+<%@ page import="be.mxs.common.util.db.*,be.mxs.common.util.system.*,java.sql.*" %>
 <%
-	String filelist="http://10.1.4.26/openclinic/pacs/20010101/MR2/19997 http://10.1.4.26/openclinic/pacs/20010101/MR2/19665";
     // prepare response
     response.setHeader("Cache-Control", "max-age=30");
     response.setContentType("application/x-java-jnlp-file");
     response.setHeader("Content-disposition", "inline; filename=Weasis.jnlp");
     String server=(request.getProtocol().toLowerCase().startsWith("https")?"https":"http")+"://"+ request.getServerName()+":"+request.getServerPort();
+	//assemble filelist
+    StringBuffer filelist=new StringBuffer();
+	Connection conn=MedwanQuery.getInstance().getOpenclinicConnection();
+	PreparedStatement ps =conn.prepareStatement("select * from OC_PACS where OC_PACS_STUDYUID=? and OC_PACS_SERIES=? order by OC_PACS_SEQUENCE*1");
+	ps.setString(1, ScreenHelper.checkString(request.getParameter("studyuid")));
+	ps.setString(2, ScreenHelper.checkString(request.getParameter("seriesid")));
+	ResultSet rs =ps.executeQuery();
+	while(rs.next()){
+		filelist.append(server+"/"+request.getRequestURI().replaceAll(request.getServletPath(),"")+"/"+MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_url","scan")+"/"+
+                MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_dirTo","to")+"/"+rs.getString("OC_PACS_FILENAME")+" ");
+	}
+	rs.close();
+	ps.close();
+	conn.close();
 %>
 
 <?xml version="1.0" encoding="UTF-8"?>
