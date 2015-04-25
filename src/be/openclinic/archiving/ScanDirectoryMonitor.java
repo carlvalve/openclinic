@@ -6,10 +6,28 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Vector;
 
+import org.dcm4che2.data.DicomObject;
+import org.dcm4che2.data.Tag;
+import org.dcm4che2.data.VR;
+
+import be.mxs.common.model.vo.IdentifierFactory;
+import be.mxs.common.model.vo.healthrecord.ItemContextVO;
+import be.mxs.common.model.vo.healthrecord.ItemVO;
+import be.mxs.common.model.vo.healthrecord.TransactionVO;
+import be.mxs.common.model.vo.healthrecord.util.TransactionFactory;
+import be.mxs.common.model.vo.healthrecord.util.TransactionFactoryGeneral;
 import be.mxs.common.util.db.MedwanQuery;
+import be.mxs.common.util.io.MessageReader.User;
 import be.mxs.common.util.system.Debug;
 import be.mxs.common.util.system.PdfBarcode;
+import be.mxs.common.util.system.ScreenHelper;
 
 public class ScanDirectoryMonitor implements Runnable{
 	private boolean stopped = false;
@@ -204,17 +222,10 @@ public class ScanDirectoryMonitor implements Runnable{
         return storeFileInDB(file,false,fileIdx);	
     }
     
-    public static int storeFileInDB(File file, boolean forced, int fileIdx){
-    	if(Debug.enabled){
-	        Debug.println("\n*******************************************************************");	
-	        Debug.println("************************ storeFileInDB ("+fileIdx+") ************************");	
-	        Debug.println("*******************************************************************");	
-	        Debug.println("file : "+file.getName()+" ("+(file.length()/1024)+"kb)");	        
-	        if(forced) Debug.println("forced : "+forced);
-    	}
-    	
-    	int result = 0; // -1 = 'faulty file', +1 = 'file accepted', 0 = 'file denied'
-    	
+    public static int storePdfDocument(File file){
+		//****************************************************************************
+		// Find out if it is a Pdf document with a valid QR code inside
+		//****************************************************************************
     	try{
 	    	String barcode = PdfBarcode.getBarcodeFromDocument(file);
 	    	if(barcode.length()==11){
@@ -236,14 +247,14 @@ public class ScanDirectoryMonitor implements Runnable{
 					        	File errFile = new File(SCANDIR_BASE+"/"+SCANDIR_ERR+"/"+file.getName().replaceAll("SCAN_","DOUBLE_"));
 				        	    moveFile(file,errFile);
 						        Debug.println("--> moved file to 'scanDirectoryMonitor_dirError' : "+SCANDIR_BASE+"/"+SCANDIR_ERR);
-						        result = -1; // err
+						        return -1; // err
 			        		}
 			        		else{
 			        			//*** ARCH_DOC FOUND, WITHOUT EXISTING LINKED FILE ***
 				        	    Debug.println("INFO : An archive-document with UDI '"+existingDoc.udi+"' exists, but its linked file does not."+
 			        		                  " --> saved incoming file as file for the archive-document");
 				        	    acceptIncomingFile(sUDI,file);
-						        result = 1; // acc
+				        	    return 1; // acc
 			        		}
 		        		}
 		        		else{
@@ -251,7 +262,7 @@ public class ScanDirectoryMonitor implements Runnable{
 			        	    Debug.println("INFO : An archive-document with UDI '"+existingDoc.udi+"' exists and it has no linked file."+
 		        		                  " --> saved incoming file as file for the archive-document");
 			        	    acceptIncomingFile(sUDI,file);
-					        result = 1; // acc
+			        	    return -1; // acc
 		        		}
 	        		}
 	        		else{
@@ -263,7 +274,7 @@ public class ScanDirectoryMonitor implements Runnable{
 			        	File errFile = new File(SCANDIR_BASE+"/"+SCANDIR_ERR+"/"+file.getName().replaceAll("SCAN_","ORPHAN_"));
 		        	    moveFile(file,errFile);
 				        Debug.println("--> moved file to 'scanDirectoryMonitor_dirError' : "+SCANDIR_BASE+"/"+SCANDIR_ERR);
-				        result = -1; // err
+				        return -1; // err
 	        		}
 	    		}
 	    		else{
@@ -273,106 +284,255 @@ public class ScanDirectoryMonitor implements Runnable{
 		        	File errFile = new File(SCANDIR_BASE+"/"+SCANDIR_ERR+"/"+file.getName().replaceAll("SCAN_","INVUDI_"));
 	        	    moveFile(file,errFile);
 			        Debug.println("--> moved file to 'scanDirectoryMonitor_dirError' : "+SCANDIR_BASE+"/"+SCANDIR_ERR);
-			        result = -1; // err
+			        return -1; // err
 	    		}
 	    	}
-    	}
-    	catch(Exception e){
-    		e.printStackTrace();
-    	}
-    	
-    	if(result<1){
-    		//File could not be identified by barcode, try to do this by id
-	        try{
-	    	    String sUDI = "00000000000"+file.getName();
-		        Debug.println("--> UDI1 : "+sUDI);
-	    	    //Remove extension
-	    	    sUDI=sUDI.substring(0,sUDI.lastIndexOf("."));
-		        Debug.println("--> UDI2 : "+sUDI);
-	    	    //Only take last 11 characters
-	    	    sUDI=sUDI.substring(sUDI.length()-11);
-		        Debug.println("--> UDI3 : "+sUDI);
-		        
-		        if(sUDI.length()==11){
-	        		if(validUDI(sUDI)){
-			        	if(!forced){	
-			        		//*** CONDITIONAL READ ******************************************
-				        	// check existence of archive-document
-				        	ArchiveDocument existingDoc = ArchiveDocument.get(sUDI);
-			        		if(existingDoc!=null){
-					        	// check existence of linked file
-			        			if(existingDoc.storageName.length() > 0){
-			                        File existingFile = new File(SCANDIR_BASE+"/"+SCANDIR_TO+"/"+existingDoc.storageName);
-					        		if(existingFile.exists()){
-					        			//*** ARCH_DOC FOUND, WITH EXISTING LINKED FILE ***
-						        	    Debug.println("WARNING : A file '"+existingDoc.storageName+"' exists for the archive-document with UDI '"+existingDoc.udi+"'."+
-						        	                  " --> incoming file '"+file.getName()+"' is a double file.");
-						        	    
-						        	    // must be read by a person before overwriting the existing file
-							        	File errFile = new File(SCANDIR_BASE+"/"+SCANDIR_ERR+"/"+file.getName().replaceAll("SCAN_","DOUBLE_"));
-						        	    moveFile(file,errFile);
-								        Debug.println("--> moved file to 'scanDirectoryMonitor_dirError' : "+SCANDIR_BASE+"/"+SCANDIR_ERR);
-								        result = -1; // err
-					        		}
-					        		else{
-					        			//*** ARCH_DOC FOUND, WITHOUT EXISTING LINKED FILE ***
-						        	    Debug.println("INFO : An archive-document with UDI '"+existingDoc.udi+"' exists, but its linked file does not."+
-					        		                  " --> saved incoming file as file for the archive-document");
-						        	    acceptIncomingFile(sUDI,file);
-								        result = 1; // acc
-					        		}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+    	return -1;
+    }
+    
+    public static int storeGenericDocument(File file, boolean forced){
+		//****************************************************************************
+		// Find out if the filename is a valid identifier
+		//****************************************************************************
+        try{
+    	    String sUDI = "00000000000"+file.getName();
+	        Debug.println("--> UDI1 : "+sUDI);
+    	    //Remove extension
+    	    sUDI=sUDI.substring(0,sUDI.lastIndexOf("."));
+	        Debug.println("--> UDI2 : "+sUDI);
+    	    //Only take last 11 characters
+    	    sUDI=sUDI.substring(sUDI.length()-11);
+	        Debug.println("--> UDI3 : "+sUDI);
+	        
+	        if(sUDI.length()==11){
+        		if(validUDI(sUDI)){
+		        	if(!forced){	
+		        		//*** CONDITIONAL READ ******************************************
+			        	// check existence of archive-document
+			        	ArchiveDocument existingDoc = ArchiveDocument.get(sUDI);
+		        		if(existingDoc!=null){
+				        	// check existence of linked file
+		        			if(existingDoc.storageName.length() > 0){
+		                        File existingFile = new File(SCANDIR_BASE+"/"+SCANDIR_TO+"/"+existingDoc.storageName);
+				        		if(existingFile.exists()){
+				        			//*** ARCH_DOC FOUND, WITH EXISTING LINKED FILE ***
+					        	    Debug.println("WARNING : A file '"+existingDoc.storageName+"' exists for the archive-document with UDI '"+existingDoc.udi+"'."+
+					        	                  " --> incoming file '"+file.getName()+"' is a double file.");
+					        	    
+					        	    // must be read by a person before overwriting the existing file
+						        	File errFile = new File(SCANDIR_BASE+"/"+SCANDIR_ERR+"/"+file.getName().replaceAll("SCAN_","DOUBLE_"));
+					        	    moveFile(file,errFile);
+							        Debug.println("--> moved file to 'scanDirectoryMonitor_dirError' : "+SCANDIR_BASE+"/"+SCANDIR_ERR);
+							        return -1; // err
 				        		}
 				        		else{
-				        			//*** ARCH_DOC FOUND, WITHOUT REGISTERED LINKED FILE ***
-					        	    Debug.println("INFO : An archive-document with UDI '"+existingDoc.udi+"' exists and it has no linked file."+
+				        			//*** ARCH_DOC FOUND, WITHOUT EXISTING LINKED FILE ***
+					        	    Debug.println("INFO : An archive-document with UDI '"+existingDoc.udi+"' exists, but its linked file does not."+
 				        		                  " --> saved incoming file as file for the archive-document");
 					        	    acceptIncomingFile(sUDI,file);
-							        result = 1; // acc
+					        	    return 1; // acc
 				        		}
 			        		}
 			        		else{
-			        			//*** NO ARCH_DOC FOUND ***
-				        	    Debug.println("WARNING : No archive-document with UDI '"+sUDI+"' found."+
-	         		        	              " --> incoming file '"+file.getName()+"' is an orphan. Register an archive-document first.");
-				        	    
-				        	    // an archive-document, to attach the scan to, must be created first
-					        	File errFile = new File(SCANDIR_BASE+"/"+SCANDIR_ERR+"/"+file.getName().replaceAll("SCAN_","ORPHAN_"));
-				        	    moveFile(file,errFile);
-						        Debug.println("--> moved file to 'scanDirectoryMonitor_dirError' : "+SCANDIR_BASE+"/"+SCANDIR_ERR);
-						        result = -1; // err
+			        			//*** ARCH_DOC FOUND, WITHOUT REGISTERED LINKED FILE ***
+				        	    Debug.println("INFO : An archive-document with UDI '"+existingDoc.udi+"' exists and it has no linked file."+
+			        		                  " --> saved incoming file as file for the archive-document");
+				        	    acceptIncomingFile(sUDI,file);
+				        	    return 1; // acc
 			        		}
-			        	}
-			        	else{
-			        		//*** UN-CONDITIONAL READ ***************************************
-		        			acceptIncomingFile(sUDI,file);
-					        result = 1; // acc
-			        	}
-	        		}
-	        		else{
-	        			//*** UDI NOT VALID ***
-		        	    Debug.println("WARNING : UDI '"+sUDI+"' is not valid (~ 9 first digit MOD 97 = last 2 digits).");
-		        	    
-			        	File errFile = new File(SCANDIR_BASE+"/"+SCANDIR_ERR+"/"+file.getName().replaceAll("SCAN_","INVUDI_"));
-		        	    moveFile(file,errFile);
-				        Debug.println("--> moved file to 'scanDirectoryMonitor_dirError' : "+SCANDIR_BASE+"/"+SCANDIR_ERR);
-				        result = -1; // err
-	        		}
-		        }
-		        else{
-		        	//*** INVALID UDI ***
-		        	Debug.println("WARNING : Invalid UDI; length must be 11");
-		        	
-			        File noscanFile = new File(SCANDIR_BASE+"/"+SCANDIR_ERR+"/"+file.getName().replaceAll("SCAN_","INVUDI_"));
-			    	moveFile(file,noscanFile);
-				    Debug.println("--> moved file to 'scanDirectoryMonitor_dirError' : "+SCANDIR_BASE+"/"+SCANDIR_ERR);
-			        result = -1; // err
-		        }
+		        		}
+		        		else{
+		        			//*** NO ARCH_DOC FOUND ***
+			        	    Debug.println("WARNING : No archive-document with UDI '"+sUDI+"' found."+
+         		        	              " --> incoming file '"+file.getName()+"' is an orphan. Register an archive-document first.");
+			        	    
+			        	    // an archive-document, to attach the scan to, must be created first
+				        	File errFile = new File(SCANDIR_BASE+"/"+SCANDIR_ERR+"/"+file.getName().replaceAll("SCAN_","ORPHAN_"));
+			        	    moveFile(file,errFile);
+					        Debug.println("--> moved file to 'scanDirectoryMonitor_dirError' : "+SCANDIR_BASE+"/"+SCANDIR_ERR);
+					        return -1; // err
+		        		}
+		        	}
+		        	else{
+		        		//*** UN-CONDITIONAL READ ***************************************
+	        			acceptIncomingFile(sUDI,file);
+	        			return -1; // acc
+		        	}
+        		}
+        		else{
+        			//*** UDI NOT VALID ***
+	        	    Debug.println("WARNING : UDI '"+sUDI+"' is not valid (~ 9 first digit MOD 97 = last 2 digits).");
+	        	    
+		        	File errFile = new File(SCANDIR_BASE+"/"+SCANDIR_ERR+"/"+file.getName().replaceAll("SCAN_","INVUDI_"));
+	        	    moveFile(file,errFile);
+			        Debug.println("--> moved file to 'scanDirectoryMonitor_dirError' : "+SCANDIR_BASE+"/"+SCANDIR_ERR);
+			        return -1; // err
+        		}
 	        }
-	        catch(Exception e){
-	        	Debug.printStackTrace(e);
+	        else{
+	        	//*** INVALID UDI ***
+	        	Debug.println("WARNING : Invalid UDI; length must be 11");
+	        	
+		        File noscanFile = new File(SCANDIR_BASE+"/"+SCANDIR_ERR+"/"+file.getName().replaceAll("SCAN_","INVUDI_"));
+		    	moveFile(file,noscanFile);
+			    Debug.println("--> moved file to 'scanDirectoryMonitor_dirError' : "+SCANDIR_BASE+"/"+SCANDIR_ERR);
+			    return -1; // err
 	        }
+        }
+        catch(Exception e){
+        	Debug.printStackTrace(e);
+        }
+        return 0;
+    }
+    
+    public static int storeDICOMDocument(File file){
+		//****************************************************************************
+		// Find out if the file is a valid DICOM file
+		//****************************************************************************
+		int err=0;
+    	DicomObject obj = Dicom.getDicomObject(file);
+    	Debug.println(""+obj);
+    	if(obj!=null){
+    		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+    		PreparedStatement ps=null;
+    		ResultSet rs=null;
+    		try{
+	    		String studyUid=obj.getString(Tag.StudyInstanceUID);
+	    		String seriesUid=obj.getString(Tag.SeriesNumber);
+	    		String sequence=obj.getString(Tag.InstanceNumber);
+	    		//First check if file does not exist yet, do nothing if it exists 
+	    		ps =conn.prepareStatement("select * from OC_PACS where OC_PACS_STUDYUID=? and OC_PACS_SERIES=? and OC_PACS_SEQUENCE=?");
+	    		ps.setString(1, studyUid);
+	    		ps.setString(2, seriesUid);
+	    		ps.setString(3, sequence);
+	    		rs =ps.executeQuery();
+	    		if(rs.next()){
+	    			Debug.println("Instance number "+sequence+" for study "+studyUid+" already exists");
+	    			err=0;
+	    			file.delete();
+	    		}
+	    		else {
+	    			//file does not exist yet, insert it
+	    			rs.close();
+	    			ps.close();
+	    			
+	    			//check if study already exists, if not create a new TRANSACTION_TYPE_PACS document
+		    		ps =conn.prepareStatement("select * from OC_PACS where OC_PACS_STUDYUID=? and OC_PACS_SERIES=?");
+		    		ps.setString(1, studyUid);
+		    		ps.setString(2, seriesUid);
+		    		rs =ps.executeQuery();
+		    		if(!rs.next()){
+		    			//Study does not exist, create the document
+		    			TransactionVO transaction = new TransactionFactoryGeneral().createTransactionVO(MedwanQuery.getInstance().getUser(MedwanQuery.getInstance().getConfigString("defaultPACSuser","4")),"be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_PACS",false); 
+		    			transaction.setCreationDate(new java.util.Date());
+		    			transaction.setStatus(1);
+		    			transaction.setTransactionId(MedwanQuery.getInstance().getOpenclinicCounter("TransactionID"));
+		    			transaction.setServerId(MedwanQuery.getInstance().getConfigInt("serverId",1));
+		    			transaction.setTransactionType("be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_PACS");
+		    			transaction.setUpdateTime(new SimpleDateFormat("yyyyMMdd").parse(obj.getString(Tag.StudyDate)));
+		    			transaction.setUser(MedwanQuery.getInstance().getUser(MedwanQuery.getInstance().getConfigString("defaultPACSuser","4")));
+		    			transaction.setVersion(1);
+		    			transaction.setItems(new Vector());
+		    			ItemContextVO itemContextVO = new ItemContextVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), "", "");
+		    			transaction.getItems().add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()),
+		    					"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYUID",studyUid,new Date(),itemContextVO));
+		    			itemContextVO = new ItemContextVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), "", "");
+		    			transaction.getItems().add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()),
+		    					"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_SERIESID",seriesUid,new Date(),itemContextVO));
+		    			itemContextVO = new ItemContextVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), "", "");
+		    			transaction.getItems().add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()),
+		    					"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYDESCRIPTION",obj.getString(Tag.StudyDescription).replaceAll("\\^", ", "),new Date(),itemContextVO));
+		    			itemContextVO = new ItemContextVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), "", "");
+		    			transaction.getItems().add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()),
+		    					"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYDATE",ScreenHelper.formatDate(new SimpleDateFormat("yyyyMMdd").parse(obj.getString(Tag.StudyDate))),new Date(),itemContextVO));
+		    			System.out.println("ITEM_TYPE_PACS_STUDYDATE="+ScreenHelper.formatDate(transaction.getUpdateDateTime()));
+		    			itemContextVO = new ItemContextVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), "", "");
+		    			try{
+			    			transaction.getItems().add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()),
+			    					"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_SERIESDATE",ScreenHelper.formatDate(new SimpleDateFormat("yyyyMMdd").parse(obj.getString(Tag.SeriesDate))),new Date(),itemContextVO));
+		    			}
+		    			catch(Exception er){er.printStackTrace();}
+		    			itemContextVO = new ItemContextVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), "", "");
+		    			transaction.getItems().add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()),
+		    					"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_MODALITY",obj.getString(Tag.Modality)+" - "+obj.getString(Tag.Manufacturer),new Date(),itemContextVO));
+		    			itemContextVO = new ItemContextVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), "", "");
+		    			transaction.getItems().add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()),
+		    					"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_PATIENTPOSITION",obj.getString(Tag.PatientPosition),new Date(),itemContextVO));
+		    			itemContextVO = new ItemContextVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), "", "");
+		    			transaction.getItems().add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()),
+		    					"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_REFMED",obj.getString(Tag.ReferringPhysicianName),new Date(),itemContextVO));
+
+		    			if(MedwanQuery.getInstance().getConfigInt("pacsTestLoad",0)==0){
+		    				MedwanQuery.getInstance().updateTransaction(Integer.parseInt(obj.getString(Tag.PatientID)),transaction);
+		    			}
+		    			else{
+		    				MedwanQuery.getInstance().updateTransaction(9966,transaction);
+		    			}
+		    		}
+
+		    		String filename=ArchiveDocument.generateUDI(MedwanQuery.getInstance().getOpenclinicCounter("ARCH_DOCUMENTS"));
+	    			filename = acceptIncomingDICOMFile(filename, file);
+	    			
+	    			ps=conn.prepareStatement("insert into OC_PACS(OC_PACS_STUDYUID,OC_PACS_SERIES,OC_PACS_SEQUENCE,OC_PACS_FILENAME,OC_PACS_UPDATETIME) values(?,?,?,?,?)");
+		    		ps.setString(1, studyUid);
+		    		ps.setString(2, seriesUid);
+		    		ps.setString(3, sequence);
+		    		ps.setString(4, filename);
+		    		ps.setTimestamp(5, new java.sql.Timestamp(new java.util.Date().getTime()));
+		    		ps.execute();
+		    		err=1;
+	    		}
+	    		rs.close();
+	    		ps.close();
+    		}
+    		catch (Exception e){
+    			e.printStackTrace();
+    			err=-1;
+    		}
+    		finally{
+    			try{
+    				if(rs!=null) rs.close();
+    				if(ps!=null) ps.close();
+    				if(conn!=null) conn.close();
+    			}
+    			catch(Exception es){
+    				es.printStackTrace();
+    				err=-1;
+    			}
+    		}
     	}
-      	
+    	else {
+    		err= -1;
+    	}
+    	return err;
+    }
+    
+    public static int storeFileInDB(File file, boolean forced, int fileIdx){
+    	if(Debug.enabled){
+	        Debug.println("\n*******************************************************************");	
+	        Debug.println("************************ storeFileInDB ("+fileIdx+") ************************");	
+	        Debug.println("*******************************************************************");	
+	        Debug.println("file : "+file.getName()+" ("+(file.length()/1024)+"kb)");	        
+	        if(forced) Debug.println("forced : "+forced);
+    	}
+    	
+    	int result = 0; // -1 = 'faulty file', +1 = 'file accepted', 0 = 'file denied'
+    	
+    	result=storeDICOMDocument(file);
+    	if(result<0){
+	        Debug.println("***NOT A DICOM FILE**");	
+    		result=storePdfDocument(file);
+	        Debug.println("store PDF="+result);	
+    	}
+    	if(result<0){
+	        Debug.println("***NOT A PDF FILE**");	
+    		result=storeGenericDocument(file, forced);
+    	}
+    	
       	return result;
     }
     
@@ -395,6 +555,38 @@ public class ScanDirectoryMonitor implements Runnable{
         Debug.println("--> moved file to '"+SCANDIR_BASE+"/"+SCANDIR_TO+"/"+sPathAndName+"'");
         
         ArchiveDocument.setStorageName(sUDI,sPathAndName);
+    }
+    
+    //--- ACCEPT INCOMING FILE --------------------------------------------------------------------
+    private static String acceptIncomingDICOMFile(String sUDI, File file) throws Exception {
+    	if(Debug.enabled){
+	        Debug.println("\n********************** acceptIncomingDICOMFile **********************");	
+	        Debug.println("file : "+file.getName()+" ("+(file.length()/1024)+"kb)"); 	
+	        Debug.println("sUDI : "+sUDI+"\n"); 	
+    	}
+    	
+        String sOrigExt = "DCM";
+        
+    	String sPathAndName = getFilePathAndName(sUDI,sOrigExt);
+   		String sDir = sPathAndName.substring(0,sPathAndName.lastIndexOf("/"));
+		createDirs(SCANDIR_BASE+"/"+SCANDIR_TO,sDir);
+		
+		if(MedwanQuery.getInstance().getConfigInt("pacsTestLoad",0)==1){
+			DicomObject obj = Dicom.getDicomObject(file);
+			obj.putString(Tag.PatientName, VR.PN, "VERBEKE^FRANK");
+			obj.putString(Tag.PatientAge, VR.AS, "51");
+			obj.putString(Tag.PatientID, VR.LO, "9966");
+			obj.putString(Tag.PatientSex, VR.LO, "M");
+	    	File toFile = new File(SCANDIR_BASE+"/"+SCANDIR_TO+"/"+sPathAndName);
+	    	Dicom.writeDicomObject(obj, toFile);
+			file.delete();
+		}
+		else {
+			File toFile = new File(SCANDIR_BASE+"/"+SCANDIR_TO+"/"+sPathAndName);
+	        moveFile(file,toFile);
+		}
+	    Debug.println("--> moved DICOM file to '"+SCANDIR_BASE+"/"+SCANDIR_TO+"/"+sPathAndName+"'");
+        return sPathAndName;
     }
     
     //--- CREATE DIRS -----------------------------------------------------------------------------

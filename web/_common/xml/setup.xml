@@ -15,8 +15,12 @@
 		<config key="priceFormatInsurar" value="#0.00"/>
 		<config key="currencyDecimals" value="2"/>
 		<labels type="professional.council.url">
+			<label id="rmdc" language="fr">http://www.mxs.be/omr/util/getPersonInfo.jsp</label>
+			<label id="rmdc" language="en">http://www.mxs.be/omr/util/getPersonInfo.jsp</label>
 		</labels>
 		<labels type="professional.councils">
+			<label id="rmdc" language="fr">Ordre de M&#233;decins et de Dentistes du Rwanda</label>
+			<label id="rmdc" language="en">Rwanda Medical and Dental Council</label>
 		</labels>
 		<project>be</project>
 	</country>

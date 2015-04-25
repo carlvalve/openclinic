@@ -207,6 +207,19 @@ try{
                                                                             %>&nbsp;<img src='<c:url value="_img/icons/icon_barcode.gif"/>' onclick="printArchiveBarcode('<%=sReference %>');" class="link" />&nbsp;<img src='<c:url value="_img/icons/icon_upload.gif"/>' class="link" onclick='document.getElementById("fileuploadid").value="<%=sReference %>";document.getElementById("uploadtransactionid").value="<%=transactionVO.getServerId()+"."+transactionVO.getTransactionId()%>";document.getElementById("fileupload").click();return false'/><%                                                                                    	
                                                                         }
                                                                     }
+                                                                    else if(transactionType.equalsIgnoreCase("be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_PACS")){
+                                                                    	transactionVO.preload();
+                                                                        %>
+                                                                            <a href="<c:url value='/healthrecord/editTransaction.do'/>?be.mxs.healthrecord.createTransaction.transactionType=<%=transactionType%>&be.mxs.healthrecord.transaction_id=<%=transactionVO.getTransactionId()%>&be.mxs.healthrecord.server_id=<%=transactionVO.getServerId()%>&ts=<%=getTs()%>" onMouseOver="window.status='';return true;">
+                                                                                <%=getTran("web.occup",transactionType,sWebLanguage)%>
+                                                                                <%
+	                                                                                String sSeriesID = transactionVO.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_SERIESID");
+	                                                                                String sDescription = transactionVO.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYDESCRIPTION");
+                                                                                    %>(<%=sSeriesID%> - <%=sDescription %>)<%
+                                                                                %>
+                                                                            </a>
+                                                                        <%
+                                                                    }
                                                                     // no Document
                                                                     else{
                                                                         %>

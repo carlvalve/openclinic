@@ -603,7 +603,8 @@
 	    <input type='hidden' id="EditPatientInvoiceUID" name='EditPatientInvoiceUID' value='<%=checkString(patientInvoice.getUid())%>'>
 	</form>
 	<script>
-	
+		var printwindow=null;
+		
 		function doValidate(invoiceuid){
 	        var today = new Date();
 	        var url= '<c:url value="/financial/patientInvoiceValidate.jsp"/>?ts='+today;
@@ -828,10 +829,17 @@
 	        }
 	        else {
 	            var url = "<c:url value='/financial/createPatientInvoicePdf.jsp'/>?Proforma=no&InvoiceUid="+invoiceUid+"&ts=<%=getTs()%>&PrintLanguage="+EditForm.PrintLanguage.value+"&PrintModel="+EditForm.PrintModel.value;
-	            window.open(url,"PatientInvoicePdf<%=new java.util.Date().getTime()%>","height=600,width=900,toolbar=yes,status=no,scrollbars=yes,resizable=yes,menubar=yes");
+	            printwindow=window.open(url,"PatientInvoicePdf<%=new java.util.Date().getTime()%>","height=600,width=900,toolbar=yes,status=no,scrollbars=yes,resizable=yes,menubar=yes");
+	            window.setTimeout("closeDeadWindow();",1000);
 	        }
 	    }
 	
+	    function closeDeadWindow(){
+	    	if(printwindow.document.URL==""){
+	    		printwindow.close();
+	    	}	
+	    }
+	    
 	    function doPrintProformaPdf(invoiceUid){
   	        var url = "<c:url value='/financial/createPatientInvoicePdf.jsp'/>?Proforma=yes&InvoiceUid="+invoiceUid+"&ts=<%=getTs()%>&PrintLanguage="+EditForm.PrintLanguage.value+"&PrintModel="+EditForm.PrintModel.value;
 	        window.open(url,"PatientInvoicePdf<%=new java.util.Date().getTime()%>","height=600,width=900,toolbar=yes,status=no,scrollbars=yes,resizable=yes,menubar=yes");

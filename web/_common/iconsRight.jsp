@@ -274,15 +274,18 @@
 				if(MedwanQuery.getInstance().getConfigInt("enableImageHub",0)==1 && activePatient!=null && activePatient.comment5.length()>0){
                     %><img class="link" onclick="openImageHub()" border='0' src="<c:url value='/_img/icons/icon_imagehub.png'/>" title="<%=getTranNoLink("web","imagehub",sWebLanguage)%>"/><%
 				}
+				else{
+                    %><img class="link" onclick="showPACS()" border='0' src="<c:url value='/_img/icons/icon_xray.png'/>" title="<%=getTranNoLink("web","imagestore",sWebLanguage)%>"/><%
+				}
+		        if(activeUser.getAccessRight("labos.patientlaboresults.select") && activePatient.hasLabRequests()){
+		            %><img class="link" onclick="clickMenuItem('javascript:searchLab();');" title="<%=getTranNoLink("Web","labresults",sWebLanguage)%>" src="<c:url value='/_img/icons/icon_labo.png'/>"/><%
+		        }
 		        %><img class="link" onclick="clickMenuItem('<c:url value="/mobile/patientMenu.jsp"/>');" border='0' src="<c:url value='/_img/icons/icon_mobile.gif'/>" title="<%=getTranNoLink("web","mobile.interface",sWebLanguage)%>"/>&nbsp;<%
 			}
 			else{
                 %><img class="link" onclick="clickMenuItem('<c:url value="/mobile/searchPatient.jsp"/>');" border='0' src="<c:url value='/_img/icons/icon_mobile.gif'/>" title="<%=getTranNoLink("web","mobile.interface",sWebLanguage)%>"/>&nbsp;<%
 			}
         
-        if(activeUser.getAccessRight("labos.patientlaboresults.select") && activePatient!=null && activePatient.personid.length()>0 && activePatient.hasLabRequests()){
-            %><img class="link" onclick="clickMenuItem('javascript:searchLab();');" title="<%=getTranNoLink("Web","labresults",sWebLanguage)%>" src="<c:url value='/_img/icons/icon_labo.png'/>"/><%
-        }
         if(bMenu && activeUser.getAccessRight("labos.fastresults.select")){
             %><img class="link" onclick="clickMenuItem('javascript:showLabResultsEdit();');" title="<%=getTranNoLink("Web","fastresultsedit",sWebLanguage)%>" src="<c:url value='/_img/icons/icon_labo_insert.png'/>"/><%
         }

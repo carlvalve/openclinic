@@ -130,7 +130,7 @@
                         min = deci.format(f);
                     }
                     catch(Exception e){
-                    	e.printStackTrace();
+                    	//Debug.println(e.getMessage());
                     }
                     
                     String max=null;

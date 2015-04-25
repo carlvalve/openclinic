@@ -15,6 +15,24 @@
     
     <!-- ################################### ACCOUNTANCY TABLES ################################### -->
     
+    <table name="OC_PACS" db="openclinic" sync="NONE">
+    	<columns>
+	    	<column name="OC_PACS_STUDYUID" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="OC_PACS_SERIES" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="OC_PACS_SEQUENCE" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="OC_PACS_FILENAME" dbtype="varchar" javatype="string" size="255"/>
+		    <column name="OC_PACS_UPDATETIME" dbtype="datetime" javatype="date"/>
+    	</columns>
+	    <indexes>
+	    	<index name="OC_PACS_STUDYUID">
+	    		<indexcolumn order="ASC" name="OC_PACS_STUDYUID"/>
+	    	</index>
+	    	<index name="OC_PACS_UPDATETIME">
+	    		<indexcolumn order="ASC" name="OC_PACS_UPDATETIME"/>
+	    	</index>
+	    </indexes>
+    </table>
+    
     <table name="AC_JOURNAL" db="ocadmin" sync="NONE">
     	<columns>
 	    	<column name="AC_JOURNAL_ID" dbtype="int" javatype="integer"/>

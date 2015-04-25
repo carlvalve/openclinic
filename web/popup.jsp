@@ -12,6 +12,8 @@
     <%=sJSTOGGLE%>
         
 <%
+System.out.println("popup: 1");
+
     String sPopupPage = checkString(request.getParameter("Page"));
 
     /// DEBUG /////////////////////////////////////////////////////////////////////////////////////
@@ -130,7 +132,9 @@
 	return yesnoDialogDirectText("<%=ScreenHelper.getTranNoLink("Web","areYouSureToDelete",sWebLanguage)%>");	
   }
 </script>
-    
+<%
+System.out.println("popup: 2");
+%>
 <script>
   var ie = document.all
   var ns6 = document.getElementById && !document.all

@@ -403,7 +403,7 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
                     	item = returnedTransactionVO.getItem("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_TYPE");
                     	if(item!=null && ScreenHelper.checkString(item.getValue()).length()>0){
                             if(MedwanQuery.getInstance().getConfigInt("enableAutomaticImagingInvoicing",0)==1){
-                            	Debet.createAutomaticDebetByAlias("MIRPREST."+returnedTransactionVO.getTransactionId(), sessionContainerWO.getPersonVO().personId+"", "mir_type."+item.getValue(), sessionContainerWO.getUserVO().userId+"",24*3600*1000);
+                            	Debet.createAutomaticDebetByAlias("MIRPREST."+returnedTransactionVO.getTransactionId(), sessionContainerWO.getPersonVO().personId+"", "mir_type."+item.getValue(), sessionContainerWO.getUserVO().userId+"",MedwanQuery.getInstance().getConfigInt("automaticImagingInvoicingDelayInHours",24)*3600*1000);
                             }
                     	}
                     }
@@ -411,19 +411,19 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
                     	item = returnedTransactionVO.getItem("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT1");
                     	if(item!=null && ScreenHelper.checkString(item.getValue()).length()>0){
                             if(MedwanQuery.getInstance().getConfigInt("enableAutomaticSurgeryInvoicing",0)==1){
-                            	Debet.createAutomaticDebetByAlias("SURGERYPREST."+returnedTransactionVO.getTransactionId(), sessionContainerWO.getPersonVO().personId+"", "surgicalacts."+item.getValue(), sessionContainerWO.getUserVO().userId+"",24*3600*1000);
+                            	Debet.createAutomaticDebetByAlias("SURGERYPREST."+returnedTransactionVO.getTransactionId(), sessionContainerWO.getPersonVO().personId+"", "surgicalacts."+item.getValue(), sessionContainerWO.getUserVO().userId+"",MedwanQuery.getInstance().getConfigInt("automaticSurgeryInvoicingDelayInHours",24)*3600*1000);
                             }
                     	}
                     	item = returnedTransactionVO.getItem("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT2");
                     	if(item!=null && ScreenHelper.checkString(item.getValue()).length()>0){
                             if(MedwanQuery.getInstance().getConfigInt("enableAutomaticSurgeryInvoicing",0)==1){
-                            	Debet.createAutomaticDebetByAlias("SURGERYPREST."+returnedTransactionVO.getTransactionId(), sessionContainerWO.getPersonVO().personId+"", "surgicalacts."+item.getValue(), sessionContainerWO.getUserVO().userId+"",24*3600*1000);
+                            	Debet.createAutomaticDebetByAlias("SURGERYPREST."+returnedTransactionVO.getTransactionId(), sessionContainerWO.getPersonVO().personId+"", "surgicalacts."+item.getValue(), sessionContainerWO.getUserVO().userId+"",MedwanQuery.getInstance().getConfigInt("automaticSurgeryInvoicingDelayInHours",24)*3600*1000);
                             }
                     	}
                     	item = returnedTransactionVO.getItem("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT3");
                     	if(item!=null && ScreenHelper.checkString(item.getValue()).length()>0){
                             if(MedwanQuery.getInstance().getConfigInt("enableAutomaticSurgeryInvoicing",0)==1){
-                            	Debet.createAutomaticDebetByAlias("SURGERYPREST."+returnedTransactionVO.getTransactionId(), sessionContainerWO.getPersonVO().personId+"", "surgicalacts."+item.getValue(), sessionContainerWO.getUserVO().userId+"",24*3600*1000);
+                            	Debet.createAutomaticDebetByAlias("SURGERYPREST."+returnedTransactionVO.getTransactionId(), sessionContainerWO.getPersonVO().personId+"", "surgicalacts."+item.getValue(), sessionContainerWO.getUserVO().userId+"",MedwanQuery.getInstance().getConfigInt("automaticSurgeryInvoicingDelayInHours",24)*3600*1000);
                             }
                     	}
                     }

@@ -402,11 +402,17 @@ public class Category {
     public static void manageCategorySave(Hashtable hCategory){
         PreparedStatement ps = null;
 
-        String sInsert = " INSERT INTO Categories (categoryid, categoryparentid, updateuserid, updatetime)" +
-                         " VALUES (?,?,?,?)";
     	Connection ad_conn = MedwanQuery.getInstance().getAdminConnection();
         try{
-            ps = ad_conn.prepareStatement(sInsert);
+            String sQuery = " DELETE FROM Categories where categoryid=?";
+            ps = ad_conn.prepareStatement(sQuery);
+            ps.setString(1, hCategory.get("categoryid").toString().toUpperCase());
+            ps.executeUpdate();
+            ps.close();
+            
+            sQuery = " INSERT INTO Categories (categoryid, categoryparentid, updateuserid, updatetime)" +
+                    " VALUES (?,?,?,?)";
+            ps = ad_conn.prepareStatement(sQuery);
             ps.setString(1, hCategory.get("categoryid").toString().toUpperCase());
             ps.setString(2, hCategory.get("categoryparentid").toString());
             ps.setInt(3, Integer.parseInt(hCategory.get("updateuserid").toString()));
@@ -428,29 +434,31 @@ public class Category {
     public static void manageCategoryUpdate(Hashtable hCategory){
         PreparedStatement ps = null;
 
-        String sUpdate = " UPDATE Categories SET categoryid = ?, categoryparentid = ?, updateuserid = ?, updatetime = ? " +
-                         " WHERE categoryid = ?";
-
-    	Connection ad_conn = MedwanQuery.getInstance().getAdminConnection();
-        try{
-            ps = ad_conn.prepareStatement(sUpdate);
-
-            ps.setString(1, hCategory.get("categoryid").toString());
-            ps.setString(2, hCategory.get("categoryparentid").toString());
-            ps.setInt(3, Integer.parseInt(hCategory.get("updateuserid").toString()));
-            ps.setTimestamp(4, (Timestamp)hCategory.get("updatetime"));
-            ps.setString(5, hCategory.get("oldcategoryid").toString());
-            ps.executeUpdate();
-            ps.close();
-        }catch(Exception e){
-            e.printStackTrace();
-        }finally{
-            try{
-                if(ps!=null)ps.close();
-                ad_conn.close();
-            }catch(Exception e){
-                e.printStackTrace();
-            }
+        if(!hCategory.get("categoryid").toString().equalsIgnoreCase(hCategory.get("categoryparentid").toString())){
+	        String sUpdate = " UPDATE Categories SET categoryid = ?, categoryparentid = ?, updateuserid = ?, updatetime = ? " +
+	                         " WHERE categoryid = ?";
+	
+	    	Connection ad_conn = MedwanQuery.getInstance().getAdminConnection();
+	        try{
+	            ps = ad_conn.prepareStatement(sUpdate);
+	
+	            ps.setString(1, hCategory.get("categoryid").toString());
+	            ps.setString(2, hCategory.get("categoryparentid").toString());
+	            ps.setInt(3, Integer.parseInt(hCategory.get("updateuserid").toString()));
+	            ps.setTimestamp(4, (Timestamp)hCategory.get("updatetime"));
+	            ps.setString(5, hCategory.get("oldcategoryid").toString());
+	            ps.executeUpdate();
+	            ps.close();
+	        }catch(Exception e){
+	            e.printStackTrace();
+	        }finally{
+	            try{
+	                if(ps!=null)ps.close();
+	                ad_conn.close();
+	            }catch(Exception e){
+	                e.printStackTrace();
+	            }
+	        }
         }
     }
 }

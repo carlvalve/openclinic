@@ -327,6 +327,10 @@
 
               <%-- DO SAVE --%>
               function doSave(){
+            	if(transactionForm.EditCategoryCode.value==transactionForm.EditCategoryParentCode.value){
+            		alert("<%=getTranNoLink("web","parentcodeequalscategorycode",sWebLanguage)%>");
+            		return;
+            	}
                 if(transactionForm.EditCategoryCode.value.length>0){
                   var allLabelsHaveAValue = true;
                   var emptyLabelField = "";

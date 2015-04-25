@@ -5894,6 +5894,9 @@ public class MedwanQuery {
             ItemVO itemVO;
             for(Iterator iterator = transactionVO.getItems().iterator(); iterator.hasNext();){
                 itemVO = (ItemVO) iterator.next();
+                if(itemVO.getValue()==null){
+                	itemVO.setValue("");
+                }
                 if(itemVO.getValue().trim().length() > 0){
                 	Debug.println("================================================="); //////////////////
                 	Debug.println("============ SAVING ITEM ========================"); //////////////////

@@ -118,7 +118,7 @@
 
             // Supplier sub-title
             html.append("<tr id='headerOfSupplier_" + i + "' title='" + showOrdersTran + "'>")
-                    .append(" <td class='titleadmin' width='22' onClick=\"toggleOrdersDiv('" + i + "');\" style='text-align:center;'>&nbsp;<img id='img_" + i + "' src='" + sCONTEXTPATH + "/_img/plus.png' class='link'></td>")
+                    .append(" <td class='titleadmin' width='22' onClick=\"toggleOrdersDiv('" + i + "');\" style='text-align:center;'>&nbsp;<img id='img_" + i + "' src='" + sCONTEXTPATH + "/_img/themes/default/plus.jpg' class='link'></td>")
                     .append(" <td class='titleadmin' width='80%' onClick=\"toggleOrdersDiv('" + i + "');\">&nbsp;&nbsp;" + getTran("service", sSupplierUid, sWebLanguage) + " (" + ordersOfOneSupplier.size() + " " + ordersTran + ")"+warning+"</td>")
                     .append(" <td class='titleadmin' width='20%' onClick='' style='font-weight:normal;'>")
                     .append("   <a href=\"javascript:checkAll('" + sSupplierUid + "',true);\">" + getTran("web.manage.checkdb", "CheckAll", sWebLanguage) + "</a>")
@@ -297,8 +297,8 @@
                         <td class="admin2">
                             <input type="hidden" name="FindSupplierUid" value="<%=sFindSupplierUid%>">
                             <input class="text" type="text" name="FindSupplierName" readonly size="<%=sTextWidth%>" value="<%=sFindSupplierName%>">
-                            <img src="<c:url value="/_img/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchSupplier('FindSupplierUid','FindSupplierName');">
-                            <img src="<c:url value="/_img/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="transactionForm.FindSupplierUid.value='';transactionForm.FindSupplierName.value='';">
+                            <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchSupplier('FindSupplierUid','FindSupplierName');">
+                            <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="transactionForm.FindSupplierUid.value='';transactionForm.FindSupplierName.value='';">
                         </td>
                     </tr>
                     <%-- Service --%>
@@ -307,8 +307,8 @@
                         <td class="admin2">
                             <input type="hidden" name="FindServiceUid" value="<%=sFindServiceUid%>">
                             <input class="text" type="text" name="FindServiceName" readonly size="<%=sTextWidth%>" value="<%=sFindServiceName%>">
-                            <img src="<c:url value="/_img/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchService('FindServiceUid','FindServiceName');">
-                            <img src="<c:url value="/_img/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="transactionForm.FindServiceUid.value='';transactionForm.FindServiceName.value='';">
+                            <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchService('FindServiceUid','FindServiceName');">
+                            <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="transactionForm.FindServiceUid.value='';transactionForm.FindServiceName.value='';">
                         </td>
                     </tr>
                     <%-- ServiceStock --%>
@@ -317,8 +317,8 @@
                         <td class="admin2">
                             <input type="hidden" name="FindServiceStockUid" value="<%=sFindServiceStockUid%>">
                             <input class="text" type="text" name="FindServiceStockName" readonly size="<%=sTextWidth%>" value="<%=sFindServiceStockName%>">
-                            <img src="<c:url value="/_img/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchServiceStock('FindServiceStockUid','FindServiceStockName');">
-                            <img src="<c:url value="/_img/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="transactionForm.FindServiceStockUid.value='';transactionForm.FindServiceStockName.value='';">
+                            <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchServiceStock('FindServiceStockUid','FindServiceStockName');">
+                            <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="transactionForm.FindServiceStockUid.value='';transactionForm.FindServiceStockName.value='';">
                         </td>
                     </tr>
                     <%-- ProductStock --%>
@@ -327,8 +327,8 @@
                         <td class="admin2">
                             <input type="hidden" name="FindProductStockUid" value="<%=sFindProductStockUid%>">
                             <input class="text" type="text" name="FindProductName" readonly size="<%=sTextWidth%>" value="<%=sFindProductName%>">
-                            <img src="<c:url value="/_img/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchProductStock('FindProductStockUid','FindProductName');">
-                            <img src="<c:url value="/_img/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="transactionForm.FindProductStockUid.value='';transactionForm.FindProductName.value='';">
+                            <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchProductStock('FindProductStockUid','FindProductName');">
+                            <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="transactionForm.FindProductStockUid.value='';transactionForm.FindProductName.value='';">
                         </td>
                     </tr>
                     <%-- PackagesOrdered --%>
@@ -627,12 +627,12 @@
     if(divObj.style.display == 'none'){
       divObj.style.display = 'block';
       headerObj.title = "<%=hideOrdersTran%>";
-      imgObj.src = "<c:url value='/_img/minus.png'/>";
+      imgObj.src = "<c:url value='/_img/themes/default/minus.jpg'/>";
     }
     else{
       divObj.style.display = 'none';
       headerObj.title = "<%=showOrdersTran%>";
-      imgObj.src = "<c:url value='/_img/plus.png'/>";
+      imgObj.src = "<c:url value='/_img/themes/default/plus.jpg'/>";
     }
   }
 
