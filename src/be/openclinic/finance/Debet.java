@@ -928,7 +928,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                         + " AND d.OC_DEBET_CREDITED=0"
                         + " AND " + MedwanQuery.getInstance().convert("int", "replace(d.OC_DEBET_INSURANCEUID,'" + serverid + "','')") + " = i.oc_insurance_objectid"
                         + " AND " + MedwanQuery.getInstance().convert("int", "replace(d.OC_DEBET_ENCOUNTERUID,'" + serverid + "','')") + " = e.oc_encounter_objectid"
-                        + " AND d.OC_DEBET_PATIENTINVOICEUID='"+serverid+"'"+MedwanQuery.getInstance().concatSign()+"pi.OC_PATIENTINVOICE_OBJECTID"
+                        + " AND d.OC_DEBET_PATIENTINVOICEUID='"+serverid+"'"+MedwanQuery.getInstance().concatSign()+MedwanQuery.getInstance().convert("varchar", "pi.OC_PATIENTINVOICE_OBJECTID")
                         + " AND (d.OC_DEBET_INSURARINVOICEUID = ' ' or d.OC_DEBET_INSURARINVOICEUID is null)"
                         + " AND pi.OC_PATIENTINVOICE_DATE>=?"
                         + " AND pi.OC_PATIENTINVOICE_DATE<=?"

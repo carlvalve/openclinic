@@ -150,6 +150,9 @@ public class OpenclinicSlaveExporter implements Runnable{
 			else if(block.getName().equalsIgnoreCase("rfe")){
 				storeRfeRecord(personid,block);
 			}
+			else if(block.getName().equalsIgnoreCase("vaccination")){
+				storeVaccinationRecord(personid,block);
+			}
 			else if(block.getName().equalsIgnoreCase("diagnosis")){
 				storeDiagnosisRecord(personid,block);
 			}
@@ -683,6 +686,66 @@ public class OpenclinicSlaveExporter implements Runnable{
 				}
 				catch(Exception e2){}
 				ps.setInt(11,updateuid);
+				ps.execute();
+				ps.close();
+			}
+			
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		finally{
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void storeVaccinationRecord(int personid,Element element){
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		try{
+			boolean doInsert=true;
+			PreparedStatement ps = conn.prepareStatement("select * from OC_VACCINATIONS where OC_VACCINATION_PATIENTUID=? and OC_VACCINATION_TYPE=?");
+			ps.setInt(1, Integer.parseInt(element.elementText("patientuid")));
+			ps.setString(2, element.elementText("type"));
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()){
+				if(!rs.getTimestamp("OC_VACCINATION_UPDATETIME").before(new SimpleDateFormat("yyyyMMddHHmmssSSS").parse(element.elementText("updatetime")))){
+					//Existing record is more recent. Do nothing
+					doInsert=false;
+					rs.close();
+				}
+				else {
+					//Received record is more recent
+					//Remove existingrecord
+					ps.close();
+					ps=conn.prepareStatement("delete from OC_VACCINATIONS where OC_VACCINATION_PATIENTUID=? and OC_VACCINATION_TYPE=?");
+					ps.setInt(1, Integer.parseInt(element.elementText("patientuid")));
+					ps.setString(2, element.elementText("type"));
+					ps.execute();
+				}
+			}
+			else {
+				rs.close();
+			}
+			ps.close();
+			if(doInsert){
+				ps=conn.prepareStatement("insert into OC_VACCINATIONS(OC_VACCINATION_PATIENTUID,OC_VACCINATION_TYPE,OC_VACCINATION_DATE,OC_VACCINATION_BATCHNUMBER,OC_VACCINATION_EXPIRY,OC_VACCINATION_LOCATION,OC_VACCINATION_UPDATETIME)"
+							+ "values(?,?,?,?,?,?,?)");
+				ps.setInt(1,personid);
+				ps.setString(2, ScreenHelper.checkString(element.elementText("type")));
+				ps.setString(3, ScreenHelper.checkString(element.elementText("date")));
+				ps.setString(4, ScreenHelper.checkString(element.elementText("batchnumber")));
+				ps.setString(5, ScreenHelper.checkString(element.elementText("expiry")));
+				ps.setString(6, ScreenHelper.checkString(element.elementText("location")));
+				java.sql.Timestamp updatetime=null;
+				try{
+					updatetime=new java.sql.Timestamp(new java.util.Date().getTime());
+				}
+				catch(Exception e2){}
+				ps.setTimestamp(7,updatetime);
 				ps.execute();
 				ps.close();
 			}
@@ -1879,6 +1942,7 @@ public class OpenclinicSlaveExporter implements Runnable{
 		addProblems();
 		addLab();
 		addRFEs();
+		addVaccinations();
 		addDiagnoses();
 		//Now we move the recordblocks to patientrecords
 		Iterator i = patientrecordblocks.keySet().iterator();
@@ -2941,6 +3005,11 @@ public class OpenclinicSlaveExporter implements Runnable{
 			ps.setInt(2, Integer.parseInt(oldid));
 			ps.execute();
 			ps.close();
+			ps = occonn.prepareStatement("update OC_VACCINATIONS set OC_VACCINATION_PATIENTUID=? where OC_VACCINATION_PATIENTUID=?");
+			ps.setInt(1, Integer.parseInt(newid));
+			ps.setInt(2, Integer.parseInt(oldid));
+			ps.execute();
+			ps.close();
 
 			success=true;
 		}
@@ -3277,6 +3346,48 @@ public class OpenclinicSlaveExporter implements Runnable{
 			        if(!addRecordBlock(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(updatetime)+"."+objectid+".R.", element)){
 			        	break;
 			        }
+				}
+				catch(Exception e2){
+					e2.printStackTrace();
+				}
+			}
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally{
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void addVaccinations(){
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		try {
+			PreparedStatement ps = conn.prepareStatement("select * from OC_VACCINATIONS where OC_VACCINATION_UPDATETIME>=? order by OC_VACCINATION_UPDATETIME asc");
+			ps.setTimestamp(1, new java.sql.Timestamp(begin.getTime()));
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				try{
+					Timestamp updatetime = rs.getTimestamp("OC_VACCINATION_UPDATETIME");
+			        Element element = DocumentHelper.createElement("vaccination");
+			        String patientuid=rs.getString("OC_VACCINATION_PATIENTUID");
+			        String type=rs.getString("OC_VACCINATION_TYPE");
+			        addStringElement(element, "patientuid", patientuid);
+			        addStringElement(element, "type", type);
+			        addStringElement(element, "date", rs.getString("OC_VACCINATION_DATE"));
+			        addStringElement(element, "batchnumber", rs.getString("OC_VACCINATION_BATCHNUMBER"));
+			        addStringElement(element, "expiry", rs.getString("OC_VACCINATION_EXPIRY"));
+			        addStringElement(element, "location", rs.getString("OC_VACCINATION_LOCATION"));
+			        addTimestampElement(element, "updatetime", updatetime);
+			        if(!addRecordBlock(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(updatetime)+"."+patientuid+"."+type+".V.", element)){
+			        	break;
+			        }
+			        System.out.println("added vaccination");
 				}
 				catch(Exception e2){
 					e2.printStackTrace();

@@ -3,10 +3,16 @@ package be.openclinic.medical;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.jfree.data.time.TimeSeries;
 
 import net.admin.AdminPerson;
 import net.admin.User;
@@ -33,6 +39,11 @@ public class Vaccination {
 		expiry="";
 		location="";
 		save();
+	}
+	
+	public static boolean isActive(Hashtable vaccinations,String type){
+		Vaccination vaccination = (Vaccination)vaccinations.get(type);
+		return vaccination!=null && vaccination.date!=null && vaccination.date.length()>0;
 	}
 	
 	public void save(){
@@ -165,7 +176,51 @@ public class Vaccination {
 		return vaccinations;
 	}
 
-	public static String getVaccination(Hashtable vaccinations,long age,HttpServletRequest request,String type,String parameter){
+    public static List getListValueGraph(int serverId, String type, String sLanguage, String userid) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        List lArray = new LinkedList();
+        try {
+        	long day=24*3600*1000;
+        	long year=365*day;
+            TimeSeries series = new TimeSeries("data");
+            conn = MedwanQuery.getInstance().getStatsConnection();
+            ps = conn.prepareStatement("select count(*) total,year(DC_VACCINATION_DATE) YEAR,month(DC_VACCINATION_DATE) MONTH from DC_VACCINATIONS where DC_VACCINATION_SERVERUID=? and"
+            		+ " DC_VACCINATION_MODEL='mali' and DC_VACCINATION_TYPE like ? and DC_VACCINATION_DATE>? group by year(DC_VACCINATION_DATE),month(DC_VACCINATION_DATE) order by year(DC_VACCINATION_DATE) ASC,month(DC_VACCINATION_DATE) ASC");
+            ps.setInt(1, serverId);
+            ps.setString(2, type+"%");
+            ps.setDate(3, new java.sql.Date(new java.util.Date().getTime()-5*year));
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Date dDate = ScreenHelper.parseDate("01/" + rs.getString("MONTH") + "/" + rs.getString("YEAR"));
+                Integer iValue = Integer.parseInt(rs.getString("total"));
+                lArray.add(new Object[]{dDate, iValue});
+            }
+            rs.close();
+        }
+        catch (Exception e) {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e2) {
+                // TODO Auto-generated catch block
+                e2.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        return lArray;
+    }
+
+    public static String getVaccination(Hashtable vaccinations,long age,HttpServletRequest request,String type,String parameter){
 		String sResult="";
 		String tag="<td class='admin2'>";
 		String redtag="<td bgcolor='#FE4B59'>";
@@ -186,11 +241,17 @@ public class Vaccination {
 			}
 			else if(parameter.equalsIgnoreCase("location")){
 				sResult=vaccination.location;
+				if(sResult.startsWith("0")){
+					sResult=ScreenHelper.getTran("web","javaposcentername",((User)request.getSession().getAttribute("activeUser")).person.language);
+				}
+				else {
+					sResult=ScreenHelper.getTran("web","other",((User)request.getSession().getAttribute("activeUser")).person.language)+": "+(sResult.length()>2?sResult.substring(2):"");
+				}
 			}
 		}
 		
 		if(parameter.equalsIgnoreCase("date")){
-			boolean bred=false,bgreen=false;
+			boolean bred=false,bgreen=false,bedit=true;
 			long day = 24*3600*1000;
 			long week=7*day;
 			long month=30*day;
@@ -243,28 +304,54 @@ public class Vaccination {
 				else if("*vita200.2*alben400.1*".contains(type)){
 					bred=(age>=24*month-week && age<60*month);
 				}
-				sResult=(bred?redtag:tag)+"<img src='"+request.getRequestURI().replaceAll(request.getServletPath(),"")+"/_img/icons/icon_new.gif' "
-						+ "onclick='editVaccination(\""+type+"\");'/>";
+				if(type.equalsIgnoreCase("vita100a")) bedit = Vaccination.isActive(vaccinations,"vita100");
+				if(type.equalsIgnoreCase("vita200.1a")) bedit = Vaccination.isActive(vaccinations,"vita200.1");
+				if(type.equalsIgnoreCase("vita200.1b")) bedit =  Vaccination.isActive(vaccinations,"vita200.1a");
+				if(type.equalsIgnoreCase("alben200.1a")) bedit =  Vaccination.isActive(vaccinations,"alben200.1");
+				if(type.equalsIgnoreCase("alben200.1b")) bedit =  Vaccination.isActive(vaccinations,"alben200.1a");
+				if(type.equalsIgnoreCase("vita200.2a")) bedit =  Vaccination.isActive(vaccinations,"vita200.2");
+				if(type.equalsIgnoreCase("vita200.2b")) bedit =  Vaccination.isActive(vaccinations,"vita200.2a");
+				if(type.equalsIgnoreCase("vita200.2c")) bedit =  Vaccination.isActive(vaccinations,"vita200.2b");
+				if(type.equalsIgnoreCase("vita200.2d")) bedit = Vaccination.isActive(vaccinations,"vita200.2c");
+				if(type.equalsIgnoreCase("alben400.1a")) bedit =  Vaccination.isActive(vaccinations,"alben400.1");
+				if(type.equalsIgnoreCase("alben400.1b")) bedit =  Vaccination.isActive(vaccinations,"alben400.1a");
+				if(type.equalsIgnoreCase("alben400.1c")) bedit =  Vaccination.isActive(vaccinations,"alben400.1b");
+				if(type.equalsIgnoreCase("alben400.1d")) bedit =  Vaccination.isActive(vaccinations,"alben400.1c");
+				
+				sResult=(bred?redtag:tag)+(bedit?"<img src='"+request.getRequestURI().replaceAll(request.getServletPath(),"")+"/_img/icons/icon_new.gif' "
+						+ "onclick='editVaccination(\""+type+"\");'/>":"");
 			}
 			else {
 				//result is a date value
 				java.util.Date vaccinationDate = ScreenHelper.parseDate(sResult);
+				long vaccinationAge=0;
 				if(vaccinationDate!=null){
+					vaccinationAge=(vaccinationDate.getTime()-new java.util.Date().getTime()+age);
 					if("*bcg*polio0*polio1*penta1*pneumo1*rota1*polio2*penta2*pneumo2*rota2*polio3*penta3*pneumo3*rota3*".contains(type)){
 						//express in weeks
-						sResult+=" ("+(vaccinationDate.getTime()-new java.util.Date().getTime()+age)/week+" "+ScreenHelper.getTran("web","weeks",((User)request.getSession().getAttribute("activeUser")).person.language)+")";
+						sResult+=" ("+vaccinationAge/week+" "+ScreenHelper.getTran("web","weeks",((User)request.getSession().getAttribute("activeUser")).person.language)+")";
 					}
 					else if("*measles*yellowfever*meningitisa*vita100*vita100a*vita200.1*alben200.1*vita200.1a*alben200.1a*vita200.1b*alben200.1b*vita200.2*alben400.1*vita200.2a*alben400.1a*vita200.2b*alben400.1b*vita200.2c*alben400.1c*vita200.2d*alben400.1d*".contains(type)){
 						//express in months
-						sResult+=" ("+(vaccinationDate.getTime()-new java.util.Date().getTime()+age)/month+" "+ScreenHelper.getTran("web","months",((User)request.getSession().getAttribute("activeUser")).person.language)+")";
+						sResult+=" ("+vaccinationAge/month+" "+ScreenHelper.getTran("web","months",((User)request.getSession().getAttribute("activeUser")).person.language)+")";
 					}
 					else if("*vat1*vat2*vatr1*vatr2*vatr3*".contains(type)){
 						//express in years
-						sResult+=" ("+(vaccinationDate.getTime()-new java.util.Date().getTime()+age)/year+" "+ScreenHelper.getTran("web","years",((User)request.getSession().getAttribute("activeUser")).person.language)+")";
+						sResult+=" ("+vaccinationAge/year+" "+ScreenHelper.getTran("web","years",((User)request.getSession().getAttribute("activeUser")).person.language)+")";
 					}
 				}
 				sResult="<td bgcolor='lightgreen'><img src='"+request.getRequestURI().replaceAll(request.getServletPath(),"")+"/_img/icons/icon_edit.gif' "
 						+ "onclick='editVaccination(\""+type+"\");'/>"+sResult;
+				//Check if a warning must be added because of late vaccination
+				boolean bWarning=false;
+				bWarning=bWarning||("*bcg*polio0*".contains(type) && vaccinationAge/week>=4);
+				bWarning=bWarning||("*polio1*penta1*pneumo1*rota1*".contains(type) && (vaccinationAge/week>=10 || vaccinationAge/week<5));
+				bWarning=bWarning||("*polio2*penta2*pneumo2*rota2*".contains(type) && (vaccinationAge/week>=14 || vaccinationAge/week<9));
+				bWarning=bWarning||("*polio3*penta3*pneumo3*rota3*".contains(type) && (vaccinationAge/month>=6 || vaccinationAge/week<13));
+				bWarning=bWarning||("*measles*yellowfever*meningitisa*".contains(type) && (vaccinationAge/month>=12 || (vaccinationAge/month)<8));
+				if(bWarning){
+					sResult+=" <img src='"+request.getRequestURI().replaceAll(request.getServletPath(),"")+"/_img/icons/icon_warning.gif' title='"+ScreenHelper.getTranNoLink("web","latevaccination",((User)request.getSession().getAttribute("activeUser")).person.language)+"'/>";
+				}
 			}
 		}
 		else {

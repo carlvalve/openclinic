@@ -29,8 +29,8 @@ public class IMAP4Receiver extends Receiver {
         String password = MedwanQuery.getInstance().getConfigString("datacenterPOP3Password","");
     	Properties props=System.getProperties();
     	//props.put("mail.debug","true");
-        Session session = Session.getInstance(props, null);
 	    try {
+	        Session session = Session.getInstance(props, null);
 	    	Store store = session.getStore("imap");
 			store.connect(host, username, password);
 		    Folder folder = store.getFolder("INBOX");

@@ -278,5 +278,81 @@ public class ExporterMedical extends Exporter {
 				}
 			}
 		}
+		else if(getParam().equalsIgnoreCase("medical.1.3")){
+			//Export all registered vaccinations
+			if(MedwanQuery.getInstance().getConfigInt("enableMaliVaccinations",0)==1){
+				//First find first month for which a summary must be provided
+				StringBuffer sb = new StringBuffer("<vaccinations>");
+				String firstVaccin = MedwanQuery.getInstance().getConfigString("datacenterFirstVaccinationDate","0");
+				if(firstVaccin.equalsIgnoreCase("0")){
+					//Find oldest vaccination
+					Connection oc_conn = MedwanQuery.getInstance().getOpenclinicConnection();
+					try {
+						PreparedStatement ps = oc_conn.prepareStatement("select count(*) total,min(OC_VACCINATION_UPDATETIME) as firstVaccin from OC_VACCINATIONS where OC_VACCINATION_DATE is not NULL and OC_VACCINATION_DATE<>''");
+						ResultSet rs = ps.executeQuery();
+						if(rs.next() && rs.getInt("total")>0){
+							firstVaccin=new SimpleDateFormat("yyyyMMddHHmmssSSS").format(rs.getDate("firstVaccin"));
+						}
+						rs.close();
+						ps.close();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+					finally {
+						try {
+							oc_conn.close();
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+				if(!firstVaccin.equalsIgnoreCase("0")){
+					try {
+						boolean bFound=false;
+						Date firstDay=new SimpleDateFormat("yyyyMMddHHmmssSSS").parse(firstVaccin);
+						if(firstDay.before(ScreenHelper.parseDate("01/01/2005"))){
+							firstDay=ScreenHelper.parseDate("01/01/2005");
+						}
+						Date lastDay=firstDay;
+						Connection oc_conn = MedwanQuery.getInstance().getOpenclinicConnection();
+						try {
+							PreparedStatement ps = oc_conn.prepareStatement("select a.*,b.dateofbirth from OC_VACCINATIONS a,adminview b where OC_VACCINATION_PATIENTUID=personid and OC_VACCINATION_UPDATETIME>? and OC_VACCINATION_DATE is not NULL and OC_VACCINATION_DATE<>'' ORDER BY OC_VACCINATION_UPDATETIME ASC");
+							ps.setTimestamp(1,new java.sql.Timestamp(firstDay.getTime()));
+							ResultSet rs = ps.executeQuery();
+							int maxVaccinations=MedwanQuery.getInstance().getConfigInt("maxExportVaccinationsPerBatch",5000);
+							int counter=0;
+							while(rs.next() && counter<maxVaccinations){
+								bFound=true;
+								counter++;
+								lastDay=rs.getTimestamp("OC_VACCINATION_UPDATETIME");
+								java.util.Date birth=rs.getDate("dateofbirth");
+								sb.append("<vaccination patient='"+rs.getString("OC_VACCINATION_PATIENTUID")+"' type='"+rs.getString("OC_VACCINATION_TYPE")+"' date='"+
+								rs.getString("OC_VACCINATION_DATE")+"' updatetime='"+new SimpleDateFormat("yyyyMMddHHmmssSSS").format(lastDay)+"' model='mali' location='"+
+										rs.getString("OC_VACCINATION_LOCATION").substring(0,1)+"' dateofbirth='"+(birth==null?"":new SimpleDateFormat("dd/MM/yyyy").format(birth))+"'/>");
+							}
+							rs.close();
+							ps.close();
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+						finally {
+							try {
+								oc_conn.close();
+							} catch (SQLException e) {
+								e.printStackTrace();
+							}
+						}
+						if(bFound){
+							sb.append("</vaccinations>");
+							exportSingleValue(sb.toString(), "medical.1.3");
+							MedwanQuery.getInstance().setConfigString("datacenterFirstVaccinationDate", new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date(lastDay.getTime()+2)));
+						}
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}
 	}
 }
