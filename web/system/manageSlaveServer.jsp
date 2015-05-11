@@ -28,6 +28,19 @@
 		}
 		MedwanQuery.getInstance().setConfigString("slaveExportMaxRecordBlocks", checkString(request.getParameter("slaveExportMaxRecordBlocks")));
 		MedwanQuery.getInstance().setConfigString("masterServerURL", checkString(request.getParameter("masterServerURL")));
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		if(checkString(request.getParameter("isslaveserver")).equalsIgnoreCase("1")){
+			PreparedStatement ps = conn.prepareStatement("DROP TABLE IF EXISTS mysql.oc_config_backup");
+			ps.execute();
+			ps.close();
+			ps = conn.prepareStatement("create table mysql.oc_config_backup like oc_config");
+			ps.execute();
+			ps.close();
+			ps = conn.prepareStatement("insert into mysql.oc_config_backup select * from oc_config");
+			ps.execute();
+			ps.close();
+		}
+		conn.close();
 	}
 %>
 

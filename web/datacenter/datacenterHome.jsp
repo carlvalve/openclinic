@@ -73,7 +73,8 @@
                         %>
 
                         </div>
-                        <div id="footer_info"><a href="javascript:window.location.href='datacenterHomePublic.jsp';">Public</a> - <a href="javascript:setLanguage('PT')">Pt</a> <a href="javascript:setLanguage('ES')">Es</a> <a href="javascript:setLanguage('FR')">Fr</a> <a href="javascript:setLanguage('EN')">En</a> - developped by Mxs</div>
+                        <div id="footer_info">
+                        <a href="javascript:window.location.href='datacenterHomePublic.jsp';">Public</a> - <a href="javascript:setLanguage('PT')">Pt</a> <a href="javascript:setLanguage('ES')">Es</a> <a href="javascript:setLanguage('FR')">Fr</a> <a href="javascript:setLanguage('EN')">En</a> - developped by Mxs</div>
                 </div>
             </div>
         </div>

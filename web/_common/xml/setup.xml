@@ -122,6 +122,8 @@
 		<config key="priceFormat" value="#"/>
 		<config key="priceFormatInsurar" value="#"/>
 		<config key="currencyDecimals" value="0"/>
+		<config key="enableMaliVaccinations" value="1"/>
+		<config key="vaccinationForwardKey" value="/main.do?Page=healthrecord/maliVaccinationCard.jsp"/>
 		<labels type="professional.council.url">
 			<label id="cnom" language="fr">http://server.antim.hnrw.org/cnom/util/getPersonInfo.jsp</label>
 			<label id="cnom" language="en">http://server.antim.hnrw.org/cnom/util/getPersonInfo.jsp</label>

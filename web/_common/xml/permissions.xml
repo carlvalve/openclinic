@@ -61,6 +61,12 @@
         <permission type="Web.Occup" id="minimalclinicaldata">occup.minimalclinicaldata</permission>
         <permission type="Web.Occup" id="external.documents">occup.externaldocuments</permission>
         <permission type="Web.Occup" id="occup.arch.documents">occup.arch.documents</permission>
+        <permission type="Web.Occup" id="occup.healthcenter.contact">occup.healthcenter.contact</permission>
+        <permission type="Web.Occup" id="cs.cpn">cs.cpn</permission>
+        <permission type="Web.Occup" id="cs.accouchement">cs.accouchement</permission>
+        <permission type="Web.Occup" id="cs.pvv">cs.pvv</permission>
+        <permission type="Web.Occup" id="cs.pmtct">cs.pmtct</permission>
+        <permission type="Web.Occup" id="cs.pvv">cs.pvv</permission>
         <permission type="web" id="emg">occup.emg</permission>
         <permission type="web" id="eeg">occup.eeg</permission>
         <permission type="web" id="ep">occup.ep</permission>
@@ -230,6 +236,7 @@
         <permission type="web" id="immo">system.immo</permission>
         <permission type="mergepersons" id="mergepersons">system.mergepersons</permission>
         <permission type="web" id="permissions">system.permissions</permission>
+        <permission type="web" id="exporttomaster">system.exporttomaster</permission>
     </application>
     <application type="Web" id="pharmacy">
         <permission type="web" id="patient.copypharmacystocks">patient.copypharmacystocks</permission>

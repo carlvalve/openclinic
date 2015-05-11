@@ -8,8 +8,8 @@
     String labelType, labelID, questionTran;
 
     if(labelValue.length() == 0){
-        labelType = ScreenHelper.checkDbString(request.getParameter("labelType"));
-        labelID   = ScreenHelper.checkDbString(request.getParameter("labelID"));
+        labelType = ScreenHelper.checkDbString(request.getParameter("labelType")).toLowerCase();
+        labelID   = ScreenHelper.checkDbString(request.getParameter("labelID")).toLowerCase();
         questionTran = getTran(labelType,labelID,sWebLanguage);
     }
     else{

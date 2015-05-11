@@ -67,6 +67,9 @@
 	    	<index name="OC_VACCINATION_PATIENTUID">
 	    		<indexcolumn order="ASC" name="OC_VACCINATION_PATIENTUID"/>
 	    	</index>
+	    	<index name="OC_VACCINATION_UPDATETIME">
+	    		<indexcolumn order="ASC" name="OC_VACCINATION_UPDATETIME"/>
+	    	</index>
 	    </indexes>
     </table>
     
@@ -715,6 +718,32 @@
 	    	</index>
 	    </indexes>
 	</table>
+    <table name="DC_VACCINATIONS" db="stats" sync="NONE">
+    	<columns>
+	    	<column name="DC_VACCINATION_SERVERUID" dbtype="int" javatype="integer"/>
+	    	<column name="DC_VACCINATION_PATIENTUID" dbtype="int" javatype="integer"/>
+	    	<column name="DC_VACCINATION_BIRTH" dbtype="datetime" javatype="date"/>
+	    	<column name="DC_VACCINATION_MODEL" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="DC_VACCINATION_TYPE" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="DC_VACCINATION_DATE" dbtype="datetime" javatype="date"/>
+	    	<column name="DC_VACCINATION_BATCHNUMBER" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="DC_VACCINATION_EXPIRY" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="DC_VACCINATION_LOCATION" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="DC_VACCINATION_UPDATETIME" dbtype="datetime" javatype="date" />
+    	</columns>
+	    <indexes>
+	    	<index name="DC_VACCINATION_PATIENTUID">
+	    		<indexcolumn order="ASC" name="DC_VACCINATION_PATIENTUID"/>
+	    	</index>
+	    	<index name="DC_VACCINATION_UPDATETIME">
+	    		<indexcolumn order="ASC" name="DC_VACCINATION_UPDATETIME"/>
+	    	</index>
+	    	<index name="DC_VACCINATION_DATE">
+	    		<indexcolumn order="ASC" name="DC_VACCINATION_DATE"/>
+	    	</index>
+	    </indexes>
+    </table>
+    
 	<table name="DC_FINANCIALVALUES" db="stats" sync="NONE">
 		<columns>
 			<column name="DC_FINANCIALVALUE_SERVERID" dbtype="int" javatype="integer"/>

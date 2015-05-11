@@ -9,7 +9,7 @@
 	String type = checkString(request.getParameter("type"));
 	String batchnumber = checkString(request.getParameter("batchnumber"));
 	String expirydate = checkString(request.getParameter("expirydate"));
-	String vaccinationlocation = checkString(request.getParameter("vaccinationlocation"));
+	String vaccinationlocation = checkString(request.getParameter("vaccinationlocation"))+":"+checkString(request.getParameter("vaccinationlocationtext"));
 	
 	if(request.getParameter("submit")!=null){
 		//Save this vaccination record
@@ -75,10 +75,30 @@
 		<tr>
 			<td class='admin'><%=getTran("web","vaccinationlocation",sWebLanguage) %></td>
 			<td class='admin2'>
-				<input type='text' name='vaccinationlocation' id='vaccinationlocation' value='<%=vaccinationlocation%>'/>
+				<select name='vaccinationlocation' id='vaccinationlocation' onchange='if(this.value==1){document.getElementById("vaccinationlocationtext").style.visibility="visible"} else {document.getElementById("vaccinationlocationtext").value="";document.getElementById("vaccinationlocationtext").style.visibility="hidden"}'>
+					<option value='0' <%=(vaccinationlocation.length()>1 && vaccinationlocation.substring(0,1).equalsIgnoreCase("0"))?"selected":"" %>><%=getTranNoLink("vaccinationlocation",MedwanQuery.getInstance().getConfigString("defaultVaccinationLocation",""),sWebLanguage) %></option>
+					<%
+						Hashtable labels=(Hashtable)((Hashtable)(MedwanQuery.getInstance().getLabels())).get(sWebLanguage.toLowerCase());
+						if(labels!=null) labels=(Hashtable)labels.get("vaccinationlocation");
+						if(labels!=null){
+							Enumeration en = labels.keys();
+							while(en.hasMoreElements()){
+								String key = (String)en.nextElement();
+								if(!key.equalsIgnoreCase(MedwanQuery.getInstance().getConfigString("defaultVaccinationLocation",""))){
+									out.println("<option value='"+key+"' "+(key.equalsIgnoreCase(vaccinationlocation.length()>1?vaccinationlocation.substring(0,1):"")?"selected":"")+">"+((Label)labels.get(key)).value+"</option>");
+								}
+							}
+						}
+					%>
+					<option value='1' <%=(vaccinationlocation.length()>1 && vaccinationlocation.substring(0,1).equalsIgnoreCase("1"))?"selected":"" %>><%=getTran("web","other",sWebLanguage) %></option>
+				</select>
+				<input type='text' name='vaccinationlocationtext' id='vaccinationlocationtext' value='<%=vaccinationlocation.length()>1?vaccinationlocation.substring(2):""%>'  size='80'/>
 			</td>
 		</tr>
 	</table>
 	<input type='submit' class='button' name='submit' value='<%=getTran("web","save",sWebLanguage)%>'/>
 	<input type='submit' class='button' name='delete' value='<%=getTran("web","delete",sWebLanguage)%>'/>
 </form>
+<script>
+	if(document.getElementById("vaccinationlocation").value==1){document.getElementById("vaccinationlocationtext").style.visibility="visible"} else {document.getElementById("vaccinationlocationtext").value="";document.getElementById("vaccinationlocationtext").style.visibility="hidden"};
+</script>
