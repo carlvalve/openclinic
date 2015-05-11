@@ -306,9 +306,10 @@
     		  "&LabelLang="+labelLang;
     new Ajax.Request(url,{
       onSuccess:function(resp){
-          var label = eval('('+resp.responseText+')').label.trim();
+    	  var rr=eval('('+resp.responseText+')');
+          var label = rr.label.trim();
         label = convertSpecialCharsToHTML(label);
-        eval("msgForm.Message"+labelLang.toUpperCase()+".value = label;");
+        eval("msgForm.Message"+rr.language.toUpperCase()+".value = label;");
       }
     });
   }

@@ -69,7 +69,6 @@
         	}
           }
           else{
-        	  alert(2);
         	if(window.confirm(labelType+"."+labelId)){
               callbackFunction.call(this);
         	}

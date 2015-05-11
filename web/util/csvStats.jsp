@@ -7,6 +7,7 @@
 <%@include file="/includes/validateUser.jsp"%>
                 
 <%
+	boolean done=false;
 	String label = "labelfr";
 	if(sWebLanguage.equalsIgnoreCase("e")||sWebLanguage.equalsIgnoreCase("en")){
 		label = "labelen";		
@@ -43,6 +44,212 @@
                 "  (select max(district) from privateview where personid=a.personid) as location1,"+
                 "  (select max(oc_label_value) from oc_labels,privateview where oc_label_type='province' and oc_label_id=province and personid=a.personid and oc_label_language='"+sWebLanguage+"') as location2"+
                 " from adminview a";
+    }
+	//*** 2.a - Djikoroni ***************************************************
+    else if("djikoroni".equalsIgnoreCase(sQueryType)){
+        Hashtable vaccins = new Hashtable();
+    	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+        PreparedStatement ps = conn.prepareStatement("select * from OC_VACCINATIONS order by OC_VACCINATION_UPDATETIME");
+        ResultSet rs = ps.executeQuery();  
+        String date,type;
+        while(rs.next()){
+        	date = checkString(rs.getString("OC_VACCINATION_DATE"));
+        	type=rs.getString("OC_VACCINATION_TYPE");
+        	if(type.startsWith("vita100")){
+        		type="vita100";
+        	}
+        	else if(type.startsWith("vita200.1")){
+        		type="vita200.1";
+        	}
+        	else if(type.startsWith("vita200.2")){
+        		type="vita200.2";
+        	}
+        	else if(type.startsWith("alben200")){
+        		type="alben200";
+        	}
+        	else if(type.startsWith("alben400")){
+        		type="alben400";
+        	}
+        	if(date.length()>0){
+        		vaccins.put(rs.getString("OC_VACCINATION_PATIENTUID")+"."+type,date);
+        	}
+        }
+		rs.close();
+		ps.close();
+        query = "select b.cell as NoCons,a.comment3 as NoChefID1, b.city as SOUQRTIE, b.quarter as QUARTIER, (select max(firstname) from adminview where personid=a.comment3) as PRCHEF_1, (select max(lastname) from adminview where personid=a.comment3) as NMCHEF_1,"+
+                "  a.comment5 as RELACHEF,a.personid as NoIndiv, firstname as PrIndiv2, lastname as NmIndiv2,datediff(now(),a.dateofbirth)/365 as Age, gender as SEXE, comment2 as STATMAT,a.dateofbirth as DATENAIS"+
+                " from adminview a, privateview b where a.personid=b.personid order by a.comment3,a.searchname";
+		StringBuffer sResult=new StringBuffer().append("NoCons;NoChefID1;SOUQRTIE;QUARTIER;PRCHEF_1;NMCHEF_1;RELACHEF;NoIndiv;PrIndiv2;NmIndiv2;Age;SEXE;STATMAT;DATENAIS;BCG;POLIO0;POLIO1;PENTA1;PNEUMO1;ROTA1;POLIO2;PENTA2;PNEUMO2;ROTA2;POLIO3;PENTA3;PNEUMO3;ROTA3;ROUGEOLE;FIEVREJAUNE;MENIGITEA;VAT1;VAT2;VATR1;VATR2;VATR3;VITA100;VITA200.1;ALBEN200;VITA200.2;ALBEN400\r\n");
+        ps=conn.prepareStatement(query);
+        rs=ps.executeQuery();
+        SimpleDateFormat myformat= new SimpleDateFormat("dd/MM/yyyy");
+        String sAge,personid;
+        java.util.Date birth, minimumdate=new SimpleDateFormat("dd/MM/yyyy").parse("01/01/1900");
+        int age;
+        while(rs.next()){
+			personid=checkString(rs.getString("NoIndiv"));
+			birth=rs.getDate("DATENAIS");
+			if(birth!=null && birth.before(minimumdate)){
+				birth=null;
+			}
+			age=rs.getInt("Age");
+			sAge=age+"";
+			if(age>150 || age<0){
+				sAge="";
+			}
+        	sResult.append(checkString(rs.getString("NoCons"))+";"+checkString(rs.getString("NoChefID1"))+";"+checkString(rs.getString("SOUQRTIE"))+";"+checkString(rs.getString("QUARTIER"))+";"+checkString(rs.getString("PRCHEF_1"))+";"+checkString(rs.getString("NMCHEF_1"))+";"+getTranNoLink("relationship",checkString(rs.getString("RELACHEF")),sWebLanguage)+";"+personid+";"+checkString(rs.getString("PrIndiv2"))+";"+checkString(rs.getString("NmIndiv2"))+";"
+        	+sAge+";"+checkString(rs.getString("SEXE"))+";"+getTranNoLink("civil.status",checkString(rs.getString("STATMAT")),sWebLanguage)+";"+ScreenHelper.formatDate(birth,myformat));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".bcg")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".polio0")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".polio1")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".penta1")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".pneumo1")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".rota1")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".polio2")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".penta2")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".pneumo2")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".rota2")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".polio3")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".penta3")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".pneumo3")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".rota3")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".measles")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".yellowfever")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".meningitisa")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".vat1")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".vat2")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".vatr1")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".vatr2")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".vatr3")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".vita100")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".vita200.1")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".alben200")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".vita200.2")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".alben400")));
+        	sResult.append("\r\n");        	
+        }
+        rs.close();
+        ps.close();
+        conn.close();
+	    response.setContentType("application/octet-stream; charset=windows-1252");
+	    response.setHeader("Content-Disposition", "Attachment;Filename=\"OpenClinicStatistic"+new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())+".csv\"");
+	    ServletOutputStream os = response.getOutputStream();
+
+    	byte[] b = sResult.toString().getBytes();
+        for(int n=0; n<b.length; n++){
+            os.write(b[n]);
+        }
+        os.flush();
+        os.close();
+        done=true;
+    }
+	//*** 2.b - Banconi ***************************************************
+    else if("banconi".equalsIgnoreCase(sQueryType)){
+        Hashtable vaccins = new Hashtable();
+    	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+        PreparedStatement ps = conn.prepareStatement("select * from OC_VACCINATIONS order by OC_VACCINATION_UPDATETIME");
+        ResultSet rs = ps.executeQuery();  
+        String date,type;
+        while(rs.next()){
+        	date = checkString(rs.getString("OC_VACCINATION_DATE"));
+        	type=rs.getString("OC_VACCINATION_TYPE");
+        	if(type.startsWith("vita100")){
+        		type="vita100";
+        	}
+        	else if(type.startsWith("vita200.1")){
+        		type="vita200.1";
+        	}
+        	else if(type.startsWith("vita200.2")){
+        		type="vita200.2";
+        	}
+        	else if(type.startsWith("alben200")){
+        		type="alben200";
+        	}
+        	else if(type.startsWith("alben400")){
+        		type="alben400";
+        	}
+        	if(date.length()>0){
+        		vaccins.put(rs.getString("OC_VACCINATION_PATIENTUID")+"."+type,date);
+        	}
+        }
+		rs.close();
+		ps.close();
+        query = "select b.cell as NoCons,a.comment3 as NoChefID1, b.city as SOUQRTIE, (select max(firstname) from adminview where personid=a.comment3) as PRCHEF_1, (select max(lastname) from adminview where personid=a.comment3) as NMCHEF_1,"+
+                "  a.personid as NoIndiv, firstname as PrIndiv2, substring(firstname,1,1)"+MedwanQuery.getInstance().concatSign()+"substring(lastname,1,1) as ININDIV_2,lastname as NmIndiv2,a.comment5 as RELACHEF,datediff(now(),a.dateofbirth)/365 as AGEAN, gender as SEXE, comment2 as STATMAT,a.dateofbirth as DATENAIS,a.comment4 as STATUT_2,a.updatetime as Date_Suivi_19,a.comment as Commentaire"+
+                " from adminview a, privateview b where a.personid=b.personid order by a.comment3,a.searchname";
+        conn = MedwanQuery.getInstance().getOpenclinicConnection();
+        ps = conn.prepareStatement("select OC_ENCOUNTER_PATIENTUID,OC_ENCOUNTER_ENDDATE from OC_ENCOUNTERS where OC_ENCOUNTER_OUTCOME='dead'");
+        rs = ps.executeQuery();
+        Hashtable deaths =new Hashtable();
+        while(rs.next()){
+        	deaths.put(rs.getString("OC_ENCOUNTER_PATIENTUID"),rs.getDate("OC_ENCOUNTER_ENDDATE"));
+        }
+        rs.close();
+        ps.close();
+		StringBuffer sResult=new StringBuffer().append("NoCons;NoChefID1;SOUQRTIE;PRCHEF_1;NMCHEF_1;NoIndiv;PrIndiv2;ININDIV_2;NmIndiv2;RELACHEF;AGEAN;SEXE;STATMAT;DATENAIS;STATUT_2;Date_Suivi_19;Commentaire;Nouv_DCD;BCG;POLIO0;POLIO1;PENTA1;PNEUMO1;ROTA1;POLIO2;PENTA2;PNEUMO2;ROTA2;POLIO3;PENTA3;PNEUMO3;ROTA3;ROUGEOLE;FIEVREJAUNE;MENIGITEA;VAT1;VAT2;VATR1;VATR2;VATR3;VITA100;VITA200.1;ALBEN200;VITA200.2;ALBEN400\r\n");
+
+        ps=conn.prepareStatement(query);
+        rs=ps.executeQuery();
+        SimpleDateFormat myformat= new SimpleDateFormat("dd/MM/yyyy");
+        String sAge,personid;
+        java.util.Date birth, minimumdate=new SimpleDateFormat("dd/MM/yyyy").parse("01/01/1900");
+        int age;
+        while(rs.next()){
+			personid=checkString(rs.getString("NoIndiv"));
+			birth=rs.getDate("DATENAIS");
+			if(birth!=null && birth.before(minimumdate)){
+				birth=null;
+			}
+			age=rs.getInt("AGEAN");
+			sAge=age+"";
+			if(age>150 || age<0){
+				sAge="";
+			}
+        	sResult.append(checkString(rs.getString("NoCons"))+";"+checkString(rs.getString("NoChefID1"))+";"+checkString(rs.getString("SOUQRTIE"))+";"+checkString(rs.getString("PRCHEF_1"))+";"+checkString(rs.getString("NMCHEF_1"))+";"+personid+";"+checkString(rs.getString("PrIndiv2"))+";"+rs.getString("ININDIV_2")+";"+checkString(rs.getString("NmIndiv2"))+";"+getTranNoLink("relationship",checkString(rs.getString("RELACHEF")),sWebLanguage)+";"
+        	+sAge+";"+checkString(rs.getString("SEXE"))+";"+getTranNoLink("civil.status",checkString(rs.getString("STATMAT")),sWebLanguage)+";"+ScreenHelper.formatDate(birth,myformat)+";"+checkString(rs.getString("STATUT_2"))+";"+ScreenHelper.formatDate(rs.getDate("Date_Suivi_19"),myformat)+";"+checkString(rs.getString("Commentaire"))+";"+ScreenHelper.formatDate((java.sql.Date)deaths.get(personid),myformat));        	
+			sResult.append(";"+checkString((String)vaccins.get(personid+".bcg")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".polio0")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".polio1")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".penta1")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".pneumo1")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".rota1")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".polio2")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".penta2")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".pneumo2")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".rota2")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".polio3")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".penta3")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".pneumo3")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".rota3")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".measles")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".yellowfever")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".meningitisa")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".vat1")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".vat2")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".vatr1")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".vatr2")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".vatr3")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".vita100")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".vita200.1")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".alben200")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".vita200.2")));
+			sResult.append(";"+checkString((String)vaccins.get(personid+".alben400")));
+        	sResult.append("\r\n");        	
+        }
+        rs.close();
+        ps.close();
+        conn.close();
+	    response.setContentType("application/octet-stream; charset=windows-1252");
+	    response.setHeader("Content-Disposition", "Attachment;Filename=\"OpenClinicStatistic"+new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())+".csv\"");
+	    ServletOutputStream os = response.getOutputStream();
+
+    	byte[] b = sResult.toString().getBytes();
+        for(int n=0; n<b.length; n++){
+            os.write(b[n]);
+        }
+        os.flush();
+        os.close();
+        done=true;
     }
 	//*** 3 - LABELS *****************************************************
     else if("labels.list".equalsIgnoreCase(sQueryType)){
@@ -231,6 +438,7 @@
 		
 		loc_conn.close();
         os.close();
+        done=true;
     }
 	//*** 8 - GLOBAL LIST ************************************************
     else if("global.list".equalsIgnoreCase(sQueryType)){
@@ -374,6 +582,7 @@
         }
         os.flush();
         os.close();
+        done=true;
     }
 	//*** 9 - GLOBAL RFE *************************************************
     else if("globalrfe.list".equalsIgnoreCase(sQueryType)){
@@ -515,6 +724,7 @@
         }
         os.flush();
         os.close();
+        done=true;
     }
 	//*** 10 - COUNTERS **************************************************
     else if("encounter.list".equalsIgnoreCase(sQueryType)){
@@ -613,26 +823,28 @@
                 " order by a.updatetime";
     }
     
-    Connection loc_conn = MedwanQuery.getInstance().getLongOpenclinicConnection(),
-	           lad_conn = MedwanQuery.getInstance().getLongAdminConnection();
-    
-    Debug.println(query);
-    CsvStats csvStats = new CsvStats(request.getParameter("begin"),
-    		                         request.getParameter("end"),
-    		                         "admin".equalsIgnoreCase(request.getParameter("db"))?lad_conn:loc_conn,
-    		                         query);
-    
-    response.setContentType("application/octet-stream; charset=windows-1252");
-    response.setHeader("Content-Disposition", "Attachment;Filename=\"OpenClinicStatistic"+new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())+".csv\"");
-   
-    ServletOutputStream os = response.getOutputStream();
-    byte[] b = csvStats.execute().toString().getBytes();
-    for(int n=0; n<b.length; n++){
-        os.write(b[n]);
-    }
-    loc_conn.close();
-    lad_conn.close();
-    
-    os.flush();
-    os.close();
+	if(!done){
+	    Connection loc_conn = MedwanQuery.getInstance().getLongOpenclinicConnection(),
+		           lad_conn = MedwanQuery.getInstance().getLongAdminConnection();
+	    
+	    Debug.println(query);
+	    CsvStats csvStats = new CsvStats(request.getParameter("begin"),
+	    		                         request.getParameter("end"),
+	    		                         "admin".equalsIgnoreCase(request.getParameter("db"))?lad_conn:loc_conn,
+	    		                         query);
+	    
+	    response.setContentType("application/octet-stream; charset=windows-1252");
+	    response.setHeader("Content-Disposition", "Attachment;Filename=\"OpenClinicStatistic"+new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())+".csv\"");
+	   
+	    ServletOutputStream os = response.getOutputStream();
+	    byte[] b = csvStats.execute().toString().getBytes();
+	    for(int n=0; n<b.length; n++){
+	        os.write(b[n]);
+	    }
+	    loc_conn.close();
+	    lad_conn.close();
+	    
+	    os.flush();
+	    os.close();
+	}
 %>

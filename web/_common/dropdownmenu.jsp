@@ -583,7 +583,7 @@
   <%-- CONFIRM LOGOUT --%>
   function confirmLogout(){
     if(verifyPrestationCheck()){
-      yesnoDialog("Web.occup","confirm.logout",function(){
+      yesnoDialog("web.occup","confirm.logout",function(){
     	document.location.href = "<c:url value='/logout.do'/>?ts=<%=getTs()%>";
       });
     }

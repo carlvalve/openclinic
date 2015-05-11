@@ -193,7 +193,9 @@
                   writeTblChildWithCodeNoButton("javascript:downloadStats(\"wicketcredits.list\",\"openclinic\");",getTran("Web","statistics.download.wicketcredits",sWebLanguage))+
                   writeTblChildWithCodeNoButton("javascript:downloadStats(\"lab.list\",\"openclinic\");",getTran("Web","statistics.download.labresults",sWebLanguage))+
                   writeTblChildWithCodeNoButton("javascript:downloadInvoicesSummary(\"hmk.invoices.list\",\"openclinic\");",getTran("Web","statistics.download.invoicessummary",sWebLanguage))+
-                  (MedwanQuery.getInstance().getConfigInt("datacenterEnabled",0)==1?writeTblChildWithCodeNoButton("javascript:downloadDatacenterStats(\"service.income.list\",\"stats\");",getTran("Web","statistics.download.serviceincomelist",sWebLanguage)):""));
+                  (MedwanQuery.getInstance().getConfigInt("enableMaliVaccinations",0)==1?writeTblChildWithCodeNoButton("javascript:downloadStats(\"djikoroni\",\"stats\");",getTran("Web","statistics.download.djikoroni",sWebLanguage)):"")+
+		          (MedwanQuery.getInstance().getConfigInt("enableMaliVaccinations",0)==1?writeTblChildWithCodeNoButton("javascript:downloadStats(\"banconi\",\"stats\");",getTran("Web","statistics.download.banconi",sWebLanguage)):"")+
+			      (MedwanQuery.getInstance().getConfigInt("datacenterEnabled",0)==1?writeTblChildWithCodeNoButton("javascript:downloadDatacenterStats(\"service.income.list\",\"stats\");",getTran("Web","statistics.download.serviceincomelist",sWebLanguage)):""));
         out.print(ScreenHelper.writeTblFooter()+"<br>");
 
         //*** 5e - PATHOLOGY ***********************************	    

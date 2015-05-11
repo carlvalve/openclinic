@@ -223,6 +223,7 @@
             thisUser.personid = activePatient.personid;
         }
         activePatient.language = request.getParameter("ChangeLanguage");
+        thisUser.parameters.add(new Parameter("userlanguage",request.getParameter("ChangeLanguage")));
         activePatient.store();
       
         // SAVE TO DB

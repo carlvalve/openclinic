@@ -254,11 +254,11 @@ function changeQuarter(){
               +"<tr><td class='admin'>"+getTran("web","community",sWebLanguage)+"</td><td class='admin2'>"+sCities+"</td></tr>"
               +"<tr><td class='admin'>"+getTran("web","sector",sWebLanguage)+"</td><td class='admin2'>"+sQuarters+"</td></tr>"
               +inputRow("Web","zipcode","PZipcode","AdminPrivate",apc.zipcode,"T",false,false,sWebLanguage)
+              +inputRow("Web","subquarter","PCity","AdminPrivate",apc.city,"T",true,false,sWebLanguage)
               +writeCountry(apc.country,"PCountry","AdminPrivate","PCountryDescription",true, "Country",sWebLanguage)
               +inputRow("Web","email","PEmail","AdminPrivate",apc.email,"T",true,false,sWebLanguage)
               +inputRow("Web","telephone","PTelephone","AdminPrivate",apc.telephone,"T",true,false,sWebLanguage)
               +inputRow("Web","mobile","PMobile","AdminPrivate",apc.mobile,"T",true,false,sWebLanguage)
-              +inputRow("Web","city","PCity","AdminPrivate",apc.city,"T",true,false,sWebLanguage)
               +inputRow("Web","cell","PCell","AdminPrivate",apc.cell,"T",true,false,sWebLanguage)
               +inputRow("Web","function","PFunction","AdminPrivate",apc.businessfunction,"T",true,false,sWebLanguage)
               +inputRow("Web","business","PBusiness","AdminPrivate",apc.business,"T",true,false,sWebLanguage)

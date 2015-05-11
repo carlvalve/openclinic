@@ -363,6 +363,10 @@ span.geo {
     background-position: left -127px;
 }
 
+span.vaccinations {
+    background-position: left -169px;
+}
+
 span.bedoccupancy {
     background-position: left -275px;
 }

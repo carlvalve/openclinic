@@ -124,6 +124,7 @@
         <Menu labelid="centerinfo" accessrights="system.centerinfo" url="/main.do?Page=center/index.jsp"/>
 		<Menu labelid="management" accessrights="system.management" url="/main.do?Page=system/menu.jsp"/>
 		<Menu labelid="permissions" accessrights="system.permissions" url="/main.do?Page=permissions/index.jsp"/>
+		<Menu labelid="exporttomaster" accessrights="system.exporttomaster" url="/main.do?Page=util/createOpenclinicExport.jsp"/>
     </Menu>
     <Menu labelid="immo" accessrights="system.immo.select" url="/main.do?Page=util/listImmoLabels.jsp"/>
     <Menu labelid="info">

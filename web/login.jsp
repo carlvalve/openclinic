@@ -7,7 +7,7 @@
                 org.dom4j.DocumentException,
                 java.net.MalformedURLException,
                 java.sql.PreparedStatement,
-                java.util.Iterator"%>
+                java.util.Iterator,be.mxs.common.util.system.SessionMessage,be.openclinic.sync.*"%>
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/helper.jsp"%>
 <%@include file="/includes/SingletonContainer.jsp"%>
@@ -39,7 +39,11 @@
     <%
     MedwanQuery.getInstance("http://"+request.getServerName()+":"+request.getServerPort()+request.getRequestURI().replaceAll(request.getServletPath(),"")+"/"+sAPPDIR);
     reloadSingleton(request.getSession());
-    
+    if(MedwanQuery.getInstance().getConfigInt("initializeSlaveCounters",0)==1){
+		OpenclinicSlaveExporter openclinicSlaveExporter = new OpenclinicSlaveExporter(new SessionMessage());
+		openclinicSlaveExporter.initializeCounters();
+		MedwanQuery.getInstance().setConfigString("initializeSlaveCounters", "0");
+    }
     UpdateSystem systemUpdate = new UpdateSystem();
     if(MedwanQuery.getInstance().getConfigString("doInitialSetup","").length()>0){
     	systemUpdate.updateSetup("os",MedwanQuery.getInstance().getConfigString("doInitialSetup",""),request);

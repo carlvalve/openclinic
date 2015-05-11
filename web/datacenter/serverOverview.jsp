@@ -271,6 +271,7 @@
         </div>
     </div>
 </div>
+
 <div class="wrap-smallcontainer leftcontainer">
     <div id="hr" class="container bedoccupancy">
         <h3 id="hr_title">
@@ -315,11 +316,19 @@
 </div>
 
 <!-- bedoccupancy -->
-<div class="wrap-smallcontainer">
+<div class="wrap-smallcontainer leftcontainer">
     <div id="bedoccupancy" class="container bedoccupancy">
         <h3 id="bedoccupancy_title">
             <span class="icon bedoccupancy" ><%=getTranNoLink("datacenter","server.bedoccupancy",sWebLanguage)%></span>
         </h3>
+        <%
+            sb = new StringBuffer("");
+            diags = DatacenterHelper.getVaccinationMonths(Integer.parseInt(serverid));
+            for(int n=0;n<diags.size();n++){
+                diag=(String)diags.elementAt(n);
+                sb.append("<option value='"+diag+"'>"+diag+"</option>");
+            }
+        %>
 
         <div class="subcontent">
             <a class="togglecontent" href="javascript:void(0)" onclick="togglecontent(this,'bedoccupancy')"><span class="icon down">&nbsp;</span></a>
@@ -332,6 +341,29 @@
     </div>
 </div>
 
+ <!-- Vaccinations -->
+<div class="wrap-smallcontainer">
+    <div id="vaccinations" class="container bedoccupancy">
+        <h3 id="vaccination_title">
+            <span class="icon vaccinations"><%=getTranNoLink("datacenter","server.vaccinations",sWebLanguage)%></span>
+        </h3>
+        <%
+                sb = new StringBuffer("");
+                diags = DatacenterHelper.getVaccinationMonths(Integer.parseInt(serverid));
+                for(int n=0;n<diags.size();n++){
+                    diag=(String)diags.elementAt(n);
+                    sb.append("<option value='"+diag+"'>"+diag+"</option>");
+                }
+            %>
+        <div class="subcontent">
+            <a class="togglecontent" href="javascript:void(0)" onclick="togglecontent(this,'vaccinations')"><span class="icon down">&nbsp;</span></a>
+            <select name="vaccinationmonth" id="vaccinationmonth" class="text" onchange="loadVaccinations('<%=serverid %>',this.value);"><%=sb.toString() %></select> <img src='<c:url value="/_img/icons/icon_excel.gif"/>' onclick='downloadVaccinations();'/>
+            <div id="vaccinations_ajax" style="display:none;"><img src='<%=sCONTEXTPATH%>/_img/themes/<%=sUserTheme%>/ajax-loader.gif'/></div>
+        </div>
+    </div>
+</div>
+
+ 
 
 
 <script>
@@ -347,7 +379,27 @@
         openPopupWindow("/datacenter/simpleValueGraph.jsp?fullperiod=yes&serverid="+serverid+"&parameterid="+parameterid+"&ts=<%=getTs()%>");
     }
     
-
+    function downloadVaccinations(){
+    	window.open('<c:url value="/datacenter/downloadVaccinations.jsp"/>?serverid=<%=serverid%>&period='+document.getElementById('vaccinationmonth').value);
+    }
+    
+    function loadVaccinations(serverid,period){
+        $('vaccinations_ajax').innerHTML = "<img src='<%=sCONTEXTPATH%>/_img/themes/<%=sUserTheme%>/ajax-loader.gif'/>";
+        var params = 'serverid=' + serverid
+                +"&period="+ period;
+        var url= '<c:url value="/datacenter/loadVaccinations.jsp"/>?ts=' + new Date();
+        new Ajax.Request(url,{
+                method: "GET",
+                parameters: params,
+                onSuccess: function(resp){
+                    $('vaccinations_ajax').innerHTML=resp.responseText;
+                },
+                onFailure: function(){
+                }
+            }
+        );
+    }
+	
     function loadDiagnoses(serverid,period,nextfunction){
         if($("diagtype").options[document.getElementById("diagtype").selectedIndex].value=="ALL"){
             $('diagnostics_ajax').innerHTML = "<img src='<%=sCONTEXTPATH%>/_img/themes/<%=sUserTheme%>/ajax-loader.gif'/>";
@@ -483,6 +535,10 @@
         openPopupWindow("/datacenter/diagnosisGraph.jsp?serverid=<%=serverid%>&diagnosiscode="+code+"&ts=<%=getTs()%>");
     }
 
+    function vaccinationsGraph(type){
+        openPopupWindow("/datacenter/vaccinationsGraph.jsp?serverid=<%=serverid%>&vaccinationtype="+type+"&ts=<%=getTs()%>");
+    }
+
     function mortalityGraph(code){
         openPopupWindow("/datacenter/mortalityGraph.jsp?serverid=<%=serverid%>&diagnosiscode="+code+"&ts=<%=getTs()%>",700,750);
     }
@@ -554,4 +610,5 @@
 <script>
 	loadHR('<%=serverid %>',document.getElementById('hrmonth').value);
 	loadDiagnoses('<%=serverid %>',document.getElementById('diagmonth').value);
+	loadVaccinations('<%=serverid %>',document.getElementById('vaccinationmonth').value);
 </script>

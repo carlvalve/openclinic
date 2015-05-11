@@ -15,9 +15,12 @@
     	Debug.println("sLabelLang : "+sLabelLang);
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
-
-    String sLabel = ScreenHelper.getTranNoLink(sLabelType,sLabelId,sWebLanguage);
+	if(sLabelLang.length()==0){
+		sLabelLang=sWebLanguage;
+	}
+    String sLabel = ScreenHelper.getTranNoLink(sLabelType,sLabelId,sLabelLang);
 %>    
 {
-"label":"<%=HTMLEntities.htmlentities(sLabel)%>"
+"label":"<%=HTMLEntities.htmlentities(sLabel)%>",
+"language":"<%=sLabelLang%>"
 }
