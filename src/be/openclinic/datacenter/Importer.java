@@ -67,6 +67,16 @@ public class Importer {
 						importMessage.sendError();
 					}
 				}
+				else if(parametertype.equalsIgnoreCase("vaccination")){
+					ImportMessage importMessage = ImportMessage.get(rs.getInt("OC_IMPORT_UID"));
+					importMessage.setImportDateTime(new java.util.Date());
+					if(storeVaccination(importMessage)){
+						importMessage.updateImportDateTime(importMessage.getImportDateTime());
+					}
+					else if(importMessage.getError()>0){
+						importMessage.sendError();
+					}
+				}
 				else if(parametertype.equalsIgnoreCase("financial")){
 					ImportMessage importMessage = ImportMessage.get(rs.getInt("OC_IMPORT_UID"));
 					importMessage.setImportDateTime(new java.util.Date());
@@ -232,6 +242,75 @@ public class Importer {
 			e.printStackTrace();
 		} catch (DocumentException e) {
 			importMessage.setError(2);
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return bSuccess;
+	}
+	
+	public static boolean storeVaccination(ImportMessage importMessage){
+		boolean bSuccess=false;
+		importMessage.setError(-1);
+		Connection conn = MedwanQuery.getInstance().getStatsConnection();
+		PreparedStatement ps=null;
+		try{
+            SAXReader reader = new SAXReader(false);
+			Document document = reader.read(new ByteArrayInputStream(importMessage.data.getBytes("UTF-8")));
+			Element root = document.getRootElement();
+			if(root.getName().equalsIgnoreCase("data") && root.attributeValue("parameterid").equalsIgnoreCase("medical.1.3")){
+				Element vacs = root.element("vaccinations");
+				Iterator vaccinations = vacs.elementIterator("vaccination");
+				while(vaccinations.hasNext()){
+					Element vaccination = (Element)vaccinations.next();
+					//First clear a possible existing value
+					ps = conn.prepareStatement("delete from DC_VACCINATIONS where DC_VACCINATION_SERVERUID=? and DC_VACCINATION_TYPE=? and DC_VACCINATION_PATIENTUID=?");
+					ps.setInt(1, importMessage.getServerId());
+					ps.setString(2, vaccination.attributeValue("type"));
+					ps.setString(3, vaccination.attributeValue("patient"));
+					ps.execute();
+					ps.close();
+					if(vaccination.attributeValue("location").startsWith("0")){
+						ps = conn.prepareStatement("insert into DC_VACCINATIONS(DC_VACCINATION_SERVERUID,DC_VACCINATION_PATIENTUID,DC_VACCINATION_TYPE,DC_VACCINATION_DATE,DC_VACCINATION_UPDATETIME,DC_VACCINATION_MODEL,DC_VACCINATION_BIRTH) values(?,?,?,?,?,?,?)");
+						ps.setInt(1, importMessage.getServerId());
+						ps.setString(2, vaccination.attributeValue("patient"));
+						ps.setString(3, vaccination.attributeValue("type"));
+						ps.setTimestamp(4,new java.sql.Timestamp(new SimpleDateFormat("dd/MM/yyyy").parse(vaccination.attributeValue("date")).getTime()));
+						ps.setTimestamp(5,new java.sql.Timestamp(new SimpleDateFormat("yyyyMMddHHmmssSSS").parse(vaccination.attributeValue("updatetime")).getTime()));
+						ps.setString(6, vaccination.attributeValue("model"));
+						ps.setTimestamp(7,vaccination.attributeValue("dateofbirth")==null || vaccination.attributeValue("dateofbirth").length()==0?null: new java.sql.Timestamp(new SimpleDateFormat("dd/MM/yyyy").parse(vaccination.attributeValue("dateofbirth")).getTime()));
+						ps.execute();
+						ps.close();
+					}
+				}
+				bSuccess=true;
+			}
+			
+		}
+		catch(SQLException e){
+			try {
+				if(ps!=null){
+					ps.close();
+				}
+			} catch (SQLException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			importMessage.setError(2);
+			e.printStackTrace();
+		} catch (DocumentException e) {
+			importMessage.setError(2);
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		finally {

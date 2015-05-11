@@ -253,6 +253,40 @@ public class DatacenterHelper {
 		return v;
 	}
 	
+	public static Vector getVaccinations(int serverid, String period){
+		Vector v = new Vector();
+		Connection conn=MedwanQuery.getInstance().getStatsConnection();
+		try{
+			String sQuery="select count(*) DC_VACCINATION_COUNT,DC_VACCINATION_TYPE from DC_VACCINATIONS where DC_VACCINATION_SERVERUID=? and year(DC_VACCINATION_DATE)=?";
+			if(period.split("\\.").length>1){
+				sQuery+=" and month(DC_VACCINATION_DATE)=?";
+			}
+			sQuery+= " group by DC_VACCINATION_TYPE";
+			PreparedStatement ps = conn.prepareStatement(sQuery);
+			ps.setInt(1, serverid);
+			ps.setInt(2,Integer.parseInt(period.split("\\.")[0]));
+			if(period.split("\\.").length>1){
+				ps.setInt(3,Integer.parseInt(period.split("\\.")[1]));
+			}
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				v.add(rs.getString("DC_VACCINATION_TYPE")+";"+rs.getString("DC_VACCINATION_COUNT"));
+			}
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return v;
+	}
+	
 
 	public static Vector getMortalities(int serverid, int year, int month, String codetype){
 		Vector v = new Vector();
@@ -315,7 +349,7 @@ public class DatacenterHelper {
 		Vector v = new Vector();
 		Connection conn=MedwanQuery.getInstance().getStatsConnection();
 		try{
-			String sQuery="select AVG(DC_HR_COUNT) DC_HR_COUNT, DC_GR_GROUP from DC_HRVALUES where DC_HR_SERVERID=? and DC_HR_YEAR=? group by DC_HR_GROUP order by DC_HR_GROUP";
+			String sQuery="select AVG(DC_HR_COUNT) DC_HR_COUNT, DC_HR_GROUP from DC_HRVALUES where DC_HR_SERVERID=? and DC_HR_YEAR=? group by DC_HR_GROUP order by DC_HR_GROUP";
 			PreparedStatement ps = conn.prepareStatement(sQuery);
 			ps.setInt(1, serverid);
 			ps.setInt(2,year);
@@ -810,6 +844,38 @@ public class DatacenterHelper {
 					v.add(year);
 				}
 				v.add(rs.getString("diagnosis"));
+			}
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return v;
+	}
+	
+	public static Vector getVaccinationMonths(int serverid){
+		Vector v = new Vector();
+		Connection conn=MedwanQuery.getInstance().getStatsConnection();
+		try{
+			String sQuery="select distinct year(DC_VACCINATION_DATE) YEAR,month(DC_VACCINATION_DATE) MONTH from DC_VACCINATIONS where DC_VACCINATION_SERVERUID=? and DC_VACCINATION_MODEL='mali' order by DC_VACCINATION_DATE DESC";
+			PreparedStatement ps = conn.prepareStatement(sQuery);
+			ps.setInt(1, serverid);
+			ResultSet rs = ps.executeQuery();
+			String activeYear="",year="",month="";
+			while(rs.next()){
+				year=rs.getString("YEAR");
+				if(!activeYear.equalsIgnoreCase(year)){
+					activeYear=year;
+					v.add(year);
+				}
+				v.add(year+"."+rs.getString("MONTH"));
 			}
 			rs.close();
 			ps.close();
