@@ -28,11 +28,28 @@ public class Product extends OC_Object implements Comparable {
     private String timeUnit; // (Hour|Day|Week|Month)
     private int timeUnitCount = -1;
     private double unitsPerTimeUnit = -1;
+    private double totalUnits = 0;
     private String productGroup;
     private String productSubGroup;
     private String prescriptionInfo;
     private String barcode;
-    private String atccode;
+    private String rxnormcode;
+	private String atccode;
+	private String prestationcode;
+    private int prestationquantity;
+    private double margin;
+    private boolean applyLowerPrices;
+    private boolean automaticInvoicing;
+    
+    public String getRxnormcode() {
+		return rxnormcode;
+	}
+
+	public void setRxnormcode(String rxnormcode) {
+		this.rxnormcode = rxnormcode;
+	}
+
+
     public String getAtccode() {
 		return atccode;
 	}
@@ -41,12 +58,13 @@ public class Product extends OC_Object implements Comparable {
 		this.atccode = atccode;
 	}
 
-	private String prestationcode;
-    private int prestationquantity;
-    private double margin;
-    private boolean applyLowerPrices;
-    private boolean automaticInvoicing;
-    
+	public double getTotalUnits() {
+		return totalUnits;
+	}
+
+	public void setTotalUnits(double totalUnits) {
+		this.totalUnits = totalUnits;
+	}
 
     public boolean isAutomaticInvoicing(){
 		return automaticInvoicing;
@@ -372,6 +390,7 @@ public class Product extends OC_Object implements Comparable {
                     product.setPrescriptionInfo(rs.getString("OC_PRODUCT_PRESCRIPTIONINFO"));
                     product.setBarcode(rs.getString("OC_PRODUCT_BARCODE"));
                     product.setAtccode(rs.getString("OC_PRODUCT_ATCCODE"));
+                    product.setRxnormcode(rs.getString("OC_PRODUCT_RXNORMCODE"));
                     product.setPrestationcode(rs.getString("OC_PRODUCT_PRESTATIONCODE"));
                     product.setPrestationquantity(rs.getInt("OC_PRODUCT_PRESTATIONQUANTITY"));
                     product.setMargin(rs.getDouble("OC_PRODUCT_MARGIN"));
@@ -407,6 +426,7 @@ public class Product extends OC_Object implements Comparable {
                     product.setUpdateDateTime(rs.getTimestamp("OC_PRODUCT_UPDATETIME"));
                     product.setUpdateUser(ScreenHelper.checkString(rs.getString("OC_PRODUCT_UPDATEUID")));
                     product.setVersion(rs.getInt("OC_PRODUCT_VERSION"));
+                    product.setTotalUnits(rs.getInt("OC_PRODUCT_TOTALUNITS"));
                 }
                 else{
                     throw new Exception("ERROR : PRODUCT "+productUid+" NOT FOUND");
@@ -460,6 +480,7 @@ public class Product extends OC_Object implements Comparable {
                 product.setPackageUnits(rs.getInt("OC_PRODUCT_PACKAGEUNITS"));
                 product.setBarcode(rs.getString("OC_PRODUCT_BARCODE"));
                 product.setAtccode(rs.getString("OC_PRODUCT_ATCCODE"));
+                product.setRxnormcode(rs.getString("OC_PRODUCT_RXNORMCODE"));
                 product.setPrestationcode(rs.getString("OC_PRODUCT_PRESTATIONCODE"));
                 product.setPrestationquantity(rs.getInt("OC_PRODUCT_PRESTATIONQUANTITY"));
                 product.setMargin(rs.getDouble("OC_PRODUCT_MARGIN"));
@@ -508,6 +529,7 @@ public class Product extends OC_Object implements Comparable {
                 product.setUpdateUser(ScreenHelper.checkString(rs.getString("OC_PRODUCT_UPDATEUID")));
                 product.setVersion(rs.getInt("OC_PRODUCT_VERSION"));
                 product.setPrescriptionInfo(rs.getString("OC_PRODUCT_PRESCRIPTIONINFO"));
+                product.setTotalUnits(rs.getInt("OC_PRODUCT_TOTALUNITS"));
             }
         }
         catch(Exception e){
@@ -576,14 +598,14 @@ public class Product extends OC_Object implements Comparable {
                       "  OC_PRODUCT_TIMEUNITCOUNT,OC_PRODUCT_UNITSPERTIMEUNIT,OC_PRODUCT_PRODUCTGROUP,"+
                       "  OC_PRODUCT_CREATETIME,OC_PRODUCT_UPDATETIME,OC_PRODUCT_UPDATEUID,OC_PRODUCT_VERSION,OC_PRODUCT_PRESCRIPTIONINFO,"+
                       "  OC_PRODUCT_BARCODE,OC_PRODUCT_PRESTATIONCODE,OC_PRODUCT_PRESTATIONQUANTITY,OC_PRODUCT_MARGIN,OC_PRODUCT_APPLYLOWERPRICES,"+
-                      "  OC_PRODUCT_AUTOMATICINVOICING,OC_PRODUCT_PRODUCTSUBGROUP,OC_PRODUCT_ATCCODE) "
+                      "  OC_PRODUCT_AUTOMATICINVOICING,OC_PRODUCT_PRODUCTSUBGROUP,OC_PRODUCT_ATCCODE,OC_PRODUCT_TOTALUNITS,OC_PRODUCT_RXNORMCODE) "
                       + "SELECT OC_PRODUCT_SERVERID,OC_PRODUCT_OBJECTID,"+
                       "  OC_PRODUCT_NAME,OC_PRODUCT_UNIT,OC_PRODUCT_UNITPRICE,OC_PRODUCT_PACKAGEUNITS,"+
                       "  OC_PRODUCT_MINORDERPACKAGES,OC_PRODUCT_SUPPLIERUID,OC_PRODUCT_TIMEUNIT,"+
                       "  OC_PRODUCT_TIMEUNITCOUNT,OC_PRODUCT_UNITSPERTIMEUNIT,OC_PRODUCT_PRODUCTGROUP,"+
                       "  OC_PRODUCT_CREATETIME,OC_PRODUCT_UPDATETIME,OC_PRODUCT_UPDATEUID,OC_PRODUCT_VERSION,OC_PRODUCT_PRESCRIPTIONINFO,"+
                       "  OC_PRODUCT_BARCODE,OC_PRODUCT_PRESTATIONCODE,OC_PRODUCT_PRESTATIONQUANTITY,OC_PRODUCT_MARGIN,OC_PRODUCT_APPLYLOWERPRICES,"+
-                      "  OC_PRODUCT_AUTOMATICINVOICING,OC_PRODUCT_PRODUCTSUBGROUP,OC_PRODUCT_ATCCODE FROM OC_PRODUCTS WHERE OC_PRODUCT_SERVERID = ? AND OC_PRODUCT_OBJECTID = ?";
+                      "  OC_PRODUCT_AUTOMATICINVOICING,OC_PRODUCT_PRODUCTSUBGROUP,OC_PRODUCT_ATCCODE,OC_PRODUCT_TOTALUNITS,OC_PRODUCT_RXNORMCODE FROM OC_PRODUCTS WHERE OC_PRODUCT_SERVERID = ? AND OC_PRODUCT_OBJECTID = ?";
                 ps = oc_conn.prepareStatement(sSelect);
                 ps.setInt(1,Integer.parseInt(this.getUid().substring(0,this.getUid().indexOf("."))));
                 ps.setInt(2,Integer.parseInt(this.getUid().substring(this.getUid().indexOf(".")+1)));
@@ -607,8 +629,8 @@ public class Product extends OC_Object implements Comparable {
                       "  OC_PRODUCT_TIMEUNITCOUNT,OC_PRODUCT_UNITSPERTIMEUNIT,OC_PRODUCT_PRODUCTGROUP,"+
                       "  OC_PRODUCT_CREATETIME,OC_PRODUCT_UPDATETIME,OC_PRODUCT_UPDATEUID,OC_PRODUCT_VERSION,OC_PRODUCT_PRESCRIPTIONINFO,"+
                       "  OC_PRODUCT_BARCODE,OC_PRODUCT_PRESTATIONCODE,OC_PRODUCT_PRESTATIONQUANTITY,OC_PRODUCT_MARGIN,OC_PRODUCT_APPLYLOWERPRICES,"+
-                      "  OC_PRODUCT_AUTOMATICINVOICING,OC_PRODUCT_PRODUCTSUBGROUP,OC_PRODUCT_ATCCODE)"+
-                      " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                      "  OC_PRODUCT_AUTOMATICINVOICING,OC_PRODUCT_PRODUCTSUBGROUP,OC_PRODUCT_ATCCODE,OC_PRODUCT_TOTALUNITS,RX_NORM_CODE)"+
+                      " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
             ps = oc_conn.prepareStatement(sSelect);
             ps.setInt(1,Integer.parseInt(this.getUid().substring(0,this.getUid().indexOf("."))));
@@ -654,6 +676,8 @@ public class Product extends OC_Object implements Comparable {
             else                                ps.setString(24,"");                             
             
             ps.setString(25, this.getAtccode());
+            ps.setDouble(26, this.getTotalUnits());
+            ps.setString(27, this.getRxnormcode());
             ps.executeUpdate();
             
             //If a health service and a margin were provided, automatically update the health service price
