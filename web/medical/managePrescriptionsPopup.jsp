@@ -481,7 +481,7 @@
     <%=writeTableHeaderDirectText(sTitle,sWebLanguage,sCloseAction)%>  
           
 <%
-    String onClick = "onclick=\"searchProduct('EditProductUid','EditProductName','ProductUnit','EditUnitsPerTimeUnit','UnitsPerPackage',null,'EditServiceStockUid');\"";
+    String onClick = "onclick=\"searchProduct('EditProductUid','EditProductName','ProductUnit','EditUnitsPerTimeUnit','UnitsPerPackage',null,'EditServiceStockUid','EditRequiredPackages');\"";
     if(!"true".equalsIgnoreCase(request.getParameter("ServicePrescriptions")) && activePatient==null){
         %><%=getTran("web","firstselectaperson",sWebLanguage)%><%
     } 
@@ -571,7 +571,7 @@
     <td class="admin"><%=getTran("Web","packages",sWebLanguage)%>&nbsp;*&nbsp;</td>
     <td class="admin2">
         <input class="text" type="text" name="EditRequiredPackages" size="5" maxLength="5" value="<%=sSelectedRequiredPackages%>" onKeyUp="if(isInteger(this)){calculatePrescriptionPeriod();}">
-        &nbsp;(<input type="text" class="text" name="UnitsPerPackage" value="<%=sUnitsPerPackage%>" size="3" readonly style="border:none;background:transparent;text-align:right;vertical-align:-4px;">&nbsp;<%=getTran("web","packageunits",sWebLanguage).toLowerCase()%>)
+        &nbsp;(<input type="text" class="text" name="UnitsPerPackage" value="<%=sUnitsPerPackage%>" size="3" readonly style="border:none;background:transparent;text-align:right;">&nbsp;<%=getTran("web","packageunits",sWebLanguage).toLowerCase()%>)
     </td>
 </tr>
 
@@ -1186,7 +1186,7 @@ function clearEditFields(){
 
 <%-- popup : search product --%>
 function searchProduct(productUidField,productNameField,productUnitField,unitsPerTimeUnitField,
-		               unitsPerPackageField,productStockUidField,serviceStockUidField){
+		               unitsPerPackageField,productStockUidField,serviceStockUidField,productTotalUnitsField){
   var url = "/_common/search/searchProduct.jsp&ts=<%=getTs()%>"+
             "&loadschema=true"+
             "&ReturnProductUidField="+productUidField+
@@ -1211,8 +1211,12 @@ function searchProduct(productUidField,productNameField,productUnitField,unitsPe
   }
 
   if(serviceStockUidField!=undefined){
-    url+= "&ReturnServiceStockUidField="+serviceStockUidField;
-  }
+	    url+= "&ReturnServiceStockUidField="+serviceStockUidField;
+	  }
+
+  if(productTotalUnitsField!=undefined){
+	    url+= "&ReturnTotalUnitsField="+productTotalUnitsField;
+	  }
 
   openPopup(url);
 }
@@ -1331,7 +1335,7 @@ function doBack(){
 <%
     if(MedwanQuery.getInstance().getConfigInt("enableAutomaticProductSearchInPrescriptions",1)==1 && "true".equalsIgnoreCase(request.getParameter("findProduct"))){
         if(sEditPrescrUid.length()==0){
-        	out.print("<script>searchProduct('EditProductUid','EditProductName','ProductUnit','EditUnitsPerTimeUnit','UnitsPerPackage',null,'EditServiceStockUid');</script>");
+        	out.print("<script>searchProduct('EditProductUid','EditProductName','ProductUnit','EditUnitsPerTimeUnit','UnitsPerPackage',null,'EditServiceStockUid','EditRequiredPackages');</script>");
         }
     }
 %>
