@@ -92,8 +92,10 @@
            sEditTimeUnit         = checkString(request.getParameter("EditTimeUnit")),
            sEditTimeUnitCount    = checkString(request.getParameter("EditTimeUnitCount")),
            sEditUnitsPerTimeUnit = checkString(request.getParameter("EditUnitsPerTimeUnit")),
+           sEditTotalUnits       = checkString(request.getParameter("EditTotalUnits")),
            sEditBarcode          = checkString(request.getParameter("EditBarcode")),
            sEditAtccode          = checkString(request.getParameter("EditAtccode")),
+           sEditRxnormcode          = checkString(request.getParameter("EditRxnormcode")),
            sEditPrestationCode   = checkString(request.getParameter("EditPrestationCode")),
            sEditPrestationQuantity = checkString(request.getParameter("EditPrestationQuantity")),
            sEditMargin           = checkString(request.getParameter("EditMargin")),
@@ -145,8 +147,8 @@
            sSelectedPackageUnits = "", sSelectedMinOrderPackages = "", sSelectedSupplierUid = "",
            sSelectedTimeUnit = "", sFindSupplierName, sSelectedTimeUnitCount = "", sAverageUnitPrice="0",
            sSelectedUnitsPerTimeUnit = "", sSelectedSupplierName = "", sSelectedProductGroup = "",
-           sSelectedProductSubGroup = "", sSelectedBarcode = "", sSelectedAtccode = "", sSelectedPrestationCode = "", 
-           sSelectedPrestationQuantity = "", sSelectedApplyLowerPrices = "", sSelectedAutomaticInvoicing = "";
+           sSelectedProductSubGroup = "", sSelectedBarcode = "", sSelectedAtccode = "", sSelectedRxnormcode = "", sSelectedPrestationCode = "", 
+           sSelectedPrestationQuantity = "", sSelectedApplyLowerPrices = "", sSelectedAutomaticInvoicing = "", sSelectedTotalUnits="";
     String sSelectedMargin = MedwanQuery.getInstance().getConfigString("defaultProductsMargin","");
 
     // get data from form
@@ -174,6 +176,7 @@
         Debug.println("sEditTimeUnit         : "+sEditTimeUnit);
         Debug.println("sEditTimeUnitCount    : "+sEditTimeUnitCount);
         Debug.println("sEditUnitsPerTimeUnit : "+sEditUnitsPerTimeUnit);
+        Debug.println("sEditTotalUnits       : "+sEditTotalUnits);
         Debug.println("sEditProductGroup     : "+sEditProductGroup+"\n");
         Debug.println("sFindProductName      : "+sFindProductName);
         Debug.println("sFindUnit             : "+sFindUnit);
@@ -214,6 +217,7 @@
         product.setProductSubGroup(sEditProductSubGroup);
         product.setBarcode(sEditBarcode);
         product.setAtccode(sEditAtccode);
+        product.setRxnormcode(sEditRxnormcode);
         product.setPrestationcode(sEditPrestationCode);
         
         if(sEditUnitPrice.length() > 0) product.setUnitPrice(Double.parseDouble(sEditUnitPrice));
@@ -222,6 +226,7 @@
         if(sEditPrestationQuantity.length() > 0) product.setPrestationquantity(Integer.parseInt(sEditPrestationQuantity));
         if(sEditTimeUnitCount.length() > 0) product.setTimeUnitCount(Integer.parseInt(sEditTimeUnitCount));
         if(sEditUnitsPerTimeUnit.length() > 0) product.setUnitsPerTimeUnit(Double.parseDouble(sEditUnitsPerTimeUnit));
+        if(sEditTotalUnits.length() > 0) product.setTotalUnits(Double.parseDouble(sEditTotalUnits));
         if(sEditMargin.length() > 0) product.setMargin(Double.parseDouble(sEditMargin));
 		if(sEditApplyLowerPrices.length()>0) product.setApplyLowerPrices(Integer.parseInt(sEditApplyLowerPrices)==1);
 		if(sEditAutomaticInvoicing.length()>0) product.setAutomaticInvoicing(Integer.parseInt(sEditAutomaticInvoicing)==1);
@@ -348,6 +353,7 @@
         sSelectedUnitsPerTimeUnit = "";
         sSelectedBarcode = "";
         sSelectedAtccode = "";
+        sSelectedRxnormcode = "";
         sSelectedPrestationCode = "";
         sSelectedPrestationQuantity = "0";
         sSelectedMargin = MedwanQuery.getInstance().getConfigString("defaultProductsMargin","");
@@ -378,11 +384,13 @@
                 sSelectedTimeUnit = checkString(product.getTimeUnit());
                 sSelectedTimeUnitCount = (product.getTimeUnitCount() < 0 ? "" : product.getTimeUnitCount()+"");
                 sSelectedUnitsPerTimeUnit = (product.getUnitsPerTimeUnit() < 0 ? "" : product.getUnitsPerTimeUnit()+"");
+                sSelectedTotalUnits = (product.getTotalUnits() < 0 ? "" : product.getTotalUnits()+"");
                 sSelectedProductGroup = checkString(product.getProductGroup());
                 sSelectedProductSubGroup = checkString(product.getProductSubGroup());
                 sSelectedSupplierName = getTranNoLink("Service",sSelectedSupplierUid,sWebLanguage);
                 sSelectedBarcode = checkString(product.getBarcode());
                 sSelectedAtccode = checkString(product.getAtccode());
+                sSelectedRxnormcode = checkString(product.getRxnormcode());
                 sSelectedPrestationCode = checkString(product.getPrestationcode());
                 sAverageUnitPrice = product.getLastYearsAveragePrice()+"";
                 sSelectedPrestationQuantity = product.getPrestationquantity()+"";
@@ -405,11 +413,13 @@
             sSelectedTimeUnit = sEditTimeUnit;
             sSelectedTimeUnitCount = sEditTimeUnitCount;
             sSelectedUnitsPerTimeUnit = sEditUnitsPerTimeUnit;
+            sSelectedTotalUnits = sEditTotalUnits;
             sSelectedProductGroup = sEditProductGroup;
             sSelectedProductSubGroup = sEditProductSubGroup;
             sSelectedSupplierName = sEditSupplierName;
             sSelectedBarcode = sEditBarcode;
             sSelectedAtccode = sEditAtccode;
+            sSelectedRxnormcode = sEditRxnormcode;
             sSelectedPrestationCode = sEditPrestationCode;
             sSelectedPrestationQuantity = sEditPrestationQuantity;
             sSelectedMargin = sEditMargin;
@@ -429,6 +439,7 @@
             sSelectedUnitsPerTimeUnit = "";
             sSelectedBarcode = "";
             sSelectedAtccode = "";
+            sSelectedRxnormcode = "";
             sSelectedPrestationCode = "";
             sSelectedPrestationQuantity = "0";
             sSelectedMargin=MedwanQuery.getInstance().getConfigString("defaultProductsMargin","");
@@ -642,13 +653,13 @@
                     
                     <%-- UnitPrice --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","UnitPrice",sWebLanguage)%> *</td>
+                        <td class="admin" nowrap><%=getTran("Web","UnitPrice",sWebLanguage)%></td>
                         <td class="admin2">
                             <input class="text" type="text" name="EditUnitPrice" size="15" maxLength="15" value="<%=sSelectedUnitPrice%>" onKeyUp="isNumber(this);">&nbsp;<%=MedwanQuery.getInstance().getConfigParam("currency","€")%>
                         </td>
                     </tr>
                     
-                    <%-- UnitPrice --%>
+                    <%-- AverageUnitPrice --%>
                     <tr>
                         <td class="admin" nowrap><%=getTran("Web","lastyearsaverageprice",sWebLanguage)%></td>
                         <td class="admin2">
@@ -656,7 +667,7 @@
                         </td>
                     </tr>
                     
-                    <%-- UnitPrice --%>
+                    <%-- Last Year Average Price --%>
                     <tr>
                         <td class="admin" nowrap><%=getTran("Web","reinitialize.lastyearsaverageprice",sWebLanguage)%></td>
                         <td class="admin2">
@@ -750,6 +761,14 @@
                             <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" style="vertical-align:-4px;" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="clearDescriptionRule();">
                         </td>
                     </tr>
+                    <%-- Default units --%>
+                    <tr>
+                        <td class="admin" nowrap><%=getTran("Web","defaultunits",sWebLanguage)%></td>
+                        <td class="admin2">
+                            <input class="text" type="text" name="EditTotalUnits" size="15" maxLength="15" value="<%=(sSelectedTotalUnits.length()>0?(doubleFormat.format(Double.parseDouble(sSelectedTotalUnits))).replaceAll(",","."):"")%>" onKeyUp="isNumber(this);">
+                        </td>
+                    </tr>
+                    
                     
                     <%-- schema --%>
                     <tr>
@@ -789,6 +808,14 @@
                         <td class="admin" nowrap><%=getTran("Web","atccode",sWebLanguage)%></td>
                         <td class="admin2">
                             <input class="text" type="text" name="EditAtccode" size="50" maxLength="50" value="<%=sSelectedAtccode%>" >
+                        </td>
+                    </tr>
+                    
+                    <%-- RxNorm --%>
+                    <tr>
+                        <td class="admin" nowrap><%=getTran("Web","rxnormcode",sWebLanguage)%></td>
+                        <td class="admin2">
+                            <input class="text" type="text" name="EditRxnormcode" size="50" maxLength="50" value="<%=sSelectedRxnormcode%>" >
                         </td>
                     </tr>
                     
@@ -893,6 +920,7 @@
                     transactionForm.EditUnitsPerTimeUnit.value = "";
                     transactionForm.EditTimeUnitCount.value = "";
                     transactionForm.EditTimeUnit.value = "";
+					transactionForm.EditTotalUnits.value="";
                   }
                 </script>
 
@@ -1095,6 +1123,7 @@
     transactionForm.EditTimeUnit.value = "";
     transactionForm.EditTimeUnitCount.value = "";
     transactionForm.EditUnitsPerTimeUnit.value = "";
+    transactionForm.EditTotalUnits.value = "";
     transactionForm.EditProductGroup.value = "";
   }
 

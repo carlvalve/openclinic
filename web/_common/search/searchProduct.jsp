@@ -30,6 +30,7 @@
            sReturnUnitsPerTimeUnitField = checkString(request.getParameter("ReturnUnitsPerTimeUnitField")),
            sReturnSupplierUidField  = checkString(request.getParameter("ReturnSupplierUidField")),
            sReturnSupplierNameField = checkString(request.getParameter("ReturnSupplierNameField")),
+           sReturnTotalUnitsField = checkString(request.getParameter("ReturnTotalUnitsField")),
            sReturnProductStockUidField  = checkString(request.getParameter("ReturnProductStockUidField"));
 
     // display options
@@ -68,6 +69,7 @@
         Debug.println("sReturnSupplierUidField      : "+sReturnSupplierUidField);
         Debug.println("sReturnSupplierNameField     : "+sReturnSupplierNameField);
         Debug.println("sReturnProductStockUidField  : "+sReturnProductStockUidField+"\n");
+        Debug.println("sReturnTotalUnitsField       : "+sReturnTotalUnitsField+"\n");
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
 %>
@@ -79,6 +81,7 @@
     <input type="hidden" name="ReturnProductNameField" value="<%=sReturnProductNameField%>">
     <input type="hidden" name="ReturnProductUnitField" value="<%=sReturnProductUnitField%>">
     <input type="hidden" name="ReturnUnitsPerTimeUnitField" value="<%=sReturnUnitsPerTimeUnitField%>">
+    <input type="hidden" name="ReturnTotalUnitsField" value="<%=sReturnTotalUnitsField%>">
 
     <%=writeTableHeader("web.manage","searchinproductcatalog",sWebLanguage," window.close();")%>
     <table width="100%" class="menu" cellspacing="0" cellpadding="0">
@@ -156,7 +159,7 @@
         if(displaySearchProductInStockLink){
 		    %>
 		    <div>
-		        <a href="javascript:searchProductInStock('<%=sReturnProductUidField%>','<%=sReturnProductNameField%>','<%=sReturnProductUnitField%>','<%=sReturnUnitsPerTimeUnitField%>','<%=sReturnUnitsPerPackageField%>','<%=sReturnProductStockUidField%>');"><%=getTran("web.manage", "searchInProductStock", sWebLanguage)%></a>
+		        <a href="javascript:searchProductInStock('<%=sReturnProductUidField%>','<%=sReturnProductNameField%>','<%=sReturnProductUnitField%>','<%=sReturnUnitsPerTimeUnitField%>','<%=sReturnUnitsPerPackageField%>','<%=sReturnProductStockUidField%>','<%=sReturnTotalUnitsField%>');"><%=getTran("web.manage", "searchInProductStock", sWebLanguage)%></a>
 		    </div>
 		    <%
         }
@@ -165,7 +168,7 @@
         if(displaySearchUserProductsLink){
 		    %>
 		    <div>
-		        <a href="javascript:searchUserProduct('<%=sReturnProductUidField%>','<%=sReturnProductNameField%>','<%=sReturnProductUnitField%>','<%=sReturnUnitsPerTimeUnitField%>','<%=sReturnUnitsPerPackageField%>','<%=sReturnProductStockUidField%>');"><%=getTran("web.manage", "searchInUserProducts", sWebLanguage)%></a>
+		        <a href="javascript:searchUserProduct('<%=sReturnProductUidField%>','<%=sReturnProductNameField%>','<%=sReturnProductUnitField%>','<%=sReturnUnitsPerTimeUnitField%>','<%=sReturnUnitsPerPackageField%>','<%=sReturnProductStockUidField%>','<%=sReturnTotalUnitsField%>');"><%=getTran("web.manage", "searchInUserProducts", sWebLanguage)%></a>
 		    </div>
 		    <%
         }
@@ -192,7 +195,7 @@
   
   <%-- SELECT PRODUCT --%>
   function selectProduct(productUid,productName,productUnit,unitsPerTimeUnit,
-		                 productSupplierUid,productSupplierName,unitsPerPackage,productStockUid){
+		                 productSupplierUid,productSupplierName,unitsPerPackage,productStockUid,productTotalUnits){
     var closeWindow = true;
 
     window.opener.document.getElementsByName("<%=sReturnProductUidField%>")[0].value = productUid;
@@ -298,7 +301,7 @@ if(sReturnUnitsPerTimeUnitField.length() > 0){
 	<%
 }
 
-// set unitsPerPackage
+//set unitsPerPackage
 if(sReturnUnitsPerPackageField.length() > 0){
 	%>
 	    if(unitsPerPackage==0) unitsPerPackage = 1;
@@ -306,6 +309,23 @@ if(sReturnUnitsPerPackageField.length() > 0){
 	    window.opener.document.getElementsByName("<%=sReturnUnitsPerPackageField%>")[0].value = unitsPerPackage;
 	    isNumber(window.opener.document.getElementsByName("<%=sReturnUnitsPerTimeUnitField%>")[0]);
 	
+	    if(window.opener.calculatePackagesNeeded!=null){
+	      window.opener.calculatePackagesNeeded();
+	    }
+	    if(window.opener.calculatePrescriptionPeriod!=null){
+	      window.opener.calculatePrescriptionPeriod();
+	    }
+	<%
+}
+
+//set unitsPerPackage
+if(sReturnTotalUnitsField.length() > 0){
+	%>
+	    if(productTotalUnits==0) productTotalUnits = 1;
+	
+	    window.opener.document.getElementsByName("<%=sReturnTotalUnitsField%>")[0].value = productTotalUnits;
+	    isNumber(window.opener.document.getElementsByName("<%=sReturnTotalUnitsField%>")[0]);
+
 	    if(window.opener.calculatePackagesNeeded!=null){
 	      window.opener.calculatePackagesNeeded();
 	    }
@@ -342,17 +362,17 @@ function searchSupplier(serviceUidField, serviceNameField){
 
 <%-- popup : search userProduct --%>
 function searchUserProduct(productUidField,productNameField,productUnitField,
-		                   unitsPerTimeUnitField,unitsPerPackage,productStockUidField){
+		                   unitsPerTimeUnitField,unitsPerPackage,productStockUidField,productTotalUnits){
   window.opener.searchUserProduct(productUidField,productNameField,productUnitField,
-		                          unitsPerTimeUnitField,unitsPerPackage,productStockUidField);
+		                          unitsPerTimeUnitField,unitsPerPackage,productStockUidField,productTotalUnits);
   window.close();
 }
 
 <%-- popup : search product in stock --%>
 function searchProductInStock(productUidField,productNameField,productUnitField,
-		                      unitsPerTimeUnitField,unitsPerPackage,productStockUidField){
+		                      unitsPerTimeUnitField,unitsPerPackage,productStockUidField,productTotalUnits){
   window.opener.searchProductInServiceStock(productUidField,productNameField,productUnitField,
-		                                    unitsPerTimeUnitField,unitsPerPackage,productStockUidField);
+		                                    unitsPerTimeUnitField,unitsPerPackage,productStockUidField,productTotalUnits);
   window.close();
 }
 

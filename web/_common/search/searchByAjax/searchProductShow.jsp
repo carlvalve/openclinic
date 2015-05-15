@@ -96,7 +96,7 @@
         sProductSubGroup = getTranNoLink("drug.category",checkString(product.getProductSubGroup()),sWebLanguage);
 
         //*** display product in one row ***
-        sHtml.append("<tr title='").append(chooseTran).append("' class='list"+sClass+"' onClick=\"selectProduct('"+product.getUid()+"','"+sProductName+"','"+product.getUnit()+"','"+sUnitsPerTimeUnit+"','"+sSupplierUid+"','"+sSupplierName+"','"+product.getPackageUnits()+"');\">")
+        sHtml.append("<tr title='").append(chooseTran).append("' class='list"+sClass+"' onClick=\"selectProduct('"+product.getUid()+"','"+sProductName+"','"+product.getUnit()+"','"+sUnitsPerTimeUnit+"','"+sSupplierUid+"','"+sSupplierName+"','"+product.getPackageUnits()+"','','"+product.getTotalUnits()+"');\">")
               .append("<td nowrap "+(inStock?"":" class='strikeonly'")+">"+sProductName+"</td>")
               .append("<td"+(inStock?"":" class='strikeonly'")+">"+sUnitTran+"</td>")
               .append("<td align='right'"+(inStock?"":" class='strikeonly'")+">"+sUnitPrice+" "+sCurrency+"&nbsp;</td>")
