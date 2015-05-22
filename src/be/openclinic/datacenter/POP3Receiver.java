@@ -33,13 +33,18 @@ public class POP3Receiver extends Receiver {
 	    try {
 	    	Store store = session.getStore("pop3");
 
+		    Debug.println("Log in with user name "+username+" on POP3 server "+host);
 			store.connect(host, username, password);
 		    Folder folder = store.getFolder("INBOX");
+		    Debug.println("Opening POP3 mailbox INBOX");
 		    folder.open(Folder.READ_WRITE);
 	
 		    Message message[] = folder.getMessages();
+		    Debug.println("Total number of messages: "+message.length);
 		    for (int i=0, n=message.length; i<n; i++) {
+			    Debug.println("Analyzing message "+i);
 		    	if(message[i].getSubject().startsWith("datacenter.content")){
+				    Debug.println("Message starts with datacenter.content");
 			    	//Store the message in the oc_imports database here and delete it if successful
 		            SAXReader reader = new SAXReader(false);
 		            try{
@@ -55,6 +60,7 @@ public class POP3Receiver extends Receiver {
 							Element data = (Element)msgs.next();
 					    	ImportMessage msg = new ImportMessage(data);
 							msg.setType(root.attributeValue("type"));
+						    Debug.println("Message type = "+root.attributeValue("type")+ " from "+message[i].getFrom()[0]);
 					    	msg.setReceiveDateTime(new java.util.Date());
 					    	msg.setRef("SMTP:"+message[i].getFrom()[0]);
 					    	try {
@@ -67,10 +73,11 @@ public class POP3Receiver extends Receiver {
 							}
 						}
 				    	//Set ackDateTime for all received messages in mail
+					    Debug.println("Sending ACK for received message "+i);
 						ImportMessage.sendAck(ackMessages);
 		            }
 		            catch(MessagingException e){
-		            	Debug.println(e.getMessage());
+		            	e.printStackTrace();
 				    	message[i].setFlag(Flags.Flag.DELETED, true);
 		            } catch (UnsupportedEncodingException e) {
 		    			// TODO Auto-generated catch block
@@ -80,7 +87,7 @@ public class POP3Receiver extends Receiver {
 		    			// TODO Auto-generated catch block
 		    			e.printStackTrace();
 				    	message[i].setFlag(Flags.Flag.DELETED, true);
-		    		} catch (IOException e) {
+		    		} catch (Exception e) {
 		    			// TODO Auto-generated catch block
 		    			e.printStackTrace();
 		    		}
@@ -172,7 +179,7 @@ public class POP3Receiver extends Receiver {
 		    store.close();
 		} catch (MessagingException e1) {
 			// TODO Auto-generated catch block
-			//e1.printStackTrace();
+			if(Debug.enabled) e1.printStackTrace();
 		}
 	}
 }

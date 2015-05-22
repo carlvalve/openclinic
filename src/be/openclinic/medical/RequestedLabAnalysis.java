@@ -2129,4 +2129,22 @@ public class RequestedLabAnalysis {
     	  return null;
       }
       
+      public boolean getNotifyByEmailAbnormalOnly(){
+    	  //transactieitem ophalen dat Email adres zou kunnen bevatten
+    	  ItemVO itemVO = MedwanQuery.getInstance().getItem(Integer.parseInt(this.getServerId()), Integer.parseInt(this.getTransactionId()), "be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_LAB_EMAIL_ABNORMALONLY");
+    	  if(itemVO!=null){
+  			  return itemVO.getValue().equalsIgnoreCase("medwan.common.true");
+    	  }
+    	  return false;
+      }
+      
+      public boolean getNotifyBySMSAbnormalOnly(){
+    	  //transactieitem ophalen dat Email adres zou kunnen bevatten
+    	  ItemVO itemVO = MedwanQuery.getInstance().getItem(Integer.parseInt(this.getServerId()), Integer.parseInt(this.getTransactionId()), "be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_LAB_SMS_ABNORMALONLY");
+    	  if(itemVO!=null){
+    		  return itemVO.getValue().equalsIgnoreCase("medwan.common.true");
+    	  }
+    	  return false;
+      }
+      
 }

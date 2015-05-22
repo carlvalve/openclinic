@@ -84,6 +84,10 @@ public class sendHtmlMail {
 	    	// * * The browser accesses these images just as if it were displaying an image in a Web page. Unfortunately, spammers have used this mechanism as a sneaky way to record who visits their site (and mark your email as valid). To protect your privacy, many Web-based (and other) email clients don't display images in HTML emails.
 			//	An alternative to placing absolute URLs to images in your HTML is to include the images as attachments to the email. The HTML can reference the image in an attachment by using the protocol prefix cid: plus the content-id of the attachment.      		       
 	        try{
+	        	System.out.println("smtpServer="+smtpServer);
+	        	System.out.println("sSubject="+sSubject);
+	        	System.out.println("sFrom="+sFrom);
+	        	System.out.println("sTo="+sTo);
 		        Properties props = new Properties();
 		        props.setProperty("mail.transport.protocol", "smtp");
 		        props.setProperty("mail.host", smtpServer); //props.setProperty("mail.user", "myuser"); //props.setProperty("mail.password", "mypwd");

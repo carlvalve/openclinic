@@ -131,11 +131,11 @@ public class PDFPatientCardGenerator extends PDFOfficialBasic {
 
             PdfPTable subTable = new PdfPTable(1);
             subTable.setWidthPercentage(100);
-            cell=createLabel(MedwanQuery.getInstance().getLabel("web","cardarchivecode",user.person.language),6,1,Font.ITALIC);
+            cell=createLabel(MedwanQuery.getInstance().getConfigInt("disableArchiveCodeOnPatientCard", 0)==1?"": MedwanQuery.getInstance().getLabel("web","cardarchivecode",user.person.language),6,1,Font.ITALIC);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
             cell.setPadding(0);
             subTable.addCell(cell);
-            cell=createLabel(person.getID("archiveFileCode").toUpperCase(),10,1,Font.BOLD);
+            cell=createLabel(MedwanQuery.getInstance().getConfigInt("disableArchiveCodeOnPatientCard", 0)==1?"":person.getID("archiveFileCode").toUpperCase(),10,1,Font.BOLD);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
             cell.setPadding(0);
             subTable.addCell(cell);

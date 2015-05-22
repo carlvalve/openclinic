@@ -13,7 +13,6 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPClientConfig;
 
 import be.mxs.common.util.db.MedwanQuery;
-import be.mxs.common.util.io.SunFtpWrapper;
 import be.mxs.common.util.system.Internet;
 import be.mxs.common.util.system.Mail;
 import be.mxs.common.util.system.ScreenHelper;
