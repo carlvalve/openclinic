@@ -88,15 +88,19 @@ public class Scheduler implements Runnable{
         }
         try {
             Element receivers = root.element("receivers");
+            Debug.println("Searching for receivers");
             @SuppressWarnings("unchecked")
 			Iterator<Element> elements = receivers.elementIterator("module");
             Element module;
             while (elements.hasNext()) {
                 module = (Element) elements.next();
                 String className = module.attributeValue("class");
+                Debug.println("Loading receiver "+className);
                 //Execute sender 
                 Receiver receiver = (Receiver)Class.forName(className).newInstance();
+                Debug.println("Initiating receive process for "+className);
                 receiver.receive();
+                Debug.println("End receive process for "+className);
             }
         }
         catch (Exception e) {

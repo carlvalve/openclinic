@@ -242,10 +242,10 @@ public class Vaccination {
 			else if(parameter.equalsIgnoreCase("location")){
 				sResult=vaccination.location;
 				if(sResult.startsWith("0")){
-					sResult=ScreenHelper.getTran("web","javaposcentername",((User)request.getSession().getAttribute("activeUser")).person.language);
+					sResult=ScreenHelper.getTran("vaccinationlocation",MedwanQuery.getInstance().getConfigString("defaultVaccinationLocation"),((User)request.getSession().getAttribute("activeUser")).person.language);
 				}
 				else {
-					sResult=ScreenHelper.getTran("web","other",((User)request.getSession().getAttribute("activeUser")).person.language)+": "+(sResult.length()>2?sResult.substring(2):"");
+					sResult=ScreenHelper.getTran("vaccinationlocation",(sResult+" ").substring(0,1),((User)request.getSession().getAttribute("activeUser")).person.language);
 				}
 			}
 		}

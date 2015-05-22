@@ -196,12 +196,17 @@ public class Encounter extends OC_Object {
                           "  and a.updatetime>=? and a.updatetime<=?";
             ps = conn.prepareStatement(sSql);
             ps.setInt(1,Integer.parseInt(this.getPatientUID()));
-            ps.setDate(2,new java.sql.Date(ScreenHelper.parseDate(ScreenHelper.stdDateFormat.format(this.getBegin())).getTime()));
-            ps.setTimestamp(3,new java.sql.Timestamp(this.getEnd()==null?new java.util.Date().getTime():this.getEnd().getTime()));
+            java.sql.Date dBegin=new java.sql.Date(ScreenHelper.parseDate(ScreenHelper.stdDateFormat.format(this.getBegin())).getTime());
+            ps.setDate(2,dBegin);
+            java.sql.Timestamp dEnd=new java.sql.Timestamp(this.getEnd()==null?new java.util.Date().getTime():this.getEnd().getTime());
+            ps.setTimestamp(3,dEnd);
             rs = ps.executeQuery();
             if(rs.next()){
                 bHasTransactions = (rs.getInt("total") > 0);
             }
+            System.out.println("dBegin="+dBegin);
+            System.out.println("dEnd="+dEnd);
+            System.out.println("bHasTransactions="+bHasTransactions);
         }
         catch(Exception e){
     		Debug.printStackTrace(e);
@@ -764,6 +769,9 @@ public class Encounter extends OC_Object {
     //--- SET PATIENT -----------------------------------------------------------------------------
     public void setPatient(AdminPerson patient){
         this.patient = patient;
+        if(patient!=null){
+        	this.patientUID=patient.personid;
+        }
     }
 
     //--- GET BED ---------------------------------------------------------------------------------

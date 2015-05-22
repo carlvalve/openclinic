@@ -16,13 +16,12 @@ import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.PostMethod;
 
 import be.mxs.common.util.system.HTMLEntities;
+import be.mxs.common.util.system.Pointer;
 import be.mxs.common.util.system.ScreenHelper;
 import be.openclinic.datacenter.SendSMS;
-
 import net.admin.AdminPerson;
 import be.mxs.common.util.tools.sendHtmlMail;
 import be.mxs.common.util.tools.ProcessFiles;
-
 import be.openclinic.medical.*;
 import be.mxs.common.model.vo.healthrecord.*;
 import be.dpms.medwan.common.model.vo.administration.PersonVO;
@@ -114,6 +113,7 @@ public class LabresultsNotifier {
 				String result;
 				if (sSMSValue != null){ 				
                 	String normal = rqLabAnalysis.getResultModifier();
+                	String normalindicator = rqLabAnalysis.getResultModifier();
                 	if(normal.length()==0){
                 		String min =rqLabAnalysis.getResultRefMin();
                 		String max =rqLabAnalysis.getResultRefMax();
@@ -123,28 +123,35 @@ public class LabresultsNotifier {
 	                        double iMax = Double.parseDouble(max.replaceAll(",", "\\."));
 	
 	                        if ((iResult >= iMin)&&(iResult <= iMax)){
-	                            normal = "";
+	                            normal = "<font color='green'>n</font>";
+	                            normalindicator="n";
 	                        }
 	                        else {
 	                            double iAverage = (iMax-iMin);
 	
 	                            if (iResult > iMax+iAverage*2){
-	                                normal = "+++";
+	                                normal = "<font color='red'>+++</font>";
+		                            normalindicator="+++";
 	                            }
 	                            else if (iResult > iMax + iAverage){
-	                                normal = "++";
+	                                normal = "<font color='red'>++</font>";
+		                            normalindicator="++";
 	                            }
 	                            else if (iResult > iMax){
-	                                normal = "+";
+	                                normal = "<font color='red'>+</font>";
+		                            normalindicator="+";
 	                            }
 	                            else if (iResult < iMin - iAverage*2){
-	                                normal = "---";
+	                                normal = "<font color='red'>---</font>";
+		                            normalindicator="---";
 	                            }
 	                            else if (iResult < iMin - iAverage){
-	                                normal = "--";
+	                                normal = "<font color='red'>--</font>";
+		                            normalindicator="--";
 	                            }
 	                            else if (iResult < iMin){
-	                                normal = "-";
+	                                normal = "<font color='red'>-</font>";
+		                            normalindicator="-";
 	                            }
 	                        }
                     	}
@@ -152,29 +159,33 @@ public class LabresultsNotifier {
                     		//e2.printStackTrace();
                     	}
                 	}
-					if(transactionlanguages.get(rqLabAnalysis.getTransactionId())!=null){
-						sLanguage=(String)transactionlanguages.get(rqLabAnalysis.getTransactionId());
-					}
-					else{
-						transactionVO = MedwanQuery.getInstance().loadTransaction(MedwanQuery.getInstance().getConfigInt("serverId"), Integer.parseInt(rqLabAnalysis.getTransactionId())); 				
-						sLanguage=transactionVO.getUser().personVO.language; 
-						transactionlanguages.put(transactionVO.getTransactionId()+"",sLanguage); 
-					}		
-					if(sLanguage==null || sLanguage.equalsIgnoreCase("")){
-						sLanguage=MedwanQuery.getInstance().getConfigString("defaultBrokerLanguage","FR");
-					}
-					String sl =MedwanQuery.getInstance().getLabel("labanalysis.short", la.getLabId()+"", sLanguage);
-					if(sl.equalsIgnoreCase(la.getLabId()+"")){
-						sl=MedwanQuery.getInstance().getLabel("labanalysis", la.getLabId()+"", sLanguage);
-					}
-					result =  sl + ": " + rqLabAnalysis.getResultValue()+" "+rqLabAnalysis.getResultUnit();					
-					
-					if(htLabsToSendSMS.get(rqLabAnalysis.getTransactionId())==null){
-						htLabsToSendSMS.put(rqLabAnalysis.getTransactionId(), result+" "+normal+"\n");
-					}
-					else {
-						htLabsToSendSMS.put(rqLabAnalysis.getTransactionId(), (String)htLabsToSendSMS.get(rqLabAnalysis.getTransactionId())+result+" "+normal+"\n");
-					}						
+                	if((!rqLabAnalysis.getNotifyBySMSAbnormalOnly() || MedwanQuery.getInstance().getConfigString("abnormalModifiers","").indexOf("*"+normal+"*")>-1) && !Pointer.getPointer("LABSMS."+rqLabAnalysis.getTransactionId()+"."+rqLabAnalysis.getAnalysisCode()).equalsIgnoreCase(rqLabAnalysis.getResultValue())){
+						if(transactionlanguages.get(rqLabAnalysis.getTransactionId())!=null){
+							sLanguage=(String)transactionlanguages.get(rqLabAnalysis.getTransactionId());
+						}
+						else{
+							transactionVO = MedwanQuery.getInstance().loadTransaction(MedwanQuery.getInstance().getConfigInt("serverId"), Integer.parseInt(rqLabAnalysis.getTransactionId())); 				
+							sLanguage=transactionVO.getUser().personVO.language; 
+							transactionlanguages.put(transactionVO.getTransactionId()+"",sLanguage); 
+						}		
+						if(sLanguage==null || sLanguage.equalsIgnoreCase("")){
+							sLanguage=MedwanQuery.getInstance().getConfigString("defaultBrokerLanguage","FR");
+						}
+						String sl =MedwanQuery.getInstance().getLabel("labanalysis.short", la.getLabId()+"", sLanguage);
+						if(sl.equalsIgnoreCase(la.getLabId()+"")){
+							sl=MedwanQuery.getInstance().getLabel("labanalysis", la.getLabId()+"", sLanguage);
+						}
+						result =  sl + ": " + rqLabAnalysis.getResultValue()+" "+rqLabAnalysis.getResultUnit();					
+						
+						if(htLabsToSendSMS.get(rqLabAnalysis.getTransactionId())==null){
+							htLabsToSendSMS.put(rqLabAnalysis.getTransactionId(), result+" "+normal+"\n");
+						}
+						else {
+							htLabsToSendSMS.put(rqLabAnalysis.getTransactionId(), (String)htLabsToSendSMS.get(rqLabAnalysis.getTransactionId())+result+" "+normal+"\n");
+						}
+						Pointer.deletePointers("LABSMS."+rqLabAnalysis.getTransactionId()+"."+rqLabAnalysis.getAnalysisCode());
+						Pointer.storePointer("LABSMS."+rqLabAnalysis.getTransactionId()+"."+rqLabAnalysis.getAnalysisCode(), rqLabAnalysis.getResultValue());
+                	}
 				}	
 				if ( emailValue != null){ 					
 					if(transactionlanguages.get(rqLabAnalysis.getTransactionId())!=null){
@@ -188,8 +199,9 @@ public class LabresultsNotifier {
 					if(sLanguage==null || sLanguage.equalsIgnoreCase("")){
 						sLanguage=MedwanQuery.getInstance().getConfigString("defaultBrokerLanguage","FR");
 					}
+                	String normal = rqLabAnalysis.getResultModifier();
+                	String normalindicator=rqLabAnalysis.getResultModifier();
 					if (sSendMode == "htmlmail" || sSendMode == "attachedmail"){
-                    	String normal = rqLabAnalysis.getResultModifier();
                     	if(normal.length()==0){
                     		String min =rqLabAnalysis.getResultRefMin();
                     		String max =rqLabAnalysis.getResultRefMax();
@@ -200,27 +212,34 @@ public class LabresultsNotifier {
 		
 		                        if ((iResult >= iMin)&&(iResult <= iMax)){
 		                            normal = "<font color='green'>n</font>";
+		                            normalindicator="n";
 		                        }
 		                        else {
 		                            double iAverage = (iMax-iMin);
 		
 		                            if (iResult > iMax+iAverage*2){
 		                                normal = "<font color='red'>+++</font>";
+			                            normalindicator="+++";
 		                            }
 		                            else if (iResult > iMax + iAverage){
 		                                normal = "<font color='red'>++</font>";
+			                            normalindicator="++";
 		                            }
 		                            else if (iResult > iMax){
 		                                normal = "<font color='red'>+</font>";
+			                            normalindicator="+";
 		                            }
 		                            else if (iResult < iMin - iAverage*2){
 		                                normal = "<font color='red'>---</font>";
+			                            normalindicator="---";
 		                            }
 		                            else if (iResult < iMin - iAverage){
 		                                normal = "<font color='red'>--</font>";
+			                            normalindicator="--";
 		                            }
 		                            else if (iResult < iMin){
 		                                normal = "<font color='red'>-</font>";
+			                            normalindicator="-";
 		                            }
 		                        }
 	                    	}
@@ -239,16 +258,21 @@ public class LabresultsNotifier {
 						result =  la.getLabcode() + " " + MedwanQuery.getInstance().getLabel("labanalysis", la.getLabId()+"", sLanguage) 
 								+  "  " + rqLabAnalysis.getResultValue()+" "+rqLabAnalysis.getResultUnit() +"\n";
 					}
-					
-					if(htLabsToSendEmail.get(rqLabAnalysis.getTransactionId())==null){
-						htLabsToSendEmail.put(rqLabAnalysis.getTransactionId(), result);
-					}
-					else {
-						htLabsToSendEmail.put(rqLabAnalysis.getTransactionId(), (String)htLabsToSendEmail.get(rqLabAnalysis.getTransactionId())+result);
-					}	
-					
+                	if((!rqLabAnalysis.getNotifyByEmailAbnormalOnly() || MedwanQuery.getInstance().getConfigString("abnormalModifiers","").indexOf("*"+normalindicator+"*")>-1) && !Pointer.getPointer("LABEMAIL."+rqLabAnalysis.getTransactionId()+"."+rqLabAnalysis.getAnalysisCode()).equalsIgnoreCase(rqLabAnalysis.getResultValue())){
+						System.out.println("Found abnormal result for "+rqLabAnalysis.getAnalysisCode()+" = "+rqLabAnalysis.getResultValue());
+						System.out.println("TransactionId="+rqLabAnalysis.getTransactionId());
+                		if(htLabsToSendEmail.get(rqLabAnalysis.getTransactionId())==null){
+							htLabsToSendEmail.put(rqLabAnalysis.getTransactionId(), result);
+						}
+						else {
+							htLabsToSendEmail.put(rqLabAnalysis.getTransactionId(), (String)htLabsToSendEmail.get(rqLabAnalysis.getTransactionId())+result);
+						}
+						Pointer.deletePointers("LABEMAIL."+rqLabAnalysis.getTransactionId()+"."+rqLabAnalysis.getAnalysisCode());
+						Pointer.storePointer("LABEMAIL."+rqLabAnalysis.getTransactionId()+"."+rqLabAnalysis.getAnalysisCode(), rqLabAnalysis.getResultValue());
+                	}
 				}
 			}
+			System.out.println("htLabsToSendEmail.size()="+htLabsToSendEmail.size());
 			if (htLabsToSendEmail.size() > 0){
 				spoolEmail(htLabsToSendEmail, sSendMode); 
 			}
@@ -326,7 +350,6 @@ public class LabresultsNotifier {
 				String transport = rs.getString("OC_NOTIFIER_TRANSPORT");
 				String result = rs.getString("OC_NOTIFIER_RESULTS");
 				String sentto = ScreenHelper.checkString(rs.getString("OC_NOTIFIER_SENTTO")).replace("+", "");
-				System.out.println("Trying to send messages to "+sentto);
 				TransactionVO transactionVO = MedwanQuery.getInstance().loadTransaction(MedwanQuery.getInstance().getConfigInt("serverId"), transactionId);
 				if(transactionVO.getHealthrecordId() == 0){
 					MedwanQuery.getInstance().getObjectCache().removeObject("transaction",MedwanQuery.getInstance().getConfigInt("serverId")+"."+transactionId);
@@ -652,15 +675,18 @@ public class LabresultsNotifier {
 			sEmailAddress = getEmailAddressByTransactionId(sTransactionId).replaceAll(";", " ").replaceAll(",", " ");									
 			try {				
 				if (sSendMode == "simple"){
+					System.out.println("sending simple");
 					sendHtmlMail.sendSimpleMail(MedwanQuery.getInstance().getConfigString("PatientEdit.MailServer"), MedwanQuery.getInstance().getConfigString("labNotifierEmailSender","frank.verbeke@mxs.be"), sEmailAddress, sMailTitle + " " + sTransactionId, sResult);					
 				}				
 				if (sSendMode == "html"){ 	
+					System.out.println("sending html");
 					sResult=HTMLEntities.htmlentities(sResult);
 					String sLogo = "/projects/openclinic/web/_img/projectlogo.jpg";	
 					sendHtmlMail.sendEmailWithImages(MedwanQuery.getInstance().getConfigString("PatientEdit.MailServer"), MedwanQuery.getInstance().getConfigString("labNotifierEmailSender","frank.verbeke@mxs.be"), sEmailAddress, sMailTitle + " " + sTransactionId, sResult, sLogo);														
 				}
 
 				if (sSendMode == "attach"){
+					System.out.println("sending attach");
 					sResult=HTMLEntities.htmlentities(sResult);
 					String sFileName = "Transaction"+ new SimpleDateFormat("ddMMyyyy-HHmmss").format(new java.util.Date())+"_Tid"+sTransactionId+".html";
 	                String sAttachment = "/tmp/"+sFileName;				

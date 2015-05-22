@@ -1,7 +1,6 @@
 package org.hnrw.chin;
 
 import be.mxs.common.util.db.MedwanQuery;
-import be.mxs.common.util.io.SunFtpWrapper;
 import be.mxs.common.util.system.Internet;
 
 import java.text.SimpleDateFormat;
@@ -62,8 +61,9 @@ public class MessageManager {
     }
 
     public static boolean receiveMessages(){
-        boolean bSuccess=false;
-        String sDoc = MedwanQuery.getInstance().getConfigString("templateSource") + "healthnet.xml";
+    	boolean bSuccess=false;
+    	/**
+    	String sDoc = MedwanQuery.getInstance().getConfigString("templateSource") + "healthnet.xml";
         SAXReader reader = new SAXReader(false);
         try {
             Document hnConfig = reader.read(new URL(sDoc));
@@ -116,12 +116,14 @@ public class MessageManager {
         catch(Exception e){
             e.printStackTrace();
         }
+        **/
         return bSuccess;
     }
 
     public static boolean sendMessages(boolean delete){
         boolean bSuccess=false;
-        String sDoc = MedwanQuery.getInstance().getConfigString("templateSource") + "healthnet.xml";
+        /**
+        
         SAXReader reader = new SAXReader(false);
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try {
@@ -190,7 +192,7 @@ public class MessageManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		**/
         return bSuccess;
     }
 

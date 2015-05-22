@@ -37,7 +37,6 @@ public class UpdateService {
 
     // declarations
     private static UpdateService instance;
-    private SunFtpWrapper ftp;
     private String id, url, login, pwd, versionFilename, tempDirName, pathToUpdateFile, newVersionId;
     private SAXReader xmlReader;
     private Element serverElem;
@@ -49,7 +48,6 @@ public class UpdateService {
 
     //--- PRIVATE CONSTRUCTOR ---------------------------------------------------------------------
     private UpdateService(){
-        ftp = new SunFtpWrapper();
         xmlReader = new SAXReader();
         tempDirName = "/updateCheckTemp";
         simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -336,10 +334,11 @@ public class UpdateService {
                 if(Debug.enabled) Debug.println("\nChecking server "+serverCount+" : "+url+" (Timeout:"+ftpTimeOut+")");
 
                 if(Internet.isReachable(url,21,ftpTimeOut)){
-                    ftp.openServer(url); // this method takes some time..
+                    //ftp.openServer(url); // this method takes some time..
 
                     // download version file to temp dir
                     try{
+                    	/**
                         if(ftp.serverIsOpen()){
                             login = checkString(serverElem.attributeValue("login"));
                             pwd   = checkString(serverElem.attributeValue("pwd"));
@@ -360,6 +359,7 @@ public class UpdateService {
                         else{
                             if(Debug.enabled) Debug.println("--> Server is closed.");
                         }
+                        **/
                     }
                     catch(Exception e){
                         // continue with next server

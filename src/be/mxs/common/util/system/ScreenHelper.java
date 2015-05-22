@@ -81,6 +81,32 @@ public class ScreenHelper {
     	return sDate;
     }
     
+    public static String getDuration(java.util.Date begin, java.util.Date end){
+    	String duration="?";
+    	long minute = 60000;
+    	long hour = 60*minute;
+    	long day = 24*hour;
+    	try{
+    		long d = end.getTime()-begin.getTime();
+    		int days = new Long(d/day).intValue();
+    		d=d-days*day;
+    		int hours = new Long(d/hour).intValue();
+    		d=d-hours*hour;
+    		int minutes = new Long(d/minute).intValue();
+    		duration = minutes+"min";
+    		if(hours>0 || days>0){
+    			duration=hours+"h "+duration;
+    		}
+    		if(days>0){
+    			duration=days+"d "+duration;
+    		}
+    	}
+    	catch(Exception e){
+    		e.printStackTrace();
+    	}
+    	return duration;
+    }
+    
     //--- CONVERT TO EU DATE CONCATINATED ---------------------------------------------------------
     public static String convertToEUDateConcatinated(String sConcatinatedValue){ 
     	if(sConcatinatedValue.length() > 0){    	    	
@@ -2045,6 +2071,10 @@ public class ScreenHelper {
         return "<input id='"+sName+"' type='text' class='text' name='"+sName+"' value='"+sValue+"' onblur='checkTime(this)' size='5'>";
     }
 
+    public static String writeTimeField(String sName, String sValue, String code){
+        return "<input id='"+sName+"' type='text' class='text' name='"+sName+"' value='"+sValue+"' onblur='checkTime(this);"+checkString(code)+"' size='5' >";
+    }
+
     //--- GET SQL TIME STAMP ----------------------------------------------------------------------
     public static void getSQLTimestamp(PreparedStatement ps, int iIndex, String sDate, String sTime){
         try{
@@ -2767,10 +2797,20 @@ public class ScreenHelper {
     //--- WRITE DATE TIME FIELD -------------------------------------------------------------------
     public static String writeDateTimeField(String sName, String sForm, java.util.Date dValue,
     		                                String sWebLanguage, String sCONTEXTDIR){        
-        return "<input type='text' maxlength='10' class='text' name='"+sName+"' value='"+getSQLDate(dValue)+"' size='12' onblur='if(!checkDate(this)){dateError(this);this.value=\"\";}'>"
+        return "<input type='text' maxlength='10' class='text' name='"+sName+"' id='"+sName+"' value='"+getSQLDate(dValue)+"' size='12' onblur='if(!checkDate(this)){dateError(this);this.value=\"\";}'>"
               +"&nbsp;<img name='popcal' class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_agenda.gif' alt='"+getTranNoLink("Web","Select",sWebLanguage)+"' onclick='gfPop1"+".fPopCalendar(document."+sForm+"."+sName+");return false;'>"
               +"&nbsp;<img class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_compose.gif' alt='"+getTranNoLink("Web","PutToday",sWebLanguage)+"' onclick=\"getToday(document."+sForm+".all['"+sName+"']);getTime(document."+sForm+".all['"+sName+"Time'])\">"
               +"&nbsp;"+writeTimeField(sName+"Time", formatSQLDate(dValue,"HH:mm"))
+              +"&nbsp;"+getTran("web.occup","medwan.common.hour",sWebLanguage);
+    }
+
+    //--- WRITE DATE TIME FIELD -------------------------------------------------------------------
+    public static String writeDateTimeField(String sName, String sForm, java.util.Date dValue,
+    		                                String sWebLanguage, String sCONTEXTDIR,String code){        
+        return "<input type='text' maxlength='10' class='text' name='"+sName+"' id='"+sName+"' value='"+getSQLDate(dValue)+"' size='12' onblur='if(!checkDate(this)){dateError(this);this.value=\"\";};"+checkString(code)+"'>"
+              +"&nbsp;<img name='popcal' class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_agenda.gif' alt='"+getTranNoLink("Web","Select",sWebLanguage)+"' onclick='gfPop1"+".fPopCalendar(document."+sForm+"."+sName+");return false;'>"
+              +"&nbsp;<img class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_compose.gif' alt='"+getTranNoLink("Web","PutToday",sWebLanguage)+"' onclick=\"getToday(document."+sForm+".all['"+sName+"']);getTime(document."+sForm+".all['"+sName+"Time'])\">"
+              +"&nbsp;"+writeTimeField(sName+"Time", formatSQLDate(dValue,"HH:mm"),code)
               +"&nbsp;"+getTran("web.occup","medwan.common.hour",sWebLanguage);
     }
 
@@ -2781,6 +2821,22 @@ public class ScreenHelper {
         if(sTime.length()>0){
             try{
                 date = new SimpleDateFormat().parse(sTime);
+            }
+            catch(Exception e){
+                date = null;
+            }
+        }
+        
+        return date;
+    }
+
+    //--- GET SQL TIME ----------------------------------------------------------------------------
+    public static java.util.Date getSQLTime(String sTime, String sFormat){
+        java.util.Date date = null;
+
+        if(sTime.length()>0){
+            try{
+                date = new SimpleDateFormat(sFormat).parse(sTime);
             }
             catch(Exception e){
                 date = null;

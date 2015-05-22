@@ -7,6 +7,9 @@ import be.mxs.common.util.system.Debug;
 import be.mxs.common.util.system.ScreenHelper;
 import be.mxs.common.model.vo.healthrecord.TransactionVO;
 import net.admin.AdminPerson;
+import net.admin.User;
+
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -30,8 +33,16 @@ public class Planning extends OC_Object {
     private String transactionUID;
     private String contextID;
     private int margin;
+    private String tempPlanningUid;
     
-    //--- DESCRIPTION -----------------------------------------------------------------------------
+    public String getTempPlanningUid() {
+		return tempPlanningUid;
+	}
+	public void setTempPlanningUid(String tempPlanningUid) {
+		this.tempPlanningUid = tempPlanningUid;
+	}
+	
+	//--- DESCRIPTION -----------------------------------------------------------------------------
     public String getDescription(){
         return description;
     }
@@ -87,15 +98,10 @@ public class Planning extends OC_Object {
     public AdminPerson getUser(){
         if(this.user==null){
             if(ScreenHelper.checkDbString(this.userUID).length() > 0){
-            	Connection ad_conn = MedwanQuery.getInstance().getAdminConnection();
-                this.setUser(AdminPerson.getAdminPerson(ad_conn,this.userUID));
-                
-                try{
-					ad_conn.close();
-				} 
-                catch(SQLException e){
-					e.printStackTrace();
-				}
+            	User u = User.get(Integer.parseInt(this.userUID));
+            	if(u!=null){
+            		this.setUser(u.person);
+            	}
             }
             else{
                 this.user = null;
@@ -383,6 +389,16 @@ public class Planning extends OC_Object {
                 
                 if(ps.executeUpdate() > 0){
                     bInserOk = true;
+                    if(tempPlanningUid!=null && tempPlanningUid.split("\\.").length==2 && tempPlanningUid.split("\\.")[0].equalsIgnoreCase("0")){
+                    	//Update reservations linked to temporaryplanninguid
+                    	sSelect = "update OC_RESERVATIONS set OC_RESERVATION_PLANNINGUID=? where OC_RESERVATION_PLANNINGUID=?";
+                    	ps.close();
+                    	ps= oc_conn.prepareStatement(sSelect);
+                    	ps.setString(1, this.getUid());
+                    	ps.setString(2, tempPlanningUid);
+                    	ps.execute();
+                    	ps.close();
+                    }
                 }
             }
         }
@@ -692,6 +708,54 @@ public class Planning extends OC_Object {
     //--- GET USER PLANNINGS ----------------------------------------------------------------------
     public static Vector getUserPlannings(String sUserUID){
         return getUserPlannings(sUserUID,null,null);    	
+    }
+    
+    public static Vector getResourcePlannings(String sResourceUid,Date begin, Date end){
+        Vector vPlannings = new Vector();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        Connection oc_conn = MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+            String sSelect = "SELECT * FROM OC_RESERVATIONS"+
+                             " WHERE OC_RESERVATION_RESOURCEUID = ?"+
+                             "  AND OC_RESERVATION_BEGIN >= ?"+
+            		         "  AND OC_RESERVATION_BEGIN < ?"+
+                             "  AND OC_RESERVATION_PLANNINGUID not like '0.%'"+
+                             " ORDER BY OC_RESERVATION_BEGIN";
+            ps = oc_conn.prepareStatement(sSelect);
+            ps.setString(1,sResourceUid);
+            ps.setTimestamp(2,new java.sql.Timestamp(begin.getTime()));
+            ps.setTimestamp(3,new java.sql.Timestamp(end.getTime()));
+            rs = ps.executeQuery();
+            
+            Planning planning;
+            while(rs.next()){
+            	String puid = rs.getString("OC_RESERVATION_PLANNINGUID");
+                planning = Planning.get(puid);
+                planning.plannedDate = rs.getTimestamp("OC_RESERVATION_BEGIN");
+                java.util.Date enddate = rs.getTimestamp("OC_RESERVATION_END");
+                long duration = enddate.getTime()-planning.plannedDate.getTime();
+                planning.estimatedtime = new SimpleDateFormat("HH:mm").format(new java.util.Date(duration));
+                planning.description = sResourceUid;
+                vPlannings.add(planning);
+            }
+        }
+        catch(Exception e){
+            Debug.printProjectErr(e,Thread.currentThread().getStackTrace());
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                oc_conn.close();
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        
+        return vPlannings;
     }
     
     public static Vector getUserPlannings(String sUserUID,Date begin,Date end){
