@@ -34,13 +34,16 @@
 		out.flush();
 	}
 	Vaccination vaccination = (Vaccination)Vaccination.getVaccinations(activePatient.personid).get(type);
-	if(vaccination!=null){
+	if(vaccination!=null && vaccination.date!=null && vaccination.date.trim().length()>0){
 		if(vaccination.date!=null && vaccination.date.length()>0){
 			date=vaccination.date;
 		}
 		batchnumber=vaccination.batchnumber;
 		vaccinationlocation=vaccination.location;
 		expirydate=vaccination.expiry;
+	}
+	else {
+		vaccinationlocation=MedwanQuery.getInstance().getConfigString("defaultVaccinationLocation","")+":";
 	}
 %>
 <form name='transactionForm' method='post'>
@@ -76,7 +79,6 @@
 			<td class='admin'><%=getTran("web","vaccinationlocation",sWebLanguage) %></td>
 			<td class='admin2'>
 				<select name='vaccinationlocation' id='vaccinationlocation' onchange='if(this.value==1){document.getElementById("vaccinationlocationtext").style.visibility="visible"} else {document.getElementById("vaccinationlocationtext").value="";document.getElementById("vaccinationlocationtext").style.visibility="hidden"}'>
-					<option value='0' <%=(vaccinationlocation.length()>1 && vaccinationlocation.substring(0,1).equalsIgnoreCase("0"))?"selected":"" %>><%=getTranNoLink("vaccinationlocation",MedwanQuery.getInstance().getConfigString("defaultVaccinationLocation",""),sWebLanguage) %></option>
 					<%
 						Hashtable labels=(Hashtable)((Hashtable)(MedwanQuery.getInstance().getLabels())).get(sWebLanguage.toLowerCase());
 						if(labels!=null) labels=(Hashtable)labels.get("vaccinationlocation");
@@ -84,9 +86,7 @@
 							Enumeration en = labels.keys();
 							while(en.hasMoreElements()){
 								String key = (String)en.nextElement();
-								if(!key.equalsIgnoreCase(MedwanQuery.getInstance().getConfigString("defaultVaccinationLocation",""))){
-									out.println("<option value='"+key+"' "+(key.equalsIgnoreCase(vaccinationlocation.length()>1?vaccinationlocation.substring(0,1):"")?"selected":"")+">"+((Label)labels.get(key)).value+"</option>");
-								}
+								out.println("<option value='"+key+"' "+(key.equalsIgnoreCase(vaccinationlocation.length()>1?vaccinationlocation.substring(0,1):"")?"selected":"")+">"+((Label)labels.get(key)).value+"</option>");
 							}
 						}
 					%>

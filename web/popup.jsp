@@ -49,7 +49,6 @@ System.out.println("popup: 1");
       alert(sMsg); // Opera          
     }
   }
-  
   <%-- ALERT DIALOG AJAX --%>
   function alertDialogAjax(labelType,labelId){
     var url = "<c:url value='/_common/getLabel.jsp'/>?ts=<%=ScreenHelper.getTs()%>&LabelType="+labelType+"&LabelId="+labelId;

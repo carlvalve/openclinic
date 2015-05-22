@@ -353,6 +353,7 @@
 	        		}
 	        	}
 	        %>
+	        <input type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_LAB_SMS_ABNORMALONLY" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_LAB_SMS_ABNORMALONLY;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"> <%=getTran("web","abnormal.only",sWebLanguage)%>
         </td>
     </tr>
     <script>
@@ -374,6 +375,7 @@
 	        		}
 	        	}
 	        %>
+	        <input type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_LAB_EMAIL_ABNORMALONLY" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_LAB_EMAIL_ABNORMALONLY;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"> <%=getTran("web","abnormal.only",sWebLanguage)%>
         </td>
     </tr>
 

@@ -88,6 +88,7 @@ ClientMsg.prototype = {
         <% } %>
         <%=writeTab("service","planning",sWebLanguage)%>
         <%=writeTab("missedAppointments","planning",sWebLanguage)%>
+        <%=writeTab("resource","planning",sWebLanguage)%>
         <%=writeTab("managePlanning","web.userprofile",sWebLanguage)%>
         <td width="*">&nbsp;</td>
     </tr>
@@ -103,6 +104,9 @@ ClientMsg.prototype = {
     <%=writeTabEnd()%>
     <%=writeTabBegin("missedAppointments")%>
     <%ScreenHelper.setIncludePage(customerInclude("planning/missedAppointments.jsp"),pageContext);%>
+    <%=writeTabEnd()%>
+    <%=writeTabBegin("resource")%>
+    <%ScreenHelper.setIncludePage(customerInclude("planning/findPlanningResource.jsp?FindResourceDate="+sFindDate), pageContext);%>
     <%=writeTabEnd()%>
      <%=writeTabBegin("managePlanning")%>
     <%ScreenHelper.setIncludePage(customerInclude("userprofile/managePlanning.jsp"),pageContext);%>
@@ -123,14 +127,16 @@ ClientMsg.prototype = {
     $("tr"+sTab).style.display = "";
     $("tab"+sTab).className = "tabselected";
     if(sTab=="user"){
-      $("FindUserUID").selectedIndex = 1;
-      $("PatientID").value = "";
-      if(!initialize){
-    	displayCountedWeek(makeDate($('beginDate').value),$("FindUserUID").options[$("FindUserUID").selectedIndex].value);
+        $("PatientID").value = "";
+        if(!initialize){
+      	displayCountedWeek(makeDate($('beginDate').value),$("FindUserUID").options[$("FindUserUID").selectedIndex].value);
+        }
+        $("tableHeaderTitle").update("&nbsp;&nbsp;<%=getTran("planning","useropenplanning",sWebLanguage)%>")
+        togglePrintButtons(sTab);
       }
-      $("tableHeaderTitle").update("&nbsp;&nbsp;<%=getTran("planning","useropenplanning",sWebLanguage)%>")
-      togglePrintButtons(sTab);
-    }
+    else if(sTab=="resource"){
+    	loadResourceReservations();
+      }
     else if(sTab=="managePlanning"){
       setSlider();
     }
@@ -169,7 +175,6 @@ ClientMsg.prototype = {
     }
 
     $("tab"+sTab).className = "tabselected";
-    $("FindUserUID").selectedIndex = 0;
     <%
         if(activePatient!=null){
     %>
@@ -245,4 +250,5 @@ ClientMsg.prototype = {
   }
 
   activateTab("<%=sTab%>",true);
+
 </script>

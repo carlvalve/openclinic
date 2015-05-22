@@ -403,7 +403,6 @@
         }
     %>
   }
-
   <%-- NEW FAST TRANSACTION --%>
   function newFastTransaction(transactionType){
     if(<%=Encounter.selectEncounters("","","","","","","","",activePatient.personid,"").size()%>>0){

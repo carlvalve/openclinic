@@ -54,6 +54,7 @@
         <permission type="Web.Occup" id="warning">occup.warning</permission>
         <permission type="Web.Occup" id="other">occup.other</permission>
         <permission type="Web.Occup" id="pacs">occup.pacs</permission>
+        <permission type="Web.Occup" id="surgicalsafetychecklist">occup.surgicalsafetychecklist</permission>
         <permission type="Web.Occup" id="documents">occup.documents</permission>
         <permission type="Web.Occup" id="delivery.obreport">occup.delivery.obreport</permission>
         <permission type="Web.Occup" id="surveillance_anesthesie">occup.surveillance_anesthesie</permission>

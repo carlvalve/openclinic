@@ -97,7 +97,7 @@ function getItemsFromServer(){
   var ajaxIndex = sackObjects.length;
   sackObjects[ajaxIndex] = new sack();
   sackObjects[ajaxIndex].requestFile = externalSourceFile_items+ 
-                                       "&PersonId="+$F("PersonId")+ 
+									  "&PersonId="+$F("PersonId")+ 
                                        "&Month="+$F("DisplayedMonth");
 
   sackObjects[ajaxIndex].onCompletion = function(){

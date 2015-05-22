@@ -40,7 +40,7 @@
 				
 				String sUserName="";
 				for(int n=tran.getVersion();n>0 && n>tran.getVersion()-depth;n--){
-					TransactionVO historytran=MedwanQuery.getInstance().loadTransaction(tran.getServerId()+"", tran.getTransactionId()+"", n+"", tran.getServerId()+"");
+					TransactionVO historytran=MedwanQuery.getInstance().loadTransactionNoItems(tran.getServerId()+"", tran.getTransactionId()+"", n+"", tran.getServerId()+"");
 					if(historytran!=null){
 						if(historytran.getVersion()==1){
 							sUserName=User.getFullUserName(historytran.getUser().userId+"");
@@ -48,14 +48,14 @@
 						else {
 							sUserName=User.getFullUserName(Pointer.getPointer("TU."+historytran.getServerId()+"."+historytran.getTransactionId()+"."+historytran.getVersion()));
 						}
-						
+
 						out.println("<tr><td class='admin"+(activeversion==historytran.getVersion()?"":"2")+"'>"+historytran.getVersion()+"</td>"+
 						                "<td class='admin"+(activeversion==historytran.getVersion()?"":"2")+"'><a href='javascript:openTransaction("+n+")'>"+ScreenHelper.getSQLTimeStamp(new java.sql.Timestamp(historytran.getTimestamp().getTime()))+"</a></td>"+
 						                "<td class='admin"+(activeversion==historytran.getVersion()?"":"2")+"'>"+sUserName+"</td></tr>");
 					}
 				}
 			}
-			
+
 			if(request.getParameter("transactionversion")!=null){
 				%><tr><td colspan='3'><br><%
 						

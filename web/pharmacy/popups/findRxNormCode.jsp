@@ -2,45 +2,54 @@
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
 <%!
-	private Vector getRxNormCodes(String sKey){
-		//Clean key, only keep letters
-		byte[] bytes = sKey.getBytes();
-		for(int n=0;n<bytes.length;n++){
-			if("abcdefghijklmnopqrstuvwxzABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(bytes[n])==-1){
-				bytes[n]=32;				
-			}
-		}
-		sKey=new String(bytes);
-		Vector codes = new Vector();
+	private SortedSet getRxNormCodes(String sKey){
+		TreeSet codes = new TreeSet();
 		try{
 			HttpClient client = new HttpClient();
-			String url = MedwanQuery.getInstance().getConfigString("NLM_DDI_URL_FindRxNormCode","http://rxnav.nlm.nih.gov/REST/rxcui");
-			String[] keys = sKey.split(" ");
-			for(int n=0;n<keys.length;n++){
-				GetMethod method = new GetMethod(url);
-				method.setRequestHeader("Content-type","text/xml; charset=windows-1252");
-				NameValuePair nvp1= new NameValuePair("name",keys[n]);
-				method.setQueryString(new NameValuePair[]{nvp1});
-				int statusCode = client.executeMethod(method);
-				BufferedReader br = new BufferedReader(new StringReader(method.getResponseBodyAsString()));
-				SAXReader reader=new SAXReader(false);
-				org.dom4j.Document document=reader.read(br);
-				Element root = document.getRootElement();
-				if(root.getName().equalsIgnoreCase("rxnormdata")){
-					Iterator i = root.elementIterator("idGroup");
-					while(i.hasNext()){
-						String code="";
-						Element idgroup = (Element)i.next();
-						if(idgroup.element("name")!=null){
-							code+=idgroup.element("name").getText();
-							if(idgroup.element("rxnormId")!=null){
-								code+=";"+idgroup.element("rxnormId").getText();
-								codes.add(code);
-							}
-						}
+			//First retrieve all rxcui for the term
+			Hashtable rxcuis = new Hashtable();
+			String url = MedwanQuery.getInstance().getConfigString("NLM_DDI_URL_FindRxNormCode","http://rxnav.nlm.nih.gov/REST/approximateTerm");
+			GetMethod method = new GetMethod(url);
+			method.setRequestHeader("Content-type","text/xml; charset=windows-1252");
+			NameValuePair nvp1= new NameValuePair("term",sKey);
+			method.setQueryString(new NameValuePair[]{nvp1});
+			int statusCode = client.executeMethod(method);
+			BufferedReader br = new BufferedReader(new StringReader(method.getResponseBodyAsString()));
+			SAXReader reader=new SAXReader(false);
+			org.dom4j.Document document=reader.read(br);
+			Element root = document.getRootElement();
+			if(root.getName().equalsIgnoreCase("rxnormdata")){
+				Element approximateGroup=root.element("approximateGroup");
+				Iterator candidates = approximateGroup.elementIterator("candidate");
+				while(candidates.hasNext()){
+					Element candidate = (Element)candidates.next();
+					if(candidate.elementText("rxcui")!=null && rxcuis.get(candidate.element("rxcui"))==null){
+						rxcuis.put(candidate.elementText("rxcui"),Integer.parseInt(candidate.elementText("score")));
 					}
 				}
 			}
+			
+			//For all rxcuis, find the RxNorm name
+			Enumeration e = rxcuis.keys();
+			while(e.hasMoreElements()){
+				String rxcui=(String)e.nextElement();
+				url = MedwanQuery.getInstance().getConfigString("NLM_DDI_URL_FindRxNormProperties","http://rxnav.nlm.nih.gov/REST/rxcui/"+rxcui+"/properties");
+				method = new GetMethod(url);
+				method.setRequestHeader("Content-type","text/xml; charset=windows-1252");
+				statusCode = client.executeMethod(method);
+				br = new BufferedReader(new StringReader(method.getResponseBodyAsString()));
+				reader=new SAXReader(false);
+				document=reader.read(br);
+				root = document.getRootElement();
+				if(root.getName().equalsIgnoreCase("rxnormdata")){
+					Element properties = root.element("properties");
+					if(properties!=null && properties.element("name")!=null){
+						String score="000"+(100-(Integer)rxcuis.get(rxcui));
+						codes.add(score.substring(score.length()-3,score.length())+";"+properties.elementText("name")+";"+rxcui);
+					}
+				}
+			}
+			
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -53,6 +62,7 @@
 	if(key.length()==0 && request.getParameter("submit")==null){
 		key=checkString(request.getParameter("initkey"));
 	}
+	System.out.println("key = "+key);
 %>
 <form name="transactionForm" method="post">
 	<input type='text' class='text' size='80' name='key' value='<%=key%>'/>
@@ -64,16 +74,19 @@
 			<td><%=getTran("web","rxnormcode",sWebLanguage) %></td>
 		</tr>
 	<%
-		Vector codes=getRxNormCodes(key);
-		for(int i=0;i<codes.size();i++){
-			String code=(String)codes.elementAt(i);
+		SortedSet codes=getRxNormCodes(key);
+		Iterator i = codes.iterator();
+		int counter=0;
+		while(i.hasNext()){
+			String code=(String)i.next();
 			%>
 			<tr>
-				<td class='admin'><%=code.split(";")[0]%></td>
-				<td class='admin2' valign='top'><input class='text' type='checkbox' name='chkrxnorm<%=i%>' id='<%=code.split(";")[1]%>'/><%=code.split(";")[1]%></td>
+				<td class='admin'><%=code.split(";")[1]%> (<%=100-Integer.parseInt(code.split(";")[0]) %>%)</td>
+				<td class='admin2' valign='top'><input class='text' type='checkbox' <%=counter>0?"":"checked"%> name='chkrxnorm<%=code.split(";")[2]%>' id='<%=code.split(";")[2]%>'/><%=code.split(";")[2]%></td>
 			</tr>
 			
 			<%	
+			counter++;
 		}
 		
 	%>

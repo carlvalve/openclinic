@@ -56,14 +56,23 @@
                 <tr>
                     <td>
                         <form name="printPrescriptionForm" method="post" action="<c:url value='/'/>medical/createPrescriptionPdf.jsp">
-                            <textarea class="text" name="prescription" id="prescription" rows="22" cols="40"></textarea><br/>
+                            <textarea class="text" name="prescription" id="prescription" rows="22" cols="40" onkeyup="cleanRxNormCodes();"></textarea><br/>
                             <%=getTran("web","date",sWebLanguage)%>
                             <input type="text" class="text" size="10" maxLength="10" name="prescriptiondate" value="<%=ScreenHelper.stdDateFormat.format(new java.util.Date())%>" id="prescriptiondate" OnBlur='checkDate(this)'>
                             <script>writeMyDate("prescriptiondate");</script>
                             <input type="hidden" name="personid" id="personid" value="<%=activePatient.personid%>"/>
+                            <input type="hidden" name="rxnormcodes" id="rxnormcodes" value=""/>
+                            <input type="hidden" name="rxnormnames" id="rxnormnames" value=""/>
                         </form>
                     </td>
                 </tr>
+                <tr>
+                	<td id='interactionswarning' style='display: none'>
+                		<a href='javascript:findInteractions();'>
+                		<img src="<c:url value='/_img/icons/icon_warning.gif'/>" title='<%=getTranNoLink("web","prescription_has_interactions",sWebLanguage)%>'/>
+                		<%=getTran("web","prescription_has_interactions",sWebLanguage)%>!</a>
+                	</td>
+                </tr>	
             </table>
         </td>
     </tr>
@@ -152,10 +161,20 @@
         var prescriptioninfo = resp.responseText.split("$");
         if(prescriptioninfo[1].length>0){
           $('prescription').value+= prescriptioninfo[1]+"\n";
+    		$('rxnormnames').value+=prescriptioninfo[1]+"="+prescriptioninfo[3]+";";
         }
         else{
           $('prescription').value+= prescriptioninfo[2]+"\n";
+    		$('rxnormnames').value+=prescriptioninfo[2]+"="+prescriptioninfo[3]+";";
         }
+  		$('rxnormcodes').value+=prescriptioninfo[3]+";";
+  	  <%
+	    	if(MedwanQuery.getInstance().getConfigInt("enableRxNorm",0)==1){
+	    %>
+	    		checkForInteractions();
+	    <%
+	    	}
+	    %>
       }
     });
   }
@@ -203,6 +222,43 @@
     }
   }
 
+  function checkForInteractions(){
+    var url = "<c:url value=''/>pharmacy/popups/findRxNormDrugDrugInteractionsBoolean.jsp";
+    var params = "key="+document.getElementById("rxnormcodes").value;
+    new Ajax.Request(url,{
+      method: "POST",
+      parameters: params,
+      onSuccess: function(resp){
+        var interactions =  eval('('+resp.responseText+')');
+        if(interactions.interactionsexist=='1'){
+        	document.getElementById("interactionswarning").style.display='';
+        }
+        else {
+        	document.getElementById("interactionswarning").style.display='none';
+        }
+      }
+    });
+  }
+  
+  function cleanRxNormCodes(){
+	var rxnormnames=document.getElementById("rxnormnames").value.split(";");
+	for(n=0;n<rxnormnames.length;n++){
+		if(document.getElementById("prescription").value.indexOf(rxnormnames[n].split("=")[0])<0){
+			document.getElementById("rxnormcodes").value=document.getElementById("rxnormcodes").value.replace(rxnormnames[n].split("=")[1],"");
+		}
+	}
+  <%
+  	if(MedwanQuery.getInstance().getConfigInt("enableRxNorm",0)==1){
+  %>
+  		checkForInteractions();
+  <%
+  	}
+  %>
+  }
+  function findInteractions(){
+	    openPopup("/pharmacy/popups/findRxNormDrugDrugInteractions.jsp&ts=<%=getTs()%>&key="+document.getElementById("rxnormcodes").value,800,600);
+ }
+	  
   function printprescription(){
     printPrescriptionForm.submit();
   }
