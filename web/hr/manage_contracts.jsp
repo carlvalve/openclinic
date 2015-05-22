@@ -84,7 +84,7 @@
                 if(MedwanQuery.getInstance().getConfigString("enableLegalReferenceCode"+i).equals("1")){
                     %>                    
                         <tr>
-                            <td class="admin"><%=getTran("web.hr","legalReferenceCode",sWebLanguage)%> <%=i%></td>
+                            <td class="admin"><%=getTran("web.hr","legalReferenceCode."+i,sWebLanguage)%></td>
                             <td class="admin2">
                                 <input type="text" class="text" id="ref<%=i%>" name="ref<%=i%>" size="30" maxLength="50" value="">
                             </td>

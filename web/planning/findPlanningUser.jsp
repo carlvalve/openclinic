@@ -75,6 +75,8 @@
         </tr>
 
     </table>
+    <script>
+    </script>
     <%=sJSWEEKPLANNERAJAX%>
     
     <%
@@ -239,7 +241,7 @@
         }
     %>
     params+= "&FindUserUID="+$("FindUserUID").value+"&EditUserUID="+$("FindUserUID").value+"&EditPatientUID=<%=(activePatient!=null)?activePatient.personid:""%>";
-    Modalbox.show(url,{title:'<%=getTran("web","planning",sWebLanguage)%>',width:650,afterHide:function(){refreshAppointments();}},{evalScripts:true});
+    Modalbox.show(url,{title:'<%=getTran("web","planning",sWebLanguage)%>',height:500,width:650,afterHide:function(){refreshAppointments();}},{evalScripts:true});
   }
   
   <%-- OPEN APPOINTMENT --%>
@@ -249,7 +251,7 @@
               "?FindUserUID="+$("FindUserUID").value +
               "&Date="+$("beginDate").value+"&FindPlanningUID="+actualAppointmentId+"&ts="+new Date().getTime();
     if(page) url+="&Page="+page;
-    Modalbox.show(url,{title:'<%=getTran("web","planning",sWebLanguage)%>',width:650,afterHide:function(){refreshAppointments();}},{evalScripts:true});
+    Modalbox.show(url,{title:'<%=getTran("web","planning",sWebLanguage)%>',height:500,width:650,afterHide:function(){refreshAppointments();}},{evalScripts:true});
   }
 
   <%-- DELETE APPOINTMENT --%>
@@ -303,15 +305,12 @@
     }
 
     var url = "<c:url value='/planning/ajax/editPlanning.jsp'/>?ts="+new Date().getTime();
-    Modalbox.show(url,{title:'<%=getTran("web","planning",sWebLanguage)%>',width:650,params:params,afterHide:function(){refreshAppointments();}},{evalScripts:true});
+    Modalbox.show(url,{title:'<%=getTran("web","planning",sWebLanguage)%>',height:500,width:650,params:params,afterHide:function(){refreshAppointments();}},{evalScripts:true});
   }
   
   <%-- SAVE APPOINTMENT --%>
   function saveAppointment(){
-    if($("EditPatientUID").value.length==0 || $F("EditUserUID").length==0 || $F("appointmentDateDay").trim().length==0 ){
-      if($("EditPatientUID").value.length==0){
-        $("EditPatientUID").focus();
-      }
+    if( $F("EditUserUID").length==0 || $F("appointmentDateDay").trim().length==0 ){
       if($F("EditUserUID").length==0){
         $("EditUserUID").focus();
       }
@@ -330,7 +329,7 @@
                    "&appointmentDateEndHour="+$("appointmentDateEndHour").value+"&appointmentDateEndMinutes="+$("appointmentDateEndMinutes").value+
                    "&EditEffectiveDate="+$("EditEffectiveDate").value+"&EditEffectiveDateTime="+$("EditEffectiveDateTime").value+"&EditCancelationDateTime="+$("EditCancelationDateTime").value+"&EditCancelationDate="+$("EditCancelationDate").value+
                    "&EditUserUID="+$("EditUserUID").value+"&EditPatientUID="+$("EditPatientUID").value+"&EditDescription="+encodeURIComponent($("EditDescription").value)+
-                   "&EditContactUID="+$("EditContactUID").value+"&EditContactName="+$("EditContactName").value+"&EditContext="+$("EditContext").value;
+                   "&EditContactUID="+$("EditContactUID").value+"&EditContactName="+$("EditContactName").value+"&EditContext="+$("EditContext").value+"&tempplanninguid="+$("tempplanninguid").value;
 
       if($("EditTransactionUID")){
         params+="&EditTransactionUID="+$F("EditTransactionUID");
@@ -502,5 +501,6 @@
   
   resizeSheduler(containerHeight,containerWidth);
   clientMsg.setDiv("weekScheduler_messages");
+
   //$("body").style.overflowY ='hidden';
 </script>

@@ -8,7 +8,10 @@
 
 <div id="patientmedicationsummary"/>
 <table width="100%" class="list" height="100%" cellspacing="0" cellpadding="0">
-    <tr class="admin"><td colspan="4"><%=getTran("curative","medication.status.title",sWebLanguage)%></td></tr>
+    <tr class="admin">
+    	<td colspan="1"><%=getTran("curative","medication.status.title",sWebLanguage)%></td>
+    	<td colspan="3"><span id="interactionswarning">&nbsp;</span></td>
+    </tr>
     <tr style="vertical-align:top;">
     <%
         //--- 1:CHRONIC ---------------------------------------------------------------------------
@@ -233,4 +236,34 @@
       document.getElementById('hiddenprescriptions').style.display='none';
     }
   }
+  function checkForInteractions(){
+	    var url = "<c:url value=''/>pharmacy/popups/findRxNormDrugDrugInteractionsBoolean.jsp";
+	    var params = "";
+	    new Ajax.Request(url,{
+	      method: "POST",
+	      parameters: params,
+	      onSuccess: function(resp){
+	        var interactions =  eval('('+resp.responseText+')');
+	        if(interactions.interactionsexist=='1'){
+	        	document.getElementById("interactionswarning").innerHTML="<a href='javascript:findInteractions();'><img src='<c:url value='/_img/icons/icon_warning.gif'/>' title='<%=getTranNoLink("web","prescription_has_interactions",sWebLanguage)%>'/><%=getTran("web","prescription_has_interactions",sWebLanguage)%>!</a>";
+	        }
+	        else {
+	        	document.getElementById("interactionswarning").innerHTML='&nbsp';
+	        }
+	      }
+	    });
+	  }
+
+  <%
+  	if(MedwanQuery.getInstance().getConfigInt("enableRxNorm",0)==1){
+  %>
+  		checkForInteractions();
+  <%
+  	}
+  %>
+  
+  function findInteractions(){
+	    openPopup("/pharmacy/popups/findRxNormDrugDrugInteractions.jsp&ts=<%=getTs()%>",800,600);
+	}
+
 </script>

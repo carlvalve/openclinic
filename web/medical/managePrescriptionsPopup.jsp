@@ -1017,6 +1017,15 @@ else{
 	    <%
 	}
 %>
+<table width='100%'>
+	<tr>
+		<td id='interactionswarning' style='display: none'>
+		<a href='javascript:findInteractions();'>
+		<img src="<c:url value='/_img/icons/icon_warning.gif'/>" title='<%=getTranNoLink("web","prescription_has_interactions",sWebLanguage)%>'/>
+		<%=getTran("web","prescription_has_interactions",sWebLanguage)%>!</a>
+		</td>
+	</tr>
+</table>	
 
 <%-- NEW BUTTON --%>
 <%=ScreenHelper.alignButtonsStart()%>
@@ -1058,6 +1067,25 @@ function doAdd(){
   transactionForm.EditPrescrUid.value = "-1";
   doSave();
 }
+
+function checkForInteractions(){
+    var url = "<c:url value=''/>pharmacy/popups/findRxNormDrugDrugInteractionsBoolean.jsp";
+    var params = "";
+    new Ajax.Request(url,{
+      method: "POST",
+      parameters: params,
+      onSuccess: function(resp){
+        var interactions =  eval('('+resp.responseText+')');
+        if(interactions.interactionsexist=='1'){
+        	document.getElementById("interactionswarning").style.display='';
+        }
+        else {
+        	document.getElementById("interactionswarning").style.display='none';
+        }
+      }
+    });
+  }
+
 
 <%-- DO SAVE --%>
 function doSave(){
@@ -1292,6 +1320,10 @@ function searchSupplyingService(serviceUidField,serviceNameField){
   openPopup("/_common/search/searchService.jsp&ts=<%=getTs()%>&VarCode="+serviceUidField+"&VarText="+serviceNameField);
 }
 
+function findInteractions(){
+    openPopup("/pharmacy/popups/findRxNormDrugDrugInteractions.jsp&ts=<%=getTs()%>",800,600);
+}
+
 <%-- popup : search service stock --%>
 function searchServiceStock(serviceStockUidField,serviceStockNameField){
   openPopup("/_common/search/searchServiceStock.jsp&ts=<%=getTs()%>&ReturnServiceStockUidField="+serviceStockUidField+"&ReturnServiceStockNameField="+serviceStockNameField);
@@ -1324,6 +1356,14 @@ function doBack(){
     window.location.href = "<%=sCONTEXTPATH%>/popup.jsp?Page=medical/managePrescriptionsPopup.jsp&ts="+new Date().getTime();
   }
 }
+
+<%
+	if(MedwanQuery.getInstance().getConfigInt("enableRxNorm",0)==1){
+%>
+		checkForInteractions();
+<%
+	}
+%>
 </script>
 
 <script for="window" event="onunload">

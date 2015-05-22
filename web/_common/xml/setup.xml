@@ -407,6 +407,7 @@
 		<config key="imageDirectory" value="$setupdir$documents"/>
 		<config key="localProjectPath" value="$setupdir$"/>
 		<config key="templateDirectory" value="$setupdir$_common/xml"/>
+		<config key="projectLogo" value="$setupdir$_img/projectlogo.jpg"/>
 		<config key="tmpDir" value="/temp"/>
 		<config key="tmpDirectory" value="/temp"/>
 		<config key="tempDirectory" value="/temp"/>
@@ -417,6 +418,7 @@
 		<config key="imageDirectory" value="$setupdir$documents"/>
 		<config key="localProjectPath" value="$setupdir$"/>
 		<config key="templateDirectory" value="$setupdir$_common/xml"/>
+		<config key="projectLogo" value="$setupdir$_img/projectlogo.jpg"/>
 		<config key="tmpDir" value="/tmp"/>
 		<config key="tmpDirectory" value="/tmp"/>
 		<config key="tempDirectory" value="/tmp"/>

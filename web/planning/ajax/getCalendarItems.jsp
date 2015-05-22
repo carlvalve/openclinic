@@ -82,8 +82,11 @@
         sHtml.append(">");
          sHtml.append(">");
         String sToDisplay = "<ul>";
-        if (!appointment.getUserUID().equals("")) {
+        if (!appointment.getPatientUID().equals("")) {
             sToDisplay += "<li><span class='info person'>" + ((appointment.getPatient()!=null)?HTMLEntities.htmlentities(appointment.getPatient().lastname + " " + appointment.getPatient().firstname):"") + "</li>";
+        }
+        else if(appointment.getDescription()!=null && appointment.getDescription().length()>0){
+            sToDisplay += "<li><span class='info person'>" + HTMLEntities.htmlentities(appointment.getDescription()) + "</li>";
         }
         if(appointment.getContextID().length()>0){
             sToDisplay+="<li><span class='info'>"+getTran("Web.Occup", appointment.getContextID(), sWebLanguage)+"</li>";

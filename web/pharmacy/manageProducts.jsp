@@ -636,7 +636,7 @@
                     <tr>
                         <td class="admin" width="<%=sTDAdminWidth%>" nowrap><%=getTran("Web","productName",sWebLanguage)%> *</td>
                         <td class="admin2">
-                            <input class="text" type="text" name="EditProductName" size="<%=sTextWidth%>" maxLength="255" value="<%=sSelectedProductName%>">
+                            <input class="text" type="text" name="EditProductName" id="EditProductName" size="<%=sTextWidth%>" maxLength="255" value="<%=sSelectedProductName%>">
                         </td>
                     </tr>
                     
@@ -807,18 +807,31 @@
                     <tr>
                         <td class="admin" nowrap><%=getTran("Web","atccode",sWebLanguage)%></td>
                         <td class="admin2">
-                            <input class="text" type="text" name="EditAtccode" size="50" maxLength="50" value="<%=sSelectedAtccode%>" >
+                            <input class="text" type="text" name="EditAtccode" id="EditAtccode" size="50" maxLength="50" value="<%=sSelectedAtccode%>" >
+                            <img src='<c:url value="_img/icons/icon_search.gif"/>' onclick='findAtcCodes()'/>
                         </td>
                     </tr>
                     
                     <%-- RxNorm --%>
+                    <%
+                    	if(MedwanQuery.getInstance().getConfigInt("enableRxNorm",0)==1){
+                    %>
                     <tr>
                         <td class="admin" nowrap><%=getTran("Web","rxnormcode",sWebLanguage)%></td>
                         <td class="admin2">
-                            <input class="text" type="text" name="EditRxnormcode" size="50" maxLength="50" value="<%=sSelectedRxnormcode%>" >
+                            <input class="text" type="text" name="EditRxnormcode" id="EditRxnormcode" size="50" maxLength="50" value="<%=sSelectedRxnormcode%>" >
+                            <img src='<c:url value="_img/icons/icon_search.gif"/>' title='<%=getTranNoLink("web","find_rxnorm_codes",sWebLanguage) %>' onclick='findRxNormCodes()'/>
+                            <img src='<c:url value="_img/icons/icon_interactions.png"/>' title='<%=getTranNoLink("web","find_interactions",sWebLanguage) %>' onclick='findRxNormInteractions()'/>
                         </td>
                     </tr>
-                    
+                    <%
+                    	}
+                    	else {
+                    %>
+                    	<input type='hidden' value="<%=sSelectedRxnormcode%>" name="EditRxnormcode" id="EditRxnormcode" />
+                    <%
+                    	}
+                    %>
                     <%-- PrestationCode --%>
                     <tr>
                         <td class="admin" nowrap><%=getTran("Web","prestation",sWebLanguage)%></td>
@@ -1107,6 +1120,18 @@
   function searchPrestation(){
     transactionForm.EditPrestationCode.value = "";
     openPopup("/_common/search/searchPrestation.jsp&ts=<%=getTs()%>&ReturnFieldUid=EditPrestationCode&ReturnFieldDescr=EditPrestationName");
+  }
+
+  function findRxNormCodes(){
+	    openPopup("/pharmacy/popups/findRxNormCode.jsp&ts=<%=getTs()%>&initkey="+document.getElementById("EditProductName").value.replace("%","pct")+"&returnField=EditRxnormcode");
+}
+
+  function findRxNormInteractions(){
+	    openPopup("/pharmacy/popups/findRxNormInteractions.jsp&ts=<%=getTs()%>&initkey="+document.getElementById("EditRxnormcode").value,800,600);
+}
+
+  function findAtcCodes(){
+	    window.open('<%=MedwanQuery.getInstance().getConfigString("FindATCCodeURL","http://www.whocc.no/atc_ddd_index/?")%>name='+document.getElementById("EditProductName").value.replace("%",""),"ATC","toolbar=no,status=yes,scrollbars=yes,resizable=yes,width=800,height=600,menubar=no");
   }
 
   <%-- CLEAR EDIT FIELDS --%>

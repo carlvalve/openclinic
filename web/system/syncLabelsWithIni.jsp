@@ -79,7 +79,7 @@
         excludedLabelTypes = "labanalysis, labanalysis.short, labanalysis.monster, labanalysis.refcomment, "+
                              "labprofiles, activitycodes, worktime, patientsharecoverageinsurance, patientsharecoverageinsurance2, "+
                              "urgency.origin ,encountertype ,prestation.type ,product.productgroup, "+
-                             "insurance.types ,labanalysis.group ,drug.category"; // default
+                             "insurance.types ,labanalysis.group ,drug.category, planningresource, systemmessages"; // default
     }
     excludedLabelTypes = excludedLabelTypes.toLowerCase();
     

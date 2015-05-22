@@ -118,6 +118,7 @@
             String sEditContactUID = checkString(request.getParameter("EditContactUID"));
             String sEditDescription = checkString(request.getParameter("EditDescription"));
             String sEditContext = checkString(request.getParameter("EditContext"));
+            String tempplanninguid = checkString(request.getParameter("tempplanninguid"));
 
             planning = new Planning();
             planning.setUid(sEditPlanningUID);
@@ -142,7 +143,10 @@
             orContact.setObjectUid(sEditContactUID);
             planning.setContact(orContact);
             planning.setDescription(sEditDescription);
+            planning.setTempPlanningUid(tempplanninguid);
+            System.out.println("tempplanninguid="+tempplanninguid);
             if(planning.store()){
+            	//Also 
                 if(sPage.length()==0){
                     out.write("<script>clientMsg.setValid('"+HTMLEntities.htmlentities(getTranNoLink("web.control","dataissaved",sWebLanguage))+"',null,500);doClose();</script>");
                 }
@@ -385,16 +389,26 @@
                     orContact = new ObjectReference();
                 }
             %>
-            <input type='radio' name='EditContactType' id='ContactProduct' value='Product' onclick='changeContactType();' onDblClick="uncheckRadio(this);" <%=sEditCheckProduct%>><label for='ContactProduct'><%=getTran("planning", "product", sWebLanguage)%>
-        </label>
-            <input type='radio' name='EditContactType' id='ContactExamination' value='Examination' onclick='changeContactType();' onDblClick="uncheckRadio(this);" <%=sEditCheckExamination%>><label for='ContactExamination'><%=getTran("planning", "examination", sWebLanguage)%>
-        </label> <br>
+            <input type='radio' name='EditContactType' id='ContactProduct' value='Product' onclick='changeContactType();' onDblClick="uncheckRadio(this);" <%=sEditCheckProduct%>>
+            <label for='ContactProduct'><%=getTran("planning", "product", sWebLanguage)%></label>
+            <input type='radio' name='EditContactType' id='ContactExamination' value='Examination' onclick='changeContactType();' onDblClick="uncheckRadio(this);" <%=sEditCheckExamination%>>
+            <label for='ContactExamination'><%=getTran("planning", "examination", sWebLanguage)%></label><br>
             <input type="hidden" id="EditEffectiveDateTime" value="" />
             <input type="hidden" id="EditCancelationDateTime" value="" />
             <input type="hidden" id="EditContactUID" name="EditContactUID" value="<%=orContact.getObjectUid()%>">
             <input class="text" type="text" id="EditContactName" name="EditContactName" readonly size="<%=sTextWidth%>" value="<%=sEditContactName%>">
             <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchPrestation('EditContactUID','EditContactName');">
             <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="$('EditContactUID').clear();$('EditContactName').clear();">
+        </td>
+    </tr>
+    <tr>
+        <td class='admin'><%=getTran("planning","resource",sWebLanguage)%></td>
+        <td class='admin2'>
+        <% if(!checkString(request.getParameter("readonly")).equalsIgnoreCase("true")){ %>
+        	<a href="javascript:openPopup('/planning/manageResources.jsp&planninguid=<%=sFindPlanningUID%>&tempplanninguid='+document.getElementById('tempplanninguid').value+'&date='+document.getElementById('appointmentDateDay').value+'&begin='+(document.getElementById('appointmentDateHour').value*60+document.getElementById('appointmentDateMinutes').value*1)*60000+'&end='+(document.getElementById('appointmentDateEndHour').value*60+document.getElementById('appointmentDateEndMinutes').value*1)*60000+'&PopupWidth=800&PopupHeight=600&ts=<%=getTs()%>');"><%=getTran("web","edit.resources",sWebLanguage) %></a>
+        <%} %>
+            <span id='resources'></span>
+            <input type='hidden' name='tempplanninguid' id='tempplanninguid'/>
         </td>
     </tr>
     <div id="trContext">
@@ -445,10 +459,10 @@
         <td class="admin2">
             <input type="hidden" id="EditPage" value="<%=sPage%>" />
             <%-- Buttons --%>
-            <%if(activeUser.getAccessRight("planning.add") || activeUser.getAccessRight("planning.edit")){%>
+            <%if(!checkString(request.getParameter("readonly")).equalsIgnoreCase("true") &&(activeUser.getAccessRight("planning.add") || activeUser.getAccessRight("planning.edit"))){%>
             <input class='button' type="button" name="buttonSave" id="buttonSaveEditPlanning" value='<%=getTranNoLink("Web","save",sWebLanguage)%>' onclick="saveAppointment();">&nbsp;
             <%}
-            if((sFindPlanningUID.length() > 0) && (activeUser.getAccessRight("planning.delete"))){%>
+            if(!checkString(request.getParameter("readonly")).equalsIgnoreCase("true") && ((sFindPlanningUID.length() > 0) && (activeUser.getAccessRight("planning.delete")))){%>
             <input class='button' type="button" name="buttonDelete" value='<%=getTranNoLink("Web","delete",sWebLanguage)%>' onclick="deleteAppointment2();">&nbsp;<%}%>
             <input class='button' type="button" name="buttonBack" value='<%=getTranNoLink("Web","Back",sWebLanguage)%>' onclick="doClose();">
         </td>
@@ -460,7 +474,24 @@
         </td>
     </tr>
 </table>
-
+<div>
+<script>
+	function findResources(){
+		var today = new Date();
+		var url= '<c:url value="/planning/ajax/getResourcesForPlanning.jsp"/>?planninguid=<%=sFindPlanningUID%>&tempplanninguid='+document.getElementById('tempplanninguid').value+'&language=<%=sWebLanguage%>&ts='+today;
+		new Ajax.Request(url,{
+		method: "POST",
+		   parameters: "",
+		   onSuccess: function(resp){
+			   $('resources').innerHTML=resp.responseText;
+			}
+		});
+	}
+	
+	findResources();
+	
+</script>
+</div>
 <input type="hidden" id="EditPlanningUID" name="EditPlanningUID" value="<%=sFindPlanningUID%>"/>
 <script>
   checkContext();
@@ -470,9 +501,9 @@
     setCorrectAppointmentDate(<%=startHourOfWeekPlanner+","+startMinOfWeekPlanner+","+endHourOfWeekPlanner+","+endMinOfWeekPlanner%>);
   }
   
+  
   updateSelect();
 </script>
-</div>
 <%}
 	}
 catch(Exception e){

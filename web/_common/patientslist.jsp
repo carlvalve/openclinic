@@ -149,7 +149,7 @@
                 sInactive = "";
                 sTmpServiceID = enc.getServiceUID();
                 if(enc.getBed()!=null){
-                	sBed = enc.getBed().getName();
+                	sBed = checkString(enc.getBed().getName());
                 }
             }
             else {
@@ -162,6 +162,8 @@
                 	if(MedwanQuery.getInstance().getConfigInt("checkPatientListInvoices",0)==1 && enc.hasInvoices()){
                 		img+="<img src='"+sCONTEXTPATH+"/_img/icons/icon_money.gif'/>";
                 	}
+                	System.out.println("enc="+enc);
+                	System.out.println("patientuid="+enc.getPatientUID());
                 	if(MedwanQuery.getInstance().getConfigInt("checkPatientListTransactions",0)==1 && enc.hasTransactions()){
                 		img+="<img src='"+sCONTEXTPATH+"/_img/icons/icon_admin.gif'/>";
                 	}
