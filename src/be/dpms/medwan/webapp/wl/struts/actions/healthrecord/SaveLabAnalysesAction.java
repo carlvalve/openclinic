@@ -148,7 +148,6 @@ public class SaveLabAnalysesAction extends Action {
             }
             // save analyses to be saved
         	Hashtable allanalyses = LabAnalysis.getAllLabanalyses();
-            Debug.println("Analysis 1005 exists: "+(allanalyses.get("1005")!=null));
         	
             analysesToSaveEnum = analysesToSave.keys();
             while(analysesToSaveEnum.hasMoreElements()){

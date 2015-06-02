@@ -1,6 +1,7 @@
 package net.admin;
 
 import be.mxs.common.util.db.MedwanQuery;
+import be.mxs.common.util.system.Debug;
 import be.mxs.common.util.system.ScreenHelper;
 
 import java.io.Serializable;
@@ -8,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Hashtable;
 import java.util.Vector;
 
 public class Label implements Serializable {
@@ -57,7 +59,7 @@ public class Label implements Serializable {
         if(this.type.length()==0)         throw new Exception("Label ("+id+"$MISSING$"+language+") is not complete : type missing");
         if(this.id.length()==0)           throw new Exception("Label (MISSING$"+type+"$"+language+") is not complete : id missing");
         if(this.language.length()==0)     throw new Exception("Label ("+id+"$"+type+"$MISSING) is not complete : language missing");
-        if(this.value.length()==0)        System.out.println("Label ("+id+"$"+type+"$"+language+") is not complete : value missing");
+        if(this.value.length()==0)        Debug.println("Label ("+id+"$"+type+"$"+language+") is not complete : value missing");
         if(this.updateUserId.length()==0) throw new Exception("Label ("+id+"$"+type+"$"+language+") is not complete : updateUserId missing");
     }
 
@@ -66,6 +68,7 @@ public class Label implements Serializable {
         try{
             if(this.exists()) update();
             else              insert();
+            MedwanQuery.getInstance().loadLabel(this);
         }
         catch(Exception e){
             e.printStackTrace();
@@ -78,9 +81,9 @@ public class Label implements Serializable {
         ResultSet rs = null;
         boolean labelExists = false;
 
-        String lcaseLabelType = ScreenHelper.getConfigParam("lowerCompare","OC_LABEL_TYPE"),
-               lcaseLabelID   = ScreenHelper.getConfigParam("lowerCompare","OC_LABEL_ID"),
-               lcaseLabelLang = ScreenHelper.getConfigParam("lowerCompare","OC_LABEL_LANGUAGE");
+        String lcaseLabelType = "OC_LABEL_TYPE",
+               lcaseLabelID   = "OC_LABEL_ID",
+               lcaseLabelLang = "OC_LABEL_LANGUAGE";
 
         Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
         try{
@@ -153,9 +156,9 @@ public class Label implements Serializable {
     	isComplete();
         PreparedStatement ps = null;
 
-        String lcaseLabelType = ScreenHelper.getConfigParam("lowerCompare","OC_LABEL_TYPE"),
-               lcaseLabelID   = ScreenHelper.getConfigParam("lowerCompare","OC_LABEL_ID"),
-               lcaseLabelLang = ScreenHelper.getConfigParam("lowerCompare","OC_LABEL_LANGUAGE");
+        String lcaseLabelType = "OC_LABEL_TYPE",
+               lcaseLabelID   = "OC_LABEL_ID",
+               lcaseLabelLang = "OC_LABEL_LANGUAGE";
 
         Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
         try{
@@ -219,6 +222,7 @@ public class Label implements Serializable {
             ps.setString(10,sOldLabelLanguage);
 
             ps.executeUpdate();
+            MedwanQuery.getInstance().loadLabel(this);
         }
         catch(Exception e){
             e.printStackTrace();
@@ -280,6 +284,13 @@ public class Label implements Serializable {
         return label;
     }
 
+    public static boolean labelExists(String type, String id, String language){
+    	Hashtable labels = MedwanQuery.getInstance().getLabels();
+    	if(labels.get(language.toLowerCase())==null || ((Hashtable)labels.get(language.toLowerCase())).get(type.toLowerCase())==null || ((Hashtable)((Hashtable)labels.get(language.toLowerCase())).get(type.toLowerCase())).get(id.toLowerCase())==null){
+    		return false;
+    	}
+    	return true;
+    }
     //--- EXISTS BASED ON NAME --------------------------------------------------------------------
     public static boolean existsBasedOnName(String type, String value, String lang){
         PreparedStatement ps = null;

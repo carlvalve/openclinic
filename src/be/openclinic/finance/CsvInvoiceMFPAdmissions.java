@@ -40,9 +40,7 @@ public class CsvInvoiceMFPAdmissions {
 		String sOutput="";
 		if(invoiceuid!=null){
 	        Vector debets = InsurarInvoice.getDebetsForInvoiceSortByServiceAndDate(invoiceuid);
-	        System.out.println("1");
 	        if(debets.size() > 0){
-		        System.out.println("2: "+debets.size());
 	            // print debets
 	            Debet debet;
 	            String sPatientName="", sPatientUid="", sPrevPatientName = "",sPreviousInvoiceUID="",beneficiarynr="",beneficiaryage="",beneficiarysex="",affiliatecompany="";
@@ -57,10 +55,8 @@ public class CsvInvoiceMFPAdmissions {
 	            for(int i=0; i<debets.size(); i++){
 	                debet = (Debet)debets.get(i);
 	                if(!debet.getEncounter().getType().equals("admission")){
-	    		        System.out.println("3");
 	                	continue;
 	                }
-    		        System.out.println("4");
 	                if(!initialized){
 			            //Eerst consultaties
 			            sOutput+="\r\n\r\n"+ScreenHelper.getTran("hospital.statistics", "visits", "fr");

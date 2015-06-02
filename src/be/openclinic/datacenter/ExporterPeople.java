@@ -42,7 +42,7 @@ public class ExporterPeople extends Exporter {
 					if(Picture.exists(Integer.parseInt(patient.personid))){
 						Picture picture = new Picture(Integer.parseInt(patient.personid));
 						if(picture!=null){
-							sb.append("<picture><![CDATA["+javax.mail.internet.MimeUtility.encodeText(new String(picture.getPicture(),"iso-8859-1"),"iso-8859-1",null)+"]]></picture>");
+							sb.append("<picture><![CDATA["+javax.mail.internet.MimeUtility.encodeText(new String(picture.getPicture(),"UTF-8"),"UTF-8",null)+"]]></picture>");
 						}
 					}
 					sb.append("</patient>");

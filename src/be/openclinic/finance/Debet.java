@@ -17,6 +17,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 
+import net.admin.Service;
+
 public class Debet extends OC_Object implements Comparable,Cloneable {
     private Date date;
     private double amount;
@@ -46,6 +48,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
     private Insurar extraInsurar=null;
     private String extraInsurarInvoiceUid2;
     private String serviceUid;
+    private Service service;
     
     
     public String getServiceUid() {
@@ -194,6 +197,13 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
     		insurance=Insurance.get(this.insuranceUid);
     	}
         return insurance;
+    }
+    public Service getService() {
+    	if(service==null || !service.code.equalsIgnoreCase(serviceUid)){
+    		service=null;
+    		service = Service.getService(serviceUid);
+    	}
+    	return service;
     }
     public void setInsurance(Insurance insurance) {
         this.insurance = insurance;
@@ -537,6 +547,9 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 ps.setString(25, this.getRefUid());
                 ps.setString(26, ScreenHelper.checkString(this.getExtraInsurarUid2()));
                 ps.setString(27, ScreenHelper.checkString(this.getExtraInsurarInvoiceUid2()));
+                if(ScreenHelper.checkString(this.getServiceUid()).length()==0 && this.getEncounter()!=null && ScreenHelper.checkString(this.getEncounter().getServiceUID()).length()>0){
+                	this.setServiceUid(this.getEncounter().getServiceUID());
+                }
                 ps.setString(28, ScreenHelper.checkString(this.getServiceUid()));
                 ps.executeUpdate();
                 ps.close();

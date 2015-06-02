@@ -204,9 +204,6 @@ public class Encounter extends OC_Object {
             if(rs.next()){
                 bHasTransactions = (rs.getInt("total") > 0);
             }
-            System.out.println("dBegin="+dBegin);
-            System.out.println("dEnd="+dEnd);
-            System.out.println("bHasTransactions="+bHasTransactions);
         }
         catch(Exception e){
     		Debug.printStackTrace(e);

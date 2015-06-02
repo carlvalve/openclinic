@@ -133,8 +133,8 @@ public class PDFPatientInvoiceReceiptGenerator extends PDFInvoiceGenerator {
 	        for(int n=0;n<debets.size();n++){
 	            Debet debet = (Debet)debets.elementAt(n);
 	            if(debet!=null){
-	            	if(debet.getEncounter()!=null && debet.getEncounter().getService()!=null){
-	            		service=debet.getEncounter().getService().getLabel(sPrintLanguage);
+	            	if(debet.getService()!=null){
+	            		service=debet.getService().getLabel(sPrintLanguage);
 	            	}
 		            if(service!=null){
 		            	services.put(service, "1");

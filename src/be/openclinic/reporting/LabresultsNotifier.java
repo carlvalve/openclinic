@@ -15,6 +15,7 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.PostMethod;
 
+import be.mxs.common.util.system.Debug;
 import be.mxs.common.util.system.HTMLEntities;
 import be.mxs.common.util.system.Pointer;
 import be.mxs.common.util.system.ScreenHelper;
@@ -159,7 +160,8 @@ public class LabresultsNotifier {
                     		//e2.printStackTrace();
                     	}
                 	}
-                	if((!rqLabAnalysis.getNotifyBySMSAbnormalOnly() || MedwanQuery.getInstance().getConfigString("abnormalModifiers","").indexOf("*"+normal+"*")>-1) && !Pointer.getPointer("LABSMS."+rqLabAnalysis.getTransactionId()+"."+rqLabAnalysis.getAnalysisCode()).equalsIgnoreCase(rqLabAnalysis.getResultValue())){
+
+                	if((!rqLabAnalysis.getNotifyBySMSAbnormalOnly() || MedwanQuery.getInstance().getConfigString("abnormalModifiers","").indexOf("*"+normalindicator+"*")>-1) && !Pointer.getPointer("LABSMS."+rqLabAnalysis.getTransactionId()+"."+rqLabAnalysis.getAnalysisCode()).equalsIgnoreCase(rqLabAnalysis.getResultValue())){
 						if(transactionlanguages.get(rqLabAnalysis.getTransactionId())!=null){
 							sLanguage=(String)transactionlanguages.get(rqLabAnalysis.getTransactionId());
 						}
@@ -178,10 +180,10 @@ public class LabresultsNotifier {
 						result =  sl + ": " + rqLabAnalysis.getResultValue()+" "+rqLabAnalysis.getResultUnit();					
 						
 						if(htLabsToSendSMS.get(rqLabAnalysis.getTransactionId())==null){
-							htLabsToSendSMS.put(rqLabAnalysis.getTransactionId(), result+" "+normal+"\n");
+							htLabsToSendSMS.put(rqLabAnalysis.getTransactionId(), result+" "+normalindicator+"\n");
 						}
 						else {
-							htLabsToSendSMS.put(rqLabAnalysis.getTransactionId(), (String)htLabsToSendSMS.get(rqLabAnalysis.getTransactionId())+result+" "+normal+"\n");
+							htLabsToSendSMS.put(rqLabAnalysis.getTransactionId(), (String)htLabsToSendSMS.get(rqLabAnalysis.getTransactionId())+result+" "+normalindicator+"\n");
 						}
 						Pointer.deletePointers("LABSMS."+rqLabAnalysis.getTransactionId()+"."+rqLabAnalysis.getAnalysisCode());
 						Pointer.storePointer("LABSMS."+rqLabAnalysis.getTransactionId()+"."+rqLabAnalysis.getAnalysisCode(), rqLabAnalysis.getResultValue());
@@ -259,8 +261,6 @@ public class LabresultsNotifier {
 								+  "  " + rqLabAnalysis.getResultValue()+" "+rqLabAnalysis.getResultUnit() +"\n";
 					}
                 	if((!rqLabAnalysis.getNotifyByEmailAbnormalOnly() || MedwanQuery.getInstance().getConfigString("abnormalModifiers","").indexOf("*"+normalindicator+"*")>-1) && !Pointer.getPointer("LABEMAIL."+rqLabAnalysis.getTransactionId()+"."+rqLabAnalysis.getAnalysisCode()).equalsIgnoreCase(rqLabAnalysis.getResultValue())){
-						System.out.println("Found abnormal result for "+rqLabAnalysis.getAnalysisCode()+" = "+rqLabAnalysis.getResultValue());
-						System.out.println("TransactionId="+rqLabAnalysis.getTransactionId());
                 		if(htLabsToSendEmail.get(rqLabAnalysis.getTransactionId())==null){
 							htLabsToSendEmail.put(rqLabAnalysis.getTransactionId(), result);
 						}
@@ -272,7 +272,6 @@ public class LabresultsNotifier {
                 	}
 				}
 			}
-			System.out.println("htLabsToSendEmail.size()="+htLabsToSendEmail.size());
 			if (htLabsToSendEmail.size() > 0){
 				spoolEmail(htLabsToSendEmail, sSendMode); 
 			}
@@ -383,11 +382,38 @@ public class LabresultsNotifier {
 							client.executeMethod(method);
 							String sResponse=method.getResponseBodyAsString();
 							if(sResponse.contains("OK: 0")){
-								System.out.println("SMS correctly sent transactionid "+transactionId+" to "+sentto+": "+sResponse);
+								Debug.println("SMS correctly sent transactionid "+transactionId+" to "+sentto+": "+sResponse);
 								setSpoolMessageSent(transactionId,transport);
 							}
 							else {
-								System.out.println("Error sending SMS with transactionid "+transactionId+" to "+sentto+": "+sResponse);
+								Debug.println("Error sending SMS with transactionid "+transactionId+" to "+sentto+": "+sResponse);
+							}
+						} catch (Exception e) {				
+							e.printStackTrace();
+						}
+					}
+					else if(MedwanQuery.getInstance().getConfigString("smsgateway","").equalsIgnoreCase("hqsms")){
+						try {						
+							HttpClient client = new HttpClient();
+							PostMethod method = new PostMethod(MedwanQuery.getInstance().getConfigString("hqsms.url","http://api.hqsms.com/sms.do"));
+							Vector<NameValuePair> vNvp = new Vector<NameValuePair>();
+							vNvp.add(new NameValuePair("normalize","1"));
+							vNvp.add(new NameValuePair("username",MedwanQuery.getInstance().getConfigString("hqsms.user","")));
+							vNvp.add(new NameValuePair("password",MedwanQuery.getInstance().getConfigString("hqsms.password","")));
+							vNvp.add(new NameValuePair("from",MedwanQuery.getInstance().getConfigString("hqsms.from","HQSMS.com")));
+							vNvp.add(new NameValuePair("to",sentto));
+							vNvp.add(new NameValuePair("message",sResult));
+							NameValuePair[] nvp = new NameValuePair[vNvp.size()];
+							vNvp.copyInto(nvp);
+							method.setQueryString(nvp);
+							client.executeMethod(method);
+							String sResponse=method.getResponseBodyAsString();
+							if(sResponse.contains("OK:")){
+								Debug.println("SMS correctly sent transactionid "+transactionId+" to "+sentto+": "+sResponse);
+								setSpoolMessageSent(transactionId,transport);
+							}
+							else {
+								Debug.println("Error sending SMS with transactionid "+transactionId+" to "+sentto+": "+sResponse);
 							}
 						} catch (Exception e) {				
 							e.printStackTrace();
@@ -418,6 +444,9 @@ public class LabresultsNotifier {
 						catch(Exception m){
 							
 						}
+					}
+					else {
+						Debug.println("NO SMS GATEWAY DEFINED!");
 					}
 				}
 				else if(transport.equalsIgnoreCase("simplemail")){
@@ -577,7 +606,7 @@ public class LabresultsNotifier {
 						i = i + 1;
 					}
 					else {
-						System.out.println(sResponse);
+						Debug.println(sResponse);
 					}
 				} catch (Exception e) {				
 					e.printStackTrace();
@@ -675,18 +704,15 @@ public class LabresultsNotifier {
 			sEmailAddress = getEmailAddressByTransactionId(sTransactionId).replaceAll(";", " ").replaceAll(",", " ");									
 			try {				
 				if (sSendMode == "simple"){
-					System.out.println("sending simple");
 					sendHtmlMail.sendSimpleMail(MedwanQuery.getInstance().getConfigString("PatientEdit.MailServer"), MedwanQuery.getInstance().getConfigString("labNotifierEmailSender","frank.verbeke@mxs.be"), sEmailAddress, sMailTitle + " " + sTransactionId, sResult);					
 				}				
 				if (sSendMode == "html"){ 	
-					System.out.println("sending html");
 					sResult=HTMLEntities.htmlentities(sResult);
 					String sLogo = "/projects/openclinic/web/_img/projectlogo.jpg";	
 					sendHtmlMail.sendEmailWithImages(MedwanQuery.getInstance().getConfigString("PatientEdit.MailServer"), MedwanQuery.getInstance().getConfigString("labNotifierEmailSender","frank.verbeke@mxs.be"), sEmailAddress, sMailTitle + " " + sTransactionId, sResult, sLogo);														
 				}
 
 				if (sSendMode == "attach"){
-					System.out.println("sending attach");
 					sResult=HTMLEntities.htmlentities(sResult);
 					String sFileName = "Transaction"+ new SimpleDateFormat("ddMMyyyy-HHmmss").format(new java.util.Date())+"_Tid"+sTransactionId+".html";
 	                String sAttachment = "/tmp/"+sFileName;				

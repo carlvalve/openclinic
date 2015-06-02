@@ -103,8 +103,8 @@ public class PDFImmoLabelGenerator extends PDFOfficialBasic {
                 barcode39.setFont(null);                
                 Image image = barcode39.createImageWithBarcode(cb, null, null);
                 
-                image.scaleAbsoluteHeight((new Float(MedwanQuery.getInstance().getConfigInt("immoLabelHeigth",220)*72/254).floatValue()-doc.topMargin()-doc.bottomMargin())*1/2);
-                image.scaleAbsoluteWidth((new Float(MedwanQuery.getInstance().getConfigInt("immoLabelWidth",450)*72/254).floatValue()-doc.leftMargin()-doc.rightMargin())*4/5);
+                image.scaleAbsoluteHeight((new Float(MedwanQuery.getInstance().getConfigInt("immoLabelImageHeightScale",100)*MedwanQuery.getInstance().getConfigInt("immoLabelHeigth",220)*72/(100*254)).floatValue()-doc.topMargin()-doc.bottomMargin())*1/2);
+                image.scaleAbsoluteWidth((new Float(MedwanQuery.getInstance().getConfigInt("immoLabelImageWidthScale",100)*MedwanQuery.getInstance().getConfigInt("immoLabelWidth",450)*72/(100*254)).floatValue()-doc.leftMargin()-doc.rightMargin())*4/5);
                 table = new PdfPTable(1);
                 table.setWidthPercentage(100);
                 cell=new PdfPCell(image);

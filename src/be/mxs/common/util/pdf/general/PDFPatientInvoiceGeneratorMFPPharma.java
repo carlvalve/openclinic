@@ -160,38 +160,15 @@ public class PDFPatientInvoiceGeneratorMFPPharma extends PDFInvoiceGenerator {
         double totalDebet=0;
         double totalinsurardebet=0;
 
-    	//Find services
-    	Hashtable services = new Hashtable();
-		String serviceuid="";
 		Vector debets=invoice.getDebets();
     	for(int n=0;n<debets.size();n++){
     		Debet debet = (Debet)debets.elementAt(n);
-    		if(debet!=null & debet.getServiceUid()!=null){
-    			serviceuid=debet.getServiceUid();
-    		}
-    		else {
-    			serviceuid=debet.getEncounter().getServiceUID();
-    		}
-   			services.put(serviceuid, "1");
    			if(debet!=null){
 	            totalDebet+=debet.getAmount();
 	            totalinsurardebet+=debet.getInsurarAmount();
    			}
     	}
     	
-    	String departments="";
-    	Enumeration eServices = services.keys();
-    	while(eServices.hasMoreElements()){
-    		serviceuid = (String)eServices.nextElement();
-    		Service service = Service.getService(serviceuid);
-    		if(service!=null){
-    			if(departments.length()>0){
-    				departments+=", ";
-    			}
-    			departments+=service.getLabel(user.person.language);
-    		}
-    	}
-
         table.addCell(createPriceCell(totalDebet,1));
         table.addCell(createValueCell(getTran("web","cashiersignature"),3,8,Font.NORMAL));
         table.addCell(createValueCell(getTran("web","payments"),1,8,Font.NORMAL));
@@ -220,7 +197,7 @@ public class PDFPatientInvoiceGeneratorMFPPharma extends PDFInvoiceGenerator {
         receiptTable.addCell(cell);
         receiptTable.addCell(createEmptyCell(50));
         receiptTable.addCell(createValueCell(getTran("web","service"),10,8,Font.BOLD));
-        receiptTable.addCell(createValueCell(departments,40,7,Font.NORMAL));
+        receiptTable.addCell(createValueCell(invoice.getServicesAsString(sPrintLanguage),40,7,Font.NORMAL));
         receiptTable.addCell(createValueCell(getTran("web","prestations"),10,8,Font.BOLD));
         int nLines=2;
         for(int n=0;n<debets.size();n++){
@@ -527,7 +504,6 @@ public class PDFPatientInvoiceGeneratorMFPPharma extends PDFInvoiceGenerator {
             PdfPTable table = new PdfPTable(100);
             table.setWidthPercentage(pageWidth);
             
-            String departments="";
         	//Find encounters
         	Hashtable encounters = new Hashtable();
         	for(int n=0;n<debets.size();n++){
@@ -536,35 +512,9 @@ public class PDFPatientInvoiceGeneratorMFPPharma extends PDFInvoiceGenerator {
         			encounters.put(debet.getEncounterUid(), debet.getEncounter());
         		}
         	}
-        	//Find services
-        	Hashtable services = new Hashtable();
-    		String serviceuid="";
-        	for(int n=0;n<debets.size();n++){
-        		Debet debet = (Debet)debets.elementAt(n);
-        		if(debet!=null & debet.getServiceUid()!=null){
-        			serviceuid=debet.getServiceUid();
-        		}
-        		else {
-        			serviceuid=debet.getEncounter().getServiceUID();
-        		}
-       			services.put(serviceuid, "1");
-        	}
-
-        	Enumeration eServices = services.keys();
-        	while(eServices.hasMoreElements()){
-        		serviceuid = (String)eServices.nextElement();
-        		Service service = Service.getService(serviceuid);
-        		if(service!=null){
-        			if(departments.length()>0){
-        				departments+=", ";
-        			}
-        			departments+=service.getLabel(user.person.language);
-        		}
-        	}
-
         	cell=createLabelCell(getTran("web","service")+":",20);
         	table.addCell(cell);
-        	cell=createBoldLabelCell(departments,80);
+        	cell=createBoldLabelCell(invoice.getServicesAsString(sPrintLanguage),80);
         	table.addCell(cell);
 
             cell=createValueCell("\n",100);
@@ -606,7 +556,7 @@ public class PDFPatientInvoiceGeneratorMFPPharma extends PDFInvoiceGenerator {
             SortedMap prestations = new TreeMap();
             for(int n=0;n<debets.size();n++){
             	Debet debet = (Debet)debets.elementAt(n);
-            	if(debet.getPrestation()!=null && debet.getQuantity()>0){
+            	if(debet.getPrestation()!=null && debet.getQuantity()!=0){
             		//printDebet(debet,table);
             		if(prestations.get(debet.getPrestation().getDescription()+"."+debet.getInsuranceUid()+"."+debet.getPrestationUid())==null){
             			prestations.put(debet.getPrestation().getDescription()+"."+debet.getInsuranceUid()+"."+debet.getPrestationUid(), debet);
@@ -770,14 +720,10 @@ public class PDFPatientInvoiceGeneratorMFPPharma extends PDFInvoiceGenerator {
         	Enumeration eEncounters = encounters.elements();
         	while(eEncounters.hasMoreElements()){
         		Encounter encounter = (Encounter)eEncounters.nextElement();
-        		if(encounter.getType().equalsIgnoreCase("admission") && encounter.getService()!=null){
+        		if(encounter.getType().equalsIgnoreCase("admission") && invoice.getServicesAsString(sPrintLanguage)!=null){
                 	cell=createLabelCell(getTran("web","service")+":",20);
                 	table.addCell(cell);
-                	String department="";
-                	if(encounter.getService()!=null){
-                		department=encounter.getService().getFullyQualifiedName(user.person.language);
-                	}
-                	cell=createBoldLabelCell(department,80);
+                	cell=createBoldLabelCell(invoice.getServicesAsString(sPrintLanguage),80);
                 	table.addCell(cell);
                 	cell=createLabelCell(getTran("web","bed")+":",20);
                 	table.addCell(cell);
@@ -890,7 +836,7 @@ public class PDFPatientInvoiceGeneratorMFPPharma extends PDFInvoiceGenerator {
             double patientshare=0,insureramount=0,supplements=0;
             for(int n=0;n<debets.size();n++){
             	Debet debet = (Debet)debets.elementAt(n);
-            	if(debet.getEncounter()!=null && debet.getEncounter().getType().equalsIgnoreCase("admission") && debet.getPrestation()!=null && debet.getQuantity()>0){
+            	if(debet.getEncounter()!=null && debet.getEncounter().getType().equalsIgnoreCase("admission") && debet.getPrestation()!=null && debet.getQuantity()!=0){
         			printDebet(debet,table);
         			patientshare+=debet.getAmount()+debet.getExtraInsurarAmount();
         			insureramount+=debet.getInsurarAmount();

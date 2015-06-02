@@ -638,7 +638,7 @@ public class Prescription extends OC_Object{
         try{
             String sSelect = "SELECT * FROM OC_PRESCRIPTIONS"+
                              " WHERE OC_PRESCR_PATIENTUID = ?"+
-            		         "  AND (OC_PRESCR_END IS NULL OR OC_PRESCR_END >= ?)";
+            		         "  AND (OC_PRESCR_END IS NULL OR OC_PRESCR_END >= ?) ORDER by OC_PRESCR_END DESC";
             ps = oc_conn.prepareStatement(sSelect);
             ps.setString(1,patientuid);
             long latencydays=1000*MedwanQuery.getInstance().getConfigInt("activeMedicationLatency",60);

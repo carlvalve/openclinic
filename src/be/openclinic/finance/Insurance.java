@@ -791,8 +791,13 @@ public class Insurance extends OC_Object {
         // patientshare
         Insurance insurance = getDefaultInsuranceForPatient(sPatientUID);
         if(insurance!=null){
-        	insurance.setPatientShare(Integer.parseInt(insurance.getInsuranceCategory().getPatientShare()));
-        	return insurance;
+        	try{
+	        	insurance.setPatientShare(Integer.parseInt(insurance.getInsuranceCategory().getPatientShare()));
+	        	return insurance;
+        	}
+        	catch(Exception a){
+        		a.printStackTrace();
+        	}
         }
 
         Connection oc_conn = MedwanQuery.getInstance().getOpenclinicConnection();

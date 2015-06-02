@@ -826,6 +826,99 @@ public class Product extends OC_Object implements Comparable {
         return changed;
     }
 
+    public static Vector getLimitedDrugs(String name,int maxrows){
+    	Vector products = new Vector();
+    	PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        Connection oc_conn = MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+            String sSelect = "SELECT * FROM OC_PRODUCTS"+
+                             " WHERE OC_PRODUCT_NAME like ? order by OC_PRODUCT_NAME";
+            ps = oc_conn.prepareStatement(sSelect);
+            ps.setString(1, "%"+name+"%");
+            rs = ps.executeQuery();
+
+            int counter=0;
+            Product product;
+            // get data from DB
+            while (rs.next() && counter<=maxrows){
+            	counter++;
+                product = new Product();
+                product.setUid(rs.getString("OC_PRODUCT_SERVERID")+"."+rs.getString("OC_PRODUCT_OBJECTID"));
+
+                product.setName(rs.getString("OC_PRODUCT_NAME"));
+                product.setUnit(rs.getString("OC_PRODUCT_UNIT"));
+                product.setUnitPrice(rs.getDouble("OC_PRODUCT_UNITPRICE"));
+                product.setPackageUnits(rs.getInt("OC_PRODUCT_PACKAGEUNITS"));
+                product.setSupplierUid(rs.getString("OC_PRODUCT_SUPPLIERUID"));
+                product.setProductGroup(rs.getString("OC_PRODUCT_PRODUCTGROUP"));
+                product.setProductSubGroup(rs.getString("OC_PRODUCT_PRODUCTSUBGROUP"));
+                product.setPrescriptionInfo(rs.getString("OC_PRODUCT_PRESCRIPTIONINFO"));
+                product.setBarcode(rs.getString("OC_PRODUCT_BARCODE"));
+                product.setAtccode(rs.getString("OC_PRODUCT_ATCCODE"));
+                product.setRxnormcode(rs.getString("OC_PRODUCT_RXNORMCODE"));
+                product.setPrestationcode(rs.getString("OC_PRODUCT_PRESTATIONCODE"));
+                product.setPrestationquantity(rs.getInt("OC_PRODUCT_PRESTATIONQUANTITY"));
+                product.setMargin(rs.getDouble("OC_PRODUCT_MARGIN"));
+                product.setApplyLowerPrices(rs.getInt("OC_PRODUCT_APPLYLOWERPRICES")==1);
+                product.setAutomaticInvoicing(rs.getInt("OC_PRODUCT_AUTOMATICINVOICING")==1);
+                
+                // timeUnit
+                String tmpValue = rs.getString("OC_PRODUCT_TIMEUNIT");
+                if(tmpValue!=null){
+                    product.setTimeUnit(tmpValue);
+                }
+
+                // timeUnitCount
+                tmpValue = rs.getString("OC_PRODUCT_TIMEUNITCOUNT");
+                if(tmpValue!=null){
+                    product.setTimeUnitCount(Integer.parseInt(tmpValue));
+                }
+
+                // unitsPerTimeUnit
+                tmpValue = rs.getString("OC_PRODUCT_UNITSPERTIMEUNIT");
+                if(tmpValue!=null){
+                    product.setUnitsPerTimeUnit(Double.parseDouble(tmpValue));
+                }
+
+                // minimumOrderPackages
+                tmpValue = rs.getString("OC_PRODUCT_MINORDERPACKAGES");
+                if(tmpValue!=null){
+                    product.setMinimumOrderPackages(Integer.parseInt(tmpValue));
+                }
+
+                // OBJECT variables
+                product.setCreateDateTime(rs.getTimestamp("OC_PRODUCT_CREATETIME"));
+                product.setUpdateDateTime(rs.getTimestamp("OC_PRODUCT_UPDATETIME"));
+                product.setUpdateUser(ScreenHelper.checkString(rs.getString("OC_PRODUCT_UPDATEUID")));
+                product.setVersion(rs.getInt("OC_PRODUCT_VERSION"));
+                product.setTotalUnits(rs.getInt("OC_PRODUCT_TOTALUNITS"));
+                products.add(product);
+            }
+        }
+        catch(Exception e){
+            if(e.getMessage().endsWith("NOT FOUND")){
+                Debug.println(e.getMessage());
+            }
+            else{
+                e.printStackTrace();
+            }
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                oc_conn.close();
+
+            }
+            catch(SQLException se){
+                se.printStackTrace();
+            }
+        }    	
+        return products;
+    }
+    
     //--- DELETE ----------------------------------------------------------------------------------
     public static void delete(String productUid){
         PreparedStatement ps = null;
@@ -1111,6 +1204,54 @@ public class Product extends OC_Object implements Comparable {
 		
 		return foundObjects;
 	}
+    
+    public String getAccessibleStockLevels(){
+    	int centrallevel=0;
+    	int distributionlevel=0;
+        Connection oc_conn = MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+        	//First look for distributionlevel
+        	String sql = "select sum(oc_stock_level) total "+
+                    " from oc_productstocks a,oc_servicestocks b"+
+                    " where b.oc_stock_objectid=replace(a.oc_stock_servicestockuid,'"+MedwanQuery.getInstance().getConfigInt("serverId")+".','')"+
+                    " and not a.oc_stock_servicestockuid=? "+
+                    " and (b.oc_stock_hidden is null or oc_stock_hidden<>1)"+
+                    " and a.oc_stock_productuid = ?";
+        	PreparedStatement ps = oc_conn.prepareStatement(sql);
+        	ps.setString(1, MedwanQuery.getInstance().getConfigString("centralPharmacyServiceStockCode","0.0"));
+        	ps.setString(2, this.getUid());
+        	ResultSet rs = ps.executeQuery();
+        	if(rs.next()){
+        		distributionlevel=rs.getInt("total");
+        	}
+        	rs.close();
+        	ps.close();
+        	//First look for centrallevel
+        	sql = "select sum(oc_stock_level) total "+
+                    " from oc_productstocks"+
+                    " where oc_stock_servicestockuid=? "+
+                    " and oc_stock_productuid = ?";
+        	ps = oc_conn.prepareStatement(sql);
+        	ps.setString(1, MedwanQuery.getInstance().getConfigString("centralPharmacyServiceStockCode","0.0"));
+        	ps.setString(2, this.getUid());
+        	rs = ps.executeQuery();
+        	if(rs.next()){
+        		centrallevel=rs.getInt("total");
+        	}
+        	rs.close();
+        	ps.close();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        try{
+			oc_conn.close();
+		}
+        catch(SQLException e){
+			e.printStackTrace();
+		}
+    	return distributionlevel+"/"+centrallevel;
+    }
     
     //--- IS IN STOCK -----------------------------------------------------------------------------
     public static boolean isInStock(String sProductUID, String sServiceUID){

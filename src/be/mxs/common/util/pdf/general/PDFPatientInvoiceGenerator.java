@@ -218,11 +218,11 @@ public class PDFPatientInvoiceGenerator extends PDFInvoiceGenerator {
 	    			table = new PdfPTable(100);
 	    	        table.setWidthPercentage(pageWidth);
 	    			if(encounter.getType()!=null && encounter.getType().equalsIgnoreCase("admission")){
-		    			if(serviceuid!=null){
+	    				if(invoice.getServicesAsString(sPrintLanguage).length()>0){
 		    				cell= createValueCell(getTran("web","service")+":",15);
 			    			cell.setBorder(PdfPCell.NO_BORDER);
 			    			table.addCell(cell);
-			    			cell= createValueCell(servicename,85);
+			    			cell= createValueCell(invoice.getServicesAsString(sPrintLanguage),85);
 			    			cell.setBorder(PdfPCell.NO_BORDER);
 			    			table.addCell(cell);
 		    			}
@@ -246,11 +246,11 @@ public class PDFPatientInvoiceGenerator extends PDFInvoiceGenerator {
 		    			table.addCell(cell);
 	    			}
 	    			else {
-	    				if(serviceuid!=null){
+	    				if(invoice.getServicesAsString(sPrintLanguage).length()>0){
 			    			cell= createValueCell(getTran("web","service")+":",20);
 			    			cell.setBorder(PdfPCell.NO_BORDER);
 			    			table.addCell(cell);
-			    			cell= createValueCell(servicename,30);
+			    			cell= createValueCell(invoice.getServicesAsString(sPrintLanguage),30);
 			    			cell.setBorder(PdfPCell.NO_BORDER);
 			    			table.addCell(cell);
 			    			cell= createValueCell(getTran("web","begindate")+":",20);
@@ -334,37 +334,15 @@ public class PDFPatientInvoiceGenerator extends PDFInvoiceGenerator {
         double totalinsurardebet=0;
 
     	//Find services
-    	Hashtable services = new Hashtable();
-		String serviceuid="";
 		Vector debets=invoice.getDebets();
     	for(int n=0;n<debets.size();n++){
     		Debet debet = (Debet)debets.elementAt(n);
-    		if(debet!=null & debet.getServiceUid()!=null){
-    			serviceuid=debet.getServiceUid();
-    		}
-    		else {
-    			serviceuid=debet.getEncounter().getServiceUID();
-    		}
-   			services.put(serviceuid, "1");
    			if(debet!=null){
 	            totalDebet+=debet.getAmount();
 	            totalinsurardebet+=debet.getInsurarAmount();
    			}
     	}
     	
-    	String departments="";
-    	Enumeration eServices = services.keys();
-    	while(eServices.hasMoreElements()){
-    		serviceuid = (String)eServices.nextElement();
-    		Service service = Service.getService(serviceuid);
-    		if(service!=null){
-    			if(departments.length()>0){
-    				departments+=", ";
-    			}
-    			departments+=service.getLabel(user.person.language);
-    		}
-    	}
-
         table.addCell(createPriceCell(totalDebet,1));
         table.addCell(createValueCell(getTran("web","cashiersignature"),3,8,Font.NORMAL));
         table.addCell(createValueCell(getTran("web","payments"),1,8,Font.NORMAL));
@@ -393,7 +371,7 @@ public class PDFPatientInvoiceGenerator extends PDFInvoiceGenerator {
         receiptTable.addCell(cell);
         receiptTable.addCell(createEmptyCell(50));
         receiptTable.addCell(createValueCell(getTran("web","service"),10,8,Font.BOLD));
-        receiptTable.addCell(createValueCell(departments,40,7,Font.NORMAL));
+        receiptTable.addCell(createValueCell(invoice.getServicesAsString(sPrintLanguage),40,7,Font.NORMAL));
         receiptTable.addCell(createValueCell(getTran("web","prestations"),10,8,Font.BOLD));
         int nLines=2;
         for(int n=0;n<debets.size();n++){
@@ -765,8 +743,35 @@ public class PDFPatientInvoiceGenerator extends PDFInvoiceGenerator {
     //--- GET DEBETS (prestations) ----------------------------------------------------------------
     private void getDebets(PatientInvoice invoice,PdfPTable tableParent,Vector debets){
 
-        Vector debetUids = debets;
-        if(debetUids.size() > 0){
+        Vector newdebets = new Vector();
+        if(MedwanQuery.getInstance().getConfigInt("defaultInvoiceSummarizeDebets",0)==1){
+            SortedMap prestations = new TreeMap();
+            for(int n=0;n<debets.size();n++){
+            	Debet debet = (Debet)debets.elementAt(n);
+            	if(debet.getPrestation()!=null && debet.getQuantity()!=0){
+        			//printDebet(debet,table);
+            		if(prestations.get(debet.getPrestation().getDescription()+"."+debet.getInsuranceUid()+"."+debet.getPrestationUid())==null){
+            			prestations.put(debet.getPrestation().getDescription()+"."+debet.getInsuranceUid()+"."+debet.getPrestationUid(), debet);
+            		}
+            		else {
+            			Debet olddebet = (Debet)prestations.get(debet.getPrestation().getDescription()+"."+debet.getInsuranceUid()+"."+debet.getPrestationUid());
+            			olddebet.setQuantity(olddebet.getQuantity()+debet.getQuantity());
+            			olddebet.setAmount(olddebet.getAmount()+debet.getAmount());
+            			olddebet.setInsurarAmount(olddebet.getInsurarAmount()+debet.getInsurarAmount());
+            			olddebet.setExtraInsurarAmount(olddebet.getExtraInsurarAmount()+debet.getExtraInsurarAmount());
+            			olddebet.setDate(debet.getDate());
+            		}
+            	}
+            }
+            Iterator iDebets = prestations.keySet().iterator();
+            while(iDebets.hasNext()){
+            	newdebets.add(prestations.get(iDebets.next()));
+            }
+        }
+        else {
+        	newdebets=debets;
+        }
+        if(newdebets.size() > 0){
             PdfPTable table = new PdfPTable(200);
             table.setWidthPercentage(pageWidth);
             // header
@@ -841,21 +846,15 @@ public class PDFPatientInvoiceGenerator extends PDFInvoiceGenerator {
             Debet debet;
             String activePrestationClass="";
 
-            Vector debetsVector = new Vector();
-            for(int i=0; i<debetUids.size(); i++){
-                debet = (Debet)debetUids.get(i);
-                debetsVector.add(debet);
-            }
-
-            for(int i=0; i<debetUids.size(); i++){
+            for(int i=0; i<newdebets.size(); i++){
                 table = new PdfPTable(200);
                 table.setWidthPercentage(pageWidth);
-                debet = (Debet)debetUids.get(i);
+                debet = (Debet)newdebets.get(i);
                 String prestationClass= debet.getPrestation().getReferenceObject().getObjectType()==null?"?":debet.getPrestation().getReferenceObject().getObjectType();
                 if(!prestationClass.equalsIgnoreCase(activePrestationClass)){
                     //This is a new prestation class, go calculate the header
                     activePrestationClass=prestationClass;
-                    printPrestationClass(table,activePrestationClass,debetsVector);
+                    printPrestationClass(table,activePrestationClass,newdebets);
                 }
                 totalPatient+= debet.getAmount();
                 totalInsurar+= debet.getInsurarAmount();
