@@ -88,7 +88,6 @@ public class UpdateDebetServices {
 				ps.close();
 				conn.close();
 				totalupdated+=counter;
-				System.out.println("Total number of Debets updated: "+totalupdated);
 			}
 			catch (Exception e){
 				e.printStackTrace();

@@ -436,12 +436,12 @@ public class PDFInsurarInvoiceGeneratorRAMA extends PDFInvoiceGenerator {
             cell.setPaddingRight(5);
             table.addCell(cell);
             table.addCell(createEmptyCell(500));
-            cell = createLabelCell(priceFormatInsurar.format(generaltotal100pct)+" RWF",200);
+            cell = createLabelCell(priceFormatInsurar.format(generaltotal100pct)+" "+MedwanQuery.getInstance().getConfigString("currencyPdf","RWF"),200);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
             cell.setBorder(PdfPCell.BOX);
             cell.setPaddingRight(5);
             table.addCell(cell);
-            cell = createLabelCell(priceFormatInsurar.format(generaltotal85pct)+" RWF",200);
+            cell = createLabelCell(priceFormatInsurar.format(generaltotal85pct)+" "+MedwanQuery.getInstance().getConfigString("currencyPdf","RWF"),200);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
             cell.setBorder(PdfPCell.BOX);
             cell.setPaddingRight(5);
@@ -529,11 +529,11 @@ public class PDFInsurarInvoiceGeneratorRAMA extends PDFInvoiceGenerator {
             cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
             cell.setPaddingRight(5);
             invoiceTable.addCell(cell);
-            cell = createUnderlinedCell(priceFormatInsurar.format(daytotal100pct)+" RWF",200);
+            cell = createUnderlinedCell(priceFormatInsurar.format(daytotal100pct)+" "+MedwanQuery.getInstance().getConfigString("currencyPdf","RWF"),200);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
             cell.setPaddingRight(5);
             invoiceTable.addCell(cell);
-            cell = createUnderlinedCell(priceFormatInsurar.format(daytotal85pct)+" RWF",200);
+            cell = createUnderlinedCell(priceFormatInsurar.format(daytotal85pct)+" "+MedwanQuery.getInstance().getConfigString("currencyPdf","RWF"),200);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
             cell.setPaddingRight(5);
             invoiceTable.addCell(cell);

@@ -9,8 +9,6 @@ import net.objecthunter.exp4j.ExpressionBuilder;
 public class Evaluate {
 	
 	public static String evaluate(String expression, Hashtable parameters,int precision) throws Exception{
-		System.out.println("expression="+expression);
-		System.out.println("precision="+precision);
 		return String.format("%."+precision+"f%n", evaluate(expression,parameters));
 	}
 

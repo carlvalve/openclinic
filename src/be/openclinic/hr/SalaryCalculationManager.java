@@ -153,11 +153,9 @@ public class SalaryCalculationManager /*extends OC_Object*/ {
                     if(dayIdx < 0) dayIdx = 6;
                     
                     if(workDays[dayIdx]==false){
-                        System.out.println("[INFO] : "+ScreenHelper.stdDateFormat.format(tmpDate)+" [dayIdx "+(dayIdx)+"] is defined by the workschedule, as a day not to work."); /////////
                         periodBegin.add(Calendar.DATE,1); // proceed one day                        
                     }
                     else{
-                        System.out.println("###### tmpDate : "+ScreenHelper.stdDateFormat.format(tmpDate)+" [dayIdx "+(dayIdx)+"] ###############"); /////////                
                                        
                         // check existence of calculation
                         calculation = SalaryCalculation.getCalculationOnDate(tmpDate,personId);
@@ -186,7 +184,6 @@ public class SalaryCalculationManager /*extends OC_Object*/ {
                             calculationsCreated++;   
                         }
                         else{
-                            System.out.println(" A calculation on '"+ScreenHelper.stdDateFormat.format(tmpDate)+"' exists, no action taken"); //////////
                             calculationsExisted++;
                         }
                         
@@ -364,11 +361,9 @@ public class SalaryCalculationManager /*extends OC_Object*/ {
                     if(dayIdx < 0) dayIdx = 6;
                     
                     if(workDays[dayIdx]==false){
-                        System.out.println("[INFO] : "+ScreenHelper.stdDateFormat.format(tmpDate)+" [dayIdx "+cal.get(dayIdx)+"] is defined by the leave, as a day not to work."); /////////
                         periodBegin.add(Calendar.DATE,1); // proceed one day                        
                     }
                     else{
-                        System.out.println("###### tmpDate : "+ScreenHelper.stdDateFormat.format(tmpDate)+" [dayIdx "+cal.get(dayIdx)+"] ###############"); /////////                
                                        
                         // check existence of calculation
                         calculation = SalaryCalculation.getCalculationOnDate(tmpDate,personId);
@@ -399,7 +394,6 @@ public class SalaryCalculationManager /*extends OC_Object*/ {
                             calculation.store(activeUser.userid); // save again, the calculation now contains codes 
                         }
                         else{
-                            System.out.println(" A calculation on '"+ScreenHelper.stdDateFormat.format(tmpDate)+"' existed; overruled because not of type 'leave'"); //////////
                             calculationsExisted++;
                         }
                         

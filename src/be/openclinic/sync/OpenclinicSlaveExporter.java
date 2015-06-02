@@ -3387,7 +3387,6 @@ public class OpenclinicSlaveExporter implements Runnable{
 			        if(!addRecordBlock(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(updatetime)+"."+patientuid+"."+type+".V.", element)){
 			        	break;
 			        }
-			        System.out.println("added vaccination");
 				}
 				catch(Exception e2){
 					e2.printStackTrace();

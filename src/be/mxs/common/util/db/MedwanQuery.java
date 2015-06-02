@@ -442,6 +442,16 @@ public class MedwanQuery {
     public Hashtable getServiceexaminations(){
 		return serviceexaminations;
 	}
+    
+    public void loadLabel(net.admin.Label label){
+    	if(getLabels().get(label.language.toLowerCase())==null){
+    		getLabels().put(label.language.toLowerCase(), new Hashtable());
+    	}
+    	if(((Hashtable)getLabels().get(label.language.toLowerCase())).get(label.type.toLowerCase())==null){
+    		((Hashtable)getLabels().get(label.language.toLowerCase())).put(label.type.toLowerCase(), new Hashtable());
+    	}
+    	((Hashtable)((Hashtable)getLabels().get(label.language.toLowerCase())).get(label.type.toLowerCase())).put(label.id.toLowerCase(), label);
+    }
 
     public void reloadLabels(){
         Hashtable labelLanguages = new Hashtable();

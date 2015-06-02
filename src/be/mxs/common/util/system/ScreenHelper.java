@@ -18,6 +18,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.PageContext;
+
 import java.io.File;
 import java.sql.*;
 import java.sql.Date;
@@ -50,6 +51,33 @@ public class ScreenHelper {
     	}
 
     	return sObjectId;
+    }
+    
+    public static String sortedMap2String(SortedMap m){
+    	String s="";
+    	Iterator i = m.keySet().iterator();
+    	while(i.hasNext()){
+    		String key=(String)i.next();
+    		String value=(String)m.get(key);
+    		if(s.length()>0){
+    			s+="|";
+    		}
+    		s+=key+"$"+value;
+    	}
+    	return s;
+    }
+    
+    public static SortedMap string2SortedMap(String s){
+    	String[] ss=s.split("\\|");
+    	SortedMap m = new TreeMap();
+    	for(int i=0;i<ss.length;i++){
+    		if(ss[i].split("\\$").length>1){
+	    		String key = ss[i].split("\\$")[0];
+	    		String value = ss[i].split("\\$")[1];
+	    		m.put(key, value);
+    		}
+    	}
+    	return m;
     }
     
     //--- RELOAD DATE FORMATS ---------------------------------------------------------------------
@@ -415,6 +443,12 @@ public class ScreenHelper {
 
                 Hashtable typeHashtable = (Hashtable)langHashtable.get(sLanguage.toLowerCase());
                 if(typeHashtable==null){
+                	if(MedwanQuery.getInstance().getConfigInt("enableAutoTranslate",0)==1){
+                		String sLabel=Translate.translateLabel(sType,sID,MedwanQuery.getInstance().getConfigString("autoTranslateSourceLanguage","en"),sLanguage);
+                		if(sLabel!=null){
+                			return sLabel;
+                		}
+                	}
                     if(checkString(MedwanQuery.getInstance().getConfigString("showLinkNoTranslation")).equals("on")){
                         String url = "system/"+(displaySimplePopup?"manageTranslationsPopupSimple":"manageTranslationsPopup")+".jsp&EditOldLabelID="+sID+"&EditOldLabelType="+sType+"&EditOldLabelLang="+sLanguage+"&Action=Select";
                         return "<a href='#' onClick=javascript:openPopup('"+url+"');>"+sID+"</a>"; // onclick without parenthesis
@@ -426,6 +460,12 @@ public class ScreenHelper {
 
                 Hashtable idHashtable = (Hashtable)typeHashtable.get(sType.toLowerCase());
                 if(idHashtable==null){
+                	if(MedwanQuery.getInstance().getConfigInt("enableAutoTranslate",0)==1){
+                		String sLabel=Translate.translateLabel(sType,sID,MedwanQuery.getInstance().getConfigString("autoTranslateSourceLanguage","en"),sLanguage);
+                		if(sLabel!=null){
+                			return sLabel;
+                		}
+                	}
                     if(checkString(MedwanQuery.getInstance().getConfigString("showLinkNoTranslation")).equals("on")){
                         String url = "system/"+(displaySimplePopup?"manageTranslationsPopupSimple":"manageTranslationsPopup")+".jsp&EditOldLabelID="+sID+"&EditOldLabelType="+sType+"&EditOldLabelLang="+sLanguage+"&Action=Select";
                         return "<a href='#' onClick=javascript:openPopup('"+url+"');>"+sID+"</a>"; // onclick without parenthesis
@@ -437,6 +477,12 @@ public class ScreenHelper {
 
                 Label label = (Label)idHashtable.get(sID.toLowerCase());
                 if(label==null){
+                	if(MedwanQuery.getInstance().getConfigInt("enableAutoTranslate",0)==1){
+                		String sLabel=Translate.translateLabel(sType,sID,MedwanQuery.getInstance().getConfigString("autoTranslateSourceLanguage","en"),sLanguage);
+                		if(sLabel!=null){
+                			return sLabel;
+                		}
+                	}
                     if(checkString(MedwanQuery.getInstance().getConfigString("showLinkNoTranslation")).equals("on")){
                         String url = "system/"+(displaySimplePopup?"manageTranslationsPopupSimple":"manageTranslationsPopup")+".jsp&EditOldLabelID="+sID+"&EditOldLabelType="+sType+"&EditOldLabelLang="+sLanguage+"&Action=Select";
                         return "<a href='#' onClick=javascript:openPopup('"+url+"');>"+sID+"</a>"; // onclick without parenthesis
@@ -571,6 +617,99 @@ public class ScreenHelper {
 
     //--- GET TRAN NO LINK ------------------------------------------------------------------------
     public static String getTranNoLink(String sType, String sID, String sLanguage){  
+    	if(sType==null){
+    		Debug.println("WARNING - getTranNoLink : sType is null for sID:"+sID+" and sLanguage:"+sLanguage);
+    		return "";
+    	}
+    	if(sID==null){
+    		Debug.println("WARNING - getTranNoLink : sID is null for sType:"+sType+" and sLanguage:"+sLanguage);
+    		return "";
+    	}
+    	
+        String labelValue = "";
+        if(sLanguage!=null && sLanguage.equalsIgnoreCase("f")){
+        	sLanguage = "fr";
+        }
+        else if(sLanguage!=null && sLanguage.equalsIgnoreCase("n")){
+        	sLanguage = "nl";
+        }
+        else if(sLanguage!=null && sLanguage.equalsIgnoreCase("e")){
+        	sLanguage = "en";
+        }
+
+        try{
+            if(sLanguage!=null && sLanguage.length()==2){	
+	            if(sType.equalsIgnoreCase("service") || sType.equalsIgnoreCase("function")){
+	                labelValue = MedwanQuery.getInstance().getLabel(sType.toLowerCase(),sID.toLowerCase(),sLanguage);
+	            }
+	            else{
+	                Hashtable labels = MedwanQuery.getInstance().getLabels();
+	                if(labels==null){
+	                    saveUnknownLabel(sType,sID,sLanguage);
+	                    return sID;
+	                }
+	                else{
+	                    Hashtable langHashtable = MedwanQuery.getInstance().getLabels();
+	                    if(langHashtable==null){
+	                    	if(MedwanQuery.getInstance().getConfigInt("enableAutoTranslate",0)==1){
+	                    		String sLabel=Translate.translateLabel(sType,sID,MedwanQuery.getInstance().getConfigString("autoTranslateSourceLanguage","en"),sLanguage);
+	                    		if(sLabel!=null){
+	                    			return sLabel;
+	                    		}
+	                    	}
+	                        return sID;
+	                    }
+	
+	                    Hashtable typeHashtable = (Hashtable)langHashtable.get(sLanguage.toLowerCase());
+	                    if(typeHashtable==null){
+	                    	if(MedwanQuery.getInstance().getConfigInt("enableAutoTranslate",0)==1){
+	                    		String sLabel=Translate.translateLabel(sType,sID,MedwanQuery.getInstance().getConfigString("autoTranslateSourceLanguage","en"),sLanguage);
+	                    		if(sLabel!=null){
+	                    			return sLabel;
+	                    		}
+	                    	}
+	                        return sID;
+	                    }
+	
+	                    Hashtable idHashtable = (Hashtable)typeHashtable.get(sType.toLowerCase());
+	                    if(idHashtable==null){
+	                    	if(MedwanQuery.getInstance().getConfigInt("enableAutoTranslate",0)==1){
+	                    		String sLabel=Translate.translateLabel(sType,sID,MedwanQuery.getInstance().getConfigString("autoTranslateSourceLanguage","en"),sLanguage);
+	                    		if(sLabel!=null){
+	                    			return sLabel;
+	                    		}
+	                    	}
+	                        return sID;
+	                    }
+	
+	                    Label label = (Label)idHashtable.get(sID.toLowerCase());
+	                    if(label==null){
+	                    	if(MedwanQuery.getInstance().getConfigInt("enableAutoTranslate",0)==1){
+	                    		String sLabel=Translate.translateLabel(sType,sID,MedwanQuery.getInstance().getConfigString("autoTranslateSourceLanguage","en"),sLanguage);
+	                    		if(sLabel!=null){
+	                    			return sLabel;
+	                    		}
+	                    	}
+	                        return sID;
+	                    }
+	
+	                    labelValue = label.value;
+	
+	                    // empty label : return id as labelValue
+	                    if(labelValue==null || labelValue.trim().length()==0){
+	                        return sID;
+	                    }
+	                }
+	            }
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return labelValue.replaceAll("##CR##","\n");
+    }
+    public static String getTranNoLinkNoTranslate(String sType, String sID, String sLanguage){  
     	if(sType==null){
     		Debug.println("WARNING - getTranNoLink : sType is null for sID:"+sID+" and sLanguage:"+sLanguage);
     		return "";

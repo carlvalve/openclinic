@@ -7,12 +7,10 @@ public class SessionMessage {
 	
 	public void setMessage(String s){
 		messages.add(s);
-		System.out.println(s);
 	}
 	
 	public void setErrorMessage(String s){
 		messages.add("<font color='red'><b>"+s+"</b></font>");
-		System.out.println(s);
 	}
 	
 	public Vector getMessages(){

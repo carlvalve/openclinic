@@ -103,11 +103,8 @@ public class PDFLabSampleLabelGenerator extends PDFOfficialBasic {
         try {
             PdfContentByte cb = docWriter.getDirectContent();
             Barcode39 barcode39 = new Barcode39();
-            //barcode39.setCode("2"+ ScreenHelper.padLeft(serverid+"","0",2)+ScreenHelper.padLeft(""+transactionid,"0",8)+sample.replaceAll("\\?",""));
             barcode39.setCode("2"+ ScreenHelper.padLeft(serverid+"","0",2)+ScreenHelper.padLeft(""+transactionid,"0",8));
             Image image = barcode39.createImageWithBarcode(cb, null, null);
-            //image.scaleAbsoluteHeight((new Float(MedwanQuery.getInstance().getConfigInt("labLabelHeight",120)*72/254).floatValue()-doc.topMargin()-doc.bottomMargin())*2/3);
-            //image.scaleAbsoluteWidth((new Float(MedwanQuery.getInstance().getConfigInt("labLabelWidth",250)*72/254).floatValue()-doc.leftMargin()-doc.rightMargin())*2/3);
             image.scaleToFit(MedwanQuery.getInstance().getConfigInt("labLabelScaleWidth",120),MedwanQuery.getInstance().getConfigInt("labLabelScaleHeight",40));
             table = new PdfPTable(3);
             table.setWidthPercentage(100);
