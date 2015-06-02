@@ -28,10 +28,5 @@
 	    out.print("window.opener.document.getElementsByName('quantity6')[0].value='"+productSchema.getTimeQuantity(5).getValue()+"';");
 	%>
 	
-	var msgArea = window.opener.document.getElementById("msgArea");
-	if(msgArea!=null){
-		msgArea.innerHTML = "<%=getTran("web","scheduleLoaded",sWebLanguage)%>";
-	}
-	
     window.close();
 </script>

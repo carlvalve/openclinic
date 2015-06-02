@@ -555,7 +555,7 @@
         if (!isNumberLimited(oObject,40,300)){
           var popupUrl = "<%=sCONTEXTPATH%>/_common/search/okPopup.jsp?ts=999999999&labelType=Web.occup&labelID=out-of-bounds-value";
           var modalities = "dialogWidth:266px;dialogHeight:163px;center:yes;scrollbars:no;resizable:no;status:no;location:no;";
-          window.showModalDialog(popupUrl,'',modalities);
+          window.showModalDialog?window.showModalDialog(popupUrl,'',modalities):alert('<%=getTran("web.occup","out-of-bounds-value",sWebLanguage)%>');
         }
         else if ((sbp.length>0)&&(dbp.length>0)){
           isbp = document.getElementsByName(sbp)[0].value*1;
@@ -563,7 +563,7 @@
           if (idbp>isbp){
             var popupUrl = "<%=sCONTEXTPATH%>/_common/search/okPopup.jsp?ts=999999999&labelType=Web.occup&labelID=error.dbp_greather_than_sbp";
             var modalities = "dialogWidth:266px;dialogHeight:163px;center:yes;scrollbars:no;resizable:no;status:no;location:no;";
-            window.showModalDialog(popupUrl,'',modalities);
+            window.showModalDialog?window.showModalDialog(popupUrl,'',modalities):alert('<%=getTran("web.occup","error.dbp_greather_than_sbp",sWebLanguage)%>');
           }
         }
       }
@@ -574,7 +574,7 @@
         if(!isNumberLimited(oObject,30,300)){
           var popupUrl = "<%=sCONTEXTPATH%>/_common/search/okPopup.jsp?ts=999999999&labelType=Web.occup&labelID=out-of-bounds-value";
           var modalities = "dialogWidth:266px;dialogHeight:163px;center:yes;scrollbars:no;resizable:no;status:no;location:no;";
-          window.showModalDialog(popupUrl,'',modalities);
+          window.showModalDialog?window.showModalDialog(popupUrl,'',modalities):alert('<%=getTran("web.occup","out-of-bounds-value",sWebLanguage)%>');
         }
       }
   }

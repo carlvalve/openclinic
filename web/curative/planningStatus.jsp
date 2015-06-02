@@ -25,17 +25,17 @@
                 <td style="padding:0;">
             		<table id="searchresultsInsurance" width="100%" cellspacing="0" class="sortable" style="border:0;">
             		
-                <%-- HEADER --%>
-                <tr class="gray">
-                    <td><%=getTran("web.occup","medwan.common.date",sWebLanguage)%></td>
-                    <td><%=getTran("web","from",sWebLanguage)%></td>
-                    <td><%=getTran("web","to",sWebLanguage)%></td>
-                    <td><%=getTran("planning","cancelationdate",sWebLanguage)%></td>
-                    <td><%=getTran("planning","user",sWebLanguage)%></td>
-                    <td><%=getTran("web","context",sWebLanguage)%></td>
-                    <td><%=getTran("web","prestation",sWebLanguage)%></td>
-                    <td><%=getTran("web","description",sWebLanguage)%></td>
-                </tr>
+		                <%-- HEADER --%>
+		                <tr class="gray">
+		                    <td><%=getTran("web.occup","medwan.common.date",sWebLanguage)%></td>
+		                    <td><%=getTran("web","from",sWebLanguage)%></td>
+		                    <td><%=getTran("web","to",sWebLanguage)%></td>
+		                    <td><%=getTran("planning","cancelationdate",sWebLanguage)%></td>
+		                    <td><%=getTran("planning","user",sWebLanguage)%></td>
+		                    <td><%=getTran("web","context",sWebLanguage)%></td>
+		                    <td><%=getTran("web","prestation",sWebLanguage)%></td>
+		                    <td><%=getTran("web","description",sWebLanguage)%></td>
+		                </tr>
             <%
             Planning planning;
             String[] aHour;
@@ -132,11 +132,13 @@
                         <td><%=planning.getDescription()%></td>
                     </tr>
                       
+                <%
+            }
+            %>
                   	        </table>
                         </td>
                     </tr>  
-                <%
-            }
+            <%
         }
         else{
         	//out.print("&nbsp;"+getTran("web","noRecordsFound",sWebLanguage));

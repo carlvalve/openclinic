@@ -4,7 +4,7 @@
     <%=writeTableHeader("web","enrollFingerPrint",sWebLanguage)%>
     <table width="100%" class="list" cellspacing="1" cellpadding="0">
         <tr>
-            <td class="admin2" width="100">
+            <td class="admin2" nowrap>
                 <input type="radio" id="righthand" name="rightleft" value="R" checked/><%=getLabel("web","right",sWebLanguage,"righthand")%>
                 <input type="radio" id="lefthand" name="rightleft" value="L"/><%=getLabel("web","left",sWebLanguage,"lefthand")%>
             </td>

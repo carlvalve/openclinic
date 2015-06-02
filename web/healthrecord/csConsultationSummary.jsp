@@ -170,7 +170,6 @@
     <bean:define id="lastTransaction_biometry" name="be.mxs.webapp.wl.session.SessionContainerFactory.WO_SESSION_CONTAINER" property="lastTransactionTypeBiometry"/>
 
 <%
-	System.out.println(1);
 	if (session.getAttribute("sessionCounter")==null){
         session.setAttribute("sessionCounter",new Integer(0));
     }
@@ -383,14 +382,10 @@
         <td style="vertical-align:top;" colspan="2">
             <table class="list" width="100%" cellspacing="1">
                     <%
-                	System.out.println(2);
 
                         SessionContainerWO sessionContainerWO = (SessionContainerWO) SessionContainerFactory.getInstance().getSessionContainerWO(request, SessionContainerWO.class.getName());
-                    	System.out.println(3);
                         TransactionVO curTran = sessionContainerWO.getCurrentTransactionVO();
-                    	System.out.println(4);
                         Encounter encounter = Encounter.getActiveEncounterOnDate(new Timestamp(ScreenHelper.fullDateFormat.parse(new SimpleDateFormat("dd/MM/yyyy 23:59").format(curTran.getUpdateTime())).getTime()),activePatient.personid);
-                    	System.out.println(5);
                         String rfe="";
                         if(encounter!=null){
                             rfe = ReasonForEncounter.getReasonsForEncounterAsHtml(encounter,sWebLanguage,"_img/icons/icon_delete.gif","deleteRFE($serverid,$objectid)");

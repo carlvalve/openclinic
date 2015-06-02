@@ -60,6 +60,7 @@
             html.append("<tr class='list"+sClass+"' onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\" title='"+detailsTran+"'>")
                  .append("<td><img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.gif' class='link' title='"+deleteTran+"' onclick=\"doDeleteProduct('"+sProductUid+"');\">")
                  .append("<td onclick=\"doShowDetails('"+sProductUid+"');\">"+product.getName()+"</td>")
+                 .append(MedwanQuery.getInstance().getConfigInt("enableRxNorm",0)==0?"":"<td onclick=\"doShowDetails('"+sProductUid+"');\">"+checkString(product.getRxnormcode())+"</td>")
                  .append("<td onclick=\"doShowDetails('"+sProductUid+"');\">"+sUnit+"</td>")
                  .append("<td align='right' onclick=\"doShowDetails('"+sProductUid+"');\">"+sUnitPrice.replaceAll(",",".")+" "+sCurrency+"</td>")
                  .append("<td onclick=\"doShowDetails('"+sProductUid+"');\">"+sSupplierName+"</td>");
@@ -581,6 +582,13 @@
                         <tr class="admin">
                             <td width="20">&nbsp;</td>
                             <td width="250"><%=getTran("Web","productName",sWebLanguage)%></td>
+                            <%
+                            	if(MedwanQuery.getInstance().getConfigInt("enableRxNorm",0)==1){
+                            %>
+	                            <td width="250"><%=getTran("Web","rxnormcode",sWebLanguage)%></td>
+                            <%
+                            	}
+                            %>
                             <td width="120"><%=getTran("Web","Unit",sWebLanguage)%></td>
                             <td width="80" align="right"><%=getTran("Web","unitprice",sWebLanguage)%></td>
                             <td width="*"><%=getTran("Web","supplier",sWebLanguage)%></td>
@@ -822,6 +830,7 @@
                             <input class="text" type="text" name="EditRxnormcode" id="EditRxnormcode" size="50" maxLength="50" value="<%=sSelectedRxnormcode%>" >
                             <img src='<c:url value="_img/icons/icon_search.gif"/>' title='<%=getTranNoLink("web","find_rxnorm_codes",sWebLanguage) %>' onclick='findRxNormCodes()'/>
                             <img src='<c:url value="_img/icons/icon_interactions.png"/>' title='<%=getTranNoLink("web","find_interactions",sWebLanguage) %>' onclick='findRxNormInteractions()'/>
+                            <div id='rxnormcodediv'></div>
                         </td>
                     </tr>
                     <%
@@ -1123,12 +1132,26 @@
   }
 
   function findRxNormCodes(){
-	    openPopup("/pharmacy/popups/findRxNormCode.jsp&ts=<%=getTs()%>&initkey="+document.getElementById("EditProductName").value.replace("%","pct")+"&returnField=EditRxnormcode");
-}
+	    document.getElementById('rxnormcodediv').innerHTML = "<img src='<%=sCONTEXTPATH%>/_img/themes/<%=sUserTheme%>/ajax-loader.gif'/><br/>Loading..";
+	    
+	    var params = 'initkey='+document.getElementById("EditProductName").value.replace("%","pct")+'&returnField=EditRxnormcode';
+	    var url = '<c:url value="/pharmacy/popups/findRxNormCode.jsp"/>?ts='+new Date()+'&PopupWidth=800&PopupHeight=600';
+		new Ajax.Request(url,{
+	      method: "POST",
+	      parameters: params,
+	      onSuccess: function(resp){
+	  	    openPopup("/pharmacy/popups/showpopup.jsp&ts=<%=getTs()%>",800,600);
+		    $('rxnormcodediv').innerHTML = "";
+	      },
+		  onFailure: function(resp){
+		    $('rxnormcodediv').innerHTML = "";
+	      }
+		});
+	}
 
   function findRxNormInteractions(){
 	    openPopup("/pharmacy/popups/findRxNormInteractions.jsp&ts=<%=getTs()%>&initkey="+document.getElementById("EditRxnormcode").value,800,600);
-}
+	}
 
   function findAtcCodes(){
 	    window.open('<%=MedwanQuery.getInstance().getConfigString("FindATCCodeURL","http://www.whocc.no/atc_ddd_index/?")%>name='+document.getElementById("EditProductName").value.replace("%",""),"ATC","toolbar=no,status=yes,scrollbars=yes,resizable=yes,width=800,height=600,menubar=no");

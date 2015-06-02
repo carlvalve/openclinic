@@ -39,7 +39,6 @@
 	    }
 	    else {
 		    for(int n=0;n<bim.getHeight()*9/10;n+=bim.getHeight()/10){
-		    	System.out.println(n);
 			    BufferedImage cropedImage = bim.getSubimage(0, n, bim.getWidth(), bim.getHeight()/10);
 			    barcode=decode(cropedImage,null);
 			    if(barcode.length()>0){

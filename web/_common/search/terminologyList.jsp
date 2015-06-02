@@ -338,7 +338,7 @@ function doEdit(id){
 }
 
 function doDelete(id){
-  if(yesnoDialog("Web","areYouSureToDelete")){
+  if(yesnoDialogDirectText('<%=getTran("Web","areYouSureToDelete",sWebLanguage)%>')){
     EditForm.EditTerminologyUid.value = id;
     EditForm.Action.value = "delete";
     EditForm.submit();

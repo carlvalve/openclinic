@@ -6,7 +6,7 @@
 <%@page import="java.io.FileOutputStream" %>
 <%@page import="org.apache.commons.codec.binary.Base64" %>
 <%@page import="be.mxs.common.util.system.Picture" %>
-<%@page contentType="text/html;charset=UTF-8" language="java" %>
+<%@page contentType="text/html;charset=ISO-8859-1" language="java" %>
 <%@include file="/includes/validateUser.jsp" %>
 
 <%!
@@ -17,8 +17,8 @@
 	    bos.close();
 	}
 
-    // MÃ©thode pour dÃ©coder l'image
-    // NB : la chaÃ®ne de caractÃ¨res est le code Base64, le nom du fichier doit Ãªtre complet (ie chemin relatif ou absolu et extension)
+    // Méthode pour décoder l'image
+    // NB : la chaîne de caractères est le code Base64, le nom du fichier doit être complet (ie chemin relatif ou absolu et extension)
     private static void decoderImage(String image, String fichier) throws Exception {
         try {
             byte[] buffer = Base64.decodeBase64(image.getBytes());

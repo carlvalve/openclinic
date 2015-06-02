@@ -309,7 +309,7 @@
         </tr>
         <%	
         	}
-	        	if(patientInvoice!=null){
+	        	if(patientInvoice!=null && patientInvoice.getUid()!=null && patientInvoice.getUid().length()>0){
 	        		String signatures="";
 	        		Vector pointers=Pointer.getFullPointers("INVSIGN."+patientInvoice.getUid());
 	        		for(int n=0;n<pointers.size();n++){
@@ -579,7 +579,6 @@
 	                        <%
 	                            	}
 	                            }
-	                            System.out.println("isInsuranceAgent="+isInsuranceAgent);
 	                        if(isInsuranceAgent && checkString(patientInvoice.getUid()).split("\\.").length==2 && checkString(patientInvoice.getAcceptationUid()).length()==0 && Pointer.getPointer("NOVALIDATE."+patientInvoice.getUid()).length()==0){
 	                        %>
                                	<input class="button" type="button" name="buttonAcceptation" value='<%=getTranNoLink("Web.finance","validation",sWebLanguage)%>' onclick="doValidate('<%=patientInvoice.getUid()%>');">

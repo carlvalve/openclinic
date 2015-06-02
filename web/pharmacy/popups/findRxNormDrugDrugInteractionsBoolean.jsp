@@ -3,16 +3,24 @@
 <%@include file="/includes/validateUser.jsp"%>
 <%
 	boolean bHasInteractions = false;
-	if(request.getParameter("key")!=null){
-		String key=checkString(request.getParameter("key"));
-		while(key.indexOf(";;")>-1){
-			key=key.replaceAll(";;",";");
+	try{	
+		SortedMap sm = null;
+		if(request.getParameter("key")!=null){
+			String key=checkString(request.getParameter("key"));
+			while(key.indexOf(";;")>-1){
+				key=key.replaceAll(";;",";");
+			}
+			key=key.replaceAll(";", "+");
+			sm = Utils.getDrugDrugInteractions(key);
+			bHasInteractions = sm.size()>0;
 		}
-		key=key.replaceAll(";", "+");
-		bHasInteractions = Utils.hasDrugDrugInteractions(key);
+		else {
+			sm=Utils.getPatientDrugDrugInteractions(activePatient.personid);
+			bHasInteractions = sm.size()>0;
+		}
 	}
-	else {
-		bHasInteractions=Utils.patientHasDrugDrugInteractions(activePatient.personid);
+	catch(Exception e){
+		e.printStackTrace();
 	}
 %>
 {

@@ -103,9 +103,16 @@
 	                }
 	                
 	                sPrescrRule = sPrescrRule.replaceAll("#timeunit#",timeUnitTran.toLowerCase());
-	                out.print("<tr>"+
-	                           "<td><b><a href='javascript:showPrescription(\""+prescription.getUid()+"\");'>"+prescription.getProduct().getName()+"</a></b><i> ("+sPrescrRule+")</i></td>"+
-	                          "</tr>");
+	                if(!prescription.getEnd().before(new java.util.Date())){
+		                out.print("<tr>"+
+		                           "<td title='"+getTran("web","active",sWebLanguage)+"'><b><a href='javascript:showPrescription(\""+prescription.getUid()+"\");'>"+prescription.getProduct().getName()+"</a></b><i> ("+sPrescrRule+")</i></td>"+
+		                          "</tr>");
+	                }
+	                else {
+		                out.print("<tr>"+
+		                           "<td title='"+getTran("web","inactive",sWebLanguage)+"'><font color='lightgray'><a style='color: gray' href='javascript:showPrescription(\""+prescription.getUid()+"\");'>"+prescription.getProduct().getName()+"</a><i> ("+sPrescrRule+")</i></font></td>"+
+		                          "</tr>");
+	                }
 	            }
 	        }
 	        
@@ -237,6 +244,7 @@
     }
   }
   function checkForInteractions(){
+	  	document.getElementById("interactionswarning").innerHTML="<img height='5px' src='<c:url value="/_img/themes/default/ajax-loader.gif"/>'/>";
 	    var url = "<c:url value=''/>pharmacy/popups/findRxNormDrugDrugInteractionsBoolean.jsp";
 	    var params = "";
 	    new Ajax.Request(url,{
@@ -250,6 +258,9 @@
 	        else {
 	        	document.getElementById("interactionswarning").innerHTML='&nbsp';
 	        }
+	      },
+		onFailure: function(resp){
+        	document.getElementById("interactionswarning").innerHTML='&nbsp';
 	      }
 	    });
 	  }

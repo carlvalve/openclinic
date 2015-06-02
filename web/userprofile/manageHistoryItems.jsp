@@ -805,12 +805,12 @@
                     System.out.println("--> userItem : "+(userItem==null)); ////////
                     sChecked = "";
                     int order = 0, savedOrder = 0;
-                    sImg = "uncheck.gif";
+                    sImg = "themes/default/uncheck.gif";
 
                     if(userItem!=null){
                         sItemLabel = userItem.label;
                         sChecked = " checked";
-                        sImg = "check.gif";
+                        sImg = "themes/default/check.gif";
                         
                         order = userItem.order;  
                         savedOrder = userItem.order;

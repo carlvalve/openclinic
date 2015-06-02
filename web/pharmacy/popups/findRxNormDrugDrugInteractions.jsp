@@ -3,6 +3,7 @@
 <%@include file="/includes/validateUser.jsp"%>
 <form name="transactionForm" method="post">
 	<%
+		SortedMap codes=null;
 		if(checkString(request.getParameter("key")).length()>0){
 	%>
 	<input type='text' class='text' size='80' name='key' value='<%=checkString(request.getParameter("key"))%>'/>
@@ -16,18 +17,16 @@
 			<td><%=getTran("web","interaction",sWebLanguage) %></td>
 		</tr>
 	<%
-		
-  		SortedMap codes=null;
 		if(checkString(request.getParameter("key")).length()>0){
 			String key=checkString(request.getParameter("key"));
 			while(key.indexOf(";;")>-1){
 				key=key.replaceAll(";;",";");
 			}
 			key=key.replaceAll(";", "+");
-			codes=Utils.getDrugDrugInteractions(key);
+			codes=Utils.getDrugDrugInteractions(key,sWebLanguage);
 		}
 		else {
-			codes=Utils.getPatientDrugDrugInteractions(activePatient.personid);
+			codes=Utils.getPatientDrugDrugInteractions(activePatient.personid,sWebLanguage);
 		}
 		Iterator i = codes.keySet().iterator();
 		int counter=0;

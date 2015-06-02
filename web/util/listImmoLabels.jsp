@@ -252,9 +252,9 @@
 				
 				out.print("<tr class='list"+sClass+"' onmouseover='this.className=\"list_select\"' onmouseout='this.className=\"list"+sClass+"\"'>"+
 				           "<td nowrap>"+
-				      	    "<img src='_img/icon_delete.gif' class='link' title='"+getTranNoLink("web","delete",sWebLanguage)+"' onclick='deleteImmo("+sServerId+","+sObjectId+");'>"+
-						    "<img src='_img/icon_print_top.gif' class='link' title='"+getTranNoLink("web","print",sWebLanguage)+"' onclick='printImmo("+sServerId+","+sObjectId+",\""+sService.trim()+"/"+sLocation+"_"+sCode+"/"+sBuyer+"\");'>"+
-						    "<img src='_img/icon_edit.gif' class='link' title='"+getTranNoLink("web","edit",sWebLanguage)+"' onclick='editImmo("+sServerId+","+sObjectId+");'>"+
+				      	    "<img src='_img/icons/icon_delete.gif' class='link' title='"+getTranNoLink("web","delete",sWebLanguage)+"' onclick='deleteImmo("+sServerId+","+sObjectId+");'>"+
+						    "<img src='_img/icons/icon_print_top.gif' class='link' title='"+getTranNoLink("web","print",sWebLanguage)+"' onclick='printImmo("+sServerId+","+sObjectId+",\""+sService.trim()+"/"+sLocation+"_"+sCode+"/"+sBuyer+"\");'>"+
+						    "<img src='_img/icons/icon_edit.gif' class='link' title='"+getTranNoLink("web","edit",sWebLanguage)+"' onclick='editImmo("+sServerId+","+sObjectId+");'>"+
 						   "</td>"+
 						   "<td style='padding-left:5px;'>"+sServerId+"."+sObjectId+"</td>"+
 						   "<td style='padding-left:5px;'>"+sService+"</td>"+

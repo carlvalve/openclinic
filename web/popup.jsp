@@ -12,7 +12,6 @@
     <%=sJSTOGGLE%>
         
 <%
-System.out.println("popup: 1");
 
     String sPopupPage = checkString(request.getParameter("Page"));
 
@@ -132,7 +131,6 @@ System.out.println("popup: 1");
   }
 </script>
 <%
-System.out.println("popup: 2");
 %>
 <script>
   var ie = document.all

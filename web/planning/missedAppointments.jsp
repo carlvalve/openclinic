@@ -115,14 +115,16 @@ if (activePatient!=null){
                                         if(orContact != null){
                                             if(orContact.getObjectType().equalsIgnoreCase("examination")){
                                                 examination = MedwanQuery.getInstance().getExamination(orContact.getObjectUid(), sWebLanguage);
-                                                if(checkString(planning.getTransactionUID()).length()==0){
-                                                    out.print("<img src='_img/icons/icon_add.gif' onclick='doExamination(\""+planning.getUid()+"\",\"" + planning.getPatientUID() + "\",\"" + examination.getTransactionType() + "\")' alt='" + sTextAdd + "' class='link'/> "
-                                                        + getTran("examination", examination.getId().toString(), sWebLanguage));
-                                                }
-                                                else{
-                                                    String sTextFind = getTran("web", "find", sWebLanguage);
-                                                    out.print("<img src='_img/icons/icon_search.gif' onclick='openExamination(\""+planning.getTransactionUID().split("\\.")[0]+"\",\""+planning.getTransactionUID().split("\\.")[1]+"\",\"" + planning.getPatientUID() + "\",\"" + examination.getTransactionType() + "\")' alt='" + sTextFind + "' class='link'/> "
-                                                        + getTran("examination", examination.getId().toString(), sWebLanguage));
+                                                if(examination!=null && examination.getTransactionType()!=null){
+	                                                if(checkString(planning.getTransactionUID()).length()==0){
+	                                                    out.print("<img src='_img/icons/icon_add.gif' onclick='doExamination(\""+planning.getUid()+"\",\"" + planning.getPatientUID() + "\",\"" + examination.getTransactionType() + "\")' alt='" + sTextAdd + "' class='link'/> "
+	                                                        + getTran("examination", examination.getId().toString(), sWebLanguage));
+	                                                }
+	                                                else{
+	                                                    String sTextFind = getTran("web", "find", sWebLanguage);
+	                                                    out.print("<img src='_img/icons/icon_search.gif' onclick='openExamination(\""+planning.getTransactionUID().split("\\.")[0]+"\",\""+planning.getTransactionUID().split("\\.")[1]+"\",\"" + planning.getPatientUID() + "\",\"" + examination.getTransactionType() + "\")' alt='" + sTextFind + "' class='link'/> "
+	                                                        + getTran("examination", examination.getId().toString(), sWebLanguage));
+	                                                }
                                                 }
                                             }
                                         }

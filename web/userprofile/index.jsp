@@ -16,7 +16,7 @@
     +writeTblChild("main.do?Page=system/manageQuickLabList.jsp&UserQuickLabList=1",getTran("Web.UserProfile","ManageQuickLabList",sWebLanguage),rowIdx++)
     +writeTblChild("main.do?Page=system/manageShortcuts.jsp&UserQuickList=1",getTran("Web.UserProfile","manage.contact.shortcuts",sWebLanguage),rowIdx++)
     +writeTblChild("main.do?Page=userprofile/manageUserShortcuts.jsp",getTran("web.userProfile","manage.general.shortcuts",sWebLanguage),rowIdx++)
-    +writeTblChild("main.do?Page=userprofile/manageHistoryItems.jsp",getTranNoLink("web.manage","manageHistoryItems",sWebLanguage),rowIdx++)
+    +writeTblChild("main.do?Page=userprofile/manageHistoryItems.jsp",getTran("web.manage","manageHistoryItems",sWebLanguage),rowIdx++)
     +writeTblChild("main.do?Page=userprofile/changeTheme.jsp",getTran("web.userProfile","changeTheme",sWebLanguage),rowIdx++)
     +writeTblChild("main.do?Page=userprofile/manageDefaultValues.jsp",getTran("web.userProfile","manageDefaultValues",sWebLanguage),rowIdx++)
     +ScreenHelper.writeTblFooter()

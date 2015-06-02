@@ -481,7 +481,7 @@
     }
 
     function deleteService(sID){
-      if(yesnoDialog("Web","areYouSureToDelete")){
+      if(yesnoDialogDirectText('<%=getTran("Web","areYouSureToDelete",sWebLanguage)%>')){
         var params = '';
         var today = new Date();
         var url= '<c:url value="/adt/ajaxActions/editEncounterDeleteService.jsp"/>?EncounterUID=<%=sEditEncounterUID%>&ServiceUID='+sID+'&ts='+today;

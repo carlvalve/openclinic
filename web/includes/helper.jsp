@@ -589,13 +589,14 @@
     public String takeOverTransaction(SessionContainerWO sessionContainerWO, User activeUser, String sFunction){
         String sReturn = sFunction;
         TransactionVO tran = sessionContainerWO.getCurrentTransactionVO();
-
         if(tran!=null){
             if((tran.getTransactionId().intValue() > 0) && (!activeUser.userid.equals(tran.getUser().getUserId().intValue()+""))){
-                sReturn = "var url_source = '"+sCONTEXTPATH+"/popup.jsp?Page=_common/search/takeOverTransaction.jsp&ts="+getTs()+"';"+
-                          "var modal_dim = 'dialogWidth:260px; dialogHeight:160px;center:yes;scrollbars:no;resizable:no;status:no;location:no;';"+
-                          "var answer = window.showModalDialog(url_source,'',modal_dim);"+
-                          "if(answer==1){"+
+            	String sWebLanguage=activeUser.getParameter("userlanguage");
+            	if(sWebLanguage==null || sWebLanguage.length()==0){
+            		sWebLanguage=activeUser.person.language;
+            	}
+                sReturn = "var answer = yesnoDialogDirectText('"+ScreenHelper.getTran("web.occup","do_you_take_over_contact",sWebLanguage)+"');"+
+                          "if(answer){"+
                            "openPopup('/_common/search/takeOverTransactionSave.jsp&ts="+getTs()+"');"+
                           "}"+sFunction;
             }

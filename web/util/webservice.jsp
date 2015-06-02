@@ -7,7 +7,6 @@
     if(xml!=null){
 		Document message = DocumentHelper.parseText(xml);
 		Element root = message.getRootElement();
-		System.out.println(root.asXML());
 		//First check if this is a valid login
 		String login =root.attributeValue("login");
 		byte[] encryptedpassword = Base64Coder.decode(root.attributeValue("password"));
