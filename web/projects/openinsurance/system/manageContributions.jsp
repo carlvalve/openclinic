@@ -435,7 +435,7 @@
   }
 
   function deletePrestation(sPrestationUid){
-    if(yesnoDialog("Web","areYouSureToDelete")){
+    if(yesnoDialogDirectText('<%=getTran("Web","areYouSureToDelete",sWebLanguage)%>')){
       transactionForm.EditPrestationUid.value = sPrestationUid;
       transactionForm.Action.value = "delete";
       transactionForm.submit();
@@ -574,7 +574,7 @@
   }
 
   function deleteCategory(rowid){
-    if(yesnoDialog("web","areYouSureToDelete")){
+      if(yesnoDialogDirectText('<%=getTran("Web","areYouSureToDelete",sWebLanguage)%>')){
       sCategory = deleteRowFromArrayString(sCategory,rowid.id.substring(11,rowid.id.length-1));
       tblCategories.deleteRow(rowid.rowIndex);
       clearCategoryFields();

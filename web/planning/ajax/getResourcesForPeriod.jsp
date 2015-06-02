@@ -1,7 +1,6 @@
 <%@ page import="be.openclinic.adt.*,java.util.*,be.mxs.common.util.system.*,java.text.*" %>
 <%
 boolean bHasConflicts=false;
-System.out.println(new java.util.Date());
 	try{
 		String resourceuid=ScreenHelper.checkString(request.getParameter("resourceuid"));
 		String excludeplanninguid=ScreenHelper.checkString(request.getParameter("excludeplanninguid"));

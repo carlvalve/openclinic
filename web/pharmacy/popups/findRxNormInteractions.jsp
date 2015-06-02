@@ -57,7 +57,6 @@
 	if(key.length()==0 && request.getParameter("submit")==null){
 		key=checkString(request.getParameter("initkey"));
 	}
-	System.out.println("key = "+key);
 %>
 <form name="transactionForm" method="post">
 	<input type='text' class='text' size='80' name='key' value='<%=key%>'/>
@@ -94,19 +93,3 @@
 	%>
 	</table>
 </form>
-
-<script>
-	function copyData(){
-		var codes="";
-		for(n=0;n<document.all.length;n++){
-			if(document.all[n].name && document.all[n].name.startsWith("chkrxnorm") && document.all[n].checked){
-				if(codes.length>0){
-					codes=codes+";";
-				}
-				codes=codes+document.all[n].id;
-			}
-		}		
-		window.opener.<%=request.getParameter("returnField")%>.value=codes;
-		window.close();
-	}
-</script>

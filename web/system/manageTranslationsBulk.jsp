@@ -1,4 +1,4 @@
-<%@ page import="java.util.*" %>
+<%@ page import="java.util.*,be.mxs.common.util.system.*" %>
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
 
@@ -30,20 +30,22 @@
             if (sKey.startsWith("Edit")) {
                 sValue = checkString(request.getParameter(sKey));
 
+                //only save value if different from existing one
                 if (sValue.length() > 0) {
                     sKey = sKey.substring(4);
                     sType = sKey.substring(0, sKey.indexOf(";"));
                     sId = sKey.substring(sKey.indexOf(";") + 1);
-
-                    // create label object
-                    label = new Label();
-                    label.type = sType;
-                    label.id = sId;
-                    label.value = sValue;
-                    label.language = sFindDestinationLanguage;
-                    label.updateUserId = activeUser.userid;
-
-                    label.saveToDB();
+					if(!sValue.equalsIgnoreCase(getTranNoLink(sType,sId,sFindDestinationLanguage))){
+	                    // create label object
+	                    label = new Label();
+	                    label.type = sType;
+	                    label.id = sId;
+	                    label.value = sValue;
+	                    label.language = sFindDestinationLanguage;
+	                    label.updateUserId = activeUser.userid;
+	
+	                    label.saveToDB();
+					}
                 }
             }
         }
@@ -150,7 +152,7 @@
 
             if (hTypes != null) {
                 eTypes = hTypes.keys();
-
+		
                 while (eTypes.hasMoreElements()) {
                     sType = (String) eTypes.nextElement();
                     hIDs = (Hashtable) hTypes.get(sType);
@@ -170,6 +172,9 @@
                             }else if(sLabel.toLowerCase().startsWith("<a href") && sLabel.indexOf("manageTranslations") > -1){
                                 sLabel = "";
                             }
+                            if(iIndex>=iFrom && iIndex<=iUntil && sLabel.length()==0 && MedwanQuery.getInstance().getConfigInt("enableAutoTranslate",0)==1){
+                            	sLabel=Translate.translate(sFindSourceLanguage, sFindDestinationLanguage, getTran(label.type, label.id, label.language));
+                            }
 
                             if ((sFindOnlyEmptyValues.length() == 0) || ((sFindOnlyEmptyValues.length() > 0) && (sLabel.length() == 0))) {
                                 hSorted.put(sKey, "<tr class='list' ><td>" + sKey + "</td><td>" + getTran(label.type, label.id, label.language) + "</td>"
@@ -177,9 +182,11 @@
                             }
                         }
                     }
+                	iIndex++;
                 }
             }
-
+			
+            iIndex=0;
             Vector vSorted = new Vector(hSorted.keySet());
             Collections.sort(vSorted);
             Iterator it = vSorted.iterator();

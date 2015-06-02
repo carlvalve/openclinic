@@ -979,7 +979,7 @@
           var msg = "<%=getTranNoLink("web.manage","patientsInThisCategory",sWebLanguage)%><br><%=getTranNoLink("web","areyousuretodelete",sWebLanguage)%>";
           msg = replaceAll(msg,"#patientCount#",patientCount);
                     
-          if(yesnoDialog(msg)){
+          if(yesnoDialogDirectText(msg)){
             categoriesToDeleteOnSave+= categoryName+"$";
 
             sCategories = deleteRowFromArrayString(sCategories,rowid.id);

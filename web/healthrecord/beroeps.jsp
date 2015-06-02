@@ -455,7 +455,7 @@ function addBeroep(){
     if((beginDate!="" && endDate!="") && !before(beginDate,endDate)){
       var popupUrl = "<%=sCONTEXTPATH%>/_common/search/template.jsp?Page=okPopup.jsp&ts=<%=getTs()%>&labelType=Web.Occup&labelID=endMustComeAfterBegin";
       var modalities = "dialogWidth:266px;dialogHeight:163px;center:yes;scrollbars:no;resizable:no;status:no;location:no;";
-      window.showModalDialog(popupUrl,'',modalities);
+      window.showModalDialog?window.showModalDialog(popupUrl,'',modalities):alert('<%=getTran("Web.Occup","endMustComeAfterBegin",sWebLanguage)%>');
       transactionForm.BeroepsDateEnd.select();
       return false;
     }

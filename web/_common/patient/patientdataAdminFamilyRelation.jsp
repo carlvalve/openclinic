@@ -29,19 +29,31 @@
                                 else                   sClass = "1";
 
                                 %>
-                                    <%-- source id --%>
-                                    <%
-                                        String sSourceFullName      = ScreenHelper.getFullPersonName(afr.sourceId+""),
-                                               sDestinationFullName = ScreenHelper.getFullPersonName(afr.destinationId+""),
-                                               sRelationType        = getTran("admin.familyrelation",afr.relationType,sWebLanguage);
-                                    %>
+                                <%-- source id --%>
+                                <%
+                                String sSourceFullName      = ScreenHelper.getFullPersonName(afr.sourceId+""),
+                                          sDestinationFullName = ScreenHelper.getFullPersonName(afr.destinationId+""),
+                                          sRelationType        = getTran("admin.familyrelation",afr.relationType,sWebLanguage);
+								if(activePatient.personid.equalsIgnoreCase(afr.sourceId)){
+           		                %>
+                   		            <tr class="list<%=sClass%>">
+	                       	        <td>&nbsp;</td>
+                                       <td>&nbsp;<%=sSourceFullName%></td>
+                                       <td title="<%=showDossierTran%>">&nbsp;<a href="javascript:showDossier('<%=afr.destinationId%>');"><%=sDestinationFullName%></a></td>
+                                       <td>&nbsp;<%=sRelationType%></td>
+                                      </tr>
+                                <%
+								}
+								else {
+                                %>
                                     <tr class="list<%=sClass%>">
                                         <td>&nbsp;</td>
-                                        <td>&nbsp;<%=sSourceFullName%></td>
-                                        <td title="<%=showDossierTran%>">&nbsp;<a href="javascript:showDossier('<%=afr.destinationId%>');"><%=sDestinationFullName%></a></td>
+                                        <td>&nbsp;<%=sDestinationFullName%></td>
+                                        <td title="<%=showDossierTran%>">&nbsp;<a href="javascript:showDossier('<%=afr.sourceId%>');"><%=sSourceFullName%></a></td>
                                         <td>&nbsp;<%=sRelationType%></td>
                                     </tr>
-                                <%
+	                            <%
+								}
                             }
                         }
                     %>

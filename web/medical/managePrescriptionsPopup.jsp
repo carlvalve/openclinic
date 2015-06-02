@@ -499,12 +499,13 @@
 <tr>
     <td class="admin"><%=getTran("Web","product",sWebLanguage)%>&nbsp;*&nbsp;</td>
     <td class="admin2">
-        <input type="hidden" name="EditProductUid" value="<%=sSelectedProductUid%>">
+        <input type="hidden" name="EditProductUid" id="EditProductUid" value="<%=sSelectedProductUid%>">
         <input type="hidden" name="ProductUnit" value="<%=sSelectedProductUnit%>">
-        <input class="text" type="text" name="EditProductName" readonly size="<%=sTextWidth%>" value="<%=sSelectedProductName%>">
-
+        <input class="text" type="text" name="EditProductName"  id="EditProductName"  size="<%=sTextWidth%>" value="<%=sSelectedProductName%>">
         <img id="findProduct" src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" <%=onClick%>>
         <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="transactionForm.EditProductName.value='';transactionForm.EditProductUid.value='';">
+        
+		<div id="autocomplete_prescription" class="autocomple"></div>
     </td>
 </tr>
 
@@ -513,15 +514,15 @@
     <td class="admin"><%=getTran("Web","prescriptionrule",sWebLanguage)%>&nbsp;*&nbsp;</td>
     <td class="admin2">
         <%-- Units Per Time Unit --%>
-        <input type="text" class="text" style="vertical-align:-3px;" name="EditUnitsPerTimeUnit" value="<%=(sSelectedUnitsPerTimeUnit.length()>0?(doubleFormat.format(Double.parseDouble(sSelectedUnitsPerTimeUnit))).replaceAll(",","."):"")%>" size="5" maxLength="5" onKeyUp="isNumber(this);calculatePackagesNeeded();">
+        <input type="text" class="text" style="vertical-align:-3px;" name="EditUnitsPerTimeUnit" id="EditUnitsPerTimeUnit" value="<%=(sSelectedUnitsPerTimeUnit.length()>0?(doubleFormat.format(Double.parseDouble(sSelectedUnitsPerTimeUnit))).replaceAll(",","."):"")%>" size="5" maxLength="5" onKeyUp="isNumber(this);calculatePackagesNeeded();">
         <span id="EditUnitsPerTimeUnitLabel"></span>
 
         <%-- Time Unit Count --%>
         &nbsp;<%=getTran("web","per",sWebLanguage)%>
-        <input type="text" class="text" style="vertical-align:-3px;" name="EditTimeUnitCount" value="<%=sSelectedTimeUnitCount%>" size="5" maxLength="5" onKeyUp="calculatePackagesNeeded();">
+        <input type="text" class="text" style="vertical-align:-3px;" name="EditTimeUnitCount" id="EditTimeUnitCount" value="<%=sSelectedTimeUnitCount%>" size="5" maxLength="5" onKeyUp="calculatePackagesNeeded();">
 
         <%-- Time Unit (dropdown : Hour|Day|Week|Month) --%>
-        <select class="text" name="EditTimeUnit" onChange="setEditUnitsPerTimeUnitLabel();setEditTimeUnitCount();calculatePackagesNeeded();" style="vertical-align:-3px;">
+        <select class="text" name="EditTimeUnit" id="EditTimeUnit" onChange="setEditUnitsPerTimeUnitLabel();setEditTimeUnitCount();calculatePackagesNeeded();" style="vertical-align:-3px;">
             <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>
             <%=ScreenHelper.writeSelectUnsorted("prescription.timeunit",sSelectedTimeUnit,sWebLanguage)%>
         </select>
@@ -570,8 +571,8 @@
 <tr>
     <td class="admin"><%=getTran("Web","packages",sWebLanguage)%>&nbsp;*&nbsp;</td>
     <td class="admin2">
-        <input class="text" type="text" name="EditRequiredPackages" size="5" maxLength="5" value="<%=sSelectedRequiredPackages%>" onKeyUp="if(isInteger(this)){calculatePrescriptionPeriod();}">
-        &nbsp;(<input type="text" class="text" name="UnitsPerPackage" value="<%=sUnitsPerPackage%>" size="3" readonly style="border:none;background:transparent;text-align:right;">&nbsp;<%=getTran("web","packageunits",sWebLanguage).toLowerCase()%>)
+        <input class="text" type="text" name="EditRequiredPackages" id="EditRequiredPackages" size="5" maxLength="5" value="<%=sSelectedRequiredPackages%>" onKeyUp="if(isInteger(this)){calculatePrescriptionPeriod();}">
+        &nbsp;(<input type="text" class="text" name="UnitsPerPackage" id="UnitsPerPackage" value="<%=sUnitsPerPackage%>" size="3" readonly style="border:none;background:transparent;text-align:right;">&nbsp;<%=getTran("web","packageunits",sWebLanguage).toLowerCase()%>)
     </td>
 </tr>
 
@@ -579,9 +580,8 @@
 <tr>
     <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","prescriber",sWebLanguage)%>&nbsp;*&nbsp;</td>
     <td class="admin2">
-        <input type="hidden" name="EditPrescriberUid" value="<%=sSelectedPrescriberUid%>">
-        <input class="text" type="text" name="EditPrescriberFullName" readonly size="<%=sTextWidth%>" value="<%=sSelectedPrescriberFullName%>">
-
+        <input type="hidden" name="EditPrescriberUid" id="EditPrescriberUid" value="<%=sSelectedPrescriberUid%>">
+        <input class="text" type="text" name="EditPrescriberFullName" id="EditPrescriberFullName" readonly size="<%=sTextWidth%>" value="<%=sSelectedPrescriberFullName%>">
         <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchPrescriber('EditPrescriberUid','EditPrescriberFullName');">
         <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="transactionForm.EditPrescriberUid.value='';transactionForm.EditPrescriberFullName.value='';">
     </td>
@@ -640,7 +640,8 @@
 <%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%>
 
 <%-- display message --%>
-<br><span id="msgArea">&nbsp;<%=msg%></span>
+<br><span id="msgArea">&nbsp;<%=msg%></span><span id='productmsg'></span>
+
 
 <%-- EDIT BUTTONS --%>
 <%=ScreenHelper.alignButtonsStart()%>
@@ -1091,7 +1092,6 @@ function checkForInteractions(){
 function doSave(){
   calculatePrescriptionPeriod();
   calculatePackagesNeeded();
-
   if(checkPrescriptionFields()){
     if(transactionForm.returnButton!=undefined) transactionForm.returnButton.disabled = true;
     if(transactionForm.saveButton!=undefined) transactionForm.saveButton.disabled = true;
@@ -1152,14 +1152,14 @@ function checkPrescriptionFields(){
         maySubmit = true;
       }
       else{
-    	alertDialog("web.Occup","endMustComeAfterBegin");
+        window.showModalDialog?alertDialog("web.Occup","endMustComeAfterBegin"):alertDialogDirectText('<%=getTran("web.Occup","endMustComeAfterBegin",sWebLanguage)%>');
         transactionForm.EditDateEnd.focus();
       }
     }
   }
   else{
     maySubmit = false;
-              alertDialog("web.manage","dataMissing");
+    window.showModalDialog?alertDialog("web.manage","dataMissing"):alertDialogDirectText('<%=getTran("web.manage","dataMissing",sWebLanguage)%>');
   }
 
   return maySubmit;
@@ -1369,11 +1369,68 @@ function doBack(){
 <script for="window" event="onunload">
   reloadOpener();
 </script>
+<script>
+	new Ajax.Autocompleter('EditProductName','autocomplete_prescription','medical/ajax/getDrugs.jsp',{
+	  minChars:1,
+	  method:'post',
+	  afterUpdateElement:afterAutoComplete,
+	  callback:composeCallbackURL
+	});
+	
+	function afterAutoComplete(field,item){
+	  var regex = new RegExp('[-0123456789.]*-idcache','i');
+	  var nomimage = regex.exec(item.innerHTML);
+	  var id = nomimage[0].replace('-idcache','');
+	  clearEditFields();
+	  document.getElementById("EditProductUid").value = id;
+	  getProduct();
+	}
+	
+	function composeCallbackURL(field,item){
+	  var url = "";
+	  if(field.id=="EditProductName"){
+		url = "field=findDrugName&findDrugName="+field.value;
+	  }
+	  return url;
+	}
+
+	function getProduct(){
+	    var url = "<c:url value=''/>medical/ajax/getProduct.jsp";
+	    var params = "productUid="+document.getElementById("EditProductUid").value;
+	    new Ajax.Request(url,{
+	      method: "POST",
+	      parameters: params,
+	      onSuccess: function(resp){
+	        var product =  eval('('+resp.responseText+')');
+	        document.getElementById("EditProductName").value=product.name;
+	        document.getElementById("EditUnitsPerTimeUnit").value=product.unitspertimeunit;
+	        document.getElementById("EditTimeUnitCount").value=product.timeunitcount;
+	        document.getElementById("EditTimeUnit").value=product.timeunit;
+	        document.getElementById("EditDateBegin").value=product.startdate;
+	        document.getElementById("UnitsPerPackage").value=product.packageunits;
+	        document.getElementById("EditRequiredPackages").value=product.totalunits;
+	        document.getElementById("EditPrescriberUid").value=product.prescriberuid;
+	        document.getElementById("EditPrescriberFullName").value=product.prescribername;
+	        document.getElementById("productmsg").innerHTML='';
+	        if(product.levels.indexOf("0/")==0){
+	        	document.getElementById("productmsg").innerHTML=document.getElementById("productmsg").innerHTML+"<br/><img src='<c:url value="/"/>_img/icons/icon_warning.gif'/><%=getTran("web","nodistributionstock",sWebLanguage)%>";
+	        }
+	        if(product.levels.indexOf("/0")>-1){
+	        	document.getElementById("productmsg").innerHTML=document.getElementById("productmsg").innerHTML+"<br/><img src='<c:url value="/"/>_img/icons/icon_warning.gif'/><%=getTran("web","nocentralstock",sWebLanguage)%>";
+	        }
+	        calculatePrescriptionPeriod();
+			loadSchema();
+	      }
+	    });
+	}
+	
+	window.setTimeout('document.getElementById("EditProductName").focus();',200);
+</script>
 
 <%=writeJSButtons("transactionForm","saveButton")%>
 
 <%
-    if(MedwanQuery.getInstance().getConfigInt("enableAutomaticProductSearchInPrescriptions",1)==1 && "true".equalsIgnoreCase(request.getParameter("findProduct"))){
+    if(MedwanQuery.getInstance().getConfigInt("enableAutomaticProductSearchInPrescriptions",0)==1 && "true".equalsIgnoreCase(request.getParameter("findProduct"))){
         if(sEditPrescrUid.length()==0){
         	out.print("<script>searchProduct('EditProductUid','EditProductName','ProductUnit','EditUnitsPerTimeUnit','UnitsPerPackage',null,'EditServiceStockUid','EditRequiredPackages');</script>");
         }

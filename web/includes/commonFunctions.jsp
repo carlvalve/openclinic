@@ -65,12 +65,16 @@
           if(label.length > 0){
             label = label.unhtmlEntities();
         	if(yesnoDialogDirectText(label)){
-              callbackFunction.call(this);
+       	      if(callbackFunction){
+	              callbackFunction.call(this);
+       	      }
         	}
           }
           else{
         	if(window.confirm(labelType+"."+labelId)){
-              callbackFunction.call(this);
+         	      if(callbackFunction){
+    	              callbackFunction.call(this);
+           	      }
         	}
           }
         }

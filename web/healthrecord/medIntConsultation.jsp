@@ -311,7 +311,8 @@
 	      transactionForm.saveButton.style.visibility = "hidden";
 	      <%
 	          SessionContainerWO sessionContainerWO = (SessionContainerWO)SessionContainerFactory.getInstance().getSessionContainerWO(request,SessionContainerWO.class.getName());
-	          out.print(takeOverTransaction(sessionContainerWO, activeUser,"document.transactionForm.submit();"));
+				
+	    		  out.print(takeOverTransaction(sessionContainerWO, activeUser,"document.transactionForm.submit();"));
 	      %>
 	    }
     }

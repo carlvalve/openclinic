@@ -284,7 +284,7 @@
   
   <%-- CLEAR SKILL --%>
   function clearSkill(){
-    if(yesnoDialog("web","areYouSureToClear")){                 
+    if(yesnoDialog('<%=getTran("web","areYouSureToClear",sWebLanguage)%>')){                 
       $("languages").value = "";
       $("drivingLicense").value = "";
       $("itOffice").value = "";

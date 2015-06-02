@@ -82,6 +82,8 @@
 		<config key="priceFormat" value="#"/>
 		<config key="priceFormatInsurar" value="#"/>
 		<config key="currencyDecimals" value="0"/>
+		<config key="enableBurundi" value="1"/>
+		<config key="enableMFP" value="1"/>
 		<labels type="professional.council.url">
 		</labels>
 		<labels type="professional.councils">

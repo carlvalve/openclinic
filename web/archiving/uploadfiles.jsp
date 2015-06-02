@@ -8,10 +8,10 @@ HashSet studies = new HashSet();
 HashSet errors = new HashSet();
 
    String SCANDIR_BASE = MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_basePath","c:/projects/openclinicnew/web/scan");
-   System.out.println("SCANDIR_BASE="+SCANDIR_BASE);
+   Debug.println("SCANDIR_BASE="+SCANDIR_BASE);
    boolean isMultipart = ServletFileUpload.isMultipartContent(request);
    if (!isMultipart) {
-	   System.out.println("NOT MULTIPART");
+	   Debug.println("NOT MULTIPART");
    }
    else{
       FileItemFactory factory = new DiskFileItemFactory();

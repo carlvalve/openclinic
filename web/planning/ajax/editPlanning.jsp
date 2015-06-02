@@ -144,7 +144,6 @@
             planning.setContact(orContact);
             planning.setDescription(sEditDescription);
             planning.setTempPlanningUid(tempplanninguid);
-            System.out.println("tempplanninguid="+tempplanninguid);
             if(planning.store()){
             	//Also 
                 if(sPage.length()==0){

@@ -511,7 +511,7 @@
     
     <%-- add data which were entered but not yet added --%>
     if(document.getElementById("addDuration").value.length > 0 && document.getElementById("addCode").value.length > 0){
-        if(window.showModalDialog?yesnoDialog("web","firstAddData"):yesnoDialog('','<%=getTran("web","firstAddData",sWebLanguage)%>')){
+        if(window.showModalDialog?yesnoDialog("web","firstAddData"):yesnoDialogDirectText('<%=getTran("web","firstAddData",sWebLanguage)%>')){
         okToSubmit = addCC();
       }
     }
@@ -568,7 +568,7 @@
     
     <%-- add data which were entered but not yet added --%>
     if(document.getElementById("addDuration").value.length > 0 && document.getElementById("addCode").value.length > 0){
-        if(window.showModalDialog?yesnoDialog("web","firstAddData"):yesnoDialog('','<%=getTran("web","firstAddData",sWebLanguage)%>')){
+        if(window.showModalDialog?yesnoDialog("web","firstAddData"):yesnoDialogDirectText('<%=getTran("web","firstAddData",sWebLanguage)%>')){
         okToSubmit = addCC();
       }
     }

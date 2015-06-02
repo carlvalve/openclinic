@@ -320,7 +320,6 @@
         		"   and oc_debet_date >= "+MedwanQuery.getInstance().convertStringToDate("'<begin>'")+
         		"   and oc_debet_date <= "+MedwanQuery.getInstance().convertStringToDate("'<end>'")+
         		" ORDER BY oc_debet_date, lastname, firstname";
-        		System.out.println(query);
     }
 	//*** LAB RESULTS *****************************************************
     else if("lab.list".equalsIgnoreCase(sQueryType)){
@@ -333,7 +332,6 @@
     			" and resultdate<="+MedwanQuery.getInstance().convertStringToDate("'<end>'")+" and "+
     			" c.transactionid=e.transactionid and e.type='be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID'"+
         		" order by personid,resultdate";
-        		System.out.println(query);
     }
 	//*** 6 - DEBETS *****************************************************
     else if("debet.list.per.encounter".equalsIgnoreCase(sQueryType)){
@@ -351,7 +349,6 @@
         		"   and oc_debet_date >= "+MedwanQuery.getInstance().convertStringToDate("'<begin>'")+
         		"   and oc_debet_date <= "+MedwanQuery.getInstance().convertStringToDate("'<end>'")+
         		" group BY oc_encounter_objectid,oc_encounter_type) a group by ENCOUNTER_TYPE";
-        		System.out.println(query);
     }
 	//*** 7 - INVOICES ***************************************************
     else if("hmk.invoices.list".equalsIgnoreCase(sQueryType)){

@@ -62,56 +62,53 @@
 	if(key.length()==0 && request.getParameter("submit")==null){
 		key=checkString(request.getParameter("initkey"));
 	}
-	System.out.println("key = "+key);
-%>
-<form name="transactionForm" method="post">
-	<input type='text' class='text' size='80' name='key' value='<%=key%>'/>
-	<input type='submit' name='submit' value='<%=getTran("web","find",sWebLanguage) %>'/>
+	StringBuffer output= new StringBuffer();
+	output.append("<form name='transactionForm' method='post' action='popup.jsp?Page=/pharmacy/popups/findRxNormCode.jsp&PopupWidth="+checkString(request.getParameter("PopupWidth"))+"&PopupHeight="+checkString(request.getParameter("PopupHeight"))+"'>");
+	output.append("<input type='hidden' name='PopupWidth' value='"+checkString(request.getParameter("PopupWidth"))+"'/>");
+	output.append("<input type='hidden' name='PopupHeight' value='"+checkString(request.getParameter("PopupHeight"))+"'/>");
+	output.append("<input type='hidden' name='returnField' value='"+checkString(request.getParameter("returnField"))+"'/>");
+	output.append("<input type='text' class='text' size='80' name='key' value='"+key+"'/>");
+	output.append("<input type='submit' name='submit' value='"+getTran("web","find",sWebLanguage)+"'/>");
 	
-	<table width="100%">
-		<tr class='admin'>
-			<td><%=getTran("web","drugname",sWebLanguage) %></td>
-			<td><%=getTran("web","rxnormcode",sWebLanguage) %></td>
-		</tr>
-	<%
+	output.append("<table width='100%'>");
+	output.append("<tr class='admin'>");
+	output.append("<td>"+getTran("web","drugname",sWebLanguage)+"</td>");
+	output.append("<td>"+getTran("web","rxnormcode",sWebLanguage)+"</td>");
+	output.append("</tr>");
 		SortedSet codes=getRxNormCodes(key);
 		Iterator i = codes.iterator();
 		int counter=0;
 		while(i.hasNext()){
 			String code=(String)i.next();
-			%>
-			<tr>
-				<td class='admin'><%=code.split(";")[1]%> (<%=100-Integer.parseInt(code.split(";")[0]) %>%)</td>
-				<td class='admin2' valign='top'><input class='text' type='checkbox' <%=counter>0?"":"checked"%> name='chkrxnorm<%=code.split(";")[2]%>' id='<%=code.split(";")[2]%>'/><%=code.split(";")[2]%></td>
-			</tr>
+			output.append("<tr>");
+			output.append("<td class='admin'>"+code.split(";")[1]+"("+(100-Integer.parseInt(code.split(";")[0]))+"%)</td>");
+			output.append("<td class='admin2' valign='top'><input class='text' type='checkbox' "+(counter>0?"":"checked")+" name='chkrxnorm"+code.split(";")[2]+"' id='"+code.split(";")[2]+"'/>"+code.split(";")[2]+"</td>");
+			output.append("</tr>");
 			
-			<%	
 			counter++;
 		}
 		
-	%>
-	</table>
-	<%
+		output.append("</table>");
 		if(request.getParameter("returnField")!=null){
-	%>
-		<input type='button' class='button' name='transfer' value='<%=getTranNoLink("web","copydata",sWebLanguage) %>' onclick='copyData();'/>
-	<%
+			output.append("<input type='button' class='button' name='transfer' value='"+getTranNoLink("web","copydata",sWebLanguage)+"' onclick='copyData();'/>");
 		}
-	%>
-</form>
+output.append("</form>");
 
-<script>
-	function copyData(){
-		var codes="";
-		for(n=0;n<document.all.length;n++){
-			if(document.all[n].name && document.all[n].name.startsWith("chkrxnorm") && document.all[n].checked){
-				if(codes.length>0){
-					codes=codes+";";
-				}
-				codes=codes+document.all[n].id;
-			}
-		}		
-		window.opener.<%=request.getParameter("returnField")%>.value=codes;
-		window.close();
-	}
-</script>
+output.append("<script>");
+output.append("function copyData(){");
+output.append("var codes='';");
+output.append("for(n=0;n<document.all.length;n++){");
+output.append("if(document.all[n].name && document.all[n].name.startsWith('chkrxnorm') && document.all[n].checked){");
+output.append("if(codes.length>0){");
+output.append("codes=codes+';';");
+output.append("}");
+output.append("codes=codes+document.all[n].id;");
+output.append("}");
+output.append("}");		
+output.append("window.opener.document.getElementById('"+request.getParameter("returnField")+"').value=codes;");
+output.append("window.close();");
+output.append("}");
+output.append("</script>");
+session.setAttribute("popupcontent", output.toString());
+out.println(output.toString());
+%>

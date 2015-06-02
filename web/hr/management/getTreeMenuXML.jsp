@@ -12,7 +12,7 @@
     ///////////////////////////////////////////////////////////////////////////    
 
     // Create a structure like this iterating over a resultset
-    String sXML = "<?xml version='1.0' encoding='iso-8859-1'?>"+
+    String sXML = "<?xml version='1.0' encoding='UTF-8'?>"+
                   "<tree id=\"0\">"+
                    "<item text=\"Books\" id=\"books\" open=\"1\" call=\"1\" select=\"1\">"+
                   

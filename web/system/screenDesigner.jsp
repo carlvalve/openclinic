@@ -195,7 +195,7 @@
     }
     else{
       if(sFormInitialStatus.length>0 && sFormInitialStatus!=serializeForm(editForm)){
-        okToSwitchScreens = yesnoDialog("web.occup","medwan.common.buttonquestion");
+        okToSwitchScreens = yesnoDialogDirectText('<%=getTran("web.occup","medwan.common.buttonquestion",sWebLanguage)%>');
       }
     }
     
@@ -503,7 +503,7 @@
 
     if(checkState==true){
       if(sFormInitialStatus!=serializeForm(cellForm)){
-        if(yesnoDialog("web.occup","medwan.common.buttonquestion")){
+        if(yesnoDialogDirectText('<%=getTran("web.occup","medwan.common.buttonquestion",sWebLanguage)%>')){
           if(Modalbox.initialized){
             Modalbox.hide();
           }
@@ -556,7 +556,7 @@
     
     <%-- ask to add un-added item before saving cell --%>
     if(addRowContainsData()){
-      if(window.showModalDialog?yesnoDialog("web.manage","addEditedRecord"):yesnoDialog('','<%=getTran("web.manage","addEditedRecord",sWebLanguage)%>')){
+      if(window.showModalDialog?yesnoDialog("web.manage","addEditedRecord"):yesnoDialogDirectText('<%=getTran("web.manage","addEditedRecord",sWebLanguage)%>')){
         okToSave = (addItem()==true);
       }
     }  

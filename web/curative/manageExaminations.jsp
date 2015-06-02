@@ -235,7 +235,6 @@
 
 	        for(int n=0; n<examNames.size(); n++){
 	            examName = (String)examNames.get(n);
-	            System.out.println(examName);
 	            verifiedExaminationVO = (VerifiedExaminationVO)exams.get(examName);
 	            
 	            if(MedwanQuery.getInstance().getConfigString("noShowExaminationsGender"+activePatient.gender,"").indexOf(verifiedExaminationVO.getTransactionType())<0){

@@ -98,7 +98,7 @@ function checkSaveButton(){
   %>
 
   if(alertAnyway || (sFormBeginStatus!=sFormCurrStatus)){
-    discardFormData = yesnoDialog("Web.Occup","medwan.common.buttonquestion");
+    discardFormData = yesnoDialogDirectText('<%=getTran("Web.Occup","medwan.common.buttonquestion",sWebLanguage)%>');
   }
 
   return discardFormData;
@@ -108,7 +108,7 @@ function checkSaveButton(){
 %>
 function verifyPrestationCheck(){
   if(document.getElementById('prestationsVerified').value=='0'){
-    if(window.showModalDialog?yesnoDialog("web.occup","exported-activities-not-validated"):yesnoDialog('','<%=getTran("web.occup","exported-activities-not-validated",sWebLanguage)%>')){
+    if(window.showModalDialog?yesnoDialog("web.occup","exported-activities-not-validated"):yesnoDialogDirectText('<%=getTran("web.occup","exported-activities-not-validated",sWebLanguage)%>')){
       showExportedActivities();
       return false;
     }

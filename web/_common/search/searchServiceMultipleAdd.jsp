@@ -114,17 +114,17 @@
         String sOldFindText = ScreenHelper.checkDbString(sFindText);
 
         Hashtable hServiceIDs = Service.getMultipleServiceIDsByText(sWebLanguage, sOldFindText);
-        Enumeration enum = hServiceIDs.keys();
+        Enumeration en = hServiceIDs.keys();
 
         if (sRSIndex.length() > 0) {
             iParameterResultSet = Integer.parseInt(sRSIndex);
-            for (int n = 0; n < iParameterResultSet && enum.hasMoreElements(); n++) {
+            for (int n = 0; n < iParameterResultSet && en.hasMoreElements(); n++) {
                 // nothing
             }
         }
 
-        while (enum.hasMoreElements() && iTotal < iMaxResultSet) {
-            sServiceID = (String) enum.nextElement();
+        while (en.hasMoreElements() && iTotal < iMaxResultSet) {
+            sServiceID = (String) en.nextElement();
             set.add(sServiceID);
             hLabels.put(sServiceID, hServiceIDs.get(sServiceID));
             iTotal++;
@@ -390,7 +390,7 @@
         else{
           var popupUrl = "<%=sCONTEXTPATH%>/_common/search/okPopup.jsp?ts=999999999&labelType=Web&labelID=selectanitem";
           var modalities = "dialogWidth:266px;dialogHeight:163px;center:yes;scrollbars:no;resizable:no;status:no;location:no;";
-          window.showModalDialog(popupUrl,'',modalities);
+          window.showModalDialog?window.showModalDialog(popupUrl,'',modalities):alert('<%=getTran("web","selectanitem",sWebLanguage)%>');
         }
       }
 

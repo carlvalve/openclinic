@@ -177,7 +177,7 @@
                       if(!validEmailAddress(transactionForm.EditDestinationEmail.value)){
                         var popupUrl = "<%=sCONTEXTPATH%>/_common/search/template.jsp?Page=okPopup.jsp&ts=<%=getTs()%>&labelType=web&labelID=invalidemailaddress";
                         var modalities = "dialogWidth:266px;dialogHeight:143px;center:yes;scrollbars:no;resizable:no;status:no;location:no;";
-                        window.showModalDialog(popupUrl,'',modalities);
+                        window.showModalDialog?window.showModalDialog(popupUrl,'',modalities):alert('<%=getTran("web","invalidemailaddress",sWebLanguage)%>');
 
                         transactionForm.EditDestinationEmail.focus();
                       }
@@ -190,7 +190,7 @@
                     else{
                       var popupUrl = "<%=sCONTEXTPATH%>/_common/search/template.jsp?Page=okPopup.jsp&ts=<%=getTs()%>&labelType=web&labelID=somefieldsareempty";
                       var modalities = "dialogWidth:266px;dialogHeight:143px;center:yes;scrollbars:no;resizable:no;status:no;location:no;";
-                      window.showModalDialog(popupUrl,'',modalities);
+                      window.showModalDialog?window.showModalDialog(popupUrl,'',modalities):alert('<%=getTran("web","somefieldsareempty",sWebLanguage)%>');
 
                       if(transactionForm.EditDestinationLabel.value.length == 0){
                         transactionForm.EditDestinationLabel.focus();

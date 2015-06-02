@@ -10,6 +10,7 @@
         String sClass;
         if(iTotal%2==0) sClass = "list1";
         else            sClass = "list";
+        
 
         // get names
         String sSourceFullName      = ScreenHelper.getFullPersonName(sourceId+""),
@@ -25,11 +26,20 @@
         	buf.append("<img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.gif' onclick=\"deleteFR(rowFR"+iTotal+");\" class='link' alt='").append(getTranNoLink("Web","delete",sWebLanguage)).append("'>");
         }        
              
-        buf.append("</td>")
-            .append("<td>&nbsp;"+sSourceFullName+"</td>")
-            .append("<td title='"+detailsTran+"'>&nbsp;<a href=\"javascipt:showDossier('"+destinationId+"');\"'>"+sDestinationFullName+"</a></td>")
+        if(sourceId.equalsIgnoreCase(activePatient.personid)){
+	        buf.append("</td>")
+	            .append("<td>&nbsp;"+sSourceFullName+"</td>")
+	            .append("<td title='"+detailsTran+"'>&nbsp;<a href=\"javascript:showDossier('"+destinationId+"');\"'>"+sDestinationFullName+"</a></td>")
+	            .append("<td>&nbsp;"+sRelationType+"</td>")
+	           .append("</tr>");
+        }
+        else {
+	        buf.append("</td>")
+            .append("<td>&nbsp;"+sDestinationFullName+"</td>")
+            .append("<td title='"+detailsTran+"'>&nbsp;<a href=\"javascript:showDossier('"+sourceId+"');\"'>"+sSourceFullName+"</a></td>")
             .append("<td>&nbsp;"+sRelationType+"</td>")
            .append("</tr>");
+        }
 
         return buf.toString();
     }

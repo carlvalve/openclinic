@@ -86,7 +86,7 @@
                 editOldLabelLang = editLabelLang;
                 findLabelType = editLabelType;
 
-                reloadSingleton(session);
+                //reloadSingleton(session);
 
                 msg = "'"+editLabelType+"$"+editLabelID+"$"+editLabelLang+"' "+getTran("Web","saved",sWebLanguage);
             }
@@ -135,7 +135,7 @@
                 editOldLabelLang = editLabelLang;
                 findLabelType = editLabelType;
 
-                reloadSingleton(session);
+                //reloadSingleton(session);
             }
             else{
                 // a label with the given ids allready exists
@@ -147,6 +147,7 @@
     //*** DELETE **********************************************************************************
     else if(sAction.equals("Delete")) {
         Label.delete(editLabelType,editLabelID,editLabelLang);
+        reloadSingleton(session);
         msg = "'"+editLabelType+"$"+editLabelID+"$"+editLabelLang+"' "+getTran("Web","deleted",sWebLanguage);
         editLabelID = "";
     }
