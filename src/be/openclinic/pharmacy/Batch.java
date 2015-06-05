@@ -212,7 +212,7 @@ public class Batch extends OC_Object{
                 ps.setString(1,this.getProductStockUid());
                 ps.setString(2,this.getBatchNumber());
                 ps.setInt(3,this.getLevel());
-                ps.setDate(4,new java.sql.Date(this.getEnd().getTime())); 
+                ps.setDate(4,this.getEnd()==null?null:new java.sql.Date(this.getEnd().getTime())); 
                 ps.setString(5,this.getComment());
 
                 // OBJECT variables
@@ -247,6 +247,52 @@ public class Batch extends OC_Object{
     		batch.setLevel(batch.getLevel()+n);
     		batch.store();
     	}
+    }
+    
+    public static void calculateBatchLevel(String batchuid){
+        int in=0,out=0;
+    	PreparedStatement ps = null;
+        ResultSet rs = null;
+        String sSelect;
+        Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+        	sSelect="select sum(oc_batchoperation_quantity) total from oc_batchoperations where oc_batchoperation_destinationuid=?";
+        	ps=oc_conn.prepareStatement(sSelect);
+        	ps.setString(1, batchuid);
+        	rs=ps.executeQuery();
+        	if(rs.next()){
+        		in=rs.getInt("total");
+        	}
+        	rs.close();
+        	ps.close();
+        	sSelect="select sum(oc_batchoperation_quantity) total from oc_batchoperations where oc_batchoperation_sourceuid=?";
+        	ps=oc_conn.prepareStatement(sSelect);
+        	ps.setString(1, batchuid);
+        	rs=ps.executeQuery();
+        	if(rs.next()){
+        		out=rs.getInt("total");
+        	}
+        	rs.close();
+        	ps.close();
+        	Batch batch = get(batchuid);
+        	if(batch!=null){
+        		batch.setLevel(in-out);
+        		batch.store();
+        	}
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                oc_conn.close();
+            }
+            catch(SQLException se){
+                se.printStackTrace();
+            }
+        }
     }
     
     public static boolean exists(String productStockUid, String batchNumber){

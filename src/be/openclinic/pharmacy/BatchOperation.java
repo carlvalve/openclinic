@@ -6,8 +6,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
+
+
+import com.sun.javafx.css.CalculatedValue;
+
 import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.system.Debug;
+import be.mxs.common.util.system.ScreenHelper;
 
 public class BatchOperation {
 	
@@ -92,18 +97,49 @@ public class BatchOperation {
 	}
 
 	public static void storeOperation(String productStockOperationUid, String sourceBatchUid, String destinationBatchUid, int quantity, java.util.Date datetime){
+		deleteOperationByProductStockOperation(productStockOperationUid);
+		if(ScreenHelper.checkString(sourceBatchUid).split("\\.").length>1 || ScreenHelper.checkString(destinationBatchUid).split("\\.").length>1){
+			PreparedStatement ps = null;
+	        ResultSet rs = null;
+	
+	        Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+	        try{
+	            String sSelect = "insert into OC_BATCHOPERATIONS(OC_BATCHOPERATION_PRODUCTSTOCKOPERATIONUID,OC_BATCHOPERATION_SOURCEUID,OC_BATCHOPERATION_DESTINATIONUID,OC_BATCHOPERATION_QUANTITY,OC_BATCHOPERATION_UPDATETIME) values(?,?,?,?,?)";
+	            ps = oc_conn.prepareStatement(sSelect);
+	            ps.setString(1,productStockOperationUid);
+	            ps.setString(2,sourceBatchUid);
+	            ps.setString(3,destinationBatchUid);
+	            ps.setInt(4,quantity);
+	            ps.setTimestamp(5, new java.sql.Timestamp(datetime.getTime()));
+	            ps.execute();
+	            if(sourceBatchUid.split("\\.").length>1) Batch.calculateBatchLevel(sourceBatchUid);
+	            if(destinationBatchUid.split("\\.").length>1) Batch.calculateBatchLevel(destinationBatchUid);
+	        }
+	        catch(Exception e){
+	            e.printStackTrace();
+	        }
+	        finally{
+	            try{
+	                if(rs!=null) rs.close();
+	                if(ps!=null) ps.close();
+	                oc_conn.close();
+	            }
+	            catch(SQLException se){
+	                se.printStackTrace();
+	            }
+	        }
+		}
+	}
+
+	public static void deleteOperationByProductStockOperation(String productStockOperationUid){
         PreparedStatement ps = null;
-        ResultSet rs = null;
 
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
-            String sSelect = "insert into OC_BATCHOPERATIONS(OC_BATCHOPERATION_PRODUCTSTOCKOPERATIONUID,OC_BATCHOPERATION_SOURCEUID,OC_BATCHOPERATION_DESTINATIONUID,OC_BATCHOPERATION_QUANTITY,OC_BATCHOPERATION_UPDATETIME) values(?,?,?,?,?)";
+            String sSelect = "delete from OC_BATCHOPERATIONS where OC_BATCHOPERATION_PRODUCTSTOCKOPERATIONUID=?";
+            System.out.println("productStockOperationUid="+productStockOperationUid);
             ps = oc_conn.prepareStatement(sSelect);
             ps.setString(1,productStockOperationUid);
-            ps.setString(2,sourceBatchUid);
-            ps.setString(3,destinationBatchUid);
-            ps.setInt(4,quantity);
-            ps.setTimestamp(5, new java.sql.Timestamp(datetime.getTime()));
             ps.execute();
         }
         catch(Exception e){
@@ -111,7 +147,6 @@ public class BatchOperation {
         }
         finally{
             try{
-                if(rs!=null) rs.close();
                 if(ps!=null) ps.close();
                 oc_conn.close();
             }
@@ -119,7 +154,6 @@ public class BatchOperation {
                 se.printStackTrace();
             }
         }
-
 	}
 
 }

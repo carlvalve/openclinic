@@ -617,6 +617,7 @@ public class ProductStockOperation extends OC_Object{
                 ps.setString(15, this.getEncounterUID());
                 ps.setString(16, this.getOrderUID());
 
+                
                 ps.setInt(17,Integer.parseInt(this.getUid().substring(0,this.getUid().indexOf("."))));
                 ps.setInt(18,Integer.parseInt(this.getUid().substring(this.getUid().indexOf(".")+1)));
 
@@ -634,7 +635,6 @@ public class ProductStockOperation extends OC_Object{
                 productStock.setLevel(currentProductStockLevel-this.getUnitsChanged()); // minus
                 //Remove the batch units from this batch
                 if(getBatchUid()!=null && getBatchUid().length()>0){
-                	Batch.updateBatchLevel(batchUid, -this.getUnitsChanged());
                 	sourceBatchUid=batchUid;
                 }
                 else if(getBatchNumber()!=null && getBatchNumber().length()>0){
@@ -663,6 +663,12 @@ public class ProductStockOperation extends OC_Object{
                 	Batch.updateBatchLevel(destinationBatchUid,this.getUnitsChanged());
                 }
             }
+            else if(this.getDescription().indexOf("delivery") > -1 || this.getDescription().indexOf("correctionout")>-1){
+            	sourceBatchUid=this.getBatchUid();
+            }
+            else if(this.getDescription().indexOf("receipt") > -1 || this.getDescription().indexOf("correctionin")>-1){
+            	destinationBatchUid=this.getBatchUid();
+            }
 
             Debug.println("@@@ updated ProductStockLevel = "+productStock.getLevel());
             if(productStock.getSupplierUid()==null){
@@ -670,9 +676,7 @@ public class ProductStockOperation extends OC_Object{
             }
             productStock.store();
 
-            if(!sourceBatchUid.equalsIgnoreCase("?") || !destinationBatchUid.equalsIgnoreCase("?")){
-            	BatchOperation.storeOperation(this.getUid(), sourceBatchUid, destinationBatchUid, this.getUnitsChanged(),new java.util.Date());
-            }
+           	BatchOperation.storeOperation(this.getUid(), sourceBatchUid, destinationBatchUid, this.getUnitsChanged(),new java.util.Date());
             
             //Generate prestation if indicated in product
             Product product = getProductStock().getProduct();
@@ -828,23 +832,13 @@ public class ProductStockOperation extends OC_Object{
         	//add the units to this productstock
             productStock.setLevel(currentProductStockLevel+this.getUnitsChanged()); // minus
             //add the batch units to this batch
-            if(getBatchUid()!=null && getBatchUid().length()>0){
-            	Batch.updateBatchLevel(getBatchUid(), this.getUnitsChanged());
-                if(getBatchUid()!=null && !getBatchUid().equalsIgnoreCase("?")){
-                	BatchOperation.storeOperation(this.getUid(), "?", getBatchUid(), this.getUnitsChanged(),new java.util.Date());
-                }
-            }
+            BatchOperation.storeOperation(this.getUid(), "?", getBatchUid(), this.getUnitsChanged(),new java.util.Date());
         }
         else if(isnew && this.getDescription().indexOf("receipt") > -1 || this.getDescription().indexOf("correctionin")>-1){
         	//add the units to this productstock
         	productStock.setLevel(currentProductStockLevel-this.getUnitsChanged()); // plus
             //Add the batch units to this batch if it exists
-            if(getBatchUid()!=null && getBatchUid().length()>0){
-            	Batch.updateBatchLevel(getBatchUid(),-this.getUnitsChanged());
-                if(getBatchUid()!=null && !getBatchUid().equalsIgnoreCase("?")){
-                	BatchOperation.storeOperation(this.getUid(), getBatchUid(), "?", this.getUnitsChanged(),new java.util.Date());
-                }
-            }
+           	BatchOperation.storeOperation(this.getUid(), getBatchUid(), "?", this.getUnitsChanged(),new java.util.Date());
         }
         productStock.store();
 
