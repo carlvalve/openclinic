@@ -66,8 +66,7 @@ public class PDFLabSampleLabelGenerator extends PDFOfficialBasic {
 			doc.addCreator("OpenClinic Software");
             Rectangle rectangle=new Rectangle(0,0,new Float(MedwanQuery.getInstance().getConfigInt("labLabelWidth",190)*72/254).floatValue(),new Float(MedwanQuery.getInstance().getConfigInt("labLabelHeight",570)*72/254).floatValue());
             doc.setPageSize(rectangle.rotate());
-            doc.setMargins(2,2,2,2);
-            doc.setJavaScript_onLoad("print();\r");
+            doc.setMargins(0,0,0,0);
             doc.open();
 
             // add content to document
@@ -76,7 +75,13 @@ public class PDFLabSampleLabelGenerator extends PDFOfficialBasic {
                     doc.newPage();
                 }
                 Hashtable h = (Hashtable)samples.elementAt(n);
-                printSampleLabel(Integer.parseInt((String)h.get("serverid")),Integer.parseInt((String)h.get("transactionid"))+"."+n,(String)h.get("sample"));
+                if(MedwanQuery.getInstance().getConfigString("labSampleLabelModel","model1").equalsIgnoreCase("model1")){
+                	printSampleLabel(Integer.parseInt((String)h.get("serverid")),Integer.parseInt((String)h.get("transactionid"))+"."+n,(String)h.get("sample"));
+                }
+                else if(MedwanQuery.getInstance().getConfigString("labSampleLabelModel","model1").equalsIgnoreCase("model2")){
+                	printSampleLabel2(Integer.parseInt((String)h.get("serverid")),Integer.parseInt((String)h.get("transactionid"))+"."+n,(String)h.get("sample"));
+                	
+                }
             }
 		}
 		catch(Exception e){
@@ -120,6 +125,56 @@ public class PDFLabSampleLabelGenerator extends PDFOfficialBasic {
             cell.setBorder(PdfPCell.NO_BORDER);
             cell.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+            cell.setPadding(0);
+            table.addCell(cell);
+
+            LabRequest labRequest = LabRequest.getUnsampledRequest(serverid,transactionid,user.person.language);
+            cell = new PdfPCell(new Paragraph(labRequest.getPersonid()+" "+labRequest.getPatientname(),FontFactory.getFont(FontFactory.HELVETICA_BOLD,MedwanQuery.getInstance().getConfigInt("labLabelPatientFontSize",6),MedwanQuery.getInstance().getConfigInt("labLabelPatientFontBold",Font.NORMAL))));
+            cell.setColspan(3);
+            cell.setBorder(PdfPCell.NO_BORDER);
+            cell.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+            cell.setPadding(0);
+            table.addCell(cell);
+
+            doc.add(table);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    protected void printSampleLabel2(int serverid,String transactionid,String sample){
+        try {
+            table = new PdfPTable(3);
+            table.setWidthPercentage(100);
+
+            cell = new PdfPCell(new Paragraph("",FontFactory.getFont(FontFactory.HELVETICA_BOLD,MedwanQuery.getInstance().getConfigInt("labLabelSampleFontSize",6),MedwanQuery.getInstance().getConfigInt("labLabelSampleFontBold",Font.NORMAL))));
+            cell.setColspan(3);
+            cell.setBorder(PdfPCell.NO_BORDER);
+            cell.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+            cell.setFixedHeight(MedwanQuery.getInstance().getConfigInt("labLabelSampleTopMargin",90)*72/254);
+            cell.setPadding(0);
+            table.addCell(cell);
+
+            PdfContentByte cb = docWriter.getDirectContent();
+            Barcode39 barcode39 = new Barcode39();
+            barcode39.setCode("2"+ ScreenHelper.padLeft(serverid+"","0",2)+ScreenHelper.padLeft(""+transactionid,"0",8));
+            Image image = barcode39.createImageWithBarcode(cb, null, null);
+            image.scaleToFit(MedwanQuery.getInstance().getConfigInt("labLabelScaleWidth",120),MedwanQuery.getInstance().getConfigInt("labLabelScaleHeight",40));
+            cell=new PdfPCell(image);
+            cell.setBorder(PdfPCell.NO_BORDER);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+            cell.setColspan(3);
+            cell.setPadding(0);
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Paragraph(MedwanQuery.getInstance().getLabel("labanalysis.monster",sample,user.person.language),FontFactory.getFont(FontFactory.HELVETICA_BOLD,MedwanQuery.getInstance().getConfigInt("labLabelSampleFontSize",6),MedwanQuery.getInstance().getConfigInt("labLabelSampleFontBold",Font.NORMAL))));
+            cell.setColspan(3);
+            cell.setBorder(PdfPCell.NO_BORDER);
+            cell.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
             cell.setPadding(0);
             table.addCell(cell);
 
