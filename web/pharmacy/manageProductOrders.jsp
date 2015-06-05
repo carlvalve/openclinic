@@ -102,10 +102,12 @@
             else              sDateDeliveryDue = "";
 
             // only search product-name ans serviceStock-name when different productstock-UID
+       	Debug.println("f.11");
             sProductStockUid = order.getProductStockUid();
             if(!sProductStockUid.equals(sPreviousProductStockUid)){
                 sPreviousProductStockUid = sProductStockUid;
                 productStock = ProductStock.get(sProductStockUid);
+               	Debug.println("f.12");
 
                 if(productStock!=null){
                     // product
@@ -119,6 +121,7 @@
 
                     // service stock
                     serviceStock = productStock.getServiceStock();
+                   	Debug.println("f.13");
                     if(serviceStock!=null){
                         sServiceStockName = serviceStock.getName();
                     }
@@ -162,7 +165,7 @@
 
 <%
     String sAction = checkString(request.getParameter("Action"));
-
+Debug.println("a");
     // retreive form data
     String sEditOrderUid        = checkString(request.getParameter("EditOrderUid")),
            sEditDescription     = checkString(request.getParameter("EditDescription")),
@@ -188,6 +191,7 @@
     }
            
     String sEditProductName = checkString(request.getParameter("EditProductName"));
+    Debug.println("b");
 
     /// DEBUG /////////////////////////////////////////////////////////////////////////////////////
     if(Debug.enabled){
@@ -231,6 +235,7 @@
     sFindDateDelivered = checkString(request.getParameter("FindDateDelivered"));
     sFindDateDeliveredSince = checkString(request.getParameter("FindDateDeliveredSince"));
     sFindImportance = checkString(request.getParameter("FindImportance")); // (native|high|low)
+    Debug.println("c");
 
     /// DEBUG /////////////////////////////////////////////////////////////////////////////////////
     if(Debug.enabled){
@@ -268,6 +273,7 @@
     if(sDisplayUndeliveredOrders.length()==0) sDisplayUndeliveredOrders = "true"; // default
     boolean displayUndeliveredOrders = sDisplayUndeliveredOrders.equalsIgnoreCase("true");
     Debug.println("sDisplayUndeliveredOrders : "+sDisplayUndeliveredOrders);
+    Debug.println("d");
 
     // default since-date is one week ago
     if(sFindDateDeliveredSince.length()==0){
@@ -315,7 +321,8 @@
    	 catch(Exception e){
    		 // empty
    	 }
-   	 
+   	Debug.println("e");
+
      ProductStockOperation operation = new ProductStockOperation();
      if(sEditProductStockOperationUid.length()>0){
      	operation = ProductStockOperation.get(sEditProductStockOperationUid);
@@ -375,14 +382,22 @@
 	    	            	}
 	    	            }
 	    	            batch.setComment(sEditBatchComment);
+	    	            //We must set the startlevel of the batch here
 	    	            batch.setLevel(0);
 	    	            batch.setCreateDateTime(new java.util.Date());
 	    	            batch.setUpdateDateTime(new java.util.Date());
 	    	            batch.setUpdateUser(activeUser.userid);
 	    	            batch.store();
 	            	}
+	            	else if(batch.getEnd()==null || !batch.getEnd().equals(ScreenHelper.parseDate(sEditBatchEnd))){
+	            		batch.setEnd(ScreenHelper.parseDate(sEditBatchEnd));
+	    	            batch.setUpdateDateTime(new java.util.Date());
+	    	            batch.setUpdateUser(activeUser.userid);
+	    	            batch.store();
+	            	}
 	            	
 	            	//If the batchnumber differs from an existing previous one, we must transfer the quantity from the old to the new batch
+					/*
 	            	if(operation.getBatchUid()!=null && operation.getBatchUid().length()>0 && !sEditBatchNumber.equalsIgnoreCase(operation.getBatchNumber())){
 	            		Batch oldbatch = Batch.get(operation.getBatchUid());
 	            		if(oldbatch!=null && batch!=null){
@@ -392,6 +407,7 @@
 	            			batch.store();
 	            		}
 	            	}
+	            	*/
 	            	operation.setBatchUid(batch.getUid());
 	            }
 	            
@@ -437,6 +453,7 @@
 
         sEditOrderUid = order.getUid();
         sAction = "find";
+       	Debug.println("f");
     }
     //--- DELETE ----------------------------------------------------------------------------------
     else if(sAction.equals("delete") && sEditOrderUid.length() > 0){
@@ -455,9 +472,12 @@
 						                  sFindPackagesOrdered,sFindDateDeliveryDue,sFindDateOrdered,
 						                  sFindSupplierUid,sFindServiceStockUid,"OC_ORDER_DATEORDERED","DESC",
 						                  sFindDateDeliveredSince);
+       	Debug.println("f.1");
 
         if(displayDeliveredOrders) ordersHtml = ordersToHtml(orders,sWebLanguage);
+       	Debug.println("f.2");
         if(displayUndeliveredOrders) ordersHtml = undeliveredOrdersToHtml(orders,sWebLanguage);
+       	Debug.println("f.3");
         foundOrderCount = orders.size();
     }
 
@@ -533,6 +553,7 @@
             sSelectedProductName = sEditProductName;
         }
     }
+    Debug.println("g");
 
     // clear 0 if no delivered date
     if(sSelectedDateDelivered.length()==0){
@@ -679,6 +700,7 @@
                 </table>
                 <br>
             <%
+            Debug.println("h");
         }
         else{
             //*** search fields as hidden fields to be able to revert to the overview ***
@@ -743,6 +765,7 @@
 	                        <%=foundOrderCount%> <%=getTran("web","recordsfound",sWebLanguage)%>
 	                    </span>
 	                    <%
+	                    Debug.println("i");
 	                        if(foundOrderCount > 20){
 	                            // link to top of page
 	                            %>
@@ -764,7 +787,8 @@
 
             //*** DELIVERED ORDERS ***
             if(displayDeliveredOrders){
-                if(foundOrderCount > 0){
+            	Debug.println("j");
+				if(foundOrderCount > 0){
 	                %>
 	                    <%-- sub title --%>
 	                    <table width="100%" cellspacing="0" cellpadding="0" class="list" style="border-bottom:none;">
