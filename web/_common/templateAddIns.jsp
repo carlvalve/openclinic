@@ -238,18 +238,6 @@ function checkAfter(afterId,beforeObj){
             "<img class='link' src='"+sDir+"/icon_compose.gif' alt='<%=getTranNoLink("web","putToday",sWebLanguage)%>'></a>");
   }
 
-  <%-- FIND ZIPCODE --%>
-  function findZipcode(oZipcode,oCity,oButton){
-    if(oZipcode.value.length==0){
-      oCity.value = "";
-    }
-    else{
-      window.open("<c:url value='/popup.jsp'/>?Page=_common/search/blurZipcode.jsp&ZipcodeValue="+oZipcode.value
-                 +"&CityName="+oCity.name+"&CityValue="+oCity.value
-                 +"&VarButton="+oButton.name, "Zipcode","toolbar=no,width=1,height=1,status=no,scrollbars=no,resizable=no,menubar=no,alwaysLowered=yes");
-    }
-  }
-
   <%-- The following script is used to hide the calendar whenever you click the document. --%>
   <%-- When using it you should set the name of popup button or image to "popcal", otherwise the calendar won't show up. --%>
   document.onmousedown = function(e){

@@ -202,14 +202,14 @@
         stock.setDefaultSupplierUid(sEditDefaultSupplierUid);
 
         // authorized users
-        AdminPerson authorizedUserObj;
+        User authorizedUserObj;
         String authorizedUserIds = checkString(request.getParameter("EditAuthorizedUsers"));
         if(authorizedUserIds.length() > 0){
             authorisedUsersIdx = 1;
             StringTokenizer idTokenizer = new StringTokenizer(authorizedUserIds,"$");
             while(idTokenizer.hasMoreTokens()){
                 authorizedUserId = idTokenizer.nextToken();
-                authorizedUserObj = AdminPerson.getAdminPerson(authorizedUserId);
+                authorizedUserObj = User.get(Integer.parseInt(authorizedUserId));
                 stock.addAuthorizedUser(authorizedUserObj);
             }
         }

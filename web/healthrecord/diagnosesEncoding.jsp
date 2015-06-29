@@ -225,8 +225,10 @@
 	</td>
   </tr>
 </table>
+<%
+	if(MedwanQuery.getInstance().getConfigInt("enableSNOMED",0)==1){
+%>
 <div style="padding-top:3px;"></div>
-
 <table class="list" width="100%" cellspacing="0" cellpadding="2">
     <tr class="admin">
         <td align="center">SNOMED-CT</td>
@@ -270,7 +272,9 @@
 
   window.setInterval("readClipboard();",1000);
 </script>
-
+<%
+	}
+%>
 <script>
   <%-- DELETE DIAGNOSIS --%>
   function deleteDiagnosis(itemid){

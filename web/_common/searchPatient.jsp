@@ -42,7 +42,6 @@
         sDistrict = activePatient.getActivePrivate().district.trim();
         sPersonID = activePatient.personid;
 
-        // retreive service via Encounters, not via AdminWork
         Service as = ScreenHelper.getActiveDivision(activePatient.personid);
         if(as!=null) sUnit = as.code;
         else         sUnit = "";

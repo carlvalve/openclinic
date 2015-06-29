@@ -120,7 +120,7 @@
             </td>
 
             <%-- LEGEND --%>
-            <td style="vertical-align:top;">
+            <td style="vertical-align:top;" size="20%">
                 <table cellspacing="1" cellpadding="0">
                     <tr>
                         <td><div width="10" height="10" style="background-color: aqua;">&nbsp;&nbsp;</div></td><td>&nbsp;<%=getTran("openclinic.chuk","tooth.absent",sWebLanguage)%></td>
@@ -156,6 +156,9 @@
                         <td><div width="10" height="10" style="background-color: orange;">&nbsp;&nbsp;</div></td><td>&nbsp;<%=getTran("openclinic.chuk","tooth.other",sWebLanguage)%></td>
                     </tr>
                 </table>
+            </td>
+            <td style="vertical-align:top;" width="60%">
+            	<%ScreenHelper.setIncludePage(customerInclude("healthrecord/diagnosesEncoding.jsp"),pageContext);%>
             </td>
         </tr>
     </table>

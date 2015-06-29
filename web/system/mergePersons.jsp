@@ -722,80 +722,6 @@
             }
             rs.close();
             ps.close();
-
-            //*** add adminwork attribute names to array ***********************************************
-            String[] workColumns = new String[15];
-
-            workColumns[0] = getTran("web", "workid", sWebLanguage);
-            workColumns[1] = getTran("web", "start", sWebLanguage);
-            workColumns[2] = getTran("web", "stop", sWebLanguage);
-            workColumns[3] = getTran("web", "rankid", sWebLanguage);
-            workColumns[4] = getTran("web", "telephone", sWebLanguage);
-            workColumns[5] = getTran("web", "fax", sWebLanguage);
-            workColumns[6] = getTran("web", "email", sWebLanguage);
-            workColumns[7] = getTran("web", "comment", sWebLanguage);
-            workColumns[8] = getTran("web", "updatetime", sWebLanguage);
-            workColumns[9] = getTran("web", "status", sWebLanguage);
-            workColumns[10] = getTran("web", "statussituation", sWebLanguage);
-            workColumns[11] = getTran("web", "category", sWebLanguage);
-            workColumns[12] = getTran("web", "companyBegin", sWebLanguage);
-            workColumns[13] = getTran("web", "companyEnd", sWebLanguage);
-            workColumns[14] = getTran("web", "companyEndReason", sWebLanguage);
-
-            // prepare statement to get adminprivate details
-            query = new StringBuffer();
-            query.append("SELECT workid,start,stop,rankid,telephone,fax,email,comment,updatetime,")
-                    .append(" status,statussituation,category,companyBegin,companyEnd,companyEndReason")
-                    .append(" FROM AdminWork")
-                    .append(" WHERE personid = ? AND stop IS NULL");
-            ps = ad_conn.prepareStatement(query.toString());
-
-            //--- current work of person 1 -------------------------------------------------------------
-            String[] work1Details = new String[workColumns.length];
-            for (int i = 0; i < work1Details.length; i++) {
-                work1Details[i] = "&nbsp;";
-            }
-            ps.setInt(1, Integer.parseInt(pid1));
-            rs = ps.executeQuery();
-
-            // add work attributes to array
-            if (rs.next()) {
-                for (int i = 0; i < work1Details.length; i++) {
-                    // dates should be formatted
-                    if (i == 1 || i == 2 || i == 8 || i == 12 || i == 13) {
-                        value = checkString(ScreenHelper.getSQLDate(rs.getDate((i + 1))));
-                    } else {
-                        value = checkString(rs.getString((i + 1)));
-                    }
-
-                    if (value.length() > 0) work1Details[i] = value;
-                }
-            }
-            rs.close();
-
-            //--- current work of person 2 -------------------------------------------------------------
-            String[] work2Details = new String[workColumns.length];
-            for (int i = 0; i < work2Details.length; i++) {
-                work2Details[i] = "&nbsp;";
-            }
-            ps.setInt(1, Integer.parseInt(pid2));
-            rs = ps.executeQuery();
-
-            // add work attributes to array
-            if (rs.next()) {
-                for (int i = 0; i < work2Details.length; i++) {
-                    // dates should be formatted
-                    if (i == 1 || i == 2 || i == 8 || i == 12 || i == 13) {
-                        value = checkString(ScreenHelper.getSQLDate(rs.getDate((i + 1))));
-                    } else {
-                        value = checkString(rs.getString((i + 1)));
-                    }
-
-                    if (value.length() > 0) work2Details[i] = value;
-                }
-            }
-            rs.close();
-            ps.close();
             ad_conn.close();
 
         %>
@@ -890,35 +816,6 @@
                     <td style="border-top:1px solid gray;border-bottom:1px solid gray;" colspan="3">&nbsp;</td>
                 </tr>
 
-                <%-- ADMINWORK DETAILS ---------------------------------------------------------------%>
-                <tr class="admin">
-                    <td colspan="3" height="21"><%=getTran("web.manage","adminworkdetails",sWebLanguage)%></td>
-                </tr>
-
-                    <%-- work columns --%>
-                    <%
-                        for(int i=0; i<workColumns.length; i++){
-                            %>
-                                <tr>
-                                    <td class="admin"><%=workColumns[i]%></td>
-                            <%
-                            if(work1Details[i].equals(work2Details[i])){
-                                %>
-                                <td class="admin2"><%=work1Details[i]%></td>
-                                <td class="admin2"><%=work2Details[i]%></td>
-                                <%
-                            }
-                            else{
-                                %>
-                                <td class="admin2" style="color:red;"><%=work1Details[i]%></td>
-                                <td class="admin2" style="color:red;"><%=work2Details[i]%></td>
-                                <%
-                            }
-                            %>
-                                </tr>
-                            <%
-                        }
-                    %>
             </table>
 
             <%=getTran("Web.manage","datainreddiffers",sWebLanguage)%>

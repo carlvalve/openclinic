@@ -22,7 +22,7 @@
                 if(sDebetUID.length() > 0){
                     debet = Debet.get(sDebetUID);
                    
-                    if(debet!=null){
+                    if(debet!=null && debet.getPrestation()!=null){
                         String sDebetUid = debet.getPrestation().getDescription()+"."+debet.getPrestation().getUid();
                         
                         Vector oneGroup = (Vector)groupedDebets.get(sDebetUid);
@@ -31,6 +31,9 @@
                         }
                     	oneGroup.add(debet);
                     	groupedDebets.put(sDebetUid,oneGroup);                        
+                    }
+                    else if(debet!=null){
+                    	System.out.println("Prestation "+debet.getPrestationUid()+" missing on debet "+debet.getUid());
                     }
                 }
             }
@@ -158,14 +161,15 @@
     			
     	for(int i=0; i<oneGroup.size(); i++){
     		debet = (Debet)oneGroup.get(i);
-    		
-    		quantity+= debet.getQuantity(); 
-    		credited+= debet.getCredited(); 
-    		amount+= debet.getAmount(); 
-    		insurarAmount+= debet.getInsurarAmount(); 
-            if(debet.getCredited() == 0){
-            	extraInsurarAmount+= debet.getExtraInsurarAmount(); 
-            }
+    		if(debet!=null){
+	    		quantity+= debet.getQuantity(); 
+	    		credited+= debet.getCredited(); 
+	    		amount+= debet.getAmount(); 
+	    		insurarAmount+= debet.getInsurarAmount(); 
+	            if(debet.getCredited() == 0){
+	            	extraInsurarAmount+= debet.getExtraInsurarAmount(); 
+	            }
+    		}
     	}
 
     	// put sums in hash

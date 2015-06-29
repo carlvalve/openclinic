@@ -156,7 +156,8 @@
             <td>
                 <%
                     hMenu = new Hashtable();
-                    hMenu.put(getTran("Web.Occup","medwan.common.db-management",sWebLanguage),"main.do?Page=system/checkDB.jsp");
+	                hMenu.put(getTran("Web.Occup","medwan.common.db-management",sWebLanguage),"main.do?Page=system/checkDB.jsp");
+	                hMenu.put(getTran("Web.Occup","cleandb",sWebLanguage),"main.do?Page=system/cleanDb.jsp");
                     hMenu.put(getTran("web.manage","ManageConfiguration",sWebLanguage),"main.do?Page=system/manageConfig.jsp");
                     hMenu.put(getTran("web.manage","ManageConfigurationTabbed",sWebLanguage),"main.do?Page=system/manageConfigTabbed.jsp");
                     hMenu.put(getTran("web.manage","ManageConfigurationPerCategory",sWebLanguage),"main.do?Page=util/configparameters.jsp");
