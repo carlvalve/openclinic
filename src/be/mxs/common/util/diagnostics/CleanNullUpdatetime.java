@@ -50,31 +50,11 @@ public class CleanNullUpdatetime extends Diagnostic {
             }
             rs.close();
             ps.close();
-            ps = adminconnection.prepareStatement("SELECT COUNT(*) total from EmailDestinations where updatetime is null");
-            rs = ps.executeQuery();
-            if (rs.next()){
-                if (rs.getInt("total")>1){
-                    if(Debug.enabled) Debug.println("! CleanNullUpdatetime.java : null-time in 'EmailDestinations'");
-                    diagnosis.hasProblems=true;
-                }
-            }
-            rs.close();
-            ps.close();
             ps = adminconnection.prepareStatement("SELECT COUNT(*) total from MedicalCenters where updatetime is null");
             rs = ps.executeQuery();
             if (rs.next()){
                 if (rs.getInt("total")>1){
                     if(Debug.enabled) Debug.println("! CleanNullUpdatetime.java : null-time in 'MedicalCenters'");
-                    diagnosis.hasProblems=true;
-                }
-            }
-            rs.close();
-            ps.close();
-            ps = adminconnection.prepareStatement("SELECT COUNT(*) total from Personnel where updatetime is null");
-            rs = ps.executeQuery();
-            if (rs.next()){
-                if (rs.getInt("total")>1){
-                    if(Debug.enabled) Debug.println("! CleanNullUpdatetime.java : null-time in 'Personnel'");
                     diagnosis.hasProblems=true;
                 }
             }
@@ -275,10 +255,6 @@ public class CleanNullUpdatetime extends Diagnostic {
             ps.execute();
             ps.close();
             ps = occupconnection.prepareStatement("update OC_LABELS set OC_LABEL_UPDATETIME=? where OC_LABEL_UPDATETIME is null");
-            ps.setDate(1,oldDate);
-            ps.execute();
-            ps.close();
-            ps = adminconnection.prepareStatement("update EmailDestinations set updatetime=? where updatetime is null");
             ps.setDate(1,oldDate);
             ps.execute();
             ps.close();

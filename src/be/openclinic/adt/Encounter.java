@@ -242,7 +242,7 @@ public class Encounter extends OC_Object {
         			      + " and OC_ENCOUNTER_BEGINDATE<?"+
         	              "   order by OC_ENCOUNTER_BEGINDATE DESC";
             ps = conn.prepareStatement(sSql);
-            ps.setInt(1,Integer.parseInt(this.getPatientUID()));
+            ps.setString(1,this.getPatientUID());
             ps.setDate(2,new java.sql.Date(this.getBegin().getTime()));
             rs = ps.executeQuery();
             long day = 24*3600*1000;
@@ -291,7 +291,7 @@ public class Encounter extends OC_Object {
         			      "  where OC_PATIENTINVOICE_PATIENTUID=?"+
         	              "   and OC_PATIENTINVOICE_DATE>=? and OC_PATIENTINVOICE_DATE<=?";
             ps = conn.prepareStatement(sSql);
-            ps.setInt(1,Integer.parseInt(this.getPatientUID()));
+            ps.setString(1,this.getPatientUID());
             ps.setDate(2,new java.sql.Date(ScreenHelper.parseDate(ScreenHelper.stdDateFormat.format(this.getBegin())).getTime()));
             ps.setTimestamp(3,new java.sql.Timestamp(this.getEnd()==null?new java.util.Date().getTime():this.getEnd().getTime()));
             rs = ps.executeQuery();
@@ -3225,16 +3225,6 @@ public class Encounter extends OC_Object {
 
             if(bIsGood){
                 sSQL = "SELECT * FROM OC_DIAGNOSES WHERE OC_DIAGNOSIS_ENCOUNTERUID = ?";
-                ps = conn.prepareStatement(sSQL);
-                ps.setString(1,sEncounterUid);
-                rs = ps.executeQuery();
-                if(rs.next()) bIsGood = false;
-                rs.close();
-                ps.close();
-            }
-
-            if(bIsGood){
-                sSQL = "SELECT * FROM OC_FINANCEDEBETS WHERE OC_FINANCEDEBET_ENCOUNTERUID = ?";
                 ps = conn.prepareStatement(sSQL);
                 ps.setString(1,sEncounterUid);
                 rs = ps.executeQuery();

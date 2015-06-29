@@ -217,7 +217,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
     		printServiceOutgoingStockOperations(d, t, (String)parameters.get("begin"), (String)parameters.get("end"), (String)parameters.get("serviceStockUID"));
     	}
     	else if(type.equalsIgnoreCase("serviceIncomingStockOperations")){
-    		printServiceIncomingStockOperations(d, t, (String)parameters.get("begin"), (String)parameters.get("end"), (String)parameters.get("serviceStockUID"));
+    		printServiceIncomingStockOperations(d, t, (String)parameters.get("begin"), (String)parameters.get("end"), (String)parameters.get("serviceStockUID"), (String)parameters.get("userid"));
     	}
     	else if(type.equalsIgnoreCase("serviceIncomingStockOperationsPerOrder")){
     		printServiceIncomingStockOperationsPerOrder(d, t, (String)parameters.get("begin"), (String)parameters.get("end"), (String)parameters.get("serviceStockUID"));
@@ -229,10 +229,10 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
     		printServiceIncomingStockOperationsPerCategoryItem(d, t, (String)parameters.get("begin"), (String)parameters.get("end"), (String)parameters.get("serviceStockUID"));
     	}
     	else if(type.equalsIgnoreCase("serviceIncomingStockOperationsPerProvider")){
-    		printServiceIncomingStockOperationsPerProvider(d, t, (String)parameters.get("begin"), (String)parameters.get("end"), (String)parameters.get("serviceStockUID"));
+    		printServiceIncomingStockOperationsPerProvider(d, t, (String)parameters.get("begin"), (String)parameters.get("end"), (String)parameters.get("serviceStockUID"), (String)parameters.get("provider"));
     	}
     	else if(type.equalsIgnoreCase("serviceOutgoingStockOperationsListing")){
-    		printServiceOutgoingStockOperationsListing(d, t, (String)parameters.get("begin"), (String)parameters.get("end"), (String)parameters.get("serviceStockUID"));
+    		printServiceOutgoingStockOperationsListing(d, t, (String)parameters.get("begin"), (String)parameters.get("end"), (String)parameters.get("serviceStockUID"), (String)parameters.get("userid"));
     	}
     	else if(type.equalsIgnoreCase("serviceOutgoingStockOperationsListingPerService")){
     		printServiceOutgoingStockOperationsListingPerService(d, t, (String)parameters.get("begin"), (String)parameters.get("end"), (String)parameters.get("serviceStockUID"), (String)parameters.get("destinationStockUID"));
@@ -830,7 +830,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
  		
      }
     
-    protected void printServiceIncomingStockOperations(org.dom4j.Document d, org.dom4j.Element t, String sDateBegin, String sDateEnd, String sServiceStockUID) throws ParseException{
+    protected void printServiceIncomingStockOperations(org.dom4j.Document d, org.dom4j.Element t, String sDateBegin, String sDateEnd, String sServiceStockUID, String userid) throws ParseException{
  		d.add(t);
         t.addAttribute("size", "180");
 		java.util.Date begin = ScreenHelper.parseDate(sDateBegin);
@@ -852,7 +852,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 		for(int n=0;n<productStocks.size();n++){
 			ProductStock stock = (ProductStock)productStocks.elementAt(n);
 			//First we look up if there have been incoming transactions
-			if(stock.getTotalUnitsInForPeriod(begin, end)>0){
+			if(stock.getTotalUnitsInForPeriod(begin, new java.util.Date(end.getTime()+day),ScreenHelper.checkString(userid))>0){
 				//First find the product subcategory
 				String uid=stock.getProduct()==null?"|"+stock.getUid():stock.getProduct().getFullProductSubGroupName(sPrintLanguage)+"|"+stock.getUid();
 				stocks.put(uid, stock);
@@ -886,7 +886,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 	        row =t.addElement("row");
 	        addCol(row,10,"");
 			addCol(row,90,stock.getProduct()==null?"":stock.getProduct().getName());
-			int in = stock.getTotalUnitsInForPeriod(begin, end);
+			int in = stock.getTotalUnitsInForPeriod(begin, new java.util.Date(end.getTime()+day),ScreenHelper.checkString(userid));
 			addCol(row,20,in+"");
 			addCol(row,20,stock.getProduct()==null?"":ScreenHelper.getTranNoLink("product.unit",stock.getProduct().getUnit(),sPrintLanguage),7);
 			double pump=0;
@@ -1133,7 +1133,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 		}
      }
 
-    protected void printServiceIncomingStockOperationsPerProvider(org.dom4j.Document d, org.dom4j.Element t, String sDateBegin, String sDateEnd, String sServiceStockUID) throws ParseException{
+    protected void printServiceIncomingStockOperationsPerProvider(org.dom4j.Document d, org.dom4j.Element t, String sDateBegin, String sDateEnd, String sServiceStockUID,String provider) throws ParseException{
  		d.add(t);
         t.addAttribute("size", "180");
 		java.util.Date begin = ScreenHelper.parseDate(sDateBegin);
@@ -1161,11 +1161,13 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 			if(operation.getDocument()!=null && ScreenHelper.checkString(operation.getDocument().getSourceName(sPrintLanguage)).length()>0){
 				provname=ScreenHelper.checkString(operation.getDocument().getSourceName(sPrintLanguage));
 			}
-			String docid="?";
-			if(operation.getDocument()!=null){
-				docid=operation.getDocument().getUid();
+			if(provname.toLowerCase().startsWith(provider.toLowerCase())){
+				String docid="?";
+				if(operation.getDocument()!=null){
+					docid=operation.getDocument().getUid();
+				}
+				operations.put(provname+";"+docid+";"+(operation.getDate()==null?"?":new SimpleDateFormat("yyyyMMdd").format(operation.getDate()))+";"+operation.getUid(), operation);
 			}
-			operations.put(provname+";"+docid+";"+(operation.getDate()==null?"?":new SimpleDateFormat("yyyyMMdd").format(operation.getDate()))+";"+operation.getUid(), operation);
 		}
 		Iterator iOperations = operations.keySet().iterator();
 		String operationdate="";
@@ -1239,6 +1241,24 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 			addRightBoldCol(row, 160, getTran("web","total"));
 			addPriceBoldCol(row, 20, sectiontotal);
 		}
+		row =t.addElement("row");
+		addCol(row, 180, "\n");
+		row =t.addElement("row");
+		addCol(row, 180, "\n");
+		row =t.addElement("row");
+		addRightBoldCol(row, 40, getTran("web","name"));
+		addRightBoldCol(row, 40, getTran("web","function"));
+		addRightBoldCol(row, 40, getTran("web","date"));
+		addRightBoldCol(row, 60, getTran("mdnac","signature"));
+		for(int n=0;n<4;n++){
+			row =t.addElement("row");
+			addRightBoldCol(row, 40, "\n");
+			addRightBoldCol(row, 40, "\n");
+			addRightBoldCol(row, 40, "\n");
+			addRightBoldCol(row, 60, "\n");
+		}
+
+		
      }
     
     protected void printServiceOutgoingStockOperationsListingPerService(org.dom4j.Document d, org.dom4j.Element t, String sDateBegin, String sDateEnd, String sServiceStockUID, String destinationStockUID) throws ParseException{
@@ -1300,10 +1320,26 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
  		addCol(row,170,"");
  		addRightBoldCol(row,150,ScreenHelper.getTranNoLink("web", "total", sPrintLanguage));
  		addPriceBoldCol(row,20,generaltotal);
+		row =t.addElement("row");
+		addCol(row, 180, "\n");
+		row =t.addElement("row");
+		addCol(row, 180, "\n");
+		row =t.addElement("row");
+		addRightBoldCol(row, 40, getTran("web","name"));
+		addRightBoldCol(row, 40, getTran("web","function"));
+		addRightBoldCol(row, 40, getTran("web","date"));
+		addRightBoldCol(row, 60, getTran("mdnac","signature"));
+		for(int n=0;n<4;n++){
+			row =t.addElement("row");
+			addRightBoldCol(row, 40, "\n");
+			addRightBoldCol(row, 40, "\n");
+			addRightBoldCol(row, 40, "\n");
+			addRightBoldCol(row, 60, "\n");
+		}
  		
      }
     
-    protected void printServiceOutgoingStockOperationsListing(org.dom4j.Document d, org.dom4j.Element t, String sDateBegin, String sDateEnd, String sServiceStockUID) throws ParseException{
+    protected void printServiceOutgoingStockOperationsListing(org.dom4j.Document d, org.dom4j.Element t, String sDateBegin, String sDateEnd, String sServiceStockUID, String userid) throws ParseException{
  		d.add(t);
         t.addAttribute("size", "180");
 
@@ -1327,13 +1363,15 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
  		SortedMap products = new TreeMap();
  		for(int n=0;n<deliveries.size();n++){
  			ProductStockOperation operation = (ProductStockOperation)deliveries.elementAt(n);
- 			String date=ScreenHelper.stdDateFormat.format(operation.getDate());
- 			ProductStock stock = operation.getProductStock();
- 			int quantity=operation.getUnitsChanged();
- 			if(products.get(date+";"+stock.getUid())==null){
- 				products.put(date+";"+stock.getUid(),0);
+ 			if(ScreenHelper.checkString(userid).length()==0 || operation.getUpdateUser().equals(userid)){
+	 			String date=ScreenHelper.stdDateFormat.format(operation.getDate());
+	 			ProductStock stock = operation.getProductStock();
+	 			int quantity=operation.getUnitsChanged();
+	 			if(products.get(date+";"+stock.getUid())==null){
+	 				products.put(date+";"+stock.getUid(),0);
+	 			}
+				products.put(date+";"+stock.getUid(),(Integer)products.get(date+";"+stock.getUid())+quantity);
  			}
-			products.put(date+";"+stock.getUid(),(Integer)products.get(date+";"+stock.getUid())+quantity);
  		}
  		Iterator i = products.keySet().iterator();
  		while(i.hasNext()){
@@ -1783,7 +1821,15 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
         	}
         	else if(type.equalsIgnoreCase("serviceIncomingStockOperations")){
                 ServiceStock serviceStock = ServiceStock.get((String)parameters.get("serviceStockUID"));
-        		printHeaderModel1(type, parameters, ScreenHelper.getTranNoLink("pharmacy.report","incoming.stock.operations",sPrintLanguage)+": "+(serviceStock==null?"":serviceStock.getName()));
+                String user="";
+                if(parameters.get("userid")!=null){
+                	String userid=(String)parameters.get("userid");
+                	if(userid.length()>0){
+                		User u = User.get(Integer.parseInt(userid));
+                		user="\n\r"+ScreenHelper.getTranNoLink("web", "user", sPrintLanguage)+": "+u.person.getFullName();
+                	}
+                }
+        		printHeaderModel1(type, parameters, ScreenHelper.getTranNoLink("pharmacy.report","incoming.stock.operations",sPrintLanguage)+": "+(serviceStock==null?"":serviceStock.getName())+user);
         	}
         	else if(type.equalsIgnoreCase("serviceIncomingStockOperationsPerOrder")){
                 ServiceStock serviceStock = ServiceStock.get((String)parameters.get("serviceStockUID"));
@@ -1799,11 +1845,23 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
         	}
         	else if(type.equalsIgnoreCase("serviceIncomingStockOperationsPerProvider")){
                 ServiceStock serviceStock = ServiceStock.get((String)parameters.get("serviceStockUID"));
-        		printHeaderModel1(type, parameters, ScreenHelper.getTranNoLink("pharmacy.report","incoming.stock.operations.perprovider",sPrintLanguage)+": "+(serviceStock==null?"":serviceStock.getName()));
+                String provider="";
+                if(parameters.get("provider")!=null){
+                	provider="\n\r"+ScreenHelper.getTranNoLink("web", "provider", sPrintLanguage)+": "+(String)parameters.get("provider");
+                }
+        		printHeaderModel1(type, parameters, ScreenHelper.getTranNoLink("pharmacy.report","incoming.stock.operations.perprovider",sPrintLanguage)+": "+(serviceStock==null?"":serviceStock.getName())+provider);
         	}
         	else if(type.equalsIgnoreCase("serviceOutgoingStockOperationsListing")){
                 ServiceStock serviceStock = ServiceStock.get((String)parameters.get("serviceStockUID"));
-        		printHeaderModel1(type, parameters, ScreenHelper.getTranNoLink("pharmacy.report","outgoing.stock.operations.listing",sPrintLanguage)+": "+(serviceStock==null?"":serviceStock.getName()));
+                String user="";
+                if(parameters.get("userid")!=null){
+                	String userid=(String)parameters.get("userid");
+                	if(userid.length()>0){
+                		User u = User.get(Integer.parseInt(userid));
+                		user="\n\r"+ScreenHelper.getTranNoLink("web", "user", sPrintLanguage)+": "+u.person.getFullName();
+                	}
+                }
+        		printHeaderModel1(type, parameters, ScreenHelper.getTranNoLink("pharmacy.report","outgoing.stock.operations.listing",sPrintLanguage)+": "+(serviceStock==null?"":serviceStock.getName())+user);
         	}
         	else if(type.equalsIgnoreCase("serviceOutgoingStockOperationsListingPerService")){
                 ServiceStock serviceStock = ServiceStock.get((String)parameters.get("serviceStockUID"));

@@ -903,7 +903,7 @@ public class UpdateSystem implements Runnable {
 	                    		ps=conn.prepareStatement("insert into examinations(id,transactiontype,priority,data,updatetime,updateuserid,messageKey) values(?,?,1,?,?,4,'')");
 	                    		ps.setInt(1,Integer.parseInt(id.getText()));
 	                    		ps.setString(2, transactiontype.getText());
-	                    		ps.setString(3, data!=null?data.asXML():"");
+	                    		ps.setBytes(3, data!=null?data.asXML().getBytes():"".getBytes());
 	                    		ps.setTimestamp(4, new java.sql.Timestamp(new java.util.Date().getTime()));
 	                    		ps.execute();
 	                    		ps.close();
