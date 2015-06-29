@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!DOCTYPE model SYSTEM "openwork.dtd">
-<model name="OpenCklinic" date="21/12/2010" version="4.0.52">
+<model name="OpenClinic" date="14/06/2015" version="4.120.3">
     <table name="Applications" db="openclinic" sync="NONE">
 		<columns>
 			<column name="ScreenId" dbtype="varchar" javatype="string" size="255"/>
@@ -163,6 +163,20 @@
 	        <column name="OC_LABPROCEDURE_NAME" dbtype="varchar" javatype="string" size="255"/>      
     	</columns>
     </table>
+    <table name="OC_LABPROCEDURES_HISTORY" db="openclinic" sync="NONE">
+    	<columns>
+	    	<column name="OC_LABPROCEDURE_SERVERID" dbtype="int" javatype="integer"/>
+	    	<column name="OC_LABPROCEDURE_OBJECTID" dbtype="int" javatype="integer"/>
+		    <column name="OC_LABPROCEDURE_CREATEDATETIME" dbtype="datetime" javatype="date"/>
+	    	<column name="OC_LABPROCEDURE_MAXBATCHSIZE" dbtype="int" javatype="integer"/>
+	    	<column name="OC_LABPROCEDURE_MINBATCHSIZE" dbtype="int" javatype="integer"/>
+	    	<column name="OC_LABPROCEDURE_MAXDELAYINDAYS" dbtype="int" javatype="integer"/>
+		    <column name="OC_LABPROCEDURE_UPDATEDATETIME" dbtype="datetime" javatype="date"/>
+	    	<column name="OC_LABPROCEDURE_UPDATEUID" dbtype="int" javatype="integer"/>
+	    	<column name="OC_LABPROCEDURE_VERSION" dbtype="int" javatype="integer"/>
+	        <column name="OC_LABPROCEDURE_NAME" dbtype="varchar" javatype="string" size="255"/>      
+    	</columns>
+    </table>
     <table name="AC_JOURNALITEMS" db="ocadmin" sync="NONE">
     	<columns>
 	        <column name="AC_JOURNALITEM_JOURNALID" dbtype="int" javatype="integer"/>
@@ -172,21 +186,6 @@
 	    <indexes>
 	    	<index name="AC_JOURNALITEM_JOURNALID">
 	    		<indexcolumn order="ASC" name="AC_JOURNALITEM_JOURNALID"/>
-	    	</index>
-	    </indexes>
-    </table>
-    
-    <table name="AC_CURRENCY" db="ocadmin" sync="NONE">
-    	<columns>
-	        <column name="AC_CURRENCY_ID" dbtype="int" javatype="integer"/>
-	    	<column name="AC_CURRENCY_CODE" dbtype="varchar" javatype="string" size="50"/>
-	    	<column name="AC_CURRENCY_LABEL" dbtype="varchar" javatype="string" size="255"/>
-		    <column name="AC_CURRENCY_UPDATETIME" dbtype="datetime" javatype="date"/>
-	    	<column name="AC_CURRENCY_UPDATEUID" dbtype="int" javatype="integer"/>
-    	</columns>
-	    <indexes>
-	    	<index name="AC_CURRENCY_ID">
-	    		<indexcolumn order="ASC" name="AC_CURRENCY_ID"/>
 	    	</index>
 	    </indexes>
     </table>
@@ -1256,6 +1255,55 @@
 			</index>
 		</indexes>
 	</table>
+	<table name="OC_INSURANCECATEGORIES" db="openclinic" sync="NONE">
+		<columns>
+			<column name="OC_INSURANCECATEGORY_CREATETIME" dbtype="datetime" javatype="date"/>
+			<column name="OC_INSURANCECATEGORY_UPDATETIME" dbtype="datetime" javatype="date"/>
+			<column name="OC_INSURANCECATEGORY_UPDATEUID" dbtype="varchar" javatype="string" size="20"/>
+			<column name="OC_INSURANCECATEGORY_VERSION" dbtype="int" javatype="integer"/>
+			<column name="OC_INSURANCECATEGORY_SERVERID" dbtype="int" javatype="integer"/>
+			<column name="OC_INSURANCECATEGORY_OBJECTID" dbtype="int" javatype="integer"/>
+			<column name="OC_INSURANCECATEGORY_INSURARUID" dbtype="varchar" javatype="string" size="20"/>
+			<column name="OC_INSURANCECATEGORY_CATEGORY" dbtype="varchar" javatype="string" size="2"/>
+			<column name="OC_INSURANCECATEGORY_LABEL" dbtype="varchar" javatype="string" size="255"/>
+			<column name="OC_INSURANCECATEGORY_PATIENTSHARE" dbtype="int" javatype="integer"/>
+		</columns>
+		<indexes>
+			<index name="OC_INSURANCECATEGORY_OBJECTID">
+				<indexcolumn order="ASC" name="OC_INSURANCECATEGORY_OBJECTID"/>
+			</index>
+			<index name="OC_INSURANCECATEGORY_INSURARUID">
+				<indexcolumn order="ASC" name="OC_INSURANCECATEGORY_INSURARUID"/>
+			</index>
+		</indexes>
+	</table>
+	<table name="OC_INSURANCECATEGORIES_HISTORY" db="openclinic" sync="NONE">
+		<columns>
+			<column name="OC_INSURANCECATEGORY_CREATETIME" dbtype="datetime" javatype="date"/>
+			<column name="OC_INSURANCECATEGORY_UPDATETIME" dbtype="datetime" javatype="date"/>
+			<column name="OC_INSURANCECATEGORY_UPDATEUID" dbtype="varchar" javatype="string" size="20"/>
+			<column name="OC_INSURANCECATEGORY_VERSION" dbtype="int" javatype="integer"/>
+			<column name="OC_INSURANCECATEGORY_SERVERID" dbtype="int" javatype="integer"/>
+			<column name="OC_INSURANCECATEGORY_OBJECTID" dbtype="int" javatype="integer"/>
+			<column name="OC_INSURANCECATEGORY_INSURARUID" dbtype="varchar" javatype="string" size="20"/>
+			<column name="OC_INSURANCECATEGORY_CATEGORY" dbtype="varchar" javatype="string" size="2"/>
+			<column name="OC_INSURANCECATEGORY_LABEL" dbtype="varchar" javatype="string" size="255"/>
+			<column name="OC_INSURANCECATEGORY_PATIENTSHARE" dbtype="int" javatype="integer"/>
+		</columns>
+	</table>
+	<table name="OC_LABPROCEDUREREAGENTS" db="openclinic" sync="NONE">
+		<columns>
+			<column name="OC_LABPROCEDUREREAGENTS_PROCEDUREUID" dbtype="varchar" javatype="string" size="50"/>
+			<column name="OC_LABPROCEDUREREAGENTS_REAGENTUID" dbtype="varchar" javatype="string" size="50"/>
+			<column name="OC_LABPROCEDUREREAGENTS_QUANTITY" dbtype="float" javatype="float"/>
+			<column name="OC_LABPROCEDUREREAGENTS_CONSUMPTIONTYPE" dbtype="varchar" javatype="string" size="50"/>
+		</columns>
+		<indexes>
+			<index name="OC_LABPROCEDUREREAGENTS_PROCEDUREUID">
+				<indexcolumn order="ASC" name="OC_LABPROCEDUREREAGENTS_PROCEDUREUID"/>
+			</index>
+		</indexes>
+	</table>
 	<table name="OC_DIAG_CLUSTERS" db="openclinic" sync="NONE">
 		<columns>
 			<column name="OC_CLUSTER_DIAGTYPE" dbtype="varchar" javatype="string" size="10"/>
@@ -1602,6 +1650,10 @@
 			</index>
 			<index name="OC_WICKET_CREDIT_INVOICEUID">
 				<indexcolumn order="ASC" name="OC_WICKET_CREDIT_INVOICEUID"/>
+			</index>
+			<index name="WICKETUID_OPERATIONDATE">
+				<indexcolumn order="ASC" name="OC_WICKET_CREDIT_WICKETUID"/>
+				<indexcolumn order="ASC" name="OC_WICKET_CREDIT_OPERATIONDATE"/>
 			</index>
 		</indexes>
     </table>
@@ -2979,6 +3031,26 @@
 		</indexes>
     </table>
 
+    <table name="OC_ENCOUNTER_SERVICES" db="openclinic" sync="NONE">
+		<columns>
+			<column name="OC_ENCOUNTER_SERVERID" dbtype="int" javatype="integer"/>
+			<column name="OC_ENCOUNTER_OBJECTID" dbtype="int" javatype="integer"/>
+            <column name="OC_ENCOUNTER_SERVICEUID" dbtype="varchar" javatype="string" size="50"/>
+            <column name="OC_ENCOUNTER_BEDUID" dbtype="varchar" javatype="string" size="50"/>
+            <column name="OC_ENCOUNTER_MANAGERUID" dbtype="varchar" javatype="string" size="50"/>
+            <column name="OC_ENCOUNTER_SERVICEBEGINDATE" dbtype="datetime" javatype="date"/>
+            <column name="OC_ENCOUNTER_SERVICEENDDATE" dbtype="datetime" javatype="date"/>
+        </columns>
+		<indexes>
+			<index name="ENCOUNTERSERVICES_OBJECTID">
+				<indexcolumn order="ASC" name="OC_ENCOUNTER_OBJECTID"/>
+			</index>
+			<index name="ENCOUNTERSERVICES_ENDDATE">
+				<indexcolumn order="ASC" name="OC_ENCOUNTER_SERVICEBEGINDATE"/>
+			</index>
+		</indexes>
+    </table>
+
     <table name="OC_ENCOUNTERS_HISTORY" db="openclinic" sync="NONE">
 		<columns>
 			<column name="OC_ENCOUNTER_SERVERID" dbtype="int" javatype="integer" primary="1" nulls="0"/>
@@ -3210,7 +3282,7 @@
     <table name="UsedPasswords" db="ocadmin" sync="NONE">
 		<columns>
 			<column name="usedPasswordId" dbtype="int" javatype="integer"/>
-			<column name="encryptedPassword" dbtype="varbinary(5000)" javatype="bytes"/>
+			<column name="encryptedPassword" dbtype="image" javatype="bytes"/>
 			<column name="userId" dbtype="int" javatype="integer"/>
 			<column name="updatetime" dbtype="datetime" javatype="date" version="1"/>
 			<column name="serverId" dbtype="int" javatype="integer"/>
@@ -3455,7 +3527,40 @@
 			</index>
 		</indexes>
 	</table>
-    <table name="AdminSocSec" db="admin" sync="MASTER">
+    <table name="AdminFamilyrelation" db="ocadmin" sync="MASTER">
+		<columns>
+			<column name="relationid" dbtype="int" javatype="integer"/>
+			<column name="sourceid" dbtype="int" javatype="integer"/>
+			<column name="destinationid" dbtype="int" javatype="integer"/>
+			<column name="relationtype" dbtype="varchar" javatype="string" size="255"/>
+			<column name="updatetime" dbtype="datetime" javatype="date"/>
+            <column name="updateserverid" dbtype="int" javatype="integer"/>
+		</columns>
+		<indexes>
+            <index name="sourceid">
+                <indexcolumn name="sourceid" order="ASC"/>
+            </index>
+			<index name="destinationid">
+				<indexcolumn name="destinationid" order="ASC"/>
+			</index>
+		</indexes>
+	</table>
+    <table name="MergePersons" db="ocadmin" sync="MASTER">
+		<columns>
+			<column name="sourcePersonId" dbtype="int" javatype="integer"/>
+			<column name="targetPersonId" dbtype="int" javatype="integer"/>
+			<column name="updatetime" dbtype="datetime" javatype="date"/>
+		</columns>
+		<indexes>
+            <index name="sourcePersonId">
+                <indexcolumn name="sourcePersonId" order="ASC"/>
+            </index>
+			<index name="targetPersonId">
+				<indexcolumn name="targetPersonId" order="ASC"/>
+			</index>
+		</indexes>
+	</table>
+    <table name="AdminSocSec" db="ocadmin" sync="MASTER">
 		<columns>
 			<column name="socsecid" dbtype="int" javatype="integer"/>
 			<column name="personid" dbtype="int" javatype="integer"/>
@@ -3556,6 +3661,218 @@
 				<indexcolumn name="name" order="ASC"/>
 			</index>
 		</indexes>
+	</table>
+	<table name="OC_USEREXAMINATIONS" db="openclinic" sync="NONE">
+		<columns>
+			<column name="userid" dbtype="int" javatype="integer"/>
+			<column name="examinationid" dbtype="int" javatype="integer"/>
+		</columns>
+		<indexes>
+			<index name="userid">
+				<indexcolumn name="userid" order="ASC"/>
+			</index>
+		</indexes>
+	</table>
+	<table name="OC_UNKNOWNLABELS" db="openclinic" sync="NONE">
+		<columns>
+			<column name="OC_LABEL_TYPE" dbtype="varchar" javatype="string" size="255"/>
+			<column name="OC_LABEL_ID" dbtype="varchar" javatype="string" size="255"/>
+			<column name="OC_LABEL_LANGUAGE" dbtype="varchar" javatype="string" size="255"/>
+			<column name="OC_LABEL_VALUE" dbtype="varchar" javatype="string" size="255"/>
+            <column name="OC_LABEL_UNKNOWNDATETIME" dbtype="datetime" javatype="date"/>
+            <column name="OC_LABEL_UPDATETIME" dbtype="datetime" javatype="date"/>
+			<column name="OC_LABEL_UPDATEUSERID" dbtype="int" javatype="integer"/>
+		</columns>
+	</table>
+	<table name="OC_WICKETS" db="openclinic" sync="NONE">
+		<columns>
+			<column name="OC_WICKET_SERVERID" dbtype="int" javatype="integer"/>
+			<column name="OC_WICKET_OBJECTID" dbtype="int" javatype="integer"/>
+			<column name="OC_WICKET_BALANCE" dbtype="float" javatype="float"/>
+			<column name="OC_WICKET_AUTHORIZEDUSERS" dbtype="varchar" javatype="string" size="255"/>
+			<column name="OC_WICKET_SERVICEUID" dbtype="varchar" javatype="string" size="50"/>
+            <column name="OC_WICKET_CREATETIME" dbtype="datetime" javatype="date"/>
+            <column name="OC_WICKET_UPDATETIME" dbtype="datetime" javatype="date"/>
+			<column name="OC_WICKET_UPDATEUID" dbtype="int" javatype="integer"/>
+			<column name="OC_WICKET_VERSION" dbtype="int" javatype="integer"/>
+		</columns>
+		<indexes>
+			<index name="OC_WICKET_OBJECTID">
+				<indexcolumn name="OC_WICKET_OBJECTID" order="ASC"/>
+			</index>
+		</indexes>
+	</table>
+	<table name="OC_WICKETS_HISTORY" db="openclinic" sync="NONE">
+		<columns>
+			<column name="OC_WICKET_SERVERID" dbtype="int" javatype="integer"/>
+			<column name="OC_WICKET_OBJECTID" dbtype="int" javatype="integer"/>
+			<column name="OC_WICKET_BALANCE" dbtype="float" javatype="float"/>
+			<column name="OC_WICKET_AUTHORIZEDUSERS" dbtype="varchar" javatype="string" size="255"/>
+			<column name="OC_WICKET_SERVICEUID" dbtype="varchar" javatype="string" size="50"/>
+            <column name="OC_WICKET_CREATETIME" dbtype="datetime" javatype="date"/>
+            <column name="OC_WICKET_UPDATETIME" dbtype="datetime" javatype="date"/>
+			<column name="OC_WICKET_UPDATEUID" dbtype="int" javatype="integer"/>
+			<column name="OC_WICKET_VERSION" dbtype="int" javatype="integer"/>
+		</columns>
+	</table>
+	<table name="resultprofilesanalysis" db="openclinic" sync="NONE">
+		<columns>
+			<column name="profileID" dbtype="int" javatype="integer"/>
+			<column name="labID" dbtype="int" javatype="integer"/>
+			<column name="updateuserid" dbtype="int" javatype="integer"/>
+            <column name="updatetime" dbtype="datetime" javatype="date"/>
+			<column name="comment" dbtype="varchar" javatype="string" size="255"/>
+		</columns>
+	</table>
+	<table name="OC_TERMINOLOGIES" db="openclinic" sync="NONE">
+		<columns>
+			<column name="OC_TERMINOLOGY_SERVERID" dbtype="int" javatype="integer"/>
+			<column name="OC_TERMINOLOGY_OBJECTID" dbtype="int" javatype="integer"/>
+			<column name="OC_TERMINOLOGY_TYPE" dbtype="varchar" javatype="string" size="255"/>
+			<column name="OC_TERMINOLOGY_USERUID" dbtype="varchar" javatype="string" size="50"/>
+			<column name="OC_TERMINOLOGY_PHRASE" dbtype="varchar" javatype="string" size="255"/>
+            <column name="OC_TERMINOLOGY_CREATETIME" dbtype="datetime" javatype="date"/>
+            <column name="OC_TERMINOLOGY_UPDATETIME" dbtype="datetime" javatype="date"/>
+			<column name="OC_TERMINOLOGY_UPDATEUID" dbtype="int" javatype="integer"/>
+			<column name="OC_TERMINOLOGY_VERSION" dbtype="int" javatype="integer"/>
+		</columns>
+		<indexes>
+			<index name="OC_TERMINOLOGY_OBJECTID">
+				<indexcolumn name="OC_TERMINOLOGY_OBJECTID" order="ASC"/>
+			</index>
+		</indexes>
+	</table>
+	<table name="OC_TERMINOLOGIES_HISTORY" db="openclinic" sync="NONE">
+		<columns>
+			<column name="OC_TERMINOLOGY_SERVERID" dbtype="int" javatype="integer"/>
+			<column name="OC_TERMINOLOGY_OBJECTID" dbtype="int" javatype="integer"/>
+			<column name="OC_TERMINOLOGY_TYPE" dbtype="varchar" javatype="string" size="255"/>
+			<column name="OC_TERMINOLOGY_USERUID" dbtype="varchar" javatype="string" size="50"/>
+			<column name="OC_TERMINOLOGY_PHRASE" dbtype="varchar" javatype="string" size="255"/>
+            <column name="OC_TERMINOLOGY_CREATETIME" dbtype="datetime" javatype="date"/>
+            <column name="OC_TERMINOLOGY_UPDATETIME" dbtype="datetime" javatype="date"/>
+			<column name="OC_TERMINOLOGY_UPDATEUID" dbtype="int" javatype="integer"/>
+			<column name="OC_TERMINOLOGY_VERSION" dbtype="int" javatype="integer"/>
+		</columns>
+	</table>
+	<table name="OC_PRODUCT_SCHEMA" db="openclinic" sync="NONE">
+		<columns>
+			<column name="OC_SCHEMA_PRODUCTUID" dbtype="varchar" javatype="string" size="255"/>
+			<column name="OC_SCHEMA_SERVERID" dbtype="int" javatype="integer"/>
+			<column name="OC_SCHEMA_OBJECTID" dbtype="int" javatype="integer"/>
+			<column name="OC_SCHEMA_TIME" dbtype="int" javatype="integer"/>
+			<column name="OC_SCHEMA_QUANTITY" dbtype="int" javatype="integer"/>
+		</columns>
+		<indexes>
+			<index name="OC_SCHEMA_PRODUCTUID">
+				<indexcolumn name="OC_SCHEMA_PRODUCTUID" order="ASC"/>
+			</index>
+			<index name="OC_SCHEMA_OBJECTID">
+				<indexcolumn name="OC_SCHEMA_OBJECTID" order="ASC"/>
+			</index>
+		</indexes>
+	</table>
+	<table name="OC_PERSON_PICTURES" db="openclinic" sync="NONE">
+		<columns>
+			<column name="personid" dbtype="int" javatype="integer"/>
+			<column name="picture" dbtype="image" javatype="bytes"/>
+		</columns>
+		<indexes>
+			<index name="personid">
+				<indexcolumn name="personid" order="ASC"/>
+			</index>
+		</indexes>
+	</table>
+	<table name="OC_PROBLEMS" db="openclinic" sync="NONE">
+		<columns>
+			<column name="OC_PROBLEM_PATIENTUID" dbtype="varchar" javatype="string" size="50"/>
+			<column name="OC_PROBLEM_CODETYPE" dbtype="varchar" javatype="string" size="10"/>
+			<column name="OC_PROBLEM_CODE" dbtype="varchar" javatype="string" size="50"/>
+            <column name="OC_PROBLEM_BEGIN" dbtype="datetime" javatype="date"/>
+            <column name="OC_PROBLEM_END" dbtype="datetime" javatype="date"/>
+			<column name="OC_PROBLEM_SERVERID" dbtype="int" javatype="integer"/>
+			<column name="OC_PROBLEM_OBJECTID" dbtype="int" javatype="integer"/>
+            <column name="OC_PROBLEM_CREATETIME" dbtype="datetime" javatype="date"/>
+            <column name="OC_PROBLEM_UPDATETIME" dbtype="datetime" javatype="date"/>
+			<column name="OC_PROBLEM_UPDATEUID" dbtype="varchar" javatype="string" size="50"/>
+			<column name="OC_PROBLEM_VERSION" dbtype="int" javatype="integer"/>
+			<column name="OC_PROBLEM_GRAVITY" dbtype="int" javatype="integer"/>
+			<column name="OC_PROBLEM_CERTAINTY" dbtype="int" javatype="integer"/>
+			<column name="OC_PROBLEM_COMMENT" dbtype="text" javatype="string"/>
+		</columns>
+		<indexes>
+			<index name="OC_PROBLEM_PATIENTUID">
+				<indexcolumn name="OC_PROBLEM_PATIENTUID" order="ASC"/>
+			</index>
+		</indexes>
+	</table>
+	<table name="OC_PROBLEMS_HISTORY" db="openclinic" sync="NONE">
+		<columns>
+			<column name="OC_PROBLEM_PATIENTUID" dbtype="varchar" javatype="string" size="50"/>
+			<column name="OC_PROBLEM_CODETYPE" dbtype="varchar" javatype="string" size="10"/>
+			<column name="OC_PROBLEM_CODE" dbtype="varchar" javatype="string" size="50"/>
+            <column name="OC_PROBLEM_BEGIN" dbtype="datetime" javatype="date"/>
+            <column name="OC_PROBLEM_END" dbtype="datetime" javatype="date"/>
+			<column name="OC_PROBLEM_SERVERID" dbtype="int" javatype="integer"/>
+			<column name="OC_PROBLEM_OBJECTID" dbtype="int" javatype="integer"/>
+            <column name="OC_PROBLEM_CREATETIME" dbtype="datetime" javatype="date"/>
+            <column name="OC_PROBLEM_UPDATETIME" dbtype="datetime" javatype="date"/>
+			<column name="OC_PROBLEM_UPDATEUID" dbtype="varchar" javatype="string" size="50"/>
+			<column name="OC_PROBLEM_VERSION" dbtype="int" javatype="integer"/>
+			<column name="OC_PROBLEM_GRAVITY" dbtype="int" javatype="integer"/>
+			<column name="OC_PROBLEM_CERTAINTY" dbtype="int" javatype="integer"/>
+			<column name="OC_PROBLEM_COMMENT" dbtype="text" javatype="string"/>
+		</columns>
+		<indexes>
+			<index name="OC_PROBLEM_PATIENTUID">
+				<indexcolumn name="OC_PROBLEM_PATIENTUID" order="ASC"/>
+			</index>
+		</indexes>
+	</table>
+	<table name="OC_BEDS" db="openclinic" sync="NONE">
+		<columns>
+			<column name="OC_BED_SERVERID" dbtype="int" javatype="integer"/>
+			<column name="OC_BED_OBJECTID" dbtype="int" javatype="integer"/>
+			<column name="OC_BED_NAME" dbtype="varchar" javatype="string" size="255"/>
+			<column name="OC_BED_SERVICEUID" dbtype="varchar" javatype="string" size="50"/>
+			<column name="OC_BED_PRIORITY" dbtype="int" javatype="integer"/>
+			<column name="OC_BED_COMMENT" dbtype="text" javatype="string"/>
+			<column name="OC_BED_LOCATION" dbtype="varchar" javatype="string" size="255"/>
+            <column name="OC_BED_CREATETIME" dbtype="datetime" javatype="date"/>
+            <column name="OC_BED_UPDATETIME" dbtype="datetime" javatype="date"/>
+			<column name="OC_BED_UPDATEUID" dbtype="varchar" javatype="string" size="50"/>
+			<column name="OC_BED_VERSION" dbtype="int" javatype="integer"/>
+		</columns>
+		<indexes>
+			<index name="OC_BED_OBJECTID">
+				<indexcolumn name="OC_BED_OBJECTID" order="ASC"/>
+			</index>
+			<index name="OC_BED_SERVICEUID">
+				<indexcolumn name="OC_BED_SERVICEUID" order="ASC"/>
+			</index>
+		</indexes>
+	</table>
+	<table name="OC_BEDS_HISTORY" db="openclinic" sync="NONE">
+		<columns>
+			<column name="OC_BED_SERVERID" dbtype="int" javatype="integer"/>
+			<column name="OC_BED_OBJECTID" dbtype="int" javatype="integer"/>
+			<column name="OC_BED_NAME" dbtype="varchar" javatype="string" size="255"/>
+			<column name="OC_BED_SERVICEUID" dbtype="varchar" javatype="string" size="50"/>
+			<column name="OC_BED_PRIORITY" dbtype="int" javatype="integer"/>
+			<column name="OC_BED_COMMENT" dbtype="text" javatype="string"/>
+			<column name="OC_BED_LOCATION" dbtype="varchar" javatype="string" size="255"/>
+            <column name="OC_BED_CREATETIME" dbtype="datetime" javatype="date"/>
+            <column name="OC_BED_UPDATETIME" dbtype="datetime" javatype="date"/>
+			<column name="OC_BED_UPDATEUID" dbtype="varchar" javatype="string" size="50"/>
+			<column name="OC_BED_VERSION" dbtype="int" javatype="integer"/>
+		</columns>
+	</table>
+	<table name="Lastitemgroups" db="openclinic" sync="NONE">
+		<columns>
+			<column name="sourceItemType" dbtype="varchar" javatype="string" size="255"/>
+			<column name="destinationItemType" dbtype="varchar" javatype="string" size="255"/>
+            <column name="updatetime" dbtype="datetime" javatype="date" version="1"/>
+		</columns>
 	</table>
 
     <table name="Groups" db="ocadmin" sync="MASTER">
@@ -3758,7 +4075,7 @@
 			<column name="stop" dbtype="datetime" javatype="date"/>
 			<column name="updatetime" dbtype="datetime" javatype="date" version="1"/>
 			<column name="project" dbtype="varchar" javatype="string" size="255"/>
-			<column name="encryptedpassword" dbtype="varbinary(5000)" javatype="bytes"/>
+			<column name="encryptedpassword" dbtype="image" javatype="bytes"/>
 		</columns>
 		<indexes>
 			<index name="users_userid">
@@ -3830,13 +4147,6 @@
 				<indexcolumn name="serviceid" order="ASC"/>
 			</index>
 		</indexes>
-	</table>
-    <table name="Personnel" db="ocadmin" sync="NONE">
-		<columns>
-			<column name="code" dbtype="varchar" javatype="string" size="255"/>
-            <column name="name" dbtype="varchar" javatype="string" size="255"/>
-			<column name="updatetime" dbtype="datetime" javatype="date" version="1"/>
-		</columns>
 	</table>
     <table name="Providers" db="ocadmin" sync="NONE">
 		<columns>
@@ -3969,7 +4279,7 @@
 		</sql>
 	</view>
     <view name="OC_DOCUMENTS" db="documents" drop="1">
-		<sql db="Microsoft SQL Server">
+		<sql db="MySQL">
             create view OC_DOCUMENTS as
             select *
             from openclinic_dbo.OC_DOCUMENTS
@@ -4047,10 +4357,181 @@
             <column name="city" dbtype="varchar" javatype="string"  size="255"/>
         </columns>
         <indexes>
-            <index name="rwandazip_zipcode">
+            <index name="zipcode">
                 <indexcolumn name="zipcode" order="ASC"/>
             </index>
-            <index name="rwandazip_district">
+            <index name="district">
+                <indexcolumn name="district" order="ASC"/>
+            </index>
+        </indexes>
+    </table>
+    <table name="AlbaniaZipcodes" db="ocadmin" sync="MASTER">
+        <columns>
+            <column name="zipcode" dbtype="varchar" javatype="string" size="10" primary="1"/>
+            <column name="district" dbtype="varchar" javatype="string"  size="255" primary="1"/>
+            <column name="city" dbtype="varchar" javatype="string"  size="255"/>
+        </columns>
+        <indexes>
+            <index name="zipcode">
+                <indexcolumn name="zipcode" order="ASC"/>
+            </index>
+            <index name="district">
+                <indexcolumn name="district" order="ASC"/>
+            </index>
+        </indexes>
+    </table>
+    <table name="NigeriaZipcodes" db="ocadmin" sync="MASTER">
+        <columns>
+            <column name="zipcode" dbtype="varchar" javatype="string" size="10" primary="1"/>
+            <column name="district" dbtype="varchar" javatype="string"  size="255" primary="1"/>
+            <column name="city" dbtype="varchar" javatype="string"  size="255"/>
+        </columns>
+        <indexes>
+            <index name="zipcode">
+                <indexcolumn name="zipcode" order="ASC"/>
+            </index>
+            <index name="district">
+                <indexcolumn name="district" order="ASC"/>
+            </index>
+        </indexes>
+    </table>
+    <table name="BangladeshZipcodes" db="ocadmin" sync="MASTER">
+        <columns>
+            <column name="zipcode" dbtype="varchar" javatype="string" size="10" primary="1"/>
+            <column name="district" dbtype="varchar" javatype="string"  size="255" primary="1"/>
+            <column name="city" dbtype="varchar" javatype="string"  size="255"/>
+        </columns>
+        <indexes>
+            <index name="zipcode">
+                <indexcolumn name="zipcode" order="ASC"/>
+            </index>
+            <index name="district">
+                <indexcolumn name="district" order="ASC"/>
+            </index>
+        </indexes>
+    </table>
+    <table name="BrazilZipcodes" db="ocadmin" sync="MASTER">
+        <columns>
+            <column name="zipcode" dbtype="varchar" javatype="string" size="10" primary="1"/>
+            <column name="district" dbtype="varchar" javatype="string"  size="255" primary="1"/>
+            <column name="city" dbtype="varchar" javatype="string"  size="255"/>
+        </columns>
+        <indexes>
+            <index name="zipcode">
+                <indexcolumn name="zipcode" order="ASC"/>
+            </index>
+            <index name="district">
+                <indexcolumn name="district" order="ASC"/>
+            </index>
+        </indexes>
+    </table>
+    <table name="BrazzaZipcodes" db="ocadmin" sync="MASTER">
+        <columns>
+            <column name="zipcode" dbtype="varchar" javatype="string" size="10" primary="1"/>
+            <column name="district" dbtype="varchar" javatype="string"  size="255" primary="1"/>
+            <column name="city" dbtype="varchar" javatype="string"  size="255"/>
+        </columns>
+        <indexes>
+            <index name="zipcode">
+                <indexcolumn name="zipcode" order="ASC"/>
+            </index>
+            <index name="district">
+                <indexcolumn name="district" order="ASC"/>
+            </index>
+        </indexes>
+    </table>
+    <table name="UgandaZipcodes" db="ocadmin" sync="MASTER">
+        <columns>
+            <column name="zipcode" dbtype="varchar" javatype="string" size="10" primary="1"/>
+            <column name="district" dbtype="varchar" javatype="string"  size="255" primary="1"/>
+            <column name="city" dbtype="varchar" javatype="string"  size="255"/>
+        </columns>
+        <indexes>
+            <index name="zipcode">
+                <indexcolumn name="zipcode" order="ASC"/>
+            </index>
+            <index name="district">
+                <indexcolumn name="district" order="ASC"/>
+            </index>
+        </indexes>
+    </table>
+    <table name="ZambiaZipcodes" db="ocadmin" sync="MASTER">
+        <columns>
+            <column name="zipcode" dbtype="varchar" javatype="string" size="10" primary="1"/>
+            <column name="district" dbtype="varchar" javatype="string"  size="255" primary="1"/>
+            <column name="city" dbtype="varchar" javatype="string"  size="255"/>
+        </columns>
+        <indexes>
+            <index name="zipcode">
+                <indexcolumn name="zipcode" order="ASC"/>
+            </index>
+            <index name="district">
+                <indexcolumn name="district" order="ASC"/>
+            </index>
+        </indexes>
+    </table>
+    <table name="SriLankaZipcodes" db="ocadmin" sync="MASTER">
+        <columns>
+            <column name="zipcode" dbtype="varchar" javatype="string" size="10" primary="1"/>
+            <column name="district" dbtype="varchar" javatype="string"  size="255" primary="1"/>
+            <column name="city" dbtype="varchar" javatype="string"  size="255"/>
+        </columns>
+        <indexes>
+            <index name="zipcode">
+                <indexcolumn name="zipcode" order="ASC"/>
+            </index>
+            <index name="district">
+                <indexcolumn name="district" order="ASC"/>
+            </index>
+        </indexes>
+    </table>
+    <table name="CameroonZipcodes" db="ocadmin" sync="MASTER">
+        <columns>
+            <column name="zipcode" dbtype="varchar" javatype="string" size="10" primary="1"/>
+            <column name="district" dbtype="varchar" javatype="string"  size="255" primary="1"/>
+            <column name="city" dbtype="varchar" javatype="string"  size="255"/>
+            <column name="region" dbtype="varchar" javatype="string"  size="255"/>
+            <column name="sector" dbtype="varchar" javatype="string"  size="255"/>
+        </columns>
+        <indexes>
+            <index name="zipcode">
+                <indexcolumn name="zipcode" order="ASC"/>
+            </index>
+            <index name="district">
+                <indexcolumn name="district" order="ASC"/>
+            </index>
+        </indexes>
+    </table>
+    <table name="SenegalZipcodes" db="ocadmin" sync="MASTER">
+        <columns>
+            <column name="zipcode" dbtype="varchar" javatype="string" size="10" primary="1"/>
+            <column name="district" dbtype="varchar" javatype="string"  size="255" primary="1"/>
+            <column name="city" dbtype="varchar" javatype="string"  size="255"/>
+            <column name="region" dbtype="varchar" javatype="string"  size="255"/>
+            <column name="sector" dbtype="varchar" javatype="string"  size="255"/>
+        </columns>
+        <indexes>
+            <index name="zipcode">
+                <indexcolumn name="zipcode" order="ASC"/>
+            </index>
+            <index name="district">
+                <indexcolumn name="district" order="ASC"/>
+            </index>
+        </indexes>
+    </table>
+    <table name="IvorycoastZipcodes" db="ocadmin" sync="MASTER">
+        <columns>
+            <column name="zipcode" dbtype="varchar" javatype="string" size="10" primary="1"/>
+            <column name="district" dbtype="varchar" javatype="string"  size="255" primary="1"/>
+            <column name="city" dbtype="varchar" javatype="string"  size="255"/>
+            <column name="region" dbtype="varchar" javatype="string"  size="255"/>
+            <column name="sector" dbtype="varchar" javatype="string"  size="255"/>
+        </columns>
+        <indexes>
+            <index name="zipcode">
+                <indexcolumn name="zipcode" order="ASC"/>
+            </index>
+            <index name="district">
                 <indexcolumn name="district" order="ASC"/>
             </index>
         </indexes>
@@ -4062,10 +4543,40 @@
             <column name="city" dbtype="varchar" javatype="string"  size="255"/>
         </columns>
         <indexes>
-            <index name="belgiumzip_zipcode">
+            <index name="zipcode">
                 <indexcolumn name="zipcode" order="ASC"/>
             </index>
-            <index name="belgiumzip_district">
+            <index name="district">
+                <indexcolumn name="district" order="ASC"/>
+            </index>
+        </indexes>
+    </table>
+    <table name="GabonZipcodes" db="ocadmin" sync="MASTER">
+        <columns>
+            <column name="zipcode" dbtype="varchar" javatype="string" size="10" primary="1"/>
+            <column name="district" dbtype="varchar" javatype="string"  size="255" primary="1"/>
+            <column name="city" dbtype="varchar" javatype="string"  size="255"/>
+        </columns>
+        <indexes>
+            <index name="zipcode">
+                <indexcolumn name="zipcode" order="ASC"/>
+            </index>
+            <index name="district">
+                <indexcolumn name="district" order="ASC"/>
+            </index>
+        </indexes>
+    </table>
+    <table name="KenyaZipcodes" db="ocadmin" sync="MASTER">
+        <columns>
+            <column name="zipcode" dbtype="varchar" javatype="string" size="10" primary="1"/>
+            <column name="district" dbtype="varchar" javatype="string"  size="255" primary="1"/>
+            <column name="city" dbtype="varchar" javatype="string"  size="255"/>
+        </columns>
+        <indexes>
+            <index name="zipcode">
+                <indexcolumn name="zipcode" order="ASC"/>
+            </index>
+            <index name="district">
                 <indexcolumn name="district" order="ASC"/>
             </index>
         </indexes>
@@ -4077,10 +4588,10 @@
             <column name="city" dbtype="varchar" javatype="string"  size="255"/>
         </columns>
         <indexes>
-            <index name="nozip_zipcode">
+            <index name="zipcode">
                 <indexcolumn name="zipcode" order="ASC"/>
             </index>
-            <index name="nozip_district">
+            <index name="district">
                 <indexcolumn name="district" order="ASC"/>
             </index>
         </indexes>
@@ -4092,10 +4603,10 @@
             <column name="city" dbtype="varchar" javatype="string"  size="255"/>
         </columns>
         <indexes>
-            <index name="tanzaniazip_zipcode">
+            <index name="zipcode">
                 <indexcolumn name="zipcode" order="ASC"/>
             </index>
-            <index name="tanzaniazip_district">
+            <index name="district">
                 <indexcolumn name="district" order="ASC"/>
             </index>
         </indexes>
@@ -4107,10 +4618,10 @@
             <column name="city" dbtype="varchar" javatype="string"  size="255"/>
         </columns>
         <indexes>
-            <index name="drczip_zipcode">
+            <index name="zipcode">
                 <indexcolumn name="zipcode" order="ASC"/>
             </index>
-            <index name="drczip_district">
+            <index name="district">
                 <indexcolumn name="district" order="ASC"/>
             </index>
         </indexes>
@@ -4122,10 +4633,10 @@
             <column name="city" dbtype="varchar" javatype="string"  size="255"/>
         </columns>
         <indexes>
-            <index name="burundizip_zipcode">
+            <index name="zipcode">
                 <indexcolumn name="zipcode" order="ASC"/>
             </index>
-            <index name="burundizip_district">
+            <index name="district">
                 <indexcolumn name="district" order="ASC"/>
             </index>
         </indexes>
@@ -4139,10 +4650,10 @@
             <column name="sector" dbtype="varchar" javatype="string"  size="255"/>
         </columns>
         <indexes>
-            <index name="malizip_zipcode">
+            <index name="zipcode">
                 <indexcolumn name="zipcode" order="ASC"/>
             </index>
-            <index name="malizip_district">
+            <index name="district">
                 <indexcolumn name="district" order="ASC"/>
             </index>
         </indexes>
@@ -4165,6 +4676,17 @@
             </index>
         </indexes>
     </table>
+    <table name="DSM4Concepts" db="openclinic" sync="NONE">
+        <columns>
+            <column name="concept" dbtype="char" javatype="string" size="255"/>
+            <column name="dsm4" dbtype="char" javatype="string" size="10"/>
+        </columns>
+        <indexes>
+            <index name="concept">
+                <indexcolumn name="concept" order="ASC"/>
+            </index>
+        </indexes>
+    </table>
     <table name="Concepts" db="openclinic" sync="NONE">
         <columns>
             <column name="concept" dbtype="char" javatype="string" size="10"/>
@@ -4177,10 +4699,63 @@
             </index>
         </indexes>
     </table>
-	<table name="counters" db="openclinic" sync="MASTEREXIST">
+    <table name="Classifications" db="openclinic" sync="NONE">
+        <columns>
+            <column name="icd10" dbtype="char" javatype="string" size="10"/>
+            <column name="icpc" dbtype="char" javatype="string" size="10"/>
+        </columns>
+        <indexes>
+            <index name="icpc">
+                <indexcolumn name="icpc" order="ASC"/>
+            </index>
+            <index name="icd10">
+                <indexcolumn name="icd10" order="ASC"/>
+            </index>
+        </indexes>
+    </table>
+    <table name="ClassificationsDSM4" db="openclinic" sync="NONE">
+        <columns>
+            <column name="icd10" dbtype="char" javatype="string" size="10"/>
+            <column name="dsm4" dbtype="char" javatype="string" size="10"/>
+        </columns>
+        <indexes>
+            <index name="dsm4">
+                <indexcolumn name="dsm4" order="ASC"/>
+            </index>
+            <index name="icd10">
+                <indexcolumn name="icd10" order="ASC"/>
+            </index>
+        </indexes>
+    </table>
+    <table name="OC_FINGERPRINTS" db="openclinic" sync="NONE">
+        <columns>
+			<column name="personid" dbtype="int" javatype="integer"/>
+            <column name="finger" dbtype="char" javatype="string" size="2"/>
+            <column name="template" dbtype="image" javatype="bytes"/>
+        </columns>
+        <indexes>
+            <index name="personid">
+                <indexcolumn name="personid" order="ASC"/>
+            </index>
+        </indexes>
+    </table>
+	<table name="OC_COUNTERS" db="openclinic" sync="NONE">
+		<columns>
+			<column name="OC_COUNTER_NAME" dbtype="varchar" javatype="string" size="255" primary="1"/>
+			<column name="OC_COUNTER_VALUE" dbtype="int" javatype="integer"/>
+		</columns>
+	</table>
+	<table name="counters" db="openclinic" sync="NONE">
 		<columns>
 			<column name="name" dbtype="varchar" javatype="string" size="255" primary="1"/>
 			<column name="counter" dbtype="int" javatype="integer"/>
+		</columns>
+	</table>
+	<table name="examinationcosts" db="openclinic" sync="NONE">
+		<columns>
+			<column name="transactionType" dbtype="varchar" javatype="string" size="255"/>
+			<column name="cost" dbtype="int" javatype="integer"/>
+			<column name="income" dbtype="int" javatype="integer"/>
 		</columns>
 	</table>
 	<table name="diagnoses" db="openclinic" sync="MASTEREXIST">
@@ -4261,7 +4836,7 @@
 			<column name="transactionType" dbtype="varchar" javatype="string" size="255"/>
 			<column name="messageKey" dbtype="varchar" javatype="string" size="255"/>
 			<column name="priority" dbtype="int" javatype="integer"/>
-			<column name="data" dbtype="varbinary(50000)" javatype="bytes"/>
+			<column name="data" dbtype="image" javatype="bytes"/>
 			<column name="deletedate" dbtype="datetime" javatype="date"/>
 			<column name="updatetime" dbtype="datetime" javatype="date" version="1"/>
 			<column name="updateuserid" dbtype="int" javatype="integer"/>
@@ -4395,6 +4970,7 @@
             <column name="code" dbtype="char" javatype="string" size="6" primary="1"/>
             <column name="labelnl" dbtype="varchar" javatype="string" size="255"/>
             <column name="labelfr" dbtype="varchar" javatype="string" size="255"/>
+            <column name="labelen" dbtype="varchar" javatype="string" size="255"/>
         </columns>
         <indexes>
             <index name="code">
@@ -4407,6 +4983,20 @@
             <column name="code" dbtype="char" javatype="string" size="6" primary="1"/>
             <column name="labelnl" dbtype="varchar" javatype="string" size="255"/>
             <column name="labelfr" dbtype="varchar" javatype="string" size="255"/>
+            <column name="labelen" dbtype="varchar" javatype="string" size="255"/>
+        </columns>
+        <indexes>
+            <index name="code">
+                <indexcolumn name="code" order="ASC"/>
+            </index>
+        </indexes>
+    </table>
+    <table name="DSM4" db="openclinic" sync="NONE">
+        <columns>
+            <column name="code" dbtype="char" javatype="string" size="6" primary="1"/>
+            <column name="labelnl" dbtype="varchar" javatype="string" size="255"/>
+            <column name="labelfr" dbtype="varchar" javatype="string" size="255"/>
+            <column name="labelen" dbtype="varchar" javatype="string" size="255"/>
         </columns>
         <indexes>
             <index name="code">
@@ -4741,6 +5331,15 @@
             <column name="modifier" dbtype="varchar" javatype="string" size="255"/>
             <column name="priority" dbtype="int" javatype="integer"/>
         </columns>
+		<indexes>
+			<index name="transactionTypeId">
+				<indexcolumn name="transactionTypeId" order="ASC"/>
+			</index>
+			<index name="transactionTypeId_itemTypeId">
+				<indexcolumn name="transactionTypeId" order="ASC"/>
+				<indexcolumn name="itemTypeId" order="ASC"/>
+			</index>
+		</indexes>
     </table>
 	<table name="TransactionsHistory" db="openclinic" sync="NONE">
 		<columns>
@@ -4797,7 +5396,7 @@
 			<column name="updatetime" dbtype="datetime" javatype="date"/>
 			<column name="updateuserid" dbtype="int" javatype="integer"/>
 			<column name="errorpage" dbtype="varchar" javatype="string" size="255"/>
-            <column name="errortext" dbtype="varbinary(50000)" javatype="bytes"/>
+            <column name="errortext" dbtype="image" javatype="bytes"/>
         </columns>
         <indexes>
 			<index name="errors_updatetime">
@@ -4987,6 +5586,9 @@
 			</index>
 			<index name="updatetime">
 				<indexcolumn order="ASC" name="updatetime"/>
+			</index>
+			<index name="finalvalidationdatetime">
+				<indexcolumn order="ASC" name="finalvalidationdatetime"/>
 			</index>
 		</indexes>
     </table>
@@ -5346,13 +5948,7 @@
             create view UnitGroupsView as select convert(int,linkId) intLinkId,* from @admin@..Groups where active=1
         </sql>
         <sql db="MySQL">
-			create view UnitGroupsView as select cast(linkId as signed) as intLinkId,id,groupType,groupName,linkId,active,updatetime from Groups where active=1
-        </sql>
-        <sql db="Adaptive Server Enterprise">
-            create view UnitGroupsView as select convert(int,linkId) intLinkId,* from admin..Groups where active=1
-        </sql>
-        <sql db="Cache">
-            create view UnitGroupsView as select convert(int,linkId) intLinkId,* from Groups where active=1
+			create view UnitGroupsView as select cast(linkId as signed) as intLinkId,id,groupType,groupName,linkId,active,updatetime from @admin@.Groups where active=1
         </sql>
 	</view>
 	<view name="UsersView" db="openclinic" drop="1">

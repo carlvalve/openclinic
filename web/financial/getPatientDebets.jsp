@@ -18,6 +18,9 @@
             String sChecked = "";
             if(bChecked){
                 sChecked = " checked";
+                if(!((MedwanQuery.getInstance().getConfigInt("authorizeCancellationOfOpenInvoices",1)==1 && !patientInvoice.getStatus().equalsIgnoreCase("closed"))||(activeUser.getParameter("sa")!=null && activeUser.getParameter("sa").length() > 0)||activeUser.getAccessRight("financial.cancelclosedinvoice.select"))){
+                	sChecked+=" disabled='true'";
+                }
             }
 
             for(int i=0; i<vDebets.size(); i++){

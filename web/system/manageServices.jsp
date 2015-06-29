@@ -532,8 +532,7 @@
                 <tr>
                     <td class="admin"> <%=getTran("Web","Zipcode",sWebLanguage)%></td>
                     <td class="admin2">
-                        <input type="text" class="text" name="EditServiceZipcode" value="<%=service.zipcode%>" size="<%=sTextWidth%>" onblur="limitLength(this);findZipcodeLanguageSpecified(EditServiceZipcode,EditServiceCity,'buttonServiceZipcode','<%=service.language%>');">
-                        <%=ScreenHelper.writeZipcodeButton("buttonServiceZipcode","EditServiceZipcode","EditServiceCity",sWebLanguage,service.language,sCONTEXTPATH)%>
+                        <input type="text" class="text" name="EditServiceZipcode" value="<%=service.zipcode%>" size="<%=sTextWidth%>" onblur="limitLength(this);">
                     </td>
                 </tr>
                 <%-- City --%>
@@ -797,8 +796,7 @@
                 <tr>
                     <td class="admin"> <%=getTran("Web","zipcode",sWebLanguage)%></td>
                     <td class="admin2">
-                        <input type="text" class="text" name="EditContactZipcode" value="<%=service.contactzipcode%>" size="<%=sTextWidth%>" onblur="limitLength(this);findZipcodeLanguageSpecified(EditContactZipcode,EditContactCity,'buttonContactZipcode','<%=service.language%>');">
-                        <%=ScreenHelper.writeZipcodeButton("buttonContactZipcode","EditContactZipcode","EditContactCity",sWebLanguage,service.language,sCONTEXTPATH)%>
+                        <input type="text" class="text" name="EditContactZipcode" value="<%=service.contactzipcode%>" size="<%=sTextWidth%>" onblur="limitLength(this);">
                     </td>
                 </tr>
                 <%-- ContactCity --%>
@@ -933,30 +931,12 @@
                   }
                 }
               }
-              <%-- FIND ZIPCODE LANGUAGE SPECIFIED --%>
-              function findZipcodeLanguageSpecified(oZipcode,oCity,buttonId,sDisplayLang){
-                if(oZipcode.value.length==0){
-                  oCity.value = "";
-                }
-                else{
-                  oCity.value = "";
-                  openPopup("/_common/search/blurZipcode.jsp&ZipcodeValue="+oZipcode.value+"&CityName="+oCity.name+"&CityValue="+oCity.value+"&DisplayLang="+sDisplayLang+"&VarButton="+buttonId);
-                }
-              }
 
               <%-- popup : search service stock --%>
               function searchServiceStock(serviceStockUidField,serviceStockNameField){
                 openPopup("/_common/search/searchServiceStock.jsp&ts=<%=getTs()%>&ReturnServiceStockUidField="+serviceStockUidField+"&ReturnServiceStockNameField="+serviceStockNameField);
               }
 
-              <%-- display city in saved service language --%>
-              if(document.getElementsByName('EditServiceCity')[0].value.length==0){
-                findZipcodeLanguageSpecified(document.getElementsByName('EditServiceZipcode')[0],document.getElementsByName('EditServiceCity')[0],'buttonServiceZipcode','<%=service.language%>');
-              }
-
-              if(document.getElementsByName('EditContactCity')[0].value.length==0){
-                findZipcodeLanguageSpecified(document.getElementsByName('EditContactZipcode')[0],document.getElementsByName('EditContactCity')[0],'buttonContactZipcode','<%=service.language%>');
-              }
             </script>
         <%
     }

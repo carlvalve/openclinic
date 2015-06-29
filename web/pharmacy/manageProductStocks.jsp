@@ -469,7 +469,7 @@ public double getLastYearsAveragePrice(Product product){
 
         Vector productStocks = ProductStock.find(sFindServiceStockUid,sFindProductUid,sFindLevel,sFindMinimumLevel,
                                                  sFindMaximumLevel,sFindOrderLevel,sFindBegin,sFindEnd,sFindDefaultImportance,
-                                                 sFindSupplierUid,"","OC_PRODUCT_NAME","DESC");
+                                                 sFindSupplierUid,"","OC_PRODUCT_NAME","ASC");
 
         // display other layout if stocks of only one service are shown
         if(sServiceId.length()==0) stocksHtml = objectsToHtml1(productStocks,sWebLanguage);

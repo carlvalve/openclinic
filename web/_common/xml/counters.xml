@@ -7,7 +7,6 @@
     <counter name="OC_DEBETS" table="OC_DEBETS" field="OC_DEBET_OBJECTID" bd='openclinic'/>
     <counter name="OC_PRODUCTS" table="OC_PRODUCTS" field="OC_PRODUCT_OBJECTID" bd='openclinic'/>
     <counter name="OC_PRESTATIONS" table="OC_PRESTATIONS" field="OC_PRESTATION_OBJECTID" bd='openclinic'/>
-    <counter name="OC_PRESTATIONGROUPS" table="OC_PRESTATIONGRPS" field="OC_PRESTATIONGRP_OBJECTID" bd='openclinic'/>
     <counter name="OC_SERVICESTOCKS" table="OC_SERVICESTOCKS" field="OC_STOCK_OBJECTID" bd='openclinic'/>
     <counter name="OC_PRODUCTSTOCKS" table="OC_PRODUCTSTOCKS" field="OC_STOCK_OBJECTID" bd='openclinic'/>
     <counter name="OC_PRODUCTSTOCKOPERATIONS" table="OC_PRODUCTSTOCKOPERATIONS" field="OC_OPERATION_OBJECTID" bd='openclinic'/>
@@ -30,7 +29,6 @@
     <counter name="DocumentID" table="Documents" field="id" bd='openclinic'/>
     <counter name="ExaminationID" table="Examinations" field="id" bd='openclinic'/>
     <counter name="LabProfileID" table="LabProfiles" field="profileID" bd='openclinic'/>
-    <counter name="ResultProfileID" table="ResultProfiles" field="profileID" bd='openclinic'/>
     <counter name="LabAnalysisID" table="LabAnalysis" field="labID" bd='openclinic'/>
     <counter name="HealthRecordID" table="Healthrecord" field="healthRecordId" bd='openclinic'/>
     <counter name="TransactionID" table="Transactions" field="transactionId" bd='openclinic'/>
@@ -44,7 +42,6 @@
     <counter name="OC_INSURARINVOICES" table="OC_INSURARINVOICES" field="OC_INSURARINVOICE_OBJECTID" bd='openclinic'/>
     <counter name="OC_RFE" table="OC_RFE" field="OC_RFE_OBJECTID" bd='openclinic'/>
     <counter name="OC_PATIENTCREDITS" table="OC_PATIENTCREDITS" field="OC_PATIENTCREDIT_OBJECTID" bd='openclinic'/>
-    <counter name="DocumentID" table="Documents" field="documentid" bd='admin'/>
     <counter name="EnterpriseVisitID" table="EnterpriseVisits" field="visitid" bd='openclinic'/>
     <counter name="EnterpriseVisitItemID" table="EnterpriseVisitItems" field="itemid" bd='openclinic'/>
     <counter name="RiskProfileID" table="RiskProfiles" field="profileid" bd='openclinic'/>

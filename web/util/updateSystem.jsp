@@ -1,5 +1,6 @@
 <%@page import="be.mxs.common.util.system.*"%>
 <%@include file="/includes/helper.jsp"%>
+<script src='<%=sCONTEXTPATH%>/_common/_script/prototype.js'></script>
 <%=sJSJQUERY%>
 <%=sCSSNORMAL%>
 <%=sIcon%>
@@ -76,6 +77,25 @@
   
   <%-- GO TO LOGIN --%>
   function goToLogin(){
+	 <%
+	 	if(ScreenHelper.getTranExists("systemMessages","mainMessage","en").length()>0){
+	 %>
+		 	if(window.confirm("Remove system message?")){
+		 	      var today = new Date();
+		 	      var url= '<c:url value="/system/deleteSystemMessage.jsp"/>?ts='+today;
+		 	      new Ajax.Request(url,{
+		 	          method: "POST",
+		 	          postBody: "",
+		 	          onSuccess: function(resp){
+		 	          },
+		 	          onFailure: function(){
+		 	          }
+		 	      }
+		 		  );
+		 	 }
+	 <%
+	 	}
+	 %>
   	window.location.href = "<%=sCONTEXTPATH%>/<%=sTmpAPPDIR%>";
   }
 </script>

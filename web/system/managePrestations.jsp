@@ -524,7 +524,18 @@
                             <%
                                 // no delete button for new prestation
                                 if(!sEditPrestationUid.equals("-1")){
-                                    %><input class="button" type="button" name="deleteButton" value="<%=getTranNoLink("Web","delete",sWebLanguage)%>" onclick="deletePrestation('<%=prestation.getUid()%>');">&nbsp;<%
+                                	boolean bExists=false;
+                                	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+                                	PreparedStatement ps = conn.prepareStatement("select * from (select 1 as uid) a where exists (select * from oc_debets where oc_debet_prestationuid=? and 1=a.uid);");
+                                	ps.setString(1,sEditPrestationUid);
+                                	ResultSet rs = ps.executeQuery();
+                                	bExists=rs.next() && rs.getInt("uid")==1;
+                                	rs.close();
+                                	ps.close();
+                                	conn.close();
+                                	if(!bExists){
+	                                    %><input class="button" type="button" name="deleteButton" value="<%=getTranNoLink("Web","delete",sWebLanguage)%>" onclick="deletePrestation('<%=prestation.getUid()%>');">&nbsp;<%
+                                	}
                                 }
                             %>
                         </td>

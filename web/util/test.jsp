@@ -1,16 +1,29 @@
-<%@include file="/includes/validateUser.jsp"%>
-<%@page errorPage="/includes/error.jsp"%>
+<%@page import="be.mxs.common.util.db.MedwanQuery"%>
+
 <%
-	String sSelect="select * from oc_batches";
-	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
-	PreparedStatement ps = conn.prepareStatement(sSelect);
-	ResultSet rs = ps.executeQuery();
+	if(request.getParameter("veld")!=null){
+		out.println("<script>alert('veld="+request.getParameter("veld")+"');</script>");
+	}
+%>
+<h1>welkom <%=new java.text.SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date()) %></h1>
+
+<input type='text' name='veld' id='veld' value=''/>
+<input type='button' value='click me' onclick='loadpage();'/>
+
+<%
+	java.sql.Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+	java.sql.PreparedStatement statement = conn.prepareStatement("select * from oc_config");
+	java.sql.ResultSet rs = statement.executeQuery();
 	while(rs.next()){
-		String uid=rs.getString("oc_batch_serverid")+"."+rs.getString("oc_batch_objectid");
-		System.out.println(uid);
-		be.openclinic.pharmacy.Batch.calculateBatchLevel(uid);
+		out.println(rs.getString("oc_key")+"="+rs.getString("oc_value")+"<br/>");
 	}
 	rs.close();
-	ps.close();
+	statement.close();
 	conn.close();
 %>
+
+<script>
+	function loadpage(){
+		window.location.href='test.jsp?veld='+document.getElementById('veld').value;
+	}
+</script>

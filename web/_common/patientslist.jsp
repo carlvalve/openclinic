@@ -171,7 +171,8 @@
                     long days = 24 * 3600 * 1000;
                     days = days * 90;
                     if(enc.getEnd()!=null){
-	                    sTmpServiceID = "<td style='text-decoration: line-through'>"+sTmpServiceID+" "+getTran("Service",sTmpServiceID,sWebLanguage)+"</td><td style='text-decoration: line-through'>"+sBed+"</td><td style='text-decoration: line-through'>"+ScreenHelper.stdDateFormat.format(enc.getBegin())+" "+img+"</td>";
+	                    String manager= (!(enc==null) && enc.getManagerUID()!=null && enc.getManagerUID().length()>0? User.getFullUserName(enc.getManagerUID()):"");
+	                    sTmpServiceID = "<td style='text-decoration: line-through'>"+sTmpServiceID+" "+getTran("Service",sTmpServiceID,sWebLanguage)+"</td><td style='text-decoration: line-through'>"+manager+"</td><td style='text-decoration: line-through'>"+sBed+"</td><td style='text-decoration: line-through'>"+ScreenHelper.stdDateFormat.format(enc.getBegin())+" "+img+"</td>";
                     }
                     else{
 	                    if(duration > days || duration < 0){

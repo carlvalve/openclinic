@@ -58,6 +58,7 @@
 		<config key="priceFormat" value="#"/>
 		<config key="priceFormatInsurar" value="#"/>
 		<config key="currencyDecimals" value="0"/>
+		<config key="enableRwanda" value="1"/>
 		<labels type="professional.council.url">
 			<label id="rmdc" language="fr">http://omr.hnrw.org/omr/util/getPersonInfo.jsp</label>
 			<label id="rmdc" language="en">http://omr.hnrw.org/omr/util/getPersonInfo.jsp</label>

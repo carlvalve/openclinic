@@ -1,5 +1,4 @@
 <%@include file="/includes/pdfmodules.jsp"%>
-<%@include file="/includes/validateUser.jsp"%>
 <%@page import="com.adobe.fdf.*,
                 com.adobe.fdf.exceptions.*,
                 java.io.*,
@@ -175,25 +174,7 @@
                              checkString(request.getParameter("modulepar4")),sWebLanguage);
         }
         String sPDFFile="";
-        if (request.getParameter("id")!=null){
-           	Connection ad_conn = MedwanQuery.getInstance().getAdminConnection();
-            PreparedStatement ps = ad_conn.prepareStatement("select * from Documents where id=?");
-            ps.setString(1,request.getParameter("id"));
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()){
-                String sFile = getFullContext(request)+customerInclude("/documents/"+rs.getString("filename").replaceAll("\\\\","/").replaceAll(MedwanQuery.getInstance().getConfigString("DocumentsFolder").replaceAll("\\\\","/"),"").replaceAll("//","/"));
-                Debug.println(sFile);
-                Debug.println("Looking via id for '"+sFile+"'");
-                outFDF.SetFile(sFile);
-                sPDFFile=sFile;
-            }
-
-            if(rs!=null) rs.close();
-            if(ps!=null) ps.close();
-            ad_conn.close();
-        }
-        else if (request.getParameter("file")!=null){
+        if (request.getParameter("file")!=null){
             String sFileName = getFullContext(request)+customerInclude("/documents/"+request.getParameter("file")).replaceAll("//","/");
 
             Debug.println("Looking via filename for '"+sFileName+"'");

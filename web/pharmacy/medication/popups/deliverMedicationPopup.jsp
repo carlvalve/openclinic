@@ -39,7 +39,7 @@
      String sEditProductStockDocumentUidText = "",
             sEditServiceStockUid = "",
             sEditServiceStockName = "";
-     
+Debug.println("1");    
     Prescription prescription = null;
     if(sEditUnitsChanged.length()==0 && sEditPrescriptionUid.length() > 0){
         prescription = Prescription.get(sEditPrescriptionUid);
@@ -88,6 +88,7 @@
 			}
         }
     }
+    Debug.println("2");    
 
     /// DEBUG /////////////////////////////////////////////////////////////////////////////////////
     if(Debug.enabled){
@@ -203,6 +204,7 @@
         	sAction = "showDetailsNew";
         }
     }
+    Debug.println("3");    
 
     //--- DELIVER MEDICATION ----------------------------------------------------------------------
     if(sAction.equals("deliverMedication")){
@@ -260,6 +262,7 @@
 
         sAction = "showDetailsNew";
     }
+    Debug.println("4");    
 
     //--- SHOW DETAILS NEW ------------------------------------------------------------------------
     if(sAction.equals("showDetailsNew")){
@@ -300,38 +303,42 @@
                         <td class="admin"><%=getTran("Web","pharmacy",sWebLanguage)%>&nbsp;*</td>
                         <td class="admin2">
                             <%
+                            Debug.println("5");    
 	                        	int expiredQuantity = 0;
                             	String productStockBatches = "", expiredProductStockBatches = "";
                             	Iterator e = availableProductStocksVector.iterator();
                             	while(e.hasNext()){
                             		ProductStock productStock = (ProductStock)e.next();
-                            		
-                            		ServiceStock serviceStock = (ServiceStock)availableProductStocks.get(productStock);
-									if(serviceStock.getUid().equalsIgnoreCase((String)session.getAttribute("activeServiceStockUid"))||availableProductStocks.size()==1){
-										iMaxStock = productStock.getLevel();
-									}
-									
-                            		Vector batches = Batch.getBatches(productStock.getUid());
-                        			if(productStockBatches.length() > 0){
-                        				productStockBatches+= "£";
-                        			}
-                        			if(expiredProductStockBatches.length() > 0){
-                        				expiredProductStockBatches+= "£";
-                        			}
-                        			
-                            		out.print("<input onclick='totalStock="+(productStock.getLevel()-expiredQuantity)+";setMaxQuantityValue("+(iMaxQuantity<(productStock.getLevel()-expiredQuantity)?iMaxQuantity:(productStock.getLevel()-expiredQuantity))+");showBatches(false);' type='radio' "+(serviceStock.getUid().equalsIgnoreCase((String)session.getAttribute("activeServiceStockUid"))||availableProductStocks.size()==1?"checked":"")+" name='EditProductStockUid' value='"+productStock.getUid()+"'><font "+((productStock.getLevel()-expiredQuantity)<iMaxQuantity?"color='red'>":">")+serviceStock.getName()+" ("+(productStock.getLevel()-expiredQuantity)+")</font><br/>");
-									
-                            		productStockBatches+= productStock.getUid();
-									expiredProductStockBatches+= productStock.getUid();
-                            		for(int n=0; n<batches.size(); n++){
-                            			Batch batch = (Batch)batches.elementAt(n);
-                            			if(!batch.getEnd().before(new java.util.Date()) || MedwanQuery.getInstance().getConfigInt("enableExpiredProductsDistribution",0)>0){
-                            				productStockBatches+= "$"+batch.getUid()+";"+batch.getBatchNumber()+";"+batch.getLevel()+";"+ScreenHelper.stdDateFormat.format(batch.getEnd())+";"+batch.getComment();
-                            			}
-                            			else {
-                            				expiredProductStockBatches+="$"+batch.getUid()+";"+batch.getBatchNumber()+";"+batch.getLevel()+";"+ScreenHelper.stdDateFormat.format(batch.getEnd())+";"+batch.getComment();
-                            				expiredQuantity+= batch.getLevel();
-                            			}
+                            		if(productStock!=null){
+	                            		ServiceStock serviceStock = (ServiceStock)availableProductStocks.get(productStock);
+										if(serviceStock!=null && serviceStock.getUid().equalsIgnoreCase((String)session.getAttribute("activeServiceStockUid"))||availableProductStocks.size()==1){
+											iMaxStock = productStock.getLevel();
+										}
+										
+	                            		Vector batches = Batch.getBatches(productStock.getUid());
+	                        			if(productStockBatches.length() > 0){
+	                        				productStockBatches+= "£";
+	                        			}
+	                        			if(expiredProductStockBatches.length() > 0){
+	                        				expiredProductStockBatches+= "£";
+	                        			}
+	                        			
+	                            		out.print("<input onclick='totalStock="+(productStock.getLevel()-expiredQuantity)+";setMaxQuantityValue("+(iMaxQuantity<(productStock.getLevel()-expiredQuantity)?iMaxQuantity:(productStock.getLevel()-expiredQuantity))+");showBatches(false);' type='radio' "+(serviceStock.getUid().equalsIgnoreCase((String)session.getAttribute("activeServiceStockUid"))||availableProductStocks.size()==1?"checked":"")+" name='EditProductStockUid' value='"+productStock.getUid()+"'><font "+((productStock.getLevel()-expiredQuantity)<iMaxQuantity?"color='red'>":">")+serviceStock.getName()+" ("+(productStock.getLevel()-expiredQuantity)+")</font><br/>");
+										
+	                            		productStockBatches+= productStock.getUid();
+										expiredProductStockBatches+= productStock.getUid();
+	                            		for(int n=0; n<batches.size(); n++){
+	                            			Batch batch = (Batch)batches.elementAt(n);
+	                            			if(batch!=null){
+		                            			if(batch.getEnd()==null || !batch.getEnd().before(new java.util.Date()) || MedwanQuery.getInstance().getConfigInt("enableExpiredProductsDistribution",0)>0){
+		                            				productStockBatches+= "$"+batch.getUid()+";"+batch.getBatchNumber()+";"+batch.getLevel()+";"+(batch.getEnd()==null?"":ScreenHelper.stdDateFormat.format(batch.getEnd()))+";"+batch.getComment();
+		                            			}
+		                            			else {
+		                            				expiredProductStockBatches+="$"+batch.getUid()+";"+batch.getBatchNumber()+";"+batch.getLevel()+";"+(batch.getEnd()==null?"":ScreenHelper.stdDateFormat.format(batch.getEnd()))+";"+batch.getComment();
+		                            				expiredQuantity+= batch.getLevel();
+		                            			}
+	                            			}
+	                            		}
                             		}
                             	}
                             	
@@ -349,6 +356,7 @@
                     </tr>
                     
 					<%
+					Debug.println("6");    
 						if(prescription==null){
 							%>
 			                    <%-- DESCRIPTION --%>
@@ -377,6 +385,7 @@
                     </tr>
                     
 					<%
+					Debug.println("7");    
 						if(prescription==null){
 							%>			                    
 			                    <%-- DOCUMENT --%>
@@ -459,7 +468,8 @@
 	                            <input type="hidden" name="EditPrescriptionUid" id="EditPrescriptionUid" value="<%=sEditPrescriptionUid%>">
 	                        <%
 						}
-					
+						Debug.println("8");    
+
                         // get previous used values to reuse in javascript
                         String sPrevUsedSrcDestUid  = checkString((String)session.getAttribute("PrevUsedDeliverySrcDestUid")),
                                sPrevUsedSrcDestName = checkString((String)session.getAttribute("PrevUsedDeliverySrcDestName"));

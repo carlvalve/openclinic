@@ -5,6 +5,7 @@
 	String sBeginDate = checkString(request.getParameter("FindBeginDate"));
 	String sEndDate = checkString(request.getParameter("FindEndDate"));
 	String sServiceStockId=checkString(request.getParameter("ServiceStockUid"));
+	String provider = checkString(request.getParameter("provider"));
     sProject = checkString((String)session.getAttribute("activeProjectTitle")).toLowerCase();
 	PDFPharmacyReportGenerator pdfGenerator = new PDFPharmacyReportGenerator(activeUser,sProject);
     ByteArrayOutputStream baosPDF = null;
@@ -13,6 +14,7 @@
         parameters.put("serviceStockUID",sServiceStockId);
         parameters.put("begin",sBeginDate);
         parameters.put("end",sEndDate);
+        parameters.put("provider",provider);
     	baosPDF = pdfGenerator.generatePDFDocumentBytes(request,"serviceIncomingStockOperationsPerProvider",parameters);
         StringBuffer sbFilename = new StringBuffer();
         sbFilename.append("filename_").append(System.currentTimeMillis()).append(".pdf");

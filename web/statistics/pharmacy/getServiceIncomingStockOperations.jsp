@@ -37,6 +37,26 @@
 				<%=getTran("web","from",sWebLanguage)%> <%=writeDateField("FindBeginDate","transactionForm",sBegin,sWebLanguage)%>
 				<%=getTran("web","to",sWebLanguage)%> <%=writeDateField("FindEndDate","transactionForm",sEnd,sWebLanguage)%>
 			</td>
+		</tr>
+		<tr>
+			<td class='admin2'>
+				<%=getTran("web","destination",sWebLanguage)%>: 
+				<select name='userid' id='userid' class='text'>
+					<option value=""></option>
+					<%
+						ServiceStock serviceStock = ServiceStock.get(sServiceStockId);
+						if(serviceStock!=null){
+							Vector users = serviceStock.getAuthorizedUsers();
+							for(int n=0; n<users.size();n++){
+								User user = (User)users.elementAt(n);
+					  			out.print("<option value='"+user.userid+"'>"+user.person.getFullName()+"</option>");
+							}
+						}
+					%>
+				</select>
+			</td>
+		</tr>
+		<tr>
 			<td class='admin2'>
 				<input type='button' class="button" name='print' value='<%=getTranNoLink("web","print",sWebLanguage)%>' onclick='printReport();'/>
 			</td>
@@ -46,7 +66,7 @@
 
 <script>
   function printReport(){
-	window.open('<c:url value="pharmacy/printServiceIncomingStockOperations.jsp"/>?FindBeginDate='+document.getElementById('FindBeginDate').value+'&FindEndDate='+document.getElementById('FindEndDate').value+'&ServiceStockUid=<%=sServiceStockId%>');
+	window.open('<c:url value="pharmacy/printServiceIncomingStockOperations.jsp"/>?FindBeginDate='+document.getElementById('FindBeginDate').value+'&FindEndDate='+document.getElementById('FindEndDate').value+'&ServiceStockUid=<%=sServiceStockId%>&userid='+document.getElementById('userid').value);
 	window.close();
   }
 </script>
