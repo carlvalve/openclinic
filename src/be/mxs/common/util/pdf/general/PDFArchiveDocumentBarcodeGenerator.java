@@ -114,7 +114,7 @@ public class PDFArchiveDocumentBarcodeGenerator extends PDFOfficialBasic {
             table.setWidthPercentage(100);
 
             Image image = PdfBarcode.getQRCode(sCode, docWriter, MedwanQuery.getInstance().getConfigInt("archiveDocumentBarcodeSize",200));
-            image.scaleToFit(doc.right()/2, doc.top());
+            image.scaleToFit(doc.right()/MedwanQuery.getInstance().getConfigInt("archiveDocumentBarcodeColumns",2), doc.top());
 
             cell = new PdfPCell(image);
             cell.setBorder(PdfPCell.NO_BORDER);

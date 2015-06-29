@@ -11,8 +11,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Vector;
 
+import org.apache.commons.io.FileUtils;
 import org.dcm4che2.data.DicomObject;
 import org.dcm4che2.data.Tag;
 import org.dcm4che2.data.VR;
@@ -35,13 +38,14 @@ public class ScanDirectoryMonitor implements Runnable{
 	private Thread thread;
 	
 	// config-values
-	public static String SCANDIR_URL, SCANDIR_BASE, SCANDIR_FROM, SCANDIR_TO, SCANDIR_ERR, SCANDIR_DEL;		
+	public static String SCANDIR_URL, SCANDIR_BASE, SCANDIR_FROM, SCANDIR_TO, SCANDIR_ERR, SCANDIR_DEL,SCAN_PREFIX;		
 	public static int FILES_PER_DIRECTORY;
 	public static long MONITORING_INTERVAL;
 	public static String EXCLUDED_EXTENSIONS;
 		
 	private static final String ALPHABET = "abcdefghijklmnopqrstuvwxyz"; 
 	private boolean OK_TO_START;
+	private static Hashtable files = new Hashtable();
 	
 	
 	//--- CONSTRUCTOR -----------------------------------------------------------------------------
@@ -62,6 +66,7 @@ public class ScanDirectoryMonitor implements Runnable{
 		    Debug.println("'scanDirectoryMonitor_interval'                   : "+MONITORING_INTERVAL+" millis");
 		    Debug.println("'scanDirectoryMonitor_notScannableFileExtensions' : "+EXCLUDED_EXTENSIONS);
 		    Debug.println("'scanDirectoryMonitor_url'                        : "+SCANDIR_URL);
+		    Debug.println("'scanDirectoryMonitor_prefix'                     : "+SCAN_PREFIX);
 		}
 		
 		runCounter = 0;
@@ -156,6 +161,7 @@ public class ScanDirectoryMonitor implements Runnable{
 	    SCANDIR_TO   = MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_dirTo","to");
 	    SCANDIR_ERR  = MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_dirError","error");
 	    SCANDIR_DEL  = MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_dirDeleted","deleted");
+	    SCAN_PREFIX  = MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_prefix","SCAN_");
 				
 		FILES_PER_DIRECTORY = MedwanQuery.getInstance().getConfigInt("scanDirectoryMonitor_filesPerDirectory",1024);
 		MONITORING_INTERVAL = MedwanQuery.getInstance().getConfigInt("scanDirectoryMonitor_interval",10*1000);
@@ -179,7 +185,13 @@ public class ScanDirectoryMonitor implements Runnable{
 	//--- RUN SCHEDULER ---------------------------------------------------------------------------
 	public static void runScheduler(){	
         try{        
-        	int acceptedFilesInRun = 0, faultyFilesInRun = 0, deniedFilesInRun = 0;
+        	int acceptedFilesInRun = 0, faultyFilesInRun = 0, deniedFilesInRun = 0, skippedFilesInRun=0;
+        	if(files.size()>5000){
+        		files=new Hashtable();
+        	}
+        	MedwanQuery.getInstance().reloadConfigValues();
+        	Debug.enabled=MedwanQuery.getInstance().getConfigString("Debug","Off").equalsIgnoreCase("on");
+        	Debug.println("File cache size: "+files.size());
         	File scanDir = new File(SCANDIR_BASE+"/"+SCANDIR_FROM);
         	
         	ScannableFileFilter fileFilter = new ScannableFileFilter(EXCLUDED_EXTENSIONS);        	
@@ -187,16 +199,35 @@ public class ScanDirectoryMonitor implements Runnable{
         	if(scannableFiles.length > 0){
 	        	Debug.println(" ScannableFiles in 'scanDirectoryMonitor_dirFrom' : "+scannableFiles.length);
 	        	for(int i=0; i<scannableFiles.length; i++){
-	        		int result = storeFileInDB((File)scannableFiles[i],(i+1));
-	        		
-	        	    if(result > 0){
-	        	    	acceptedFilesInRun++;
-	        	    }
-	        	    else if(result < 0){
-	        	    	faultyFilesInRun++;
-	        	    }
+	        		File file = (File)scannableFiles[i];
+	        		long lastModified=new java.util.Date().getTime();
+	        		if(files.get(file.getName())==null){
+	        			files.put(file.getName(),lastModified);
+	        		}
+	        		else {
+	        			lastModified=(Long)files.get(file.getName());
+	        			if(file.lastModified()>lastModified){
+	        				lastModified=file.lastModified();
+	        			}
+	        		}
+	        		long millis=MedwanQuery.getInstance().getConfigInt("archivingServerDocumentModificationTimeoutInMillis",60*1000);
+	        		if(new java.util.Date().getTime()-lastModified<millis){
+	        			Debug.println("Skipping file "+file.getName()+" because modified less than "+millis+"ms ago");
+	        			skippedFilesInRun++;
+	        		}
+	        		else {
+		        		int result = storeFileInDB(file,(i+1));
+		        		
+		        	    if(result > 0){
+		        	    	acceptedFilesInRun++;
+		        	    }
+		        	    else if(result < 0){
+		        	    	faultyFilesInRun++;
+		        	    }
+	        		}
 	        	}
 
+	        	Debug.println("===> "+skippedFilesInRun+" skipped files");
 	        	Debug.println("===> "+acceptedFilesInRun+" accepted files");
 	        	Debug.println("===> "+faultyFilesInRun+" faulty files");
         	}
@@ -244,7 +275,7 @@ public class ScanDirectoryMonitor implements Runnable{
 				        	                  " --> incoming file '"+file.getName()+"' is a double file.");
 				        	    
 				        	    // must be read by a person before overwriting the existing file
-					        	File errFile = new File(SCANDIR_BASE+"/"+SCANDIR_ERR+"/"+file.getName().replaceAll("SCAN_","DOUBLE_"));
+					        	File errFile = new File(SCANDIR_BASE+"/"+SCANDIR_ERR+"/DOUBLE_"+file.getName().replaceAll(SCAN_PREFIX,""));
 				        	    moveFile(file,errFile);
 						        Debug.println("--> moved file to 'scanDirectoryMonitor_dirError' : "+SCANDIR_BASE+"/"+SCANDIR_ERR);
 						        return -1; // err
@@ -262,7 +293,7 @@ public class ScanDirectoryMonitor implements Runnable{
 			        	    Debug.println("INFO : An archive-document with UDI '"+existingDoc.udi+"' exists and it has no linked file."+
 		        		                  " --> saved incoming file as file for the archive-document");
 			        	    acceptIncomingFile(sUDI,file);
-			        	    return -1; // acc
+			        	    return 1; // acc
 		        		}
 	        		}
 	        		else{
@@ -271,7 +302,7 @@ public class ScanDirectoryMonitor implements Runnable{
 	 		        	              " --> incoming file '"+file.getName()+"' is an orphan. Register an archive-document first.");
 		        	    
 		        	    // an archive-document, to attach the scan to, must be created first
-			        	File errFile = new File(SCANDIR_BASE+"/"+SCANDIR_ERR+"/"+file.getName().replaceAll("SCAN_","ORPHAN_"));
+			        	File errFile = new File(SCANDIR_BASE+"/"+SCANDIR_ERR+"/ORPHAN_"+file.getName().replaceAll(SCAN_PREFIX,""));
 		        	    moveFile(file,errFile);
 				        Debug.println("--> moved file to 'scanDirectoryMonitor_dirError' : "+SCANDIR_BASE+"/"+SCANDIR_ERR);
 				        return -1; // err
@@ -281,7 +312,7 @@ public class ScanDirectoryMonitor implements Runnable{
 	    			//*** UDI NOT VALID ***
 	        	    Debug.println("WARNING : UDI '"+sUDI+"' is not valid (~ 9 first digit MOD 97 = last 2 digits).");
 	        	    
-		        	File errFile = new File(SCANDIR_BASE+"/"+SCANDIR_ERR+"/"+file.getName().replaceAll("SCAN_","INVUDI_"));
+		        	File errFile = new File(SCANDIR_BASE+"/"+SCANDIR_ERR+"/INVUDI_"+file.getName().replaceAll(SCAN_PREFIX,""));
 	        	    moveFile(file,errFile);
 			        Debug.println("--> moved file to 'scanDirectoryMonitor_dirError' : "+SCANDIR_BASE+"/"+SCANDIR_ERR);
 			        return -1; // err
@@ -324,7 +355,7 @@ public class ScanDirectoryMonitor implements Runnable{
 					        	                  " --> incoming file '"+file.getName()+"' is a double file.");
 					        	    
 					        	    // must be read by a person before overwriting the existing file
-						        	File errFile = new File(SCANDIR_BASE+"/"+SCANDIR_ERR+"/"+file.getName().replaceAll("SCAN_","DOUBLE_"));
+						        	File errFile = new File(SCANDIR_BASE+"/"+SCANDIR_ERR+"/DOUBLE_"+file.getName().replaceAll(SCAN_PREFIX,""));
 					        	    moveFile(file,errFile);
 							        Debug.println("--> moved file to 'scanDirectoryMonitor_dirError' : "+SCANDIR_BASE+"/"+SCANDIR_ERR);
 							        return -1; // err
@@ -351,7 +382,7 @@ public class ScanDirectoryMonitor implements Runnable{
          		        	              " --> incoming file '"+file.getName()+"' is an orphan. Register an archive-document first.");
 			        	    
 			        	    // an archive-document, to attach the scan to, must be created first
-				        	File errFile = new File(SCANDIR_BASE+"/"+SCANDIR_ERR+"/"+file.getName().replaceAll("SCAN_","ORPHAN_"));
+				        	File errFile = new File(SCANDIR_BASE+"/"+SCANDIR_ERR+"/ORPHAN_"+file.getName().replaceAll(SCAN_PREFIX,""));
 			        	    moveFile(file,errFile);
 					        Debug.println("--> moved file to 'scanDirectoryMonitor_dirError' : "+SCANDIR_BASE+"/"+SCANDIR_ERR);
 					        return -1; // err
@@ -367,7 +398,7 @@ public class ScanDirectoryMonitor implements Runnable{
         			//*** UDI NOT VALID ***
 	        	    Debug.println("WARNING : UDI '"+sUDI+"' is not valid (~ 9 first digit MOD 97 = last 2 digits).");
 	        	    
-		        	File errFile = new File(SCANDIR_BASE+"/"+SCANDIR_ERR+"/"+file.getName().replaceAll("SCAN_","INVUDI_"));
+		        	File errFile = new File(SCANDIR_BASE+"/"+SCANDIR_ERR+"/INVUDI_"+file.getName().replaceAll(SCAN_PREFIX,""));
 	        	    moveFile(file,errFile);
 			        Debug.println("--> moved file to 'scanDirectoryMonitor_dirError' : "+SCANDIR_BASE+"/"+SCANDIR_ERR);
 			        return -1; // err
@@ -377,7 +408,7 @@ public class ScanDirectoryMonitor implements Runnable{
 	        	//*** INVALID UDI ***
 	        	Debug.println("WARNING : Invalid UDI; length must be 11");
 	        	
-		        File noscanFile = new File(SCANDIR_BASE+"/"+SCANDIR_ERR+"/"+file.getName().replaceAll("SCAN_","INVUDI_"));
+		        File noscanFile = new File(SCANDIR_BASE+"/"+SCANDIR_ERR+"/INVUDI_"+file.getName().replaceAll(SCAN_PREFIX,""));
 		    	moveFile(file,noscanFile);
 			    Debug.println("--> moved file to 'scanDirectoryMonitor_dirError' : "+SCANDIR_BASE+"/"+SCANDIR_ERR);
 			    return -1; // err
@@ -528,7 +559,7 @@ public class ScanDirectoryMonitor implements Runnable{
 	        Debug.println("store PDF="+result);	
     	}
     	if(result<0){
-	        Debug.println("***NOT A PDF FILE**");	
+	        Debug.println("***NOT A PDF FILE WITH VALID BARCODE***");	
     		result=storeGenericDocument(file, forced);
     	}
     	
@@ -711,24 +742,29 @@ public class ScanDirectoryMonitor implements Runnable{
     
     //--- MOVE FILE -------------------------------------------------------------------------------
     public static String moveFile(File srcFile, File dstFile) throws IOException {
-        InputStream in = new FileInputStream(srcFile);
-        OutputStream out = new FileOutputStream(dstFile);
-
-        byte[] buf = new byte[1024];
-        int len;
-        while((len = in.read(buf)) > 0){
-            out.write(buf,0,len);
-        }
-
-        in.close();
-        out.close();
-        
-        // preserve original datetime
-        dstFile.setLastModified(srcFile.lastModified());
-        
-        srcFile.delete();
-        
-        return "moved file '"+srcFile.getName()+"' from '"+srcFile.getAbsolutePath()+"' to '"+dstFile.getAbsolutePath()+"'";
+    	if(srcFile.exists()){
+	        InputStream in = new FileInputStream(srcFile);
+	        OutputStream out = new FileOutputStream(dstFile);
+	
+	        byte[] buf = new byte[1024];
+	        int len;
+	        while((len = in.read(buf)) > 0){
+	            out.write(buf,0,len);
+	        }
+	
+	        in.close();
+	        out.close();
+	        
+	        // preserve original datetime
+	        dstFile.setLastModified(srcFile.lastModified());
+	        
+	        srcFile.delete();
+	        
+	        return "moved file '"+srcFile.getName()+"' from '"+srcFile.getAbsolutePath()+"' to '"+dstFile.getAbsolutePath()+"'";
+    	}
+    	else {
+    		return "tried to move non-existing file '"+srcFile.getAbsolutePath()+"'";
+    	}
     }
     
     //--- REMOVE OLD DELETED FILES ----------------------------------------------------------------
@@ -782,7 +818,7 @@ public class ScanDirectoryMonitor implements Runnable{
         			String sExt = tmpFile.getName().substring(tmpFile.getName().lastIndexOf(".")+1);
         			if(EXCLUDED_EXTENSIONS.indexOf(sExt) > -1){
 		        	    if(tmpFile.lastModified() < (new java.util.Date().getTime()-(60*1000))){ // millis in minute
-		            		movedFile = new File(SCANDIR_BASE+"/"+SCANDIR_ERR+"/"+tmpFile.getName().replaceAll("SCAN_","INVEXT_"));
+		            		movedFile = new File(SCANDIR_BASE+"/"+SCANDIR_ERR+"/"+tmpFile.getName().replaceAll(SCAN_PREFIX,"INVEXT_"));
 		            	    moveFile(tmpFile,movedFile);
 		            	    filesMoved++;
 		        	    }

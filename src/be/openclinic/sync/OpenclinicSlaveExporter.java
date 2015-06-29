@@ -2866,11 +2866,6 @@ public class OpenclinicSlaveExporter implements Runnable{
 			ps.setInt(2, Integer.parseInt(oldid));
 			ps.execute();
 			ps.close();
-			ps = adminconn.prepareStatement("update adminwork set personid=? where personid=?");
-			ps.setInt(1, Integer.parseInt(newid));
-			ps.setInt(2, Integer.parseInt(oldid));
-			ps.execute();
-			ps.close();
 			ps = adminconn.prepareStatement("update alternateid set personid=? where personid=?");
 			ps.setInt(1, Integer.parseInt(newid));
 			ps.setInt(2, Integer.parseInt(oldid));

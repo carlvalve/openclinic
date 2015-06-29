@@ -1037,9 +1037,15 @@ public class PDFPatientInvoiceGeneratorMFP extends PDFInvoiceGenerator {
             table.addCell(cell);
             cell=createValueCell("\n",100);
             table.addCell(cell);
-            cell=createValueCell(getTran("web","printedby")+": "+user.person.lastname.toUpperCase()+", "+user.person.firstname+" "+ScreenHelper.fullDateFormatSS.format(new java.util.Date()),100);
+    		String sPrinted=getTran("web","printedby")+": "+user.person.lastname.toUpperCase()+", "+user.person.firstname+" "+ScreenHelper.fullDateFormatSS.format(new java.util.Date());
+    		if(ScreenHelper.checkString(invoice.getComment()).length()>0){
+    			sPrinted+="\n\n\n"+ScreenHelper.getTran("web.finance","otherreference",sPrintLanguage)+": "+invoice.getComment();
+                table.addCell(cell);
+    		}
+    		cell=createValueCell(sPrinted,50);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
             table.addCell(cell);
+            
             if(invoice.getAcceptationUid()!=null && invoice.getAcceptationUid().length()>0){
             	User validatinguser = User.get(Integer.parseInt(invoice.getAcceptationUid()));
 	            cell=createValueCell(getTran("web","validatedby")+": "+validatinguser.person.lastname.toUpperCase()+", "+validatinguser.person.firstname+" ("+validatinguser.userid+") - "+invoice.getAcceptationDate(),100);
@@ -1336,6 +1342,10 @@ public class PDFPatientInvoiceGeneratorMFP extends PDFInvoiceGenerator {
             table.addCell(cell);
             cell=createValueCell("\n",100);
             table.addCell(cell);
+    		if(ScreenHelper.checkString(invoice.getComment()).length()>0){
+    			cell=createValueCell(ScreenHelper.getTran("web.finance","otherreference",sPrintLanguage)+": "+invoice.getComment(),100);
+                table.addCell(cell);
+    		}
             cell=createValueCell(getTran("web","printedby")+": "+user.person.lastname.toUpperCase()+", "+user.person.firstname+" "+ScreenHelper.fullDateFormatSS.format(new java.util.Date()),100);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
             table.addCell(cell);

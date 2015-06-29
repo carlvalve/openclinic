@@ -200,7 +200,7 @@ public class Product extends OC_Object implements Comparable {
     	double totalprice = 0;
     	double count = 0;
     	
-    	Vector prices = Pointer.getLoosePointers("drugprice."+getUid(),new java.util.Date(new java.util.Date().getTime()-year),new java.util.Date());
+    	Vector prices = Pointer.getLoosePointers("drugprice."+getUid()+".",new java.util.Date(new java.util.Date().getTime()-year),new java.util.Date());
     	for(int n=0; n<prices.size();n++){
     		String[] s = ((String)prices.elementAt(n)).split(";");
     		if(s.length > 1){
@@ -222,7 +222,7 @@ public class Product extends OC_Object implements Comparable {
     	long year = 365*day;
     	double totalprice=0;
     	double count=0;
-    	Vector prices = Pointer.getLoosePointers("drugprice."+getUid(), new java.util.Date(date.getTime()-year), date);
+    	Vector prices = Pointer.getLoosePointers("drugprice."+getUid()+".", new java.util.Date(date.getTime()-year), date);
     	for(int n=0; n<prices.size();n++){
     		String[] s = ((String)prices.elementAt(n)).split(";");
     		if(s.length>1){
@@ -242,7 +242,7 @@ public class Product extends OC_Object implements Comparable {
     	long year = 365*day;
     	double totalprice=0;
     	double count=0;
-    	Vector prices = Pointer.getLoosePointers("drugprice."+getUid(), new java.util.Date(date.getTime()-year), date);
+    	Vector prices = Pointer.getLoosePointers("drugprice."+getUid()+".", new java.util.Date(date.getTime()-year), date);
     	for(int n=0; n<prices.size();n++){
     		String[] s = ((String)prices.elementAt(n)).split(";");
     		if(s.length>1){

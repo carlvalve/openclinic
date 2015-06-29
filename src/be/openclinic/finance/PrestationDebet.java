@@ -440,12 +440,14 @@ public class PrestationDebet extends OC_Object implements Comparable {
         try {
             sSelect = "SELECT * FROM OC_ENCOUNTERS e, OC_PRESTATIONDEBETS d WHERE e.OC_ENCOUNTER_PATIENTUID = ? AND d.OC_DEBET_CREDITED=0"
                     + " AND e.oc_encounter_objectid=" + MedwanQuery.getInstance().convert("int", "replace(d.OC_DEBET_ENCOUNTERUID,'" + serverid + "','')") 
-                    + " AND (d.OC_DEBET_PATIENTINVOICEUID is null OR d.OC_DEBET_PATIENTINVOICEUID = ' ') order by OC_DEBET_DATE DESC";
+                    + " order by OC_DEBET_DATE DESC";
             ps = loc_conn.prepareStatement(sSelect);
             ps.setString(1, sPatientId);
             rs = ps.executeQuery();
             while (rs.next()) {
-                vUnassignedDebets.add(rs.getInt("OC_DEBET_SERVERID") + "." + rs.getInt("OC_DEBET_OBJECTID"));
+            	if(ScreenHelper.checkString(rs.getString("OC_DEBET_PATIENTINVOICEUID")).trim().length()==0){
+            		vUnassignedDebets.add(rs.getInt("OC_DEBET_SERVERID") + "." + rs.getInt("OC_DEBET_OBJECTID"));
+            	}
             }
         }
         catch (Exception e) {
@@ -1423,20 +1425,22 @@ public class PrestationDebet extends OC_Object implements Comparable {
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try {
             String serverid = MedwanQuery.getInstance().getConfigString("serverId") + ".";
-            sSelect = "SELECT SUM(d.OC_DEBET_AMOUNT) as somme,count(OC_DEBET_OBJECTID) as nb,a.lastname,a.firstname FROM  OC_PRESTATIONDEBETS d,OC_ENCOUNTERS b,adminview a WHERE OC_DEBET_AMOUNT >0 AND (OC_DEBET_PATIENTINVOICEUID IS NULL OR OC_DEBET_PATIENTINVOICEUID = '0') AND " +
+            sSelect = "SELECT SUM(d.OC_DEBET_AMOUNT) as somme,count(OC_DEBET_OBJECTID) as nb,a.lastname,a.firstname FROM  OC_PRESTATIONDEBETS d,OC_ENCOUNTERS b,adminview a WHERE OC_DEBET_AMOUNT >0 AND " +
                     MedwanQuery.getInstance().convert("int", "replace(d.OC_DEBET_ENCOUNTERUID,'" + serverid + "','')") + "=b.OC_ENCOUNTER_OBJECTID AND " + MedwanQuery.getInstance().convert("int", "b.OC_ENCOUNTER_PATIENTUID") + "=a.personid GROUP BY a.lastname,a.firstname ORDER BY a.lastname,a.firstname";
             ps = oc_conn.prepareStatement(sSelect);
             rs = ps.executeQuery();
             while (rs.next()) {
-                PrestationDebet debet = new PrestationDebet();
-                debet.setAmount(rs.getDouble("somme"));
-                debet.setComment(rs.getInt("nb") + "");
-                //*********************
-                //add Patient name
-                //*********************
-                debet.setPatientName(ScreenHelper.checkString(rs.getString("lastname")) + " " + ScreenHelper.checkString(rs.getString("firstname")));
-                MedwanQuery.getInstance().getObjectCache().putObject("prestationdebet", debet);
-                vDebets.add(debet);
+            	if(ScreenHelper.checkString(rs.getString("OC_DEBET_PATIENTINVOICEUID")).trim().length()==0){
+	                PrestationDebet debet = new PrestationDebet();
+	                debet.setAmount(rs.getDouble("somme"));
+	                debet.setComment(rs.getInt("nb") + "");
+	                //*********************
+	                //add Patient name
+	                //*********************
+	                debet.setPatientName(ScreenHelper.checkString(rs.getString("lastname")) + " " + ScreenHelper.checkString(rs.getString("firstname")));
+	                MedwanQuery.getInstance().getObjectCache().putObject("prestationdebet", debet);
+	                vDebets.add(debet);
+            	}
             }
         }
         catch (Exception e) {

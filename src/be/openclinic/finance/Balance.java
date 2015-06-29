@@ -471,21 +471,16 @@ public class Balance extends OC_Object implements Comparable{
                         " a.oc_patientcredit_encounteruid='"+MedwanQuery.getInstance().getConfigString("serverId")+".'"+MedwanQuery.getInstance().concatSign()+"b.oc_encounter_objectid and" +
                         " b.oc_encounter_patientuid=?" +
                         " union" +
-                        " select -sum(oc_debet_amount) total from oc_debets a,oc_encounters b" +
+                        " select -sum(oc_debet_amount) total from oc_debets a IGNORE INDEX (OC_DEBET_EXTRAINSURARUID2),oc_encounters b" +
                         " where" +
                         " a.oc_debet_encounteruid='"+MedwanQuery.getInstance().getConfigString("serverId")+".'"+MedwanQuery.getInstance().concatSign()+"b.oc_encounter_objectid and" +
                         " b.oc_encounter_patientuid=? and" +
                         " (a.oc_debet_extrainsuraruid2 is null or a.oc_debet_extrainsuraruid2 ='')" +
                         ") a";
-	            ps = oc_conn.prepareStatement(sSelect);
-	            ps.setInt(1,Integer.parseInt(personid));
-	            ps.setInt(2,Integer.parseInt(personid));
             }
-            else {
-	            ps = oc_conn.prepareStatement(sSelect);
-	            ps.setString(1,personid);
-	            ps.setString(2,personid);
-            }
+            ps = oc_conn.prepareStatement(sSelect);
+            ps.setString(1,personid);
+            ps.setString(2,personid);
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
                 total=rs.getDouble("balance");

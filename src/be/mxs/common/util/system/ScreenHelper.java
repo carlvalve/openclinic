@@ -38,7 +38,6 @@ public class ScreenHelper {
     	reloadDateFormats();
     }
 
-
     //--- GET OBJECT ID ---------------------------------------------------------------------------
     public static String getObjectId(String sUIDorID){ 
     	String sObjectId = "";
@@ -1379,8 +1378,10 @@ public class ScreenHelper {
     		sEncounterUid=encounter.getUid();
     	}
     	
+    	String sPrestationCode = MedwanQuery.getInstance().getConfigString(transaction.getTransactionType()+".requiredPrestation","");
+    	String sPrestationClass = MedwanQuery.getInstance().getConfigString(transaction.getTransactionType()+".requiredPrestationClass","");
+    	int nInvoicable = MedwanQuery.getInstance().getConfigInt(transaction.getTransactionType()+".requiredInvoicable",0);
         if(sEncounterUid.length()>0 && sEncounterUid.split("\\.").length==2 && transaction.getTransactionId()<0 && MedwanQuery.getInstance().getConfigInt("activateOutpatientConsultationPrestationCheck",0)==1){
-        	String sPrestationCode = MedwanQuery.getInstance().getConfigString(transaction.getTransactionType()+".requiredPrestation","");
         	if(checkString(sPrestationCode).length() > 0){
     			Prestation prestation = Prestation.getByCode(sPrestationCode);
     			if(prestation.getUid()!=null && prestation.getUid().split("\\.").length==2){
@@ -1411,7 +1412,6 @@ public class ScreenHelper {
     			}
         	}
         	
-        	int nInvoicable = MedwanQuery.getInstance().getConfigInt(transaction.getTransactionType()+".requiredInvoicable",0);
         	if(nInvoicable==1){
         		//Check if invoicing conditions have been met
         		if(Encounter.getActiveEncounter(sPersonId)==null || Insurance.getMostInterestingInsuranceForPatient(sPersonId)==null){
@@ -1419,7 +1419,6 @@ public class ScreenHelper {
         		}
         	}
         	
-        	String sPrestationClass = MedwanQuery.getInstance().getConfigString(transaction.getTransactionType()+".requiredPrestationClass","");
             if(checkString(sPrestationClass).length() > 0){
         		try{
 	        		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
@@ -1452,6 +1451,41 @@ public class ScreenHelper {
 	                      " var answer = (window.showModalDialog)?window.showModalDialog(popupUrl,\"\",modalities):window.confirm(\""+sMessage+"\");"+
 	                      "</script>";
         	}
+        }
+        else if (transaction.getTransactionId()<0 && MedwanQuery.getInstance().getConfigInt("activateOutpatientConsultationPrestationCheck",0)==1 && sPrestationCode.length()>0){
+			Prestation prestation = Prestation.getByCode(sPrestationCode);
+			if(prestation!=null){
+	        	sMessage = getTranNoLink("web","noactiveprestation",activeUser.person.language)+" `"+prestation.getCode()+": "+prestation.getDescription()+"`";
+	            jsAlert = "<script>"+(screenIsPopup?"window.close();":"window.history.go(-1);")+
+	                    "var popupUrl = '"+sAPPFULLDIR+"/_common/search/okPopup.jsp?ts="+getTs()+"&labelValue="+sMessage;
+	
+				jsAlert+= "';"+
+						" var modalities = 'dialogWidth:266px;dialogHeight:143px;center:yes;scrollbars:no;resizable:no;status:no;location:no;';"+
+						" var answer = (window.showModalDialog)?window.showModalDialog(popupUrl,\"\",modalities):window.confirm(\""+sMessage+"\");"+
+						"</script>";
+			}
+        }
+        else if (transaction.getTransactionId()<0 && MedwanQuery.getInstance().getConfigInt("activateOutpatientConsultationPrestationCheck",0)==1 && sPrestationClass.length()>0){
+			sMessage = getTranNoLink("web","noactiveprestationclass",activeUser.person.language)+" `"+getTran("prestation.class",sPrestationClass,activeUser.person.language)+"`";
+            jsAlert = "<script>"+(screenIsPopup?"window.close();":"window.history.go(-1);")+
+                    "var popupUrl = '"+sAPPFULLDIR+"/_common/search/okPopup.jsp?ts="+getTs()+"&labelValue="+sMessage;
+
+			jsAlert+= "';"+
+					" var modalities = 'dialogWidth:266px;dialogHeight:143px;center:yes;scrollbars:no;resizable:no;status:no;location:no;';"+
+					" var answer = (window.showModalDialog)?window.showModalDialog(popupUrl,\"\",modalities):window.confirm(\""+sMessage+"\");"+
+					"</script>";
+        	
+        }
+        else if (transaction.getTransactionId()<0 && MedwanQuery.getInstance().getConfigInt("activateOutpatientConsultationPrestationCheck",0)==1 && nInvoicable==1){
+			sMessage = getTranNoLink("web","notinvoicable",activeUser.person.language);
+            jsAlert = "<script>"+(screenIsPopup?"window.close();":"window.history.go(-1);")+
+                    "var popupUrl = '"+sAPPFULLDIR+"/_common/search/okPopup.jsp?ts="+getTs()+"&labelValue="+sMessage;
+
+			jsAlert+= "';"+
+					" var modalities = 'dialogWidth:266px;dialogHeight:143px;center:yes;scrollbars:no;resizable:no;status:no;location:no;';"+
+					" var answer = (window.showModalDialog)?window.showModalDialog(popupUrl,\"\",modalities):window.confirm(\""+sMessage+"\");"+
+					"</script>";
+        	
         }
 
         return jsAlert;
@@ -1698,23 +1732,6 @@ public class ScreenHelper {
         }
 
         return sOptions;
-    }
-
-    //--- WRITE ZIPCODE BUTTON --------------------------------------------------------------------
-    public static String writeZipcodeButton(String sButtonName, String sZipcode, String sCity, String sWebLanguage, String sCONTEXTDIR){
-        String sSearch = sZipcode+".value";
-
-        return "<img src='"+sCONTEXTDIR+"/_img/icons/icon_search.gif' id='"+sButtonName+"' class='link' alt='"+getTranNoLink("Web","select",sWebLanguage)+"' "
-              +"onclick='openPopup(\"_common/search/searchZipcode.jsp&VarCode="+sZipcode+"&VarText="+sCity+"&FindText=\"+"+sSearch+");'>"
-              +"&nbsp;<img src='"+sCONTEXTDIR+"/_img/icons/icon_delete.gif' class='link' alt='"+getTranNoLink("Web","clear",sWebLanguage)+"' onclick=\""+sZipcode+".value='';"+sCity+".value='';\">";
-    }
-
-    public static String writeZipcodeButton(String sButtonName, String sZipcode, String sCity, String sWebLanguage, String sDisplayLang, String sCONTEXTDIR){
-        String sSearch = sZipcode+".value";
-
-        return "<img src='"+sCONTEXTDIR+"/_img/icons/icon_search.gif' id='"+sButtonName+"' class='link' alt='"+getTranNoLink("Web","select",sWebLanguage)+"' "
-              +"onclick='openPopup(\"_common/search/searchZipcode.jsp&VarCode="+sZipcode+"&VarText="+sCity+"&FindText=\"+"+sSearch+"+\"&DisplayLang="+sDisplayLang+"\");'>"
-              +"&nbsp;<img src='"+sCONTEXTDIR+"/_img/icons/icon_delete.gif' class='link' alt='"+getTranNoLink("Web","clear",sWebLanguage)+"' onclick=\""+sZipcode+".value='';"+sCity+".value='';\">";
     }
 
     //--- SAVE UNKNOWN LABEL ----------------------------------------------------------------------

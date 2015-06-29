@@ -16,6 +16,9 @@ public class Debug {
     //--- PRINT LN --------------------------------------------------------------------------------
     public static void println(String sText){
         if(enabled){
+        	if(sText==null){
+        		sText="no error message available";
+        	}
             if(sText.startsWith("\n\n")){
                 System.out.println("\n\n["+timeFormat.format(new java.util.Date())+"] : "+sText.substring(2));
             }
@@ -31,6 +34,9 @@ public class Debug {
     //--- PRINT -----------------------------------------------------------------------------------
     public static void print(String sText){
         if(enabled){
+        	if(sText==null){
+        		sText="no error message available";
+        	}
             if(sText.startsWith("\n\n")){
                 System.out.print("\n\n["+timeFormat.format(new java.util.Date())+"] : "+sText.substring(2));
             }

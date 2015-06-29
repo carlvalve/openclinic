@@ -1458,10 +1458,10 @@ public class AdminPerson extends OC_Object{
                                         " WHERE"
                                         + " o2.OC_ENCOUNTER_OBJECTID=o.OC_ENCOUNTER_OBJECTID and"
                                         + " o2.OC_ENCOUNTER_SERVERID=o.OC_ENCOUNTER_SERVERID and"
-                                        + " (o2.OC_ENCOUNTER_ENDDATE IS NULL OR o2.OC_ENCOUNTER_ENDDATE > ?)" +
+                                        + " (o.OC_ENCOUNTER_SERVICEENDDATE IS NULL OR o.OC_ENCOUNTER_SERVICEENDDATE > ?)" +
                                         " AND o2.OC_ENCOUNTER_TYPE = 'admission'" +
                                         " AND o.OC_ENCOUNTER_MANAGERUID = ?" +
-                                        " AND o2.OC_ENCOUNTER_PATIENTUID = " + MedwanQuery.getInstance().convert("varchar(255)","personid");
+                                        " AND o2.OC_ENCOUNTER_PATIENTUID = personid";
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
             ps = oc_conn.prepareStatement(sSelect.trim());
@@ -1535,10 +1535,10 @@ public class AdminPerson extends OC_Object{
                         " WHERE"
                         + " o2.OC_ENCOUNTER_OBJECTID=o.OC_ENCOUNTER_OBJECTID and"
                         + " o2.OC_ENCOUNTER_SERVERID=o.OC_ENCOUNTER_SERVERID and"
-                        + " (o2.OC_ENCOUNTER_ENDDATE IS NULL OR o2.OC_ENCOUNTER_ENDDATE > ?)" +
+                        + " (o.OC_ENCOUNTER_SERVICEENDDATE IS NULL OR o.OC_ENCOUNTER_SERVICEENDDATE > ?)" +
                         " AND o2.OC_ENCOUNTER_TYPE = 'visit'" +
                         " AND o.OC_ENCOUNTER_MANAGERUID = ?" +
-                        " AND o2.OC_ENCOUNTER_PATIENTUID = " + MedwanQuery.getInstance().convert("varchar(255)","personid");
+                        " AND o2.OC_ENCOUNTER_PATIENTUID = personid";
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
             ps = oc_conn.prepareStatement(sSelect.trim());
@@ -1597,10 +1597,12 @@ public class AdminPerson extends OC_Object{
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try {
             String sQuery="select OC_ENCOUNTER_PATIENTUID " +
-                    " from OC_ENCOUNTERS_VIEW a where " +
-                    " OC_ENCOUNTER_SERVICEUID=? and" +
-                    " (OC_ENCOUNTER_ENDDATE IS NULL or OC_ENCOUNTER_ENDDATE>=?) and" +
-                    " OC_ENCOUNTER_BEGINDATE<=?";
+                    " from OC_ENCOUNTERS o, OC_ENCOUNTER_SERVICES p where " +
+					" o.OC_ENCOUNTER_SERVERID=p.OC_ENCOUNTER_SERVERID and " +
+					" o.OC_ENCOUNTER_OBJECTID=p.OC_ENCOUNTER_OBJECTID and " +
+                    " p.OC_ENCOUNTER_SERVICEUID=? and" +
+                    " (OC_ENCOUNTER_SERVICEENDDATE IS NULL or OC_ENCOUNTER_SERVICEENDDATE>=?) and" +
+                    " OC_ENCOUNTER_SERVICEBEGINDATE<=?";
             ps=oc_conn.prepareStatement(sQuery);
             ps.setString(1,serviceid);
             ps.setDate(2,new java.sql.Date(new java.util.Date().getTime()));
@@ -1631,10 +1633,12 @@ public class AdminPerson extends OC_Object{
         List lResults = new ArrayList();
 
         String sSQLSelect = " SELECT distinct searchname,OC_ENCOUNTER_PATIENTUID,a.personid, immatnew, natreg, lastname, firstname, gender, dateofbirth, pension";
-        String sSQLFrom   = " FROM AdminView a, OC_ENCOUNTERS_VIEW o ";
-        String sSQLWhere  = " (OC_ENCOUNTER_ENDDATE IS NULL OR OC_ENCOUNTER_ENDDATE >= ?) AND" +
-                            " (OC_ENCOUNTER_TYPE = 'admission' OR OC_ENCOUNTER_TYPE = 'visit') AND" +
-                            " OC_ENCOUNTER_PATIENTUID = " + MedwanQuery.getInstance().convert("varchar(255)","a.personid") + " AND";
+        String sSQLFrom   = " FROM AdminView a, OC_ENCOUNTERS o, OC_ENCOUNTER_SERVICES p";
+        String sSQLWhere  = " (OC_ENCOUNTER_SERVICEENDDATE IS NULL OR OC_ENCOUNTER_SERVICEENDDATE >= ?) AND "
+							+ " o.OC_ENCOUNTER_SERVERID=p.OC_ENCOUNTER_SERVERID and " 
+							+ " o.OC_ENCOUNTER_OBJECTID=p.OC_ENCOUNTER_OBJECTID and " +
+                            " OC_ENCOUNTER_TYPE IN ('admission','visit') AND" +
+                            " OC_ENCOUNTER_PATIENTUID = a.personid AND";
 
         if (simmatnew.trim().length()>0) {
             sSQLWhere += " immatnew = '"+simmatnew+"' AND";
@@ -1689,8 +1693,8 @@ public class AdminPerson extends OC_Object{
             }
         }
         if(sDistrict.trim().length()>0){
-            sSQLFrom+=",PrivateView p ";
-            sSQLWhere+=" a.personid=p.personid AND p.district = '"+sDistrict+"' AND";
+            sSQLFrom+=",PrivateView v ";
+            sSQLWhere+=" a.personid=v.personid AND v.district = '"+sDistrict+"' AND";
         }
         try{
             if (sSQLWhere.trim().length()>0) {

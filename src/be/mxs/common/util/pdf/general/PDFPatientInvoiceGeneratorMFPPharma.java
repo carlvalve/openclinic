@@ -652,7 +652,12 @@ public class PDFPatientInvoiceGeneratorMFPPharma extends PDFInvoiceGenerator {
             table.addCell(cell);
             cell=createValueCell("\n",100);
             table.addCell(cell);
-            cell=createValueCell(getTran("web","printedby")+": "+user.person.lastname.toUpperCase()+", "+user.person.firstname+" "+ScreenHelper.fullDateFormatSS.format(new java.util.Date()),50);
+    		String sPrinted=getTran("web","printedby")+": "+user.person.lastname.toUpperCase()+", "+user.person.firstname+" "+ScreenHelper.fullDateFormatSS.format(new java.util.Date());
+    		if(ScreenHelper.checkString(invoice.getComment()).length()>0){
+    			sPrinted+="\n\n\n"+ScreenHelper.getTran("web.finance","otherreference",sPrintLanguage)+": "+invoice.getComment();
+                table.addCell(cell);
+    		}
+    		cell=createValueCell(sPrinted,50);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
             table.addCell(cell);
             cell=createValueCell(getTran("web","mfp.drugsdelivery.identification"),50);

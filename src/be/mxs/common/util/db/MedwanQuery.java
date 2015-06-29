@@ -845,26 +845,6 @@ public class MedwanQuery {
         }
     }
     
-    public boolean userHasMessages(int userid){
-        boolean result = false;
-        Connection AdmindbConnection;
-        try{
-            AdmindbConnection = getAdminConnection();
-            PreparedStatement ps = AdmindbConnection.prepareStatement("select * from UserMessages where userid=?");
-            ps.setInt(1, userid);
-            ResultSet rs = ps.executeQuery();
-            result = rs.next();
-            rs.close();
-            ps.close();
-            AdmindbConnection.close();
-
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
-        return result;
-    }
-    
     //--- GET SUB SERVICES ------------------------------------------------------------------------
     public void getSubServices(String serviceid, Vector services){
         services.add(serviceid);

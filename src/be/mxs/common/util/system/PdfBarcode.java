@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 
@@ -59,34 +61,44 @@ public class PdfBarcode {
 	public static String getBarcodeFromDocument(File file){
 		String barcode="";
 		try{
+			System.setProperty("org.apache.pdfbox.baseParser.pushBackSize", "10000000");
 			PDDocument document = PDDocument.loadNonSeq(file, null);
 			java.util.List<PDPage> pdPages = document.getDocumentCatalog().getAllPages();
 			int mypage = 0;
 			for (PDPage pdPage : pdPages)
 			{ 
 			    ++mypage;
-			    System.out.println("Analyzing page "+mypage);
-			    BufferedImage bim = pdPage.convertToImage(BufferedImage.TYPE_INT_RGB, 300);
+		    	boolean bExit=false;
+			    Debug.println("Analyzing page "+mypage);
+			    BufferedImage bim = pdPage.convertToImage(BufferedImage.TYPE_BYTE_GRAY, 300);
+			    File f = new File("c:/temp/scan/IMG_"+mypage+".png");
+			    if(f.exists()){
+			    	f.delete();
+			    }
+			    ImageIO.write(bim, "PNG", f);
 			    barcode=decode(bim,null);
 			    if(barcode.length()>0){
-			    	System.out.println("Found barcode value "+barcode+" on page "+mypage);
+			    	Debug.println("Found barcode value "+barcode+" on page "+mypage);
 					break;		    	
 			    }
 			    else {
 				    for(int n=0;n<bim.getHeight()*9/10;n+=bim.getHeight()/10){
 					    BufferedImage cropedImage = bim.getSubimage(0, n, bim.getWidth(), bim.getHeight()/10);
 					    barcode=decode(cropedImage,null);
-					    if(barcode.length()>0){
-					    	System.out.println("Found barcode value "+barcode+" on page "+mypage);
+					    if(barcode.length()==11){
+					    	Debug.println("Found barcode value "+barcode+" on page "+mypage);
+					    	bExit=true;
 							break;		    	
 					    }
 				    }
+				    if(bExit) break;
 			    }
+			    if(bExit) break;
 			}
 			document.close();
 		}
 		catch(Exception e){
-			//e.printStackTrace();
+			Debug.println(e.getMessage());
 		}
 		return barcode;
 	}

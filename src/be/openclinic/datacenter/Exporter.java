@@ -44,11 +44,12 @@ public abstract class Exporter {
 		}
 		PreparedStatement ps,ps2;
 		try {
-			ps = oc_conn.prepareStatement("select * from OC_EXPORTS where OC_EXPORT_ID=? and OC_EXPORT_CREATEDATETIME>=?");
+			ps = oc_conn.prepareStatement("select max(OC_EXPORT_CREATEDATETIME) as maxdate from OC_EXPORTS where OC_EXPORT_ID=?");
 			ps.setString(1, sExportId);
-			ps.setTimestamp(2, new java.sql.Timestamp(getDeadline().getTime()));
 			ResultSet rs = ps.executeQuery();
-			if(!rs.next()){
+			rs.next();
+			java.util.Date maxdate = rs.getTimestamp("maxdate");
+			if(maxdate == null || maxdate.before(getDeadline())){
 				rs.close();
 				ps.close();
 				ps = conn.prepareStatement(sQuery);
@@ -84,11 +85,12 @@ public abstract class Exporter {
 		Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
 		PreparedStatement ps;
 		try {
-			ps = oc_conn.prepareStatement("select * from OC_EXPORTS where OC_EXPORT_ID=? and OC_EXPORT_CREATEDATETIME>=?");
+			ps = oc_conn.prepareStatement("select max(OC_EXPORT_CREATEDATETIME) as maxdate from OC_EXPORTS where OC_EXPORT_ID=?");
 			ps.setString(1, sExportId);
-			ps.setTimestamp(2, new java.sql.Timestamp(getDeadline().getTime()));
 			ResultSet rs = ps.executeQuery();
-			mustExport=!rs.next();
+			rs.next();
+			java.util.Date maxdate = rs.getTimestamp("maxdate");
+			mustExport= (maxdate == null || maxdate.before(getDeadline()));
 			rs.close();
 			ps.close();
 		} catch (SQLException e) {
@@ -109,11 +111,12 @@ public abstract class Exporter {
 		Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
 		PreparedStatement ps;
 		try {
-			ps = oc_conn.prepareStatement("select * from OC_EXPORTS where OC_EXPORT_ID=? and OC_EXPORT_CREATEDATETIME>=?");
+			ps = oc_conn.prepareStatement("select max(OC_EXPORT_CREATEDATETIME) as maxdate from OC_EXPORTS where OC_EXPORT_ID=?");
 			ps.setString(1, sExportId);
-			ps.setTimestamp(2, new java.sql.Timestamp(getDeadline().getTime()));
 			ResultSet rs = ps.executeQuery();
-			if(!rs.next()){
+			rs.next();
+			java.util.Date maxdate = rs.getTimestamp("maxdate");
+			if(maxdate == null || maxdate.before(getDeadline())){
 				rs.close();
 				ps.close();
 				String sQuery="INSERT INTO OC_EXPORTS(OC_EXPORT_OBJECTID,OC_EXPORT_ID,OC_EXPORT_CREATEDATETIME,OC_EXPORT_DATA) VALUES(?,?,?,?)";

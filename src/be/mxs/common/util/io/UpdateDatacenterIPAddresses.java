@@ -24,20 +24,25 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-import net.admin.User;
-
-import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.system.Debug;
-import be.mxs.common.util.system.HTMLEntities;
-import be.mxs.common.util.system.Mail;
-import be.mxs.common.util.system.Pointer;
-import be.mxs.common.util.system.ScreenHelper;
 
 public class UpdateDatacenterIPAddresses {
 
 	/**
 	 * @param args
 	 */
+	
+    public static String checkString(String sString){
+        // om geen 'null' weer te geven
+        if((sString==null)||(sString.toLowerCase().equals("null"))){
+            return "";
+        }
+        else{
+            sString = sString.trim();
+        }
+        return sString;
+    }
+
 	public static void main(String[] args) {
 		//Find date of last export
 		try {
@@ -108,7 +113,7 @@ public class UpdateDatacenterIPAddresses {
     			PostMethod method = new PostMethod(url);
     			method.setRequestHeader("Content-type","text/xml; charset=windows-1252");
     			Vector<NameValuePair> vNvp = new Vector<NameValuePair>();
-            	String address=ScreenHelper.checkString(rs.getString("dc_monitorserver_city"))+","+ScreenHelper.checkString(rs.getString("dc_monitorserver_country"));
+            	String address=checkString(rs.getString("dc_monitorserver_city"))+","+checkString(rs.getString("dc_monitorserver_country"));
             	System.out.println("trying address "+address);
     			vNvp.add(new NameValuePair("address",address));
             	vNvp.add(new NameValuePair("sensor","false"));
@@ -142,7 +147,7 @@ public class UpdateDatacenterIPAddresses {
     	    			method = new PostMethod(url);
     	    			method.setRequestHeader("Content-type","text/xml; charset=windows-1252");
     	    			vNvp = new Vector<NameValuePair>();
-    	            	address=ScreenHelper.checkString(rs.getString("dc_monitorserver_country"));
+    	            	address=checkString(rs.getString("dc_monitorserver_country"));
     	            	System.out.println("trying address "+address);
     	    			vNvp.add(new NameValuePair("address",address));
     	            	vNvp.add(new NameValuePair("sensor","false"));

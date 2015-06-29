@@ -137,7 +137,6 @@ public class BatchOperation {
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
             String sSelect = "delete from OC_BATCHOPERATIONS where OC_BATCHOPERATION_PRODUCTSTOCKOPERATIONUID=?";
-            System.out.println("productStockOperationUid="+productStockOperationUid);
             ps = oc_conn.prepareStatement(sSelect);
             ps.setString(1,productStockOperationUid);
             ps.execute();

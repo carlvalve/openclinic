@@ -5,6 +5,7 @@ import be.mxs.common.util.system.ScreenHelper;
 import be.openclinic.common.OC_Object;
 import net.admin.AdminPerson;
 import net.admin.Service;
+import net.admin.User;
 
 import java.sql.*;
 import java.util.*;
@@ -110,7 +111,7 @@ public class ServiceStock extends OC_Object{
     
     //--- AUTHORISED USERS ------------------------------------------------------------------------
     public Vector getAuthorizedUsers(){
-        AdminPerson user;
+        User user;
         if(authorizedUserIds!=null && authorizedUserIds.length() > 0){
             StringTokenizer idTokenizer = new StringTokenizer(authorizedUserIds,"$");
             String authorizedUserId;
@@ -118,7 +119,7 @@ public class ServiceStock extends OC_Object{
             while(idTokenizer.hasMoreTokens()){
                 authorizedUserId = idTokenizer.nextToken();
             	Connection ad_conn = MedwanQuery.getInstance().getAdminConnection();
-                user = AdminPerson.getAdminPerson(ad_conn,authorizedUserId);
+                user = User.get(Integer.parseInt(authorizedUserId));
                
                 try{
 					ad_conn.close();
@@ -137,10 +138,10 @@ public class ServiceStock extends OC_Object{
     public void setAuthorizedUsers(Vector authorizedUsers){
         this.authorizedUsers = authorizedUsers;
     }
-    public void addAuthorizedUser(AdminPerson user){
+    public void addAuthorizedUser(User user){
         this.authorizedUsers.addElement(user);
     }
-    public void removeAuthorizedUser(AdminPerson user){
+    public void removeAuthorizedUser(User user){
         this.authorizedUsers.removeElement(user);
     }
     public void setAuthorizedUserIds(String ids){
@@ -347,11 +348,11 @@ public class ServiceStock extends OC_Object{
                 else                                       ps.setNull(7,Types.VARCHAR);
 
                 // authorized users
-                AdminPerson user;
+                User user;
                 StringBuffer authorizedUserIds = new StringBuffer();
                 for(int i=0; i<this.getAuthorizedUsers().size(); i++){
-                    user = (AdminPerson)this.getAuthorizedUsers().elementAt(i);
-                    authorizedUserIds.append(user.getActivePerson().personid+"$");
+                    user = (User)this.getAuthorizedUsers().elementAt(i);
+                    authorizedUserIds.append(user.userid+"$");
                 }
                 
                 if(authorizedUserIds.length() > 0) ps.setString(8,authorizedUserIds.toString());
@@ -399,11 +400,11 @@ public class ServiceStock extends OC_Object{
                 else                                       ps.setNull(5,Types.VARCHAR);
 
                 // authorized users
-                AdminPerson user;
+                User user;
                 StringBuffer authorizedUserIds = new StringBuffer();
                 for(int i=0; i<this.getAuthorizedUsers().size(); i++){
-                    user = (AdminPerson)this.getAuthorizedUsers().elementAt(i);
-                    authorizedUserIds.append(user.getActivePerson().personid+"$");
+                    user = (User)this.getAuthorizedUsers().elementAt(i);
+                    authorizedUserIds.append(user.userid+"$");
                 }                
                 if(authorizedUserIds.length() > 0) ps.setString(6,authorizedUserIds.toString());
                 else                               ps.setNull(6,Types.VARCHAR);
@@ -528,11 +529,11 @@ public class ServiceStock extends OC_Object{
             else                                       ps.setNull(questionmarkIdx++,Types.VARCHAR);
 
             // authorized users
-            AdminPerson user;
+            User user;
             StringBuffer authorizedUserIds = new StringBuffer();
             for(int i=0; i<this.getAuthorizedUsers().size(); i++){
-                user = (AdminPerson)this.getAuthorizedUsers().elementAt(i);
-                authorizedUserIds.append(user.getActivePerson().personid+"$");
+                user = (User)this.getAuthorizedUsers().elementAt(i);
+                authorizedUserIds.append(user.userid+"$");
             }
             
             if(authorizedUserIds.length() > 0) ps.setString(questionmarkIdx++,authorizedUserIds.toString());
