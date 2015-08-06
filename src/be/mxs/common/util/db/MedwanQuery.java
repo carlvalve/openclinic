@@ -3637,6 +3637,9 @@ public class MedwanQuery {
             rs = ps.executeQuery();
             if(rs.next()){
                 newCounter = rs.getInt("OC_COUNTER_VALUE");
+                if(newCounter==0){
+                	newCounter=1;
+                }
                 rs.close();
                 ps.close();
             } 

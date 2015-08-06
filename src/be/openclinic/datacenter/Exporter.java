@@ -134,6 +134,7 @@ public abstract class Exporter {
 			}
 			ps.close();
 		} catch (SQLException e) {
+			System.out.println("sValue="+sValue);
 			e.printStackTrace();
 		}
 		finally {
