@@ -241,13 +241,13 @@ public class ExtraInsurarInvoice2 extends Invoice {
                     ps.close();
                 }
                 else{
-                    ids = new String[] {MedwanQuery.getInstance().getConfigString("serverId"),MedwanQuery.getInstance().getOpenclinicCounter("OC_INVOICES")+""};
+                    ids = new String[] {MedwanQuery.getInstance().getConfigString("serverId"),MedwanQuery.getInstance().getOpenclinicCounter(MedwanQuery.getInstance().getConfigString("ExtraInsuranceInvoiceCounter","OC_INVOICES"))+""};
                     this.setUid(ids[0]+"."+ids[1]);
                     this.setInvoiceUid(ids[1]);
                 }
             }
             else{
-                ids = new String[] {MedwanQuery.getInstance().getConfigString("serverId"),MedwanQuery.getInstance().getOpenclinicCounter("OC_INVOICES")+""};
+                ids = new String[] {MedwanQuery.getInstance().getConfigString("serverId"),MedwanQuery.getInstance().getOpenclinicCounter(MedwanQuery.getInstance().getConfigString("ExtraInsuranceInvoiceCounter","OC_INVOICES"))+""};
                 this.setUid(ids[0]+"."+ids[1]);
                 this.setInvoiceUid(ids[1]);
             }

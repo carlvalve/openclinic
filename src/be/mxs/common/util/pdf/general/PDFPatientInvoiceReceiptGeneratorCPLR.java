@@ -144,7 +144,7 @@ public class PDFPatientInvoiceReceiptGeneratorCPLR extends PDFInvoiceGenerator {
 			if(receiptid>=MedwanQuery.getInstance().getConfigInt("maximumNumberOfReceipts",10000)){
 				MedwanQuery.getInstance().setOpenclinicCounter("RECEIPT",0);
 			}
-	        cell = createBorderlessCell(receiptid+" - "+ScreenHelper.getTran("web","receiptforinvoice",sPrintLanguage).toUpperCase()+" "+invoice.getInvoiceNumber(),10, 50,new Double(8*scaleFactor).intValue());
+	        cell = createBorderlessCell(receiptid+" - "+ScreenHelper.getTran("web","receiptforinvoice",sPrintLanguage)+" "+invoice.getInvoiceNumber(),10, 50,new Double(8*scaleFactor).intValue());
 	        cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
 	        cell.setPadding(2);
 	        table.addCell(cell);

@@ -6,11 +6,13 @@ import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.system.ScreenHelper;
 import be.openclinic.medical.LabRequest;
 import net.admin.User;
+
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
 import java.io.ByteArrayOutputStream;
 import java.util.Vector;
 import java.util.Hashtable;
@@ -108,7 +110,7 @@ public class PDFLabSampleLabelGenerator extends PDFOfficialBasic {
         try {
             PdfContentByte cb = docWriter.getDirectContent();
             Barcode39 barcode39 = new Barcode39();
-            barcode39.setCode("2"+ ScreenHelper.padLeft(serverid+"","0",2)+ScreenHelper.padLeft(""+transactionid,"0",8));
+            barcode39.setCode("2"+ transactionid);
             Image image = barcode39.createImageWithBarcode(cb, null, null);
             image.scaleToFit(MedwanQuery.getInstance().getConfigInt("labLabelScaleWidth",120),MedwanQuery.getInstance().getConfigInt("labLabelScaleHeight",40));
             table = new PdfPTable(3);
@@ -159,8 +161,8 @@ public class PDFLabSampleLabelGenerator extends PDFOfficialBasic {
             table.addCell(cell);
 
             PdfContentByte cb = docWriter.getDirectContent();
-            Barcode39 barcode39 = new Barcode39();
-            barcode39.setCode("2"+ ScreenHelper.padLeft(serverid+"","0",2)+ScreenHelper.padLeft(""+transactionid,"0",8));
+            BarcodeInter25 barcode39 = new BarcodeInter25();
+            barcode39.setCode("2"+transactionid);
             Image image = barcode39.createImageWithBarcode(cb, null, null);
             image.scaleToFit(MedwanQuery.getInstance().getConfigInt("labLabelScaleWidth",120),MedwanQuery.getInstance().getConfigInt("labLabelScaleHeight",40));
             cell=new PdfPCell(image);
