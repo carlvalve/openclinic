@@ -18,7 +18,7 @@
             String sChecked = "";
             if(bChecked){
                 sChecked = " checked";
-                if(!((MedwanQuery.getInstance().getConfigInt("authorizeCancellationOfOpenInvoices",1)==1 && !patientInvoice.getStatus().equalsIgnoreCase("closed"))||(activeUser.getParameter("sa")!=null && activeUser.getParameter("sa").length() > 0)||activeUser.getAccessRight("financial.cancelclosedinvoice.select"))){
+                if(patientInvoice!=null && !((MedwanQuery.getInstance().getConfigInt("authorizeCancellationOfOpenInvoices",1)==1 && !patientInvoice.getStatus().equalsIgnoreCase("closed"))||(activeUser.getParameter("sa")!=null && activeUser.getParameter("sa").length() > 0)||activeUser.getAccessRight("financial.cancelclosedinvoice.select"))){
                 	sChecked+=" disabled='true'";
                 }
             }
@@ -28,7 +28,6 @@
 
                 if(sDebetUID!=null && sDebetUID.length()>0){
                     debet = Debet.get(sDebetUID);
-
                     if(debet!=null){
                     	if(begin!=null && debet.getDate()!=null && debet.getDate().before(begin)){
                     		continue;
@@ -169,6 +168,7 @@
     </tr>
     
 <%
+try{
 	boolean isInsuranceAgent = false;
 	if(activeUser!=null && activeUser.getParameter("insuranceagent")!=null && activeUser.getParameter("insuranceagent").length()>0 && MedwanQuery.getInstance().getConfigString("InsuranceAgentAcceptationNeededFor","").indexOf("*"+activeUser.getParameter("insuranceagent")+"*")>-1){
 		// This is an insurance agent, limit the functionalities
@@ -191,5 +191,9 @@
         out.print(addDebets(vUnassignedDebets,sClass,sWebLanguage,false,begin,end,activeUser,patientInvoice));
         out.print("<tr><td colspan='10'>"+vUnassignedDebets.size()+" "+getTranNoLink("web","records.loaded",sWebLanguage)+"</td></tr>");
     }
+}
+catch(Exception e){
+	e.printStackTrace();
+}
 %>
 </table>

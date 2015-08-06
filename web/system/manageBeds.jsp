@@ -430,8 +430,8 @@
     EditBedForm.EditComment.value = "";
     EditBedForm.EditUID.value = "";
     
-    EditBedForm.EditBedService.value = "<%=sFindBedService%>";
-    EditBedForm.EditBedServiceName.value = "<%=sFindBedServiceName%>";
+    if (EditBedForm.EditBedService.value.length==0) EditBedForm.EditBedService.value = "<%=sFindBedService%>";
+    if (EditBedForm.EditBedServiceName.value.length==0) EditBedForm.EditBedServiceName.value = "<%=sFindBedServiceName%>";
     
     EditBedForm.submit();
   }

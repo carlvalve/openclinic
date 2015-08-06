@@ -247,16 +247,13 @@
 	             		}
 	             	
 		              	if(MedwanQuery.getInstance().getConfigInt("enableMFP",0)==1){
-		                    %><option value="mfp" <%=defaultmodel.equalsIgnoreCase("mfp")?"selected":""%>><%=getTranNoLink("web","mfpmodel",sWebLanguage)%></option><%
+		                    %>
+		                    	<option value="mfp" <%=defaultmodel.equalsIgnoreCase("mfp")?"selected":""%>><%=getTranNoLink("web","mfpmodel",sWebLanguage)%></option>
+	                            <option value="mfpcsv" <%=defaultmodel.equalsIgnoreCase("mfpcsv")?"selected":""%>><%=getTranNoLink("web","mfpcsvmodel",sWebLanguage)%></option>
+		                    <%
 		           		}
 		              	
-		              	if(MedwanQuery.getInstance().getConfigInt("enableBurundi",0)==1){
-		                    %>
-	                            <option value="mfp" <%=defaultmodel.equalsIgnoreCase("mfp")?"selected":""%>><%=getTranNoLink("web","mfpmodel",sWebLanguage)%></option>
-	                            <option value="mfpcsv" <%=defaultmodel.equalsIgnoreCase("mfpcsv")?"selected":""%>><%=getTranNoLink("web","mfpcsvmodel",sWebLanguage)%></option>
-                        	<%
-                   				}
-		                    	if(MedwanQuery.getInstance().getConfigInt("enableBurundi",0)==1){
+                    	if(MedwanQuery.getInstance().getConfigInt("enableBurundi",0)==1){
 		                    %>
 	                            <option value="hmk" <%=defaultmodel.equalsIgnoreCase("hmk")?"selected":""%>><%=getTranNoLink("web","hmkmodel",sWebLanguage)%></option>
 	                            <option value="ascoma" <%=defaultmodel.equalsIgnoreCase("ascoma")?"selected":""%>><%=getTranNoLink("web","ascomamodel",sWebLanguage)%></option>
@@ -266,8 +263,8 @@
 	                            <option value="msplscsv" <%=defaultmodel.equalsIgnoreCase("msplscsv")?"selected":""%>><%=getTranNoLink("web","msplscsvmodel",sWebLanguage)%></option>
 	                            <option value="cmck" <%=defaultmodel.equalsIgnoreCase("cmck")?"selected":""%>><%=getTranNoLink("web","cmckmodel",sWebLanguage)%></option>
                         	<%
-                   				}
-                        	%>
+           				}
+                       	%>
                         </select>
                             <%
                                 if(insurarInvoice.getStatus().equalsIgnoreCase("closed")){

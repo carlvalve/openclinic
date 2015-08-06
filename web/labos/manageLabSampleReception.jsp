@@ -7,6 +7,7 @@
 <%
     String labrequestid = checkString(request.getParameter("labrequestid"));
     int serverid = 0, transactionid = 0;
+    boolean bFind=false;
     
     Enumeration parameters = request.getParameterNames();
     if(parameters!=null){
@@ -18,6 +19,11 @@
                 transactionid = Integer.parseInt(fields[2]);
                 LabRequest.setSampleReceived(serverid,transactionid,fields[3]);
                 labrequestid = "";
+            }
+            else if(fields[0].equalsIgnoreCase("receive") && fields.length == 3){
+                transactionid = Integer.parseInt(fields[2]);
+                labrequestid = transactionid+"";
+                bFind=true;
             }
         }
     }
@@ -40,7 +46,7 @@
     <table class="list" cellspacing="0" cellpadding="0">
 <%
     boolean bInitialized = false;
-    if(request.getParameter("find")!=null){
+    if(request.getParameter("find")!=null || bFind){
         if(labrequestid.length() > 0 || transactionid>0){
             try{
                 if(labrequestid.length() > 0){

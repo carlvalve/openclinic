@@ -232,6 +232,9 @@
                 } else if (bUpdate) {
                     labAnalysis.update();
                 }
+                String sEditInvoicingInterval=checkString(request.getParameter("EditInvoicingMinimumInterval"));
+            	MedwanQuery.getInstance().setConfigString("labinvoicing.minimumintervalinhours."+labAnalysis.getLabId(), sEditInvoicingInterval);
+				
             }
             //--- SAVE LABEL ----------------------------------------------------------------------
             // check if label exists for each of the supported languages
@@ -679,6 +682,12 @@
         	}
         %>
         <input class="greytext" readonly disabled type="text" name="EditPrestationName" id="EditPrestationName" value="<%=sEditPrestationName%>" size="50"/>
+    </td>
+  </tr>
+  <tr>
+    <td class="admin"><%=getTran("Web.manage","labanalysis.automaticinvoicing.minimumintervalinhours",sWebLanguage)%></td>
+    <td class="admin2">
+      <input type="text" name="EditInvoicingMinimumInterval" class="text" value="<%=MedwanQuery.getInstance().getConfigString("labinvoicing.minimumintervalinhours."+sLabID,"")%>" size="5" onKeyUp="if(this.value.length>0 && !isNumber(this)){alertDialog('web','notnumeric');this.value='';}">
     </td>
   </tr>
   <%
