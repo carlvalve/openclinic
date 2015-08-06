@@ -99,7 +99,8 @@
     //*********************************************************************************************
 
     //--- SAVE (receive) --------------------------------------------------------------------------
-    if(sAction.equals("save") && sEditOperationUid.length()>0){
+    if(sAction.equals("save") && sEditReferenceOperationUid.length()>0){
+    	
         //*** store 4 of the used values in session for later re-use ***
         String sPrevUsedOperationDescr = checkString((String)session.getAttribute("PrevUsedReceiptOperationDescr"));
         if(!sPrevUsedOperationDescr.equals(sEditOperationDescr)){
@@ -691,10 +692,8 @@
 
   <%-- DO RECEIVE --%>
   function doReceive(){
-    transactionForm.EditOperationUid.value = "-1";
     doSave();
   }
-
   <%-- DO SAVE --%>
   function doSave(){
     if(checkStockFields()){
@@ -782,7 +781,7 @@
         }
     %>
   }
-  
+
   <%-- popup : search document --%>
   function searchDocument(documentUidField,documentUidTextField){
 	<%
@@ -807,8 +806,8 @@
       if(sEditReferenceOperationUid.length()>0){
    	      // Show batch information
    	      String sBatchInfo = "<input type='radio' checked/>"+(sEditBatchNumber!=null?sEditBatchNumber:"?")+" ("+sEditUnitsChanged+" - exp. "+sEditBatchEnd+")";
-   	      sBatchInfo+= "<input type='hidden' name='EditBatchUid' value=\""+sEditBatchUid+"\"/>";
-   	      out.print("document.getElementById('batch').innerHTML='"+sBatchInfo+"';");
+   	      sBatchInfo+= "<input type='hidden' name='EditBatchUid' value='"+sEditBatchUid+"'/>";
+   	      out.print("document.getElementById('batch').innerHTML=\""+sBatchInfo+"\";");
       }
   %>
 </script>

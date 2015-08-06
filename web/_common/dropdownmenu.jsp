@@ -447,8 +447,10 @@
       alert("Barcode = "+barcode);
     }
     else if(barcode.substring(0,1)=="2"){
-      if(document.getElementsByName('sampleReceiver')[0]!=undefined){
-        document.getElementsByName('sampleReceiver')[0].innerHTML = "<input type='hidden' name='receive."+barcode.substring(1,3)+"."+barcode.substring(3, 11)+"."+(barcode.length > 11 ? barcode.substring(11) : "?")+"' value='1'/>";
+      if(document.getElementById('sampleReceiver')!=undefined){
+    	var code="'receive.<%=MedwanQuery.getInstance().getConfigString("serverId")%>."+barcode.substring(1,barcode.length-1)+"'";
+    	//alert(code);
+        document.getElementById('sampleReceiver').innerHTML = "<input type='hidden' name="+code+" value='1'/>";
         frmSampleReception.submit();
       }
     }
@@ -688,6 +690,9 @@
   }
   function showAdminPopup(){
     openPopup("/_common/patient/patientdataPopup.jsp&ts=<%=getTs()%>");
+  }
+  function showQueues(){
+	  openPopup("/util/manageQueues.jsp&ts=<%=getTs()%>&PopupWidth=800&PopupHeight=600");
   }
   function searchLab(){
     window.location.href = "<c:url value="/"/>main.do?Page=labos/showLabRequestList.jsp&ts=<%=getTs()%>";

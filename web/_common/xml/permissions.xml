@@ -142,6 +142,7 @@
         <permission type="web" id="manageEncounters">adt.encounter</permission>
         <permission type="web" id="encounterHistory">adt.encounterHistory</permission>
         <permission type="web" id="urgencybedoverview">adt.urgencybedoverview</permission>
+        <permission type="web" id="queues">adt.queues</permission>
     </application>
     <application type="Web" id="nursing">
         <permission type="web" id="nursing">nursing</permission>
@@ -158,6 +159,7 @@
         <permission type="web" id="medicationschema">medication.medicationschema</permission>
     </application>
     <application type="Web" id="financial">
+        <permission type="web" id="occup.transferinvoiceinsurer">occup.transferinvoiceinsurer</permission>
         <permission type="web" id="occup.signinvoices">occup.signinvoices</permission>
         <permission type="balance" id="financial">financial</permission>
         <permission type="balance" id="manageBalances">financial.balance</permission>

@@ -229,9 +229,14 @@
 		             	    if(MedwanQuery.getInstance().getConfigInt("enableRwanda",1)==1){
 		             	        %><option value="ramacsv" <%=defaultmodel.equalsIgnoreCase("ramacsv")?"selected":""%>><%=getTranNoLink("web","ramacsvmodel",sWebLanguage)%></option><%
 		             	    }
+	                 	    if(MedwanQuery.getInstance().getConfigInt("enableMFP",0)==1){
 		             	%>
-	                    <option value="mfp" <%=defaultmodel.equalsIgnoreCase("mfp")?"selected":""%>><%=getTranNoLink("web","mfpmodel",sWebLanguage)%></option>
-	                    <option value="hmk" <%=defaultmodel.equalsIgnoreCase("hmk")?"selected":""%>><%=getTranNoLink("web","hmkmodel",sWebLanguage)%></option>
+			                    <option value="mfp" <%=defaultmodel.equalsIgnoreCase("mfp")?"selected":""%>><%=getTranNoLink("web","mfpmodel",sWebLanguage)%></option>
+			            <%	}
+	               	        if(MedwanQuery.getInstance().getConfigInt("enableBurundi",0)==1){
+	                 	%>
+			                    <option value="hmk" <%=defaultmodel.equalsIgnoreCase("hmk")?"selected":""%>><%=getTranNoLink("web","hmkmodel",sWebLanguage)%></option>
+			            <%	} %>
 	                </select>
                     <%
                         if(insurarInvoice.getStatus().equalsIgnoreCase("closed")){

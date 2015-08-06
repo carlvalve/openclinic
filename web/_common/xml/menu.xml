@@ -24,6 +24,7 @@
     <Menu labelid="curative" accessrights="curative.select" patientselected="true" url="/main.do?Page=curative/index.jsp"/>
     <Menu labelid="nursing" accessrights="nursing.select" patientselected="true" url="/main.do?Page=pharmacy/manageAdministrations.jsp"/>
     <Menu labelid="applications">
+		<Menu labelid="queues" accessrights="adt.queues.select" url="javascript:showQueues()"/>
 		<Menu labelid="planning" accessrights="planning.select" url="/main.do?Page=planning/findPlanning.jsp"/>
         <Menu labelid="anesthesie" accessrights="medical.anesthesie.select">
             <Menu labelid="controlanesthesie" accessrights="medical.anesthesieedit.select" url="/main.do?Page=medical/controlAnesthesieEdit.jsp"/>
@@ -83,6 +84,7 @@
 		    <Menu labelid="uploaddocuments" accessrights="occup.uploaddocuments.select" url="javascript:uploadDocs();"/>
        	</Menu>
         <Menu labelid="adt" accessrights="adt.encounter.select">
+			<Menu labelid="queues" accessrights="adt.queues.select"  patientselected="true" url="/main.do?Page=adt/managePatientQueues.jsp"/>
             <Menu labelid="newEncounter" accessrights="adt.encounter" patientselected="true" url="javascript:newEncounter();"/>
             <Menu labelid="historyEncounters" accessrights="adt.encounterhistory" patientselected="true" url="/main.do?Page=adt/historyEncounter.jsp"/>
         </Menu>

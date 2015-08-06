@@ -33,6 +33,32 @@
 	    </indexes>
     </table>
     
+    <table name="OC_QUEUES" db="openclinic" sync="NONE">
+    	<columns>
+	    	<column name="OC_QUEUE_OBJECTID" dbtype="int" javatype="integer"/>
+	    	<column name="OC_QUEUE_ID" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="OC_QUEUE_SUBJECTTYPE" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="OC_QUEUE_SUBJECTUID" dbtype="varchar" javatype="string" size="50"/>
+		    <column name="OC_QUEUE_BEGIN" dbtype="datetime" javatype="date"/>
+		    <column name="OC_QUEUE_BEGINUID" dbtype="varchar" javatype="string" size="50"/>
+		    <column name="OC_QUEUE_END" dbtype="datetime" javatype="date"/>
+		    <column name="OC_QUEUE_ENDUID" dbtype="varchar" javatype="string" size="50"/>
+		    <column name="OC_QUEUE_ENDREASON" dbtype="varchar" javatype="string" size="50"/>
+		    <column name="OC_QUEUE_TRANSFERTO" dbtype="int" javatype="integer"/>
+    	</columns>
+	    <indexes>
+	    	<index name="OC_QUEUE_OBJECTID">
+	    		<indexcolumn order="ASC" name="OC_QUEUE_OBJECTID"/>
+	    	</index>
+	    	<index name="OC_QUEUE_BEGIN">
+	    		<indexcolumn order="ASC" name="OC_QUEUE_BEGIN"/>
+	    	</index>
+	    	<index name="OC_QUEUE_SUBJECTUID">
+	    		<indexcolumn order="ASC" name="OC_QUEUE_SUBJECTUID"/>
+	    	</index>
+	    </indexes>
+    </table>
+    
     <table name="AC_JOURNAL" db="ocadmin" sync="NONE">
     	<columns>
 	    	<column name="AC_JOURNAL_ID" dbtype="int" javatype="integer"/>
@@ -3713,6 +3739,16 @@
             <column name="OC_WICKET_UPDATETIME" dbtype="datetime" javatype="date"/>
 			<column name="OC_WICKET_UPDATEUID" dbtype="int" javatype="integer"/>
 			<column name="OC_WICKET_VERSION" dbtype="int" javatype="integer"/>
+		</columns>
+	</table>
+	<table name="resultprofiles" db="openclinic" sync="NONE">
+		<columns>
+			<column name="profileID" dbtype="int" javatype="integer"/>
+			<column name="profilecode" dbtype="varchar" javatype="string" size="255"/>
+			<column name="comment" dbtype="varchar" javatype="string" size="255"/>
+			<column name="updateuserid" dbtype="int" javatype="integer"/>
+            <column name="updatetime" dbtype="datetime" javatype="date"/>
+            <column name="deletetime" dbtype="datetime" javatype="date"/>
 		</columns>
 	</table>
 	<table name="resultprofilesanalysis" db="openclinic" sync="NONE">

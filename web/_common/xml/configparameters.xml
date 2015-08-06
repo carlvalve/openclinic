@@ -614,7 +614,7 @@
 		    <description language="en">[0]=zero when no other value, [#]=nothing unless a value is specified;
 		    price format when reporting a hospitals' finances</description>
 		</parameter>
-		<parameter name="enableFinancialStatusPrestations" default="0" type="radio" options="0;1">
+		<parameter name="enableFinancialStatusPrestations" default="1" type="radio" options="0;1">
 		    <description language="en">When activated show "deliveries in last 24 hours"</description>
 		</parameter>
 	</parametergroup>

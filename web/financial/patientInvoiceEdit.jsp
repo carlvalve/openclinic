@@ -586,8 +586,13 @@
 	                        <%
 	                        }
 	                        if(!isInsuranceAgent && activeUser.getAccessRight("occup.signinvoices.select")){
-		                        %>
+		                    %>
                                	<input class="button" type="button" name="buttonSignature" value='<%=getTranNoLink("Web.finance","signature",sWebLanguage)%>' onclick="doSign('<%=patientInvoice.getUid()%>');">
+	                       	<%
+	                        }
+	                        if(checkString(patientInvoice.getStatus()).equalsIgnoreCase("open") && activeUser.getAccessRight("occup.transferinvoiceinsurer.select")){
+		                    %>
+                               	<input class="button" type="button" name="buttonTransferInsurer" value='<%=getTranNoLink("Web.finance","transfer.insurer",sWebLanguage)%>' onclick="doTransfer('<%=patientInvoice.getUid()%>');">
 	                        <%
 	                        }
 	                        %>
@@ -969,9 +974,13 @@
 	  }
 	  
 	  function doPayment(invoiceUid){
-	    openPopup("/financial/patientCreditEdit.jsp&ts=<%=getTs()%>&EditCreditInvoiceUid="+invoiceUid+"&ScreenType=doPayment&EditBalance="+document.getElementById('EditBalanceDetailed').value);
-	  }
-	
+		    openPopup("/financial/patientCreditEdit.jsp&ts=<%=getTs()%>&EditCreditInvoiceUid="+invoiceUid+"&ScreenType=doPayment&EditBalance="+document.getElementById('EditBalanceDetailed').value);
+		  }
+		
+	  function doTransfer(invoiceUid){
+		    openPopup("/financial/transferInvoiceToInsurer.jsp&ts=<%=getTs()%>&PopupWidth=500&PopupHeight=200&patientinvoiceuid="+invoiceUid+"&openerfunction=setPatientInvoice('"+invoiceUid+"')");
+		  }
+		
 	  function doInvoiceCancel(invoiceUid){
           if(yesnoDeleteDialog()){
 	      if(document.getElementById('invoiceStatus').selectedIndex){
