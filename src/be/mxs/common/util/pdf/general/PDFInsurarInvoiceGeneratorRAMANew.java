@@ -53,12 +53,12 @@ public class PDFInsurarInvoiceGeneratorRAMANew extends PDFInvoiceGenerator {
 			doc.addCreationDate();
 			doc.addCreator("OpenClinic Software");
 			doc.setPageSize(PageSize.A4.rotate());
-            addFooter(sInvoiceUid.replaceAll("1\\.",""));
+            // get specified invoice
+            InsurarInvoice invoice = InsurarInvoice.get(sInvoiceUid);
+            addFooter(invoice.getInvoiceNumber());
 
             doc.open();
 
-            // get specified invoice
-            InsurarInvoice invoice = InsurarInvoice.get(sInvoiceUid);
 
             addHeading(invoice);
             addInsurarData(invoice);
@@ -378,7 +378,7 @@ public class PDFInsurarInvoiceGeneratorRAMANew extends PDFInvoiceGenerator {
                 	if(invoiceid.length()>0){
                 		invoiceid+="\n";
                 	}
-                	invoiceid+=debet.getPatientInvoiceUid().split("\\.")[1];
+                	invoiceid+=ScreenHelper.checkString(PatientInvoice.getPatientInvoiceNumber(debet.getPatientInvoiceUid()));
                 	if(insurarreference.equalsIgnoreCase("")){
 	                	PatientInvoice patientInvoice = PatientInvoice.get(debet.getPatientInvoiceUid());
 	                	if(patientInvoice!=null){

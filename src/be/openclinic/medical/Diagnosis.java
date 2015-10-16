@@ -671,10 +671,10 @@ public class Diagnosis extends OC_Object{
         
         String sSelect = "";
         if(codeType.equals("ICPC-2")){
-            sSelect = "SELECT "+label+" from ICPC2View WHERE code = ?";
+            sSelect = "SELECT "+label+" from ICPC2 WHERE code = ?";
         }
         else if(codeType.equals("ICD-10")){
-            sSelect = "SELECT "+label+" from ICD10View WHERE code = ?";
+            sSelect = "SELECT "+label+" from ICD10 WHERE code = ?";
         }
         
         if(sSelect.length() > 0){

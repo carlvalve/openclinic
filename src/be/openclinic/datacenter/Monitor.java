@@ -68,7 +68,7 @@ public class Monitor implements Runnable{
     			//Now check if we already registered a globalHealthBarometerUID
     			String uid=MedwanQuery.getInstance().getConfigString("globalHealthBarometerUID","");
     			if(uid.length()==0){
-    				uid=Math.random()*1000*Math.random()*1000*Math.random()*1000*Math.random()*1000+"";
+    				uid=java.util.UUID.randomUUID().toString();
     				MedwanQuery.getInstance().setConfigString("globalHealthBarometerUID", uid);
     				uid=MedwanQuery.getInstance().getConfigString("globalHealthBarometerUID","");
     			}

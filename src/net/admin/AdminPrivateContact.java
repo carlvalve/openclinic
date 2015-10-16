@@ -286,7 +286,7 @@ public class AdminPrivateContact{
              .append(" mobile,email,comment,updatetime,type,")
              .append(" district, sanitarydistrict, province, sector, cell, quarter, businessfunction, business")
              .append(" FROM AdminPrivate")
-             .append(" WHERE personid = ? AND stop IS NULL AND type = 'Official'");
+             .append(" WHERE personid = ? AND stop IS NULL");
         String value;
     	Connection ad_conn = MedwanQuery.getInstance().getAdminConnection();
         try{

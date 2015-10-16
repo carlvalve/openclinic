@@ -53,12 +53,11 @@ public class PDFExtraInsurarInvoiceGeneratorRAMANew2 extends PDFInvoiceGenerator
 			doc.addCreationDate();
 			doc.addCreator("OpenClinic Software");
 			doc.setPageSize(PageSize.A4.rotate());
-            addFooter(sInvoiceUid.replaceAll("1\\.",""));
-
-            doc.open();
-
             // get specified invoice
             ExtraInsurarInvoice2 invoice = ExtraInsurarInvoice2.get(sInvoiceUid);
+            addFooter(invoice.getInvoiceNumber());
+
+            doc.open();
 
             addHeading(invoice);
             addInsurarData(invoice);

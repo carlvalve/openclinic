@@ -950,6 +950,46 @@ public class ScreenHelper {
         sTest = sTest.replaceAll("à","a");
         sTest = sTest.replaceAll("â","a");
 
+        sTest = sTest.replaceAll("É","E");
+        sTest = sTest.replaceAll("È","E");
+        sTest = sTest.replaceAll("Ë","E");
+        sTest = sTest.replaceAll("Ê","E");
+        sTest = sTest.replaceAll("Ï","I");
+        sTest = sTest.replaceAll("Ö","O");
+        sTest = sTest.replaceAll("Ô","O");
+        sTest = sTest.replaceAll("Ä","A");
+        sTest = sTest.replaceAll("Á","A");
+        sTest = sTest.replaceAll("À","A");
+        sTest = sTest.replaceAll("Â","A");
+
+        return sTest;
+    }
+
+public static String removeAccents(String sTest){
+        sTest = sTest.replaceAll("é","e");
+        sTest = sTest.replaceAll("è","e");
+        sTest = sTest.replaceAll("ë","e");
+        sTest = sTest.replaceAll("ê","e");
+        sTest = sTest.replaceAll("ï","i");
+        sTest = sTest.replaceAll("ö","o");
+        sTest = sTest.replaceAll("ô","o");
+        sTest = sTest.replaceAll("ä","a");
+        sTest = sTest.replaceAll("á","a");
+        sTest = sTest.replaceAll("à","a");
+        sTest = sTest.replaceAll("â","a");
+
+        sTest = sTest.replaceAll("É","E");
+        sTest = sTest.replaceAll("È","E");
+        sTest = sTest.replaceAll("Ë","E");
+        sTest = sTest.replaceAll("Ê","E");
+        sTest = sTest.replaceAll("Ï","I");
+        sTest = sTest.replaceAll("Ö","O");
+        sTest = sTest.replaceAll("Ô","O");
+        sTest = sTest.replaceAll("Ä","A");
+        sTest = sTest.replaceAll("Á","A");
+        sTest = sTest.replaceAll("À","A");
+        sTest = sTest.replaceAll("Â","A");
+
         return sTest;
     }
 

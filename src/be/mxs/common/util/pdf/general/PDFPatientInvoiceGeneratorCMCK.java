@@ -282,7 +282,7 @@ public class PDFPatientInvoiceGeneratorCMCK extends PDFInvoiceGenerator {
             cell=createValueCell(getTran("web","cmck.ident.1.1"),15,8,Font.BOLD);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
             table2.addCell(cell);
-            cell=createValueCell(getTran("web","invoicenumber")+": "+invoice.getUid(),10,8,Font.BOLD);
+            cell=createValueCell(getTran("web","invoicenumber")+": "+invoice.getInvoiceNumber(),10,8,Font.BOLD);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
             table2.addCell(cell);
             cell = createEmptyCell(5);

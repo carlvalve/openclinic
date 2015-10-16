@@ -1431,7 +1431,7 @@ public class PDFInsurarInvoiceGeneratorBRARUDI extends PDFInvoiceGenerator {
         	table.addCell(cell);
             cell=createLabelCell(getTran("web","invoicenumber"),15);
         	table.addCell(cell);
-            cell=createBoldLabelCell(invoice.getUid()+"."+personid,25);
+            cell=createBoldLabelCell(invoice.getInvoiceNumber()+"."+personid,25);
         	table.addCell(cell);
             cell=createLabelCell(getTran("web","client"),15);
         	table.addCell(cell);

@@ -128,7 +128,7 @@ public class WHONetUtils {
 		else {
 			String smtpurl=MedwanQuery.getInstance().getConfigString("WHONetDestinationSmtpServer","");
 			try{
-				Mail.sendMail(MedwanQuery.getInstance().getConfigString("DefaultMailServerAddress"), MedwanQuery.getInstance().getConfigString("DefaultFromMailAddress"), smtpurl, "OpenClinicWHONet."+new SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date())+".csv", file.toString());
+				Mail.sendMail(MedwanQuery.getInstance().getConfigString("DefaultMailServerAddress"), MedwanQuery.getInstance().getConfigString("DefaultFromMailAddress"), smtpurl, "OpenClinicWHONet."+new SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date())+".csv", file.toString(),null,null);
 				message=ScreenHelper.getTran("web","file.sent.to",sWebLanguage)+" "+smtpurl;
 			}
 			catch(Exception e){

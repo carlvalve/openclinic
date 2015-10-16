@@ -533,7 +533,7 @@ public class ProductStockOperation extends OC_Object{
 
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
-            if(this.getUid().equals("-1")){
+            if(this.getUid()==null || this.getUid().length()==0 || this.getUid().equals("-1")){
             	isnew=true;
                 //***** INSERT *****
                 Debug.println("@@@ PRODUCTSTOCK-OPERATION insert @@@");
@@ -878,7 +878,13 @@ public class ProductStockOperation extends OC_Object{
 
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
-            String sSelect = "DELETE FROM OC_PRODUCTSTOCKOPERATIONS"+
+        	//First remove related batchoperations
+        	String sSelect = "DELETE FROM OC_BATCHOPERATIONS where OC_BATCHOPERATION_PRODUCTSTOCKOPERATIONUID=?";
+            ps = oc_conn.prepareStatement(sSelect);
+            ps.setString(1, operationUid);
+            ps.execute();
+            ps.close();
+            sSelect = "DELETE FROM OC_PRODUCTSTOCKOPERATIONS"+
                              " WHERE OC_OPERATION_SERVERID = ? AND OC_OPERATION_OBJECTID = ?";
             ps = oc_conn.prepareStatement(sSelect);
             ps.setInt(1,Integer.parseInt(operationUid.substring(0,operationUid.indexOf("."))));

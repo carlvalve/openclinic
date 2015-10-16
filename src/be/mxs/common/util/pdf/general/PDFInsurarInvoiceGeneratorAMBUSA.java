@@ -57,12 +57,12 @@ public class PDFInsurarInvoiceGeneratorAMBUSA extends PDFInvoiceGenerator {
 			doc.addCreationDate();
 			doc.addCreator("OpenClinic Software");
 			doc.setPageSize(PageSize.A4);
-            addFooter(sInvoiceUid.replaceAll("1\\.",""));
+            // get specified invoice
+            InsurarInvoice invoice = InsurarInvoice.get(sInvoiceUid);
+            addFooter(invoice.getInvoiceNumber());
 
             doc.open();
 
-            // get specified invoice
-            InsurarInvoice invoice = InsurarInvoice.get(sInvoiceUid);
             boolean hasAdmissions=false,hasVisits=false;
             debets = InsurarInvoice.getDebetsForInvoiceSortByDate(invoice.getUid());
             for(int n=0;n<debets.size();n++){
@@ -1389,7 +1389,7 @@ public class PDFInsurarInvoiceGeneratorAMBUSA extends PDFInvoiceGenerator {
             
             cell=createLabelCell(getTran("web","invoicenumber")+":", 15);
             table.addCell(cell);
-            cell=createBoldLabelCell(invoice.getUid(), 20);
+            cell=createBoldLabelCell(invoice.getInvoiceNumber(), 20);
             table.addCell(cell);
             cell=createLabelCell(getTran("web","period")+":", 10);
             table.addCell(cell);
@@ -1636,7 +1636,7 @@ public class PDFInsurarInvoiceGeneratorAMBUSA extends PDFInvoiceGenerator {
             
             cell=createLabelCell(getTran("web","invoicenumber")+":", 15);
             table.addCell(cell);
-            cell=createBoldLabelCell(invoice.getUid(), 20);
+            cell=createBoldLabelCell(invoice.getInvoiceNumber(), 20);
             table.addCell(cell);
             cell=createLabelCell(getTran("web","period")+":", 10);
             table.addCell(cell);
@@ -1833,7 +1833,7 @@ public class PDFInsurarInvoiceGeneratorAMBUSA extends PDFInvoiceGenerator {
             
             cell=createLabelCell(getTran("web","invoicenumber")+":", 15);
             table.addCell(cell);
-            cell=createBoldLabelCell(invoice.getUid(), 20);
+            cell=createBoldLabelCell(invoice.getInvoiceNumber(), 20);
             table.addCell(cell);
             cell=createLabelCell(getTran("web","period")+":", 10);
             table.addCell(cell);

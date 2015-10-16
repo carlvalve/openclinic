@@ -204,7 +204,7 @@ public class IntrusionDetector {
         if(blockTime > 0) sMailMessage+= " for "+blockTime+" minutes.\n";
         else              sMailMessage+= " permanently.\n";
 
-        Mail.sendMail(sMailServer,sMailFrom,sMailTo,sMailSubject,sMailMessage);
+        Mail.sendMail(sMailServer,sMailFrom,sMailTo,sMailSubject,sMailMessage,null,null);
     }
 
     //--- ADD INTRUSION ---------------------------------------------------------------------------

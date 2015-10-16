@@ -115,7 +115,7 @@ public class ExporterEncounter extends Exporter {
 					while(iterator.hasNext()){
 						String key = (String)iterator.next();
 						String service = key+";"+ScreenHelper.getTran("service",key,"FR");
-						sb.append("<service serviceid='"+HTMLEntities.htmlentities(service.replaceAll("'", "").replaceAll("&", "+"))+"' date='"+new SimpleDateFormat("yyyyMMddHHmmss").format(date)+"' totalbeds='"+admissionServices.get(key)+"' occupiedbeds='"+(occupiedServices.get(key)==null?0:occupiedServices.get(key))+"'/>");
+						sb.append("<service serviceid='"+ScreenHelper.normalizeSpecialCharacters(service.replaceAll("'", "").replaceAll("&", "+"))+"' date='"+new SimpleDateFormat("yyyyMMddHHmmss").format(date)+"' totalbeds='"+admissionServices.get(key)+"' occupiedbeds='"+(occupiedServices.get(key)==null?0:occupiedServices.get(key))+"'/>");
 					}
 					sb.append("</services>");
 					exportSingleValue(sb.toString(), "encounter.1");

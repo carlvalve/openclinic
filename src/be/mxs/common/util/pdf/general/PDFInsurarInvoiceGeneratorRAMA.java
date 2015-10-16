@@ -52,12 +52,12 @@ public class PDFInsurarInvoiceGeneratorRAMA extends PDFInvoiceGenerator {
 			doc.addCreationDate();
 			doc.addCreator("OpenClinic Software");
 			doc.setPageSize(PageSize.A4.rotate());
-            addFooter(sInvoiceUid.replaceAll("1\\.",""));
+            // get specified invoice
+            InsurarInvoice invoice = InsurarInvoice.get(sInvoiceUid);
+            addFooter(invoice.getInvoiceNumber());
 
             doc.open();
 
-            // get specified invoice
-            InsurarInvoice invoice = InsurarInvoice.get(sInvoiceUid);
 
             addHeading(invoice);
             addInsurarData(invoice);

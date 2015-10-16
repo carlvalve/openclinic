@@ -4,14 +4,19 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.*;
+
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.text.DecimalFormat;
+
 import javax.servlet.http.HttpServletRequest;
 
 import be.mxs.common.util.pdf.PDFBasic;
 import be.mxs.common.util.system.ScreenHelper;
 import be.mxs.common.util.db.MedwanQuery;
+import be.openclinic.finance.ExtraInsurarInvoice;
+import be.openclinic.finance.ExtraInsurarInvoice2;
+import be.openclinic.finance.InsurarInvoice;
 import be.openclinic.finance.Invoice;
 import be.openclinic.finance.PatientInvoice;
 
@@ -62,6 +67,59 @@ public abstract class PDFInvoiceGenerator extends PDFBasic {
         PDFFooter footer = new PDFFooter(sFooter+(sFooter.trim().length()>0?" - ":"")+s);
         docWriter.setPageEvent(footer);
     }
+
+    protected PdfPTable getInsurarInvoiceId(InsurarInvoice invoice){
+        PdfPTable table = new PdfPTable(14);
+        table.setWidthPercentage(pageWidth);
+
+        // number
+        String sInvoiceNr = invoice.getInvoiceNumber();
+        table.addCell(createLabelCell((invoice.getStatus().equalsIgnoreCase("closed")?getTran("web","invoiceNumber"):getTran("web","proforma"))+":   ",2));
+        table.addCell(createValueCell(sInvoiceNr,5,7,Font.BOLD));
+
+        // date
+        String sInvoiceDate = ScreenHelper.stdDateFormat.format(invoice.getDate());
+        table.addCell(createLabelCell(getTran("web","date")+":   ",2));
+        table.addCell(createValueCell(sInvoiceDate,5,7,Font.BOLD));
+
+        return table;
+    }
+
+
+    protected PdfPTable getExtraInsurarInvoiceId(ExtraInsurarInvoice invoice){
+        PdfPTable table = new PdfPTable(14);
+        table.setWidthPercentage(pageWidth);
+
+        // number
+        String sInvoiceNr = invoice.getInvoiceNumber();
+        table.addCell(createLabelCell((invoice.getStatus().equalsIgnoreCase("closed")?getTran("web","invoiceNumber"):getTran("web","proforma"))+":   ",2));
+        table.addCell(createValueCell(sInvoiceNr,5,7,Font.BOLD));
+
+        // date
+        String sInvoiceDate = ScreenHelper.stdDateFormat.format(invoice.getDate());
+        table.addCell(createLabelCell(getTran("web","date")+":   ",2));
+        table.addCell(createValueCell(sInvoiceDate,5,7,Font.BOLD));
+
+        return table;
+    }
+
+    protected PdfPTable getExtraInsurarInvoiceId2(ExtraInsurarInvoice2 invoice){
+        PdfPTable table = new PdfPTable(14);
+        table.setWidthPercentage(pageWidth);
+
+        // number
+        String sInvoiceNr = invoice.getInvoiceNumber();
+        table.addCell(createLabelCell((invoice.getStatus().equalsIgnoreCase("closed")?getTran("web","invoiceNumber"):getTran("web","proforma"))+":   ",2));
+        table.addCell(createValueCell(sInvoiceNr,5,7,Font.BOLD));
+
+        // date
+        String sInvoiceDate = ScreenHelper.stdDateFormat.format(invoice.getDate());
+        table.addCell(createLabelCell(getTran("web","date")+":   ",2));
+        table.addCell(createValueCell(sInvoiceDate,5,7,Font.BOLD));
+
+        return table;
+    }
+
 
     //--- GET INVOICE ID --------------------------------------------------------------------------
     protected PdfPTable getInvoiceId(Invoice invoice){

@@ -30,6 +30,7 @@ public class ExportAMO {
 			StringBuffer exportfile = new StringBuffer();
 			// This will load the MySQL driver, each DB has its own driver
 		    Class.forName("com.mysql.jdbc.Driver");			
+		    System.out.println("args="+args[0]);
 		    Connection conn =  DriverManager.getConnection("jdbc:mysql://localhost:3306/openclinic_dbo?"+args[0]);
 			Date lastexport = new SimpleDateFormat("yyyyMMddHHmmssSSS").parse("19000101000000000");
 			PreparedStatement ps = conn.prepareStatement("select oc_value from oc_config where oc_key='lastAMOexport'");
