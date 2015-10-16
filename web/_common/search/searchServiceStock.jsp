@@ -98,7 +98,7 @@
 
 <script>
   window.resizeTo(830,530);
-  document.serviceStockForm.SearchServiceStockName.focus();
+  window.setTimeout("document.serviceStockForm.SearchServiceStockName.focus();",300);
 
   <%-- select service stock --%>
   function selectServiceStock(serviceStockUid, serviceStockName, supplyingServiceUid, supplyingServiceName){

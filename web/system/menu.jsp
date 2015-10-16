@@ -206,6 +206,7 @@
                     hMenu.put(getTran("web.manage","ManageSystemMessage",sWebLanguage),"main.do?Page=system/manageSystemMessage.jsp"); idx++;
                     hMenu.put(getTran("web.manage","exporttowhonet",sWebLanguage),"main.do?Page=system/exportToWHONet.jsp"); idx++;
                     hMenu.put(getTran("web.manage","exporttomaster",sWebLanguage),"main.do?Page=util/createOpenclinicExport.jsp"); idx++;
+                    hMenu.put(getTran("web.manage","setinvoicecounters",sWebLanguage),"main.do?Page=system/setInvoiceCounters.jsp"); idx++;
 
                     // depends on selection of activePatient
                     out.print(ScreenHelper.writeTblHeader(getTran("web.occup","medwan.common.other",sWebLanguage),sCONTEXTPATH)+

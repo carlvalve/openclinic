@@ -139,5 +139,5 @@
   }
 
   window.resizeTo(582,484);
-  searchForm.FindCode.focus();
+  window.setTimeout("searchForm.FindCode.focus();",300);
 </script>

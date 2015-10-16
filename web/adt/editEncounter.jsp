@@ -703,7 +703,7 @@
 	    %>
 	        <table class="list" width="100%" cellspacing="1">
 	            <tr class="admin">
-	                <td align="center"><a href="javascript:openPopup('healthrecord/findRFE.jsp&field=rfe&encounterUid=<%=sEditEncounterUID%>&ts=<%=getTs()%>',700,400)"><%=getTran("openclinic.chuk","rfe",sWebLanguage)%> <%=getTran("Web.Occup","ICPC-2",sWebLanguage)%>/<%=getTran("Web.Occup","ICD-10",sWebLanguage)%></a></td>
+	                <td align="center"><a href="javascript:openPopup('healthrecord/findRFE.jsp&field=rfe&encounterUid=<%=sEditEncounterUID%>&ts=<%=getTs()%>',700,400);void(0);"><%=getTran("openclinic.chuk","rfe",sWebLanguage)%> <%=getTran("Web.Occup","ICPC-2",sWebLanguage)%>/<%=getTran("Web.Occup","ICD-10",sWebLanguage)%></a></td>
 	            </tr>
 	            <tr>
 	                <td id="rfe"><%=sRfe%></td>

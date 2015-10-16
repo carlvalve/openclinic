@@ -9,6 +9,9 @@
 	String type = checkString(request.getParameter("type"));
 	String batchnumber = checkString(request.getParameter("batchnumber"));
 	String expirydate = checkString(request.getParameter("expirydate"));
+	String observationselector = checkString(request.getParameter("observationselector"));
+	String observationcomment = checkString(request.getParameter("observationcomment"));
+	String modifier = checkString(request.getParameter("modifier"));
 	String vaccinationlocation = checkString(request.getParameter("vaccinationlocation"))+":"+checkString(request.getParameter("vaccinationlocationtext"));
 	
 	if(request.getParameter("submit")!=null){
@@ -20,6 +23,8 @@
 		vaccination.batchnumber=batchnumber;
 		vaccination.expiry=expirydate;
 		vaccination.location=vaccinationlocation;
+		vaccination.observation=observationselector+";"+observationcomment;
+		vaccination.modifier=modifier;
 		vaccination.save();
 		out.println("<script>window.location.href='"+request.getRequestURI().replaceAll(request.getServletPath(),"")+"/main.do?Page=/healthrecord/maliVaccinationCard.jsp';</script>");
 		out.flush();
@@ -41,6 +46,11 @@
 		batchnumber=vaccination.batchnumber;
 		vaccinationlocation=vaccination.location;
 		expirydate=vaccination.expiry;
+		observationselector=checkString(vaccination.observation).split(";")[0];
+		if(checkString(vaccination.observation).split(";").length>1){
+			observationcomment=checkString(vaccination.observation).split(";")[1];
+		}
+		modifier=vaccination.modifier;
 	}
 	else {
 		vaccinationlocation=MedwanQuery.getInstance().getConfigString("defaultVaccinationLocation","")+":";
@@ -95,10 +105,34 @@
 				<input type='text' name='vaccinationlocationtext' id='vaccinationlocationtext' value='<%=vaccinationlocation.length()>1?vaccinationlocation.substring(2):""%>'  size='80'/>
 			</td>
 		</tr>
+		<tr>
+			<td class='admin'><%=getTran("web","observation",sWebLanguage) %></td>
+			<td class='admin2'>
+				<select name='observationselector' id='observationselector' onchange='if(this.value==4){document.getElementById("observationcomment").style.visibility="visible"} else {document.getElementById("observationcomment").value="";document.getElementById("observationcomment").style.visibility="hidden"}'>
+					<%=ScreenHelper.writeSelect("malivaccinationobservations", observationselector, sWebLanguage) %>
+				</select>
+				<input type='text' name='observationcomment' id='observationcomment' value='<%=observationcomment%>'/>
+			</td>
+		</tr>
+		<%
+			if(type.toLowerCase().startsWith("polio")){
+		%>
+		<tr>
+			<td class='admin'><%=getTran("web","vaccinationmodifier",sWebLanguage) %></td>
+			<td class='admin2'>
+				<select name='modifier' id='modifier'>
+					<%=ScreenHelper.writeSelect("malivaccinationmodifiers", modifier, sWebLanguage) %>
+				</select>
+			</td>
+		</tr>
+		<%
+			}
+		%>
 	</table>
 	<input type='submit' class='button' name='submit' value='<%=getTran("web","save",sWebLanguage)%>'/>
 	<input type='submit' class='button' name='delete' value='<%=getTran("web","delete",sWebLanguage)%>'/>
 </form>
 <script>
 	if(document.getElementById("vaccinationlocation").value==1){document.getElementById("vaccinationlocationtext").style.visibility="visible"} else {document.getElementById("vaccinationlocationtext").value="";document.getElementById("vaccinationlocationtext").style.visibility="hidden"};
+	document.getElementById("observationselector").onchange();
 </script>

@@ -490,7 +490,7 @@ function deleteRowFromArrayString(sArray,rowid){
   <%--SUBMIT FORM --%>
   function submitForm() {
     if(document.getElementById('encounteruid').value==''){
-		alertDialog("web","no.encounter.linked");
+		alertDialogDirectText('<%=getTranNoLink("web","no.encounter.linked",sWebLanguage)%>');
 		searchEncounter();
 	}	
     else{
@@ -545,7 +545,7 @@ function deleteRowFromArrayString(sArray,rowid){
   }
   
   if(document.getElementById('encounteruid').value==''){
-	alertDialog("web","no.encounter.linked");
+	alertDialogDirectText('<%=getTranNoLink("web","no.encounter.linked",sWebLanguage)%>');
 	searchEncounter();
   }	
 

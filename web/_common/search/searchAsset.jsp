@@ -302,6 +302,6 @@
     window.close();
   }
   
-  document.getElementById("searchCode").focus();
+  window.setTimeout("document.getElementById('searchCode').focus();",300);
 </script>
 </body>

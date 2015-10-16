@@ -292,7 +292,7 @@
 
 <script>
   window.resizeTo(600,460);
-  searchForm.FindCode.focus();
+  window.setTimeout("searchForm.FindCode.focus();",300);
     
   <%-- ADD ALL LABANALYSIS --%>
   function addLabAnalysis(code,type,label,other,monster,total){

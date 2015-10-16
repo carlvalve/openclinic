@@ -194,7 +194,7 @@
 
         <script>
           window.resizeTo(450,465);
-          SearchForm.FindText.focus();
+          window.setTimeout("SearchForm.FindText.focus();",300);
 
           function selectRecord(value,text){
             window.opener.document.getElementsByName('<%=sVarCode%>')[0].value = value;

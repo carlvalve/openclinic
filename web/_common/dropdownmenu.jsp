@@ -5,6 +5,7 @@
 <%@include file="/_common/templateAddIns.jsp"%>
 <%@include file="/includes/commonFunctions.jsp"%>
 <script src="<c:url value='/_common/_script/menu.js'/>"></script>
+<%=sSUBMODAL %>
 
 <%!
     //### INNER CLASS : Menu ######################################################################
@@ -634,8 +635,9 @@
         title = replaceAll(title,".","_");
       }
     }
-    var w = window.open(url,title,"toolbar=no,status=yes,scrollbars=yes,resizable=yes,width=1,height=1,menubar=no");
-    w.moveBy(2000,2000);
+    popup = window.open(url,title,"toolbar=no,status=yes,scrollbars=yes,resizable=yes,width=1,height=1,menubar=no");
+    popup.moveBy(2000,2000);
+    return popup;
   }
   
   <%-- REPLACE ALL --%>

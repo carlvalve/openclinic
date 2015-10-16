@@ -135,9 +135,10 @@
             iOverallCounter = Integer.parseInt(sRSIndex);
         }
         
-        String sTmpServiceID, sInactive, sBed;
+        String sTmpServiceID, sInactive, sBed, sCity;
         AdminPerson tempPat;
         Encounter enc;
+        boolean bShowCity=(MedwanQuery.getInstance().getConfigInt("showCityInPatientsList",0)==1);
 
         while((iOverallCounter+iCounter) < lResults.size() && iCounter < iMaxResultSet){
             tempPat = (AdminPerson) lResults.get(iCounter+iOverallCounter);
@@ -216,11 +217,17 @@
                     sNatReg = tempAdminID.value;
                 }
             }
+            sCity="";
+            if(bShowCity){
+            	String[] privateDetails= new String[5];
+            	AdminPrivateContact.getPrivateDetails(tempPat.personid, privateDetails);
+            	sCity="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;("+checkString(privateDetails[4])+")";
+            }
             sResult.append(" class=list"+sInactive+sClass+" >"
                    +"<td><img src='"+sCONTEXTPATH+"/_img/icons/icon_view.gif' alt='"+getTranNoLink("Web","view",sWebLanguage)+"'></td>"
                    +"<td>"+checkString(sImmatNew)+"</td>"
                    +"<td>"+checkString(sNatReg)+"</td>"
-                   +"<td>"+checkString(tempPat.lastname)+"  "+checkString(tempPat.firstname)+"</td>"
+                   +"<td><b>"+checkString(tempPat.lastname)+"  "+checkString(tempPat.firstname)+"</b>"+sCity+"</td>"
                    +"<td>"+checkString(tempPat.gender.toUpperCase())+"</td>"
                    +"<td>"+tempPat.dateOfBirth+"</td>"
                    +""+sTmpServiceID

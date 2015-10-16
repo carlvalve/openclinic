@@ -116,7 +116,6 @@
     User user;
     while(iter.hasNext()){
         user = (User)iter.next();
-
         sTmpProject = checkString(user.project);
         sMyProjects+= sTmpProject+",";
 

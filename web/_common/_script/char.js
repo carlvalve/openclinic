@@ -1,23 +1,23 @@
 function denySpecialCharacters(inputField,useExtendedSet){
   if(useExtendedSet==null) useExtendedSet = false;
   var checkChar = inputField.value.charAt(inputField.value.length-1);
-  var extendedSet = "()<>@,;:.[]/\'%$*%´§!^_#&|²³{}\"¨µ£`~=?+";
+  var extendedSet = "()<>@,;:.[]/\'%$*%Â´Â§!^_#&|Â²Â³{}\"Â¨ÂµÂ£`~=?+";
   
-  if(checkChar=='É' || checkChar=='é' ||
-     checkChar=='È' || checkChar=='è' ||
-     checkChar=='Á' || checkChar=='á' ||
-     checkChar=='À' || checkChar=='à' ||
-     checkChar=='Ú' || checkChar=='ú' ||
-     checkChar=='Ù' || checkChar=='ù' ||
-     checkChar=='Ó' || checkChar=='ó' ||
-     checkChar=='Ò' || checkChar=='ò' ||
-     checkChar=='Í' || checkChar=='í' ||
-     checkChar=='Ì' || checkChar=='ì' ||
-     checkChar=='Ë' || checkChar=='ë' ||
-     checkChar=='Ä' || checkChar=='ä' ||
-     checkChar=='Ü' || checkChar=='ü' ||
-     checkChar=='Ö' || checkChar=='ö' ||
-     checkChar=='Ï' || checkChar=='ï' || 
+  if(checkChar=='Ã‰' || checkChar=='Ã©' ||
+     checkChar=='Ãˆ' || checkChar=='Ã¨' ||
+     checkChar=='Ã' || checkChar=='Ã¡' ||
+     checkChar=='Ã€' || checkChar=='Ã ' ||
+     checkChar=='Ãš' || checkChar=='Ãº' ||
+     checkChar=='Ã™' || checkChar=='Ã¹' ||
+     checkChar=='Ã“' || checkChar=='Ã³' ||
+     checkChar=='Ã’' || checkChar=='Ã²' ||
+     checkChar=='Ã' || checkChar=='Ã­' ||
+     checkChar=='ÃŒ' || checkChar=='Ã¬' ||
+     checkChar=='Ã‹' || checkChar=='Ã«' ||
+     checkChar=='Ã„' || checkChar=='Ã¤' ||
+     checkChar=='Ãœ' || checkChar=='Ã¼' ||
+     checkChar=='Ã–' || checkChar=='Ã¶' ||
+     checkChar=='Ã' || checkChar=='Ã¯' || 
      (useExtendedSet?(extendedSet.indexOf(checkChar) > -1):false)
     ){
     inputField.value = inputField.value.substring(0,inputField.value.length-1);
@@ -380,61 +380,55 @@ function formatNumber(value,decimals){
 
 function convertSpecialCharsToHTML(text){
   // accents
-  text = replaceAll(text,"&eacute;","é");
-  text = replaceAll(text,"&egrave;","è");
-  text = replaceAll(text,"&aacute;","á");
-  text = replaceAll(text,"&agrave;","à");
-  text = replaceAll(text,"&uacute;","ú");
-  text = replaceAll(text,"&ugrave;","ù");
-  text = replaceAll(text,"&oacute;","ó");
-  text = replaceAll(text,"&ograve;","ò");
-  text = replaceAll(text,"&iacute;","í");
-  text = replaceAll(text,"&igrave;","ì");
+  text = replaceAll(text,"&eacute;","Ã©");
+  text = replaceAll(text,"&egrave;","Ã¨");
+  text = replaceAll(text,"&aacute;","Ã¡");
+  text = replaceAll(text,"&agrave;","Ã ");
+  text = replaceAll(text,"&uacute;","Ãº");
+  text = replaceAll(text,"&ugrave;","Ã¹");
+  text = replaceAll(text,"&oacute;","Ã³");
+  text = replaceAll(text,"&ograve;","Ã²");
+  text = replaceAll(text,"&iacute;","Ã­");
+  text = replaceAll(text,"&igrave;","Ã¬");
 
-  text = replaceAll(text,"&Eacute;","É");
-  text = replaceAll(text,"&Egrave;","È");
-  text = replaceAll(text,"&Aacute;","Á");
-  text = replaceAll(text,"&Agrave;","À");
-  text = replaceAll(text,"&Uacute;","Ú");
-  text = replaceAll(text,"&Ugrave;","Ù");
-  text = replaceAll(text,"&Oacute;","Ó");
-  text = replaceAll(text,"&Ograve;","Ò");
-  text = replaceAll(text,"&Iacute;","Í");
-  text = replaceAll(text,"&Igrave;","Ì");
+  text = replaceAll(text,"&Eacute;","Ã‰");
+  text = replaceAll(text,"&Egrave;","Ãˆ");
+  text = replaceAll(text,"&Aacute;","Ã");
+  text = replaceAll(text,"&Agrave;","Ã€");
+  text = replaceAll(text,"&Uacute;","Ãš");
+  text = replaceAll(text,"&Ugrave;","Ã™");
+  text = replaceAll(text,"&Oacute;","Ã“");
+  text = replaceAll(text,"&Ograve;","Ã’");
+  text = replaceAll(text,"&Iacute;","Ã");
+  text = replaceAll(text,"&Igrave;","ÃŒ");
 
   // trema
-  text = replaceAll(text,"&iuml;","ï");
-  text = replaceAll(text,"&euml;","ë");
-  text = replaceAll(text,"&ouml;","ö");
-  text = replaceAll(text,"&auml;","ä");
-  text = replaceAll(text,"&uuml;","ü");
+  text = replaceAll(text,"&iuml;","Ã¯");
+  text = replaceAll(text,"&euml;","Ã«");
+  text = replaceAll(text,"&ouml;","Ã¶");
+  text = replaceAll(text,"&auml;","Ã¤");
+  text = replaceAll(text,"&uuml;","Ã¼");
 
-  text = replaceAll(text,"&Iuml;","Ï");
-  text = replaceAll(text,"&Euml;","Ë");
-  text = replaceAll(text,"&Ouml;","Ö");
-  text = replaceAll(text,"&Auml;","Ä");
-  text = replaceAll(text,"&Uuml;","Ü");
+  text = replaceAll(text,"&Iuml;","Ã");
+  text = replaceAll(text,"&Euml;","Ã‹");
+  text = replaceAll(text,"&Ouml;","Ã–");
+  text = replaceAll(text,"&Auml;","Ã„");
+  text = replaceAll(text,"&Uuml;","Ãœ");
 
   // hat
-  text = replaceAll(text,"&ecirc;","ê");
-  text = replaceAll(text,"&acirc;","â");
-  text = replaceAll(text,"&ucirc;","û");
-  text = replaceAll(text,"&ocirc;","ô");
-  text = replaceAll(text,"&icirc;","î");
+  text = replaceAll(text,"&ecirc;","Ãª");
+  text = replaceAll(text,"&acirc;","Ã¢");
+  text = replaceAll(text,"&ucirc;","Ã»");
+  text = replaceAll(text,"&ocirc;","Ã´");
+  text = replaceAll(text,"&icirc;","Ã®");
 
-  text = replaceAll(text,"&Ecirc;","Ê");
-  text = replaceAll(text,"&Acirc;","Â");
-  text = replaceAll(text,"&Ucirc;","Û");
-  text = replaceAll(text,"&Ocirc;","Ô");
-  text = replaceAll(text,"&Icirc;","Î");
+  text = replaceAll(text,"&Ecirc;","ÃŠ");
+  text = replaceAll(text,"&Acirc;","Ã‚");
+  text = replaceAll(text,"&Ucirc;","Ã›");
+  text = replaceAll(text,"&Ocirc;","Ã”");
+  text = replaceAll(text,"&Icirc;","ÃŽ");
 
   // varia
-  text = replaceAll(text,"&acute;","´");
-  text = replaceAll(text,"&#231;","ç");
-  text = replaceAll(text,"&#156;","œ");
-  text = replaceAll(text,"&#234;","ê");
-  //text = replaceAll(text,"?;","ê"); // unicode --> crashes JS !
-  text = replaceAll(text,"&#202;","Ê");
   text = replaceAll(text,"<br>","\r\n");
   text = replaceAll(text,"&gt;",">");
   text = replaceAll(text,"&lt;","<");

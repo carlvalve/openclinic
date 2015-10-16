@@ -338,7 +338,7 @@
         }
 
         Vector products = Product.find(sFindProductName,sFindUnit,sFindUnitPriceMin,sFindUnitPriceMax,sFindPackageUnits,
-                                       sFindMinOrderPackages,sFindSupplierUid,sFindProductGroup,"OC_PRODUCT_NAME","DESC");
+                                       sFindMinOrderPackages,sFindSupplierUid,sFindProductGroup,"OC_PRODUCT_NAME","ASC");
         productsHtml = objectsToHtml(products,sWebLanguage);
         foundProductCount = products.size();
 

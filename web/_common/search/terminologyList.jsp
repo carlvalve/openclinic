@@ -225,7 +225,7 @@
 </center>
 
 <script>
-SearchForm.FindTerminologyPhrase.focus();
+window.setTimeout("SearchForm.FindTerminologyPhrase.focus();",300);
 
 var style2 = document.getElementById('EditBlock').style;
 style2.display = style2.display?"":"<%=sEditBlockStatus%>";

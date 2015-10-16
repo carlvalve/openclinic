@@ -43,18 +43,19 @@
     		sCountryCode="'"+sCountryCode+"'";
     	}
 	    conn = MedwanQuery.getInstance().getStatsConnection();
+	    System.out.println("Country code="+sCountryCode);
 		String sSql = "select distinct * from dc_monitorservers a, dc_monitorvalues b"+
 		              " where b.dc_monitorvalue_serverid = a.dc_monitorserver_serverid"+
 		              "  and b.dc_monitorvalue_date > ?"+
 		              "  and a.dc_monitorserver_name <> ''"+
 		              "  and a.dc_monitorserver_country in ("+sCountryCode+") "+
-		              " order by dc_monitorserver_city, dc_monitorserver_serverid, dc_monitorvalue_date desc";
+		              " order by dc_monitorserver_city, dc_monitorserver_serverid, dc_monitorvalue_updatetime desc";
 	    ps = conn.prepareStatement(sSql);
 	
 		// revert one month
 		long monthMillis = 30*24*3600;
 		monthMillis*= 1000;	
-		ps.setTimestamp(1,new java.sql.Timestamp(new java.util.Date().getTime()-3*monthMillis));	
+		ps.setTimestamp(1,new java.sql.Timestamp(new java.util.Date().getTime()-MedwanQuery.getInstance().getConfigInt("gbhPublicInactivityPeriodInMonths",3)*monthMillis));
 		
 		rs = ps.executeQuery();
 		SiteData siteData;
@@ -78,6 +79,7 @@
 				siteData = new SiteData();
 				siteData.date = rs.getTimestamp("dc_monitorvalue_date");
 				
+				siteData.id   = rs.getInt("dc_monitorvalue_serverid");
 				siteData.patients   = rs.getInt("dc_monitorvalue_patientcount");
 				siteData.visits     = rs.getInt("dc_monitorvalue_visitcount");
 				siteData.admissions = rs.getInt("dc_monitorvalue_admissioncount");

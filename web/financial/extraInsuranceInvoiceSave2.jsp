@@ -11,6 +11,7 @@
     String sEditStatus = checkString(request.getParameter("EditStatus"));
     String sEditBalance = checkString(request.getParameter("EditBalance"));
     String sEditCBs = checkString(request.getParameter("EditCBs"));
+    String sEditNumber = checkString(request.getParameter("EditNumber"));
 
     ExtraInsurarInvoice2 insurarinvoice = new ExtraInsurarInvoice2();
     insurarinvoice.setBalance(Double.parseDouble(sEditBalance));
@@ -29,6 +30,7 @@
     insurarinvoice.setUid(sEditInsurarInvoiceUID);
     insurarinvoice.setUpdateDateTime(ScreenHelper.getSQLDate(getDate()));
     insurarinvoice.setUpdateUser(activeUser.userid);
+    insurarinvoice.setNumber(sEditNumber);
 
     insurarinvoice.setDebets(new Vector());
     insurarinvoice.setCredits(new Vector());

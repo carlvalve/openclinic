@@ -265,8 +265,8 @@
             <td class="admin2" style="padding:5px;padding-bottom:0;">
                 <input type="hidden" id="purchaseDocuments" name="purchaseDocuments" value="">
                                     
-                <div id="pdScroller" style="overflow:none;width:263px;height:50px;border:none;">   
-                    <table width="23%" class="sortable" id="tblPD" cellspacing="1" headerRowCount="2"> 
+                <span id="pdScroller" style="overflow:none;width:263px;height:50px;border:none;">   
+                    <table width="50%" class="sortable" id="tblPD" cellspacing="1" headerRowCount="2"> 
                         <%-- header --%>                        
                         <tr class="admin">
                             <%-- 0 - empty --%>
@@ -297,8 +297,8 @@
                         <%-- content by ajax and javascript --%>
                     </table>
                     
-                    <div id="purchaseDocumentMsgDiv" style="padding-top:10px;"></div>
-                </div>                    
+                    <div id="purchaseDocumentMsgDiv" style="padding-top:10px; width: 100px"></div>
+                </span>                    
             </td>
         </tr>        
         
@@ -564,8 +564,8 @@
                 <td class="admin2" style="padding:5px;padding-bottom:0;">
                     <input type="hidden" id="loanDocuments" name="loanDocuments" value="">
                               
-                    <div id="ldScroller" style="overflow:none;width:270px;height:50px;border:none;">           
-                        <table width="45%" class="sortable" id="tblLD" cellspacing="1" headerRowCount="2"> 
+                    <span id="ldScroller" style="overflow:none;width:270px;height:50px;border:none;">           
+                        <table width="100%" class="sortable" id="tblLD" cellspacing="1" headerRowCount="2"> 
                             <%-- header --%>                        
                             <tr class="admin">
                                 <%-- 0 - empty --%>
@@ -597,7 +597,7 @@
                         </table>
                     
                         <div id="loanDocumentMsgDiv" style="padding-top:10px;"></div>      
-                    </div>              
+                    </span>              
                 </td>
             </tr>        
         
@@ -679,29 +679,11 @@
     var docId = docIdField.value;
     
     if(docId.length > 0){
-      docId = replaceAll(docId,"-","");
-      docId = replaceAll(docId,".","");
-      
-      while(docId.length<11){
-    	docId = "0"+docId;  
-      }
-    		  
-      if(docId.length==11 && !isNaN(docId)){
-        var partOne = 1*docId.substr(0,9),
-            partTwo = 1*docId.substr(9,2);
-
-        if(partOne%97==97-partTwo){
-          docIdField.value = docId;
           return true;
-        }
-      }
-      
-      alertDialog("web","invalidDocumentId");
-      docIdField.focus();
-      return false;
     }
-    
-    return true;
+    alertDialog("web","invalidDocumentId");
+    docIdField.focus();
+    return false;
   }
   
   <%-- CLEAR ASSET FIELDS --%>
@@ -1638,7 +1620,7 @@
     tr.appendChild(td);
 
     td = tr.insertCell(1);
-    td.innerHTML = "&nbsp;"+makeDocumentLink(sID,"purchaseDocumentMsgDiv");
+    td.innerHTML = "&nbsp;"+sID;
     tr.appendChild(td);
                
     <%-- empty cell --%>
@@ -1660,12 +1642,7 @@
     
     EditForm.pdID.value = formatDocumentID(EditForm.pdID.value); 
       
-    if(sPD.indexOf(EditForm.pdID.value) > -1){
-      alertDialog("web.assets","documentAlreadySelected");
-      //EditForm.pdID.focus();
-      return false;        
-    }
-    
+   
     if(countSelectedPDs() <= 20){
       if(areRequiredPDFieldsFilled()){
         iPDIndex++;
@@ -1685,7 +1662,7 @@
         tr.appendChild(td);
 
         td = tr.insertCell(1);
-        td.innerHTML = "&nbsp;"+makeDocumentLink(EditForm.pdID.value,"purchaseDocumentMsgDiv");
+        td.innerHTML = "&nbsp;"+EditForm.pdID.value;
         tr.appendChild(td);
                   
         <%-- empty cell --%>
@@ -1738,7 +1715,7 @@
                                 "<img src='<%=sCONTEXTPATH%>/_img/icons/icon_edit.gif' class='link' alt='<%=getTranNoLink("web","edit",sWebLanguage)%>'>"+
                                "</a>";
 
-      row.cells[1].innerHTML = "&nbsp;"+makeDocumentLink(EditForm.pdID.value,"purchaseDocumentMsgDiv");
+      row.cells[1].innerHTML = "&nbsp;"+EditForm.pdID.value;
                                             
       <%-- empty cell --%>
       row.cells[2].innerHTML = "&nbsp;";
@@ -2152,7 +2129,7 @@
     tr.appendChild(td);
 
     td = tr.insertCell(1);
-    td.innerHTML = "&nbsp;"+makeDocumentLink(sID,"loanDocumentMsgDiv");
+    td.innerHTML = "&nbsp;"+sID;
     tr.appendChild(td);
                
     <%-- empty cell --%>
@@ -2199,7 +2176,7 @@
         tr.appendChild(td);
 
         td = tr.insertCell(1);
-        td.innerHTML = "&nbsp;"+makeDocumentLink(EditForm.ldID.value,"loanDocumentMsgDiv");
+        td.innerHTML = "&nbsp;"+EditForm.ldID.value;
         tr.appendChild(td);
                   
         <%-- empty cell --%>
@@ -2272,7 +2249,7 @@
                                 "<img src='<%=sCONTEXTPATH%>/_img/icons/icon_edit.gif' class='link' alt='<%=getTranNoLink("web","edit",sWebLanguage)%>'>"+
                                "</a>";
 
-      row.cells[1].innerHTML = "&nbsp;"+makeDocumentLink(EditForm.ldID.value,"loanDocumentMsgDiv");
+      row.cells[1].innerHTML = "&nbsp;"+EditForm.ldID.value;
                         
       <%-- empty cell --%>
       row.cells[2].innerHTML = "&nbsp;";

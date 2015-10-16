@@ -61,19 +61,19 @@
             Vector oneGroup;
             String sDebetType;
             int groupIdx = 0;
-            
+
             Vector groupKeys = new Vector(hDebetGroups.keySet());
             Iterator groupKeysIter = groupKeys.iterator();
             while(groupKeysIter.hasNext()){
             	sDebetType = (String)groupKeysIter.next();
             	oneGroup = (Vector)hDebetGroups.get(sDebetType);
-            	
+
             	Debet mostRecentDebet = (Debet)oneGroup.elementAt(0);
             	if(mostRecentDebet!=null){            	
 	           	    // encounter and patient
 	           	    sEncounterName = "";
 	                sPatientName = "";
-	
+
 	                encounter = mostRecentDebet.getEncounter();
 	                if(encounter!=null){
 	                    sEncounterName = encounter.getEncounterDisplayName(sWebLanguage);
@@ -89,7 +89,7 @@
 	                        sPrestationDescription = checkString(prestation.getDescription());
 	                    }
 	                }
-		
+
 	                // icons
 	                String sIcons = "";
 	                if(oneGroup.size() > 1){
@@ -101,7 +101,7 @@
 		                	sJS = "<script>toggleDebetGroup('"+sGroupIdx+"');</script>";
 		                }
 	                }
-	                
+
 	                Hashtable groupInfo = getGroupInfo(oneGroup,sWebLanguage);
 	                
 	                String sOnClick = "";
@@ -117,12 +117,17 @@
 	                if(mostRecentDebet.getInsurance()!=null && mostRecentDebet.getInsurance().getInsurar()!=null){
 	                	sInsurer=mostRecentDebet.getInsurance().getInsurar().getName();
 	                }
-	                
+					String user = "?";
+					UserVO u =MedwanQuery.getInstance().getUser(mostRecentDebet.getUpdateUser());
+					if (u!=null && u.getPersonVO()!=null){
+						user=u.getPersonVO().getFullName();
+					}
+
 	            	// main-row for group : info about 'mostRecentDebet' or summed info 
 	            	sHtml+= "<tr class='list1' "+sOnClick+">"+
 	            	         "<td "+(oneGroup.size()>1?"":" style='cursor:pointer'")+">"+sIcons+"</td>"+
 	            	         "<td "+(oneGroup.size()>1?"":" style='cursor:pointer'")+">"+(oneGroup.size()>1?"":ScreenHelper.getSQLDate(mostRecentDebet.getDate()))+"</td>"+
-	            	         "<td "+(oneGroup.size()>1?"":" style='cursor:pointer'")+">"+HTMLEntities.htmlentities(sEncounterName)+" ("+MedwanQuery.getInstance().getUser(mostRecentDebet.getUpdateUser()).getPersonVO().getFullName()+")</td>"+
+	            	         "<td "+(oneGroup.size()>1?"":" style='cursor:pointer'")+">"+HTMLEntities.htmlentities(sEncounterName)+" ("+user+")</td>"+
 	                         "<td "+(oneGroup.size()>1?"":" style='cursor:pointer'")+">"+HTMLEntities.htmlentities(sPrestationDescription)+" ("+(String)groupInfo.get("quantity")+"x)</td>"+
   	                         "<td style='padding-left:5px;'>"+HTMLEntities.htmlentities(sInsurer)+"</td>"+
 	                         "<td "+(oneGroup.size()>1?"":" style='cursor:pointer'")+">"+(Double.parseDouble((String)groupInfo.get("amount"))+Double.parseDouble((String)groupInfo.get("insurarAmount"))+Double.parseDouble((String)groupInfo.get("extraInsurarAmount")))+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"+
@@ -142,7 +147,7 @@
 		                         "</td>"+
 		                        "</tr>";
 	                }
-	                
+
 	            	groupIdx++;	                		
 	            }
             }
@@ -158,7 +163,7 @@
     	Debet debet;    	
     	int quantity = 0;
     	double credited = 0, amount = 0, insurarAmount = 0, extraInsurarAmount = 0;
-    			
+
     	for(int i=0; i<oneGroup.size(); i++){
     		debet = (Debet)oneGroup.get(i);
     		if(debet!=null){
@@ -179,14 +184,14 @@
     	info.put("extraInsurarAmount",Double.toString(extraInsurarAmount));
     	
    	    info.put("credited",""); // empty string
-    	
+
     	return info;
     }
     
     //--- GROUP TO HTML ---------------------------------------------------------------------------
     // These are the hidden debets, sorted per type of prestation.
     private String groupToHtml(String sDebetType, Vector debetGroup, String sClass, String sWebLanguage, int groupIdx){
-    	if(debetGroup.size()==1) return ""; // do not group single debets
+    	if(debetGroup.size()<=1) return ""; // do not group single debets
     	
     	String sHtml = "<table width='100%' cellspacing='0' cellpadding='0'>";
 
@@ -203,7 +208,7 @@
                  "<td width='7%'></td>"+
                  "<td width='7%'></td>"+
                 "</tr>";
-                        
+
         if(debetGroup!=null){
         	//Sort the debetgroup
         	SortedMap sortedGroup = new TreeMap();
@@ -237,7 +242,7 @@
 	                    sEncounterName = encounter.getEncounterDisplayName(sWebLanguage);
 	                    sPatientName = ScreenHelper.getFullPersonName(encounter.getPatientUID());
 	                }
-	
+
 	                // prestation
 	                sPrestationDescription = "";
 	                if(checkString(debet.getPrestationUid()).length() > 0){
@@ -260,12 +265,17 @@
 	                if(debet.getInsurance()!=null && debet.getInsurance().getInsurar()!=null){
 	                	sInsurer=debet.getInsurance().getInsurar().getName();
 	                }
-	                
+					String user = "?";
+					UserVO u =MedwanQuery.getInstance().getUser(debet.getUpdateUser());
+					if (u!=null && u.getPersonVO()!=null){
+						user=u.getPersonVO().getFullName();
+					}
+					
 	                // no TRs
 	                hSorted.put(sPatientName.toUpperCase()+"="+debet.getDate().getTime()+"="+debet.getUid()," onclick=\"setDebet('"+debet.getUid()+"','"+groupIdx+"');\">"
 	                        +"<td>&nbsp;<i>"+i+"</i></td>"
 	                        +"<td style='padding-left:5px;'>"+ScreenHelper.getSQLDate(debet.getDate())+"</td>"
-	                        +"<td style='padding-left:5px;'>"+HTMLEntities.htmlentities(sEncounterName)+" ("+MedwanQuery.getInstance().getUser(debet.getUpdateUser()).getPersonVO().getFullName()+")</td>"
+	                        +"<td style='padding-left:5px;'>"+HTMLEntities.htmlentities(sEncounterName)+" ("+user+")</td>"
 	                        +"<td style='padding-left:5px;'>"+HTMLEntities.htmlentities(sPrestationDescription)+" ("+debet.getQuantity()+"x)</td>"
   	                        +"<td style='padding-left:5px;'>"+HTMLEntities.htmlentities(sInsurer)+"</td>"
    	                        +"<td style='padding-left:5px;'>"+(debet.getAmount()+debet.getInsurarAmount()+dExtraInsurarAmount)+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"
@@ -273,7 +283,7 @@
 	                        +"<td style='padding-left:5px;'>"+debet.getInsurarAmount()+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"
 	                        +"<td style='padding-left:5px;'>"+dExtraInsurarAmount+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"
 	                        +"<td style='padding-left:5px;'>"+sCredited+"</td>");
-                }
+				}
             }
 
             // sort and reverse order
@@ -326,6 +336,7 @@
     </tr>
     
 	<%		
+	try{
     Vector vUnassignedDebets;
 	    if(sFindDateBegin.length()==0 && sFindDateEnd.length()==0 && sFindAmountMin.length()==0 && sFindAmountMax.length()==0){
 	    	// no search-criteria
@@ -341,5 +352,9 @@
 	    else{
 	    	%><tr><td colspan="7"><%=getTran("web","noRecordsFound",sWebLanguage)%></td></tr><%
 	    }
+	}
+	catch(Exception e){
+		e.printStackTrace();
+	}
 	%>
 </table>

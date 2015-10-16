@@ -15,7 +15,7 @@
         String sReturn = normalRow(sLabelType,sLabelID,sFieldName,sTab,sWebLanguage);
 
         if(sTypeContent.toUpperCase().equals("T")){
-            sReturn+= "<input class='text' type='text' name='"+sFieldName+"' id='"+sFieldName+"' value=\""+sValue.trim()+"\" size='"+sTextWidth+"' onKeyUp='denySpecialCharacters(this,true);limitLength(this,125);'";
+            sReturn+= "<input class='text' type='text' name='"+sFieldName+"' id='"+sFieldName+"' value=\""+sValue.trim()+"\" size='"+sTextWidth+"' onKeyUp='denySpecialCharacters(this,false);limitLength(this,125);'";
             if(!bEditable){
                 sReturn+=" readonly ";
             }

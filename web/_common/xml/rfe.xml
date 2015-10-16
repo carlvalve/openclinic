@@ -4,6 +4,10 @@
         <flag codetype="icd10" start="B50" end="B64.9" flag="CDES"/>
         <!--Diahrrée-->
         <flag codetype="icpc" start="D1100" end="D1199" flag="BRHXYZ"/>
+        <flag codetype="icd10" start="A09" end="A09" flag="BRHXYZ"/>
+        <flag codetype="icd10" start="K58.0" end="K58.0" flag="BRHXYZ"/>
+        <flag codetype="icd10" start="K59.1" end="K59.1" flag="BRHXYZ"/>
+        <flag codetype="icd10" start="P78.3" end="P78.3" flag="BRHXYZ"/>
         <!--Tuberculose-->
         <flag codetype="icpc" start="A7000" end="A7099" flag="K"/>
         <flag codetype="icd10" start="A15" end="A19.9" flag="K"/>

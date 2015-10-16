@@ -193,6 +193,7 @@
                   writeTblChildWithCodeNoButton("javascript:downloadStats(\"wicketcredits.list\",\"openclinic\");",getTran("Web","statistics.download.wicketcredits",sWebLanguage))+
                   writeTblChildWithCodeNoButton("javascript:downloadStats(\"lab.list\",\"openclinic\");",getTran("Web","statistics.download.labresults",sWebLanguage))+
                   writeTblChildWithCodeNoButton("javascript:downloadInvoicesSummary(\"hmk.invoices.list\",\"openclinic\");",getTran("Web","statistics.download.invoicessummary",sWebLanguage))+
+                  (MedwanQuery.getInstance().getConfigInt("enablePBFBurundi",0)==1?writeTblChildWithCodeNoButton("javascript:downloadPBFdocs(\"pbf.burundi.consultationslist\",\"openclinic\");",getTran("Web","statistics.download.pbfburundi",sWebLanguage)):"")+
                   (MedwanQuery.getInstance().getConfigInt("enableMaliVaccinations",0)==1?writeTblChildWithCodeNoButton("javascript:downloadStats(\"djikoroni\",\"stats\");",getTran("Web","statistics.download.djikoroni",sWebLanguage)):"")+
 		          (MedwanQuery.getInstance().getConfigInt("enableMaliVaccinations",0)==1?writeTblChildWithCodeNoButton("javascript:downloadStats(\"banconi\",\"stats\");",getTran("Web","statistics.download.banconi",sWebLanguage)):"")+
 			      (MedwanQuery.getInstance().getConfigInt("datacenterEnabled",0)==1?writeTblChildWithCodeNoButton("javascript:downloadDatacenterStats(\"service.income.list\",\"stats\");",getTran("Web","statistics.download.serviceincomelist",sWebLanguage)):""));
@@ -249,6 +250,7 @@
                     getTran("web","to",sWebLanguage)+"&nbsp;"+writeDateField("end2","stats",lastdayPreviousMonth,sWebLanguage)+
                    "</td>"+
                   "</tr>"+
+                  writeTblChildWithCode("javascript:coreStatistics()",getTran("Web","statistics.activitystats.corestats",sWebLanguage))+
                   writeTblChildWithCode("javascript:hospitalReport()",getTran("Web","chin.global.hospital.report",sWebLanguage))+
                   writeTblChildWithCode("javascript:minisanteReport()",getTran("Web","chin.minisantereport.health.center",sWebLanguage))+
                   writeTblChildWithCode("javascript:minisanteReportDH()",getTran("Web","chin.minisantereport.district.hospital",sWebLanguage))+
@@ -260,7 +262,11 @@
 </form>
 
 <script>
-  function downloadInvoicesSummary(query,db){
+function downloadPBFdocs(query,db){
+    var URL = "/statistics/downloadPBFdocs.jsp&query="+query+"&db="+db+"&begin="+document.getElementsByName('begin')[0].value+"&end="+document.getElementsByName('end')[0].value;
+	openPopup(URL,400,300,"OpenClinic");
+  }
+function downloadInvoicesSummary(query,db){
     var URL = "/statistics/downloadInvoicesSummary.jsp&query="+query+"&db="+db+"&begin="+document.getElementsByName('begin')[0].value+"&end="+document.getElementsByName('end')[0].value;
 	openPopup(URL,400,300,"OpenClinic");
   }
@@ -273,10 +279,14 @@
   function minisanteReport(){
     window.open("<c:url value='/statistics/createMonthlyReportPdf.jsp?'/>start="+document.getElementById('begin2').value+"&end="+document.getElementById('end2').value+"&ts=<%=getTs()%>");
   }
+  function coreStatistics(){
+	    var URL = "/statistics/coreStats.jsp&start="+document.getElementById('begin2').value+"&end="+document.getElementById('end2').value;
+	    openPopup(URL,800,600,"OpenClinic");
+	  }
   function getMFPSummary(){
-    var URL = "/statistics/createMFPSummary.jsp&start="+document.getElementById('beginmfp').value+"&end="+document.getElementById('endmfp').value+"&serviceid="+document.getElementById('mfpserviceid').value+"&ts=<%=getTs()%>";
-    openPopup(URL,400,600,"OpenClinic");
-  }
+	    var URL = "/statistics/createMFPSummary.jsp&start="+document.getElementById('beginmfp').value+"&end="+document.getElementById('endmfp').value+"&serviceid="+document.getElementById('mfpserviceid').value+"&ts=<%=getTs()%>";
+	    openPopup(URL,400,600,"OpenClinic");
+	  }
   function getMFPUnsignedInvoices(){
     var URL = "/statistics/findMFPUnsignedInvoices.jsp&start="+document.getElementById('beginmfp').value+"&end="+document.getElementById('endmfp').value+"&serviceid="+document.getElementById('mfpserviceid').value+"&ts=<%=getTs()%>";
     openPopup(URL,800,600,"OpenClinic");

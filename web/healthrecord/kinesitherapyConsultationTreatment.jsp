@@ -176,7 +176,7 @@
 
         <%-- ICPC / ICD10 --%>
         <tr>
-            <td class="admin"><a href="javascript:openPopup('healthrecord/findICPC.jsp&ts=<%=getTs()%>&patientuid=<%=activePatient.personid %>')"><%=getTran("openclinic.chuk","diagnostic",sWebLanguage)%> <%=getTran("Web.Occup","ICPC-2",sWebLanguage)%>/<%=getTran("Web.Occup","ICD-10",sWebLanguage)%></a></td>
+            <td class="admin"><a href="javascript:openPopup('healthrecord/findICPC.jsp&ts=<%=getTs()%>&patientuid=<%=activePatient.personid %>');void(0);"><%=getTran("openclinic.chuk","diagnostic",sWebLanguage)%> <%=getTran("Web.Occup","ICPC-2",sWebLanguage)%>/<%=getTran("Web.Occup","ICD-10",sWebLanguage)%></a></td>
             <td id='icpccodes' class="admin2">
                 <%
                     SessionContainerWO sessionContainerWO = (SessionContainerWO) SessionContainerFactory.getInstance().getSessionContainerWO(request, SessionContainerWO.class.getName());
@@ -597,7 +597,7 @@ function replaceRowInArrayString(sArray, newRow, rowid){
 <%-- SUBMIT FORM --%>
 function submitForm(){
   if(document.getElementById('encounteruid').value==''){
-    alertDialog("web","no.encounter.linked");
+    alertDialogDirectText('<%=getTranNoLink("web","no.encounter.linked",sWebLanguage)%>');
 	searchEncounter();
   }	
   else{
@@ -641,7 +641,7 @@ function searchEncounter(){
 }
   
 if(document.getElementById('encounteruid').value==''){
-  alertDialog("web","no.encounter.linked");
+  alertDialogDirectText('<%=getTranNoLink("web","no.encounter.linked",sWebLanguage)%>');
   searchEncounter();
 }	
 

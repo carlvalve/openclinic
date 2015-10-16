@@ -6,6 +6,7 @@
 <script src='<%=sCONTEXTPATH%>/_common/_script/prototype.js'></script>
 
 <%
+try{
 String sEditDebetUID = checkString(request.getParameter("EditDebetUID")),
 sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
 
@@ -126,35 +127,54 @@ sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
                 <select class="text" id='EditInsuranceUID' name="EditInsuranceUID" onchange="changeInsurance()">
                     <option/>
                     <%
+                    System.out.println(1);
                         Vector vInsurances = Insurance.getCurrentInsurances(activePatient.personid);
+                        System.out.println("1.1");
                         if (vInsurances!=null){
+                            System.out.println("1.2");
                             boolean bInsuranceSelected = false;
                             Insurance insurance,selectedInsurance;
 							if(debet.getUid().equalsIgnoreCase("-1")){
+		                        System.out.println("1.3");
 								selectedInsurance = Insurance.getMostInterestingInsuranceForPatient(activePatient.personid);
+		                        System.out.println("1.4");
 	                            for (int i=0;i<vInsurances.size();i++){
 	                                insurance = (Insurance)vInsurances.elementAt(i);
+	                                System.out.println("1.5");
 
 	                                if (insurance!=null && insurance.isAuthorized() && insurance.getInsurar()!=null && insurance.getInsurar().getName()!=null && insurance.getInsurar().getName().trim().length()>0){
 	                                    out.print("<option value='"+insurance.getUid()+"'");
+	                                    System.out.println("1.6");
 
-	                                    if (selectedInsurance.getUid().equals(insurance.getUid())){
+	                                    if (selectedInsurance!=null && selectedInsurance.getUid().equals(insurance.getUid())){
+	                                        System.out.println("1.7");
 	                                        out.print(" selected");
 	                                        bInsuranceSelected = true;
 	                                    }
 	                                    else if (!bInsuranceSelected){
-	                                        if(vInsurances.size()==1){
+	                                        System.out.println("1.8");
+	                                        if(vInsurances!=null && vInsurances.size()==1){
 	                                            out.print(" selected");
 	                                            bInsuranceSelected = true;
 	                                        }
 	                                    }
-
-	                                    out.print("/>"+insurance.getInsurar().getName()+" ("+insurance.getInsuranceCategory().getCategory()+": "+insurance.getInsuranceCategory().getPatientShare()+"/"+(100-Integer.parseInt(insurance.getInsuranceCategory().getPatientShare()))+")"+ "</option>");
+                                        System.out.println("insurance="+insurance);
+                                        System.out.println("insurar="+insurance.getInsurar().getName());
+                                        System.out.println("category="+insurance.getInsuranceCategory());
+                                        System.out.println("category2="+insurance.getInsuranceCategory().getCategory());
+                                        try{
+                                        	out.print("/>"+insurance.getInsurar().getName()+" ("+insurance.getInsuranceCategory().getCategory()+": "+insurance.getInsuranceCategory().getPatientShare()+"/"+(100-Integer.parseInt(insurance.getInsuranceCategory().getPatientShare()))+")"+ "</option>");
+                                        }
+                                        catch(Exception e1){
+                                        	out.print("/>"+insurance.getInsurar().getName()+ "</option>");
+                                        }
 	                                }
 	                            }
 							}
 							else {
+		                        System.out.println("1.10");
 	                            for (int i=0;i<vInsurances.size();i++){
+	                                System.out.println("1.11");
 	                                insurance = (Insurance)vInsurances.elementAt(i);
 	
 	                                if (insurance!=null && insurance.isAuthorized() && insurance.getInsurar()!=null && insurance.getInsurar().getName()!=null && insurance.getInsurar().getName().trim().length()>0){
@@ -187,6 +207,7 @@ sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
                 <select class="text" name="coverageinsurance" id="coverageinsurance" onchange="changeInsurance();checkCoverage();">
                     <option value=""></option>
 					<%
+                    System.out.println(2);
 						String extrainsurar="";
 						Insurance insurance=Insurance.getMostInterestingInsuranceForPatient(activePatient.personid);
 						if(insurance!=null && insurance.getExtraInsurarUid()!=null && insurance.getExtraInsurarUid().length()>0){
@@ -238,7 +259,8 @@ sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
                 <select class="text" name="EditPrestationName" id="EditPrestationName" onchange="document.getElementById('EditPrestationGroup').value='';changePrestation(false)">
                     <option/>
                     <%
-                        Prestation prestation = debet.getPrestation();
+                    System.out.println(3);
+						Prestation prestation = debet.getPrestation();
 
                         if (prestation!=null){
                             out.print("<option selected value='"+checkString(prestation.getUid())+"'>"+checkString(prestation.getCode())+": "+checkString(prestation.getDescription())+"</option>");
@@ -351,6 +373,7 @@ sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
             	<select class='text' name='EditCareProvider' id='EditCareProvider'>
             		<option value=''></option>
 		            <%
+                    System.out.println(4);
 		            	Vector users = UserParameter.getUserIdsExtended("invoicingcareprovider", "on");
 		            	SortedSet usernames = new TreeSet();
 		            	for(int n=0;n<users.size();n++){
@@ -999,3 +1022,9 @@ sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
   checkAdmissionDaysInvoiced();
   window.setTimeout("changePrestation(false);",300); // Stijn
 </script>
+<%
+}
+catch(Exception e){
+	e.printStackTrace();
+}
+%>

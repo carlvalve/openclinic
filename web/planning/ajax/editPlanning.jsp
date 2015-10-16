@@ -404,7 +404,7 @@
         <td class='admin'><%=getTran("planning","resource",sWebLanguage)%></td>
         <td class='admin2'>
         <% if(!checkString(request.getParameter("readonly")).equalsIgnoreCase("true")){ %>
-        	<a href="javascript:openPopup('/planning/manageResources.jsp&planninguid=<%=sFindPlanningUID%>&tempplanninguid='+document.getElementById('tempplanninguid').value+'&date='+document.getElementById('appointmentDateDay').value+'&begin='+(document.getElementById('appointmentDateHour').value*60+document.getElementById('appointmentDateMinutes').value*1)*60000+'&end='+(document.getElementById('appointmentDateEndHour').value*60+document.getElementById('appointmentDateEndMinutes').value*1)*60000+'&PopupWidth=800&PopupHeight=600&ts=<%=getTs()%>');"><%=getTran("web","edit.resources",sWebLanguage) %></a>
+        	<a href="javascript:openPopup('/planning/manageResources.jsp&planninguid=<%=sFindPlanningUID%>&tempplanninguid='+document.getElementById('tempplanninguid').value+'&date='+document.getElementById('appointmentDateDay').value+'&begin='+(document.getElementById('appointmentDateHour').value*60+document.getElementById('appointmentDateMinutes').value*1)*60000+'&end='+(document.getElementById('appointmentDateEndHour').value*60+document.getElementById('appointmentDateEndMinutes').value*1)*60000+'&PopupWidth=800&PopupHeight=600&ts=<%=getTs()%>');void(0);"><%=getTran("web","edit.resources",sWebLanguage) %></a>
         <%} %>
             <span id='resources'></span>
             <input type='hidden' name='tempplanninguid' id='tempplanninguid'/>

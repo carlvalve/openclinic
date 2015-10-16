@@ -81,21 +81,52 @@
 
         <%-- TYPE --%>
         <tr>
-            <td class="admin"><%=getTran("Web.Occup",sPREFIX+"item_type_mir_type",sWebLanguage)%></td>
+            <td class="admin">
+            	<table width='100%'>
+            		<tr>
+            			<td class="admin">
+			            	<%=getTran("Web.Occup",sPREFIX+"item_type_mir_type",sWebLanguage)%>*
+			            </td>
+			        </tr>
+  				  <%	if(MedwanQuery.getInstance().getConfigInt("enableDHIS2",0)==1){ 
+  							out.println("<tr><td class='admin'>"+getTran("web","dhis2code",sWebLanguage)+"*</td></tr>");
+  						} 
+  				  %>
+  				</table>
+            </td>
             <td class="admin2">
-                <select id="examination" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_TYPE" property="itemId"/>]>.value">
-                    <option/>
-                    <%
-                        String sType = checkString(request.getParameter("type"));
-                        if(sType.length() == 0){
-                            ItemVO item = sessionContainerWO.getCurrentTransactionVO().getItem(sPREFIX+"ITEM_TYPE_MIR2_TYPE");
-                            if (item!=null){
-                                sType = checkString(item.getValue());
-                            }
-                        }
-                    %>
-                    <%=ScreenHelper.writeSelect("mir_type",sType,sWebLanguage,false,true)%>
-                </select>
+            	<table width='100%'>
+            		<tr>
+            			<td class="admin2">
+			                <select id="examination" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_TYPE" property="itemId"/>]>.value">
+			                    <option/>
+			                    <%
+			                        String sType = checkString(request.getParameter("type"));
+			                        if(sType.length() == 0){
+			                            ItemVO item = sessionContainerWO.getCurrentTransactionVO().getItem(sPREFIX+"ITEM_TYPE_MIR2_TYPE");
+			                            if (item!=null){
+			                                sType = checkString(item.getValue());
+			                            }
+			                        }
+			                    %>
+			                    <%=ScreenHelper.writeSelect("mir_type",sType,sWebLanguage,false,true)%>
+			                </select>
+			            </td>
+			        </tr>
+				  <%-- DHIS2 CODE --%>
+				  <%	if(MedwanQuery.getInstance().getConfigInt("enableDHIS2",0)==1){ %>
+				          	<%	if(MedwanQuery.getInstance().getConfigInt("enableBurundi",0)==1){ %>
+				           	<tr><td class='admin2'><select class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DHIS2CODE1" property="itemId"/>]>.value">
+				           		<option value=''></option>
+				           		<%=ScreenHelper.writeSelect("dhis2examcodes",checkString(sessionContainerWO.getCurrentTransactionVO().getItemValue(sPREFIX+"ITEM_TYPE_DHIS2CODE1")),sWebLanguage) %>
+				           	</select></td></tr>
+				           <%	}
+				          		else {
+				          	%>
+				              <tr><td class='admin2'><input type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DHIS2CODE1" property="itemId"/>]>.value" size="80" maxlength="250" value="<%=checkString(sessionContainerWO.getCurrentTransactionVO().getItemValue(sPREFIX+"ITEM_TYPE_DHIS2CODE1"))%>"></td></tr>
+				              <%	} %>
+				  <%	} %>
+				  </table>
             </td>
 
             <%-- SPECIFICATION --%>

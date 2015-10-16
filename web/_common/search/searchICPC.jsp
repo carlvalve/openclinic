@@ -269,7 +269,7 @@
 
 <script>
   window.resizeTo(700,470);
-  document.getElementsByName('keywords')[0].focus();
+  window.setTimeout("document.getElementsByName('keywords')[0].focus();",300);
 
   <%-- DO FIND --%>
   function doFind(){

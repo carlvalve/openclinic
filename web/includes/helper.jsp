@@ -969,6 +969,7 @@
     String sCSSTREEMENU      = "<link href='"+sCONTEXTPATH+"/_common/_css/dhtmlxtree.css' rel='stylesheet' type='text/css'>";
     
     // JS
+    String sSHOWMODALDIALOG = "<script src='"+sCONTEXTPATH+"/_common/_script/showmodaldialog.js'></script>";
     String sJSTOOLTIP = "<script src='"+sCONTEXTPATH+"/_common/_script/tooltip.js'></script>";
     String sJSSHORTCUTS = "<script src='"+sCONTEXTPATH+"/_common/_script/shortcuts.js'></script>";
     String sJSCHAR = "<script src='"+sCONTEXTPATH+"/_common/_script/char.js'></script>";
@@ -1007,7 +1008,9 @@
     //String sJSEXCANVAS  = "<script src='"+sCONTEXTPATH+"/_common/_script/protochart/excanvas.js'></script>";
     String sJSROTATE  = "<script src='"+sCONTEXTPATH+"/_common/_script/rotate.js'></script>";
     String sPROGRESSBAR  = "<script src='"+sCONTEXTPATH+"/_common/_script/pb_prototype.js'></script>"+
-                           "<script src='"+sCONTEXTPATH+"/_common/_script/pb_ProgressBarHandler.js'></script>";
+            "<script src='"+sCONTEXTPATH+"/_common/_script/pb_ProgressBarHandler.js'></script>";
+    String sSUBMODAL  = "<script src='"+sCONTEXTPATH+"/_common/_script/jsmodal-1.0d.js'></script><script src='"+sCONTEXTPATH+"/_common/_script/common.js'></script>"+"<link rel='stylesheet' type='text/css' href='"+sCONTEXTPATH+"/_common/_script/subModal.css' />"+
+            "<script src='"+sCONTEXTPATH+"/_common/_script/subModal.js'></script>";
     String sJSFUSIONCHARTS  = "<script src='"+sCONTEXTPATH+"/_common/_script/FusionCharts.js'></script>";
     String sJSTREEMENU = "<script src='"+sCONTEXTPATH+"/_common/_script/treemenu/dhtmlxtree_compacted.js'></script>"+ // ".._std.js"
                          "<script src='"+sCONTEXTPATH+"/_common/_script/treemenu/dhtmlxcommon.js'></script>";

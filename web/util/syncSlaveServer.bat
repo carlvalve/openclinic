@@ -1,4 +1,4 @@
-SET CENTRAL_SERVER_IP=10.10.86.40
+SET CENTRAL_SERVER_IP=server.antim.hnrw.org
 @echo off
 cd c:\projects\openclinic\util
 del openclinic.sql.gz

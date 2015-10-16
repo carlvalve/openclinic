@@ -75,8 +75,8 @@
     ///////////////////////////////////////////////////////////////////////////////////////////////
     
     AdminPerson adminPerson = activePatient;
+    PatientInvoice invoice = PatientInvoice.get(sEditCreditInvoiceUid);
     if(ScreenHelper.checkString(sEditCreditInvoiceUid).length()>0){
-        PatientInvoice invoice = PatientInvoice.get(sEditCreditInvoiceUid);
         adminPerson=invoice.getPatient();
     }
     if(adminPerson==null){
@@ -142,7 +142,7 @@
 
             // set patient name as default comment
             if(wicketCredit.getComment()==null || (wicketCredit.getComment()!=null && wicketCredit.getComment().toString().length()==0)){
-                wicketCredit.setComment(adminPerson.lastname+" "+adminPerson.firstname+" - "+sEditCreditInvoiceUid.replaceAll("1\\.",""));
+                wicketCredit.setComment(adminPerson.lastname+" "+adminPerson.firstname+(invoice==null?"":" - "+invoice.getInvoiceNumber()));
             }
 
             wicketCredit.setInvoiceUID(sEditCreditInvoiceUid);

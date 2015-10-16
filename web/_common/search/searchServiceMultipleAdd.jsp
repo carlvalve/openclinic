@@ -324,7 +324,7 @@
 
     <script>
       window.resizeTo(650,600);
-      SearchForm.FindText.focus();
+      window.setTimeout("SearchForm.FindText.focus();",300);
 
       <%-- PREV --%>
       function doPrev(idx){

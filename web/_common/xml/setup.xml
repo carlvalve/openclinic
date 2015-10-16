@@ -44,6 +44,26 @@
 		</labels>
 		<project>cd</project>
 	</country>
+	<country code="et">
+		<config key="currency" value="ETB"/>
+		<config key="currencyPdf" value="ETB"/>
+		<config key="countrycode" value="ET"/>
+		<config key="DefaultCountry" value="ET"/>
+		<config key="defaultSearchCountry" value="Ethiop"/>
+		<config key="zipcodetable" value="ethiopiazipcodes"/>
+		<config key="DefaultLanguage" value="en"/>
+		<config key="PatientLanguages" value="en"/>
+		<config key="supportedLanguages" value="en"/>
+		<config key="mxsref" value="ET"/>
+		<config key="priceFormat" value="#"/>
+		<config key="priceFormatInsurar" value="#"/>
+		<config key="currencyDecimals" value="0"/>
+		<labels type="professional.council.url">
+		</labels>
+		<labels type="professional.councils">
+		</labels>
+		<project>et</project>
+	</country>
 	<country code="rw">
 		<config key="currency" value="RWF"/>
 		<config key="currencyPdf" value="RWF"/>

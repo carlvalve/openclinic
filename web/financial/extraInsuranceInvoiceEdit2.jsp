@@ -80,6 +80,7 @@
     <tr>
         <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("medical.accident","insurancecompany",sWebLanguage)%></td>
         <td class="admin2">
+            <input type="hidden" name="EditNumber" value="<%=checkString(insurarInvoice.getNumber())%>">
             <input type="hidden" name="EditInsurarUID" value="<%=checkString(insurarInvoice.getInsurarUid())%>">
             <input type="text" class="text" readonly name="EditInsurarText" value="<%=sInsurarText%>" size="100">
             <%
@@ -96,7 +97,13 @@
     <tbody id="invoicedetails" style="visibility:hidden">
         <tr>
             <td class="admin"><%=getTran("web.finance", "invoiceid", sWebLanguage)%></td>
-            <td class="admin2"><input type="text" class="text" readonly name="EditInvoiceUID" id="EditInvoiceUID" value="<%=checkString(insurarInvoice.getInvoiceUid())%>"></td>
+            <td class="admin2"><input type="text" class="text" readonly name="EditInvoiceUID" id="EditInvoiceUID" value="<%=checkString(insurarInvoice.getInvoiceUid())%>">
+				<%
+	            	if(checkString(insurarInvoice.getNumber()).length()>0 && !insurarInvoice.getInvoiceUid().equalsIgnoreCase(insurarInvoice.getInvoiceNumber())){
+	            		out.print("("+insurarInvoice.getInvoiceNumber()+")");
+	            	}
+				%>
+			</td>
         </tr>
             
         <%-- DATE --%>
@@ -278,6 +285,7 @@ function doSave(){
       postBody: 'EditDate='+EditForm.EditDate.value+
                 '&EditInsurarInvoiceUID='+EditForm.EditInsurarInvoiceUID.value+
                 '&EditInvoiceUID='+EditForm.EditInvoiceUID.value+
+                '&EditNumber='+EditForm.EditNumber.value+
                 '&EditInsurarUID='+EditForm.EditInsurarUID.value+
                 '&EditStatus='+EditForm.EditStatus.value+
                 '&EditCBs='+sCbs+

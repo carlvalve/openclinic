@@ -132,10 +132,11 @@
 				              "  and b.dc_monitorvalue_date > ?"+
 				              "  and a.dc_monitorserver_name<>''"+
 				              "  and a.dc_monitorserver_country<>''"+
-				              " order by dc_monitorserver_country, dc_monitorserver_city, dc_monitorserver_serverid, dc_monitorvalue_date desc";
+				              " order by dc_monitorserver_country, dc_monitorserver_city, dc_monitorserver_serverid, dc_monitorvalue_updatetime desc";
 				PreparedStatement ps=conn.prepareStatement(sSql);
 				long month=30*24*3600;
-				month=month*1000;
+				month*=1000;
+				System.out.println("time="+new java.sql.Timestamp(new java.util.Date().getTime()-MedwanQuery.getInstance().getConfigInt("gbhPublicInactivityPeriodInMonths",3)*month));
 				ps.setTimestamp(1,new java.sql.Timestamp(new java.util.Date().getTime()-MedwanQuery.getInstance().getConfigInt("gbhPublicInactivityPeriodInMonths",3)*month));
 				ResultSet rs = ps.executeQuery();
 				int serverid,activeServer=-1;
@@ -171,7 +172,6 @@
 						}
 						siteData.softwareversion = checkString(rs.getString("dc_monitorserver_softwareversion"));
 						sites.put(activeServer,siteData);
-						
 						summarySite.patients+=siteData.patients;
 						summarySite.visits+=siteData.visits;
 						summarySite.admissions+=siteData.admissions;

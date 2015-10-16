@@ -170,5 +170,5 @@
     }
   }
     
-  SearchForm.FindLastname.focus();
+  window.setTimeout("SearchForm.FindLastname.focus();",300);
 </script>

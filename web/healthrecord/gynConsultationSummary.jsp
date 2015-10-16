@@ -608,7 +608,7 @@
             
             <table width="100%" class="list" cellspacing="1">
                 <tr class="admin">
-                    <td align="center"><a href="javascript:openPopup('medical/managePrescriptionsPopup.jsp&amp;skipEmpty=1',900,400,'medication');"><%=getTran("Web.Occup","medwan.healthrecord.medication",sWebLanguage)%></a></td>
+                    <td align="center"><a href="javascript:openPopup('medical/managePrescriptionsPopup.jsp&amp;skipEmpty=1',900,400,'medication');void(0);"><%=getTran("Web.Occup","medwan.healthrecord.medication",sWebLanguage)%></a></td>
                 </tr>
                 <tr>
                     <td>
@@ -671,7 +671,7 @@
                     }
                 %>
                 <tr>
-                    <td><a href="javascript:openPopup('medical/managePrescriptionForm.jsp&amp;skipEmpty=1',650,430,'medication');"><%=getTran("web","medicationpaperprescription",sWebLanguage)%></a></td>
+                    <td><a href="javascript:openPopup('medical/managePrescriptionForm.jsp&amp;skipEmpty=1',650,430,'medication');void(0);"><%=getTran("web","medicationpaperprescription",sWebLanguage)%></a></td>
                 </tr>
             </table>
         </td>
@@ -827,7 +827,18 @@
         ItemVO itemEcho = MedwanQuery.getInstance().getLastItemVO(Integer.parseInt(activePatient.personid), "be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DATE_ECHO");
         if (itemAgeDateEcho!=null && itemEcho!=null){
            	//How many weeks was the patient at the moment of the last echo?
-            double lEcho = Double.parseDouble(itemAgeDateEcho.getValue().replaceAll(",","."));
+            double lEcho = 0;
+           	try{
+           		if(itemAgeDateEcho.getValue().split(" ").length>1){
+           			lEcho=Double.parseDouble(itemAgeDateEcho.getValue().split(" ")[0])*7+Double.parseDouble(itemAgeDateEcho.getValue().split(" ")[1]);
+           		}
+           		else {
+    	           	lEcho=Double.parseDouble(itemAgeDateEcho.getValue().replaceAll(",","."));
+           		}
+           	}
+           	catch(Exception e){
+           		e.printStackTrace();
+           	}
            	//How many weeks between the last echo date and now?
            	try{
             	java.util.Date dNow = ScreenHelper.getSQLDate(ScreenHelper.getDate());

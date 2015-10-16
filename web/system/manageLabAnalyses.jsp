@@ -30,6 +30,7 @@
     String sMonster = "",
            sBiomonitoring = "",
            sMedidoccode = "",
+           sDhis2code = "",
            sComment = "",
            sLimitValue = "",
            sShortTimeValue = "",
@@ -136,6 +137,7 @@
             sMonster = checkString(request.getParameter("EditMonster"));
             sBiomonitoring = checkString(request.getParameter("EditBiomonitoring"));
             sMedidoccode = checkString(request.getParameter("EditMedidoccode"));
+            sDhis2code = checkString(request.getParameter("EditDhis2code"));
             sComment = checkString(request.getParameter("EditComment"));
             sAlertValue = checkString(request.getParameter("EditAlertValue"));
             sLimitValue = checkString(request.getParameter("EditLimitValue"));
@@ -208,6 +210,7 @@
                 labAnalysis.setMonster(sMonster);
                 labAnalysis.setBiomonitoring(sBiomonitoring);
                 labAnalysis.setMedidoccode(sMedidoccode);
+                labAnalysis.setDhis2code(sDhis2code);
                 labAnalysis.setLabgroup(sLabGroup);
                 labAnalysis.setComment(sComment);
                 labAnalysis.setUpdateuserid(Integer.parseInt(activeUser.userid));
@@ -339,6 +342,7 @@
             sMonster       = labAnalysis.getMonster();
             sBiomonitoring = labAnalysis.getBiomonitoring();
             sMedidoccode   = labAnalysis.getMedidoccode();
+            sDhis2code     = labAnalysis.getDhis2code();
             sLabCodeOther  = labAnalysis.getLabcodeother();
             sProcedure     = labAnalysis.getProcedureUid();
             sLabGroup      = labAnalysis.getLabgroup();
@@ -382,6 +386,7 @@
                     <td><%=sMonster%></td>
                     <td><%=sBiomonitoring%></td>
                     <td><%=sMedidoccode%></td>
+                    <td><%=sDhis2code%></td>
                     <td><%=sLabGroup%></td>
                 </tr>
             <%
@@ -440,6 +445,7 @@
                     sBiomonitoring="0";
                 }
                 sMedidoccode    = checkString(labAnalysis.getMedidoccode());
+                sDhis2code    = checkString(labAnalysis.getDhis2code());
                 sComment        = checkString(labAnalysis.getComment());
                 sLabGroup       = checkString(labAnalysis.getLabgroup());
                 sLabCodeOther   = checkString(labAnalysis.getLabcodeother());
@@ -662,6 +668,24 @@
       <input type="text" name="EditMedidoccode" class="text" value="<%=sMedidoccode%>" size="50" onblur="limitLength(this);">
     </td>
   </tr>
+  <%-- DHIS2 CODE --%>
+  <%	if(MedwanQuery.getInstance().getConfigInt("enableDHIS2",0)==1){ %>
+      <tr>
+		  <td class="admin"><%=getTran("web","dhis2code",sWebLanguage)%></td>
+          <td class="admin2">
+          	<%	if(MedwanQuery.getInstance().getConfigInt("enableBurundi",0)==1){ %>
+           	<select class="text" name="EditDhis2code">
+           		<option value=''></option>
+           		<%=ScreenHelper.writeSelect("dhis2examcodes",sDhis2code,sWebLanguage) %>
+           	</select>
+           <%	}
+          		else {
+          	%>
+              <input type="text" class="text" name="EditDhis2code" size="80" maxlength="250" value="<%=sDhis2code%>">
+              <%	} %>
+          </td>
+      </tr>
+  <%	} %>
   <%-- PRESTATION CODE --%>
   <%
   if(MedwanQuery.getInstance().getConfigInt("enableAutomaticLabInvoicing",0)==1){

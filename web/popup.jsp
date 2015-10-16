@@ -10,7 +10,7 @@
     <%=sJSPROTOTYPE%>
     <%=sJSNUMBER%>
     <%=sJSTOGGLE%>
-        
+</head>
 <%
 
     String sPopupPage = checkString(request.getParameter("Page"));
@@ -298,8 +298,9 @@
       gfPop3.fHideCal();
     }
   }
-    
+
   if(document.layers) document.captureEvents(Event.MOUSEDOWN);
 </script>
+
 </body>
 </html>

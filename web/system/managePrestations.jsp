@@ -55,6 +55,7 @@
            sEditPrestationFlag1 = checkString(request.getParameter("EditPrestationFlag1")),
            sEditPrestationServiceUid = checkString(request.getParameter("EditPrestationServiceUid")),
            sEditPrestationNomenclature = checkString(request.getParameter("EditPrestationNomenclature")),
+           sEditPrestationDHIS2Code = checkString(request.getParameter("EditPrestationDHIS2Code")),
 		   sEditCareProvider = checkString(request.getParameter("EditCareProvider"));
 		if(sEditPrestationVariablePrice.length()==0){
 			sEditPrestationVariablePrice="0";
@@ -164,6 +165,7 @@
         prestation.setPrestationClass(sEditPrestationClass);
         prestation.setServiceUid(sEditPrestationServiceUid);
         prestation.setNomenclature(sEditPrestationNomenclature);
+        prestation.setDhis2code(sEditPrestationDHIS2Code);
         prestation.setFlag1(sEditPrestationFlag1);
         try{
         	prestation.setUpdateDateTime(ScreenHelper.parseDate(sEditPrestationUpdatetime));
@@ -332,6 +334,23 @@
                             <input type="text" class="text" name="EditPrestationNomenclature" size="80" maxlength="250" value="<%=checkString(prestation.getNomenclature())%>">
                         </td>
                     </tr>
+                       	<%	if(MedwanQuery.getInstance().getConfigInt("enableDHIS2",0)==1){ %>
+		                    <tr>
+		                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","dhis2code",sWebLanguage)%></td>
+		                        <td class="admin2">
+		                        	<%	if(MedwanQuery.getInstance().getConfigInt("enableBurundi",0)==1){ %>
+			                        	<select class="text" name="EditPrestationDHIS2Code">
+			                        		<option value=''></option>
+			                        		<%=ScreenHelper.writeSelect("dhis2nomenclature",checkString(prestation.getDhis2code()),sWebLanguage) %>
+			                        	</select>
+			                        <%	}
+		                        		else {
+		                        	%>
+		                            <input type="text" class="text" name="EditPrestationDHIS2Code" size="80" maxlength="250" value="<%=checkString(prestation.getDhis2code())%>">
+		                            <%	} %>
+		                        </td>
+		                    </tr>
+		                <%	} %>
                     <tr>
                         <td class="admin"><%=getTran("web","description",sWebLanguage)%>&nbsp;*&nbsp;</td>
                         <td class="admin2">

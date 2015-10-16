@@ -349,7 +349,7 @@
   <%-- SUBMIT FORM --%>
   function submitForm(){
     if(document.getElementById('encounteruid').value.length==0){
-	  alertDialog("web","no.encounter.linked");
+	  alertDialogDirectText('<%=getTranNoLink("web","no.encounter.linked",sWebLanguage)%>');
       searchEncounter();
 	}	
     else{
@@ -367,7 +367,7 @@
   }
   
   if(document.getElementById('encounteruid').value==''){
-	alertDialog("web","no.encounter.linked");
+	alertDialogDirectText('<%=getTranNoLink("web","no.encounter.linked",sWebLanguage)%>');
 	searchEncounter();
   }  
 </script>
