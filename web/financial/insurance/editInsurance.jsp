@@ -63,6 +63,8 @@
     String sEditInsuranceInsurarName = "";
     String sEditInsuranceComment = checkString(request.getParameter("EditInsuranceComment"));
     String sEditInsuranceDefault = checkString(request.getParameter("EditInsuranceDefault"));
+    String sEditInsuranceMemberCategory = checkString(request.getParameter("EditInsuranceMemberCategory"));
+    String sEditInsuranceFamilyCode = checkString(request.getParameter("EditInsuranceFamilyCode"));
 	if(sEditInsuranceDefault.length()==0){
 		sEditInsuranceDefault = "0";
 	}
@@ -115,6 +117,8 @@
 	        insurance.setExtraInsurarUid(sEditExtraInsurarUID);
 	        insurance.setExtraInsurarUid2(sEditExtraInsurarUID2);
 	        insurance.setDefaultInsurance(Integer.parseInt(sEditInsuranceDefault));
+	        insurance.setMembercategory(sEditInsuranceMemberCategory);
+	        insurance.setFamilycode(sEditInsuranceFamilyCode);
 	        insurance.store();
 	        
 	        if(insurance.getDefaultInsurance()==1){
@@ -174,6 +178,8 @@
             sEditInsuranceCategory = insuranceCategory.getCategory()+": "+insuranceCategory.getLabel();
         }
         sEditInsuranceDefault = insurance.getDefaultInsurance()+"";
+        sEditInsuranceMemberCategory = ScreenHelper.checkString(insurance.getMembercategory());
+        sEditInsuranceFamilyCode = ScreenHelper.checkString(insurance.getFamilycode());
     }
     else if(sEditInsurarUID.length()>0 && sEditInsuranceCategoryLetter.length() > 0){
         InsuranceCategory insuranceCategory = InsuranceCategory.get(sEditInsurarUID,sEditInsuranceCategoryLetter);
@@ -229,6 +235,32 @@
             <td class="admin"><%=getTran("insurance","memberemployer",sWebLanguage)%></td>
             <td class="admin2">
                 <input class="text" type="text" name="EditInsuranceMemberEmployer" value="<%=sEditInsuranceMemberEmployer%>" size="<%=sTextWidth%>"/>
+            </td>
+        </tr>
+ <%
+	}
+ %>
+<%
+	if(MedwanQuery.getInstance().getConfigInt("enableRwanda",0)==1){
+%>
+        <%-- membercategory --%>
+        <tr>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("insurance","membercategory",sWebLanguage)%></td>
+            <td class="admin2">
+            	<select class="text" name="EditInsuranceMemberCategory" id="EditInsuranceMemberCategory">
+            		<option></option>
+            		<%=ScreenHelper.writeSelect("membercategory", sEditInsuranceMemberCategory, sWebLanguage) %>
+            	</select>
+            </td>
+        </tr>
+        <%-- employer --%>
+        <tr>
+            <td class="admin"><%=getTran("insurance","familycode",sWebLanguage)%></td>
+            <td class="admin2">
+            	<select class="text" name="EditInsuranceFamilyCode" id="EditInsuranceFamilyCode">
+            		<option></option>
+            		<%=ScreenHelper.writeSelect("familycode", sEditInsuranceFamilyCode, sWebLanguage) %>
+            	</select>
             </td>
         </tr>
  <%

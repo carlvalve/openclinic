@@ -136,6 +136,8 @@
 	    	<column name="OC_VACCINATION_BATCHNUMBER" dbtype="varchar" javatype="string" size="50"/>
 	    	<column name="OC_VACCINATION_EXPIRY" dbtype="varchar" javatype="string" size="50"/>
 	    	<column name="OC_VACCINATION_LOCATION" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="OC_VACCINATION_OBSERVATION" dbtype="varchar" javatype="string" size="255"/>
+	    	<column name="OC_VACCINATION_MODIFIER" dbtype="varchar" javatype="string" size="255"/>
 	    	<column name="OC_VACCINATION_UPDATETIME" dbtype="datetime" javatype="date" />
     	</columns>
 	    <indexes>
@@ -833,6 +835,14 @@
 	    </indexes>
     </table>
     
+    <table name="DC_UNKNOWNDIAGNOSES" db="stats" sync="NONE">
+    	<columns>
+	    	<column name="DC_UNKNOWNDIAGNOSIS_SERVERID" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="DC_UNKNOWNDIAGNOSIS_DATASETUID" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="DC_UNKNOWNDIAGNOSIS_CODE" dbtype="varchar" javatype="string" size="50"/>
+    	</columns>
+    </table>
+    
 	<table name="DC_FINANCIALVALUES" db="stats" sync="NONE">
 		<columns>
 			<column name="DC_FINANCIALVALUE_SERVERID" dbtype="int" javatype="integer"/>
@@ -929,6 +939,67 @@
 	    		<indexcolumn order="ASC" name="DC_DIAGNOSISVALUE_CODE"/>
 	    	</index>
 	    	<index name="DC_DIAGNOSISVALUE_YEARMONTH">
+	    		<indexcolumn order="ASC" name="DC_DIAGNOSISVALUE_YEAR"/>
+	    		<indexcolumn order="ASC" name="DC_DIAGNOSISVALUE_MONTH"/>
+	    	</index>
+	    </indexes>
+	</table>
+	<table name="DC_DHIS2DIAGNOSISVALUES" db="stats" sync="NONE">
+		<columns>
+			<column name="DC_DIAGNOSISVALUE_SERVERID" dbtype="int" javatype="integer"/>
+			<column name="DC_DIAGNOSISVALUE_OBJECTID" dbtype="int" javatype="integer"/>
+			<column name="DC_DIAGNOSISVALUE_SERVICEUID" dbtype="varchar" javatype="string" size="50"/>
+			<column name="DC_DIAGNOSISVALUE_ENCOUNTERTYPE" dbtype="varchar" javatype="string" size="50"/>
+			<column name="DC_DIAGNOSISVALUE_GENDER" dbtype="varchar" javatype="string" size="5"/>
+			<column name="DC_DIAGNOSISVALUE_AGE" dbtype="int" javatype="integer"/>
+			<column name="DC_DIAGNOSISVALUE_CODETYPE" dbtype="varchar" javatype="string" size="50"/>
+			<column name="DC_DIAGNOSISVALUE_CODE" dbtype="varchar" javatype="string" size="50"/>
+			<column name="DC_DIAGNOSISVALUE_YEAR" dbtype="int" javatype="integer"/>
+			<column name="DC_DIAGNOSISVALUE_MONTH" dbtype="int" javatype="integer"/>
+			<column name="DC_DIAGNOSISVALUE_COUNT" dbtype="int" javatype="integer"/>
+	    	<column name="DC_DIAGNOSISVALUE_DHIS2EXPORTDATETIME" dbtype="datetime" javatype="date"/>
+	    </columns>
+	    <indexes>
+	    	<index name="DC_DHIS2DIAGNOSISVALUE_OBJECTID">
+	    		<indexcolumn order="ASC" name="DC_DIAGNOSISVALUE_OBJECTID"/>
+	    	</index>
+	    	<index name="DC_DHIS2DIAGNOSISVALUE_CODE">
+	    		<indexcolumn order="ASC" name="DC_DIAGNOSISVALUE_CODE"/>
+	    	</index>
+	    	<index name="DC_DIAGNOSISVALUE_DHIS2EXPORTDATETIME">
+	    		<indexcolumn order="ASC" name="DC_DIAGNOSISVALUE_DHIS2EXPORTDATETIME"/>
+	    	</index>
+	    	<index name="DC_DHIS2DIAGNOSISVALUE_YEARMONTH">
+	    		<indexcolumn order="ASC" name="DC_DIAGNOSISVALUE_YEAR"/>
+	    		<indexcolumn order="ASC" name="DC_DIAGNOSISVALUE_MONTH"/>
+	    	</index>
+	    </indexes>
+	</table>
+	<table name="DC_DHIS2DEATHDIAGNOSISVALUES" db="stats" sync="NONE">
+		<columns>
+			<column name="DC_DIAGNOSISVALUE_SERVERID" dbtype="int" javatype="integer"/>
+			<column name="DC_DIAGNOSISVALUE_OBJECTID" dbtype="int" javatype="integer"/>
+			<column name="DC_DIAGNOSISVALUE_SERVICEUID" dbtype="varchar" javatype="string" size="50"/>
+			<column name="DC_DIAGNOSISVALUE_GENDER" dbtype="varchar" javatype="string" size="5"/>
+			<column name="DC_DIAGNOSISVALUE_AGE" dbtype="int" javatype="integer"/>
+			<column name="DC_DIAGNOSISVALUE_CODETYPE" dbtype="varchar" javatype="string" size="50"/>
+			<column name="DC_DIAGNOSISVALUE_CODE" dbtype="varchar" javatype="string" size="50"/>
+			<column name="DC_DIAGNOSISVALUE_YEAR" dbtype="int" javatype="integer"/>
+			<column name="DC_DIAGNOSISVALUE_MONTH" dbtype="int" javatype="integer"/>
+			<column name="DC_DIAGNOSISVALUE_COUNT" dbtype="int" javatype="integer"/>
+	    	<column name="DC_DIAGNOSISVALUE_DHIS2EXPORTDATETIME" dbtype="datetime" javatype="date"/>
+	    </columns>
+	    <indexes>
+	    	<index name="DC_DHIS2DIAGNOSISVALUE_OBJECTID">
+	    		<indexcolumn order="ASC" name="DC_DIAGNOSISVALUE_OBJECTID"/>
+	    	</index>
+	    	<index name="DC_DHIS2DIAGNOSISVALUE_CODE">
+	    		<indexcolumn order="ASC" name="DC_DIAGNOSISVALUE_CODE"/>
+	    	</index>
+	    	<index name="DC_DIAGNOSISVALUE_DHIS2EXPORTDATETIME">
+	    		<indexcolumn order="ASC" name="DC_DIAGNOSISVALUE_DHIS2EXPORTDATETIME"/>
+	    	</index>
+	    	<index name="DC_DHIS2DIAGNOSISVALUE_YEARMONTH">
 	    		<indexcolumn order="ASC" name="DC_DIAGNOSISVALUE_YEAR"/>
 	    		<indexcolumn order="ASC" name="DC_DIAGNOSISVALUE_MONTH"/>
 	    	</index>
@@ -2797,6 +2868,8 @@
             <column name="OC_INSURANCE_EXTRAINSURARUID" dbtype="varchar" javatype="string" size="50"/>
             <column name="OC_INSURANCE_EXTRAINSURARUID2" dbtype="varchar" javatype="string" size="50"/>
 			<column name="OC_INSURANCE_DEFAULT" dbtype="int" javatype="integer"/>
+            <column name="OC_INSURANCE_MEMBERCATEGORY" dbtype="varchar" javatype="string" size="50"/>
+            <column name="OC_INSURANCE_FAMILYCODE" dbtype="varchar" javatype="string" size="50"/>
         </columns>
 		<indexes>
 			<index name="OC_INSURANCE_OBJECTID">
@@ -2834,6 +2907,8 @@
             <column name="OC_INSURANCE_EXTRAINSURARUID" dbtype="varchar" javatype="string" size="50"/>
             <column name="OC_INSURANCE_EXTRAINSURARUID2" dbtype="varchar" javatype="string" size="50"/>
 			<column name="OC_INSURANCE_DEFAULT" dbtype="int" javatype="integer"/>
+            <column name="OC_INSURANCE_MEMBERCATEGORY" dbtype="varchar" javatype="string" size="50"/>
+            <column name="OC_INSURANCE_FAMILYCODE" dbtype="varchar" javatype="string" size="50"/>
         </columns>
     </table>
 
@@ -2850,6 +2925,7 @@
 			<column name="OC_INSURARINVOICE_VERSION" dbtype="int" javatype="integer" nulls="0"/>
             <column name="OC_INSURARINVOICE_STATUS" dbtype="varchar" javatype="string" size="255" nulls="0"/>
             <column name="OC_INSURARINVOICE_BALANCE" dbtype="float" javatype="float"/>
+            <column name="OC_INSURARINVOICE_NUMBER" dbtype="varchar" javatype="string" size="20"/>
         </columns>
 		<indexes>
 			<index name="OC_E_INSURARINVOICE_OBJECTID">
@@ -2874,6 +2950,7 @@
 			<column name="OC_INSURARINVOICE_VERSION" dbtype="int" javatype="integer" nulls="0"/>
             <column name="OC_INSURARINVOICE_STATUS" dbtype="varchar" javatype="string" size="255" nulls="0"/>
             <column name="OC_INSURARINVOICE_BALANCE" dbtype="float" javatype="float"/>
+            <column name="OC_INSURARINVOICE_NUMBER" dbtype="varchar" javatype="string" size="20"/>
         </columns>
     </table>
 
@@ -2890,6 +2967,7 @@
 			<column name="OC_INSURARINVOICE_VERSION" dbtype="int" javatype="integer" nulls="0"/>
             <column name="OC_INSURARINVOICE_STATUS" dbtype="varchar" javatype="string" size="255" nulls="0"/>
             <column name="OC_INSURARINVOICE_BALANCE" dbtype="float" javatype="float"/>
+            <column name="OC_INSURARINVOICE_NUMBER" dbtype="varchar" javatype="string" size="20"/>
         </columns>
 		<indexes>
 			<index name="OC_E_INSURARINVOICE2_OBJECTID">
@@ -2914,6 +2992,7 @@
 			<column name="OC_INSURARINVOICE_VERSION" dbtype="int" javatype="integer" nulls="0"/>
             <column name="OC_INSURARINVOICE_STATUS" dbtype="varchar" javatype="string" size="255" nulls="0"/>
             <column name="OC_INSURARINVOICE_BALANCE" dbtype="float" javatype="float"/>
+            <column name="OC_INSURARINVOICE_NUMBER" dbtype="varchar" javatype="string" size="20"/>
         </columns>
     </table>
 
@@ -2930,6 +3009,7 @@
 			<column name="OC_INSURARINVOICE_VERSION" dbtype="int" javatype="integer" nulls="0"/>
             <column name="OC_INSURARINVOICE_STATUS" dbtype="varchar" javatype="string" size="255" nulls="0"/>
             <column name="OC_INSURARINVOICE_BALANCE" dbtype="float" javatype="float"/>
+            <column name="OC_INSURARINVOICE_NUMBER" dbtype="varchar" javatype="string" size="20"/>
         </columns>
 		<indexes>
 			<index name="OC_INSURARINVOICE_OBJECTID">
@@ -2954,6 +3034,7 @@
 			<column name="OC_INSURARINVOICE_VERSION" dbtype="int" javatype="integer" nulls="0"/>
             <column name="OC_INSURARINVOICE_STATUS" dbtype="varchar" javatype="string" size="255" nulls="0"/>
             <column name="OC_INSURARINVOICE_BALANCE" dbtype="float" javatype="float"/>
+            <column name="OC_INSURARINVOICE_NUMBER" dbtype="varchar" javatype="string" size="20"/>
         </columns>
     </table>
 
@@ -3254,6 +3335,7 @@
             <column name="OC_PRESTATION_MODIFIERS" dbtype="varchar" javatype="string" size="255"/>
             <column name="OC_PRESTATION_SERVICEUID" dbtype="varchar" javatype="string" size="50"/>
             <column name="OC_PRESTATION_NOMENCLATURE" dbtype="varchar" javatype="string" size="50"/>
+            <column name="OC_PRESTATION_DHIS2CODE" dbtype="varchar" javatype="string" size="50"/>
         </columns>
 		<indexes>
 			<index name="OC_PRESTATION_OBJECTID">
@@ -3293,6 +3375,7 @@
             <column name="OC_PRESTATION_MODIFIERS" dbtype="varchar" javatype="string" size="255"/>
             <column name="OC_PRESTATION_SERVICEUID" dbtype="varchar" javatype="string" size="50"/>
             <column name="OC_PRESTATION_NOMENCLATURE" dbtype="varchar" javatype="string" size="50"/>
+            <column name="OC_PRESTATION_DHIS2CODE" dbtype="varchar" javatype="string" size="50"/>
         </columns>
 		<indexes>
 			<index name="OC_PRESTATION_OBJECTID">
@@ -3937,9 +4020,10 @@
 			<column name="monster"        dbtype="varchar"  javatype="string"  size="50"/>
             <column name="biomonitoring"  dbtype="varchar"  javatype="string"  size="50"/>
             <column name="medidoccode"    dbtype="varchar"  javatype="string"  size="50"/>
+            <column name="dhis2code"      dbtype="varchar"  javatype="string"  size="50"/>
             <column name="comment"        dbtype="varchar"  javatype="string"  size="255"/>
             <column name="updateuserid"   dbtype="int"      javatype="integer"/>
-            <column name="historydays"   dbtype="int"      javatype="integer"/>
+            <column name="historydays"    dbtype="int"      javatype="integer"/>
             <column name="historyvalues"   dbtype="int"      javatype="integer"/>
             <column name="updatetime"     dbtype="datetime" javatype="date"    version="1"/>
             <column name="deletetime"     dbtype="datetime" javatype="date"    version="1"/>

@@ -709,7 +709,7 @@
 		            }
 					reduction=-1;
 			    	var reductions=document.getElementsByName('reduction');
-					if(reductions[0].type=='radio'){
+					if(reductions[0] && reductions[0].type=='radio'){
 						for(var n=0;n<reductions.length;n++){
 							if(reductions[n].checked){
 								reduction=reductions[n].value*1;
@@ -816,7 +816,7 @@
 	    	document.getElementById('invoicePaid').innerHTML='<b>'+paid.toFixed(<%=MedwanQuery.getInstance().getConfigInt("currencyDecimals",2)%>)+'</b>';
 	    	document.getElementById('invoice100pct').innerHTML='<b>'+((insurar+total).toFixed(<%=MedwanQuery.getInstance().getConfigInt("currencyDecimals",2)%>))+'</b>';
 			var reductions=document.getElementsByName('reduction');
-			if(reductions[0].type=='radio'){
+			if(reductions[0] && reductions[0].type=='radio'){
 				for(var n=0;n<reductions.length;n++){
 					if(reductions[n].checked){
 						reduction=reductions[n].value;
@@ -1012,3 +1012,4 @@
 	}
 
 %>
+

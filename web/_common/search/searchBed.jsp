@@ -72,7 +72,7 @@
 
 <script>
   window.resizeTo(600,520);
-  SearchForm.FindBedName.focus();
+  window.setTimeout("SearchForm.FindBedName.focus();",300);
   doFind();
     
   <%-- CLEAR FIELDS --%>

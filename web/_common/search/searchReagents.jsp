@@ -69,7 +69,7 @@
 
 <script>
   window.resizeTo(800,600);
-  SearchForm.FindReagentName.focus();
+  window.setTimeout("SearchForm.FindReagentName.focus();",300);
 
   function clearFields(){
     SearchForm.FindReagentName.value = "";

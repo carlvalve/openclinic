@@ -391,7 +391,7 @@
                             rfe = ReasonForEncounter.getReasonsForEncounterAsHtml(encounter,sWebLanguage,"_img/icons/icon_delete.gif","deleteRFE($serverid,$objectid)");
                             %>
                             <tr class="admin">
-                                <td align="center"><a href="javascript:openPopup('healthrecord/findRFE.jsp&field=rfe&encounterUid=<%=encounter.getUid()%>&ts=<%=getTs()%>',700,400)"><%=getTran("openclinic.chuk","rfe",sWebLanguage)%> <%=getTran("Web.Occup","ICPC-2",sWebLanguage)%>/<%=getTran("Web.Occup","ICD-10",sWebLanguage)%></a></td>
+                                <td align="center"><a href="javascript:openPopup('healthrecord/findRFE.jsp&field=rfe&encounterUid=<%=encounter.getUid()%>&ts=<%=getTs()%>',700,400);void(0);"><%=getTran("openclinic.chuk","rfe",sWebLanguage)%> <%=getTran("Web.Occup","ICPC-2",sWebLanguage)%>/<%=getTran("Web.Occup","ICD-10",sWebLanguage)%></a></td>
                             </tr>
                             <tr>
                                 <td id='rfe'>
@@ -402,7 +402,7 @@
                         }
                     %>
                 <tr class="admin">
-                    <td align="center"><a href="javascript:openPopup('healthrecord/findICPC.jsp&ts=<%=getTs()%>&patientuid=<%=activePatient.personid %>',700,400)"><%=getTran("openclinic.chuk","diagnostic",sWebLanguage)%> <%=getTran("Web.Occup","ICPC-2",sWebLanguage)%>/<%=getTran("Web.Occup","ICD-10",sWebLanguage)%></a></td>
+                    <td align="center"><a href="javascript:openPopup('healthrecord/findICPC.jsp&ts=<%=getTs()%>&patientuid=<%=activePatient.personid %>',700,400);void(0);"><%=getTran("openclinic.chuk","diagnostic",sWebLanguage)%> <%=getTran("Web.Occup","ICPC-2",sWebLanguage)%>/<%=getTran("Web.Occup","ICD-10",sWebLanguage)%></a></td>
                 </tr>
                 <tr>
                     <td id='icpccodes'>
@@ -560,7 +560,7 @@
                     }
                 %>
                 <tr>
-                    <td><a href="javascript:openPopup('medical/managePrescriptionForm.jsp&amp;skipEmpty=1',650,430,'medication');"><%=getTran("web","medicationpaperprescription",sWebLanguage)%></a></td>
+                    <td><a href="javascript:openPopup('medical/managePrescriptionForm.jsp&amp;skipEmpty=1',650,430,'medication');void(0);;"><%=getTran("web","medicationpaperprescription",sWebLanguage)%></a></td>
                 </tr>
             </table>
         </td>

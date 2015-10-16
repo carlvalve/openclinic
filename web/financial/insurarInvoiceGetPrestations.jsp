@@ -133,6 +133,7 @@
         StringBuffer sReturn = new StringBuffer();
         boolean bBaseInvoicingOnPatientInvoiceDate=false;
 
+        try{
         if (vDebets != null) {
             Debet debet;
             Prestation prestation;
@@ -144,13 +145,15 @@
                 sImage = " _img/themes/default/uncheck.gif";
             }
             String oldname="",oldencounter="",olddate="";
-            
+            System.out.println(1);
             // sort the records
             for (int i=0;i<vDebets.size(); i++){
                 debet = (Debet) vDebets.elementAt(i);
                 if(debet!=null){
                 	if(i==0){
+                        System.out.println(2);
                 		bBaseInvoicingOnPatientInvoiceDate=(debet.getInsurance()!=null && debet.getInsurance().getInsurar()!=null && debet.getInsurance().getInsurar().getIncludeAllPatientInvoiceDebets()==1);
+                        System.out.println(3);
                 	}
                     hSort.put(debet.getPatientName()+"="+debet.getDate().getTime()+"="+debet.getUid(),debet);
                 }
@@ -238,6 +241,7 @@
                         // alternate row-style
                         if(sClass.equals("")) sClass = "1";
                         else                  sClass = "";
+                        System.out.println(4);
 
                         sReturn.append("<tr class='list"+sClass+"'><td><img src='"+sImage+"' name='cbDebet"+debet.getUid()+"="+debet.getInsurarAmount()+"' onclick='doBalance(this, true)'></td>"
                                        +"<td>"+HTMLEntities.htmlentities(sPatientName)+"</td>"
@@ -247,11 +251,15 @@
                                        +"<td>" +debet.getQuantity()+" x "+ HTMLEntities.htmlentities(sPrestationDescription)+"</td>"
                                        +"<td>"+new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","0.00")).format(debet.getInsurarAmount())+" "+MedwanQuery.getInstance().getConfigParam("currency", "€")+"</td>"
                                        +"</tr>");
+                        System.out.println(5);
                     }
                 }
             }
         }
-        
+        }
+        catch(Exception e){
+        	e.printStackTrace();
+        }
         return sReturn.toString();
     }
 %>
@@ -266,6 +274,7 @@
         <td><%=HTMLEntities.htmlentities(getTran("web","amount",sWebLanguage))%></td>
     </tr>
 <%
+	try{
 	String sWarning="";
 	String sServiceUid = checkString(request.getParameter("EditInvoiceService"));
 	if(sServiceUid.length()>0){
@@ -319,5 +328,9 @@
     
    	s += "<tr><td colspan='6'>"+(vUnassignedDebets.size()+vDebets.size())+" "+getTranNoLink("web","records.loaded",sWebLanguage)+"</td></tr>";
     out.print(s);
+	}
+catch(Exception e){
+	e.printStackTrace();
+}
 %>
 </table>

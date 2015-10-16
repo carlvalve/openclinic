@@ -70,29 +70,31 @@
                     String oldcodelabel = "";
                     for(int n=0; n<codes.size(); n++){
                         code = (ICPCCode)codes.elementAt(n);
-                        Debug.println("ICPC code : "+code.code); 
-
-                        //if(!oldcodelabel.equalsIgnoreCase(code.label)){
-                            oldcodelabel = code.label;
-                            
-                            if(code.code.length()>=5 || code.code.startsWith("I")){
-                                foundRecords++;
-			                    
-	                        	// alternate row-style
-	                        	if(sClass.length()==0) sClass = "1";
-	                        	else                   sClass = ""; 
-	                        	
-                                if(code.code.length()>=5 && code.code.substring(3,5).equalsIgnoreCase("00")){
-                                    out.print("<tr class='list"+sClass+"' style='font-weight:bold'>");
-                                }
-                                else{
-	                                out.print("<tr class='list"+sClass+"'>");
-                                }
-                                out.print(" <td onclick='addICPC(\""+code.code+"\",\""+code.label+"\");'>"+code.code+"</td>");
-                                out.print(" <td onclick='addICPC(\""+code.code+"\",\""+code.label+"\");'>"+code.label+"</td>");
-                                out.print("</tr>");
-                            }
-                        //}
+                        if("abcdefghijklmnopqrstuvwxyz".indexOf(code.code.substring(0, 1).toLowerCase())>-1){
+	                        Debug.println("ICPC code : "+code.code); 
+	
+	                        //if(!oldcodelabel.equalsIgnoreCase(code.label)){
+	                            oldcodelabel = code.label;
+	                            
+	                            if(code.code.length()>=5 || code.code.startsWith("I")){
+	                                foundRecords++;
+				                    
+		                        	// alternate row-style
+		                        	if(sClass.length()==0) sClass = "1";
+		                        	else                   sClass = ""; 
+		                        	
+	                                if(code.code.length()>=5 && code.code.substring(3,5).equalsIgnoreCase("00")){
+	                                    out.print("<tr class='list"+sClass+"' style='font-weight:bold'>");
+	                                }
+	                                else{
+		                                out.print("<tr class='list"+sClass+"'>");
+	                                }
+	                                out.print(" <td onclick='addICPC(\""+code.code+"\",\""+code.label+"\");'>"+code.code+"</td>");
+	                                out.print(" <td onclick='addICPC(\""+code.code+"\",\""+code.label+"\");'>"+code.label+"</td>");
+	                                out.print("</tr>");
+	                            }
+                            //}
+	                     }
                     }
                     %></tbody><%
                     
@@ -113,28 +115,30 @@
 		                oldcodelabel = "";
 		                for(int n=0; n<codes.size(); n++){		
 		                    code = (ICPCCode)codes.elementAt(n);
-	                        
-		                    if(!oldcodelabel.equalsIgnoreCase(code.label)){
-		                        oldcodelabel = code.label;
+	                        if("abcdefghijklmnopqrstuvwxyz".indexOf(code.code.substring(0, 1).toLowerCase())>-1){
 		                        
-		                        if(code.code.length()>=3){
-				                    foundRecords++;
-				                    
-		                        	// alternate row-style
-		                        	if(sClass.length()==0) sClass = "1";
-		                        	else                   sClass = ""; 
-		                        	
-		                            if(code.code.length()==3){
-	                                    out.print("<tr class='list"+sClass+"' style='font-weight:bold'>");
-	                                }
-	                                else{
-		                                out.print("<tr class='list"+sClass+"'>");
-		                            }
-		                            out.print(" <td onclick='addICD10(\""+code.code+"\",\""+code.label+"\");'>"+code.code+"</td>");
-		                            out.print(" <td onclick='addICD10(\""+code.code+"\",\""+code.label+"\");'>"+code.label+"</td>");
-		                            out.print("</tr>");
-		                        }
-		                    }
+			                    if(!oldcodelabel.equalsIgnoreCase(code.label)){
+			                        oldcodelabel = code.label;
+			                        
+			                        if(code.code.length()>=3){
+					                    foundRecords++;
+					                    
+			                        	// alternate row-style
+			                        	if(sClass.length()==0) sClass = "1";
+			                        	else                   sClass = ""; 
+			                        	
+			                            if(code.code.length()==3){
+		                                    out.print("<tr class='list"+sClass+"' style='font-weight:bold'>");
+		                                }
+		                                else{
+			                                out.print("<tr class='list"+sClass+"'>");
+			                            }
+			                            out.print(" <td onclick='addICD10(\""+code.code+"\",\""+code.label+"\");'>"+code.code+"</td>");
+			                            out.print(" <td onclick='addICD10(\""+code.code+"\",\""+code.label+"\");'>"+code.label+"</td>");
+			                            out.print("</tr>");
+			                        }
+			                    }
+	                        }
 		                }
 	                    %></tbody><%
                     }                    

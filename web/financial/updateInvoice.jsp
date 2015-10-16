@@ -14,9 +14,6 @@
     if(sFindInvoiceId.indexOf(",")>0){
         sFindInvoiceId = sFindInvoiceId.substring(sFindInvoiceId.indexOf(",")+1);
     }
-    else if(sFindInvoiceId.indexOf(".")>0){
-        sFindInvoiceId = sFindInvoiceId.substring(sFindInvoiceId.indexOf(".")+1);
-    }
     
     String sFindInvoiceType = checkString(request.getParameter("FindInvoiceType")),
            sInvoiceType     = checkString(request.getParameter("invoiceType"));
@@ -187,7 +184,8 @@
 	                Vector v = new Vector(hInvoices.keySet());
 	                Collections.sort(v);
 	                Iterator it = v.iterator();
-	
+	                String sInvoiceId="";
+
 	                while(it.hasNext()){
 	                    iInvoiceId = (Integer)it.next();
 	                    Object object = hInvoices.get(iInvoiceId);
@@ -196,6 +194,7 @@
 	                    try{
 		                    if(object.getClass().getName().equals("be.openclinic.finance.PatientInvoice")){
 		                        patientInvoice = (PatientInvoice) object;
+		    					sInvoiceId = patientInvoice.getInvoiceNumber();
 		                        sRowDate = ScreenHelper.getSQLDate(patientInvoice.getDate());
 		                        sRowDestination = patientInvoice.getPatient().lastname + ", " + patientInvoice.getPatient().firstname;
 		                        sRowAmount = new DecimalFormat("#0.00").format(patientInvoice.getBalance());
@@ -204,6 +203,7 @@
 		                    } 
 		                    else if(object.getClass().getName().equals("be.openclinic.finance.InsurarInvoice")){
 		                        insurarInvoice = (InsurarInvoice) object;
+		    					sInvoiceId = insurarInvoice.getInvoiceNumber();
 		                        sRowDate = ScreenHelper.getSQLDate(insurarInvoice.getDate());
 		                        sRowDestination = insurarInvoice.getInsurar().getName();
 		                        sRowAmount = new DecimalFormat("#0.00").format(insurarInvoice.getBalance());
@@ -212,6 +212,7 @@
 		                    }
 		                    else if(object.getClass().getName().equals("be.openclinic.finance.ExtraInsurarInvoice")){
 		                        extrainsurarInvoice = (ExtraInsurarInvoice) object;
+		    					sInvoiceId = extrainsurarInvoice.getInvoiceNumber();
 		                        sRowDate = ScreenHelper.getSQLDate(extrainsurarInvoice.getDate());
 		                        sRowDestination = extrainsurarInvoice.getInsurar().getName();
 		                        sRowAmount = new DecimalFormat("#0.00").format(extrainsurarInvoice.getBalance());
@@ -220,6 +221,7 @@
 		                    }
 		                    else if(object.getClass().getName().equals("be.openclinic.finance.ExtraInsurarInvoice2")){
 		                        extrainsurarInvoice2 = (ExtraInsurarInvoice2) object;
+		    					sInvoiceId = extrainsurarInvoice2.getInvoiceNumber();
 		                        sRowDate = ScreenHelper.getSQLDate(extrainsurarInvoice2.getDate());
 		                        sRowDestination = extrainsurarInvoice2.getInsurar().getName();
 		                        sRowAmount = new DecimalFormat("#0.00").format(extrainsurarInvoice2.getBalance());
@@ -241,7 +243,7 @@
 	
 	                    %>
 	                    <tr class="list<%=sClass%>" onclick="openInvoice('<%=iInvoiceId.toString()%>','<%=sRowType%>')">
-	                        <td><%=iInvoiceId.toString()%></td>
+	                        <td><%=iInvoiceId+(sInvoiceId.equals(iInvoiceId+"")?"":" ("+sInvoiceId+")")%></td>
 	                        <td><%=sRowDate%></td>
 	                        <td><%=sRowDestination%></td>
 	                        <td><%=sRowType%></td>

@@ -71,7 +71,7 @@
 <script>
   doFind();
   window.resizeTo(550,520);
-  SearchForm.FindText.focus();
+  window.setTimeout("SearchForm.FindText.focus();",300);
     
   <%-- SELECT PARENT SERVICE --%>
   function selectParentService(sCode,sText){

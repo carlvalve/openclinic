@@ -266,7 +266,7 @@
 
 <script>
 window.resizeTo(1000,550);
-document.productForm.SearchProductName.focus();
+window.setTimeout("document.productForm.SearchProductName.focus();",300);
 doFind();
 
 <%-- select product --%>

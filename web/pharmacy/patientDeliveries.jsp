@@ -9,7 +9,11 @@
 		ProductStockOperation operation = ProductStockOperation.get(request.getParameter("deleteoperation"));
 		if(operation!=null){
 			ProductStock productStock = operation.getProductStock();
+			String batchuid=operation.getBatchUid();
 			operation.delete(request.getParameter("deleteoperation"));
+			if(batchuid!=null){
+				Batch.calculateBatchLevel(batchuid);
+			}
 			productStock.setLevel(productStock.getLevel(new java.util.Date()));
 			productStock.store();
 		}
@@ -187,12 +191,14 @@ if(request.getParameter("modifyquantityoperation")!=null){
 			    <%-- HEADER --%>
 				<tr class='admin'>
 				    <td width="25">&nbsp;</td>
-					<td width="100"><%=getTran("web","date",sWebLanguage)%></td>
-					<td width="150"><%=getTran("web","servicestock",sWebLanguage)%></td>
-					<td width="150"><%=getTran("web","productstock",sWebLanguage)%></td>
-					<td width="100"><%=getTran("web","quantity",sWebLanguage)%></td>
-					<td width="100"><%=getTran("web","packageunits",sWebLanguage)%></td>
-					<td width="*"><%=getTran("web","batch.number",sWebLanguage)%></td>
+					<td><%=getTran("web","date",sWebLanguage)%></td>
+					<td><%=getTran("web","servicestock",sWebLanguage)%></td>
+					<td><%=getTran("web","productstock",sWebLanguage)%></td>
+					<td><%=getTran("web","quantity",sWebLanguage)%></td>
+					<td><%=getTran("web","packageunits",sWebLanguage)%></td>
+					<td><%=getTran("web","batch.number",sWebLanguage)%></td>
+					<td><%=getTran("web","batch.expiration",sWebLanguage)%></td>
+				    <td>&nbsp;</td>
 				</tr>
         <%
 
@@ -220,6 +226,9 @@ if(request.getParameter("modifyquantityoperation")!=null){
 			               )+
 			               "<td>"+operation.getProductStock().getProduct().getPackageUnits()+" "+getTran("product.unit",operation.getProductStock().getProduct().getUnit(),sWebLanguage)+"</td>"+
 			               "<td>"+(operation.getBatchNumber()!=null?operation.getBatchNumber():"?")+"</td>"+
+			               "<td>"+(operation.getBatchEnd()!=null?ScreenHelper.formatDate(operation.getBatchEnd()):"?")+"</td>"+
+			               (operation.getDescription().equalsIgnoreCase("medicationdelivery.1")?
+			               "<td><input type='button' class='button' value='"+getTranNoLink("web","returnproduct",sWebLanguage)+"' onclick='returnProduct(\""+operation.getUid()+"\");'/></td>":"<td/>")+
 			              "</tr>");
 				
 				recCount++;
@@ -270,5 +279,9 @@ if(request.getParameter("modifyquantityoperation")!=null){
 	  if(quantity!=d){
 		  transactionForm.submit();
 	  }
+  }
+  
+  function returnProduct(uid){
+	  openPopup("pharmacy/medication/popups/receiveMedicationPopup.jsp&EditReferenceOperationUid="+uid+"&forcenew=1&ts=<%=getTs()%>",750,400);
   }
 </script>

@@ -116,5 +116,5 @@
     window.close();
   }
     
-  searchForm.FindInsurarName.focus();
+  window.setTimeout("SearchForm.FindInsurarName.focus();",300);
 </script>

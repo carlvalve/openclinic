@@ -229,7 +229,7 @@
 
 <script>
   window.resizeTo(542,484);
-  searchForm.FindCode.focus();
+  window.setTimeout("searchForm.FindCode.focus();",300);
 
   function clearForm(){
     searchForm.FindCode.value = "";

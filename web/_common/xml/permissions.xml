@@ -128,6 +128,7 @@
         <permission type="web" id="managePrescriptions">prescriptions.manage</permission>
     </application>
     <application type="Web" id="diagnoses">
+        <permission type="web" id="diagnoses.createlocal">diagnoses.createlocal</permission>
         <permission type="web" id="diagnoses">diagnoses</permission>
         <permission type="web" id="manageDiagnosesPop">diagnoses.populationDiagnoses</permission>
         <permission type="web" id="manageDiagnosesPatient">diagnoses.patientDiagnoses</permission>

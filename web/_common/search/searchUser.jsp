@@ -114,7 +114,7 @@
 
 <script>
   window.resizeTo(600,480);
-  SearchForm.FindLastname.focus();
+  window.setTimeout("SearchForm.FindLastname.focus();",300);
 
   <%-- CLEAR SEARCH FIELDS --%>
   function clearSearchFields(){

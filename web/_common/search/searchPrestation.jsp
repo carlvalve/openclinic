@@ -126,7 +126,7 @@
 
 <script>
   window.resizeTo(800,600);
-  SearchForm.FindPrestationDescr.focus();
+  window.setTimeout("SearchForm.FindPrestationDescr.focus();",300);
 
   <%-- CLEAR FIELDS --%>
   function clearFields(){

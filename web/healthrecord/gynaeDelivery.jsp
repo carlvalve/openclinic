@@ -1304,7 +1304,7 @@
     <%-- SUBMIT FORM --%>
     function submitForm(){
         if(document.getElementById('encounteruid').value==''){
-    		alertDialog("web","no.encounter.linked");
+    		alertDialogDirectText('<%=getTranNoLink("web","no.encounter.linked",sWebLanguage)%>');
     		searchEncounter();
     	}	
         else {
@@ -1403,7 +1403,7 @@
         openPopup("/_common/search/searchEncounter.jsp&ts=<%=getTs()%>&VarCode=currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID" property="itemId"/>]>.value&VarText=&FindEncounterPatient=<%=activePatient.personid%>");
     }
     if(document.getElementById('encounteruid').value==''){
-  	alertDialog("web","no.encounter.linked");
+  	alertDialogDirectText('<%=getTranNoLink("web","no.encounter.linked",sWebLanguage)%>');
   	searchEncounter();
     }	
       

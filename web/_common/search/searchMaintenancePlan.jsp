@@ -231,6 +231,6 @@
     window.close();
   }
   
-  document.getElementById("searchName").focus();
+  window.setTimeout("document.getElementById('searchName').focus();",300);
 </script>
 </body>

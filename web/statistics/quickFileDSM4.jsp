@@ -383,7 +383,7 @@
 	    String sRfe= ReasonForEncounter.getReasonsForEncounterAsHtml(sEditEncounterUID,sWebLanguage,"_img/icons/icon_delete.gif","deleteRFE($serverid,$objectid)");
 	%>
     <tr class="admin">
-        <td align="left" colspan="2"><a href="javascript:openPopup('healthrecord/findRFE.jsp&field=rfe&patientuid=<%=sPatientUID%>&encounterUid=<%=sEditEncounterUID%>&ts=<%=getTs()%>',700,400)"><%=getTran("openclinic.chuk","rfe",sWebLanguage)%> <%=getTran("Web.Occup","ICPC-2",sWebLanguage)%>/<%=getTran("Web.Occup","ICD-10",sWebLanguage)%></a></td>
+        <td align="left" colspan="2"><a href="javascript:openPopup('healthrecord/findRFE.jsp&field=rfe&patientuid=<%=sPatientUID%>&encounterUid=<%=sEditEncounterUID%>&ts=<%=getTs()%>',700,400);void(0);"><%=getTran("openclinic.chuk","rfe",sWebLanguage)%> <%=getTran("Web.Occup","ICPC-2",sWebLanguage)%>/<%=getTran("Web.Occup","ICD-10",sWebLanguage)%></a></td>
     </tr>
     <tr>
         <td id="rfe" colspan="2"><%=sRfe%></td>

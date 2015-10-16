@@ -91,6 +91,7 @@
         Bed tmpBed;
         String sSelectable;
         String sPatientName = "";
+        String sComment = "";
         String sEncounterUid = "";
         Boolean bStatus;
 
@@ -104,6 +105,7 @@
             else                  sClass = "";
 
             hOccupiedInfo = tmpBed.isOccupied();
+            sComment= tmpBed.getComment();
             bStatus = (Boolean)hOccupiedInfo.get("status");
 
             if(bStatus.booleanValue()){
@@ -141,13 +143,14 @@
 
             results.append("<td "+sSelectable+">"+tmpBed.getName().toUpperCase()+(sViewCode.equalsIgnoreCase("on")?" ("+tmpBed.getUid()+")":"")+"</td>")
                     .append("<td "+sSelectable+">"+sPatientName+"</td>")
+                    .append("<td "+sSelectable+">"+sComment+"</td>")
                     .append("</tr>");
             
             if(bStatus.booleanValue()){
                 results.append("<tr id='"+tmpBed.getUid()+"' style='display:none;'>"+
                                 "<td/>"+
                                 "<td/>"+
-                                "<td colspan='2'>"+createEncounterInfo(sEncounterUid,sWebLanguage)+"</td>"+
+                                "<td colspan='3'>"+createEncounterInfo(sEncounterUid,sWebLanguage)+"</td>"+
                                "</tr>");
             }
             sPatientName = "";
@@ -161,6 +164,7 @@
 			        <td width="20"/>
 			        <td width="100"><%=HTMLEntities.htmlentities(getTran("web","bed",sWebLanguage))%></td>
 			        <td><%=HTMLEntities.htmlentities(getTran("Web","patient",sWebLanguage))%></td>
+			        <td><%=HTMLEntities.htmlentities(getTran("Web","comment",sWebLanguage))%></td>
 			    </tr>
 			    
 			    <tbody class="hand"><%=HTMLEntities.htmlentities(results.toString())%></tbody>

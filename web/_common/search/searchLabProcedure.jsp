@@ -66,7 +66,7 @@
 
 <script>
   window.resizeTo(800,600);
-  SearchForm.FindLabProcedureName.focus();
+  window.setTimeout("SearchForm.FindLabProcedureName.focus();",300);
 
   function clearFields(){
     SearchForm.FindLabProcedureName.value = "";

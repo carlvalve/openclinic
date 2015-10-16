@@ -358,7 +358,7 @@ else if(persons.size()==1){
     </tr>
     <tr class="admin">
         <td align="left" colspan="2">
-	        <a href="javascript:openPopup('healthrecord/findICPC.jsp&ts=<%=getTs()%>&patientuid=<%=sPatientUID%>&showpatientencounters=1',700,400)"><%=
+	        <a href="javascript:openPopup('healthrecord/findICPC.jsp&ts=<%=getTs()%>&patientuid=<%=sPatientUID%>&showpatientencounters=1',700,400);void(0);"><%=
 	            getTran("openclinic.chuk","diagnostic",sWebLanguage)%> <%=getTran("Web.Occup", "ICPC-2", sWebLanguage)%>/<%=getTran("Web.Occup", "ICD-10", sWebLanguage)%>
 	        </a>
         </td>

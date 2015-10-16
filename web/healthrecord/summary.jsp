@@ -446,7 +446,7 @@
             
             <table class="list" width="100%" cellspacing="1">
                 <tr class="admin">
-                    <td align="center" colspan='2'><a href="javascript:openPopup('healthrecord/findICPC.jsp?ts=<%=getTs()%>&patientuid=<%=activePatient.personid %>')"><%=getTran("Web.Occup","ICPC-2",sWebLanguage)%>/<%=getTran("Web.Occup","ICD-10",sWebLanguage)%></a></td>
+                    <td align="center" colspan='2'><a href="javascript:openPopup('healthrecord/findICPC.jsp?ts=<%=getTs()%>&patientuid=<%=activePatient.personid %>');void(0);"><%=getTran("Web.Occup","ICPC-2",sWebLanguage)%>/<%=getTran("Web.Occup","ICD-10",sWebLanguage)%></a></td>
                 </tr>
                 <tr>
                     <td colspan='2' id='icpccodes'>

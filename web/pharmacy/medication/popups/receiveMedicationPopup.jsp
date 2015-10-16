@@ -6,6 +6,7 @@
 <%
     String sAction = checkString(request.getParameter("Action"));
     if(sAction.length()==0) sAction = "receiveMedication"; // default
+    boolean bDoReload=false;
 
     // retreive form data
     String sEditOperationUid    = checkString(request.getParameter("EditOperationUid")),
@@ -46,6 +47,7 @@
     	ProductStockOperation operation = ProductStockOperation.get(sEditReferenceOperationUid);
     	
     	if(operation.getDescription().equalsIgnoreCase("medicationdelivery.2")){
+    		//This receptions applies to a delivery that was made by another stock
     		sEditOperationDescr = "medicationreceipt.1";
     		sEditUnitsChanged = (operation.getUnitsChanged()-operation.getUnitsReceived())+"";
     		sEditRemaining = (operation.getUnitsChanged()-operation.getUnitsReceived())+"";
@@ -64,6 +66,33 @@
     		
     		sEditProductStockDocumentUid = checkString(operation.getDocumentUID());
     	}
+    	else if(operation.getDescription().equalsIgnoreCase("medicationdelivery.1")){
+    		bDoReload=true;
+    		//This reception applies to a delivery that is being returned by a patient
+            sEditProductName = operation.getProductStock().getProduct().getName();
+            sServiceStockUid = operation.getProductStock().getServiceStockUid();
+            sEditProductStockUid = operation.getProductStockUid();
+            sProductUid = operation.getProductStock().getProductUid();
+            
+    		sEditOperationDescr = "medicationreceipt.2";
+    		sEditUnitsChanged = operation.getUnitsChanged()+"";
+    		//sEditRemaining = (operation.getUnitsChanged()-operation.getUnitsReceived())+"";
+    		sEditSrcDestType = operation.getSourceDestination().getObjectType();
+    		sEditSrcDestUid = operation.getSourceDestination().getObjectUid();
+    		sEditSrcDestName = AdminPerson.getFullName(sEditSrcDestUid);
+    		sEditBatchNumber = checkString(operation.getBatchNumber());
+    		sEditBatchUid = checkString(operation.getBatchUid());
+    		
+    		if(operation.getBatchEnd()!=null){
+    			sEditBatchEnd = ScreenHelper.stdDateFormat.format(operation.getBatchEnd());
+    		}
+    		else{
+    			sEditBatchEnd = "?";
+    		}
+    		
+    		sEditProductStockDocumentUid = checkString(operation.getDocumentUID());
+    	}
+
     }
 
     /// DEBUG /////////////////////////////////////////////////////////////////////////////////////
@@ -78,8 +107,9 @@
         Debug.println("sEditSrcDestName     : "+sEditSrcDestName);
         Debug.println("sEditOperationDate   : "+sEditOperationDate);
         Debug.println("sEditProductName     : "+sEditProductName);
-        Debug.println("sEditBatchUid     	  : "+sEditBatchUid);
-        Debug.println("sEditProductStockUid : "+sEditProductStockUid+"\n");
+        Debug.println("sEditBatchUid     	: "+sEditBatchUid);
+        Debug.println("sEditProductStockUid : "+sEditProductStockUid);
+        Debug.println("sAction              : "+sAction+"\n");
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -99,9 +129,9 @@
     //*********************************************************************************************
 
     //--- SAVE (receive) --------------------------------------------------------------------------
-    if(sAction.equals("save") && sEditReferenceOperationUid.length()>0){
+    if(sAction.equals("save")){
     	
-        //*** store 4 of the used values in session for later re-use ***
+        //*** store 5 of the used values in session for later re-use ***
         String sPrevUsedOperationDescr = checkString((String)session.getAttribute("PrevUsedReceiptOperationDescr"));
         if(!sPrevUsedOperationDescr.equals(sEditOperationDescr)){
             session.setAttribute("PrevUsedReceiptOperationDescr",sEditOperationDescr);
@@ -127,7 +157,7 @@
             session.setAttribute("PrevUsedReceiptDocument", sEditProductStockDocumentUid);
         }
 
-        //*** create product ***
+        //*** create productstock operation ***
         ProductStockOperation operation = new ProductStockOperation();
         operation.setUid(sEditOperationUid);
         operation.setDescription(sEditOperationDescr);
@@ -179,7 +209,6 @@
         operation.setProductStockUid(sEditProductStockUid);
         if(sEditUnitsChanged.length() > 0) operation.setUnitsChanged(Integer.parseInt(sEditUnitsChanged));
         operation.setUpdateUser(activeUser.userid);
-
         String sResult = operation.store(true);
         if(sResult==null){
         	// In case this is a receipt operation linked to a delivery operation, update the delivery operation
@@ -205,6 +234,13 @@
 						                        "&ServiceId="+window.opener.document.getElementById("ServiceId").value+
 						                        "&DisplaySearchFields=false";
 				}
+			<%	
+				if (request.getParameter("reload")!=null){
+			%>
+				window.opener.location.reload();
+			<%
+				}
+			%>
 	         	window.close();
 	          </script>
 	        <%
@@ -421,6 +457,13 @@
         if(displayEditFields){
             %>
 			<form name="transactionForm" id="transactionForm" method="post" action='<c:url value="/popup.jsp"/>?Page=pharmacy/medication/popups/receiveMedicationPopup.jsp&ts=<%=getTs()%>' onClick="clearMessage();">
+			    <%
+			    	if(bDoReload){
+			    %>
+			    	<input type='hidden' name='reload' value='1'/>
+			    <%
+			    	}
+			    %>
 			    <%=writeTableHeader("Web.manage","receiveproducts",sWebLanguage," window.close();")%>
              
                 <table class="list" width="100%" cellspacing="1">

@@ -552,7 +552,7 @@
                     }
                 %>
                 <tr>
-                    <td><a href="javascript:openPopup('medical/managePrescriptionForm.jsp&amp;skipEmpty=1',650,430,'medication');"><%=getTran("web","medicationpaperprescription",sWebLanguage)%></a></td>
+                    <td><a href="javascript:openPopup('medical/managePrescriptionForm.jsp&amp;skipEmpty=1',650,430,'medication');void(0);"><%=getTran("web","medicationpaperprescription",sWebLanguage)%></a></td>
                 </tr>
             </table>
         </td>

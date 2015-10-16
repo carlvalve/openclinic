@@ -188,7 +188,7 @@
 	 		%>
 			    <tr class="list<%=sClass%>">
 			        <td>
-			            <img src="<c:url value="/_img/themes/default/pijl.gif"/>"><button accesskey="<%=counter%>" class="buttoninvisible" onclick="javascript:openPopup('medical/manageCarePrescriptionsPopup.jsp',700,400);"></button><u><%=counter++%></u> <a href="javascript:openPopup('medical/manageCarePrescriptionsPopup.jsp',700,400);"><%=getTran("web","careprescriptions",sWebLanguage)%></a>
+			            <img src="<c:url value="/_img/themes/default/pijl.gif"/>"><button accesskey="<%=counter%>" class="buttoninvisible" onclick="javascript:openPopup('medical/manageCarePrescriptionsPopup.jsp',700,400);"></button><u><%=counter++%></u> <a href="javascript:openPopup('medical/manageCarePrescriptionsPopup.jsp',700,400);void(0);"><%=getTran("web","careprescriptions",sWebLanguage)%></a>
 			        </td>
 			        <td/><td/><td/><td/>
 			    </tr>
@@ -205,7 +205,7 @@
 		    %>
 			    <tr class="list<%=sClass%>">
 			        <td>
-			            <img src="<c:url value="/_img/themes/default/pijl.gif"/>"><button accesskey="<%=counter%>" class="buttoninvisible" onclick="javascript:openPopup('medical/managePrescriptionsPopup.jsp',700,400);"></button><u><%=counter++%></u> <a href="javascript:openPopup('medical/managePrescriptionsPopup.jsp',700,400);"><%=getTran("web","medications",sWebLanguage)%></a>
+			            <img src="<c:url value="/_img/themes/default/pijl.gif"/>"><button accesskey="<%=counter%>" class="buttoninvisible" onclick="javascript:openPopup('medical/managePrescriptionsPopup.jsp',700,400);"></button><u><%=counter++%></u> <a href="javascript:openPopup('medical/managePrescriptionsPopup.jsp',700,400);void(0);"><%=getTran("web","medications",sWebLanguage)%></a>
 			        </td>
 			        <td/><td/><td/><td/>
 			    </tr>

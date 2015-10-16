@@ -305,7 +305,7 @@
 
 <script>
   window.resizeTo(970,480);
-  searchForm.SearchProductName.focus();
+  window.setTimeout("searchForm.SearchProductName.focus();",300);
 
   <%-- select product --%>
   function selectProduct(productUid,productName,productUnit,unitsPerTimeUnit,supplyingServiceUid,

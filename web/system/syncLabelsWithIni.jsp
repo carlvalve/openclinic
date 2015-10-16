@@ -76,10 +76,11 @@
     // excluded label types
     String excludedLabelTypes = MedwanQuery.getInstance().getConfigString("excludedLabelTypesNew");
     if(excludedLabelTypes.length() == 0){
-        excludedLabelTypes = "labanalysis, labanalysis.short, labanalysis.monster, labanalysis.refcomment, "+
-                             "labprofiles, activitycodes, worktime, patientsharecoverageinsurance, patientsharecoverageinsurance2, "+
-                             "urgency.origin ,encountertype ,prestation.type ,product.productgroup, "+
-                             "insurance.types ,labanalysis.group ,drug.category, planningresource, systemmessages"; // default
+        excludedLabelTypes = "*labanalysis*labanalysis.short*labanalysis.monster*labanalysis.group*insurance.types*prestation.type*resultprofiles*"+
+        					 " *admin.category*labanalysis.refcomment*"+
+                             " *labprofiles*activitycodes*worktime*patientsharecoverageinsurance*patientsharecoverageinsurance2*"+
+                             " *urgency.origin*encountertype*prestation.type*product.productgroup*"+
+                             " *insurance.types*labanalysis.group*drug.category*planningresource*systemmessages*"; // default
     }
     excludedLabelTypes = excludedLabelTypes.toLowerCase();
     
@@ -470,11 +471,11 @@
                             labelUniqueKey = (labelType+"$"+labelID+"$"+labelLang).toLowerCase();
 
                             // only display labels if not in ini, so check existence in ini.
-                            if(excludedLabelTypes.indexOf(labelType.toLowerCase())<0 && !containsKey(iniProps,labelUniqueKey) && labelID.indexOf(" ")<0){
+                            if(excludedLabelTypes.indexOf("*"+labelType.toLowerCase()+"*")<0 && !containsKey(iniProps,labelUniqueKey) && labelID.indexOf(" ")<0){
                                 // display labels, except excluded labeltypes
                                 checked = "checked";
 
-                                if(excludedLabelTypes.indexOf(labelType.toLowerCase()) < 0){
+                                if(excludedLabelTypes.indexOf("*"+labelType.toLowerCase()+"*") < 0){
                                     labelValue = checkString(rs.getString("OC_LABEL_VALUE"));
                                     if(labelValue.length()==0) labelValue = "<font color='red'>[empty]</font>";
 
@@ -546,7 +547,7 @@
 
                                                 // only check existence in DB of those labels that do not occur in the label hash
                                                 // check at 3 levels of hashes
-                                                if (excludedLabelTypes.indexOf(sLabelType.toLowerCase())<0 && (labels.get(sLabelLang) == null || ((Hashtable) labels.get(sLabelLang)).get(sLabelType) == null ||
+                                                if (excludedLabelTypes.indexOf("*"+sLabelType.toLowerCase()+"*")<0 && (labels.get(sLabelLang) == null || ((Hashtable) labels.get(sLabelLang)).get(sLabelType) == null ||
                                                         ((Hashtable) ((Hashtable) labels.get(sLabelLang)).get(sLabelType)).get(sLabelID) == null)) {
                                                     // only list record if not in DB, so check existence in DB
                                                     ps.setString(1, sLabelType);

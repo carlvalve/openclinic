@@ -49,7 +49,7 @@ String sPatientUid=request.getParameter("patientuid");
 
                 // header
                 if (codes.size() > 0) {
-                    out.print("<tr class='admin'><td colspan='3'>" + getTran("Web.Occup", "ICPC-2", sWebLanguage) + " (<a href='javascript:addnewlocalcode(\""+keywords+"\")'>"+getTran("web","managelocalcodes",sWebLanguage)+"</a>)</td></tr>");
+                    out.print("<tr class='admin'><td colspan='3'>" + getTran("Web.Occup", "ICPC-2", sWebLanguage) + (activeUser.getAccessRight("diagnoses.createlocal.select")?" (<a href='javascript:addnewlocalcode(\""+keywords+"\")'>"+getTran("web","managelocalcodes",sWebLanguage)+"</a>)":"")+"</td></tr>");
                 }
 
         %><tbody class="hand"><%
@@ -218,7 +218,12 @@ String sPatientUid=request.getParameter("patientuid");
                 // display 'no results' message
                 %>
                     <tr class="label2">
-                                <td colspan='3'><%=getTran("web","norecordsfound",sWebLanguage)%> (<a href='javascript:addnewlocalcode("<%=keywords%>")'><%=getTran("web","managelocalcodes",sWebLanguage)%></a>)</td>
+                                <td colspan='3'><%=getTran("web","norecordsfound",sWebLanguage)%>
+                                <%if(activeUser.getAccessRight("diagnoses.createlocal.select")){ %> 
+                                	(<a href='javascript:addnewlocalcode("<%=keywords%>")'><%=getTran("web","managelocalcodes",sWebLanguage)%></a>)
+                                <%} %>
+                                </td>
+                                
                     </tr>
                 <%
             }

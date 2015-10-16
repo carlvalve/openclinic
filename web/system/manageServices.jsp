@@ -471,7 +471,7 @@
                 <tr>
                     <td class="admin"> <%=getTran("Web.Manage.Service","ParentID",sWebLanguage)%></td>
                     <td class="admin2">
-                        <input type="text readonly class="text" name="EditServiceParentCode" value="<%=service.parentcode%>"> <input type="text" readonly class="text" name="EditServiceParentText" value="<%=sServiceParentCodeText%>" size="<%=sTextWidth%>">
+                        <input type="text" readonly class="text" name="EditServiceParentCode" value="<%=service.parentcode%>"> <input type="text" readonly class="text" name="EditServiceParentText" value="<%=sServiceParentCodeText%>" size="<%=sTextWidth%>">
                         <%=ScreenHelper.writeServiceButton("buttonService","EditServiceParentCode","EditServiceParentText",sWebLanguage,sCONTEXTPATH)%>
                     </td>
                 </tr>
@@ -499,6 +499,19 @@
                     </td>
                 </tr>
                 <%-- Inscode --%>
+                <% 	if(MedwanQuery.getInstance().getConfigInt("enableDHIS2",0)==1){ %>
+                <tr>
+                    <td class="admin"> <%=getTran("Web.Manage.Service","dhis2code",sWebLanguage)%></td>
+                    <td class="admin2">
+                        <select class="text" name="EditServiceInscode" id="EditServiceInscode">
+                        	<option value=""></option>
+                        	<%=ScreenHelper.writeSelect("dhis2services", service.inscode, sWebLanguage) %>
+                        </select>
+                    </td>
+                </tr>
+                <% 	}
+                   	else{
+                %>
                 <tr>
                     <td class="admin"> <%=getTran("Web.Manage.Service","Inscode",sWebLanguage)%></td>
                     <td class="admin2">
@@ -506,6 +519,7 @@
                     </td>
                 </tr>
                 <%
+                   }
                     // display input field for each of the supported languages
                     StringTokenizer tokenizer = new StringTokenizer(supportedLanguages,",");
                     while(tokenizer.hasMoreTokens()){

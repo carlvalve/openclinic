@@ -81,6 +81,7 @@
     <tr>
         <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("medical.accident","insurancecompany",sWebLanguage)%></td>
         <td class="admin2">
+            <input type="hidden" name="EditNumber" value="<%=checkString(insurarInvoice.getNumber())%>">
             <input type="hidden" name="EditInsurarUID" value="<%=checkString(insurarInvoice.getInsurarUid())%>">
             <input type="text" class="text" readonly name="EditInsurarText" value="<%=sInsurarText%>" size="100">
            
@@ -100,6 +101,11 @@
             <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web.finance","invoiceid",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" readonly name="EditInvoiceUID" id="EditInvoiceUID" value="<%=checkString(insurarInvoice.getInvoiceUid())%>">
+				<%
+					if(checkString(insurarInvoice.getNumber()).length()>0 && !insurarInvoice.getInvoiceUid().equalsIgnoreCase(insurarInvoice.getInvoiceNumber())){
+	            		out.print("("+insurarInvoice.getInvoiceNumber()+")");
+	            	}
+				%>
             </td>
         </tr>
                 
@@ -242,6 +248,7 @@
 		                       <option value="rama" <%=defaultmodel.equalsIgnoreCase("rama")?"selected":""%>><%=getTranNoLink("web","ramamodel",sWebLanguage)%></option>
 		                       <option value="ramanew" <%=defaultmodel.equalsIgnoreCase("ramanew")?"selected":""%>><%=getTranNoLink("web","ramanewmodel",sWebLanguage)%></option>
 		                       <option value="ramacsv" <%=defaultmodel.equalsIgnoreCase("ramacsv")?"selected":""%>><%=getTranNoLink("web","ramacsvmodel",sWebLanguage)%></option>
+		                       <option value="rssbcsv" <%=defaultmodel.equalsIgnoreCase("rssbcsv")?"selected":""%>><%=getTranNoLink("web","rssbcsvmodel",sWebLanguage)%></option>
 		                       <option value="ctams" <%=defaultmodel.equalsIgnoreCase("ctams")?"selected":""%>><%=getTranNoLink("web","ctamsmodel",sWebLanguage)%></option>
 		              		<%
 	             		}
@@ -325,6 +332,7 @@
                   '&EditInvoiceUID='+EditForm.EditInvoiceUID.value+
                   '&EditInsurarUID='+EditForm.EditInsurarUID.value+
                   '&EditStatus='+EditForm.EditStatus.value+
+                  '&EditNumber='+EditForm.EditNumber.value+
                   '&EditCBs='+selectedimages.join()+
                   '&EditBalance='+EditForm.EditBalance.value,
         onSuccess: function(resp){
@@ -438,6 +446,10 @@ function doBalance(oObject,bAdd){
 function doPrintPdf(invoiceUid) {
     if(EditForm.PrintModel.value=='ramacsv'){
 		var url = "<c:url value='/util/csvDocs.jsp'/>?invoiceuid=" + invoiceUid + "&ts=<%=getTs()%>&docid=invoice.rama";
+	    window.open(url, "InsurarInvoicePdf<%=new java.util.Date().getTime()%>", "height=600,width=900,toolbar=yes,status=no,scrollbars=yes,resizable=yes,menubar=yes");
+    }
+    else if(EditForm.PrintModel.value=='rssbcsv'){
+		var url = "<c:url value='/util/csvDocs.jsp'/>?invoiceuid=" + invoiceUid + "&ts=<%=getTs()%>&docid=invoice.rssb";
 	    window.open(url, "InsurarInvoicePdf<%=new java.util.Date().getTime()%>", "height=600,width=900,toolbar=yes,status=no,scrollbars=yes,resizable=yes,menubar=yes");
     }
     else if(EditForm.PrintModel.value=='cplrcsv'){

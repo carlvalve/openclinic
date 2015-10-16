@@ -46,7 +46,7 @@
 <script>
     doFind();
     window.resizeTo(550, 520);
-    SearchForm.FindText.focus();
+    window.setTimeout("SearchForm.FindText.focus();",300);
 
     function selectParentCategory(sCode, sText) {
         window.opener.document.getElementsByName('<%=sVarCode%>')[0].value = sCode;

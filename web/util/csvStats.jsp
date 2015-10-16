@@ -1,4 +1,5 @@
 <%@page import="be.openclinic.finance.*,
+				be.openclinic.medical.*,
                 be.openclinic.statistics.CsvStats,
                 be.mxs.common.util.system.HTMLEntities,
                 be.mxs.common.util.db.MedwanQuery,
@@ -374,15 +375,16 @@
 	    ServletOutputStream os = response.getOutputStream();
 	    
 	    // header
-		sResult.append("SERIAL;DATE;PATIENT;AGE;DEPARTMENT;DISEASE;DOCTOR;INSURER;INS_PART;PAT_PART;TOTAL\r\n");
+		sResult.append("SERIAL;DATE;PATIENTID;PATIENT;DATEOFBIRTH;AGE;GENDER;DEPARTMENT;DISEASE;DOCTOR;INSURER;INS_PART;COMPL_INS_PART;PAT_SHARE_COVERAGE;PAT_PART;TOTAL\r\n");
 	    
     	byte[] b = sResult.toString().getBytes();
         for(int n=0; n<b.length; n++){
             os.write(b[n]);
         }
         os.flush();
-        
+        int c=0;
 		while(rs.next()){
+			c++;
 			sResult = new StringBuffer();
 			PatientInvoice invoice = PatientInvoice.get(rs.getString("oc_patientinvoice_serverid")+"."+rs.getString("oc_patientinvoice_objectid"));
 			if(invoice!=null){
@@ -394,7 +396,10 @@
 				}
 				sResult.append(invoice.getUid().split("\\.")[1]+";");
 				sResult.append((invoice.getDate()==null?"":ScreenHelper.stdDateFormat.format(invoice.getDate()))+";");
+				sResult.append((invoice.getPatientUid()==null?"":invoice.getPatientUid())+";");
 				sResult.append((invoice.getPatient()==null?"":invoice.getPatient().getFullName())+";");
+				sResult.append((invoice.getPatient()==null || invoice.getPatient().dateOfBirth==null?"":invoice.getPatient().dateOfBirth)+";");
+		        System.out.println(new SimpleDateFormat("HH:mm:ss SSS").format(new java.util.Date())+" *3*");
 			
 				String age = "";
 				try{
@@ -414,13 +419,16 @@
 				}
 				
 				sResult.append(age+";");
+				sResult.append((invoice.getPatient()==null?"":invoice.getPatient().gender)+";");
 				sResult.append(invoice.getServicesAsString(sWebLanguage)+";");
 				sResult.append(invoice.getDiseases(sWebLanguage)+";");
 				sResult.append(invoice.getSignatures()+";");
 				sResult.append(invoice.getInsurers()+";");
 				sResult.append(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#")).format(invoice.getInsurarAmount())+";");
-				sResult.append((new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#")).format(invoice.getPatientAmount()+invoice.getExtraInsurarAmount()))+";");
-				sResult.append((new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#")).format(invoice.getInsurarAmount()+invoice.getPatientAmount()+invoice.getExtraInsurarAmount()))+";");
+				sResult.append((new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#")).format(invoice.getExtraInsurarAmount()))+";");
+				sResult.append((new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#")).format(invoice.getExtraInsurarAmount2()))+";");
+				sResult.append((new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#")).format(invoice.getPatientOwnAmount()))+";");
+				sResult.append((new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#")).format(invoice.getInsurarAmount()+invoice.getExtraInsurarAmount2()+invoice.getPatientOwnAmount()+invoice.getExtraInsurarAmount()))+";");
 				sResult.append("\r\n");
 			}
 			
@@ -436,6 +444,163 @@
 		loc_conn.close();
         os.close();
         done=true;
+    }
+	//*** 7 - INVOICES ***************************************************
+    else if("pbf.burundi.consultationslist".equalsIgnoreCase(sQueryType)){
+        try{
+    	Connection loc_conn = MedwanQuery.getInstance().getLongOpenclinicConnection();
+		StringBuffer sResult = new StringBuffer();
+		String service=checkString(request.getParameter("service"));
+		String doctor =checkString(request.getParameter("doctor"));
+		String encountertypes="'ooo'";
+		if(checkString(request.getParameter("includevisits")).equalsIgnoreCase("1")){
+			encountertypes+=",'visit'";
+		}
+		if(checkString(request.getParameter("includeadmissions")).equalsIgnoreCase("1")){
+			encountertypes+=",'admission'";
+		}
+		long l = 24*3600*1000;
+		java.util.Date endDate = ScreenHelper.parseDate(request.getParameter("end"));
+		endDate.setTime(endDate.getTime()+l);
+
+		// search all the invoices from this period     
+		query = "select a.oc_encounter_objectid,a.oc_encounter_begindate,b.personid,b.firstname,b.lastname,b.gender,b.dateofbirth,b.comment5,c.address,c.sector,c.cell from oc_encounters_view a,adminview b,privateview c where"+
+		        " a.oc_encounter_patientuid=b.personid and"+
+				" b.personid=c.personid and"+
+				" a.oc_encounter_type in ("+encountertypes+") and"+
+		        " oc_encounter_begindate>="+ MedwanQuery.getInstance().convertStringToDate("'<begin>'")+" and"+
+		        " oc_encounter_begindate<"+ MedwanQuery.getInstance().convertStringToDate("'<end>'")+
+				(service.length()>0?" and oc_encounter_serviceuid='"+service+"'":"")+
+				(doctor.length()>0?" and exists (select * from transactions t, items i where t.serverid=i.serverid and t.transactionid=i.transactionid and "+
+				" i.type='be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID' and i.value='"+MedwanQuery.getInstance().getConfigString("serverId")+".'"+MedwanQuery.getInstance().concatSign()+"a.oc_encounter_objectid and t.userId="+doctor+" and t.transactionType NOT IN ('be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_LAB_REQUEST','be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MIR2'))":"")+
+		        " order by oc_encounter_begindate,oc_encounter_objectid";
+        query = query.replaceAll("<begin>",request.getParameter("begin"))
+        		     .replaceAll("<end>",ScreenHelper.formatDate(endDate));
+		Debug.println(query);
+		PreparedStatement ps = loc_conn.prepareStatement(query);
+		ResultSet rs = ps.executeQuery();
+		int counter = 1;
+	    response.setContentType("application/octet-stream; charset=windows-1252");
+	    response.setHeader("Content-Disposition", "Attachment;Filename=\"OpenClinicStatistic"+new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())+".csv\"");
+	    
+	    ServletOutputStream os = response.getOutputStream();
+	    
+	    // header
+		sResult.append("DATE;PATIENTID;FIRSTNAME;NAME;GENDER;AGE;BIRTHDATE;FAMILY_CHIEF;ADDRESS;DOCTOR;ICD10;DIAGNOSIS/RFE*\r\n");
+	    
+    	byte[] b = sResult.toString().getBytes();
+        for(int n=0; n<b.length; n++){
+            os.write(b[n]);
+        }
+        os.flush();
+        int activeEncounterObjectId=-1;
+		while(rs.next()){
+			int encounterObjectId=rs.getInt("oc_encounter_objectid");
+			if(encounterObjectId==activeEncounterObjectId){
+				//We don't want to show the same encounter multiple times
+				continue;
+			}
+			activeEncounterObjectId=encounterObjectId;
+			
+			sResult = new StringBuffer();
+			sResult.append(ScreenHelper.formatDate(rs.getDate("oc_encounter_begindate"))+";");
+			sResult.append(rs.getString("personid")+";");
+			sResult.append(ScreenHelper.removeAccents(rs.getString("firstname").toUpperCase()).replaceAll("´", "'").replaceAll("`", "'")+";");
+			sResult.append(ScreenHelper.removeAccents(rs.getString("lastname").toUpperCase()).replaceAll("´", "'").replaceAll("`", "'")+";");
+			sResult.append(rs.getString("gender").toUpperCase()+";");
+			java.util.Date dateofbirth = rs.getDate("dateofbirth");
+			String age = "";
+			try{
+				int a = AdminPerson.getAge(dateofbirth);
+				if(a<5){
+					age = "0->4";
+				}
+				else if(a<15){
+					age = "5->14";
+				}
+				else {
+					age = "15+";
+				}
+			}
+			catch(Exception e){
+				// empty
+			}
+			sResult.append(age+";");
+			sResult.append(ScreenHelper.formatDate(dateofbirth)+";");
+			sResult.append(ScreenHelper.removeAccents(checkString(rs.getString("comment5")).toUpperCase()).replaceAll("´", "'").replaceAll("`", "'")+";");
+			String address ="";
+			if(checkString(rs.getString("address")).length()>0){
+				address+=rs.getString("address");	
+			}
+			if(checkString(rs.getString("sector")).length()>0){
+				if(address.length()>0){
+					address+=", ";
+				}
+				address+=rs.getString("sector");	
+			}
+			if(checkString(rs.getString("cell")).length()>0){
+				if(address.length()>0){
+					address+=", ";
+				}
+				address+=rs.getString("cell");	
+			}
+			sResult.append(address.toUpperCase()+";");
+			SortedSet hDiagnoses = new TreeSet();
+			//Now add the diagnoses for the Encounter
+			if(checkString(request.getParameter("diagsicd10")).equalsIgnoreCase("1")){
+				Vector diagnoses = Diagnosis.selectDiagnoses("", "", MedwanQuery.getInstance().getConfigString("serverId")+"."+encounterObjectId, doctor, "", "", "", "", "", "", "", "icd10", "");
+				for(int n=0;n<diagnoses.size();n++){
+					Diagnosis diagnosis = (Diagnosis)diagnoses.elementAt(n);
+					hDiagnoses.add(User.getFullUserName(diagnosis.getAuthorUID())+";"+diagnosis.getCode().toUpperCase()+";"+MedwanQuery.getInstance().getDiagnosisLabel("icd10", diagnosis.getCode(), sWebLanguage));
+				}
+			}
+			if(checkString(request.getParameter("diagsrfe")).equalsIgnoreCase("1")){
+				Vector rfes = ReasonForEncounter.getReasonsForEncounterByEncounterUid(MedwanQuery.getInstance().getConfigString("serverId")+"."+encounterObjectId);
+				for(int n=0;n<rfes.size();n++){
+					ReasonForEncounter rfe = (ReasonForEncounter)rfes.elementAt(n);
+					if(rfe.getCodeType().equalsIgnoreCase("icd10")){
+						hDiagnoses.add(User.getFullUserName(rfe.getAuthorUID())+";"+rfe.getCode().toUpperCase()+";*"+MedwanQuery.getInstance().getDiagnosisLabel("icd10", rfe.getCode(), sWebLanguage));
+					}
+				}
+			}
+			if(checkString(request.getParameter("diagsfreetext")).equalsIgnoreCase("1")){
+				HashSet hFree = Encounter.getFreeTextDiagnoses(MedwanQuery.getInstance().getConfigString("serverId")+"."+encounterObjectId);
+				Iterator iFree = hFree.iterator();
+				while(iFree.hasNext()){
+					hDiagnoses.add(((String)iFree.next()).toUpperCase().replaceAll("\n", " ").replaceAll("\r", ""));
+				}
+			}
+			
+			if(hDiagnoses.size()==0){
+				sResult.append("-;-;-;");
+			}
+			Iterator iDiagnoses = hDiagnoses.iterator();
+			int c=0;
+			while(iDiagnoses.hasNext()){
+				if(c>0){
+					sResult.append("\r\n;;;;;;;;;");
+				}
+				c++;
+				sResult.append(ScreenHelper.removeAccents((String)iDiagnoses.next()).replaceAll("´", "'").replaceAll("`", "'"));
+			}
+			sResult.append("\r\n");
+			
+	    	b = sResult.toString().getBytes();
+	        for(int n=0; n<b.length; n++){
+	            os.write(b[n]);
+	        }
+	        os.flush();
+		}
+		rs.close();
+		ps.close();
+		
+		loc_conn.close();
+        os.close();
+        done=true;
+        }
+        catch(Exception z){
+        	z.printStackTrace();
+        }
     }
 	//*** 8 - GLOBAL LIST ************************************************
     else if("global.list".equalsIgnoreCase(sQueryType)){

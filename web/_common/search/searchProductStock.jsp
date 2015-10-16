@@ -110,7 +110,7 @@
 
 <script>
   window.resizeTo(600,540);
-  document.productStockForm.SearchProductName.focus();
+  window.setTimeout("document.productStockForm.SearchProductName.focus();",300);
 
   <%-- select product stock --%>
   function selectProductStock(productStockUid, productStockName, serviceStockUid, serviceStockName, productStockLevel){

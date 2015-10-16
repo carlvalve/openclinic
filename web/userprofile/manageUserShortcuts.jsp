@@ -159,6 +159,7 @@
                     shortcuts.add("applications.prescriptions.medications");       // voorschrift geneesmiddelen
                     shortcuts.add("applications.prescriptions.medicationpaperprescription");       // voorschrift geneesmiddelen (papier)
                     shortcuts.add("applications.prescriptions.careprescriptions"); // voorschrift zorgen
+                    shortcuts.add("applications.financial.debetEdit");     // facturen raadplegen
                     shortcuts.add("applications.financial.patientCreditEdit");     // facturen raadplegen
                     shortcuts.add("applications.financial.patientInvoiceEdit");    // prestaties invoeren
                     shortcuts.add("hidden.actualrfe");                             // reason for encounter (RFE)

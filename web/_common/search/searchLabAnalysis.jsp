@@ -197,7 +197,7 @@
 
   <script>
     window.resizeTo(542,484);
-    searchForm.FindCode.focus();
+    window.setTimeout("searchForm.FindCode.focus();",300);
 
     <%-- select labanalysis --%>
     function selectLabAnalysis(sID,sType,sCode,sText){

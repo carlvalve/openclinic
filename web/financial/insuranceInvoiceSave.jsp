@@ -9,6 +9,7 @@
     String sEditInvoiceUID = checkString(request.getParameter("EditInvoiceUID"));
     String sEditStatus = checkString(request.getParameter("EditStatus"));
     String sEditBalance = checkString(request.getParameter("EditBalance"));
+    String sEditNumber = checkString(request.getParameter("EditNumber"));
     String sEditCBs = checkString(request.getParameter("EditCBs"));
     InsurarInvoice insurarinvoice = new InsurarInvoice();
     insurarinvoice.setBalance(Double.parseDouble(sEditBalance.replace(",",".")));
@@ -28,7 +29,7 @@
     insurarinvoice.setUid(sEditInsurarInvoiceUID);
     insurarinvoice.setUpdateDateTime(ScreenHelper.getSQLDate(getDate()));
     insurarinvoice.setUpdateUser(activeUser.userid);
-
+    insurarinvoice.setNumber(sEditNumber);
     insurarinvoice.setDebets(new Vector());
     insurarinvoice.setCredits(new Vector());
     

@@ -2,6 +2,7 @@
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
 <%
+System.out.println("1");
 	String country=request.getParameter("country");
 	String os=request.getParameter("os");
 	String database=request.getParameter("database");
@@ -20,6 +21,7 @@
 			MedwanQuery.getInstance().setConfigString("openclinicdbName", openclinicdb);
 		}
 	}
+	System.out.println("2");
 	if(country==null) country=MedwanQuery.getInstance().getConfigString("setup.country","");
 	if(os==null) os=MedwanQuery.getInstance().getConfigString("setup.os","");
 	if(database==null) database=MedwanQuery.getInstance().getConfigString("setup.database","");
@@ -68,6 +70,7 @@
 		ps.close();
 		conn.close();
 	}
+System.out.println("3");
 %>
 
 <form name='resetDefaults' method='post'>
@@ -97,6 +100,7 @@
 					<option value='ng' <%="ng".equals(country)?"selected":""%>><%=getTran("country","ng",sWebLanguage).toUpperCase() %></option>
 					<option value='ga' <%="ga".equals(country)?"selected":""%>><%=getTran("country","ga",sWebLanguage).toUpperCase() %></option>
 					<option value='sn' <%="sn".equals(country)?"selected":""%>><%=getTran("country","sn",sWebLanguage).toUpperCase() %></option>
+					<option value='et' <%="et".equals(country)?"selected":""%>><%=getTran("country","et",sWebLanguage).toUpperCase() %></option>
 				</select>
 			</td>
 		</tr>
@@ -104,6 +108,7 @@
 			<td class='admin'><%=getTran("web","os",sWebLanguage)%>&nbsp</td>
 			<td class='admin2'>
 				<%
+				System.out.println("4");
 					String detectedos=System.getProperty("os.name").toLowerCase();
 					if(detectedos.contains("windows")){
 						detectedos="windows";
@@ -146,12 +151,13 @@
 				<select name='database' class='text'>
 					<option value=''></option>
 					<option value='mysql' <%="mysql".equals(detecteddatabase)?"selected":""%>><%=getTran("web","mysql",sWebLanguage).toUpperCase() %></option>
-					<option value='sqlserver' <%="sqlserver".equals(detecteddatabase)?"selected":""%>><%=getTran("web","sqlserver",sWebLanguage).toUpperCase() %></option>
+					<option value='sqlserver' <%=detecteddatabase.replaceAll(" ", "").contains("sqlserver")?"selected":""%>><%=getTran("web","sqlserver",sWebLanguage).toUpperCase() %></option>
 				</select>
 				<%
-					if(!detecteddatabase.equals(database)){
+				System.out.println("5");
+					if(!detecteddatabase.replaceAll(" ", "").contains(database)){
 				%>
-				<font color="red"><img src="<c:url value="_img/icons/icon_warning.gif"/>"/> <%=getTran("web","wrong.database",sWebLanguage)+": "+database %></font>
+				<font color="red"><img src="<c:url value="_img/icons/icon_warning.gif"/>"/> <%=getTran("web","wrong.database",sWebLanguage)+": "+database+" (<> "+detecteddatabase+")" %></font>
 				<%
 					}
 				%>
@@ -196,6 +202,7 @@
 		</tr>
 		<tr>
 			<%
+			System.out.println("6");
 				String detectedadmindb=MedwanQuery.getInstance().getAdminConnection().getCatalog();
 			%>
 			<td class='admin'><%=getTran("web","admindb",sWebLanguage)%>&nbsp</td>
@@ -212,17 +219,20 @@
 		</tr>
 		<tr>
 			<%
-				String detectedopenclinicdb=conn.getCatalog();
+			System.out.println("7");
+				String detectedopenclinicdb=MedwanQuery.getInstance().getOpenclinicConnection().getCatalog();
 			%>
 			<td class='admin'><%=getTran("web","openclinicdb",sWebLanguage)%>&nbsp</td>
 			<td class='admin2'>
 				<input class='text' type='text' name='openclinicdb' id='openclinicdb' value='<%=detectedopenclinicdb%>'/>
 				<%
+				System.out.println("8");
 					if(!detectedopenclinicdb.equals(MedwanQuery.getInstance().getConfigString("openclinicdbName","openclinic_dbo"))){
 				%>
 				<font color="red"><img src="<c:url value="_img/icons/icon_warning.gif"/>"/> <%=getTran("web","wrong.openclinicdb",sWebLanguage)+": <b>"+MedwanQuery.getInstance().getConfigString("openclinicdbName","openclinic_dbo") %></b></font>
 				<%
 					}
+					System.out.println("9");
 				%>
 			</td>
 		</tr>

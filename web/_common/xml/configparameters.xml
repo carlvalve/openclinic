@@ -251,7 +251,7 @@
 		<parameter name="showUnitID" default="0" type="select" options="0;1">
 		    <description language="en">Show the serviceid or not, whenever a service name is displayed</description>
 	    </parameter>
-		<parameter name="MFP" default="0" type="select" options="0;1"/>
+		<parameter name="MFP" default=""/>
 		<parameter name="priceFormat" default="#,##0.00"/>
 		<parameter name="priceFormatExtended" default="#,##0.00"/>
 		<parameter name="BackButtonDisabled" default="true" type="select" options="true;false"/>
