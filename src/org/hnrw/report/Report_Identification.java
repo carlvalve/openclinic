@@ -60,7 +60,7 @@ public class Report_Identification {
             }
             rs1.close();
             ps1.close();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();  
         }
         try {

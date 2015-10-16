@@ -47,12 +47,11 @@ public class PDFExtraInsurarInvoiceGenerator extends PDFInvoiceGenerator {
 			doc.addCreationDate();
 			doc.addCreator("OpenClinic Software");
 			doc.setPageSize(PageSize.A4);
-            addFooter();
-
-            doc.open();
-
             // get specified invoice
             ExtraInsurarInvoice invoice = ExtraInsurarInvoice.get(sInvoiceUid);
+            addFooter(invoice.getInvoiceNumber());
+
+            doc.open();
 
             addHeading(invoice);
             addInsurarData(invoice);
@@ -168,7 +167,7 @@ public class PDFExtraInsurarInvoiceGenerator extends PDFInvoiceGenerator {
             table.setWidthPercentage(pageWidth);
 
             // invoice id
-            cell = new PdfPCell(getInvoiceId(invoice));
+            cell = new PdfPCell(getExtraInsurarInvoiceId(invoice));
             cell.setPadding(cellPadding);
             table.addCell(createCell(cell,1,PdfPCell.ALIGN_LEFT,PdfPCell.BOX));
             table.addCell(createEmptyCell(1));
@@ -611,7 +610,7 @@ public class PDFExtraInsurarInvoiceGenerator extends PDFInvoiceGenerator {
         }
         invoiceTable.addCell(createEmptyCell(2));
         invoiceTable.addCell(createValueCell(sEncounterName,4));
-        invoiceTable.addCell(createValueCell(ScreenHelper.checkString(debet.getPatientInvoiceUid()).replaceAll("1\\.",""),2));
+        invoiceTable.addCell(createValueCell(ScreenHelper.checkString(PatientInvoice.getPatientInvoiceNumber(debet.getPatientInvoiceUid())),2));
         invoiceTable.addCell(createValueCell(sPrestationCode+sPrestationDescr,7));
         invoiceTable.addCell(createValueCell(debet.getQuantity()+"",1));
         invoiceTable.addCell(createValueCell(priceFormat.format(debetAmount/debet.getQuantity()),2));

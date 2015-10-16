@@ -39,8 +39,17 @@ public class Prestation extends OC_Object{
     private String prestationClass;
     private String serviceUid;
     private String nomenclature;
+    private String dhis2code;
     
-    public String getNomenclature(){
+    public String getDhis2code() {
+		return dhis2code;
+	}
+
+	public void setDhis2code(String dhis2code) {
+		this.dhis2code = dhis2code;
+	}
+
+	public String getNomenclature(){
 		return nomenclature;
 	}
 
@@ -48,7 +57,7 @@ public class Prestation extends OC_Object{
 		this.nomenclature = nomenclature;
 	}
 
-	private String modifiers; // 0=anesthesiaPercentage, 1=mfpadmissionpercentage, 2=flag1
+	private String modifiers; // 0=anesthesiaPercentage, 1=mfpadmissionpercentage, 2=flag1, 3=getAnesthesiaSupplementPercentag, 4=codedhis2
     
     public String getServiceUid(){
 		return serviceUid;
@@ -500,6 +509,7 @@ public class Prestation extends OC_Object{
                 prestation.setModifiers(rs.getString("OC_PRESTATION_MODIFIERS"));
                 prestation.setServiceUid(rs.getString("OC_PRESTATION_SERVICEUID"));
                 prestation.setNomenclature(rs.getString("OC_PRESTATION_NOMENCLATURE"));
+                prestation.setDhis2code(rs.getString("OC_PRESTATION_DHIS2CODE"));
                 prestations.add(prestation);
     		}
     		rs.close();
@@ -883,6 +893,7 @@ public class Prestation extends OC_Object{
                         prestation.setModifiers(rs.getString("OC_PRESTATION_MODIFIERS"));
                         prestation.setServiceUid(rs.getString("OC_PRESTATION_SERVICEUID"));
                         prestation.setNomenclature(rs.getString("OC_PRESTATION_NOMENCLATURE"));
+                        prestation.setDhis2code(rs.getString("OC_PRESTATION_DHIS2CODE"));
                     }
                 }
             }
@@ -969,6 +980,7 @@ public class Prestation extends OC_Object{
                         prestation.setModifiers(rs.getString("OC_PRESTATION_MODIFIERS"));
                         prestation.setServiceUid(rs.getString("OC_PRESTATION_SERVICEUID"));
                         prestation.setNomenclature(rs.getString("OC_PRESTATION_NOMENCLATURE"));
+                        prestation.setDhis2code(rs.getString("OC_PRESTATION_DHIS2CODE"));
                     }
                     else{
                     	prestation = Prestation.get(uid);
@@ -1082,6 +1094,7 @@ public class Prestation extends OC_Object{
                 prestation.setModifiers(rs.getString("OC_PRESTATION_MODIFIERS"));
                 prestation.setServiceUid(rs.getString("OC_PRESTATION_SERVICEUID"));
                 prestation.setNomenclature(rs.getString("OC_PRESTATION_NOMENCLATURE"));
+                prestation.setDhis2code(rs.getString("OC_PRESTATION_DHIS2CODE"));
                 allPrestations.put(prestation.getCode(),prestation);
             }
         }
@@ -1149,6 +1162,7 @@ public class Prestation extends OC_Object{
                     prestation.setModifiers(rs.getString("OC_PRESTATION_MODIFIERS"));
                     prestation.setServiceUid(rs.getString("OC_PRESTATION_SERVICEUID"));
                     prestation.setNomenclature(rs.getString("OC_PRESTATION_NOMENCLATURE"));
+                    prestation.setDhis2code(rs.getString("OC_PRESTATION_DHIS2CODE"));
                 }
             }
             catch(Exception e){
@@ -1324,6 +1338,7 @@ public class Prestation extends OC_Object{
                 prestation.setModifiers(rs.getString("OC_PRESTATION_MODIFIERS"));
                 prestation.setServiceUid(rs.getString("OC_PRESTATION_SERVICEUID"));
                 prestation.setNomenclature(rs.getString("OC_PRESTATION_NOMENCLATURE"));
+                prestation.setDhis2code(rs.getString("OC_PRESTATION_DHIS2CODE"));
 
                 prestations.add(prestation);
             }
@@ -1439,6 +1454,7 @@ public class Prestation extends OC_Object{
                 prestation.setModifiers(rs.getString("OC_PRESTATION_MODIFIERS"));
                 prestation.setServiceUid(rs.getString("OC_PRESTATION_SERVICEUID"));
                 prestation.setNomenclature(rs.getString("OC_PRESTATION_NOMENCLATURE"));
+                prestation.setDhis2code(rs.getString("OC_PRESTATION_DHIS2CODE"));
 
                 prestations.add(prestation);
             }
@@ -1479,13 +1495,13 @@ public class Prestation extends OC_Object{
                 			"OC_PRESTATION_REFUID,OC_PRESTATION_UPDATETIME,OC_PRESTATION_UPDATEUID,OC_PRESTATION_VERSION,OC_PRESTATION_TYPE,OC_PRESTATION_CATEGORIES,"+
                 			"OC_PRESTATION_MFPPERCENTAGE,OC_PRESTATION_INVOICEGROUP,OC_PRESTATION_RENEWALINTERVAL,OC_PRESTATION_COVERAGEPLAN,OC_PRESTATION_COVERAGEPLANCATEGORY,"+
                 			"OC_PRESTATION_VARIABLEPRICE,OC_PRESTATION_INACTIVE,OC_PRESTATION_PERFORMERUID,OC_PRESTATION_SUPPLEMENT,OC_PRESTATION_CLASS,"+
-                			"OC_PRESTATION_MODIFIERS,OC_PRESTATION_SERVICEUID,OC_PRESTATION_SERVERID,OC_PRESTATION_OBJECTID,OC_PRESTATION_CREATETIME,OC_PRESTATION_NOMENCLATURE) "+
+                			"OC_PRESTATION_MODIFIERS,OC_PRESTATION_SERVICEUID,OC_PRESTATION_SERVERID,OC_PRESTATION_OBJECTID,OC_PRESTATION_CREATETIME,OC_PRESTATION_NOMENCLATURE,OC_PRESTATION_DHIS2CODE) "+
                 			""+
                 			"select OC_PRESTATION_CODE,OC_PRESTATION_DESCRIPTION,OC_PRESTATION_PRICE,OC_PRESTATION_REFTYPE,"+
                 			"OC_PRESTATION_REFUID,OC_PRESTATION_UPDATETIME,OC_PRESTATION_UPDATEUID,OC_PRESTATION_VERSION,OC_PRESTATION_TYPE,OC_PRESTATION_CATEGORIES,"+
                 			"OC_PRESTATION_MFPPERCENTAGE,OC_PRESTATION_INVOICEGROUP,OC_PRESTATION_RENEWALINTERVAL,OC_PRESTATION_COVERAGEPLAN,OC_PRESTATION_COVERAGEPLANCATEGORY,"+
                 			"OC_PRESTATION_VARIABLEPRICE,OC_PRESTATION_INACTIVE,OC_PRESTATION_PERFORMERUID,OC_PRESTATION_SUPPLEMENT,OC_PRESTATION_CLASS,"+
-                			"OC_PRESTATION_MODIFIERS,OC_PRESTATION_SERVICEUID,OC_PRESTATION_SERVERID,OC_PRESTATION_OBJECTID,OC_PRESTATION_CREATETIME,OC_PRESTATION_NOMENCLATURE from OC_PRESTATIONS where "+
+                			"OC_PRESTATION_MODIFIERS,OC_PRESTATION_SERVICEUID,OC_PRESTATION_SERVERID,OC_PRESTATION_OBJECTID,OC_PRESTATION_CREATETIME,OC_PRESTATION_NOMENCLATURE,OC_PRESTATION_DHIS2CODE from OC_PRESTATIONS where "+
                 			"OC_PRESTATION_SERVERID=? and OC_PRESTATION_OBJECTID=?";
                 	ps = oc_conn.prepareStatement(sSql);
                 	ps.setInt(1,Integer.parseInt(ids[0]));
@@ -1553,8 +1569,9 @@ public class Prestation extends OC_Object{
                    "  OC_PRESTATION_CLASS,"+
                    "  OC_PRESTATION_MODIFIERS,"+
                    "  OC_PRESTATION_SERVICEUID,"+
-                   "  OC_PRESTATION_NOMENCLATURE)"+
-                   " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                   "  OC_PRESTATION_NOMENCLATURE,"+
+                   "  OC_PRESTATION_DHIS2CODE)"+
+                   " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             ps = oc_conn.prepareStatement(sSql);
             ps.setInt(1,Integer.parseInt(ids[0]));
             ps.setInt(2,Integer.parseInt(ids[1]));
@@ -1582,6 +1599,7 @@ public class Prestation extends OC_Object{
             ps.setString(24, this.getModifiers());
             ps.setString(25, this.getServiceUid());
             ps.setString(26, this.getNomenclature());
+            ps.setString(27, this.getDhis2code());
             ps.executeUpdate();
             ps.close();
             

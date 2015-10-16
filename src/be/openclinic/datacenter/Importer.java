@@ -67,6 +67,26 @@ public class Importer {
 						importMessage.sendError();
 					}
 				}
+				else if(parametertype.equalsIgnoreCase("dhis2diagnosis")){
+					ImportMessage importMessage = ImportMessage.get(rs.getInt("OC_IMPORT_UID"));
+					importMessage.setImportDateTime(new java.util.Date());
+					if(storeDHIS2Diagnosis(importMessage)){
+						importMessage.updateImportDateTime(importMessage.getImportDateTime());
+					}
+					else if(importMessage.getError()>0){
+						importMessage.sendError();
+					}
+				}
+				else if(parametertype.equalsIgnoreCase("dhis2deathdiagnosis")){
+					ImportMessage importMessage = ImportMessage.get(rs.getInt("OC_IMPORT_UID"));
+					importMessage.setImportDateTime(new java.util.Date());
+					if(storeDHIS2DeathDiagnosis(importMessage)){
+						importMessage.updateImportDateTime(importMessage.getImportDateTime());
+					}
+					else if(importMessage.getError()>0){
+						importMessage.sendError();
+					}
+				}
 				else if(parametertype.equalsIgnoreCase("vaccination")){
 					ImportMessage importMessage = ImportMessage.get(rs.getInt("OC_IMPORT_UID"));
 					importMessage.setImportDateTime(new java.util.Date());
@@ -220,6 +240,152 @@ public class Importer {
 					ps.setInt(5,Integer.parseInt(diagnosis.attributeValue("year")));
 					ps.setInt(6,Integer.parseInt(diagnosis.attributeValue("month")));
 					ps.setInt(7,Integer.parseInt(diagnosis.attributeValue("count")));
+					ps.execute();
+					ps.close();
+				}
+				bSuccess=true;
+			}
+			
+		}
+		catch(SQLException e){
+			try {
+				if(ps!=null){
+					ps.close();
+				}
+			} catch (SQLException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			importMessage.setError(2);
+			e.printStackTrace();
+		} catch (DocumentException e) {
+			importMessage.setError(2);
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return bSuccess;
+	}
+	
+	public static boolean storeDHIS2Diagnosis(ImportMessage importMessage){
+		boolean bSuccess=false;
+		importMessage.setError(-1);
+		Connection conn = MedwanQuery.getInstance().getStatsConnection();
+		PreparedStatement ps=null;
+		try{
+            SAXReader reader = new SAXReader(false);
+			Document document = reader.read(new ByteArrayInputStream(importMessage.data.getBytes("UTF-8")));
+			Element root = document.getRootElement();
+			if(root.getName().equalsIgnoreCase("data") && root.attributeValue("parameterid").equalsIgnoreCase("dhis2.1")){
+				Element diags = root.element("dhis2diags");
+				Iterator diagnoses = diags.elementIterator("diagnosis");
+				while(diagnoses.hasNext()){
+					Element diagnosis = (Element)diagnoses.next();
+					//First clear a possible existing value
+					ps = conn.prepareStatement("delete from DC_DHIS2DIAGNOSISVALUES where DC_DIAGNOSISVALUE_SERVERID=? and DC_DIAGNOSISVALUE_SERVICEUID=? and DC_DIAGNOSISVALUE_ENCOUNTERTYPE=? and DC_DIAGNOSISVALUE_GENDER=? and DC_DIAGNOSISVALUE_AGE=? and DC_DIAGNOSISVALUE_CODETYPE=? and DC_DIAGNOSISVALUE_CODE=? and DC_DIAGNOSISVALUE_YEAR=? and DC_DIAGNOSISVALUE_MONTH=?");
+					ps.setInt(1, importMessage.getServerId());
+					ps.setString(2, diagnosis.attributeValue("serviceuid"));
+					ps.setString(3, diagnosis.attributeValue("encountertype"));
+					ps.setString(4, diagnosis.attributeValue("gender"));
+					ps.setString(5, diagnosis.attributeValue("age"));
+					ps.setString(6, "icd10");
+					ps.setString(7, diagnosis.attributeValue("code"));
+					ps.setInt(8,Integer.parseInt(diagnosis.attributeValue("year")));
+					ps.setInt(9,Integer.parseInt(diagnosis.attributeValue("month")));
+					ps.execute();
+					ps.close();
+					ps = conn.prepareStatement("insert into DC_DHIS2DIAGNOSISVALUES(DC_DIAGNOSISVALUE_SERVERID,DC_DIAGNOSISVALUE_OBJECTID,DC_DIAGNOSISVALUE_SERVICEUID,DC_DIAGNOSISVALUE_ENCOUNTERTYPE,DC_DIAGNOSISVALUE_GENDER,DC_DIAGNOSISVALUE_AGE,DC_DIAGNOSISVALUE_CODETYPE,DC_DIAGNOSISVALUE_CODE,DC_DIAGNOSISVALUE_YEAR,DC_DIAGNOSISVALUE_MONTH,DC_DIAGNOSISVALUE_COUNT) values(?,?,?,?,?,?,?,?,?,?,?)");
+					ps.setInt(1, importMessage.getServerId());
+					ps.setInt(2, importMessage.getObjectId());
+					ps.setString(3, diagnosis.attributeValue("serviceuid"));
+					ps.setString(4, diagnosis.attributeValue("encountertype"));
+					ps.setString(5, diagnosis.attributeValue("gender"));
+					ps.setString(6, diagnosis.attributeValue("age"));
+					ps.setString(7, "icd10");
+					ps.setString(8, diagnosis.attributeValue("code"));
+					ps.setInt(9,Integer.parseInt(diagnosis.attributeValue("year")));
+					ps.setInt(10,Integer.parseInt(diagnosis.attributeValue("month")));
+					ps.setInt(11,Integer.parseInt(diagnosis.attributeValue("count")));
+					ps.execute();
+					ps.close();
+				}
+				bSuccess=true;
+			}
+			
+		}
+		catch(SQLException e){
+			try {
+				if(ps!=null){
+					ps.close();
+				}
+			} catch (SQLException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			importMessage.setError(2);
+			e.printStackTrace();
+		} catch (DocumentException e) {
+			importMessage.setError(2);
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return bSuccess;
+	}
+	
+	public static boolean storeDHIS2DeathDiagnosis(ImportMessage importMessage){
+		boolean bSuccess=false;
+		importMessage.setError(-1);
+		Connection conn = MedwanQuery.getInstance().getStatsConnection();
+		PreparedStatement ps=null;
+		try{
+            SAXReader reader = new SAXReader(false);
+			Document document = reader.read(new ByteArrayInputStream(importMessage.data.getBytes("UTF-8")));
+			Element root = document.getRootElement();
+			if(root.getName().equalsIgnoreCase("data") && root.attributeValue("parameterid").equalsIgnoreCase("dhis2.2")){
+				Element diags = root.element("dhis2diags");
+				Iterator diagnoses = diags.elementIterator("diagnosis");
+				while(diagnoses.hasNext()){
+					Element diagnosis = (Element)diagnoses.next();
+					//First clear a possible existing value
+					ps = conn.prepareStatement("delete from DC_DHIS2DEATHDIAGNOSISVALUES where DC_DIAGNOSISVALUE_SERVERID=? and DC_DIAGNOSISVALUE_SERVICEUID=? and DC_DIAGNOSISVALUE_GENDER=? and DC_DIAGNOSISVALUE_AGE=? and DC_DIAGNOSISVALUE_CODETYPE=? and DC_DIAGNOSISVALUE_CODE=? and DC_DIAGNOSISVALUE_YEAR=? and DC_DIAGNOSISVALUE_MONTH=?");
+					ps.setInt(1, importMessage.getServerId());
+					ps.setString(2, diagnosis.attributeValue("serviceuid"));
+					ps.setString(3, diagnosis.attributeValue("gender"));
+					ps.setString(4, diagnosis.attributeValue("age"));
+					ps.setString(5, "icd10");
+					ps.setString(6, diagnosis.attributeValue("code"));
+					ps.setInt(7,Integer.parseInt(diagnosis.attributeValue("year")));
+					ps.setInt(8,Integer.parseInt(diagnosis.attributeValue("month")));
+					ps.execute();
+					ps.close();
+					ps = conn.prepareStatement("insert into DC_DHIS2DEATHDIAGNOSISVALUES(DC_DIAGNOSISVALUE_SERVERID,DC_DIAGNOSISVALUE_OBJECTID,DC_DIAGNOSISVALUE_SERVICEUID,DC_DIAGNOSISVALUE_GENDER,DC_DIAGNOSISVALUE_AGE,DC_DIAGNOSISVALUE_CODETYPE,DC_DIAGNOSISVALUE_CODE,DC_DIAGNOSISVALUE_YEAR,DC_DIAGNOSISVALUE_MONTH,DC_DIAGNOSISVALUE_COUNT) values(?,?,?,?,?,?,?,?,?,?)");
+					ps.setInt(1, importMessage.getServerId());
+					ps.setInt(2, importMessage.getObjectId());
+					ps.setString(3, diagnosis.attributeValue("serviceuid"));
+					ps.setString(4, diagnosis.attributeValue("gender"));
+					ps.setString(5, diagnosis.attributeValue("age"));
+					ps.setString(6, "icd10");
+					ps.setString(7, diagnosis.attributeValue("code"));
+					ps.setInt(8,Integer.parseInt(diagnosis.attributeValue("year")));
+					ps.setInt(9,Integer.parseInt(diagnosis.attributeValue("month")));
+					ps.setInt(10,Integer.parseInt(diagnosis.attributeValue("count")));
 					ps.execute();
 					ps.close();
 				}

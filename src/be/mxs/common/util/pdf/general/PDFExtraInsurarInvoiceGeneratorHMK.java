@@ -56,12 +56,12 @@ public class PDFExtraInsurarInvoiceGeneratorHMK extends PDFInvoiceGenerator {
 			doc.addCreationDate();
 			doc.addCreator("OpenClinic Software");
 			doc.setPageSize(PageSize.A4);
-            addFooter(sInvoiceUid.replaceAll("1\\.",""));
+            // get specified invoice
+            ExtraInsurarInvoice invoice = ExtraInsurarInvoice.get(sInvoiceUid);
+            addFooter(invoice.getInvoiceNumber());
 
             doc.open();
 
-            // get specified invoice
-            ExtraInsurarInvoice invoice = ExtraInsurarInvoice.get(sInvoiceUid);
             debets = ExtraInsurarInvoice.getDebetsForInvoiceSortByDate(invoice.getUid());
             for(int n=0;n<debets.size();n++){
             	Debet debet = (Debet)debets.elementAt(n);
@@ -128,7 +128,7 @@ public class PDFExtraInsurarInvoiceGeneratorHMK extends PDFInvoiceGenerator {
             	immat="?";
             	affiliate="?";
             	emp="?";
-            	invoiceUid=ScreenHelper.checkString(debet.getPatientInvoiceUid());
+            	invoiceUid=ScreenHelper.checkString(PatientInvoice.getPatientInvoiceNumber(debet.getPatientInvoiceUid()));
             	Encounter encounter = debet.getEncounter();
             	serviceUid=debet.determineServiceUid();
             	if(debet.getInsurance()!=null && debet.getInsurance().getInsuranceCategory()!=null){

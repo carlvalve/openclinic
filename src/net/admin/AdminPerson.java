@@ -2927,6 +2927,42 @@ public class AdminPerson extends OC_Object{
         return age;
     }
 
+    public static int getAge(java.util.Date db){
+        int age = -1;
+        try{
+            Calendar dateOfBirth = Calendar.getInstance();
+            dateOfBirth.setTime(db);
+
+            Calendar now = Calendar.getInstance();
+
+            //*** check wether the birthday in the current year is passed ***
+            // check month
+            if(now.get(Calendar.MONTH) < dateOfBirth.get(Calendar.MONTH)){
+                // dob not passed
+                age = now.get(Calendar.YEAR) - dateOfBirth.get(Calendar.YEAR) - 1;
+            }
+            else if(now.get(Calendar.MONTH) > dateOfBirth.get(Calendar.MONTH)){
+                // dob passed
+                age = now.get(Calendar.YEAR) - dateOfBirth.get(Calendar.YEAR);
+            }
+            else if(now.get(Calendar.MONTH) == dateOfBirth.get(Calendar.MONTH)){
+                // check day
+                if(now.get(Calendar.DAY_OF_MONTH) < dateOfBirth.get(Calendar.DAY_OF_MONTH)){
+                    // dob not passed
+                    age = now.get(Calendar.YEAR) - dateOfBirth.get(Calendar.YEAR) - 1;
+                }
+                else if(now.get(Calendar.DAY_OF_MONTH) >= dateOfBirth.get(Calendar.DAY_OF_MONTH)){
+                    // dob passed
+                    age = now.get(Calendar.YEAR) - dateOfBirth.get(Calendar.YEAR);
+                }
+            }
+        }
+        catch(Exception e){
+            Debug.printStackTrace(e);
+        }
+        return age;
+    }
+
     public static Vector getUpdateTimes(java.sql.Date dBegin, java.sql.Date dEnd, int iUserid){
         PreparedStatement ps = null;
         ResultSet rs = null;

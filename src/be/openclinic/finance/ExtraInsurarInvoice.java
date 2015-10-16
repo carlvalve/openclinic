@@ -22,8 +22,68 @@ import java.sql.Statement;
 public class ExtraInsurarInvoice extends Invoice {
     private String insurarUid;
     private Insurar insurar;
+    private String number;
 
-    //--- S/GET INSURAR UID -----------------------------------------------------------------------
+	public String getInvoiceNumber() {
+        if(number==null || number.equalsIgnoreCase("")){
+        	if(invoiceUid.split("\\.").length>1){
+        		return invoiceUid.split("\\.")[1];
+        	}
+        	else{
+        		return invoiceUid;
+        	}
+        }
+        else {
+        	return number+"";
+        }
+    }
+	public static String getPatientInvoiceNumber(String uid){
+		String s=uid;
+        String sSelect = "SELECT OC_INSURARINVOICE_NUMBER FROM OC_EXTRAINSURARINVOICES WHERE OC_INSURARINVOICE_SERVERID=? and OC_INSURARINVOICE_OBJECTID = ? ";
+        Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+        ResultSet rs=null;
+        PreparedStatement ps=null;
+        try{
+            ps = oc_conn.prepareStatement(sSelect);
+            ps.setInt(1,Integer.parseInt(uid.split("\\.")[0]));
+            ps.setInt(2,Integer.parseInt(uid.split("\\.")[1]));
+            rs = ps.executeQuery();
+            
+            if(rs.next()){
+            	String sNumber = ScreenHelper.checkString(rs.getString("OC_INSURARINVOICE_NUMBER"));
+            	if(sNumber.length()>0){
+            		s=sNumber;
+            	}
+            }
+
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null)rs.close();
+                if(ps!=null)ps.close();
+                oc_conn.close();
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+
+		return s;
+	}
+
+
+    public String getNumber() {
+		return number;
+	}
+
+	public void setNumber(String number) {
+		this.number = number;
+	}
+
+	//--- S/GET INSURAR UID -----------------------------------------------------------------------
     public void setInsurarUid(String insurarUid) {
         this.insurarUid = insurarUid;
     }
@@ -75,6 +135,7 @@ public class ExtraInsurarInvoice extends Invoice {
                         insurarInvoice.setVersion(rs.getInt("OC_INSURARINVOICE_VERSION"));
                         insurarInvoice.setBalance(rs.getDouble("OC_INSURARINVOICE_BALANCE"));
                         insurarInvoice.setStatus(rs.getString("OC_INSURARINVOICE_STATUS"));
+                        insurarInvoice.setNumber(rs.getString("OC_INSURARINVOICE_NUMBER"));
                     }
                     rs.close();
                     ps.close();
@@ -186,6 +247,7 @@ public class ExtraInsurarInvoice extends Invoice {
                         insurarInvoice.setVersion(rs.getInt("OC_INSURARINVOICE_VERSION"));
                         insurarInvoice.setBalance(rs.getDouble("OC_INSURARINVOICE_BALANCE"));
                         insurarInvoice.setStatus(rs.getString("OC_INSURARINVOICE_STATUS"));
+                        insurarInvoice.setNumber(rs.getString("OC_INSURARINVOICE_NUMBER"));
                     }
                     rs.close();
                     ps.close();
@@ -232,6 +294,7 @@ public class ExtraInsurarInvoice extends Invoice {
                 insurarInvoice.setVersion(rs.getInt("OC_INSURARINVOICE_VERSION"));
                 insurarInvoice.setBalance(rs.getDouble("OC_INSURARINVOICE_BALANCE"));
                 insurarInvoice.setStatus(rs.getString("OC_INSURARINVOICE_STATUS"));
+                insurarInvoice.setNumber(rs.getString("OC_INSURARINVOICE_NUMBER"));
             }
             rs.close();
             ps.close();
@@ -297,15 +360,17 @@ public class ExtraInsurarInvoice extends Invoice {
                     ps.close();
                 }
                 else{
-                    ids = new String[] {MedwanQuery.getInstance().getConfigString("serverId"),MedwanQuery.getInstance().getOpenclinicCounter(MedwanQuery.getInstance().getConfigString("ExtraInsurance2InvoiceCounter","OC_INVOICES"))+""};
+                    ids = new String[] {MedwanQuery.getInstance().getConfigString("serverId"),MedwanQuery.getInstance().getOpenclinicCounter("OC_INVOICES")+""};
                     this.setUid(ids[0]+"."+ids[1]);
                     this.setInvoiceUid(ids[1]);
+                   	this.setNumber(getInvoiceNumberCounter("ExtraInsurerInvoice"));
                 }
             }
             else{
-                ids = new String[] {MedwanQuery.getInstance().getConfigString("serverId"),MedwanQuery.getInstance().getOpenclinicCounter(MedwanQuery.getInstance().getConfigString("ExtraInsurance2InvoiceCounter","OC_INVOICES"))+""};
+                ids = new String[] {MedwanQuery.getInstance().getConfigString("serverId"),MedwanQuery.getInstance().getOpenclinicCounter("OC_INVOICES")+""};
                 this.setUid(ids[0]+"."+ids[1]);
                 this.setInvoiceUid(ids[1]);
+               	this.setNumber(getInvoiceNumberCounter("ExtraInsurerInvoice"));
             }
 
             if(ids.length == 2){
@@ -320,9 +385,10 @@ public class ExtraInsurarInvoice extends Invoice {
                           " OC_INSURARINVOICE_UPDATEUID," +
                           " OC_INSURARINVOICE_VERSION," +
                           " OC_INSURARINVOICE_BALANCE," +
+                          " OC_INSURARINVOICE_NUMBER," +
                           " OC_INSURARINVOICE_STATUS" +
                         ") " +
-                         " VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+                         " VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
                 ps = oc_conn.prepareStatement(sSelect);
                 ps.setInt(1,Integer.parseInt(ids[0]));
                 ps.setInt(2,Integer.parseInt(ids[1]));
@@ -337,7 +403,8 @@ public class ExtraInsurarInvoice extends Invoice {
                 ps.setString(8,this.getUpdateUser());
                 ps.setInt(9,iVersion);
                 ps.setDouble(10,this.getBalance());
-                ps.setString(11,this.getStatus());
+                ps.setString(11, this.getNumber());
+                ps.setString(12,this.getStatus());
                 ps.executeUpdate();
                 ps.close();
 
@@ -512,6 +579,7 @@ public class ExtraInsurarInvoice extends Invoice {
                 invoice.setVersion(rs.getInt("OC_INSURARINVOICE_VERSION"));
                 invoice.setBalance(rs.getDouble("OC_INSURARINVOICE_BALANCE"));
                 invoice.setStatus(rs.getString("OC_INSURARINVOICE_STATUS"));
+                invoice.setNumber(rs.getString("OC_INSURARINVOICE_NUMBER"));
 
                 invoices.add(invoice);
             }
@@ -551,9 +619,14 @@ public class ExtraInsurarInvoice extends Invoice {
             }
 
             if(sInvoiceNr.length() > 0){
-                sSql+= " OC_INSURARINVOICE_OBJECTID = ? AND";
+            	if(sInvoiceNr.contains(".")){
+            		sSql+= " OC_INSURARINVOICE_NUMBER = ? AND";
+            		
+            	}
+            	else {
+            		sSql+= " (OC_INSURARINVOICE_NUMBER = '"+sInvoiceNr+"' OR OC_INSURARINVOICE_OBJECTID = ?) AND";
+            	}
             }
-
             if ((sAmountMin.length() > 0)&&(sAmountMax.length()>0)){
                 sSql+= " OC_INSURARINVOICE_BALANCE BETWEEN ? AND ? AND";
             }
@@ -575,7 +648,14 @@ public class ExtraInsurarInvoice extends Invoice {
 
             // set question marks
             int qmIdx = 1;
-            if(sInvoiceNr.length() > 0) ps.setInt(qmIdx++,Integer.parseInt(sInvoiceNr));
+            if(sInvoiceNr.length() > 0){
+            	if(sInvoiceNr.contains(".")){
+            		ps.setString(qmIdx++,sInvoiceNr);
+            	}
+            	else {
+            		ps.setInt(qmIdx++,Integer.parseInt(sInvoiceNr));
+            	}
+            }
             if(sInvoiceDateBegin.length() > 0) ps.setDate(qmIdx++,ScreenHelper.getSQLDate(sInvoiceDateBegin));
             if(sInvoiceDateEnd.length() > 0) ps.setDate(qmIdx++,ScreenHelper.getSQLDate(sInvoiceDateEnd));
 
@@ -606,6 +686,7 @@ public class ExtraInsurarInvoice extends Invoice {
                 invoice.setVersion(rs.getInt("OC_INSURARINVOICE_VERSION"));
                 invoice.setBalance(rs.getDouble("OC_INSURARINVOICE_BALANCE"));
                 invoice.setStatus(rs.getString("OC_INSURARINVOICE_STATUS"));
+                invoice.setNumber(rs.getString("OC_INSURARINVOICE_NUMBER"));
 
                 invoices.add(invoice);
             }
@@ -653,6 +734,7 @@ public class ExtraInsurarInvoice extends Invoice {
                 insurarInvoice.setVersion(rs.getInt("OC_INSURARINVOICE_VERSION"));
                 insurarInvoice.setBalance(rs.getDouble("OC_INSURARINVOICE_BALANCE"));
                 insurarInvoice.setStatus(rs.getString("OC_INSURARINVOICE_STATUS"));
+                insurarInvoice.setNumber(rs.getString("OC_INSURARINVOICE_NUMBER"));
 
                 vInsurarInvoices.add(insurarInvoice);
             }

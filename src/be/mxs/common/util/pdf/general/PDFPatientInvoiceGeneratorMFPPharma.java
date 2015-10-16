@@ -260,7 +260,7 @@ public class PDFPatientInvoiceGeneratorMFPPharma extends PDFInvoiceGenerator {
             cell=createValueCell(getTran("web","mfp.pharma.invoice"),10,8,Font.BOLD);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
             table2.addCell(cell);
-            cell=createValueCell(getTran("web","recordnumber")+": "+invoice.getUid(),10,8,Font.BOLD);
+            cell=createValueCell(getTran("web","recordnumber")+": "+invoice.getInvoiceNumber(),10,8,Font.BOLD);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
             table2.addCell(cell);
 

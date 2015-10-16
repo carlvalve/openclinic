@@ -50,7 +50,7 @@ public class PDFPatientInvoiceReceiptGenerator extends PDFInvoiceGenerator {
 			doc.addCreator("OpenClinic Software");
             Rectangle rectangle = new Rectangle(0,0,new Float(MedwanQuery.getInstance().getConfigInt("patientReceiptWidth",720)*72/254).floatValue(),new Float(MedwanQuery.getInstance().getConfigInt("patientReceiptHeight",5000)*72/254).floatValue());
             doc.setPageSize(rectangle);
-            doc.setMargins(0, 0, 0, 0);
+            doc.setMargins(MedwanQuery.getInstance().getConfigInt("patientReceiptLeftMargin",0), MedwanQuery.getInstance().getConfigInt("patientReceiptRightMargin",0), MedwanQuery.getInstance().getConfigInt("patientReceiptTopMargin",0), MedwanQuery.getInstance().getConfigInt("patientReceiptBottomMargin",0));
             doc.open();
 
             // get specified invoice

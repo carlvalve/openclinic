@@ -20,7 +20,7 @@ import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.system.ScreenHelper;
 
 public class Vaccination {
-	public String personid,date,type,batchnumber,expiry,location;
+	public String personid,date,type,batchnumber,expiry,location,observation,modifier;
 	
 	public long getAge(){
 		long d = 0;
@@ -38,6 +38,8 @@ public class Vaccination {
 		batchnumber="";
 		expiry="";
 		location="";
+		observation="";
+		modifier="";
 		save();
 	}
 	
@@ -56,7 +58,7 @@ public class Vaccination {
 			ps.execute();
 			ps.close();
 			ps = conn.prepareStatement("insert into OC_VACCINATIONS(OC_VACCINATION_PATIENTUID,OC_VACCINATION_DATE,OC_VACCINATION_TYPE,"
-					+ "OC_VACCINATION_BATCHNUMBER,OC_VACCINATION_EXPIRY,OC_VACCINATION_LOCATION,OC_VACCINATION_UPDATETIME) values(?,?,?,?,?,?,?)");
+					+ "OC_VACCINATION_BATCHNUMBER,OC_VACCINATION_EXPIRY,OC_VACCINATION_LOCATION,OC_VACCINATION_UPDATETIME,OC_VACCINATION_OBSERVATION,OC_VACCINATION_MODIFIER) values(?,?,?,?,?,?,?,?,?)");
 			ps.setString(1,personid);
 			ps.setString(2,date);
 			ps.setString(3,type);
@@ -64,6 +66,8 @@ public class Vaccination {
 			ps.setString(5,expiry);
 			ps.setString(6,location);
 			ps.setTimestamp(7,new java.sql.Timestamp(new java.util.Date().getTime()));
+			ps.setString(8,observation);
+			ps.setString(9,modifier);
 			ps.execute();
 			ps.close();
 			conn.close();
@@ -88,6 +92,8 @@ public class Vaccination {
 				vaccination.batchnumber=rs.getString("OC_VACCINATION_BATCHNUMBER");
 				vaccination.expiry=rs.getString("OC_VACCINATION_EXPIRY");
 				vaccination.location=rs.getString("OC_VACCINATION_LOCATION");
+				vaccination.observation=rs.getString("OC_VACCINATION_OBSERVATION");
+				vaccination.modifier=rs.getString("OC_VACCINATION_MODIFIER");
 				vaccinations.put(vaccination.type,vaccination);
 			}
 			rs.close();
@@ -238,6 +244,12 @@ public class Vaccination {
 			}
 			else if(parameter.equalsIgnoreCase("expiry")){
 				sResult=vaccination.expiry;
+			}
+			else if(parameter.equalsIgnoreCase("observation")){
+				sResult=vaccination.observation;
+			}
+			else if(parameter.equalsIgnoreCase("modifier")){
+				sResult=vaccination.modifier;
 			}
 			else if(parameter.equalsIgnoreCase("location")){
 				sResult=vaccination.location;

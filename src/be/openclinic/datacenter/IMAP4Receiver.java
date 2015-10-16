@@ -27,8 +27,11 @@ public class IMAP4Receiver extends Receiver {
         String host = MedwanQuery.getInstance().getConfigString("datacenterPOP3Host","localhost");
         String username = MedwanQuery.getInstance().getConfigString("datacenterPOP3Username","");
         String password = MedwanQuery.getInstance().getConfigString("datacenterPOP3Password","");
+        Debug.println("logging in to "+host+" with "+username+"/"+password);
     	Properties props=System.getProperties();
-    	//props.put("mail.debug","true");
+    	if(Debug.enabled){
+    		//props.put("mail.debug","true");
+    	}
 	    try {
 	        Session session = Session.getInstance(props, null);
 	    	Store store = session.getStore("imap");
@@ -36,8 +39,11 @@ public class IMAP4Receiver extends Receiver {
 		    Folder folder = store.getFolder("INBOX");
 		    folder.open(Folder.READ_WRITE);
 		    Message message[] = folder.getMessages();
+		    Debug.println("Found "+message.length+" messages");
 		    for (int i=0, n=message.length; i<n; i++) {
+		    	boolean deletemessage=false;
 		    	if(message[i].getSubject().startsWith("datacenter.content")){
+		    		Debug.println("Subject: "+message[i].getSubject());
 			    	//Store the message in the oc_imports database here and delete it if successful
 		            SAXReader reader = new SAXReader(false);
 		            try{
@@ -47,14 +53,20 @@ public class IMAP4Receiver extends Receiver {
 						Vector ackMessages=new Vector();
 						while(msgs.hasNext()){
 							Element data = (Element)msgs.next();
+							Debug.println("data = "+data.asXML());
 					    	ImportMessage msg = new ImportMessage(data);
 							msg.setType(root.attributeValue("type"));
+							Debug.println("type = "+root.attributeValue("type"));
 					    	msg.setReceiveDateTime(new java.util.Date());
 					    	msg.setRef("SMTP:"+message[i].getFrom()[0]);
+							Debug.println("ref = "+"SMTP:"+message[i].getFrom()[0]);
 					    	try {
+					    		Debug.println("Storing...");
 								msg.store();
-						    	message[i].setFlag(Flags.Flag.DELETED, true);
+								Debug.println("Stored");
+								deletemessage=true;
 						    	ackMessages.add(msg);
+								Debug.println("ACK Added");
 							} catch (SQLException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -64,12 +76,16 @@ public class IMAP4Receiver extends Receiver {
 						ImportMessage.sendAck(ackMessages);
 		            }
 		            catch(MessagingException e){
+		            	e.printStackTrace();
 		            	Debug.println(e.getMessage());
 		            } catch (UnsupportedEncodingException e) {
+		            	e.printStackTrace();
 		            	Debug.println(e.getMessage());
 		    		} catch (DocumentException e) {
+		            	e.printStackTrace();
 		            	Debug.println(e.getMessage());
 		    		} catch (IOException e) {
+		            	e.printStackTrace();
 		            	Debug.println(e.getMessage());
 		    		}
 		    	}
@@ -94,7 +110,7 @@ public class IMAP4Receiver extends Receiver {
 					    		}
 					    	}
 						}
-				    	message[i].setFlag(Flags.Flag.DELETED, true);
+				    	deletemessage=true;
 		            }
 		            catch(MessagingException e){
 		            	Debug.println(e.getMessage());
@@ -129,7 +145,7 @@ public class IMAP4Receiver extends Receiver {
 					    		}
 					    	}
 						}
-				    	message[i].setFlag(Flags.Flag.DELETED, true);
+				    	deletemessage=true;
 		            }
 		            catch(MessagingException e){
 		            	Debug.println(e.getMessage());
@@ -141,6 +157,15 @@ public class IMAP4Receiver extends Receiver {
 		            	Debug.println(e.getMessage());
 		    		}
 		    	}
+			    if(deletemessage){
+					try{
+						message[i].setFlag(Flags.Flag.DELETED, true);
+						Debug.println("DELETED");
+					}
+					catch(javax.mail.FolderClosedException a){
+						a.printStackTrace();
+					}
+			    }
 		    }
 	
 		    // Close connection 
@@ -148,7 +173,7 @@ public class IMAP4Receiver extends Receiver {
 		    store.close();
 		} catch (MessagingException e1) {
 			// TODO Auto-generated catch block
-			// e1.printStackTrace();
+			Debug.println(e1.getMessage());
 		}
 	}
 }

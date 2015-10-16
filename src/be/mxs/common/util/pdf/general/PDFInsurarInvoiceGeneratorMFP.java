@@ -56,12 +56,12 @@ public class PDFInsurarInvoiceGeneratorMFP extends PDFInvoiceGenerator {
 			doc.addCreationDate();
 			doc.addCreator("OpenClinic Software");
 			doc.setPageSize(PageSize.A4);
-            addFooter(sInvoiceUid.replaceAll("1\\.",""));
+            // get specified invoice
+            InsurarInvoice invoice = InsurarInvoice.get(sInvoiceUid);
+            addFooter(invoice.getInvoiceNumber());
 
             doc.open();
 
-            // get specified invoice
-            InsurarInvoice invoice = InsurarInvoice.get(sInvoiceUid);
             debets = InsurarInvoice.getDebetsForInvoiceSortByDate(invoice.getUid());
             for(int n=0;n<debets.size();n++){
             	Debet debet = (Debet)debets.elementAt(n);
@@ -128,7 +128,7 @@ public class PDFInsurarInvoiceGeneratorMFP extends PDFInvoiceGenerator {
             	immat="?";
             	affiliate="?";
             	emp="?";
-            	invoiceUid=ScreenHelper.checkString(debet.getPatientInvoiceUid());
+            	invoiceUid=ScreenHelper.checkString(PatientInvoice.getPatientInvoiceNumber(debet.getPatientInvoiceUid()));
             	Encounter encounter = debet.getEncounter();
             	serviceUid=debet.determineServiceUid();
             	if(debet.getInsurance()!=null && debet.getInsurance().getInsuranceCategory()!=null){
@@ -248,13 +248,17 @@ public class PDFInsurarInvoiceGeneratorMFP extends PDFInvoiceGenerator {
                 if(income!=null){
                 	String beneficiary="";
                 	PatientInvoice iv = PatientInvoice.get(invoiceUid.split(";")[0]);
+                	System.out.println("iv="+iv);
                 	if(iv!=null){
+                    	System.out.println("iv.patientuid="+iv.getPatientUid());
+                    	System.out.println("iv.getPatient()="+iv.getPatient());
                 		if(iv.getPatient()!=null){
                 			status="";
                 			if(iv.getInsuranceUid().length()>0){
                 				Insurance insurance = Insurance.get(iv.getInsuranceUid());
                 				status=insurance.getStatus();
                 			}
+                        	System.out.println("beneficiary="+beneficiary);
                 			beneficiary=iv.getPatient().lastname.toUpperCase()+", "+iv.getPatient().firstname+" ("+ScreenHelper.getTranNoLink("insurance.status", status, sPrintLanguage)+")";
                 		}
                 	}

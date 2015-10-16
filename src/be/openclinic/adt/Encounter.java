@@ -15,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Vector;
 import java.util.Hashtable;
 import java.text.ParseException;
@@ -133,6 +134,37 @@ public class Encounter extends OC_Object {
         this.end = end;
     }
     
+    public static HashSet getFreeTextDiagnoses(String encounterUid){
+    	HashSet diagnoses = new HashSet();
+    	PreparedStatement ps = null;
+    	ResultSet rs = null;
+        Connection conn = null;        
+    	
+        try{ 
+        	conn = MedwanQuery.getInstance().getOpenclinicConnection();
+            ps = conn.prepareStatement("select j.value,t.userId from OC_ENCOUNTERS o,HealthRecord h,Transactions t, Items i, Items j where o.OC_ENCOUNTER_OBJECTID=? and h.personid=o.OC_ENCOUNTER_PATIENTUID and h.healthrecordid=t.healthrecordid and t.serverid=i.serverid and t.transactionid=i.transactionid and t.serverid=j.serverid and t.transactionid=j.transactionid and i.type='be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID' and i.value=? and j.type='"+MedwanQuery.getInstance().getConfigString("FreeTextDiagnosisType","be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RMH_FINALDIAGNOSIS")+"'");
+            ps.setInt(1, Integer.parseInt(encounterUid.split("\\.")[1]));
+            ps.setString(2, encounterUid);
+            rs = ps.executeQuery();
+            while(rs.next()){
+                diagnoses.add(User.getFullUserName(rs.getString("userId"))+";-;"+rs.getString("value"));
+            }
+        }
+        catch(Exception e){
+    		Debug.printStackTrace(e);
+        }
+        finally{
+        	try{
+        		if(rs!=null) rs.close();
+        		if(ps!=null) ps.close();
+        		if(conn!=null) conn.close();
+        	}
+        	catch(Exception e){
+        		Debug.printStackTrace(e);
+        	}
+        }
+        return diagnoses;
+    }
     //--- GET COVERAGE ENCOUNTER ------------------------------------------------------------------
     public static Encounter getCoverageEncounter(String patientid,String userid){
     	Encounter encounter = null;

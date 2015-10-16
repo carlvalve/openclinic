@@ -55,12 +55,11 @@ public class PDFExtraInsurarInvoiceGeneratorCTAMS extends PDFInvoiceGenerator {
 			doc.addCreationDate();
 			doc.addCreator("OpenClinic Software");
 			doc.setPageSize(PageSize.A4.rotate());
-            addFooter(sInvoiceUid.replaceAll("1\\.",""));
-
-            doc.open();
-
             // get specified invoice
             ExtraInsurarInvoice invoice = ExtraInsurarInvoice.get(sInvoiceUid);
+            addFooter(invoice.getInvoiceNumber());
+
+            doc.open();
 
             addHeading(invoice);
             addInsurarData(invoice);
@@ -707,7 +706,7 @@ public class PDFExtraInsurarInvoiceGeneratorCTAMS extends PDFInvoiceGenerator {
 	                	if(invoiceid.length()>0){
 	                		invoiceid+="\n";
 	                	}
-	                	invoiceid+=debet.getPatientInvoiceUid().split("\\.")[1];
+	                	invoiceid+=ScreenHelper.checkString(PatientInvoice.getPatientInvoiceNumber(debet.getPatientInvoiceUid()));
 	                	if(insurarreference.equalsIgnoreCase("")){
 		                	patientInvoice = PatientInvoice.get(debet.getPatientInvoiceUid());
 		                	if(patientInvoice!=null){

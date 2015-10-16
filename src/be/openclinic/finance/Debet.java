@@ -951,6 +951,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                         + " AND " + MedwanQuery.getInstance().convert("int", "e.OC_ENCOUNTER_PATIENTUID") + "=a.personid" 
                         + " ORDER BY OC_PATIENTINVOICE_DATE,d.OC_DEBET_DATE";
             }
+            System.out.println(sSelect);
             ps = loc_conn.prepareStatement(sSelect);
             ps.setString(1, sInsurarUid);
             ps.setTimestamp(2, new java.sql.Timestamp(begin.getTime()));
@@ -2538,48 +2539,61 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
         ResultSet rs = null;
         Vector vUnassignedDebets = new Vector();
         Connection oc_conn = MedwanQuery.getInstance().getOpenclinicConnection();
+        Debug.println("Build GetPatientDebets Query");
         try{
             sSelect = "SELECT * FROM OC_ENCOUNTERS e, OC_DEBETS d WHERE e.OC_ENCOUNTER_PATIENTUID = ? "
                     + " AND d.oc_debet_encounteruid="+MedwanQuery.getInstance().convert("varchar", "e.oc_encounter_serverid")+MedwanQuery.getInstance().concatSign()+"'.'"+MedwanQuery.getInstance().concatSign()+MedwanQuery.getInstance().convert("varchar", "e.oc_encounter_objectid");
             if (sDateBegin.length() > 0) {
-                sSelect += " AND d.OC_DEBET_DATE >= ?  ";
+                sSelect += " AND d.OC_DEBET_DATE >= ? ";
             }
             if (sDateEnd.length() > 0) {
-                sSelect += " AND d.OC_DEBET_DATE <= ?  ";
+                sSelect += " AND d.OC_DEBET_DATE <= ? ";
             }
             if ((sAmountMin.length() > 0) && (sAmountMax.length() > 0)) {
                 sSelect += " AND d.OC_DEBET_AMOUNT >= ? AND OC_DEBET_AMOUNT <= ? ";
             }
             else if (sAmountMin.length() > 0) {
-                sSelect += " AND d.OC_DEBET_AMOUNT >= ?  ";
+                sSelect += " AND d.OC_DEBET_AMOUNT >= ? ";
             }
             else if (sAmountMax.length() > 0) {
-                sSelect += " AND d.OC_DEBET_AMOUNT <= ?  ";
+                sSelect += " AND d.OC_DEBET_AMOUNT <= ? ";
             }
+            Debug.println("Query = "+sSelect);
             ps = oc_conn.prepareStatement(sSelect);
+            Debug.println("set parameters");
             ps.setString(1, sPatientId);
+            Debug.println("e.OC_ENCOUNTER_PATIENTUID="+sPatientId);
             int iIndex = 2;
             if (sDateBegin.length() > 0) {
+                Debug.println("d.OC_DEBET_DATE >="+ScreenHelper.getSQLDate(sDateBegin));
                 ps.setDate(iIndex++, ScreenHelper.getSQLDate(sDateBegin));
             }
             if (sDateEnd.length() > 0) {
+                Debug.println("d.OC_DEBET_DATE <"+ScreenHelper.getSQLDate(sDateEnd));
                 ps.setDate(iIndex++, ScreenHelper.getSQLDate(sDateEnd));
             }
             if ((sAmountMin.length() > 0) && (sAmountMax.length() > 0)) {
+                Debug.println("amountmin="+Double.parseDouble(sAmountMin));
+                Debug.println("amountmax="+Double.parseDouble(sAmountMax));
                 ps.setDouble(iIndex++, Double.parseDouble(sAmountMin));
                 ps.setDouble(iIndex++, Double.parseDouble(sAmountMax));
             }
             else if (sAmountMin.length() > 0) {
+                Debug.println("amountmin="+Double.parseDouble(sAmountMin));
                 ps.setDouble(iIndex++, Double.parseDouble(sAmountMin));
             }
             else if (sAmountMax.length() > 0) {
+                Debug.println("amountmax="+Double.parseDouble(sAmountMax));
                 ps.setDouble(iIndex++, Double.parseDouble(sAmountMax));
             }
+            Debug.println("parameters set");
             
             rs = ps.executeQuery();
+            Debug.println("Query executed");
             while (rs.next()) {
                 vUnassignedDebets.add(rs.getInt("OC_DEBET_SERVERID") + "." + rs.getInt("OC_DEBET_OBJECTID"));
             }
+            Debug.println("Debets loaded");
         }
         catch (Exception e) {
             e.printStackTrace();

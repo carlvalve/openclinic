@@ -312,7 +312,7 @@ public class PDFPatientInvoiceGeneratorCTAMS extends PDFInvoiceGenerator {
             table.setWidthPercentage(pageWidth);
 
             //*** title ***
-            table.addCell(createTitleCell(getTran("web","ctams.invoice").toUpperCase()+" #"+(sProforma.equalsIgnoreCase("yes")?"PROFORMA":invoice.getInvoiceUid())+" - "+ScreenHelper.stdDateFormat.format(invoice.getDate()),"",5));
+            table.addCell(createTitleCell(getTran("web","ctams.invoice").toUpperCase()+" #"+(sProforma.equalsIgnoreCase("yes")?"PROFORMA":invoice.getInvoiceNumber())+" - "+ScreenHelper.stdDateFormat.format(invoice.getDate()),"",5));
 
 
             doc.add(table);

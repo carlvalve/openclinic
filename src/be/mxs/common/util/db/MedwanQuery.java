@@ -3681,6 +3681,41 @@ public class MedwanQuery {
         return newCounter;
     }
     
+    public int getOpenclinicCounterNoIncrement(String name){
+        int newCounter = -1;
+        Connection oc_conn=getOpenclinicConnection();
+        PreparedStatement ps=null;
+        ResultSet rs=null;
+        try{
+        	ps = oc_conn.prepareStatement("select OC_COUNTER_VALUE from OC_COUNTERS where OC_COUNTER_NAME=?");
+            ps.setString(1, name);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                newCounter = rs.getInt("OC_COUNTER_VALUE");
+                if(newCounter==0){
+                	newCounter=1;
+                }
+            } 
+            rs.close();
+            ps.close();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        finally{
+        	try{
+        		if(rs!=null) rs.close();
+        		if(ps!=null) ps.close();
+                oc_conn.close();
+        	}
+        	catch(Exception e2){
+        		e2.printStackTrace();
+        	}
+        }
+        
+        return newCounter;
+    }
+    
     public void setOpenclinicCounter(String name,int value){
         try{
             Connection oc_conn=getOpenclinicConnection();

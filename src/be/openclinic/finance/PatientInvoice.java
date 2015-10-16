@@ -2,6 +2,7 @@ package be.openclinic.finance;
 
 import net.admin.AdminPerson;
 
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
@@ -15,10 +16,17 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 
 
+
+
+
+
 import be.mxs.common.util.system.Pointer;
 import be.mxs.common.util.system.ScreenHelper;
 import be.mxs.common.util.system.Debug;
 import be.mxs.common.util.db.MedwanQuery;
+import be.openclinic.adt.Encounter;
+import be.openclinic.medical.Diagnosis;
+import be.openclinic.medical.ReasonForEncounter;
 
 public class PatientInvoice extends Invoice {
     private String patientUid;
@@ -32,6 +40,49 @@ public class PatientInvoice extends Invoice {
     
 	public String getModifiers() {
 		return modifiers;
+	}
+	
+	public static String getPatientInvoiceNumber(String uid){
+		String s=uid;
+		if(uid!=null && uid.length()>0){
+	        String sSelect = "SELECT OC_PATIENTINVOICE_NUMBER FROM OC_PATIENTINVOICES WHERE OC_PATIENTINVOICE_SERVERID=? and OC_PATIENTINVOICE_OBJECTID = ? ";
+	        Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+	        ResultSet rs=null;
+	        PreparedStatement ps=null;
+	        try{
+	            ps = oc_conn.prepareStatement(sSelect);
+	            ps.setInt(1,Integer.parseInt(uid.split("\\.")[0]));
+	            ps.setInt(2,Integer.parseInt(uid.split("\\.")[1]));
+	            rs = ps.executeQuery();
+	            
+	            if(rs.next()){
+	            	String sNumber = ScreenHelper.checkString(rs.getString("OC_PATIENTINVOICE_NUMBER"));
+	            	if(sNumber.length()>0){
+	            		s=sNumber;
+	            	}
+	            	else{
+	                	if(uid.split("\\.").length>1){
+	                		s= uid.split("\\.")[1];
+	                	}
+	            	}
+	            }
+	
+	        }
+	        catch(Exception e){
+	            e.printStackTrace();
+	        }
+	        finally{
+	            try{
+	                if(rs!=null)rs.close();
+	                if(ps!=null)ps.close();
+	                oc_conn.close();
+	            }
+	            catch(Exception e){
+	                e.printStackTrace();
+	            }
+	        }
+		}
+		return s;
 	}
 
 	public void setModifiers(String modifiers) {
@@ -256,7 +307,12 @@ public class PatientInvoice extends Invoice {
 
 	public String getInvoiceNumber() {
         if(number==null || number.equalsIgnoreCase("")){
-        	return invoiceUid;
+        	if(invoiceUid.split("\\.").length>1){
+        		return invoiceUid.split("\\.")[1];
+        	}
+        	else{
+        		return invoiceUid;
+        	}
         }
         else {
         	return number+"";
@@ -299,6 +355,57 @@ public class PatientInvoice extends Invoice {
             }
         }
         return patient;
+    }
+
+    public String getDiagnoses(String language){
+    	String diagnoses="";
+    	//First make a list for all linked encouters
+    	HashSet encounters = new HashSet();
+    	Vector debets=getDebets();
+    	if(debets!=null){
+	    	for(int n=0;n<debets.size();n++){
+	    		Debet debet = (Debet)debets.elementAt(n);
+	    		if(!encounters.contains(debet.getEncounterUid())){
+	    			encounters.add(debet.getEncounterUid());
+	    		}
+	    	}
+    	}
+    	//Now make a list for all linked diagnoses
+    	HashSet hDiagnoses = new HashSet();
+    	Iterator iEncounters = encounters.iterator();
+    	while(iEncounters.hasNext()){
+    		String encounterUid=(String)iEncounters.next();
+    		//Coded diagnosis
+    		Vector vDiagnoses = Diagnosis.selectDiagnoses("", "", encounterUid, "", "", "", "", "", "", "", "", "icd10", "");
+    		for(int n=0; n<vDiagnoses.size();n++){
+    			Diagnosis d = (Diagnosis)vDiagnoses.elementAt(n);
+    			hDiagnoses.add(d.getCode()+" "+MedwanQuery.getInstance().getDiagnosisLabel(d.getCodeType(), d.getCode(), language));
+    		}
+    		//RFEs
+    		Vector vRFE = ReasonForEncounter.getReasonsForEncounterByEncounterUid(encounterUid);
+    		for(int n=0; n<vRFE.size();n++){
+    			ReasonForEncounter d = (ReasonForEncounter)vRFE.elementAt(n);
+    			if(d.getCodeType().equalsIgnoreCase("icd10")){
+    				hDiagnoses.add(d.getCode()+" "+MedwanQuery.getInstance().getDiagnosisLabel(d.getCodeType(), d.getCode(), language));
+    			}
+    		}
+    		if(MedwanQuery.getInstance().getConfigInt("enablePBFFreeTextDiagnosisReporting",0)==1){
+	    		//Free text diagnoses
+	    		HashSet hFreetext = Encounter.getFreeTextDiagnoses(encounterUid);
+	    		Iterator iFreeText = hFreetext.iterator();
+	    		while(iFreeText.hasNext()){
+	    			hDiagnoses.add(((String)iFreeText.next()).replaceAll("\n", " ").replaceAll("\r", "").replaceAll(";", ":"));
+	    		}
+    		}
+    	}
+    	Iterator iDiagnoses = hDiagnoses.iterator();
+    	while(iDiagnoses.hasNext()){
+    		if(diagnoses.length()>0){
+    			diagnoses+=", ";
+    		}
+    		diagnoses+=iDiagnoses.next();
+    	}
+    	return diagnoses;
     }
     
     public Hashtable getInsurarAmounts(){
@@ -347,6 +454,34 @@ public class PatientInvoice extends Invoice {
 	    	for(int n=0;n<debets.size();n++){
 	    		Debet debet = (Debet)debets.elementAt(n);
 	    		amount+=debet.getAmount();
+	    	}
+    	}
+    	return amount;
+    }
+    
+    public double getPatientOwnAmount(){
+    	double amount=0;
+    	Vector debets=getDebets();
+    	if(debets!=null){
+	    	for(int n=0;n<debets.size();n++){
+	    		Debet debet = (Debet)debets.elementAt(n);
+	    		if(debet.getExtraInsurarUid2()==null || debet.getExtraInsurarUid2().length()==0){
+	    			amount+=debet.getAmount();
+	    		}
+	    	}
+    	}
+    	return amount;
+    }
+    
+    public double getExtraInsurarAmount2(){
+    	double amount=0;
+    	Vector debets=getDebets();
+    	if(debets!=null){
+	    	for(int n=0;n<debets.size();n++){
+	    		Debet debet = (Debet)debets.elementAt(n);
+	    		if(debet.getExtraInsurarUid2()!=null && debet.getExtraInsurarUid2().length()>0){
+	    			amount+=debet.getAmount();
+	    		}
 	    	}
     	}
     	return amount;
@@ -470,7 +605,10 @@ public class PatientInvoice extends Invoice {
 
         if(uid!=null && uid.length()>0){
             String [] ids = uid.split("\\.");
-
+            if(ids.length==1){
+            	uid=MedwanQuery.getInstance().getConfigString("serverId")+"."+uid;
+                ids = uid.split("\\.");
+            }
             if (ids.length==2){
                 PreparedStatement ps = null;
                 ResultSet rs = null;
@@ -638,12 +776,14 @@ public class PatientInvoice extends Invoice {
                     ids = new String[] {MedwanQuery.getInstance().getConfigString("serverId"),MedwanQuery.getInstance().getOpenclinicCounter("OC_INVOICES")+""};
                     this.setUid(ids[0]+"."+ids[1]);
                     this.setInvoiceUid(ids[1]);
+                   	this.setNumber(getInvoiceNumberCounter("PatientInvoice"));
                 }
             }
             else{
                 ids = new String[] {MedwanQuery.getInstance().getConfigString("serverId"),MedwanQuery.getInstance().getOpenclinicCounter("OC_INVOICES")+""};
                 this.setUid(ids[0]+"."+ids[1]);
                 this.setInvoiceUid(ids[1]);
+               	this.setNumber(getInvoiceNumberCounter("PatientInvoice"));
             }
 
             if(ids.length == 2){
@@ -898,7 +1038,13 @@ public class PatientInvoice extends Invoice {
             }
 
             if(sInvoiceNr.length() > 0){
-                sSql+= " OC_PATIENTINVOICE_OBJECTID = ? AND";
+            	if(sInvoiceNr.contains(".")){
+            		sSql+= " OC_PATIENTINVOICE_NUMBER = ? AND";
+            		
+            	}
+            	else {
+            		sSql+= " (OC_PATIENTINVOICE_NUMBER = '"+sInvoiceNr+"' OR OC_PATIENTINVOICE_OBJECTID = ?) AND";
+            	}
             }
 
             // balance range
@@ -924,7 +1070,14 @@ public class PatientInvoice extends Invoice {
             int qmIdx = 1;
             if(sInvoiceDateBegin.length() > 0) ps.setDate(qmIdx++,ScreenHelper.getSQLDate(sInvoiceDateBegin));
             if(sInvoiceDateEnd.length() > 0) ps.setDate(qmIdx++,ScreenHelper.getSQLDate(sInvoiceDateEnd));
-            if(sInvoiceNr.length() > 0) ps.setInt(qmIdx++,Integer.parseInt(sInvoiceNr));
+            if(sInvoiceNr.length() > 0){
+            	if(sInvoiceNr.contains(".")){
+            		ps.setString(qmIdx++,sInvoiceNr);
+            	}
+            	else {
+            		ps.setInt(qmIdx++,Integer.parseInt(sInvoiceNr));
+            	}
+            }
             if(sInvoiceBalanceMin.length() > 0) ps.setDouble(qmIdx++,Double.parseDouble(sInvoiceBalanceMin));
             if(sInvoiceBalanceMax.length() > 0) ps.setDouble(qmIdx,Double.parseDouble(sInvoiceBalanceMax));
 

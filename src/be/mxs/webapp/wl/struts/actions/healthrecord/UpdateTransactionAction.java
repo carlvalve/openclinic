@@ -94,7 +94,7 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
 
                         // send messages
                         String sMailServer = MedwanQuery.getInstance().getConfigString("PatientEdit.MailServer");
-                        Mail.sendMail(sMailServer,sMailFrom,sMailTo,sMailSubject,sMailMessage);
+                        Mail.sendMail(sMailServer,sMailFrom,sMailTo,sMailSubject,sMailMessage,null,null);
                     }
                 }
             }

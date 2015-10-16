@@ -732,8 +732,8 @@ public class OpenclinicSlaveExporter implements Runnable{
 			}
 			ps.close();
 			if(doInsert){
-				ps=conn.prepareStatement("insert into OC_VACCINATIONS(OC_VACCINATION_PATIENTUID,OC_VACCINATION_TYPE,OC_VACCINATION_DATE,OC_VACCINATION_BATCHNUMBER,OC_VACCINATION_EXPIRY,OC_VACCINATION_LOCATION,OC_VACCINATION_UPDATETIME)"
-							+ "values(?,?,?,?,?,?,?)");
+				ps=conn.prepareStatement("insert into OC_VACCINATIONS(OC_VACCINATION_PATIENTUID,OC_VACCINATION_TYPE,OC_VACCINATION_DATE,OC_VACCINATION_BATCHNUMBER,OC_VACCINATION_EXPIRY,OC_VACCINATION_LOCATION,OC_VACCINATION_UPDATETIME,OC_VACCINATION_OBSERVATION,OC_VACCINATION_MODIFIER)"
+							+ "values(?,?,?,?,?,?,?,?,?)");
 				ps.setInt(1,personid);
 				ps.setString(2, ScreenHelper.checkString(element.elementText("type")));
 				ps.setString(3, ScreenHelper.checkString(element.elementText("date")));
@@ -746,6 +746,8 @@ public class OpenclinicSlaveExporter implements Runnable{
 				}
 				catch(Exception e2){}
 				ps.setTimestamp(7,updatetime);
+				ps.setString(8, ScreenHelper.checkString(element.elementText("observation")));
+				ps.setString(9, ScreenHelper.checkString(element.elementText("modifier")));
 				ps.execute();
 				ps.close();
 			}
@@ -3378,6 +3380,8 @@ public class OpenclinicSlaveExporter implements Runnable{
 			        addStringElement(element, "batchnumber", rs.getString("OC_VACCINATION_BATCHNUMBER"));
 			        addStringElement(element, "expiry", rs.getString("OC_VACCINATION_EXPIRY"));
 			        addStringElement(element, "location", rs.getString("OC_VACCINATION_LOCATION"));
+			        addStringElement(element, "observation", rs.getString("OC_VACCINATION_OBSERVATION"));
+			        addStringElement(element, "modifier", rs.getString("OC_VACCINATION_MODIFIER"));
 			        addTimestampElement(element, "updatetime", updatetime);
 			        if(!addRecordBlock(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(updatetime)+"."+patientuid+"."+type+".V.", element)){
 			        	break;

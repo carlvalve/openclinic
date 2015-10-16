@@ -1,5 +1,6 @@
 package be.openclinic.finance;
 
+import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.system.ScreenHelper;
 import be.openclinic.common.OC_Object;
 
@@ -157,4 +158,67 @@ public class Invoice extends OC_Object {
 	   }
 	   return serviceDebets;
    }
+   
+   public String getInvoiceNumberCounter(String invoiceType){
+	   String s=null;
+	   String sPrefix="";
+	   try{
+		   invoiceType=MedwanQuery.getInstance().getConfigString(invoiceType+"Type",invoiceType);
+		   //First find the resetDate
+		   java.util.Date dResetDate=ScreenHelper.getSQLDate(MedwanQuery.getInstance().getConfigString(invoiceType+"ResetDate",""));
+		   if(dResetDate!=null){
+			   dResetDate=ScreenHelper.getSQLDate(new SimpleDateFormat("dd/MM/").format(dResetDate)+new SimpleDateFormat("yyyy").format(this.getDate()));
+			   if(this.getDate().before(dResetDate)){
+				   sPrefix=(Integer.parseInt(new SimpleDateFormat("yyyy").format(this.getDate()))-1)+"";
+			   }
+			   else {
+				   sPrefix=new SimpleDateFormat("yyyy").format(this.getDate());
+			   }
+			   //Now find the appropriate counter for this invoice
+			   s = MedwanQuery.getInstance().getOpenclinicCounter(sPrefix+"."+invoiceType)+"";
+			   if(MedwanQuery.getInstance().getConfigInt(invoiceType+"AddPrefix",1)==1){
+				   s=sPrefix+"."+s;
+			   }
+		   }
+	   }
+	   catch(Exception e){
+		   e.printStackTrace();
+	   }
+	   return s;
+   }
+   
+   public static String getInvoiceNumberCounterNoIncrement(String invoiceType){
+	   String s="-1";
+	   String sPrefix="";
+	   try{
+		   invoiceType=MedwanQuery.getInstance().getConfigString(invoiceType+"Type",invoiceType);
+		   //First find the resetDate
+		   java.util.Date dResetDate=ScreenHelper.getSQLDate(MedwanQuery.getInstance().getConfigString(invoiceType+"ResetDate",""));
+		   if(dResetDate!=null){
+			   dResetDate=ScreenHelper.getSQLDate(new SimpleDateFormat("dd/MM/").format(dResetDate)+new SimpleDateFormat("yyyy").format(new java.util.Date()));
+			   if(new java.util.Date().before(dResetDate)){
+				   sPrefix=(Integer.parseInt(new SimpleDateFormat("yyyy").format(new java.util.Date()))-1)+"";
+			   }
+			   else {
+				   sPrefix=new SimpleDateFormat("yyyy").format(new java.util.Date());
+			   }
+			   //Now find the appropriate counter for this invoice
+			   s = MedwanQuery.getInstance().getOpenclinicCounterNoIncrement(sPrefix+"."+invoiceType)+"";
+			   if(MedwanQuery.getInstance().getConfigInt(invoiceType+"AddPrefix",1)==1){
+				   s=sPrefix+"."+s;
+			   }
+		   }
+		   else{
+			   s = MedwanQuery.getInstance().getOpenclinicCounterNoIncrement(invoiceType)+"";
+		   }
+	   }
+	   catch(Exception e){
+		   e.printStackTrace();
+	   }
+	   if(s.indexOf("-1")>-1){
+		   s="";
+	   }
+	   return s;
+   }
+   
 }

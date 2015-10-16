@@ -54,7 +54,7 @@ public class PDFInsurarInvoiceGeneratorMFPSummary extends PDFInvoiceGenerator {
 			doc.addCreationDate();
 			doc.addCreator("OpenClinic Software");
 			doc.setPageSize(PageSize.A4);
-            addFooter(sInvoiceUid.replaceAll("1\\.",""));
+            addFooter();
 
             doc.open();
 
@@ -79,16 +79,18 @@ public class PDFInsurarInvoiceGeneratorMFPSummary extends PDFInvoiceGenerator {
             	}
             }
             
-            //First make an invoice grouping all income per service and ventilate per disease type
-            //addType1Invoice(invoice);
-            addType2Invoice();
-            addType3Invoice();
-            addType4Invoice();
-            
-            //addHeading(invoice);
-            //addInsurarData(invoice);
-            //printInvoice(invoice);
-            //addFinancialMessage();
+            if(start!=null && end!=null){
+	            //First make an invoice grouping all income per service and ventilate per disease type
+	            //addType1Invoice(invoice);
+	            addType2Invoice();
+	            addType3Invoice();
+	            addType4Invoice();
+	            
+	            //addHeading(invoice);
+	            //addInsurarData(invoice);
+	            //printInvoice(invoice);
+	            //addFinancialMessage();
+            }
             
         }
 		catch(Exception e){
