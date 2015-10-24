@@ -470,7 +470,7 @@ public class PDFWicketOverViewGenerator extends PDFBasic {
         if(credit.getComment()!=null){
             sCreditComment = credit.getComment().toString();
             if(credit.getOperationType().equalsIgnoreCase("patient.payment") && sCreditComment.split(" - ").length>1){
-            	String sInvoiceUid = MedwanQuery.getInstance().getConfigString("serverId")+"."+ScreenHelper.checkString(sCreditComment.split("-")[sCreditComment.split("-").length-1]).trim();
+            	String sInvoiceUid = credit.getInvoiceUID();
             	PatientInvoice patientInvoice = null;
             	try{
             		patientInvoice = PatientInvoice.get(sInvoiceUid);

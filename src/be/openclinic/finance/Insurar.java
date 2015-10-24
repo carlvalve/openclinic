@@ -135,6 +135,23 @@ public class Insurar extends OC_Object {
 		setModifier(5,n+"");
 	}
 	
+	public String getAccountingCode(){
+		String n="";
+		if(getModifiers()!=null){
+			try{
+				n=getModifiers().split(";")[6];
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return n;
+	}
+
+	public void setAccountingCode(String n){
+		setModifier(6,n+"");
+	}
+	
 	public void setModifier(int index,String value){
 		if(getModifiers()==null){
 			setModifiers("");
@@ -308,6 +325,16 @@ public class Insurar extends OC_Object {
         return new Insurar();
     }
 
+    public static Insurar get(Connection oc_conn,String uid){
+        if ((uid!=null)&&(uid.length()>0)){
+            String [] ids = uid.split("\\.");
+            if (ids.length==2){
+                return get(oc_conn,Integer.parseInt(ids[0]),Integer.parseInt(ids[1]));
+            }
+        }
+        return new Insurar();
+    }
+
     public static Insurar get(int serverid, int objectid){
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -369,6 +396,74 @@ public class Insurar extends OC_Object {
                 if(ps!=null) ps.close();
                 if(rs!=null) rs.close();
                 oc_conn.close();
+            }
+            catch(SQLException e){
+                e.printStackTrace();
+            }
+        }
+
+        return insurar;
+    }
+
+    public static Insurar get(Connection oc_conn,int serverid, int objectid){
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        Insurar insurar = new Insurar();
+
+        try{
+            String sQuery = "SELECT * FROM OC_INSURARS"+
+                            " WHERE OC_INSURAR_SERVERID=? AND OC_INSURAR_OBJECTID=?";
+            ps = oc_conn.prepareStatement(sQuery);
+            ps.setInt(1,serverid);
+            ps.setInt(2,objectid);
+            rs = ps.executeQuery();
+
+            if(rs.next()){
+                insurar.setUid(serverid+"."+objectid);
+                insurar.setName(rs.getString("OC_INSURAR_NAME"));
+                insurar.setLanguage(rs.getString("OC_INSURAR_LANGUAGE"));
+                insurar.setContact(rs.getString("OC_INSURAR_CONTACT"));
+                insurar.setContactPerson(rs.getString("OC_INSURAR_CONTACTPERSON"));
+                insurar.setOfficialName(rs.getString("OC_INSURAR_OFFICIAL_NAME"));
+                insurar.setCreateDateTime(rs.getTimestamp("OC_INSURAR_CREATETIME"));
+                insurar.setUpdateDateTime(rs.getTimestamp("OC_INSURAR_UPDATETIME"));
+                insurar.setUpdateUser(rs.getString("OC_INSURAR_UPDATEUID"));
+                insurar.setVersion(rs.getInt("OC_INSURAR_VERSION"));
+                insurar.setType(rs.getString("OC_INSURAR_TYPE"));
+                insurar.setDefaultInsurarInvoiceModel(rs.getString("OC_INSURAR_DEFAULTINSURARINVOICEMODEL"));
+                insurar.setDefaultPatientInvoiceModel(rs.getString("OC_INSURAR_DEFAULTPATIENTINVOICEMODEL"));
+                insurar.setAllowedReductions(rs.getString("OC_INSURAR_ALLOWEDREDUCTIONS"));
+                insurar.setModifiers(rs.getString("OC_INSURAR_MODIFIERS"));
+                rs.close();
+                ps.close();
+
+                // load categories
+                sQuery = "SELECT * FROM OC_INSURANCECATEGORIES"+
+                         " WHERE OC_INSURANCECATEGORY_INSURARUID=?"+
+                         "  ORDER BY OC_INSURANCECATEGORY_CATEGORY";
+                ps = oc_conn.prepareStatement(sQuery);
+                ps.setString(1,insurar.getUid());
+                rs = ps.executeQuery();
+                while(rs.next()){
+                    insurar.addInsuranceCategory(
+                        rs.getString("OC_INSURANCECATEGORY_SERVERID")+"."+rs.getString("OC_INSURANCECATEGORY_OBJECTID"),
+                        rs.getString("OC_INSURANCECATEGORY_CATEGORY"),
+                        rs.getString("OC_INSURANCECATEGORY_LABEL"),
+                        rs.getInt("OC_INSURANCECATEGORY_PATIENTSHARE")+""
+                    );
+                }
+                rs.close();
+                ps.close();
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if(ps!=null) ps.close();
+                if(rs!=null) rs.close();
             }
             catch(SQLException e){
                 e.printStackTrace();

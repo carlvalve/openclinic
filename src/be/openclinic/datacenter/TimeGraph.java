@@ -115,6 +115,82 @@ public class TimeGraph {
     METHOD TO USE
     Will create a Sorted List
     */
+    public static List getCoreValueGraph(Date begin, Date end, String parameterId, String sLanguage, String userid) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        List lArray = new LinkedList();
+        try {
+        	if(parameterId.equalsIgnoreCase("visits")){
+	            conn = MedwanQuery.getInstance().getOpenclinicConnection();
+	            ps = conn.prepareStatement("select year(oc_encounter_begindate) year,month(oc_encounter_begindate) month,count(*) total from oc_encounters where oc_encounter_type='visit' and oc_encounter_begindate>=? and oc_encounter_begindate<?"
+	            		+ " group by year(oc_encounter_begindate),month(oc_encounter_begindate) order by year(oc_encounter_begindate),month(oc_encounter_begindate)");
+	            ps.setTimestamp(1, new java.sql.Timestamp(begin.getTime()));
+	            ps.setTimestamp(2, new java.sql.Timestamp(end.getTime()));
+        	}
+        	else if(parameterId.equalsIgnoreCase("admissions")){
+	            conn = MedwanQuery.getInstance().getOpenclinicConnection();
+	            ps = conn.prepareStatement("select year(oc_encounter_begindate) year,month(oc_encounter_begindate) month,count(*) total from oc_encounters where oc_encounter_type='admission' and oc_encounter_begindate>=? and oc_encounter_begindate<?"
+	            		+ " group by year(oc_encounter_begindate),month(oc_encounter_begindate) order by year(oc_encounter_begindate),month(oc_encounter_begindate)");
+	            ps.setTimestamp(1, new java.sql.Timestamp(begin.getTime()));
+	            ps.setTimestamp(2, new java.sql.Timestamp(end.getTime()));
+        	}
+        	else if(parameterId.equalsIgnoreCase("patients")){
+	            conn = MedwanQuery.getInstance().getOpenclinicConnection();
+	            ps = conn.prepareStatement("select year(oc_encounter_begindate) year,month(oc_encounter_begindate) month,count(distinct oc_encounter_patientuid) total from oc_encounters where oc_encounter_begindate>=? and oc_encounter_begindate<?"
+	            		+ " group by year(oc_encounter_begindate),month(oc_encounter_begindate) order by year(oc_encounter_begindate),month(oc_encounter_begindate)");
+	            ps.setTimestamp(1, new java.sql.Timestamp(begin.getTime()));
+	            ps.setTimestamp(2, new java.sql.Timestamp(end.getTime()));
+        	}
+        	else if(parameterId.equalsIgnoreCase("userdensity")){
+	            conn = MedwanQuery.getInstance().getOpenclinicConnection();
+	            String sql="select year,month,avg(users) total from (select year,month,count(*) users,encounteruid from "+
+	      			  " (select year(oc_encounter_begindate) year, month(oc_encounter_begindate) month,oc_encounter_updateuid uid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".'"+MedwanQuery.getInstance().concatSign()+MedwanQuery.getInstance().convert("varchar", "oc_encounter_objectid")+" encounteruid from oc_encounters where oc_encounter_begindate>=? and oc_encounter_begindate<?"+
+	    			  " union"+
+	    			  " select year(oc_debet_date) year, month(oc_debet_date) month,oc_debet_updateuid uid,oc_debet_encounteruid encounteruid from oc_debets,oc_encounters where  oc_encounter_objectid=replace(oc_debet_encounteruid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and oc_debet_date>=? and oc_debet_date<?"+
+	    			  " union"+
+	    			  " select year(updatetime) year, month(updatetime) month, userid uid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".'"+MedwanQuery.getInstance().concatSign()+MedwanQuery.getInstance().convert("varchar", "oc_encounter_objectid")+" encounteruid from transactions a,items b,oc_encounters c where a.serverid=b.serverid and a.transactionid=b.transactionid and b.type='be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID' and oc_encounter_objectid=replace(b.value,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and a.updatetime>=? and a.updatetime<? and oc_encounter_begindate>=? and oc_encounter_begindate<?) q"+
+	    			  " group by year,month,encounteruid) r group by year,month order by year, month";
+	            System.out.println(sql);
+	            ps = conn.prepareStatement(sql);
+	            ps.setTimestamp(1, new java.sql.Timestamp(begin.getTime()));
+	            ps.setTimestamp(2, new java.sql.Timestamp(end.getTime()));
+	            ps.setTimestamp(3, new java.sql.Timestamp(begin.getTime()));
+	            ps.setTimestamp(4, new java.sql.Timestamp(end.getTime()));
+	            ps.setTimestamp(5, new java.sql.Timestamp(begin.getTime()));
+	            ps.setTimestamp(6, new java.sql.Timestamp(end.getTime()));
+	            ps.setTimestamp(7, new java.sql.Timestamp(begin.getTime()));
+	            ps.setTimestamp(8, new java.sql.Timestamp(end.getTime()));
+        	}
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Date dDate = ScreenHelper.getSQLDate("15/"+rs.getString("month")+"/"+rs.getString("year"));
+                Double iValue = Double.parseDouble(rs.getString("total"));
+                lArray.add(new Object[]{dDate, iValue});
+            }
+            rs.close();
+        }
+        catch (Exception e) {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e2) {
+                // TODO Auto-generated catch block
+                e2.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        return lArray;
+    }
+    
     public static List getListValueGraph(Date begin, Date end, int serverId, String parameterId, String sLanguage, String userid) {
         Connection conn = null;
         PreparedStatement ps = null;

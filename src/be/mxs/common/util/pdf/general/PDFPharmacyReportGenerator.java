@@ -4,10 +4,12 @@ import be.mxs.common.util.pdf.official.PDFOfficialBasic;
 import be.mxs.common.util.system.Pointer;
 import be.mxs.common.util.system.ScreenHelper;
 import be.mxs.common.util.db.MedwanQuery;
+import be.openclinic.adt.Encounter;
 import be.openclinic.pharmacy.Batch;
 import be.openclinic.pharmacy.BatchOperation;
 import be.openclinic.pharmacy.DrugCategory;
 import be.openclinic.pharmacy.OperationDocument;
+import be.openclinic.pharmacy.Product;
 import be.openclinic.pharmacy.ProductOrder;
 import be.openclinic.pharmacy.ProductStock;
 import be.openclinic.pharmacy.ProductStockOperation;
@@ -23,12 +25,18 @@ import net.admin.AdminPerson;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import oracle.net.ano.Service;
+
 import org.dom4j.DocumentHelper;
 
 import java.io.ByteArrayOutputStream;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.SortedMap;
 import java.util.SortedSet;
@@ -88,7 +96,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
             doc.addAuthor(user.person.firstname+" "+user.person.lastname);
 			doc.addCreationDate();
 			doc.addCreator("OpenClinic Software");
-        	if(type.equalsIgnoreCase("serviceStockInventorySummary")||type.equalsIgnoreCase("serviceIncomingStockOperationsPerProvider")||type.equalsIgnoreCase("serviceIncomingStockOperationsPerItem")||type.equalsIgnoreCase("serviceIncomingStockOperationsPerOrder")||type.equalsIgnoreCase("serviceIncomingStockOperations")||type.equalsIgnoreCase("monthlyConsumption")||type.equalsIgnoreCase("serviceOutgoingStockOperations")||type.equalsIgnoreCase("serviceOutgoingStockOperationsListing")||type.equalsIgnoreCase("serviceOutgoingStockOperationsListingPerService")||type.equalsIgnoreCase("stockout")||type.equalsIgnoreCase("serviceIncomingStockOperationsPerCategoryItem")){
+        	if(type.equalsIgnoreCase("patientDeliveries")||type.equalsIgnoreCase("serviceStockInventorySummary")||type.equalsIgnoreCase("serviceIncomingStockOperationsPerProvider")||type.equalsIgnoreCase("serviceIncomingStockOperationsPerItem")||type.equalsIgnoreCase("serviceIncomingStockOperationsPerOrder")||type.equalsIgnoreCase("serviceIncomingStockOperations")||type.equalsIgnoreCase("monthlyConsumption")||type.equalsIgnoreCase("serviceOutgoingStockOperations")||type.equalsIgnoreCase("serviceOutgoingStockOperationsPerService")||type.equalsIgnoreCase("serviceOutgoingStockOperationsListing")||type.equalsIgnoreCase("serviceOutgoingStockOperationsListingPerService")||type.equalsIgnoreCase("stockout")||type.equalsIgnoreCase("serviceIncomingStockOperationsPerCategoryItem")){
         		doc.setPageSize(PageSize.A4);
         	}
         	else {
@@ -169,7 +177,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 	private void addPriceCol(org.dom4j.Element row, int size, double value){
 		org.dom4j.Element col = row.addElement("col");
 		col.addAttribute("size", size+"");
-		col.setText(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#")).format(value));
+		col.setText(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#")).format(value));
 	}
 
 	private void addPriceCol(org.dom4j.Element row, int size, double value,String format){
@@ -189,7 +197,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 		org.dom4j.Element col = row.addElement("col");
 		col.addAttribute("size", size+"");
 		col.addAttribute("weight", "bold");
-		col.setText(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#")).format(value));
+		col.setText(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#")).format(value));
 	}
 
     protected void printTable(String type,Hashtable parameters) throws DocumentException, ParseException{
@@ -210,11 +218,17 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
     	else if(type.equalsIgnoreCase("stockout")){
     		printStockOut(d, t, (String)parameters.get("date"), (String)parameters.get("serviceStockUID"));
     	}
+    	else if(type.equalsIgnoreCase("patientDeliveries")){
+    		printPatientDeliveries(d, t, (String)parameters.get("begin"), (String)parameters.get("end"), (String)parameters.get("patientUID"));
+    	}
     	else if(type.equalsIgnoreCase("serviceStockOperations")){
     		printServiceStockOperations(d, t, (String)parameters.get("begin"), (String)parameters.get("end"), (String)parameters.get("serviceStockUID"));
     	}
     	else if(type.equalsIgnoreCase("serviceOutgoingStockOperations")){
     		printServiceOutgoingStockOperations(d, t, (String)parameters.get("begin"), (String)parameters.get("end"), (String)parameters.get("serviceStockUID"));
+    	}
+    	else if(type.equalsIgnoreCase("serviceOutgoingStockOperationsPerService")){
+    		printServiceOutgoingStockOperationsPerService(d, t, (String)parameters.get("begin"), (String)parameters.get("end"), (String)parameters.get("serviceStockUID"));
     	}
     	else if(type.equalsIgnoreCase("serviceIncomingStockOperations")){
     		printServiceIncomingStockOperations(d, t, (String)parameters.get("begin"), (String)parameters.get("end"), (String)parameters.get("serviceStockUID"), (String)parameters.get("userid"));
@@ -351,7 +365,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 			if(stock.getProduct()!=null){
 				pump=stock.getProduct().getLooseLastYearsAveragePrice(new java.util.Date(date.getTime()+day));
 			}
-			addPriceCol(row,20,pump,"#,##0.00");
+			addPriceCol(row,20,pump,MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#,##0.00"));
 			addPriceCol(row,20,level*pump);
 			generalTotal+=level*pump;
 		}
@@ -481,7 +495,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 			if(stock.getProduct()!=null){
 				pump=stock.getProduct().getLastYearsAveragePrice(new java.util.Date(date.getTime()+day));
 			}
-			addPriceCol(row,30,pump,"#,##0.00");
+			addPriceCol(row,30,pump,MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#,##0.00"));
 			addPriceCol(row,30,level*pump);
 			sectionTotal+=level*pump;
 			generalTotal+=level*pump;
@@ -648,7 +662,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
  			if(stock.getProduct()!=null){
  				pump=stock.getProduct().getLastYearsAveragePrice(new java.util.Date(end.getTime()+day));
  			}
- 			addPriceCol(row,20,pump,"#,##0.00");
+ 			addPriceCol(row,20,pump,MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#,##0.00"));
  			addPriceCol(row,20,(initiallevel+in-out)*pump);
  			addCol(row,20,"");
  			addCol(row,20,"");
@@ -707,7 +721,8 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
  		for(int n=0;n<productStocks.size();n++){
  			ProductStock stock = (ProductStock)productStocks.elementAt(n);
  			//First find the product subcategory
- 			String uid=stock.getProduct()==null?"|"+stock.getUid():stock.getProduct().getFullProductSubGroupName(sPrintLanguage)+"|"+stock.getUid();
+ 			Product product=stock.getProduct();
+ 			String uid=stock.getProduct()==null?"|"+stock.getUid():stock.getProduct().getFullProductSubGroupName(sPrintLanguage)+"|"+(product!=null?product.getName():"")+" |"+stock.getUid();
  			stocks.put(uid, stock);
  		}
  		
@@ -754,10 +769,69 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
  			addCol(row,20,out+"");
  			addPriceCol(row,20,out*pump);
  			addCol(row,20,(initiallevel+in-out)+"");
- 			addPriceCol(row,20,pump,"#,##0.00");
+ 			addPriceCol(row,20,pump,MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#,##0.00"));
  			addPriceCol(row,20,(initiallevel+in-out)*pump);
  		}
      }
+    protected void printPatientDeliveries(org.dom4j.Document d, org.dom4j.Element t, String sDateBegin, String sDateEnd, String patientUid) throws ParseException{
+ 		d.add(t);
+        t.addAttribute("size", "100");
+ 		//Add title rows
+        org.dom4j.Element row =t.addElement("row");
+ 		row.addAttribute("type", "title");
+ 		addCol(row,70,ScreenHelper.getTranNoLink("web","productstock",sPrintLanguage));
+ 		addCol(row,10,ScreenHelper.getTranNoLink("web","quantity",sPrintLanguage));
+ 		addCol(row,20,ScreenHelper.getTranNoLink("web","packageunits",sPrintLanguage));
+
+        try{
+			java.util.Date dDate = ScreenHelper.parseDate(sDateBegin);
+			String sQuery = " select oc_stock_productuid,sum(quantity) quantity from ("+
+							" select oc_operation_objectid,c.oc_stock_name,oc_stock_productuid,oc_operation_unitschanged quantity from oc_productstockoperations a,oc_productstocks b,oc_servicestocks c"+
+			                " where oc_operation_srcdesttype='patient'"+
+			                "  and oc_operation_date>?"+
+			                "  and oc_operation_description like '%delivery%'"+
+			                "  and oc_operation_srcdestuid=?"+
+			                "  and b.oc_stock_objectid=replace(a.oc_operation_productstockuid,'"+MedwanQuery.getInstance().getConfigInt("serverId")+".','')"+
+			                "  and c.oc_stock_objectid=replace(b.oc_stock_servicestockuid,'"+MedwanQuery.getInstance().getConfigInt("serverId")+".','')"+
+			                " union"+
+			                " select oc_operation_objectid,c.oc_stock_name,oc_stock_productuid,-oc_operation_unitschanged quantity from oc_productstockoperations a,oc_productstocks b,oc_servicestocks c"+
+			                " where oc_operation_srcdesttype='patient'"+
+			                "  and oc_operation_date>?"+
+			                "  and oc_operation_description like '%receipt%'"+
+			                "  and oc_operation_srcdestuid=?"+
+			                "  and b.oc_stock_objectid=replace(a.oc_operation_productstockuid,'"+MedwanQuery.getInstance().getConfigInt("serverId")+".','')"+
+			                "  and c.oc_stock_objectid=replace(b.oc_stock_servicestockuid,'"+MedwanQuery.getInstance().getConfigInt("serverId")+".','')) q"+
+			                " group by oc_stock_productuid";
+			Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+			PreparedStatement ps = conn.prepareStatement(sQuery);
+			ps.setDate(1,new java.sql.Date(dDate.getTime()));
+			ps.setString(2,patientUid);
+			ps.setDate(3,new java.sql.Date(dDate.getTime()));
+			ps.setString(4,patientUid);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			Product product;
+			
+			while(rs.next()){
+				product = Product.get(rs.getString("oc_stock_productuid"));
+				if(product!=null){
+		 	        row =t.addElement("row");
+			 		addCol(row,70,product.getName());
+			 		addCol(row,10,rs.getInt("quantity")+"");
+			 		addCol(row,20,product.getPackageUnits()+" "+ScreenHelper.getTran("product.unit",product.getUnit(),sPrintLanguage));
+				}
+			}
+
+			rs.close();
+			ps.close();
+			conn.close();
+        }
+        catch(Exception e){
+        	e.printStackTrace();
+        }
+     }
+    
     protected void printServiceOutgoingStockOperations(org.dom4j.Document d, org.dom4j.Element t, String sDateBegin, String sDateEnd, String sServiceStockUID) throws ParseException{
  		d.add(t);
         t.addAttribute("size", "195");
@@ -778,10 +852,128 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 		double subtotal=0, generaltotal=0;
  		Vector deliveries = ProductStockOperation.getServiceStockDeliveries(sServiceStockUID, begin, new java.util.Date(end.getTime()+day), "OC_OPERATION_DATE,OC_OPERATION_SRCDESTUID,OC_OPERATION_DOCUMENTUID", "ASC");
  		String activedate="",activedestination="$$$";
+ 		Hashtable lastprices = new Hashtable();
  		for(int n=0;n<deliveries.size();n++){
  			ProductStockOperation operation = (ProductStockOperation)deliveries.elementAt(n);
- 			String date=new SimpleDateFormat("dd/MM/yyyy").format(operation.getDate());
- 			String destination=operation.getDescription()+"."+(operation.getSourceDestination()==null?"":ScreenHelper.checkString(operation.getSourceDestination().getObjectType()))+"."+(operation.getSourceDestination()==null?"":ScreenHelper.checkString(operation.getSourceDestination().getObjectUid()))+"."+operation.getDocumentUID();
+ 			if(operation.getProductStock()!=null){
+ 				Product product=operation.getProductStock().getProduct();
+ 				if(product!=null){
+		 			String date=new SimpleDateFormat("dd/MM/yyyy").format(operation.getDate());
+		 			String destination=operation.getDescription()+"."+(operation.getSourceDestination()==null?"":ScreenHelper.checkString(operation.getSourceDestination().getObjectType()))+"."+(operation.getSourceDestination()==null?"":ScreenHelper.checkString(operation.getSourceDestination().getObjectUid()))+"."+operation.getDocumentUID();
+		
+		 			if(activedate.length()>0 && (!date.equalsIgnoreCase(activedate) || !destination.equalsIgnoreCase(activedestination))){
+		 				row =t.addElement("row");
+		 		 		addRightBoldCol(row,170,ScreenHelper.getTranNoLink("web", "subtotal", sPrintLanguage));
+		 		 		addPriceBoldCol(row,25,subtotal);
+		 		 		subtotal=0;
+		 		 		activedestination="$$$";
+		 			}
+		 			if(!date.equalsIgnoreCase(activedate)){
+		 				row =t.addElement("row");
+		 		 		addBoldCol(row,195,date);
+		 		 		activedate=date;
+		 			}
+		 			if(!destination.equalsIgnoreCase(activedestination)){
+		 				row =t.addElement("row");
+		 		 		addCol(row,10,"");
+		 	 			String document="";
+		 	 			if(operation.getDocument()!=null){
+		 	 				document=operation.getDocument().getReference();
+		 	 			}
+		 		 		addBoldCol(row,60,getTran("web","document")+": "+document);
+		 		 		addBoldCol(row,125,ScreenHelper.getTranNoLink("productstockoperation.medicationdelivery",operation.getDescription(),sPrintLanguage)+": "+operation.getSourceDestinationName());
+		 		 		activedestination=destination;
+		 			}
+		 	        row =t.addElement("row");
+			 		addCol(row,10,"");
+		 			addCol(row,100,ScreenHelper.checkString(product.getName())+(operation.getBatchNumber()!=null&&operation.getBatchNumber().length()>0?" ("+operation.getBatchNumber().toUpperCase()+")":""));
+		 			addCol(row,20,operation.getDate()==null?"":new SimpleDateFormat("yyyy").format(operation.getDate()));
+		 			addCol(row,20,operation.getUnitsChanged()+"");
+		 			if(lastprices.get(product.getUid())==null){
+		 				lastprices.put(product.getUid(), product.getLastYearsAveragePrice(operation.getDate()==null?new java.util.Date():operation.getDate()));
+		 			}
+		 			double price=(Double)lastprices.get(product.getUid());
+		 			addPriceCol(row,20,price,MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#,##0.00"));
+		 			addPriceCol(row,25,operation.getUnitsChanged()*price);
+		 			subtotal+=operation.getUnitsChanged()*price;
+		 			generaltotal+=operation.getUnitsChanged()*price;
+ 				}
+ 			}
+ 		}
+		if(activedate.length()>0){
+			row =t.addElement("row");
+	 		addRightBoldCol(row,170,ScreenHelper.getTranNoLink("web", "subtotal", sPrintLanguage));
+	 		addPriceBoldCol(row,25,subtotal);
+		}
+
+ 		row =t.addElement("row");
+ 		addCol(row,195,"");
+ 		addRightBoldCol(row,170,ScreenHelper.getTranNoLink("web", "total", sPrintLanguage));
+ 		addPriceBoldCol(row,25,generaltotal);
+ 		
+     }
+    
+    protected void printServiceOutgoingStockOperationsPerService(org.dom4j.Document d, org.dom4j.Element t, String sDateBegin, String sDateEnd, String sServiceStockUID) throws ParseException{
+ 		d.add(t);
+        t.addAttribute("size", "195");
+
+ 		//Add title rows
+        org.dom4j.Element row =t.addElement("row");
+ 		row.addAttribute("type", "title");
+ 		addCol(row,30,ScreenHelper.getTranNoLink("web","service",sPrintLanguage));
+ 		addCol(row,80,ScreenHelper.getTranNoLink("web","article",sPrintLanguage));
+ 		addCol(row,20,ScreenHelper.getTranNoLink("web","year",sPrintLanguage));
+ 		addCol(row,20,ScreenHelper.getTranNoLink("web","qte",sPrintLanguage));
+ 		addCol(row,20,ScreenHelper.getTranNoLink("web","pu",sPrintLanguage));
+ 		addCol(row,25,ScreenHelper.getTranNoLink("web","totalprice",sPrintLanguage));
+
+ 		//First we make a list of all productstockoperations ordered by date
+		java.util.Date begin = ScreenHelper.parseDate(sDateBegin);
+		java.util.Date end = ScreenHelper.parseDate(sDateEnd);
+		double subtotal=0, generaltotal=0;
+		Hashtable products = new Hashtable();
+ 		Vector deliveries = ProductStockOperation.getServiceStockDeliveries(sServiceStockUID, begin, new java.util.Date(end.getTime()+day), "OC_OPERATION_DATE,OC_OPERATION_SRCDESTUID,OC_OPERATION_DOCUMENTUID", "ASC");
+ 		SortedMap mDeliveries = new TreeMap();
+ 		for(int n=0;n<deliveries.size();n++){
+ 			ProductStockOperation operation = (ProductStockOperation)deliveries.elementAt(n);
+ 			if(operation.getSourceDestination().getObjectType().equalsIgnoreCase("patient")){
+ 	 			String date=new SimpleDateFormat("yyyyMMdd").format(operation.getDate());
+ 	 			String productstockuid=operation.getProductStockUid();
+ 	 			Product product = (Product)products.get(productstockuid);
+ 	 			if(product==null){
+ 	 		 		ProductStock productStock = ProductStock.get(productstockuid);
+ 	 		 		if(productStock!=null){
+ 	 		 			product=productStock.getProduct();
+ 	 		 			if(product!=null){
+ 	 		 				products.put(productstockuid, product);
+ 	 		 			}
+ 	 		 		}
+ 	 			}
+ 	 			String patientuid=operation.getSourceDestination().getObjectUid();
+ 	 			//Now determine the service on the moment the operation took place
+ 	 			Encounter encounter = Encounter.getActiveEncounterOnDate(new java.sql.Timestamp(operation.getDate().getTime()), patientuid);
+ 	 			String service = "?";
+ 	 			if(encounter!=null && encounter.getServiceUID(operation.getDate())!=null){
+ 	 				service = encounter.getServiceUID(operation.getDate());
+ 	 			}
+ 	 			String uid = date+";"+service+";"+(product==null?"?":product.getName().toUpperCase())+";"+productstockuid;
+ 	 			if(mDeliveries.get(uid)==null){
+ 	 				mDeliveries.put(uid, 0);
+ 	 			}
+ 	 			if(operation.getDescription().contains("delivery")){
+ 	 				mDeliveries.put(uid, (Integer)mDeliveries.get(uid)+operation.getUnitsChanged());
+ 	 			}
+ 	 			else {
+ 	 				mDeliveries.put(uid, (Integer)mDeliveries.get(uid)-operation.getUnitsChanged());
+ 	 			}
+ 			}
+ 		}
+ 		String activedate="",activedestination="$$$";
+ 		Iterator iDeliveries = mDeliveries.keySet().iterator();
+ 		while(iDeliveries.hasNext()){
+ 			String key = (String)iDeliveries.next();
+ 			String date=ScreenHelper.formatDate(new SimpleDateFormat("yyyyMMdd").parse(key.split(";")[0]));
+ 			String destination=ScreenHelper.getTranNoLink("service", key.split(";")[1], sPrintLanguage);
 
  			if(activedate.length()>0 && (!date.equalsIgnoreCase(activedate) || !destination.equalsIgnoreCase(activedestination))){
  				row =t.addElement("row");
@@ -798,24 +990,21 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
  			if(!destination.equalsIgnoreCase(activedestination)){
  				row =t.addElement("row");
  		 		addCol(row,10,"");
- 	 			String document="";
- 	 			if(operation.getDocument()!=null){
- 	 				document=operation.getDocument().getReference();
- 	 			}
- 		 		addBoldCol(row,60,getTran("web","document")+": "+document);
- 		 		addBoldCol(row,125,ScreenHelper.getTranNoLink("productstockoperation.medicationdelivery",operation.getDescription(),sPrintLanguage)+": "+operation.getSourceDestinationName());
+ 		 		addBoldCol(row,60,getTran("web","service")+": ");
+ 		 		addBoldCol(row,125,destination);
  		 		activedestination=destination;
  			}
  	        row =t.addElement("row");
+ 	        Product product = (Product)products.get(key.split(";")[3]);
 	 		addCol(row,10,"");
- 			addCol(row,100,operation.getProductStock()!=null && operation.getProductStock().getProduct()!=null?ScreenHelper.checkString(operation.getProductStock().getProduct().getName()):"");
- 			addCol(row,20,operation.getDate()==null?"":new SimpleDateFormat("yyyy").format(operation.getDate()));
- 			addCol(row,20,operation.getUnitsChanged()+"");
- 			double price=operation.getProductStock()==null || operation.getProductStock().getProduct()==null?0:operation.getProductStock().getProduct().getLastYearsAveragePrice(operation.getDate()==null?new java.util.Date():operation.getDate());
- 			addPriceCol(row,20,price,"#,##0.00");
- 			addPriceCol(row,25,operation.getUnitsChanged()*price);
- 			subtotal+=operation.getUnitsChanged()*price;
- 			generaltotal+=operation.getUnitsChanged()*price;
+ 			addCol(row,100,product!=null?ScreenHelper.checkString(product.getName()):"");
+ 			addCol(row,20,new SimpleDateFormat("yyyy").format(ScreenHelper.getSQLDate(date)));
+ 			addCol(row,20,mDeliveries.get(key)+"");
+ 			double price=product==null?0:product.getLastYearsAveragePrice(ScreenHelper.getSQLDate(date)==null?new java.util.Date():ScreenHelper.getSQLDate(date));
+ 			addPriceCol(row,20,price,MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#,##0.00"));
+ 			addPriceCol(row,25,((Integer)mDeliveries.get(key))*price);
+ 			subtotal+=((Integer)mDeliveries.get(key))*price;
+ 			generaltotal+=((Integer)mDeliveries.get(key))*price;
  		}
 		if(activedate.length()>0){
 			row =t.addElement("row");
@@ -827,7 +1016,6 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
  		addCol(row,195,"");
  		addRightBoldCol(row,170,ScreenHelper.getTranNoLink("web", "total", sPrintLanguage));
  		addPriceBoldCol(row,25,generaltotal);
- 		
      }
     
     protected void printServiceIncomingStockOperations(org.dom4j.Document d, org.dom4j.Element t, String sDateBegin, String sDateEnd, String sServiceStockUID, String userid) throws ParseException{
@@ -848,13 +1036,16 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 		
 		//Now we have to find all productstocks sorted by productsubgroup
 		SortedMap stocks = new TreeMap();
+		//Todo: get productstocks per batch
 		Vector productStocks = ServiceStock.getProductStocks(sServiceStockUID);
 		for(int n=0;n<productStocks.size();n++){
 			ProductStock stock = (ProductStock)productStocks.elementAt(n);
 			//First we look up if there have been incoming transactions
-			if(stock.getTotalUnitsInForPeriod(begin, new java.util.Date(end.getTime()+day),ScreenHelper.checkString(userid))>0){
+			//Todo: check productstocks for specific batches
+			//Todo: store incoming in uid
+			if(stock.getProduct()!=null && stock.getTotalUnitsInForPeriod(begin, new java.util.Date(end.getTime()+day),ScreenHelper.checkString(userid))>0){
 				//First find the product subcategory
-				String uid=stock.getProduct()==null?"|"+stock.getUid():stock.getProduct().getFullProductSubGroupName(sPrintLanguage)+"|"+stock.getUid();
+				String uid=stock.getProduct().getFullProductSubGroupName(sPrintLanguage)+"|"+ScreenHelper.capitalize(stock.getProduct().getName())+"|"+stock.getUid();
 				stocks.put(uid, stock);
 			}
 		}
@@ -883,19 +1074,27 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 			}
 			bInitialized=true;
 			//Nu printen we de gegevens van de productstock
-	        row =t.addElement("row");
-	        addCol(row,10,"");
-			addCol(row,90,stock.getProduct()==null?"":stock.getProduct().getName());
-			int in = stock.getTotalUnitsInForPeriod(begin, new java.util.Date(end.getTime()+day),ScreenHelper.checkString(userid));
-			addCol(row,20,in+"");
-			addCol(row,20,stock.getProduct()==null?"":ScreenHelper.getTranNoLink("product.unit",stock.getProduct().getUnit(),sPrintLanguage),7);
-			double pump=0;
-			if(stock.getProduct()!=null){
-				pump=stock.getProduct().getLooseLastYearsAveragePrice(new java.util.Date(end.getTime()+day));
+			//We printen een lijn voor elke batch waarop operaties plaatsvonden
+			SortedSet hBatches = stock.getBatchesInForPeriod(begin, new java.util.Date(end.getTime()+day),ScreenHelper.checkString(userid));
+			Iterator iBatches = hBatches.iterator();
+			while(iBatches.hasNext()){
+				String sBatchNumber = (String)iBatches.next();
+				row =t.addElement("row");
+		        addCol(row,10,"");
+		        //Todo: add batch number
+				addCol(row,90,stock.getProduct()==null?ScreenHelper.getTranNoLink("web","unknown_product",sPrintLanguage):ScreenHelper.capitalize(stock.getProduct().getName())+(sBatchNumber.equalsIgnoreCase("?")?"":" ("+ScreenHelper.getTran("web", "batch", sPrintLanguage)+": "+sBatchNumber.toUpperCase()+")"));
+				//Todo: get incoming from uid and batchuid
+				int in = stock.getTotalUnitsInForPeriod(begin, new java.util.Date(end.getTime()+day),ScreenHelper.checkString(userid),sBatchNumber);
+				addCol(row,20,in+"");
+				addCol(row,20,stock.getProduct()==null?"":ScreenHelper.getTranNoLink("product.unit",stock.getProduct().getUnit(),sPrintLanguage),7);
+				double pump=0;
+				if(stock.getProduct()!=null){
+					pump=stock.getProduct().getLooseLastYearsAveragePrice(new java.util.Date(end.getTime()+day));
+				}
+				addPriceCol(row,20,pump,MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#,##0.00"));
+				addPriceCol(row,20,in*pump);
+				generalTotal+=in*pump;
 			}
-			addPriceCol(row,20,pump,"#,##0.00");
-			addPriceCol(row,20,in*pump);
-			generalTotal+=in*pump;
 		}
 		if(bInitialized){
 	        row =t.addElement("row");
@@ -970,7 +1169,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 			if(operation.getProductStock()!=null && operation.getProductStock().getProduct()!=null){
 				pump=operation.getProductStock().getProduct().getLooseLastYearsAveragePrice(new java.util.Date(end.getTime()+day));
 			}
-			addPriceCol(row,20,pump,"#,##0.00");
+			addPriceCol(row,20,pump,MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#,##0.00"));
 			addPriceCol(row,20,in*pump);
 			sectiontotal+=in*pump;
 		}
@@ -990,11 +1189,12 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 		//Add title rows
         org.dom4j.Element row =t.addElement("row");
 		row.addAttribute("type", "title");
-		addCol(row,20,ScreenHelper.getTranNoLink("web","date",sPrintLanguage),8);
-		addCol(row,30,ScreenHelper.getTranNoLink("web","docnr",sPrintLanguage),8);
-		addCol(row,20,ScreenHelper.getTranNoLink("web","quantity",sPrintLanguage),8);
+		addCol(row,16,ScreenHelper.getTranNoLink("web","date",sPrintLanguage),8);
+		addCol(row,25,ScreenHelper.getTranNoLink("web","docnr",sPrintLanguage),8);
+		addCol(row,21,ScreenHelper.getTranNoLink("web","batch",sPrintLanguage),8);
+		addCol(row,10,ScreenHelper.getTranNoLink("web","quantity",sPrintLanguage),8);
 		addCol(row,20,ScreenHelper.getTranNoLink("web","PU",sPrintLanguage),8);
-		addCol(row,20,ScreenHelper.getTranNoLink("web","totalprice",sPrintLanguage),8);
+		addCol(row,18,ScreenHelper.getTranNoLink("web","totalprice",sPrintLanguage),8);
 		addCol(row,30,ScreenHelper.getTranNoLink("web","provider",sPrintLanguage),8);
 
 		String activeproduct = "$$$";
@@ -1021,8 +1221,8 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 				//First check if we have to print the sectiontotal
 				if(!activeproduct.equalsIgnoreCase("$$$")){
 					row =t.addElement("row");
-					addRightBoldCol(row, 90, getTran("web","total"));
-					addPriceBoldCol(row, 50, sectiontotal);
+					addRightBoldCol(row, 92, getTran("web","total"));
+					addPriceBoldCol(row, 48, sectiontotal);
 					sectiontotal=0;
 				}
 				//We have to print the productname
@@ -1033,104 +1233,115 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 			}
 			//Now we print the operation data
 			row =t.addElement("row");
-			addCol(row,20,operation.getDate()==null?"":new SimpleDateFormat("dd/MM/yyyy").format(operation.getDate()));
-			addCol(row,30,operation.getDocument()==null?"":operation.getDocument().getReference());
+			addCol(row,16,operation.getDate()==null?"":new SimpleDateFormat("dd/MM/yyyy").format(operation.getDate()));
+			addCol(row,25,operation.getDocument()==null?"":operation.getDocument().getReference());
+			addCol(row,21,operation.getBatchNumber()==null?"":operation.getBatchNumber().toUpperCase(),8);
 			int in=operation.getUnitsChanged();
-			addCol(row,20,in+"");
+			addCol(row,10,in+"");
 			double pump=0;
 			if(operation.getProductStock()!=null && operation.getProductStock().getProduct()!=null){
 				pump=operation.getProductStock().getProduct().getLooseLastYearsAveragePrice(new java.util.Date(end.getTime()+day));
 			}
-			addPriceCol(row,20,pump,"#,##0.00");
-			addPriceCol(row,20,in*pump);
+			addPriceCol(row,20,pump,MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#,##0.00"));
+			addPriceCol(row,18,in*pump);
 			addCol(row,30,operation.getDocument()==null?"":operation.getDocument().getSourceName(sPrintLanguage));
 			sectiontotal+=in*pump;
 		}
 		if(!activeproduct.equalsIgnoreCase("$$$")){
 			row =t.addElement("row");
-			addRightBoldCol(row, 90, getTran("web","total"));
-			addPriceBoldCol(row, 50, sectiontotal);
+			addRightBoldCol(row, 92, getTran("web","total"));
+			addPriceBoldCol(row, 48, sectiontotal);
 		}
      }
 
-    protected void printServiceIncomingStockOperationsPerCategoryItem(org.dom4j.Document d, org.dom4j.Element t, String sDateBegin, String sDateEnd, String sServiceStockUID) throws ParseException{
- 		d.add(t);
-        t.addAttribute("size", "160");
-		java.util.Date begin = ScreenHelper.parseDate(sDateBegin);
-		java.util.Date end = ScreenHelper.parseDate(sDateEnd);
-
-		//Add title rows
-        org.dom4j.Element row =t.addElement("row");
-		row.addAttribute("type", "title");
-		addCol(row,20,ScreenHelper.getTranNoLink("web","month",sPrintLanguage),8);
-		addCol(row,80,ScreenHelper.getTranNoLink("web","article",sPrintLanguage),8);
-		addCol(row,20,ScreenHelper.getTranNoLink("web","quantity",sPrintLanguage),8);
-		addCol(row,20,ScreenHelper.getTranNoLink("web","PU",sPrintLanguage),8);
-		addCol(row,20,ScreenHelper.getTranNoLink("web","totalprice",sPrintLanguage),8);
-
-		String activecategory = "$$$";
-		String activeproduct = "$$$";
-		String activemonth ="$$$";
-		//Now we have to find all the orders for this period
-		SortedMap operations = new TreeMap();
-		Vector receipts = ProductStockOperation.getReceiptsForServiceStock(sServiceStockUID, begin, new java.util.Date(end.getTime()+day), "OC_OPERATION_DOCUMENTUID", "ASC");
-		for(int n=0;n<receipts.size();n++){
-			ProductStockOperation operation = (ProductStockOperation)receipts.elementAt(n);
-			String prodname="";
-			if(operation.getProductStock()!=null && operation.getProductStock().getProduct()!=null){
-				operations.put(new SimpleDateFormat("MM/yyyy").format(operation.getDate())+"|"+operation.getProductStock().getProduct().getFullProductSubGroupName(sPrintLanguage)+"|"+operation.getProductStock().getProduct().getName()+"|"+operation.getUid(), operation);
-			}
-		}
-		Iterator iOperations = operations.keySet().iterator();
-		Hashtable printedSubTitels = new Hashtable();
-		while(iOperations.hasNext()){
-			String key=(String)iOperations.next();
-			ProductStockOperation operation = (ProductStockOperation)operations.get(key);
-			String month=key.split("\\|")[0];
-			if(!month.equals(activemonth)){
-				//We have to print the month
-				row =t.addElement("row");
-				addBoldCol(row, 160, month);
-				activemonth=month;
-				printedSubTitels = new Hashtable();
-				activecategory="$$$";
-			}
-			String category=key.split("\\|")[1];
-			if(!category.equals(activecategory)){
-				//We have to print the category
-				String[] subtitles = category.split(";");
-				String title="";
-				for(int n=0;n<subtitles.length;n++){
-					title+=subtitles[n]+";";
-					if(printedSubTitels.get(title)==null){
-						//This one must be printed
-				        row =t.addElement("row");
-				        if(n>0){
-				        	addCol(row,n*5,"");
-				        }
-						addBoldCol(row,160-n*5,subtitles[n]);
-						printedSubTitels.put(title, "1");
-					}
-				}
-				activecategory=category;
-				activeproduct="$$$";
-			}
-			String productname=key.split("\\|")[2];
-			//Now we print the operation data
-			row =t.addElement("row");
-			addCol(row,20,"");
-			addCol(row,80,productname);
-			int in=operation.getUnitsChanged();
-			addCol(row,20,in+"");
-			double pump=operation.getPrice();
-			if(pump==0){
+    protected void printServiceIncomingStockOperationsPerCategoryItem(org.dom4j.Document d, org.dom4j.Element t, String sDateBegin, String sDateEnd, String sServiceStockUID){
+ 		try{
+	    	d.add(t);
+	        t.addAttribute("size", "160");
+			java.util.Date begin = ScreenHelper.parseDate(sDateBegin);
+			java.util.Date end = ScreenHelper.parseDate(sDateEnd);
+	
+			//Add title rows
+	        org.dom4j.Element row =t.addElement("row");
+			row.addAttribute("type", "title");
+			addCol(row,20,ScreenHelper.getTranNoLink("web","month.and.batch",sPrintLanguage),8);
+			addCol(row,80,ScreenHelper.getTranNoLink("web","article",sPrintLanguage),8);
+			addCol(row,20,ScreenHelper.getTranNoLink("web","quantity",sPrintLanguage),8);
+			addCol(row,20,ScreenHelper.getTranNoLink("web","PU",sPrintLanguage),8);
+			addCol(row,20,ScreenHelper.getTranNoLink("web","totalprice",sPrintLanguage),8);
+	
+			String activecategory = "$$$";
+			String activeproduct = "$$$";
+			String activemonth ="$$$";
+			//Now we have to find all the orders for this period
+			SortedMap operations = new TreeMap();
+			Hashtable quantities = new Hashtable();
+			Vector receipts = ProductStockOperation.getReceiptsForServiceStock(sServiceStockUID, begin, new java.util.Date(end.getTime()+day), "OC_OPERATION_DOCUMENTUID", "ASC");
+			for(int n=0;n<receipts.size();n++){
+				ProductStockOperation operation = (ProductStockOperation)receipts.elementAt(n);
+				String prodname="";
 				if(operation.getProductStock()!=null && operation.getProductStock().getProduct()!=null){
-					pump=operation.getProductStock().getProduct().getLooseLastYearsAveragePrice(new java.util.Date(end.getTime()+day));
+					String key=new SimpleDateFormat("MM/yyyy").format(operation.getDate())+"|"+operation.getProductStock().getProduct().getFullProductSubGroupName(sPrintLanguage)+"|"+ScreenHelper.capitalize(operation.getProductStock().getProduct().getName())+"|"+ScreenHelper.checkString(operation.getBatchNumber()).toUpperCase()+" ";
+					if(quantities.get(key)==null){
+						quantities.put(key, 0);
+						operations.put(key, operation.getProductStock().getProduct());
+					}
+					quantities.put(key, (Integer)quantities.get(key)+operation.getUnitsChanged());
 				}
 			}
-			addPriceCol(row,20,pump,"#,##0.00");
-			addPriceCol(row,20,in*pump);
-		}
+			Iterator iOperations = operations.keySet().iterator();
+			Hashtable printedSubTitels = new Hashtable();
+			while(iOperations.hasNext()){
+				String key=(String)iOperations.next();
+				Product product = (Product)operations.get(key);
+				String month=key.split("\\|")[0];
+				if(!month.equals(activemonth)){
+					//We have to print the month
+					row =t.addElement("row");
+					addBoldCol(row, 160, month);
+					activemonth=month;
+					printedSubTitels = new Hashtable();
+					activecategory="$$$";
+				}
+				String category=key.split("\\|")[1];
+				if(!category.equals(activecategory)){
+					//We have to print the category
+					String[] subtitles = category.split(";");
+					String title="";
+					for(int n=0;n<subtitles.length;n++){
+						title+=subtitles[n]+";";
+						if(printedSubTitels.get(title)==null){
+							//This one must be printed
+					        row =t.addElement("row");
+					        if(n>0){
+					        	addCol(row,n*5,"");
+					        }
+							addBoldCol(row,160-n*5,subtitles[n]);
+							printedSubTitels.put(title, "1");
+						}
+					}
+					activecategory=category;
+					activeproduct="$$$";
+				}
+				String productname=key.split("\\|")[2];
+				//Now we print the operation data
+				row =t.addElement("row");
+				addCol(row,20,key.split("\\|")[3]);
+				addCol(row,80,productname);
+				int in=(Integer)quantities.get(key);
+				addCol(row,20,in+"");
+				double pump=0;
+				try {
+					pump=product.getLooseLastYearsAveragePrice(new java.util.Date(end.getTime()+day));
+				}
+				catch(Exception e){};
+				addPriceCol(row,20,pump,MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#,##0.00"));
+				addPriceCol(row,20,in*pump);
+			}
+ 		}
+ 		catch(Exception e2){
+ 			e2.printStackTrace();
+ 		}
      }
 
     protected void printServiceIncomingStockOperationsPerProvider(org.dom4j.Document d, org.dom4j.Element t, String sDateBegin, String sDateEnd, String sServiceStockUID,String provider) throws ParseException{
@@ -1157,16 +1368,18 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 		Vector receipts = ProductStockOperation.getReceiptsForServiceStock(sServiceStockUID, begin, new java.util.Date(end.getTime()+day), "OC_OPERATION_DOCUMENTUID", "ASC");
 		for(int n=0;n<receipts.size();n++){
 			ProductStockOperation operation = (ProductStockOperation)receipts.elementAt(n);
-			String provname="?";
-			if(operation.getDocument()!=null && ScreenHelper.checkString(operation.getDocument().getSourceName(sPrintLanguage)).length()>0){
-				provname=ScreenHelper.checkString(operation.getDocument().getSourceName(sPrintLanguage));
-			}
-			if(provname.toLowerCase().startsWith(provider.toLowerCase())){
-				String docid="?";
-				if(operation.getDocument()!=null){
-					docid=operation.getDocument().getUid();
+			if(operation.getUnitsChanged()!=0){
+				String provname="?";
+				if(operation.getDocument()!=null && ScreenHelper.checkString(operation.getDocument().getSourceName(sPrintLanguage)).length()>0){
+					provname=ScreenHelper.checkString(operation.getDocument().getSourceName(sPrintLanguage));
 				}
-				operations.put(provname+";"+docid+";"+(operation.getDate()==null?"?":new SimpleDateFormat("yyyyMMdd").format(operation.getDate()))+";"+operation.getUid(), operation);
+				if(provname.toLowerCase().startsWith(provider.toLowerCase())){
+					String docid="?";
+					if(operation.getDocument()!=null){
+						docid=operation.getDocument().getUid();
+					}
+					operations.put(provname+";"+docid+";"+(operation.getDate()==null?"?":new SimpleDateFormat("yyyyMMdd").format(operation.getDate()))+";"+operation.getUid(), operation);
+				}
 			}
 		}
 		Iterator iOperations = operations.keySet().iterator();
@@ -1223,7 +1436,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 			}
 			//Now we print the operation data
 			row =t.addElement("row");
-			addCol(row,80,operation.getProductStock()==null || operation.getProductStock().getProduct()==null?"?":operation.getProductStock().getProduct().getName());
+			addCol(row,80,operation.getProductStock()==null || operation.getProductStock().getProduct()==null?"?":operation.getProductStock().getProduct().getName()+(operation.getBatchNumber()==null?"":" ("+operation.getBatchNumber().toUpperCase()+")"));
 			addCol(row,20,operation.getBatchEnd()==null?"":new SimpleDateFormat("dd/MM/yyyy").format(operation.getBatchEnd()));
 			int in=operation.getUnitsChanged();
 			addCol(row,20,in+"");
@@ -1232,7 +1445,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 			if(operation.getProductStock()!=null && operation.getProductStock().getProduct()!=null){
 				pump=operation.getProductStock().getProduct().getLooseLastYearsAveragePrice(new java.util.Date(end.getTime()+day));
 			}
-			addPriceCol(row,20,pump,"#,##0.00");
+			addPriceCol(row,20,pump,MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#,##0.00"));
 			addPriceCol(row,20,in*pump);
 			sectiontotal+=in*pump;
 		}
@@ -1305,7 +1518,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
  			addCol(row,80,operation.getProductStock()!=null && operation.getProductStock().getProduct()!=null?ScreenHelper.checkString(operation.getProductStock().getProduct().getName()):"");
  			addCol(row,20,operation.getUnitsChanged()+"");
  			double price=operation.getProductStock()==null || operation.getProductStock().getProduct()==null?0:operation.getProductStock().getProduct().getLastYearsAveragePrice(operation.getDate()==null?new java.util.Date():operation.getDate());
- 			addPriceCol(row,20,price,"#,##0.00");
+ 			addPriceCol(row,20,price,MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#,##0.00"));
  			addPriceCol(row,20,operation.getUnitsChanged()*price);
  			subtotal+=operation.getUnitsChanged()*price;
  			generaltotal+=operation.getUnitsChanged()*price;
@@ -1385,7 +1598,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
  			addCol(row,80,stock!=null && stock.getProduct()!=null?ScreenHelper.checkString(stock.getProduct().getName()):"");
  			addCol(row,20,""+quantity);
  			double price=stock==null || stock.getProduct()==null?0:stock.getProduct().getLastYearsAveragePrice(date==null?new java.util.Date():ScreenHelper.getSQLDate(date));
- 			addPriceCol(row,20,price,"#,##0.00");
+ 			addPriceCol(row,20,price,MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#,##0.00"));
  			addPriceCol(row,20,quantity*price);
  			generaltotal+=quantity*price;
  		}
@@ -1447,12 +1660,12 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 						addCol(row,40,ScreenHelper.getTranNoLink("web","initial.stock",sPrintLanguage));
 						addCol(row,20,initialstock+"");
 						double pump=productStock.getProduct().getLastYearsAveragePrice(new java.util.Date(begin.getTime()+day));
-						addPriceCol(row,20,pump,"#,##0.00");
+						addPriceCol(row,20,pump,MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#,##0.00"));
 						addCol(row,20,"0");
 						addCol(row,20,"0");
 						addCol(row,20,initialstock+"");
 						addPriceCol(row,20,initialstock*pump);
-						addPriceCol(row,20,pump,"#,##0.00");
+						addPriceCol(row,20,pump,MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#,##0.00"));
 					}
 					//We have to show this operation
 					// Date
@@ -1493,7 +1706,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 						addCol(row,20,operation.getUnitsChanged()+"");
 						String pump=Pointer.getPointer("drugprice."+productStock.getProductUid()+"."+operation.getUid());
 						if(pump.length()>0){
-							addPriceCol(row,20,Double.parseDouble(pump.split(";")[1]),"#,##0.00");
+							addPriceCol(row,20,Double.parseDouble(pump.split(";")[1]),MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#,##0.00"));
 						}
 						else {
 							addCol(row,20,"0");
@@ -1523,7 +1736,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 					addCol(row,20,stock+"");
 					addPriceCol(row,20,stock*pump);
 					//PUMP
-					addPriceCol(row,20,pump,"#,##0.00");
+					addPriceCol(row,20,pump,MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#,##0.00"));
 				}
 				else {
 					//update stock level
@@ -1545,12 +1758,12 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 				addCol(row,40,ScreenHelper.getTranNoLink("web","initial.stock",sPrintLanguage));
 				addCol(row,20,initialstock+"");
 				double pump=productStock.getProduct().getLastYearsAveragePrice(new java.util.Date(begin.getTime()+day));
-				addPriceCol(row,20,pump,"#,##0.00");
+				addPriceCol(row,20,pump,MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#,##0.00"));
 				addCol(row,20,"0");
 				addCol(row,20,"0");
 				addCol(row,20,initialstock+"");
 				addPriceCol(row,20,initialstock*pump);
-				addPriceCol(row,20,pump,"#,##0.00");
+				addPriceCol(row,20,pump,MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#,##0.00"));
 			}
 		}
     }
@@ -1815,9 +2028,17 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
                 ServiceStock serviceStock = ServiceStock.get((String)parameters.get("serviceStockUID"));
         		printHeaderModel1(type, parameters, ScreenHelper.getTranNoLink("pharmacy.report","stock.operations",sPrintLanguage)+": "+(serviceStock==null?"":serviceStock.getName()));
         	}
+        	else if(type.equalsIgnoreCase("patientDeliveries")){
+                AdminPerson patient = AdminPerson.getAdminPerson((String)parameters.get("patientUID"));
+        		printHeaderModel1(type, parameters, ScreenHelper.getTranNoLink("pharmacy.report","patient.deliveries",sPrintLanguage)+": "+(patient==null?"":patient.getFullName()+" ("+patient.personid+")"));
+        	}
         	else if(type.equalsIgnoreCase("serviceOutgoingStockOperations")){
                 ServiceStock serviceStock = ServiceStock.get((String)parameters.get("serviceStockUID"));
         		printHeaderModel1(type, parameters, ScreenHelper.getTranNoLink("pharmacy.report","outgoing.stock.operations",sPrintLanguage)+": "+(serviceStock==null?"":serviceStock.getName()));
+        	}
+        	else if(type.equalsIgnoreCase("serviceOutgoingStockOperationsPerService")){
+                ServiceStock serviceStock = ServiceStock.get((String)parameters.get("serviceStockUID"));
+        		printHeaderModel1(type, parameters, ScreenHelper.getTranNoLink("pharmacy.report","outgoing.stock.operations.per.service",sPrintLanguage)+": "+(serviceStock==null||serviceStock.getName().length()==0?"?":serviceStock.getName()));
         	}
         	else if(type.equalsIgnoreCase("serviceIncomingStockOperations")){
                 ServiceStock serviceStock = ServiceStock.get((String)parameters.get("serviceStockUID"));

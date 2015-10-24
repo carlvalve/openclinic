@@ -52,6 +52,18 @@ public class ScreenHelper {
     	return sObjectId;
     }
     
+    public static String capitalize(String s){
+    	if(s==null){
+    		return null;
+    	}
+    	else if(s.length()==1){
+    		return s.toUpperCase();
+    	}
+    	else {
+    		return s.substring(0,1).toUpperCase()+s.substring(1);
+    	}
+    }
+    
     public static String sortedMap2String(SortedMap m){
     	String s="";
     	Iterator i = m.keySet().iterator();
