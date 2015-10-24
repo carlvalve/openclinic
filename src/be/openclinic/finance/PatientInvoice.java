@@ -237,6 +237,10 @@ public class PatientInvoice extends Invoice {
 		return s;
 	}
 
+	public void setAcceptationDate(String s){
+		setModifier(7,s);
+	}
+
 	public void setDerivedFrom(String s){
 		setModifier(8,s);
 	}
@@ -254,8 +258,21 @@ public class PatientInvoice extends Invoice {
 		return s;
 	}
 
-	public void setAcceptationDate(String s){
-		setModifier(7,s);
+	public void setSAPExport(String s){
+		setModifier(9,s);
+	}
+
+	public String getSAPExport(){
+		String s="";
+		if(getModifiers()!=null){
+			try{
+				s=getModifiers().split(";")[9];
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return s;
 	}
 
 	//MFP reporting section
@@ -307,6 +324,9 @@ public class PatientInvoice extends Invoice {
 
 	public String getInvoiceNumber() {
         if(number==null || number.equalsIgnoreCase("")){
+        	if(invoiceUid==null){
+        		return "";
+        	}
         	if(invoiceUid.split("\\.").length>1){
         		return invoiceUid.split("\\.")[1];
         	}
@@ -533,6 +553,50 @@ public class PatientInvoice extends Invoice {
     	return insurers;
     }
     
+    public String getExtraInsurers(){
+    	String insurers="";
+    	Hashtable ins = new Hashtable();
+    	Vector debets=getDebets();
+    	if(debets!=null){
+	    	for(int n=0;n<debets.size();n++){
+	    		Debet debet = (Debet)debets.elementAt(n);
+	    		if(debet.getExtraInsurar()!=null && debet.getExtraInsurar().getName()!=null){
+	    			ins.put(debet.getExtraInsurarUid(), debet.getExtraInsurar().getName());
+	    		}
+	    	}
+    	}
+    	Iterator i = ins.keySet().iterator();
+    	while(i.hasNext()){
+    		if(insurers.length()>0){
+    			insurers+=", ";
+    		}
+    		insurers+=ins.get(i.next());
+    	}
+    	return insurers;
+    }
+    
+    public String getExtraInsurers2(){
+    	String insurers="";
+    	Hashtable ins = new Hashtable();
+    	Vector debets=getDebets();
+    	if(debets!=null){
+	    	for(int n=0;n<debets.size();n++){
+	    		Debet debet = (Debet)debets.elementAt(n);
+	    		if(debet.getExtraInsurar2()!=null && debet.getExtraInsurar2().getName()!=null){
+	    			ins.put(debet.getExtraInsurarUid2(), debet.getExtraInsurar2().getName());
+	    		}
+	    	}
+    	}
+    	Iterator i = ins.keySet().iterator();
+    	while(i.hasNext()){
+    		if(insurers.length()>0){
+    			insurers+=", ";
+    		}
+    		insurers+=ins.get(i.next());
+    	}
+    	return insurers;
+    }
+    
     public String getDiseases(String language){
     	String encounters="";
     	Hashtable ins = new Hashtable();
@@ -671,6 +735,61 @@ public class PatientInvoice extends Invoice {
         ResultSet rs = null;
 
         String sSelect = "SELECT * FROM OC_PATIENTINVOICES WHERE OC_PATIENTINVOICE_OBJECTID = ? ";
+        Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+            ps = oc_conn.prepareStatement(sSelect);
+            ps.setInt(1,Integer.parseInt(sInvoiceID));
+            rs = ps.executeQuery();
+            
+            if(rs.next()){
+                patientInvoice.setUid(rs.getInt("OC_PATIENTINVOICE_SERVERID")+"."+rs.getInt("OC_PATIENTINVOICE_OBJECTID"));
+                patientInvoice.setDate(rs.getDate("OC_PATIENTINVOICE_DATE"));
+                patientInvoice.setInvoiceUid(rs.getInt("OC_PATIENTINVOICE_ID")+"");
+                patientInvoice.setPatientUid(rs.getString("OC_PATIENTINVOICE_PATIENTUID"));
+                patientInvoice.setCreateDateTime(rs.getTimestamp("OC_PATIENTINVOICE_CREATETIME"));
+                patientInvoice.setUpdateDateTime(rs.getTimestamp("OC_PATIENTINVOICE_UPDATETIME"));
+                patientInvoice.setUpdateUser(rs.getString("OC_PATIENTINVOICE_UPDATEUID"));
+                patientInvoice.setVersion(rs.getInt("OC_PATIENTINVOICE_VERSION"));
+                patientInvoice.setBalance(rs.getDouble("OC_PATIENTINVOICE_BALANCE"));
+                patientInvoice.setStatus(rs.getString("OC_PATIENTINVOICE_STATUS"));
+                patientInvoice.setNumber(rs.getString("OC_PATIENTINVOICE_NUMBER"));
+                patientInvoice.setInsurarreference(rs.getString("OC_PATIENTINVOICE_INSURARREFERENCE"));
+                patientInvoice.setInsurarreferenceDate(rs.getString("OC_PATIENTINVOICE_INSURARREFERENCEDATE"));
+                patientInvoice.setAcceptationUid(rs.getString("OC_PATIENTINVOICE_ACCEPTATIONUID"));
+                patientInvoice.setVerifier(rs.getString("OC_PATIENTINVOICE_VERIFIER"));
+                patientInvoice.setComment(rs.getString("OC_PATIENTINVOICE_COMMENT"));
+                patientInvoice.setModifiers(rs.getString("OC_PATIENTINVOICE_MODIFIERS"));
+            }
+
+            patientInvoice.debets = Debet.getPatientDebetsViaInvoiceUid(patientInvoice.getPatientUid(),patientInvoice.getUid());
+            patientInvoice.credits = PatientCredit.getPatientCreditsViaInvoiceUID(patientInvoice.getUid());
+        }
+        catch(Exception e){
+            Debug.println("OpenClinic => PatientInvoice.java => getViaInvoiceUID => "+e.getMessage());
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null)rs.close();
+                if(ps!=null)ps.close();
+                oc_conn.close();
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        
+        return patientInvoice;
+    }
+
+    //--- GET VIA INVOICE UID ---------------------------------------------------------------------
+    public static PatientInvoice getViaPatientNumber(String sInvoiceID){
+        PatientInvoice patientInvoice = new PatientInvoice();
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        String sSelect = "SELECT * FROM OC_PATIENTINVOICES WHERE OC_PATIENTINVOICE_NUMBER = ? ";
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
             ps = oc_conn.prepareStatement(sSelect);

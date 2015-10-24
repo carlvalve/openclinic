@@ -46,6 +46,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
     private String refUid;
     private String extraInsurarUid2;
     private Insurar extraInsurar=null;
+    private Insurar extraInsurar2=null;
     private String extraInsurarInvoiceUid2;
     private String serviceUid;
     private Service service;
@@ -110,6 +111,12 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
     		extraInsurar=Insurar.get(extraInsurarUid);
     	}
         return extraInsurar;
+    }
+    public Insurar getExtraInsurar2() {
+    	if(extraInsurar2==null){
+    		extraInsurar2=Insurar.get(extraInsurarUid2);
+    	}
+        return extraInsurar2;
     }
     public void setExtraInsurarUid(String extraInsurarUid) {
         this.extraInsurarUid = extraInsurarUid;

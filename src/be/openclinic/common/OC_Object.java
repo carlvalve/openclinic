@@ -9,12 +9,21 @@ public class OC_Object {
     private Date updateDateTime;
     private int version;
     private Date cacheDate;
+    private String tag;
 
     public Date getCacheDate() {
         return cacheDate;
     }
 
-    public void setCacheDate(Date cacheDate) {
+    public String getTag() {
+		return tag;
+	}
+
+	public void setTag(String tag) {
+		this.tag = tag;
+	}
+
+	public void setCacheDate(Date cacheDate) {
         this.cacheDate = cacheDate;
     }
 

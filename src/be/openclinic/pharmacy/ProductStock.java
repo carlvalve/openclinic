@@ -7,6 +7,10 @@ import be.mxs.common.util.system.Debug;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.Vector;
 import java.util.GregorianCalendar;
 import java.util.Calendar;
@@ -988,6 +992,37 @@ public class ProductStock extends OC_Object implements Comparable {
             }
         }
         return units;
+    }
+    
+    public int getTotalUnitsInForPeriod(java.util.Date dateFrom,java.util.Date dateTo,String userid,String sBatchNumber) {
+        int units = 0;
+
+        Vector deliveries = ProductStockOperation.getReceipts(getUid(), "", dateFrom, dateTo, "OC_OPERATION_DATE", "ASC");
+        ProductStockOperation receipt;
+        for (int i = 0; i < deliveries.size(); i++) {
+            receipt = (ProductStockOperation) deliveries.get(i);
+            if((userid.length()==0 || receipt.getUpdateUser().equalsIgnoreCase(userid)) && ((receipt.getBatchNumber()==null && sBatchNumber.equalsIgnoreCase("?"))||(receipt.getBatchNumber()!=null && receipt.getBatchNumber().equalsIgnoreCase(sBatchNumber)))){
+            	units += receipt.getUnitsChanged();
+            }
+        }
+        return units;
+    }
+    
+    public SortedSet getBatchesInForPeriod(java.util.Date dateFrom,java.util.Date dateTo,String userid) {
+        SortedSet batches = new TreeSet();
+
+        Vector deliveries = ProductStockOperation.getReceipts(getUid(), "", dateFrom, dateTo, "OC_OPERATION_DATE", "ASC");
+        ProductStockOperation receipt;
+        for (int i = 0; i < deliveries.size(); i++) {
+            receipt = (ProductStockOperation) deliveries.get(i);
+            if(receipt.getBatchNumber()!=null){
+            	batches.add(receipt.getBatchNumber());
+            }
+            else{
+            	batches.add("?");
+            }
+        }
+        return batches;
     }
     
     //--- GET TOTAL UNITS OUT FOR YEAR ------------------------------------------------------------

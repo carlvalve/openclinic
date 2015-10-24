@@ -391,7 +391,7 @@ public class Label implements Serializable {
                           " WHERE "+lcaseLabelType+"=? AND "+lcaseLabelID+"=?";
             
             if(sLanguage.length() > 0){
-            	sSql+= "AND "+lcaseLabelLang+"=?";
+            	sSql+= " AND "+lcaseLabelLang+"=?";
             }
             
             ps = oc_conn.prepareStatement(sSql);

@@ -26,6 +26,48 @@ public class InsurarInvoice extends Invoice {
     private String insurarUid;
     private Insurar insurar;
     private String number;
+    protected String modifiers; 
+
+	public String getModifiers() {
+		return modifiers;
+	}
+	
+	public void setModifiers(String modifiers) {
+		this.modifiers = modifiers;
+	}
+
+	public void setModifier(int index,String value){
+		if(getModifiers()==null){
+			setModifiers("");
+		}
+		String[] m = getModifiers().split(";");
+		if(m.length<=index){
+			setModifiers(getModifiers()+"; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;".substring(0,(index+1-m.length)*2));
+			m = getModifiers().split(";");
+		}
+		m[index]=value;
+		modifiers="";
+		for(int n=0;n<m.length;n++){
+			modifiers+=m[n]+";";
+		}
+	}
+
+	public String getSAPExport(){
+		String s="";
+		if(getModifiers()!=null){
+			try{
+				s=getModifiers().split(";")[0];
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return s;
+	}
+
+	public void setSAPExport(String s){
+		setModifier(0,s);
+	}
 
 	public static String getPatientInvoiceNumber(String uid){
 		String s=uid;
@@ -191,6 +233,7 @@ public class InsurarInvoice extends Invoice {
                         insurarInvoice.setBalance(rs.getDouble("OC_INSURARINVOICE_BALANCE"));
                         insurarInvoice.setNumber(rs.getString("OC_INSURARINVOICE_NUMBER"));
                         insurarInvoice.setStatus(rs.getString("OC_INSURARINVOICE_STATUS"));
+                        insurarInvoice.setModifiers(rs.getString("OC_INSURARINVOICE_MODIFIERS"));
                     }
                     rs.close();
                     ps.close();
@@ -245,6 +288,7 @@ public class InsurarInvoice extends Invoice {
                         insurarInvoice.setBalance(rs.getDouble("OC_INSURARINVOICE_BALANCE"));
                         insurarInvoice.setNumber(rs.getString("OC_INSURARINVOICE_NUMBER"));
                         insurarInvoice.setStatus(rs.getString("OC_INSURARINVOICE_STATUS"));
+                        insurarInvoice.setModifiers(rs.getString("OC_INSURARINVOICE_MODIFIERS"));
                     }
                     rs.close();
                     ps.close();
@@ -299,6 +343,7 @@ public class InsurarInvoice extends Invoice {
                         insurarInvoice.setBalance(rs.getDouble("OC_INSURARINVOICE_BALANCE"));
                         insurarInvoice.setNumber(rs.getString("OC_INSURARINVOICE_NUMBER"));
                         insurarInvoice.setStatus(rs.getString("OC_INSURARINVOICE_STATUS"));
+                        insurarInvoice.setModifiers(rs.getString("OC_INSURARINVOICE_MODIFIERS"));
                     }
                     rs.close();
                     ps.close();
@@ -346,6 +391,7 @@ public class InsurarInvoice extends Invoice {
                 insurarInvoice.setBalance(rs.getDouble("OC_INSURARINVOICE_BALANCE"));
                 insurarInvoice.setStatus(rs.getString("OC_INSURARINVOICE_STATUS"));
                 insurarInvoice.setNumber(rs.getString("OC_INSURARINVOICE_NUMBER"));
+                insurarInvoice.setModifiers(rs.getString("OC_INSURARINVOICE_MODIFIERS"));
             }
             rs.close();
             ps.close();
@@ -438,9 +484,10 @@ public class InsurarInvoice extends Invoice {
                           " OC_INSURARINVOICE_VERSION," +
                           " OC_INSURARINVOICE_BALANCE," +
                           " OC_INSURARINVOICE_NUMBER,"+
-                          " OC_INSURARINVOICE_STATUS" +
+                          " OC_INSURARINVOICE_STATUS," +
+                          " OC_INSURARINVOICE_MODIFIERS" +
                         ") " +
-                         " VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
+                         " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
                 ps = oc_conn.prepareStatement(sSelect);
                 ps.setInt(1,Integer.parseInt(ids[0]));
                 ps.setInt(2,Integer.parseInt(ids[1]));
@@ -454,6 +501,7 @@ public class InsurarInvoice extends Invoice {
                 ps.setDouble(10,this.getBalance());
                 ps.setString(11, this.getNumber());
                 ps.setString(12,this.getStatus());
+                ps.setString(13,this.getModifiers());
                 ps.executeUpdate();
                 ps.close();
 
@@ -775,6 +823,7 @@ public class InsurarInvoice extends Invoice {
                 invoice.setBalance(rs.getDouble("OC_INSURARINVOICE_BALANCE"));
                 invoice.setStatus(rs.getString("OC_INSURARINVOICE_STATUS"));
                 invoice.setNumber(rs.getString("OC_INSURARINVOICE_NUMBER"));
+                invoice.setModifiers(rs.getString("OC_INSURARINVOICE_MODIFIERS"));
 
                 invoices.add(invoice);
             }
@@ -883,6 +932,7 @@ public class InsurarInvoice extends Invoice {
                 invoice.setBalance(rs.getDouble("OC_INSURARINVOICE_BALANCE"));
                 invoice.setStatus(rs.getString("OC_INSURARINVOICE_STATUS"));
                 invoice.setNumber(rs.getString("OC_INSURARINVOICE_NUMBER"));
+                invoice.setModifiers(rs.getString("OC_INSURARINVOICE_MODIFIERS"));
 
                 invoices.add(invoice);
             }
@@ -931,6 +981,7 @@ public class InsurarInvoice extends Invoice {
                 insurarInvoice.setBalance(rs.getDouble("OC_INSURARINVOICE_BALANCE"));
                 insurarInvoice.setStatus(rs.getString("OC_INSURARINVOICE_STATUS"));
                 insurarInvoice.setNumber(rs.getString("OC_INSURARINVOICE_NUMBER"));
+                insurarInvoice.setModifiers(rs.getString("OC_INSURARINVOICE_MODIFIERS"));
 
                 vInsurarInvoices.add(insurarInvoice);
             }
