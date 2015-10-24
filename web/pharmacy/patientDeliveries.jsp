@@ -255,10 +255,15 @@ if(request.getParameter("modifyquantityoperation")!=null){
 %>
 
 <%=ScreenHelper.alignButtonsStart()%>
+    <input type="button" name="printButton" class="button" value="<%=getTranNoLink("web","print",sWebLanguage)%>" onclick="printlist();">
     <input type="button" name="closeButton" class="button" value="<%=getTranNoLink("web","close",sWebLanguage)%>" onclick="window.close();">
 <%=ScreenHelper.alignButtonsStop()%>
 
 <script>
+  function printlist(){
+	  window.open("<c:url value="pharmacy/printPatientDeliveries.jsp"/>?ts=<%=getTs()%>&offsetdate=<%=sExpiryDate%>");
+  }
+	
   function cancelOperation(uid){
       if(yesnoDeleteDialog()){
       document.getElementById('deleteoperation').value = uid;

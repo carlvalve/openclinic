@@ -102,12 +102,10 @@
             else              sDateDeliveryDue = "";
 
             // only search product-name ans serviceStock-name when different productstock-UID
-       	Debug.println("f.11");
             sProductStockUid = order.getProductStockUid();
             if(!sProductStockUid.equals(sPreviousProductStockUid)){
                 sPreviousProductStockUid = sProductStockUid;
                 productStock = ProductStock.get(sProductStockUid);
-               	Debug.println("f.12");
 
                 if(productStock!=null){
                     // product
@@ -121,7 +119,6 @@
 
                     // service stock
                     serviceStock = productStock.getServiceStock();
-                   	Debug.println("f.13");
                     if(serviceStock!=null){
                         sServiceStockName = serviceStock.getName();
                     }
@@ -880,13 +877,13 @@ Debug.println("a");
                             </td>
                         </tr>
                         <tr>
-                            <td class="admin"><%=getTran("Web","batch",sWebLanguage)%></td>
+                            <td class="admin"><%=getTran("Web","batch",sWebLanguage)%><%=MedwanQuery.getInstance().getConfigInt("pharmacyOrderBatchNumberMandatory",0)==1?"&nbsp;*":""%></td>
                             <td class="admin2">
                                 <input type="text" class="text" name="EditBatchNumber" value="<%=checkString(operation.getBatchNumber()) %>" size="25" maxLength="50"/>
                             </td>
                         </tr>
                         <tr>
-                            <td class="admin"><%=getTran("Web","batch.expiration",sWebLanguage)%></td>
+                            <td class="admin"><%=getTran("Web","batch.expiration",sWebLanguage)%><%=MedwanQuery.getInstance().getConfigInt("pharmacyOrderBatchEndMandatory",0)==1?"&nbsp;*":""%></td>
                             <td class="admin2">
                                 <%=writeDateField("EditBatchEnd","transactionForm",operation.getBatchEnd()==null?"":ScreenHelper.formatDate(operation.getBatchEnd()),sWebLanguage)%>
                             </td>
@@ -898,7 +895,7 @@ Debug.println("a");
                             </td>
                         </tr>
                         <tr>
-                            <td class="admin"><%=getTran("Web","supplier",sWebLanguage)%></td>
+                            <td class="admin"><%=getTran("Web","supplier",sWebLanguage)%><%=MedwanQuery.getInstance().getConfigInt("pharmacyOrderSupplierMandatory",0)==1?"&nbsp;*":""%></td>
                             <td class="admin2">
 				               <input type="hidden" name="EditSupplierID" id="EditSupplierID" value="" onchange="">
 				               <input class="text" type="text" name="EditSupplier" id="EditSupplier" readonly size="<%=sTextWidth%>" value="" >
@@ -908,7 +905,7 @@ Debug.println("a");
                         </tr>
                         <%-- Prices --%>
                         <tr>
-                            <td class="admin"><%=getTran("Web","unitprice",sWebLanguage)%></td>
+                            <td class="admin"><%=getTran("Web","unitprice",sWebLanguage)%><%=MedwanQuery.getInstance().getConfigInt("pharmacyOrderPriceMandatory",0)==1?"&nbsp;*":""%></td>
                             <td class="admin2">
                             <%
                             	String sPrice = "";
@@ -968,7 +965,7 @@ Debug.println("a");
                             </td>
                         </tr>
 	                    <tr id='documentline'>
-	                        <td class="admin"><%=getTran("Web","productstockoperationdocument",sWebLanguage)%></td>
+	                        <td class="admin"><%=getTran("Web","productstockoperationdocument",sWebLanguage)%><%=MedwanQuery.getInstance().getConfigInt("pharmacyOrderDocumentMandatory",0)==1?"&nbsp;*":""%></td>
 		                    <td class="admin2">
 		                    	<input type='text' class='text' name='EditProductStockDocumentUid' id='EditProductStockDocumentUid' size='10' value="<%=sEditProductStockDocumentUid %>" readonly/>
 		                    	<img src='<c:url value="/_img/icons/icon_search.gif"/>' class='link' alt='<%=getTranNoLink("Web","select",sWebLanguage)%>' onclick="searchDocument('EditProductStockDocumentUid','EditProductStockDocumentUidText');">&nbsp;
@@ -988,7 +985,7 @@ Debug.println("a");
                         </tr>
                         <%-- importance (dropdown : native|high|low) --%>
                         <tr>
-                            <td class="admin"><%=getTran("Web","close.order",sWebLanguage)%>&nbsp;*</td>
+                            <td class="admin"><%=getTran("Web","close.order",sWebLanguage)%></td>
                             <td class="admin2">
                             	<input type='checkbox' name='closeOrder'/>
                             </td>
@@ -1190,18 +1187,72 @@ Debug.println("a");
       else if(transactionForm.EditImportance.value.length==0){
         transactionForm.EditImportance.focus();
       }
+      <%
+  		if(MedwanQuery.getInstance().getConfigInt("pharmacyOrderBatchNumberMandatory",0)==1){
+  	  %>
+         !transactionForm.EditBatchNumberfocus();
+  	  <%
+  	    }
+  	    if(MedwanQuery.getInstance().getConfigInt("pharmacyOrderBatchEndMandatory",0)==1){
+      %>
+  	     !transactionForm.EditBatchEnd.focus();
+      <%
+  	    }
+  	    if(MedwanQuery.getInstance().getConfigInt("pharmacyOrderSupplierMandatory",0)==1){
+      %>
+  	     !transactionForm.EditSupplier.focus();
+      <%
+  	    }
+  	    if(MedwanQuery.getInstance().getConfigInt("pharmacyOrderPriceMandatory",0)==1){
+      %>
+  	     !transactionForm.EditPrice.focus();
+      <%
+  	    }
+  	    if(MedwanQuery.getInstance().getConfigInt("pharmacyOrderDocumentMandatory",0)==1){
+      %>
+  	     !transactionForm.EditProductStockDocumentUidText.focus();
+      <%
+  	    }
+      %>
     }
   }
 
   <%-- CHECK ORDER FIELDS --%>
   function checkOrderFields(){
     var maySubmit = false;
-
+    
     <%-- required fields --%>
     if(!transactionForm.EditDescription.value.length==0 &&
        !transactionForm.EditProductStockUid.value.length==0 &&
        !transactionForm.EditPackagesOrdered.value.length==0 &&
        !transactionForm.EditDateOrdered.value.length==0 &&
+<%
+	if(MedwanQuery.getInstance().getConfigInt("pharmacyOrderBatchNumberMandatory",0)==1){
+%>
+       !transactionForm.EditBatchNumber.value.length==0 &&
+<%
+	}
+	if(MedwanQuery.getInstance().getConfigInt("pharmacyOrderBatchEndMandatory",0)==1){
+%>
+	   !transactionForm.EditBatchEnd.value.length==0 &&
+<%
+	}
+	if(MedwanQuery.getInstance().getConfigInt("pharmacyOrderSupplierMandatory",0)==1){
+%>
+	   !transactionForm.EditSupplierID.value.length==0 &&
+<%
+	}
+	if(MedwanQuery.getInstance().getConfigInt("pharmacyOrderPriceMandatory",0)==1){
+%>
+	   !transactionForm.EditPrice.value.length==0 &&
+<%
+	}
+	if(MedwanQuery.getInstance().getConfigInt("pharmacyOrderDocumentMandatory",0)==1){
+%>
+	   !transactionForm.EditProductStockDocumentUid.value.length==0 &&
+<%
+	}
+%>
        !transactionForm.EditImportance.value.length==0){
       maySubmit = true;
 

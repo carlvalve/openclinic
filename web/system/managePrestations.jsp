@@ -383,7 +383,20 @@
                     <tr>
                         <td class="admin"><%=getTran("web","invoicegroup",sWebLanguage)%></td>
                         <td class="admin2">
-                            <input type="text" class="text" name="EditPrestationInvoiceGroup" size="10" maxlength="8" value="<%=prestation.getInvoiceGroup()==null?"":prestation.getInvoiceGroup()%>">
+                        	<%
+                        		if(MedwanQuery.getInstance().getConfigInt("enableSAP",0)==1){
+                        	%>
+	                            <select class="text" name="EditPrestationInvoiceGroup">
+	                                <%=ScreenHelper.writeSelect("prestation.invoicegroup",checkString(prestation.getInvoicegroup()),sWebLanguage,false,true)%>
+	                            </select>
+                        	<%
+                        		}
+                        		else {
+                        	%>
+                            	<input type="text" class="text" name="EditPrestationInvoiceGroup" size="10" maxlength="8" value="<%=prestation.getInvoiceGroup()==null?"":prestation.getInvoiceGroup()%>">
+                            <%
+                        		}
+                            %>
                         </td>
                     </tr>
                     <tr>

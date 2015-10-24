@@ -59,6 +59,7 @@
     	   sEditInsurarRequiresAffiliateID = checkString(request.getParameter("EditInsurarRequiresAffiliateID")),
     	   sEditInsurarRequiresValidation  = checkString(request.getParameter("EditInsurarRequiresValidation")),
     	   sEditInsurarIncludeAllPatientInvoiceDebets  = checkString(request.getParameter("EditInsurarIncludeAllPatientInvoiceDebets")),
+	   	   sEditInsurarAccountingCode  = checkString(request.getParameter("EditInsurarAccountingCode")),
            sEditInsurarType     = checkString(request.getParameter("EditInsurarType"));
 
     /// DEBUG /////////////////////////////////////////////////////////////////////////////////////
@@ -129,6 +130,7 @@
         insurar.setDefaultInsurarInvoiceModel(request.getParameter("EditInsurarDefaultInsurarInvoiceModel"));
         insurar.setDefaultPatientInvoiceModel(request.getParameter("EditInsurarDefaultPatientInvoiceModel"));
         insurar.setAllowedReductions(request.getParameter("EditInsurarAllowedReductions"));
+        insurar.setAccountingCode(checkString(request.getParameter("EditInsurarAccountingCode")));
         
 		int nNoSupplements = 0;
 		try{
@@ -593,6 +595,12 @@
                         <td class="admin"><%=getTran("web","includeallpatientinvoicedebets",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="checkbox" name="EditInsurarIncludeAllPatientInvoiceDebets" <%=insurar.getIncludeAllPatientInvoiceDebets()==1?"checked":""%> value="1"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","accountingcode",sWebLanguage)%></td>
+                        <td class="admin2">
+                            <input type="text" class="text" name="EditInsurarAccountingCode" size="50" maxChars="255" value="<%=checkString(insurar.getAccountingCode())%>">
                         </td>
                     </tr>
                     <%-- SELECTED CATEGORIES --%>

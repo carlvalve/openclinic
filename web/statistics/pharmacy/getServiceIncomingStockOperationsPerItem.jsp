@@ -32,7 +32,7 @@
 	<table width="100%" cellpadding="0" cellspacing="1" class="list">
 	    <%-- PERIOD --%>
 		<tr>
-			<td class='admin2' width="<%=sTDAdminWidth%>">
+			<td class='admin2'>
 				<%=getTran("web","from",sWebLanguage)%> <%=writeDateField("FindBeginDate","transactionForm",sBegin,sWebLanguage)%>
 				<%=getTran("web","to",sWebLanguage)%> <%=writeDateField("FindEndDate","transactionForm",sEnd,sWebLanguage)%>
 			</td>
