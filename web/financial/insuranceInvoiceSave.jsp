@@ -27,7 +27,7 @@
     insurarinvoice.setInvoiceUid(sEditInvoiceUID);
     insurarinvoice.setDate(ScreenHelper.getSQLDate(sEditDate));
     insurarinvoice.setUid(sEditInsurarInvoiceUID);
-    insurarinvoice.setUpdateDateTime(ScreenHelper.getSQLDate(getDate()));
+    insurarinvoice.setUpdateDateTime(new java.util.Date());
     insurarinvoice.setUpdateUser(activeUser.userid);
     insurarinvoice.setNumber(sEditNumber);
     insurarinvoice.setDebets(new Vector());

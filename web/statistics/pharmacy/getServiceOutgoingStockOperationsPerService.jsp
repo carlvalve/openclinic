@@ -7,6 +7,11 @@
 <%@include file="/includes/validateUser.jsp"%>
 <%
 	String sServiceStockId = checkString(request.getParameter("ServiceStockUid"));
+	String sServiceStockName="?";
+	ServiceStock serviceStock = ServiceStock.get(sServiceStockId);
+	if(serviceStock!=null){
+		sServiceStockName=serviceStock.getName();
+	}
 	long day = 24*3600*1000;
 	long year = 365*day;
 
@@ -20,7 +25,7 @@
 
     /// DEBUG /////////////////////////////////////////////////////////////////////////////////////
     if(Debug.enabled){
-    	Debug.println("\n****** statistics/pharmacy/getServiceOutgoingStockOperations.jsp *******");
+    	Debug.println("\n****** statistics/pharmacy/getServiceOutgoingStockOperationsPerService.jsp *******");
     	Debug.println("sServiceStockId : "+sServiceStockId);
     	Debug.println("sBegin          : "+sBegin);
     	Debug.println("sEnd            : "+sEnd+"\n");
@@ -31,6 +36,11 @@
 <form name='transactionForm' method='post'>
 	<table width="100%" cellpadding="0" cellspacing="1" class="list">
 	    <%-- PERIOD --%>
+		<tr>
+			<td class='admin2' colspan="2">
+				<input type='checkbox' name='enableService' id='enableService' checked/><%=sServiceStockName%>
+			</td>
+		</tr>
 		<tr>
 			<td class='admin2'>
 				<%=getTran("web","from",sWebLanguage)%> <%=writeDateField("FindBeginDate","transactionForm",sBegin,sWebLanguage)%>
@@ -45,7 +55,11 @@
 
 <script>
   function printReport(){
-	window.open('<c:url value="pharmacy/printServiceOutgoingStockOperations.jsp"/>?FindBeginDate='+document.getElementById('FindBeginDate').value+'&FindEndDate='+document.getElementById('FindEndDate').value+'&ServiceStockUid=<%=sServiceStockId%>');
+	url='<c:url value="pharmacy/printServiceOutgoingStockOperationsPerService.jsp"/>?FindBeginDate='+document.getElementById('FindBeginDate').value+'&FindEndDate='+document.getElementById('FindEndDate').value;
+	if(document.getElementById('enableService').checked){
+		url=url+'&ServiceStockUid=<%=sServiceStockId%>';
+	}
+	window.open(url);
 	window.close();
   }
 </script>

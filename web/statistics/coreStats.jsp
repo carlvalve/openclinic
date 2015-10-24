@@ -1,5 +1,27 @@
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
+<head>
+    <%=sJSTOGGLE%>
+    <%=sJSFORM%>
+    <%=sJSPOPUPMENU%>
+    <%//=sCSSNORMAL%>
+    <%=sJSPROTOTYPE %>
+    <%=sJSAXMAKER %>
+    <%=sJSPROTOCHART %>
+    <!--[if IE]>
+    <%=sJSEXCANVAS %>
+    <![endif]-->
+    <%=sJSFUSIONCHARTS%>
+    <%=sJSAXMAKER %>
+    <%=sJSSCRPTACULOUS %>
+    <%=sJSMODALBOX%>
+    <%=sCSSDATACENTER%>
+    <%=sCSSMODALBOXDATACENTER%>
+    <!--[if IE]>
+    <%=sCSSDATACENTERIE%>
+     <![endif]-->
+</head>
+
 <table width='100%'>
 <%
 	String start = request.getParameter("start");
@@ -21,7 +43,7 @@
 	int totalvisits=0;
 	if(rs.next()){
 		totalvisits=rs.getInt("total");
-		out.println("<tr><td class='admin'>"+getTran("web","visits",sWebLanguage)+"</td><td class='admin2'>"+totalvisits+"</td></tr>");
+		out.println("<tr><td class='admin'>"+getTran("web","visits",sWebLanguage)+"</td><td class='admin2'><a href='javascript:coreValueGraph(\"visits\");void(0);'>"+totalvisits+"</a></td></tr>");
 	}
 	rs.close();
 	ps.close();
@@ -34,7 +56,7 @@
 	int totaladmissions=0;
 	if(rs.next()){
 		totaladmissions=rs.getInt("total");
-		out.println("<tr><td class='admin'>"+getTran("web","admissions",sWebLanguage)+"</td><td class='admin2'>"+totaladmissions+"</td></tr>");
+		out.println("<tr><td class='admin'>"+getTran("web","admissions",sWebLanguage)+"</td><td class='admin2'><a href='javascript:coreValueGraph(\"admissions\");void(0);'>"+totaladmissions+"</a></td></tr>");
 	}
 	rs.close();
 	ps.close();
@@ -47,7 +69,7 @@
 	int totalpatients=0;
 	if(rs.next()){
 		totalpatients=rs.getInt("total");
-		out.println("<tr><td class='admin'>"+getTran("web","patients",sWebLanguage)+"</td><td class='admin2'>"+totalpatients+"</td></tr>");
+		out.println("<tr><td class='admin'>"+getTran("web","patients",sWebLanguage)+"</td><td class='admin2'><a href='javascript:coreValueGraph(\"patients\");void(0);'>"+totalpatients+"</a></td></tr>");
 	}
 	rs.close();
 	ps.close();
@@ -72,7 +94,7 @@
 	ps.setDate(8,new java.sql.Date(dEnd.getTime()));
 	rs = ps.executeQuery();
 	if(rs.next()){
-		out.println("<tr><td class='admin'>"+getTran("web","userdensity",sWebLanguage)+"</td><td class='admin2'>"+new DecimalFormat("#.00").format(rs.getDouble("total"))+"</td></tr>");
+		out.println("<tr><td class='admin'>"+getTran("web","userdensity",sWebLanguage)+"</td><td class='admin2'><a href='javascript:coreValueGraph(\"userdensity\");void(0);'>"+new DecimalFormat("#.00").format(rs.getDouble("total"))+"</a></td></tr>");
 	}
 	rs.close();
 	ps.close();
@@ -354,3 +376,26 @@
 	conn.close();
 %>
 </table>
+<script>
+function openPopupWindow(page, width, height, title){
+    if (width == undefined){
+        width = 700;
+    }
+    if (height == undefined){
+        height = 400;
+    }
+    if (title == undefined) {
+       title = "&nbsp;";
+    }
+    page = "<c:url value="/"/>"+page;
+
+    Modalbox.show(page, {title: title, width: width,height: height} );
+}
+
+function coreValueGraph(type){
+	openPopupWindow('statistics/coreStatsHistory.jsp?type='+type,700,400,'OpenClinicMetricHistory');
+}
+function coreValueGraphFull(type){
+	openPopupWindow('statistics/coreStatsHistory.jsp?fullperiod=true&type='+type,700,400,'OpenClinicMetricHistory');
+}
+</script>

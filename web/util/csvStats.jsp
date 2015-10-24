@@ -353,97 +353,104 @@
     }
 	//*** 7 - INVOICES ***************************************************
     else if("hmk.invoices.list".equalsIgnoreCase(sQueryType)){
-        Connection loc_conn = MedwanQuery.getInstance().getLongOpenclinicConnection();
-		StringBuffer sResult = new StringBuffer();
-		
-		// search all the invoices from this period     
-		query = "select oc_patientinvoice_serverid,oc_patientinvoice_objectid from oc_patientinvoices"+
-		        " where oc_patientinvoice_date>="+ MedwanQuery.getInstance().convertStringToDate("'<begin>'")+
-		        "  and oc_patientinvoice_date<="+ MedwanQuery.getInstance().convertStringToDate("'<end>'")+
-		        "   order by oc_patientinvoice_date";
-        query = query.replaceAll("<begin>",request.getParameter("begin"))
-        		     .replaceAll("<end>",request.getParameter("end"));
-		Debug.println(query);
-		PreparedStatement ps = loc_conn.prepareStatement(query);
-		ResultSet rs = ps.executeQuery();
-		int counter = 1;
-		String doctor =checkString(request.getParameter("doctor"));
-		String service=checkString(request.getParameter("service"));
-	    response.setContentType("application/octet-stream; charset=windows-1252");
-	    response.setHeader("Content-Disposition", "Attachment;Filename=\"OpenClinicStatistic"+new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())+".csv\"");
-	    
-	    ServletOutputStream os = response.getOutputStream();
-	    
-	    // header
-		sResult.append("SERIAL;DATE;PATIENTID;PATIENT;DATEOFBIRTH;AGE;GENDER;DEPARTMENT;DISEASE;DOCTOR;INSURER;INS_PART;COMPL_INS_PART;PAT_SHARE_COVERAGE;PAT_PART;TOTAL\r\n");
-	    
-    	byte[] b = sResult.toString().getBytes();
-        for(int n=0; n<b.length; n++){
-            os.write(b[n]);
-        }
-        os.flush();
-        int c=0;
-		while(rs.next()){
-			c++;
-			sResult = new StringBuffer();
-			PatientInvoice invoice = PatientInvoice.get(rs.getString("oc_patientinvoice_serverid")+"."+rs.getString("oc_patientinvoice_objectid"));
-			if(invoice!=null){
-				if(doctor.length()>0 && invoice.getSignatures().indexOf("("+doctor+")")<0){
-					continue;
-				}
-				if(service.length()>0 && !invoice.getServices().contains(service)){
-					continue;
-				}
-				sResult.append(invoice.getUid().split("\\.")[1]+";");
-				sResult.append((invoice.getDate()==null?"":ScreenHelper.stdDateFormat.format(invoice.getDate()))+";");
-				sResult.append((invoice.getPatientUid()==null?"":invoice.getPatientUid())+";");
-				sResult.append((invoice.getPatient()==null?"":invoice.getPatient().getFullName())+";");
-				sResult.append((invoice.getPatient()==null || invoice.getPatient().dateOfBirth==null?"":invoice.getPatient().dateOfBirth)+";");
-		        System.out.println(new SimpleDateFormat("HH:mm:ss SSS").format(new java.util.Date())+" *3*");
+    	try{
+	        Connection loc_conn = MedwanQuery.getInstance().getLongOpenclinicConnection();
+			StringBuffer sResult = new StringBuffer();
 			
-				String age = "";
-				try{
-					int a = invoice.getPatient().getAge();
-					if(a<5){
-						age = "0->4";
-					}
-					else if(a<15){
-						age = "5->14";
-					}
-					else {
-						age = "15+";
-					}
-				}
-				catch(Exception e){
-					// empty
-				}
-				
-				sResult.append(age+";");
-				sResult.append((invoice.getPatient()==null?"":invoice.getPatient().gender)+";");
-				sResult.append(invoice.getServicesAsString(sWebLanguage)+";");
-				sResult.append(invoice.getDiseases(sWebLanguage)+";");
-				sResult.append(invoice.getSignatures()+";");
-				sResult.append(invoice.getInsurers()+";");
-				sResult.append(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#")).format(invoice.getInsurarAmount())+";");
-				sResult.append((new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#")).format(invoice.getExtraInsurarAmount()))+";");
-				sResult.append((new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#")).format(invoice.getExtraInsurarAmount2()))+";");
-				sResult.append((new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#")).format(invoice.getPatientOwnAmount()))+";");
-				sResult.append((new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#")).format(invoice.getInsurarAmount()+invoice.getExtraInsurarAmount2()+invoice.getPatientOwnAmount()+invoice.getExtraInsurarAmount()))+";");
-				sResult.append("\r\n");
-			}
-			
-	    	b = sResult.toString().getBytes();
+			// search all the invoices from this period     
+			query = "select oc_patientinvoice_serverid,oc_patientinvoice_objectid from oc_patientinvoices"+
+			        " where oc_patientinvoice_date>="+ MedwanQuery.getInstance().convertStringToDate("'<begin>'")+
+			        "  and oc_patientinvoice_date<="+ MedwanQuery.getInstance().convertStringToDate("'<end>'")+
+			        "   order by oc_patientinvoice_date";
+	        query = query.replaceAll("<begin>",request.getParameter("begin"))
+	        		     .replaceAll("<end>",request.getParameter("end"));
+			Debug.println(query);
+			PreparedStatement ps = loc_conn.prepareStatement(query);
+			ResultSet rs = ps.executeQuery();
+			int counter = 1;
+			String doctor =checkString(request.getParameter("doctor"));
+			String service=checkString(request.getParameter("service"));
+		    response.setContentType("application/octet-stream; charset=windows-1252");
+		    response.setHeader("Content-Disposition", "Attachment;Filename=\"OpenClinicStatistic"+new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())+".csv\"");
+		    
+		    ServletOutputStream os = response.getOutputStream();
+		    
+		    // header
+			sResult.append("SERIAL;DATE;PATIENTID;PATIENT;DATEOFBIRTH;AGE;GENDER;DEPARTMENT;DISEASE;DOCTOR;INSURER;COMPL_INSURER;PAT_SHARE_COVERAGE_INSURER;INS_PART;COMPL_INS_PART;PAT_SHARE_COVERAGE_PART;PAT_PART;TOTAL\r\n");
+		    
+	    	byte[] b = sResult.toString().getBytes();
 	        for(int n=0; n<b.length; n++){
 	            os.write(b[n]);
 	        }
 	        os.flush();
-		}
-		rs.close();
-		ps.close();
-		
-		loc_conn.close();
-        os.close();
-        done=true;
+	        int c=0;
+			while(rs.next()){
+				c++;
+				sResult = new StringBuffer();
+				PatientInvoice invoice = PatientInvoice.get(rs.getString("oc_patientinvoice_serverid")+"."+rs.getString("oc_patientinvoice_objectid"));
+				if(invoice!=null){
+					if(doctor.length()>0 && invoice.getSignatures().indexOf("("+doctor+")")<0){
+						continue;
+					}
+					if(service.length()>0 && !invoice.getServices().contains(service)){
+						continue;
+					}
+					sResult.append(invoice.getUid().split("\\.")[1]+";");
+					sResult.append((invoice.getDate()==null?"":ScreenHelper.stdDateFormat.format(invoice.getDate()))+";");
+					sResult.append((invoice.getPatientUid()==null?"":invoice.getPatientUid())+";");
+					sResult.append((invoice.getPatient()==null?"":invoice.getPatient().getFullName())+";");
+					sResult.append((invoice.getPatient()==null || invoice.getPatient().dateOfBirth==null?"":invoice.getPatient().dateOfBirth)+";");
+			        System.out.println(new SimpleDateFormat("HH:mm:ss SSS").format(new java.util.Date())+" *3*");
+				
+					String age = "";
+					try{
+						int a = invoice.getPatient().getAge();
+						if(a<5){
+							age = "0->4";
+						}
+						else if(a<15){
+							age = "5->14";
+						}
+						else {
+							age = "15+";
+						}
+					}
+					catch(Exception e){
+						// empty
+					}
+					
+					sResult.append(age+";");
+					sResult.append((invoice.getPatient()==null?"":invoice.getPatient().gender)+";");
+					sResult.append(invoice.getServicesAsString(sWebLanguage)+";");
+					sResult.append(invoice.getDiseases(sWebLanguage)+";");
+					sResult.append(invoice.getSignatures()+";");
+					sResult.append(invoice.getInsurers()+";");
+					sResult.append(invoice.getExtraInsurers()+";");
+					sResult.append(invoice.getExtraInsurers2()+";");
+					sResult.append(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#")).format(invoice.getInsurarAmount())+";");
+					sResult.append((new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#")).format(invoice.getExtraInsurarAmount()))+";");
+					sResult.append((new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#")).format(invoice.getExtraInsurarAmount2()))+";");
+					sResult.append((new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#")).format(invoice.getPatientOwnAmount()))+";");
+					sResult.append((new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#")).format(invoice.getInsurarAmount()+invoice.getExtraInsurarAmount2()+invoice.getPatientOwnAmount()+invoice.getExtraInsurarAmount()))+";");
+					sResult.append("\r\n");
+				}
+				
+		    	b = sResult.toString().getBytes();
+		        for(int n=0; n<b.length; n++){
+		            os.write(b[n]);
+		        }
+		        os.flush();
+			}
+			rs.close();
+			ps.close();
+			
+			loc_conn.close();
+	        os.close();
+	        done=true;
+    	}
+    	catch(Exception e){
+    		e.printStackTrace();
+    	}
     }
 	//*** 7 - INVOICES ***************************************************
     else if("pbf.burundi.consultationslist".equalsIgnoreCase(sQueryType)){
