@@ -294,6 +294,17 @@ public class PDFPatientInvoiceReceiptGenerator extends PDFInvoiceGenerator {
 		        table.addCell(cell);
 	        }
 
+	        if(MedwanQuery.getInstance().getConfigInt("enablePatientReceiptPrintBy",0)==1){
+		        //Signature patient
+		        cell = createValueCell(ScreenHelper.getTranNoLink("web","printedby",sPrintLanguage)+": "+user.person.getFullName(), 50,new Double(7*scaleFactor).intValue(),Font.NORMAL);
+		        cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+		        table.addCell(cell);
+	
+		        cell=createValueCell("\r\n",50);
+		        cell.setBorder(PdfPCell.NO_BORDER);
+		        table.addCell(cell);
+	        }
+
             Image image = PdfBarcode.getBarcode("7"+invoice.getInvoiceUid(), docWriter);            
 	        cell = new PdfPCell(image);
 	        cell.setBorder(PdfPCell.NO_BORDER);
