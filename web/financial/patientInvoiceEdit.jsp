@@ -1,3 +1,4 @@
+<%@page import="java.awt.ActiveEvent"%>
 <%@ page import="be.openclinic.finance.*,be.openclinic.adt.Encounter,java.text.*,be.mxs.common.util.system.*" %>
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
@@ -123,6 +124,10 @@
         patientInvoice.setDate(new java.util.Date());
         patientInvoice.setStatus(MedwanQuery.getInstance().getConfigString("defaultPatientInvoiceStatus","open"));
         sPatientId = activePatient.personid;
+        if(MedwanQuery.getInstance().getConfigInt("enableEncounterReference",0)==1){
+	        Encounter encounter = Encounter.getActiveEncounter(activePatient.personid);
+	        sInsurarReference=checkString(encounter.getEtiology());
+        }
     }
 	if(patientInvoice!=null && patientInvoice.getDate()!=null){
 	    double dBalance = 0;

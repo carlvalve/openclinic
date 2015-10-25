@@ -38,6 +38,7 @@
            sEditEncounterBegin = checkString(request.getParameter("EditEncounterBegin")),
            sEditEncounterBeginHour = checkString(request.getParameter("EditEncounterBeginHour")),
            sEditEncounterEnd = checkString(request.getParameter("EditEncounterEnd")),
+           sEditEncounterReference = checkString(request.getParameter("EditEncounterReference")),
            sEditEncounterEndHour = checkString(request.getParameter("EditEncounterEndHour")),
            sEditEncounterCategories = checkString(request.getParameter("EditEncounterCategories"));
     
@@ -145,6 +146,9 @@
         tmpEncounter.setOutcome(sEditEncounterOutcome);
         tmpEncounter.setSituation(sEditEncounterSituation);
         tmpEncounter.setCategories(sEditEncounterCategories);
+		if(MedwanQuery.getInstance().getConfigInt("enableEncounterReference",0)==1){
+			tmpEncounter.setEtiology(sEditEncounterReference);
+		}
 
         Service tmpService, tmpDestination;
         Bed tmpBed = null;
@@ -312,7 +316,8 @@
         sEditEncounterType = checkString(tmpEncounter.getType());
         sEditEncounterBegin = checkString(ScreenHelper.stdDateFormat.format(tmpEncounter.getBegin()));
         sEditEncounterBeginHour = checkString(ScreenHelper.hourFormat.format(tmpEncounter.getBegin()));
-
+		sEditEncounterReference = checkString(tmpEncounter.getEtiology());
+        
         if(tmpEncounter.getEnd()==null){
             sEditEncounterEnd = "";
         }else{
@@ -622,7 +627,19 @@
             	</table>
             </td>
         </tr>
-        
+		<%
+			if(MedwanQuery.getInstance().getConfigInt("enableEncounterReference",0)==1){
+		%>
+        <%-- REFERENCE --%>
+        <tr id="Reference" style="visibility:visible;">
+            <td class="admin"><%=getTran("web","reference",sWebLanguage)%></td>
+            <td class='admin2'>
+				<input type='text' class='text' size='<%=sTextWidth%>' id='EditEncounterReference' name='EditEncounterReference' value='<%=sEditEncounterReference %>'/>
+            </td>
+        </tr>
+        <%
+			}
+        %>
         <%-- ALREADY ACCOUNTED ACCOMODATION --%>
         <%
             int accountedDays = Encounter.getAccountedAccomodationDays(sEditEncounterUID);
