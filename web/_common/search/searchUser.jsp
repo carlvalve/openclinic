@@ -4,45 +4,6 @@
 <%@include file="/includes/validateUser.jsp"%>
 <%=sJSSORTTABLE%>
 
-<%!
-    //--- GET SERVICE IDS FROM XML ----------------------------------------------------------------
-    private Vector getServiceIdsFromXML(HttpServletRequest request) throws Exception {
-        Vector ids = new Vector();
-        Document document;
-
-        SAXReader xmlReader = new SAXReader();
-        String sXmlFile = MedwanQuery.getInstance().getConfigString("servicesXMLFile"),
-        	   xmlFileUrl;
-
-        if((sXmlFile!=null) && (sXmlFile.length() > 0)){
-            // Check if xmlFile exists, else use file at templateSource location.
-            try{
-                xmlFileUrl = "http://"+request.getServerName()+request.getRequestURI().replaceAll(request.getServletPath(),"")+"/"+sAPPDIR+"/_common/xml/"+sXmlFile;
-                document = xmlReader.read(new URL(xmlFileUrl));
-                Debug.println("Using custom services file : "+xmlFileUrl);
-            }
-            catch(DocumentException e){
-                xmlFileUrl = MedwanQuery.getInstance().getConfigString("templateSource")+"/"+sXmlFile;
-                document = xmlReader.read(new URL(xmlFileUrl));
-                Debug.println("Using default services file : "+xmlFileUrl);
-            }
-
-            if(document!=null){
-                Element root = document.getRootElement();
-                if(root!=null){
-                    Iterator elements = root.elementIterator("ServiceId");
-
-                    while(elements.hasNext()){
-                        ids.add(((Element)elements.next()).attributeValue("value"));
-                    }
-                }
-            }
-        }
-
-        return ids;
-    }
-%>
-
 <%
     String sFindLastname   = checkString(request.getParameter("FindLastname")),
            sFindFirstname  = checkString(request.getParameter("FindFirstname")),
@@ -63,7 +24,6 @@
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
-    Vector xmlServiceIds = getServiceIdsFromXML(request);
 %>
 <form name="SearchForm" method="POST" onkeydown="if(enterEvent(event,13)){doFind();};">
     <%=writeTableHeader("web","searchUser",sWebLanguage," window.close()")%>
@@ -105,6 +65,7 @@
     
     <%-- hidden fields --%>
     <input type="hidden" name="ReturnPersonID" value="<%=sReturnPersonID%>">
+    <input type="hidden" name="FindServiceID" value="<%=request.getParameter("FindServiceID")%>">
     <input type="hidden" name="ReturnUserID" value="<%=sReturnUserID%>">
     <input type="hidden" name="ReturnName" value="<%=sReturnName%>">
     <input type="hidden" name="SetGreenField" value="<%=sSetGreenField%>">
@@ -196,14 +157,14 @@
   function activateTab(sTab){
     <% 
       // hide all TRs
-      for(int i=0; i<xmlServiceIds.size(); i++){
+      if(request.getParameter("FindServiceID")!=null){
         %>
-          document.getElementById('tr_tab<%=i%>').style.display = 'none';
-          document.getElementById('td<%=i%>').className = "tabunselected";
+          document.getElementById('tr_tab1').style.display = 'none';
+          document.getElementById('td1').className = "tabunselected";
 
-          if(sTab=='tab_<%=xmlServiceIds.get(i)%>'){
-            document.getElementById('tr_tab<%=i%>').style.display = '';
-            document.getElementById('td<%=i%>').className = "tabselected";
+          if(sTab=='tab_1'){
+            document.getElementById('tr_tab1').style.display = '';
+            document.getElementById('td1').className = "tabselected";
           }
         <%
       }
@@ -211,11 +172,11 @@
 
     <%-- varia tab --%>
     document.getElementById('tr_tabvaria').style.display = 'none';
-    document.getElementById('td<%=xmlServiceIds.size()%>').className = "tabunselected";
+    document.getElementById('td2').className = "tabunselected";
 
     if(sTab=='tab_varia'){
       document.getElementById('tr_tabvaria').style.display = '';
-      document.getElementById('td<%=xmlServiceIds.size()%>').className = "tabselected";
+      document.getElementById('td2').className = "tabselected";
     }
   }
   

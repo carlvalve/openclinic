@@ -39,31 +39,63 @@
     					+(cd==null?"":"("+getTran("web","patientcreationdate",sWebLanguage)+": "+ScreenHelper.getSQLDate(cd)+")")+"</td></tr>":
     	            inputRow("Web","begindate","UpdateTime","Admin",ScreenHelper.formatDate(new java.util.Date()),"T",bCanModifyCore,true,sWebLanguage)
     				)
-        	+inputRow("Web","Lastname","Lastname","Admin",activePatient.lastname,"T",bCanModifyCore,true,sWebLanguage)
-            +inputRow("Web","Firstname","Firstname","Admin",activePatient.firstname,"T",bCanModifyCore,true,sWebLanguage)
-			+(bCanModifyCore?inputRow("Web","Dateofbirth","DateOfBirth","Admin",activePatient.dateOfBirth,"Dp",true,false,sWebLanguage):
-            inputRow("Web","Dateofbirth","DateOfBirth","Admin",activePatient.dateOfBirth,"T",bCanModifyCore,true,sWebLanguage)
-			)
-            +inputRow("Web","NativeTown","NativeTown","Admin",activePatient.nativeTown,"N",true,true,sWebLanguage)
-            +writeCountry(activePatient.nativeCountry, "NativeCountry","Admin","NativeCountryDescription",true,"NativeCountry",sWebLanguage)
-            +"<tr><td class='admin'>"+getTran("web","personid",sWebLanguage)+"</td><td class='admin2'>"+activePatient.personid+"</td></tr>"
-            +inputRow("Web","immatnew","ImmatNew","Admin",activePatient.getID("immatnew"),"N",true,true,sWebLanguage)
-            +"<tr><td class='admin'>"+getTran("web","archiveFileCode",sWebLanguage)+"</td><td class='admin2'><input type='hidden' name='archiveFileCode' value='"+activePatient.getID("archiveFileCode")+"'/>"
-            +activePatient.getID("archiveFileCode").toUpperCase()+"</td></tr>");
+        	//Lastname
+    		+(	
+        		MedwanQuery.getInstance().getConfigInt("showAdminLastname",1)==0?"<input type='hidden' name='Lastname' value='"+checkString(activePatient.lastname)+"'/>":
+        		inputRow("Web","Lastname","Lastname","Admin",activePatient.lastname,"T",bCanModifyCore,true,sWebLanguage)
+        	 )
+        	//Firstname
+            +(
+           		MedwanQuery.getInstance().getConfigInt("showAdminFirstname",1)==0?"<input type='hidden' name='Firstname' value='"+checkString(activePatient.firstname)+"'/>":
+            	inputRow("Web","Firstname","Firstname","Admin",activePatient.firstname,"T",bCanModifyCore,true,sWebLanguage)
+             )
+        	//Dateofbirth
+			+(
+           		MedwanQuery.getInstance().getConfigInt("showAdminDateOfBirth",1)==0?"<input type='hidden' name='DateOfBirth' value='"+checkString(activePatient.dateOfBirth)+"'/>":
+				(bCanModifyCore?inputRow("Web","Dateofbirth","DateOfBirth","Admin",activePatient.dateOfBirth,"Dp",true,false,sWebLanguage):
+            	inputRow("Web","Dateofbirth","DateOfBirth","Admin",activePatient.dateOfBirth,"T",bCanModifyCore,true,sWebLanguage))
+			 )
+        	//Native town
+            +(
+           		MedwanQuery.getInstance().getConfigInt("showAdminNativeTown",1)==0?"<input type='hidden' name='NativeTown' value='"+checkString(activePatient.nativeTown)+"'/>":
+            	inputRow("Web","NativeTown","NativeTown","Admin",activePatient.nativeTown,"N",true,true,sWebLanguage)
+             )
+        	//Native country
+            +(
+           		MedwanQuery.getInstance().getConfigInt("showAdminNativeCountry",1)==0?"<input type='hidden' name='NativeCountry' value='"+checkString(activePatient.nativeCountry)+"'/>":
+            	writeCountry(activePatient.nativeCountry, "NativeCountry","Admin","NativeCountryDescription",true,"NativeCountry",sWebLanguage)
+             )
+        	//PersonId
+            +(
+           		MedwanQuery.getInstance().getConfigInt("showAdminPersonId",1)==0?"":
+            	"<tr><td class='admin'>"+getTran("web","personid",sWebLanguage)+"</td><td class='admin2'>"+activePatient.personid+"</td></tr>"
+             )
+        	//Immatnew
+            +(
+           		MedwanQuery.getInstance().getConfigInt("showAdminImmatNew",1)==0?"<input type='hidden' name='ImmatNew' value='"+checkString(activePatient.getID("immatnew"))+"'/>":
+            	inputRow("Web","immatnew","ImmatNew","Admin",activePatient.getID("immatnew"),"N",true,true,sWebLanguage)
+             )
+            +(
+           		MedwanQuery.getInstance().getConfigInt("showAdminArchiveFileCode",1)==0?"<input type='hidden' name='archiveFileCode' value='"+checkString(activePatient.getID("archiveFileCode"))+"'/>":
+            	"<tr><td class='admin'>"+getTran("web","archiveFileCode",sWebLanguage)+"</td><td class='admin2'><input type='hidden' name='archiveFileCode' value='"+activePatient.getID("archiveFileCode")+"'/>"
+                +activePatient.getID("archiveFileCode").toUpperCase()+"</td></tr>")
+             );
 
         // natreg (max 11 chars)
         String sNatRegHtml = normalRow("Web","natreg","NatReg","Admin",sWebLanguage)+
                              "<input class='text' type='text' name='NatReg' value=\""+activePatient.getID("natreg").trim()+"\""+
                              " size='"+sTextWidth+"' maxLength='250'>";
-        out.print(sNatRegHtml);
+        
+        //Natreg
+        out.print(
+           		MedwanQuery.getInstance().getConfigInt("showAdminNatReg",1)==0?"<input type='hidden' name='NatReg' value='"+checkString(activePatient.getID("natreg"))+"'/>":
+        		sNatRegHtml
+        		);
 
         //language
-        String sLanguage = "<select name='Language' select-one class='text'";
-        sLanguage+=">";
+        String sLanguage = "<select name='Language' select-one class='text'>";
         sLanguage+="<option value='' SELECTED>"+getTran("web","choose",sWebLanguage)+"</option>";
-
         String sPatientLanguages = MedwanQuery.getInstance().getConfigString("PatientLanguages");
-
         if(sPatientLanguages.length()==0){
             sPatientLanguages = MedwanQuery.getInstance().getConfigString("supportedLanguages","en,fr");
 
@@ -71,20 +103,20 @@
                 sPatientLanguages = sWebLanguage;
             }
         }
-
         String[] aPatientLanguages = sPatientLanguages.split(",");
         for(int i=0;i<aPatientLanguages.length;i++){
             sLanguage += "<option value='"+aPatientLanguages[i]+"'>"+getTran("Web.Language",aPatientLanguages[i],sWebLanguage)+"</option>";
         }
-
         String sDefaultLanguage = MedwanQuery.getInstance().getConfigString("DefaultLanguage");
-
         if(sDefaultLanguage.length()==0){
             sDefaultLanguage = sWebLanguage;
         }
-
         sLanguage = setOption(sLanguage,activePatient.language.toLowerCase(),sDefaultLanguage.toLowerCase(),3);
-        out.print(normalRow("Web","language","Language","Admin",sWebLanguage)+sLanguage+"</select></td></tr>");
+
+        out.print(
+       		MedwanQuery.getInstance().getConfigInt("showAdminLanguage",1)==0?"<input type='hidden' name='Language' value='"+checkString(activePatient.language)+"'/>":
+        	normalRow("Web","language","Language","Admin",sWebLanguage)+sLanguage+"</select></td></tr>"
+        );
 
       // gender
       String sGender = "<select name='Gender' select-one class='text'";
@@ -97,15 +129,48 @@
       String sCivilStatus = "<select name='CivilStatus' select-one class='text'><option value=''/>"
             +ScreenHelper.writeSelect("civil.status",activePatient.comment2,sWebLanguage)+"</select>";
 
-      out.print(normalRow("Web","gender","Gender","Admin",sWebLanguage)+sGender+"</select></td></tr>"
-          +inputRow("Web","tracnetid","TracnetID","Admin",checkString((String)activePatient.adminextends.get("tracnetid")),"N",true,false,sWebLanguage)
-          +inputRow("Web","treating-physician","Comment1","Admin",activePatient.comment1,"N",true,false,sWebLanguage)
-          +normalRow("Web","civilstatus","CivilStatus","Admin",sWebLanguage)+sCivilStatus+"</td></tr>"
-          +inputRow("Web","comment3","Comment3","Admin",activePatient.comment3,"N",true, false,sWebLanguage) 
-          +inputRow("Web","comment5","Comment5","Admin",activePatient.comment5,"N",true, false,sWebLanguage) 
-          +(activePatient.isDead()!=null?inputRow("Web","deathcertificateon","DeathCertificateOn","Admin",checkString((String)activePatient.adminextends.get("deathcertificateon")),"T",true,false,sWebLanguage)
-          +inputRow("Web","deathcertificateto","DeathCertificateTo","Admin",checkString((String)activePatient.adminextends.get("deathcertificateto")),"T",true,false,sWebLanguage):"")
-	      +inputRow("Web","comment","Comment","Admin",activePatient.comment,"N",true, false,sWebLanguage)
+      out.print(
+   	      // gender
+    	  (
+ 	      		MedwanQuery.getInstance().getConfigInt("showAdminGender",1)==0?"<input type='hidden' name='Gender' value='"+checkString(activePatient.gender)+"'/>":
+    		  	normalRow("Web","gender","Gender","Admin",sWebLanguage)+sGender+"</select></td></tr>"
+    	  )
+   	      // Tracnet ID
+          +(
+          		MedwanQuery.getInstance().getConfigInt("showAdminTracnetID",1)==0?"<input type='hidden' name='TracnetID' value='"+checkString(activePatient.getID("tracnetid"))+"'/>":
+        		inputRow("Web","tracnetid","TracnetID","Admin",checkString((String)activePatient.adminextends.get("tracnetid")),"N",true,false,sWebLanguage)
+           )
+   	      // Comment1
+          +(
+   	      		MedwanQuery.getInstance().getConfigInt("showAdminComment1",1)==0?"<input type='hidden' name='Comment1' value='"+checkString(activePatient.comment1)+"'/>":
+        		inputRow("Web","treating-physician","Comment1","Admin",activePatient.comment1,"N",true,false,sWebLanguage)
+           )
+   	      // Comment2
+          +(
+  	      		MedwanQuery.getInstance().getConfigInt("showAdminComment2",1)==0?"<input type='hidden' name='CivilStatus' value='"+checkString(activePatient.comment2)+"'/>":
+        		normalRow("Web","civilstatus","CivilStatus","Admin",sWebLanguage)+sCivilStatus+"</td></tr>"
+           )
+   	      // Comment3
+          +(
+  	      		MedwanQuery.getInstance().getConfigInt("showAdminComment3",1)==0?"<input type='hidden' name='Comment3' value='"+checkString(activePatient.comment3)+"'/>":
+        		inputRow("Web","comment3","Comment3","Admin",activePatient.comment3,"N",true, false,sWebLanguage)
+           )
+   	      // Comment5
+          +(
+  	      		MedwanQuery.getInstance().getConfigInt("showAdminComment5",1)==0?"<input type='hidden' name='Comment5' value='"+checkString(activePatient.comment5)+"'/>":
+        		inputRow("Web","comment5","Comment5","Admin",activePatient.comment5,"N",true, false,sWebLanguage)
+           )
+   	      // DeathCertificate
+          +(
+   	      		MedwanQuery.getInstance().getConfigInt("showAdminDeathCertificate",1)==0?"<input type='hidden' name='DeathCertificateOn' value='"+checkString((String)activePatient.adminextends.get("deathcertificateon"))+"'/><input type='hidden' name='DeathCertificateTo' value='"+checkString((String)activePatient.adminextends.get("deathcertificateto"))+"'/>":
+        		(activePatient.isDead()!=null?inputRow("Web","deathcertificateon","DeathCertificateOn","Admin",checkString((String)activePatient.adminextends.get("deathcertificateon")),"T",true,false,sWebLanguage)
+    	        +inputRow("Web","deathcertificateto","DeathCertificateTo","Admin",checkString((String)activePatient.adminextends.get("deathcertificateto")),"T",true,false,sWebLanguage):"")
+           )
+   	      // Comment
+	      +(
+ 	      		MedwanQuery.getInstance().getConfigInt("showAdminComment",1)==0?"<input type='hidden' name='Comment' value='"+checkString(activePatient.comment)+"'/>":
+	    		inputRow("Web","comment","Comment","Admin",activePatient.comment,"N",true, false,sWebLanguage)
+	       )
 	      +(MedwanQuery.getInstance().getConfigInt("enableVip",0)==1 && activeUser.getAccessRight("vipaccess.select")?
 	      normalRow("Web","vip","Vip","Admin",sWebLanguage)+"<input type='radio' name='Vip' id='Vip' value='0' "+(!"1".equalsIgnoreCase((String)activePatient.adminextends.get("vip"))?"checked":"")+">"+getTran("vipstatus","0",sWebLanguage)+" <input type='radio' name='Vip' id='Vip' value='1' "+("1".equalsIgnoreCase((String)activePatient.adminextends.get("vip"))?"checked":"")+">"+getTran("vipstatus","1",sWebLanguage)+"</td></tr>":
 	      "<input type='hidden' name='Vip' id='Vip' value='"+checkString((String)activePatient.adminextends.get("vip"))+"'/>"	  

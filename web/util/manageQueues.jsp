@@ -1,6 +1,16 @@
 <%@ page import="be.openclinic.adt.Queue" %>
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
+<head>
+    <%=sCSSNORMAL%>
+    <%=sJSCHAR%>
+    <%=sJSDATE%>
+    <%=sJSPOPUPSEARCH%>
+    <%=sJSDROPDOWNMENU%>
+    <%=sJSPROTOTYPE%>
+    <%=sJSNUMBER%>
+    <%=sJSTOGGLE%>
+</head>
 <table width='100%'>
 	<tr class='admin'>
 		<td colspan='2'>
@@ -18,9 +28,9 @@
 <script>
 	loadtickets();
 	window.setInterval("loadtickets();",5000);
+	activeresponse="";
 	
 	function loadtickets(){
-	    document.getElementById('tickets').innerHTML = "<img src='<c:url value="/_img/themes/default/ajax-loader.gif"/>'/><br/>Loading";
 	    var params = 'queueid=' + document.getElementById("queue").value;
 	    var today = new Date();
 	    var url= '<c:url value="/util/getQueueTickets.jsp"/>?ts='+today;
@@ -28,7 +38,11 @@
 		  method: "GET",
 	      parameters: params,
 	      onSuccess: function(resp){
-	        $('tickets').innerHTML=resp.responseText;
+	    	var txt = resp.responseText;
+	    	if(txt!=activeresponse){
+	    		$('tickets').innerHTML=txt;
+	    		activeresponse=txt;
+	    	}
 	      }
 		});
 	}

@@ -466,18 +466,6 @@
         </tr>
         <input type='hidden' name='EditEncounterPatient' value='<%=sEditEncounterPatient%>'>
         
-        <%-- manager --%>
-        <tr>
-            <td class="admin"><%=getTran("web","manager",sWebLanguage)%></td>
-            <td class="admin2">
-                <input type="hidden" name="EditEncounterManager" value="<%=sEditEncounterManager%>">
-                <input class="text" type="text" name="EditEncounterManagerName" readonly size="<%=sTextWidth%>" value="<%=sEditEncounterManagerName%>">
-               
-                <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTran("web","select",sWebLanguage)%>" onclick="searchManager('EditEncounterManager','EditEncounterManagerName');">
-                <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran("web","clear",sWebLanguage)%>" onclick="EditEncounterForm.EditEncounterManager.value='';EditEncounterForm.EditEncounterManagerName.value='';">
-            </td>
-        </tr>
-        
         <%-- service --%>
         <tr id="Service">
             <td class="admin"><%=getTran("web","service",sWebLanguage)%> *</td>
@@ -487,6 +475,18 @@
                 
                 <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTran("web","select",sWebLanguage)%>" onclick="searchService('EditEncounterService','EditEncounterServiceName');">
                 <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran("web","clear",sWebLanguage)%>" onclick="EditEncounterForm.EditEncounterService.value='';EditEncounterForm.EditEncounterServiceName.value='';">
+            </td>
+        </tr>
+        
+        <%-- manager --%>
+        <tr>
+            <td class="admin"><%=getTran("web","manager",sWebLanguage)%></td>
+            <td class="admin2">
+                <input type="hidden" name="EditEncounterManager" value="<%=sEditEncounterManager%>">
+                <input class="text" type="text" name="EditEncounterManagerName" readonly size="<%=sTextWidth%>" value="<%=sEditEncounterManagerName%>">
+               
+                <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTran("web","select",sWebLanguage)%>" onclick="searchManager('EditEncounterManager','EditEncounterManagerName');">
+                <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran("web","clear",sWebLanguage)%>" onclick="EditEncounterForm.EditEncounterManager.value='';EditEncounterForm.EditEncounterManagerName.value='';">
             </td>
         </tr>
         

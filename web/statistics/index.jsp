@@ -64,7 +64,7 @@
     //*** 2 - QUICK DIAGNOSIS ENTRY ***************************************************************
     if(activeUser.getAccessRight("patient.administration.add") || activeUser.getAccessRight("statistics.quickdiagnosisentry")){
          out.print(ScreenHelper.writeTblHeader(getTran("Web","statistics.quickdiagnosisentry",sWebLanguage),sCONTEXTPATH));
-         out.print(writeTblChildWithCode("javascript:openPopup(\"statistics/quickFile.jsp\",800,600,\"quickFile\")",getTran("Web","statistics.quickdiagnosisentry",sWebLanguage)));
+         out.print(writeTblChildWithCode("javascript:openPopup(\"statistics/quickFile.jsp\",800,600,\"quickFile\");void(0);",getTran("Web","statistics.quickdiagnosisentry",sWebLanguage)));
          out.print(ScreenHelper.writeTblFooter()+"<br>");
     }
 
@@ -194,8 +194,7 @@
                   writeTblChildWithCodeNoButton("javascript:downloadStats(\"lab.list\",\"openclinic\");",getTran("Web","statistics.download.labresults",sWebLanguage))+
                   writeTblChildWithCodeNoButton("javascript:downloadInvoicesSummary(\"hmk.invoices.list\",\"openclinic\");",getTran("Web","statistics.download.invoicessummary",sWebLanguage))+
                   (MedwanQuery.getInstance().getConfigInt("enablePBFBurundi",0)==1?writeTblChildWithCodeNoButton("javascript:downloadPBFdocs(\"pbf.burundi.consultationslist\",\"openclinic\");",getTran("Web","statistics.download.pbfburundi",sWebLanguage)):"")+
-                  (MedwanQuery.getInstance().getConfigInt("enableMaliVaccinations",0)==1?writeTblChildWithCodeNoButton("javascript:downloadStats(\"djikoroni\",\"stats\");",getTran("Web","statistics.download.djikoroni",sWebLanguage)):"")+
-		          (MedwanQuery.getInstance().getConfigInt("enableMaliVaccinations",0)==1?writeTblChildWithCodeNoButton("javascript:downloadStats(\"banconi\",\"stats\");",getTran("Web","statistics.download.banconi",sWebLanguage)):"")+
+                  (MedwanQuery.getInstance().getConfigInt("enableMaliVaccinations",0)==1?writeTblChildWithCodeNoButton("javascript:downloadStats(\"vida\",\"stats\");",getTran("Web","statistics.download.vida",sWebLanguage)):"")+
 			      (MedwanQuery.getInstance().getConfigInt("datacenterEnabled",0)==1?writeTblChildWithCodeNoButton("javascript:downloadDatacenterStats(\"service.income.list\",\"stats\");",getTran("Web","statistics.download.serviceincomelist",sWebLanguage)):""));
         out.print(ScreenHelper.writeTblFooter()+"<br>");
 

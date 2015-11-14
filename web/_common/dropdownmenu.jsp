@@ -694,7 +694,8 @@
     openPopup("/_common/patient/patientdataPopup.jsp&ts=<%=getTs()%>");
   }
   function showQueues(){
-	  openPopup("/util/manageQueues.jsp&ts=<%=getTs()%>&PopupWidth=800&PopupHeight=600");
+      window.open("<c:url value='/util/manageQueues.jsp'/>?ts=<%=getTs()%>","Popup"+new Date().getTime(),"toolbar=no,status=no,scrollbars=yes,resizable=yes,width=800,height=740,location=no,menubar=no").moveTo((screen.width - 800) / 2,(screen.height - 620) / 2);
+	  //openPopup("/util/manageQueues.jsp&ts=<%=getTs()%>&PopupWidth=800&PopupHeight=620");
   }
   function searchLab(){
     window.location.href = "<c:url value="/"/>main.do?Page=labos/showLabRequestList.jsp&ts=<%=getTs()%>";

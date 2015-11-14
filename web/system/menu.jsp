@@ -43,6 +43,7 @@
                     hMenu.put(getTran("web.manage","ManagePassword",sWebLanguage),"main.do?Page=system/managePassword.jsp");
                     hMenu.put(getTran("web.manage","ManageServers",sWebLanguage),"main.do?Page=system/manageServers.jsp");
                     hMenu.put(getTran("web.manage","obligatory_fields",sWebLanguage),"main.do?Page=system/manageObligatoryFields.jsp");
+                    hMenu.put(getTran("web","managevisiblefields",sWebLanguage),"main.do?Page=system/manageVisibleFields.jsp");
                     hMenu.put(getTran("web.manage","intrusionmanagement",sWebLanguage),"main.do?Page=system/manageIntrusions.jsp");
                     hMenu.put(getTran("web.manage","prestations",sWebLanguage),"main.do?Page=system/managePrestations.jsp");
                     hMenu.put(getTran("web.manage","prestationgroups",sWebLanguage),"main.do?Page=system/managePrestationGroups.jsp");
