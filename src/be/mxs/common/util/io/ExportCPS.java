@@ -73,7 +73,7 @@ public class ExportCPS {
 		    }
 		    rs.close();
 		    ps.close();
-		    String exportmonthlyamofile="/temp/exportCPSMonthly.csv";
+		    String exportmonthlyamofile="/tmp/exportCPSMonthly.csv";
 		    ps = conn.prepareStatement("select oc_value from oc_config where oc_key='exportCPSMonthlyfile'");
 		    rs = ps.executeQuery();
 		    if(rs.next()){
@@ -81,7 +81,7 @@ public class ExportCPS {
 		    }
 		    rs.close();
 		    ps.close();
-		    String exportdailyamofile="/temp/exportCPSDaily.csv";
+		    String exportdailyamofile="/tmp/exportCPSDaily.csv";
 		    ps = conn.prepareStatement("select oc_value from oc_config where oc_key='exportCPSDailyfile'");
 		    rs = ps.executeQuery();
 		    if(rs.next()){
@@ -457,7 +457,7 @@ public class ExportCPS {
 						exportfile.append((data.serviceuid==null||data.serviceuid.length()==0?"?":data.serviceuid)+";");
 						exportfile.append((servicenames.get(data.serviceuid)==null?"?":servicenames.get(data.serviceuid))+";");
 						exportfile.append(data.prestationcode+";");
-						exportfile.append(data.prestationnomenclature+";");
+						exportfile.append((data.prestationnomenclature==null?"":data.prestationnomenclature)+";");
 						exportfile.append(data.prestationname+";");
 						exportfile.append(data.getTotal()+";");
 						exportfile.append(data.m0_11m+";");

@@ -396,7 +396,7 @@ public class ExtraInsurarInvoice2 extends Invoice {
                 ps.setDouble(10,this.getBalance());
                 ps.setString(11, this.getNumber());
                 ps.setString(12,this.getStatus());
-                ps.setString(12,this.getModifiers());
+                ps.setString(13,this.getModifiers());
                 ps.executeUpdate();
                 ps.close();
 
