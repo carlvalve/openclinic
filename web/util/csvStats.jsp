@@ -46,11 +46,13 @@
                 "  (select max(oc_label_value) from oc_labels,privateview where oc_label_type='province' and oc_label_id=province and personid=a.personid and oc_label_language='"+sWebLanguage+"') as location2"+
                 " from adminview a";
     }
-	//*** 2.a - Djikoroni ***************************************************
-    else if("djikoroni".equalsIgnoreCase(sQueryType)){
+	//*** 2.a - Vida ***************************************************
+    else if("vida".equalsIgnoreCase(sQueryType)){
         Hashtable vaccins = new Hashtable();
+        Hashtable comments = new Hashtable();
+        Hashtable polios = new Hashtable();
     	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
-        PreparedStatement ps = conn.prepareStatement("select * from OC_VACCINATIONS order by OC_VACCINATION_UPDATETIME");
+        PreparedStatement ps = conn.prepareStatement("select * from OC_VACCINATIONS where OC_VACCINATION_DATE<>'' order by OC_VACCINATION_UPDATETIME");
         ResultSet rs = ps.executeQuery();  
         String date,type;
         while(rs.next()){
@@ -72,15 +74,24 @@
         		type="alben400";
         	}
         	if(date.length()>0){
-        		vaccins.put(rs.getString("OC_VACCINATION_PATIENTUID")+"."+type,date);
+        		String uid=rs.getString("OC_VACCINATION_PATIENTUID")+"."+type;
+        		vaccins.put(uid,date);
+        		String comment=checkString(rs.getString("OC_VACCINATION_OBSERVATION"));
+        		if(comment.length()>0){
+        			comments.put(uid,getTranNoLink("malivaccinationobservations",comment.split(";")[0],sWebLanguage)+(comment.split(";").length<2?"":": "+comment.split(";")[1]));
+        		}
+        		String polio=checkString(rs.getString("OC_VACCINATION_MODIFIER"));
+        		if(polio.length()>0){
+        			polios.put(uid,getTranNoLink("malivaccinationmodifiers",polio.split(";")[0],sWebLanguage));
+        		}
         	}
         }
 		rs.close();
 		ps.close();
         query = "select b.cell as NoCons,a.comment3 as NoChefID1, b.city as SOUQRTIE, b.quarter as QUARTIER, (select max(firstname) from adminview where personid=a.comment3) as PRCHEF_1, (select max(lastname) from adminview where personid=a.comment3) as NMCHEF_1,"+
                 "  a.comment5 as RELACHEF,a.personid as NoIndiv, firstname as PrIndiv2, lastname as NmIndiv2,datediff(now(),a.dateofbirth)/365 as Age, gender as SEXE, comment2 as STATMAT,a.dateofbirth as DATENAIS"+
-                " from adminview a, privateview b where a.personid=b.personid order by a.comment3,a.searchname";
-		StringBuffer sResult=new StringBuffer().append("NoCons;NoChefID1;SOUQRTIE;QUARTIER;PRCHEF_1;NMCHEF_1;RELACHEF;NoIndiv;PrIndiv2;NmIndiv2;Age;SEXE;STATMAT;DATENAIS;BCG;POLIO0;POLIO1;PENTA1;PNEUMO1;ROTA1;POLIO2;PENTA2;PNEUMO2;ROTA2;POLIO3;PENTA3;PNEUMO3;ROTA3;ROUGEOLE;FIEVREJAUNE;MENIGITEA;VAT1;VAT2;VATR1;VATR2;VATR3;VITA100;VITA200.1;ALBEN200;VITA200.2;ALBEN400\r\n");
+                " from adminview a, privateview b where a.personid=b.personid and exists (select * from oc_vaccinations where OC_VACCINATION_PATIENTUID=a.personid and OC_VACCINATION_DATE<>'') order by a.comment3,a.searchname";
+		StringBuffer sResult=new StringBuffer().append("NoCons;NoChefID1;SOUQRTIE;QUARTIER;PRCHEF_1;NMCHEF_1;RELACHEF;NoIndiv;PrIndiv2;NmIndiv2;Age;SEXE;STATMAT;DATENAIS;BCG;OBS_BCG;POLIO0;OBS_POLIO0;PV_POLIO0;POLIO1;OBS_POLIO1;PV_POLIO1;PENTA1;OBS_PENTA1;PNEUMO1;OBS_PNEUMO1;ROTA1;OBS_ROTA1;POLIO2;OBS_POLIO2;PV_POLIO2;PENTA2;OBS_PENTA2;PNEUMO2;OBS_PNEUMO2;ROTA2;OBS_ROTA2;POLIO3;OBS_POLIO3;PV_POLIO3;PENTA3;OBS_PENTA3;PNEUMO3;OBS_PNEUMO3;ROTA3;OBS_ROTA3;ROUGEOLE;OBS_ROUGEOLE;FIEVREJAUNE;OBS_FIEVREJAUNE;MENIGITEA;OBS_MENINGITEA;VAT1;OBS_VAT1;VAT2;OBS_VAT2;VATR1;OBS_VATR1;VATR2;OBS_VATR2;VATR3;OBS_VATR3;VITA100;OBS_VITA100;VITA200.1;OBS_VITA200.1;ALBEN200;OBS_ALBEN200;VITA200.2;OBS_VITA200.2;ALBEN400;OBS_ALBEN400\r\n");
         ps=conn.prepareStatement(query);
         rs=ps.executeQuery();
         SimpleDateFormat myformat= new SimpleDateFormat("dd/MM/yyyy");
@@ -101,32 +112,63 @@
         	sResult.append(checkString(rs.getString("NoCons"))+";"+checkString(rs.getString("NoChefID1"))+";"+checkString(rs.getString("SOUQRTIE"))+";"+checkString(rs.getString("QUARTIER"))+";"+checkString(rs.getString("PRCHEF_1"))+";"+checkString(rs.getString("NMCHEF_1"))+";"+getTranNoLink("relationship",checkString(rs.getString("RELACHEF")),sWebLanguage)+";"+personid+";"+checkString(rs.getString("PrIndiv2"))+";"+checkString(rs.getString("NmIndiv2"))+";"
         	+sAge+";"+checkString(rs.getString("SEXE"))+";"+getTranNoLink("civil.status",checkString(rs.getString("STATMAT")),sWebLanguage)+";"+ScreenHelper.formatDate(birth,myformat));
 			sResult.append(";"+checkString((String)vaccins.get(personid+".bcg")));
+			sResult.append(";"+checkString((String)comments.get(personid+".bcg")));
 			sResult.append(";"+checkString((String)vaccins.get(personid+".polio0")));
+			sResult.append(";"+checkString((String)comments.get(personid+".polio0")));
+			sResult.append(";"+checkString((String)polios.get(personid+".polio0")));
 			sResult.append(";"+checkString((String)vaccins.get(personid+".polio1")));
+			sResult.append(";"+checkString((String)comments.get(personid+".polio1")));
+			sResult.append(";"+checkString((String)polios.get(personid+".polio1")));
 			sResult.append(";"+checkString((String)vaccins.get(personid+".penta1")));
+			sResult.append(";"+checkString((String)comments.get(personid+".penta1")));
 			sResult.append(";"+checkString((String)vaccins.get(personid+".pneumo1")));
+			sResult.append(";"+checkString((String)comments.get(personid+".pneumo1")));
 			sResult.append(";"+checkString((String)vaccins.get(personid+".rota1")));
+			sResult.append(";"+checkString((String)comments.get(personid+".rota1")));
 			sResult.append(";"+checkString((String)vaccins.get(personid+".polio2")));
+			sResult.append(";"+checkString((String)comments.get(personid+".polio2")));
+			sResult.append(";"+checkString((String)polios.get(personid+".polio2")));
 			sResult.append(";"+checkString((String)vaccins.get(personid+".penta2")));
+			sResult.append(";"+checkString((String)comments.get(personid+".penta2")));
 			sResult.append(";"+checkString((String)vaccins.get(personid+".pneumo2")));
+			sResult.append(";"+checkString((String)comments.get(personid+".pneumo2")));
 			sResult.append(";"+checkString((String)vaccins.get(personid+".rota2")));
+			sResult.append(";"+checkString((String)comments.get(personid+".rota2")));
 			sResult.append(";"+checkString((String)vaccins.get(personid+".polio3")));
+			sResult.append(";"+checkString((String)comments.get(personid+".polio3")));
+			sResult.append(";"+checkString((String)polios.get(personid+".polio3")));
 			sResult.append(";"+checkString((String)vaccins.get(personid+".penta3")));
+			sResult.append(";"+checkString((String)comments.get(personid+".penta3")));
 			sResult.append(";"+checkString((String)vaccins.get(personid+".pneumo3")));
+			sResult.append(";"+checkString((String)comments.get(personid+".pneumo3")));
 			sResult.append(";"+checkString((String)vaccins.get(personid+".rota3")));
+			sResult.append(";"+checkString((String)comments.get(personid+".rota3")));
 			sResult.append(";"+checkString((String)vaccins.get(personid+".measles")));
+			sResult.append(";"+checkString((String)comments.get(personid+".measles")));
 			sResult.append(";"+checkString((String)vaccins.get(personid+".yellowfever")));
+			sResult.append(";"+checkString((String)comments.get(personid+".yellowfever")));
 			sResult.append(";"+checkString((String)vaccins.get(personid+".meningitisa")));
+			sResult.append(";"+checkString((String)comments.get(personid+".meningitisa")));
 			sResult.append(";"+checkString((String)vaccins.get(personid+".vat1")));
+			sResult.append(";"+checkString((String)comments.get(personid+".vat1")));
 			sResult.append(";"+checkString((String)vaccins.get(personid+".vat2")));
+			sResult.append(";"+checkString((String)comments.get(personid+".vat2")));
 			sResult.append(";"+checkString((String)vaccins.get(personid+".vatr1")));
+			sResult.append(";"+checkString((String)comments.get(personid+".vatr1")));
 			sResult.append(";"+checkString((String)vaccins.get(personid+".vatr2")));
+			sResult.append(";"+checkString((String)comments.get(personid+".vatr2")));
 			sResult.append(";"+checkString((String)vaccins.get(personid+".vatr3")));
+			sResult.append(";"+checkString((String)comments.get(personid+".vatr3")));
 			sResult.append(";"+checkString((String)vaccins.get(personid+".vita100")));
+			sResult.append(";"+checkString((String)comments.get(personid+".vita100")));
 			sResult.append(";"+checkString((String)vaccins.get(personid+".vita200.1")));
+			sResult.append(";"+checkString((String)comments.get(personid+".vita200.1")));
 			sResult.append(";"+checkString((String)vaccins.get(personid+".alben200")));
+			sResult.append(";"+checkString((String)comments.get(personid+".alben200")));
 			sResult.append(";"+checkString((String)vaccins.get(personid+".vita200.2")));
+			sResult.append(";"+checkString((String)comments.get(personid+".vita200.2")));
 			sResult.append(";"+checkString((String)vaccins.get(personid+".alben400")));
+			sResult.append(";"+checkString((String)comments.get(personid+".alben400")));
         	sResult.append("\r\n");        	
         }
         rs.close();
@@ -147,6 +189,8 @@
 	//*** 2.b - Banconi ***************************************************
     else if("banconi".equalsIgnoreCase(sQueryType)){
         Hashtable vaccins = new Hashtable();
+        Hashtable comments = new Hashtable();
+        Hashtable polios = new Hashtable();
     	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
         PreparedStatement ps = conn.prepareStatement("select * from OC_VACCINATIONS order by OC_VACCINATION_UPDATETIME");
         ResultSet rs = ps.executeQuery();  
@@ -170,7 +214,16 @@
         		type="alben400";
         	}
         	if(date.length()>0){
-        		vaccins.put(rs.getString("OC_VACCINATION_PATIENTUID")+"."+type,date);
+        		String uid=rs.getString("OC_VACCINATION_PATIENTUID")+"."+type;
+        		vaccins.put(uid,date);
+        		String comment=checkString(rs.getString("OC_VACCINATION_OBSERVATION"));
+        		if(comment.length()>0){
+        			comments.put(uid,getTranNoLink("malivaccinationobservations",comment.split(";")[0],sWebLanguage)+(comment.split(";").length<2?"":": "+comment.split(";")[1]));
+        		}
+        		String polio=checkString(rs.getString("OC_VACCINATION_MODIFIER"));
+        		if(polio.length()>0){
+        			polios.put(uid,getTranNoLink("malivaccinationmodifiers",polio.split(";")[0],sWebLanguage));
+        		}
         	}
         }
 		rs.close();

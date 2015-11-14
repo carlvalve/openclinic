@@ -93,7 +93,7 @@
                   .append("<td>"+sInsurarName+"</td>")
                   .append("<td>"+sInvoiceDate+"</td>")
                   .append("<td>"+sInvoiceNr+"</td>")
-                  .append("<td style='text-align:right;'>"+priceFormat.format(invoice.getBalance())+"&nbsp;&nbsp;</td>")
+                  .append("<td style='text-align:right;'>"+priceFormat.format(invoice.getBalance())+" </td>")
                   .append("<td>"+sInvoiceStatus+"</td>")
                  .append("</tr>");
         }

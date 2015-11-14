@@ -41,41 +41,6 @@
         return html.toString();
     }
 
-    //--- GET SERVICE IDS FROM XML ----------------------------------------------------------------
-    private Vector getServiceIdsFromXML(HttpServletRequest request) throws Exception {
-        Vector ids = new Vector();
-        Document document;
-
-        SAXReader xmlReader = new SAXReader();
-        String sXmlFile = MedwanQuery.getInstance().getConfigString("servicesXMLFile"),
-        	   xmlFileUrl;
-
-        if(sXmlFile!=null && sXmlFile.length()>0){
-            // Check if xmlFile exists, else use file at templateSource location.
-            try{
-                xmlFileUrl = "http://"+request.getServerName()+request.getRequestURI().replaceAll(request.getServletPath(),"")+"/"+sAPPDIR+"/_common/xml/"+sXmlFile;
-                document = xmlReader.read(new URL(xmlFileUrl));
-                Debug.println("Using custom services file : "+xmlFileUrl);
-            }
-            catch(DocumentException e){
-                xmlFileUrl = MedwanQuery.getInstance().getConfigString("templateSource")+"/"+sXmlFile;
-                document = xmlReader.read(new URL(xmlFileUrl));
-                Debug.println("Using default services file : "+xmlFileUrl);
-            }
-
-            if(document!=null){
-                Element root = document.getRootElement();
-                if(root!=null){
-                    Iterator elements = root.elementIterator("ServiceId");
-                    while(elements.hasNext()){
-                        ids.add(((Element)elements.next()).attributeValue("value"));
-                    }
-                }
-            }
-        }
-
-        return ids;
-    }
 %>
 
 <%
@@ -103,7 +68,6 @@
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
     String selectedTab = "", sLastname, sFirstname, sServiceID;
-    Vector xmlServiceIds = getServiceIdsFromXML(request);
 
     // clean names
     String sSelectLastname  = ScreenHelper.normalizeSpecialCharacters(sFindLastname),
@@ -111,15 +75,18 @@
 
     Vector vUsers = User.searchUsers(sSelectLastname,sSelectFirstname);
     Iterator userIter = vUsers.iterator();
-
     Hashtable usersPerDiv = new Hashtable();
-    for(int i=0; i<xmlServiceIds.size(); i++){
-        usersPerDiv.put(xmlServiceIds.get(i),new Vector());
+    String sSearchService=checkString(request.getParameter("FindServiceID"));
+    if(sSearchService.length()>0){
+    	usersPerDiv.put(sSearchService,new Vector());
+    }
+    else {
+    	sSearchService="##??//";
     }
     usersPerDiv.put("varia",new Vector());
-    
     // run thru found users
     Hashtable user, hUserInfo;
+    System.out.println("A");
     while(userIter.hasNext()){
         hUserInfo = (Hashtable)userIter.next();
         
@@ -131,6 +98,7 @@
         }
         sLastname = sLastname.replace('\'','´');
         sFirstname = sFirstname.replace('\'','´');
+        System.out.println("B");
 
         // service
         sServiceID = checkString((String)hUserInfo.get("serviceid"));
@@ -143,36 +111,24 @@
         user.put("firstName",sFirstname);
         user.put("serviceId",sServiceID);
 
-        // add user to correct division-vector
-        boolean bFound = false;
-        for(int n=0; n<xmlServiceIds.size(); n++){
-        	if(sServiceID.startsWith((String)xmlServiceIds.elementAt(n))){
-        		((Vector)(usersPerDiv.get(xmlServiceIds.elementAt(n)))).add(user);
-        		bFound = true;
-        	}
+        System.out.println("C");
+
+        if(sServiceID.toUpperCase().startsWith(sSearchService.toUpperCase())){
+        	((Vector)(usersPerDiv.get(sSearchService))).add(user);
         }
-        
-        if(!bFound){
+        else{
         	((Vector)(usersPerDiv.get("varia"))).add(user);
         }
     }
+    System.out.println("D");
 
-    // default selected tab is the one with the most found records in
-    Enumeration e = usersPerDiv.keys();
-    Vector users = null;
-    int mostUsers = 0;
-    String key;
-
-	selectedTab = "tab_varia"; // default
-    while(e.hasMoreElements()){
-        key = (String)e.nextElement();
-        users = (Vector)usersPerDiv.get(key);
-
-        if(users.size() > mostUsers){
-            mostUsers = users.size();
-            selectedTab = "tab_"+key;
-        }
+	if(usersPerDiv.get(sSearchService)!=null){
+        selectedTab = "tab_1";
     }
+	else{
+		selectedTab="tab_varia";
+	}
+    System.out.println("E");
 %>
 
 <div class="search" style="border:none;width:100%">
@@ -180,30 +136,24 @@
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
             <%
-                // for each service a tab
-                String serviceName, serviceNameFull;
-                int charsPerTab = ((74 - (xmlServiceIds.size() * 2)) - getTranNoLink("web","varia",sWebLanguage).length()) / xmlServiceIds.size();
-                
-                for(int i=0; i<xmlServiceIds.size(); i++){
-                    serviceName = getTranNoLink("service",(String)xmlServiceIds.get(i),sWebLanguage);
-                    serviceNameFull = serviceName;
-                    
-                    if(serviceName.length() > charsPerTab){
-                        serviceName = serviceName.substring(0,charsPerTab).trim()+"..";
-                    }
+        	if(usersPerDiv.get(sSearchService)!=null){
 
-                    if(i > 0){
-		                %><td class='tabs' width='5'>&nbsp;</td><%
-                    }
-
-                    %>
-                    <td style="cursor:pointer" class="tabunselected" width="1%" title="<%=HTMLEntities.htmlentities(serviceNameFull)%>" onclick="activateTab('tab_<%=xmlServiceIds.get(i)%>')" id="td<%=i%>" nowrap>&nbsp;<b><%=HTMLEntities.htmlentities(serviceName)%></b>&nbsp;</td><%
-                }
-            %>
+                String serviceName = getTranNoLink("service",checkString(request.getParameter("FindServiceID")),sWebLanguage);
+               	String serviceNameFull=serviceName;
+               	if(serviceName.length()>20){
+               		serviceName=serviceName.substring(0, 20)+"...";
+               	}
+	        %>
+            <td style="cursor:pointer" class="tabunselected" width="1%" title="<%=HTMLEntities.htmlentities(serviceNameFull)%>" onclick="activateTab('tab_1')" id="td1" nowrap>
+            	&nbsp;<b><%=HTMLEntities.htmlentities(serviceName)%></b>&nbsp;
+            </td>
             
             <%-- varia division TR --%>
             <td class="tabs" width="5">&nbsp;</td>
-            <td style="cursor:pointer" class="tabunselected" width="1%" onclick="activateTab('tab_varia')" id="td<%=xmlServiceIds.size()%>" nowrap>
+            <%
+        	}
+            %>
+            <td style="cursor:pointer" class="tabunselected" width="1%" onclick="activateTab('tab_varia')" id="td2" nowrap>
                 &nbsp;<b><%=HTMLEntities.htmlentities(getTranNoLink("web","varia",sWebLanguage))%></b>&nbsp;
             </td>
             
@@ -213,45 +163,42 @@
     
     <%-- TAB CONTENTS -------------------------------------------------------%>
     <table width="100%" cellspacing="0" cellpadding="0" style="border-top:none;">
-        <%
-            int x;
-
-            // for each service a TR
-            for(x=0; x<xmlServiceIds.size(); x++){
-        %>
         <%-- one division --%>
-        <tr id="tr_tab<%=x%>" style="display:none">
+        <%
+        	if(usersPerDiv.get(sSearchService)!=null){
+        %>
+        <tr id="tr_tab1" style="display:none">
             <td>
-                <table width="100%" cellpadding="0" cellspacing="0" class="sortable" id="searchresults<%=(x==0?"":""+x)%>" style="border-top:none;">
+                <table width="100%" cellpadding="0" cellspacing="0" class="sortable" id="searchresults1" style="border-top:none;">
                     <%-- header --%>
                     <tr class="admin">
                         <td width="200"><%=HTMLEntities.htmlentities(getTran("Web","name",sWebLanguage))%></td>
                         <td width="300"><%=HTMLEntities.htmlentities(getTran("Web","service",sWebLanguage))%></td>
                     </tr>
                     <tbody class="hand">
-                        <%=HTMLEntities.htmlentities(getHtml((Vector)(usersPerDiv.get(xmlServiceIds.get(x))),sWebLanguage))%>
+                        <%=HTMLEntities.htmlentities(getHtml((Vector)(usersPerDiv.get(checkString(request.getParameter("FindServiceID")))),sWebLanguage))%>
                     </tbody>
                 </table>
 
                 <%
-                    if(((Vector)usersPerDiv.get(xmlServiceIds.get(x))).size()==0){
+                    if(((Vector)usersPerDiv.get(checkString(request.getParameter("FindServiceID")))).size()==0){
                         // no records found message
                         %><div><%=HTMLEntities.htmlentities(getTran("web","nousersFoundInDivision",sWebLanguage))%></div><%
                     }
                     else{
                         // X records found message
-		                %><div><%=((Vector)usersPerDiv.get(xmlServiceIds.get(x))).size()%> <%=HTMLEntities.htmlentities(getTran("web","usersFoundInDivision",sWebLanguage))%></div><%
+		                %><div><%=((Vector)usersPerDiv.get(checkString(request.getParameter("FindServiceID")))).size()%> <%=HTMLEntities.htmlentities(getTran("web","usersFoundInDivision",sWebLanguage))%></div><%
                     }
                 %>
             </td>
         </tr>
         <%
-            }
+        	}
         %>
         <%-- varia division TR --%>
         <tr id="tr_tabvaria" style="display:none">
             <td>
-                <table width="100%" cellpadding="0" cellspacing="0" class="sortable" id="searchresults<%=x%>" style="border-top:none;">
+                <table width="100%" cellpadding="0" cellspacing="0" class="sortable" id="searchresults2" style="border-top:none;">
                     <%-- header --%>
                     <tr class="admin">
                         <td width="200"><%=HTMLEntities.htmlentities(getTran("Web","name",sWebLanguage))%></td>

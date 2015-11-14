@@ -34,6 +34,7 @@
         ServletOutputStream os = response.getOutputStream();
         byte[] b = null;
         try{
+        	System.out.println(message.asXML());
         	b = message.asXML().getBytes();
         }
         catch(Exception e){

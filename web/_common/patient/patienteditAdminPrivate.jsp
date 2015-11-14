@@ -154,25 +154,78 @@
         sCities += "</select>";
 
         out.print(sBeginDate
-                +inputRow("Web","address","PAddress","AdminPrivate",apc.address,"T",true, true,sWebLanguage)
-//              +inputRow("Web","district","PDistrict","AdminPrivate",apc.district,"T",true,false,sWebLanguage)
-              +"<tr><td class='admin'>"+getTran("web","district",sWebLanguage)+"</td><td class='admin2'>"+sDistricts+"</td></tr>"
-//              +inputRow("Web","city","PCity","AdminPrivate",apc.city,"T",true, true,sWebLanguage)
-              +"<tr><td class='admin'>"+getTran("web","community",sWebLanguage)+"</td><td class='admin2'>"+sCities+"</td></tr>"
-              +inputRow("Web","zipcode","PZipcode","AdminPrivate",apc.zipcode,"T",true,false,sWebLanguage)
-              +writeCountry(apc.country,"PCountry","AdminPrivate","PCountryDescription",true, "Country",sWebLanguage)
-              +inputRow("Web","email","PEmail","AdminPrivate",apc.email,"T",true,false,sWebLanguage)
-              +inputRow("Web","telephone","PTelephone","AdminPrivate",apc.telephone,"T",true,false,sWebLanguage)
-              +inputRow("Web","mobile","PMobile","AdminPrivate",apc.mobile,"T",true,false,sWebLanguage)
-              //+inputRow("Web","province","PProvince","AdminPrivate",apc.province,"T",true,false,sWebLanguage)
-              +"<tr><td class='admin'>"+getTran("web","province",sWebLanguage)+"</td><td class='admin2'><select class='text' name='PProvince' id='PProvince'><option/>"
-                  +ScreenHelper.writeSelect("province",apc.province,sWebLanguage,false,true)
-                  +"</select></td></tr>"
-              +inputRow("Web","city","PCity","AdminPrivate",apc.city,"T",true,false,sWebLanguage)
-              +inputRow("Web","cell","PCell","AdminPrivate",apc.cell,"T",true,false,sWebLanguage)
-              +inputRow("Web","function","PFunction","AdminPrivate",apc.businessfunction,"T",true,false,sWebLanguage)
-              +inputRow("Web","business","PBusiness","AdminPrivate",apc.business,"T",true,false,sWebLanguage)
-              +inputRow("Web","comment","PComment","AdminPrivate",apc.comment,"T",true,false,sWebLanguage));
+			  //Address
+        	  +(
+       	      		MedwanQuery.getInstance().getConfigInt("showAdminPrivateAddress",1)==0?"<input type='hidden' name='PAddress' value='"+checkString(apc.address)+"'/>":
+            		inputRow("Web","address","PAddress","AdminPrivate",apc.address,"T",true, true,sWebLanguage)
+               )
+			  //District
+              +(
+       	      		MedwanQuery.getInstance().getConfigInt("showAdminPrivateDistrict",1)==0?"<input type='hidden' name='PDistrict' value='"+checkString(apc.district)+"'/>":
+            		"<tr><td class='admin'>"+getTran("web","district",sWebLanguage)+"</td><td class='admin2'>"+sDistricts+"</td></tr>"
+               )
+			  //Sector
+              +(
+      	      		MedwanQuery.getInstance().getConfigInt("showAdminPrivateSector",1)==0?"<input type='hidden' name='PSector' value='"+checkString(apc.sector)+"'/>":
+            		"<tr><td class='admin'>"+getTran("web","community",sWebLanguage)+"</td><td class='admin2'>"+sCities+"</td></tr>"
+               )
+			  //Zipcode
+              +(
+      	      		MedwanQuery.getInstance().getConfigInt("showAdminPrivateZipcode",1)==0?"<input type='hidden' name='PZipcode' value='"+checkString(apc.zipcode)+"'/>":
+            		inputRow("Web","zipcode","PZipcode","AdminPrivate",apc.zipcode,"T",true,false,sWebLanguage)
+               )
+			  //Country
+              +(
+       	      		MedwanQuery.getInstance().getConfigInt("showAdminPrivateCountry",1)==0?"<input type='hidden' name='PCountry' value='"+checkString(apc.country)+"'/>":
+            		writeCountry(apc.country,"PCountry","AdminPrivate","PCountryDescription",true, "Country",sWebLanguage)
+               )
+			  //Email
+              +(
+       	      		MedwanQuery.getInstance().getConfigInt("showAdminPrivateEmail",1)==0?"<input type='hidden' name='PEmail' value='"+checkString(apc.email)+"'/>":
+            		inputRow("Web","email","PEmail","AdminPrivate",apc.email,"T",true,false,sWebLanguage)
+               )
+			  //Phone
+              +(
+       	      		MedwanQuery.getInstance().getConfigInt("showAdminPrivateTelephone",1)==0?"<input type='hidden' name='PTelephone' value='"+checkString(apc.telephone)+"'/>":
+            		inputRow("Web","telephone","PTelephone","AdminPrivate",apc.telephone,"T",true,false,sWebLanguage)
+               )
+			  //Mobile phone
+              +(
+       	      		MedwanQuery.getInstance().getConfigInt("showAdminPrivateMobile",1)==0?"<input type='hidden' name='PMobile' value='"+checkString(apc.mobile)+"'/>":
+            		inputRow("Web","mobile","PMobile","AdminPrivate",apc.mobile,"T",true,false,sWebLanguage)
+               )
+			  //Province
+              +(
+       	      		MedwanQuery.getInstance().getConfigInt("showAdminPrivateProvince",1)==0?"<input type='hidden' name='PProvince' value='"+checkString(apc.province)+"'/>":
+            	    "<tr><td class='admin'>"+getTran("web","province",sWebLanguage)+"</td><td class='admin2'><select class='text' name='PProvince' id='PProvince'><option/>"
+                    +ScreenHelper.writeSelect("province",apc.province,sWebLanguage,false,true)
+                    +"</select></td></tr>"
+               )
+			  //City
+              +(
+       	      		MedwanQuery.getInstance().getConfigInt("showAdminPrivateCity",1)==0?"<input type='hidden' name='PCity' value='"+checkString(apc.city)+"'/>":
+            		inputRow("Web","city","PCity","AdminPrivate",apc.city,"T",true,false,sWebLanguage)
+               )
+			  //Cell
+              +(
+       	      		MedwanQuery.getInstance().getConfigInt("showAdminPrivateCell",1)==0?"<input type='hidden' name='PCell' value='"+checkString(apc.cell)+"'/>":
+            		inputRow("Web","cell","PCell","AdminPrivate",apc.cell,"T",true,false,sWebLanguage)
+               )
+			  //Function
+              +(
+       	      		MedwanQuery.getInstance().getConfigInt("showAdminPrivateFunction",1)==0?"<input type='hidden' name='PFunction' value='"+checkString(apc.businessfunction)+"'/>":
+            		inputRow("Web","function","PFunction","AdminPrivate",apc.businessfunction,"T",true,false,sWebLanguage)
+               )
+			  //Business
+              +(
+       	      		MedwanQuery.getInstance().getConfigInt("showAdminPrivateBusiness",1)==0?"<input type='hidden' name='PBusiness' value='"+checkString(apc.business)+"'/>":
+            		inputRow("Web","business","PBusiness","AdminPrivate",apc.business,"T",true,false,sWebLanguage)
+               )
+			  //Comment
+              +(
+       	      		MedwanQuery.getInstance().getConfigInt("showAdminPrivateComment",1)==0?"<input type='hidden' name='PComment' value='"+checkString(apc.comment)+"'/>":
+            		inputRow("Web","comment","PComment","AdminPrivate",apc.comment,"T",true,false,sWebLanguage))
+       		   );
     %>
     <%-- spacer --%>
     <tr height="0">
