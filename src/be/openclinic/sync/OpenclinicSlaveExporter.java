@@ -1553,7 +1553,7 @@ public class OpenclinicSlaveExporter implements Runnable{
 			boolean doInsert=true;
 			PreparedStatement ps = conn.prepareStatement("select * from adminextends where personid=? and labelid=?");
 			ps.setInt(1, personid);
-			ps.setInt(2, Integer.parseInt(element.elementText("labelid")));
+			ps.setString(2, element.elementText("labelid"));
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()){
 				if(!rs.getTimestamp("updatetime").before(new SimpleDateFormat("yyyyMMddHHmmssSSS").parse(element.elementText("updatetime")))){
@@ -1567,7 +1567,7 @@ public class OpenclinicSlaveExporter implements Runnable{
 					ps.close();
 					ps=conn.prepareStatement("delete from adminextends where personid=? and labelid=?");
 					ps.setInt(1, personid);
-					ps.setInt(2, Integer.parseInt(element.elementText("labelid")));
+					ps.setString(2, element.elementText("labelid"));
 					ps.execute();
 				}
 			}
@@ -4463,6 +4463,18 @@ public class OpenclinicSlaveExporter implements Runnable{
 	public void setLastExport(Date date){
 		if(date!=null){
 			MedwanQuery.getInstance().setConfigString("lastOpenClinicExport",new SimpleDateFormat("yyyyMMddHHmmssSSS").format(date));
+			try{
+				Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+				PreparedStatement ps = conn.prepareStatement("update mysql.oc_config_backup set oc_value=?, updatetime=? where oc_key='lastOpenClinicExport'");
+				ps.setString(1, new SimpleDateFormat("yyyyMMddHHmmssSSS").format(date));
+				ps.setTimestamp(2, new java.sql.Timestamp(new java.util.Date().getTime()));
+				ps.execute();
+				ps.close();
+				conn.close();
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
 		}
 	}
 	
