@@ -541,6 +541,9 @@
   function printClinixRecord(){
 	    window.open("<c:url value='/util/exportClinix.jsp'/>?ts=<%=getTs()%>&personid=<%=activePatient.personid%>","Popup"+new Date().getTime(),"toolbar=no,status=yes,scrollbars=yes,resizable=yes,width=400,height=300,menubar=no").moveTo((screen.width - 400) / 2, (screen.height - 300)/2);
   }
+    function printMedicalCard(){
+	    window.open("<c:url value='/print/printMedicalCard.jsp'/>?ts=<%=getTs()%>&personid=<%=activePatient.personid%>","Popup"+new Date().getTime(),"toolbar=no,status=yes,scrollbars=yes,resizable=yes,width=800,height=600,menubar=no").moveTo((screen.width - 800) / 2, (screen.height - 600)/2);
+  }
   function storePicture(){
     var url = "<c:url value='/util/ajax/webcam.jsp'/>?ts="+new Date().getTime();
     Modalbox.show(url,{title:'<%=getTranNoLink("web","storePicture",sWebLanguage)%>',width:650});
@@ -694,7 +697,7 @@
     openPopup("/_common/patient/patientdataPopup.jsp&ts=<%=getTs()%>");
   }
   function showQueues(){
-      window.open("<c:url value='/util/manageQueues.jsp'/>?ts=<%=getTs()%>","Popup"+new Date().getTime(),"toolbar=no,status=no,scrollbars=yes,resizable=yes,width=800,height=740,location=no,menubar=no").moveTo((screen.width - 800) / 2,(screen.height - 620) / 2);
+      window.open("<c:url value='/util/manageQueues.jsp'/>?ts=<%=getTs()%>","Queue","toolbar=no,status=no,scrollbars=yes,resizable=yes,width=800,height=740,location=no,menubar=no").moveTo((screen.width - 800) / 2,(screen.height - 620) / 2);
 	  //openPopup("/util/manageQueues.jsp&ts=<%=getTs()%>&PopupWidth=800&PopupHeight=620");
   }
   function searchLab(){

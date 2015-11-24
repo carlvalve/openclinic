@@ -64,7 +64,7 @@
     //*** 2 - QUICK DIAGNOSIS ENTRY ***************************************************************
     if(activeUser.getAccessRight("patient.administration.add") || activeUser.getAccessRight("statistics.quickdiagnosisentry")){
          out.print(ScreenHelper.writeTblHeader(getTran("Web","statistics.quickdiagnosisentry",sWebLanguage),sCONTEXTPATH));
-         out.print(writeTblChildWithCode("javascript:openPopup(\"statistics/quickFile.jsp\",800,600,\"quickFile\");void(0);",getTran("Web","statistics.quickdiagnosisentry",sWebLanguage)));
+         out.print(writeTblChildWithCode("javascript:openPopup(\"statistics/quickFile.jsp\",1000,600,\"quickFile\");void(0);",getTran("Web","statistics.quickdiagnosisentry",sWebLanguage)));
          out.print(ScreenHelper.writeTblFooter()+"<br>");
     }
 
