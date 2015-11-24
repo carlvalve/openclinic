@@ -20,17 +20,20 @@
 				if(Integer.parseInt(new SimpleDateFormat("HH").format(reservation.getEnd()))*12>maxtime){
 					maxtime=Integer.parseInt(new SimpleDateFormat("HH").format(reservation.getEnd()))*12;
 				}
-				String username=ScreenHelper.getTran("web","user",request.getParameter("language"))+": "+reservation.getPlanning().getUser().getFullName()+" | "+ScreenHelper.getTran("web","hour",request.getParameter("language"))+": "+ new SimpleDateFormat("HH:mm").format(reservation.getBegin())+"-"+new SimpleDateFormat("HH:mm").format(reservation.getEnd());
-				if(reservation.getPlanning().getPatientUID()!=null && reservation.getPlanning().getPatientUID().length()>0){
-					username=ScreenHelper.getTran("web","patient",request.getParameter("language"))+": "+reservation.getPlanning().getPatient().getFullName()+" | "+username;
+				try{
+					String username=ScreenHelper.getTran("web","user",request.getParameter("language"))+": "+reservation.getPlanning().getUser().getFullName()+" | "+ScreenHelper.getTran("web","hour",request.getParameter("language"))+": "+ new SimpleDateFormat("HH:mm").format(reservation.getBegin())+"-"+new SimpleDateFormat("HH:mm").format(reservation.getEnd());
+					if(reservation.getPlanning().getPatientUID()!=null && reservation.getPlanning().getPatientUID().length()>0){
+						username=ScreenHelper.getTran("web","patient",request.getParameter("language"))+": "+reservation.getPlanning().getPatient().getFullName()+" | "+username;
+					}
+					if( reservation.getPlanning().getDescription()!=null && reservation.getPlanning().getDescription().length()>0){
+						username=username+" | "+ScreenHelper.getTran("web","comment",request.getParameter("language"))+": "+reservation.getPlanning().getDescription();
+					}
+					username+=";"+reservation.getPlanningUid();
+					for(long i=reservation.getBegin().getTime();i<reservation.getEnd().getTime();i+=5*minute){
+						occupiedSegments.put(new SimpleDateFormat("yyyyMMddHHmm").format(new java.util.Date(i)),username);
+					}
 				}
-				if( reservation.getPlanning().getDescription()!=null && reservation.getPlanning().getDescription().length()>0){
-					username=username+" | "+ScreenHelper.getTran("web","comment",request.getParameter("language"))+": "+reservation.getPlanning().getDescription();
-				}
-				username+=";"+reservation.getPlanningUid();
-				for(long i=reservation.getBegin().getTime();i<reservation.getEnd().getTime();i+=5*minute){
-					occupiedSegments.put(new SimpleDateFormat("yyyyMMddHHmm").format(new java.util.Date(i)),username);
-				}
+				catch(Exception e){}
 			}			
 		}
 		

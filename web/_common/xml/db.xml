@@ -45,6 +45,7 @@
 		    <column name="OC_QUEUE_ENDUID" dbtype="varchar" javatype="string" size="50"/>
 		    <column name="OC_QUEUE_ENDREASON" dbtype="varchar" javatype="string" size="50"/>
 		    <column name="OC_QUEUE_TRANSFERTO" dbtype="int" javatype="integer"/>
+		    <column name="OC_QUEUE_TICKETNUMBER" dbtype="int" javatype="integer"/>
     	</columns>
 	    <indexes>
 	    	<index name="OC_QUEUE_OBJECTID">
@@ -55,6 +56,9 @@
 	    	</index>
 	    	<index name="OC_QUEUE_SUBJECTUID">
 	    		<indexcolumn order="ASC" name="OC_QUEUE_SUBJECTUID"/>
+	    	</index>
+	    	<index name="OC_QUEUE_TICKETNUMBER">
+	    		<indexcolumn order="ASC" name="OC_QUEUE_TICKETNUMBER"/>
 	    	</index>
 	    </indexes>
     </table>
@@ -1968,6 +1972,7 @@
             <column name="OC_PLANNING_OBJECTID" dbtype="int" javatype="integer"/>
             <column name="OC_PLANNING_ESTIMATIONTIME" dbtype="varchar" javatype="string" size="255"/>
             <column name="OC_PLANNING_CONTEXTID" dbtype="varchar" javatype="string" size="255"/>
+			<column name="OC_PLANNING_SERVICEUID" dbtype="varchar" javatype="string" size="50"/>
 		</columns>
 		<indexes>
 			<index name="OC_PLANNING_PATIENTID">
@@ -1981,6 +1986,9 @@
 			</index>
 			<index name="OC_PLANNING_OBJECTID">
 				<indexcolumn order="ASC" name="OC_PLANNING_OBJECTID"/>
+			</index>
+			<index name="OC_PLANNING_SERVICEUID">
+				<indexcolumn order="ASC" name="OC_PLANNING_SERVICEUID"/>
 			</index>
 		</indexes>
 	</table>

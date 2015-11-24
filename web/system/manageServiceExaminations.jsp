@@ -29,6 +29,7 @@
     // then add all selected examinations (those in request)
     if(sAction.equals("save")){
     	MedwanQuery.getInstance().setServiceexaminations(new Hashtable());
+    	MedwanQuery.getInstance().setServiceexaminationsincludingparent(new Hashtable());
     	ServiceExamination.deleteAllExaminationsForService(sFindServiceCode);
 
         String examId;

@@ -80,6 +80,7 @@
     String sFindPlanningUID = checkString(request.getParameter("FindPlanningUID"));
     String sPage = checkString(request.getParameter("Page"));
     String sFindUserUID = checkString(request.getParameter("FindUserUID"));
+    String sFindServiceUID = checkString(request.getParameter("FindServiceUID"));
     String sEstimatedTime = "";
     boolean show = false;
     String appointmentDateDay = "", appointmentDateHour = "", appointmentDateMinutes = "",
@@ -119,6 +120,16 @@
             String sEditDescription = checkString(request.getParameter("EditDescription"));
             String sEditContext = checkString(request.getParameter("EditContext"));
             String tempplanninguid = checkString(request.getParameter("tempplanninguid"));
+            String sEditRepeatUntil = checkString(request.getParameter("appointmentRepeatUntil"));
+            java.util.Date dRepeatUntil = null;
+            try{
+            	if(sEditRepeatUntil.length()>0){
+            		dRepeatUntil=ScreenHelper.parseDate(sEditRepeatUntil);
+            	}
+            }
+            catch(Exception e){
+            	e.printStackTrace();
+            }
 
             planning = new Planning();
             planning.setUid(sEditPlanningUID);
@@ -144,7 +155,25 @@
             planning.setContact(orContact);
             planning.setDescription(sEditDescription);
             planning.setTempPlanningUid(tempplanninguid);
-            if(planning.store()){
+            planning.setServiceUid(sFindServiceUID);
+            boolean bError=false;
+            if(dRepeatUntil!=null && dRepeatUntil.after(planning.getPlannedDate())){
+            	//Repeatedly store this planning for each day in the period
+            	while(!ScreenHelper.parseDate(ScreenHelper.formatDate(planning.getPlannedDate())).after(dRepeatUntil)){
+            		planning.setUid(null);
+            		bError=!planning.store();
+            		if(bError){
+            			break;
+            		}
+            		else{
+            			planning.setPlannedDate(new java.util.Date(planning.getPlannedDate().getTime()+24*3600*1000));
+            		}
+            	}
+            }
+            else{
+            	bError=!planning.store();
+            }
+            if(!bError){
             	//Also 
                 if(sPage.length()==0){
                     out.write("<script>clientMsg.setValid('"+HTMLEntities.htmlentities(getTranNoLink("web.control","dataissaved",sWebLanguage))+"',null,500);doClose();</script>");
@@ -453,6 +482,23 @@
         <td class='admin'><%=HTMLEntities.htmlentities(getTran("planning","description",sWebLanguage))%></td>
         <td class='admin2'><%=writeTextarea("EditDescription","","","",HTMLEntities.htmlentities(checkString(planning.getDescription())))%></td>
     </tr>
+    <%
+    	if(sFindPlanningUID.length()==0){
+    %>
+	    <tr>
+	        <td class="admin"><%=HTMLEntities.htmlentities(getTran("web", "repeatuntil", sWebLanguage))%>
+	        </td>
+	        <td class="admin2"><%=ScreenHelper.planningDateTimeField("appointmentRepeatUntil", "", sWebLanguage, sCONTEXTPATH)%>
+	        </td>
+	    </tr>
+    <%
+    	}
+    	else{
+    %>
+    	<input type="hidden" id="appointmentRepeatUntil" name="appointmentRepeatUntil" value="" />
+    <%
+    	}
+    %>
     <tr>
         <td class="admin"/>
         <td class="admin2">

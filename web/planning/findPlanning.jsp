@@ -86,7 +86,9 @@ ClientMsg.prototype = {
         <td style='width:10px'>&nbsp;</td>
         <td class='tabunselected' width='1%' style='padding:2px 4px;text-align:center;' onclick='activatePatient("patient");' id='tabpatient' nowrap><b><%=getTran("planning", "patient", sWebLanguage)%></b></td>
         <% } %>
-        <%=writeTab("service","planning",sWebLanguage)%>
+        <script>sTabs += ',service';</script>
+        <td style='width:10px'>&nbsp;</td>
+        <td class='tabunselected' width='1%' style='padding:2px 4px;text-align:center;' onclick='activateService("service");' id='tabservice' nowrap><b><%=getTran("planning", "service", sWebLanguage)%></b></td>
         <%=writeTab("missedAppointments","planning",sWebLanguage)%>
         <%=writeTab("resource","planning",sWebLanguage)%>
         <%=writeTab("managePlanning","web.userprofile",sWebLanguage)%>
@@ -100,7 +102,6 @@ ClientMsg.prototype = {
     <%=(activePatient!=null)?writeTabBegin("patient"):""%>
     <%=(activePatient!=null)?writeTabEnd():""%>
     <%=writeTabBegin("service")%>
-    <%//ScreenHelper.setIncludePage(customerInclude("healthrecord/globalReferenceSummary.jsp"), pageContext);%>
     <%=writeTabEnd()%>
     <%=writeTabBegin("missedAppointments")%>
     <%ScreenHelper.setIncludePage(customerInclude("planning/missedAppointments.jsp"),pageContext);%>
@@ -127,6 +128,10 @@ ClientMsg.prototype = {
     $("tr"+sTab).style.display = "";
     $("tab"+sTab).className = "tabselected";
     if(sTab=="user"){
+        $("usertd1").style.display='';
+        $("servicetd1").style.display='none';
+        $("usertd2").style.display='';
+        $("servicetd2").style.display='none';
         $("PatientID").value = "";
         if(!initialize){
       	displayCountedWeek(makeDate($('beginDate').value),$("FindUserUID").options[$("FindUserUID").selectedIndex].value);
@@ -164,30 +169,55 @@ ClientMsg.prototype = {
   }
   
   function activatePatient(sTab){
-    if(!$("truser").visible()){
-      $("truser").style.display = "";
-    }
-    for(var i=0; i<aTabs.length; i++){
-      sTmp = aTabs[i];
-      if(sTmp.length > 0){
-        $("tab"+sTmp).className = "tabunselected";
-      }
-    }
+	    if(!$("truser").visible()){
+	      $("truser").style.display = "";
+	    }
+	    $("usertd1").style.display = "";
+	    $("servicetd1").style.display = "none";
+	    $("usertd2").style.display = "";
+	    $("servicetd2").style.display = "none";
+	    for(var i=0; i<aTabs.length; i++){
+	      sTmp = aTabs[i];
+	      if(sTmp.length > 0){
+	        $("tab"+sTmp).className = "tabunselected";
+	      }
+	    }
 
-    $("tab"+sTab).className = "tabselected";
-    <%
-        if(activePatient!=null){
-    %>
-      $("PatientID").value = "<%=activePatient.personid%>";
-      displayWeek(makeDate($('beginDate').value));
+	    $("tab"+sTab).className = "tabselected";
+	    <%
+	        if(activePatient!=null){
+	    %>
+	      $("PatientID").value = "<%=activePatient.personid%>";
+	      displayWeek(makeDate($('beginDate').value));
 
-      $("tableHeaderTitle").update("&nbsp;&nbsp;<%=getTran("planning","patientplanningstoday",sWebLanguage)%>")
-    <%    
-       }
-    %>
-    togglePrintButtons(sTab);
-  }
-     
+	      $("tableHeaderTitle").update("&nbsp;&nbsp;<%=getTran("planning","patientplanningstoday",sWebLanguage)%>")
+	    <%    
+	       }
+	    %>
+	    togglePrintButtons(sTab);
+	  }
+	     
+  function activateService(sTab){
+	    if(!$("truser").visible()){
+	      $("truser").style.display = "";
+	    }
+	    $("usertd1").style.display = "none";
+	    $("servicetd1").style.display = "";
+	    $("usertd2").style.display = "none";
+	    $("servicetd2").style.display = "";
+	    for(var i=0; i<aTabs.length; i++){
+	      sTmp = aTabs[i];
+	      if(sTmp.length > 0){
+	        $("tab"+sTmp).className = "tabunselected";
+	      }
+	    }
+
+	    $("tab"+sTab).className = "tabselected";
+	      displayWeek(makeDate($('beginDate').value));
+	      $("tableHeaderTitle").update("&nbsp;&nbsp;<%=getTran("planning","serviceplanningstoday",sWebLanguage)%>")
+	    togglePrintButtons(sTab);
+	  }
+	     
   function togglePrintButtons(sTab){
     if(sTab=="patient"){
       var a = $("weekScheduler_container").getElementsByClassName('print_user_button');

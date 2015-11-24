@@ -369,7 +369,7 @@
         		"   and serviceid = oc_debet_serviceuid"+
         		"   and oc_label_type = 'service'"+
         		"   and oc_label_id = serviceid"+
-        		"   and oc_label_language = 'fr'"+
+        		"   and oc_label_language = '"+sWebLanguage+"'"+
         		"   and oc_encounter_patientuid = personid"+
         		"   and oc_debet_date >= "+MedwanQuery.getInstance().convertStringToDate("'<begin>'")+
         		"   and oc_debet_date <= "+MedwanQuery.getInstance().convertStringToDate("'<end>'")+
@@ -398,7 +398,7 @@
         		"   and serviceid = oc_debet_serviceuid"+
         		"   and oc_label_type = 'service'"+
         		"   and oc_label_id = serviceid"+
-        		"   and oc_label_language = 'fr'"+
+        		"   and oc_label_language = '"+sWebLanguage+"'"+
         		"   and oc_encounter_patientuid = personid"+
         		"   and oc_debet_date >= "+MedwanQuery.getInstance().convertStringToDate("'<begin>'")+
         		"   and oc_debet_date <= "+MedwanQuery.getInstance().convertStringToDate("'<end>'")+
@@ -978,9 +978,9 @@
     }
 	//*** 11 - WICKET CREDITS ********************************************
     else if("wicketcredits.list".equalsIgnoreCase(sQueryType)){
-        query = "select oc_wicket_credit_operationdate as DATE,a.oc_label_value as CAISSE,b.oc_label_value as TYPE,"+MedwanQuery.getInstance().convert("int","oc_wicket_credit_amount")+" as MONTANT,"+
-                "  oc_wicket_credit_comment as COMMENTAIRE, oc_wicket_credit_invoiceuid as REF_FACTURE,"+
-                "  lastname as NOM_UTILISATEUR, firstname as PRENOM_UTILISATEUR"+
+        query = "select oc_wicket_credit_operationdate as DATE,a.oc_label_value as CASHDESK,b.oc_label_value as TYPE,"+MedwanQuery.getInstance().convert("int","oc_wicket_credit_amount")+" as AMOUNT,"+
+                "  oc_wicket_credit_comment as COMMENT, oc_wicket_credit_invoiceuid as REF_INVOICE,"+
+                "  lastname as USERLASTNAME, firstname as USERFIRSTNAME"+
         		" from oc_wicket_credits, oc_wickets, oc_labels a, oc_labels b, usersview c, adminview d"+
         		"  where oc_wicket_credit_updateuid = userid"+
         		"   and c.personid = d.personid"+
@@ -989,11 +989,12 @@
         		"   and oc_wicket_objectid = replace(oc_wicket_credit_wicketuid,'"+MedwanQuery.getInstance().getConfigInt("serverId")+".','')"+
         		"   and a.oc_label_type = 'service'"+
         		"   and a.oc_label_id = oc_wicket_serviceuid"+
-        		"   and a.oc_label_language = 'fr'"+
+        		"   and a.oc_label_language = '"+sWebLanguage+"'"+
         		"   and b.oc_label_type = 'credit.type'"+
         		"   and b.oc_label_id = oc_wicket_credit_type"+
-        		"   and b.oc_label_language = 'fr'"+
+        		"   and b.oc_label_language = '"+sWebLanguage+"'"+
         		" order by DATE";
+        		System.out.println(query);
     }
 	//*** 12 - DIAGNOSES *************************************************
     else if("diagnosis.list".equalsIgnoreCase(sQueryType)){

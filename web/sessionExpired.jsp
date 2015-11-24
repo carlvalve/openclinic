@@ -65,6 +65,10 @@
                session.setAttribute("edition", "openinsurance");
                %><img src="_img/openinsurancelogo.jpg" border="0"><%
            }
+           else if ("bloodbank".equalsIgnoreCase(MedwanQuery.getInstance().getConfigString("edition",""))) {
+               session.setAttribute("edition", "openinsurance");
+           	   %><img src="_img/logo_bloodbank.jpg" border="0"><%
+           }
            else{
                session.setAttribute("edition", "openclinic");
                %><img src="<%=sTmpAPPDIR%>_img/logo.jpg" border="0"><%

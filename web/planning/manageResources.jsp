@@ -27,6 +27,7 @@
 		<tr class='admin'>
 			<td>
 				<select name='resource' id='resource' onchange='loadResourceReservations()'>	
+					<option/>
 					<%=ScreenHelper.writeSelect("planningresource", "", sWebLanguage) %>
 				</select>
            		<%
@@ -95,15 +96,17 @@
 	}
 	
 	function saveReservation(){
-		var today = new Date();
-		var url= '<c:url value="/planning/ajax/saveReservation.jsp"/>?planninguid=<%=planninguid%>&resourceuid='+document.getElementById('resource').value+'&begin='+document.getElementById('begin').value+'&begintime='+document.getElementById('beginTime').value+'&end='+document.getElementById('end').value+'&endtime='+document.getElementById('endTime').value+'&userid=<%=activeUser.userid%>&language=<%=sWebLanguage%>&ts='+today;
-		new Ajax.Request(url,{
-		method: "POST",
-		   parameters: "",
-		   onSuccess: function(resp){
-			   loadReservations();
-			}
-		});
+		if(document.getElementById('resource').value.length>0){
+			var today = new Date();
+			var url= '<c:url value="/planning/ajax/saveReservation.jsp"/>?planninguid=<%=planninguid%>&resourceuid='+document.getElementById('resource').value+'&begin='+document.getElementById('begin').value+'&begintime='+document.getElementById('beginTime').value+'&end='+document.getElementById('end').value+'&endtime='+document.getElementById('endTime').value+'&userid=<%=activeUser.userid%>&language=<%=sWebLanguage%>&ts='+today;
+			new Ajax.Request(url,{
+			method: "POST",
+			   parameters: "",
+			   onSuccess: function(resp){
+				   loadReservations();
+				}
+			});
+		}			
 	}
 	
 	function deleteResource(uid){

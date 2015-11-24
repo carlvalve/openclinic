@@ -185,7 +185,7 @@
                         <td class="admin" width="40px"></td>
                         <td class="admin" width="50px"><%=getTran("web.occup","medwan.common.date",sWebLanguage)%></td>
                         <td class="admin" width="50px"><%=getTran("openclinic.chuk","tooth",sWebLanguage)%></td>
-                        <td class="admin" width="250px"><%=getTran("openclinic.chuk","problem description",sWebLanguage)%></td>
+                        <td class="admin" width="250px"><%=getTran("openclinic.chuk","problemdescription",sWebLanguage)%></td>
                         <td class="admin" width="250px"><%=getTran("openclinic.chuk","treatment",sWebLanguage)%></td>
                         <td class="admin" width="150px"><%=getTran("openclinic.chuk","status",sWebLanguage)%></td>
                         <td class="admin" width="*"/>

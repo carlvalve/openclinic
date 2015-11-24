@@ -1,0 +1,6 @@
+cd /var/tomcat/webapps/openclinic/util
+# MS SQL Server
+java -classpath ../WEB-INF/classes:../WEB-INF/lib/dom4j-full.jar:../WEB-INF/lib/mail.jar:../WEB-INF/lib/log4j.jar:/var/tomcat/lib/sqljdbc4.jar be.mxs.common.util.io.CloseVisits "com.microsoft.sqlserver.jdbc.SQLServerDriver" "jdbc:sqlserver://db-01-test:1433;databaseName=openclinic;user=dba;password=qwerty@123" "update oc_encounter_services set oc_encounter_serviceenddate=oc_encounter_enddate from oc_encounter_services a, oc_encounters b where a.oc_encounter_objectid=b.oc_encounter_objectid and b.oc_encounter_enddate is not null and a.oc_encounter_serviceenddate is null"
+# MySQL
+# java -classpath ../WEB-INF/classes:../WEB-INF/lib/dom4j-full.jar:../WEB-INF/lib/mail.jar:../WEB-INF/lib/log4j.jar:/var/tomcat/lib/sqljdbc4.jar be.mxs.common.util.io.CloseVisits "com.microsoft.sqlserver.jdbc.SQLServerDriver" "jdbc:sqlserver://db-01-test:1433;databaseName=openclinic;user=dba;password=qwerty@123" "update oc_encounter_services a, oc_encounters b set oc_encounter_serviceenddate=oc_encounter_enddate where a.oc_encounter_objectid=b.oc_encounter_objectid and b.oc_encounter_enddate is not null and a.oc_encounter_serviceenddate is null"
+  

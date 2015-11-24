@@ -4,8 +4,6 @@
 <%@page import="java.io.*"%>
 <%@page import="be.openclinic.common.IconsFilter"%>
 
-<%=checkPermission("userprofile.manageUserShortcuts","all",activeUser)%>
-
 <%!   
     //--- GET MENU ELEMENT ------------------------------------------------------------------------
     private Element getMenuElement(HttpSession session, String sMenuPath) throws Exception {
@@ -159,16 +157,20 @@
                     shortcuts.add("applications.prescriptions.medications");       // voorschrift geneesmiddelen
                     shortcuts.add("applications.prescriptions.medicationpaperprescription");       // voorschrift geneesmiddelen (papier)
                     shortcuts.add("applications.prescriptions.careprescriptions"); // voorschrift zorgen
-                    shortcuts.add("applications.financial.debetEdit");     // facturen raadplegen
+                    shortcuts.add("applications.financial.debetEdit");             // facturen raadplegen
                     shortcuts.add("applications.financial.patientCreditEdit");     // facturen raadplegen
                     shortcuts.add("applications.financial.patientInvoiceEdit");    // prestaties invoeren
+                    shortcuts.add("applications.queues");						   // waiting queues
+                    shortcuts.add("applications.adt.patientqueues");			   // patient tickets
+                    shortcuts.add("applications.print.printmedicalcard");		   // print medical card
+                    shortcuts.add("hidden.statistics.quickdiagnosisentry");		   // quick diagnosis entry
                     shortcuts.add("hidden.actualrfe");                             // reason for encounter (RFE)
                     shortcuts.add("hidden.clinicalDocuments");                     // subtype : type of documents
                           
                     String sLongLabelId, sLabelType, sShortcutTitle;
                     Element menuElem;
                     for(int i=0; i<shortcuts.size(); i++){
-                        sLongLabelId = (String)shortcuts.get(i);
+                    	sLongLabelId = (String)shortcuts.get(i);
                         menuElem = getMenuElement(session,sLongLabelId);
 
                         // check permissions

@@ -1,13 +1,12 @@
-<%@page import="be.openclinic.finance.Wicket,
+<%@page import="be.openclinic.finance.*,
                 java.util.Vector,
-                be.openclinic.finance.Insurar,
-                be.openclinic.finance.InsuranceCategory,
                 be.mxs.common.util.system.HTMLEntities"%>
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
 
 <%
-    String sFindInsurarName = checkString(request.getParameter("FindInsurarName"));
+	String sFindInsurarName = checkString(request.getParameter("FindInsurarName"));
+	String sNoActive = checkString(request.getParameter("NoActive"));
 
     /// DEBUG /////////////////////////////////////////////////////////////////////////////////////
     if(Debug.enabled){
@@ -22,6 +21,12 @@
     <%
         if(sFindInsurarName.length() > 0){
             Vector vInsurars = Insurar.getInsurarsByName(sFindInsurarName);
+            Vector activeInsurances = Insurance.getCurrentInsurances(activePatient.personid);
+            String sActiveInsurances=";";
+            for(int n=0;n<activeInsurances.size();n++){
+            	Insurance insurance = (Insurance)activeInsurances.elementAt(n);
+            	sActiveInsurances+=insurance.getInsurar().getUid()+"."+insurance.getInsuranceCategoryLetter()+";";
+            }
             String sClass = "", sInsurarUID = "";
             boolean recsFound = false;
             StringBuffer results = new StringBuffer();
@@ -43,8 +48,13 @@
                                 if(n > 0){
                                     cats+= "<br/>";
                                 }
-                                cats+= "<a href=\"javascript:setInsuranceCategory('"+insCat.getCategory()+"','"+objInsurar.getUid()+"','"+objInsurar.getName().toUpperCase()+"','" +insCat.getCategory()+": "+insCat.getLabel()+"','"+objInsurar.getType()+"','"+getTran("insurance.types",objInsurar.getType(),sWebLanguage)+"');\">"+
-                                       insCat.getCategory()+" ("+insCat.getLabel()+" - "+insCat.getPatientShare()+"/"+(100-Integer.parseInt(insCat.getPatientShare()))+")</a>";
+                                if(sNoActive.length()>0 && sActiveInsurances.indexOf(objInsurar.getUid()+"."+insCat.getCategory())>-1){
+                                	cats+=insCat.getCategory()+" ("+insCat.getLabel()+" - "+insCat.getPatientShare()+"/"+(100-Integer.parseInt(insCat.getPatientShare()))+") <img src='"+sCONTEXTPATH+"/_img/themes/default/valid.gif' title='"+getTranNoLink("web","insurancecategoryalreadyactive",sWebLanguage)+"'>";
+                                }
+                                else{
+	                                cats+= "<a href=\"javascript:setInsuranceCategory('"+insCat.getCategory()+"','"+objInsurar.getUid()+"','"+objInsurar.getName().toUpperCase()+"','" +insCat.getCategory()+": "+insCat.getLabel()+"','"+objInsurar.getType()+"','"+getTran("insurance.types",objInsurar.getType(),sWebLanguage)+"');\">"+
+	                                       insCat.getCategory()+" ("+insCat.getLabel()+" - "+insCat.getPatientShare()+"/"+(100-Integer.parseInt(insCat.getPatientShare()))+")</a>";
+                                }
                       }
                       
                       // alternate row-style
