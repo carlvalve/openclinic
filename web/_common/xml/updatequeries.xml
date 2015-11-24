@@ -250,5 +250,11 @@
   	<Query id='QUERY.dropfunctionsview' db='openclinic' date='18/04/2015' dbserver='MySQL'>
 		drop view functionsview;
   	</Query>	
+  	<Query id='QUERY.removelabelerror' db='openclinic' date='22/11/2015' dbserver='MySQL'>
+		update OC_LABELS set OC_LABEL_VALUE=replace(OC_LABEL_VALUE,'&lt;:b&gt;','&lt;/b&gt;');
+  	</Query>	
+  	<Query id='QUERY.removelabelerror' db='openclinic' date='22/11/2015' dbserver='Microsoft SQL Server'>
+		update OC_LABELS set OC_LABEL_VALUE=replace(OC_LABEL_VALUE,'&lt;:b&gt;','&lt;/b&gt;');
+  	</Query>	
   	
 </Queries>

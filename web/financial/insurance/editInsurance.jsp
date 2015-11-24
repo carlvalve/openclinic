@@ -7,7 +7,7 @@
 	openPopup("/_common/search/searchInsuranceCategory.jsp&ts=<%=getTs()%>&VarCode=EditInsuranceCategoryLetter"+
 			  "&VarText=EditInsuranceInsurarName&VarCat=EditInsuranceCategory&VarCompUID=EditInsurarUID"+
 			  "&VarTyp=EditInsuranceType&VarTypName=EditInsuranceTypeName&"+
-			  "VarFunction=checkInsuranceAuthorization()&Active=1");
+			  "VarFunction=checkInsuranceAuthorization()&Active=1&NoActive=1",600);
   }
 	
   function doBack(){

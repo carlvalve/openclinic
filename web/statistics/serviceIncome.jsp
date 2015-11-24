@@ -109,7 +109,7 @@
                         "     and oc_debet_serviceuid is null) a, oc_prestations b"+
                         "  where oc_prestation_objectid = replace(a.oc_debet_prestationuid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','')"+
                         "   and serviceuid in ("+Service.getChildIdsAsString(serviceId)+")"+
-                        "    group by oc_debet_serviceuid,oc_prestation_description,oc_prestation_code"+
+                        "    group by serviceuid,oc_prestation_description,oc_prestation_code"+
                         "   ) as q"+
                         " group by oc_debet_serviceuid,oc_prestation_description,oc_prestation_code"+
                         " order by oc_debet_serviceuid,total desc";

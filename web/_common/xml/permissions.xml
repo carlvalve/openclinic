@@ -188,6 +188,7 @@
         <permission type="web" id="financial.modifyinvoice">financial.modifyinvoice</permission>
         <permission type="web" id="financial.superuser">financial.superuser</permission>
         <permission type="web" id="financial.modifyinvoicestatus">financial.modifyinvoicestatus</permission>
+        <permission type="web" id="financial.negotiate.tariff">financial.negotiate.tariff</permission>
     </application>
     <application type="Web" id="executive">
         <permission type="web" id="bedoccupation">occup.bedoccupation</permission>

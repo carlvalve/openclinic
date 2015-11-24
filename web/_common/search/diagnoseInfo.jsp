@@ -351,7 +351,13 @@
 	                	activeDate = curTran.getUpdateTime();
 	                }
 	            	
-	                Encounter activeEnc = Encounter.getActiveEncounterOnDate(new Timestamp(activeDate.getTime()),sPatientUid);
+	                Encounter activeEnc=null;
+	                if(curTran!=null && curTran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID").length()>0){
+	                	activeEnc = Encounter.get(curTran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID"));
+	                }
+	                if(activeEnc==null) {
+	                	activeEnc = Encounter.getActiveEncounterOnDate(new Timestamp(activeDate.getTime()),sPatientUid);
+	                }
 					String activeEncParents="",activeService="";
 	                if(activeEnc!=null && activeEnc.getService()!=null){
 	                	activeEncParents=","+activeEnc.getServiceUID()+","+Service.getParentIds(activeEnc.getServiceUID())+",";
@@ -361,9 +367,8 @@
 		            		hServices.put(activeEnc.getServiceUID(),"1");
 	                	}
 	                }
-	                
 					//2. The user's service
-	            	if(activeUser.activeService!=null){
+	            	if(activeUser.activeService!=null && hServices.get(activeUser.activeService.code)==null){
 	            		services.add(activeUser.activeService.code+";"+activeUser.activeService.getLabel(sWebLanguage));
 	            		hServices.put(activeUser.activeService.code,"1");
 	            	}

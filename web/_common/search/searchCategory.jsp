@@ -5,11 +5,13 @@
     // form data
     String sVarCode = checkString(request.getParameter("VarCode")),
            sVarText = checkString(request.getParameter("VarText")),
+           sNoActive = checkString(request.getParameter("NoActive")),
            sFindText = checkString(request.getParameter("FindText")).toUpperCase();
 %>
 <form name="SearchForm" method="POST" onSubmit="doFind();return false;" onkeydown="if(enterEvent(event,13)){doFind();}">
     <%-- hidden fields --%>
     <input type="hidden" name="VarCode" value="<%=sVarCode%>">
+    <input type="hidden" name="NoActive" value="<%=sNoActive%>">
     <input type="hidden" name="VarText" value="<%=sVarText%>">
     <input type="hidden" name="FindCode">
     <input type="hidden" name="ViewCode">

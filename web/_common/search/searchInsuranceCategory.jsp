@@ -12,6 +12,7 @@
            sVarText     = checkString(request.getParameter("VarText")),
            sVarCat      = checkString(request.getParameter("VarCat")),
            sVarTyp      = checkString(request.getParameter("VarTyp")),
+           sNoActive = checkString(request.getParameter("NoActive")),
            sVarTypName  = checkString(request.getParameter("VarTypName")),
            sVarCompUID  = checkString(request.getParameter("VarCompUID")),
            sVarFunction = checkString(request.getParameter("VarFunction")),
@@ -36,6 +37,7 @@
     <input type="hidden" name="VarCode" value="<%=sVarCode%>">
     <input type="hidden" name="VarText" value="<%=sVarText%>">
     <input type="hidden" name="VarCat" value="<%=sVarCat%>">
+    <input type="hidden" name="NoActive" value="<%=sNoActive%>">
     <input type="hidden" name="Active" value="<%=sVarActive%>">
     
     <table width="100%" cellspacing="0" cellpadding="0" class="menu">
@@ -46,7 +48,7 @@
         <tr>
             <td class="admin2"><%=getTran("Web","insurar",sWebLanguage)%></td>
             <td class="admin2">
-                <input class="text" type="text" name="FindInsurarName" size="<%=sTextWidth%>" value="<%=sFindInsurarName%>">
+                <input class="text" type="text" name="FindInsurarName" name="FindInsurarName" size="<%=sTextWidth%>" value="<%=sFindInsurarName%>">
             </td>
         </tr>
         
@@ -78,6 +80,7 @@
   <%-- CLEAR FIELDS --%>
   function clearFields(){
     SearchForm.FindInsurarName.value = "";
+    SearchForm.FindInsurarName.focus();
   }
 
   <%-- DO FIND --%>

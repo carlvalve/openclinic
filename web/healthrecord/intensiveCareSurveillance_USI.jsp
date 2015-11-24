@@ -349,7 +349,7 @@
   function addSurveillance(){
 	var url = "<c:url value='/popup.jsp'/>?Page=/healthrecord/intensiveCareSurveillance_USI_add.jsp"+
               "&trandate="+document.getElementById('trandate').value+"&CONTEXT_CONTEXT="+document.getElementById('context_context').value+
-              "&CONTEXT_DEPARTMENT="+document.getElementById('context_department').value;	
+              "&CONTEXT_DEPARTMENT="+document.getElementById('context_department').value+"&PopupWidth=600&PopupHeight=630";	
     window.open(url,"","toolbar=no, status=no, scrollbars=no, resizable=yes, menubar=no");
   }
 

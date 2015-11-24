@@ -209,7 +209,7 @@ function getItemsFromServer(){
     $("wait").style.display = "inline";
     var ajaxIndex = weekSchedule_ajaxObjects.length;
     weekSchedule_ajaxObjects[ajaxIndex] = new sack();
-    weekSchedule_ajaxObjects[ajaxIndex].requestFile = externalSourceFile_items+'&PatientID='+$F("PatientID")+'&FindUserUID='+$F("FindUserUID")+'&year='+dateStartOfWeek.getFullYear()+'&month='+(dateStartOfWeek.getMonth() / 1+1)+'&day='+dateStartOfWeek.getDate();
+    weekSchedule_ajaxObjects[ajaxIndex].requestFile = externalSourceFile_items+'&PatientID='+$F("PatientID")+'&FindUserUID='+$F("FindUserUID")+'&FindServiceUID='+$("FindServiceUID").value+'&FindServiceDisplay='+$("servicetd2").style.display+'&year='+dateStartOfWeek.getFullYear()+'&month='+(dateStartOfWeek.getMonth() / 1+1)+'&day='+dateStartOfWeek.getDate();
     weekSchedule_ajaxObjects[ajaxIndex].onCompletion = function(){
         parseItemsFromServer(ajaxIndex);
     };
@@ -438,7 +438,7 @@ function createBeforeAppointment(){
     var dateEnd = new Date(getAppointment(actualAppointmentId).eventStartDate.toGMTString().replace('UTC', 'GMT'));
     var dateStart = new Date(dateEnd);
     dateStart.setMinutes(dateStart.getMinutes() - defaultAppointmentDuration);
-    var saveString = "&Action=new&FindUserUID="+$F('FindUserUID')+"&AppointmentID=-1&inputId="+actualAppointmentId
+    var saveString = "&Action=new&FindUserUID="+$F('FindUserUID')+"&FindServiceUID="+$('FindServiceUID').value+"&AppointmentID=-1&inputId="+actualAppointmentId
            +'&appointmentDateDay='+dateStart.getDate()+"/"+(Number(dateStart.getMonth()+1))+"/"+dateStart.getFullYear()
            +'&appointmentDateHour='+dateStart.getHours()
            +'&appointmentDateMinutes='+dateStart.getMinutes()
@@ -455,7 +455,7 @@ function createNextAppointment(){
     var dateStart = new Date(getAppointment(actualAppointmentId).eventEndDate.toGMTString().replace('UTC', 'GMT'));
     var dateEnd = new Date(dateStart);
     dateEnd.setMinutes(dateStart.getMinutes()+defaultAppointmentDuration);
-    var saveString = "&Action=new&FindUserUID="+$F('FindUserUID')+"&AppointmentID=-1&inputId="+actualAppointmentId
+    var saveString = "&Action=new&FindUserUID="+$F('FindUserUID')+"&FindServiceUID="+$('FindServiceUID').value+"&AppointmentID=-1&inputId="+actualAppointmentId
            +'&appointmentDateDay='+dateStart.getDate()+"/"+(Number(dateStart.getMonth()+1))+"/"+dateStart.getFullYear()
            +'&appointmentDateHour='+dateStart.getHours()
            +'&appointmentDateMinutes='+dateStart.getMinutes()
@@ -470,7 +470,7 @@ function createNextAppointment(){
 }
 function testIfNewAppointmentPossible(start, stop){
     var ok = false;
-    if(start.getHours() >= weekplannerStartHour && stop.getHours() < weekplannerStopHour+1){
+    if(($('servicetd2').style.display=='none' || $('FindServiceUID').value.length>0) && start.getHours() >= weekplannerStartHour && stop.getHours() < weekplannerStopHour+1){
         ok = true;
     }
     return ok;
@@ -667,14 +667,14 @@ function schedulerMouseUp()
             var dateStart = new Date(appointment.eventStartDate.toGMTString().replace('UTC', 'GMT'));
             var dateEnd = new Date(appointment.eventEndDate.toGMTString().replace('UTC', 'GMT'));
             if(dateStart < dateEnd){
-                var saveString = "&Action=new&FindUserUID="+$('FindUserUID').value+"&AppointmentID=-1&inputId="+currentAppointmentDiv.id
+                var saveString = "&Action=new&FindUserUID="+$('FindUserUID').value+"&FindServiceUID="+$('FindServiceUID').value+"AppointmentID=-1&inputId="+currentAppointmentDiv.id
                        +'&appointmentDateDay='+dateStart.getDate()+"/"+(Number(dateStart.getMonth()+1))+"/"+dateStart.getFullYear()
                        +'&appointmentDateHour='+dateStart.getHours()
                        +'&appointmentDateMinutes='+dateStart.getMinutes()
                        +'&appointmentDateEndDay='+dateEnd.getDate()+"/"+(Number(dateEnd.getMonth()+1))+"/"+dateEnd.getFullYear()
                        +'&appointmentDateEndHour='+dateEnd.getHours()
                        +'&appointmentDateEndMinutes='+dateEnd.getMinutes();
-                openNewAppointment(saveString);
+                    openNewAppointment(saveString);
             }
         }
     }
@@ -928,18 +928,20 @@ function updateCountedHeaderDates(beginweek,userid){
             subDivs[no].className = "";
         }
     }
-    new Ajax.Request("planning/ajax/getTotalServerItems.jsp",
-            {   parameters:"sDates="+sDates+"&userid="+userid,
-                evalScripts: true,
-                onComplete:function(request){
-    				var totals=request.responseText.trim().split(";");
-    				for(n=0;n<totals.length;n++){
-        				if(totals[n].split("=").length==2){
-        					$(totals[n].split("=")[0]).innerHTML="("+totals[n].split("=")[1]+") ";
-        				}
-    				}
-                }
-            });
+    if($("tabuser").className == "tabselected"){
+	    new Ajax.Request("planning/ajax/getTotalServerItems.jsp",
+	            {   parameters:"sDates="+sDates+"&userid="+userid,
+	                evalScripts: true,
+	                onComplete:function(request){
+	    				var totals=request.responseText.trim().split(";");
+	    				for(n=0;n<totals.length;n++){
+	        				if(totals[n].split("=").length==2){
+	        					$(totals[n].split("=")[0]).innerHTML="("+totals[n].split("=")[1]+") ";
+	        				}
+	    				}
+	                }
+	            });
+    }
 }
 var Appointment = Class.create();
 Appointment.prototype = {

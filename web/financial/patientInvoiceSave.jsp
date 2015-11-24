@@ -3,6 +3,8 @@
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
 <%
+try{
+	System.out.println("A");
     String sEditDate = checkString(request.getParameter("EditDate"));
     String sEditPatientInvoiceUID = checkString(request.getParameter("EditPatientInvoiceUID"));
     String sEditInvoiceUID = checkString(request.getParameter("EditInvoiceUID"));
@@ -242,6 +244,7 @@
     else {
         sMessage = getTran("web.control", "dberror", sWebLanguage);
     }
+
 %>
 {
 "Message":"<%=HTMLEntities.htmlentities(sMessage)%>",
@@ -252,3 +255,9 @@
 "EditInvoiceUID":"<%=patientinvoice.getInvoiceUid()%>",
 "TotalDebets":"<%=dTotalDebets%>"
 }
+<%
+}
+catch(Exception e){
+	e.printStackTrace();
+}
+%>

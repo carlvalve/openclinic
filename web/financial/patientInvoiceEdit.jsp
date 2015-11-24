@@ -245,7 +245,7 @@
 	                <input type="text" size="40" class="text" id="EditComment" name="EditComment" value="<%=sEditComment%>"></td></tr></table>
 	            </td>
 	        </tr>
-	        <% if(MedwanQuery.getInstance().getConfigInt("enableMFP",0)==1){ %>
+	        <% if(MedwanQuery.getInstance().getConfigInt("enableMFP",0)==1 && MedwanQuery.getInstance().getConfigInt("hideMFPInvoiceFields",0)==0){ %>
 	        <tr>
 	            <td class="admin">
            			<%=getTran("web.finance","mfp.invoice.drugsrecipient",sWebLanguage)%>
@@ -559,7 +559,7 @@
 	                        <input class="button" type="button" name="buttonPrint" value='<%=getTranNoLink("Web","print.receipt",sWebLanguage)%>' onclick="doPrintPatientReceipt('<%=patientInvoice.getUid()%>');">
 	                        <%
 	                        	}
-	                        	if(!isInsuranceAgent && MedwanQuery.getInstance().getConfigInt("printPDFreceiptenabled",0)==1){
+	                        	if(!isInsuranceAgent && MedwanQuery.getInstance().getConfigInt("printPDFreceiptenabled",1)==1){
 	                        %>
 	                        <input class="button" type="button" name="buttonPrint" value='<%=getTranNoLink("Web","print.receipt.pdf",sWebLanguage)%>' onclick="doPrintPatientReceiptPdf('<%=patientInvoice.getUid()%>');">
 	                        <%
@@ -751,7 +751,7 @@
 		                          +'&EditInvoiceVerifier='+document.getElementById('EditInvoiceVerifier').value
 		                          +'&EditReduction='+red
 		                          +'&EditComment='+document.getElementById('EditComment').value
-		              	        <% if(MedwanQuery.getInstance().getConfigInt("enableMFP",0)==1){ %>
+		              	        <% if(MedwanQuery.getInstance().getConfigInt("enableMFP",0)==1 && MedwanQuery.getInstance().getConfigInt("hideMFPInvoiceFields",0)==0){ %>
 		                          +'&EditInvoiceDoctor='+document.getElementById('EditInvoiceDoctor').value
 		                          +'&EditInvoicePost='+document.getElementById('EditInvoicePost').value
 		                          +'&EditInvoiceAgent='+document.getElementById('EditInvoiceAgent').value

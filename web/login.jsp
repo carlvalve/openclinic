@@ -206,22 +206,28 @@
     <div id="logo">
         <% if ("datacenter".equalsIgnoreCase(MedwanQuery.getInstance().getConfigString("edition",""))) {
             session.setAttribute("edition", "datacenter");%>
-        <img src="projects/datacenter/_img/logo.jpg" border="0">
+        	<img src="projects/datacenter/_img/logo.jpg" border="0">
         <% } else if ("openlab".equalsIgnoreCase(MedwanQuery.getInstance().getConfigString("edition",""))) {
             session.setAttribute("edition", "openlab");%>
-        <img src="projects/openlab/_img/logo.jpg" border="0">
+        	<img src="projects/openlab/_img/logo.jpg" border="0">
         <% } else if ("openpharmacy".equalsIgnoreCase(MedwanQuery.getInstance().getConfigString("edition",""))) {
             session.setAttribute("edition", "openpharmacy");%>
-        <img src="_img/openpharmacy_logo.jpg" border="0">
+        	<img src="_img/openpharmacy_logo.jpg" border="0">
         <% } else if ("openinsurance".equalsIgnoreCase(MedwanQuery.getInstance().getConfigString("edition",""))) {
             session.setAttribute("edition", "openinsurance");%>
-        <img src="_img/openinsurancelogo.jpg" border="0">
+        	<img src="_img/openinsurancelogo.jpg" border="0">
+        <% } else if ("bloodbank".equalsIgnoreCase(MedwanQuery.getInstance().getConfigString("edition",""))) {
+            session.setAttribute("edition", "openinsurance");%>
+        	<img src="_img/logo_bloodbank.jpg" border="0">
         <% } else {
             session.setAttribute("edition", "openclinic");%>
-        <img src="<%=sTmpAPPDIR%>_img/logo.jpg" border="0">
+        	<img src="<%=sTmpAPPDIR%>_img/logo.jpg" border="0">
         <% }%>
     </div>
-    <div id="version"><%=version%>&nbsp;</div>
+    <%
+    	String edition="bloodbank".equalsIgnoreCase(MedwanQuery.getInstance().getConfigString("edition",""))?"Blood Bank Edition<br/>":"";
+    %>
+    <div id="version"><%=edition+" "+version%>&nbsp;</div>
     <div id="fields">
         <form name="entranceform" action="checkLogin.do?ts=<%=getTs()%>" method="post" id="entranceform">
             <div id="login_field"><input class="text" name="login" size="17" onblur="limitLength(this);"/></div>

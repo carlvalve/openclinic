@@ -32,40 +32,28 @@
     
     <table width="100%" class="list" cellspacing="0" cellpadding="0" style="border:none;" onKeyDown='if(enterEvent(event,13)){if(checkDate($("beginDate"))){refreshAppointments();}return false;}else{return true;}' >
         <tr style="height:30px;">
-            <td width="80" class="admin2" id="FindUserUID_td">
-            	<span id='usertd1'><%=getTran("planning","user",sWebLanguage)%></span>
-            	<span id='servicetd1'><%=getTran("planning","service",sWebLanguage)%></span>
-            </td>
-            <td class="admin2" width="350">
-            	<span id="usertd2">
-	                <select class="text" id="FindUserUID" name="FindUserUID" onchange="displayCountedWeek(makeDate($('beginDate').value),this.options[this.selectedIndex].value);">
-	                    <option value="-1"><%=getTran("web.occup","medwan.common.all.users",sWebLanguage)%></option>
-	                    <%
-	                        Hashtable hUsers = Planning.getPlanningPermissionUsers(activeUser.userid);
-	                        v = new Vector(hUsers.keySet());
-	                        Collections.sort(v);
-	                        String sSelected, sUserID;
-	                        for(int i=0; i<v.size(); i++){
-	                            sKey = (String)v.elementAt(i);
-	                            sUserID = (String)hUsers.get(sKey);
-	                            if(sUserID.equals(sFindUserUID)){
-	                                sSelected = " selected";
-	                            }
-	                            else{
-	                                sSelected = "";
-	                            }
-	                            %><option value="<%=sUserID%>"<%=sSelected%>><%=sKey%></option><%
-	                        }
-	                    %>
-	                </select>
-                </span>
-                <span id="servicetd2">
-					<input type="hidden" name="FindServiceUID" id="FindServiceUID"  onchange="displayCountedWeek(makeDate($('beginDate').value),this.value);" value='<%=checkString((String)session.getAttribute("activePlanningServiceUid"))%>'>
-					<input class="text" type="text" name="FindServiceName" id="FindServiceName" readonly size="40" value='<%=checkString(((String)session.getAttribute("activePlanningServiceUid"))).length()>0?getTran("service",checkString(((String)session.getAttribute("activePlanningServiceUid"))),sWebLanguage):""%>' >
-					
-					<img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTran("web","select",sWebLanguage)%>" onclick="searchService('FindServiceUID','FindServiceName');">
-					<img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran("web","clear",sWebLanguage)%>" onclick="formFindUser.FindServiceUID.value='';EditEncounterForm.FindServiceName.value='';">
-                </span>
+            <td width="80" class="admin2" id="FindUserUID_td"><%=getTran("planning","user",sWebLanguage)%></td>
+            <td class="admin2" width="150">
+                <select class="text" id="FindUserUID" name="FindUserUID" onchange="displayCountedWeek(makeDate($('beginDate').value),this.options[this.selectedIndex].value);">
+                    <option value="-1"><%=getTran("web.occup","medwan.common.all.users",sWebLanguage)%></option>
+                    <%
+                        Hashtable hUsers = Planning.getPlanningPermissionUsers(activeUser.userid);
+                        v = new Vector(hUsers.keySet());
+                        Collections.sort(v);
+                        String sSelected, sUserID;
+                        for(int i=0; i<v.size(); i++){
+                            sKey = (String)v.elementAt(i);
+                            sUserID = (String)hUsers.get(sKey);
+                            if(sUserID.equals(sFindUserUID)){
+                                sSelected = " selected";
+                            }
+                            else{
+                                sSelected = "";
+                            }
+                            %><option value="<%=sUserID%>"<%=sSelected%>><%=sKey%></option><%
+                        }
+                    %>
+                </select>
             </td>
              <td class="admin2" width="75"><%=getTran("web.control","week.of",sWebLanguage)%>
             </td>
@@ -244,21 +232,16 @@
 
   <%-- OPEN APPOINTMENT --%>
   function createAppointment(params){
-	if($("servicetd2").style.display.length==0 && $('FindServiceUID').value.length==0){
-		alert('<%=getTranNoLink("web","selectservicefirst",sWebLanguage)%>');
-	}
-	else {
-	    var url = "<c:url value='/planning/ajax/editPlanning.jsp'/>?ts="+new Date().getTime();
-	    <%
-	        // active patient selected by default
-	        if(activePatient!=null){
-	            out.write("params+='&PatientId="+activePatient.personid+"';");
-	            out.write("params+='&PatientName="+((activePatient!=null)?activePatient.lastname+" "+activePatient.firstname:"")+" ("+activePatient.getID("immatnew")+")';");
-	        }
-	    %>
-	    params+= "&FindUserUID="+$("FindUserUID").value+"&EditUserUID="+$("FindUserUID").value+"&FindServiceUID="+$('FindServiceUID').value+"&EditPatientUID=<%=(activePatient!=null)?activePatient.personid:""%>";
-	    Modalbox.show(url,{title:'<%=getTran("web","planning",sWebLanguage)%>',height:500,width:650,afterHide:function(){refreshAppointments();}},{evalScripts:true});
-  	}
+    var url = "<c:url value='/planning/ajax/editPlanning.jsp'/>?ts="+new Date().getTime();
+    <%
+        // active patient selected by default
+        if(activePatient!=null){
+            out.write("params+='&PatientId="+activePatient.personid+"';");
+            out.write("params+='&PatientName="+((activePatient!=null)?activePatient.lastname+" "+activePatient.firstname:"")+" ("+activePatient.getID("immatnew")+")';");
+        }
+    %>
+    params+= "&FindUserUID="+$("FindUserUID").value+"&EditUserUID="+$("FindUserUID").value+"&EditPatientUID=<%=(activePatient!=null)?activePatient.personid:""%>";
+    Modalbox.show(url,{title:'<%=getTran("web","planning",sWebLanguage)%>',height:500,width:650,afterHide:function(){refreshAppointments();}},{evalScripts:true});
   }
   
   <%-- OPEN APPOINTMENT --%>
@@ -311,24 +294,18 @@
   }
 
   function openNewAppointment(params){
-		if($("servicetd2").style.display.length==0 && $('FindServiceUID').value.length==0){
-			alert('<%=getTranNoLink("web","selectservicefirst",sWebLanguage)%>');
-			refreshAppointments();
-		}
-		else {
-		    if(params==null){
-		      params = "&Action=new&FindUserUID="+$F('FindUserUID')+"&AppointmentID=-1&inputId="+actualAppointmentId
-		         +'&appointmentDateDay='+$("beginDate").value
-		         +'&appointmentDateHour=<%=sFrom%>'
-		         +'&appointmentDateMinutes=0'
-		         +'&appointmentDateEndDay='+$("beginDate").value
-		         +'&appointmentDateEndHour=<%=(Double.valueOf(sFrom).intValue()+1)+""%>'
-		         +'&appointmentDateEndMinutes=0';
-		    }
-		
-		    var url = "<c:url value='/planning/ajax/editPlanning.jsp'/>?ts="+new Date().getTime();
-		    Modalbox.show(url,{title:'<%=getTran("web","planning",sWebLanguage)%>',height:500,width:650,params:params,afterHide:function(){refreshAppointments();}},{evalScripts:true});
-		}
+    if(params==null){
+      params = "&Action=new&FindUserUID="+$F('FindUserUID')+"&AppointmentID=-1&inputId="+actualAppointmentId
+         +'&appointmentDateDay='+$("beginDate").value
+         +'&appointmentDateHour=<%=sFrom%>'
+         +'&appointmentDateMinutes=0'
+         +'&appointmentDateEndDay='+$("beginDate").value
+         +'&appointmentDateEndHour=<%=(Double.valueOf(sFrom).intValue()+1)+""%>'
+         +'&appointmentDateEndMinutes=0';
+    }
+
+    var url = "<c:url value='/planning/ajax/editPlanning.jsp'/>?ts="+new Date().getTime();
+    Modalbox.show(url,{title:'<%=getTran("web","planning",sWebLanguage)%>',height:500,width:650,params:params,afterHide:function(){refreshAppointments();}},{evalScripts:true});
   }
   
   <%-- SAVE APPOINTMENT --%>
@@ -351,7 +328,7 @@
                    $("appointmentDateMinutes").value+"&appointmentDateEndDay="+$("appointmentDateDay").value+"&Action=save"+
                    "&appointmentDateEndHour="+$("appointmentDateEndHour").value+"&appointmentDateEndMinutes="+$("appointmentDateEndMinutes").value+
                    "&EditEffectiveDate="+$("EditEffectiveDate").value+"&EditEffectiveDateTime="+$("EditEffectiveDateTime").value+"&EditCancelationDateTime="+$("EditCancelationDateTime").value+"&EditCancelationDate="+$("EditCancelationDate").value+
-                   "&EditUserUID="+$("EditUserUID").value+"&FindServiceUID="+$("FindServiceUID").value+"&EditPatientUID="+$("EditPatientUID").value+"&EditDescription="+encodeURIComponent($("EditDescription").value)+
+                   "&EditUserUID="+$("EditUserUID").value+"&EditPatientUID="+$("EditPatientUID").value+"&EditDescription="+encodeURIComponent($("EditDescription").value)+
                    "&EditContactUID="+$("EditContactUID").value+"&appointmentRepeatUntil="+$("appointmentRepeatUntil").value+"&EditContactName="+$("EditContactName").value+"&EditContext="+$("EditContext").value+"&tempplanninguid="+$("tempplanninguid").value;
 
       if($("EditTransactionUID")){
@@ -522,11 +499,6 @@
     window.open(url+params);
   }
   
-  function searchService(serviceUidField,serviceNameField){
-	    openPopup("/_common/search/searchService.jsp&ts=<%=getTs()%>&VarSelectDefaultStay=true&VarCode="+serviceUidField+"&VarText="+serviceNameField);
-	    document.getElementById(serviceNameField).focus();
-	  }
-
   resizeSheduler(containerHeight,containerWidth);
   clientMsg.setDiv("weekScheduler_messages");
 

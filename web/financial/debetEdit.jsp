@@ -129,30 +129,22 @@ sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
                     <%
                     System.out.println(1);
                         Vector vInsurances = Insurance.getCurrentInsurances(activePatient.personid);
-                        System.out.println("1.1");
                         if (vInsurances!=null){
-                            System.out.println("1.2");
                             boolean bInsuranceSelected = false;
                             Insurance insurance,selectedInsurance;
 							if(debet.getUid().equalsIgnoreCase("-1")){
-		                        System.out.println("1.3");
 								selectedInsurance = Insurance.getMostInterestingInsuranceForPatient(activePatient.personid);
-		                        System.out.println("1.4");
 	                            for (int i=0;i<vInsurances.size();i++){
 	                                insurance = (Insurance)vInsurances.elementAt(i);
-	                                System.out.println("1.5");
 
 	                                if (insurance!=null && insurance.isAuthorized() && insurance.getInsurar()!=null && insurance.getInsurar().getName()!=null && insurance.getInsurar().getName().trim().length()>0){
 	                                    out.print("<option value='"+insurance.getUid()+"'");
-	                                    System.out.println("1.6");
 
 	                                    if (selectedInsurance!=null && selectedInsurance.getUid().equals(insurance.getUid())){
-	                                        System.out.println("1.7");
 	                                        out.print(" selected");
 	                                        bInsuranceSelected = true;
 	                                    }
 	                                    else if (!bInsuranceSelected){
-	                                        System.out.println("1.8");
 	                                        if(vInsurances!=null && vInsurances.size()==1){
 	                                            out.print(" selected");
 	                                            bInsuranceSelected = true;
@@ -172,9 +164,7 @@ sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
 	                            }
 							}
 							else {
-		                        System.out.println("1.10");
 	                            for (int i=0;i<vInsurances.size();i++){
-	                                System.out.println("1.11");
 	                                insurance = (Insurance)vInsurances.elementAt(i);
 	
 	                                if (insurance!=null && insurance.isAuthorized() && insurance.getInsurar()!=null && insurance.getInsurar().getName()!=null && insurance.getInsurar().getName().trim().length()>0){
@@ -323,30 +313,54 @@ sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
 	    		// Stijn : updated whole paragraph below (contained mixed-up html)
 	    		// Stijn : BUT I suppose you can just leave this static part out,
 	    		// Stijn : these data are loaded by ajax at the end of the page
-	    		out.print("<table class='list' width='100%' cellpadding='1' cellspacing='0'>");
+	    		out.print("<table width='100%' cellpadding='1' cellspacing='0'>");
 	    		
 	    		// header
-	    	    out.print("<tr class='admin'>"+
-	                       "<td width='20%'><b>"+getTran("web","prestation",sWebLanguage)+"</b></td>"+
-					       "<td width='15%'><b>"+getTran("web.finance","amount.patient",sWebLanguage)+"</b></td>"+
+	    	    out.print("<tr>"+
+	                       "<td><b>"+getTran("web","prestation",sWebLanguage)+"</b></td>"+
+					       "<td><b>"+getTran("web.finance","amount.patient",sWebLanguage)+"</b></td>"+
 					       "<td><b>"+getTran("web.finance","amount.insurar",sWebLanguage)+"</b></td>"+
 					       "<td><b>"+getTranNoLink("web.finance","amount.complementaryinsurar",sWebLanguage)+"</b></td>"+
+					       "<td><b>"+getTranNoLink("web","service",sWebLanguage)+"</b></td>"+
 	                      "</tr>");
 	    		
 	    		// data
-	    		out.print("<tr class='list1'>"+
-	    		           "<td "+(debet.getExtraInsurarUid2()!=null && debet.getExtraInsurarUid2().length()>0?"class='strikeonly'":"")+">"+debet.getPrestation().getCode()+"</td>"+
-	    		           "<td>"+debet.getAmount()+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"+
-	    		           "<td>"+debet.getInsurarAmount()+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"+
-	    		           "<td>"+debet.getExtraInsurarAmount()+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"+
-	                      "</tr>");
+				String sNegociate="",sNegociate2="";
+	    		prestation=debet.getPrestation();
+		        if(activeUser.getAccessRight("financial.negotiate.tariff.select") && insurance.getInsurar().getAllowTariffNegociations()==1){
+		        	sNegociate=" <img src='"+sCONTEXTPATH+"/_img/icons/icon_interactions.png' onclick='negotiate("+prestation.getUid()+")'/>";
+		        }
+		        if(activeUser.getAccessRight("financial.negotiate.tariff.select") && debet.getExtraInsurar()!=null && debet.getExtraInsurar().getAllowTariffNegociations()==1){
+		        	sNegociate2=" <img src='"+sCONTEXTPATH+"/_img/icons/icon_interactions.png' onclick='negotiate2("+prestation.getUid()+")'/>";
+		        }
+				String coveragePct="";
+				if(debet.getAmount()+debet.getInsurarAmount()!=0){
+					coveragePct=" ("+Math.round(debet.getInsurarAmount()*100/(debet.getAmount()+debet.getInsurarAmount()))+"%)";
+				}
+	    		out.print("<tr>"+
+	    		           "<td "+(debet.getExtraInsurarUid2()!=null && debet.getExtraInsurarUid2().length()>0?"class='strikeonly'":"")+">"+checkString(prestation.getCode())+": "+prestation.getDescription()+"</td>"+
+	    		           "<td><span id='TPPP_"+prestation.getUid()+"'>"+debet.getAmount()+"</span> "+MedwanQuery.getInstance().getConfigParam("currency","RWF")+"</td>"+
+	    		           "<td><span id='TPPI_"+prestation.getUid()+"'>"+debet.getInsurarAmount()+"</span> "+MedwanQuery.getInstance().getConfigParam("currency","RWF")+"<span id='TPPC_"+prestation.getUid()+"'>"+coveragePct+"</span>"+sNegociate+"</td>"+
+	    		           "<td><span id='TPPE_"+prestation.getUid()+"'>"+debet.getExtraInsurarAmount()+"</span> "+MedwanQuery.getInstance().getConfigParam("currency","RWF")+sNegociate2+"</td>");
+				String sServiceName = sEditDebetServiceName;
+	    		if(prestation.getServiceUid()!=null && prestation.getServiceUid().length()>0){
+					Service service = Service.getService(prestation.getServiceUid());
+					if(service!=null){
+						sServiceName=checkString(service.getLabel(sWebLanguage));
+					}
+					if(!sServiceName.equals(sEditDebetServiceName)){
+						sServiceName="<font color='red'><b>"+sServiceName+"</b></font>";
+					}
+				}
+		        out.println("<td>"+sServiceName+"</td>");
+	            out.println("</tr>");
 	    				
 	            out.print("</table>");
 	                       
-				out.print("<input type='hidden' name='PPC_"+debet.getPrestationUid()+"' value='"+debet.getPrestation().getCode()+"'/>"+
-				          "<input type='hidden' name='PPP_"+debet.getPrestationUid()+"' value='"+debet.getAmount()+"'/>"+
-	                      "<input type='hidden' name='PPI_"+debet.getPrestationUid()+"' value='"+debet.getInsurarAmount()+"'/>"+
-		                  "<input type='hidden' name='PPE_"+debet.getPrestationUid()+"' value='"+debet.getExtraInsurarAmount()+"'/>");
+				out.print("<input type='hidden' name='PPC_"+debet.getPrestationUid()+"' id='PPC_"+debet.getPrestationUid()+"' value='"+debet.getPrestation().getCode()+"'/>"+
+				          "<input type='hidden' name='PPP_"+debet.getPrestationUid()+"' id='PPP_"+debet.getPrestationUid()+"' value='"+debet.getAmount()+"'/>"+
+	                      "<input type='hidden' name='PPI_"+debet.getPrestationUid()+"' id='PPI_"+debet.getPrestationUid()+"' value='"+debet.getInsurarAmount()+"'/>"+
+		                  "<input type='hidden' name='PPE_"+debet.getPrestationUid()+"' id='PPE_"+debet.getPrestationUid()+"' value='"+debet.getExtraInsurarAmount()+"'/>");
 	    	}
         %>
         </td></tr>
@@ -1012,6 +1026,14 @@ sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
 	openPopup("/_common/search/searchService.jsp&ts=<%=getTs()%>&VarCode="+serviceUidField+"&VarText="+serviceNameField);
 	document.getElementById(serviceNameField).focus();
   }
+  
+  function negotiate(prestationuid){
+	  openPopup("/financial/negotiateTariff.jsp&prestationuid="+prestationuid+"&extrainsurance="+document.getElementById('coverageinsurance').value);
+  }
+
+  function negotiate2(prestationuid){
+	  openPopup("/financial/negotiateTariff2.jsp&prestationuid="+prestationuid+"&extrainsurance="+document.getElementById('coverageinsurance').value);
+  }
 
   checkCoverage();
   EditForm.EditDate.focus();
@@ -1020,7 +1042,7 @@ sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
   checkSaveButtonRights();
   checkQuickInvoice();
   checkAdmissionDaysInvoiced();
-  window.setTimeout("changePrestation(false);",300); // Stijn
+  //window.setTimeout("changePrestation(false);",300); // Stijn
 </script>
 <%
 }

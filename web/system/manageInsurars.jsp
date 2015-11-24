@@ -59,9 +59,10 @@
     	   sEditInsurarRequiresAffiliateID = checkString(request.getParameter("EditInsurarRequiresAffiliateID")),
     	   sEditInsurarRequiresValidation  = checkString(request.getParameter("EditInsurarRequiresValidation")),
     	   sEditInsurarIncludeAllPatientInvoiceDebets  = checkString(request.getParameter("EditInsurarIncludeAllPatientInvoiceDebets")),
+    	   sEditInsurarAllowTariffNegociations  = checkString(request.getParameter("EditInsurarAllowTariffNegociations")),
 	   	   sEditInsurarAccountingCode  = checkString(request.getParameter("EditInsurarAccountingCode")),
            sEditInsurarType     = checkString(request.getParameter("EditInsurarType"));
-
+    
     /// DEBUG /////////////////////////////////////////////////////////////////////////////////////
     if(Debug.enabled){
         Debug.println("\n********************** system/manageInsurars.jsp **********************");
@@ -130,6 +131,13 @@
         insurar.setDefaultInsurarInvoiceModel(request.getParameter("EditInsurarDefaultInsurarInvoiceModel"));
         insurar.setDefaultPatientInvoiceModel(request.getParameter("EditInsurarDefaultPatientInvoiceModel"));
         insurar.setAllowedReductions(request.getParameter("EditInsurarAllowedReductions"));
+        if(sEditInsurarAllowTariffNegociations.equalsIgnoreCase("1")){
+        	insurar.setAllowTariffNegociations(1);
+        }
+        else {
+        	insurar.setAllowTariffNegociations(0);
+        }
+        
         insurar.setAccountingCode(checkString(request.getParameter("EditInsurarAccountingCode")));
         
 		int nNoSupplements = 0;
@@ -595,6 +603,12 @@
                         <td class="admin"><%=getTran("web","includeallpatientinvoicedebets",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="checkbox" name="EditInsurarIncludeAllPatientInvoiceDebets" <%=insurar.getIncludeAllPatientInvoiceDebets()==1?"checked":""%> value="1"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="admin"><%=getTran("web","allowtariffnegociations",sWebLanguage)%></td>
+                        <td class="admin2">
+                            <input type="checkbox" name="EditInsurarAllowTariffNegociations" <%=insurar.getAllowTariffNegociations()==1?"checked":""%> value="1"/>
                         </td>
                     </tr>
                     <tr>

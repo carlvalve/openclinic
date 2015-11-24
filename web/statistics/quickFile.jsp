@@ -94,11 +94,13 @@
       
     String sICPCHtml = "";
 %>
-<form name='EditPatientForm' id='EditPatientForm' method='post' action="<c:url value='/'/>popup.jsp?Page=statistics/quickFile.jsp&PopupHeight=600&PopupWidth=800">
+<form name='EditPatientForm' id='EditPatientForm' method='post' action="<c:url value='/'/>popup.jsp?Page=statistics/quickFile.jsp&PopupHeight=600&PopupWidth=1000">
 <%=writeTableHeader("Web","statistics.quickdiagnosisentry",sWebLanguage,"window.close();")%>
 
 <table class='list' border='0' width='100%' cellspacing='1'>
     <tr>
+        <td class="admin">ID</td>
+        <td class="admin2"><input type="bold" class="text" name="PatientUID" id="pi" value="" size="10"/></td>
         <td class="admin"><%=getTran("web","name",sWebLanguage)%></td>
         <td class="admin2"><input type="bold" class="text" name="patientLastname" id="pl" value="<%=sPatientLastname%>" size="25"/></td>
         <td class="admin"><%=HTMLEntities.htmlentities(getTran("web","firstname",sWebLanguage))%></td>
@@ -248,7 +250,7 @@
             %>
 <tr>
     <td class="admin2"><b>
-        <a href="<c:url value='/'/>popup.jsp?Page=statistics/quickFile.jsp&PopupHeight=600&PopupWidth=800&findPatient=1&PatientUID=<%=activePerson.personid%>"><%=activePerson.personid%></a></b>
+        <a href="<c:url value='/'/>popup.jsp?Page=statistics/quickFile.jsp&PopupHeight=600&PopupWidth=1000&findPatient=1&PatientUID=<%=activePerson.personid%>"><%=activePerson.personid%></a></b>
     </td>
     <td class="admin2"><b><%=HTMLEntities.htmlentities(activePerson.lastname+" "+activePerson.firstname+"  °"+activePerson.dateOfBirth+" "+activePerson.gender)%></b></td>
 </tr>
@@ -385,7 +387,7 @@ else if(persons.size()==1){
             if(encounter.getBegin()!=null){
                 %>
 <tr>
-    <td class="admin2"><b><a href="<c:url value='/'/>popup.jsp?Page=statistics/quickFile.jsp&PopupHeight=600&PopupWidth=800&EditEncounterUID=<%=encounter.getUid()%>&PatientUID=<%=activePerson.personid%>&findEncounter=1"/><%=ScreenHelper.stdDateFormat.format(encounter.getBegin())+" -> "+(encounter.getEnd()==null?"":ScreenHelper.stdDateFormat.format(encounter.getEnd()))%></b></td>
+    <td class="admin2"><b><a href="<c:url value='/'/>popup.jsp?Page=statistics/quickFile.jsp&PopupHeight=600&PopupWidth=1000&EditEncounterUID=<%=encounter.getUid()%>&PatientUID=<%=activePerson.personid%>&findEncounter=1"/><%=ScreenHelper.stdDateFormat.format(encounter.getBegin())+" -> "+(encounter.getEnd()==null?"":ScreenHelper.stdDateFormat.format(encounter.getEnd()))%></b></td>
     <td class="admin2"><b><%=(encounter.getService()==null?"":encounter.getService().getLabel(sWebLanguage))+(encounter.getOutcome()==null?"":" ("+getTran("encounter.outcome",encounter.getOutcome(),sWebLanguage)+")")%></b></td>
 </tr>
                 <%

@@ -59,6 +59,7 @@
     // form data
     String  sViewCode = checkString(request.getParameter("ViewCode")),
             sFindText = checkString(request.getParameter("FindText")).toUpperCase(),
+            sNoActive = checkString(request.getParameter("NoActive")),
             sFindCode = checkString(request.getParameter("FindCode")).toUpperCase();
 
     // DEBUG ///////////////////////////////////////////////////////////

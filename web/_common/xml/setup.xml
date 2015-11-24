@@ -434,6 +434,10 @@
 		<config key="tmpDir" value="/temp"/>
 		<config key="tmpDirectory" value="/temp"/>
 		<config key="tempDirectory" value="/temp"/>
+		<config key="DocumentsURL" value="$context$/documents/"/>
+		<config key="datacenterTemplateSource" value="$context$/_common/xml/"/>
+		<config key="imageSource" value="$context$"/>
+		<config key="templateSource" value="$context$/_common/xml/"/>
 	</os>
 	<os code="linux">
 		<config key="DocumentsFolder" value="$setupdir$documents"/>
@@ -445,6 +449,10 @@
 		<config key="tmpDir" value="/tmp"/>
 		<config key="tmpDirectory" value="/tmp"/>
 		<config key="tempDirectory" value="/tmp"/>
+		<config key="DocumentsURL" value="$context$/documents/"/>
+		<config key="datacenterTemplateSource" value="$context$/_common/xml/"/>
+		<config key="imageSource" value="$context$"/>
+		<config key="templateSource" value="$context$/_common/xml/"/>
 	</os>
 	<database code="mysql">
 		<config key="charindexFunction" value="locate"/>

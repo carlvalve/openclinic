@@ -27,6 +27,9 @@
 <%
     String sYear = checkString(request.getParameter("year"));
     String sUserId = checkString(request.getParameter("FindUserUID"));
+    String sServiceUid = checkString(request.getParameter("FindServiceUID"));
+    boolean bUseServiceUid = checkString(request.getParameter("FindServiceDisplay")).length()==0;
+    System.out.println("display="+request.getParameter("FindServiceDisplay"));
     String sPatientId = checkString(request.getParameter("PatientID"));
     String sMonth = checkString(request.getParameter("month"));
     String sDay = checkString(request.getParameter("day"));
@@ -50,7 +53,11 @@
     String sUserName, sOnClick;
     String sTranViewDossier = getTranNoLink("web", "viewDossier", sWebLanguage);
     List userAppointments = new LinkedList();
-    if (sUserId.length() > 0 && sPatientId.length() <= 0) {
+    if(bUseServiceUid){
+        userAppointments = Planning.getServicePlannings(sServiceUid, startOfWeek, endOfWeek);
+        session.setAttribute("activePlanningServiceUid", sServiceUid);
+    }
+    else if (sUserId.length() > 0 && sPatientId.length() <= 0) {
         userAppointments = Planning.getUserPlannings(sUserId, startOfWeek, endOfWeek);
     } else if (sPatientId.length() > 0) {
         if(sUserId.trim().equals("-1")){

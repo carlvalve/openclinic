@@ -28,7 +28,7 @@ boolean bHasConflicts=false;
 		if(reservations.size()>0){
 			for(int n=0;n<reservations.size();n++){
 				Reservation reservation = (Reservation)reservations.elementAt(n);
-				if(!reservation.getPlanningUid().startsWith("0.") && !reservation.getPlanningUid().equalsIgnoreCase(excludeplanninguid)){
+				if(reservation.getPlanning().getUser()!=null && !reservation.getPlanningUid().startsWith("0.") && !reservation.getPlanningUid().equalsIgnoreCase(excludeplanninguid)){
 					try{
 						if((reservation.getBegin().before(dbegin) && reservation.getEnd().before(dbegin))||(reservation.getBegin().after(dend) && reservation.getEnd().after(dend))){
 							out.println("<tr><td class='admin2'>"+new SimpleDateFormat("dd/MM/yyyy HH:mm").format(reservation.getBegin())+"</td><td class='admin2'>"+new SimpleDateFormat("dd/MM/yyyy HH:mm").format(reservation.getEnd())+"</td><td class='admin2'>"+ScreenHelper.getDuration(reservation.getBegin(),reservation.getEnd())+"</td><td class='admin2'>"+(reservation.getPlanning().getUser()==null?"?":reservation.getPlanning().getUser().getFullName())+"</td><td class='admin2'>"+(reservation.getPlanning().getPatient()==null?"?":reservation.getPlanning().getPatient().getFullName())+"</td><td class='admin2'>"+ScreenHelper.checkString(reservation.getPlanning().getDescription())+"</td></tr>");

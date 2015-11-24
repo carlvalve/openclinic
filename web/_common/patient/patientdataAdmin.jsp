@@ -49,7 +49,7 @@
         sComment = (activePatient.comment);
     }
 
-    // comment
+    // comment3
     if ((activePatient.comment3!=null)&&(activePatient.comment3.trim().length()>0)) {
         sComment3 = (activePatient.comment3);
     }
@@ -80,15 +80,42 @@
 <%-- MAIN TABLE ----------------------------------------------------------------------------------%>
 <table width='100%' cellspacing="1" class="list" style="border-top:none;">
     <%=(
-        setRow("Web","nativecountry",sNativeCountry,sWebLanguage)
-        +setRow("Web","Language",sLanguage,sWebLanguage)
-        +setRow("Web","Gender",sGender,sWebLanguage)
-        +setRow("Web","natreg",sNatreg,sWebLanguage)
-        +setRow("Web","tracnetid",sTracnetID,sWebLanguage)
-        +setRow("Web","treating-physician",sTreatingPhysician,sWebLanguage)
-        +setRow("Web","civilstatus",sCivilStatus,sWebLanguage)
-        +setRow("Web","comment3",sComment3,sWebLanguage)
-        +setRow("Web","comment",sComment,sWebLanguage)
+         (
+            MedwanQuery.getInstance().getConfigInt("showAdminNativeCountry",1)==0?"":
+            setRow("Web","nativecountry",sNativeCountry,sWebLanguage)
+         )
+        +(
+            MedwanQuery.getInstance().getConfigInt("showAdminLanguage",1)==0?"":
+            setRow("Web","Language",sLanguage,sWebLanguage)
+        )
+        +(
+            MedwanQuery.getInstance().getConfigInt("showAdminGender",1)==0?"":
+            setRow("Web","Gender",sGender,sWebLanguage)
+        )
+        +(
+            MedwanQuery.getInstance().getConfigInt("showAdminNatReg",1)==0?"":
+            setRow("Web","natreg",sNatreg,sWebLanguage)
+        )
+        +(
+            MedwanQuery.getInstance().getConfigInt("showAdminTracnetID",1)==0?"":
+            setRow("Web","tracnetid",sTracnetID,sWebLanguage)
+        )
+        +(
+            MedwanQuery.getInstance().getConfigInt("showAdminComment1",1)==0?"":
+            setRow("Web","treating-physician",sTreatingPhysician,sWebLanguage)
+        )
+        +(
+            MedwanQuery.getInstance().getConfigInt("showAdminComment2",1)==0?"":
+            setRow("Web","civilstatus",sCivilStatus,sWebLanguage)
+        )
+        +(
+            MedwanQuery.getInstance().getConfigInt("showAdminComment3",1)==0?"":
+            setRow("Web","comment3",sComment3,sWebLanguage)
+        )
+        +(
+            MedwanQuery.getInstance().getConfigInt("showAdminComment",1)==0?"":
+            setRow("Web","comment",sComment,sWebLanguage)
+        )
         +(MedwanQuery.getInstance().getConfigInt("enableVip",0)==1?setRow("Web","vip",getTran("vipstatus",sVip,sWebLanguage),sWebLanguage):"")
         +(MedwanQuery.getInstance().getConfigInt("enableDatacenterPatientExport",0)==1?setRow("Web","datacenterpatientexport",getTran("datacenterpatientexport",sExport,sWebLanguage),sWebLanguage):"")
         +(MedwanQuery.getInstance().getConfigInt("enableDatacenterPatientExport",0)==1?setRow("Web","lastdatacenterpatientexport",activePatient.getLastSentExportRequest(),sWebLanguage):"")
