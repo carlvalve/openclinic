@@ -1,3 +1,4 @@
+
 SET CENTRAL_SERVER_IP=server.antim.hnrw.org
 @echo off
 cd c:\projects\openclinic\util
