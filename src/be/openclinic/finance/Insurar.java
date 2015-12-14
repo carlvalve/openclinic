@@ -3,6 +3,8 @@ package be.openclinic.finance;
 import be.openclinic.common.OC_Object;
 import be.mxs.common.util.db.MedwanQuery;
 
+import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Vector;
 import java.util.Date;
 import java.sql.Connection;
@@ -24,8 +26,80 @@ public class Insurar extends OC_Object {
     private String defaultInsurarInvoiceModel;
     private String allowedReductions;
     private String modifiers;
+    private HashSet prestations;
 
-    public String getModifiers() {
+    public boolean isPrestationVisible(String prestationUid){
+    	return getUseLimitedPrestationsList()==0 || prestations.contains(prestationUid);
+    }
+    
+    public void loadPrestations(){
+		prestations = new HashSet();
+    	if(getUseLimitedPrestationsList()==1){
+    		//Load all prestationuids linked to this insurer
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+            Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+            try{
+                String sQuery = "SELECT a.* FROM OC_INSURARPRESTATIONS a,OC_PRESTATIONS b"+
+                                " WHERE OC_INSURARPRESTATION_INSURARUID=? and"
+                                + " OC_PRESTATION_OBJECTID=replace(OC_INSURARPRESTATION_PRESTATIONUID,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','')"
+                                		+ " ORDER by OC_PRESTATION_DESCRIPTION";
+                ps = oc_conn.prepareStatement(sQuery);
+                ps.setString(1,getUid());
+                rs = ps.executeQuery();
+                while(rs.next()){
+                    prestations.add(rs.getString("OC_INSURARPRESTATION_PRESTATIONUID"));
+                }
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+            finally{
+                try{
+                    if(ps!=null) ps.close();
+                    if(rs!=null) rs.close();
+                    oc_conn.close();
+                }
+                catch(SQLException e){
+                    e.printStackTrace();
+                }
+            }
+    	}
+    }
+    
+    public static void deletePrestations(String uid){
+        PreparedStatement ps = null;
+        Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+            String sQuery = "DELETE * FROM OC_INSURARPRESTATIONS"+
+                            " WHERE OC_INSURARPRESTATION_INSURARUID=?";
+            ps = oc_conn.prepareStatement(sQuery);
+            ps.setString(1,uid);
+            ps.execute();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if(ps!=null) ps.close();
+                oc_conn.close();
+            }
+            catch(SQLException e){
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    public HashSet getPrestations() {
+		return prestations;
+	}
+
+	public void setPrestations(HashSet prestations) {
+		this.prestations = prestations;
+	}
+
+	public String getModifiers() {
 		return modifiers;
 	}
 
@@ -152,6 +226,74 @@ public class Insurar extends OC_Object {
 		setModifier(6,n+"");
 	}
 	
+	public int getAllowTariffNegociations(){
+		int n=0;
+		if(getModifiers()!=null){
+			try{
+				n=Integer.parseInt(getModifiers().split(";")[7]);
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return n;
+	}
+
+	public void setAllowTariffNegociations(int n){
+		setModifier(7,n+"");
+	}
+	
+	public int getUseLimitedPrestationsList(){
+		int n=0;
+		if(getModifiers()!=null){
+			try{
+				n=Integer.parseInt(getModifiers().split(";")[8]);
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return n;
+	}
+
+	public void setUseLimitedPrestationsList(int n){
+		setModifier(8,n+"");
+	}
+	
+	public int getInsuranceReferenceNumberMandatory(){
+		int n=0;
+		if(getModifiers()!=null){
+			try{
+				n=Integer.parseInt(getModifiers().split(";")[9]);
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return n;
+	}
+
+	public void setInsuranceReferenceNumberMandatory(int n){
+		setModifier(9,n+"");
+	}
+	
+	public int getCanPrintProforma(){
+		int n=0;
+		if(getModifiers()!=null){
+			try{
+				n=Integer.parseInt(getModifiers().split(";")[10]);
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return n;
+	}
+
+	public void setCanPrintProforma(int n){
+		setModifier(10,n+"");
+	}
+	
 	public void setModifier(int index,String value){
 		if(getModifiers()==null){
 			setModifiers("");
@@ -252,6 +394,7 @@ public class Insurar extends OC_Object {
     public void setInsuraceCategories(Vector insuraceCategories) {
         this.insuranceCategories = insuraceCategories;
     }
+    
 
     //--- GET INSURANCE CATEGORY ------------------------------------------------------------------
     public InsuranceCategory getInsuranceCategory(String category){
@@ -386,6 +529,7 @@ public class Insurar extends OC_Object {
                 }
                 rs.close();
                 ps.close();
+                insurar.loadPrestations();
             }
         }
         catch(Exception e){
@@ -455,6 +599,7 @@ public class Insurar extends OC_Object {
                 }
                 rs.close();
                 ps.close();
+                insurar.loadPrestations();
             }
         }
         catch(Exception e){
@@ -704,11 +849,16 @@ public class Insurar extends OC_Object {
 
         // delete its categories
         deleteCategories(serverid,objectid);
+        deletePrestations(serverid,objectid);
     }
 
     //--- DELETE CATEGORIES -----------------------------------------------------------------------
     public static void deleteCategories(int serverid, int objectid){
         deleteCategories(serverid+"."+objectid);
+    }
+
+    public static void deletePrestations(int serverid, int objectid){
+        deletePrestations(serverid+"."+objectid);
     }
 
     public static void deleteCategories(String insurarUid){

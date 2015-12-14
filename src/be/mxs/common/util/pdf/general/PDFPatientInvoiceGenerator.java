@@ -50,7 +50,12 @@ public class PDFPatientInvoiceGenerator extends PDFInvoiceGenerator {
             doc.addAuthor(user.person.firstname+" "+user.person.lastname);
 			doc.addCreationDate();
 			doc.addCreator("OpenClinic Software");
-			doc.setPageSize(PageSize.A4);
+			if(MedwanQuery.getInstance().getConfigString("invoicePaperFormat","A4").equalsIgnoreCase("A5")){
+				doc.setPageSize(PageSize.A5);
+			}
+			else{
+				doc.setPageSize(PageSize.A4);
+			}
 
 			// get specified invoice
             PatientInvoice invoice = PatientInvoice.get(sInvoiceUid);
@@ -355,8 +360,13 @@ public class PDFPatientInvoiceGenerator extends PDFInvoiceGenerator {
         cell.setBorder(PdfPCell.BOTTOM);
         table.addCell(cell);
         table.addCell(createValueCell(ScreenHelper.stdDateFormat.format(new Date()),3,8,Font.NORMAL));
-        table.addCell(createValueCell(getTran("web.finance","balance"),1,8,Font.NORMAL));
-        table.addCell(createPriceCell(invoice.getBalance(),1));
+        if(invoice.getBalance()>0 && Balance.getActiveBalance(patient.personid).getMinimumBalance()>Balance.getPatientBalance(patient.personid)){
+        	table.addCell(createValueCell(getTran("web.finance","unauthorizedbalance"),1,MedwanQuery.getInstance().getConfigInt("unauthorizedBalanceFontSize",10),Font.BOLD));
+        }
+        else {
+        	table.addCell(createValueCell(getTran("web.finance","balance"),1,8,Font.NORMAL));
+        }
+        table.addCell(createTotalPriceCell(invoice.getBalance(),1,invoice.getDate()));
         table.addCell(createEmptyCell(3));
         table.addCell(createValueCell(getTran("web","insurar"),1,8,Font.ITALIC));
         cell = new PdfPCell(new Paragraph(priceFormat.format(totalinsurardebet)+" "+sCurrency,FontFactory.getFont(FontFactory.HELVETICA,7,Font.ITALIC)));
@@ -455,9 +465,9 @@ public class PDFPatientInvoiceGenerator extends PDFInvoiceGenerator {
             }
 
 
-            if(!sProforma.equalsIgnoreCase("yes")){
+            if(!sProforma.equalsIgnoreCase("yes") || MedwanQuery.getInstance().getConfigInt("showBarcodeForProformaInvoices",0)==1){
                 //*** barcode ***
-                Image image = PdfBarcode.getBarcode("7"+invoice.getInvoiceUid(), docWriter);            
+                Image image = PdfBarcode.getBarcode("7"+invoice.getInvoiceUid(),invoice.getInvoiceUid(), docWriter);            
                 cell = new PdfPCell(image);
                 cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
                 cell.setBorder(PdfPCell.NO_BORDER);
@@ -622,7 +632,7 @@ public class PDFPatientInvoiceGenerator extends PDFInvoiceGenerator {
             // saldo
             PdfPTable saldoTable = new PdfPTable(1);
             saldoTable.addCell(createGrayCell(getTran("web","invoiceSaldo").toUpperCase(),1));
-            cell = new PdfPCell(getSaldo(debets));
+            cell = new PdfPCell(getSaldo(debets, invoice));
             cell.setPadding(cellPadding);
             saldoTable.addCell(createCell(cell,1,PdfPCell.ALIGN_LEFT,PdfPCell.BOX));
             table.addCell(createCell(new PdfPCell(saldoTable),1,PdfPCell.ALIGN_CENTER,PdfPCell.NO_BORDER));
@@ -711,6 +721,20 @@ public class PDFPatientInvoiceGenerator extends PDFInvoiceGenerator {
         table.addCell(createValueCell(":   "+invoice.getInsurarreference()+(invoice.getInsurarreferenceDate()!=null && invoice.getInsurarreferenceDate().length()>0?" ("+invoice.getInsurarreferenceDate()+")":""),5));
         table.addCell(createLabelCell(getTran("insurance","member"),2));
         table.addCell(createValueCell(":   "+ScreenHelper.checkString(insurance.getMember()),5));
+        
+        if(invoice.getComment().length()>0){
+	        table.addCell(createLabelCell(getTran("web.finance","otherreference"),2));
+	        table.addCell(createValueCell(":   "+invoice.getComment(),12));
+        }
+
+        if(invoice.getMfpDoctor().length()>0 || invoice.getMfpDrugReceiver().length()>0 || invoice.getMfpPost().length()>0){
+        	if(MedwanQuery.getInstance().getConfigInt("hideCCBRTInvoiceFields",1)==0){
+	            table.addCell(createLabelCell(getTran("web.finance","ccbrt.specialauthorizationnumber"),2));
+	            table.addCell(createValueCell(":   "+invoice.getMfpDoctor()+(invoice.getMfpDrugReceiver().length()>0?" ("+getTran("nhif.authorizationtypes",invoice.getMfpDrugReceiver())+")":""),5));
+	            table.addCell(createLabelCell(getTran("web","ccbrt.comment"),2));
+	            table.addCell(createValueCell(":   "+invoice.getMfpPost(),5));
+        	}
+        }
 
         //*** ROW 4 ***
         // complementary insurar
@@ -1098,7 +1122,7 @@ public class PDFPatientInvoiceGenerator extends PDFInvoiceGenerator {
     }
 
     //--- GET SALDO -------------------------------------------------------------------------------
-    private PdfPTable getSaldo(Vector debets){
+    private PdfPTable getSaldo(Vector debets, PatientInvoice invoice){
         PdfPTable table = new PdfPTable(20);
         table.setWidthPercentage(pageWidth);
 
@@ -1127,7 +1151,7 @@ public class PDFPatientInvoiceGenerator extends PDFInvoiceGenerator {
         cell.setPaddingRight(5);
         table.addCell(cell);
         double saldo = (this.patientDebetTotal - Math.abs(this.creditTotal));
-        table.addCell(createTotalPriceCell(saldo,3));
+        table.addCell(createTotalPriceCell(saldo,3,invoice.getDate()));
         table.addCell(createEmptyCell(3));
 
         

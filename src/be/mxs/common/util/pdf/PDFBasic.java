@@ -440,9 +440,17 @@ public abstract class PDFBasic {
         cell = new PdfPCell(new Paragraph(value,FontFactory.getFont(FontFactory.HELVETICA,7,Font.NORMAL)));
         cell.setPaddingTop(height);
         cell.setColspan(colspan);
-        cell.setBorder(PdfPCell.BOX);
-        cell.setBorderColor(innerBorderColor);
-        cell.setVerticalAlignment(PdfPCell.ALIGN_TOP);
+        cell.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
+        cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+
+        return cell;
+    }
+
+    protected PdfPCell createBorderlessCell2(String value, int colspan, int fontsize){
+        cell = new PdfPCell(new Paragraph(value,FontFactory.getFont(FontFactory.HELVETICA,fontsize,Font.NORMAL)));
+        cell.setColspan(colspan);
+        cell.setBorder(PdfPCell.NO_BORDER);
+        cell.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
         cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
 
         return cell;
@@ -453,8 +461,7 @@ public abstract class PDFBasic {
         cell = new PdfPCell(new Paragraph(value,FontFactory.getFont(FontFactory.HELVETICA,fontSize,Font.NORMAL)));
         cell.setPaddingTop(height);
         cell.setColspan(colspan);
-        cell.setBorder(PdfPCell.BOX);
-        cell.setBorderColor(innerBorderColor);
+        cell.setBorder(PdfPCell.NO_BORDER);
         cell.setVerticalAlignment(PdfPCell.ALIGN_TOP);
         cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
 
@@ -465,8 +472,17 @@ public abstract class PDFBasic {
         cell = new PdfPCell(new Paragraph(value,FontFactory.getFont(FontFactory.HELVETICA,fontSize,Font.NORMAL)));
         cell.setPaddingTop(height);
         cell.setColspan(colspan);
-        cell.setBorder(PdfPCell.BOX);
-        cell.setBorderColor(innerBorderColor);
+        cell.setBorder(PdfPCell.NO_BORDER);
+        cell.setVerticalAlignment(PdfPCell.ALIGN_TOP);
+        cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+
+        return cell;
+    }
+
+    protected PdfPCell createBoldBorderlessCell(String value, int colspan,int fontSize){
+        cell = new PdfPCell(new Paragraph(value,FontFactory.getFont(FontFactory.HELVETICA,fontSize,Font.NORMAL)));
+        cell.setColspan(colspan);
+        cell.setBorder(PdfPCell.NO_BORDER);
         cell.setVerticalAlignment(PdfPCell.ALIGN_TOP);
         cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
 

@@ -533,7 +533,7 @@ public class Diagnosis extends OC_Object{
                          "  OC_DIAGNOSIS_ENDDATE,OC_DIAGNOSIS_CERTAINTY,OC_DIAGNOSIS_GRAVITY,"+MedwanQuery.getInstance().convert("varchar(4000)","OC_DIAGNOSIS_LATERALISATION")+" as OC_DIAGNOSIS_LATERALISATION,"+
                          "  OC_DIAGNOSIS_ENCOUNTERUID,OC_DIAGNOSIS_AUTHORUID,OC_DIAGNOSIS_CODETYPE,"+
                          "  OC_DIAGNOSIS_POA,OC_DIAGNOSIS_NC,OC_DIAGNOSIS_SERVICEUID,OC_DIAGNOSIS_FLAGS,"+
-                         "  OC_DIAGNOSIS_CREATETIME,OC_DIAGNOSIS_UPDATETIME"+
+                         "  OC_DIAGNOSIS_CREATETIME,OC_DIAGNOSIS_UPDATETIME,OC_DIAGNOSIS_REFERENCETYPE,OC_DIAGNOSIS_REFERENCEUID"+
                          " FROM OC_DIAGNOSES a, OC_ENCOUNTERS_view b";
 
         if(serverID.length()>0)       sCondition+= " OC_DIAGNOSIS_SERVERID = ? AND";
@@ -632,6 +632,8 @@ public class Diagnosis extends OC_Object{
                 dTmp.setNC(ScreenHelper.checkString(rs.getString("OC_DIAGNOSIS_NC")));
                 dTmp.setServiceUid(ScreenHelper.checkString(rs.getString("OC_DIAGNOSIS_SERVICEUID")));
                 dTmp.setFlags(ScreenHelper.checkString(rs.getString("OC_DIAGNOSIS_FLAGS")));
+                dTmp.setReferenceType(ScreenHelper.checkString(rs.getString("OC_DIAGNOSIS_REFERENCETYPE")));
+                dTmp.setReferenceUID(ScreenHelper.checkString(rs.getString("OC_DIAGNOSIS_REFERENCEUID")));
                 vDiagnoses.addElement(dTmp);
                 
                 MedwanQuery.getInstance().getObjectCache().putObject("diagnosis",dTmp);
@@ -753,6 +755,7 @@ public class Diagnosis extends OC_Object{
 
             while(rs.next()){
                 hDiagnosisInfo = new Hashtable();
+                hDiagnosisInfo.put("User",ScreenHelper.checkString(rs.getString("OC_DIAGNOSIS_AUTHORUID")));
                 hDiagnosisInfo.put("Gravity",ScreenHelper.checkString(rs.getString("OC_DIAGNOSIS_GRAVITY")));
                 hDiagnosisInfo.put("Certainty",ScreenHelper.checkString(rs.getString("OC_DIAGNOSIS_CERTAINTY")));
                 hDiagnosisInfo.put("POA",ScreenHelper.checkString(rs.getString("OC_DIAGNOSIS_POA")));
@@ -977,8 +980,47 @@ public class Diagnosis extends OC_Object{
             objDiagnosis.setCode(sCode.substring(sCodeType.length(),sCode.length()));
             objDiagnosis.setCodeType(sType);
             objDiagnosis.setLateralisation(new StringBuffer(sLateralisation));
-            objDiagnosis.setDate(encounter.getBegin());
-            objDiagnosis.setCreateDateTime(ScreenHelper.getSQLTime()); // now
+            objDiagnosis.setDate(new Date(updateTime.getTime()));
+            objDiagnosis.setCreateDateTime(new Date(updateTime.getTime())); // now
+            objDiagnosis.setUpdateDateTime(ScreenHelper.getSQLTime()); // now
+            objDiagnosis.setUpdateUser(Integer.toString(userid));
+            objDiagnosis.setReferenceType("Transaction");
+            objDiagnosis.setReferenceUID(sTransactionUID);
+            objDiagnosis.setEncounterUID(encounter.getUid());
+            objDiagnosis.setPOA(POA);
+            objDiagnosis.setNC(NC);
+            objDiagnosis.setServiceUid(serviceUid);
+            objDiagnosis.setFlags(flags);
+            objDiagnosis.store();
+            
+            MedwanQuery.getInstance().getObjectCache().putObject("diagnosis",objDiagnosis);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    //--- SAVE TRANSACTION DIAGNOSIS WITH SERVICE AND FLAGS ---------------------------------------
+    public static void saveTransactionDiagnosisWithServiceAndFlags(String sCode, String sLateralisation,
+    		                                                       String sGravity, String sCertainty, String sPersonid,
+    		                                                       String sCodeType, String sType, Timestamp updateTime,
+    		                                                       String sTransactionUID, int userid, int authorid, Encounter encounter,
+    		                                                       String POA, String NC, String serviceUid, String flags){
+        try{
+            if(POA==null) POA = "";
+            if(NC==null) NC = "";
+            
+            Diagnosis objDiagnosis = new Diagnosis();
+
+            //objDiagnosis.setAuthor(user);
+            objDiagnosis.setAuthorUID(Integer.toString(authorid));
+            objDiagnosis.setCertainty(Integer.parseInt(sCertainty));
+            objDiagnosis.setGravity(Integer.parseInt(sGravity));
+            objDiagnosis.setCode(sCode.substring(sCodeType.length(),sCode.length()));
+            objDiagnosis.setCodeType(sType);
+            objDiagnosis.setLateralisation(new StringBuffer(sLateralisation));
+            objDiagnosis.setDate(new Date(updateTime.getTime()));
+            objDiagnosis.setCreateDateTime(new Date(updateTime.getTime())); // now
             objDiagnosis.setUpdateDateTime(ScreenHelper.getSQLTime()); // now
             objDiagnosis.setUpdateUser(Integer.toString(userid));
             objDiagnosis.setReferenceType("Transaction");
@@ -1044,12 +1086,21 @@ public class Diagnosis extends OC_Object{
     static public int getGravity(String codetype, String code, int defaultValue){
     	int i = defaultValue;
         Connection oc_conn = MedwanQuery.getInstance().getOpenclinicConnection();
+        PreparedStatement ps =null;
+        ResultSet rs = null;
         
     	try{
-    		PreparedStatement ps = oc_conn.prepareStatement("select weight from OC_BOD where codetype=? and code=?");
-    		ps.setString(1,codetype);
-    		ps.setString(2,code.substring(0,3));
-    		ResultSet rs = ps.executeQuery();
+    		if(codetype.equalsIgnoreCase("icpc")){
+    			//First find equivalent ICD10 code
+    			ps=oc_conn.prepareStatement("select avg(weight) weight from OC_BOD a,concepts b where a.codetype='icd10' and b.icd10 like a.code"+MedwanQuery.getInstance().concatSign()+"'%' and b.icpc=?");
+        		ps.setString(1,code.substring(0,3));
+    		}
+    		else{
+    			ps = oc_conn.prepareStatement("select weight from OC_BOD where codetype=? and code=?");
+        		ps.setString(1,codetype);
+        		ps.setString(2,code.substring(0,3));
+    		}
+    		rs = ps.executeQuery();
     		if(rs.next()){
     			i = rs.getInt("weight");
     		}

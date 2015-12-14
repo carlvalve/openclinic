@@ -2600,6 +2600,7 @@ public class MedwanQuery {
                 sQuery = " select distinct code as code from ICD10 where "+label+" like '%"+ScreenHelper.normalizeSpecialCharacters(keys[n].toLowerCase()).toUpperCase()+"%' or code like '%"+ScreenHelper.normalizeSpecialCharacters(keys[n].toLowerCase()).toUpperCase()+"%'";
                 sQuery += " union select distinct b.icd10 as code from Concepts b,Keywords c where c.language='"+language+"' and b.icd10 is not null and b.concept=c.concept and c.keyword like '"+ScreenHelper.normalizeSpecialCharacters(keys[n].toLowerCase()).toUpperCase()+"%'";
                 sQuery += " order by code";
+                System.out.println(sQuery);
                 PreparedStatement ps;
                 Connection OccupdbConnection;
                 try{

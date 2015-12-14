@@ -14,7 +14,6 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
-import com.lowagie.text.Cell;
 
 import be.mxs.common.util.db.MedwanQuery;
 import net.admin.Label;
@@ -500,7 +499,7 @@ public class PDFOphtalmologyIOTA extends PDFGeneralBasic {
 	            // eyes image        	    		
 	            Image image = Miscelaneous.getImage("ophtalmo_3.png","");
 	            image.scaleToFit(190,80);
-	            image.setAlignment(com.lowagie.text.Image.UNDERLYING);
+	            image.setAlignment(com.itextpdf.text.Image.UNDERLYING);
 	                            
 	            cell = new PdfPCell(image);
 				cell.setBorder(PdfPCell.NO_BORDER);
@@ -597,7 +596,7 @@ public class PDFOphtalmologyIOTA extends PDFGeneralBasic {
 				section18Table.addCell(cell);
 				
 				cell = emptyCell(17);
-				cell.setBorder(Cell.NO_BORDER);
+				cell.setBorder(PdfPCell.NO_BORDER);
 				section18Table.addCell(cell);
 	
 	    		if(section18Table.size() > 1){

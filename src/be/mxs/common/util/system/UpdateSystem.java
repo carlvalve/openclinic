@@ -450,7 +450,9 @@ public class UpdateSystem implements Runnable {
 	                }
 	            }
 	            if(!exists && identifiers.length>1){
-	                MedwanQuery.getInstance().storeLabel(identifiers[0],identifiers[1],identifiers[2],paramValue,0);
+	            	if(MedwanQuery.getInstance().getConfigString("excludedLabelTypes","").indexOf(identifiers[0])<0){
+	            		MedwanQuery.getInstance().storeLabel(identifiers[0],identifiers[1],identifiers[2],paramValue,0);
+	            	}
 	            }
 	        }
         }
@@ -748,7 +750,11 @@ public class UpdateSystem implements Runnable {
 	                    		Element configelement = (Element)configelements.next();
 	                    		if(configelement.getName().equalsIgnoreCase("config")){
 	                    			//This is an OC_CONFIG setting
-	                    			MedwanQuery.getInstance().setConfigString(configelement.attributeValue("key"), configelement.attributeValue("value").replaceAll("\\$setupdir\\$", request.getSession().getServletContext().getRealPath("/").replaceAll("\\\\","/")));
+	                    			String setupdir=request.getSession().getServletContext().getRealPath("/").replaceAll("\\\\","/");
+	                    			String context = request.getRequestURL().toString().replaceAll(request.getServletPath(),"");
+	                    			String key=configelement.attributeValue("key");
+	                    			String value=configelement.attributeValue("value")+"";
+	                    			MedwanQuery.getInstance().setConfigString(key,value.replaceAll("\\$setupdir\\$", setupdir).replaceAll("\\$context\\$", context));
 	                    		}
 	                    		else if(configelement.getName().equalsIgnoreCase("labels")){
 	                    			//This is a label list 
@@ -800,7 +806,11 @@ public class UpdateSystem implements Runnable {
 	                    		Element configelement = (Element)configelements.next();
 	                    		if(configelement.getName().equalsIgnoreCase("config")){
 	                    			//This is an OC_CONFIG setting
-	                    			MedwanQuery.getInstance().setConfigString(configelement.attributeValue("key"), configelement.attributeValue("value").replaceAll("\\$setupdir\\$", request.getSession().getServletContext().getRealPath("/").replaceAll("\\\\","/")));
+	                    			String setupdir=request.getSession().getServletContext().getRealPath("/").replaceAll("\\\\","/");
+	                    			String context = request.getRequestURL().toString().replaceAll(request.getServletPath(),"");
+	                    			String key=configelement.attributeValue("key");
+	                    			String value=configelement.attributeValue("value")+"";
+	                    			MedwanQuery.getInstance().setConfigString(key,value.replaceAll("\\$setupdir\\$", setupdir).replaceAll("\\$context\\$", context));
 	                    		}
 	                    		else if(configelement.getName().equalsIgnoreCase("labels")){
 	                    			//This is a label list 

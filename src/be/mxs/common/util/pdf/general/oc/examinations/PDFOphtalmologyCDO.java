@@ -473,7 +473,7 @@ public class PDFOphtalmologyCDO extends PDFGeneralBasic {
                 // eyes image        	    		
                 Image image = Miscelaneous.getImage("ophtalmo_3.png","");
                 image.scaleToFit(190,80);
-                image.setAlignment(com.lowagie.text.Image.UNDERLYING);
+                image.setAlignment(com.itextpdf.text.Image.UNDERLYING);
                                 
                 cell = new PdfPCell(image);
 				cell.setBorder(PdfPCell.NO_BORDER);

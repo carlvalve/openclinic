@@ -83,7 +83,7 @@ public class ExporterLab extends Exporter {
 								ResultSet rs = ps.executeQuery();
 								while(rs.next()){
 									String labcode=rs.getString("analysiscode");
-									sb.append("<labtest editor='numeric' code='"+labcode+"' count='"+rs.getInt("total")+"' average='"+rs.getDouble("average")+"' standarddeviation='"+rs.getDouble("stdev")+"' month='"+i+"' year='"+n+"'/>");
+									sb.append("<labtest editor='numeric' code='"+labcode+"' count='"+rs.getInt("total")+"' average='"+rs.getDouble("average")+"' standarddeviation='"+rs.getDouble("stddev")+"' month='"+i+"' year='"+n+"'/>");
 								}
 								rs.close();
 								ps.close();

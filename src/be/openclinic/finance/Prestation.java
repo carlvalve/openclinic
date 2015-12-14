@@ -143,6 +143,27 @@ public class Prestation extends OC_Object{
 		setModifier(3,pct+"");
 	}
 	
+	public double getHideFromDefaultList(){
+		int n = 0;
+		if(getModifiers()!=null){
+			try{
+				n =Integer.parseInt(getModifiers().split(";")[4]);
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return n;
+	}
+	
+	public void setHideFromDefaultList(int n){
+		setModifier(4,n+"");
+	}
+
+	public boolean isVisibleFor(Insurar insurar){
+		return insurar.isPrestationVisible(this.getUid()) && (insurar.getUseLimitedPrestationsList()==1 || getHideFromDefaultList()==0);
+	}
+	
 	//--- SET MODIFIER ----------------------------------------------------------------------------
 	public void setModifier(int index, String value){
 		if(getModifiers()==null){

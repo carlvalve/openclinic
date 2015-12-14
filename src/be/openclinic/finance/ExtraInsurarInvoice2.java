@@ -763,7 +763,7 @@ public class ExtraInsurarInvoice2 extends Invoice {
 
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
-            sSelect = "SELECT a.lastname, a.firstname, d.*,e.* ,c.* "+
+            sSelect = "SELECT a.lastname, a.firstname,a.personid,a.gender,a.dateofbirth, d.*,e.* ,c.* "+
             " FROM OC_DEBETS d, OC_EXTRAINSURARINVOICES2 i, OC_ENCOUNTERS e, AdminView a, OC_PRESTATIONS c"+
             "  WHERE d.OC_DEBET_EXTRAINSURARINVOICEUID2 = ?"+
             "   AND i.OC_INSURARINVOICE_OBJECTID = replace(d.OC_DEBET_EXTRAINSURARINVOICEUID2,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','')"+
@@ -799,6 +799,9 @@ public class ExtraInsurarInvoice2 extends Invoice {
                 debet.setExtraInsurarUid2(rs.getString("OC_DEBET_EXTRAINSURARUID2"));
                 debet.setServiceUid(rs.getString("OC_DEBET_SERVICEUID"));
                 debet.setPatientName(rs.getString("lastname")+", "+rs.getString("firstname"));
+                debet.setPatientbirthdate(ScreenHelper.formatDate(rs.getDate("dateofbirth")));
+                debet.setPatientgender(rs.getString("gender"));
+                debet.setPatientid(rs.getString("personid"));
 
                 //*********************
                 //add Encounter object
@@ -882,7 +885,7 @@ public class ExtraInsurarInvoice2 extends Invoice {
 
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
-            sSelect = "SELECT a.lastname, a.firstname, d.*,e.*,c.*"+
+            sSelect = "SELECT a.lastname, a.firstname,a.personid,a.gender,a.dateofbirth, d.*,e.*,c.*"+
             " FROM OC_DEBETS d, OC_EXTRAINSURARINVOICES2 i, OC_ENCOUNTERS e, AdminView a, OC_PRESTATIONS c"+
             "  WHERE d.OC_DEBET_EXTRAINSURARINVOICEUID2 = ?"+
             "   AND i.OC_INSURARINVOICE_OBJECTID = replace(d.OC_DEBET_EXTRAINSURARINVOICEUID2,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','')"+
@@ -918,6 +921,9 @@ public class ExtraInsurarInvoice2 extends Invoice {
                 debet.setExtraInsurarUid2(rs.getString("OC_DEBET_EXTRAINSURARUID2"));
                 debet.setServiceUid(rs.getString("OC_DEBET_SERVICEUID"));
                 debet.setPatientName(rs.getString("lastname")+", "+rs.getString("firstname"));
+                debet.setPatientbirthdate(ScreenHelper.formatDate(rs.getDate("dateofbirth")));
+                debet.setPatientgender(rs.getString("gender"));
+                debet.setPatientid(rs.getString("personid"));
 
                 //*********************
                 //add Encounter object

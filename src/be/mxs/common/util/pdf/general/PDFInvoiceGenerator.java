@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import be.mxs.common.util.pdf.PDFBasic;
 import be.mxs.common.util.system.ScreenHelper;
 import be.mxs.common.util.db.MedwanQuery;
+import be.mxs.common.util.io.ExportSAP_AR_INV;
 import be.openclinic.finance.ExtraInsurarInvoice;
 import be.openclinic.finance.ExtraInsurarInvoice2;
 import be.openclinic.finance.InsurarInvoice;
@@ -165,7 +166,7 @@ public abstract class PDFInvoiceGenerator extends PDFBasic {
         table.setWidthPercentage(pageWidth);
 
         String sPrintedBy = getTran("web","printedby")+" "+user.person.lastname+" "+user.person.firstname+" "+
-                            getTran("web","on")+" "+ScreenHelper.stdDateFormat.format(new java.util.Date());
+                            getTran("web","on")+" "+ new SimpleDateFormat(MedwanQuery.getInstance().getConfigString("printedByDateFormat","dd/MM/yyyy")).format(new java.util.Date());
         table.addCell(createValueCell(sPrintedBy,1));
 
         return table;
@@ -353,6 +354,10 @@ public abstract class PDFInvoiceGenerator extends PDFBasic {
         return createTotalPriceCell(price,false,colspan);
     }
 
+    protected PdfPCell createTotalPriceCell(double price, int colspan, java.util.Date date){
+        return createTotalPriceCell(price,false,colspan,date);
+    }
+
     protected PdfPCell createTotalPriceCellInsurar(double price, int colspan){
         return createTotalPriceCellInsurar(price,false,colspan);
     }
@@ -362,7 +367,26 @@ public abstract class PDFInvoiceGenerator extends PDFBasic {
         if(indicateNegative){
             sValue = "- "+sValue;
         }
+        
+        cell = new PdfPCell(new Paragraph(sValue,FontFactory.getFont(FontFactory.HELVETICA,7,Font.BOLD)));
+        cell.setColspan(colspan);
+        cell.setBorder(PdfPCell.TOP);
+        cell.setVerticalAlignment(PdfPCell.ALIGN_TOP);
+        cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 
+        return cell;
+    }
+
+    protected PdfPCell createTotalPriceCell(double price, boolean indicateNegative, int colspan,java.util.Date date){
+        String sValue = priceFormat.format(price)+" "+sCurrency;
+        if(indicateNegative){
+            sValue = "- "+sValue;
+        }
+        String sAlternateCurrency = MedwanQuery.getInstance().getConfigString("AlternateCurrency","");
+        if(sAlternateCurrency.length()>0){
+        	sValue+="\n("+new DecimalFormat(MedwanQuery.getInstance().getConfigString("AlternateCurrencyPriceFormat","# ##0.00")).format(price/ExportSAP_AR_INV.getExchangeRate(sAlternateCurrency, date))+" "+sAlternateCurrency+")";
+        }
+        
         cell = new PdfPCell(new Paragraph(sValue,FontFactory.getFont(FontFactory.HELVETICA,7,Font.BOLD)));
         cell.setColspan(colspan);
         cell.setBorder(PdfPCell.TOP);
@@ -392,7 +416,7 @@ public abstract class PDFInvoiceGenerator extends PDFBasic {
         cell = new PdfPCell(new Paragraph(label,FontFactory.getFont(FontFactory.HELVETICA,7,Font.NORMAL)));
         cell.setColspan(colspan);
         cell.setBorder(PdfPCell.NO_BORDER);
-        cell.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
+        cell.setVerticalAlignment(PdfPCell.ALIGN_TOP);
         cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
 
         return cell;
@@ -402,7 +426,7 @@ public abstract class PDFInvoiceGenerator extends PDFBasic {
         cell = new PdfPCell(new Paragraph(label,FontFactory.getFont(FontFactory.HELVETICA,size,Font.NORMAL)));
         cell.setColspan(colspan);
         cell.setBorder(PdfPCell.NO_BORDER);
-        cell.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
+        cell.setVerticalAlignment(PdfPCell.ALIGN_TOP);
         cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
         cell.setPadding(1);
 
@@ -414,7 +438,7 @@ public abstract class PDFInvoiceGenerator extends PDFBasic {
         cell = new PdfPCell(new Paragraph(label,FontFactory.getFont(FontFactory.HELVETICA,7,Font.BOLD)));
         cell.setColspan(colspan);
         cell.setBorder(PdfPCell.NO_BORDER);
-        cell.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
+        cell.setVerticalAlignment(PdfPCell.ALIGN_TOP);
         cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
 
         return cell;
@@ -424,7 +448,7 @@ public abstract class PDFInvoiceGenerator extends PDFBasic {
         cell = new PdfPCell(new Paragraph(label,FontFactory.getFont(FontFactory.HELVETICA,size,Font.BOLD)));
         cell.setColspan(colspan);
         cell.setBorder(PdfPCell.NO_BORDER);
-        cell.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
+        cell.setVerticalAlignment(PdfPCell.ALIGN_TOP);
         cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
 
         return cell;
@@ -434,7 +458,7 @@ public abstract class PDFInvoiceGenerator extends PDFBasic {
         cell = new PdfPCell(new Paragraph(label,FontFactory.getFont(FontFactory.HELVETICA,7,Font.BOLD+Font.UNDERLINE)));
         cell.setColspan(colspan);
         cell.setBorder(PdfPCell.NO_BORDER);
-        cell.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
+        cell.setVerticalAlignment(PdfPCell.ALIGN_TOP);
         cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
 
         return cell;
