@@ -39,6 +39,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.sql.Timestamp;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
@@ -427,6 +428,32 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
                             }
                     	}
                     }
+                    else if(returnedTransactionVO.getTransactionType().equals("be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_PATIENTCREDITREQUEST")){
+                        try{
+                            String sMailTo = MedwanQuery.getInstance().getConfigString("patientCreditRequestMailAddress","");
+                            if(sMailTo.length()>0){
+	                            String sMailMessage = MedwanQuery.getInstance().getConfigString("patientCreditRequestMessage","");
+	                            AdminPerson patient = (AdminPerson)(request.getSession().getAttribute("activePatient"));
+	                            sMailMessage = sMailMessage.replaceAll("#PatientName#", patient.getFullName());
+	                            sMailMessage = sMailMessage.replaceAll("#PatientID#", patient.personid);
+	                            System.out.println(sMailMessage);
+	                            if (sMailMessage.length()>0){
+                                    String sMailFrom = MedwanQuery.getInstance().getConfigString("patientCreditRequestFromMailAddress","");
+                                    if (sMailFrom.length()==0){
+                                        sMailFrom = MedwanQuery.getInstance().getConfigString("DefaultFromMailAddress");
+                                    }
+
+                                    String sMailSubject = MedwanQuery.getInstance().getConfigString("patientCreditRequestSubject","Patient Credit Request for "+patient.getFullName());
+                                    // send messages
+                                    String sMailServer = MedwanQuery.getInstance().getConfigString("PatientEdit.MailServer");
+                                    Mail.sendMail(sMailServer,sMailFrom,sMailTo,sMailSubject,sMailMessage,null,null);
+	                            }
+                            }
+                        }
+                        catch (Exception e){
+                            Debug.println(e.getMessage());
+                        }
+                    }
                     else if(returnedTransactionVO.getTransactionType().equals("be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_LAB_REQUEST")){
                     	//Bewaar SMS en e-mail in user profiel
                     	item = returnedTransactionVO.getItem("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_LAB_SMS");
@@ -445,7 +472,7 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
                     if(encounterItem!=null){
                     	Encounter encounter = Encounter.get(encounterItem.getValue());
                     	if(encounter!=null){
-                    		saveDiagnosesToTable(RequestParameterParser.getInstance().parseRequestParameters(request, "ICPCCode"),RequestParameterParser.getInstance().parseRequestParameters(request, "ICD10Code"),RequestParameterParser.getInstance().parseRequestParameters(request, "DSM4Code"),returnedTransactionVO.getServerId()+"."+returnedTransactionVO.getTransactionId(),sessionContainerWO,encounter);
+                    		saveDiagnosesToTable(RequestParameterParser.getInstance().parseRequestParameters(request, "ICPCCode"),RequestParameterParser.getInstance().parseRequestParameters(request, "ICD10Code"),RequestParameterParser.getInstance().parseRequestParameters(request, "DSM4Code"),returnedTransactionVO.getUpdateTime(),returnedTransactionVO.getServerId()+"."+returnedTransactionVO.getTransactionId(),sessionContainerWO,encounter);
                     	}
                     }
 
@@ -570,7 +597,7 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
         return actionForward;
     }
 
-    public static void saveDiagnosesToTable(Hashtable ICPCCodes,Hashtable ICD10Codes,Hashtable DSM4Codes,String sTransactionUID,SessionContainerWO sessionContainerWO,Encounter encounter){
+    public static void saveDiagnosesToTable(Hashtable ICPCCodes,Hashtable ICD10Codes,Hashtable DSM4Codes,java.util.Date updatetime, String sTransactionUID,SessionContainerWO sessionContainerWO,Encounter encounter){
 
         Enumeration enumeration;
         String code;
@@ -586,9 +613,10 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
                                                       sessionContainerWO.getPersonVO().personId.toString(),
                                                       "ICPCCode",
                                                       "icpc",
-                                                      ScreenHelper.getSQLTime(),
+                                                      new java.sql.Timestamp(updatetime.getTime()),
                                                       sTransactionUID,
                                                       sessionContainerWO.getUserVO().getUserId().intValue(),
+                                                      ScreenHelper.checkString((String)ICPCCodes.get("User"+code)).length() > 0? Integer.parseInt(ScreenHelper.checkString((String)ICPCCodes.get("User"+code))):sessionContainerWO.getUserVO().getUserId().intValue(),
                                                       encounter,
                                                       ScreenHelper.checkString((String)ICPCCodes.get("POA"+code)),
                                                       ScreenHelper.checkString((String)ICPCCodes.get("NC"+code)),
@@ -610,9 +638,10 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
                                                       sessionContainerWO.getPersonVO().personId.toString(),
                                                       "DSM4Code",
                                                       "dsm4",
-                                                      ScreenHelper.getSQLTime(),
+                                                      new java.sql.Timestamp(updatetime.getTime()),
                                                       sTransactionUID,
                                                       sessionContainerWO.getUserVO().getUserId().intValue(),
+                                                      ScreenHelper.checkString((String)DSM4Codes.get("User"+code)).length() > 0? Integer.parseInt(ScreenHelper.checkString((String)DSM4Codes.get("User"+code))):sessionContainerWO.getUserVO().getUserId().intValue(),
                                                       encounter,
                                                       ScreenHelper.checkString((String)DSM4Codes.get("POA"+code)),
                                                       ScreenHelper.checkString((String)DSM4Codes.get("NC"+code)),
@@ -636,9 +665,10 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
                                                       sessionContainerWO.getPersonVO().personId.toString(),
                                                       "ICD10Code",
                                                       "icd10",
-                                                      ScreenHelper.getSQLTime(),
+                                                      new java.sql.Timestamp(updatetime.getTime()),
                                                       sTransactionUID,
                                                       sessionContainerWO.getUserVO().getUserId().intValue(),
+                                                      ScreenHelper.checkString((String)ICD10Codes.get("User"+code)).length() > 0? Integer.parseInt(ScreenHelper.checkString((String)ICD10Codes.get("User"+code))):sessionContainerWO.getUserVO().getUserId().intValue(),
                                                       encounter,
                                                       ScreenHelper.checkString((String)ICD10Codes.get("POA"+code)),
                                                       ScreenHelper.checkString((String)ICD10Codes.get("NC"+code)),

@@ -24,6 +24,7 @@ import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.system.Debug;
 import be.mxs.common.util.system.HTMLEntities;
 import be.mxs.common.util.system.UpdateSystem;
+import be.openclinic.adt.Queue;
 
 public class Monitor implements Runnable{
 	Thread thread;
@@ -91,7 +92,7 @@ public class Monitor implements Runnable{
             	vNvp.add(new NameValuePair("centerBeds",MedwanQuery.getInstance().getConfigString("globalHealthBarometerCenterBeds","")));
             	vNvp.add(new NameValuePair("date",new SimpleDateFormat("yyyyMMdd").format(new java.util.Date())));
             	vNvp.add(new NameValuePair("softwareVersion",MedwanQuery.getInstance().getConfigString("updateVersion","")));
-    			sDoc = MedwanQuery.getInstance().getConfigString("datacenterTemplateSource",MedwanQuery.getInstance().getConfigString("templateSource")) + "globalhealthbarometer.xml";
+    			sDoc = MedwanQuery.getInstance().getConfigString("datacenterTemplateSource",MedwanQuery.getInstance().getConfigString("templateSource")) + "/globalhealthbarometer.xml";
 	            reader = new SAXReader(false);
 	            document = reader.read(new URL(sDoc));
 	            root = document.getRootElement();
@@ -156,6 +157,17 @@ public class Monitor implements Runnable{
 					UpdateSystem systemUpdate = new UpdateSystem();
 					systemUpdate.validateCouncilRegistrations();
 				}
+    		}
+            //Waiting queue stats
+            try {
+    			Date dLastQueueStats = new SimpleDateFormat("yyyyMMddHHmmss").parse(MedwanQuery.getInstance().getConfigString("lastQueueStats","19000101010000"));
+    			long interval = MedwanQuery.getInstance().getConfigInt("queueStatsInterval",24*3600*1000);
+    			if(new java.util.Date().getTime()-dLastQueueStats.getTime()>interval){
+    				Queue.calculateStats();
+    				MedwanQuery.getInstance().setConfigString("lastQueueStats",new SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date()));
+    			}
+    		} catch (Exception e) {
+    			e.printStackTrace();
     		}
         }
         catch (Exception e) {

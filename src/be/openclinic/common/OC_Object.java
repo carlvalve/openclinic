@@ -68,4 +68,8 @@ public class OC_Object {
     public void setVersion(int version) {
         this.version = version;
     }
+    
+    public boolean hasValidUid(){
+    	return getUid()!=null && getUid().split("\\.").length==2;
+    }
 }

@@ -35,8 +35,29 @@ public class PrestationDebet extends OC_Object implements Comparable {
     private double extraInsurarAmount;
     private int renewalInterval;
     private java.util.Date renewalDate;
+    private String patientid;
+    private String patientgender;
+    private String patientbirthdate;
     
-    public double getTotalAmount(){
+    public String getPatientid() {
+		return patientid;
+	}
+	public void setPatientid(String patientid) {
+		this.patientid = patientid;
+	}
+	public String getPatientgender() {
+		return patientgender;
+	}
+	public void setPatientgender(String patientgender) {
+		this.patientgender = patientgender;
+	}
+	public String getPatientbirthdate() {
+		return patientbirthdate;
+	}
+	public void setPatientbirthdate(String patientbirthdate) {
+		this.patientbirthdate = patientbirthdate;
+	}
+	public double getTotalAmount(){
     	return getAmount()+getInsurarAmount()+getExtraInsurarAmount();
     }
     public double getExtraInsurarAmount() {
@@ -721,6 +742,9 @@ public class PrestationDebet extends OC_Object implements Comparable {
                 //add Patient name
                 //*********************
                 debet.setPatientName(ScreenHelper.checkString(rs.getString("lastname")) + " " + ScreenHelper.checkString(rs.getString("firstname")));
+                debet.setPatientbirthdate(ScreenHelper.formatDate(rs.getDate("dateofbirth")));
+                debet.setPatientgender(rs.getString("gender"));
+                debet.setPatientid(rs.getString("personid"));
                 MedwanQuery.getInstance().getObjectCache().putObject("prestationdebet", debet);
                 vUnassignedDebets.add(debet);
             }
@@ -871,6 +895,9 @@ public class PrestationDebet extends OC_Object implements Comparable {
                 //add Patient name
                 //*********************
                 debet.setPatientName(ScreenHelper.checkString(rs.getString("lastname")) + " " + ScreenHelper.checkString(rs.getString("firstname")));
+                debet.setPatientbirthdate(ScreenHelper.formatDate(rs.getDate("dateofbirth")));
+                debet.setPatientgender(rs.getString("gender"));
+                debet.setPatientid(rs.getString("personid"));
                 MedwanQuery.getInstance().getObjectCache().putObject("prestationdebet", debet);
                 vUnassignedDebets.add(debet);
             }
@@ -985,6 +1012,9 @@ public class PrestationDebet extends OC_Object implements Comparable {
                 //add Patient name
                 //*********************
                 debet.setPatientName(ScreenHelper.checkString(rs.getString("lastname")) + " " + ScreenHelper.checkString(rs.getString("firstname")));
+                debet.setPatientbirthdate(ScreenHelper.formatDate(rs.getDate("dateofbirth")));
+                debet.setPatientgender(rs.getString("gender"));
+                debet.setPatientid(rs.getString("personid"));
                 MedwanQuery.getInstance().getObjectCache().putObject("prestationdebet", debet);
                 vUnassignedDebets.add(debet);
             }
@@ -1143,6 +1173,9 @@ public class PrestationDebet extends OC_Object implements Comparable {
                 //add Patient name
                 //*********************
                 debet.setPatientName(ScreenHelper.checkString(rs.getString("lastname")) + " " + ScreenHelper.checkString(rs.getString("firstname")));
+                debet.setPatientbirthdate(ScreenHelper.formatDate(rs.getDate("dateofbirth")));
+                debet.setPatientgender(rs.getString("gender"));
+                debet.setPatientid(rs.getString("personid"));
                 MedwanQuery.getInstance().getObjectCache().putObject("prestationdebet", debet);
                 vDebets.add(debet);
             }
@@ -1246,6 +1279,9 @@ public class PrestationDebet extends OC_Object implements Comparable {
                 //add Patient name
                 //*********************
                 debet.setPatientName(ScreenHelper.checkString(rs.getString("lastname")) + " " + ScreenHelper.checkString(rs.getString("firstname")));
+                debet.setPatientbirthdate(ScreenHelper.formatDate(rs.getDate("dateofbirth")));
+                debet.setPatientgender(rs.getString("gender"));
+                debet.setPatientid(rs.getString("personid"));
                 MedwanQuery.getInstance().getObjectCache().putObject("prestationdebet", debet);
                 vDebets.add(debet);
             }
@@ -1425,8 +1461,8 @@ public class PrestationDebet extends OC_Object implements Comparable {
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try {
             String serverid = MedwanQuery.getInstance().getConfigString("serverId") + ".";
-            sSelect = "SELECT SUM(d.OC_DEBET_AMOUNT) as somme,count(OC_DEBET_OBJECTID) as nb,a.lastname,a.firstname FROM  OC_PRESTATIONDEBETS d,OC_ENCOUNTERS b,adminview a WHERE OC_DEBET_AMOUNT >0 AND " +
-                    MedwanQuery.getInstance().convert("int", "replace(d.OC_DEBET_ENCOUNTERUID,'" + serverid + "','')") + "=b.OC_ENCOUNTER_OBJECTID AND " + MedwanQuery.getInstance().convert("int", "b.OC_ENCOUNTER_PATIENTUID") + "=a.personid GROUP BY a.lastname,a.firstname ORDER BY a.lastname,a.firstname";
+            sSelect = "SELECT SUM(d.OC_DEBET_AMOUNT) as somme,count(OC_DEBET_OBJECTID) as nb,a.lastname,a.firstname,a.personid,a.gender,a.dateofbirth FROM  OC_PRESTATIONDEBETS d,OC_ENCOUNTERS b,adminview a WHERE OC_DEBET_AMOUNT >0 AND " +
+                    MedwanQuery.getInstance().convert("int", "replace(d.OC_DEBET_ENCOUNTERUID,'" + serverid + "','')") + "=b.OC_ENCOUNTER_OBJECTID AND " + MedwanQuery.getInstance().convert("int", "b.OC_ENCOUNTER_PATIENTUID") + "=a.personid GROUP BY a.lastname,a.firstname,a.personid,a.gender,a.dateofbirth ORDER BY a.lastname,a.firstname";
             ps = oc_conn.prepareStatement(sSelect);
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -1438,6 +1474,9 @@ public class PrestationDebet extends OC_Object implements Comparable {
 	                //add Patient name
 	                //*********************
 	                debet.setPatientName(ScreenHelper.checkString(rs.getString("lastname")) + " " + ScreenHelper.checkString(rs.getString("firstname")));
+	                debet.setPatientbirthdate(ScreenHelper.formatDate(rs.getDate("dateofbirth")));
+	                debet.setPatientgender(rs.getString("gender"));
+	                debet.setPatientid(rs.getString("personid"));
 	                MedwanQuery.getInstance().getObjectCache().putObject("prestationdebet", debet);
 	                vDebets.add(debet);
             	}

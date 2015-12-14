@@ -12,6 +12,7 @@ import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.SortedSet;
@@ -1463,12 +1464,13 @@ public class User extends OC_Object {
     //--- GET USER PARAMETERS BY TYPE -------------------------------------------------------------
     public Vector getUserParametersByType(String sUserId, String sParameterTypeBase){
     	Vector userParameters = new Vector();
+    	HashSet params = new HashSet();
         
     	Parameter parameter;
     	for(int i=0; i<this.parameters.size(); i++){
     		parameter = (Parameter)this.parameters.get(i);
     		
-    		if(parameter.parameter.startsWith(sParameterTypeBase)){
+    		if(!params.contains(parameter.parameter) && parameter.parameter.startsWith(sParameterTypeBase)){
     			UserParameter userParameter = new UserParameter();
     			userParameter.setActive(1);
     			userParameter.setUserid(Integer.parseInt(sUserId));
@@ -1476,6 +1478,7 @@ public class User extends OC_Object {
     			userParameter.setValue(parameter.value);
     			    			
     		    userParameters.add(userParameter);
+    		    params.add(parameter.parameter);
     		}
     	}
     	

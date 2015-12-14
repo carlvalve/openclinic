@@ -1014,7 +1014,7 @@ public class InsurarInvoice extends Invoice {
 
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
-            sSelect = "SELECT a.lastname, a.firstname, d.*,e.* ,c.* "+
+            sSelect = "SELECT a.lastname, a.firstname,a.personid,a.gender,a.dateofbirth, d.*,e.* ,c.* "+
                       " FROM OC_DEBETS d, OC_INSURARINVOICES i, OC_ENCOUNTERS e, AdminView a, OC_PRESTATIONS c"+
                       "  WHERE d.OC_DEBET_INSURARINVOICEUID = ?"+
                       "   AND i.OC_INSURARINVOICE_OBJECTID = replace(d.OC_DEBET_INSURARINVOICEUID,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','')"+
@@ -1045,6 +1045,9 @@ public class InsurarInvoice extends Invoice {
                 debet.setQuantity(rs.getInt("OC_DEBET_QUANTITY"));
                 debet.setServiceUid(rs.getString("OC_DEBET_SERVICEUID"));
                 debet.setPatientName(rs.getString("lastname")+", "+rs.getString("firstname"));
+                debet.setPatientbirthdate(ScreenHelper.formatDate(rs.getDate("dateofbirth")));
+                debet.setPatientgender(rs.getString("gender"));
+                debet.setPatientid(rs.getString("personid"));
 
                 //*********************
                 //add Encounter object
@@ -1134,7 +1137,7 @@ public class InsurarInvoice extends Invoice {
 
         Connection loc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
-            sSelect = "SELECT a.lastname, a.firstname, d.*,e.*,c.*"+
+            sSelect = "SELECT a.lastname, a.firstname,a.personid,a.gender,a.dateofbirth, d.*,e.*,c.*"+
                       " FROM OC_DEBETS d, OC_INSURARINVOICES i, OC_ENCOUNTERS e, AdminView a, OC_PRESTATIONS c"+
                       "  WHERE d.OC_DEBET_INSURARINVOICEUID = ?"+
                       "   AND i.OC_INSURARINVOICE_OBJECTID = replace(d.OC_DEBET_INSURARINVOICEUID,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','')"+
@@ -1143,7 +1146,7 @@ public class InsurarInvoice extends Invoice {
                       "   AND e.OC_ENCOUNTER_PATIENTUID = a.personid"+
                       " ORDER BY OC_DEBET_DATE,lastname,firstname,OC_DEBET_PATIENTINVOICEUID";
             if(bInvoicebased){
-                sSelect = "SELECT a.lastname, a.firstname, d.*,e.*,c.*,pi.OC_PATIENTINVOICE_DATE"+
+                sSelect = "SELECT a.lastname, a.firstname,a.personid,a.gender,a.dateofbirth, d.*,e.*,c.*,pi.OC_PATIENTINVOICE_DATE"+
                         " FROM OC_DEBETS d, OC_INSURARINVOICES i, OC_ENCOUNTERS e, AdminView a, OC_PRESTATIONS c, OC_PATIENTINVOICES pi"+
                         "  WHERE d.OC_DEBET_INSURARINVOICEUID = ?"+
                         "   AND i.OC_INSURARINVOICE_OBJECTID = replace(d.OC_DEBET_INSURARINVOICEUID,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','')"+
@@ -1183,7 +1186,11 @@ public class InsurarInvoice extends Invoice {
                 debet.setCredited(rs.getInt("OC_DEBET_CREDITED"));
                 debet.setQuantity(rs.getInt("OC_DEBET_QUANTITY"));
                 debet.setServiceUid(rs.getString("OC_DEBET_SERVICEUID"));
+                debet.setUpdateUser(rs.getString("OC_DEBET_UPDATEUID"));
                 debet.setPatientName(rs.getString("lastname")+", "+rs.getString("firstname"));
+                debet.setPatientbirthdate(ScreenHelper.formatDate(rs.getDate("dateofbirth")));
+                debet.setPatientgender(rs.getString("gender"));
+                debet.setPatientid(rs.getString("personid"));
 
                 //*********************
                 //add Encounter object
@@ -1275,7 +1282,7 @@ public class InsurarInvoice extends Invoice {
 
         Connection loc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
-            sSelect = "SELECT a.lastname, a.firstname, d.*,e.*,c.*"+
+            sSelect = "SELECT a.lastname, a.firstname,a.personid,a.gender,a.dateofbirth, d.*,e.*,c.*"+
                       " FROM OC_DEBETS d, OC_INSURARINVOICES i, OC_ENCOUNTERS e, AdminView a, OC_PRESTATIONS c"+
                       "  WHERE d.OC_DEBET_INSURARINVOICEUID = ?"+
                       "   AND i.OC_INSURARINVOICE_OBJECTID = replace(d.OC_DEBET_INSURARINVOICEUID,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','')"+
@@ -1306,8 +1313,12 @@ public class InsurarInvoice extends Invoice {
                 debet.setComment(rs.getString("OC_DEBET_COMMENT"));
                 debet.setCredited(rs.getInt("OC_DEBET_CREDITED"));
                 debet.setQuantity(rs.getInt("OC_DEBET_QUANTITY"));
+                debet.setUpdateUser(rs.getString("OC_DEBET_UPDATEUID"));
                 debet.setServiceUid(rs.getString("OC_DEBET_SERVICEUID"));
                 debet.setPatientName(rs.getString("lastname")+", "+rs.getString("firstname"));
+                debet.setPatientbirthdate(ScreenHelper.formatDate(rs.getDate("dateofbirth")));
+                debet.setPatientgender(rs.getString("gender"));
+                debet.setPatientid(rs.getString("personid"));
 
                 //*********************
                 //add Encounter object

@@ -39,7 +39,6 @@ import be.mxs.common.util.system.ScreenHelper;
 import be.mxs.common.util.system.StatFunctions;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.hyphenation.TernaryTree.Iterator;
 public class TimeGraph {
     /*
    USED TO CREATE A IMAGE OF GRAPH

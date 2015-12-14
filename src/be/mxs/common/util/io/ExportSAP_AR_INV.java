@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.system.Debug;
 import be.mxs.common.util.system.Mail;
 import be.mxs.common.util.system.ScreenHelper;
@@ -17,6 +18,108 @@ import be.openclinic.finance.Insurar;
 
 public class ExportSAP_AR_INV {
 
+	public static void setExchangeRate(String currency,String date,String exchangerate){
+		setExchangeRate(currency, ScreenHelper.getSQLDate(date), Double.parseDouble(exchangerate));
+	}
+	
+	public static void setExchangeRate(String currency,java.util.Date date,double exchangerate){
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		try{
+			PreparedStatement ps = conn.prepareStatement("delete from OC_EXCHANGERATES where OC_EXCHANGERATE_DATE=? and OC_EXCHANGERATE_CURRENCY=?");
+			ps.setDate(1, new java.sql.Date(date.getTime()));
+			ps.setString(2, currency);
+			ps.execute();
+			ps.close();
+			ps = conn.prepareStatement("insert into OC_EXCHANGERATES(OC_EXCHANGERATE_DATE,OC_EXCHANGERATE_CURRENCY,OC_EXCHANGERATE_RATE) values(?,?,?)");
+			ps.setDate(1, new java.sql.Date(date.getTime()));
+			ps.setString(2, currency);
+			ps.setDouble(3, exchangerate);
+			ps.execute();
+			if(ps!= null) ps.close();
+			conn.close();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+	public static double getExchangeRate(String currency,java.util.Date date){
+		return getExchangeRate(currency,date,true);
+	}
+	
+	public static double getExchangeRate(String currency,java.util.Date date,boolean last){
+		double exchangerate=-1;
+		java.util.Date currdate = ScreenHelper.getSQLDate(ScreenHelper.getSQLDate(date));
+		try{
+			Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+			PreparedStatement ps = conn.prepareStatement("select OC_EXCHANGERATE_RATE from OC_EXCHANGERATES where OC_EXCHANGERATE_DATE=? and OC_EXCHANGERATE_CURRENCY=?");
+			ps.setDate(1, new java.sql.Date(currdate.getTime()));
+			ps.setString(2, currency);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()){
+				exchangerate=rs.getDouble("OC_EXCHANGERATE_RATE");
+			}
+			else {
+				try{
+				    Class.forName(MedwanQuery.getInstance().getConfigString("SAPDatabaseClass"));			
+				    Connection sapconn =  DriverManager.getConnection(MedwanQuery.getInstance().getConfigString("SAPDatabaseURL"));
+			    	PreparedStatement pssap = sapconn.prepareStatement("select Rate from ORTT where Currency=? and RateDate=?");
+			    	pssap.setString(1, currency);
+			    	pssap.setDate(2, new java.sql.Date(currdate.getTime()));
+			    	ResultSet rssap = pssap.executeQuery();
+			    	if(!rssap.next()){
+			    		System.out.print("MISSING EXCHANGE RATE FOR "+new SimpleDateFormat("dd/MM/yyyy").format(currdate)+" - ABORTING PROCESS");
+			    		if(last){
+							rs.close();
+							ps.close();
+							ps = conn.prepareStatement("select OC_EXCHANGERATE_RATE from OC_EXCHANGERATES where OC_EXCHANGERATE_DATE<? and OC_EXCHANGERATE_CURRENCY=? order by OC_EXCHANGERATE_DATE DESC");
+							ps.setDate(1, new java.sql.Date(currdate.getTime()));
+							ps.setString(2, currency);
+							rs = ps.executeQuery();
+							if(rs.next()){
+								exchangerate=rs.getDouble("OC_EXCHANGERATE_RATE");
+							}
+			    		}
+			    	}
+			    	else{
+			    		exchangerate=rssap.getDouble("Rate");
+						rs.close();
+						ps.close();
+				    	ps = conn.prepareStatement("insert into OC_EXCHANGERATES(OC_EXCHANGERATE_DATE,OC_EXCHANGERATE_CURRENCY,OC_EXCHANGERATE_RATE) values(?,?,?)");
+						ps.setDate(1, new java.sql.Date(currdate.getTime()));
+						ps.setString(2, currency);
+						ps.setDouble(3, exchangerate);
+						ps.execute();
+			    	}
+			    	if(rssap !=null) rssap.close();
+			    	if(pssap !=null) pssap.close();
+			    	sapconn.close();
+				}
+				catch(Exception s){
+					s.printStackTrace();
+					if(last){
+						rs.close();
+						ps.close();
+						ps = conn.prepareStatement("select OC_EXCHANGERATE_RATE from OC_EXCHANGERATES where OC_EXCHANGERATE_DATE<? and OC_EXCHANGERATE_CURRENCY=? order by OC_EXCHANGERATE_DATE DESC");
+						ps.setDate(1, new java.sql.Date(currdate.getTime()));
+						ps.setString(2, currency);
+						rs = ps.executeQuery();
+						if(rs.next()){
+							exchangerate=rs.getDouble("OC_EXCHANGERATE_RATE");
+						}
+					}
+				}
+			}
+			if(rs!=null) rs.close();
+			if(ps!= null) ps.close();
+			conn.close();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return exchangerate;
+	}
+	
 	public static void main(String[] args) {
 		StringBuffer exportfile = new StringBuffer();
 		long month=30*24*3600;

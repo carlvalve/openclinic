@@ -553,6 +553,28 @@ public class PatientInvoice extends Invoice {
     	return insurers;
     }
     
+    public String getInsurerIds(){
+    	String insurers="";
+    	HashSet ins = new HashSet();
+    	Vector debets=getDebets();
+    	if(debets!=null){
+	    	for(int n=0;n<debets.size();n++){
+	    		Debet debet = (Debet)debets.elementAt(n);
+	    		if(debet.getInsurance()!=null && debet.getInsurance().getInsurar()!=null){
+	    			ins.add(debet.getInsurance().getInsurarUid());
+	    		}
+	    	}
+    	}
+    	Iterator i = ins.iterator();
+    	while(i.hasNext()){
+    		if(insurers.length()>0){
+    			insurers+=", ";
+    		}
+    		insurers+=i.next();
+    	}
+    	return insurers;
+    }
+    
     public String getExtraInsurers(){
     	String insurers="";
     	Hashtable ins = new Hashtable();

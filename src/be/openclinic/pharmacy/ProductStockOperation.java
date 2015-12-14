@@ -703,7 +703,7 @@ public class ProductStockOperation extends OC_Object{
             		//Insurance & insurar
             		Insurance insurance = Insurance.getMostInterestingInsuranceForPatient(patient.personid);
             		double insuraramount=0;
-            		if(insurance!=null){
+            		if(insurance!=null && insurance.getInsurar()!=null && prestation.isVisibleFor(insurance.getInsurar())){
             			patientamount = prestation.getPrice(insurance.getType());
 	            		debet.setInsurance(insurance);
 	            		//First find out if there is a fixed tariff for this prestation
@@ -715,23 +715,23 @@ public class ProductStockOperation extends OC_Object{
 	            			//Calculate the insuranceamount based on reimbursementpercentage
 	            			insuraramount=patientamount*(100-insurance.getPatientShare())/100;
 	            		}
+	            		patientamount=patientamount-insuraramount;
+	            		//Extrainsurar
+	            		double extrainsuraramount=0;
+	            		if(!MedwanQuery.getInstance().getConfigString("defaultExtraInsurar","-1").equalsIgnoreCase("-1")){
+	            			Insurar extrainsurar = Insurar.get(MedwanQuery.getInstance().getConfigString("defaultExtraInsurar","-1"));
+	            			if(extrainsurar!=null){
+	            				extrainsuraramount=patientamount;
+	            				patientamount=0;
+	            				debet.setExtraInsurarUid(extrainsurar.getUid());
+	            			}
+	            		}
+	            		debet.setAmount(Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(patientamount).replaceAll(",", "."))*debet.getQuantity());
+	            		debet.setInsurarAmount(Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(insuraramount).replaceAll(",", "."))*debet.getQuantity());
+	            		debet.setExtraInsurarAmount(Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(extrainsuraramount).replaceAll(",", "."))*debet.getQuantity());
+	            		debet.store();
+	            		MedwanQuery.getInstance().getObjectCache().removeObject("debet", debet.getUid());
             		}
-            		patientamount=patientamount-insuraramount;
-            		//Extrainsurar
-            		double extrainsuraramount=0;
-            		if(!MedwanQuery.getInstance().getConfigString("defaultExtraInsurar","-1").equalsIgnoreCase("-1")){
-            			Insurar extrainsurar = Insurar.get(MedwanQuery.getInstance().getConfigString("defaultExtraInsurar","-1"));
-            			if(extrainsurar!=null){
-            				extrainsuraramount=patientamount;
-            				patientamount=0;
-            				debet.setExtraInsurarUid(extrainsurar.getUid());
-            			}
-            		}
-            		debet.setAmount(Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(patientamount).replaceAll(",", "."))*debet.getQuantity());
-            		debet.setInsurarAmount(Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(insuraramount).replaceAll(",", "."))*debet.getQuantity());
-            		debet.setExtraInsurarAmount(Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(extrainsuraramount).replaceAll(",", "."))*debet.getQuantity());
-            		debet.store();
-            		MedwanQuery.getInstance().getObjectCache().removeObject("debet", debet.getUid());
             	}
             }
         }

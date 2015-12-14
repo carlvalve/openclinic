@@ -13,6 +13,7 @@ import org.dom4j.io.SAXReader;
 
 import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.system.Debug;
+import be.openclinic.adt.Queue;
 
 public class Scheduler implements Runnable{
 	Thread thread;

@@ -32,7 +32,7 @@ public class Insurance extends OC_Object {
     private String patientUID;
     private String insuranceCategoryLetter;
     private InsuranceCategory insuranceCategory;
-    private Insurar insurar;
+    private Insurar insurar,extrainsurar;
     private int patientShare;
     private String extraInsurarUid;
     private String extraInsurarUid2;
@@ -67,6 +67,15 @@ public class Insurance extends OC_Object {
 
 	public String getExtraInsurarUid(){
 		return extraInsurarUid;
+	}
+
+	public Insurar getExtraInsurar(){
+        if(extrainsurar==null){
+            if(ScreenHelper.checkString(extraInsurarUid).length()>0){
+                insurar = Insurar.get(extraInsurarUid);
+            }
+        }
+        return extrainsurar;
 	}
 
 	//--- IS AUTHORIZED ---------------------------------------------------------------------------

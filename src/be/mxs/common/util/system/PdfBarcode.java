@@ -112,6 +112,15 @@ public class PdfBarcode {
         }
 	}
 	
+	public static Image getBarcode(String text, String alttext, PdfWriter docWriter){
+        if(MedwanQuery.getInstance().getConfigString("preferredBarcodeType","Code39").equalsIgnoreCase("QRCode")){
+        	return getQRCode(text, docWriter,MedwanQuery.getInstance().getConfigInt("preferredQRCodeSize", 60));
+        }
+        else {
+        	return getCode39(text, alttext, docWriter,MedwanQuery.getInstance().getConfigInt("preferredCode39TextSize", 8),MedwanQuery.getInstance().getConfigInt("preferredCode39Baseline", 10),MedwanQuery.getInstance().getConfigInt("preferredCode39Height", 20));
+        }
+	}
+	
 	public static Image getCode39(String text, PdfWriter docWriter,int size, int baseline, int barheight){
         PdfContentByte cb = docWriter.getDirectContent();
         Barcode39 barcode39 = new Barcode39();
@@ -152,6 +161,17 @@ public class PdfBarcode {
             e.printStackTrace();
 		}
         return image;
+	}
+	
+	public static Image getCode39(String text, String alttext, PdfWriter docWriter,int size, int baseline, int barheight){
+        PdfContentByte cb = docWriter.getDirectContent();
+        Barcode39 barcode39 = new Barcode39();
+        barcode39.setCode(text);
+        barcode39.setSize(size);
+        barcode39.setBaseline(baseline);
+        barcode39.setBarHeight(barheight);
+        barcode39.setAltText(alttext);
+        return barcode39.createImageWithBarcode(cb,null,null);
 	}
 	
 }

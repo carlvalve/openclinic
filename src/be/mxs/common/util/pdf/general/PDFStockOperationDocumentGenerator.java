@@ -2,7 +2,6 @@ package be.mxs.common.util.pdf.general;
 
 import com.itextpdf.text.pdf.*;
 import com.itextpdf.text.*;
-import com.lowagie.text.Paragraph;
 
 import java.util.*;
 import java.io.ByteArrayOutputStream;
