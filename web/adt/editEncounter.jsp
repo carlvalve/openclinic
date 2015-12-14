@@ -241,18 +241,19 @@
         	                    	patientAmount+=accountAccomodationDays*accomodationPrestation.getSupplement();
         	                    }
         	                }
-                            
-                            debet.setAmount(patientAmount);
-                            debet.setInsurarAmount(insurarAmount);
-                            debet.setPrestationUid(accomodationPrestation.getUid());
-                            debet.setInsuranceUid(insurance.getUid());
-                            debet.setDate(new Date());
-                            debet.setEncounterUid(tmpEncounter.getUid());
-                            debet.setCreateDateTime(new Date());
-                            debet.setUpdateDateTime(new Date());
-                            debet.setUpdateUser(activeUser.userid);
-                            debet.setServiceUid(tmpEncounter.getServiceUID());
-                            debet.store();
+                            if(insurance.getInsurar()!=null && accomodationPrestation.isVisibleFor(insurance.getInsurar())){
+	                            debet.setAmount(patientAmount);
+	                            debet.setInsurarAmount(insurarAmount);
+	                            debet.setPrestationUid(accomodationPrestation.getUid());
+	                            debet.setInsuranceUid(insurance.getUid());
+	                            debet.setDate(new Date());
+	                            debet.setEncounterUid(tmpEncounter.getUid());
+	                            debet.setCreateDateTime(new Date());
+	                            debet.setUpdateDateTime(new Date());
+	                            debet.setUpdateUser(activeUser.userid);
+	                            debet.setServiceUid(tmpEncounter.getServiceUID());
+	                            debet.store();
+                            }	                            
                         }
                     }
                 }

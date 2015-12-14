@@ -33,7 +33,7 @@
 %>
 <script>
   function showRFElist(){
-    openPopup('healthrecord/findRFE.jsp&field=rfe&encounterUid=<%=encounter.getUid()%>&ts=<%=getTs()%>',700,400);
+    openPopup('healthrecord/findRFE.jsp&field=rfe&encounterUid=<%=encounter.getUid()%>&ts=<%=getTs()%>&reloadroot=1',700,400);
   }
 
   function deleteRFE(serverid,objectid){

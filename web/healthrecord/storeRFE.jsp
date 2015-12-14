@@ -1,5 +1,5 @@
 <%@ page import="be.mxs.common.util.system.ScreenHelper" %>
-<%@ page import="be.openclinic.medical.ReasonForEncounter" %>
+<%@ page import="be.openclinic.medical.*,be.openclinic.adt.*" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="java.text.SimpleDateFormat" %><%
     String encounterUid= ScreenHelper.checkString(request.getParameter("encounterUid"));
@@ -11,6 +11,7 @@
     String language= ScreenHelper.checkString(request.getParameter("language"));
     String userUid= ScreenHelper.checkString(request.getParameter("userUid"));
     String trandate= ScreenHelper.checkString(request.getParameter("trandate"));
+    String transfertoproblemlist= ScreenHelper.checkString(request.getParameter("transfertoproblemlist"));
     Date d = new Date();
     try{
         d = ScreenHelper.parseDate(trandate);
@@ -43,6 +44,16 @@
         reasonForEncounter.setAuthorUID(userUid);
         reasonForEncounter.setFlags(flags);
         reasonForEncounter.store();
+    }
+    if(transfertoproblemlist.equalsIgnoreCase("1")){
+    	Encounter encounter = Encounter.get(encounterUid);
+    	if(encounter.hasValidUid()){
+	        Problem problem=new Problem(encounter.getPatientUID(),codeType,code,"",new java.util.Date(),null);
+	        problem.setGravity(be.openclinic.medical.Diagnosis.getGravity(codeType,code,500));
+	        problem.setCertainty(500);
+	        problem.setUpdateDateTime(new java.util.Date());
+	        problem.store();
+    	}
     }
     out.println(ReasonForEncounter.getReasonsForEncounterAsHtml(encounterUid,language,"_img/icons/icon_delete.gif","deleteRFE($serverid,$objectid)"));
 %>

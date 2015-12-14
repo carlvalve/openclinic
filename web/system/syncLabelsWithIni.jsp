@@ -82,6 +82,7 @@
                              " *urgency.origin*encountertype*prestation.type*product.productgroup*"+
                              " *insurance.types*labanalysis.group*drug.category*planningresource*systemmessages*"; // default
     }
+    excludedLabelTypes+=MedwanQuery.getInstance().getConfigString("excludedLabelTypes","").replaceAll(",","*")+"*";
     excludedLabelTypes = excludedLabelTypes.toLowerCase();
     
     /// DEBUG /////////////////////////////////////////////////////////////////////////////////////

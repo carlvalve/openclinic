@@ -31,19 +31,19 @@
                 	patientAmount+=debet.getQuantity()*pStay.getSupplement();
                 }
             }
-
-            
-            debet.setAmount(patientAmount);
-            debet.setInsurarAmount(insurarAmount);
-            debet.setPrestationUid(pStay.getUid());
-            debet.setInsuranceUid(insurance.getUid());
-            debet.setDate(new java.util.Date());
-            debet.setEncounterUid(encounter.getUid());
-            debet.setCreateDateTime(new java.util.Date());
-            debet.setUpdateDateTime(new java.util.Date());
-            debet.setUpdateUser(activeUser.userid);
-            debet.setServiceUid(encounter.getServiceUID());
-            debet.store();
+			if(insurance.getInsurar()!=null && pStay!=null && pStay.isVisibleFor(insurance.getInsurar())){
+	            debet.setAmount(patientAmount);
+	            debet.setInsurarAmount(insurarAmount);
+	            debet.setPrestationUid(pStay.getUid());
+	            debet.setInsuranceUid(insurance.getUid());
+	            debet.setDate(new java.util.Date());
+	            debet.setEncounterUid(encounter.getUid());
+	            debet.setCreateDateTime(new java.util.Date());
+	            debet.setUpdateDateTime(new java.util.Date());
+	            debet.setUpdateUser(activeUser.userid);
+	            debet.setServiceUid(encounter.getServiceUID());
+	            debet.store();
+			}
         }
 	}
 	}

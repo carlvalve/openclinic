@@ -2,7 +2,7 @@
 <%@page errorPage="/includes/error.jsp"%>
 <%@page import="java.io.ByteArrayOutputStream,
                 java.io.PrintWriter,
-                com.lowagie.text.*,
+                com.itextpdf.text.*,
                 be.mxs.common.util.pdf.general.GeneralPDFCreator,
                 be.mxs.common.util.pdf.PDFCreator"%>
 <%=sJSSORTTABLE%>

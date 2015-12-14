@@ -176,6 +176,16 @@ function isIntegerNegativeAllowed(sObject){
 }
 
 function isNumberNegativeAllowed(inputField){
+	var CaretPos=0;
+	if (document.selection) {
+		inputField.focus ();
+		var Sel = document.selection.createRange ();
+		Sel.moveStart ('character', -inputField.value.length);
+		CaretPos = Sel.text.length;
+	}
+	else if (inputField.selectionStart || inputField.selectionStart == '0'){
+		CaretPos = inputField.selectionStart;  inputField.value=inputField.value.replace(",",".").replace(" ","");
+	}	
   if(inputField.value.length==0) return false;
   var number = inputField.value;
   var vchar = "-1234567890.";
@@ -200,7 +210,7 @@ function isNumberNegativeAllowed(inputField){
   if(inputField.value.length > 250){
     inputField.value = inputField.value.substring(0,249);
   }
-
+  inputField.setSelectionRange(CaretPos,CaretPos);
   return true;
 }
 

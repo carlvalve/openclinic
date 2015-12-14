@@ -77,7 +77,7 @@
     Iterator userIter = vUsers.iterator();
     Hashtable usersPerDiv = new Hashtable();
     String sSearchService=checkString(request.getParameter("FindServiceID"));
-    if(sSearchService.length()>0){
+    if(sSearchService.length()>0 && sSelectLastname.length()==0 && sSelectFirstname.length()==0){
     	usersPerDiv.put(sSearchService,new Vector());
     }
     else {
@@ -86,7 +86,6 @@
     usersPerDiv.put("varia",new Vector());
     // run thru found users
     Hashtable user, hUserInfo;
-    System.out.println("A");
     while(userIter.hasNext()){
         hUserInfo = (Hashtable)userIter.next();
         
@@ -98,7 +97,6 @@
         }
         sLastname = sLastname.replace('\'','´');
         sFirstname = sFirstname.replace('\'','´');
-        System.out.println("B");
 
         // service
         sServiceID = checkString((String)hUserInfo.get("serviceid"));
@@ -111,8 +109,6 @@
         user.put("firstName",sFirstname);
         user.put("serviceId",sServiceID);
 
-        System.out.println("C");
-
         if(sServiceID.toUpperCase().startsWith(sSearchService.toUpperCase())){
         	((Vector)(usersPerDiv.get(sSearchService))).add(user);
         }
@@ -120,15 +116,13 @@
         	((Vector)(usersPerDiv.get("varia"))).add(user);
         }
     }
-    System.out.println("D");
 
-	if(usersPerDiv.get(sSearchService)!=null){
+	if(usersPerDiv.get(sSearchService)!=null && !sSearchService.equalsIgnoreCase("##??//")){
         selectedTab = "tab_1";
     }
 	else{
 		selectedTab="tab_varia";
 	}
-    System.out.println("E");
 %>
 
 <div class="search" style="border:none;width:100%">
@@ -143,14 +137,14 @@
                	if(serviceName.length()>20){
                		serviceName=serviceName.substring(0, 20)+"...";
                	}
-	        %>
-            <td style="cursor:pointer" class="tabunselected" width="1%" title="<%=HTMLEntities.htmlentities(serviceNameFull)%>" onclick="activateTab('tab_1')" id="td1" nowrap>
-            	&nbsp;<b><%=HTMLEntities.htmlentities(serviceName)%></b>&nbsp;
-            </td>
-            
-            <%-- varia division TR --%>
-            <td class="tabs" width="5">&nbsp;</td>
-            <%
+		        %>
+	            <td style="cursor:pointer" class="tabunselected" width="1%" title="<%=HTMLEntities.htmlentities(serviceNameFull)%>" onclick="activateTab('tab_1')" id="td1" nowrap>
+	            	&nbsp;<b><%=HTMLEntities.htmlentities(serviceName)%></b>&nbsp;
+	            </td>
+	            
+	            <%-- varia division TR --%>
+	            <td class="tabs" width="5">&nbsp;</td>
+	            <%
         	}
             %>
             <td style="cursor:pointer" class="tabunselected" width="1%" onclick="activateTab('tab_varia')" id="td2" nowrap>
@@ -167,31 +161,31 @@
         <%
         	if(usersPerDiv.get(sSearchService)!=null){
         %>
-        <tr id="tr_tab1" style="display:none">
-            <td>
-                <table width="100%" cellpadding="0" cellspacing="0" class="sortable" id="searchresults1" style="border-top:none;">
-                    <%-- header --%>
-                    <tr class="admin">
-                        <td width="200"><%=HTMLEntities.htmlentities(getTran("Web","name",sWebLanguage))%></td>
-                        <td width="300"><%=HTMLEntities.htmlentities(getTran("Web","service",sWebLanguage))%></td>
-                    </tr>
-                    <tbody class="hand">
-                        <%=HTMLEntities.htmlentities(getHtml((Vector)(usersPerDiv.get(checkString(request.getParameter("FindServiceID")))),sWebLanguage))%>
-                    </tbody>
-                </table>
-
-                <%
-                    if(((Vector)usersPerDiv.get(checkString(request.getParameter("FindServiceID")))).size()==0){
-                        // no records found message
-                        %><div><%=HTMLEntities.htmlentities(getTran("web","nousersFoundInDivision",sWebLanguage))%></div><%
-                    }
-                    else{
-                        // X records found message
-		                %><div><%=((Vector)usersPerDiv.get(checkString(request.getParameter("FindServiceID")))).size()%> <%=HTMLEntities.htmlentities(getTran("web","usersFoundInDivision",sWebLanguage))%></div><%
-                    }
-                %>
-            </td>
-        </tr>
+	        <tr id="tr_tab1" style="display:none">
+	            <td>
+	                <table width="100%" cellpadding="0" cellspacing="0" class="sortable" id="searchresults1" style="border-top:none;">
+	                    <%-- header --%>
+	                    <tr class="admin">
+	                        <td width="200"><%=HTMLEntities.htmlentities(getTran("Web","name",sWebLanguage))%></td>
+	                        <td width="300"><%=HTMLEntities.htmlentities(getTran("Web","service",sWebLanguage))%></td>
+	                    </tr>
+	                    <tbody class="hand">
+	                        <%=HTMLEntities.htmlentities(getHtml((Vector)(usersPerDiv.get(checkString(request.getParameter("FindServiceID")))),sWebLanguage))%>
+	                    </tbody>
+	                </table>
+	
+	                <%
+	                    if(((Vector)usersPerDiv.get(checkString(request.getParameter("FindServiceID")))).size()==0){
+	                        // no records found message
+	                        %><div><%=HTMLEntities.htmlentities(getTran("web","nousersFoundInDivision",sWebLanguage))%></div><%
+	                    }
+	                    else{
+	                        // X records found message
+			                %><div><%=((Vector)usersPerDiv.get(checkString(request.getParameter("FindServiceID")))).size()%> <%=HTMLEntities.htmlentities(getTran("web","usersFoundInDivision",sWebLanguage))%></div><%
+	                    }
+	                %>
+	            </td>
+	        </tr>
         <%
         	}
         %>
@@ -211,6 +205,7 @@
                 </table>
 
                 <%
+                	System.out.println("A:"+((Vector)usersPerDiv.get("varia")).size());
                     if(((Vector)usersPerDiv.get("varia")).size()==0){
                         // no records found message
                         %><div><%=HTMLEntities.htmlentities(getTran("web","nousersFoundInDivision",sWebLanguage))%></div><%
@@ -224,5 +219,4 @@
         </tr>
     </table>
 </div>
-
 <script>activateTab('<%=selectedTab%>');</script>

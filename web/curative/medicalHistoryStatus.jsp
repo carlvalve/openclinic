@@ -1,9 +1,13 @@
-<%@page import="be.openclinic.adt.Encounter" %>
+<%@page import="be.openclinic.finance.*,be.openclinic.adt.Encounter" %>
 <%@ page import="java.util.Vector" %>
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
 <%=sJSSORTTABLE%>
 
+<%
+	double saldo = Balance.getPatientBalance(activePatient.personid);
+	Balance balance = Balance.getActiveBalance(activePatient.personid);
+%>
 <%
 try{
     // context

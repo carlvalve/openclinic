@@ -43,6 +43,7 @@
     <input type="hidden" name="FindInsurarContact" value="<%=sFindInsurarContact%>">
     <input type="hidden" name="doFunction" value="<%=sFunction%>">
     <input type="hidden" name="ExcludeCoverageplans" value="<%=sExcludeCoverageplans%>">
+    <input type="hidden" name="RestrictedListOnly" value="<%=checkString(request.getParameter("restrictedlistonly"))%>">
       
     <%=writeTableHeader("financial","searchInsurar",sWebLanguage," window.close();")%>
     

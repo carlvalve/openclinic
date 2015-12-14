@@ -1,4 +1,4 @@
-<%@page import="be.openclinic.finance.Prestation,
+<%@page import="be.openclinic.finance.*,
                 java.util.Vector,
                 be.mxs.common.util.system.HTMLEntities,
                 be.openclinic.finance.Insurance"%>
@@ -16,6 +16,16 @@
            sFindPrestationPrice   = checkString(request.getParameter("FindPrestationPrice"));
 
     String sFunction = checkString(request.getParameter("doFunction"));
+    String sCheckInsurance = checkString(request.getParameter("CheckInsurance"));
+    boolean mustCheckInsurance=false;
+    Insurar insurar=null;
+    if(sCheckInsurance.length()>0){
+    	Insurance insurance = Insurance.get(sCheckInsurance);
+    	if(insurance!=null){
+    		insurar = insurance.getInsurar();
+    		mustCheckInsurance=insurar.getUseLimitedPrestationsList()==1;
+    	}
+    }
 
     String sReturnFieldUid   = checkString(request.getParameter("ReturnFieldUid")),
            sReturnFieldCode  = checkString(request.getParameter("ReturnFieldCode")),
@@ -71,6 +81,9 @@
 
         while(prestationsIter.hasNext()){
             prestation = (Prestation)prestationsIter.next();
+            if(insurar==null || prestation==null || !prestation.isVisibleFor(insurar)){
+            	continue;
+            }
             if(prestation!=null && !checkString(prestation.getType()).equalsIgnoreCase("con.openinsurance")){
             	recCount++;
 

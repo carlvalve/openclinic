@@ -17,6 +17,10 @@ var initMinutes = 15;	// Used to auto set start time. Example: 15 = auto set sta
 var snapToMinutes = 15;	// Snap to minutes, example: 5 = allow minute 0,5,10,15,20,25,30,35,40,45,50,55
 //var weekplannerStartHour = 6;	// If you don't want to display all hours from 0, but start later, example: 8am
 var initDateToShow = new Date();
+if($("FindUserDate")){
+	var parts = $("FindUserDate").value.match(/(\d+)/g);
+	initDateToShow= new Date(parts[2], parts[1]-1, parts[0]);
+}
 var inlineTextAreaEnabled = false;
 var actualAppointmentId;
 /* End user variables */

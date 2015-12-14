@@ -10,6 +10,15 @@
     <%=sJSPROTOTYPE%>
     <%=sJSNUMBER%>
     <%=sJSTOGGLE%>
+    <%=sCSSMODALBOX%>
+    <%=sJSMODALBOX%>
+    <%=sJSTOGGLE%>
+    <%=sJSFORM%>
+    <%=sJSPOPUPMENU%>
+    <%=sJSPROTOTYPE%>
+    <%=sJSSCRPTACULOUS%>
+  	<%=sJSSCRIPTS%>
+
 </head>
 <%
 
@@ -214,19 +223,6 @@
     </table>
 </div>
 
-<%-- End Floating layer -------------------------------------------------------------------------%>
-<body style="margin:2px;" onload="resizeMe();">
-<table width="100%" border="0" cellspacing="0" cellpadding="0" id="popuptbl" height="100%">
-    <tr>
-        <td colspan="3" style="vertical-align:top;" height="100%">
-            <%
-                response.setHeader("Pragma","no-cache"); //HTTP 1.0
-                response.setDateHeader("Expires",0); //prevents caching at the proxy server
-                ScreenHelper.setIncludePage("/"+customerInclude(sPopupPage),pageContext);
-            %>
-        </td>
-    </tr>
-</table>
 
 <script>
   <%=getUserInterval(session,activeUser)%>
@@ -300,7 +296,21 @@
   }
 
   if(document.layers) document.captureEvents(Event.MOUSEDOWN);
+  resizeMe();
 </script>
+<%-- End Floating layer -------------------------------------------------------------------------%>
+<body style="margin:2px;" onload="resizeMe();">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" id="popuptbl" height="100%">
+    <tr>
+        <td colspan="3" style="vertical-align:top;" height="100%">
+            <%
+                response.setHeader("Pragma","no-cache"); //HTTP 1.0
+                response.setDateHeader("Expires",0); //prevents caching at the proxy server
+                ScreenHelper.setIncludePage("/"+customerInclude(sPopupPage),pageContext);
+            %>
+        </td>
+    </tr>
+</table>
 
 </body>
 </html>

@@ -67,7 +67,9 @@
 
 <%-- BUTTONS --%>
 <center>
-    <input type="button" class="button" name="ButtonEdit" value="<%=getTranNoLink("web","edit",sWebLanguage)%>" onclick="doEdit()">&nbsp;
+	<%if (activeUser.getAccessRight("patient.administration.edit")){ %>
+    	<input type="button" class="button" name="ButtonEdit" value="<%=getTranNoLink("web","edit",sWebLanguage)%>" onclick="doEdit()">&nbsp;
+    <%} %>
     <input type="button" class="button" name="ButtonClose" value="<%=getTranNoLink("Web","close",sWebLanguage)%>" onclick="window.close();">
 </center>
 

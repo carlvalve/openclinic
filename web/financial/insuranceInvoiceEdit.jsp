@@ -259,6 +259,12 @@
 	                            <option value="mfpcsv" <%=defaultmodel.equalsIgnoreCase("mfpcsv")?"selected":""%>><%=getTranNoLink("web","mfpcsvmodel",sWebLanguage)%></option>
 		                    <%
 		           		}
+		              	if(MedwanQuery.getInstance().getConfigInt("enableCCBRT",0)==1){
+		                    %>
+		                    	<option value="ccbrtacsv" <%=defaultmodel.equalsIgnoreCase("ccbrtacsv")?"selected":""%>><%=getTranNoLink("web","ccbrtacsvmodel",sWebLanguage)%></option>
+		                    	<option value="ccbrtbcsv" <%=defaultmodel.equalsIgnoreCase("ccbrtbcsv")?"selected":""%>><%=getTranNoLink("web","ccbrtbcsvmodel",sWebLanguage)%></option>
+		                    <%
+		           		}
 		              	
                     	if(MedwanQuery.getInstance().getConfigInt("enableBurundi",0)==1){
 		                    %>
@@ -454,6 +460,14 @@ function doPrintPdf(invoiceUid) {
     }
     else if(EditForm.PrintModel.value=='cplrcsv'){
 		var url = "<c:url value='/util/csvDocs.jsp'/>?invoiceuid=" + invoiceUid + "&ts=<%=getTs()%>&docid=invoice.cplr";
+	    window.open(url, "InsurarInvoicePdf<%=new java.util.Date().getTime()%>", "height=600,width=900,toolbar=yes,status=no,scrollbars=yes,resizable=yes,menubar=yes");
+    }
+    else if(EditForm.PrintModel.value=='ccbrtacsv'){
+		var url = "<c:url value='/util/csvDocs.jsp'/>?invoiceuid=" + invoiceUid + "&ts=<%=getTs()%>&docid=invoice.ccbrta";
+	    window.open(url, "InsurarInvoicePdf<%=new java.util.Date().getTime()%>", "height=600,width=900,toolbar=yes,status=no,scrollbars=yes,resizable=yes,menubar=yes");
+    }
+    else if(EditForm.PrintModel.value=='ccbrtbcsv'){
+		var url = "<c:url value='/util/csvDocs.jsp'/>?invoiceuid=" + invoiceUid + "&ts=<%=getTs()%>&docid=invoice.ccbrtb";
 	    window.open(url, "InsurarInvoicePdf<%=new java.util.Date().getTime()%>", "height=600,width=900,toolbar=yes,status=no,scrollbars=yes,resizable=yes,menubar=yes");
     }
     else if(EditForm.PrintModel.value=='mfpcsv'){

@@ -579,7 +579,6 @@ sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
 	          document.getElementById('prestationcontent').innerHTML='';
 	      }
 	      else {
-	          EditForm.EditPrestationName.style.backgroundColor='white';
 	          if (!bFirst){
 	              document.getElementById('divMessage').innerHTML = "<img src='<c:url value="/_img/themes/default/ajax-loader.gif"/>'/><br/>Calculating";
 	              var today = new Date();
@@ -841,7 +840,9 @@ sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
   }
 
 	function openQuicklist(){
-	    openPopup("/financial/quicklist.jsp&ts=<%=getTs()%>&EditInsuranceUID="+document.getElementById("EditInsuranceUID").value+"&PopupHeight=600&PopupWidth=800");
+		if(document.getElementById("EditInsuranceUID").value.length>0){
+		    openPopup("/financial/quicklist.jsp&ts=<%=getTs()%>&EditInsuranceUID="+document.getElementById("EditInsuranceUID").value+"&PopupHeight=600&PopupWidth=800");
+		}
 	}
 	
   	function searchEncounter(encounterUidField,encounterNameField){
@@ -870,7 +871,11 @@ sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
     	document.getElementById('EditPrestationGroup').value='';
         EditForm.tmpPrestationName.value = "";
         EditForm.tmpPrestationUID.value = "";
-        openPopup("/_common/search/searchPrestation.jsp&ts=<%=getTs()%>&ReturnFieldUid=tmpPrestationUID&ReturnFieldDescr=tmpPrestationName&ReturnFieldPrice=tmpPrestationPrice&doFunction=changeTmpPrestation()&doFunctionVariable=changeTmpPrestationVariable()");
+        insuranceuid=document.getElementById("EditInsuranceUID").value;
+        if(insuranceuid==''){
+        	insuranceuid='?';
+        }
+        openPopup("/_common/search/searchPrestation.jsp&ts=<%=getTs()%>&ReturnFieldUid=tmpPrestationUID&ReturnFieldDescr=tmpPrestationName&ReturnFieldPrice=tmpPrestationPrice&doFunction=changeTmpPrestation()&doFunctionVariable=changeTmpPrestationVariable()&checkInsurance="+insuranceuid);
     }
 
     function doCredit(){

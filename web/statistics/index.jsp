@@ -253,6 +253,7 @@
                   writeTblChildWithCode("javascript:hospitalReport()",getTran("Web","chin.global.hospital.report",sWebLanguage))+
                   writeTblChildWithCode("javascript:minisanteReport()",getTran("Web","chin.minisantereport.health.center",sWebLanguage))+
                   writeTblChildWithCode("javascript:minisanteReportDH()",getTran("Web","chin.minisantereport.district.hospital",sWebLanguage))+
+                  writeTblChildWithCode("javascript:jasperReports()",getTran("Web","statistics.activitystats.jasperReports",sWebLanguage))+
                   writeTblChildWithCode("javascript:openPopup(\"chin/chinGraph.jsp&ts="+getTs()+"\",1000,750)",getTran("Web","chin.actualsituation",sWebLanguage))+
                   writeTblChildWithCode("javascript:window.location.href=\"main.jsp?Page=healthnet/index.jsp&ts="+getTs()+"\"",getTran("Web","chin.healthnet",sWebLanguage)));
         out.print(ScreenHelper.writeTblFooter());
@@ -261,6 +262,10 @@
 </form>
 
 <script>
+function jasperReports(){
+    var URL = "/statistics/jasperReports.jsp";
+	openPopup(URL,600,400,"OpenClinic");
+  }
 function downloadPBFdocs(query,db){
     var URL = "/statistics/downloadPBFdocs.jsp&query="+query+"&db="+db+"&begin="+document.getElementsByName('begin')[0].value+"&end="+document.getElementsByName('end')[0].value;
 	openPopup(URL,400,300,"OpenClinic");

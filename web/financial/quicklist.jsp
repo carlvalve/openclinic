@@ -31,6 +31,16 @@
 
 <%    	
     boolean quickInvoicingEnabled = (MedwanQuery.getInstance().getConfigInt("enableQuickInvoicing",0)==1);
+	String sCheckInsurance = checkString(request.getParameter("EditInsuranceUID"));
+	boolean mustCheckInsurance=false;
+	Insurar insurar=null;
+	if(sCheckInsurance.length()>0){
+		Insurance insurance = Insurance.get(sCheckInsurance);
+		if(insurance!=null){
+			insurar = insurance.getInsurar();
+			mustCheckInsurance=insurar.getUseLimitedPrestationsList()==1;
+		}
+	}
 
 	/// DEBUG /////////////////////////////////////////////////////////////////////////////////////
 	if(Debug.enabled){
@@ -80,10 +90,18 @@
 						hasContent = true;
 						prestation = Prestation.getByCode(val);
 						if(prestation!=null && prestation.getDescription()!=null){
-							sLine+= "<td bgcolor='"+getItemColor(sPrestations,i,n)+"' width='"+(100/cols)+"%'>"+
-						             "<input type='checkbox' name='prest."+prestation.getUid()+"' id='prest."+prestation.getUid()+"'/>"+
-							         "<input type='text' class='text' name='quant."+prestation.getUid()+"' id='quant."+prestation.getUid()+"' value='1' size='1'/>"+prestation.getDescription()+
-							        "</td>";
+							if(mustCheckInsurance && !prestation.isVisibleFor(insurar)){
+								sLine+= "<td bgcolor='"+getItemColor(sPrestations,i,n)+"' width='"+(100/cols)+"%'>"+
+							             "<input disabled type='checkbox' name='prest."+prestation.getUid()+"' id='prest."+prestation.getUid()+"'/>"+
+								         "<input disabled type='text' class='text' name='quant."+prestation.getUid()+"' id='quant."+prestation.getUid()+"' value='1' size='1'/><font style='color: lightgray;text-decoration:line-through'>"+prestation.getDescription()+
+								        "</font></td>";
+							}
+							else{
+								sLine+= "<td bgcolor='"+getItemColor(sPrestations,i,n)+"' width='"+(100/cols)+"%'>"+
+							             "<input type='checkbox' name='prest."+prestation.getUid()+"' id='prest."+prestation.getUid()+"'/>"+
+								         "<input type='text' class='text' name='quant."+prestation.getUid()+"' id='quant."+prestation.getUid()+"' value='1' size='1'/>"+prestation.getDescription()+
+								        "</td>";
+							}
 						}
 						else{
 							sLine+= "<td width='"+(100/cols)+"%'><font color='red'>Error loading "+val+"</font></td>";

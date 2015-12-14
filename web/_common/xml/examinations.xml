@@ -1283,5 +1283,40 @@
 		<fr>Check-list de s&#233;curit&#233; chirurgicale</fr>
 		<en>Surgical Safety Checklist</en>
 	</Row>
+	<Row>
+		<id>1112</id>
+		<class>ccbrt</class>
+		<transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CCBRT_EYE_REGISTRY</transactiontype>
+		<fr>R&#233;gistre ophtalmologique CCBRT</fr>
+		<en>CCBRT Eye registry</en>
+	</Row>
+	<Row>
+		<id>1113</id>
+		<class>ccbrt</class>
+		<transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CCBRT_ORTHO_REGISTRY</transactiontype>
+		<fr>R&#233;gistre orthopédique CCBRT</fr>
+		<en>CCBRT Ortho registry</en>
+	</Row>
+	<Row>
+		<id>1114</id>
+		<class>ccbrt</class>
+		<transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CCBRT_PO_REGISTRY</transactiontype>
+		<fr>R&#233;gistre orthopédique proth&#232;ses et orth&#232;ses</fr>
+		<en>CCBRT prosthesis and orthesis registry</en>
+	</Row>
+	<Row>
+		<id>1115</id>
+		<class>ccbrt</class>
+		<transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CCBRT_PHYSIO_REGISTRY</transactiontype>
+		<fr>R&#233;gistre physioth&#233;rapie</fr>
+		<en>CCBRT physiotherapy registry</en>
+	</Row>
+	<Row>
+		<id>1116</id>
+		<class>ccbrt</class>
+		<transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_PATIENTCREDITREQUEST</transactiontype>
+		<fr>Demande de cr&#233;dit patient</fr>
+		<en>Patient credit request</en>
+	</Row>
 </Examinations>
 

@@ -142,6 +142,7 @@ function isIntegerNegativeAllowed(sObject){
 }
 
 function isNumberNegativeAllowed(inputField){
+	  inputField.value=inputField.value.replace(",",".").replace(" ","");
   if(inputField.value.length==0) return false;
   var number = inputField.value;
   var vchar = "-1234567890.";

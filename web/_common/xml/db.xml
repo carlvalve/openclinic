@@ -63,6 +63,19 @@
 	    </indexes>
     </table>
     
+    <table name="OC_EXCHANGERATES" db="openclinic" sync="NONE">
+    	<columns>
+	        <column name="OC_EXCHANGERATE_DATE" dbtype="datetime" javatype="date"/>      
+	        <column name="OC_EXCHANGERATE_CURRENCY" dbtype="varchar" javatype="string" size="5"/>      
+	    	<column name="OC_EXCHANGERATE_RATE" dbtype="float" javatype="float"/>
+    	</columns>
+	    <indexes>
+	    	<index name="OC_EXCHANGERATE_DATE">
+	    		<indexcolumn order="ASC" name="OC_EXCHANGERATE_DATE"/>
+	    	</index>
+	    </indexes>
+    </table>
+    
     <table name="AC_JOURNAL" db="ocadmin" sync="NONE">
     	<columns>
 	    	<column name="AC_JOURNAL_ID" dbtype="int" javatype="integer"/>
@@ -84,7 +97,7 @@
     </table>
     
     
-    <table name="OC_RESERVATIONS" db="openclinic" sync="NONE">
+    <table name="OC_RESERVATIONS" db="	" sync="NONE">
     	<columns>
 	    	<column name="OC_RESERVATION_SERVERID" dbtype="int" javatype="integer"/>
 	    	<column name="OC_RESERVATION_OBJECTID" dbtype="int" javatype="integer"/>
@@ -1973,6 +1986,7 @@
             <column name="OC_PLANNING_ESTIMATIONTIME" dbtype="varchar" javatype="string" size="255"/>
             <column name="OC_PLANNING_CONTEXTID" dbtype="varchar" javatype="string" size="255"/>
 			<column name="OC_PLANNING_SERVICEUID" dbtype="varchar" javatype="string" size="50"/>
+			<column name="OC_PLANNING_PLANNEDEND" dbtype="datetime" javatype="date"/>
 		</columns>
 		<indexes>
 			<index name="OC_PLANNING_PATIENTID">
@@ -1993,6 +2007,18 @@
 		</indexes>
 	</table>
 
+	<table name="OC_REPORTS" db="openclinic" sync="NONE">
+		<columns>
+			<column name="OC_REPORT_SERVERID" dbtype="int" javatype="integer"/>
+			<column name="OC_REPORT_OBJECTID" dbtype="int" javatype="integer"/>
+			<column name="OC_REPORT_NAME" dbtype="varchar" javatype="string" size="255"/>
+            <column name="OC_REPORT_REPORTXML" dbtype="text" javatype="string"/>
+            <column name="OC_REPORT_INPUTXML" dbtype="text" javatype="string"/>
+            <column name="OC_REPORT_GROUP" dbtype="varchar" javatype="string" size="255"/>
+            <column name="OC_REPORT_PROFILES" dbtype="text" javatype="string"/>
+		</columns>
+	</table>
+	
     <table name="OC_PRESCRIPTIONS" db="openclinic" sync="NONE">
 		<columns>
 			<column name="OC_PRESCR_SERVERID" dbtype="int" javatype="integer" primary="1" nulls="0"/>
@@ -3321,6 +3347,21 @@
 		</columns>
 	</table>
 
+    <table name="OC_INSURARPRESTATIONS" db="openclinic" sync="NONE">
+    	<columns>
+			<column name="OC_INSURARPRESTATION_PRESTATIONUID" dbtype="varchar" size="50" javatype="string"/>
+			<column name="OC_INSURARPRESTATION_INSURARUID" dbtype="varchar" size="50" javatype="string"/>
+    	</columns>
+    	<indexes>
+    		<index name="OC_INSURARPRESTATION_PRESTATIONUID">
+    			<indexcolumn order="ASC" name="OC_INSURARPRESTATION_PRESTATIONUID"/>
+    		</index>
+    		<index name="OC_INSURARPRESTATION_INSURARUID">
+    			<indexcolumn order="ASC" name="OC_INSURARPRESTATION_INSURARUID"/>
+    		</index>
+    	</indexes>
+	</table>
+	
     <table name="OC_PRESTATIONS" db="openclinic" sync="NONE">
 		<columns>
             <column name="OC_PRESTATION_SERVERID" dbtype="int" javatype="integer" primary="1" nulls="0"/>

@@ -624,7 +624,7 @@
   }
   
   <%-- OPEN POPUP --%>
-  function openPopup(page,width,height,title){
+  function openPopup(page,width,height,title,parameters){
     var url = "<c:url value='/popup.jsp'/>?Page="+page;
     if(width!=undefined) url+= "&PopupWidth="+width;
     if(height!=undefined) url+= "&PopupHeight="+height;
@@ -638,7 +638,10 @@
         title = replaceAll(title,".","_");
       }
     }
-    popup = window.open(url,title,"toolbar=no,status=yes,scrollbars=yes,resizable=yes,width=1,height=1,menubar=no");
+    if(!parameters || parameters.length==0){
+    	parameters="toolbar=no,status=yes,scrollbars=yes,resizable=yes,width=1,height=1,menubar=no";
+    }
+    popup = window.open(url,title,parameters);
     popup.moveBy(2000,2000);
     return popup;
   }

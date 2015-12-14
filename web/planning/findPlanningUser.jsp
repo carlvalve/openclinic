@@ -15,6 +15,7 @@
     String sKey;
     
     String sFindUserDate = checkString(request.getParameter("FindUserDate"));
+    String isPopup = checkString(request.getParameter("isPopup"));
     if(sFindUserDate.length()==0){
         sFindUserDate = checkString(request.getParameter("FindDate"));
         if(sFindUserDate.length()==0){
@@ -25,6 +26,10 @@
     String sFindUserUID = checkString(request.getParameter("FindUserUID"));
     if(sFindUserUID.length()==0){
         sFindUserUID = activeUser.userid;
+    }
+    User selectedUser = activeUser;
+    if(!sFindUserUID.equalsIgnoreCase(activeUser.userid)){
+    	selectedUser = User.get(Integer.parseInt(sFindUserUID));
     }
 %>
 <form name="formFindUser" method="post" action="<c:url value='/main.do'/>?Page=planning/findPlanning.jsp&Tab=user&ts=<%=getTs()%>">
@@ -38,7 +43,8 @@
             </td>
             <td class="admin2" width="350">
             	<span id="usertd2">
-	                <select class="text" id="FindUserUID" name="FindUserUID" onchange="displayCountedWeek(makeDate($('beginDate').value),this.options[this.selectedIndex].value);">
+            		<input type='hidden' name='FindUserDate' id='FindUserDate' value='<%=sFindUserDate %>'/>
+	                <select class="text" id="FindUserUID" name="FindUserUID" onchange="formFindUser.submit();">
 	                    <option value="-1"><%=getTran("web.occup","medwan.common.all.users",sWebLanguage)%></option>
 	                    <%
 	                        Hashtable hUsers = Planning.getPlanningPermissionUsers(activeUser.userid);
@@ -64,7 +70,7 @@
 					<input class="text" type="text" name="FindServiceName" id="FindServiceName" readonly size="40" value='<%=checkString(((String)session.getAttribute("activePlanningServiceUid"))).length()>0?getTran("service",checkString(((String)session.getAttribute("activePlanningServiceUid"))),sWebLanguage):""%>' >
 					
 					<img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTran("web","select",sWebLanguage)%>" onclick="searchService('FindServiceUID','FindServiceName');">
-					<img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran("web","clear",sWebLanguage)%>" onclick="formFindUser.FindServiceUID.value='';EditEncounterForm.FindServiceName.value='';">
+					<img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran("web","clear",sWebLanguage)%>" onclick="formFindUser.FindServiceUID.value='';formFindUser.FindServiceName.value='';">
                 </span>
             </td>
              <td class="admin2" width="75"><%=getTran("web.control","week.of",sWebLanguage)%>
@@ -92,19 +98,19 @@
     <%=sJSWEEKPLANNERAJAX%>
     
     <%
-	    long iZoom = Math.round(Double.parseDouble((checkString(activeUser.getParameter("PlanningFindZoom"))=="")?"40":checkString(activeUser.getParameter("PlanningFindZoom"))));
+	    long iZoom = Math.round(Double.parseDouble((checkString(selectedUser.getParameter("PlanningFindZoom")).equals("")?"40":checkString(selectedUser.getParameter("PlanningFindZoom")))));
 	    if(iZoom==0){
 	        iZoom = 40;
 	    }
-	    String sInterval = checkString(activeUser.getParameter("PlanningExamDuration"));
+	    String sInterval = checkString(selectedUser.getParameter("PlanningExamDuration"));
 	    if(sInterval.length()==0){
 	        sInterval = 30+"";
 	    }
-	    String sFrom = checkString(activeUser.getParameter("PlanningFindFrom"));
+	    String sFrom = checkString(selectedUser.getParameter("PlanningFindFrom"));
 	    if(sFrom.length()==0){
 	        sFrom = "8" ;
 	    }
-	    String sUntil = checkString(activeUser.getParameter("PlanningFindUntil"));
+	    String sUntil = checkString(selectedUser.getParameter("PlanningFindUntil"));
 	    if(sUntil.length()==0){
 	        sUntil = "20" ;
         }
@@ -116,15 +122,26 @@
       var itemRowHeight = <%=iZoom%>;
       var defaultAppointmentDuration = <%=sInterval%>;
       var patientName = '<%=(activePatient!=null)?activePatient.lastname+" "+activePatient.firstname:""%>';
-
-      if(document.all){
-        var containerWidth = document.body.clientWidth-8;
-        var containerHeight = document.body.clientHeight - 285;
-      }
-      else{
-        var containerWidth = document.body.clientWidth-16;
-        var containerHeight = document.body.clientHeight - 271;
-      }
+	  	<%
+		if(isPopup.equals("1")){
+		%>
+	    	var containerWidth = window.innerWidth-25;
+	    	//var containerWidth = document.body.clientWidth-8;
+		    var containerHeight = document.body.clientHeight;
+		<%
+		} else {
+		%>
+			  if(document.all){
+			    var containerWidth = window.innerWidth-8;
+			    var containerHeight = document.body.clientHeight - 285;
+			  }
+			  else{
+			    var containerWidth = window.innerWidth-25;
+			    var containerHeight = document.body.clientHeight - 271;
+			  }
+		<%
+		}
+		%>
     </script>
     <%=sJSWEEKPLANNER%><%=sCSSWEEKPLANNER%>
     <script>
@@ -137,6 +154,8 @@
         userSelected.initialize(Integer.parseInt(sFindUserUID));
         SimpleDateFormat hhmmDateFormat = new SimpleDateFormat("HH:mm");
         Calendar c = Calendar.getInstance();
+        Date date = ScreenHelper.getSQLDate(sFindUserDate);
+        c.setTime(date);
         int todayNumber = c.getFirstDayOfWeek();
     %>
     <div id="weekScheduler_container">
@@ -166,8 +185,6 @@
                     int endMinOfWeekPlanner = (sUntil.split("\\.").length>1)?Integer.parseInt(sUntil.split("\\.")[1]):0;
                     int iCalendarEnd = (endMinOfWeekPlanner==0)?endHourOfWeekPlanner-1:endHourOfWeekPlanner;
 
-                    Calendar cal = Calendar.getInstance();
-                    Date date = cal.getTime();
                     for(int i = startHourOfWeekPlanner; i <= iCalendarEnd; i++){
                         int hour = i;
                         String suffix = "00"; // Enable this line in case you want to show hours like 08:00 - 23:00
@@ -418,8 +435,16 @@
       document.getElementById("EditContext").disabled = true;
     }
   }
+
   function resizeSheduler(containerHeight,containerWidth){
-    $("weekScheduler_content").style.height = containerHeight+"px";
+	<%
+	  if(isPopup.equals("1")){
+	%>
+	   	containerWidth = window.innerWidth-25;
+	<%
+	} 
+	%>
+    $("weekScheduler_content").style.height = ((weekplannerStopHour-weekplannerStartHour)*<%=iZoom%>+50)+"px";
     $("weekScheduler_container").style.width = containerWidth+"px";
     var divs = $("weekScheduler_content").getElementsByClassName("weekScheduler_appointments_day");
     var divs2 = $("weekScheduler_dayRow").getElementsByTagName("DIV");
@@ -514,12 +539,17 @@
   }
   
   function printPlanning(day,isPatient){
-    var url = "<c:url value='/planning/ajax/getCalendarPdf.jsp'/>?ts="+new Date().getTime();
-    var params = '&dayToShow='+day+'&PatientID=<%=activePatient!=null?activePatient.personid:""%>&FindUserUID='+$F("FindUserUID")+'&year='+dateStartOfWeek.getFullYear()+'&month='+(dateStartOfWeek.getMonth() / 1+1)+'&day='+dateStartOfWeek.getDate();	// Specifying which file to get
-    if(isPatient){
-      params+="&ispatient="+isPatient;  
-    }
-    window.open(url+params);
+	  if($("servicetd2").style.display.length==0 && $('FindServiceUID').value.length==0){
+			alert('<%=getTranNoLink("web","selectservicefirst",sWebLanguage)%>');
+	  }
+	  else{
+	    var url = "<c:url value='/planning/ajax/getCalendarPdf.jsp'/>?ts="+new Date().getTime();
+	    var params = '&dayToShow='+day+'&PatientID=<%=activePatient!=null?activePatient.personid:""%>'+($("servicetd2").style.display.length==0?'&FindServiceUID='+$F('FindServiceUID'):'')+'&FindUserUID='+$F("FindUserUID")+'&year='+dateStartOfWeek.getFullYear()+'&month='+(dateStartOfWeek.getMonth() / 1+1)+'&day='+dateStartOfWeek.getDate();	// Specifying which file to get
+	    if(isPatient){
+	      params+="&ispatient="+isPatient;  
+	    }
+	    window.open(url+params);
+  	  }
   }
   
   function searchService(serviceUidField,serviceNameField){
@@ -527,8 +557,7 @@
 	    document.getElementById(serviceNameField).focus();
 	  }
 
-  resizeSheduler(containerHeight,containerWidth);
-  clientMsg.setDiv("weekScheduler_messages");
 
-  //$("body").style.overflowY ='hidden';
+  clientMsg.setDiv("weekScheduler_messages");
+  resizeSheduler(containerHeight,containerWidth);
 </script>

@@ -11,13 +11,13 @@
 <html>
 <head>
     <%=sCSSNORMAL%>
-    <%=sCSSMODALBOX%>
     <%//=sCSSOPERA%>
     <%=sJSTOGGLE%>
     <%=sJSFORM%>
     <%=sJSPOPUPMENU%>
     <%=sJSPROTOTYPE%>
     <%=sJSSCRPTACULOUS%>
+    <%=sCSSMODALBOX%>
     <%=sJSMODALBOX%>
     <%=sIcon%>
 </head>

@@ -76,7 +76,7 @@
 				
 			<table class="list" width="100%" cellspacing="1">
 			    <tr class="admin">
-			        <td align="center"><a href="javascript:openPopup('healthrecord/findICPC.jsp&ts=<%=getTs()%>&patientuid=<%=activePatient.personid %>');void(0);"><%=getTran("openclinic.chuk","diagnostic.document",sWebLanguage)%> <%=getTran("Web.Occup","ICPC-2",sWebLanguage)%>/<%=getTran("Web.Occup","ICD-10",sWebLanguage)%></a></td>
+			        <td align="center"><a href="javascript:openPopup('healthrecord/findICPC.jsp&AuthorUID='+(document.getElementById('diagnosisUser')?document.getElementById('diagnosisUser').value:'')+'&ts=<%=getTs()%>&patientuid=<%=activePatient.personid %>');void(0);"><%=getTran("openclinic.chuk","diagnostic.document",sWebLanguage)%> <%=getTran("Web.Occup","ICPC-2",sWebLanguage)%>/<%=getTran("Web.Occup","ICD-10",sWebLanguage)%></a></td>
 			    </tr>
 			    <tr>
 			        <td id='icpccodes'>
@@ -89,7 +89,7 @@
 						         String sReferenceType = "Transaction";
 						         Hashtable hDiagnoses = Diagnosis.getDiagnosesByReferenceUID(sReferenceUID,sReferenceType);
 						         Hashtable hDiagnosisInfo;
-						         String sCode, sGravity, sCertainty, POA, NC, serviceUid, flags;
+						         String sCode, sGravity, sCertainty, POA, NC, serviceUid, flags, userid,userwarning="";
 						         String sClass = "1";
 						
 						         while(items.hasNext()){
@@ -106,6 +106,10 @@
 						                     NC = (String)hDiagnosisInfo.get("NC");
 						                     serviceUid = (String)hDiagnosisInfo.get("ServiceUid");
 						                     flags = (String)hDiagnosisInfo.get("Flags");
+						                     userid = (String)hDiagnosisInfo.get("User");
+						                     if(!userid.equalsIgnoreCase(activeUser.userid)){
+						                    	 userwarning=" <img src='"+sCONTEXTPATH+"/_img/icons/icon_warning.gif' title='"+getTran("web","author",sWebLanguage)+": "+User.getFullUserName(userid)+"'/>("+User.getFullUserName(userid)+")";
+						                     }
 						                 }
 						                 else{
 						                     sGravity = "";
@@ -114,6 +118,7 @@
 						                     NC = "";
 						                     serviceUid = "";
 						                     flags = "";
+						                     userid="";
 						                 }
 							                
    						                 // alternate row-style
@@ -122,10 +127,10 @@
    						                 
 						     			 %>
 						     			 <tr id="ICPCCode<%=item.getItemId()%>" style="list<%=sClass%>">
-						     			   <td width="16" nowrap><img src="<c:url value='/_img/icons/icon_delete.gif'/>" class="link" onclick="deleteDiagnosis(ICPCCode<%=item.getItemId()%>);"/></td>
+						     			   <td width="1%" nowrap><img src="<c:url value='/_img/icons/icon_delete.gif'/>" class="link" onclick="deleteDiagnosis(ICPCCode<%=item.getItemId()%>);"/></td>
 						                   <td width="1%">ICPC</td>
 						                   <td width="1%"><b><%=item.getType().replaceAll("ICPCCode","")%></b></td>
-						                   <td><b><%=MedwanQuery.getInstance().getCodeTran(item.getType().trim(),sWebLanguage)%> <%=item.getValue().trim()%>&nbsp;<i>G:<%=sGravity%>/C:<%=sCertainty%><%=POA.length()>0?" POA":""%><%=NC.length()>0?" N":""%><%=flags.length()==0?"":" ("+flags+")" %></i></b>
+						                   <td><b><%=MedwanQuery.getInstance().getCodeTran(item.getType().trim(),sWebLanguage)%> <%=item.getValue().trim()%>&nbsp;<i>G:<%=sGravity%>/C:<%=sCertainty%><%=POA.length()>0?" POA":""%><%=NC.length()>0?" N":""%><%=flags.length()==0?"":" ("+flags+")" %><%=userwarning %></i></b>
 						                     <input type='hidden' name='ICPCCode<%=item.getType().replaceAll("ICPCCode","")%>' value="<%=item.getValue().trim()%>"/>
 						                     <input type='hidden' name='GravityICPCCode<%=item.getType().replaceAll("ICPCCode","")%>' value="<%=sGravity%>"/>
 						                     <input type='hidden' name='CertaintyICPCCode<%=item.getType().replaceAll("ICPCCode","")%>' value="<%=sCertainty%>"/>
@@ -133,6 +138,7 @@
 						                     <input type='hidden' name='NCICPCCode<%=item.getType().replaceAll("ICPCCode","")%>' value="<%=NC%>"/>
 						                     <input type='hidden' name='ServiceICPCCode<%=item.getType().replaceAll("ICPCCode","")%>' value="<%=serviceUid%>"/>
 						                     <input type='hidden' name='FlagsICPCCode<%=item.getType().replaceAll("ICPCCode","")%>' value="<%=flags%>"/>
+						                     <input type='hidden' name='UserICPCCode<%=item.getType().replaceAll("ICPCCode","")%>' value="<%=userid%>"/>
 						                   </td>
 						                 </tr>
 						                 <%
@@ -148,6 +154,10 @@
 						                     NC = (String)hDiagnosisInfo.get("NC");
 						                     serviceUid = (String)hDiagnosisInfo.get("ServiceUid");
 						                     flags = (String)hDiagnosisInfo.get("Flags");
+						                     userid = (String)hDiagnosisInfo.get("User");
+						                     if(!userid.equalsIgnoreCase(activeUser.userid)){
+						                    	 userwarning=" <img src='"+sCONTEXTPATH+"/_img/icons/icon_warning.gif' title='"+getTran("web","author",sWebLanguage)+": "+User.getFullUserName(userid)+"'/>("+User.getFullUserName(userid)+")";
+						                     }
 						                 }
 						                 else{
 						                     sGravity = "";
@@ -156,6 +166,7 @@
 						                     NC = "";
 						                     serviceUid = "";
 						                     flags = "";
+						                     userid = "";
 						                 }	
 							                
 							             // alternate row-style
@@ -164,10 +175,10 @@
 						                 
 						                 %>
 						                 <tr id='ICD10Code<%=item.getItemId()%>' style="list<%=sClass%>">
-						                   <td width="16" nowrap><img src='<c:url value="/_img/icons/icon_delete.gif"/>' class="link" onclick="deleteDiagnosis(ICD10Code<%=item.getItemId()%>);"/></td>
+						                   <td width="1%" nowrap><img src='<c:url value="/_img/icons/icon_delete.gif"/>' class="link" onclick="deleteDiagnosis(ICD10Code<%=item.getItemId()%>);"/></td>
 						                   <td width="1%">ICD10</td>
 						                   <td width="1%"><b><%=item.getType().replaceAll("ICD10Code","")%></b></td>
-						                   <td><b><%=MedwanQuery.getInstance().getCodeTran(item.getType().trim(),sWebLanguage)%> <%=item.getValue().trim()%>&nbsp;<i>G:<%=sGravity%>/C:<%=sCertainty%><%=POA.length()>0?" POA":""%><%=NC.length()>0?" N":""%><%=flags.length()==0?"":" ("+flags+")" %></i></b>
+						                   <td><b><%=MedwanQuery.getInstance().getCodeTran(item.getType().trim(),sWebLanguage)%> <%=item.getValue().trim()%>&nbsp;<i>G:<%=sGravity%>/C:<%=sCertainty%><%=POA.length()>0?" POA":""%><%=NC.length()>0?" N":""%><%=flags.length()==0?"":" ("+flags+")" %><%=userwarning %></i></b>
 						                     <input type='hidden' name='ICD10Code<%=item.getType().replaceAll("ICD10Code","")%>' value='<%=item.getValue().trim()%>'/>
 						                     <input type='hidden' name='GravityICD10Code<%=item.getType().replaceAll("ICD10Code","")%>' value="<%=sGravity%>"/>
 						                     <input type='hidden' name='CertaintyICD10Code<%=item.getType().replaceAll("ICD10Code","")%>' value="<%=sCertainty%>"/>
@@ -175,6 +186,7 @@
 						                     <input type='hidden' name='NCICD10Code<%=item.getType().replaceAll("ICD10Code","")%>' value="<%=NC%>"/>
 						                     <input type='hidden' name='ServiceICD10Code<%=item.getType().replaceAll("ICD10Code","")%>' value="<%=serviceUid%>"/>
 						                     <input type='hidden' name='FlagsICD10Code<%=item.getType().replaceAll("ICD10Code","")%>' value="<%=flags%>"/>			                   
+						                     <input type='hidden' name='UserICD10Code<%=item.getType().replaceAll("ICD10Code","")%>' value="<%=userid%>"/>			                   
 						                   </td>
 						                 </tr>
 						                 <%

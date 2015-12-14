@@ -9,6 +9,7 @@
         activePatientIsUser = activePatient.isUser();
     }
 %>
+<%=sJSMASKEDINPUT%>
 <form name="PatientEditForm" id="PatientEditForm" method="POST" action='<c:url value='/main.do'/>?Page=_common/patient/patienteditSave.jsp&SavePatientEditForm=ok&Tab=<%=tab%>&ts=<%=getTs()%>'>
     <%-- TABS -----------------------------------------------------------------------------------%>
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
