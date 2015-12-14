@@ -126,7 +126,9 @@
         sPatientId = activePatient.personid;
         if(MedwanQuery.getInstance().getConfigInt("enableEncounterReference",0)==1){
 	        Encounter encounter = Encounter.getActiveEncounter(activePatient.personid);
-	        sInsurarReference=checkString(encounter.getEtiology());
+	        if(encounter!=null){
+	        	sInsurarReference=checkString(encounter.getEtiology());
+	        }
         }
     }
 	if(patientInvoice!=null && patientInvoice.getDate()!=null){
@@ -192,6 +194,10 @@
 	</form>
 	<div id="divOpenPatientInvoices" class="searchResults" style="height:120px;"></div>
 	<script>
+		window.onresize = function(event) {
+			document.getElementById("divOpenPatientInvoices").style.width=document.body.clientWidth-19;
+		};
+		document.getElementById("divOpenPatientInvoices").style.width=document.body.clientWidth-19;
 	    function searchPatientInvoice(){
 	        openPopup("/_common/search/searchPatientInvoice.jsp&FindInvoicePatient=<%=sPatientId%>&doFunction=doFind()&ReturnFieldInvoiceNr=FindPatientInvoiceUID&FindInvoicePatientId=<%=sPatientId%>&Action=search&header=false&PopupHeight=420&ts=<%=getTs()%>");
 	    }
@@ -220,8 +226,8 @@
 	<form name='EditForm' id="EditForm" method='POST'>
 	    <table class='list' border='0' width='100%' cellspacing='1'>
 	        <tr>
-	            <td class="admin" nowrap><%=getTran("web.finance","invoiceid",sWebLanguage)%></td>
-	            <td class="admin2">
+	            <td class="admin" nowrap rowspan="2"><%=getTran("web.finance","invoiceid",sWebLanguage)%></td>
+	            <td class="admin2" rowspan="2">
 	                <input type="hidden" id="EditInvoiceUID" name="EditInvoiceUID" value="<%=checkString(patientInvoice.getInvoiceUid())%>">
 	                <input type="text" class="text" readonly id="EditInvoiceUIDText" name="EditInvoiceUIDText" value="<%=sPatientInvoiceID%>">
 	                <%
@@ -238,38 +244,97 @@
 	
 	                %>
 	            </td>
-	            <td class="admin" nowrap><table><tr><td class="admin" nowrap><%=getTran("web.finance","insurarreference",sWebLanguage)%></td></tr><tr><td class="admin" nowrap><%=getTran("web.finance","otherreference",sWebLanguage)%></td></tr></table></td>
-	            <td class="admin2"><table><tr><td class="admin2" nowrap>
+	            <td class="admin" nowrap>
+	            	<%=getTran("web.finance","insurarreference",sWebLanguage)%>
+	            </td>
+	            <td class="admin2">
 	                <input type="text" size="40" class="text" id="EditInsurarReference" name="EditInsurarReference" value="<%=sInsurarReference%>">
-	                <%=getTran("web","date",sWebLanguage)%>: <%=writeDateField("EditInsurarReferenceDate","EditForm",sInsurarReferenceDate,sWebLanguage)%></td></tr><tr><td class="admin2" nowrap>
-	                <input type="text" size="40" class="text" id="EditComment" name="EditComment" value="<%=sEditComment%>"></td></tr></table>
+	                <%=getTran("web","date",sWebLanguage)%>: <%=writeDateField("EditInsurarReferenceDate","EditForm",sInsurarReferenceDate,sWebLanguage)%>
+	            </td>
+	        </tr>
+	        <tr>
+	            <td class="admin" nowrap>
+	            	<%=getTran("web.finance","otherreference",sWebLanguage)%>
+	            </td>
+	            <td class="admin2">
+	                <input type="text" size="40" class="text" id="EditComment" name="EditComment" value="<%=sEditComment%>">
 	            </td>
 	        </tr>
 	        <% if(MedwanQuery.getInstance().getConfigInt("enableMFP",0)==1 && MedwanQuery.getInstance().getConfigInt("hideMFPInvoiceFields",0)==0){ %>
-	        <tr>
-	            <td class="admin">
-           			<%=getTran("web.finance","mfp.invoice.drugsrecipient",sWebLanguage)%>
-	            </td>
-	            <td class="admin2">
-	            	<%=getTran("web","name",sWebLanguage)%>: <input type="text" size="30" class="text"  id="EditInvoiceDrugsRecipient" name="EditInvoiceDrugsRecipient" value="<%=sPatientInvoiceMfpDrugsRecipient%>">
-	            	<%=getTran("web.finance","mfp.invoice.drugsid",sWebLanguage)%>: <input type="text" size="30" class="text"  id="EditInvoiceDrugsIdCard" name="EditInvoiceDrugsIdCard" value="<%=sPatientInvoiceMfpDrugsIdCard%>"><BR/>
-	            	<%=getTran("web","delivered.at",sWebLanguage)%>: <input type="text" size="30" class="text"  id="EditInvoiceDrugsIdCardPlace" name="EditInvoiceDrugsIdCardPlace" value="<%=sPatientInvoiceMfpDrugsIdCardPlace%>">
-	            	<%=getTran("web","date",sWebLanguage)%>: <%=writeDateField("EditInvoiceDrugsIdCardDate","EditForm",sPatientInvoiceMfpDrugsIdCardDate,sWebLanguage)%>
-	            </td>
-	            <td class="admin" nowrap><%=getTran("web.finance","mfp.invoice.data",sWebLanguage)%></td>
-	            <td class="admin2">
-	            	<table>
-	            		<tr>
-	            			<td><%=getTran("web.finance","mfp.invoice.doctor",sWebLanguage)%>: <input type="text" size="8" class="text"  id="EditInvoiceDoctor" name="EditInvoiceDoctor" value="<%=sPatientInvoiceMfpDoctor%>"></td>
-	            			<td><%=getTran("web.finance","mfp.invoice.post",sWebLanguage)%>: <input type="text" size="8" class="text"  id="EditInvoicePost" name="EditInvoicePost" value="<%=sPatientInvoiceMfpPost%>"></td>
-	            			<td><%=getTran("web.finance","mfp.invoice.agent",sWebLanguage)%>: <input type="text" size="8" class="text"  id="EditInvoiceAgent" name="EditInvoiceAgent" value="<%=sPatientInvoiceMfpAgent%>"></td>
-	            		</tr>
-	            	</table>
-	            </td>
-	        </tr>
+		        <tr>
+		            <td class="admin">
+	           			<%=getTran("web.finance","mfp.invoice.drugsrecipient",sWebLanguage)%>
+		            </td>
+		            <td class="admin2">
+		            	<%=getTran("web","name",sWebLanguage)%>: <input type="text" size="30" class="text"  id="EditInvoiceDrugsRecipient" name="EditInvoiceDrugsRecipient" value="<%=sPatientInvoiceMfpDrugsRecipient%>">
+		            	<%=getTran("web.finance","mfp.invoice.drugsid",sWebLanguage)%>: <input type="text" size="30" class="text"  id="EditInvoiceDrugsIdCard" name="EditInvoiceDrugsIdCard" value="<%=sPatientInvoiceMfpDrugsIdCard%>"><BR/>
+		            	<%=getTran("web","delivered.at",sWebLanguage)%>: <input type="text" size="30" class="text"  id="EditInvoiceDrugsIdCardPlace" name="EditInvoiceDrugsIdCardPlace" value="<%=sPatientInvoiceMfpDrugsIdCardPlace%>">
+		            	<%=getTran("web","date",sWebLanguage)%>: <%=writeDateField("EditInvoiceDrugsIdCardDate","EditForm",sPatientInvoiceMfpDrugsIdCardDate,sWebLanguage)%>
+		            </td>
+		            <td class="admin" nowrap><%=getTran("web.finance","mfp.invoice.data",sWebLanguage)%></td>
+		            <td class="admin2">
+		            	<table>
+		            		<tr>
+		            			<td><%=getTran("web.finance","mfp.invoice.doctor",sWebLanguage)%>: <input type="text" size="8" class="text"  id="EditInvoiceDoctor" name="EditInvoiceDoctor" value="<%=sPatientInvoiceMfpDoctor%>"></td>
+		            			<td><%=getTran("web.finance","mfp.invoice.post",sWebLanguage)%>: <input type="text" size="8" class="text"  id="EditInvoicePost" name="EditInvoicePost" value="<%=sPatientInvoiceMfpPost%>"></td>
+		            			<td><%=getTran("web.finance","mfp.invoice.agent",sWebLanguage)%>: <input type="text" size="8" class="text"  id="EditInvoiceAgent" name="EditInvoiceAgent" value="<%=sPatientInvoiceMfpAgent%>"></td>
+		            		</tr>
+		            	</table>
+		            </td>
+		        </tr>
 	        <%
 	        }
-        	if(patientInvoice!=null && patientInvoice.getUid()!=null && checkString(Pointer.getPointer("DERIVED."+patientInvoice.getUid())).length()>0){
+	        else if(MedwanQuery.getInstance().getConfigInt("enableMFP",0)==1 && MedwanQuery.getInstance().getConfigInt("hideCCBRTInvoiceFields",1)==0){
+				boolean bMFPActive = false;
+				Vector insurances = Insurance.getCurrentInsurances(activePatient.personid);
+				for(int n=0;n<insurances.size();n++){
+					Insurance insurance = (Insurance)insurances.elementAt(n);
+					if(insurance!=null && insurance.getInsurarUid()!=null && insurance.getInsurarUid().equalsIgnoreCase(MedwanQuery.getInstance().getConfigString("MFP","NOOP"))){
+						bMFPActive=true;
+						break;
+					}
+				}
+				if(!bMFPActive && patientInvoice!=null && patientInvoice.getInsurerIds()!=null){				
+		        	String[] insurers = patientInvoice.getInsurerIds().split(",");
+					for(int n=0;n<insurers.length;n++){
+						if(insurers[n].trim().equalsIgnoreCase(MedwanQuery.getInstance().getConfigString("MFP","NOOP"))){
+							bMFPActive=true;
+							break;
+						}
+					}
+				}
+				if(bMFPActive){
+		        %>
+			        <tr>
+			            <td class="admin" rowspan="2">
+			            </td>
+			            <td class="admin2" rowspan="2">
+			            </td>
+			            <td class="admin">
+							<%=getTran("web.finance","ccbrt.specialauthorizationnumber",sWebLanguage)%>
+						</td>
+		            	<td class="admin2">
+		            		<input type="text" size="40" class="text"  id="EditInvoiceDoctor" name="EditInvoiceDoctor" value="<%=sPatientInvoiceMfpDoctor%>">
+					        <%=getTran("web","type",sWebLanguage) %>:
+					        <select class='text' name="EditInvoiceDrugsRecipient" id="EditInvoiceDrugsRecipient">
+					        	<option/>
+		            			<%=ScreenHelper.writeSelect("nhif.authorizationtypes",sPatientInvoiceMfpDrugsRecipient,sWebLanguage) %>
+		            		</select>
+		            	</td>
+		            </tr>
+		            <tr>
+	           			<td class="admin">
+	           				<%=getTran("web","ccbrt.comment",sWebLanguage)%>
+	           			</td>
+		            	<td class="admin2">
+					        <input type="text" size="40" class="text"  id="EditInvoicePost" name="EditInvoicePost" value="<%=sPatientInvoiceMfpPost%>">
+					    </td>
+			        </tr>
+		        <%
+				}	        
+	        }
+
+	        if(patientInvoice!=null && patientInvoice.getUid()!=null && checkString(Pointer.getPointer("DERIVED."+patientInvoice.getUid())).length()>0){
         %>
         <tr>
         	<td class='admin'/><td class='admin2'/>
@@ -382,7 +447,7 @@
 	            %>
 		            	<td class='admin'><%=getTran("web","service",sWebLanguage)%></td>
 		            	<td class='admin2'>
-				           	<input class="text" type="text" name="EditInvoiceServiceName" id="EditInvoiceServiceName" readonly size="<%=sTextWidth%>" value="">
+				           	<input class="text" type="text" name="EditInvoiceServiceName" id="EditInvoiceServiceName" readonly size="<%=40%>" value="">
 				           	<img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTran("Web","select",sWebLanguage)%>" onclick="searchService('EditInvoiceService','EditInvoiceServiceName');">
 				           	<img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran("Web","clear",sWebLanguage)%>" onclick="document.getElementById('EditInvoiceService').value='';document.getElementById('EditInvoiceServiceName').value='';">
 		                    &nbsp;<input type="button" class="button" name="update2" value="<%=getTran("web","update",sWebLanguage)%>" onclick="loadDebets();"/>
@@ -549,8 +614,18 @@
 	                        </select>
 							<%if(!isInsuranceAgent){ %>
 	                        <input class="button" type="button" name="buttonPrint" value='<%=getTranNoLink("Web","print",sWebLanguage)%>' onclick="doPrintPdf('<%=patientInvoice.getUid()%>');">
-	                        <%} %>
-	                        <%if(MedwanQuery.getInstance().getConfigInt("enableProformaPatientInvoice",0)==1 || activeUser.getAccessRight("financial.printproformapatientinvoice.select")){ %>
+	                        <%}
+								boolean bInsurerAllowsProforma=false;
+					        	String[] insurers = patientInvoice.getInsurerIds().split(",");
+								for(int n=0;n<insurers.length;n++){
+									Insurar insurar = Insurar.get(insurers[n].trim());
+									if(insurar!=null && insurar.getCanPrintProforma()==1){
+										bInsurerAllowsProforma=true;
+										break;
+									}
+								}
+								
+							if(MedwanQuery.getInstance().getConfigInt("enableProformaPatientInvoice",0)==1 || activeUser.getAccessRight("financial.printproformapatientinvoice.select") || bInsurerAllowsProforma){ %>
 	                        <input class="button" type="button" name="buttonPrint" value='PROFORMA' onclick="doPrintProformaPdf('<%=patientInvoice.getUid()%>');">
 	                        <%
 	                          }
@@ -682,8 +757,8 @@
 	                (window.showModalDialog)?window.showModalDialog(popupUrl,"",modalities):window.confirm("<%=getTranNoLink("web.manage","dateinfuture",sWebLanguage)%>");
 	            }
 	        <%
-	        	boolean canCloseUnpaidInvoice=(activeUser.getParameter("sa")!=null && activeUser.getParameter("sa").length() > 0)||activeUser.getAccessRight("financial.closeunpaidinvoice.select");
-	        	if(!canCloseUnpaidInvoice){
+        	boolean canCloseUnpaidInvoice=(activeUser.getParameter("sa")!=null && activeUser.getParameter("sa").length() > 0)||activeUser.getAccessRight("financial.closeunpaidinvoice.select");
+        	if(!canCloseUnpaidInvoice){
 	        %>
 	            else if(document.getElementById('EditBalance').value.replace('.','').replace('0','').length>0 && document.getElementById('EditBalance').value*1><%=MedwanQuery.getInstance().getConfigString("minimumInvoiceBalance","1")%> && document.getElementById('invoiceStatus').value=="closed"){
 	                var popupUrl = "<c:url value="/popup.jsp"/>?Page=_common/search/okPopup.jsp&ts=<%=getTs()%>&labelType=web.manage&labelID=cannotcloseunpaidinvoice";
@@ -691,7 +766,15 @@
 	                (window.showModalDialog)?window.showModalDialog(popupUrl,"",modalities):window.confirm("<%=getTranNoLink("web.manage","cannotcloseunpaidinvoice",sWebLanguage)%>");
 	            }
 	        <%
-	        	}
+        	}
+        	boolean bReferenceMandatory=insurance!=null && insurance.getInsurar()!=null && insurance.getInsurar().getInsuranceReferenceNumberMandatory()==1;
+        	if(bReferenceMandatory){
+	        %>
+	        	else if(document.getElementById('EditInsurarReference').value.length==0){
+	                window.confirm("´<%=getTran("web.finance","insurarreference",sWebLanguage)+"´ "+getTranNoLink("web","ismandatory",sWebLanguage)%>");
+	            }
+	        <%
+        	}
 	        %>
 	            else {
 		            if (<%=MedwanQuery.getInstance().getConfigInt("enableAutomaticInvoiceClosure",1)%>==1 && (document.getElementById('EditBalance').value*1==0)&&(document.getElementById('invoiceStatus').value!="closed")&&(document.getElementById('invoiceStatus').value!="canceled")){
@@ -759,6 +842,11 @@
 		                          +'&EditInvoiceDrugsIdCard='+document.getElementById('EditInvoiceDrugsIdCard').value
 		                          +'&EditInvoiceDrugsIdCardDate='+document.getElementById('EditInvoiceDrugsIdCardDate').value
 		                          +'&EditInvoiceDrugsIdCardPlace='+document.getElementById('EditInvoiceDrugsIdCardPlace').value
+		                        <%}
+		              	        else if(MedwanQuery.getInstance().getConfigInt("enableMFP",0)==1 && MedwanQuery.getInstance().getConfigInt("hideCCBRTInvoiceFields",1)==0){ %>
+		                          +'&EditInvoiceDoctor='+document.getElementById('EditInvoiceDoctor').value
+		                          +'&EditInvoicePost='+document.getElementById('EditInvoicePost').value
+		                          +'&EditInvoiceDrugsRecipient='+document.getElementById('EditInvoiceDrugsRecipient').value
 		                        <%}%>
 		                          +'&EditBalance=' + document.getElementById('EditBalance').value,
 		                  onSuccess: function(resp){
@@ -811,7 +899,7 @@
 	    	for(var n=0;n<elements.length;n++){
 	    		if(elements[n].name.indexOf("cbDebet")==0 && elements[n].checked){
 	    			total+=parseFloat(elements[n].name.split("=")[1].replace(",","."))*1;
-	    			insurar+=parseFloat(document.getElementById(elements[n].name.split("=")[0].replace("cbDebet","cbDebetInsurar")).value)*1;
+	    			insurar+=parseFloat("0"+document.getElementById(elements[n].name.split("=")[0].replace("cbDebet","cbDebetInsurar")).value)*1;
 	    		}
 	    		else if(elements[n].name.indexOf("cbPatientInvoice")==0 && elements[n].checked){
 	    			paid+=parseFloat(elements[n].name.split("=")[1].replace(",","."))*1;
@@ -979,7 +1067,7 @@
 	  }
 	  
 	  function doPayment(invoiceUid){
-		    openPopup("/financial/patientCreditEdit.jsp&ts=<%=getTs()%>&EditCreditInvoiceUid="+invoiceUid+"&ScreenType=doPayment&EditBalance="+document.getElementById('EditBalanceDetailed').value);
+		    openPopup("/financial/patientCreditEdit.jsp&ts=<%=getTs()%>&EditCreditInvoiceUid="+invoiceUid+"&ScreenType=doPayment&EditBalance="+document.getElementById('EditBalanceDetailed').value,600,300);
 		  }
 		
 	  function doTransfer(invoiceUid){

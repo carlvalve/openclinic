@@ -249,28 +249,6 @@
             <input type="hidden" name="FindDiagnosisCodeType" id="FindDiagnosisCodeType" value="<%=sFindDiagnosisCodeType%>">
         </tr>
         
-        <%-- certainty --%>
-        <tr>
-            <td class="admin2"><%=getTran("medical.diagnosis","certainty",sWebLanguage)%></td>
-            <td class="admin2">
-                <%=getTran("web","from",sWebLanguage)%>&nbsp;
-                <%=writeSelectFromConfig("adt.diagnosis.certainty",sFindDiagnosisFromCertainty,"FindDiagnosisFromCertainty",sWebLanguage)%>
-                <%=getTran("web","to",sWebLanguage)%>&nbsp;
-                <%=writeSelectFromConfig("adt.diagnosis.certainty",sFindDiagnosisToCertainty,"FindDiagnosisToCertainty",sWebLanguage)%>
-            </td>
-        </tr>
-        
-        <%-- gravity --%>
-        <tr>
-            <td class="admin2"><%=getTran("medical.diagnosis","gravity",sWebLanguage)%></td>
-            <td class="admin2">
-                <%=getTran("web","from",sWebLanguage)%>&nbsp;
-                <%=writeSelectFromConfig("adt.diagnosis.gravity",sFindDiagnosisFromGravity,"FindDiagnosisFromGravity",sWebLanguage)%>
-                <%=getTran("web","to",sWebLanguage)%>&nbsp;
-                <%=writeSelectFromConfig("adt.diagnosis.gravity",sFindDiagnosisToGravity,"FindDiagnosisToGravity",sWebLanguage)%>
-            </td>
-        </tr>
-
         <%-- encounter --%>
         <tr>
             <td class="admin2"><%=getTran("web","encounter",sWebLanguage)%></td>
@@ -486,19 +464,25 @@
         <%-- certainty --%>
         <tr>
             <td class="admin"><%=getTran("medical.diagnosis","certainty",sWebLanguage)%> *</td>
-            <td class="admin2">
-                <%=writeSelectFromConfig("adt.diagnosis.certainty",sEditDiagnosisCertainty,"EditDiagnosisCertainty",sWebLanguage)%>
+            <td class="admin2" style="height:35px;">
+              
+                <div id="DiagnosisCertainty_slider" class="slider" style="margin-left:5px;width:560px;">
+                    <div id="DiagnosisCertainty_handle" class="handle"><span style="width:30px">500</span></div>
+                </div>
+                <input type="hidden" name="EditDiagnosisCertainty" id="EditDiagnosisCertainty" value="" />
             </td>
         </tr>
-        
         <%-- gravity --%>
         <tr>
             <td class="admin"><%=getTran("medical.diagnosis","gravity",sWebLanguage)%> *</td>
-            <td class="admin2">
-                <%=writeSelectFromConfig("adt.diagnosis.gravity",sEditDiagnosisGravity,"EditDiagnosisGravity",sWebLanguage)%>
+            <td class="admin2" style="height:35px;">
+                 <div id="DiagnosisGravity_slider" class="slider" style="margin-left:5px;width:560px;">
+                    <div id="DiagnosisGravity_handle" class="handle"><span style="width:30px">500</span></div>
+                </div>
+                <input type="hidden" value="" name="EditDiagnosisGravity" id="EditDiagnosisGravity" />
             </td>
         </tr>
-        
+
         <%-- encounter --%>
         <tr>
             <td class="admin"><%=getTran("web","encounter",sWebLanguage)%> *</td>
@@ -552,7 +536,74 @@
     }
 %>
 <script>
-  function doFind(){
+	function changecode(){
+		setGravity(document.getElementById('EditDiagnosisCode').value,document.getElementById('EditDiagnosisCodeType').value);
+	}
+	
+	var sliderCertainty, sliderGravity;
+	setSliders = function(){
+		sliderCertainty = new Control.Slider("DiagnosisCertainty_handle","DiagnosisCertainty_slider", {
+		    range: $R(0, 1000),
+		    sliderValue: 500,
+		    values:[<%for(int i=0;i<=1000;i=i+5){out.write((i==0)?"0":","+i);}%>],
+		    onSlide: function(values){
+		      $("DiagnosisCertainty_handle").firstChild.innerHTML= values;
+			},
+		    onChange: function(value){
+		      $("EditDiagnosisCertainty").value = value;
+		    }
+		});   
+		
+		sliderGravity = new Control.Slider("DiagnosisGravity_handle","DiagnosisGravity_slider", {
+		    range: $R(0, 1000),
+		    values:[<%for(int i=0;i<=1000;i=i+5){out.write((i==0)?"0":","+i);}%>],
+		    sliderValue: 500,
+		    onSlide: function(values){
+		      $("DiagnosisGravity_handle").firstChild.innerHTML= values;
+		    },
+		    onChange: function(value){
+		      $("EditDiagnosisGravity").value = value;
+		    }
+		});
+		
+		<%
+	    if(sEditDiagnosisUID.length() > 0){
+	        Diagnosis tmpDiagnosis = Diagnosis.get(sEditDiagnosisUID);
+	        if(tmpDiagnosis!=null){
+		%>
+				sliderCertainty.setValue(<%=tmpDiagnosis.getCertainty()%>);
+    			$("DiagnosisCertainty_handle").innerHTML='<span style="width:30px"><%=tmpDiagnosis.getCertainty()%></span>';
+				sliderGravity.setValue(<%=tmpDiagnosis.getGravity()%>);
+    			$("DiagnosisGravity_handle").innerHTML='<span style="width:30px"><%=tmpDiagnosis.getGravity()%></span>';
+		<%
+	        }
+	    }
+	    else {
+		%>
+			// todo: set initial slider value to default for the selected disease      
+			sliderCertainty.setValue(500);
+			sliderGravity.setValue(500);
+		<%
+	    }
+		%>
+	}
+	
+	setSliders();
+	
+	function setGravity(code,codetype){
+   		var url = '<c:url value="/healthrecord/ajax/getDiagnosisGravity.jsp"/>?ts='+new Date();
+   		new Ajax.Request(url,{
+      		method: "POST",
+      		postBody: 'code='+code+
+                '&codetype='+codetype,
+     		onSuccess: function(resp){
+    			$("DiagnosisGravity_handle").innerHTML='<span style="width:30px">'+resp.responseText+'</span>';
+    			sliderGravity.setValue(resp.responseText);
+     		}
+ 		});
+	}
+
+	function doFind(){
     if(FindDiagnosisForm.FindDiagnosisFromDate.value==""
        && FindDiagnosisForm.FindDiagnosisToDate.value==""
        && FindDiagnosisForm.FindDiagnosisCode.value==""
@@ -640,7 +691,7 @@
   }
 
   function searchICPC(code,codelabel,codetype){
-    openPopup("/_common/search/searchICPC.jsp&ts=<%=getTs()%>&returnField="+code+"&returnField2="+codelabel+"&returnField3="+codetype+"&ListChoice=TRUE");
+    openPopup("/_common/search/searchICPC.jsp&ts=<%=getTs()%>&returnField="+code+"&returnField2="+codelabel+"&returnField3="+codetype+"&ListChoice=TRUE&functioncall=changecode()");
   }
 
   function clearSearchFields(){
@@ -675,6 +726,7 @@
     </table>
     
     <script>
+	
       function doBack(){
         window.location.href="<c:url value='/main.do'/>?Page=medical/index.jsp&ts=<%=getTs()%>";
       }

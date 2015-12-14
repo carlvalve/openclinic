@@ -4,6 +4,7 @@
                 be.openclinic.finance.Wicket,
                 be.openclinic.finance.WicketCredit,
                 be.openclinic.finance.PatientInvoice,
+                be.mxs.common.util.io.ExportSAP_AR_INV,
                 be.mxs.common.util.system.HTMLEntities"%>
 <%@include file="/includes/validateUser.jsp"%>
 <%=checkPermission("financial.patientCreditEdit","select",activeUser)%>
@@ -326,7 +327,18 @@
             <td class="admin"><%=getTran("web","amount",sWebLanguage)%>&nbsp;*</td>
             <td class="admin2">
                 <input type="hidden" name="EditCreditMaxAmount">
-                <input class="text" type="text" name="EditCreditAmount" value="<%=sEditCreditAmount%>" size="10" maxLength="9" onKeyUp="isNumberNegativeAllowed(this);" onBlur="checkForMaxAmount(this);">&nbsp;<%=MedwanQuery.getInstance().getConfigParam("currency","€")%>
+                <%if(MedwanQuery.getInstance().getConfigString("AlternateCurrency","").length()>0){ 
+                %>
+	                <input class="text" type="text" name="EditCreditAmount" id="EditCreditAmount" value="<%=sEditCreditAmount.length()==0?"0":sEditCreditAmount%>" size="14" maxLength="13" onKeyUp="isNumberNegativeAllowed(this);checkAlternate();" onBlur="checkForMaxAmount(this);">&nbsp;<%=MedwanQuery.getInstance().getConfigParam("currency","€")%>
+	                &nbsp;&nbsp;<input class="text" type="text" name="EditAlternateCreditAmount" id="EditAlternateCreditAmount" value="<%=sEditCreditAmount.length()==0?"0":new DecimalFormat(MedwanQuery.getInstance().getConfigString("AlternateCurrencyPriceFormat","# ##0.00")).format(Double.parseDouble(sEditCreditAmount)/ExportSAP_AR_INV.getExchangeRate(MedwanQuery.getInstance().getConfigString("AlternateCurrency"), new java.util.Date()))%>" size="14" maxLength="13" onKeyUp="isNumberNegativeAllowed(this);checkPrimary();" onBlur="checkForMaxAmount(this);">&nbsp;<%=MedwanQuery.getInstance().getConfigString("AlternateCurrency")%>
+            	<%}
+                 else {
+                 %>
+	                <input class="text" type="text" name="EditCreditAmount" value="<%=sEditCreditAmount%>" size="10" maxLength="9" onKeyUp="isNumberNegativeAllowed(this);" onBlur="checkForMaxAmount(this);">&nbsp;<%=MedwanQuery.getInstance().getConfigParam("currency","€")%>
+	                <input type='hidden' name='EditAlternateCreditAmount'/>
+                 <%
+                 }
+                 %>
             </td>
         </tr>
         <tr>
@@ -342,7 +354,7 @@
             <td class="admin"><%=getTran("web","encounter",sWebLanguage)%>&nbsp;*</td>
             <td class="admin2">
                 <input type="hidden" id="EditCreditEncounterUid" name="EditCreditEncounterUid" value="<%=sEditCreditEncUid%>">
-                <input class="text" type="text" name="EditCreditEncounterName" readonly size="<%=sTextWidth%>" value="<%=sEditCreditEncName%>">
+                <input class="text" type="text" name="EditCreditEncounterName" readonly size="40" value="<%=sEditCreditEncName%>">
 
                 <%-- icons --%>
                 <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchEncounter('EditCreditEncounterUid','EditCreditEncounterName');">
@@ -351,7 +363,7 @@
         </tr>
         <tr>
             <td class="admin"><%=getTran("web","description",sWebLanguage)%></td>
-            <td class="admin2"><%=writeTextarea("EditCreditDescription","","","",sEditCreditDescr)%></td>
+            <td class="admin2"><%=writeTextarea("EditCreditDescription","40","","",sEditCreditDescr)%></td>
         </tr>
         
         <%
@@ -447,6 +459,12 @@
 <script>
   var dateFormat = "<%=ScreenHelper.stdDateFormat.toPattern()%>";
    
+  function checkAlternate(){
+	  document.getElementById("EditAlternateCreditAmount").value=parseFloat(document.getElementById("EditCreditAmount").value/<%=ExportSAP_AR_INV.getExchangeRate(MedwanQuery.getInstance().getConfigString("AlternateCurrency"), new java.util.Date())%>).toFixed(<%=MedwanQuery.getInstance().getConfigInt("AlternateCurrencyDecimals",2)%>);
+  }
+  function checkPrimary(){
+	  document.getElementById("EditCreditAmount").value=parseFloat(document.getElementById("EditAlternateCreditAmount").value*<%=ExportSAP_AR_INV.getExchangeRate(MedwanQuery.getInstance().getConfigString("AlternateCurrency"), new java.util.Date())%>).toFixed(<%=MedwanQuery.getInstance().getConfigInt("currencyDecimals",2)%>);
+  }
   function clearMessage(){
     <%
         if(msg.length() > 0){
@@ -632,6 +650,7 @@
     document.getElementById('creditid').innerHTML=document.getElementById('EditCreditUid').value.split(".")[1];
     document.getElementById('printsection').style.visibility='visible';
     document.getElementById('PrintLanguage').style.visibility='visible';
+    checkAlternate();
   }
 
   function clearEditFields(){
@@ -645,6 +664,7 @@
     EditForm.EditCreditInvoiceUid.value = "";
     EditForm.EditCreditInvoiceNr.value = "";
     EditForm.EditCreditAmount.value = "";
+    EditForm.EditAlternateCreditAmount.value = "";
     EditForm.EditCreditType.value = "<%=MedwanQuery.getInstance().getConfigString("defaultPatientCreditType","patient.payment")%>";
 
     <%
@@ -697,4 +717,5 @@
 	    %>loadUnassignedCredits();<%
 	}
 %>
+	checkAlternate();
 </script>

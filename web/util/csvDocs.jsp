@@ -27,6 +27,26 @@
 			sOutput+=CsvInvoiceRSSB.getOutput(request);
 		}
 	}
+	if("invoice.ccbrtb".equalsIgnoreCase(request.getParameter("docid"))){
+		InsurarInvoice invoice = InsurarInvoice.get(request.getParameter("invoiceuid"));
+		if(invoice!=null){
+			sOutput+="INVOICE NUMBER:;"+invoice.getUid()+"\r\n";
+			sOutput+="INVOICE DATE:;"+ScreenHelper.stdDateFormat.format(invoice.getDate())+"\r\n";
+			sOutput+="INSURAR:;"+invoice.getInsurar().getName()+"\r\n";
+			sOutput+="\r\n";
+			sOutput+=CsvInvoiceCCBRTB.getOutput(request);
+		}
+	}
+	if("invoice.ccbrtb.extra".equalsIgnoreCase(request.getParameter("docid"))){
+		ExtraInsurarInvoice invoice = ExtraInsurarInvoice.get(request.getParameter("invoiceuid"));
+		if(invoice!=null){
+			sOutput+="INVOICE NUMBER:;"+invoice.getUid()+"\r\n";
+			sOutput+="INVOICE DATE:;"+ScreenHelper.stdDateFormat.format(invoice.getDate())+"\r\n";
+			sOutput+="INSURAR:;"+invoice.getInsurar().getName()+"\r\n";
+			sOutput+="\r\n";
+			sOutput+=CsvInvoiceCCBRTB2.getOutput(request);
+		}
+	}
 	else if("invoice.rama.extra".equalsIgnoreCase(request.getParameter("docid"))){
 		ExtraInsurarInvoice invoice = ExtraInsurarInvoice.get(request.getParameter("invoiceuid"));
 		if(invoice!=null){
@@ -55,6 +75,16 @@
 			sOutput+="INSURAR:;"+invoice.getInsurar().getName()+"\r\n";
 			sOutput+="\r\n";
 			sOutput+=CsvInvoiceCplr.getOutput(request);
+		}
+	}
+	else if("invoice.ccbrta".equalsIgnoreCase(request.getParameter("docid"))){
+		InsurarInvoice invoice = InsurarInvoice.get(request.getParameter("invoiceuid"));
+		if(invoice!=null){
+			sOutput+="INVOICE NUMBER:;"+invoice.getUid()+"\r\n";
+			sOutput+="INVOICE DATE:;"+ScreenHelper.stdDateFormat.format(invoice.getDate())+"\r\n";
+			sOutput+="INSURAR:;"+invoice.getInsurar().getName()+"\r\n";
+			sOutput+="\r\n";
+			sOutput+=CsvInvoiceCCBRTA.getOutput(request);
 		}
 	}
 	else if("invoice.mfp".equalsIgnoreCase(request.getParameter("docid"))){
@@ -95,6 +125,16 @@
 			sOutput+="INSURAR:;"+invoice.getInsurar().getName()+"\r\n";
 			sOutput+="\r\n";
 			sOutput+=CsvInvoiceCplr2.getOutput(request);
+		}
+	}
+	else if("invoice.ccbrta.extra".equalsIgnoreCase(request.getParameter("docid"))){
+		ExtraInsurarInvoice invoice = ExtraInsurarInvoice.get(request.getParameter("invoiceuid"));
+		if(invoice!=null){
+			sOutput+="INVOICE NUMBER:;"+invoice.getUid()+"\r\n";
+			sOutput+="INVOICE DATE:;"+ScreenHelper.stdDateFormat.format(invoice.getDate())+"\r\n";
+			sOutput+="INSURAR:;"+invoice.getInsurar().getName()+"\r\n";
+			sOutput+="\r\n";
+			sOutput+=CsvInvoiceCCBRTA2.getOutput(request);
 		}
 	}
     byte[] b = sOutput.getBytes();

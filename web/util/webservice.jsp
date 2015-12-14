@@ -15,7 +15,7 @@
 			message.setRootElement(DocumentHelper.createElement("export"));
 			message.getRootElement().addAttribute("error", "remote.login.error");
 		}
-		else if(!User.hasAccessRight(login, "exportslavedata","select")){
+		else if(!User.hasAccessRight(login, "system.exporttomaster","select")){
 			message=DocumentHelper.createDocument();
 			message.setRootElement(DocumentHelper.createElement("export"));
 			message.getRootElement().addAttribute("error", "remote.login.nopermission");
@@ -34,7 +34,6 @@
         ServletOutputStream os = response.getOutputStream();
         byte[] b = null;
         try{
-        	System.out.println(message.asXML());
         	b = message.asXML().getBytes();
         }
         catch(Exception e){

@@ -66,7 +66,7 @@
 	    <table width="100%" class="sortable" id="searchresults" cellspacing="1" cellpadding="0">
 	        <%-- HEADER --%>
 	        <tr class="gray">
-	           <td width="250"><%=getTran("web","patient",sWebLanguage)%></td>
+	           <td width="250"><%=getTran("web","user",sWebLanguage)%></td>
 	           <td width="*"><%=getTran("web","encounters",sWebLanguage)%></td>
 	        </tr>
 	    <%

@@ -68,6 +68,7 @@
                     hMenu.put(getTran("web.manage","ManageAssetSuppliers",sWebLanguage),"main.do?Page=assets/manage_suppliers.jsp");
                     hMenu.put(getTran("web.manage","manageHistoryItems",sWebLanguage),"main.do?Page=system/manageHistoryItems.jsp");
                     hMenu.put(getTran("web.manage","managePlanningResourceAccess",sWebLanguage),"main.do?Page=system/managePlanningResourceAccess.jsp");
+                    hMenu.put(getTran("web.manage","manageInsurerPrestations",sWebLanguage),"main.do?Page=system/manageInsurerPrestations.jsp");
 
                     out.print(ScreenHelper.writeTblHeader(getTran("Web","Manage",sWebLanguage),sCONTEXTPATH)+
                     		  sortMenu(hMenu)+
@@ -210,6 +211,7 @@
                     hMenu.put(getTran("web.manage","setinvoicecounters",sWebLanguage),"main.do?Page=system/setInvoiceCounters.jsp"); idx++;
                     hMenu.put(getTran("web.manage","resetqueues",sWebLanguage),"main.do?Page=system/resetQueues.jsp"); idx++;
                     hMenu.put(getTran("web.manage","calculatequeuestats",sWebLanguage),"main.do?Page=system/calculateQueueStats.jsp"); idx++;
+                    hMenu.put(getTran("web.manage","managereports",sWebLanguage),"main.do?Page=system/manageReports.jsp"); idx++;
 
                     // depends on selection of activePatient
                     out.print(ScreenHelper.writeTblHeader(getTran("web.occup","medwan.common.other",sWebLanguage),sCONTEXTPATH)+

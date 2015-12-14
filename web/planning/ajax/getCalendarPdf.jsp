@@ -29,7 +29,8 @@
 
 <%
     String sYear = checkString(request.getParameter("year"));
-    String sUserId = checkString(request.getParameter("FindUserUID"));
+	String sUserId = checkString(request.getParameter("FindUserUID"));
+	String sServiceId = checkString(request.getParameter("FindServiceUID"));
     String sPatientId = checkString(request.getParameter("PatientID"));
     String sMonth = checkString(request.getParameter("month"));
     String sDay = checkString(request.getParameter("day"));
@@ -46,6 +47,10 @@
     String sHeader = getTranNoLink("web","calendar.health.professional",sWebLanguage)+": "+(calendarUser==null?"":calendarUser.person.lastname+" "+calendarUser.person.firstname);
     if(isPatient){
         sHeader = getTranNoLink("web","appointment.list.patient",sWebLanguage)+" \n"+activePatient.lastname+" "+activePatient.firstname+" \n"+ activePatient.dateOfBirth+" ("+activePatient.personid+")";
+    }
+    else if(sServiceId.length()>0){
+    	Service service = Service.getService(sServiceId);
+        sHeader = getTranNoLink("web","appointment.list.service",sWebLanguage)+" \n"+sServiceId+" "+service.getLabel(sWebLanguage);
     }
     calendarGenerator.addHeader(sHeader);
     if (sBegin.length() == 0) {
@@ -64,10 +69,13 @@
     Planning appointment;
     List userAppointments = new LinkedList();
 
-
-    if (sUserId.length() > 0 && !isPatient) {
+    if (sServiceId.length() > 0 && !isPatient) {
+        userAppointments = Planning.getServicePlannings(sServiceId, startOfWeek, endOfWeek);
+    }
+    else if (sUserId.length() > 0 && !isPatient) {
         userAppointments = Planning.getUserPlannings(sUserId, startOfWeek, endOfWeek);
-    } else if (isPatient) {
+    } 
+    else if (isPatient) {
         if (sUserId.trim().equals("-1")) {
             sUserId = "";
         }

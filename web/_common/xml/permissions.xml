@@ -81,6 +81,11 @@
         <permission type="examination" id="1089">occup.cnar.consultation</permission>
         <permission type="examination" id="1095">occup.cnar.orthoprosthesis</permission>
         <permission type="examination" id="1096">occup.cnar.mobile</permission>
+        <permission type="examination" id="1112">occup.ccbrt.eyeregistry</permission>
+        <permission type="examination" id="1113">occup.ccbrt.orthoregistry</permission>
+        <permission type="examination" id="1114">occup.ccbrt.poregistry</permission>
+        <permission type="examination" id="1115">occup.ccbrt.physioregistry</permission>
+        <permission type="examination" id="1116">occup.patientcreditrequest</permission>
     </application>
     <application type="Web" id="newexaminations">
         <permission type="web" id="globalexaminations">examinations.global</permission>
@@ -160,6 +165,7 @@
         <permission type="web" id="medicationschema">medication.medicationschema</permission>
     </application>
     <application type="Web" id="financial">
+        <permission type="web" id="financial.setexchangerate">financial.setexchangerate</permission>
         <permission type="web" id="occup.transferinvoiceinsurer">occup.transferinvoiceinsurer</permission>
         <permission type="web" id="occup.signinvoices">occup.signinvoices</permission>
         <permission type="balance" id="financial">financial</permission>
@@ -189,6 +195,7 @@
         <permission type="web" id="financial.superuser">financial.superuser</permission>
         <permission type="web" id="financial.modifyinvoicestatus">financial.modifyinvoicestatus</permission>
         <permission type="web" id="financial.negotiate.tariff">financial.negotiate.tariff</permission>
+        <permission type="web" id="financial.authorizeanyinsurance">financial.authorizeanyinsurance</permission>
     </application>
     <application type="Web" id="executive">
         <permission type="web" id="bedoccupation">occup.bedoccupation</permission>

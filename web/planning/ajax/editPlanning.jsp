@@ -60,6 +60,7 @@
                 beginDate = calendar.getTime();
             }
             planning.setPlannedDate(beginDate);
+            planning.setPlannedEndDate(endDate);
 
             long minutes = ((endDate.getTime()-planning.getPlannedDate().getTime())/1000)/60;
             if(minutes>55){
@@ -106,97 +107,109 @@
 
 
     if (sAction.equalsIgnoreCase("save")){
-        try {
-            //####################### IF APPOINTMENT TO SAVE ###################################//
-            String sEditPlanningUID = checkString(request.getParameter("EditPlanningUID"));
-            String sEditEstimatedtime = checkString(request.getParameter("EditEstimatedtime"));
-            String sEditEffectiveDate = checkString(request.getParameter("EditEffectiveDate"))+" "+checkString(request.getParameter("EditEffectiveDateTime"));
-            String sEditCancelationDate = checkString(request.getParameter("EditCancelationDate"))+" "+checkString(request.getParameter("EditCancelationDateTime"));
-            String sEditUserUID = checkString(request.getParameter("EditUserUID"));
-            String sEditPatientUID = checkString(request.getParameter("EditPatientUID"));
-            String sEditTransactionUID = checkString(request.getParameter("EditTransactionUID"));
-            String sEditContactType = checkString(request.getParameter("EditContactType"));
-            String sEditContactUID = checkString(request.getParameter("EditContactUID"));
-            String sEditDescription = checkString(request.getParameter("EditDescription"));
-            String sEditContext = checkString(request.getParameter("EditContext"));
-            String tempplanninguid = checkString(request.getParameter("tempplanninguid"));
-            String sEditRepeatUntil = checkString(request.getParameter("appointmentRepeatUntil"));
-            java.util.Date dRepeatUntil = null;
-            try{
-            	if(sEditRepeatUntil.length()>0){
-            		dRepeatUntil=ScreenHelper.parseDate(sEditRepeatUntil);
-            	}
-            }
-            catch(Exception e){
-            	e.printStackTrace();
-            }
-
-            planning = new Planning();
-            planning.setUid(sEditPlanningUID);
-            planning.setEstimatedtime(sEditEstimatedtime);
-			try{
-	            planning.setEffectiveDate(ScreenHelper.fullDateFormat.parse(sEditEffectiveDate));
-			}
-			catch(Exception e){};
-			try{
-	            planning.setCancelationDate(ScreenHelper.fullDateFormat.parse(sEditCancelationDate));
-			}
-			catch(Exception e){};
-			
-            planning.setUserUID(sEditUserUID);
-
-            planning.setPatientUID(sEditPatientUID);
-            planning.setTransactionUID(sEditTransactionUID);
-            planning.setContextID(sEditContext);
-            setDates(planning, request,new int[]{startHourOfWeekPlanner,startMinOfWeekPlanner,endHourOfWeekPlanner,endMinOfWeekPlanner});
-            ObjectReference orContact = new ObjectReference();
-            orContact.setObjectType(sEditContactType);
-            orContact.setObjectUid(sEditContactUID);
-            planning.setContact(orContact);
-            planning.setDescription(sEditDescription);
-            planning.setTempPlanningUid(tempplanninguid);
-            planning.setServiceUid(sFindServiceUID);
-            boolean bError=false;
-            if(dRepeatUntil!=null && dRepeatUntil.after(planning.getPlannedDate())){
-            	//Repeatedly store this planning for each day in the period
-            	while(!ScreenHelper.parseDate(ScreenHelper.formatDate(planning.getPlannedDate())).after(dRepeatUntil)){
-            		planning.setUid(null);
-            		bError=!planning.store();
-            		if(bError){
-            			break;
-            		}
-            		else{
-            			planning.setPlannedDate(new java.util.Date(planning.getPlannedDate().getTime()+24*3600*1000));
-            		}
-            	}
-            }
-            else{
-            	bError=!planning.store();
-            }
-            if(!bError){
-            	//Also 
-                if(sPage.length()==0){
-                    out.write("<script>clientMsg.setValid('"+HTMLEntities.htmlentities(getTranNoLink("web.control","dataissaved",sWebLanguage))+"',null,500);doClose();</script>");
-                }
-                else{
-                    out.write("<script>window.location.reload(true);Modalbox.hide();</script>");
-                }
-            }
-            else{
-                if(sPage.length()==0){
-                    out.write("<script>clientMsg.setError('"+HTMLEntities.htmlentities(getTranNoLink("web.control","dberror",sWebLanguage))+"');</script>");
-                }
-                else{
-                    if(sPage.length()==0){
-                        out.write("<script>alert('"+HTMLEntities.htmlentities(getTranNoLink("web.control","dberror",sWebLanguage))+"');</script>");                        
-                    }
-                }
-            }
-
-        }
-        catch (Exception e){
-            Debug.printProjectErr(e, Thread.currentThread().getStackTrace());
-        }
+    	//First check if overlap is allowed
+        String sEditUserUID = checkString(request.getParameter("EditUserUID"));
+        String sEditPlanningUID = checkString(request.getParameter("EditPlanningUID"));
+    	boolean bOverlapProhibited=false;
+    	if(checkString(activeUser.getParameter("PlanningDoubleBookingProhibited")).equalsIgnoreCase("1")){
+    		java.util.Date start = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(request.getParameter("appointmentDateDay")+" "+request.getParameter("appointmentDateHour")+":"+request.getParameter("appointmentDateMinutes"));
+    		java.util.Date end = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(request.getParameter("appointmentDateDay")+" "+request.getParameter("appointmentDateEndHour")+":"+request.getParameter("appointmentDateEndMinutes"));
+    		bOverlapProhibited=!Planning.isAvailablePlannedDate(sEditUserUID, start,end,sEditPlanningUID);
+    	}
+    	if(!bOverlapProhibited){
+	        try {
+	            //####################### IF APPOINTMENT TO SAVE ###################################//
+	            String sEditEstimatedtime = checkString(request.getParameter("EditEstimatedtime"));
+	            String sEditEffectiveDate = checkString(request.getParameter("EditEffectiveDate"))+" "+checkString(request.getParameter("EditEffectiveDateTime"));
+	            String sEditCancelationDate = checkString(request.getParameter("EditCancelationDate"))+" "+checkString(request.getParameter("EditCancelationDateTime"));
+	            String sEditPatientUID = checkString(request.getParameter("EditPatientUID"));
+	            String sEditTransactionUID = checkString(request.getParameter("EditTransactionUID"));
+	            String sEditContactType = checkString(request.getParameter("EditContactType"));
+	            String sEditContactUID = checkString(request.getParameter("EditContactUID"));
+	            String sEditDescription = checkString(request.getParameter("EditDescription"));
+	            String sEditContext = checkString(request.getParameter("EditContext"));
+	            String tempplanninguid = checkString(request.getParameter("tempplanninguid"));
+	            String sEditRepeatUntil = checkString(request.getParameter("appointmentRepeatUntil"));
+	            java.util.Date dRepeatUntil = null;
+	            try{
+	            	if(sEditRepeatUntil.length()>0){
+	            		dRepeatUntil=ScreenHelper.parseDate(sEditRepeatUntil);
+	            	}
+	            }
+	            catch(Exception e){
+	            	e.printStackTrace();
+	            }
+	
+	            planning = new Planning();
+	            planning.setUid(sEditPlanningUID);
+	            planning.setEstimatedtime(sEditEstimatedtime);
+				try{
+		            planning.setEffectiveDate(ScreenHelper.fullDateFormat.parse(sEditEffectiveDate));
+				}
+				catch(Exception e){};
+				try{
+		            planning.setCancelationDate(ScreenHelper.fullDateFormat.parse(sEditCancelationDate));
+				}
+				catch(Exception e){};
+				
+	            planning.setUserUID(sEditUserUID);
+	
+	            planning.setPatientUID(sEditPatientUID);
+	            planning.setTransactionUID(sEditTransactionUID);
+	            planning.setContextID(sEditContext);
+	            setDates(planning, request,new int[]{startHourOfWeekPlanner,startMinOfWeekPlanner,endHourOfWeekPlanner,endMinOfWeekPlanner});
+	            ObjectReference orContact = new ObjectReference();
+	            orContact.setObjectType(sEditContactType);
+	            orContact.setObjectUid(sEditContactUID);
+	            planning.setContact(orContact);
+	            planning.setDescription(sEditDescription);
+	            planning.setTempPlanningUid(tempplanninguid);
+	            planning.setServiceUid(sFindServiceUID);
+	            boolean bError=false;
+	            if(dRepeatUntil!=null && dRepeatUntil.after(planning.getPlannedDate())){
+	            	//Repeatedly store this planning for each day in the period
+	            	while(!ScreenHelper.parseDate(ScreenHelper.formatDate(planning.getPlannedDate())).after(dRepeatUntil)){
+	            		planning.setUid(null);
+	            		bError=!planning.store();
+	            		if(bError){
+	            			break;
+	            		}
+	            		else{
+	            			planning.setPlannedDate(new java.util.Date(planning.getPlannedDate().getTime()+24*3600*1000));
+	            		}
+	            	}
+	            }
+	            else{
+	            	bError=!planning.store();
+	            }
+	            if(!bError){
+	            	//Also 
+	                if(sPage.length()==0){
+	                    out.write("<script>clientMsg.setValid('"+HTMLEntities.htmlentities(getTranNoLink("web.control","dataissaved",sWebLanguage))+"',null,500);doClose();</script>");
+	                }
+	                else{
+	                    out.write("<script>window.location.reload(true);Modalbox.hide();</script>");
+	                }
+	            }
+	            else{
+	                if(sPage.length()==0){
+	                    out.write("<script>clientMsg.setError('"+HTMLEntities.htmlentities(getTranNoLink("web.control","dberror",sWebLanguage))+"');</script>");
+	                }
+	                else{
+	                    if(sPage.length()==0){
+	                        out.write("<script>alert('"+HTMLEntities.htmlentities(getTranNoLink("web.control","dberror",sWebLanguage))+"');</script>");                        
+	                    }
+	                }
+	            }
+	
+	        }
+	        catch (Exception e){
+	            Debug.printProjectErr(e, Thread.currentThread().getStackTrace());
+	        }
+    	}
+    	else{
+    		out.println("<script>alert('"+getTran("web","overlapnotallowed",sWebLanguage)+"');</script>");
+    	}
     } 
     else if (sAction.equalsIgnoreCase("delete")){
         String sEditPlanningUID = checkString(request.getParameter("AppointmentID"));
@@ -208,20 +221,33 @@
         }
     } 
     else if (sAction.equalsIgnoreCase("update")){
-        //####################### IF TO APPOINTMENT DATE UPDATE ###################################//
-        try {
-            String sEditPlanningUID = checkString(request.getParameter("AppointmentID"));
-            planning = new Planning();
-            // set appointment date
-            boolean bRefresh = setDates(planning, request,new int[]{startHourOfWeekPlanner,startMinOfWeekPlanner,endHourOfWeekPlanner,endMinOfWeekPlanner});
-            if(planning.updateDate(sEditPlanningUID)){
-                out.write("<script>clientMsg.setValid('"+HTMLEntities.htmlentities(getTranNoLink("web.control","dataissaved",sWebLanguage))+"',null,1000);"+((bRefresh)?"refreshAppointments();":"")+"</script>");
-            }
-        }
-        catch (Exception e){
-            out.write("<script>clientMsg.setError('"+HTMLEntities.htmlentities(getTranNoLink("web.control","dberror",sWebLanguage))+"');</script>");
-            Debug.printProjectErr(e, Thread.currentThread().getStackTrace());
-        }
+        String sEditPlanningUID = checkString(request.getParameter("AppointmentID"));
+        Planning p = Planning.get(sEditPlanningUID);
+        planning = new Planning();
+        // set appointment date
+        boolean bRefresh = setDates(planning, request,new int[]{startHourOfWeekPlanner,startMinOfWeekPlanner,endHourOfWeekPlanner,endMinOfWeekPlanner});
+        System.out.println("start="+planning.getPlannedDate());
+        System.out.println("end="+planning.getPlannedEndDate());
+        System.out.println("user="+p.getUserUID());
+    	boolean bOverlapProhibited=false;
+    	if(checkString(activeUser.getParameter("PlanningDoubleBookingProhibited")).equalsIgnoreCase("1")){
+    		bOverlapProhibited=!Planning.isAvailablePlannedDate(p.getUserUID(), planning.getPlannedDate(),planning.getPlannedEndDate(),sEditPlanningUID);
+    	}
+    	if(!bOverlapProhibited){
+	        //####################### IF TO APPOINTMENT DATE UPDATE ###################################//
+	        try {
+	            if(planning.updateDate(sEditPlanningUID)){
+	                out.write("<script>clientMsg.setValid('"+HTMLEntities.htmlentities(getTranNoLink("web.control","dataissaved",sWebLanguage))+"',null,1000);"+((bRefresh)?"refreshAppointments();":"")+"</script>");
+	            }
+	        }
+	        catch (Exception e){
+	            out.write("<script>clientMsg.setError('"+HTMLEntities.htmlentities(getTranNoLink("web.control","dberror",sWebLanguage))+"');</script>");
+	            Debug.printProjectErr(e, Thread.currentThread().getStackTrace());
+	        }
+    	}
+    	else{
+    		out.println("<script>alert('"+getTran("web","overlapnotallowed",sWebLanguage)+"');refreshAppointments();</script>");
+    	}
     } 
     else if (sAction.equalsIgnoreCase("new")){
         //####################### IF NEW APPOINTMENT ###################################//

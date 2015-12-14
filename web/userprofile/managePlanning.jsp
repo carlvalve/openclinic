@@ -7,6 +7,7 @@
     String sEditUserIDs = checkString(request.getParameter("EditUserIDs"));
     String sEditExamDuration = checkString(request.getParameter("PlanningExamDuration"));
     String sEditZoom = checkString(request.getParameter("EditZoom"));
+    String sEditDoubleBookingProhibited = checkString(request.getParameter("PlanningDoubleBookingProhibited"));
 
     //--- DISPLAY ---------------------------------------------------------------------------------
     if (sAction.length() == 0) {
@@ -23,6 +24,7 @@
             sEditExamDuration = 30 + "";
         }
         sEditUserIDs = checkString(activeUser.getParameter("PlanningFindUserIDs"));
+        sEditDoubleBookingProhibited=checkString(activeUser.getParameter("PlanningDoubleBookingProhibited"));
         sEditZoom = checkString(activeUser.getParameter("PlanningFindZoom"));
         if (sEditZoom.length() == 0) {
             sEditZoom = 40 + "";
@@ -50,6 +52,14 @@
                         }
                     %>
                 </select><%=getTran("web.occup", "medwan.common.minutes", sWebLanguage)%>
+            </td>
+        </tr>
+        <tr>
+            <%-- DOUBLE BOOKING PROHIBITED --%>
+            <td class="admin"><%=getTran("web", "doublebookingprohibited", sWebLanguage)%>
+            </td>
+            <td class="admin2">
+            	<input type='checkbox' style="margin-left:30px;margin-right:10px;" name='PlanningDoubleBookingProhibited' id='PlanningDoubleBookingProhibited' <%=sEditDoubleBookingProhibited.equalsIgnoreCase("1")?"checked":"" %> value="1"/>
             </td>
         </tr>
         <tr>
@@ -205,7 +215,7 @@
             new Ajax.Updater("updateByAjax", "<%=sCONTEXTPATH%>/userprofile/managePlanning.jsp?ts=<%=getTs()%>", {parameters:params,evalScripts:true});
        }
         function searchUser() {
-            openPopup("/_common/search/searchUser.jsp&ts=<%=getTs()%>&ReturnUserID=EditUserID&ReturnName=EditUserName");
+            openPopup("/_common/search/searchUser.jsp&ts=<%=getTs()%>&ReturnUserID=EditUserID&ReturnName=EditUserName&PopupWidth=600");
         }
         function doAdd() {
             var array = formEdit.EditUserIDs.value.split(";");
@@ -272,6 +282,10 @@ else if (sAction.equals("save")) {
     activeUser.removeParameter("PlanningFindUserIDs");
     activeUser.updateParameter(parameter);
     activeUser.parameters.add(parameter);
+    parameter = new Parameter("PlanningDoubleBookingProhibited", sEditDoubleBookingProhibited, activeUser.userid);
+    activeUser.removeParameter("PlanningDoubleBookingProhibited");
+    activeUser.updateParameter(parameter);
+    activeUser.parameters.add(parameter);
     parameter = new Parameter("PlanningExamDuration", sEditExamDuration, activeUser.userid);
     activeUser.removeParameter("PlanningExamDuration");
     activeUser.updateParameter(parameter);
@@ -280,7 +294,7 @@ else if (sAction.equals("save")) {
     out.write("<span class='valid'>"+
                    "<img src='"+sCONTEXTPATH+"/_img/themes/default/valid.gif' style='vertical-align:-3px;'>&nbsp;"+
                    HTMLEntities.htmlentities(getTranNoLink("web","dataissaved",sWebLanguage))+
-                  "</span><script>if($('tabpatient')){setTimeout('window.location.reload()',500);}</script>");
+                  "</span><script>if($('tabpatient')){setTimeout('window.location.reload()',500);}else{formFindUser.submit();}</script>");
     }
     catch(Exception e){
         out.write("<span class='error'>"+

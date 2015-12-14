@@ -3,8 +3,8 @@
 <%@page errorPage="/includes/error.jsp"%>
 <%@page import="java.io.ByteArrayOutputStream,
                 java.io.PrintWriter,
-                com.lowagie.text.*,
-                com.lowagie.text.pdf.*,
+                com.itextpdf.text.*,
+                com.itextpdf.text.pdf.*,
                 be.mxs.common.util.pdf.general.dossierCreators.MedicalDossierPDFCreator,
                 be.mxs.common.util.pdf.PDFCreator,
                 be.mxs.common.util.system.Picture,

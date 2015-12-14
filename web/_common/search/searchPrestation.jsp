@@ -1,3 +1,4 @@
+<%@page import="be.openclinic.finance.*"%>
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
 <%=sJSSORTTABLE%>
@@ -19,6 +20,17 @@
            sReturnFieldPrice     = checkString(request.getParameter("ReturnFieldPrice"));
 
     String sCurrency = MedwanQuery.getInstance().getConfigParam("currency","€");
+    String sCheckInsurance = checkString(request.getParameter("checkInsurance"));
+    if(sCheckInsurance.length()>0){
+    	Insurance insurance = null;
+    	if(sCheckInsurance.split("\\.").length==2){
+    		insurance = Insurance.get(sCheckInsurance);
+    	}
+    	if(insurance==null || insurance.getUid()==null || insurance.getUid().length()==0 || insurance.getUid().split("\\.").length<2){
+    		out.println("<script>window.opener.setTimeout(\"alert('"+getTranNoLink("web","selectinsurancefirst",sWebLanguage)+"')\",100);window.close();</script>");
+    		out.flush();
+    	}
+    }
     
     /// DEBUG /////////////////////////////////////////////////////////////////////////////////////
     if(Debug.enabled){
@@ -48,6 +60,7 @@
     <input type="hidden" name="ReturnFieldDescr" value="<%=sReturnFieldDescr%>">
     <input type="hidden" name="ReturnFieldType" value="<%=sReturnFieldType%>">
     <input type="hidden" name="ReturnFieldPrice" value="<%=sReturnFieldPrice%>">
+    <input type="hidden" name="CheckInsurance" value="<%=sCheckInsurance%>">
 
     <%=writeTableHeader("web","searchprestation",sWebLanguage," window.close();")%>
     <table width="100%" cellspacing="1" cellpadding="0" class="menu">

@@ -11,6 +11,8 @@
 
     String keywords = checkString(request.getParameter("keywords"));
     
+    String functioncall = checkString(request.getParameter("functioncall"));
+    
     String sListLink = "";
     if(sListMode.equals("ALL")){
         sListLink = "MY_LIST";
@@ -298,6 +300,9 @@
         if(sReturnField3.length() > 0){
             %>window.opener.document.getElementById('<%=sReturnField3%>').value = codeType;<%
         }
+        if(functioncall.length() > 0){
+            %>window.opener.<%=functioncall%>;<%
+        }
     %>
     window.close();
   }
@@ -313,6 +318,9 @@
         }
         if(sReturnField3.length() > 0){
             %>window.opener.document.getElementById('<%=sReturnField3%>').value = codeType;<%
+        }
+        if(functioncall.length() > 0){
+            %>window.opener.<%=functioncall%>;<%
         }
     %>
     window.close();

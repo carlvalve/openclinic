@@ -21,7 +21,8 @@
 <%-- End Floating layer --------------------------------------------------------------------------%>
 
 <%
-    String encounterUid = checkString(request.getParameter("encounterUid"));
+	String encounterUid = checkString(request.getParameter("encounterUid"));
+	String reloadroot = checkString(request.getParameter("reloadroot"));
     Debug.println("encounterUid : "+encounterUid);
 
     if(encounterUid.length()==0){
@@ -35,6 +36,7 @@
         Debug.println("keywords : "+keywords);
 %>
     <form name="RFEForm" method="post" onKeyDown='if(enterEvent(event,13)){doFind();}'>
+    	<input type='hidden' name='reloadroot' value='<%=reloadroot %>'/>
         <table class='menu' width='100%' cellspacing="0" cellpadding="0">
             <tr class="admin"><td colspan="3"><%=getTran("openclinic.chuk","rfe",sWebLanguage)%></td></tr>
             <tr>
@@ -192,11 +194,11 @@
   }
 
   function addICPC(code,label){
-    openPopup("/_common/search/RFEInfo.jsp&ts=<%=getTs()%>&field=<%=ScreenHelper.checkString(request.getParameter("field"))%>&trandate=<%=ScreenHelper.checkString(request.getParameter("trandate"))%>&encounterUid=<%=encounterUid%>&Type=ICPC&Code="+code+"&Label="+label,800,500);
+    openPopup("/_common/search/RFEInfo.jsp&ts=<%=getTs()%>&field=<%=ScreenHelper.checkString(request.getParameter("field"))%>&trandate=<%=ScreenHelper.checkString(request.getParameter("trandate"))%>&encounterUid=<%=encounterUid%>&Type=ICPC&Code="+code+"&Label="+label+"&reloadroot=<%=reloadroot%>",800,500);
   }
 
   function addICD10(code,label){
-    openPopup("/_common/search/RFEInfo.jsp&ts=<%=getTs()%>&field=<%=ScreenHelper.checkString(request.getParameter("field"))%>&trandate=<%=ScreenHelper.checkString(request.getParameter("trandate"))%>&encounterUid=<%=encounterUid%>&Type=ICD10&Code="+code+"&Label="+label,800,500);
+    openPopup("/_common/search/RFEInfo.jsp&ts=<%=getTs()%>&field=<%=ScreenHelper.checkString(request.getParameter("field"))%>&trandate=<%=ScreenHelper.checkString(request.getParameter("trandate"))%>&encounterUid=<%=encounterUid%>&Type=ICD10&Code="+code+"&Label="+label+"&reloadroot=<%=reloadroot%>",800,500);
   }
     
   function addnewlocalcode(keywords){

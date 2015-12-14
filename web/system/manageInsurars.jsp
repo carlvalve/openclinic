@@ -60,6 +60,9 @@
     	   sEditInsurarRequiresValidation  = checkString(request.getParameter("EditInsurarRequiresValidation")),
     	   sEditInsurarIncludeAllPatientInvoiceDebets  = checkString(request.getParameter("EditInsurarIncludeAllPatientInvoiceDebets")),
     	   sEditInsurarAllowTariffNegociations  = checkString(request.getParameter("EditInsurarAllowTariffNegociations")),
+    	   sEditInsurarCanPrintProforma  = checkString(request.getParameter("EditInsurarCanPrintProforma")),
+	   	   sEditInsurarReferenceNumberMandatory  = checkString(request.getParameter("EditInsurarReferenceNumberMandatory")),
+    	   sEditInsurarUseLimitedPrestationsList  = checkString(request.getParameter("EditInsurarUseLimitedPrestationsList")),
 	   	   sEditInsurarAccountingCode  = checkString(request.getParameter("EditInsurarAccountingCode")),
            sEditInsurarType     = checkString(request.getParameter("EditInsurarType"));
     
@@ -131,11 +134,32 @@
         insurar.setDefaultInsurarInvoiceModel(request.getParameter("EditInsurarDefaultInsurarInvoiceModel"));
         insurar.setDefaultPatientInvoiceModel(request.getParameter("EditInsurarDefaultPatientInvoiceModel"));
         insurar.setAllowedReductions(request.getParameter("EditInsurarAllowedReductions"));
+        if(sEditInsurarUseLimitedPrestationsList.equalsIgnoreCase("1")){
+        	insurar.setUseLimitedPrestationsList(1);
+        }
+        else {
+        	insurar.setUseLimitedPrestationsList(0);
+        }
+        
         if(sEditInsurarAllowTariffNegociations.equalsIgnoreCase("1")){
         	insurar.setAllowTariffNegociations(1);
         }
         else {
         	insurar.setAllowTariffNegociations(0);
+        }
+        
+        if(sEditInsurarCanPrintProforma.equalsIgnoreCase("1")){
+        	insurar.setCanPrintProforma(1);
+        }
+        else {
+        	insurar.setCanPrintProforma(0);
+        }
+        
+        if(sEditInsurarReferenceNumberMandatory.equalsIgnoreCase("1")){
+        	insurar.setInsuranceReferenceNumberMandatory(1);
+        }
+        else {
+        	insurar.setInsuranceReferenceNumberMandatory(0);
         }
         
         insurar.setAccountingCode(checkString(request.getParameter("EditInsurarAccountingCode")));
@@ -529,7 +553,13 @@
 		                            <option value="cplrcsv" <%=checkString(insurar.getDefaultInsurarInvoiceModel()).equalsIgnoreCase("cplrcsv")?"selected":""%>><%=getTranNoLink("web","cplrcsvmodel",sWebLanguage)%></option>
 	                        	<%
                    				}
-                        	%>
+	    		              	if(MedwanQuery.getInstance().getConfigInt("enableCCBRT",0)==1){
+								%>
+	    		              		<option value="ccbrtacsv" <%=checkString(insurar.getDefaultInsurarInvoiceModel()).equalsIgnoreCase("ccbrtacsv")?"selected":""%>><%=getTranNoLink("web","ccbrtacsvmodel",sWebLanguage)%></option>
+	    		              		<option value="ccbrtbcsv" <%=checkString(insurar.getDefaultInsurarInvoiceModel()).equalsIgnoreCase("ccbrtbcsv")?"selected":""%>><%=getTranNoLink("web","ccbrtbcsvmodel",sWebLanguage)%></option>
+                        		<%
+	    		              	}
+                        		%>
                             </select>
                         </td>
                     </tr>
@@ -609,6 +639,24 @@
                         <td class="admin"><%=getTran("web","allowtariffnegociations",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="checkbox" name="EditInsurarAllowTariffNegociations" <%=insurar.getAllowTariffNegociations()==1?"checked":""%> value="1"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="admin"><%=getTran("web","referencenumbermandatory",sWebLanguage)%></td>
+                        <td class="admin2">
+                            <input type="checkbox" name="EditInsurarReferenceNumberMandatory" <%=insurar.getInsuranceReferenceNumberMandatory()==1?"checked":""%> value="1"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="admin"><%=getTran("web","canprintproforma",sWebLanguage)%></td>
+                        <td class="admin2">
+                            <input type="checkbox" name="EditInsurarCanPrintProforma" <%=insurar.getCanPrintProforma()==1?"checked":""%> value="1"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="admin"><%=getTran("web","uselimitedprestationslist",sWebLanguage)%></td>
+                        <td class="admin2">
+                            <input type="checkbox" name="EditInsurarUseLimitedPrestationsList" <%=insurar.getUseLimitedPrestationsList()==1?"checked":""%> value="1"/>
                         </td>
                     </tr>
                     <tr>

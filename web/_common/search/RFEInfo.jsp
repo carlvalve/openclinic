@@ -3,7 +3,8 @@
 <%@include file="/includes/validateUser.jsp"%>
 <%
     String sCode  = checkString(request.getParameter("Code")),
-           sLabel = checkString(request.getParameter("Label")),
+            sLabel = checkString(request.getParameter("Label")),
+            reloadroot = checkString(request.getParameter("reloadroot")),
            sType  = checkString(request.getParameter("Type"));
            
     String sPatientUid = checkString(request.getParameter("patientuid"));
@@ -42,7 +43,7 @@
         
         <!-- Diagnose label, equivalent -->
         <tr>
-            <td class="admin"><%=sType.equalsIgnoreCase("icpc")?"ICD10":"ICPC"%></td>
+            <td class="admin"><%=sType.equalsIgnoreCase("icpc")?"ICD10":"ICPC"%>*</td>
             <td class="admin2">
                 <%
                     String sFindCode = sCode;
@@ -66,7 +67,7 @@
                         out.print("<input type='hidden' name='alternativeCodeLabel' value='"+MedwanQuery.getInstance().getDiagnosisLabel(sType.equalsIgnoreCase("icpc")?"ICD10":"ICPC",(String)alternatives.elementAt(0),sWebLanguage)+"'/>");
                     }
                     else if (alternatives.size()>1){
-                        out.print("<select class='text' name='alternativeCode' id='alternativeCode' onclick=\"document.getElementsByName('alternativeCodeLabel')[0].value=document.getElementsByName('alternativeCode')[0].options[document.getElementsByName('alternativeCode')[0].selectedIndex].text.substring(document.getElementsByName('alternativeCode')[0].options[document.getElementsByName('alternativeCode')[0].selectedIndex].text.indexOf(' ')+1);\">");
+                        out.print("<select class='text' name='alternativeCode' id='alternativeCode' onclick=\"document.getElementsByName('alternativeCodeLabel')[0].value=document.getElementsByName('alternativeCode')[0].options[document.getElementsByName('alternativeCode')[0].selectedIndex].text.substring(document.getElementsByName('alternativeCode')[0].options[document.getElementsByName('alternativeCode')[0].selectedIndex].text.indexOf(' ')+1);\"><option/>");
                         for(int n=0; n<alternatives.size(); n++){
                             out.print("<option value='"+alternatives.elementAt(n)+"'>"+alternatives.elementAt(n)+" "+MedwanQuery.getInstance().getDiagnosisLabel(sType.equalsIgnoreCase("icpc")?"ICD10":"ICPC",(String)alternatives.elementAt(n),sWebLanguage)+"</option>");
                             flags = ReasonForEncounter.getFlags(sType.equalsIgnoreCase("icpc")?"ICD10":"ICPC",(String)alternatives.elementAt(n),flags);
@@ -330,7 +331,7 @@
         <tr>
             <td class="admin" nowrap><%=getTran("medical.diagnosis","transfer.problemlist",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
-                <input type="checkbox" name="DiagnosisTransferToProblemlist"/>
+                <input type="checkbox" name="DiagnosisTransferToProblemlist" id="DiagnosisTransferToProblemlist"/>
             </td>
         </tr>
         
@@ -523,6 +524,10 @@
     alt = "";
     if(document.getElementById("alternativeCode")){
       alt = document.getElementById("alternativeCode").value;
+      if(alt.length==0){
+    	  alert('<%=getTranNoLink("web","somedataismissing",sWebLanguage)%>');
+    	  return;
+      }
     }
     
     var params = "encounterUid=<%=ScreenHelper.checkString(request.getParameter("encounterUid"))%>"+
@@ -533,13 +538,26 @@
                  "&alternativeCode="+alt+
                  "&language=<%=sWebLanguage%>"+
                  "&flags="+flags+
+                 "&reloadroot=<%=reloadroot%>"+
                  "&userUid=<%=activeUser.userid%>";
+    if(document.getElementById("DiagnosisTransferToProblemlist").checked){
+    	params+="&transfertoproblemlist=1";
+    }
     var url = '<c:url value="/healthrecord/storeRFE.jsp"/>?ts='+new Date();
     new Ajax.Request(url,{
       method: "GET",
       parameters: params,
       onSuccess: function(resp){
-        window.opener.opener.document.getElementById('<%=ScreenHelper.checkString(request.getParameter("field"))%>').innerHTML=resp.responseText;
+          window.opener.opener.document.getElementById('<%=ScreenHelper.checkString(request.getParameter("field"))%>').innerHTML=resp.responseText;
+    	<%
+    		if(reloadroot.equals("1")){
+    	%>
+	        if(document.getElementById("DiagnosisTransferToProblemlist").checked){
+		        window.opener.opener.location.reload(true);
+	        }
+	    <%
+    		}
+	    %>
         window.opener.close();
         window.close();
       }

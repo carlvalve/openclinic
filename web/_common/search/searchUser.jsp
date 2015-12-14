@@ -33,13 +33,13 @@
             <%-- lastname --%>
             <td class="admin2"><%=getTran("Web","name",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
-                <input type="text" class="text" name="FindLastname" size="28" maxLength="255" value="<%=sFindLastname%>" >
+                <input type="text" class="text" name="FindLastname" id="FindLastname" size="28" maxLength="255" value="<%=sFindLastname%>" >
             </td>
             
             <%-- firstname --%>
             <td class="admin2"><%=getTran("Web","firstname",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
-                <input type="text" class="text" name="FindFirstname" size="28" maxLength="255" value="<%=sFindFirstname%>">
+                <input type="text" class="text" name="FindFirstname" id="FindFirstname" size="28" maxLength="255" value="<%=sFindFirstname%>">
             </td>
             
             <%-- BUTTONS --%>
@@ -155,17 +155,20 @@
 
   <%-- ACTIVATE TAB --%>
   function activateTab(sTab){
+
     <% 
       // hide all TRs
       if(request.getParameter("FindServiceID")!=null){
         %>
-          document.getElementById('tr_tab1').style.display = 'none';
-          document.getElementById('td1').className = "tabunselected";
-
-          if(sTab=='tab_1'){
-            document.getElementById('tr_tab1').style.display = '';
-            document.getElementById('td1').className = "tabselected";
-          }
+          if(document.getElementById('FindLastname').value.length==0 && document.getElementById('FindFirstname').value.length==0){
+	          document.getElementById('tr_tab1').style.display = 'none';
+	          document.getElementById('td1').className = "tabunselected";
+	
+	          if(sTab=='tab_1'){
+	            document.getElementById('tr_tab1').style.display = '';
+	            document.getElementById('td1').className = "tabselected";
+	          }
+      	  }
         <%
       }
     %>

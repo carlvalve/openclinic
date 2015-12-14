@@ -46,6 +46,7 @@
            sEditPrestationMfpPercentage  = checkString(request.getParameter("EditPrestationMfpPercentage")),
            sEditPrestationMfpAdmissionPercentage  = checkString(request.getParameter("EditPrestationMfpAdmissionPercentage")),
            sEditPrestationAnesthesiaPercentage  = checkString(request.getParameter("EditPrestationAnesthesiaPercentage")),
+           sEditPrestationHideFromDefaultList  = checkString(request.getParameter("EditPrestationHideFromDefaultList")),
            sEditPrestationAnesthesiaSupplementPercentage  = checkString(request.getParameter("EditPrestationAnesthesiaSupplementPercentage")),
            sEditPrestationSupplement  = checkString(request.getParameter("EditPrestationSupplement")),
            sEditPrestationClass  = checkString(request.getParameter("EditPrestationClass")),
@@ -94,6 +95,12 @@
 	   }
 	   catch(Exception e){
 		   sEditPrestationAnesthesiaPercentage="0";
+	   }
+	   try{
+		   sEditPrestationHideFromDefaultList =""+Integer.parseInt(sEditPrestationHideFromDefaultList);
+	   }
+	   catch(Exception e){
+		   sEditPrestationHideFromDefaultList="0";
 	   }
 	   try{
 		   sEditPrestationAnesthesiaSupplementPercentage =""+Double.parseDouble(sEditPrestationAnesthesiaSupplementPercentage);
@@ -157,6 +164,7 @@
         prestation.setMfpPercentage(Integer.parseInt(sEditPrestationMfpPercentage));
         prestation.setMfpAdmissionPercentage(Double.parseDouble(sEditPrestationMfpAdmissionPercentage));
         prestation.setAnesthesiaPercentage(Double.parseDouble(sEditPrestationAnesthesiaPercentage));
+        prestation.setHideFromDefaultList(Integer.parseInt(sEditPrestationHideFromDefaultList));
         prestation.setAnesthesiaSupplementPercentage(Double.parseDouble(sEditPrestationAnesthesiaSupplementPercentage));
         prestation.setSupplement(Double.parseDouble(sEditPrestationSupplement));
         prestation.setInactive(Integer.parseInt(sEditPrestationInactive));
@@ -514,6 +522,12 @@
                         <td class="admin"><%=getTran("web","inactive",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="checkbox" name="EditPrestationInactive" value="1" <%=prestation.getInactive()==1?"checked":"" %>/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="admin"><%=getTran("web","hidefromdefaultlist",sWebLanguage)%></td>
+                        <td class="admin2">
+                            <input type="checkbox" name="EditPrestationHideFromDefaultList" <%=prestation.getHideFromDefaultList()==1?"checked":""%> value="1"/>
                         </td>
                     </tr>
                     <tr>

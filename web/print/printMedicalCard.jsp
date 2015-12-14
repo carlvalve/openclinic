@@ -12,8 +12,13 @@
     try{
         // PDF generator
         sProject = checkString((String)session.getAttribute("activeProjectTitle")).toLowerCase();
-        PDFIOTAFileGenerator pdfGenerator;
-       	pdfGenerator = new PDFIOTAFileGenerator(activeUser,activePatient,sProject,sWebLanguage);
+        PDFInvoiceGenerator pdfGenerator=null;
+        if(MedwanQuery.getInstance().getConfigInt("medicalCardType",1)==2){
+        	pdfGenerator = new PDFIOTAFile2Generator(activeUser,activePatient,sProject,sWebLanguage);
+        }
+        else{
+        	pdfGenerator = new PDFIOTAFileGenerator(activeUser,activePatient,sProject,sWebLanguage);
+        }
         baosPDF = pdfGenerator.generatePDFDocumentBytes(request,sPersonId);
 
         StringBuffer sbFilename = new StringBuffer();

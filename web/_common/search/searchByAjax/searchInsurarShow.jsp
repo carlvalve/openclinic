@@ -13,10 +13,12 @@
     
     String sFunction = checkString(request.getParameter("doFunction"));
     String sExcludeCoverageplans = checkString(request.getParameter("ExcludeCoverageplans"));
+    String sRestrictedListOnly=checkString(request.getParameter("RestrictedListOnly"));
     
     String sReturnFieldUid     = checkString(request.getParameter("ReturnFieldInsurarUid")),
            sReturnFieldName    = checkString(request.getParameter("ReturnFieldInsurarName")),
            sReturnFieldContact = checkString(request.getParameter("ReturnFieldInsurarContact"));
+    
     
     if(sAction.length()==0 && sFindInsurarName.length() > 0){
     	sAction = "search"; // default
@@ -47,7 +49,7 @@
 <br>
 
 <%-- SEARCH RESULTS TABLE --%>
-<table id="searchresults" cellpadding="0" cellspacing="0" width="100%" class="sortable">
+<table id="searchresults" class="sortable" cellpadding="0" cellspacing="0" width="100%">
     <%-- header --%>
     <tr class="admin">
         <td><%=HTMLEntities.htmlentities(getTran("system.manage","insurarName",sWebLanguage))%></td>
@@ -69,7 +71,7 @@
                 if(sExcludeCoverageplans.equalsIgnoreCase("true") && insurar.getContact().equalsIgnoreCase("plan.openinsurance")){
                 	continue;
                 }
-                insurarCount++;
+                
 
                 sContact = checkString(insurar.getContact());
 
@@ -78,15 +80,18 @@
                 else                  sClass = "";
 
 		        %>
-		        <tr class="list<%=sClass%>">
-		            <td onClick="selectInsurar('<%=insurar.getUid()%>','<%=HTMLEntities.htmlentities(insurar.getName())%>');"><%=HTMLEntities.htmlentities(checkString(insurar.getName()))%></td>
-		            <td onClick="selectInsurar('<%=insurar.getUid()%>','<%=HTMLEntities.htmlentities(insurar.getName())%>');"><%=HTMLEntities.htmlentities(sContact)%></td>
-		        </tr>
+	        	<%if(!sRestrictedListOnly.equalsIgnoreCase("1") || insurar.getUseLimitedPrestationsList()==1){insurarCount++;%>
+			        <tr class="list<%=sClass%>">
+			            <td onClick="selectInsurar('<%=insurar.getUid()%>','<%=HTMLEntities.htmlentities(insurar.getName())%>');"><%=HTMLEntities.htmlentities(checkString(insurar.getName()))%></td>
+			            <td onClick="selectInsurar('<%=insurar.getUid()%>','<%=HTMLEntities.htmlentities(insurar.getName())%>');"><%=HTMLEntities.htmlentities(sContact)%></td>
+			        </tr>
+	            <%}%>
 		        <%
             }
         %>
     </tbody>
 </table>
+<script>sortables_init();</script>
 <%
 	    }
 	
@@ -98,7 +103,12 @@
 	        <%
 	    }
 	    else{
-	        %><br><%=HTMLEntities.htmlentities(getTran("web","noRecordsFound",sWebLanguage))%><%
+	    	if(!sRestrictedListOnly.equalsIgnoreCase("1")){
+	        	%><br><%=HTMLEntities.htmlentities(getTran("web","noRecordsFound",sWebLanguage))%><%
+	    	}
+	    	else{
+	        	%><br><%=HTMLEntities.htmlentities(getTran("web","noRecordsFoundwithlimitedprestationlist",sWebLanguage))%><%
+	    	}
 	    }
 	
 	    // display message

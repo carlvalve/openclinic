@@ -40,7 +40,6 @@
         baosPDF = pdfImmoLabelGenerator.generatePDFDocumentBytes(request, articles);
         StringBuffer sbFilename = new StringBuffer();
         sbFilename.append("filename_").append(System.currentTimeMillis()).append(".pdf");
-
         StringBuffer sbContentDispValue = new StringBuffer();
         sbContentDispValue.append("inline; filename=").append(sbFilename);
 
