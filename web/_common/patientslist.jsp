@@ -310,7 +310,7 @@
         	activeUser.getAccessRight("patient.administration.add")){
 	        %>
 	            <br><br>
-	            <img src="<%=sCONTEXTPATH%>/_img/themes/default/pijl.gif"/>&nbsp;<a href="<c:url value='/patientnew.do'/>?PatientNew=true&pLastname=<%=sName%>&pFirstname=<%=sFirstname%>&pImmatnew=<%=simmatnew%>&pArchiveCode=<%=sArchiveFileCode%>&pNatreg=<%=snatreg%>&pDateofbirth=<%=sDateOfBirth%>&pDistrict=<%=sDistrict%>"><%=getTran("web","new_patient",sWebLanguage)%></a><br>
+	            <img src="<%=sCONTEXTPATH%>/_img/themes/default/pijl.gif"/>&nbsp;<a href="<c:url value='/patientnew.do'/>?PatientNew=true&pLastname=<%=sName%>&pFirstname=<%=sFirstname%>&pImmatnew=<%=simmatnew%>&pNatreg=<%=snatreg%>&pDateofbirth=<%=sDateOfBirth%>&pDistrict=<%=sDistrict%>"><%=getTran("web","new_patient",sWebLanguage)%></a><br>
 	            <img src="<%=sCONTEXTPATH%>/_img/themes/default/pijl.gif"/>&nbsp;<a href="<c:url value='/_common/patient/patienteditSave.jsp'/>?Lastname=<%=sName%>&Firstname=<%=sFirstname%>&DateOfBirth=<%=sDateOfBirth%>&NatReg=<%=snatreg%>&ImmatNew=<%=simmatnew%>&PDistrict=<%=sDistrict%>&PBegin=<%=getDate()%>&NextPage=planning/findPlanning.jsp&SavePatientEditForm=ok"><%=getTran("web","create_person_and_go_to_agenda",sWebLanguage)%></a>
 	        <%
         }

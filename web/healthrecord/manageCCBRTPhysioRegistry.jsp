@@ -39,6 +39,7 @@
 			            <td class="admin"><%=getTran("ccbrt.physio","from",sWebLanguage)%>&nbsp;</td>
 			            <td class="admin2" colspan="6">
 			                <select id="from" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_PHYSIO_REGISTRY_FROM" property="itemId"/>]>.value">
+			                	<option/>
 				            	<%=ScreenHelper.writeSelect("ccbrt.physio.from",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_PHYSIO_REGISTRY_FROM"),sWebLanguage,false,true) %>
 			                </select>
 			            </td>
@@ -47,6 +48,7 @@
 			            <td class="admin"><%=getTran("ccbrt.physio","activities",sWebLanguage)%>&nbsp;</td>
 			            <td class="admin2" colspan="3">
 			                <select id="activities" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_PHYSIO_REGISTRY_ACTIVITIES" property="itemId"/>]>.value">
+			                	<option/>
 				            	<%=ScreenHelper.writeSelect("ccbrt.physio.activities",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_PHYSIO_REGISTRY_ACTIVITIES"),sWebLanguage,false,true) %>
 			                </select>
 			            </td>
@@ -86,6 +88,7 @@
 			            <td class="admin"><%=getTran("ccbrt.physio","statusdetails",sWebLanguage)%>&nbsp;</td>
 			            <td class="admin2" colspan="2">
 			                <select id="statusdetails" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_PHYSIO_REGISTRY_STATUSDETAILS" property="itemId"/>]>.value">
+			                	<option/>
 				            	<%=ScreenHelper.writeSelect("ccbrt.physio.statusdetails",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_PHYSIO_REGISTRY_STATUSDETAILS"),sWebLanguage,false,true) %>
 			                </select>
 			            </td>

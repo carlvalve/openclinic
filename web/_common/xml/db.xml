@@ -97,7 +97,7 @@
     </table>
     
     
-    <table name="OC_RESERVATIONS" db="	" sync="NONE">
+    <table name="OC_RESERVATIONS" db="openclinic" sync="NONE">
     	<columns>
 	    	<column name="OC_RESERVATION_SERVERID" dbtype="int" javatype="integer"/>
 	    	<column name="OC_RESERVATION_OBJECTID" dbtype="int" javatype="integer"/>
@@ -1987,6 +1987,7 @@
             <column name="OC_PLANNING_CONTEXTID" dbtype="varchar" javatype="string" size="255"/>
 			<column name="OC_PLANNING_SERVICEUID" dbtype="varchar" javatype="string" size="50"/>
 			<column name="OC_PLANNING_PLANNEDEND" dbtype="datetime" javatype="date"/>
+			<column name="OC_PLANNING_REMINDSENT" dbtype="datetime" javatype="date"/>
 		</columns>
 		<indexes>
 			<index name="OC_PLANNING_PATIENTID">

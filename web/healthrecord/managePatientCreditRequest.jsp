@@ -15,7 +15,25 @@
     
     <%=writeHistoryFunctions(((TransactionVO)transaction).getTransactionType(),sWebLanguage)%>
     <%=contextHeader(request,sWebLanguage)%>
-    
+    <%
+	    String sMailTo = MedwanQuery.getInstance().getConfigString("patientCreditRequestMailAddress","");
+    	Encounter encounter = Encounter.getActiveEncounterOnDate(new Timestamp(((TransactionVO)transaction).getUpdateTime().getTime()),activePatient.personid);
+    	if(encounter!=null && encounter.getLastEncounterService()!=null){
+    		Service service = Service.getService(encounter.getLastEncounterService().serviceUID);
+    		while(service !=null){
+    			if(service.contactemail!=null && service.contactemail.length()>0){
+    				sMailTo=service.contactemail;
+    				break;
+    			}
+    			else if(service.parentcode!=null && service.parentcode.length()>0){
+    				service=Service.getService(service.parentcode);
+    			}
+    			else {
+    				service=null;
+    			}
+    		}
+    	}
+    %>
     <table class="list" width="100%" cellspacing="1">
         <%-- DATE --%>
         <tr>
@@ -38,15 +56,18 @@
 			            <td class="admin2" colspan="6"><table width='100%'>
 			            	<%
 			            		String activecriteria=((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PATIENTCREDITREQUEST_CRITERIA");
-			            		Hashtable values = (Hashtable)((Hashtable)((Hashtable)MedwanQuery.getInstance().getLabels()).get(sWebLanguage)).get("patientcreditcriteria");
-			            		if(values!=null){
-			            			Enumeration e = values.keys();
-			            			while(e.hasMoreElements()){
-			            				String id = (String)e.nextElement();
-			            				out.println("<tr><td><input name='criteria."+id+"' type='checkbox' "+(("*"+activecriteria+"*").indexOf("*"+id+"*")>-1?"checked":"")+"/>"+getTran("patientcreditcriteria",id,sWebLanguage)+"</td></tr>");
-			            			}
+			            		Hashtable labels=MedwanQuery.getInstance().getLabels();
+			            		Hashtable hLang=(Hashtable)labels.get(sWebLanguage.toLowerCase());
+			            		if(hLang!=null){
+			            			Hashtable values = (Hashtable)hLang.get("patientcreditcriteria");
+				            		if(values!=null){
+				            			Enumeration e = values.keys();
+				            			while(e.hasMoreElements()){
+				            				String id = (String)e.nextElement();
+				            				out.println("<tr><td><input name='criteria."+id+"' type='checkbox' "+(("*"+activecriteria+"*").indexOf("*"+id+"*")>-1?"checked":"")+"/>"+getTran("patientcreditcriteria",id,sWebLanguage)+"</td></tr>");
+				            			}
+				            		}
 			            		}
-			            	
 			            	%>
 			            	</table>
 			                <input type='hidden' id="criteria" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PATIENTCREDITREQUEST_CRITERIA" property="itemId"/>]>.value"/>
@@ -62,6 +83,12 @@
 			            <td class="admin"><%=getTran("web","comment",sWebLanguage)%>*&nbsp;</td>
 			            <td class="admin2" colspan="6">
 			               <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_PATIENTCREDITREQUEST_COMMENT")%> class="text" cols="50" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PATIENTCREDITREQUEST_COMMENT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PATIENTCREDITREQUEST_COMMENT" property="value"/></textarea>
+			            </td>
+			        </tr>
+		        	<tr>
+			            <td class="admin"><%=getTran("web","sendmailto",sWebLanguage)%>*&nbsp;</td>
+			            <td class="admin2" colspan="6">
+							<%=sMailTo %>
 			            </td>
 			        </tr>
 	            </table>

@@ -37,6 +37,7 @@
 			            <td class="admin"><%=getTran("ccbrt.eye","from",sWebLanguage)%>&nbsp;</td>
 			            <td class="admin2" colspan="6">
 			                <select id="from" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_EYE_REGISTRY_FROM" property="itemId"/>]>.value">
+			                	<option/>
 				            	<%=ScreenHelper.writeSelect("ccbrt.eye.from",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_EYE_REGISTRY_FROM"),sWebLanguage,false,true) %>
 			                </select>
 			            </td>
@@ -47,6 +48,7 @@
 			            </td>
 			            <td class="admin2" colspan="6">
 			                <select id="attendencytype" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_EYE_REGISTRY_ATTENDENCYTYPE" property="itemId"/>]>.value">
+			                	<option/>
 				            	<%=ScreenHelper.writeSelect("ccbrt.attendencytype",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_EYE_REGISTRY_ATTENDENCYTYPE"),sWebLanguage,false,true) %>
 			                </select>
 			            </td>
@@ -58,6 +60,7 @@
 			            </td>
 			            <td class="admin2">
 			                <select id="varight" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_EYE_REGISTRY_VARIGHT" property="itemId"/>]>.value">
+			                	<option/>
 				            	<%=ScreenHelper.writeSelect("ccbrt.va.lr",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_EYE_REGISTRY_VARIGHT"),sWebLanguage,false,true) %>
 			                </select>
 			            </td>
@@ -66,6 +69,7 @@
 			            </td>
 			            <td class="admin2">
 			                <select id="valeft" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_EYE_REGISTRY_VALEFT" property="itemId"/>]>.value">
+			                	<option/>
 				            	<%=ScreenHelper.writeSelect("ccbrt.va.lr",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_EYE_REGISTRY_VALEFT"),sWebLanguage,false,true) %>
 			                </select>
 			            </td>
@@ -74,6 +78,7 @@
 			            </td>
 			            <td class="admin2">
 			                <select id="vacategory" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_EYE_REGISTRY_VACATEGORY" property="itemId"/>]>.value">
+			                	<option/>
 				            	<%=ScreenHelper.writeSelect("ccbrt.va.category",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_EYE_REGISTRY_VACATEGORY"),sWebLanguage,false,true) %>
 			                </select>
 			            </td>
@@ -84,6 +89,7 @@
 			            </td>
 			            <td class="admin2" colspan="3">
 			                <select id="vamaterial" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_EYE_REGISTRY_VAMATERIAL" property="itemId"/>]>.value">
+			                	<option/>
 				            	<%=ScreenHelper.writeSelect("ccbrt.va.material",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_EYE_REGISTRY_VAMATERIAL"),sWebLanguage,false,true) %>
 			                </select>
 			            </td>
@@ -98,6 +104,7 @@
 			            <td class="admin"><%=getTran("ccbrt.va","assessment",sWebLanguage)%>&nbsp;</td>
 			            <td class="admin2" colspan="6">
 			                <select id="vaassessment" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_EYE_REGISTRY_VAASSESSMENT" property="itemId"/>]>.value">
+			                	<option/>
 				            	<%=ScreenHelper.writeSelect("ccbrt.va.assessment",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_EYE_REGISTRY_VAASSESSMENT"),sWebLanguage,false,true) %>
 			                </select>
 			            </td>

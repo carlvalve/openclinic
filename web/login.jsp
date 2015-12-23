@@ -221,7 +221,7 @@
         	<img src="_img/logo_bloodbank.jpg" border="0">
         <% } else {
             session.setAttribute("edition", "openclinic");%>
-        	<img src="<%=sTmpAPPDIR%>_img/logo.jpg" border="0">
+        	<img src="_img/logo.jpg" border="0">
         <% }%>
     </div>
     <%
@@ -250,6 +250,7 @@
     
     <div id="messages">
         <center>
+        <br/>
         <%
             if(MedwanQuery.getInstance().getConfigInt("enableProductionWarning",0)==1){
         		out.print(ScreenHelper.getTranDb("web","productionsystemwarning","EN"));

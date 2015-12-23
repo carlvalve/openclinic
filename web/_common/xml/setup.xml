@@ -465,6 +465,7 @@
 		<config key="convertFunction" value="convert($value$,$datatype$)"/>
 		<config key="convertStringToDateFunction" value="str_to_date($date$,'%d/%m/%Y')"/>
 		<config key="datediffFunction" value="datediff($enddate$,$begindate$)"/>
+		<config key="timeStamp" value="now()"/>
 		<config key="dateFunction" value="now()"/>
 		<config key="iifFunction" value="if($condition$,$iftrue$,$iffalse$)"/>
 		<config key="limitFunction" value="limit"/>
@@ -485,6 +486,7 @@
 		<config key="convertFunction" value="convert($datatype$,$value$)"/>
 		<config key="convertStringToDateFunction" value="convert(datetime,$date$,103)"/>
 		<config key="datediffFunction" value="datediff($interval$,$begindate$,$enddate$)"/>
+		<config key="timeStamp" value="getdate()"/>
 		<config key="dateFunction" value="getdate()"/>
 		<config key="iifFunction" value="case when $condition$ then $iftrue$ else $iffalse$ end"/>
 		<config key="limitFunction" value=""/>

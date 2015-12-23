@@ -626,7 +626,7 @@
 								}
 								
 							if(MedwanQuery.getInstance().getConfigInt("enableProformaPatientInvoice",0)==1 || activeUser.getAccessRight("financial.printproformapatientinvoice.select") || bInsurerAllowsProforma){ %>
-	                        <input class="button" type="button" name="buttonPrint" value='PROFORMA' onclick="doPrintProformaPdf('<%=patientInvoice.getUid()%>');">
+	                        <input class="button" type="button" name="buttonPrint" value='<%=getTran("invoice","proforma",sWebLanguage)%>' onclick="doPrintProformaPdf('<%=patientInvoice.getUid()%>');">
 	                        <%
 	                          }
 	                        	if(!isInsuranceAgent && MedwanQuery.getInstance().getConfigInt("javaPOSenabled",0)==1){
@@ -775,8 +775,17 @@
 	            }
 	        <%
         	}
+        	boolean bOtherReferenceMandatory=insurance!=null && insurance.getInsurar()!=null && insurance.getInsurar().getInvoiceCommentMandatory()==1;
+        	if(bOtherReferenceMandatory){
+	        %>
+	        	else if(document.getElementById('EditComment').value.length==0){
+	                window.confirm("´<%=getTran("web.finance","otherreference",sWebLanguage)+"´ "+getTranNoLink("web","ismandatory",sWebLanguage)%>");
+	            }
+	        <%
+        	}
 	        %>
 	            else {
+	            	var originalStatus=document.getElementById('invoiceStatus').selectedIndex;
 		            if (<%=MedwanQuery.getInstance().getConfigInt("enableAutomaticInvoiceClosure",1)%>==1 && (document.getElementById('EditBalance').value*1==0)&&(document.getElementById('invoiceStatus').value!="closed")&&(document.getElementById('invoiceStatus').value!="canceled")){
 		                var popupUrl = "<c:url value='/popup.jsp'/>?Page=_common/search/yesnoPopup.jsp&ts=<%=getTs()%>&labelType=web.finance&labelID=closetheinvoice";
 		                var modalities = "dialogWidth:266px;dialogHeight:143px;center:yes;scrollbars:no;resizable:no;status:no;location:no;";
@@ -843,23 +852,52 @@
 		                          +'&EditInvoiceDrugsIdCardDate='+document.getElementById('EditInvoiceDrugsIdCardDate').value
 		                          +'&EditInvoiceDrugsIdCardPlace='+document.getElementById('EditInvoiceDrugsIdCardPlace').value
 		                        <%}
-		              	        else if(MedwanQuery.getInstance().getConfigInt("enableMFP",0)==1 && MedwanQuery.getInstance().getConfigInt("hideCCBRTInvoiceFields",1)==0){ %>
-		                          +'&EditInvoiceDoctor='+document.getElementById('EditInvoiceDoctor').value
-		                          +'&EditInvoicePost='+document.getElementById('EditInvoicePost').value
-		                          +'&EditInvoiceDrugsRecipient='+document.getElementById('EditInvoiceDrugsRecipient').value
-		                        <%}%>
+		              	        else if(MedwanQuery.getInstance().getConfigInt("enableMFP",0)==1 && MedwanQuery.getInstance().getConfigInt("hideCCBRTInvoiceFields",1)==0){ 
+		              	        %>
+		                          +'&EditInvoiceDoctor='+(document.getElementById('EditInvoiceDoctor')?document.getElementById('EditInvoiceDoctor').value:"")
+		                          +'&EditInvoicePost='+(document.getElementById('EditInvoicePost')?document.getElementById('EditInvoicePost').value:"")
+		                          +'&EditInvoiceDrugsRecipient='+(document.getElementById('EditInvoiceDrugsRecipient')?document.getElementById('EditInvoiceDrugsRecipient').value:"")
+		                        <%}
+		                        %>
 		                          +'&EditBalance=' + document.getElementById('EditBalance').value,
 		                  onSuccess: function(resp){
 		                      var label = eval('('+resp.responseText+')');
-		                      $('divMessage').innerHTML=label.Message;
-		                      $('EditPatientInvoiceUID').value=label.EditPatientInvoiceUID;
-		                      $('EditInvoiceUID').value=label.EditInvoiceUID;
-		                      $('EditInvoiceUIDText').value=label.EditInvoiceUID;
-		                      $('EditComment').value=label.EditComment;
-		                      $('EditInsurarReference').value=label.EditInsurarReference;
-		                      $('EditInsurarReferenceDate').value=label.EditInsurarReferenceDate;
-		                      $('FindPatientInvoiceUID').value=label.EditInvoiceUID;
-		                      doFind();
+		                      var referenceMandatory=label.ReferenceMandatory;
+		                      var otherReferenceMandatory=label.OtherReferenceMandatory;
+		                      var uniqueInsurerReferenceMandatory=label.UniqueInsurerReferenceRequired;
+		                      var uniqueOtherReferenceMandatory=label.UniqueOtherReferenceRequired;
+		                      var uniqueDoctorMandatory=label.UniqueDoctorRequired;
+		                      if(referenceMandatory=="1"){
+		      	                  window.confirm("´<%=getTran("web.finance","insurarreference",sWebLanguage)+"´ "+getTranNoLink("web","ismandatory",sWebLanguage)%>");
+		      	                  document.getElementById('invoiceStatus').selectedIndex=originalStatus;
+		      	                  document.getElementById('divMessage').innerHTML =	"";	                      }
+		                      else if(otherReferenceMandatory=="1"){
+		      	                  window.confirm("´<%=getTran("web.finance","otherreference",sWebLanguage)+"´ "+getTranNoLink("web","ismandatory",sWebLanguage)%>");
+		      	                  document.getElementById('invoiceStatus').selectedIndex=originalStatus;
+		      	                  document.getElementById('divMessage').innerHTML =	"";	                      }
+		                      else if(uniqueInsurerReferenceMandatory=="1"){
+		      	                  window.confirm("´<%=getTran("web.finance","insurarreference",sWebLanguage)+"´ "+getTranNoLink("web","mustbeunique",sWebLanguage)%>");
+		      	                  document.getElementById('invoiceStatus').selectedIndex=originalStatus;
+		      	                  document.getElementById('divMessage').innerHTML =	"";	                      }
+		                      else if(uniqueOtherReferenceMandatory=="1"){
+		      	                  window.confirm("´<%=getTran("web.finance","otherreference",sWebLanguage)+"´ "+getTranNoLink("web","mustbeunique",sWebLanguage)%>");
+		      	                  document.getElementById('invoiceStatus').selectedIndex=originalStatus;
+		      	                  document.getElementById('divMessage').innerHTML =	"";	                      }
+		                      else if(uniqueDoctorMandatory=="1"){
+		      	                  window.confirm("´<%=getTran("web.finance","ccbrt.specialauthorizationnumber",sWebLanguage)+"´ "+getTranNoLink("web","mustbeunique",sWebLanguage)%>");
+		      	                  document.getElementById('invoiceStatus').selectedIndex=originalStatus;
+		      	                  document.getElementById('divMessage').innerHTML =	"";	                      }
+		                      else{
+			                      $('divMessage').innerHTML=label.Message;
+			                      $('EditPatientInvoiceUID').value=label.EditPatientInvoiceUID;
+			                      $('EditInvoiceUID').value=label.EditInvoiceUID;
+			                      $('EditInvoiceUIDText').value=label.EditInvoiceUID;
+			                      $('EditComment').value=label.EditComment;
+			                      $('EditInsurarReference').value=label.EditInsurarReference;
+			                      $('EditInsurarReferenceDate').value=label.EditInsurarReferenceDate;
+			                      $('FindPatientInvoiceUID').value=label.EditInvoiceUID;
+			                      doFind();
+		                  	  }
 		                  },
 		                  onFailure: function(){
 		                      $('divMessage').innerHTML = "Error in function manageTranslationsStore() => AJAX";
