@@ -153,7 +153,7 @@ public class PDFPatientInvoiceGeneratorCTAMS extends PDFInvoiceGenerator {
 
         table = new PdfPTable(5);
         table.setWidthPercentage(100);
-        table.addCell(createGrayCell(getTran("web","receiptforinvoice").toUpperCase()+" #"+(sProforma.equalsIgnoreCase("yes")?"PROFORMA":invoice.getInvoiceNumber())+" - "+ScreenHelper.stdDateFormat.format(invoice.getDate()),5,10,Font.BOLD));
+        table.addCell(createGrayCell(getTran("web","receiptforinvoice").toUpperCase()+" #"+(sProforma.equalsIgnoreCase("yes")?ScreenHelper.getTranNoLink("invoice","PROFORMA",sPrintLanguage):invoice.getInvoiceNumber())+" - "+ScreenHelper.stdDateFormat.format(invoice.getDate()),5,10,Font.BOLD));
         table.addCell(createValueCell(getTran("web","receivedfrom")+": "+patient.lastname.toUpperCase()+" "+patient.firstname+" ("+patient.personid+")",3,8,Font.NORMAL));
         table.addCell(createValueCell(patient.dateOfBirth,1,8,Font.NORMAL));
         table.addCell(createValueCell(patient.gender,1,8,Font.NORMAL));
@@ -276,9 +276,13 @@ public class PDFPatientInvoiceGeneratorCTAMS extends PDFInvoiceGenerator {
                 cell.setColspan(1);
                 table.addCell(cell);
             }
-            catch(NullPointerException e){
+            catch(Exception e){
                 Debug.println("WARNING : PDFPatientInvoiceGenerator --> IMAGE NOT FOUND : logo_"+sProject+".gif");
                 e.printStackTrace();
+                cell = new PdfPCell();
+                cell.setBorder(PdfPCell.NO_BORDER);
+                cell.setColspan(1);
+                table.addCell(cell);
             }
 
             Report_Identification report_identification = new Report_Identification(invoice.getDate());
@@ -312,7 +316,7 @@ public class PDFPatientInvoiceGeneratorCTAMS extends PDFInvoiceGenerator {
             table.setWidthPercentage(pageWidth);
 
             //*** title ***
-            table.addCell(createTitleCell(getTran("web","ctams.invoice").toUpperCase()+" #"+(sProforma.equalsIgnoreCase("yes")?"PROFORMA":invoice.getInvoiceNumber())+" - "+ScreenHelper.stdDateFormat.format(invoice.getDate()),"",5));
+            table.addCell(createTitleCell(getTran("web","ctams.invoice").toUpperCase()+" #"+(sProforma.equalsIgnoreCase("yes")?ScreenHelper.getTranNoLink("invoice","PROFORMA",sPrintLanguage):invoice.getInvoiceNumber())+" - "+ScreenHelper.stdDateFormat.format(invoice.getDate()),"",5));
 
 
             doc.add(table);

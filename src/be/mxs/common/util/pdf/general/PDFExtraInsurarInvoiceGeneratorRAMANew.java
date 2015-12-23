@@ -107,9 +107,13 @@ public class PDFExtraInsurarInvoiceGeneratorRAMANew extends PDFInvoiceGenerator 
                 cell.setColspan(2);
                 table.addCell(cell);
             }
-            catch(NullPointerException e){
+            catch(Exception e){
                 Debug.println("WARNING : PDFPatientInvoiceGenerator --> IMAGE NOT FOUND : logo_"+sProject+".gif");
                 e.printStackTrace();
+                cell = new PdfPCell();
+                cell.setBorder(PdfPCell.NO_BORDER);
+                cell.setColspan(2);
+                table.addCell(cell);
             }
 
             //*** barcode ***

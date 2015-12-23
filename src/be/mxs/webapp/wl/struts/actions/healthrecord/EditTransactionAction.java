@@ -2,6 +2,7 @@ package be.mxs.webapp.wl.struts.actions.healthrecord;
 
 import be.dpms.medwan.webapp.wo.common.system.SessionContainerWO;
 import be.dpms.medwan.common.model.vo.administration.PersonVO;
+import be.dpms.medwan.common.model.vo.authentication.UserVO;
 import be.mxs.common.model.vo.healthrecord.ItemVO;
 import be.mxs.common.model.vo.healthrecord.TransactionVO;
 import be.mxs.common.model.vo.healthrecord.HealthRecordVO;
@@ -28,6 +29,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Date;
 
+import net.admin.User;
 import net.admin.system.AccessLog;
 public class EditTransactionAction extends Action {
 
@@ -41,7 +43,11 @@ public class EditTransactionAction extends Action {
 
         try {
             SessionContainerWO sessionContainerWO = (SessionContainerWO)SessionContainerFactory.getInstance().getSessionContainerWO( request , SessionContainerWO.class.getName() );
-
+            if((sessionContainerWO.getUserVO()==null || sessionContainerWO.getUserVO().getUserId()==null) && request.getSession().getAttribute("activeUser")!=null){
+            	User user = (User)(request.getSession().getAttribute("activeUser"));
+            	UserVO userVO = MedwanQuery.getInstance().getUser(user.userid);
+            	sessionContainerWO.setUserVO((userVO));
+            }
             // get parameters
             String transactionType = request.getParameter("be.mxs.healthrecord.createTransaction.transactionType"),
                    transactionId   = request.getParameter("be.mxs.healthrecord.transaction_id"),

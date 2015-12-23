@@ -9,6 +9,7 @@ import com.itextpdf.text.*;
 import java.text.SimpleDateFormat;
 import java.io.ByteArrayOutputStream;
 import java.util.Date;
+import java.util.Vector;
 
 import be.mxs.common.util.pdf.PDFBasic;
 import be.mxs.common.util.pdf.general.PDFFooter;
@@ -17,6 +18,7 @@ import be.mxs.common.util.system.Debug;
 import be.mxs.common.util.system.Miscelaneous;
 import be.mxs.common.util.system.ScreenHelper;
 import be.openclinic.adt.Planning;
+import be.openclinic.adt.Reservation;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -237,13 +239,44 @@ public class PDFCalendarGenerator extends PDFBasic {
             t.addCell(this.createBorderlessCell("ID: "+sPersonId,5));
 
             if(appointment.getPatient().getActivePrivate()!=null){
-                t.addCell(this.createBorderlessCell("Tel: "+appointment.getPatient().getActivePrivate().telephone,10));
+            	String phones = "";
+            	if(appointment.getPatient().getActivePrivate().telephone.trim().length()>0){
+            		phones=appointment.getPatient().getActivePrivate().telephone.trim();
+            	}
+            	if(appointment.getPatient().getActivePrivate().mobile.trim().length()>0){
+            		if(phones.length()>0){
+            			phones+=", ";
+            		}
+            		phones+=appointment.getPatient().getActivePrivate().mobile.trim();
+            	}
+            	t.addCell(this.createBorderlessCell(phones,10));
             }
             else {
             	t.addCell(createEmptyCell(10));
             }
 
             table.addCell(t);
+            if(MedwanQuery.getInstance().getConfigInt("enableExtendedCalendarInformation",0)==1){
+                t.addCell(this.createBorderlessCell(5));
+                t.addCell(this.createBorderlessCell(appointment.getDescription(),25));
+                String s="";
+        		Vector reservations = Reservation.getReservationsForPlanningUid(appointment.getUid());
+        		for(int n=0;n<reservations.size();n++){
+        			Reservation reservation = (Reservation)reservations.elementAt(n);
+        			try{
+        				if(s.length()>0){
+        					s+=", ";
+        				}
+        				s+=ScreenHelper.getTranNoLink("planningresource",reservation.getResourceUid(),User.get(Integer.parseInt(appointment.getUserUID())).person.language);
+        			}
+        			catch(Exception a){
+        				a.printStackTrace();
+        			}
+        		}
+                t.addCell(this.createBorderlessCell(s,15));
+                t.addCell(this.createBorderlessCell(User.getFullUserName(appointment.getUserUID()),15));
+            	
+            }
            
         } catch (Exception e) {
             //  Debug.printProjectErr(e,Thread.currentThread().getStackTrace());

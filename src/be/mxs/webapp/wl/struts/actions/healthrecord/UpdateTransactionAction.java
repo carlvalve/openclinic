@@ -27,6 +27,7 @@ import be.openclinic.finance.Prestation;
 import be.openclinic.medical.Diagnosis;
 import net.admin.User;
 import net.admin.AdminPerson;
+import net.admin.Service;
 import net.admin.UserParameter;
 import net.admin.system.AccessLog;
 import org.apache.struts.action.ActionForm;
@@ -63,6 +64,8 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
         ActionForward actionForward = mapping.findForward("failure");
         SessionContainerWO sessionContainerWO;
 
+        System.out.println("1");
+        
         try {
             sessionContainerWO = (SessionContainerWO)SessionContainerFactory.getInstance().getSessionContainerWO( request , SessionContainerWO.class.getName() );
             if (sessionContainerWO.getHealthRecordVO()!=null){
@@ -158,6 +161,7 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
             Enumeration enumeration;
             ItemContextVO itemContextVO;
             Hashtable ICD10Codes, ICPCCodes, DSM4Codes;
+            System.out.println("2");
 
             while (iterator.hasNext()) {
                 df = new DummyTransactionFactory();
@@ -233,6 +237,7 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
                         e.printStackTrace();
                     }
                 }
+                System.out.println("3");
 
                 if (request.getParameter("be.mxs.healthrecord.updateTransaction.preserve")==null){
                     df.populateTransaction(oldTransaction,newTransactionVO);
@@ -431,9 +436,22 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
                     else if(returnedTransactionVO.getTransactionType().equals("be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_PATIENTCREDITREQUEST")){
                         try{
                             String sMailTo = MedwanQuery.getInstance().getConfigString("patientCreditRequestMailAddress","");
+                            AdminPerson patient = (AdminPerson)(request.getSession().getAttribute("activePatient"));
+                        	Encounter encounter = Encounter.getActiveEncounterOnDate(new Timestamp(returnedTransactionVO.getUpdateTime().getTime()),patient.personid);
+                        	if(encounter!=null && encounter.getLastEncounterService()!=null){
+                        		Service service = Service.getService(encounter.getLastEncounterService().serviceUID);
+                        		while(service !=null){
+                        			if(service.contactemail!=null && service.contactemail.length()>0){
+                        				sMailTo=service.contactemail;
+                        				break;
+                        			}
+                        			else if(service.parentcode!=null && service.parentcode.length()>0){
+                        				service=Service.getService(service.parentcode);
+                        			}
+                        		}
+                        	}
                             if(sMailTo.length()>0){
 	                            String sMailMessage = MedwanQuery.getInstance().getConfigString("patientCreditRequestMessage","");
-	                            AdminPerson patient = (AdminPerson)(request.getSession().getAttribute("activePatient"));
 	                            sMailMessage = sMailMessage.replaceAll("#PatientName#", patient.getFullName());
 	                            sMailMessage = sMailMessage.replaceAll("#PatientID#", patient.personid);
 	                            System.out.println(sMailMessage);
@@ -465,6 +483,7 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
                     		UserParameter.saveUserParameter("lastLabEmail", item.getValue(), returnedTransactionVO.getUser().userId);
                     	}
                     }
+                    System.out.println("4");
 
                     //Delete diagnoses from OC_DIAGNOSES and ADD all+new again
                     Diagnosis.deleteDiagnosesByReferenceUID(returnedTransactionVO.getServerId()+"."+returnedTransactionVO.getTransactionId(),"Transaction");
@@ -475,6 +494,7 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
                     		saveDiagnosesToTable(RequestParameterParser.getInstance().parseRequestParameters(request, "ICPCCode"),RequestParameterParser.getInstance().parseRequestParameters(request, "ICD10Code"),RequestParameterParser.getInstance().parseRequestParameters(request, "DSM4Code"),returnedTransactionVO.getUpdateTime(),returnedTransactionVO.getServerId()+"."+returnedTransactionVO.getTransactionId(),sessionContainerWO,encounter);
                     	}
                     }
+                    System.out.println("5");
 
                     if(returnedTransactionVO.getTransactionType().equals(ScreenHelper.ITEM_PREFIX+"TRANSACTION_TYPE_ARCHIVE_DOCUMENT")){
                         boolean isNewTran = (sessionContainerWO.getCurrentTransactionVO().getTransactionId() < 0);
@@ -501,6 +521,7 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
                     sessionContainerWO.setCurrentTransactionVO(returnedTransactionVO);
                     requestParameters = RequestParameterParser.getInstance().parseRequestParameters(request, "inactiveDiagnosis");
                     enumeration = requestParameters.keys();
+                    System.out.println("6");
 
                     while (enumeration.hasMoreElements()) {
                         key = (String) enumeration.nextElement();

@@ -294,6 +294,23 @@ public class Insurar extends OC_Object {
 		setModifier(10,n+"");
 	}
 	
+	public int getInvoiceCommentMandatory(){
+		int n=0;
+		if(getModifiers()!=null){
+			try{
+				n=Integer.parseInt(getModifiers().split(";")[11]);
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return n;
+	}
+
+	public void setInvoiceCommentMandatory(int n){
+		setModifier(11,n+"");
+	}
+	
 	public void setModifier(int index,String value){
 		if(getModifiers()==null){
 			setModifiers("");

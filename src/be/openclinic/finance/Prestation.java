@@ -161,6 +161,9 @@ public class Prestation extends OC_Object{
 	}
 
 	public boolean isVisibleFor(Insurar insurar){
+		if(insurar==null){
+			return true;
+		}
 		return insurar.isPrestationVisible(this.getUid()) && (insurar.getUseLimitedPrestationsList()==1 || getHideFromDefaultList()==0);
 	}
 	
@@ -1424,7 +1427,9 @@ public class Prestation extends OC_Object{
             if(sPrestationDescr.length() > 0){
             	ps.setString(qmIdx++,"%"+sPrestationDescr+"%");
             }
-            if(sPrestationDescr.length() > 0) ps.setString(qmIdx++,"%"+sPrestationDescr.toUpperCase()+"%");
+            if(sPrestationDescr.length() > 0) {
+            	ps.setString(qmIdx++,"%"+sPrestationDescr.toUpperCase()+"%");
+            }
             if(sPrestationType.length() > 0) ps.setString(qmIdx++,sPrestationType);
             if(sPrestationPrice.length() > 0){
                 float fPrice = 0;
@@ -1441,7 +1446,6 @@ public class Prestation extends OC_Object{
 
             // execute query
             rs = ps.executeQuery();
-
             Prestation prestation;
             while(rs.next()){
                 prestation = new Prestation();

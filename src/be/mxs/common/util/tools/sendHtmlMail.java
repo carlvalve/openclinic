@@ -12,8 +12,9 @@ import be.mxs.common.util.system.Debug;
 
 public class sendHtmlMail {
 	
-	static public void sendSimpleMail(String smtpServer, String sFrom, String sTo, String sSubject, String sMessage)
+	static public boolean sendSimpleMail(String smtpServer, String sFrom, String sTo, String sSubject, String sMessage)
 			throws AddressException, MessagingException {    	
+		boolean bSuccess=false;
 		try{
 	        Properties props = new Properties();
 	        props.setProperty("mail.transport.protocol", "smtp");
@@ -39,10 +40,12 @@ public class sendHtmlMail {
 	        transport.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
 	        transport.close();        
 	        //transport.sendMessage(message, message.getAllRecipients());
+	        bSuccess=true;
 		}
         catch(Exception e){
-        	Debug.print(e.getMessage());
+        	Debug.println(e.getMessage());
         }
+		return bSuccess;
 	}
 
 	static public void sendMail(String smtpServer, String sFrom, String sTo, String sSubject, String sMessage)

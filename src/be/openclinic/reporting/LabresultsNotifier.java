@@ -19,10 +19,11 @@ import be.mxs.common.util.system.Debug;
 import be.mxs.common.util.system.HTMLEntities;
 import be.mxs.common.util.system.Pointer;
 import be.mxs.common.util.system.ScreenHelper;
-import be.openclinic.datacenter.SendSMS;
 import net.admin.AdminPerson;
 import be.mxs.common.util.tools.sendHtmlMail;
 import be.mxs.common.util.tools.ProcessFiles;
+import be.mxs.common.util.tools.SendSMS;
+import be.openclinic.adt.Planning;
 import be.openclinic.medical.*;
 import be.mxs.common.model.vo.healthrecord.*;
 import be.dpms.medwan.common.model.vo.administration.PersonVO;
@@ -364,89 +365,13 @@ public class LabresultsNotifier {
 				sUserFirstname = sUserFirstname.charAt(0) + sUserFirstname.substring(1).toLowerCase();					
 
 				if(transport.equalsIgnoreCase("sms")){
-					String sResult = "Lab " + MedwanQuery.getInstance().getLabel("sendhtmlmail", "for", user.language) + " " + patient.lastname.toUpperCase()+" "+sPatientFirstname + "\n" + result;
-					if(MedwanQuery.getInstance().getConfigString("smsgateway","").equalsIgnoreCase("smsglobal")){
-						try {						
-							HttpClient client = new HttpClient();
-							PostMethod method = new PostMethod(MedwanQuery.getInstance().getConfigString("smsglobal.url","http://www.smsglobal.com/http-api.php"));
-							Vector<NameValuePair> vNvp = new Vector<NameValuePair>();
-							vNvp.add(new NameValuePair("action","sendsms"));
-							vNvp.add(new NameValuePair("user",MedwanQuery.getInstance().getConfigString("smsglobal.user","")));
-							vNvp.add(new NameValuePair("password",MedwanQuery.getInstance().getConfigString("smsglobal.password","")));
-							vNvp.add(new NameValuePair("from",MedwanQuery.getInstance().getConfigString("smsglobal.from","")));
-							vNvp.add(new NameValuePair("to",sentto));
-							vNvp.add(new NameValuePair("text",URLEncoder.encode(sResult,"utf-8")));
-							NameValuePair[] nvp = new NameValuePair[vNvp.size()];
-							vNvp.copyInto(nvp);
-							method.setQueryString(nvp);
-							client.executeMethod(method);
-							String sResponse=method.getResponseBodyAsString();
-							if(sResponse.contains("OK: 0")){
-								Debug.println("SMS correctly sent transactionid "+transactionId+" to "+sentto+": "+sResponse);
-								setSpoolMessageSent(transactionId,transport);
-							}
-							else {
-								Debug.println("Error sending SMS with transactionid "+transactionId+" to "+sentto+": "+sResponse);
-							}
-						} catch (Exception e) {				
-							e.printStackTrace();
-						}
-					}
-					else if(MedwanQuery.getInstance().getConfigString("smsgateway","").equalsIgnoreCase("hqsms")){
-						try {						
-							HttpClient client = new HttpClient();
-							PostMethod method = new PostMethod(MedwanQuery.getInstance().getConfigString("hqsms.url","http://api.hqsms.com/sms.do"));
-							Vector<NameValuePair> vNvp = new Vector<NameValuePair>();
-							vNvp.add(new NameValuePair("normalize","1"));
-							vNvp.add(new NameValuePair("username",MedwanQuery.getInstance().getConfigString("hqsms.user","")));
-							vNvp.add(new NameValuePair("password",MedwanQuery.getInstance().getConfigString("hqsms.password","")));
-							vNvp.add(new NameValuePair("from",MedwanQuery.getInstance().getConfigString("hqsms.from","HQSMS.com")));
-							vNvp.add(new NameValuePair("to",sentto));
-							vNvp.add(new NameValuePair("message",sResult));
-							NameValuePair[] nvp = new NameValuePair[vNvp.size()];
-							vNvp.copyInto(nvp);
-							method.setQueryString(nvp);
-							client.executeMethod(method);
-							String sResponse=method.getResponseBodyAsString();
-							if(sResponse.contains("OK:")){
-								Debug.println("SMS correctly sent transactionid "+transactionId+" to "+sentto+": "+sResponse);
-								setSpoolMessageSent(transactionId,transport);
-							}
-							else {
-								Debug.println("Error sending SMS with transactionid "+transactionId+" to "+sentto+": "+sResponse);
-							}
-						} catch (Exception e) {				
-							e.printStackTrace();
-						}
-					}
-					else if(MedwanQuery.getInstance().getConfigString("smsgateway","").equalsIgnoreCase("nokia")){
-						try{
-							String sPinCode = MedwanQuery.getInstance().getConfigString("smsPincode","0000"); 
-							String sPort= MedwanQuery.getInstance().getConfigString("smsDevicePort","/dev/ttyS20");
-							int nBaudrate=MedwanQuery.getInstance().getConfigInt("smsBaudrate",115200);
-							System.setProperty("smslib.serial.polling", MedwanQuery.getInstance().getConfigString("smsPolling","false"));
-							SendSMS sendSMS = new SendSMS();				
-							if (sResult.length() > 160){ 					
-								Vector vSMSs = new Vector();
-								vSMSs = splitSMSText(sResult);
-								Enumeration<String> eSMSs = vSMSs.elements();
-								String sSMS;
-								while (eSMSs.hasMoreElements()){
-									sSMS = eSMSs.nextElement();
-									sendSMS.send("modem.nokia",sPort, nBaudrate, "Nokia", "2690", sPinCode, sentto, sSMS);
-								}
-							}
-							else { 
-								sendSMS.send("modem.nokia", sPort, nBaudrate, "Nokia", "2690", sPinCode, sentto, sResult);
-							}						
-							setSpoolMessageSent(transactionId,transport);
-						}
-						catch(Exception m){
-							
-						}
+					String sResult = MedwanQuery.getInstance().getLabel("openclinic.chuk", "labo", user.language)+" " + MedwanQuery.getInstance().getLabel("sendhtmlmail", "for", user.language) + " " + patient.lastname.toUpperCase()+" "+sPatientFirstname + "\n" + result;
+					if(SendSMS.sendSMS(sentto, sResult)){
+						Debug.println("SMS correctly sent transactionid "+transactionId+" to "+sentto);
+						setSpoolMessageSent(transactionId,transport);
 					}
 					else {
-						Debug.println("NO SMS GATEWAY DEFINED!");
+						Debug.println("Error sending SMS with transactionid "+transactionId+" to "+sentto);
 					}
 				}
 				else if(transport.equalsIgnoreCase("simplemail")){
