@@ -41,7 +41,13 @@ public class SaveLabAnalysesAction extends Action {
                sUserId         = ScreenHelper.checkString(request.getParameter("userId")),
                sLabAnalysesToSave = ScreenHelper.checkString(request.getParameter("labAnalysesToSave")),
                sSavedLabAnalyses  = ScreenHelper.checkString(request.getParameter("savedLabAnalyses"));
-
+        String s="";
+        for(int n=0;n<sLabAnalysesToSave.length();n++){
+        	if("0123456789ABCDEFGHIJKLMNOPQRSTUVW.;:/$£".indexOf(sLabAnalysesToSave.substring(n,n+1))>-1){
+        		s+=sLabAnalysesToSave.substring(n,n+1);
+        	}
+        }
+        sLabAnalysesToSave=s;
         /*
         Debug.println("// DEBUG ////////////////////////////////////////////////");
         Debug.println("*** sServerId          : "+sServerId);

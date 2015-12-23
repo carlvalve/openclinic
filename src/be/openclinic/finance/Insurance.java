@@ -715,7 +715,10 @@ public class Insurance extends OC_Object {
         String sSelect = "SELECT * FROM OC_INSURANCES"+
                          " WHERE OC_INSURANCE_PATIENTUID = ?";
         if(closed){
-            sSelect+= " AND OC_INSURANCE_STOP IS NOT NULL";	
+            sSelect+= " AND OC_INSURANCE_STOP<=?";	
+        }
+        else {
+            sSelect+= " AND (OC_INSURANCE_STOP IS NULL OR OC_INSURANCE_STOP>?)";	
         }
         
         sSelect+= sSortAppend;
@@ -724,6 +727,7 @@ public class Insurance extends OC_Object {
         try{
             ps = oc_conn.prepareStatement(sSelect);
             ps.setString(1,sPatientUID);
+            ps.setTimestamp(2,new java.sql.Timestamp(new java.util.Date().getTime()));
             rs = ps.executeQuery();
 
             while(rs.next()){

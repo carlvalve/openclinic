@@ -35,9 +35,15 @@ public class Planning extends OC_Object {
     private int margin;
     private String tempPlanningUid;
     private String serviceUid;
+    private Date remindSent;
     
-    
-    public String getServiceUid() {
+    public Date getRemindSent() {
+		return remindSent;
+	}
+	public void setRemindSent(Date remindSent) {
+		this.remindSent = remindSent;
+	}
+	public String getServiceUid() {
 		return serviceUid;
 	}
 	public void setServiceUid(String serviceUid) {
@@ -252,6 +258,7 @@ public class Planning extends OC_Object {
                         planning.setUpdateUser(rs.getString("OC_PLANNING_UPDATEUID"));
                         planning.setVersion(rs.getInt("OC_PLANNING_VERSION"));
                         planning.contextID = rs.getString("OC_PLANNING_CONTEXTID");
+                        planning.setRemindSent(rs.getTimestamp("OC_PLANNING_REMINDSENT"));
                         planning.setPlannedEndDate();
                     }
                 }
@@ -502,6 +509,7 @@ public class Planning extends OC_Object {
                 planning.setContextID(rs.getString("OC_PLANNING_CONTEXTID"));
                 planning.setServiceUid(rs.getString("OC_PLANNING_SERVICEUID"));
                 planning.setPlannedEndDate();
+                planning.setRemindSent(rs.getTimestamp("OC_PLANNING_REMINDSENT"));
                 
                 vPlannings.add(planning);
             }
@@ -566,6 +574,7 @@ public class Planning extends OC_Object {
                 planning.setContextID(rs.getString("OC_PLANNING_CONTEXTID"));
                 planning.setServiceUid(rs.getString("OC_PLANNING_SERVICEUID"));
                 planning.setPlannedEndDate();
+                planning.setRemindSent(rs.getTimestamp("OC_PLANNING_REMINDSENT"));
                 vPlannings.add(planning);
             }
         }
@@ -634,6 +643,7 @@ public class Planning extends OC_Object {
                 planning.setContextID(rs.getString("OC_PLANNING_CONTEXTID"));
                 planning.setServiceUid(rs.getString("OC_PLANNING_SERVICEUID"));
                 planning.setPlannedEndDate();
+                planning.setRemindSent(rs.getTimestamp("OC_PLANNING_REMINDSENT"));
                 vPlannings.add(planning);
             }
         }
@@ -653,7 +663,30 @@ public class Planning extends OC_Object {
         return vPlannings;
     }
     
-    //--- IS AVAILABLE PLANNED DATE ---------------------------------------------------------------
+    public static void storeRemindSent(String planningUid,java.util.Date remindSent){
+        PreparedStatement ps = null;
+        Connection oc_conn = MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+        	ps = oc_conn.prepareStatement("update oc_planning set OC_PLANNING_REMINDSENT=? where oc_planning_serverid=? and oc_planning_objectid=?");
+        	ps.setTimestamp(1, new java.sql.Timestamp(remindSent.getTime()));
+        	ps.setInt(2, Integer.parseInt(planningUid.split("\\.")[0]));
+        	ps.setInt(3, Integer.parseInt(planningUid.split("\\.")[1]));
+        	ps.execute();
+        }
+        catch(Exception e){
+        	e.printStackTrace();
+        }
+        finally{
+            try{
+                if(ps!=null) ps.close();
+                oc_conn.close();
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+    
     public static boolean isAvailablePlannedDate(String sUserUid,java.util.Date start, java.util.Date end, String exclude){
         boolean bAvailable = true;
         PreparedStatement ps = null;
@@ -856,6 +889,7 @@ public class Planning extends OC_Object {
                 planning.setContextID(rs.getString("OC_PLANNING_CONTEXTID"));
                 planning.setServiceUid(rs.getString("OC_PLANNING_SERVICEUID"));
                 planning.setPlannedEndDate();
+                planning.setRemindSent(rs.getTimestamp("OC_PLANNING_REMINDSENT"));
                 vPlannings.add(planning);
             }
         }
@@ -921,6 +955,7 @@ public class Planning extends OC_Object {
 	                planning.setContextID(rs.getString("OC_PLANNING_CONTEXTID"));
 	                planning.setServiceUid(rs.getString("OC_PLANNING_SERVICEUID"));
 	                planning.setPlannedEndDate();
+                    planning.setRemindSent(rs.getTimestamp("OC_PLANNING_REMINDSENT"));
 	                vPlannings.add(planning);
 	            }
 	        }

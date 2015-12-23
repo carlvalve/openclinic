@@ -86,9 +86,13 @@ public class PDFReceiptGenerator extends PDFInvoiceGenerator {
                 cell.setColspan(1);
                 table.addCell(cell);
             }
-            catch(NullPointerException e){
+            catch(Exception e){
                 Debug.println("WARNING : PDFPatientInvoiceGenerator --> IMAGE NOT FOUND : logo_"+sProject+".gif");
                 e.printStackTrace();
+                cell = new PdfPCell();
+                cell.setBorder(PdfPCell.NO_BORDER);
+                cell.setColspan(1);
+                table.addCell(cell);
             }
 
             //*** title ***

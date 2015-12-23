@@ -18,6 +18,7 @@ import be.openclinic.finance.*;
 import be.openclinic.adt.Encounter;
 import net.admin.*;
 
+import javax.print.attribute.standard.PrinterLocation;
 import javax.servlet.http.HttpServletRequest;
 
 public class PDFPatientInvoiceGenerator extends PDFInvoiceGenerator {
@@ -73,8 +74,9 @@ public class PDFPatientInvoiceGenerator extends PDFInvoiceGenerator {
 
             doc.open();
 
-
-            addReceipt(invoice);
+            if(sProforma.equalsIgnoreCase("no") || MedwanQuery.getInstance().getConfigInt("printReceiptForProformaInvoice",1)==1){
+            	addReceipt(invoice);
+            }
             if(MedwanQuery.getInstance().getConfigInt("pageBreakAfterReceiptForDefaultInvoice",0)==1){
             	doc.newPage();
             }
@@ -323,7 +325,7 @@ public class PDFPatientInvoiceGenerator extends PDFInvoiceGenerator {
 
         table = new PdfPTable(5);
         table.setWidthPercentage(100);
-        table.addCell(createGrayCell(getTran("web","receiptforinvoice").toUpperCase()+" #"+(sProforma.equalsIgnoreCase("yes")?"PROFORMA":invoice.getInvoiceNumber())+" - "+ScreenHelper.stdDateFormat.format(invoice.getDate()),5,10,Font.BOLD));
+        table.addCell(createGrayCell((sProforma.equalsIgnoreCase("yes")?ScreenHelper.getTranNoLink("invoice","PROFORMA",sPrintLanguage)+" #"+invoice.getInvoiceNumber():getTran("web","receiptforinvoice").toUpperCase()+" #"+invoice.getInvoiceNumber())+" - "+ScreenHelper.stdDateFormat.format(invoice.getDate()),5,10,Font.BOLD));
         table.addCell(createValueCell(getTran("web","receivedfrom")+": "+patient.lastname.toUpperCase()+" "+patient.firstname+" ("+patient.personid+")",3,8,Font.NORMAL));
         table.addCell(createValueCell(patient.dateOfBirth,1,8,Font.NORMAL));
         table.addCell(createValueCell(patient.gender,1,8,Font.NORMAL));
@@ -442,19 +444,23 @@ public class PDFPatientInvoiceGenerator extends PDFInvoiceGenerator {
                 cell.setColspan(1);
                 table.addCell(cell);
             }
-            catch(NullPointerException e){
+            catch(Exception e){
                 Debug.println("WARNING : PDFPatientInvoiceGenerator --> IMAGE NOT FOUND : logo_"+sProject+".gif");
                 e.printStackTrace();
+                cell = new PdfPCell();
+                cell.setBorder(PdfPCell.NO_BORDER);
+                cell.setColspan(1);
+                table.addCell(cell);
             }
 
             //*** title ***
             if(invoice.getInvoiceNumber().equalsIgnoreCase(invoice.getInvoiceUid())){
-                table.addCell(createTitleCell(getTran("web","invoice").toUpperCase()+" #"+(sProforma.equalsIgnoreCase("yes")?"PROFORMA":invoice.getInvoiceNumber())+" - "+ScreenHelper.stdDateFormat.format(invoice.getDate()),"",3));
+                table.addCell(createTitleCell((sProforma.equalsIgnoreCase("yes")?ScreenHelper.getTranNoLink("invoice","PROFORMA",sPrintLanguage)+" #"+invoice.getInvoiceNumber():getTran("web","invoice").toUpperCase()+" #"+invoice.getInvoiceNumber())+" - "+ScreenHelper.stdDateFormat.format(invoice.getDate()),"",3));
             }
             else {
             	PdfPTable table2 = new PdfPTable(1);
                 table2.setWidthPercentage(100);
-                table2.addCell(createTitleCell(getTran("web","invoice").toUpperCase()+" #"+(sProforma.equalsIgnoreCase("yes")?"PROFORMA":invoice.getInvoiceNumber())+" - "+ScreenHelper.stdDateFormat.format(invoice.getDate()),"",1));
+                table2.addCell(createTitleCell((sProforma.equalsIgnoreCase("yes")?ScreenHelper.getTranNoLink("invoice","PROFORMA",sPrintLanguage)+" #"+invoice.getInvoiceNumber():getTran("web","invoice").toUpperCase()+" #"+invoice.getInvoiceNumber())+" - "+ScreenHelper.stdDateFormat.format(invoice.getDate()),"",1));
             	cell=createValueCell(getTran("web.occup","medwan.common.reference")+": "+invoice.getInvoiceUid(),1,8,Font.NORMAL);
                 cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
             	table2.addCell(cell);
@@ -643,6 +649,10 @@ public class PDFPatientInvoiceGenerator extends PDFInvoiceGenerator {
             table = new PdfPTable(2);
             table.setWidthPercentage(pageWidth);
             // "printed by" info
+    		if(sProforma.equalsIgnoreCase("yes") && MedwanQuery.getInstance().getConfigInt("ebableProformaInvoiceComment",0)==1){
+	            table.addCell(createValueCell(getTran("web","proformainvoicecomment"),2));
+	            cell=createValueCell("\n",2);
+    		}
             table.addCell(createCell(new PdfPCell(getPrintedByInfo()),2,PdfPCell.ALIGN_LEFT,PdfPCell.NO_BORDER));
             if(invoice.getAcceptationUid()!=null && invoice.getAcceptationUid().length()>0){
             	User validatinguser = User.get(Integer.parseInt(invoice.getAcceptationUid()));

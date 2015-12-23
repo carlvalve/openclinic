@@ -917,14 +917,18 @@ public class PatientInvoice extends Invoice {
                     ids = new String[] {MedwanQuery.getInstance().getConfigString("serverId"),MedwanQuery.getInstance().getOpenclinicCounter("OC_INVOICES")+""};
                     this.setUid(ids[0]+"."+ids[1]);
                     this.setInvoiceUid(ids[1]);
-                   	this.setNumber(getInvoiceNumberCounter("PatientInvoice"));
+                    if(MedwanQuery.getInstance().getConfigInt("alternateInvoiceNumberingForClosedInvoicesOnly",0)==0 || this.getStatus().equalsIgnoreCase("closed")){
+                    	this.setNumber(getInvoiceNumberCounter("PatientInvoice"));
+                    }
                 }
             }
             else{
                 ids = new String[] {MedwanQuery.getInstance().getConfigString("serverId"),MedwanQuery.getInstance().getOpenclinicCounter("OC_INVOICES")+""};
                 this.setUid(ids[0]+"."+ids[1]);
                 this.setInvoiceUid(ids[1]);
-               	this.setNumber(getInvoiceNumberCounter("PatientInvoice"));
+                if(MedwanQuery.getInstance().getConfigInt("alternateInvoiceNumberingForClosedInvoicesOnly",0)==0 || this.getStatus().equalsIgnoreCase("closed")){
+                	this.setNumber(getInvoiceNumberCounter("PatientInvoice"));
+                }
             }
 
             if(ids.length == 2){
@@ -964,6 +968,9 @@ public class PatientInvoice extends Invoice {
                 ps.setInt(9,iVersion);
                 ps.setDouble(10,this.getBalance());
                 ps.setString(11,this.getStatus());
+                if(ScreenHelper.checkString(this.getNumber()).length()==0 && MedwanQuery.getInstance().getConfigInt("alternateInvoiceNumberingForClosedInvoicesOnly",0)==1 && this.getStatus().equalsIgnoreCase("closed")){
+                	this.setNumber(getInvoiceNumberCounter("PatientInvoice"));
+                }
                 ps.setString(12,this.getNumber());
                 ps.setString(13,this.getInsurarreference());
                 ps.setString(14,this.getInsurarreferenceDate());

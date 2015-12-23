@@ -96,7 +96,7 @@ public class ExportSAP_AR_INV {
 			    	sapconn.close();
 				}
 				catch(Exception s){
-					s.printStackTrace();
+					if(Debug.enabled) s.printStackTrace();
 					if(last){
 						rs.close();
 						ps.close();
@@ -115,7 +115,7 @@ public class ExportSAP_AR_INV {
 			conn.close();
 		}
 		catch(Exception e){
-			e.printStackTrace();
+			if(Debug.enabled) e.printStackTrace();
 		}
 		return exchangerate;
 	}

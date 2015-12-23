@@ -1242,7 +1242,7 @@ public class PDFExtraInsurarInvoiceGeneratorHMK2 extends PDFInvoiceGenerator {
                 cell.setColspan(2);
                 table.addCell(cell);
             }
-            catch(NullPointerException e){
+            catch(Exception e){
                 Debug.println("WARNING : PDFPatientInvoiceGenerator --> IMAGE NOT FOUND : logo_"+sProject+".gif");
                 e.printStackTrace();
                 cell = new PdfPCell();

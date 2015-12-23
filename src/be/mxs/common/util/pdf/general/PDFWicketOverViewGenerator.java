@@ -225,9 +225,13 @@ public class PDFWicketOverViewGenerator extends PDFBasic {
             cell.setColspan(5);
             table.addCell(cell);
         }
-        catch(NullPointerException e){
+        catch(Exception e){
             Debug.println("WARNING : PDFWicketOverviewGenerator --> IMAGE NOT FOUND : logo_"+sProject+".gif");
             e.printStackTrace();
+            cell = new PdfPCell();
+            cell.setBorder(PdfPCell.NO_BORDER);
+            cell.setColspan(5);
+            table.addCell(cell);
         }
 
         doc.add(table);

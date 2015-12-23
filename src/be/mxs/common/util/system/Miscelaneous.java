@@ -41,6 +41,7 @@ public class Miscelaneous {
     	
         // Try to find the image in the config cache
         String imageSource = MedwanQuery.getInstance().getConfigString("PDFIMG."+name.replaceAll("/",".")+"."+project);
+        System.out.println(1);
         if(imageSource!=null && imageSource.length()>0){
             try {
             	Debug.println("(config cache) imageSource : "+imageSource);
@@ -51,10 +52,13 @@ public class Miscelaneous {
             }
             catch (Exception e){}
         }
+        System.out.println(2);
         imageSource=MedwanQuery.getInstance().getConfigString("imageSource","http://localhost/openclinic");
-        
+        System.out.println(3);
+
         // Try to find the image in the project image directory
         try{
+            System.out.println(4);
         	Debug.println("(project image directory) imageSource : "+imageSource+"/projects/"+project+"/_img/"+name);
             image = com.itextpdf.text.Image.getInstance(new URL(imageSource+"/projects/"+project+"/_img/"+name));
             if(image!=null){
@@ -73,6 +77,20 @@ public class Miscelaneous {
                 return image;
             }
         }
+        catch (Exception e){}
+        
+        // Try to find the image in the default image directory with removal of projectname
+        try{
+        	if(name.contains("_"+project)){
+        		name=name.replaceAll("_"+project, "");
+	        	Debug.println("(default image directory without project) imageSource : "+imageSource+"/_img/"+name);
+	            image = com.itextpdf.text.Image.getInstance(new URL(imageSource+"/_img/"+name));
+	            if(image!=null){
+	                MedwanQuery.getInstance().setConfigString("PDFIMG."+name.replaceAll("/",".")+"."+project,imageSource+"/_img/"+name);
+	                return image;
+	            }
+        	}
+       }
         catch (Exception e){}
         
         System.out.println("Could not find image "+name+" for project "+project);
