@@ -67,7 +67,7 @@
             }
             else{
          	   session.setAttribute("edition","openclinic");
-         	   %><img src="<%=sTmpAPPDIR%>_img/logo.jpg" border="0"><%
+         	   %><img src="_img/logo.jpg" border="0"><%
             }
         %>
     </div>

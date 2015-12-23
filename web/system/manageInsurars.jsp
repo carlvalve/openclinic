@@ -62,6 +62,7 @@
     	   sEditInsurarAllowTariffNegociations  = checkString(request.getParameter("EditInsurarAllowTariffNegociations")),
     	   sEditInsurarCanPrintProforma  = checkString(request.getParameter("EditInsurarCanPrintProforma")),
 	   	   sEditInsurarReferenceNumberMandatory  = checkString(request.getParameter("EditInsurarReferenceNumberMandatory")),
+	   	   sEditInsurarInvoiceCommentMandatory  = checkString(request.getParameter("EditInsurarInvoiceCommentMandatory")),
     	   sEditInsurarUseLimitedPrestationsList  = checkString(request.getParameter("EditInsurarUseLimitedPrestationsList")),
 	   	   sEditInsurarAccountingCode  = checkString(request.getParameter("EditInsurarAccountingCode")),
            sEditInsurarType     = checkString(request.getParameter("EditInsurarType"));
@@ -160,6 +161,13 @@
         }
         else {
         	insurar.setInsuranceReferenceNumberMandatory(0);
+        }
+        
+        if(sEditInsurarInvoiceCommentMandatory.equalsIgnoreCase("1")){
+        	insurar.setInvoiceCommentMandatory(1);
+        }
+        else {
+        	insurar.setInvoiceCommentMandatory(0);
         }
         
         insurar.setAccountingCode(checkString(request.getParameter("EditInsurarAccountingCode")));
@@ -645,6 +653,12 @@
                         <td class="admin"><%=getTran("web","referencenumbermandatory",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="checkbox" name="EditInsurarReferenceNumberMandatory" <%=insurar.getInsuranceReferenceNumberMandatory()==1?"checked":""%> value="1"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="admin"><%=getTran("web","invoicecommentmandatory",sWebLanguage)%></td>
+                        <td class="admin2">
+                            <input type="checkbox" name="EditInsurarInvoiceCommentMandatory" <%=insurar.getInvoiceCommentMandatory()==1?"checked":""%> value="1"/>
                         </td>
                     </tr>
                     <tr>

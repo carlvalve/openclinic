@@ -37,6 +37,7 @@
 			            <td class="admin"><%=getTran("ccbrt.eye","from",sWebLanguage)%>&nbsp;</td>
 			            <td class="admin2" colspan="6">
 			                <select id="from" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_ORTHO_REGISTRY_FROM" property="itemId"/>]>.value">
+			                	<option/>
 				            	<%=ScreenHelper.writeSelect("ccbrt.eye.from",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_ORTHO_REGISTRY_FROM"),sWebLanguage,false,true) %>
 			                </select>
 			            </td>
@@ -47,6 +48,7 @@
 			            </td>
 			            <td class="admin2" colspan="6">
 			                <select id="attendencytype" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_ORTHO_REGISTRY_ATTENDENCYTYPE" property="itemId"/>]>.value">
+			                	<option/>
 				            	<%=ScreenHelper.writeSelect("ccbrt.attendencytype",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_ORTHO_REGISTRY_ATTENDENCYTYPE"),sWebLanguage,false,true) %>
 			                </select>
 			            </td>
@@ -128,6 +130,7 @@
 			            <td class="admin"><%=getTran("ccbrt.ortho","serviceclassification",sWebLanguage)%>&nbsp;</td>
 			            <td class="admin2" colspan="6">
 			                <select id="serviceclassification" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_ORTHO_REGISTRY_SERVICECLASSIFICATION" property="itemId"/>]>.value">
+			                	<option/>
 				            	<%=ScreenHelper.writeSelect("ccbrt.va.serviceclassification",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_ORTHO_REGISTRY_SERVICECLASSIFICATION"),sWebLanguage,false,true) %>
 			                </select>
 			            </td>

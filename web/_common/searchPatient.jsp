@@ -70,7 +70,7 @@
         
         <%-- row 1 --%>
         <tr>
-            <td align="right" nowrap width="55"><%=getTran("Web","Name",sWebLanguage)%></td>
+            <td align="right" nowrap width="55"><%=getTran("Web","Name",sWebLanguage)%>&nbsp;</td>
             <td>
                 <input id="ac2" autocomplete="off" class='<%=setFocus("Name",sDefaultFocus)%>' type='text' style='text-transform:uppercase' name='findName' value="<%=sName%>" size='25' onblur='limitLength(this);'>
                 <div id="ac2update" class="autocompletiondiv" style="display:none;"></div>
@@ -102,7 +102,7 @@
         
         <%-- row 2 --%>
         <tr>
-            <td align="right" nowrap><%=getTran("Web", "natreg.short", sWebLanguage)%>
+            <td align="right" nowrap><%=getTran("Web", "natreg.short", sWebLanguage)%>&nbsp;
             </td>
             <td>
                 <input class='<%=setFocus("natreg",sDefaultFocus)%>' TYPE='TEXT' NAME='findnatreg' VALUE="<%=sNatreg%>" size='25' onblur='limitLength(this);'>
@@ -132,7 +132,7 @@
         </tr>
         <%-- row 3 --%>
         <tr>
-            <td align="right" nowrap><%=getTran("Web","service",sWebLanguage)%></td>
+            <td align="right" nowrap><%=getTran("Web","service",sWebLanguage)%>&nbsp;</td>
             <td colspan='2' nowrap>
                 <input class='text' type="text" name="findUnitText" readonly size="49" title="<%=sUnitText%>" value="<%=sUnitText%>" onkeydown="enterEvent(event,13)? window.event.keyCode='' : (window.which='');return true;">
                 <%

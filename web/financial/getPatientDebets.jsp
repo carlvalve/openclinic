@@ -174,7 +174,6 @@ try{
 		// This is an insurance agent, limit the functionalities
 		isInsuranceAgent = true;
 	}
-	
     String sClass = "";
     out.print(addDebets(vDebets,sClass,sWebLanguage,true,null,null,activeUser,patientInvoice));
 

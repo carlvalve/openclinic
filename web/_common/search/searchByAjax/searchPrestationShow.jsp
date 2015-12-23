@@ -62,10 +62,13 @@
     
     //*** SEARCH **********************************************************************************
     if(sAction.equals("search")){
-    	String sFindDescr = sFindPrestationDescr.replaceAll("e",MedwanQuery.getInstance().getConfigString("equivalentofe","[eéèê]"))
-    			                                .replaceAll("a",MedwanQuery.getInstance().getConfigString("equivalentofa","[aàá]"));
+    	String sFindDescr = sFindPrestationDescr.replaceAll(MedwanQuery.getInstance().getConfigString("equivalentofe","[eéèê]"),"e")
+    			                                .replaceAll(MedwanQuery.getInstance().getConfigString("equivalentofa","[aàá]"),"a");
     	
+    	System.out.println("D1:"+sFindPrestationDescr);
+    	System.out.println("D2:"+sFindDescr);
         Vector foundPrestations = Prestation.searchActivePrestations(sFindPrestationCode,sFindDescr,sFindPrestationType,sFindPrestationPrice,"",sFindPrestationSort);
+		System.out.println("Found "+foundPrestations.size()+" prestations");
         Iterator prestationsIter = foundPrestations.iterator();
         String sClass = "", sUid, sCode, sDescr, sType, sTypeTran, sPrice, sSupplement;
         String sSelectTran = getTranNoLink("web","select",sWebLanguage);
@@ -81,7 +84,7 @@
 
         while(prestationsIter.hasNext()){
             prestation = (Prestation)prestationsIter.next();
-            if(insurar==null || prestation==null || !prestation.isVisibleFor(insurar)){
+            if(prestation==null || !prestation.isVisibleFor(insurar)){
             	continue;
             }
             if(prestation!=null && !checkString(prestation.getType()).equalsIgnoreCase("con.openinsurance")){

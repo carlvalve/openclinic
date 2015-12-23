@@ -1,10 +1,10 @@
-<%@ page import="be.mxs.common.util.system.HTMLEntities,be.openclinic.finance.PatientInvoice,java.util.*
-,be.openclinic.finance.PatientCredit,be.openclinic.adt.Encounter,be.openclinic.finance.Debet,java.math.BigDecimal" %>
+<%@ page import="be.mxs.common.util.system.*,be.openclinic.finance.*,java.util.*
+,be.openclinic.adt.Encounter,java.math.BigDecimal" %>
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
 <%
+
 try{
-	System.out.println("A");
     String sEditDate = checkString(request.getParameter("EditDate"));
     String sEditPatientInvoiceUID = checkString(request.getParameter("EditPatientInvoiceUID"));
     String sEditInvoiceUID = checkString(request.getParameter("EditInvoiceUID"));
@@ -57,6 +57,9 @@ try{
 
     PatientInvoice patientinvoice = new PatientInvoice();
     AdminPerson invoicePatient=activePatient;
+    boolean bUniqueInsurerReferenceRequired=false;
+    boolean bUniqueOtherReferenceRequired=false;
+    boolean bUniqueDoctorRequired=false;
 
     if (sEditPatientInvoiceUID.length() > 0) {
         PatientInvoice oldpatientinvoice = PatientInvoice.get(sEditPatientInvoiceUID);
@@ -69,6 +72,26 @@ try{
         }
     } else {
         patientinvoice.setCreateDateTime(getSQLTime());
+        //This is a new invoice. Check if unique reference numbers are really unique
+    }
+
+    if(MedwanQuery.getInstance().getConfigInt("invoiceInsurerReferenceMustBeUnique",0)==1 && sEditInsurarReference.length()>0){
+    	String ref = Pointer.getPointer("INV.REF."+sEditInsurarReference);
+    	if(ref.length()>0 && !ref.equalsIgnoreCase(sEditPatientInvoiceUID)){
+    		bUniqueInsurerReferenceRequired=true;
+    	}
+    }
+    if(MedwanQuery.getInstance().getConfigInt("invoiceOtherReferenceMustBeUnique",0)==1 && sEditComment.length()>0){
+    	String ref = Pointer.getPointer("INV.OTHERREF."+sEditComment);
+    	if(ref.length()>0 && !ref.equalsIgnoreCase(sEditPatientInvoiceUID)){
+    		bUniqueOtherReferenceRequired=true;
+    	}
+    }
+    if(MedwanQuery.getInstance().getConfigInt("invoiceDoctorMustBeUnique",0)==1 && sEditInvoiceDoctor.length()>0){
+    	String ref = Pointer.getPointer("INV.DOCTORREF."+sEditInvoiceDoctor);
+    	if(ref.length()>0 && !ref.equalsIgnoreCase(sEditPatientInvoiceUID)){
+    		bUniqueDoctorRequired=true;
+    	}
     }
 
     patientinvoice.setStatus(sEditStatus);
@@ -96,6 +119,8 @@ try{
     patientinvoice.setCredits(new Vector());
     double dTotalCredits = 0;
     double dTotalDebets = 0;
+    boolean bReferenceMandatory=false;
+    boolean bOtherReferenceMandatory=false;
     
     if (sEditCBs.length() > 0) {
         String[] aCBs = sEditCBs.split(",");
@@ -135,6 +160,9 @@ try{
         if(acceptationuid.length()>0){
         	patientinvoice.setAcceptationUid(acceptationuid);
         }
+        Insurance insurance = Insurance.getMostInterestingInsuranceForPatient(invoicePatient.personid);
+    	bReferenceMandatory=insurance!=null && insurance.getInsurar()!=null && insurance.getInsurar().getInsuranceReferenceNumberMandatory()==1 && sEditInsurarReference.length()==0;
+    	bOtherReferenceMandatory=insurance!=null && insurance.getInsurar()!=null && insurance.getInsurar().getInvoiceCommentMandatory()==1 && sEditComment.length()==0;
     }
     else{
     	if(quickInvoice){
@@ -142,7 +170,6 @@ try{
     		Vector unassignedDebets = Debet.getUnassignedPatientDebets(activePatient.personid);
     		String sDebetUID; 
     		Debet debet;
-    		
 	        for(int i=0; i<unassignedDebets.size(); i++){
                 sDebetUID = checkString((String)unassignedDebets.get(i));
 
@@ -165,86 +192,98 @@ try{
 	        }    		
     	}
     }
-    
-	if(!quickInvoice){
-	    double dBalance = Double.parseDouble(sEditBalance);
-	    
-		// patient heeft te veel betaald => aanmaken van credit en saldo invoice = 0
-	    if (dBalance < 0) {
-			Encounter encounter = Encounter.getActiveEncounter(invoicePatient.personid);
-			if(encounter==null){
-				encounter = Encounter.getLastEncounter(invoicePatient.personid);
-			}
-	
-	        double dCredit = dBalance;
-	        dBalance = 0;
-	        PatientCredit patientcredit = new PatientCredit();
-	        patientcredit.setAmount(dCredit * (-1));
-	        patientcredit.setEncounterUid(encounter==null?"":encounter.getUid());
-	        patientcredit.setDate(ScreenHelper.getSQLDate(getDate()));
-	        patientcredit.setType("transfer.de.credit");
-	        patientcredit.setUpdateDateTime(ScreenHelper.getSQLDate(getDate()));
-	        patientcredit.setUpdateUser(activeUser.userid);
-	        patientcredit.store();
-			
-	        PatientCredit credit;
-	        String sCreditUid;
-	        double dTmpCredits = 0;
-	        boolean paymentCovered=false;
-			
-	        for (int i = 0; i < patientinvoice.getCredits().size(); i++) {
-	            sCreditUid = checkString((String) patientinvoice.getCredits().elementAt(i));
-	
-	            if (sCreditUid.length() > 0) {
-	                credit = PatientCredit.get(sCreditUid);
-	
-	                if (credit != null) {
-	                    dTmpCredits += credit.getAmount();
-	                    if (dTmpCredits > dTotalDebets) {
-	                        if(!paymentCovered){
-	                        	credit.setAmount(new BigDecimal("" + (credit.getAmount() - (dTmpCredits - dTotalDebets))).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
-	                        }
-	                        else {
-	                        	credit.setAmount(0);
-	                        }
-	                        credit.store();
-	                        paymentCovered=true;
-	                    }
-	                }
-	            }
+    String sMessage="";
+    if(!bReferenceMandatory && !bOtherReferenceMandatory && !bUniqueInsurerReferenceRequired && !bUniqueOtherReferenceRequired && !bUniqueDoctorRequired){
+		if(!quickInvoice){
+		    double dBalance = Double.parseDouble(sEditBalance);
+		    
+			// patient heeft te veel betaald => aanmaken van credit en saldo invoice = 0
+		    if (dBalance < 0) {
+				Encounter encounter = Encounter.getActiveEncounter(invoicePatient.personid);
+				if(encounter==null){
+					encounter = Encounter.getLastEncounter(invoicePatient.personid);
+				}
+		
+		        double dCredit = dBalance;
+		        dBalance = 0;
+		        PatientCredit patientcredit = new PatientCredit();
+		        patientcredit.setAmount(dCredit * (-1));
+		        patientcredit.setEncounterUid(encounter==null?"":encounter.getUid());
+		        patientcredit.setDate(ScreenHelper.getSQLDate(getDate()));
+		        patientcredit.setType("transfer.de.credit");
+		        patientcredit.setUpdateDateTime(ScreenHelper.getSQLDate(getDate()));
+		        patientcredit.setUpdateUser(activeUser.userid);
+		        patientcredit.store();
+				
+		        PatientCredit credit;
+		        String sCreditUid;
+		        double dTmpCredits = 0;
+		        boolean paymentCovered=false;
+				
+		        for (int i = 0; i < patientinvoice.getCredits().size(); i++) {
+		            sCreditUid = checkString((String) patientinvoice.getCredits().elementAt(i));
+		
+		            if (sCreditUid.length() > 0) {
+		                credit = PatientCredit.get(sCreditUid);
+		
+		                if (credit != null) {
+		                    dTmpCredits += credit.getAmount();
+		                    if (dTmpCredits > dTotalDebets) {
+		                        if(!paymentCovered){
+		                        	credit.setAmount(new BigDecimal("" + (credit.getAmount() - (dTmpCredits - dTotalDebets))).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+		                        }
+		                        else {
+		                        	credit.setAmount(0);
+		                        }
+		                        credit.store();
+		                        paymentCovered=true;
+		                    }
+		                }
+		            }
+		        }
+		    }
+		    patientinvoice.setBalance(dBalance);
+		}
+		
+	    if (patientinvoice.store()) {
+	        if(MedwanQuery.getInstance().getConfigInt("invoiceInsurerReferenceMustBeUnique",0)==1 && sEditInsurarReference.length()>0){
+	        	Pointer.deletePointers("INV.REF."+sEditInsurarReference);
+	        	Pointer.storePointer("INV.REF."+sEditInsurarReference,patientinvoice.getUid());
 	        }
-	    }
-	    patientinvoice.setBalance(dBalance);
-	}
-	
-    String sMessage;
-    if (patientinvoice.store()) {
-    	//Nu zetten we de reducties op orde
-    	//Eerst verwijderen we de bestaande reducties
-    	if(sEditReduction.length()>0){
-        	PatientCredit.deletePatientInvoiceReductions(patientinvoice.getUid());
-        	
-	    	//Bereken de korting
-	    	double reduction = Double.parseDouble(sEditReduction);
-	    	if(reduction>0){
-		    	PatientCredit credit = new PatientCredit();
-		    	credit.setAmount(reduction*patientinvoice.getPatientAmount()/100);
-		    	credit.setDate(new java.util.Date());
-		    	credit.setInvoiceUid(patientinvoice.getUid());
-		    	credit.setPatientUid(patientinvoice.getPatientUid());
-		    	credit.setType("reduction");
-		    	credit.setUpdateDateTime(new java.util.Date());
-		    	credit.setUpdateUser(patientinvoice.getUpdateUser());
-		    	credit.setVersion(1);
-		    	credit.store();
+	        if(MedwanQuery.getInstance().getConfigInt("invoiceOtherReferenceMustBeUnique",0)==1 && sEditComment.length()>0){
+	        	Pointer.deletePointers("INV.OTHERREF."+sEditComment);
+	        	Pointer.storePointer("INV.OTHERREF."+sEditComment,patientinvoice.getUid());
+	        }
+	        if(MedwanQuery.getInstance().getConfigInt("invoiceDoctorMustBeUnique",0)==1 && sEditInvoiceDoctor.length()>0){
+	        	Pointer.deletePointers("INV.DOCTORREF."+sEditInvoiceDoctor);
+	        	Pointer.storePointer("INV.DOCTORREF."+sEditInvoiceDoctor,patientinvoice.getUid());
+	        }
+	    	//Nu zetten we de reducties op orde
+	    	//Eerst verwijderen we de bestaande reducties
+	    	if(sEditReduction.length()>0){
+	        	PatientCredit.deletePatientInvoiceReductions(patientinvoice.getUid());
+	        	
+		    	//Bereken de korting
+		    	double reduction = Double.parseDouble(sEditReduction);
+		    	if(reduction>0){
+			    	PatientCredit credit = new PatientCredit();
+			    	credit.setAmount(reduction*patientinvoice.getPatientAmount()/100);
+			    	credit.setDate(new java.util.Date());
+			    	credit.setInvoiceUid(patientinvoice.getUid());
+			    	credit.setPatientUid(patientinvoice.getPatientUid());
+			    	credit.setType("reduction");
+			    	credit.setUpdateDateTime(new java.util.Date());
+			    	credit.setUpdateUser(patientinvoice.getUpdateUser());
+			    	credit.setVersion(1);
+			    	credit.store();
+		    	}
 	    	}
-    	}
-        sMessage = getTran("web", "dataissaved", sWebLanguage);
-    } 
-    else {
-        sMessage = getTran("web.control", "dberror", sWebLanguage);
+	        sMessage = getTran("web", "dataissaved", sWebLanguage);
+	    } 
+	    else {
+	        sMessage = getTran("web.control", "dberror", sWebLanguage);
+	    }
     }
-
 %>
 {
 "Message":"<%=HTMLEntities.htmlentities(sMessage)%>",
@@ -253,6 +292,11 @@ try{
 "EditInsurarReference":"<%=patientinvoice.getInsurarreference()%>",
 "EditInsurarReferenceDate":"<%=patientinvoice.getInsurarreferenceDate()%>",
 "EditInvoiceUID":"<%=patientinvoice.getInvoiceUid()%>",
+"ReferenceMandatory":"<%=bReferenceMandatory?"1":"0"%>",
+"OtherReferenceMandatory":"<%=bOtherReferenceMandatory?"1":"0"%>",
+"UniqueInsurerReferenceRequired":"<%=bUniqueInsurerReferenceRequired?"1":"0"%>",
+"UniqueOtherReferenceRequired":"<%=bUniqueOtherReferenceRequired?"1":"0"%>",
+"UniqueDoctorRequired":"<%=bUniqueDoctorRequired?"1":"0"%>",
 "TotalDebets":"<%=dTotalDebets%>"
 }
 <%

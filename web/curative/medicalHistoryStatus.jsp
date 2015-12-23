@@ -335,7 +335,7 @@ function checkArchiveDocument(){
     var modalities = "dialogWidth:266px;dialogHeight:143px;center:yes;scrollbars:no;resizable:no;status:no;location:no;";
 
     if(userId!=<%=activeUser.userid%>){
-      if(promptDialog("web.occup","medwan.transaction.delete.question")=="deleteit"){
+      if(window.prompt('<%=getTran("web.occup","medwan.transaction.delete.question",sWebLanguage)%>')=="deleteit"){
         window.location.href = "<c:url value='/healthrecord/manageDeleteTransaction.do'/>?transactionId="+transactionId+"&serverId="+serverId+"&ts=<%=getTs()%>&be.mxs.healthrecord.updateTransaction.actionForwardKey=/main.do?Page=curative/index.jsp&ts=<%=getTs()%>";
       }
       else{

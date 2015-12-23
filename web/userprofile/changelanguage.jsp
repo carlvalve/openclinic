@@ -11,6 +11,7 @@
 </script>
 <%
     String sAction = checkString(request.getParameter("Action"));
+System.out.println("action: "+sAction);
 
     //--- DISPLAY FORM ----------------------------------------------------------------------------
     if(sAction.length() == 0){
@@ -52,6 +53,7 @@
     //--- SAVE LANGUAGE AND RETURN TO INDEX -------------------------------------------------------
     else if(sAction.equals("save")){
         sWebLanguage = checkString(request.getParameter("ChangeLanguage"));
+        System.out.println(1);
 
         // put new language in activeUser
         ((User)session.getAttribute("activeUser")).person.language = sWebLanguage;
@@ -61,12 +63,16 @@
         if (sessionContainerWO.getUserVO()==null){
             sessionContainerWO.setUserVO(MedwanQuery.getInstance().getUser(activeUser.userid));
         }
+        System.out.println("userid: "+activeUser.userid);
+        System.out.println("user: "+sessionContainerWO.getUserVO());
+        System.out.println("person: "+sessionContainerWO.getUserVO().personVO);
 
         sessionContainerWO.getUserVO().personVO.setLanguage(sWebLanguage);
         session.setAttribute("be.mxs.webapp.wl.session.SessionContainerFactory.WO_SESSION_CONTAINER",sessionContainerWO);
 
         // put new language in attribute
         session.setAttribute(sAPPTITLE+"WebLanguage",sWebLanguage);
+        System.out.println(3);
 
         // return to userprofile index
         out.print("<script>doBack();</script>");

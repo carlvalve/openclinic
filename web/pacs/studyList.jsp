@@ -5,7 +5,7 @@
 		<td><%=getTran("web", "date", sWebLanguage) %></td>
 		<td><%=getTran("web", "studyid", sWebLanguage) %></td>
 		<td><%=getTran("web", "modality", sWebLanguage) %></td>
-		<td><%=getTran("web", "seriesid", sWebLanguage) %></td>
+		<td><%=getTran("web", "seriesid", sWebLanguage) %></td>z
 		<td><%=getTran("web", "description", sWebLanguage) %></td>
 	</tr>
 <%
@@ -14,9 +14,11 @@
 	SortedMap pacstransorted=new TreeMap(Collections.reverseOrder());
 	for (int n=0;n<pacstran.size();n++){
 		TransactionVO tran = (TransactionVO)pacstran.elementAt(n);
-		String seriesid="00000000000"+tran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_SERIESID");
-		pacstransorted.put(new SimpleDateFormat("yyyyMMdd").format(tran.getUpdateDateTime())+"."+tran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYUID")+
-				"."+(seriesid).substring(seriesid.length()-11), tran);
+		if(tran!=null){
+			String seriesid="00000000000"+tran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_SERIESID");
+			pacstransorted.put(new SimpleDateFormat("yyyyMMdd").format(tran.getUpdateDateTime())+"."+tran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYUID")+
+					"."+(seriesid).substring(seriesid.length()-11), tran);
+		}
 	}
 	Iterator ipacs = pacstransorted.keySet().iterator();
 	while(ipacs.hasNext()){

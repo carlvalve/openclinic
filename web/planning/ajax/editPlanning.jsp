@@ -1,3 +1,4 @@
+<%@page import="be.openclinic.finance.Balance"%>
 <%@ page import="be.openclinic.adt.Planning,be.dpms.medwan.common.model.vo.occupationalmedicine.ExaminationVO" %>
 <%@ page import="java.util.*" %>
 <%@ page import="be.mxs.common.util.system.HTMLEntities" %>
@@ -250,43 +251,55 @@
     	}
     } 
     else if (sAction.equalsIgnoreCase("new")){
-        //####################### IF NEW APPOINTMENT ###################################//
-        planning = new Planning();
-        if(activePatient!=null){
-            planning.setPatientUID(activePatient.personid);
-            planning.setPatient(activePatient);
-        }
-        planning.setUserUID(sFindUserUID);
-
-        if(Integer.parseInt(planning.getUserUID())<=0){
-            planning.setUserUID(activeUser.userid);
-        }
-        setDates(planning, request,new int[]{startHourOfWeekPlanner,startMinOfWeekPlanner,endHourOfWeekPlanner,endMinOfWeekPlanner});
-     
-        // appointment date
-        if (planning.getPlannedDate()!=null){
-            appointmentDateDay = ScreenHelper.formatDate(planning.getPlannedDate());
-            appointmentDateHour = new SimpleDateFormat("HH").format(planning.getPlannedDate());
-            appointmentDateMinutes = new SimpleDateFormat("mm").format(planning.getPlannedDate());
-        } else {
-            appointmentDateDay = "";
-            appointmentDateHour = new SimpleDateFormat("HH").format(sFrom+"");
-            appointmentDateMinutes = "";
-        }
-        // appointment edn date
-        planning.setPlannedEndDate();
-        if (planning.getPlannedEndDate()!=null){
-            appointmentDateEndDay = ScreenHelper.formatDate(planning.getPlannedEndDate());
-            appointmentDateEndHour = new SimpleDateFormat("HH").format(planning.getPlannedEndDate());
-            appointmentDateEndMinutes = new SimpleDateFormat("mm").format(planning.getPlannedEndDate());
-        }
-        else {
-            appointmentDateEndDay = appointmentDateDay;
-            appointmentDateEndHour = appointmentDateHour;
-            appointmentDateEndMinutes = appointmentDateMinutes;
-        }
-
-        show = true;
+    	boolean bAllowed=true;
+    	if(MedwanQuery.getInstance().getConfigInt("negativePatientBalanceAllowedForAppointments",1)==0){
+    		Balance balance = Balance.getActiveBalance(activePatient.personid);
+    		double saldo = Balance.getPatientBalance(activePatient.personid);
+    		if(saldo<balance.getMinimumBalance()){
+    			out.println("<script>alert('"+getTranNoLink("web","notpermittedwithnegativebalance",sWebLanguage)+"');doClose();</script>");
+    			out.flush();
+    			bAllowed=false;
+    		}
+    	}
+		if(bAllowed){
+	        //####################### IF NEW APPOINTMENT ###################################//
+	        planning = new Planning();
+	        if(activePatient!=null){
+	            planning.setPatientUID(activePatient.personid);
+	            planning.setPatient(activePatient);
+	        }
+	        planning.setUserUID(sFindUserUID);
+	
+	        if(Integer.parseInt(planning.getUserUID())<=0){
+	            planning.setUserUID(activeUser.userid);
+	        }
+	        setDates(planning, request,new int[]{startHourOfWeekPlanner,startMinOfWeekPlanner,endHourOfWeekPlanner,endMinOfWeekPlanner});
+	     
+	        // appointment date
+	        if (planning.getPlannedDate()!=null){
+	            appointmentDateDay = ScreenHelper.formatDate(planning.getPlannedDate());
+	            appointmentDateHour = new SimpleDateFormat("HH").format(planning.getPlannedDate());
+	            appointmentDateMinutes = new SimpleDateFormat("mm").format(planning.getPlannedDate());
+	        } else {
+	            appointmentDateDay = "";
+	            appointmentDateHour = new SimpleDateFormat("HH").format(sFrom+"");
+	            appointmentDateMinutes = "";
+	        }
+	        // appointment edn date
+	        planning.setPlannedEndDate();
+	        if (planning.getPlannedEndDate()!=null){
+	            appointmentDateEndDay = ScreenHelper.formatDate(planning.getPlannedEndDate());
+	            appointmentDateEndHour = new SimpleDateFormat("HH").format(planning.getPlannedEndDate());
+	            appointmentDateEndMinutes = new SimpleDateFormat("mm").format(planning.getPlannedEndDate());
+	        }
+	        else {
+	            appointmentDateEndDay = appointmentDateDay;
+	            appointmentDateEndHour = appointmentDateHour;
+	            appointmentDateEndMinutes = appointmentDateMinutes;
+	        }
+	
+	        show = true;
+		}
     } 
     else if (sFindPlanningUID.length() > 0){
         //####################### IF EXISTS APPOINTMENT ###################################//
