@@ -10,7 +10,8 @@
            sFindDOB        = checkString(request.getParameter("FindDOB")),
            sFindGender     = checkString(request.getParameter("FindGender")),
            sReturnPersonID = checkString(request.getParameter("ReturnPersonID")),
-           sPersonID       = checkString(request.getParameter("PersonID"));
+           sPersonID       = checkString(request.getParameter("PersonID")),
+		   sGiftID         = checkString(request.getParameter("giftid"));
 
     if(sReturnPersonID.length()==0){
         sReturnPersonID = checkString(request.getParameter("ReturnField"));
@@ -54,13 +55,38 @@
                 vPersons.addElement(hInfo);
     		}
     	}
+    	else if(!bIsUser && sGiftID.length()>0){
+    		TransactionVO transaction=null;
+    		try{
+    			transaction = MedwanQuery.getInstance().loadTransaction(MedwanQuery.getInstance().getConfigInt("serverId"), Integer.parseInt(sGiftID));
+    		}
+    		catch(Exception e){}
+			if(transaction!=null){
+				if(transaction.getTransactionType().equalsIgnoreCase("be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CNTS_BLOODGIFT")){
+					String personid = MedwanQuery.getInstance().getPersonIdFromHealthrecordId(transaction.getHealthrecordId())+"";
+		    		AdminPerson person = AdminPerson.getAdminPerson(personid);
+		    		if(person!=null && person.lastname!=null && person.lastname.length()>0){
+		                Hashtable hInfo = new Hashtable();
+		                
+		                hInfo.put("personid",ScreenHelper.checkString(personid));
+		                hInfo.put("dateofbirth",ScreenHelper.checkString(person.dateOfBirth));
+		                hInfo.put("gender",ScreenHelper.checkString(person.gender));
+		                hInfo.put("lastname",ScreenHelper.checkString(person.lastname));
+		                hInfo.put("firstname",ScreenHelper.checkString(person.firstname));
+		                hInfo.put("immatnew",ScreenHelper.checkString(person.getID("immatnew")));
+	
+		                vPersons.addElement(hInfo);
+		    		}
+				}
+			}
+    	}
     	else{
     		vPersons = AdminPerson.searchPatients(sSelectLastname, sSelectFirstname, sFindGender, sFindDOB, bIsUser);
     	}
     	
         Iterator personIter = vPersons.iterator();
         Hashtable hPersonInfo;
-        if((sSelectLastname.length() > 0 || sSelectFirstname.length() > 0 || sFindGender.length() > 0 || sFindDOB.length() > 0) ||
+        if((sSelectLastname.length() > 0 || sSelectFirstname.length() > 0 || sFindGender.length() > 0 || sFindDOB.length() > 0 || sGiftID.length()>0) ||
            bIsUser || sPersonID.length()>0){
             String sClass = "", sLastname, sFirstname;
             boolean recsFound = false;

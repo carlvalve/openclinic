@@ -69,7 +69,7 @@
             <table width='100%' cellspacing='0' cellpadding="0" class='sortable' id="sortable">
                 <tr class='gray'>
                     <td>
-                        <%=getTran("web","id",sWebLanguage)%>
+                        <%=getTran("web","contactid",sWebLanguage)%>
                         <%
 	                        if(checkString(activeEncounter.getType()).equalsIgnoreCase("visit") && activeEncounter.getEnd()==null && activeUser.getAccessRight("adt.encounter.edit")){
 	                            %>&nbsp;<img class="link" src="<c:url value='/_img/themes/default/keywords.jpg'/>" onclick="closeEncounter('<%=activeEncounter.getUid() %>')" alt="<%=getTranNoLink("web","close",sWebLanguage)%>"  title="<%=getTran("web","close",sWebLanguage)%>" style="vertical-align:-4px;"/><% 

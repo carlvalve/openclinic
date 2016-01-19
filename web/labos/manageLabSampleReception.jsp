@@ -14,6 +14,7 @@
         while(parameters.hasMoreElements()){
             String name = (String)parameters.nextElement();
             String fields[] = name.split("\\.");
+            System.out.println(fields[0]+": "+name);
             if(fields[0].equalsIgnoreCase("receive") && fields.length == 4){
                 serverid = Integer.parseInt(fields[1]);
                 transactionid = Integer.parseInt(fields[2]);
@@ -31,12 +32,12 @@
 
 <form name="frmSampleReception" method="post">
     <%=writeTableHeader("Web","sampleReception",sWebLanguage," doBack();")%>
-    
+    <input type='hidden' id='find' name='find'/>
     <table width="100%" class="menu" cellspacing="1" cellpadding="0">
         <tr>
             <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","labrequestid",sWebLanguage)%></td>
             <td class="admin2">
-                <input type="text" size="16" class="text" name="labrequestid" value="<%=labrequestid%>"/>
+                <input type="text" size="16" class="text" id="labrequestid" name="labrequestid" value="<%=labrequestid%>"/>
                 <input type="submit" class="button" name="find" value="<%=getTranNoLink("web","find",sWebLanguage)%>"/>
             </td>
         </tr>
@@ -92,7 +93,7 @@
             for(int n=0; n<unsampledRequests.size(); n++){
                 LabRequest labRequest = (LabRequest)unsampledRequests.elementAt(n);
                 if(labRequest!=null && labRequest.getRequestdate()!=null) {
-                    out.print("<tr><td class='admin2'><b><a href='javascript:selectRequest("+labRequest.getServerid()+","+labRequest.getTransactionid()+");'>"+(labRequest.getRequestdate()==null?"?":ScreenHelper.stdDateFormat.format(labRequest.getRequestdate()))+"</a> "+labRequest.getPatientname()+" </b></td><td class='admin2'> "+labRequest.getPatientgender()+" </td>"+
+                    out.print("<tr><td class='admin2'><b><a href='javascript:document.getElementById(\"labrequestid\").value=\""+labRequest.getServerid()+"."+labRequest.getTransactionid()+"\";selectRequest();'>"+(labRequest.getRequestdate()==null?"?":ScreenHelper.stdDateFormat.format(labRequest.getRequestdate()))+"</a> "+labRequest.getPatientname()+" </b></td><td class='admin2'> "+labRequest.getPatientgender()+" </td>"+
                             "<td class='admin2'> "+(labRequest.getPatientdateofbirth()==null?"?":ScreenHelper.stdDateFormat.format(labRequest.getPatientdateofbirth()))+" </td><td class='admin2'><i> "+labRequest.getServicename()+"</i></td></tr>");
                 }
             }
@@ -111,8 +112,9 @@
 <script>
   document.getElementsByName('labrequestid')[0].focus();
     
-  function selectRequest(serverid,transactionid){
-    window.location.href="<c:url value="/main.do"/>?Page=labos/manageLabSampleReception.jsp&find=1&labrequestid="+serverid+"."+transactionid;
+  function selectRequest(){
+	  document.getElementById('find').value='1';
+	  frmSampleReception.submit();
   }
   function showRequest(serverid,transactionid){
     window.open("<c:url value='/labos/manageLabResult_view.jsp'/>?ts=<%=getTs()%>&show."+serverid+"."+transactionid+"=1","Popup"+new Date().getTime(),"toolbar=no,status=yes,scrollbars=yes,resizable=yes,width=800,height=600,menubar=no");

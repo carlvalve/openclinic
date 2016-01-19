@@ -225,7 +225,7 @@
         <% }%>
     </div>
     <%
-    	String edition="bloodbank".equalsIgnoreCase(MedwanQuery.getInstance().getConfigString("edition",""))?"Blood Bank Edition<br/>":"";
+    	String edition=("bloodbank".equalsIgnoreCase(MedwanQuery.getInstance().getConfigString("edition",""))?"Blood Bank Edition<br/>":"");
     %>
     <div id="version"><%=edition+" "+version%>&nbsp;</div>
     <div id="fields">
@@ -261,7 +261,7 @@
         %>
         </center><br/>
         
-        <center><%=MedwanQuery.getInstance().getConfigString("edition", "GA Open Source Edition") %> by:
+        <center><%=MedwanQuery.getInstance().getConfigString("openclinicedition", "GA Open Source Edition") %> by:
         <% if (MedwanQuery.getInstance().getConfigString("mxsref", "rw").equalsIgnoreCase("rw")){ %>
         <img src="_img/flags/rwandaflag.jpg" height="15px" width="30px" alt="Rwanda"/>
         <a href="http://mxs.rwandamed.org" target="_new"><b>The Open-IT Group Ltd</b></a>

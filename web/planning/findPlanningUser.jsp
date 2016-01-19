@@ -368,7 +368,7 @@
                    $("appointmentDateMinutes").value+"&appointmentDateEndDay="+$("appointmentDateDay").value+"&Action=save"+
                    "&appointmentDateEndHour="+$("appointmentDateEndHour").value+"&appointmentDateEndMinutes="+$("appointmentDateEndMinutes").value+
                    "&EditEffectiveDate="+$("EditEffectiveDate").value+"&EditEffectiveDateTime="+$("EditEffectiveDateTime").value+"&EditCancelationDateTime="+$("EditCancelationDateTime").value+"&EditCancelationDate="+$("EditCancelationDate").value+
-                   "&EditUserUID="+$("EditUserUID").value+"&FindServiceUID="+$("FindServiceUID").value+"&EditPatientUID="+$("EditPatientUID").value+"&EditDescription="+encodeURIComponent($("EditDescription").value)+
+                   "&EditUserUID="+$("EditUserUID").value+"&FindServiceUID="+$("FindServiceUID").value+"&EditPatientUID="+$("EditPatientUID").value+"&EditDescription="+encodeURIComponent($("EditDescription").value)+"&EditComment="+encodeURIComponent($("EditComment").value)+
                    "&EditContactUID="+$("EditContactUID").value+"&appointmentRepeatUntil="+$("appointmentRepeatUntil").value+"&EditContactName="+$("EditContactName").value+"&EditContext="+$("EditContext").value+"&tempplanninguid="+$("tempplanninguid").value;
 
       if($("EditTransactionUID")){
@@ -376,11 +376,14 @@
       }
       if($F("EditPage").length>0) params+="&Page="+$F("EditPage");
 
-      if($("ContactProduct").checked){
+      if($("ContactProduct") && $("ContactProduct").checked){
         params+="&EditContactType="+$("ContactProduct").value;
       }
-      else if($("ContactExamination").checked){
+      else if($("ContactProduct") && $("ContactExamination").checked){
         params+="&EditContactType="+$("ContactExamination").value;
+      }
+      else if($("ContactPrestation") && $("ContactPrestation").value=='prestation'){
+        params+="&EditContactType="+$("ContactPrestation").value;
       }
       
       new Ajax.Request(url,{

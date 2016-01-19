@@ -1,9 +1,5 @@
-<%@page import="be.openclinic.pharmacy.OperationDocument,
-                be.openclinic.pharmacy.ProductStockOperation,
-                be.openclinic.pharmacy.Batch,
-                be.openclinic.pharmacy.ProductStock,
-                be.openclinic.medical.Prescription,
-                be.openclinic.pharmacy.ServiceStock"%>
+<%@page import="be.openclinic.pharmacy.*,
+                be.openclinic.medical.Prescription"%>
 <%@include file="/includes/validateUser.jsp"%>
 <%@page errorPage="/includes/error.jsp"%>
 <%=checkPermission("medication.medicationdelivery","all",activeUser)%>
@@ -39,7 +35,6 @@
      String sEditProductStockDocumentUidText = "",
             sEditServiceStockUid = "",
             sEditServiceStockName = "";
-Debug.println("1");    
     Prescription prescription = null;
     if(sEditUnitsChanged.length()==0 && sEditPrescriptionUid.length() > 0){
         prescription = Prescription.get(sEditPrescriptionUid);
@@ -185,6 +180,75 @@ Debug.println("1");
 
         String sResult=operation.store();
         if(sResult==null){
+        	//Now check if a blood product delivery must be registered
+        	//We only do this if it has been delivered to a patient
+        	System.out.println(1);
+        	if(operation.getSourceDestination().getObjectType().equalsIgnoreCase("patient")){
+        		//We need a batch number, otherwise there is no link
+        	System.out.println(2);
+        		if(operation.getBatchNumber()!=null && operation.getBatchNumber().length()>0){
+                	System.out.println(3);
+        			int nBatchNumber=-1;
+        			try{
+        				nBatchNumber=Integer.parseInt(operation.getBatchNumber());
+        			}
+        			catch(Exception r){
+        			}
+        			if(nBatchNumber>-1){
+        	        	System.out.println(4);
+			        	ProductStock productStock = operation.getProductStock();
+			        	if(productStock!=null){
+			            	System.out.println(5);
+			        		Product product = productStock.getProduct();
+			        		if(product!=null && product.getProductSubGroup().toLowerCase().startsWith(MedwanQuery.getInstance().getConfigString("bloodProductsCategory","BP.").toLowerCase())){
+			                	System.out.println(6);
+			        			//It is a blood product delivery. Register it
+			        			Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+								PreparedStatement ps = conn.prepareStatement("insert into OC_BLOODDELIVERIES("+
+										" OC_BLOODDELIVERY_DATE,"+
+										" OC_BLOODDELIVERY_LOCATION,"+
+										" OC_BLOODDELIVERY_PATIENTNAME,"+
+										" OC_BLOODDELIVERY_PATIENTFIRSTNAME,"+
+										" OC_BLOODDELIVERY_PATIENTGENDER,"+
+										" OC_BLOODDELIVERY_PATIENTTELEPHONE,"+
+										" OC_BLOODDELIVERY_PATIENTADDRESS,"+
+										" OC_BLOODDELIVERY_PATIENTDATEOFBIRTH,"+
+										" OC_BLOODDELIVERY_POCKETS,"+
+										" OC_BLOODDELIVERY_COMMENT,"+
+										" OC_BLOODDELIVERY_ID,"+
+										" OC_BLOODDELIVERY_USERID,"+
+										" OC_BLOODDELIVERY_PRODUCT)"+
+										" values(?,?,?,?,?,?,?,?,?,?,?,?,?)"
+								);
+								ps.setDate(1,new java.sql.Date(operation.getDate().getTime()));
+								ps.setString(2,MedwanQuery.getInstance().getConfigString("cntsDefaultLocation","CNTS"));
+								String personid = operation.getSourceDestination().getObjectUid();
+								AdminPerson person = AdminPerson.getAdminPerson(personid);
+								ps.setString(3, person.lastname.toUpperCase());
+								ps.setString(4, person.firstname);
+								ps.setString(5, person.gender);
+								ps.setString(6, person.getActivePrivate().telephone+ " / "+person.getActivePrivate().mobile);
+								ps.setString(7, person.getActivePrivate().address);
+								java.sql.Date date = null;
+								try{
+									date = new java.sql.Date(ScreenHelper.parseDate(person.dateOfBirth).getTime());
+								}
+								catch(Exception t){}
+								ps.setDate(8, date);
+								ps.setInt(9, operation.getUnitsChanged());
+								ps.setString(10, getTran("web","operation",sWebLanguage)+": "+operation.getUid());
+								ps.setInt(11, nBatchNumber);
+								ps.setInt(12, Integer.parseInt(activeUser.userid));
+								ps.setString(13,product.getName());
+								ps.execute();
+								ps.close();
+								conn.close();
+			        		}
+			        	}
+        			}
+	        	}
+        	}
+        	
 	        // reload opener to see the change in level
 	        %>        
 			  <script>
@@ -204,7 +268,6 @@ Debug.println("1");
         	sAction = "showDetailsNew";
         }
     }
-    Debug.println("3");    
 
     //--- DELIVER MEDICATION ----------------------------------------------------------------------
     if(sAction.equals("deliverMedication")){
@@ -301,9 +364,8 @@ Debug.println("1");
                     <%-- PHARMACY --%>
                     <tr>
                         <td class="admin"><%=getTran("Web","pharmacy",sWebLanguage)%>&nbsp;*</td>
-                        <td class="admin2">
+                        <td class="admin2"><table>
                             <%
-                            Debug.println("5");    
 	                        	int expiredQuantity = 0;
                             	String productStockBatches = "", expiredProductStockBatches = "";
                             	Iterator e = availableProductStocksVector.iterator();
@@ -323,18 +385,27 @@ Debug.println("1");
 	                        				expiredProductStockBatches+= "£";
 	                        			}
 	                        			
-	                            		out.print("<input onclick='totalStock="+(productStock.getLevel()-expiredQuantity)+";setMaxQuantityValue("+(iMaxQuantity<(productStock.getLevel()-expiredQuantity)?iMaxQuantity:(productStock.getLevel()-expiredQuantity))+");showBatches(false);' type='radio' "+(serviceStock.getUid().equalsIgnoreCase((String)session.getAttribute("activeServiceStockUid"))||availableProductStocks.size()==1?"checked":"")+" name='EditProductStockUid' value='"+productStock.getUid()+"'><font "+((productStock.getLevel()-expiredQuantity)<iMaxQuantity?"color='red'>":">")+serviceStock.getName()+" ("+(productStock.getLevel()-expiredQuantity)+")</font><br/>");
+	                            		out.print("<tr><td><input onclick='totalStock="+(productStock.getLevel()-expiredQuantity)+";setMaxQuantityValue("+(iMaxQuantity<(productStock.getLevel()-expiredQuantity)?iMaxQuantity:(productStock.getLevel()-expiredQuantity))+");showBatches(false);' type='radio' "+(serviceStock.getUid().equalsIgnoreCase((String)session.getAttribute("activeServiceStockUid"))||availableProductStocks.size()==1?"checked":"")+" name='EditProductStockUid' value='"+productStock.getUid()+"'><font "+((productStock.getLevel()-expiredQuantity)<iMaxQuantity?"color='red'>":">")+serviceStock.getName()+" ("+(productStock.getLevel()-expiredQuantity)+")</font></td></tr>");
 										
 	                            		productStockBatches+= productStock.getUid();
 										expiredProductStockBatches+= productStock.getUid();
+										int nProductStockBatches=0,nExpiredBatches=0;
 	                            		for(int n=0; n<batches.size(); n++){
 	                            			Batch batch = (Batch)batches.elementAt(n);
 	                            			if(batch!=null){
 		                            			if(batch.getEnd()==null || !batch.getEnd().before(new java.util.Date()) || MedwanQuery.getInstance().getConfigInt("enableExpiredProductsDistribution",0)>0){
-		                            				productStockBatches+= "$"+batch.getUid()+";"+batch.getBatchNumber()+";"+batch.getLevel()+";"+(batch.getEnd()==null?"":ScreenHelper.stdDateFormat.format(batch.getEnd()))+";"+batch.getComment();
+		                            				if(nProductStockBatches<10){
+		                            					productStockBatches+= "$"+batch.getUid()+";"+batch.getBatchNumber()+";"+batch.getLevel()+";"+(batch.getEnd()==null?"":ScreenHelper.stdDateFormat.format(batch.getEnd()))+";"+batch.getComment();
+		                            					nProductStockBatches++;
+		                            				}
+		                            				else{
+		                            					break;
+		                            				}
 		                            			}
 		                            			else {
-		                            				expiredProductStockBatches+="$"+batch.getUid()+";"+batch.getBatchNumber()+";"+batch.getLevel()+";"+(batch.getEnd()==null?"":ScreenHelper.stdDateFormat.format(batch.getEnd()))+";"+batch.getComment();
+		                            				if(nExpiredBatches<10){
+		                            					expiredProductStockBatches+="$"+batch.getUid()+";"+batch.getBatchNumber()+";"+batch.getLevel()+";"+(batch.getEnd()==null?"":ScreenHelper.stdDateFormat.format(batch.getEnd()))+";"+batch.getComment();
+		                            				}
 		                            				expiredQuantity+= batch.getLevel();
 		                            			}
 	                            			}
@@ -346,17 +417,27 @@ Debug.println("1");
                             	out.print("<script>var expiredbatches='"+expiredProductStockBatches+"';</script>");
                             	out.print("<script>var expiredquantity="+expiredQuantity+";</script>");
                             %>
+                            </table>
                         </td>
                     </tr>
                     
                     <%-- BATCH --%>
                     <tr>
-                        <td class="admin"><%=getTran("Web","batch",sWebLanguage)%>&nbsp;*</td>
+                        <td class="admin"><%=getTran("Web","batch",sWebLanguage)%>&nbsp;*
+                        <%
+                        	if(MedwanQuery.getInstance().getConfigString("edition").equalsIgnoreCase("bloodbank")){
+                        %>
+                        	<img src="<c:url value="/_img/icons/icon_person.png"/>" onclick="searchPatientBatches('batchPatientUid')" onmouseout='this.style.cursor = "default";' onmouseover='this.style.cursor = "pointer";'/>
+                        	<img src="<c:url value="/_img/icons/icon_default.gif"/>" onclick="searchPatientBatches('')" onmouseout='this.style.cursor = "default";' onmouseover='this.style.cursor = "pointer";'/>
+                        	<input type='hidden' name='batchPatientUid' id='batchPatientUid'/>
+                        <%
+                        	}
+                        %>
+                        </td>
                         <td class="admin2"><div id="batch" name="batch"/></td>
                     </tr>
                     
 					<%
-					Debug.println("6");    
 						if(prescription==null){
 							%>
 			                    <%-- DESCRIPTION --%>
@@ -385,7 +466,6 @@ Debug.println("1");
                     </tr>
                     
 					<%
-					Debug.println("7");    
 						if(prescription==null){
 							%>			                    
 			                    <%-- DOCUMENT --%>
@@ -454,7 +534,7 @@ Debug.println("1");
 			                    <tr id='prescriptionline'>
 			                        <td class="admin" width="20%"><%=getTran("Web","prescriptionid",sWebLanguage)%></td>
 			                        <td class="admin2">
-			                            <input class="text" type="text" name="EditPrescriptionUid" size="10" maxLength="10" value="<%=sEditPrescriptionUid%>" <%=(sAction.equals("showDetails")?"READONLY":"")%>>
+			                            <input class="text" type="text" name="EditPrescriptionUid" size="60" maxLength="60" value="<%=sEditPrescriptionUid%>" <%=(sAction.equals("showDetails")?"READONLY":"")%>>
 			                        </td>
 			                    </tr>	                    
 			                <%
@@ -842,9 +922,33 @@ Debug.println("1");
 
   <%-- popup : search doctor --%>
   function searchDoctor(doctorUidField,doctorNameField){
-    openPopup("/_common/search/searchUser.jsp&ts=<%=getTs()%>&ReturnUserID="+doctorUidField+"&ReturnName="+doctorNameField+"&displayImmatNew=no");
+	    openPopup("/_common/search/searchUser.jsp&ts=<%=getTs()%>&ReturnUserID="+doctorUidField+"&ReturnName="+doctorNameField+"&displayImmatNew=no");
+	  }
+
+  function searchPatientBatches(patientUidField){
+	 if(patientUidField && patientUidField.length>0){
+		 openPopup("/_common/search/searchPatient.jsp&ts=<%=getTs()%>&ReturnPersonID="+patientUidField+"&ReturnFunction=findPatientBatches()&displayImmatNew=no&isUser=no");
+	 }
+	 else {
+		 document.getElementById("batchPatientUid").value="";
+		 findPatientBatches();
+	 }
   }
 
+  function findPatientBatches(){
+      var params = 'personid='+document.getElementById("batchPatientUid").value+"&productstockuid=<%=sEditProductStockUid%>";
+      var url = '<c:url value="/pharmacy/getPatientBatches.jsp"/>?ts='+new Date();
+      new Ajax.Request(url,{
+	  	method: "GET",
+        parameters: params,
+        onSuccess: function(resp){
+          var label = eval('('+resp.responseText+')');
+          batches = label.batches;
+          showBatches(false);
+        }
+      });
+  }
+  
   <%-- popup : search document --%>
   function searchDocument(documentUidField,documentUidTextField){
 	<%
@@ -882,7 +986,7 @@ Debug.println("1");
   <%-- SHOW BATCHES --%>
   function showBatches(expired){
 	var remainingQuantity = totalStock;
-    var ih = "";
+    var ih = "<table>";
     var productStockUid = "";
 	if(transactionForm.EditProductStockUid.checked){
 	  productStockUid = transactionForm.EditProductStockUid.value;
@@ -903,7 +1007,7 @@ Debug.println("1");
 		if(c[0]==productStockUid){
 	  	  for(q=1; q<c.length; q++){
   		    var d = c[q].split(";");
-			ih+= "<input onclick='setMaxQuantityValue("+d[2]+");' type='radio' name='EditBatchUid' value='"+d[0]+"' ";
+			ih+= "<tr><td><input onclick='setMaxQuantityValue("+d[2]+");' type='radio' name='EditBatchUid' value='"+d[0]+"' ";
 			if(q==1){
 			  bFound = true;
 			  ih+= "checked";
@@ -913,7 +1017,7 @@ Debug.println("1");
 			  ih+= " />"+d[1]+" (<font color='red'><b>"+d[2]+"</b></font> - exp. "+d[3]+") <i>"+d[4]+"</i><br/>";
 			}
 			else{
-			  ih+= " />"+d[1]+" ("+d[2]+" - exp. "+d[3]+") <i>"+d[4]+"</i><br/>";
+			  ih+= " />"+d[1]+" ("+d[2]+" - exp. "+d[3]+") <i>"+d[4]+"</i></td></tr>";
 			}
 			remainingQuantity-= d[2];
 		  }
@@ -921,8 +1025,11 @@ Debug.println("1");
       } 
 	  remainingQuantity-= expiredquantity;
 	  
+	  if(document.getElementById("batchPatientUid") && document.getElementById("batchPatientUid").value.length>0){
+		  remainingQuantity=0;
+	  }
 	  if(remainingQuantity > 0){
-	    ih+= "<input onclick='setMaxQuantityValue("+remainingQuantity+");' type='radio' name='EditBatchUid' value=''";
+	    ih+= "<tr><td><input onclick='setMaxQuantityValue("+remainingQuantity+");' type='radio' name='EditBatchUid' value=''";
 		if(!bFound){
 	      ih+= "checked";
 		  setMaxQuantityValue(remainingQuantity);
@@ -948,7 +1055,7 @@ Debug.println("1");
 			  ih+=" />"+d[1]+" (<font color='red'><b>"+d[2]+"</b></font> - exp. "+d[3]+") <i>"+d[4]+"</i><br/>";
 			}
 			else{
-			  ih+=" />"+d[1]+" ("+d[2]+" - exp. "+d[3]+") <i>"+d[4]+"</i><br/>";
+			  ih+=" />"+d[1]+" ("+d[2]+" - exp. "+d[3]+") <i>"+d[4]+"</i></td></tr>";
 			}
 			
 			remainingQuantity-= d[2];
@@ -956,7 +1063,7 @@ Debug.println("1");
 		}
 	  } 
     }
-	
+	ih+="</table>"
     document.getElementById("batch").innerHTML = ih;
   }
 

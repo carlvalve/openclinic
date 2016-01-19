@@ -49,5 +49,6 @@
 %>
 
 {
-  "msg":"<%=HTMLEntities.htmlentities(getTranNoLink("web","dataSaved",sWebLanguage))%>"
+  "msg":"<%=HTMLEntities.htmlentities(getTranNoLink("web","dataSaved",sWebLanguage))%>",
+  "screenuid":"<%=screen.getUid()%>"
 }

@@ -101,17 +101,25 @@
 <%=ScreenHelper.contextFooter(request)%>
     
 <script>
-  listSavedScreens();
- 
   <%-- LIST SAVED SCREENS --%>
-  function listSavedScreens(){
+  function listSavedScreens(screenuid){
     document.getElementById("savedScreensDiv").innerHTML = "<img src='<%=sCONTEXTPATH%>/_img/themes/<%=sUserTheme%>/ajax-loader.gif'/>&nbsp;&nbsp;Loading..";
     var url = "<c:url value='/system/ajax/screenDesigner/listSavedScreens.jsp'/>?ts="+new Date().getTime();
     new Ajax.Request(url,{
       method: "GET",
       onSuccess: function(resp){
         document.getElementById("savedScreensDiv").innerHTML = trim(resp.responseText);
+        if(screenuid && screenuid.length>0){
+        	var options = editForm.ScreenUID.options;
+        	for(n=0;n<options.length;n++){
+        		if(options[n].value==screenuid){
+        			options[n].selected=true;
+        			break;
+        		}
+        	}
+        }
         editForm.ScreenUID.focus();
+        fetchScreen();
       },
       onFailure: function(resp){
         alert(resp.responseText); ///
@@ -185,7 +193,7 @@
       });
     }
   }
-     
+//OK     
   <%-- OK TO SWITCH SCREENS --%>
   function okToSwitchScreens(){
     var okToSwitchScreens = true;
@@ -267,7 +275,7 @@
           clearForm();  
           document.getElementById("msgDiv").innerHTML = data.msg;
           document.getElementById("tranTypeDiv").innerHTML = "";
-          listSavedScreens(); <%-- to update name of screen when name changed --%>
+          listSavedScreens(data.screenuid); <%-- to update name of screen when name changed --%>
         },
         onFailure: function(){
           alert(resp.responseText); ///
@@ -290,7 +298,7 @@
       }
     }
   }
-  
+//OK  
   <%-- FOCUS FIRST EMPTY LANGUAGE --%>
   function focusFirstEmptyLanguage(){
     var labelInputs = document.getElementsByTagName("input");
@@ -419,7 +427,7 @@
       } 
     }); 
   }
-  
+//OK  
   <%-- MOVE ROW --%>
   function moveRow(directionAndStep,rowId){
     editForm.performedAction.value = "moveRow";
@@ -549,14 +557,14 @@
 	  }
 	}
   }
-  
+//OK  
   <%-- STORE CELL --%>
   function storeCell(sCellID){
     var okToSave = true;
     
     <%-- ask to add un-added item before saving cell --%>
     if(addRowContainsData()){
-      if(window.showModalDialog?yesnoDialog("web.manage","addEditedRecord"):yesnoDialogDirectText('<%=getTran("web.manage","addEditedRecord",sWebLanguage)%>')){
+      if(window.showModalDialog?yesnoDialog("web.manage","addEditedRecord"):yesnoDialogDirectText('<%=getTranNoLink("web.manage","addEditedRecord",sWebLanguage)%>')){
         okToSave = (addItem()==true);
       }
     }  
@@ -577,7 +585,7 @@
                      "&Class="+cellForm.EditClass.value+
                      "&TranTypeId="+cellForm.EditTranTypeId.value; // common for all items
         new Ajax.Request(url,{
-          method: "GET",
+          method: "POST",
           parameters: params,
           onSuccess: function(resp){ 
             var data = eval("("+resp.responseText+")");
@@ -596,7 +604,7 @@
       }
     }
   }
-  
+//NOK  
   <%-- CONCAT ITEMS --%>
   function concatItems(){
     var sItems = "";
@@ -605,24 +613,22 @@
     for(var i=2; i<itemsTable.rows.length; i++){ // 2 : skip header and add-row
       row = itemsTable.rows[i];    
       
-      sItems+= row.cells[1].innerHTML+"£"+ // itemTypeId
-		       row.cells[2].innerHTML+"£"+ // htmlElement-type
-		       row.cells[3].innerHTML+"£"+ // size
-               row.cells[4].innerHTML+"£"+ // defaultValue
-               (row.cells[5].innerHTML.indexOf("/check.gif")>-1?"true":"false")+"£"+ // required
-               row.cells[6].innerHTML+"£"; // followedBy
+      sItems+= row.cells[1].innerHTML+"^"+ // itemTypeId
+		       row.cells[2].innerHTML+"^"+ // htmlElement-type
+		       row.cells[3].innerHTML+"^"+ // size
+		       encodeURIComponent(row.cells[4].innerHTML)+"^"+ // defaultValue
+               (row.cells[5].innerHTML.indexOf("/check.gif")>-1?"true":"false")+"^"+ // required
+               row.cells[6].innerHTML+"^"; // followedBy
       
       // add print-labels
       if(row.cells[7].text){
-        sItems+= row.cells[7].text;
+        sItems+= encodeURIComponent(row.cells[7].text);
       }
-               
       sItems+= "$"; // end with dollar
     }
-    
     return sItems;
   }
-  
+//NOK  
   <%-- CONCAT PRINT-LABELS --%>
   function concatPrintlabels(){
     var sPrintlabels = "";
@@ -631,7 +637,7 @@
 	for(var i=0; i<inputFields.length; i++){ 
   	  if(inputFields[i].name && inputFields[i].name.startsWith("printLabel_")){
   		var lang = inputFields[i].name.substring(inputFields[i].name.indexOf("_")+1);
-  		sPrintlabels+= lang+"_"+inputFields[i].value+"§";
+  		sPrintlabels+= lang+"_"+inputFields[i].value+";";
   	  }
 	}
         
@@ -648,7 +654,7 @@
     var row = document.getElementById(rowId);
     row.parentNode.removeChild(row);
   }
-  
+//NOK  
   <%-- EDIT ITEM --%>
   function editItem(rowId){
     var row = document.getElementById(rowId);
@@ -695,7 +701,7 @@
       clearPrintlabels();
     }
   }
-  
+//NOK  
   <%-- FETCH PRINT-LABELS FOR ITEM --%>
   function fetchPrintlabelsForItem(cellId,itemTypeId){
     var url = "<c:url value='/system/ajax/screenDesigner/fetchPrintLabelsForItem.jsp'/>?ts="+new Date().getTime();
@@ -984,6 +990,8 @@
       integerField.focus();
     }
   }
+  listSavedScreens();
+
 </script>
 
 <%=writeJSButtons("editForm","saveButton")%>

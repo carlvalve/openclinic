@@ -1,4 +1,4 @@
-<%@page import="be.openclinic.finance.Balance"%>
+<%@page import="be.openclinic.finance.*"%>
 <%@ page import="be.openclinic.adt.Planning,be.dpms.medwan.common.model.vo.occupationalmedicine.ExaminationVO" %>
 <%@ page import="java.util.*" %>
 <%@ page import="be.mxs.common.util.system.HTMLEntities" %>
@@ -128,6 +128,7 @@
 	            String sEditContactType = checkString(request.getParameter("EditContactType"));
 	            String sEditContactUID = checkString(request.getParameter("EditContactUID"));
 	            String sEditDescription = checkString(request.getParameter("EditDescription"));
+	            String sEditComment = checkString(request.getParameter("EditComment"));
 	            String sEditContext = checkString(request.getParameter("EditContext"));
 	            String tempplanninguid = checkString(request.getParameter("tempplanninguid"));
 	            String sEditRepeatUntil = checkString(request.getParameter("appointmentRepeatUntil"));
@@ -164,6 +165,7 @@
 	            orContact.setObjectUid(sEditContactUID);
 	            planning.setContact(orContact);
 	            planning.setDescription(sEditDescription);
+	            planning.setComment(sEditComment);
 	            planning.setTempPlanningUid(tempplanninguid);
 	            planning.setServiceUid(sFindServiceUID);
 	            boolean bError=false;
@@ -431,6 +433,42 @@
     <%}%>
     <tr>
         <td class='admin'><%=getTran("web","prestation",sWebLanguage)%></td>
+		<% 	if(MedwanQuery.getInstance().getConfigInt("enableCCBRT",0)==1){ %>
+        <td class='admin2'>
+            <%
+                ObjectReference orContact = planning.getContact();
+                if(orContact==null){
+                    orContact = new ObjectReference();
+                }
+            %>
+            <input type='hidden' name='EditContactType' id='ContactPrestation' value='prestation'/>
+            <input type="hidden" id="EditEffectiveDateTime" value="" />
+            <input type="hidden" id="EditCancelationDateTime" value="" />
+            <input type="hidden" id="EditContactName" name="EditContactName" value="" />
+            <select class='text' id="EditContactUID" name="EditContactUID">
+            	<option/>
+            	<%
+            		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+            		PreparedStatement ps = conn.prepareStatement("select * from OC_PRESTATIONS where OC_PRESTATION_INVOICEGROUP in ('"+MedwanQuery.getInstance().getConfigString("ccbrtProcedureGroup","sl 001 003")+"') ORDER BY OC_PRESTATION_CODE");
+            		ResultSet rs = ps.executeQuery();
+            		while(rs.next()){
+						String uid=rs.getString("OC_PRESTATION_SERVERID")+"."+rs.getString("OC_PRESTATION_OBJECTID");
+						String descr=checkString(rs.getString("OC_PRESTATION_DESCRIPTION")).toUpperCase();
+						if(descr.length()>40){
+							descr=descr.substring(0,40);
+						}
+						out.println("<option value='"+uid+"' "+(uid.equalsIgnoreCase(orContact.getObjectUid())?"selected":"")+">"+(checkString(rs.getString("OC_PRESTATION_CODE"))+" -          ").substring(0,10)+""+descr+"</option>");
+            		}
+            		rs.close();
+            		ps.close();
+            		conn.close();
+				%>
+            </select>
+        </td>
+		<%
+			}
+			else {
+		%>
         <td class='admin2'>
             <%
                 String sEditCheckProduct = "", sEditCheckExamination = "", sEditContactName = "";
@@ -467,6 +505,9 @@
             <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchPrestation('EditContactUID','EditContactName');">
             <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="$('EditContactUID').clear();$('EditContactName').clear();">
         </td>
+        <%
+			}
+        %>
     </tr>
     <tr>
         <td class='admin'><%=getTran("planning","resource",sWebLanguage)%></td>
@@ -520,6 +561,10 @@
     <tr>
         <td class='admin'><%=HTMLEntities.htmlentities(getTran("planning","description",sWebLanguage))%></td>
         <td class='admin2'><%=writeTextarea("EditDescription","","","",HTMLEntities.htmlentities(checkString(planning.getDescription())))%></td>
+    </tr>
+    <tr>
+        <td class='admin'><%=HTMLEntities.htmlentities(getTran("planning","remark",sWebLanguage))%></td>
+        <td class='admin2'><%=writeTextarea("EditComment","","","",HTMLEntities.htmlentities(checkString(planning.getComment())))%></td>
     </tr>
     <%
     	if(sFindPlanningUID.length()==0){

@@ -18,19 +18,19 @@
         PatientInvoice invoice = PatientInvoice.get(sInvoiceUid);
         sProject = checkString((String)session.getAttribute("activeProjectTitle")).toLowerCase();
         PDFInvoiceGenerator pdfGenerator;
-        if(sPrintModel.equalsIgnoreCase("ctams")){
+        if(!sProforma.equalsIgnoreCase("debetnote") && sPrintModel.equalsIgnoreCase("ctams")){
         	pdfGenerator = new PDFPatientInvoiceGeneratorCTAMS(activeUser,invoice.getPatient(),sProject,sPrintLanguage,sProforma);
         }
-        else if(sPrintModel.equalsIgnoreCase("cmck")){
+        else if(!sProforma.equalsIgnoreCase("debetnote") && sPrintModel.equalsIgnoreCase("cmck")){
         	pdfGenerator = new PDFPatientInvoiceGeneratorCMCK(activeUser,invoice.getPatient(),sProject,sPrintLanguage,sProforma);
         }
-        else if(sPrintModel.equalsIgnoreCase("hmk")){
+        else if(!sProforma.equalsIgnoreCase("debetnote") && sPrintModel.equalsIgnoreCase("hmk")){
         	pdfGenerator = new PDFPatientInvoiceGeneratorHMK(activeUser,invoice.getPatient(),sProject,sPrintLanguage,sProforma);
         }
-        else if(sPrintModel.equalsIgnoreCase("mfp")){
+        else if(!sProforma.equalsIgnoreCase("debetnote") && sPrintModel.equalsIgnoreCase("mfp")){
         	pdfGenerator = new PDFPatientInvoiceGeneratorMFP(activeUser,invoice.getPatient(),sProject,sPrintLanguage,sProforma);
         }
-        else if(sPrintModel.equalsIgnoreCase("mfppharma")){
+        else if(!sProforma.equalsIgnoreCase("debetnote") && sPrintModel.equalsIgnoreCase("mfppharma")){
         	pdfGenerator = new PDFPatientInvoiceGeneratorMFPPharma(activeUser,invoice.getPatient(),sProject,sPrintLanguage,sProforma);
         }
         else {

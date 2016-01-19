@@ -7,7 +7,7 @@ HashSet patients = new HashSet();
 HashSet studies = new HashSet();
 HashSet errors = new HashSet();
 
-   String SCANDIR_BASE = MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_basePath","c:/projects/openclinicnew/web/scan");
+   String SCANDIR_BASE = MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_basePath","/var/tomcat/webapps/openclinic/scan");
    Debug.println("SCANDIR_BASE="+SCANDIR_BASE);
    boolean isMultipart = ServletFileUpload.isMultipartContent(request);
    if (!isMultipart) {

@@ -256,5 +256,15 @@
   	<Query id='QUERY.removelabelerror' db='openclinic' date='22/11/2015' dbserver='Microsoft SQL Server'>
 		update OC_LABELS set OC_LABEL_VALUE=replace(OC_LABEL_VALUE,'&lt;:b&gt;','&lt;/b&gt;');
   	</Query>	
+  	<Query id='QUERY.updatescreenstable' db='openclinic' date='17/01/2016' dbserver='Microsoft SQL Server'>
+		alter table oc_screens drop column oc_screen_xmldata;
+		alter table oc_screens add oc_screen_xmldata text null;
+		alter table oc_screens_history drop column oc_screen_xmldata;
+		alter table oc_screens_history add oc_screen_xmldata text null;
+  	</Query>	
+  	<Query id='QUERY.updatescreenstable' db='openclinic' date='17/01/2016' dbserver='MySQL'>
+		alter table oc_screens modify column oc_screen_xmldata text;
+		alter table oc_screens_history modify column oc_screen_xmldata text;
+  	</Query>	
   	
 </Queries>

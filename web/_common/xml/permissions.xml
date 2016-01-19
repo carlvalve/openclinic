@@ -86,6 +86,8 @@
         <permission type="examination" id="1114">occup.ccbrt.poregistry</permission>
         <permission type="examination" id="1115">occup.ccbrt.physioregistry</permission>
         <permission type="examination" id="1116">occup.patientcreditrequest</permission>
+        <permission type="examination" id="1117">occup.cnts.bloodgift</permission>
+        <permission type="examination" id="1118">occup.cntslab</permission>
     </application>
     <application type="Web" id="newexaminations">
         <permission type="web" id="globalexaminations">examinations.global</permission>

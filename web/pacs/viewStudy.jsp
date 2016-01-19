@@ -3,7 +3,7 @@
     // prepare response
     response.setHeader("Cache-Control", "max-age=30");
     response.setContentType("application/x-java-jnlp-file");
-    response.setHeader("Content-disposition", "inline; filename=Weasis.jnlp");
+    response.setHeader("Content-disposition", "inline; filename="+MedwanQuery.getInstance().getConfigString("weasisJnlpFile","Weasis.jnlp"));
     String server=(request.getProtocol().toLowerCase().startsWith("https")?"https":"http")+"://"+ request.getServerName()+":"+request.getServerPort();
 	//assemble filelist
     StringBuffer filelist=new StringBuffer();
@@ -20,9 +20,8 @@
 	ps.close();
 	conn.close();
 %>
-
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE jnlp PUBLIC "-//Sun Microsystems, Inc//DTD JNLP Descriptor 6.0//EN" "http://java.sun.com/dtd/JNLP-6.0.dtd">
+<!DOCTYPE jnlp PUBLIC "-//Sun Microsystems, Inc//DTD JNLP Descriptor 6.0//EN" "<%=MedwanQuery.getInstance().getConfigString("templateSource")%>JNLP-6.0.dtd">
   <jnlp spec="1.6+" codebase="<%=server%>/weasis" href="">
   <information>
     <title>Weasis</title>

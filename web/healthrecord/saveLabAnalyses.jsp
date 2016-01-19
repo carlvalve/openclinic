@@ -7,9 +7,15 @@
 <%
     // delete all labanalysis in the specified LabRequest, then insert all analysis to be saved
     String sServerId          = checkString(request.getParameter("serverId")),
+           sObjectId          = checkString(request.getParameter("objectId")),
            sTransactionId     = checkString(request.getParameter("transactionId")),
            sLabAnalysesToSave = checkString(request.getParameter("labAnalysesToSave")),
            sSavedLabAnalyses  = checkString(request.getParameter("savedLabAnalyses"));
+	int nObjectId=-1;
+	try{
+		nObjectId=Integer.parseInt(sObjectId);
+	}
+	catch(Exception e){}
 
     /*
     Debug.println("// DEBUG ////////////////////////////////////////////////");
@@ -94,6 +100,7 @@
         	if(a!=null && MedwanQuery.getInstance().getConfigString("virtualLabAnalysisEditors","virtual").indexOf(a.getEditor())<0){    
 	            labAnalysis = new RequestedLabAnalysis();
 	            labAnalysis.setServerId(sServerId);
+	            labAnalysis.setObjectid(nObjectId);
 	            labAnalysis.setTransactionId(sTransactionId);
 	            labAnalysis.setAnalysisCode(analysisCode);
 	            labAnalysis.setComment(comment);

@@ -323,7 +323,43 @@
             <textarea id="remark" onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_LAB_REMARK")%> class="text" cols="80" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_LAB_REMARK" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_LAB_REMARK" property="value"/></textarea>
         </td>
     </tr>
-
+	<%
+		if(MedwanQuery.getInstance().getConfigString("edition").equalsIgnoreCase("bloodbank")){
+	%>
+	    <%-- Bloodgift reference --%>
+	    <%
+	        ItemVO item = ((TransactionVO)transaction).getItem(sPREFIX+"ITEM_TYPE_LAB_OBJECTID");
+	        String sObjectId = "";
+	        if(item!=null) sObjectId = item.getValue();
+	    %>
+	    <tr>
+	        <td class="admin"><%=getTran("Web.Occup","bloodgiftreference",sWebLanguage)%></td>
+	        <td class="admin2">
+	            <select class="text" id="cntsobjectid" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_LAB_OBJECTID" property="itemId"/>]>.value">
+	                <option/>
+	                <%
+	                	//Find all existing bloodgifts with expirydate in the future
+	                	Vector bloodgifts = MedwanQuery.getInstance().getTransactionsByType(Integer.parseInt(activePatient.personid), "be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CNTS_BLOODGIFT");
+	                	for(int n=0;n<bloodgifts.size();n++){
+	                		TransactionVO bloodgift = (TransactionVO)bloodgifts.elementAt(n);
+	                		String expirydate=bloodgift.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTS_EXPIRYDATE");
+	                		if(expirydate.length()==10){
+	                			try{
+	                				java.util.Date expdate = ScreenHelper.parseDate(expirydate);
+	                				if(expdate.after(new java.util.Date())){
+	                					out.println("<option value='"+bloodgift.getTransactionId()+"' "+(sObjectId.equalsIgnoreCase(bloodgift.getTransactionId()+"")?"selected":"")+">"+bloodgift.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTS_RECEPTIONDATE")+" (ID: "+bloodgift.getTransactionId()+")");
+	                				}
+	                			}
+	                			catch(Exception e){}
+	                		}
+	                	}
+	                %>
+	            </select>
+	        </td>
+	    </tr>
+	<%
+		}
+	%>
     <%-- URGENCY --%>
     <%
         ItemVO item = ((TransactionVO)transaction).getItem(sPREFIX+"ITEM_TYPE_LAB_URGENCY");
@@ -398,8 +434,8 @@
                     }
 
                     %>
-                        <button accesskey="<%=ScreenHelper.getAccessKey(getTranNoLink("accesskey","save",sWebLanguage))%>" class="buttoninvisible" onclick="doSave(false);"></button>
-                        <button class="button" name="saveButton" id="saveButton" onclick="doSave(false);"><%=getTran("accesskey","save",sWebLanguage)%></button>
+                        <input type='button' accesskey="<%=ScreenHelper.getAccessKey(getTranNoLink("accesskey","save",sWebLanguage))%>" style='display: none' onclick="doSave(false);"/>
+                        <input type='button' class="button" name="labSaveButton" id="labSaveButton" onclick="doSave(false);" value='<%=getTran("accesskey","save",sWebLanguage)%>'/>
                         <input class="button" type="button" name="printLabelsButton" value="<%=getTranNoLink("Web","saveandprintlabels",sWebLanguage)%>" onclick="doSave(true)"/>&nbsp;
                     <%
                 }
@@ -476,7 +512,7 @@
 
     window.location.href = "<%=sCONTEXTPATH%>/healthrecord/createOfficialPdf.jsp?tranAndServerID_1="+tranID+"_"+serverID+"&PrintLanguage="+printLang+"&ts=<%=getTs()%>";
 
-    window.opener.document.transactionForm.saveButton.disabled = false;
+    window.opener.document.transactionForm.labSaveButton.disabled = false;
     window.opener.document.transactionForm.SaveAndPrint.disabled = false;
     window.opener.bSaveHasNotChanged = true;
     window.opener.location.reload();
@@ -491,7 +527,7 @@
 
   <%-- DO SAVE --%>
   function doSave(printDocument){
-    if(tblLA.rows.length > 1){
+	if(tblLA.rows.length > 1){
       if(printDocument==true){
         document.getElementsByName('exitmessage')[0].value='printlabels';
       }
@@ -542,7 +578,25 @@
       sTmpEnd = sTmpBegin.substring(sTmpBegin.indexOf("=")+1);
       sLA = sLA.substring(0,sLA.indexOf("rowLA"))+sTmpEnd;
     }
-
+	<%
+	if(MedwanQuery.getInstance().getConfigString("edition").equalsIgnoreCase("bloodbank")){
+	%>
+	
+	    if(document.getElementById("cntsobjectid").value.length==0){
+		    var donorCode='<%=MedwanQuery.getInstance().getConfigString("cntsDonorCode","9999")%>';
+		    var testLA=sLA.split("$");
+			for(n=0;n<testLA.length;n++){
+				if(testLA[n].replace('£','')==donorCode){
+					alert('<%=getTranNoLink("Web.Occup","bloodgiftreference",sWebLanguage)%> <%=getTranNoLink("web","ismandatory",sWebLanguage)%>');
+					document.getElementById("cntsobjectid").focus;
+					return;
+				}
+			}
+	    }
+	
+	<%
+	}
+	%>
     <%-- remove row id --%>
     while(sLASaved.indexOf("rowLA") > -1){
       sTmpBegin = sLASaved.substring(sLASaved.indexOf("rowLA"));
@@ -553,7 +607,11 @@
     <%-- set the forward key --%>
     if(sLASaved != sLA){
       <%-- when some labanalyses were removed or added, update the transaction and reload this page in order to save the labanalyses --%>
-      document.getElementsByName('be.mxs.healthrecord.updateTransaction.actionForwardKey')[0].value = "<c:url value='../healthrecord/saveLabAnalyses.do'/>?ForwardUpdateTransactionId&labAnalysesToSave="+sLA+"&savedLabAnalyses="+sLASaved+"&patientId=<%=activePatient.personid%>&userId=<%=activeUser.userid%>&ts=<%=getTs()%>";
+      var objectid='';
+      if(document.getElementById("cntsobjectid")){
+    	  objectid=document.getElementById("cntsobjectid").value;
+      }
+      document.getElementsByName('be.mxs.healthrecord.updateTransaction.actionForwardKey')[0].value = "<c:url value='../healthrecord/saveLabAnalyses.do'/>?ForwardUpdateTransactionId&labAnalysesToSave="+sLA+"&savedLabAnalyses="+sLASaved+"&patientId=<%=activePatient.personid%>&userId=<%=activeUser.userid%>&ts=<%=getTs()%>&objectId="+objectid;
     }
     else{
       <%-- when no labanalyses were removed or added, update the transaction and go to the consultation-overview --%>

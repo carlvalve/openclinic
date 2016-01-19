@@ -10,7 +10,6 @@
     +writeTblChild("main.do?Page=userprofile/changetimeout.jsp",getTran("Web.UserProfile","Change",sWebLanguage)+" "+getTran("Web.UserProfile","timeout",sWebLanguage).toLowerCase(),rowIdx++)
     +writeTblChild("main.do?Page=userprofile/changeservice.jsp",getTran("Web.UserProfile","ChangeService",sWebLanguage),rowIdx++)
     +writeTblChild("main.do?Page=userprofile/changelanguage.jsp",getTran("Web.UserProfile","ChangeLanguage",sWebLanguage),rowIdx++)
-    //+writeTblChild("main.do?Page=userprofile/manageExaminations.jsp",getTranNoLink("Web.UserProfile","ManageExaminations",sWebLanguage),rowIdx++)
     +writeTblChild("main.do?Page=userprofile/managePlanning.jsp",getTranNoLink("Web.UserProfile","ManagePlanning",sWebLanguage),rowIdx++)
     +writeTblChild("main.do?Page=system/manageQuickList.jsp&UserQuickList=1",getTran("Web.UserProfile","ManageQuickList",sWebLanguage),rowIdx++)
     +writeTblChild("main.do?Page=system/manageQuickLabList.jsp&UserQuickLabList=1",getTran("Web.UserProfile","ManageQuickLabList",sWebLanguage),rowIdx++)

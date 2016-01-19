@@ -1,4 +1,4 @@
-<%@page import="be.openclinic.reporting.*,java.io.*,org.apache.commons.fileupload.servlet.*,org.apache.commons.fileupload.disk.*,org.apache.commons.fileupload.*"%>
+<%@page import="org.dom4j.tree.*, be.openclinic.reporting.*,java.io.*,org.apache.commons.fileupload.servlet.*,org.apache.commons.fileupload.disk.*,org.apache.commons.fileupload.*"%>
 <%@include file="/includes/validateUser.jsp"%>
 <%@page errorPage="/includes/error.jsp"%>
 
@@ -99,24 +99,31 @@ Element getElement(Element element, String elementname, String attributename,Str
 		}
 		report.setInputxml(sReportInputXml);
 		if(sReportXml.length()>0){
-			System.out.println("ReportXML="+sReportInputXml+"*");
 			report.setReportxml(sReportXml);
 		}
 		if(checkString(report.getReportxml()).length()>0){
 		    SAXReader reader = new SAXReader(false);
 			BufferedReader br = new BufferedReader(new StringReader(report.getReportxml()));
-			System.out.println("ReportXML 2="+report.getReportxml()+"*");
 			Document document = reader.read(br);
 			Element root = document.getRootElement();
 			if(sReportMakeExcelCorrection.equalsIgnoreCase("1")){
 				Element e = getElement(root, "property", "name","net.sf.jasperreports.export.xls.exclude.origin.keep.first.band.1");
 				if(e==null){
-					Element newElement = root.addElement("property");
+					DefaultElement newElement = new DefaultElement("property",root.getNamespace());
 					newElement.addAttribute("name", "net.sf.jasperreports.export.xls.exclude.origin.keep.first.band.1");
 					newElement.addAttribute("value", "columnHeader");
-					newElement = root.addElement("property");
+				    List content = document.getRootElement().content();
+				    if (content != null ) {
+				        content.add(0, newElement);
+				    }
+					
+				    newElement = new DefaultElement("property",root.getNamespace());
 					newElement.addAttribute("name", "net.sf.jasperreports.export.xls.exclude.origin.keep.first.band.2");
 					newElement.addAttribute("value", "pageHeader");
+				    content = document.getRootElement().content();
+				    if (content != null ) {
+				        content.add(0, newElement);
+				    }
 				}
 			}
 			else {
@@ -129,7 +136,6 @@ Element getElement(Element element, String elementname, String attributename,Str
 					root.remove(e);
 				}
 			}
-			System.out.println("ReportXML 3="+document.asXML()+"*");
 			report.setReportxml(document.asXML());
 		}
 		report.store();

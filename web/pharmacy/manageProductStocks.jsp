@@ -1,7 +1,4 @@
-<%@page import="be.openclinic.pharmacy.ServiceStock,
-                be.openclinic.pharmacy.Product,
-                be.openclinic.pharmacy.ProductStock,
-                be.openclinic.pharmacy.ProductStockOperation,
+<%@page import="be.openclinic.pharmacy.*,
                 be.openclinic.medical.Prescription,
                 java.util.Vector,be.mxs.common.util.system.*,
                 be.openclinic.pharmacy.ProductOrder"%>
@@ -1272,7 +1269,7 @@ public double getLastYearsAveragePrice(Product product){
       alertDialog("web.manage","insufficientStock");
     }
     else{
-      openPopup("pharmacy/medication/popups/deliverMedicationPopup.jsp&EditProductStockUid="+productStockUid+"&EditProductName="+productName+"&ts=<%=getTs()%>",750,400);
+      openPopup("pharmacy/medication/popups/deliverMedicationPopup.jsp&EditProductStockUid="+productStockUid+"&EditProductName="+encodeURIComponent(productName)+"&ts=<%=getTs()%>",750,400);
     }
   }
 

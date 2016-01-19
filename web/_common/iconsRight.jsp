@@ -232,18 +232,18 @@
                     bBarcode = Barcode.exists(Integer.parseInt(sTmpPersonid));
             
             if(!bFingerPrint){
-                %> <img class="link" onclick="enrollFingerPrint();" border="0" src="<c:url value='/_img/icons/icon_fingerprint_enroll.png'/>" alt="<%=getTranNoLink("web","enrollFingerPrint",sWebLanguage)%>"/><%
+                %> <img class="link" onclick="enrollFingerPrint();" border="0" src="<c:url value='/_img/icons/icon_fingerprint_enroll.png'/>" title="<%=getTranNoLink("web","enrollFingerPrint",sWebLanguage)%>"/><%
             }
             if(!bBarcode){
-                %> <img class="link" onclick="printPatientCard();"  border='0' src="<c:url value='/_img/icons/icon_barcode.gif'/>" alt="<%=getTranNoLink("web","printPatientCard",sWebLanguage)%>"/><%
+                %> <img class="link" onclick="printPatientCard();"  border='0' height='16px' src="<c:url value='/_img/icons/icon_badge.gif'/>" title="<%=getTranNoLink("web","printPatientCard",sWebLanguage)%>"/><%
             }
             if(!bPicture){
-                %> <img class="link" onclick="storePicture();"  border='0' src="<c:url value='/_img/icons/icon_camera.png'/>" alt="<%=getTranNoLink("web","loadPicture",sWebLanguage)%>"/><%
+                %> <img class="link" onclick="storePicture();"  border='0' src="<c:url value='/_img/icons/icon_camera.png'/>" title="<%=getTranNoLink("web","loadPicture",sWebLanguage)%>"/><%
             }
         }
         
         if(activePatient!=null && activePatient.personid!=null && activePatient.personid.length()>0 && MedwanQuery.getInstance().getConfigString("edition").equalsIgnoreCase("openpharmacy")){
-            %><img class="link" onclick="showdrugsoutbarcode();"  border='0' src="<c:url value='/_img/icons/icon_pharma.png'/>" alt="<%=getTranNoLink("web","drugsoutbarcode",sWebLanguage)%>"/><%
+            %><img class="link" onclick="showdrugsoutbarcode();"  border='0' src="<c:url value='/_img/icons/icon_pharma.png'/>" title="<%=getTranNoLink("web","drugsoutbarcode",sWebLanguage)%>"/><%
         }
         %>
         
@@ -293,10 +293,10 @@
             %><img class="link" onclick="clickMenuItem('javascript:showAdminPopup();');" style="padding:2px" title="<%=getTranNoLink("Web","Administration",sWebLanguage)%>" src="<c:url value='/_img/icons/icon_admin.gif'/>"/><%
         }
     
-        %><img class="link" onclick="clickMenuItem('javascript:searchMyHospitalized();');" alt="<%=getTranNoLink("Web","my_hospitalized_patients",sWebLanguage)%>" title="<%=getTranNoLink("Web","my_hospitalized_patients",sWebLanguage)%>" src="<c:url value='/_img/icons/icon_bed.gif'/>"/><%
+        %><img class="link" onclick="clickMenuItem('javascript:searchMyHospitalized();');" title="<%=getTranNoLink("Web","my_hospitalized_patients",sWebLanguage)%>" title="<%=getTranNoLink("Web","my_hospitalized_patients",sWebLanguage)%>" src="<c:url value='/_img/icons/icon_bed.gif'/>"/><%
   
         if(activeUser.getAccessRight("manage.meals.select")){
-            %>&nbsp;<img class="link" onclick="clickMenuItem('<c:url value="/main.do" />?Page=meals/index.jsp&ts='+new Date().getTime());" alt="<%=getTranNoLink("web","meals",sWebLanguage)%>" title="<%=getTranNoLink("web","meals",sWebLanguage)%>" src="<c:url value='/_img/icons/icon_meals.png'/>"/><%
+            %>&nbsp;<img class="link" onclick="clickMenuItem('<c:url value="/main.do" />?Page=meals/index.jsp&ts='+new Date().getTime());" title="<%=getTranNoLink("web","meals",sWebLanguage)%>" title="<%=getTranNoLink("web","meals",sWebLanguage)%>" src="<c:url value='/_img/icons/icon_meals.png'/>"/><%
         }
         
         %>
@@ -307,7 +307,7 @@
         
         String sHelp = MedwanQuery.getInstance().getConfigString("HelpFile");
         if(sHelp.length() > 0){
-            %><img id="ddIconHelp" src="<c:url value='/_img/icons/icon_help.gif'/>" height="16" width="16" border="0" alt="Help" onclick="showmanual();" onmouseover='this.style.cursor="hand"' onmouseout='this.style.cursor="default"'><%
+            %><img id="ddIconHelp" src="<c:url value='/_img/icons/icon_help.gif'/>" height="18" border="0" title="<%=getTranNoLink("Web","help",sWebLanguage)%>" onclick="showmanual();" onmouseover='this.style.cursor="hand"' onmouseout='this.style.cursor="default"'><%
         }
         
         %><img class="link" id="ddIconFingerprint" onclick="readFingerprint();" title="<%=getTranNoLink("Web","Read_fingerprint",sWebLanguage)%>" src="<c:url value='/_img/icons/icon_fingerprint.gif'/>"/><%

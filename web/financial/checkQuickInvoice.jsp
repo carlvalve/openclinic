@@ -9,7 +9,7 @@
     boolean quickInvoicingEnabled = (MedwanQuery.getInstance().getConfigInt("enableQuickInvoicing",0)==1);
     Vector debets = new Vector();
     if(quickInvoicingEnabled){
-    	Debet.getUnassignedPatientDebets(sPersonId);
+    	debets=Debet.getUnassignedPatientDebets(sPersonId);
     }
     
     /// DEBUG /////////////////////////////////////////////////////////////////////////////////////

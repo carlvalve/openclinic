@@ -17,6 +17,9 @@
         else if(sPage.indexOf("patientdata")>-1){
             %><img src="<c:url value="/_img/themes/default/pijl.gif"/>">&nbsp;<%=getTran("Web","Administration",sWebLanguage)%><%
         }
+        else if(sPage.indexOf("config")>-1){
+            %><img src="<c:url value="/_img/themes/default/pijl.gif"/>">&nbsp;<%=getTran("Web","config",sWebLanguage)%><%
+        }
         else if(sPage.indexOf("patientedit")>-1){
             %>
                 <img src="<c:url value="/_img/themes/default/pijl.gif"/>">&nbsp;<a href="#" onMouseOver="window.status='';return true;" onClick="doClick('<c:url value="/patientdata.do"/>?PatientID=<%=sPatientID%>&ts=<%=getTs()%>');"><%=getTran("Web","Administration",sWebLanguage)%></a>

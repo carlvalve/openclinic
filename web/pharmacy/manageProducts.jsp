@@ -811,6 +811,20 @@
                         </td>
                     </tr>
                     
+                    <%if(MedwanQuery.getInstance().getConfigString("edition").equalsIgnoreCase("bloodbank")){ %>
+                    <%-- Bloodgroup --%>
+                    <tr>
+                        <td class="admin" nowrap><%=getTran("Web","bloodgroup",sWebLanguage)%></td>
+                        <td class="admin2">
+                            <select class="text" name="EditAtccode" id="EditAtccode">
+                            	<option/>
+                            	<%=ScreenHelper.writeSelect("abobloodgroup", sSelectedAtccode, sWebLanguage) %>
+                            </select>
+                        </td>
+                    </tr>
+                    <%}
+                      else {
+                    %>
                     <%-- ATCcode --%>
                     <tr>
                         <td class="admin" nowrap><%=getTran("Web","atccode",sWebLanguage)%></td>
@@ -819,7 +833,7 @@
                             <img src='<c:url value="_img/icons/icon_search.gif"/>' onclick='findAtcCodes()'/>
                         </td>
                     </tr>
-                    
+                    <%} %>
                     <%-- RxNorm --%>
                     <%
                     	if(MedwanQuery.getInstance().getConfigInt("enableRxNorm",0)==1){

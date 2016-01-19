@@ -9,24 +9,28 @@
     private void parsePrintlabels(Hashtable itemAttributes, String sPrintlabels){
 	    String sPrintlabel, sLanguage, sLabel;
 	
-	    while(sPrintlabels.length() > 0 && !sPrintlabels.equals("§")){
-	    	if(sPrintlabels.endsWith("§")){
-	    	    sPrintlabel = sPrintlabels.substring(0,sPrintlabels.indexOf("§"));
+	    while(sPrintlabels.length() > 0 && !sPrintlabels.equals(";")){
+	    	if(sPrintlabels.endsWith(";")){
+	    	    sPrintlabel = sPrintlabels.substring(0,sPrintlabels.indexOf(";"));
 	    	}
 	    	else{
 	    		sPrintlabel = sPrintlabels;
 	    	}
-
 	    	// required : language
 	    	sLanguage = sPrintlabel.split("_")[0];
 
 	    	// required : label
-	    	sLabel = sPrintlabel.split("_")[1];
-	    	sLabel = sLabel.substring(0,sLabel.length()-1); // trim-off hyphen
-	    	
+	    	if(sPrintlabel.split("_").length>1){
+		    	sLabel = sPrintlabel.split("_")[1];
+		    	sLabel = sLabel.substring(0,sLabel.length()-1); // trim-off hyphen
+	    	}
+	    	else{
+	    		sLabel="";
+	    	}
+
 	        itemAttributes.put("Attr_printlabel_"+sLanguage,sLabel);
-	    	
-	        sPrintlabels = sPrintlabels.substring(sPrintlabels.indexOf("§")+1);
+
+	        sPrintlabels = sPrintlabels.substring(sPrintlabels.indexOf(";")+1);
 	    }   
     }
 %>
@@ -71,7 +75,7 @@
     if(sItems.length() > 0){
 	    Vector items = new Vector();
 	    ScreenTransactionItem item;
-	    String sItem, sItemTypeId, sHtmlElement, sSize = "", sDefaultValue = "", sAttrValue;
+	    String sItem="", sItemTypeId, sHtmlElement, sSize = "", sDefaultValue = "", sAttrValue;
 	    Hashtable itemAttributes = new Hashtable();
 	    int itemIdx = 0;
 	    
@@ -84,40 +88,39 @@
 	    	}
 	    	
 	    	// required : itemTypeId
-	    	sItemTypeId = sItem.split("£")[0];
-	    	sItemTypeId = sItemTypeId.substring(0,sItemTypeId.length()-1); // trim-off pound
-	    	
+	    	sItemTypeId = sItem.split("\\^")[0];
+	    	sItemTypeId = sItemTypeId.substring(0,sItemTypeId.length()); // trim-off pound
 	    	// required : htmlEmlement
-	    	sHtmlElement = sItem.split("£")[1];
-	    	sHtmlElement = sHtmlElement.substring(0,sHtmlElement.length()-1); // trim-off pound
+	    	sHtmlElement = sItem.split("\\^")[1];
+	    	sHtmlElement = sHtmlElement.substring(0,sHtmlElement.length()); // trim-off pound
 
 	    	// optional : size
-	    	if(sItem.split("£").length > 2){
-	    	    sAttrValue = sItem.split("£")[2];
-	    	    sAttrValue = sAttrValue.substring(0,sAttrValue.length()-1);
+	    	if(sItem.split("\\^").length > 2){
+	    	    sAttrValue = sItem.split("\\^")[2];
+	    	    sAttrValue = sAttrValue.substring(0,sAttrValue.length());
 	    	    
 	    	    if(sAttrValue.length() > 0){
 	    	        itemAttributes.put("Attr_size",sAttrValue);
 	    	    }
 	    	}
-	    	
+
 	    	// optional : defaultValue
-	    	if(sItem.split("£").length > 3){
-	    	    sDefaultValue = sItem.split("£")[3];
-	    	    sDefaultValue = sDefaultValue.substring(0,sDefaultValue.length()-1);
+	    	if(sItem.split("\\^").length > 3){
+	    	    sDefaultValue = sItem.split("\\^")[3];
+	    	    sDefaultValue = sDefaultValue.substring(0,sDefaultValue.length());
 	    	}
-	    	
+
 	    	// optional : required
-	    	if(sItem.split("£").length > 4){
-	    	    sAttrValue = sItem.split("£")[4];
-	    	    sAttrValue = sAttrValue.substring(0,sAttrValue.length()-1);
+	    	if(sItem.split("\\^").length > 4){
+	    	    sAttrValue = sItem.split("\\^")[4];
+	    	    sAttrValue = sAttrValue.substring(0,sAttrValue.length());
 	    	    itemAttributes.put("Attr_required",sAttrValue);
 	    	}
 
 	    	// optional : followedBy
-	    	if(sItem.split("£").length > 5){
-	    		sAttrValue = sItem.split("£")[5];
-	    	    sAttrValue = sAttrValue.substring(0,sAttrValue.length()-1);
+	    	if(sItem.split("\\^").length > 5){
+	    		sAttrValue = sItem.split("\\^")[5];
+	    	    sAttrValue = sAttrValue.substring(0,sAttrValue.length());
 	    		
 	    	    if(sAttrValue.length() > 0){
 	    	        itemAttributes.put("Attr_followedBy",sAttrValue);
@@ -125,14 +128,14 @@
 	    	}
 
 	    	// optional : printLabels
-	    	if(sItem.split("£").length > 6){
-	    		String sPrintlabels = sItem.split("£")[6];
+	    	if(sItem.split("\\^").length > 6){
+	    		String sPrintlabels = sItem.split("\\^")[6];
 	    		
 	    	    if(sPrintlabels.length() > 0){
 	    	        parsePrintlabels(itemAttributes,sPrintlabels);
 	    	    }
 	    	}
-	    	
+
 	        screen.putItemInCell(sTranTypeId,sItemTypeId,sCellId,sDefaultValue,sHtmlElement,itemAttributes);
 	        
 	    	sItems = sItems.substring(sItems.indexOf("$")+1);

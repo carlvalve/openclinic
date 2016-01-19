@@ -62,7 +62,7 @@
         }
 
     	// show link to open document, when server is configured
-    	String sPath = MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_basePath")+"/"+
+    	String sPath = MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_basePath","/var/tomcat/webapps/openclinic/scan")+"/"+
     	               MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_dirTo");
         Debug.println("--> Full path : "+sPath+(sPath.endsWith("/")?"":"/")+(docu.storageName.startsWith("/")?docu.storageName.substring(1):docu.storageName));
     	

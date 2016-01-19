@@ -200,7 +200,7 @@ try{
                                                                                 <%
 	                                                                                String sReference = transactionVO.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DOC_UDI");
 	                                                                                if(sReference.length() > 0){
-	                                                                                    %>(<%=sReference%> - <%=transactionVO.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DOC_TITLE") %>)<%
+	                                                                                    %>(<%=sReference%> - <b><%=transactionVO.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DOC_TITLE").toUpperCase() %></b>)<%
 	                                                                                }
                                                                                 %>
                                                                             </a>

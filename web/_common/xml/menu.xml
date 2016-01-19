@@ -121,7 +121,9 @@
         -->
         </Menu>  
     </Menu>
-    <Menu labelid="documents" accessrights="printableDocuments.select" patientselected="true" url="/main.do?Page=medical/showPrintableDocuments.jsp"/>
+    <Menu labelid="documents" patientselected="true">
+		<Menu labelid="printworddocuments" accessrights="printableDocuments.select" patientselected="true" url="javascript:printWordDocuments();"/>
+	</Menu>
 	<Menu labelid="system">
 		<Menu labelid="myProfile" url="/main.do?Page=userprofile/index.jsp"/>
         <Menu labelid="mergepersons" accessrights="system.mergepersons.select" url="/main.do?Page=system/mergePersons.jsp"/>

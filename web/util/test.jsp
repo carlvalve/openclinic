@@ -1,4 +1,6 @@
 <%@page import="be.mxs.common.util.io.ExportSAP_AR_INV"%>
 <%
-	out.println(ExportSAP_AR_INV.getExchangeRate("USD", new java.util.Date()));
+	System.out.println("1: "+request.getRequestURL());
+	System.out.println("2: "+request.getServletPath());
+	System.out.println("3: "+request.getContextPath());
 %>
