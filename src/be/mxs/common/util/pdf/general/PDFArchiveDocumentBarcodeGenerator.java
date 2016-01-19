@@ -134,7 +134,7 @@ public class PDFArchiveDocumentBarcodeGenerator extends PDFOfficialBasic {
             if(sCode.length()>2){
             	sCode=sCode.substring(0,sCode.length()-2)+"."+sCode.substring(sCode.length()-2);
             }
-            cell = createBoldBorderlessCell(sCode,1,1,MedwanQuery.getInstance().getConfigInt("archiveDocumentBarcodeFontSize",10));
+            cell = createBoldBorderlessCell(sCode,1,1,MedwanQuery.getInstance().getConfigInt("archiveDocumentBarcodeFontSize",20));
             cell.setBorder(PdfPCell.NO_BORDER);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
             cell.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);

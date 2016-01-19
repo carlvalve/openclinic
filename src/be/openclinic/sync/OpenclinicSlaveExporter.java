@@ -1999,8 +1999,11 @@ public class OpenclinicSlaveExporter implements Runnable{
 		Element export = document.addElement("export");
 		export.addAttribute("date", new SimpleDateFormat("yyyyMMddHHmmssSSSS").format(new java.util.Date()));
 		export.addAttribute("begin", new SimpleDateFormat("yyyyMMddHHmmssSSSS").format(begin));
-		export.addAttribute("sourceid", MedwanQuery.getInstance().getConfigString("slaveId",""));
-		export.addAttribute("sourcename", MedwanQuery.getInstance().getConfigString("slaveName",""));
+		if(MedwanQuery.getInstance().getConfigString("exportId","").length()==0){
+			MedwanQuery.getInstance().setConfigString("exportId", new java.util.Date().getTime()+"");
+		}
+		export.addAttribute("sourceid", MedwanQuery.getInstance().getConfigString("slaveId",MedwanQuery.getInstance().getConfigString("exportId")));
+		export.addAttribute("sourcename", MedwanQuery.getInstance().getConfigString("slaveName",HTMLEntities.htmlentities(ScreenHelper.getTranNoLink("web", "hospitalname", MedwanQuery.getInstance().getConfigString("defaultLanguage","en")))));
 		export.addAttribute("project", MedwanQuery.getInstance().getConfigString("slaveProject","openclinic"));
 		Enumeration e = patientrecords.keys();
 		while(e.hasMoreElements()){

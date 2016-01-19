@@ -681,10 +681,12 @@ public class ProductStockOperation extends OC_Object{
             //Generate prestation if indicated in product
             Product product = getProductStock().getProduct();
             if(bStorePrestation && getSourceDestination().getObjectType().equalsIgnoreCase("patient") && getSourceDestination().getObjectUid().length()>0 && product!=null && product.isAutomaticInvoicing() && product.getPrestationcode()!=null && product.getPrestationcode().length()>0){
+            	Debug.println("Facturation automatique");
             	Prestation prestation = Prestation.get(product.getPrestationcode());
             	AdminPerson patient = AdminPerson.getAdminPerson(getSourceDestination().getObjectUid());
             	Encounter activeEncounter = Encounter.getActiveEncounter(patient.personid);
             	if(prestation!=null && patient!=null && activeEncounter!=null){
+                	Debug.println("Prestation existe, patient existe, contact existe");
             		Debet debet = new Debet();
             		debet.setCreateDateTime(new java.util.Date());
             		debet.setUpdateDateTime(new java.util.Date());
@@ -704,8 +706,10 @@ public class ProductStockOperation extends OC_Object{
             		Insurance insurance = Insurance.getMostInterestingInsuranceForPatient(patient.personid);
             		double insuraramount=0;
             		if(insurance!=null && insurance.getInsurar()!=null && prestation.isVisibleFor(insurance.getInsurar())){
+                    	Debug.println("Assurance existe et est visible");
             			patientamount = prestation.getPrice(insurance.getType());
 	            		debet.setInsurance(insurance);
+	            		debet.setInsuranceUid(insurance.getUid());
 	            		//First find out if there is a fixed tariff for this prestation
 	            		insuraramount = prestation.getInsuranceTariff(insurance.getInsurarUid(), insurance.getInsuranceCategoryLetter());
 		                if(activeEncounter.getType().equalsIgnoreCase("admission") && prestation.getMfpAdmissionPercentage()>0){
@@ -729,7 +733,8 @@ public class ProductStockOperation extends OC_Object{
 	            		debet.setAmount(Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(patientamount).replaceAll(",", "."))*debet.getQuantity());
 	            		debet.setInsurarAmount(Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(insuraramount).replaceAll(",", "."))*debet.getQuantity());
 	            		debet.setExtraInsurarAmount(Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(extrainsuraramount).replaceAll(",", "."))*debet.getQuantity());
-	            		debet.store();
+                    	Debug.println("Stockage de la prestation");
+	            		System.out.println(debet.store());
 	            		MedwanQuery.getInstance().getObjectCache().removeObject("debet", debet.getUid());
             		}
             	}
@@ -1550,6 +1555,44 @@ public class ProductStockOperation extends OC_Object{
         return foundRecords;
     }
     
+    public static int getReceiptsForBatchnumber(String productStockUid,String batchnumber){
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		int total = 0;
+		
+		Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+		try{
+			String sSelect = "SELECT sum(OC_OPERATION_UNITSCHANGED) total"+
+			    " FROM OC_PRODUCTSTOCKOPERATIONS, OC_BATCHES"+
+			    " WHERE OC_OPERATION_DESCRIPTION LIKE 'medicationreceipt.%' and" +
+			    " OC_OPERATION_PRODUCTSTOCKUID='"+productStockUid+"' AND OC_BATCH_OBJECTID=replace(OC_OPERATION_BATCHUID,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','')"
+					+ " AND OC_BATCH_NUMBER='"+batchnumber+"'";
+			
+			ps = oc_conn.prepareStatement(sSelect);
+			// execute
+			rs = ps.executeQuery();
+			if(rs.next()){
+				total=rs.getInt("total");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		finally{
+			try{
+				if(rs!=null) rs.close();
+				if(ps!=null) ps.close();
+				oc_conn.close();
+			}
+			catch(SQLException se){
+				se.printStackTrace();
+			}
+		}
+		
+		return total;
+	}
+
+
     public static Vector getReceipts(String productStockUid,String sourceDestionationUid, java.util.Date dateFrom, java.util.Date dateUntil,
                                      String sSortCol, String sSortDir){
         PreparedStatement ps = null;

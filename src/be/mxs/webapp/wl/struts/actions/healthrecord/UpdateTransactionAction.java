@@ -483,7 +483,6 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
                     		UserParameter.saveUserParameter("lastLabEmail", item.getValue(), returnedTransactionVO.getUser().userId);
                     	}
                     }
-                    System.out.println("4");
 
                     //Delete diagnoses from OC_DIAGNOSES and ADD all+new again
                     Diagnosis.deleteDiagnosesByReferenceUID(returnedTransactionVO.getServerId()+"."+returnedTransactionVO.getTransactionId(),"Transaction");
@@ -494,7 +493,6 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
                     		saveDiagnosesToTable(RequestParameterParser.getInstance().parseRequestParameters(request, "ICPCCode"),RequestParameterParser.getInstance().parseRequestParameters(request, "ICD10Code"),RequestParameterParser.getInstance().parseRequestParameters(request, "DSM4Code"),returnedTransactionVO.getUpdateTime(),returnedTransactionVO.getServerId()+"."+returnedTransactionVO.getTransactionId(),sessionContainerWO,encounter);
                     	}
                     }
-                    System.out.println("5");
 
                     if(returnedTransactionVO.getTransactionType().equals(ScreenHelper.ITEM_PREFIX+"TRANSACTION_TYPE_ARCHIVE_DOCUMENT")){
                         boolean isNewTran = (sessionContainerWO.getCurrentTransactionVO().getTransactionId() < 0);
@@ -521,7 +519,6 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
                     sessionContainerWO.setCurrentTransactionVO(returnedTransactionVO);
                     requestParameters = RequestParameterParser.getInstance().parseRequestParameters(request, "inactiveDiagnosis");
                     enumeration = requestParameters.keys();
-                    System.out.println("6");
 
                     while (enumeration.hasMoreElements()) {
                         key = (String) enumeration.nextElement();
@@ -571,10 +568,12 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
                 actionForward = new ActionForward(actionForwardKey, true);
             }
             sessionContainerWO.getHealthRecordVO().setUpdated(true);
-            
+            System.out.println("actionForwardKey="+actionForwardKey);
             // INSERT ACCESS LOG
             if(bIsNewTrans){
+                System.out.println("A0");
             	AccessLog.insert(sessionContainerWO.getCurrentTransactionVO().getUser().getUserId()+"","T."+sessionContainerWO.getCurrentTransactionVO().getServerId()+"."+sessionContainerWO.getCurrentTransactionVO().getTransactionId().intValue());
+                System.out.println("A1");
             }
         }
         catch (SessionContainerFactoryException e) {
@@ -611,10 +610,10 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
             catch (SessionContainerFactoryException e1) {
                 e1.printStackTrace();
             }
-
             actionForward = mapping.findForward("failure");
         }
 
+        System.out.println("A2");
         return actionForward;
     }
 

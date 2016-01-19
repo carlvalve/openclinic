@@ -73,6 +73,50 @@ public class Pointer {
 		return pointer;
 	}
 	
+	public static String getPointerAfter(String key,java.util.Date date){
+		String pointer = "";
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		PreparedStatement ps = null;
+		try{
+			ps=conn.prepareStatement("select OC_POINTER_VALUE from OC_POINTERS where OC_POINTER_KEY=? and OC_POINTER_UPDATETIME>?");
+			ps.setString(1, key);
+			ps.setTimestamp(2, new java.sql.Timestamp(date.getTime()));
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()){
+				pointer=rs.getString("OC_POINTER_VALUE");
+			}
+			rs.close();
+			ps.close();
+			conn.close();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return pointer;
+	}
+	
+	public static String getPointerBefore(String key,java.util.Date date){
+		String pointer = "";
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		PreparedStatement ps = null;
+		try{
+			ps=conn.prepareStatement("select OC_POINTER_VALUE from OC_POINTERS where OC_POINTER_KEY=? and OC_POINTER_UPDATETIME<?");
+			ps.setString(1, key);
+			ps.setTimestamp(2, new java.sql.Timestamp(date.getTime()));
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()){
+				pointer=rs.getString("OC_POINTER_VALUE");
+			}
+			rs.close();
+			ps.close();
+			conn.close();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return pointer;
+	}
+	
 	public static String getLastPointer(String key){
 		String pointer = "";
 		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();

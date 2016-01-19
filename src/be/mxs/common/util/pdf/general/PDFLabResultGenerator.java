@@ -339,6 +339,9 @@ public class PDFLabResultGenerator extends PDFOfficialBasic {
             Iterator analysisEnumeration = analysisList.keySet().iterator();
             while (analysisEnumeration.hasNext()){
                 String analysisCode=(String)analysisList.get((String)analysisEnumeration.next());
+                if(MedwanQuery.getInstance().getConfigString("hiddenLabAnalyses","").contains("*"+analysisCode+"*")){
+                	continue;
+                }
                 Debug.println("##### analysisCode : "+analysisCode+" #####");
                 
                 String result="";
@@ -913,24 +916,40 @@ public class PDFLabResultGenerator extends PDFOfficialBasic {
                 //*** 4 - CALCULATED *****************************************************************
                 else if(LabAnalysis.getLabAnalysisByLabcode(analysisCode).getEditor().equalsIgnoreCase("calculated")){
             		LabAnalysis analysis = LabAnalysis.getLabAnalysisByLabcode(analysisCode);
-                	String expression = analysis.getEditorparametersParameter("OP").split("\\|")[0];
-            		Hashtable pars = new Hashtable();
-            		if(analysis.getEditorparameters().split("|").length>0){
-            			String[] sPars = analysis.getEditorparametersParameter("OP").split("\\|")[1].replaceAll(" ", "").split(",");
+            		if(analysis.getEditorparameters().startsWith("OP:CONC|")){
+            			//Especially useful for phenotypes
+            			result="";
+            			String s=analysis.getEditorparameters().replaceAll("OP:CONC\\|", "");
+            			String[] sPars = s.split(",");
             			for(int n=0;n<sPars.length;n++){
-	        				try{
-	            				pars.put(sPars[n],((RequestedLabAnalysis)labRequest.getAnalyses().get(sPars[n].replaceAll("@", ""))).getResultValue());
-	        				}
-	        				catch(Exception p){}
+            				if(labRequest.getAnalyses().get(sPars[n].replaceAll("@", ""))!=null){
+    	            			result+=((RequestedLabAnalysis)labRequest.getAnalyses().get(sPars[n].replaceAll("@", ""))).getResultValue();
+            				}
+            				else{
+            					result="";
+            					break;
+            				}
             			}
             		}
-					try{
-						result = Evaluate.evaluate(expression, pars,analysis.getEditorparametersParameter("OP").split("\\|").length>2?Integer.parseInt(analysis.getEditorparametersParameter("OP").replaceAll(" ", "").split("\\|")[2]):5);
-					}
-					catch(Exception e){
-                		result = "?";
-					}
-
+            		else {
+	                	String expression = analysis.getEditorparametersParameter("OP").split("\\|")[0];
+	            		Hashtable pars = new Hashtable();
+	            		if(analysis.getEditorparameters().split("|").length>0){
+	            			String[] sPars = analysis.getEditorparametersParameter("OP").split("\\|")[1].replaceAll(" ", "").split(",");
+	            			for(int n=0;n<sPars.length;n++){
+		        				try{
+		            				pars.put(sPars[n],((RequestedLabAnalysis)labRequest.getAnalyses().get(sPars[n].replaceAll("@", ""))).getResultValue());
+		        				}
+		        				catch(Exception p){}
+	            			}
+	            		}
+						try{
+							result = Evaluate.evaluate(expression, pars,analysis.getEditorparametersParameter("OP").split("\\|").length>2?Integer.parseInt(analysis.getEditorparametersParameter("OP").replaceAll(" ", "").split("\\|")[2]):5);
+						}
+						catch(Exception e){
+	                		result = "?";
+						}
+            		}
                 	Debug.println("*** 3 - numeric ***");
                 	
 	                cell=createLabelCourier(result,8,15,Font.BOLD);

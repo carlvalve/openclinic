@@ -115,7 +115,7 @@ public class CsvInvoiceRSSB {
 	                double rAmount = debet.getAmount();
 	                double rInsurarAmount = debet.getInsurarAmount();
 	                double rExtraInsurarAmount = debet.getExtraInsurarAmount();
-	                int rTotal=(int)(rAmount+rInsurarAmount+rExtraInsurarAmount);
+	                double rTotal=(double)(rAmount+rInsurarAmount+rExtraInsurarAmount);
 	                if(prestation!=null && prestation.getReferenceObject()!=null && prestation.getReferenceObject().getObjectType()!=null && prestation.getReferenceObject().getObjectType().length()>0){
 	                	String sCat=prestation.getReferenceObject().getObjectType();
 	                    if(categories.get(sCat)==null){
@@ -181,21 +181,15 @@ public class CsvInvoiceRSSB {
         amount = (String)categories.get(MedwanQuery.getInstance().getConfigString("RAMAadmissionCategory","S"));
         sOutput+=amount==null?"0;":amount+";";
         //Acts and consumables go together
-        double acts_cons =0;
+        String acts_cons ="+0";
         amount = (String)categories.get(MedwanQuery.getInstance().getConfigString("RAMAactsCategory","A"));
-        try{
-        	acts_cons+=Double.parseDouble(amount);
-        }
-        catch(Exception a){
-        	
-        }
+       	if(amount!=null){
+       		acts_cons+="+"+amount;
+       	}
         amount = (String)categories.get(MedwanQuery.getInstance().getConfigString("RAMAconsumablesCategory","C"));
-        try{
-        	acts_cons+=Double.parseDouble(amount);
-        }
-        catch(Exception a){
-        	
-        }
+       	if(amount!=null){
+       		acts_cons+="+"+amount;
+       	}
         sOutput+=acts_cons+";";
         amount = (String)categories.get(MedwanQuery.getInstance().getConfigString("RAMAambulanceCategory","Amb"));
         sOutput+=amount==null?"0;":amount+";";

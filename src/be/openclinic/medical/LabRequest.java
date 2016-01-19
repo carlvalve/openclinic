@@ -344,6 +344,31 @@ public class LabRequest {
 			e.printStackTrace();
 		}
     }
+    
+    public String getResultValue(String analysiscode){
+    	String result="";
+    	RequestedLabAnalysis labanalysis = (RequestedLabAnalysis)analyses.get(analysiscode);
+    	if(labanalysis!=null){
+    		LabAnalysis l = LabAnalysis.getLabAnalysisByLabcode(labanalysis.getAnalysisCode());
+    		if(l!=null && l.getEditorparameters().startsWith("OP:CONC|")){
+    			String s=l.getEditorparameters().replaceAll("OP:CONC\\|", "");
+    			String[] sPars = s.split(",");
+    			for(int n=0;n<sPars.length;n++){
+    				if(getAnalyses().get(sPars[n].replaceAll("@", ""))!=null){
+    					result+=((RequestedLabAnalysis)getAnalyses().get(sPars[n].replaceAll("@", ""))).getResultValue();
+    				}
+    				else{
+    					result="";
+    					break;
+    				}
+    			}
+    		}
+    		else{
+    			result=labanalysis.getResultValue();
+    		}
+    	}
+    	return result;
+    }
 
     public void loadRequestAnalyses(){
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
@@ -929,7 +954,7 @@ public class LabRequest {
                     " from RequestedLabAnalyses a" +
                     " where" +
                     " samplereceptiondatetime is null and (resultvalue is null or resultvalue='') and finalvalidationdatetime is null and requestdatetime>?" +
-                    " order by serverid,transactionid,requestdatetime";
+                    " order by serverid,transactionid";
             PreparedStatement ps = oc_conn.prepareStatement(sQuery);
             long week = 60000*60*24*7;
             ps.setTimestamp(1, new java.sql.Timestamp(new java.util.Date().getTime()-week));

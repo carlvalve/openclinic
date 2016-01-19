@@ -117,7 +117,7 @@ public class AdminPerson extends OC_Object{
 
     //--- GET ADMIN PERSON ------------------------------------------------------------------------
     public static AdminPerson getAdminPerson (Connection connection, String sPersonID){
-        AdminPerson adminPerson = new AdminPerson();
+    	AdminPerson adminPerson = new AdminPerson();
         adminPerson.initialize(connection,sPersonID);
         return adminPerson;
     }
