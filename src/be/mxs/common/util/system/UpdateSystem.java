@@ -752,9 +752,10 @@ public class UpdateSystem implements Runnable {
 	                    			//This is an OC_CONFIG setting
 	                    			String setupdir=request.getSession().getServletContext().getRealPath("/").replaceAll("\\\\","/");
 	                    			String context = request.getRequestURL().toString().replaceAll(request.getServletPath(),"");
+	                    			String minicontext =request.getContextPath().replaceAll("/", "");
 	                    			String key=configelement.attributeValue("key");
 	                    			String value=configelement.attributeValue("value")+"";
-	                    			MedwanQuery.getInstance().setConfigString(key,value.replaceAll("\\$setupdir\\$", setupdir).replaceAll("\\$context\\$", context));
+	                    			MedwanQuery.getInstance().setConfigString(key,value.replaceAll("\\$setupdir\\$", setupdir).replaceAll("\\$context\\$", context).replaceAll("\\$minicontext\\$", minicontext));
 	                    		}
 	                    		else if(configelement.getName().equalsIgnoreCase("labels")){
 	                    			//This is a label list 
@@ -855,6 +856,96 @@ public class UpdateSystem implements Runnable {
 	        String sMenuXML = MedwanQuery.getInstance().getConfigString("examinationsXMLFile","examinations.xml");
 	        String sMenuXMLUrl = MedwanQuery.getInstance().getConfigString("templateSource") + sMenuXML;
 	        // Check if menu file exists, else use file at templateSource location.
+	        document = xmlReader.read(new URL(sMenuXMLUrl));
+	        if (document != null) {
+	            Element root = document.getRootElement();
+	            if (root != null) {
+	                Iterator elements = root.elementIterator("Row");
+	                int n=0,n2=root.elements("Row").size();
+	                while (elements.hasNext()) {
+	                	n++;
+	           		 	setProgress(80+10*n/n2);
+	                	Element e = (Element) elements.next();
+	                    Element id = e.element("id");
+	                    Element transactiontype = e.element("transactiontype");
+	                    Element data =e.element("Data");
+	                    Element fr=e.element("fr");
+	                    Element en=e.element("en");
+	                    Element es=e.element("es");
+	                    Element nl=e.element("nl");
+	                    Element pt=e.element("pt");
+	                    if(id!=null && transactiontype!=null){
+	                    	counter++;
+	                    	//First search if the examination already exists
+	                    	ps=conn.prepareStatement("select * from examinations where transactiontype=?");
+	                    	ps.setString(1, transactiontype.getText());
+	                    	rs=ps.executeQuery();
+	                    	if(rs.next()){
+	                    		//Examination exists
+	                    		int oldid = rs.getInt("id");
+	                    		if(oldid!=Integer.parseInt(id.getText())){
+		                    		//Update examinations, serviceexaminations and oc_labels tables with new id value
+		                    		rs.close();
+		                    		ps.close();
+		                    		ps=conn.prepareStatement("update examinations set id=? where id=?");
+		                    		ps.setInt(1, Integer.parseInt(id.getText()));
+		                    		ps.setInt(2, oldid);
+		                    		ps.execute();
+		                    		ps.close();
+		                    		ps=conn.prepareStatement("update serviceexaminations set examinationid=? where examinationid=?");
+		                    		ps.setInt(1, Integer.parseInt(id.getText()));
+		                    		ps.setInt(2, oldid);
+		                    		ps.execute();
+		                    		ps.close();
+		                    		ps=conn.prepareStatement("update oc_labels set oc_label_id=? where oc_label_id=? and oc_label_type='examination'");
+		                    		ps.setString(1, id.getText());
+		                    		ps.setString(2, oldid+"");
+		                    		ps.execute();
+		                    		ps.close();
+	                    		}
+	                    		else {
+	                    			//Update has already been performed on this examination, do nothing
+	                    		}
+	                    	}
+	                    	else{
+	                    		//Examination doesn't exist, let's add it
+	                    		rs.close();
+	                    		ps.close();
+	                    		ps=conn.prepareStatement("insert into examinations(id,transactiontype,priority,data,updatetime,updateuserid,messageKey) values(?,?,1,?,?,4,'')");
+	                    		ps.setInt(1,Integer.parseInt(id.getText()));
+	                    		ps.setString(2, transactiontype.getText());
+	                    		ps.setBytes(3, data!=null?data.asXML().getBytes():"".getBytes());
+	                    		ps.setTimestamp(4, new java.sql.Timestamp(new java.util.Date().getTime()));
+	                    		ps.execute();
+	                    		ps.close();
+	                    		if(fr!=null){
+	                    			Label label = new Label("examination",id.getText(),"fr",fr.getText(),"1","4");
+	                    			label.saveToDB();
+	                    		}
+	                    		if(en!=null){
+	                    			Label label = new Label("examination",id.getText(),"en",en.getText(),"1","4");
+	                    			label.saveToDB();
+	                    		}
+	                    		if(es!=null){
+	                    			Label label = new Label("examination",id.getText(),"es",es.getText(),"1","4");
+	                    			label.saveToDB();
+	                    		}
+	                    		if(nl!=null){
+	                    			Label label = new Label("examination",id.getText(),"nl",nl.getText(),"1","4");
+	                    			label.saveToDB();
+	                    		}
+	                    		if(pt!=null){
+	                    			Label label = new Label("examination",id.getText(),"pt",pt.getText(),"1","4");
+	                    			label.saveToDB();
+	                    		}
+	                    	}
+	                    }
+	                }
+	            }
+	        }
+	        //Do the same for customexaminations
+	        sMenuXML = MedwanQuery.getInstance().getConfigString("customExaminationsXMLFile","noexaminations");
+	        sMenuXMLUrl = MedwanQuery.getInstance().getConfigString("templateSource") + sMenuXML;
 	        document = xmlReader.read(new URL(sMenuXMLUrl));
 	        if (document != null) {
 	            Element root = document.getRootElement();

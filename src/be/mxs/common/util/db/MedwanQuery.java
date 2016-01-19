@@ -47,6 +47,7 @@ import java.util.Date;
 import jpos.JposException;
 import be.openclinic.adt.Encounter;
 import be.openclinic.archiving.ArchiveDocument;
+import be.openclinic.archiving.ScanDirectoryMonitor;
 import be.openclinic.common.OC_Object;
 import be.openclinic.datacenter.Monitor;
 import be.openclinic.datacenter.Scheduler;
@@ -91,6 +92,7 @@ public class MedwanQuery {
     private static Scheduler scheduler;
     private static Monitor monitor;
     private static BrokerScheduler brokerScheduler;
+    private static ScanDirectoryMonitor scanDirectoryMonitor;
     private Hashtable datacenterparametertypes = new Hashtable();
     private Hashtable countersInUse = new Hashtable();
     private Hashtable accessRightsForTransactionTypes = new Hashtable();
@@ -270,6 +272,10 @@ public class MedwanQuery {
         }
         if(brokerScheduler==null){
         	brokerScheduler=new BrokerScheduler();
+        }
+        if(getConfigInt("enableArchiveDirectoryMonitoring", 0)==1 && scanDirectoryMonitor==null){
+        	scanDirectoryMonitor=new ScanDirectoryMonitor();
+        	scanDirectoryMonitor.activate();
         }
     }
     
@@ -3615,8 +3621,12 @@ public class MedwanQuery {
         }
         return newCounter;
     }
-    
+
     public int getOpenclinicCounter(String name){
+    	return getOpenclinicCounter(name,0);
+    }
+    
+    public int getOpenclinicCounter(String name,int mincounter){
     	int loopcounter=0;
     	while(countersInUse.get(name)!=null && loopcounter<500){
     		loopcounter++;
@@ -3641,6 +3651,9 @@ public class MedwanQuery {
                 if(newCounter==0){
                 	newCounter=1;
                 }
+                if(newCounter<mincounter){
+                	newCounter=mincounter;
+                }
                 rs.close();
                 ps.close();
             } 
@@ -3648,6 +3661,9 @@ public class MedwanQuery {
                 rs.close();
                 ps.close();
                 newCounter = 1;
+                if(newCounter<mincounter){
+                	newCounter=mincounter;
+                }
                 ps = oc_conn.prepareStatement("insert into OC_COUNTERS(OC_COUNTER_NAME,OC_COUNTER_VALUE) values(?,1)");
                 ps.setString(1, name);
                 ps.execute();

@@ -40,6 +40,15 @@ public class RequestedLabAnalysis {
     private java.util.Date worklisteddatetime;
     private java.util.Date updatetime;
     private int sampler;
+    private int objectid;
+
+	public int getObjectid() {
+		return objectid;
+	}
+
+	public void setObjectid(int objectid) {
+		this.objectid = objectid;
+	}
 
 	private String extractResistance(String arvs,String arv){
 		String resistance="";
@@ -134,6 +143,7 @@ public class RequestedLabAnalysis {
     }//--- CONSTRUCTOR 1 ---------------------------------------------------------------------------
     public RequestedLabAnalysis(){
         serverId      = "";
+        objectid      = -1;
         transactionId = "";
         patientId     = "";
         analysisCode  = "";
@@ -952,6 +962,7 @@ public class RequestedLabAnalysis {
             while(rs.next()){
                 labAnalysis = new RequestedLabAnalysis();
                 labAnalysis.setServerId(serverId+"");
+                labAnalysis.setObjectid(rs.getInt("objectid"));
                 labAnalysis.setTransactionId(transactionId+"");
 
                 labAnalysis.patientId    = ScreenHelper.checkString(rs.getString("patientid"));
@@ -1075,7 +1086,9 @@ public class RequestedLabAnalysis {
                 sSelect = "UPDATE RequestedLabAnalyses"+
                           " SET serverid=?, transactionid=?, patientid=?, analysiscode=?, "+
                           "  comment=?, resultvalue=?, resultunit=?, resultmodifier=?, resultcomment=?, "+
-                          "  resultrefmax=?, resultrefmin=?, resultdate=?, resultuserid=?, resultprovisional=?, updatetime=?";
+                          "  resultrefmax=?, resultrefmin=?, resultdate=?, resultuserid=?, resultprovisional=?, updatetime=?, objectid=?"
+                          + " WHERE"
+                          + " serverid=? and transactionid=? and analysiscode=?";
 
                 ps = oc_conn.prepareStatement(sSelect);
 
@@ -1103,6 +1116,10 @@ public class RequestedLabAnalysis {
 
                 ps.setString(14,this.resultProvisional==""?"1":"0");
                 ps.setTimestamp(15, new java.sql.Timestamp(new java.util.Date().getTime()));
+                ps.setInt(16,this.getObjectid());
+                ps.setInt(17,Integer.parseInt(this.serverId));
+                ps.setInt(18,Integer.parseInt(this.transactionId));
+                ps.setString(19,this.analysisCode);
                 ps.executeUpdate();
             }
             else{
@@ -1111,8 +1128,8 @@ public class RequestedLabAnalysis {
 
                 sSelect = "INSERT INTO RequestedLabAnalyses (serverid,transactionid,patientid,analysiscode,"+
                           "  comment,resultvalue,resultunit,resultmodifier,resultcomment,resultrefmax,"+
-                          "  resultrefmin,resultdate,resultuserid, resultprovisional,requestdatetime,updatetime)"+
-                          " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                          "  resultrefmin,resultdate,resultuserid, resultprovisional,requestdatetime,updatetime,objectid)"+
+                          " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
                 ps = oc_conn.prepareStatement(sSelect);
 
@@ -1140,6 +1157,7 @@ public class RequestedLabAnalysis {
                 ps.setString(14,this.resultProvisional.equalsIgnoreCase("")?"1":"0");
                 ps.setTimestamp(15,new Timestamp(new java.util.Date().getTime()));
                 ps.setTimestamp(16, new java.sql.Timestamp(new java.util.Date().getTime()));
+                ps.setInt(17, this.getObjectid());
                 ps.executeUpdate();
             }
         }
@@ -1229,6 +1247,7 @@ public class RequestedLabAnalysis {
                 labAnalysis.resultUserId   = ScreenHelper.checkString(rs.getString("resultuserid"));
                 labAnalysis.requestUserId   = ScreenHelper.checkString(rs.getString("userId"));
                 labAnalysis.updatetime = rs.getTimestamp("updatetime");
+                labAnalysis.objectid = rs.getInt("objectid");
                 labAnalysis.resultProvisional   = ScreenHelper.checkString(rs.getString("resultprovisional"));
 
                 // result date
@@ -1239,6 +1258,82 @@ public class RequestedLabAnalysis {
             }
             else{
                 throw new Exception("INFO : REQUESTED LABANALYSIS "+serverId+"."+transactionId+"."+analysisCode+" NOT FOUND");
+            }
+        }
+        catch(Exception e){
+            labAnalysis = null;
+
+            if(e.getMessage().startsWith("INFO")){
+                Debug.println(e.getMessage());
+            }
+            else{
+                e.printStackTrace();
+            }
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                oc_conn.close();
+            }
+            catch(SQLException se){
+                se.printStackTrace();
+            }
+        }
+
+        return labAnalysis;
+    }
+
+    //--- GET -------------------------------------------------------------------------------------
+    public static RequestedLabAnalysis getByObjectid(int objectId, String analysisCode){
+        // create LabRequest and initialize
+        RequestedLabAnalysis labAnalysis = new RequestedLabAnalysis();
+        labAnalysis.setAnalysisCode(analysisCode);
+        if(objectId<0){
+        	return labAnalysis;
+        }
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+            String sSelect = "SELECT a.*,b.userId,b.updateTime FROM RequestedLabAnalyses a,Transactions b where a.serverid=b.serverid and a.transactionid=b.transactionId "+
+                             "  AND a.objectid = ?"+
+                             "  AND analysiscode = ?";
+            ps = oc_conn.prepareStatement(sSelect);
+            ps.setInt(1,objectId);
+            ps.setString(2,analysisCode);
+            rs = ps.executeQuery();
+
+            // get data from DB
+            if(rs.next()){
+                labAnalysis.serverId = ScreenHelper.checkString(rs.getString("serverid"));
+                labAnalysis.transactionId = ScreenHelper.checkString(rs.getString("transactionid"));
+                labAnalysis.patientId = ScreenHelper.checkString(rs.getString("patientid"));
+                labAnalysis.comment   = ScreenHelper.checkString(rs.getString("comment"));
+
+                // result..
+                labAnalysis.resultValue    = ScreenHelper.checkString(rs.getString("resultvalue"));
+                labAnalysis.resultUnit     = ScreenHelper.checkString(rs.getString("resultunit"));
+                labAnalysis.resultModifier = ScreenHelper.checkString(rs.getString("resultmodifier"));
+                labAnalysis.resultComment  = ScreenHelper.checkString(rs.getString("resultcomment"));
+                labAnalysis.resultRefMax   = ScreenHelper.checkString(rs.getString("resultrefmax"));
+                labAnalysis.resultRefMin   = ScreenHelper.checkString(rs.getString("resultrefmin"));
+                labAnalysis.resultUserId   = ScreenHelper.checkString(rs.getString("resultuserid"));
+                labAnalysis.requestUserId   = ScreenHelper.checkString(rs.getString("userId"));
+                labAnalysis.updatetime = rs.getTimestamp("updatetime");
+                labAnalysis.objectid = rs.getInt("objectid");
+                labAnalysis.resultProvisional   = ScreenHelper.checkString(rs.getString("resultprovisional"));
+
+                // result date
+                java.util.Date tmpDate = rs.getDate("resultdate");
+                if(tmpDate!=null) labAnalysis.resultDate = tmpDate;
+                tmpDate = rs.getDate("updateTime");
+                if(tmpDate!=null) labAnalysis.requestDate = tmpDate;
+            }
+            else{
+                throw new Exception("INFO : REQUESTED LABANALYSIS "+objectId+"."+analysisCode+" NOT FOUND");
             }
         }
         catch(Exception e){
@@ -1399,6 +1494,7 @@ public class RequestedLabAnalysis {
             while(rs.next()){
                     labAnalysis = new RequestedLabAnalysis();
                     labAnalysis.setServerId(rs.getString("serverid"));
+                    labAnalysis.setObjectid(rs.getInt("objectid"));
                     labAnalysis.setTransactionId(rs.getString("transactionid"));
                     labAnalysis.setAnalysisCode(rs.getString("analysiscode"));
                     labAnalysis.patientId = ScreenHelper.checkString(rs.getString("patientid"));
@@ -1497,7 +1593,7 @@ public class RequestedLabAnalysis {
 
         String sUpdate = " UPDATE RequestedLabAnalyses"+
                          " SET comment=?, resultvalue=?, resultunit=?, resultmodifier=?, resultcomment=?,"+
-                         " resultrefmax=?, resultrefmin=?, resultdate=?, resultuserid=?, resultprovisional=?, updatetime=?"+
+                         " resultrefmax=?, resultrefmin=?, resultdate=?, resultuserid=?, resultprovisional=?, updatetime=?, objectid=?"+
                          " WHERE serverid = ? AND transactionid = ? AND analysiscode = ?";
 
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
@@ -1514,10 +1610,11 @@ public class RequestedLabAnalysis {
             ps.setInt(9,Integer.parseInt(this.getResultUserId()));
             ps.setString(10,ScreenHelper.checkString(this.getResultProvisional()));
             ps.setTimestamp(11, new java.sql.Timestamp(new java.util.Date().getTime()));
+            ps.setInt(12,this.getObjectid());
             // where
-            ps.setInt(12,Integer.parseInt(sServerId));
-            ps.setInt(13,Integer.parseInt(sTransactionId));
-            ps.setString(14,sAnalysisCode);
+            ps.setInt(13,Integer.parseInt(sServerId));
+            ps.setInt(14,Integer.parseInt(sTransactionId));
+            ps.setString(15,sAnalysisCode);
             ps.executeUpdate();
 
             ps.close();
@@ -1808,7 +1905,30 @@ public class RequestedLabAnalysis {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-}
+    }
+
+    public static void setObjectid(int serverid,int transactionid, int objectid){
+        Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+            String sQuery="update RequestedLabAnalyses set objectid=?,updatetime=? where serverid=? and transactionid=? and (objectid is null or objectid<0)";
+            PreparedStatement ps = oc_conn.prepareStatement(sQuery);
+            ps.setInt(1,objectid);
+            ps.setTimestamp(2,new Timestamp(new java.util.Date().getTime()));
+            ps.setInt(3,serverid);
+            ps.setInt(4,transactionid);
+            ps.executeUpdate();
+            ps.close();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        try {
+			oc_conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
 
     public static String findUnvalidatedAnalyses(){
         String result="";

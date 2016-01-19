@@ -9,6 +9,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 
 import be.mxs.common.util.system.Miscelaneous;
+import be.mxs.common.util.system.PdfBarcode;
 import be.mxs.common.util.system.Debug;
 import be.mxs.common.util.system.HTMLEntities;
 import be.mxs.common.util.system.ScreenHelper;
@@ -311,7 +312,21 @@ public class PDFPatientInvoiceReceiptGeneratorCPLR extends PDFInvoiceGenerator {
 	        cell=createValueCell("",50);
 	        cell.setBorder(PdfPCell.NO_BORDER);
 	        table.addCell(cell);
-	
+
+	        if(MedwanQuery.getInstance().getConfigInt("showBarcodeOnReceipts",0)==1){
+		        //*** barcode ***
+		        Image image = PdfBarcode.getBarcode("7"+invoice.getInvoiceUid(),"", docWriter);            
+		        cell = new PdfPCell(image);
+		        cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+		        cell.setBorder(PdfPCell.NO_BORDER);
+		        cell.setColspan(50);
+		        table.addCell(cell);
+	        }
+
+	        cell=createValueCell("",50);
+	        cell.setBorder(PdfPCell.NO_BORDER);
+	        table.addCell(cell);
+
 	        cell = createValueCell(user.person.getFullName().toUpperCase(), 40,new Double(7*scaleFactor).intValue(),Font.NORMAL);
 	        cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
 	        table.addCell(cell);

@@ -19,6 +19,7 @@ import be.mxs.common.util.system.Miscelaneous;
 import be.mxs.common.util.system.ScreenHelper;
 import be.openclinic.adt.Planning;
 import be.openclinic.adt.Reservation;
+import be.openclinic.finance.Prestation;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -232,7 +233,7 @@ public class PDFCalendarGenerator extends PDFBasic {
             String sGender = appointment.getPatient().gender;
             t.addCell(this.createBorderlessCell(sGender,5));
 
-            String sBirthdate = appointment.getPatient().dateOfBirth;
+            String sBirthdate = appointment.getPatient().dateOfBirth +" ("+getTran("web","age")+": "+appointment.getPatient().getAge()+")";
             t.addCell(this.createBorderlessCell(sBirthdate,10));
 
             String sPersonId = appointment.getPatient().personid;
@@ -258,8 +259,24 @@ public class PDFCalendarGenerator extends PDFBasic {
             table.addCell(t);
             if(MedwanQuery.getInstance().getConfigInt("enableExtendedCalendarInformation",0)==1){
                 t.addCell(this.createBorderlessCell(5));
-                t.addCell(this.createBorderlessCell(appointment.getDescription(),25));
-                String s="";
+                String s = ScreenHelper.checkString(appointment.getDescription());
+                if(ScreenHelper.checkString(appointment.getComment()).length()>0){
+                	if(s.length()>0){
+                		s+="\n";
+                	}
+                	s+=appointment.getComment();
+                }
+                if(appointment.getContact()!=null && appointment.getContact().getObjectType()!=null && appointment.getContact().getObjectType().equalsIgnoreCase("prestation")){
+                	Prestation prestation = Prestation.get(appointment.getContact().getObjectUid());
+                	if(prestation!=null){
+                    	if(s.length()>0){
+                    		s+="\n";
+                    	}
+                    	s+=prestation.getCode()+" - "+prestation.getDescription();
+                	}
+                }
+                t.addCell(this.createBorderlessCell(s,25));
+                s="";
         		Vector reservations = Reservation.getReservationsForPlanningUid(appointment.getUid());
         		for(int n=0;n<reservations.size();n++){
         			Reservation reservation = (Reservation)reservations.elementAt(n);

@@ -71,7 +71,7 @@ public class PdfBarcode {
 		    	boolean bExit=false;
 			    Debug.println("Analyzing page "+mypage);
 			    BufferedImage bim = pdPage.convertToImage(BufferedImage.TYPE_BYTE_GRAY, 300);
-			    File f = new File("c:/temp/scan/IMG_"+mypage+".png");
+			    File f = new File(MedwanQuery.getInstance().getConfigString("tempDirectory","/tmp")+"/IMG_"+mypage+".png");
 			    if(f.exists()){
 			    	f.delete();
 			    }

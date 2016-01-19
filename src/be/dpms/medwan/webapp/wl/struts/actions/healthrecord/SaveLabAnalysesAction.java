@@ -33,17 +33,25 @@ public class SaveLabAnalysesAction extends Action {
                                        HttpServletRequest request,
                                        HttpServletResponse response)
         throws IOException, ServletException {
-
+    	System.out.println("0");
         // delete all labanalysis in the specified LabRequest, then insert all analysis to be saved
         String sServerId          = ScreenHelper.checkString(request.getParameter("be.mxs.healthrecord.server_id")),
                sTransactionId     = ScreenHelper.checkString(request.getParameter("be.mxs.healthrecord.transaction_id")),
                sPatientId         = ScreenHelper.checkString(request.getParameter("patientId")),
+               sObjectId         = ScreenHelper.checkString(request.getParameter("objectId")),
                sUserId         = ScreenHelper.checkString(request.getParameter("userId")),
                sLabAnalysesToSave = ScreenHelper.checkString(request.getParameter("labAnalysesToSave")),
                sSavedLabAnalyses  = ScreenHelper.checkString(request.getParameter("savedLabAnalyses"));
+    	System.out.println("0:"+sObjectId);
+        int nObjectId=-1;
+        try{
+        	nObjectId=Integer.parseInt(sObjectId);
+        }
+        catch(Exception e){}
+        
         String s="";
         for(int n=0;n<sLabAnalysesToSave.length();n++){
-        	if("0123456789ABCDEFGHIJKLMNOPQRSTUVW.;:/$£".indexOf(sLabAnalysesToSave.substring(n,n+1))>-1){
+        	if("0123456789ABCDEFGHIJKLMNOPQRSTUVW-_.;:/$£".indexOf(sLabAnalysesToSave.substring(n,n+1).toUpperCase())>-1){
         		s+=sLabAnalysesToSave.substring(n,n+1);
         	}
         }
@@ -173,6 +181,7 @@ public class SaveLabAnalysesAction extends Action {
 	                    // labRequest not found : insert in DB
 	                    labAnalysis = new RequestedLabAnalysis();
 	                    labAnalysis.setServerId(sServerId);
+	                    labAnalysis.setObjectid(nObjectId);
 	                    labAnalysis.setTransactionId(sTransactionId);
 	                    labAnalysis.setPatientId(sPatientId);
 	                    labAnalysis.setAnalysisCode(analysisCode);
@@ -191,6 +200,7 @@ public class SaveLabAnalysesAction extends Action {
                     	}
         		    }
                 }
+            	RequestedLabAnalysis.setObjectid(Integer.parseInt(sServerId), Integer.parseInt(sTransactionId), nObjectId);
             }
         }
 

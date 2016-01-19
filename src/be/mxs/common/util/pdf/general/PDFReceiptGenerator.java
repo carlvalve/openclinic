@@ -6,6 +6,8 @@ import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 
 import be.mxs.common.util.system.Miscelaneous;
+import be.mxs.common.util.system.PdfBarcode;
+import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.system.Debug;
 import be.mxs.common.util.system.ScreenHelper;
 import be.openclinic.finance.*;
@@ -95,8 +97,23 @@ public class PDFReceiptGenerator extends PDFInvoiceGenerator {
                 table.addCell(cell);
             }
 
-            //*** title ***
-            table.addCell(createTitleCell(getTran("web","paymentreceipt").toUpperCase()+" #"+credit.getUid().split("\\.")[1]+" - "+ScreenHelper.stdDateFormat.format(credit.getDate()),"",4));
+	        if(MedwanQuery.getInstance().getConfigInt("showBarcodeOnReceipts",0)==1){
+	
+	            //*** title ***
+	            table.addCell(createTitleCell(getTran("web","paymentreceipt").toUpperCase()+" #"+credit.getUid().split("\\.")[1]+" - "+ScreenHelper.stdDateFormat.format(credit.getDate()),"",3));
+		        
+	            //*** barcode ***
+		        Image image = PdfBarcode.getBarcode("R"+credit.getUid().split("\\.")[1],credit.getUid().split("\\.")[1], docWriter);            
+		        cell = new PdfPCell(image);
+		        cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+		        cell.setBorder(PdfPCell.NO_BORDER);
+		        cell.setColspan(1);
+		        table.addCell(cell);
+	        }
+	        else{
+	            //*** title ***
+	            table.addCell(createTitleCell(getTran("web","paymentreceipt").toUpperCase()+" #"+credit.getUid().split("\\.")[1]+" - "+ScreenHelper.stdDateFormat.format(credit.getDate()),"",4));
+	        }
 
             doc.add(table);
             addBlankRow();

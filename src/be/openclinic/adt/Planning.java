@@ -36,8 +36,15 @@ public class Planning extends OC_Object {
     private String tempPlanningUid;
     private String serviceUid;
     private Date remindSent;
+    private String comment;
     
-    public Date getRemindSent() {
+    public String getComment() {
+		return comment;
+	}
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+	public Date getRemindSent() {
 		return remindSent;
 	}
 	public void setRemindSent(Date remindSent) {
@@ -251,6 +258,7 @@ public class Planning extends OC_Object {
                         orContact.setObjectUid(rs.getString("OC_PLANNING_CONTACTUID"));
                         planning.setContact(orContact);
                         planning.description = rs.getString("OC_PLANNING_DESCRIPTION");
+                        planning.comment = rs.getString("OC_PLANNING_COMMENT");
                         planning.transactionUID = rs.getString("OC_PLANNING_TRANSACTIONUID");
                         planning.setCreateDateTime(rs.getTimestamp("OC_PLANNING_CREATETIME"));
                         planning.setPlannedEndDate(rs.getTimestamp("OC_PLANNING_PLANNEDEND"));
@@ -389,8 +397,9 @@ public class Planning extends OC_Object {
                           " OC_PLANNING_ESTIMATEDTIME,"+
                           " OC_PLANNING_CONTEXTID,"+
                           " OC_PLANNING_SERVICEUID,"+
-                          " OC_PLANNING_PLANNEDEND"+
-                          ") VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                          " OC_PLANNING_PLANNEDEND,"+
+                          " OC_PLANNING_COMMENT"+
+                          ") VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                 ps = oc_conn.prepareStatement(sSelect);
                 ps.setInt(1,Integer.parseInt(ids[0]));
                 ps.setInt(2,Integer.parseInt(ids[1]));
@@ -415,6 +424,7 @@ public class Planning extends OC_Object {
                 long hour=60*minute;
                 this.setPlannedEndDate(new java.util.Date(this.getPlannedDate().getTime()+Integer.parseInt(this.getEstimatedtime().split(":")[0])*hour+Integer.parseInt(this.getEstimatedtime().split(":")[1])*minute));
                 ScreenHelper.getSQLTimestamp(ps,19,this.getPlannedEndDate());
+                ps.setString(20,this.getComment());
                 
                 if(ps.executeUpdate() > 0){
                     bInserOk = true;
@@ -501,6 +511,7 @@ public class Planning extends OC_Object {
                 
                 planning.setContact(orContact);
                 planning.description = rs.getString("OC_PLANNING_DESCRIPTION");
+                planning.comment = rs.getString("OC_PLANNING_COMMENT");
                 planning.transactionUID = rs.getString("OC_PLANNING_TRANSACTIONUID");
                 planning.setCreateDateTime(rs.getTimestamp("OC_PLANNING_CREATETIME"));
                 planning.setUpdateDateTime(rs.getTimestamp("OC_PLANNING_UPDATETIME"));
@@ -566,6 +577,7 @@ public class Planning extends OC_Object {
                 
                 planning.setContact(orContact);
                 planning.description = rs.getString("OC_PLANNING_DESCRIPTION");
+                planning.comment = rs.getString("OC_PLANNING_COMMENT");
                 planning.transactionUID = rs.getString("OC_PLANNING_TRANSACTIONUID");
                 planning.setCreateDateTime(rs.getTimestamp("OC_PLANNING_CREATETIME"));
                 planning.setUpdateDateTime(rs.getTimestamp("OC_PLANNING_UPDATETIME"));
@@ -635,6 +647,7 @@ public class Planning extends OC_Object {
                 orContact.setObjectUid(rs.getString("OC_PLANNING_CONTACTUID"));
                 planning.setContact(orContact);
                 planning.description = rs.getString("OC_PLANNING_DESCRIPTION");
+                planning.comment = rs.getString("OC_PLANNING_COMMENT");
                 planning.transactionUID = rs.getString("OC_PLANNING_TRANSACTIONUID");
                 planning.setCreateDateTime(rs.getTimestamp("OC_PLANNING_CREATETIME"));
                 planning.setUpdateDateTime(rs.getTimestamp("OC_PLANNING_UPDATETIME"));
@@ -881,6 +894,7 @@ public class Planning extends OC_Object {
                 
                 planning.setContact(orContact);
                 planning.description = rs.getString("OC_PLANNING_DESCRIPTION");
+                planning.comment = rs.getString("OC_PLANNING_COMMENT");
                 planning.transactionUID = rs.getString("OC_PLANNING_TRANSACTIONUID");
                 planning.setCreateDateTime(rs.getTimestamp("OC_PLANNING_CREATETIME"));
                 planning.setUpdateDateTime(rs.getTimestamp("OC_PLANNING_UPDATETIME"));
@@ -947,6 +961,7 @@ public class Planning extends OC_Object {
 	                
 	                planning.setContact(orContact);
 	                planning.description = rs.getString("OC_PLANNING_DESCRIPTION");
+	                planning.comment = rs.getString("OC_PLANNING_COMMENT");
 	                planning.transactionUID = rs.getString("OC_PLANNING_TRANSACTIONUID");
 	                planning.setCreateDateTime(rs.getTimestamp("OC_PLANNING_CREATETIME"));
 	                planning.setUpdateDateTime(rs.getTimestamp("OC_PLANNING_UPDATETIME"));

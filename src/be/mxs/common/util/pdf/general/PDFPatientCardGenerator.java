@@ -105,6 +105,7 @@ public class PDFPatientCardGenerator extends PDFOfficialBasic {
         try {
             table = new PdfPTable(4);
             table.setWidthPercentage(pageWidth);
+            
             //Logo
             Image image = Miscelaneous.getImage("logo_patientcard.gif",sProject);
             image.scaleToFit(MedwanQuery.getInstance().getConfigInt("patientCardLogoWidth",60*200/254),MedwanQuery.getInstance().getConfigInt("patientCardLogoHeight",60));

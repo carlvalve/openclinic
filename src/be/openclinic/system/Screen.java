@@ -3,6 +3,7 @@ package be.openclinic.system;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.net.URL;
@@ -11,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.servlet.http.HttpSession;
 import net.admin.Label;
@@ -762,6 +764,9 @@ public class Screen extends OC_Object {
                 ps.executeUpdate();
             } 
             else{
+                updateLabels(session,"examination",this.examId);
+                updateLabels(session,"web.occup",ScreenHelper.ITEM_PREFIX+"TRANSACTION_TYPE_CUSTOMEXAMINATION"+this.examId);            
+                registerExaminationInXML();
             	copyScreenRecordToHistory(getUid());
             	
                 // update existing cell-record
@@ -1525,7 +1530,7 @@ public class Screen extends OC_Object {
                 examinationWithSameTypeExists = (Examination.getByType(this.transactionType)!=null);
 
         if(!examinationWithSameNameExists && !examinationWithSameTypeExists){
-            sExamID = MedwanQuery.getInstance().getOpenclinicCounter("ExaminationID")+"";
+            sExamID = MedwanQuery.getInstance().getOpenclinicCounter("CustomExaminationID",10000)+"";
             this.examId = sExamID;
             this.transactionType = ScreenHelper.ITEM_PREFIX+"TRANSACTION_TYPE_CUSTOMEXAMINATION"+sExamID;
             bQueryInsert = true;
@@ -1562,22 +1567,6 @@ public class Screen extends OC_Object {
         return msg;
     }
     
-    //--- REGISTER EXAMINATION IN XML -------------------------------------------------------------
-    // examinations.xml
-    /*
-        <?xml version="1.0" encoding="UTF-8"?>
-        <Examinations>
-            <Row>
-                <id>1001</id>
-                <creationDate></creationDate>
-                <userId></userId>
-                <class>imaging</class>
-                <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MIR2</transactiontype>
-                <fr>Imagerie m&#233;dicale</fr>
-                <en>Medical imaging</en>
-            </Row>
-        </Examinations>
-    */
     private void registerExaminationInXML(){
         Debug.println("\n*******************************************************************");
         Debug.println("********************* registerExaminationInXml ********************");
@@ -1585,16 +1574,34 @@ public class Screen extends OC_Object {
         
         try{
             SAXReader xmlReader = new SAXReader();
-            String sMenuXML = MedwanQuery.getInstance().getConfigString("examinationsXMLFile","examinations.xml");
+            String sMenuXML = MedwanQuery.getInstance().getConfigString("customExaminationsXMLFile","");
+            if(sMenuXML.length()==0){
+            	MedwanQuery.getInstance().setConfigString("customExaminationsXMLFile", "customexaminations."+new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new java.util.Date())+".xml");
+            }
             String sMenuXMLUrl = MedwanQuery.getInstance().getConfigString("templateSource")+sMenuXML;
-            
-            // Check if menu file exists, else use file at templateSource location.
             Debug.println("Reading XML : "+sMenuXMLUrl);
+            //Check physical location
+            String sPhysicalFile=MedwanQuery.getInstance().getConfigString("templateDirectory")+"/"+sMenuXML;
+            File file = new File(sPhysicalFile);
+            if(!file.exists()){
+            	FileWriter writer = new FileWriter(file);
+            	writer.write("<Examinations></Examinations>");
+            	writer.flush();
+            	writer.close();
+            }
             Document document = xmlReader.read(new URL(sMenuXMLUrl));
             if(document!=null){
                 Element root = document.getRootElement();
                 
-                if(root!=null){                    
+                if(root!=null){               
+                	//Remove existing examination
+                	Iterator iElements = root.elementIterator("Row");
+                	while(iElements.hasNext()){
+                		Element r = (Element)iElements.next();
+                		if(ScreenHelper.checkString(r.elementText("id")).equalsIgnoreCase(this.examId)){
+                			root.remove(r);
+                		}
+                	}
                     Element rowElem = (Element)root.addElement("Row");
 
                     //*** childs ***
@@ -1698,42 +1705,44 @@ public class Screen extends OC_Object {
 
         try{
             SAXReader xmlReader = new SAXReader();
-            String sMenuXML = MedwanQuery.getInstance().getConfigString("examinationsXMLFile","examinations.xml");
-            String sMenuXMLUrl = MedwanQuery.getInstance().getConfigString("templateSource")+sMenuXML;
-            
-            // Check if menu file exists, else use file at templateSource location.
-            Debug.println("Reading XML : "+sMenuXMLUrl);
-            Document document = xmlReader.read(new URL(sMenuXMLUrl));
-            if(document!=null){
-                Element root = document.getRootElement();
-                if(root!=null){
-                    Element rowElem, idElem;
-    
-                    Iterator rowElems = root.elementIterator("Row");
-                    while(rowElems.hasNext() && !examFound){
-                        rowElem = (Element)rowElems.next();
-                                   
-                        if(rowElem.elementText("id").equalsIgnoreCase(sExamId)){
-                            root.remove(rowElem);
-                            examFound = true;
-                                                        
-                            // write document to xml-file
-                            String sMenuXMLUri = MedwanQuery.getInstance().getConfigString("templateDirectory")+"/"+sMenuXML;
-                            
-                            BufferedWriter fileWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(sMenuXMLUri)),"UTF-8"));
-                            OutputFormat format = OutputFormat.createPrettyPrint();                             
-                            XMLWriter writer = new XMLWriter(fileWriter,format);
-                            writer.write(document);
-                            
-                            //Debug.println("\n"+document.asXML()+"\n");
-                            writer.close();
-                            fileWriter.close();
-                            
-                            Debug.println(" ---> Examination (id:"+this.examId+") removed from 'examinations.xml'");
-                        }
-                    }
-                }
-            }    
+            String sMenuXML = MedwanQuery.getInstance().getConfigString("customExaminationsXMLFile","");
+            if(sMenuXML.length()>0){
+	            String sMenuXMLUrl = MedwanQuery.getInstance().getConfigString("templateSource")+sMenuXML;
+	            
+	            // Check if menu file exists, else use file at templateSource location.
+	            Debug.println("Reading XML : "+sMenuXMLUrl);
+	            Document document = xmlReader.read(new URL(sMenuXMLUrl));
+	            if(document!=null){
+	                Element root = document.getRootElement();
+	                if(root!=null){
+	                    Element rowElem, idElem;
+	    
+	                    Iterator rowElems = root.elementIterator("Row");
+	                    while(rowElems.hasNext() && !examFound){
+	                        rowElem = (Element)rowElems.next();
+	                                   
+	                        if(rowElem.elementText("id").equalsIgnoreCase(sExamId)){
+	                            root.remove(rowElem);
+	                            examFound = true;
+	                                                        
+	                            // write document to xml-file
+	                            String sMenuXMLUri = MedwanQuery.getInstance().getConfigString("templateDirectory")+"/"+sMenuXML;
+	                            
+	                            BufferedWriter fileWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(sMenuXMLUri)),"UTF-8"));
+	                            OutputFormat format = OutputFormat.createPrettyPrint();                             
+	                            XMLWriter writer = new XMLWriter(fileWriter,format);
+	                            writer.write(document);
+	                            
+	                            //Debug.println("\n"+document.asXML()+"\n");
+	                            writer.close();
+	                            fileWriter.close();
+	                            
+	                            Debug.println(" ---> Examination (id:"+this.examId+") removed from 'examinations.xml'");
+	                        }
+	                    }
+	                }
+	            }
+            }
         }
         catch(Exception e){
             e.printStackTrace();
