@@ -317,6 +317,7 @@
                 <td width='15%'>&nbsp;<%=getTran("Web.manage","labanalysis.cols.monster",sWebLanguage)%></td>
                 <td width='10%'>&nbsp;<%=getTran("Web.manage","labanalysis.cols.biomonitoring",sWebLanguage)%></td>
                 <td width='10%'>&nbsp;<%=getTran("Web.manage","labanalysis.cols.loinccode",sWebLanguage)%></td>
+                <td width='10%'>&nbsp;DHIS2</td>
                 <td width='*'>&nbsp;<%=getTran("Web.manage","labanalysis.cols.labgroup",sWebLanguage)%></td>
             </tr>
         <%
@@ -465,6 +466,14 @@
         }
     %>
 
+<script>
+	function validatechars(element){
+		if(element.value.indexOf(".")>-1){
+			alert('<%=getTranNoLink("web","invalidcharacter",sWebLanguage)%>: .');
+			element.value=element.value.replace('.','');
+		}
+	}
+</script>
 <%-- EDIT/ADD FROM ------------------------------------------------------------------------------%>
 <form name="editForm" id="editForm" method="post">
   <input type="hidden" name="Action" value="<%=(sAction.equals("new")?sAction:"save")%>"/>
@@ -483,7 +492,7 @@
   <tr>
     <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web.manage","labanalysis.cols.code",sWebLanguage)%></td>
     <td class="admin2">
-      <input type="text" name="EditLabCode" class="text" value="<%=sEditLabCode%>" size="20" onblur="limitLength(this);">
+      <input type="text" name="EditLabCode" class="text" value="<%=sEditLabCode%>" size="20" onkeyup="validatechars(this);" onblur="limitLength(this);">
       <input type="checkbox" id="LabCodeOther" value="1" name="LabCodeOther" <%=(sLabCodeOther.equals("1")?"checked":"")%>><%=getLabel("web.occup","labanalysis.labCodeOther",sWebLanguage,"LabCodeOther")%>
     </td>
   </tr>

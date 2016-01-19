@@ -70,9 +70,18 @@
         <%-- search fields row 3 --%>
         <tr>
             <td class="admin2" class="admin2" height="25" nowrap>&nbsp;<%=getTran("Web", "personid", sWebLanguage)%>&nbsp;&nbsp;</td>
-            <td class="admin2" class="admin2" nowrap colspan="3">
+            <td class="admin2" class="admin2" nowrap>
                 <input type="text" name="PersonID" class="text" value="<%=sPersonID%>"/>
             </td>
+            <%if(MedwanQuery.getInstance().getConfigString("edition").equalsIgnoreCase("bloodbank")){ %>
+	            <td class="admin2" class="admin2" height="25" nowrap>&nbsp;<%=getTran("Web", "giftid", sWebLanguage)%>&nbsp;&nbsp;</td>
+	            <td class="admin2" class="admin2" nowrap>
+	                <input type="text" name="giftid" id="giftid" class="text" value="<%=sPersonID%>"/>
+	            </td>
+            <%}
+              else{%>
+              	<td class='admin2' colspan='2'><input type='hidden' name='giftid' id='giftid'/>&nbsp;</td>
+            <%} %>
         </tr>
         <%
             }

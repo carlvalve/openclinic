@@ -75,6 +75,9 @@
         
         while(enumeration.hasMoreElements()){
             RequestedLabAnalysis requestedLabAnalysis = (RequestedLabAnalysis)enumeration.nextElement();
+            if(MedwanQuery.getInstance().getConfigString("hiddenLabAnalyses","").contains("*"+requestedLabAnalysis.getAnalysisCode()+"*")){
+            	continue;
+            }
             if(groups.get(MedwanQuery.getInstance().getLabel("labanalysis.group",requestedLabAnalysis.getLabgroup(),sWebLanguage))==null){
                 groups.put(MedwanQuery.getInstance().getLabel("labanalysis.group",requestedLabAnalysis.getLabgroup(),sWebLanguage),new Hashtable());
             }
@@ -176,23 +179,36 @@
 	                    	}
                     	}
                     	else if(analysis.getEditor().equalsIgnoreCase("calculated")){
-                    		String expression = analysis.getEditorparametersParameter("OP").split("\\|")[0];
-                    		Hashtable pars = new Hashtable();
-                    		if(analysis.getEditorparameters().split("|").length>0){
-                    			String[] sPars = analysis.getEditorparametersParameter("OP").split("\\|")[1].replaceAll(" ", "").split(",");
+                    		if(analysis.getEditorparameters().startsWith("OP:CONC|")){
+                    			//Especially useful for phenotypes
+                    			result="";
+                    			String s=analysis.getEditorparameters().replaceAll("OP:CONC\\|", "");
+                    			System.out.println(labRequest.getAnalyses());
+                    			String[] sPars = s.split(",");
                     			for(int n=0;n<sPars.length;n++){
-        	        				try{
-        	            				pars.put(sPars[n],((RequestedLabAnalysis)labRequest.getAnalyses().get(sPars[n].replaceAll("@", ""))).getResultValue());
-        	        				}
-        	        				catch(Exception p){}
+                    				System.out.println("searching for: "+sPars[n].replaceAll("@", "")+" = "+labRequest.getAnalyses().get(sPars[n].replaceAll("@", "")));
+        	            			result+=((RequestedLabAnalysis)labRequest.getAnalyses().get(sPars[n].replaceAll("@", ""))).getResultValue();
                     			}
                     		}
-							try{
-								result = Evaluate.evaluate(expression, pars,analysis.getEditorparametersParameter("OP").split("\\|").length>2?Integer.parseInt(analysis.getEditorparametersParameter("OP").replaceAll(" ", "").split("\\|")[2]):5);
-							}
-							catch(Exception e){
-	                    		result = "?";
-							}
+                    		else {
+	                    		String expression = analysis.getEditorparametersParameter("OP").split("\\|")[0];
+	                    		Hashtable pars = new Hashtable();
+	                    		if(analysis.getEditorparameters().split("|").length>0){
+	                    			String[] sPars = analysis.getEditorparametersParameter("OP").split("\\|")[1].replaceAll(" ", "").split(",");
+	                    			for(int n=0;n<sPars.length;n++){
+	        	        				try{
+	        	            				pars.put(sPars[n],((RequestedLabAnalysis)labRequest.getAnalyses().get(sPars[n].replaceAll("@", ""))).getResultValue());
+	        	        				}
+	        	        				catch(Exception p){}
+	                    			}
+	                    		}
+								try{
+									result = Evaluate.evaluate(expression, pars,analysis.getEditorparametersParameter("OP").split("\\|").length>2?Integer.parseInt(analysis.getEditorparametersParameter("OP").replaceAll(" ", "").split("\\|")[2]):5);
+								}
+								catch(Exception e){
+		                    		result = "?";
+								}
+                    		}
                     	}
                     	else if(analysis.getEditor().equalsIgnoreCase("antibiogramnew")){
 	                    	if(requestedLabAnalysis.existsNonEmptyAntibiogrammesByUid(labRequest.getServerid()+"."+labRequest.getTransactionid()+"."+requestedLabAnalysis.getAnalysisCode())){

@@ -76,6 +76,53 @@
 	    </indexes>
     </table>
     
+    <table name="OC_BLOODCOLLECTIONS" db="openclinic" sync="NONE">
+    	<columns>
+	    	<column name="OC_BLOODCOLLECTION_ID" dbtype="int" javatype="integer"/>
+	        <column name="OC_BLOODCOLLECTION_DATE" dbtype="datetime" javatype="date"/>      
+	        <column name="OC_BLOODCOLLECTION_LOCATION" dbtype="varchar" javatype="string" size="255"/>      
+	        <column name="OC_BLOODCOLLECTION_COLLECTIONUNIT" dbtype="varchar" javatype="string" size="255"/>      
+	        <column name="OC_BLOODCOLLECTION_PATIENTNAME" dbtype="varchar" javatype="string" size="100"/>      
+	        <column name="OC_BLOODCOLLECTION_PATIENTFIRSTNAME" dbtype="varchar" javatype="string" size="100"/>      
+	        <column name="OC_BLOODCOLLECTION_PATIENTGENDER" dbtype="char" javatype="string" size="1"/>      
+	        <column name="OC_BLOODCOLLECTION_PATIENTTELEPHONE" dbtype="varchar" javatype="string" size="100"/>      
+	        <column name="OC_BLOODCOLLECTION_PATIENTADDRESS" dbtype="varchar" javatype="string" size="100"/>      
+	        <column name="OC_BLOODCOLLECTION_PATIENTDATEOFBIRTH" dbtype="datetime" javatype="date"/>      
+	        <column name="OC_BLOODCOLLECTION_VOLUME" dbtype="varchar" javatype="string" size="100"/>      
+	        <column name="OC_BLOODCOLLECTION_COMMENT" dbtype="text" javatype="string"/>      
+	        <column name="OC_BLOODCOLLECTION_USERID" dbtype="int" javatype="integer"/>      
+	        <column name="OC_BLOODCOLLECTION_INTEGRATIONDATE" dbtype="datetime" javatype="date"/>      
+    	</columns>
+	    <indexes>
+	    	<index name="OC_BLOODCOLLECTION_ID">
+	    		<indexcolumn order="ASC" name="OC_BLOODCOLLECTION_ID"/>
+	    	</index>
+	    </indexes>
+    </table>
+    
+    <table name="OC_BLOODDELIVERIES" db="openclinic" sync="NONE">
+    	<columns>
+	    	<column name="OC_BLOODDELIVERY_ID" dbtype="int" javatype="integer"/>
+	        <column name="OC_BLOODDELIVERY_DATE" dbtype="datetime" javatype="date"/>      
+	        <column name="OC_BLOODDELIVERY_LOCATION" dbtype="varchar" javatype="string" size="255"/>      
+	        <column name="OC_BLOODDELIVERY_PATIENTNAME" dbtype="varchar" javatype="string" size="100"/>      
+	        <column name="OC_BLOODDELIVERY_PATIENTFIRSTNAME" dbtype="varchar" javatype="string" size="100"/>      
+	        <column name="OC_BLOODDELIVERY_PATIENTGENDER" dbtype="char" javatype="string" size="1"/>      
+	        <column name="OC_BLOODDELIVERY_PATIENTTELEPHONE" dbtype="varchar" javatype="string" size="100"/>      
+	        <column name="OC_BLOODDELIVERY_PATIENTADDRESS" dbtype="varchar" javatype="string" size="100"/>      
+	        <column name="OC_BLOODDELIVERY_PATIENTDATEOFBIRTH" dbtype="datetime" javatype="date"/>      
+	        <column name="OC_BLOODDELIVERY_POCKETS" dbtype="int" javatype="integer"/>      
+	        <column name="OC_BLOODDELIVERY_COMMENT" dbtype="text" javatype="string"/>      
+	        <column name="OC_BLOODDELIVERY_PRODUCT" dbtype="varchar" javatype="string" size="255"/>      
+	        <column name="OC_BLOODDELIVERY_USERID" dbtype="int" javatype="integer"/>      
+    	</columns>
+	    <indexes>
+	    	<index name="OC_BLOODDELIVERY_ID">
+	    		<indexcolumn order="ASC" name="OC_BLOODDELIVERY_ID"/>
+	    	</index>
+	    </indexes>
+    </table>
+    
     <table name="AC_JOURNAL" db="ocadmin" sync="NONE">
     	<columns>
 	    	<column name="AC_JOURNAL_ID" dbtype="int" javatype="integer"/>
@@ -735,7 +782,7 @@
 			<column name="OC_SCREEN_SERVERID" dbtype="int" javatype="integer"/>  
 			<column name="OC_SCREEN_OBJECTID" dbtype="int" javatype="integer"/>  
 			<column name="OC_SCREEN_TRANSACTIONTYPE" dbtype="varchar" javatype="string" size="255"/>
-			<column name="OC_SCREEN_XMLDATA" dbtype="binary" javatype="bytes"/>
+			<column name="OC_SCREEN_XMLDATA" dbtype="text" javatype="bytes"/>
 			<column name="OC_SCREEN_CREATIONDATE" dbtype="datetime" javatype="date"/>
 	        <column name="OC_SCREEN_UPDATETIME" dbtype="datetime" javatype="date"/>
 			<column name="OC_SCREEN_UPDATEID" dbtype="int" javatype="integer"/>
@@ -752,7 +799,7 @@
 			<column name="OC_SCREEN_SERVERID" dbtype="int" javatype="integer"/>  
 			<column name="OC_SCREEN_OBJECTID" dbtype="int" javatype="integer"/>  
 			<column name="OC_SCREEN_TRANSACTIONTYPE" dbtype="varchar" javatype="string" size="255"/>
-			<column name="OC_SCREEN_XMLDATA" dbtype="binary" javatype="bytes"/>
+			<column name="OC_SCREEN_XMLDATA" dbtype="text" javatype="bytes"/>
 			<column name="OC_SCREEN_CREATIONDATE" dbtype="datetime" javatype="date"/>
 	        <column name="OC_SCREEN_UPDATETIME" dbtype="datetime" javatype="date"/>
 			<column name="OC_SCREEN_UPDATEID" dbtype="int" javatype="integer"/>
@@ -1965,6 +2012,12 @@
 			<column name="synchronize" dbtype="char" javatype="string" size="1"/>
 		</columns>
 	</table>
+    <table name="WordDocuments" db="ocadmin" sync="NONE">
+    	<columns>
+    		<column name="name" dbtype="varchar" javatype="string" size="255"/>
+    		<column name="document" dbtype="longblob" javatype="bytes"/>
+    	</columns>
+    </table>
 
     <table name="OC_PLANNING" db="openclinic" sync="NONE">
 		<columns>
@@ -1988,6 +2041,7 @@
 			<column name="OC_PLANNING_SERVICEUID" dbtype="varchar" javatype="string" size="50"/>
 			<column name="OC_PLANNING_PLANNEDEND" dbtype="datetime" javatype="date"/>
 			<column name="OC_PLANNING_REMINDSENT" dbtype="datetime" javatype="date"/>
+			<column name="OC_PLANNING_COMMENT" dbtype="text" javatype="string"/>
 		</columns>
 		<indexes>
 			<index name="OC_PLANNING_PATIENTID">
@@ -3447,7 +3501,7 @@
     <table name="UsedPasswords" db="ocadmin" sync="NONE">
 		<columns>
 			<column name="usedPasswordId" dbtype="int" javatype="integer"/>
-			<column name="encryptedPassword" dbtype="image" javatype="bytes"/>
+			<column name="encryptedPassword" dbtype="longblob" javatype="bytes"/>
 			<column name="userId" dbtype="int" javatype="integer"/>
 			<column name="updatetime" dbtype="datetime" javatype="date" version="1"/>
 			<column name="serverId" dbtype="int" javatype="integer"/>
@@ -5759,6 +5813,9 @@
 			</index>
 			<index name="patientid">
 				<indexcolumn order="ASC" name="patientid"/>
+			</index>
+			<index name="objectid">
+				<indexcolumn order="ASC" name="objectid"/>
 			</index>
 			<index name="updatetime">
 				<indexcolumn order="ASC" name="updatetime"/>

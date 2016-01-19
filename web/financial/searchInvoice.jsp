@@ -272,7 +272,7 @@
   <%-- OPEN INVOICE --%>
   function openInvoice(sInvoiceId,sType){
     if(sType=="<%=getTranNoLink("web","patient",sWebLanguage)%>"){
-      openPopup("/financial/patientInvoiceEdit.jsp&ts=<%=getTs()%>&PopupWidth="+(screen.width-200)+"&PopupHeight=600&FindPatientInvoiceUID="+sInvoiceId);
+      openPopup("/financial/patientInvoiceEdit.jsp&ts=<%=getTs()%>&PopupWidth="+(screen.width-200)+"&PopupHeight=600&FindPatientInvoiceUID="+sInvoiceId+"&showpatientname=1");
     }
     else if(sType=="<%=getTranNoLink("web","insurar",sWebLanguage)%>"){
       openPopup("/financial/insuranceInvoiceEdit.jsp&ts=<%=getTs()%>&PopupWidth="+(screen.width-200)+"&PopupHeight=600&FindInsurarInvoiceUID="+sInvoiceId);

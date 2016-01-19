@@ -275,11 +275,11 @@
 		        // header
                 sOutEnc1.append("<tr height='20'>")
                          .append("<td class='admin' width='30'>&nbsp;</td>")
-	                     .append("<td class='admin' width='100'>"+getTran("web.occup","medwan.common.contacttype",sWebLanguage)+"&nbsp;</td>")
-	                     .append("<td class='admin' width='80'>"+getTran("web","begin",sWebLanguage)+"&nbsp;</td>")
-	                     .append("<td class='admin' width='80'>"+getTran("web","end",sWebLanguage)+"&nbsp;</td>")
-	                     .append("<td class='admin' width='120'>"+getTran("openclinic.chuk","urgency.origin",sWebLanguage)+"&nbsp;</td>")
-	                     .append("<td class='admin' width='150'>"+getTran("web","service",sWebLanguage)+"&nbsp;</td>")
+	                     .append("<td class='admin' width='10%'>"+getTran("web.occup","medwan.common.contacttype",sWebLanguage)+"&nbsp;</td>")
+	                     .append("<td class='admin' width='10%'>"+getTran("web","begin",sWebLanguage)+"&nbsp;</td>")
+	                     .append("<td class='admin' width='10%'>"+getTran("web","end",sWebLanguage)+"&nbsp;</td>")
+	                     .append("<td class='admin' width='10%'>"+getTran("openclinic.chuk","urgency.origin",sWebLanguage)+"&nbsp;</td>")
+	                     .append("<td class='admin' width='20%'>"+getTran("web","service",sWebLanguage)+"&nbsp;</td>")
 	                     .append("<td class='admin' width='*'>"+getTran("openclinic.chuk","rfe",sWebLanguage)+"&nbsp;</td>")
                         .append("</tr>");
 
@@ -324,11 +324,11 @@
 		        // header
                 sOutEnc2.append("<tr height='20'>")
                          .append("<td class='admin' width='30'>&nbsp;</td>")
- 	                     .append("<td class='admin' width='100'>"+getTran("web.occup","medwan.common.contacttype",sWebLanguage)+"&nbsp;</td>")
-	                     .append("<td class='admin' width='80'>"+getTran("web","begin",sWebLanguage)+"&nbsp;</td>")
-	                     .append("<td class='admin' width='80'>"+getTran("web","end",sWebLanguage)+"&nbsp;</td>")
-	                     .append("<td class='admin' width='120'>"+getTran("openclinic.chuk","urgency.origin",sWebLanguage)+"&nbsp;</td>")
-	                     .append("<td class='admin' width='150'>"+getTran("web","service",sWebLanguage)+"&nbsp;</td>")
+ 	                     .append("<td class='admin' width='10%'>"+getTran("web.occup","medwan.common.contacttype",sWebLanguage)+"&nbsp;</td>")
+	                     .append("<td class='admin' width='10%'>"+getTran("web","begin",sWebLanguage)+"&nbsp;</td>")
+	                     .append("<td class='admin' width='10%'>"+getTran("web","end",sWebLanguage)+"&nbsp;</td>")
+	                     .append("<td class='admin' width='10%'>"+getTran("openclinic.chuk","urgency.origin",sWebLanguage)+"&nbsp;</td>")
+	                     .append("<td class='admin' width='20%'>"+getTran("web","service",sWebLanguage)+"&nbsp;</td>")
 	                     .append("<td class='admin' width='*'>"+getTran("openclinic.chuk","rfe",sWebLanguage)+"&nbsp;</td>")
                         .append("</tr>");
 
@@ -748,7 +748,7 @@
   <%-- TOGGLE ENCOUNTER TABLE --%>
   function toggleEncounterTable(checkbox){
     if(checkbox.checked){
-      document.getElementById("encounterTable").style.display = "table";
+      document.getElementById("encounterTable").style.display = "table-row";
       checkAllEncounters(true);
     }
     else{

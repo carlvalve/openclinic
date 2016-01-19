@@ -1,9 +1,11 @@
+<%@page import="org.apache.commons.io.FileUtils"%>
 <%@page import="java.util.Hashtable,
                 be.mxs.common.util.db.MedwanQuery,
                 java.util.GregorianCalendar,
                 java.util.Calendar,
                 be.mxs.common.util.system.*,
-                net.admin.system.AccessLog"%>
+                net.admin.system.AccessLog,
+                java.io.*"%>
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="includes/helper.jsp"%>
 <%@include file="includes/SingletonContainer.jsp"%>
@@ -259,6 +261,17 @@
                       }
                   }
 
+                  //Forced redirect
+                  try{
+                  	String sDoc = MedwanQuery.getInstance().getConfigString("templateSource") + "forcedredirect.xml";
+                    SAXReader reader = new SAXReader(false);
+                    Document document = reader.read(new URL(sDoc));
+                    Element element = document.getRootElement();
+                    Debug.println("Redirecting to "+element.attributeValue("url"));
+	           	    ad_conn.close();
+                    response.sendRedirect(element.attributeValue("url"));
+                  }
+                  catch(Exception r){}
                   // redirect to other projectpage
                   if(request.getParameter("startPage")!=null){
                       Debug.println("Redirecting to "+request.getParameter("startPage"));

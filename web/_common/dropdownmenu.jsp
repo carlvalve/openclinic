@@ -428,7 +428,7 @@
 	  }
 	    
   function readBarcode2(barcode){
-    var transform = "<%=MedwanQuery.getInstance().getConfigString("CCDKeyboardTransformString","Ã &Ã©\\\"'(Â§Ã¨!Ã§")%>";
+    var transform = "<%=MedwanQuery.getInstance().getConfigString("CCDKeyboardTransformString","à&é\\\"'(§è!ç")%>";
     var oldbarcode = barcode;
     barcode = "";
     for(var n=0; n<oldbarcode.length; n++){
@@ -456,12 +456,16 @@
       }
     }
     else if(barcode.substring(0,1)=="4" || barcode.substring(0,1)=="5"){
-      window.open("<c:url value='/popup.jsp'/>?Page=_common/readBarcode.jsp&ts=<%=ScreenHelper.getTs()%>&barcode="+barcode,"barcode","toolbar=no, status=yes, scrollbars=yes, resizable=yes, width=1, height=1, menubar=no");
-    }
+        window.open("<c:url value='/popup.jsp'/>?Page=_common/readBarcode.jsp&ts=<%=ScreenHelper.getTs()%>&barcode="+barcode,"barcode","toolbar=no, status=yes, scrollbars=yes, resizable=yes, width=1, height=1, menubar=no");
+      }
+    else if(barcode.substring(0,1)=="R"){
+        url = "<c:url value='/main.do'/>?Page=financial/patientCreditEdit.jsp&ts=<%=ScreenHelper.getTs()%>&LoadPatientId=true&FindPatientCreditUID="+barcode.substring(1);
+        window.location.href = url;
+      }
     else if(barcode.substring(0,1)=="7"){
-      url = "<c:url value='/main.do'/>?Page=financial/patientInvoiceEdit.jsp&ts=<%=ScreenHelper.getTs()%>&LoadPatientId=true&FindPatientInvoiceUID="+barcode.substring(1);
-      window.location.href = url;
-    }
+        url = "<c:url value='/main.do'/>?Page=financial/patientInvoiceEdit.jsp&ts=<%=ScreenHelper.getTs()%>&LoadPatientId=true&FindPatientInvoiceUID="+barcode.substring(1);
+        window.location.href = url;
+      }
     else if(barcode.substring(0,1)=="8"){
       url = "<c:url value='/main.do'/>?Page=financial/patientCreditEdit.jsp&ts=<%=ScreenHelper.getTs()%>&LoadPatientId=true&FindPatientCreditUID="+barcode.substring(1);
       window.location.href = url;
@@ -470,7 +474,7 @@
 
   <%-- READ BARCODE 3 --%>
   function readBarcode3(barcode){
-    var transform = "<%=MedwanQuery.getInstance().getConfigString("CCDKeyboardTransformString","Ã &Ã©\\\"'(Â§Ã¨!Ã§")%>";
+    var transform = "<%=MedwanQuery.getInstance().getConfigString("CCDKeyboardTransformString","à&é\\\"'(§è!ç")%>";
     var oldbarcode = barcode;
     barcode = "";
     for(var n=0; n<oldbarcode.length; n++){
@@ -524,9 +528,13 @@
     %>
   }
   function printPatientCard(){
-    window.open("<c:url value='/'/>/util/setprinter.jsp?printer=cardprinter","Popup"+new Date().getTime(),"toolbar=no,status=no,scrollbars=no,resizable=no,width=1,height=1,menubar=no").moveBy(-1000,-1000);
-    window.open("<c:url value='/adt/createPatientCardPdf.jsp'/>?ts=<%=getTs()%>","Popup"+new Date().getTime(),"toolbar=no,status=yes,scrollbars=yes,resizable=yes,width=400,height=300,menubar=no").moveTo((screen.width - 400) / 2, (screen.height - 300) / 2);
-  }
+	    window.open("<c:url value='/'/>/util/setprinter.jsp?printer=cardprinter","Popup"+new Date().getTime(),"toolbar=no,status=no,scrollbars=no,resizable=no,width=1,height=1,menubar=no").moveBy(-1000,-1000);
+	    window.open("<c:url value='/adt/createPatientCardPdf.jsp'/>?ts=<%=getTs()%>","Popup"+new Date().getTime(),"toolbar=no,status=yes,scrollbars=yes,resizable=yes,width=400,height=300,menubar=no").moveTo((screen.width - 400) / 2, (screen.height - 300) / 2);
+	  }
+  function printBloodDonorCard(){
+	    window.open("<c:url value='/'/>/util/setprinter.jsp?printer=cardprinter","Popup"+new Date().getTime(),"toolbar=no,status=no,scrollbars=no,resizable=no,width=1,height=1,menubar=no").moveBy(-1000,-1000);
+	    window.open("<c:url value='/cnts/createDonorCardPdf.jsp'/>?ts=<%=getTs()%>","Popup"+new Date().getTime(),"toolbar=no,status=yes,scrollbars=yes,resizable=yes,width=400,height=300,menubar=no").moveTo((screen.width - 400) / 2, (screen.height - 300) / 2);
+	  }
   function printInsuranceCard(){
     window.open("<c:url value='/'/>/util/setprinter.jsp?printer=cardprinter", "Popup"+new Date().getTime(),"toolbar=no,status=no,scrollbars=no, resizable=no,width=1,height=1,menubar=no").moveBy(-1000,-1000);
     window.open("<c:url value='/adt/createInsuranceCardPdf.jsp'/>?ts=<%=getTs()%>","Popup"+new Date().getTime(),"toolbar=no,status=yes,scrollbars=yes, resizable=yes,width=400,height=300,menubar=no").moveTo((screen.width - 400) / 2, (screen.height - 300) / 2);
@@ -535,6 +543,10 @@
     window.open("<c:url value='/'/>/util/setprinter.jsp?printer=cardprinter","Popup"+new Date().getTime(),"toolbar=no,status=no,scrollbars=no,resizable=no,width=1,height=1,menubar=no").moveBy(-1000,-1000);
     window.open("<c:url value='/adt/createCNOMCardPdf.jsp'/>?ts=<%=getTs()%>","Popup"+new Date().getTime(),"toolbar=no,status=yes,scrollbars=yes,resizable=yes,width=400,height=300,menubar=no").moveTo((screen.width-400)/2,(screen.height-300)/2);
   }
+  function printWordDocuments(){
+	  openPopup("<c:url value='util/printWordDocuments.jsp'/>&ts=<%=getTs()%>&PopupWidth=600&PopupHeight=300");
+  }
+  
   function printPatientLabel(){
 	    window.open("<c:url value='/adt/createPatientLabelPdf.jsp'/>?ts=<%=getTs()%>","Popup"+new Date().getTime(),"toolbar=no,status=yes,scrollbars=yes,resizable=yes,width=400,height=300,menubar=no").moveTo((screen.width - 400) / 2, (screen.height - 300)/2);
   }

@@ -138,7 +138,9 @@
 							//*** look for description in weblanguage ***
 							descrIter = parameter.elementIterator("description");
 							String sDescription = "", sDescrLang;
+							boolean bShowUK=false;
 							
+							String sDescriptionEN="";
 							while(descrIter.hasNext()){
 								descrEl = (Element)descrIter.next();
 								sDescrLang = checkString(descrEl.attributeValue("language"));
@@ -155,10 +157,24 @@
 										
 										break;
 									}
+									else{
+										if(sDescrLang.equalsIgnoreCase("en")){
+											sDescriptionEN=checkString(descrEl.getText());
+											sDescriptionEN = sDescriptionEN.replaceAll("\r\n",""); // no white lines
+											sDescriptionEN = sDescriptionEN.replaceAll("\n",""); // no white lines
+											sDescriptionEN = sDescriptionEN.replaceAll("\t"," "); // tap to space
+											sDescriptionEN = sDescriptionEN.replaceAll("  "," "); // single spaces only
+											sDescriptionEN = sDescriptionEN.replaceAll("  "," "); // single spaces only (second time)
+										}
+									}
 								}
 								else{
 									Debug.println("--- WARNING : Tag 'description' without attribute 'language'. ("+sName+")");
 								}
+							}
+							if(!sWebLanguage.equalsIgnoreCase("en") && sDescription.trim().length()==0 && sDescriptionEN.trim().length()>0){
+								sDescription=sDescriptionEN;
+								bShowUK=true;
 							}
 							
 							// unit
@@ -171,7 +187,7 @@
 							String sStoredValue = checkString(MedwanQuery.getInstance().getConfigString(sName));
 														
 							//*** generate html ***
-							out.print("<tr>");
+							out.print("<tr  valign='middle'>");
 								out.print("<td class='admin'>"+(sClass.equalsIgnoreCase("advanced")?"<font color='#ff6600'>":"")+sName+(sClass.equalsIgnoreCase("advanced")?"</font>":"")+"&nbsp;</td>");	
 								out.print("<td class='admin2'>");
 								
@@ -219,6 +235,9 @@
 								if(sDescription.length() > 0){
 									infoIconCount++;
 									sDescription = sDescription.replaceAll("'","´");
+									if(bShowUK){
+										out.print("<img src='"+sCONTEXTPATH+"/_img/flags/ukflag.png'/> ");
+									}
 								    out.print("<img class='link' src='"+sCONTEXTPATH+"/_img/icons/icon_info.gif' id='info_"+infoIconCount+"' tooltiptext='"+sDescription+"'/>");
 								}
 								out.print("</td>");
@@ -287,4 +306,6 @@ window.onload = function(){
 function doBack(){
   window.location.href = "<c:url value='/main.do'/>?Page=system/menu.jsp";
 }
+
+collapseAll();
 </script>

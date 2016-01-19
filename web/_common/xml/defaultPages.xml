@@ -39,4 +39,9 @@
             capital/index.jsp
         </page>
     </defaultPage>
+     <defaultPage type='cnts'>
+        <page>
+            main.do?Page=cnts/index.jsp
+        </page>
+    </defaultPage>
 </defaultPages>

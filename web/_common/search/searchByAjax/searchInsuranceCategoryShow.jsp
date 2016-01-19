@@ -52,7 +52,7 @@
                                 	cats+=insCat.getCategory()+" ("+insCat.getLabel()+" - "+insCat.getPatientShare()+"/"+(100-Integer.parseInt(insCat.getPatientShare()))+") <img src='"+sCONTEXTPATH+"/_img/themes/default/valid.gif' title='"+getTranNoLink("web","insurancecategoryalreadyactive",sWebLanguage)+"'>";
                                 }
                                 else{
-	                                cats+= "<a href=\"javascript:setInsuranceCategory('"+insCat.getCategory()+"','"+objInsurar.getUid()+"','"+objInsurar.getName().toUpperCase()+"','" +insCat.getCategory()+": "+insCat.getLabel()+"','"+objInsurar.getType()+"','"+getTran("insurance.types",objInsurar.getType(),sWebLanguage)+"');\">"+
+	                                cats+= "<a href=\"javascript:setInsuranceCategory('"+insCat.getCategory()+"','"+objInsurar.getUid()+"','"+objInsurar.getName().toUpperCase()+"','" +insCat.getCategory()+": "+insCat.getLabel()+"','"+objInsurar.getType()+"','"+getTranNoLink("insurance.types",objInsurar.getType(),sWebLanguage)+"');\">"+
 	                                       insCat.getCategory()+" ("+insCat.getLabel()+" - "+insCat.getPatientShare()+"/"+(100-Integer.parseInt(insCat.getPatientShare()))+")</a>";
                                 }
                       }

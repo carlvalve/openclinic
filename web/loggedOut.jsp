@@ -88,7 +88,7 @@
     </div>
     
     <div id="messages" class="messagesnofields">
-        <%=MedwanQuery.getInstance().getConfigString("edition", "GA Open Source Edition") %> by: 
+        <%=MedwanQuery.getInstance().getConfigString("openclinicedition", "GA Open Source Edition") %> by: 
         <%
             if(MedwanQuery.getInstance().getConfigString("mxsref", "rw").equalsIgnoreCase("rw")){
 %><img src="_img/flags/rwandaflag.jpg" height="15px" width="30px" alt="Rwanda"/>

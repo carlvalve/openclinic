@@ -74,21 +74,22 @@ try{
         patientinvoice.setCreateDateTime(getSQLTime());
         //This is a new invoice. Check if unique reference numbers are really unique
     }
-
+	
+	long day = 24*3600*1000;
     if(MedwanQuery.getInstance().getConfigInt("invoiceInsurerReferenceMustBeUnique",0)==1 && sEditInsurarReference.length()>0){
-    	String ref = Pointer.getPointer("INV.REF."+sEditInsurarReference);
+    	String ref = Pointer.getPointerBefore("INV.REF."+sEditInsurarReference,ScreenHelper.parseDate(ScreenHelper.formatDate(new java.util.Date(new java.util.Date().getTime()-MedwanQuery.getInstance().getConfigInt("invoiceInsurerReferenceValidityInDays",1)*day)).substring(0,10)));
     	if(ref.length()>0 && !ref.equalsIgnoreCase(sEditPatientInvoiceUID)){
     		bUniqueInsurerReferenceRequired=true;
     	}
     }
     if(MedwanQuery.getInstance().getConfigInt("invoiceOtherReferenceMustBeUnique",0)==1 && sEditComment.length()>0){
-    	String ref = Pointer.getPointer("INV.OTHERREF."+sEditComment);
+    	String ref = Pointer.getPointerBefore("INV.OTHERREF."+sEditComment,ScreenHelper.parseDate(ScreenHelper.formatDate(new java.util.Date(new java.util.Date().getTime()-MedwanQuery.getInstance().getConfigInt("invoiceOtherReferenceValidityInDays",1)*day)).substring(0,10)));
     	if(ref.length()>0 && !ref.equalsIgnoreCase(sEditPatientInvoiceUID)){
     		bUniqueOtherReferenceRequired=true;
     	}
     }
     if(MedwanQuery.getInstance().getConfigInt("invoiceDoctorMustBeUnique",0)==1 && sEditInvoiceDoctor.length()>0){
-    	String ref = Pointer.getPointer("INV.DOCTORREF."+sEditInvoiceDoctor);
+    	String ref = Pointer.getPointerBefore("INV.DOCTORREF."+sEditInvoiceDoctor,ScreenHelper.parseDate(ScreenHelper.formatDate(new java.util.Date(new java.util.Date().getTime()-MedwanQuery.getInstance().getConfigInt("invoiceDoctorReferenceValidityInDays",1)*day)).substring(0,10)));
     	if(ref.length()>0 && !ref.equalsIgnoreCase(sEditPatientInvoiceUID)){
     		bUniqueDoctorRequired=true;
     	}
@@ -160,9 +161,6 @@ try{
         if(acceptationuid.length()>0){
         	patientinvoice.setAcceptationUid(acceptationuid);
         }
-        Insurance insurance = Insurance.getMostInterestingInsuranceForPatient(invoicePatient.personid);
-    	bReferenceMandatory=insurance!=null && insurance.getInsurar()!=null && insurance.getInsurar().getInsuranceReferenceNumberMandatory()==1 && sEditInsurarReference.length()==0;
-    	bOtherReferenceMandatory=insurance!=null && insurance.getInsurar()!=null && insurance.getInsurar().getInvoiceCommentMandatory()==1 && sEditComment.length()==0;
     }
     else{
     	if(quickInvoice){
@@ -193,7 +191,7 @@ try{
     	}
     }
     String sMessage="";
-    if(!bReferenceMandatory && !bOtherReferenceMandatory && !bUniqueInsurerReferenceRequired && !bUniqueOtherReferenceRequired && !bUniqueDoctorRequired){
+    if(!bUniqueInsurerReferenceRequired && !bUniqueOtherReferenceRequired && !bUniqueDoctorRequired){
 		if(!quickInvoice){
 		    double dBalance = Double.parseDouble(sEditBalance);
 		    
@@ -292,8 +290,6 @@ try{
 "EditInsurarReference":"<%=patientinvoice.getInsurarreference()%>",
 "EditInsurarReferenceDate":"<%=patientinvoice.getInsurarreferenceDate()%>",
 "EditInvoiceUID":"<%=patientinvoice.getInvoiceUid()%>",
-"ReferenceMandatory":"<%=bReferenceMandatory?"1":"0"%>",
-"OtherReferenceMandatory":"<%=bOtherReferenceMandatory?"1":"0"%>",
 "UniqueInsurerReferenceRequired":"<%=bUniqueInsurerReferenceRequired?"1":"0"%>",
 "UniqueOtherReferenceRequired":"<%=bUniqueOtherReferenceRequired?"1":"0"%>",
 "UniqueDoctorRequired":"<%=bUniqueDoctorRequired?"1":"0"%>",

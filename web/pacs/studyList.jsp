@@ -5,7 +5,7 @@
 		<td><%=getTran("web", "date", sWebLanguage) %></td>
 		<td><%=getTran("web", "studyid", sWebLanguage) %></td>
 		<td><%=getTran("web", "modality", sWebLanguage) %></td>
-		<td><%=getTran("web", "seriesid", sWebLanguage) %></td>z
+		<td><%=getTran("web", "seriesid", sWebLanguage) %></td>
 		<td><%=getTran("web", "description", sWebLanguage) %></td>
 	</tr>
 <%

@@ -147,7 +147,18 @@
 
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 	out.println("<tr class='admin'><td colspan='2'>"+getTran("web","financial",sWebLanguage)+"</td></tr>");
-	sql = "select sum(oc_debet_amount) total from oc_debets,oc_encounters where oc_encounter_objectid=replace(oc_debet_encounteruid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and oc_encounter_type='visit' and oc_debet_date>=? and oc_debet_date<?";
+	sql = "select sum(oc_debet_amount) total from oc_debets,oc_encounters,oc_patientinvoices where oc_patientinvoice_objectid=replace(oc_debet_patientinvoiceuid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and oc_patientinvoice_status='closed' and oc_encounter_objectid=replace(oc_debet_encounteruid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and oc_encounter_type='visit' and oc_debet_date>=? and oc_debet_date<?";
+	ps = conn.prepareStatement(sql);
+	ps.setDate(1,new java.sql.Date(dStart.getTime()));
+	ps.setDate(2,new java.sql.Date(dEnd.getTime()));
+	rs = ps.executeQuery();
+	double closedinvoicedvisits=0;
+	if(rs.next()){
+		closedinvoicedvisits=rs.getInt("total");
+	}
+	rs.close();
+	ps.close();
+	sql = "select sum(oc_debet_amount) total from oc_debets,oc_encounters,oc_patientinvoices where oc_patientinvoice_objectid=replace(oc_debet_patientinvoiceuid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and oc_encounter_objectid=replace(oc_debet_encounteruid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and oc_encounter_type='visit' and oc_debet_date>=? and oc_debet_date<?";
 	ps = conn.prepareStatement(sql);
 	ps.setDate(1,new java.sql.Date(dStart.getTime()));
 	ps.setDate(2,new java.sql.Date(dEnd.getTime()));
@@ -155,12 +166,23 @@
 	double invoicedvisits=0;
 	if(rs.next()){
 		invoicedvisits=rs.getInt("total");
-		out.println("<tr><td class='admin'>"+getTran("web","invoicedpatients",sWebLanguage)+ " - "+getTran("web","visits",sWebLanguage)+"</td><td class='admin2'>"+new DecimalFormat("###,##0.00").format(invoicedvisits)+" "+MedwanQuery.getInstance().getConfigString("currency")+"</td></tr>");
+		out.println("<tr><td class='admin'>"+getTran("web","invoicedpatients",sWebLanguage)+ " - "+getTran("web","visits",sWebLanguage)+"</td><td class='admin2'>"+new DecimalFormat("###,##0.00").format(invoicedvisits)+" "+MedwanQuery.getInstance().getConfigString("currency")+" ("+getTran("finance.patientinvoice.status","closed",sWebLanguage)+": "+new DecimalFormat("###,##0.00").format(closedinvoicedvisits)+" "+MedwanQuery.getInstance().getConfigString("currency")+")</td></tr>");
 	}
 	rs.close();
 	ps.close();
 
-	sql = "select sum(oc_debet_amount) total from oc_debets,oc_encounters where oc_encounter_objectid=replace(oc_debet_encounteruid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and oc_encounter_type='admission' and oc_debet_date>=? and oc_debet_date<?";
+	sql = "select sum(oc_debet_amount) total from oc_debets,oc_encounters,oc_patientinvoices where oc_patientinvoice_objectid=replace(oc_debet_patientinvoiceuid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and oc_patientinvoice_status='closed' and oc_encounter_objectid=replace(oc_debet_encounteruid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and oc_encounter_type='admission' and oc_debet_date>=? and oc_debet_date<?";
+	ps = conn.prepareStatement(sql);
+	ps.setDate(1,new java.sql.Date(dStart.getTime()));
+	ps.setDate(2,new java.sql.Date(dEnd.getTime()));
+	rs = ps.executeQuery();
+	double closedinvoicedadmissions=0;
+	if(rs.next()){
+		closedinvoicedadmissions=rs.getInt("total");
+	}
+	rs.close();
+	ps.close();
+	sql = "select sum(oc_debet_amount) total from oc_debets,oc_encounters,oc_patientinvoices where oc_patientinvoice_objectid=replace(oc_debet_patientinvoiceuid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and oc_encounter_objectid=replace(oc_debet_encounteruid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and oc_encounter_type='admission' and oc_debet_date>=? and oc_debet_date<?";
 	ps = conn.prepareStatement(sql);
 	ps.setDate(1,new java.sql.Date(dStart.getTime()));
 	ps.setDate(2,new java.sql.Date(dEnd.getTime()));
@@ -168,14 +190,26 @@
 	double invoicedadmissions=0;
 	if(rs.next()){
 		invoicedadmissions=rs.getInt("total");
-		out.println("<tr><td class='admin'>"+getTran("web","invoicedpatients",sWebLanguage)+ " - "+getTran("web","admissions",sWebLanguage)+"</td><td class='admin2'>"+new DecimalFormat("###,##0.00").format(invoicedadmissions)+" "+MedwanQuery.getInstance().getConfigString("currency")+"</td></tr>");
+		out.println("<tr><td class='admin'>"+getTran("web","invoicedpatients",sWebLanguage)+ " - "+getTran("web","admissions",sWebLanguage)+"</td><td class='admin2'>"+new DecimalFormat("###,##0.00").format(invoicedadmissions)+" "+MedwanQuery.getInstance().getConfigString("currency")+" ("+getTran("finance.patientinvoice.status","closed",sWebLanguage)+": "+new DecimalFormat("###,##0.00").format(closedinvoicedadmissions)+" "+MedwanQuery.getInstance().getConfigString("currency")+")</td></tr>");
 	}
 	rs.close();
 	ps.close();
 
 	out.println("<tr><td class='admin'>"+getTran("web","invoicedpatients",sWebLanguage)+ " - "+getTran("web","total",sWebLanguage)+"</td><td class='admin2'>"+new DecimalFormat("###,##0.00").format(invoicedvisits+invoicedadmissions)+" "+MedwanQuery.getInstance().getConfigString("currency")+" ("+new DecimalFormat("###,##0.00").format((invoicedvisits+invoicedadmissions)*365/duration)+" "+MedwanQuery.getInstance().getConfigString("currency")+")</td></tr>");
+	out.println("<tr><td class='admin'>"+getTran("web","closedinvoicedpatients",sWebLanguage)+ " - "+getTran("web","total",sWebLanguage)+"</td><td class='admin2'>"+new DecimalFormat("###,##0.00").format(closedinvoicedvisits+closedinvoicedadmissions)+" "+MedwanQuery.getInstance().getConfigString("currency")+" ("+new DecimalFormat("###,##0.00").format((closedinvoicedvisits+closedinvoicedadmissions)*365/duration)+" "+MedwanQuery.getInstance().getConfigString("currency")+")</td></tr>");
 
-	sql = "select sum(oc_debet_insuraramount) total1,sum(oc_debet_extrainsuraramount) total2,sum(oc_debet_extrainsuraramount2) total3 from oc_debets,oc_encounters where oc_encounter_objectid=replace(oc_debet_encounteruid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and oc_encounter_type='visit' and oc_debet_date>=? and oc_debet_date<?";
+	sql = "select sum(oc_debet_insuraramount) total1,sum(oc_debet_extrainsuraramount) total2,sum(oc_debet_extrainsuraramount2) total3 from oc_debets,oc_encounters,oc_patientinvoices where oc_patientinvoice_objectid=replace(oc_debet_patientinvoiceuid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and oc_patientinvoice_status='closed' and oc_encounter_objectid=replace(oc_debet_encounteruid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and oc_encounter_type='visit' and oc_debet_date>=? and oc_debet_date<?";
+	ps = conn.prepareStatement(sql);
+	ps.setDate(1,new java.sql.Date(dStart.getTime()));
+	ps.setDate(2,new java.sql.Date(dEnd.getTime()));
+	rs = ps.executeQuery();
+	double closedinvoicedinsurervisits=0;
+	if(rs.next()){
+		closedinvoicedinsurervisits=rs.getInt("total1")+rs.getInt("total2")+rs.getInt("total3");
+	}
+	rs.close();
+	ps.close();
+	sql = "select sum(oc_debet_insuraramount) total1,sum(oc_debet_extrainsuraramount) total2,sum(oc_debet_extrainsuraramount2) total3 from oc_debets,oc_encounters,oc_patientinvoices where oc_patientinvoice_objectid=replace(oc_debet_patientinvoiceuid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and oc_encounter_objectid=replace(oc_debet_encounteruid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and oc_encounter_type='visit' and oc_debet_date>=? and oc_debet_date<?";
 	ps = conn.prepareStatement(sql);
 	ps.setDate(1,new java.sql.Date(dStart.getTime()));
 	ps.setDate(2,new java.sql.Date(dEnd.getTime()));
@@ -183,12 +217,23 @@
 	double invoicedinsurervisits=0;
 	if(rs.next()){
 		invoicedinsurervisits=rs.getInt("total1")+rs.getInt("total2")+rs.getInt("total3");
-		out.println("<tr><td class='admin'>"+getTran("web","invoicedinsurers",sWebLanguage)+ " - "+getTran("web","visits",sWebLanguage)+"</td><td class='admin2'>"+new DecimalFormat("###,##0.00").format(invoicedinsurervisits)+" "+MedwanQuery.getInstance().getConfigString("currency")+"</td></tr>");
+		out.println("<tr><td class='admin'>"+getTran("web","invoicedinsurers",sWebLanguage)+ " - "+getTran("web","visits",sWebLanguage)+"</td><td class='admin2'>"+new DecimalFormat("###,##0.00").format(invoicedinsurervisits)+" "+MedwanQuery.getInstance().getConfigString("currency")+" ("+getTran("finance.patientinvoice.status","closed",sWebLanguage)+": "+new DecimalFormat("###,##0.00").format(closedinvoicedinsurervisits)+" "+MedwanQuery.getInstance().getConfigString("currency")+")</td></tr>");
 	}
 	rs.close();
 	ps.close();
 
-	sql = "select sum(oc_debet_insuraramount) total1,sum(oc_debet_extrainsuraramount) total2,sum(oc_debet_extrainsuraramount2) total3 from oc_debets,oc_encounters where oc_encounter_objectid=replace(oc_debet_encounteruid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and oc_encounter_type='admission' and oc_debet_date>=? and oc_debet_date<?";
+	sql = "select sum(oc_debet_insuraramount) total1,sum(oc_debet_extrainsuraramount) total2,sum(oc_debet_extrainsuraramount2) total3 from oc_debets,oc_encounters,oc_patientinvoices where oc_patientinvoice_objectid=replace(oc_debet_patientinvoiceuid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and oc_patientinvoice_status='closed' and oc_encounter_objectid=replace(oc_debet_encounteruid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and oc_encounter_type='admission' and oc_debet_date>=? and oc_debet_date<?";
+	ps = conn.prepareStatement(sql);
+	ps.setDate(1,new java.sql.Date(dStart.getTime()));
+	ps.setDate(2,new java.sql.Date(dEnd.getTime()));
+	rs = ps.executeQuery();
+	double closedinvoicedinsureradmissions=0;
+	if(rs.next()){
+		closedinvoicedinsureradmissions=rs.getInt("total1")+rs.getInt("total2")+rs.getInt("total3");
+	}
+	rs.close();
+	ps.close();
+	sql = "select sum(oc_debet_insuraramount) total1,sum(oc_debet_extrainsuraramount) total2,sum(oc_debet_extrainsuraramount2) total3 from oc_debets,oc_encounters,oc_patientinvoices where oc_patientinvoice_objectid=replace(oc_debet_patientinvoiceuid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and oc_encounter_objectid=replace(oc_debet_encounteruid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and oc_encounter_type='admission' and oc_debet_date>=? and oc_debet_date<?";
 	ps = conn.prepareStatement(sql);
 	ps.setDate(1,new java.sql.Date(dStart.getTime()));
 	ps.setDate(2,new java.sql.Date(dEnd.getTime()));
@@ -196,13 +241,15 @@
 	double invoicedinsureradmissions=0;
 	if(rs.next()){
 		invoicedinsureradmissions=rs.getInt("total1")+rs.getInt("total2")+rs.getInt("total3");
-		out.println("<tr><td class='admin'>"+getTran("web","invoicedinsurers",sWebLanguage)+ " - "+getTran("web","admissions",sWebLanguage)+"</td><td class='admin2'>"+new DecimalFormat("###,##0.00").format(invoicedinsureradmissions)+" "+MedwanQuery.getInstance().getConfigString("currency")+"</td></tr>");
+		out.println("<tr><td class='admin'>"+getTran("web","invoicedinsurers",sWebLanguage)+ " - "+getTran("web","admissions",sWebLanguage)+"</td><td class='admin2'>"+new DecimalFormat("###,##0.00").format(invoicedinsureradmissions)+" "+MedwanQuery.getInstance().getConfigString("currency")+" ("+getTran("finance.patientinvoice.status","closed",sWebLanguage)+": "+new DecimalFormat("###,##0.00").format(closedinvoicedinsureradmissions)+" "+MedwanQuery.getInstance().getConfigString("currency")+")</td></tr>");
 	}
 	rs.close();
 	ps.close();
 
 	out.println("<tr><td class='admin'>"+getTran("web","invoicedinsurers",sWebLanguage)+ " - "+getTran("web","total",sWebLanguage)+"</td><td class='admin2'>"+new DecimalFormat("###,##0.00").format(invoicedinsurervisits+invoicedinsureradmissions)+" ("+new DecimalFormat("###,##0.00").format((invoicedinsurervisits+invoicedinsureradmissions)*365/duration)+" "+MedwanQuery.getInstance().getConfigString("currency")+")</td></tr>");
+	out.println("<tr><td class='admin'>"+getTran("web","closedinvoicedinsurers",sWebLanguage)+ " - "+getTran("web","total",sWebLanguage)+"</td><td class='admin2'>"+new DecimalFormat("###,##0.00").format(closedinvoicedinsurervisits+closedinvoicedinsureradmissions)+" ("+new DecimalFormat("###,##0.00").format((closedinvoicedinsurervisits+closedinvoicedinsureradmissions)*365/duration)+" "+MedwanQuery.getInstance().getConfigString("currency")+")</td></tr>");
 	out.println("<tr><td class='admin'>"+getTran("web","invoiced",sWebLanguage)+ " - "+getTran("web","total",sWebLanguage)+"</td><td class='admin2'>"+new DecimalFormat("###,##0.00").format(invoicedvisits+invoicedadmissions+invoicedinsurervisits+invoicedinsureradmissions)+" "+MedwanQuery.getInstance().getConfigString("currency")+" ("+new DecimalFormat("###,##0.00").format((invoicedvisits+invoicedadmissions+invoicedinsurervisits+invoicedinsureradmissions)*365/duration)+" "+MedwanQuery.getInstance().getConfigString("currency")+")</td></tr>");
+	out.println("<tr><td class='admin'>"+getTran("web","closedinvoiced",sWebLanguage)+ " - "+getTran("web","total",sWebLanguage)+"</td><td class='admin2'>"+new DecimalFormat("###,##0.00").format(closedinvoicedvisits+closedinvoicedadmissions+closedinvoicedinsurervisits+closedinvoicedinsureradmissions)+" "+MedwanQuery.getInstance().getConfigString("currency")+" ("+new DecimalFormat("###,##0.00").format((closedinvoicedvisits+closedinvoicedadmissions+closedinvoicedinsurervisits+closedinvoicedinsureradmissions)*365/duration)+" "+MedwanQuery.getInstance().getConfigString("currency")+")</td></tr>");
 
 	sql = "select sum(oc_patientcredit_amount) total from oc_patientcredits,oc_encounters where oc_encounter_objectid=replace(oc_patientcredit_encounteruid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and oc_encounter_type='visit' and oc_patientcredit_date>=? and oc_patientcredit_date<?";
 	ps = conn.prepareStatement(sql);
@@ -231,9 +278,9 @@
 	ps.close();
 
 	out.println("<tr><td class='admin'>"+getTran("web","paidpatients",sWebLanguage)+ " - "+getTran("web","total",sWebLanguage)+"</td><td class='admin2'>"+new DecimalFormat("###,##0.00").format(paidvisits+paidadmissions)+" "+MedwanQuery.getInstance().getConfigString("currency")+"</td></tr>");
-	out.println("<tr><td class='admin'>"+getTran("web","patientpaymentcoverage",sWebLanguage)+ " - "+getTran("web","visits",sWebLanguage)+"</td><td class='admin2'>"+new DecimalFormat("###,##0.00").format(paidvisits*100/invoicedvisits)+"%</td></tr>");
-	out.println("<tr><td class='admin'>"+getTran("web","patientpaymentcoverage",sWebLanguage)+ " - "+getTran("web","admissions",sWebLanguage)+"</td><td class='admin2'>"+new DecimalFormat("###,##0.00").format(paidadmissions*100/invoicedadmissions)+"%</td></tr>");
-	out.println("<tr><td class='admin'>"+getTran("web","patientpaymentcoverage",sWebLanguage)+ " - "+getTran("web","total",sWebLanguage)+"</td><td class='admin2'>"+new DecimalFormat("###,##0.00").format((paidadmissions+paidvisits)*100/(invoicedadmissions+invoicedvisits))+"%</td></tr>");
+	out.println("<tr><td class='admin'>"+getTran("web","patientpaymentcoverage",sWebLanguage)+ " - "+getTran("web","visits",sWebLanguage)+"</td><td class='admin2'>"+new DecimalFormat("###,##0.00").format(paidvisits*100/invoicedvisits)+"% ("+getTran("finance.patientinvoice.status","closed",sWebLanguage)+": "+new DecimalFormat("###,##0.00").format(paidvisits*100/closedinvoicedvisits)+"%)</td></tr>");
+	out.println("<tr><td class='admin'>"+getTran("web","patientpaymentcoverage",sWebLanguage)+ " - "+getTran("web","admissions",sWebLanguage)+"</td><td class='admin2'>"+new DecimalFormat("###,##0.00").format(paidadmissions*100/invoicedadmissions)+"% ("+getTran("finance.patientinvoice.status","closed",sWebLanguage)+": "+new DecimalFormat("###,##0.00").format(paidadmissions*100/closedinvoicedadmissions)+"%)</td></tr>");
+	out.println("<tr><td class='admin'>"+getTran("web","patientpaymentcoverage",sWebLanguage)+ " - "+getTran("web","total",sWebLanguage)+"</td><td class='admin2'>"+new DecimalFormat("###,##0.00").format((paidadmissions+paidvisits)*100/(invoicedadmissions+invoicedvisits))+"% ("+getTran("finance.patientinvoice.status","closed",sWebLanguage)+": "+new DecimalFormat("###,##0.00").format((paidadmissions+paidvisits)*100/(closedinvoicedadmissions+closedinvoicedvisits))+"%)</td></tr>");
 
 	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 	out.println("<tr class='admin'><td colspan='2'>"+getTran("web","clinical",sWebLanguage)+"</td></tr>");

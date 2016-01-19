@@ -39,7 +39,7 @@
 			            <td class="admin2" colspan="6">
 			                <select id="from" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_PO_REGISTRY_FROM" property="itemId"/>]>.value">
 			                	<option/>
-				            	<%=ScreenHelper.writeSelect("ccbrt.physio.from",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_PO_REGISTRY_FROM"),sWebLanguage,false,true) %>
+				            	<%=ScreenHelper.writeSelect("ccbrt.eye.from",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_PO_REGISTRY_FROM"),sWebLanguage,false,true) %>
 			                </select>
 			            </td>
 			        </tr>
@@ -102,7 +102,10 @@
 			            <td class="admin2">
 							<input type="checkbox" class="hand" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_PO_REGISTRY_AMPUTATIONS" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_PO_REGISTRY_AMPUTATIONS;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><%=getTran("web","amputations",sWebLanguage) %>
 						</td>			            
-			            <td class="admin2" colspan="5">
+			            <td class="admin2">
+							<input type="checkbox" class="hand" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_PO_REGISTRY_ORTHOSIS" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_PO_REGISTRY_ORTHOSIS;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><%=getTran("web","orthosis",sWebLanguage) %>
+						</td>			            
+			            <td class="admin2" colspan="4">
 							<input type="checkbox" class="hand" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_PO_REGISTRY_MINING" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_PO_REGISTRY_MINING;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><%=getTran("web","mining",sWebLanguage) %>			            
 						</td>	
 					</tr>

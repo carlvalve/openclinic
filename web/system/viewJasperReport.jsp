@@ -22,6 +22,7 @@
 	<%
 		String uid = request.getParameter("uid");
 		Report report = Report.get(uid);
+		System.out.println(report.getReportxml()+"\n");
 	    SAXReader reader = new SAXReader(false);
 		BufferedReader br = new BufferedReader(new StringReader(report.getReportxml()));
 		Document document = reader.read(br);

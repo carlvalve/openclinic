@@ -212,6 +212,7 @@
                     hMenu.put(getTran("web.manage","resetqueues",sWebLanguage),"main.do?Page=system/resetQueues.jsp"); idx++;
                     hMenu.put(getTran("web.manage","calculatequeuestats",sWebLanguage),"main.do?Page=system/calculateQueueStats.jsp"); idx++;
                     hMenu.put(getTran("web.manage","managereports",sWebLanguage),"main.do?Page=system/manageReports.jsp"); idx++;
+                    hMenu.put(getTran("web.manage","manageworddocuments",sWebLanguage),"main.do?Page=system/manageWordDocuments.jsp"); idx++;
 
                     // depends on selection of activePatient
                     out.print(ScreenHelper.writeTblHeader(getTran("web.occup","medwan.common.other",sWebLanguage),sCONTEXTPATH)+

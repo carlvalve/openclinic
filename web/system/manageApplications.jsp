@@ -120,7 +120,7 @@
                     String title;
                     Hashtable perms;
                     SAXReader xmlReader = new SAXReader();
-                    String sPermissions = MedwanQuery.getInstance().getConfigString("templateSource") + "permissions.xml";
+                    String sPermissions = MedwanQuery.getInstance().getConfigString("templateSource") + MedwanQuery.getInstance().getConfigString("permissionsFile","permissions.xml");
                     Document document;
                     String sApplicationType, sApplicationId, sApplicationDisplaySection, sPermissionType, sPermissionId, sPermission;
                     boolean bDisplaySection;

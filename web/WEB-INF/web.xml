@@ -13,6 +13,10 @@
         <extension>ecg</extension>
         <mime-type>application/ecg</mime-type>
     </mime-mapping>
+    <mime-mapping>
+        <extension>jnlpa</extension>
+        <mime-type>application/x-java-jnlp-file</mime-type>
+    </mime-mapping>
 
     <!-- ========== SERVLET FILTERS CONFIGURATIONS ============================ -->
 

@@ -70,7 +70,7 @@
         }
         else{
         	// default
-		    bgi = "/"+sAPPDIR+"_img/themes/"+(sUserTheme.length()==0?"default":sUserTheme)+"/logo.png";
+		    bgi = "/"+sAPPDIR+"_img/themes/"+(sUserTheme.length()==0?"default":sUserTheme)+"/"+MedwanQuery.getInstance().getConfigString("defaultLogo","logo.png");
         }
 
         %>        
@@ -83,7 +83,7 @@
 			   	   	    java.io.File file = new java.io.File(sLogoUrl); 
 			   	   	    if(!(file.exists() && file.isFile())){
 			   	   	    	// default theme
-			   			    bgi = "/_img/themes/"+(sUserTheme.length()==0?"default":sUserTheme)+"/logo.png";
+			   			    bgi = "/_img/themes/default/"+MedwanQuery.getInstance().getConfigString("defaultLogo","logo.png");
 			   	   	    	
 			   	   	    	Debug.println("INFO : Configured project-logo-file for edition '"+sEdition+"' does not exist : '"+sLogoUrl+"', USING default logo");
 			   	   	    }
