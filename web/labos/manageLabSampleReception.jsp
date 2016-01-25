@@ -14,7 +14,6 @@
         while(parameters.hasMoreElements()){
             String name = (String)parameters.nextElement();
             String fields[] = name.split("\\.");
-            System.out.println(fields[0]+": "+name);
             if(fields[0].equalsIgnoreCase("receive") && fields.length == 4){
                 serverid = Integer.parseInt(fields[1]);
                 transactionid = Integer.parseInt(fields[2]);

@@ -329,10 +329,7 @@
             insurance = Insurance.get(sInsuranceUID);
         }
         Prestation prestation = Prestation.get(sPrestationUID,dDebetDate);
-    	System.out.println("insurance.getInsurar()="+insurance.getInsurar());
-    	System.out.println("prestation.isVisibleFor(insurance.getInsurar())="+prestation.isVisibleFor(insurance.getInsurar()));
         if(insurance==null || insurance.getInsurar()==null || !prestation.isVisibleFor(insurance.getInsurar())){
-        	System.out.println("not allowed!");
         	prestationcontent+="<table></table>";
         }
         else {

@@ -29,7 +29,6 @@
     String sUserId = checkString(request.getParameter("FindUserUID"));
     String sServiceUid = checkString(request.getParameter("FindServiceUID"));
     boolean bUseServiceUid = checkString(request.getParameter("FindServiceDisplay")).length()==0;
-    System.out.println("display="+request.getParameter("FindServiceDisplay"));
     String sPatientId = checkString(request.getParameter("PatientID"));
     String sMonth = checkString(request.getParameter("month"));
     String sDay = checkString(request.getParameter("day"));

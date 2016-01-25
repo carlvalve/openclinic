@@ -229,9 +229,6 @@
         planning = new Planning();
         // set appointment date
         boolean bRefresh = setDates(planning, request,new int[]{startHourOfWeekPlanner,startMinOfWeekPlanner,endHourOfWeekPlanner,endMinOfWeekPlanner});
-        System.out.println("start="+planning.getPlannedDate());
-        System.out.println("end="+planning.getPlannedEndDate());
-        System.out.println("user="+p.getUserUID());
     	boolean bOverlapProhibited=false;
     	if(checkString(activeUser.getParameter("PlanningDoubleBookingProhibited")).equalsIgnoreCase("1")){
     		bOverlapProhibited=!Planning.isAvailablePlannedDate(p.getUserUID(), planning.getPlannedDate(),planning.getPlannedEndDate(),sEditPlanningUID);

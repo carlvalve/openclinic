@@ -183,10 +183,8 @@
                     			//Especially useful for phenotypes
                     			result="";
                     			String s=analysis.getEditorparameters().replaceAll("OP:CONC\\|", "");
-                    			System.out.println(labRequest.getAnalyses());
                     			String[] sPars = s.split(",");
                     			for(int n=0;n<sPars.length;n++){
-                    				System.out.println("searching for: "+sPars[n].replaceAll("@", "")+" = "+labRequest.getAnalyses().get(sPars[n].replaceAll("@", "")));
         	            			result+=((RequestedLabAnalysis)labRequest.getAnalyses().get(sPars[n].replaceAll("@", ""))).getResultValue();
                     			}
                     		}

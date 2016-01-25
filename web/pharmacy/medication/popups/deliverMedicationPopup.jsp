@@ -182,12 +182,9 @@
         if(sResult==null){
         	//Now check if a blood product delivery must be registered
         	//We only do this if it has been delivered to a patient
-        	System.out.println(1);
         	if(operation.getSourceDestination().getObjectType().equalsIgnoreCase("patient")){
         		//We need a batch number, otherwise there is no link
-        	System.out.println(2);
         		if(operation.getBatchNumber()!=null && operation.getBatchNumber().length()>0){
-                	System.out.println(3);
         			int nBatchNumber=-1;
         			try{
         				nBatchNumber=Integer.parseInt(operation.getBatchNumber());
@@ -195,13 +192,10 @@
         			catch(Exception r){
         			}
         			if(nBatchNumber>-1){
-        	        	System.out.println(4);
 			        	ProductStock productStock = operation.getProductStock();
 			        	if(productStock!=null){
-			            	System.out.println(5);
 			        		Product product = productStock.getProduct();
 			        		if(product!=null && product.getProductSubGroup().toLowerCase().startsWith(MedwanQuery.getInstance().getConfigString("bloodProductsCategory","BP.").toLowerCase())){
-			                	System.out.println(6);
 			        			//It is a blood product delivery. Register it
 			        			Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
 								PreparedStatement ps = conn.prepareStatement("insert into OC_BLOODDELIVERIES("+

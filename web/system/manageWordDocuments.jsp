@@ -76,7 +76,6 @@
 			}
 		}
 		else {
-			System.out.println(3);
 			//New document
 			ps = conn.prepareStatement("insert into WordDocuments(name,document) values(?,?)");
 			ps.setString(1,sDocumentName);

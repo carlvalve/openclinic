@@ -176,11 +176,13 @@
 	    	Insurance insurance = (Insurance)insurances.elementAt(n);
 	    	if(insurance.getStop()==null || insurance.getStop().after(new java.util.Date())){
 		    	Insurar insurar = insurance.getInsurar();
-		    	if(insurar.getInsuranceReferenceNumberMandatory()==1){
-		    		mandatoryReferenceInsurers+="*"+insurance.getUid()+"*";
-		    	}
-		    	if(insurar.getInvoiceCommentMandatory()==1){
-		    		mandatoryOtherReferenceInsurers+="*"+insurance.getUid()+"*";
+		    	if(insurar!=null){
+			    	if(insurar.getInsuranceReferenceNumberMandatory()==1){
+			    		mandatoryReferenceInsurers+="*"+insurance.getUid()+"*";
+			    	}
+			    	if(insurar.getInvoiceCommentMandatory()==1){
+			    		mandatoryOtherReferenceInsurers+="*"+insurance.getUid()+"*";
+			    	}
 		    	}
 	    	}
 	    }

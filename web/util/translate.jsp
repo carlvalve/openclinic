@@ -7,8 +7,6 @@
 	boolean done=false,recycle=false;
 	int n=0;
 	while(!done){
-		System.out.println("STARTING CYCLE................");
-		System.out.println("..............................");
 		Connection conn = MedwanQuery.getInstance().getLongOpenclinicConnection();
 		PreparedStatement ps = conn.prepareStatement("select * from oc_labels a where oc_label_language=? and not exists (select * from oc_labels where oc_label_type=a.oc_label_type and oc_label_id=a.oc_label_id and oc_label_language=?)");
 		ps.setString(1, from);

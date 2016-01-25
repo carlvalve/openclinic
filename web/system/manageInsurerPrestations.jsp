@@ -15,7 +15,6 @@
 	}
 	
 	if(sEditInsurarUid.length()>0 && request.getParameter("submit")!=null){
-		System.out.println("1");
 		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
 		PreparedStatement ps = conn.prepareStatement("delete from oc_insurarprestations where oc_insurarprestation_insuraruid=?");
 		ps.setString(1,sEditInsurarUid);
@@ -26,7 +25,6 @@
 		Enumeration pars = request.getParameterNames();
 		while(pars.hasMoreElements()){
 			String parName=(String)pars.nextElement();
-			System.out.println(parName+" ("+request.getParameter(parName)+")");
 			if(parName.startsWith("cb.") && request.getParameter(parName).equalsIgnoreCase("1")){
 				ps.setString(2, parName.replaceAll("cb.",""));
 				ps.execute();

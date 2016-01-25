@@ -49,10 +49,8 @@
     DecimalFormat priceFormat = new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#,##0.00"));
 
     if(sAction.equals("search")){
-    	System.out.println("searching sFindInvoiceInsurarUID="+sFindInvoiceInsurarUID);
         Vector vInvoices = InsurarInvoice.searchInvoices(sFindInvoiceDate,sFindInvoiceNr,sFindInvoiceInsurarUID,
         		                                         sFindInvoiceStatus,sFindInvoiceBalanceMin,sFindInvoiceBalanceMax);
-    	System.out.println("found "+vInvoices.size());
 
         int recCount = 0;
         StringBuffer sHtml = new StringBuffer();

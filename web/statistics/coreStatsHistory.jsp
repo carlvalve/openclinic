@@ -27,7 +27,6 @@
         Date dDate = (Date)o[0];
         Double iValue = (Double)o[1];
         sJsArray+="["+dDate.getTime()+","+iValue+"],";
-        System.out.println("["+dDate.getTime()+","+iValue+"],");
     }
     sJsArray+="]";
 %>

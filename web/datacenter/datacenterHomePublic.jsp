@@ -136,7 +136,6 @@
 				PreparedStatement ps=conn.prepareStatement(sSql);
 				long month=30*24*3600;
 				month*=1000;
-				System.out.println("time="+new java.sql.Timestamp(new java.util.Date().getTime()-MedwanQuery.getInstance().getConfigInt("gbhPublicInactivityPeriodInMonths",3)*month));
 				ps.setTimestamp(1,new java.sql.Timestamp(new java.util.Date().getTime()-MedwanQuery.getInstance().getConfigInt("gbhPublicInactivityPeriodInMonths",3)*month));
 				ResultSet rs = ps.executeQuery();
 				int serverid,activeServer=-1;
