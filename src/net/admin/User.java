@@ -1224,6 +1224,9 @@ public class User extends OC_Object {
             String sQuery = "SELECT u.userid, a.personid, a.lastname, a.firstname, a.immatnew"+
                             " FROM Admin a, Users u"+
                             "  WHERE a.personid = u.personid";
+            if(MedwanQuery.getInstance().getConfigInt("hideStoppedUsers",0)==1){
+            	sQuery+=" and u.stop is null";
+            }
 
             if(sSelect.length() > 0) sQuery+= " AND "+sSelect;
             sQuery+= " ORDER BY searchname";

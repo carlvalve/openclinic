@@ -93,7 +93,6 @@ public class CsvInvoiceCCBRTA {
 	                sUser = "?";
 	                try{
 	                	if(debet.getUpdateUser()!=null){
-	                		System.out.println("userid="+debet.getUpdateUser());
 	                		sUser=User.getFullUserName(debet.getUpdateUser());
 	                	}
 	                }

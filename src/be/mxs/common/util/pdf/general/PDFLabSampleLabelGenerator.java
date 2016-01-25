@@ -161,9 +161,29 @@ public class PDFLabSampleLabelGenerator extends PDFOfficialBasic {
             table.addCell(cell);
 
             PdfContentByte cb = docWriter.getDirectContent();
-            BarcodeInter25 barcode39 = new BarcodeInter25();
-            barcode39.setCode("2"+transactionid);
-            Image image = barcode39.createImageWithBarcode(cb, null, null);
+            Image image = null;
+            
+            if(MedwanQuery.getInstance().getConfigString("labLabelBarcodeType","code39").equalsIgnoreCase("interleave25")){
+	            BarcodeInter25 barcode25 = new BarcodeInter25();
+	            String sampleid=transactionid.split("\\.")[1];
+	            if(sampleid.length()==1){
+	            	sampleid="0"+sampleid;
+	            }
+	            String tranid=transactionid.split("\\.")[0]+sampleid;
+	            barcode25.setCode("2"+(tranid.length()%2==0?"0":"")+tranid);
+	            barcode25.setAltText("");
+	            barcode25.setSize(1);
+	            barcode25.setBaseline(0);
+	            image = barcode25.createImageWithBarcode(cb, null, null);
+            }
+            else {
+	            Barcode39 barcode39 = new Barcode39();
+	            barcode39.setCode("2"+transactionid);
+	            barcode39.setAltText("");
+	            barcode39.setSize(1);
+	            barcode39.setBaseline(0);
+	            image = barcode39.createImageWithBarcode(cb, null, null);
+            }
             image.scaleToFit(MedwanQuery.getInstance().getConfigInt("labLabelScaleWidth",120),MedwanQuery.getInstance().getConfigInt("labLabelScaleHeight",40));
             cell=new PdfPCell(image);
             cell.setBorder(PdfPCell.NO_BORDER);
@@ -172,7 +192,7 @@ public class PDFLabSampleLabelGenerator extends PDFOfficialBasic {
             cell.setPadding(0);
             table.addCell(cell);
 
-            cell = new PdfPCell(new Paragraph(MedwanQuery.getInstance().getLabel("labanalysis.monster",sample,user.person.language),FontFactory.getFont(FontFactory.HELVETICA_BOLD,MedwanQuery.getInstance().getConfigInt("labLabelSampleFontSize",6),MedwanQuery.getInstance().getConfigInt("labLabelSampleFontBold",Font.NORMAL))));
+            cell = new PdfPCell(new Paragraph(transactionid+" - "+MedwanQuery.getInstance().getLabel("labanalysis.monster",sample,user.person.language),FontFactory.getFont(FontFactory.HELVETICA_BOLD,MedwanQuery.getInstance().getConfigInt("labLabelSampleFontSize",6),MedwanQuery.getInstance().getConfigInt("labLabelSampleFontBold",Font.NORMAL))));
             cell.setColspan(3);
             cell.setBorder(PdfPCell.NO_BORDER);
             cell.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
@@ -195,6 +215,7 @@ public class PDFLabSampleLabelGenerator extends PDFOfficialBasic {
             e.printStackTrace();
         }
     }
+
 
     //################################### UTILITY FUNCTIONS #######################################
 

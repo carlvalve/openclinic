@@ -248,17 +248,13 @@ public class PDFInsurarInvoiceGeneratorMFP extends PDFInvoiceGenerator {
                 if(income!=null){
                 	String beneficiary="";
                 	PatientInvoice iv = PatientInvoice.get(invoiceUid.split(";")[0]);
-                	System.out.println("iv="+iv);
                 	if(iv!=null){
-                    	System.out.println("iv.patientuid="+iv.getPatientUid());
-                    	System.out.println("iv.getPatient()="+iv.getPatient());
                 		if(iv.getPatient()!=null){
                 			status="";
                 			if(iv.getInsuranceUid().length()>0){
                 				Insurance insurance = Insurance.get(iv.getInsuranceUid());
                 				status=insurance.getStatus();
                 			}
-                        	System.out.println("beneficiary="+beneficiary);
                 			beneficiary=iv.getPatient().lastname.toUpperCase()+", "+iv.getPatient().firstname+" ("+ScreenHelper.getTranNoLink("insurance.status", status, sPrintLanguage)+")";
                 		}
                 	}

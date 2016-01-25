@@ -181,7 +181,6 @@ public class PDFInsurarInvoiceGenerator extends PDFInvoiceGenerator {
 
             // debets
             table.addCell(createGrayCell(getTran("web","invoiceDebets").toUpperCase(),1));
-            System.out.println("????????????????????????????????????????????");
             getDebets(invoice,table);
             table.addCell(createEmptyCell(1));
 
@@ -282,7 +281,6 @@ public class PDFInsurarInvoiceGenerator extends PDFInvoiceGenerator {
                 boolean displayPatientName;
                 int counter=0;
                 for(int i=0; i<debets.size(); i++){
-                	System.out.println("i="+i);
                     table = new PdfPTable(20);
                     table.setWidthPercentage(pageWidth);
                     debet = (Debet)debets.get(i);

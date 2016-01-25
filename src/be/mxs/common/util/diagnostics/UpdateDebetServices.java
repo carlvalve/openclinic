@@ -82,7 +82,6 @@ public class UpdateDebetServices {
 					ps2.executeUpdate();
 					ps2.close();
 					Thread.sleep(50);
-					System.out.print(".");
 				}
 				rs.close();
 				ps.close();

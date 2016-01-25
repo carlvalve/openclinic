@@ -149,7 +149,6 @@ public class TimeGraph {
 	    			  " union"+
 	    			  " select year(updatetime) year, month(updatetime) month, userid uid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".'"+MedwanQuery.getInstance().concatSign()+MedwanQuery.getInstance().convert("varchar", "oc_encounter_objectid")+" encounteruid from transactions a,items b,oc_encounters c where a.serverid=b.serverid and a.transactionid=b.transactionid and b.type='be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID' and oc_encounter_objectid=replace(b.value,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and a.updatetime>=? and a.updatetime<? and oc_encounter_begindate>=? and oc_encounter_begindate<?) q"+
 	    			  " group by year,month,encounteruid) r group by year,month order by year, month";
-	            System.out.println(sql);
 	            ps = conn.prepareStatement(sql);
 	            ps.setTimestamp(1, new java.sql.Timestamp(begin.getTime()));
 	            ps.setTimestamp(2, new java.sql.Timestamp(end.getTime()));
