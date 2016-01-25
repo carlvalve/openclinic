@@ -205,7 +205,6 @@
                 </table>
 
                 <%
-                	System.out.println("A:"+((Vector)usersPerDiv.get("varia")).size());
                     if(((Vector)usersPerDiv.get("varia")).size()==0){
                         // no records found message
                         %><div><%=HTMLEntities.htmlentities(getTran("web","nousersFoundInDivision",sWebLanguage))%></div><%

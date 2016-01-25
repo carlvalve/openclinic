@@ -127,7 +127,6 @@ sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
                 <select class="text" id='EditInsuranceUID' name="EditInsuranceUID" onchange="changeInsurance()">
                     <option/>
                     <%
-                    System.out.println(1);
                         Vector vInsurances = Insurance.getCurrentInsurances(activePatient.personid);
                         if (vInsurances!=null){
                             boolean bInsuranceSelected = false;
@@ -150,10 +149,6 @@ sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
 	                                            bInsuranceSelected = true;
 	                                        }
 	                                    }
-                                        System.out.println("insurance="+insurance);
-                                        System.out.println("insurar="+insurance.getInsurar().getName());
-                                        System.out.println("category="+insurance.getInsuranceCategory());
-                                        System.out.println("category2="+insurance.getInsuranceCategory().getCategory());
                                         try{
                                         	out.print("/>"+insurance.getInsurar().getName()+" ("+insurance.getInsuranceCategory().getCategory()+": "+insurance.getInsuranceCategory().getPatientShare()+"/"+(100-Integer.parseInt(insurance.getInsuranceCategory().getPatientShare()))+")"+ "</option>");
                                         }
@@ -197,7 +192,6 @@ sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
                 <select class="text" name="coverageinsurance" id="coverageinsurance" onchange="changeInsurance();checkCoverage();">
                     <option value=""></option>
 					<%
-                    System.out.println(2);
 						String extrainsurar="";
 						Insurance insurance=Insurance.getMostInterestingInsuranceForPatient(activePatient.personid);
 						if(insurance!=null && insurance.getExtraInsurarUid()!=null && insurance.getExtraInsurarUid().length()>0){
@@ -249,7 +243,6 @@ sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
                 <select class="text" name="EditPrestationName" id="EditPrestationName" onchange="document.getElementById('EditPrestationGroup').value='';changePrestation(false)">
                     <option/>
                     <%
-                    System.out.println(3);
 						Prestation prestation = debet.getPrestation();
 
                         if (prestation!=null){
@@ -387,7 +380,6 @@ sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
             	<select class='text' name='EditCareProvider' id='EditCareProvider'>
             		<option value=''></option>
 		            <%
-                    System.out.println(4);
 		            	Vector users = UserParameter.getUserIdsExtended("invoicingcareprovider", "on");
 		            	SortedSet usernames = new TreeSet();
 		            	for(int n=0;n<users.size();n++){

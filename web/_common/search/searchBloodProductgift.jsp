@@ -19,7 +19,6 @@
 			sRefABO=product.getAtccode();
 		}
 	}
-	System.out.println("cat="+sProductCategory);
 	//Find all existing bloodgifts with expirydate in the future
     String sObjectId = "";
 	Vector bloodgifts = MedwanQuery.getInstance().getTransactionsByType(Integer.parseInt(sPatientUid), "be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CNTS_BLOODGIFT");

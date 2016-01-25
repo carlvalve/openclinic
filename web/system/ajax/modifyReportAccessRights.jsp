@@ -2,7 +2,6 @@
 <%
 	String reportgroup=request.getParameter("reportgroup");
 	String groupaccessrights=MedwanQuery.getInstance().getConfigString("reportGroupAccessRights."+reportgroup,"");
-	System.out.println("test");
 %>
 <table width='100%'>
 	<tr>
@@ -23,5 +22,4 @@
 	</tr>
 </table>							
 <%
-System.out.println("testend");
 %>

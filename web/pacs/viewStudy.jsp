@@ -5,24 +5,10 @@
     response.setContentType("application/x-java-jnlp-file");
     response.setHeader("Content-disposition", "inline; filename="+MedwanQuery.getInstance().getConfigString("weasisJnlpFile","Weasis.jnlp"));
     String server=(request.getProtocol().toLowerCase().startsWith("https")?"https":"http")+"://"+ request.getServerName()+":"+request.getServerPort();
-	//assemble filelist
-    StringBuffer filelist=new StringBuffer();
-	Connection conn=MedwanQuery.getInstance().getOpenclinicConnection();
-	PreparedStatement ps =conn.prepareStatement("select * from OC_PACS where OC_PACS_STUDYUID=? and OC_PACS_SERIES=? order by OC_PACS_SEQUENCE*1");
-	ps.setString(1, ScreenHelper.checkString(request.getParameter("studyuid")));
-	ps.setString(2, ScreenHelper.checkString(request.getParameter("seriesid")));
-	ResultSet rs =ps.executeQuery();
-	while(rs.next()){
-		filelist.append(server+"/"+request.getRequestURI().replaceAll(request.getServletPath(),"")+"/"+MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_url","scan")+"/"+
-                MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_dirTo","to")+"/"+rs.getString("OC_PACS_FILENAME")+" ");
-	}
-	rs.close();
-	ps.close();
-	conn.close();
 %>
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE jnlp PUBLIC "-//Sun Microsystems, Inc//DTD JNLP Descriptor 6.0//EN" "<%=MedwanQuery.getInstance().getConfigString("templateSource")%>JNLP-6.0.dtd">
-  <jnlp spec="1.6+" codebase="<%=server%>/weasis" href="">
+  <jnlp spec="1.6+" codebase="<%=server+request.getRequestURI().replaceAll(request.getServletPath(),"")%>/weasis" href="">
   <information>
     <title>Weasis</title>
     <vendor>Weasis Team</vendor>
@@ -40,11 +26,11 @@
     <j2se version="1.6.0_10+" href="http://java.sun.com/products/autodl/j2se" initial-heap-size="128m" max-heap-size="512m" />
     <j2se version="1.6.0_10+" initial-heap-size="128m" max-heap-size="512m" />
 
-    <jar href="<%=server%>/weasis/weasis-launcher.jar" main="true" />
-    <jar href="<%=server%>/weasis/felix.jar" />
+    <jar href="<%=server+request.getRequestURI().replaceAll(request.getServletPath(),"")%>/weasis/weasis-launcher.jar" main="true" />
+    <jar href="<%=server+request.getRequestURI().replaceAll(request.getServletPath(),"")%>/weasis/felix.jar" />
 
     <!-- Optional library (Substance Look and feel, only since version 1.0.8). Requires the new Java Plug-in introduced in the Java SE 6 update 10 release.For previous JRE 6, substance.jnlp needs a static codebase URL -->
-    <extension href="<%=server%>/weasis/substance.jnlp" />
+    <extension href="<%=server+request.getRequestURI().replaceAll(request.getServletPath(),"")%>/weasis/substance.jnlp" />
 
     <!-- Allows to get files in pack200 compression, only since Weasis 1.1.2 -->
     <property name="jnlp.packEnabled" value="true" />
@@ -52,30 +38,25 @@
     <!-- ================================================================================================================= -->
     <!-- Security Workaround. Add prefix "jnlp.weasis" for having a fully trusted application without signing jnlp (only since weasis 1.2.9), http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6653241 -->
     <!-- Required parameter. Define the location of config.properties (the OSGI configuration and the list of plug-ins to install/start) -->
-    <property name="jnlp.weasis.felix.config.properties" value="<%=server%>/weasis/conf/config.properties" />
+    <property name="jnlp.weasis.felix.config.properties" value="<%=server+request.getRequestURI().replaceAll(request.getServletPath(),"")%>/weasis/conf/config.properties" />
     <!-- Optional parameter. Define the location of ext-config.properties (extend/override config.properties) -->
-    <property name="jnlp.weasis.felix.extended.config.properties" value="<%=server%>/weasis-ext/conf/ext-config.properties" />
+    <property name="jnlp.weasis.felix.extended.config.properties" value="<%=server+request.getRequestURI().replaceAll(request.getServletPath(),"")%>/weasis-ext/conf/ext-config.properties" />
     <!-- Required parameter. Define the code base of Weasis for the JNLP -->
-    <property name="jnlp.weasis.weasis.codebase.url" value="<%=server%>/weasis" />
+    <property name="jnlp.weasis.weasis.codebase.url" value="<%=server+request.getRequestURI().replaceAll(request.getServletPath(),"")%>/weasis" />
     <!-- Optional parameter. Define the code base ext of Weasis for the JNLP -->
-    <property name="jnlp.weasis.weasis.codebase.ext.url" value="<%=server%>/weasis-ext" />
+    <property name="jnlp.weasis.weasis.codebase.ext.url" value="<%=server+request.getRequestURI().replaceAll(request.getServletPath(),"")%>/weasis-ext" />
     <!-- Required parameter. OSGI console parameter -->
     <property name="jnlp.weasis.gosh.args" value="-sc telnetd -p 17179 start" />
     <!-- Optional parameter. Allows to have the Weasis menu bar in the top bar on Mac OS X (works only with the native Aqua look and feel) -->
     <property name="jnlp.weasis.apple.laf.useScreenMenuBar" value="true" />
     <!-- Optional parameter. Allows to get plug-ins translations -->
-    <property name="jnlp.weasis.weasis.i18n" value="<%=server%>/weasis-i18n" />
+    <property name="jnlp.weasis.weasis.i18n" value="<%=server+request.getRequestURI().replaceAll(request.getServletPath(),"")%>/weasis-i18n" />
     <!-- Optional Weasis Documentation -->
     <!-- <property name="jnlp.weasis.weasis.help.url" value="${cdb}/../weasis-doc" /> -->
     <!-- ================================================================================================================= -->
   </resources>
 
   <application-desc main-class="org.weasis.launcher.WebstartLauncher">
-	<!-- Example for opening dicom files from local foler -->
-		<!--
-		<argument>$dicom:get -l "c:/temp/24759123/20010101/MR5"</argument>
-		-->
-	<!-- Example for opening dicom files from URLs -->
-		<argument>$dicom:get -r <%=filelist %> </argument>
+    <argument>$dicom:get -w <%=server %><%=request.getRequestURI().replaceAll(request.getServletPath(),"")%>/pacs/wadoQuery.jsp?studyuid=<%=request.getParameter("studyuid")%>&seriesid=<%=request.getParameter("seriesid")%></argument>
   </application-desc>
   </jnlp>

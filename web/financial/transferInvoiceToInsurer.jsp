@@ -59,9 +59,7 @@
 <%
 	if(request.getParameter("submit")!=null){
 		PatientInvoice invoice = PatientInvoice.get(sPatientInvoiceUid);
-		System.out.println("invoice="+invoice);
 		Insurance insurance = Insurance.get(sInsuranceUid);
-		System.out.println("insurance="+insurance);
 		if(invoice!=null && insurance!=null){
 			Vector debets = invoice.getDebets();
 			for(int n=0;n<debets.size();n++){

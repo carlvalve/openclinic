@@ -65,10 +65,7 @@
     	String sFindDescr = sFindPrestationDescr.replaceAll(MedwanQuery.getInstance().getConfigString("equivalentofe","[eéèê]"),"e")
     			                                .replaceAll(MedwanQuery.getInstance().getConfigString("equivalentofa","[aàá]"),"a");
     	
-    	System.out.println("D1:"+sFindPrestationDescr);
-    	System.out.println("D2:"+sFindDescr);
         Vector foundPrestations = Prestation.searchActivePrestations(sFindPrestationCode,sFindDescr,sFindPrestationType,sFindPrestationPrice,"",sFindPrestationSort);
-		System.out.println("Found "+foundPrestations.size()+" prestations");
         Iterator prestationsIter = foundPrestations.iterator();
         String sClass = "", sUid, sCode, sDescr, sType, sTypeTran, sPrice, sSupplement;
         String sSelectTran = getTranNoLink("web","select",sWebLanguage);
