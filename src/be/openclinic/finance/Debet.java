@@ -982,7 +982,6 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                         + " AND " + MedwanQuery.getInstance().convert("int", "e.OC_ENCOUNTER_PATIENTUID") + "=a.personid" 
                         + " ORDER BY OC_PATIENTINVOICE_DATE,d.OC_DEBET_DATE";
             }
-            System.out.println(sSelect);
             ps = loc_conn.prepareStatement(sSelect);
             ps.setString(1, sInsurarUid);
             ps.setTimestamp(2, new java.sql.Timestamp(begin.getTime()));

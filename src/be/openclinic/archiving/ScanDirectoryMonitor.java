@@ -201,19 +201,28 @@ public class ScanDirectoryMonitor implements Runnable{
 	        	Debug.println(" ScannableFiles in 'scanDirectoryMonitor_dirFrom' : "+scannableFiles.length);
 	        	for(int i=0; i<scannableFiles.length; i++){
 	        		File file = (File)scannableFiles[i];
-	        		long lastModified=new java.util.Date().getTime();
+	        		long lastSize=0;
+	        		boolean bSkip=!isFileUnlocked(file);
+	        		/*
 	        		if(files.get(file.getName())==null){
-	        			files.put(file.getName(),lastModified);
+	        			files.put(file.getName(),lastSize);
 	        		}
 	        		else {
-	        			lastModified=(Long)files.get(file.getName());
-	        			if(file.lastModified()>lastModified){
-	        				lastModified=file.lastModified();
+	        			lastSize=(Long)files.get(file.getName());
+		        		Debug.println("Last file size = "+lastSize+" bytes");
+		        		Debug.println("Actual file size = "+file.length()+" bytes");
+	        			if(file.length()>lastSize){
+	        				lastSize=file.length();
+		        			files.put(file.getName(),lastSize);
+	        			}
+	        			else{
+	        				bSkip=false;
 	        			}
 	        		}
-	        		long millis=MedwanQuery.getInstance().getConfigInt("archivingServerDocumentModificationTimeoutInMillis",60*1000);
-	        		if(new java.util.Date().getTime()-lastModified<millis){
-	        			Debug.println("Skipping file "+file.getName()+" because modified less than "+millis+"ms ago");
+	        		*/
+	        		//long millis=MedwanQuery.getInstance().getConfigInt("archivingServerDocumentModificationTimeoutInMillis",60*1000);
+	        		if(bSkip){
+	        			Debug.println("Skipping file "+file.getName()+" because a process may still be writing to it.");
 	        			skippedFilesInRun++;
 	        		}
 	        		else {
@@ -225,6 +234,7 @@ public class ScanDirectoryMonitor implements Runnable{
 		        	    else if(result < 0){
 		        	    	faultyFilesInRun++;
 		        	    }
+	        	    	files.remove(file.getName());
 	        		}
 	        	}
 
@@ -419,6 +429,29 @@ public class ScanDirectoryMonitor implements Runnable{
         	Debug.printStackTrace(e);
         }
         return 0;
+    }
+    
+    public static boolean isFileUnlocked(File file){
+    	boolean bUnlocked=false;
+    	String originalFileName = file.getAbsolutePath();
+    	File newFile = new File(originalFileName+".renamed");
+    	Debug.println("Original absolute file path: "+file.getAbsolutePath());
+    	Debug.println("Destination absolute file path: "+newFile.getAbsolutePath());
+    	Debug.println("Renaming file "+file.getName()+" to "+newFile.getName());
+    	if(file.renameTo(newFile)){
+        	Debug.println("Successfull, renaming file "+newFile.getName()+" to "+originalFileName);
+    		if(newFile.renameTo(new File(originalFileName))){
+            	Debug.println("Successfull, file is unlocked");
+    			bUnlocked=true;
+    		}
+    		else {
+            	Debug.println("Unsuccessfull, file is locked");
+    		}
+    	}
+		else {
+        	Debug.println("Unsuccessfull, file is locked");
+		}
+    	return bUnlocked;
     }
     
     public static int storeDICOMDocument(File file){
@@ -795,16 +828,18 @@ public class ScanDirectoryMonitor implements Runnable{
         	File[] files = scanDir.listFiles(); 
         	File tmpFile;
         		        	
-	        for(int i=0; i<files.length; i++){
-	       		tmpFile = (File)files[i];
-	       		
-	    		if(tmpFile.isFile()){	        		
-	        	    if(tmpFile.lastModified() < (new java.util.Date().getTime()-(7*24*3600*1000))){ // millis in week
-	        	    	tmpFile.delete();
-	        	    	filesDeleted++;
-	        	    }
-	        	}
-    		}
+        	if(files!=null){
+	        	for(int i=0; i<files.length; i++){
+		       		tmpFile = (File)files[i];
+		       		
+		    		if(tmpFile.isFile()){	        		
+		        	    if(tmpFile.lastModified() < (new java.util.Date().getTime()-(7*24*3600*1000))){ // millis in week
+		        	    	tmpFile.delete();
+		        	    	filesDeleted++;
+		        	    }
+		        	}
+	    		}
+        	}
         }
         catch(Exception e){
             e.printStackTrace();

@@ -64,7 +64,6 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
         ActionForward actionForward = mapping.findForward("failure");
         SessionContainerWO sessionContainerWO;
 
-        System.out.println("1");
         
         try {
             sessionContainerWO = (SessionContainerWO)SessionContainerFactory.getInstance().getSessionContainerWO( request , SessionContainerWO.class.getName() );
@@ -161,7 +160,6 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
             Enumeration enumeration;
             ItemContextVO itemContextVO;
             Hashtable ICD10Codes, ICPCCodes, DSM4Codes;
-            System.out.println("2");
 
             while (iterator.hasNext()) {
                 df = new DummyTransactionFactory();
@@ -237,7 +235,6 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
                         e.printStackTrace();
                     }
                 }
-                System.out.println("3");
 
                 if (request.getParameter("be.mxs.healthrecord.updateTransaction.preserve")==null){
                     df.populateTransaction(oldTransaction,newTransactionVO);
@@ -454,7 +451,6 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
 	                            String sMailMessage = MedwanQuery.getInstance().getConfigString("patientCreditRequestMessage","");
 	                            sMailMessage = sMailMessage.replaceAll("#PatientName#", patient.getFullName());
 	                            sMailMessage = sMailMessage.replaceAll("#PatientID#", patient.personid);
-	                            System.out.println(sMailMessage);
 	                            if (sMailMessage.length()>0){
                                     String sMailFrom = MedwanQuery.getInstance().getConfigString("patientCreditRequestFromMailAddress","");
                                     if (sMailFrom.length()==0){
@@ -568,12 +564,9 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
                 actionForward = new ActionForward(actionForwardKey, true);
             }
             sessionContainerWO.getHealthRecordVO().setUpdated(true);
-            System.out.println("actionForwardKey="+actionForwardKey);
             // INSERT ACCESS LOG
             if(bIsNewTrans){
-                System.out.println("A0");
             	AccessLog.insert(sessionContainerWO.getCurrentTransactionVO().getUser().getUserId()+"","T."+sessionContainerWO.getCurrentTransactionVO().getServerId()+"."+sessionContainerWO.getCurrentTransactionVO().getTransactionId().intValue());
-                System.out.println("A1");
             }
         }
         catch (SessionContainerFactoryException e) {
@@ -613,7 +606,6 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
             actionForward = mapping.findForward("failure");
         }
 
-        System.out.println("A2");
         return actionForward;
     }
 

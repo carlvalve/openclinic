@@ -41,7 +41,6 @@ public class Miscelaneous {
     	
         // Try to find the image in the config cache
         String imageSource = MedwanQuery.getInstance().getConfigString("PDFIMG."+name.replaceAll("/",".")+"."+project);
-        System.out.println(1);
         if(imageSource!=null && imageSource.length()>0){
             try {
             	Debug.println("(config cache) imageSource : "+imageSource);
@@ -52,13 +51,10 @@ public class Miscelaneous {
             }
             catch (Exception e){}
         }
-        System.out.println(2);
         imageSource=MedwanQuery.getInstance().getConfigString("imageSource","http://localhost/openclinic");
-        System.out.println(3);
 
         // Try to find the image in the project image directory
         try{
-            System.out.println(4);
         	Debug.println("(project image directory) imageSource : "+imageSource+"/projects/"+project+"/_img/"+name);
             image = com.itextpdf.text.Image.getInstance(new URL(imageSource+"/projects/"+project+"/_img/"+name));
             if(image!=null){

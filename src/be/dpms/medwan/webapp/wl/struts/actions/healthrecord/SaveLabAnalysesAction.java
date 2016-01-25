@@ -33,7 +33,6 @@ public class SaveLabAnalysesAction extends Action {
                                        HttpServletRequest request,
                                        HttpServletResponse response)
         throws IOException, ServletException {
-    	System.out.println("0");
         // delete all labanalysis in the specified LabRequest, then insert all analysis to be saved
         String sServerId          = ScreenHelper.checkString(request.getParameter("be.mxs.healthrecord.server_id")),
                sTransactionId     = ScreenHelper.checkString(request.getParameter("be.mxs.healthrecord.transaction_id")),
@@ -42,7 +41,6 @@ public class SaveLabAnalysesAction extends Action {
                sUserId         = ScreenHelper.checkString(request.getParameter("userId")),
                sLabAnalysesToSave = ScreenHelper.checkString(request.getParameter("labAnalysesToSave")),
                sSavedLabAnalyses  = ScreenHelper.checkString(request.getParameter("savedLabAnalyses"));
-    	System.out.println("0:"+sObjectId);
         int nObjectId=-1;
         try{
         	nObjectId=Integer.parseInt(sObjectId);

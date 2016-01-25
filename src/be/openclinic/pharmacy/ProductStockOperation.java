@@ -734,7 +734,6 @@ public class ProductStockOperation extends OC_Object{
 	            		debet.setInsurarAmount(Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(insuraramount).replaceAll(",", "."))*debet.getQuantity());
 	            		debet.setExtraInsurarAmount(Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(extrainsuraramount).replaceAll(",", "."))*debet.getQuantity());
                     	Debug.println("Stockage de la prestation");
-	            		System.out.println(debet.store());
 	            		MedwanQuery.getInstance().getObjectCache().removeObject("debet", debet.getUid());
             		}
             	}
