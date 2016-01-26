@@ -479,6 +479,24 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
                     		UserParameter.saveUserParameter("lastLabEmail", item.getValue(), returnedTransactionVO.getUser().userId);
                     	}
                     }
+                    
+                    //If AUTOINVOICE items exist in the transaction, then automatically invoice the items
+                    Collection invoiceItems = returnedTransactionVO.getItems();
+                    Iterator iInvoiceItems = invoiceItems.iterator();
+                    while(iInvoiceItems.hasNext()){
+                    	ItemVO itemVO = (ItemVO)iInvoiceItems.next();
+                    	if(itemVO.getType().contains("AUTOINVOICE")){
+                    		Debug.println("AUTOINVOICE item detected: "+itemVO.getType());
+                    		String sPrestationData = itemVO.getValue();
+                    		int quantity=1;
+                    		if(sPrestationData.split("\\.").length>1){
+                    			quantity=Integer.parseInt(sPrestationData.split("\\.")[1]);
+                    			sPrestationData=sPrestationData.split("\\.")[0];
+                    		}
+                    		Debug.println("AUTOINVOICING "+quantity+" x "+sPrestationData);
+                        	Debet.createAutomaticDebetByAlias(returnedTransactionVO.getTransactionId()+";"+itemVO.getType(), sessionContainerWO.getPersonVO().personId+"", sPrestationData, sessionContainerWO.getUserVO().userId+"",MedwanQuery.getInstance().getConfigInt("automaticGenericInvoicingDelayInHours",24)*3600*1000);
+                    	}
+                    }
 
                     //Delete diagnoses from OC_DIAGNOSES and ADD all+new again
                     Diagnosis.deleteDiagnosesByReferenceUID(returnedTransactionVO.getServerId()+"."+returnedTransactionVO.getTransactionId(),"Transaction");

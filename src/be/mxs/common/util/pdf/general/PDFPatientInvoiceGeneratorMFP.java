@@ -53,7 +53,13 @@ public class PDFPatientInvoiceGeneratorMFP extends PDFInvoiceGenerator {
             doc.addAuthor(user.person.firstname+" "+user.person.lastname);
 			doc.addCreationDate();
 			doc.addCreator("OpenClinic Software");
-			doc.setPageSize(PageSize.A4);
+			if(MedwanQuery.getInstance().getConfigString("invoicePaperFormat","A4").equalsIgnoreCase("A5")){
+				doc.setPageSize(PageSize.A5);
+			}
+			else{
+				doc.setPageSize(PageSize.A4);
+			}
+			doc.setMargins(MedwanQuery.getInstance().getConfigInt("patientInvoiceMarginLeft",new Float(doc.leftMargin()).intValue()), MedwanQuery.getInstance().getConfigInt("patientInvoiceMarginRight",new Float(doc.rightMargin()).intValue()), MedwanQuery.getInstance().getConfigInt("patientInvoiceMarginTop",new Float(doc.topMargin()).intValue()), MedwanQuery.getInstance().getConfigInt("patientInvoiceMarginBottom",new Float(doc.bottomMargin()).intValue()));
             // get specified invoice
             PatientInvoice invoice = PatientInvoice.get(sInvoiceUid);
             addMFPFooter(invoice);

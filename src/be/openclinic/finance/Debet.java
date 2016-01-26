@@ -2982,7 +2982,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
     		String sQuery="select * from OC_PRESTATIONS where ';'||OC_PRESTATION_REFUID||';' LIKE '%;"+alias+";%'";
     		PreparedStatement ps = conn.prepareStatement(sQuery);
     		ResultSet rs = ps.executeQuery();
-    		if(rs.next()){
+    		while(rs.next()){
     			String prestationUid=rs.getString("OC_PRESTATION_SERVERID")+"."+rs.getString("OC_PRESTATION_OBJECTID");
     	    	if(!Debet.existsRecent(prestationUid,personid,notExistingSince)){
         			createAutomaticDebet(uid, personid, prestationUid, new java.util.Date(), 1,userid);

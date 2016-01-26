@@ -57,6 +57,7 @@ public class PDFPatientInvoiceGenerator extends PDFInvoiceGenerator {
 			else{
 				doc.setPageSize(PageSize.A4);
 			}
+			doc.setMargins(MedwanQuery.getInstance().getConfigInt("patientInvoiceMarginLeft",new Float(doc.leftMargin()).intValue()), MedwanQuery.getInstance().getConfigInt("patientInvoiceMarginRight",new Float(doc.rightMargin()).intValue()), MedwanQuery.getInstance().getConfigInt("patientInvoiceMarginTop",new Float(doc.topMargin()).intValue()), MedwanQuery.getInstance().getConfigInt("patientInvoiceMarginBottom",new Float(doc.bottomMargin()).intValue()));
 
 			// get specified invoice
             PatientInvoice invoice = PatientInvoice.get(sInvoiceUid);
