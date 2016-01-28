@@ -319,7 +319,7 @@ public class Examination {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        String sSelect = "SELECT id,transactionType FROM Examinations";
+        String sSelect = "SELECT id,transactionType FROM Examinations order by id";
 
         Vector vResults = new Vector();
         Hashtable hResults;
