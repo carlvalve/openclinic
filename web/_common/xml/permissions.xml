@@ -233,6 +233,7 @@
         <permission type="web.manage" id="managelocaldiagnosiscodes">system.managelocaldiagnosiscodes</permission>
         <permission type="web.manage" id="manageExaminations">system.manageexaminations</permission>
         <permission type="web.manage" id="manageserviceexaminations">system.manageserviceexaminations</permission>
+        <permission type="web.manage" id="manageproductionorders">system.manageproductionorders</permission>
         <permission type="web.manage" id="manageinsurars">system.manageinsurars</permission>
         <permission type="web.manage" id="manageprestations">system.manageprestations</permission>
         <permission type="web.manage" id="manageUserDiagnoses">diagnoses.manageuserdiagnoses</permission>
