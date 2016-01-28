@@ -2,6 +2,7 @@ package be.openclinic.finance;
 
 import be.openclinic.common.OC_Object;
 import be.openclinic.common.ObjectReference;
+import be.openclinic.pharmacy.ProductStock;
 import be.openclinic.common.IObjectReference;
 import be.openclinic.adt.Encounter;
 import be.mxs.common.util.db.MedwanQuery;
@@ -158,6 +159,68 @@ public class Prestation extends OC_Object{
 	
 	public void setHideFromDefaultList(int n){
 		setModifier(4,n+"");
+	}
+
+	public String getProductionOrder(){
+		String order="";
+		if(getModifiers()!=null){
+			try{
+				order = getModifiers().split(";")[5];
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return order;
+	}
+	
+	public void setProductionOrder(String order){
+		setModifier(5,order);
+	}
+
+	public double getProductionOrderPaymentLevel(){
+		int n = 0;
+		if(getModifiers()!=null){
+			try{
+				n =Integer.parseInt(getModifiers().split(";")[6]);
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return n;
+	}
+	
+	public void setProductionOrderPaymentLevel(int n){
+		setModifier(6,n+"");
+	}
+	
+	public int getProductionOrderPrescription(){
+		int n = 0;
+		if(getModifiers()!=null){
+			try{
+				n =Integer.parseInt(getModifiers().split(";")[7]);
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return n;
+	}
+	
+	public void setProductionOrderPrescription(int n){
+		setModifier(7,n+"");
+	}
+	
+	public String getProductionOrderProductName(){
+		String name="";
+		if(getProductionOrder().length()>0){
+			ProductStock productStock = ProductStock.get(getProductionOrder());
+			if(productStock!=null && productStock.getProduct()!=null){
+				name=productStock.getProduct().getName();
+			}
+		}
+		return name;
 	}
 
 	public boolean isVisibleFor(Insurar insurar){

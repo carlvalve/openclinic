@@ -61,39 +61,41 @@ public class ExportSAP_AR_INV {
 			}
 			else {
 				try{
-				    Class.forName(MedwanQuery.getInstance().getConfigString("SAPDatabaseClass"));			
-				    Connection sapconn =  DriverManager.getConnection(MedwanQuery.getInstance().getConfigString("SAPDatabaseURL"));
-			    	PreparedStatement pssap = sapconn.prepareStatement("select Rate from ORTT where Currency=? and RateDate=?");
-			    	pssap.setString(1, currency);
-			    	pssap.setDate(2, new java.sql.Date(currdate.getTime()));
-			    	ResultSet rssap = pssap.executeQuery();
-			    	if(!rssap.next()){
-			    		System.out.print("MISSING EXCHANGE RATE FOR "+new SimpleDateFormat("dd/MM/yyyy").format(currdate)+" - ABORTING PROCESS");
-			    		if(last){
+					if(MedwanQuery.getInstance().getConfigString("SAPDatabaseClass","").length()>0){
+					    Class.forName(MedwanQuery.getInstance().getConfigString("SAPDatabaseClass"));			
+					    Connection sapconn =  DriverManager.getConnection(MedwanQuery.getInstance().getConfigString("SAPDatabaseURL"));
+				    	PreparedStatement pssap = sapconn.prepareStatement("select Rate from ORTT where Currency=? and RateDate=?");
+				    	pssap.setString(1, currency);
+				    	pssap.setDate(2, new java.sql.Date(currdate.getTime()));
+				    	ResultSet rssap = pssap.executeQuery();
+				    	if(!rssap.next()){
+				    		System.out.print("MISSING EXCHANGE RATE FOR "+new SimpleDateFormat("dd/MM/yyyy").format(currdate)+" - ABORTING PROCESS");
+				    		if(last){
+								rs.close();
+								ps.close();
+								ps = conn.prepareStatement("select OC_EXCHANGERATE_RATE from OC_EXCHANGERATES where OC_EXCHANGERATE_DATE<? and OC_EXCHANGERATE_CURRENCY=? order by OC_EXCHANGERATE_DATE DESC");
+								ps.setDate(1, new java.sql.Date(currdate.getTime()));
+								ps.setString(2, currency);
+								rs = ps.executeQuery();
+								if(rs.next()){
+									exchangerate=rs.getDouble("OC_EXCHANGERATE_RATE");
+								}
+				    		}
+				    	}
+				    	else{
+				    		exchangerate=rssap.getDouble("Rate");
 							rs.close();
 							ps.close();
-							ps = conn.prepareStatement("select OC_EXCHANGERATE_RATE from OC_EXCHANGERATES where OC_EXCHANGERATE_DATE<? and OC_EXCHANGERATE_CURRENCY=? order by OC_EXCHANGERATE_DATE DESC");
+					    	ps = conn.prepareStatement("insert into OC_EXCHANGERATES(OC_EXCHANGERATE_DATE,OC_EXCHANGERATE_CURRENCY,OC_EXCHANGERATE_RATE) values(?,?,?)");
 							ps.setDate(1, new java.sql.Date(currdate.getTime()));
 							ps.setString(2, currency);
-							rs = ps.executeQuery();
-							if(rs.next()){
-								exchangerate=rs.getDouble("OC_EXCHANGERATE_RATE");
-							}
-			    		}
-			    	}
-			    	else{
-			    		exchangerate=rssap.getDouble("Rate");
-						rs.close();
-						ps.close();
-				    	ps = conn.prepareStatement("insert into OC_EXCHANGERATES(OC_EXCHANGERATE_DATE,OC_EXCHANGERATE_CURRENCY,OC_EXCHANGERATE_RATE) values(?,?,?)");
-						ps.setDate(1, new java.sql.Date(currdate.getTime()));
-						ps.setString(2, currency);
-						ps.setDouble(3, exchangerate);
-						ps.execute();
-			    	}
-			    	if(rssap !=null) rssap.close();
-			    	if(pssap !=null) pssap.close();
-			    	sapconn.close();
+							ps.setDouble(3, exchangerate);
+							ps.execute();
+				    	}
+				    	if(rssap !=null) rssap.close();
+				    	if(pssap !=null) pssap.close();
+				    	sapconn.close();
+					}
 				}
 				catch(Exception s){
 					if(Debug.enabled) s.printStackTrace();

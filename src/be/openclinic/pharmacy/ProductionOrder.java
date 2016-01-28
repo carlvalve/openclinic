@@ -7,22 +7,32 @@ import java.sql.SQLException;
 import java.util.Vector;
 
 import be.mxs.common.util.db.MedwanQuery;
+import be.mxs.common.util.system.ScreenHelper;
 import be.openclinic.common.OC_Object;
 
 public class ProductionOrder extends OC_Object{
 	private int id=-1;
 	private String targetProductStockUid;
-	private String transactionUid;
+	private String debetUid;
 	private int patientUid;
 	private int updateUid;
 	private java.util.Date closeDateTime;
 	private String comment;
+	private int quantity;
 	
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
 	public Vector getMaterials() {
 		return ProductionOrderMaterial.getProductionOrderMaterials(getId());
 	}
 
-	public Vector getProductionOrders(int patientid){
+	public static Vector getProductionOrders(int patientid){
 		Vector orders = new Vector();
 		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
 		PreparedStatement ps = null;
@@ -52,14 +62,106 @@ public class ProductionOrder extends OC_Object{
 		return orders;
 	}
 	
-	public Vector getProductionOrders(String transactionuid){
+	public static Vector getProductionOrders(String patientid, String productStockUid, String debetUid, java.util.Date mindate, java.util.Date maxdate){
 		Vector orders = new Vector();
 		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
 		PreparedStatement ps = null;
 		ResultSet rs =null;
 		try{
-			ps=conn.prepareStatement("SELECT * FROM OC_PRODUCTIONORDERS where OC_PRODUCTIONORDER_TRANSACTIONUID=? ORDER BY OC_PRODUCTIONORDER_CREATEDATETIME");
+			String sQuery="SELECT * FROM OC_PRODUCTIONORDERS where 1=1";
+			if(ScreenHelper.checkString(patientid).length()>0){
+				sQuery+=" AND OC_PRODUCTIONORDER_PATIENTUID=?";
+			}
+			if(ScreenHelper.checkString(productStockUid).length()>0){
+				sQuery+=" AND OC_PRODUCTIONORDER_TARGETPRODUCTSTOCKUID=?";
+			}
+			if(mindate!=null){
+				sQuery+=" AND OC_PRODUCTIONORDER_CREATEDATETIME>=?";
+			}
+			if(maxdate!=null){
+				sQuery+=" AND OC_PRODUCTIONORDER_CREATEDATETIME<=?";
+			}
+			if(ScreenHelper.checkString(debetUid).length()>0){
+				sQuery+=" AND OC_PRODUCTIONORDER_DEBETUID=?";
+			}
+			sQuery+= " ORDER BY OC_PRODUCTIONORDER_CREATEDATETIME";
+			ps=conn.prepareStatement(sQuery);
+			int i=1;
+			if(ScreenHelper.checkString(patientid).length()>0){
+				ps.setInt(i++, Integer.parseInt(patientid));
+			}
+			if(ScreenHelper.checkString(productStockUid).length()>0){
+				ps.setString(i++, productStockUid);;
+			}
+			if(mindate!=null){
+				ps.setTimestamp(i++, new java.sql.Timestamp(mindate.getTime()));
+			}
+			if(maxdate!=null){
+				ps.setTimestamp(i++, new java.sql.Timestamp(maxdate.getTime()));
+			}
+			if(ScreenHelper.checkString(debetUid).length()>0){
+				ps.setString(i++, debetUid);;
+			}
+			rs=ps.executeQuery();
+			while(rs.next()){
+				orders.add(ProductionOrder.get(rs.getInt("OC_PRODUCTIONORDER_ID")));
+			}
+		}
+        catch(Exception e){
+        	e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                conn.close();
+
+            }
+            catch(SQLException se){
+                se.printStackTrace();
+            }
+        }
+		return orders;
+	}
+	
+	public static Vector getProductionOrders(String transactionuid){
+		Vector orders = new Vector();
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		PreparedStatement ps = null;
+		ResultSet rs =null;
+		try{
+			ps=conn.prepareStatement("SELECT * FROM OC_PRODUCTIONORDERS where OC_PRODUCTIONORDER_DEBETUID=? ORDER BY OC_PRODUCTIONORDER_CREATEDATETIME");
 			ps.setString(1, transactionuid);
+			rs=ps.executeQuery();
+			while(rs.next()){
+				orders.add(ProductionOrder.get(rs.getInt("OC_PRODUCTIONORDER_ID")));
+			}
+		}
+        catch(Exception e){
+        	e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                conn.close();
+
+            }
+            catch(SQLException se){
+                se.printStackTrace();
+            }
+        }
+		return orders;
+	}
+	
+	public static Vector getProductionOrdersForProductStockUid(String productStockUid){
+		Vector orders = new Vector();
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		PreparedStatement ps = null;
+		ResultSet rs =null;
+		try{
+			ps=conn.prepareStatement("SELECT * FROM OC_PRODUCTIONORDERS where OC_PRODUCTIONORDER_TARGETPRODUCTSTOCKUID=? ORDER BY OC_PRODUCTIONORDER_CREATEDATETIME");
+			ps.setString(1, productStockUid);
 			rs=ps.executeQuery();
 			while(rs.next()){
 				orders.add(ProductionOrder.get(rs.getInt("OC_PRODUCTIONORDER_ID")));
@@ -95,8 +197,9 @@ public class ProductionOrder extends OC_Object{
 				productionOrder = new ProductionOrder();
 				productionOrder.setId(id);
 				productionOrder.setTargetProductStockUid(rs.getString("OC_PRODUCTIONORDER_TARGETPRODUCTSTOCKUID"));
-				productionOrder.setTransactionUid(rs.getString("OC_PRODUCTIONORDER_TRANSACTIONUID"));
+				productionOrder.setDebetUid(rs.getString("OC_PRODUCTIONORDER_DEBETUID"));
 				productionOrder.setPatientUid(rs.getInt("OC_PRODUCTIONORDER_PATIENTUID"));
+				productionOrder.setQuantity(rs.getInt("OC_PRODUCTIONORDER_QUANTITY"));
 				productionOrder.setCreateDateTime(rs.getTimestamp("OC_PRODUCTIONORDER_CREATEDATETIME"));
 				productionOrder.setUpdateDateTime(rs.getTimestamp("OC_PRODUCTIONORDER_UPDATETIME"));
 				productionOrder.setCloseDateTime(rs.getTimestamp("OC_PRODUCTIONORDER_CLOSEDATETIME"));
@@ -127,6 +230,9 @@ public class ProductionOrder extends OC_Object{
 		if(id==-1){
 			id=MedwanQuery.getInstance().getOpenclinicCounter("OC_PRODUCTIONORDER_ID");
 			setVersion(0);
+			if(getCreateDateTime()==null){
+				setCreateDateTime(new java.util.Date());
+			}
 		}
 		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
 		PreparedStatement ps = null;
@@ -134,8 +240,9 @@ public class ProductionOrder extends OC_Object{
 			//COPY TO HISTORY
 			ps=conn.prepareStatement("INSERT INTO OC_PRODUCTIONORDERS_HISTORY(OC_PRODUCTIONORDER_ID,"
 					+ " OC_PRODUCTIONORDER_TARGETPRODUCTSTOCKUID,"
-					+ " OC_PRODUCTIONORDER_TRANSACTIONUID,"
+					+ " OC_PRODUCTIONORDER_DEBETUID,"
 					+ " OC_PRODUCTIONORDER_PATIENTUID,"
+					+ " OC_PRODUCTIONORDER_QUANTITY,"
 					+ " OC_PRODUCTIONORDER_CREATEDATETIME,"
 					+ " OC_PRODUCTIONORDER_UPDATETIME,"
 					+ " OC_PRODUCTIONORDER_UPDATEUID,"
@@ -144,8 +251,9 @@ public class ProductionOrder extends OC_Object{
 					+ " OC_PRODUCTIONORDER_COMMENT)"
 					+ " SELECT OC_PRODUCTIONORDER_ID,"
 					+ " OC_PRODUCTIONORDER_TARGETPRODUCTSTOCKUID,"
-					+ " OC_PRODUCTIONORDER_TRANSACTIONUID,"
+					+ " OC_PRODUCTIONORDER_DEBETUID,"
 					+ " OC_PRODUCTIONORDER_PATIENTUID,"
+					+ " OC_PRODUCTIONORDER_QUANTITY,"
 					+ " OC_PRODUCTIONORDER_CREATEDATETIME,"
 					+ " OC_PRODUCTIONORDER_UPDATETIME,"
 					+ " OC_PRODUCTIONORDER_UPDATEUID,"
@@ -162,27 +270,29 @@ public class ProductionOrder extends OC_Object{
 			ps.execute();
 			//STORE new version
 			setVersion(getVersion()+1);
-			ps=conn.prepareStatement("INSERT INTO OC_PRODUCTORDERS(OC_PRODUCTIONORDER_ID,"
+			ps=conn.prepareStatement("INSERT INTO OC_PRODUCTIONORDERS(OC_PRODUCTIONORDER_ID,"
 					+ " OC_PRODUCTIONORDER_TARGETPRODUCTSTOCKUID,"
-					+ " OC_PRODUCTIONORDER_TRANSACTIONUID,"
+					+ " OC_PRODUCTIONORDER_DEBETUID,"
 					+ " OC_PRODUCTIONORDER_PATIENTUID,"
+					+ " OC_PRODUCTIONORDER_QUANTITY,"
 					+ " OC_PRODUCTIONORDER_CREATEDATETIME,"
 					+ " OC_PRODUCTIONORDER_UPDATETIME,"
 					+ " OC_PRODUCTIONORDER_UPDATEUID,"
 					+ " OC_PRODUCTIONORDER_VERSION,"
 					+ " OC_PRODUCTIONORDER_CLOSEDATETIME,"
 					+ " OC_PRODUCTIONORDER_COMMENT)"
-					+ " VALUES(?,?,?,?,?,?,?,?,?,?)");
+					+ " VALUES(?,?,?,?,?,?,?,?,?,?,?)");
 			ps.setInt(1, id);
 			ps.setString(2, getTargetProductStockUid());
-			ps.setString(3, getTransactionUid());
+			ps.setString(3, getDebetUid());
 			ps.setInt(4, getPatientUid());
-			ps.setTimestamp(5, new java.sql.Timestamp(getCreateDateTime().getTime()));
-			ps.setTimestamp(6, new java.sql.Timestamp(getUpdateDateTime().getTime()));
-			ps.setInt(7, getUpdateUid());
-			ps.setInt(8, getVersion());
-			ps.setTimestamp(9, new java.sql.Timestamp(getCreateDateTime().getTime()));
-			ps.setString(10, getComment());
+			ps.setInt(5, getQuantity());
+			ps.setTimestamp(6, new java.sql.Timestamp(getCreateDateTime().getTime()));
+			ps.setTimestamp(7, new java.sql.Timestamp(getUpdateDateTime().getTime()));
+			ps.setInt(8, getUpdateUid());
+			ps.setInt(9, getVersion());
+			ps.setTimestamp(10, new java.sql.Timestamp(getCloseDateTime().getTime()));
+			ps.setString(11, getComment());
 			bStored=ps.execute();
 		}
         catch(Exception e){
@@ -213,11 +323,18 @@ public class ProductionOrder extends OC_Object{
 	public void setTargetProductStockUid(String targetProductStockUid) {
 		this.targetProductStockUid = targetProductStockUid;
 	}
-	public String getTransactionUid() {
-		return transactionUid;
+	public ProductStock getProductStock(){
+		ProductStock stock = ProductStock.get(getTargetProductStockUid());
+		if(stock==null){
+			stock = new ProductStock();
+		}
+		return stock;
 	}
-	public void setTransactionUid(String transactionUid) {
-		this.transactionUid = transactionUid;
+	public String getDebetUid() {
+		return debetUid;
+	}
+	public void setDebetUid(String debetUid) {
+		this.debetUid = debetUid;
 	}
 	public int getPatientUid() {
 		return patientUid;
