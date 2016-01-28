@@ -371,6 +371,17 @@
             <%-- DIAGNOSES --%>
             <td class="admin2" style="vertical-align:top;padding-top:0">
 			    <%ScreenHelper.setIncludePage(customerInclude("healthrecord/diagnosesEncoding.jsp"),pageContext);%>
+			    <table width='100%'>
+			    	<tr>
+			    		<td class='admin'><%=getTran("web","prestation",sWebLanguage) %></td>
+			    		<td>
+			    			<select class='text' id="prestation" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPHTALMOLOGY_CONSULTATION_AUTOINVOICEPRESTATION" property="itemId"/>]>.value">
+			    				<option/>
+			    				<%=ScreenHelper.writeSelect("ophtalmology.prestation", ((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPHTALMOLOGY_CONSULTATION_AUTOINVOICEPRESTATION"), sWebLanguage) %>
+			    			</select>
+			    		</td>
+			    	</tr>
+			    </table>
 			</td>
 		</tr>
     </table>

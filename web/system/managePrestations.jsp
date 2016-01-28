@@ -1,4 +1,5 @@
-<%@page import="be.openclinic.finance.Prestation"%>
+<%@page import="be.openclinic.system.*"%>
+<%@page import="be.openclinic.finance.*"%>
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
 <%=checkPermission("system.manageprestations","all",activeUser)%>
@@ -57,6 +58,9 @@
            sEditPrestationServiceUid = checkString(request.getParameter("EditPrestationServiceUid")),
            sEditPrestationNomenclature = checkString(request.getParameter("EditPrestationNomenclature")),
            sEditPrestationDHIS2Code = checkString(request.getParameter("EditPrestationDHIS2Code")),
+           sEditPrestationProductionOrder = checkString(request.getParameter("EditPrestationProductionOrder")),
+           sEditPrestationProductionOrderPaymentLevel = checkString(request.getParameter("EditPrestationProductionOrderPaymentLevel")),
+           sEditPrestationProductionOrderPrescription = checkString(request.getParameter("EditPrestationProductionOrderPrescription")),
 		   sEditCareProvider = checkString(request.getParameter("EditCareProvider"));
 		if(sEditPrestationVariablePrice.length()==0){
 			sEditPrestationVariablePrice="0";
@@ -66,6 +70,20 @@
 	   }
 	   catch(Exception e){
 		   sEditPrestationPrice="0";
+	   }
+
+	   try{
+		   sEditPrestationProductionOrderPaymentLevel =""+Double.parseDouble(sEditPrestationProductionOrderPaymentLevel);
+	   }
+	   catch(Exception e){
+		   sEditPrestationProductionOrderPaymentLevel="0";
+	   }
+
+	   try{
+		   sEditPrestationProductionOrderPrescription =""+Double.parseDouble(sEditPrestationProductionOrderPrescription);
+	   }
+	   catch(Exception e){
+		   sEditPrestationProductionOrderPrescription="0";
 	   }
 
 	   try{
@@ -174,13 +192,15 @@
         prestation.setServiceUid(sEditPrestationServiceUid);
         prestation.setNomenclature(sEditPrestationNomenclature);
         prestation.setDhis2code(sEditPrestationDHIS2Code);
+        prestation.setProductionOrder(sEditPrestationProductionOrder);
+        prestation.setProductionOrderPaymentLevel(new Double(Double.parseDouble(sEditPrestationProductionOrderPaymentLevel)).intValue());
+        prestation.setProductionOrderPrescription(new Double(Double.parseDouble(sEditPrestationProductionOrderPrescription)).intValue());
         prestation.setFlag1(sEditPrestationFlag1);
         try{
         	prestation.setUpdateDateTime(ScreenHelper.parseDate(sEditPrestationUpdatetime));
         }
         catch(Exception e){}
         prestation.store();
-        //activeUser.addPrestation(prestation.getUid());
         sEditPrestationUid = prestation.getUid();
         msg = getTran("web","dataIsSaved",sWebLanguage);
         sAction = "search";
@@ -309,6 +329,7 @@
                     }
                 }
             }
+            sTDAdminWidth="20%";
 
             %>
                <br>
@@ -358,6 +379,44 @@
 		                            <%	} %>
 		                        </td>
 		                    </tr>
+		                <%	} %>
+                       	<%	if(MedwanQuery.getInstance().getConfigInt("enableProductionOrders",0)==1){ %>
+                       		<tr>
+                       			<td colspan='2' style='border:solid #000 1px;border-color: grey;'>
+		                       		<table width='100%' cellspacing="1" cellpadding="0" class="list">
+					                    <tr>
+					                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","generateproductionitem",sWebLanguage)%></td>
+					                        <td class="admin2">
+					                            <input type="hidden" name="EditPrestationProductionOrder" value="<%=checkString(prestation.getProductionOrder())%>">
+					                            <input type="text" size="80" class="text" name="EditPrestationProductOrderProductName" id="EditPrestationProductOrderProductName" value="<%=prestation.getProductionOrderProductName() %>"/>
+					                            <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchProductStock('EditPrestationProductionOrder','EditPrestationProductOrderProductName');">
+					                            <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="transactionForm.EditPrestationProductionOrder.value='';transactionForm.EditPrestationProductOrderProductName.value='';">
+					                        </td>
+					                    </tr>
+					                    <tr>
+					                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","productionorderpaymentlevel",sWebLanguage)%></td>
+					                        <td class="admin2">
+					                            <input type="text" size="5" class="text" name="EditPrestationProductionOrderPaymentLevel" id="EditPrestationProductionOrderPaymentLevel" value="<%=prestation.getProductionOrderPaymentLevel() %>"/>%
+					                        </td>
+					                    </tr>
+					                    <tr>
+					                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","productionorderprescription",sWebLanguage)%></td>
+					                        <td class="admin2">
+					                        	<select class='text' name='EditPrestationProductionOrderPrescription' id='EditPrestationProductionOrderPrescription'>
+					                        		<option/>
+					                        		<%
+					                        			Vector vResults = Examination.searchAllExaminations();
+					                        			for(int n=0;n<vResults.size();n++){
+					                        				Hashtable h = (Hashtable)vResults.elementAt(n);
+					                        				out.println("<option value='"+h.get("id")+"' "+(((String)h.get("id")).equalsIgnoreCase(""+prestation.getProductionOrderPrescription())?"selected":"")+">"+getTran("examination",(String)h.get("id"),sWebLanguage)+"</option>");
+					                        			}
+					                        		%>
+					                        	</select>
+					                        </td>
+					                    </tr>
+					                </table>
+					            </td>
+					        </tr>
 		                <%	} %>
                     <tr>
                         <td class="admin"><%=getTran("web","description",sWebLanguage)%>&nbsp;*&nbsp;</td>
@@ -800,6 +859,9 @@
       document.getElementById(serviceNameField).focus();
   }
 
+  function searchProductStock(productStockUidField,productStockNameField){
+	    openPopup("/_common/search/searchProductStock.jsp&ts=<%=getTs()%>&PopupWidth=600&ReturnProductStockUidField="+productStockUidField+"&ReturnProductStockNameField="+productStockNameField);
+	  }
 
   <%
   if (sAction.length()>0){

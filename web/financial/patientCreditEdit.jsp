@@ -1,11 +1,9 @@
 <%@page import="be.openclinic.adt.Encounter,
-                be.openclinic.finance.PatientCredit,
+                be.openclinic.finance.*,
+                be.openclinic.pharmacy.*,
                 java.util.Vector,java.text.*,
-                be.openclinic.finance.Wicket,
-                be.openclinic.finance.WicketCredit,
-                be.openclinic.finance.PatientInvoice,
                 be.mxs.common.util.io.ExportSAP_AR_INV,
-                be.mxs.common.util.system.HTMLEntities"%>
+                be.mxs.common.util.system.*"%>
 <%@include file="/includes/validateUser.jsp"%>
 <%=checkPermission("financial.patientCreditEdit","select",activeUser)%>
 <%=sJSSTRINGFUNCTIONS%>
@@ -162,9 +160,38 @@
             // recalculate wicket balance
             Wicket wicket = Wicket.get(sEditCreditWicketUid);
             wicket.recalculateBalance();
-        }
 
-        //sEditCreditUid = ""; // do not load the just saved credit
+            if(MedwanQuery.getInstance().getConfigInt("enableProductionOrders",0)==1){
+    			//Check if a productionOrder must be generated
+    			//First verify if at least one prestation on the linked patientinvoice has been linked to a production order
+    			if(sEditCreditInvoiceUid.length()>0){
+    				PatientInvoice linkedInvoice = PatientInvoice.get(sEditCreditInvoiceUid);
+    				if(linkedInvoice!=null && checkString(linkedInvoice.getUid()).split("\\.").length==2){
+    					Vector debets = linkedInvoice.getDebets();
+    					for(int n=0;n<debets.size();n++){
+    						Debet debet = (Debet)debets.elementAt(n);
+    						Prestation prestation = debet.getPrestation();
+    						if(prestation.getProductionOrder().trim().length()>0){
+    							//Check if the value of the paid sum >= minimum payment
+    							if(linkedInvoice.getAmountPaid()>=debet.getAmount()*prestation.getProductionOrderPaymentLevel()/100){
+    								if(ProductionOrder.getProductionOrders(null,null,debet.getUid(),null,null).size()==0){
+        								//Add the target productstockuid to the candidate production orders
+        								ProductionOrder productionOrder = new ProductionOrder();
+        								productionOrder.setCreateDateTime(debet.getDate());
+        								productionOrder.setPatientUid(Integer.parseInt(activePatient.personid));
+        								productionOrder.setTargetProductStockUid(prestation.getProductionOrder());
+        								productionOrder.setDebetUid(debet.getUid());
+        								productionOrder.setUpdateDateTime(new java.sql.Timestamp(new java.util.Date().getTime()));
+        								productionOrder.setUpdateUid(Integer.parseInt(activeUser.userid));
+        								productionOrder.store();
+    								}
+    							}
+    						}
+    					}
+    				}
+    			}
+           	}
+        }
 
         if(sScreenType.length() > 0){
             %>

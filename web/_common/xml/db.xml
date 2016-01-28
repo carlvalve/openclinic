@@ -147,7 +147,7 @@
     	<columns>
 	    	<column name="OC_PRODUCTIONORDER_ID" dbtype="int" javatype="integer"/>
 	    	<column name="OC_PRODUCTIONORDER_TARGETPRODUCTSTOCKUID" dbtype="varchar" javatype="string" size="50"/>
-	    	<column name="OC_PRODUCTIONORDER_TRANSACTIONUID" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="OC_PRODUCTIONORDER_DEBETUID" dbtype="varchar" javatype="string" size="50"/>
 	    	<column name="OC_PRODUCTIONORDER_PATIENTUID" dbtype="int" javatype="integer"/>
 	        <column name="OC_PRODUCTIONORDER_CREATEDATETIME" dbtype="datetime" javatype="date"/>      
 	        <column name="OC_PRODUCTIONORDER_UPDATETIME" dbtype="datetime" javatype="date"/>      
@@ -155,13 +155,14 @@
 	    	<column name="OC_PRODUCTIONORDER_VERSION" dbtype="int" javatype="integer"/>
 	        <column name="OC_PRODUCTIONORDER_CLOSEDATETIME" dbtype="datetime" javatype="date"/>      
 	        <column name="OC_PRODUCTIONORDER_COMMENT" dbtype="varchar" javatype="string" size="255"/>      
+	    	<column name="OC_PRODUCTIONORDER_QUANTITY" dbtype="int" javatype="integer"/>
     	</columns>
 	    <indexes>
 	    	<index name="OC_PRODUCTIONORDER_ID">
 	    		<indexcolumn order="ASC" name="OC_PRODUCTIONORDER_ID"/>
 	    	</index>
-	    	<index name="OC_PRODUCTIONORDER_TRANSACTIONUID">
-	    		<indexcolumn order="ASC" name="OC_PRODUCTIONORDER_TRANSACTIONUID"/>
+	    	<index name="OC_PRODUCTIONORDER_DEBETUID">
+	    		<indexcolumn order="ASC" name="OC_PRODUCTIONORDER_DEBETUID"/>
 	    	</index>
 	    	<index name="OC_PRODUCTIONORDER_PATIENTUID">
 	    		<indexcolumn order="ASC" name="OC_PRODUCTIONORDER_PATIENTUID"/>
@@ -173,7 +174,7 @@
     	<columns>
 	    	<column name="OC_PRODUCTIONORDER_ID" dbtype="int" javatype="integer"/>
 	    	<column name="OC_PRODUCTIONORDER_TARGETPRODUCTSTOCKUID" dbtype="varchar" javatype="string" size="50"/>
-	    	<column name="OC_PRODUCTIONORDER_TRANSACTIONUID" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="OC_PRODUCTIONORDER_DEBETUID" dbtype="varchar" javatype="string" size="50"/>
 	    	<column name="OC_PRODUCTIONORDER_PATIENTUID" dbtype="int" javatype="integer"/>
 	        <column name="OC_PRODUCTIONORDER_CREATEDATETIME" dbtype="datetime" javatype="date"/>      
 	        <column name="OC_PRODUCTIONORDER_UPDATETIME" dbtype="datetime" javatype="date"/>      
@@ -181,6 +182,7 @@
 	    	<column name="OC_PRODUCTIONORDER_VERSION" dbtype="int" javatype="integer"/>
 	        <column name="OC_PRODUCTIONORDER_CLOSEDATETIME" dbtype="datetime" javatype="date"/>      
 	        <column name="OC_PRODUCTIONORDER_COMMENT" dbtype="varchar" javatype="string" size="255"/>      
+	    	<column name="OC_PRODUCTIONORDER_QUANTITY" dbtype="int" javatype="integer"/>
     	</columns>
     </table>
     
