@@ -143,7 +143,83 @@
 	    </indexes>
     </table>
     
+    <table name="OC_PRODUCTIONORDERS" db="openclinic" sync="NONE">
+    	<columns>
+	    	<column name="OC_PRODUCTIONORDER_ID" dbtype="int" javatype="integer"/>
+	    	<column name="OC_PRODUCTIONORDER_TARGETPRODUCTSTOCKUID" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="OC_PRODUCTIONORDER_TRANSACTIONUID" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="OC_PRODUCTIONORDER_PATIENTUID" dbtype="int" javatype="integer"/>
+	        <column name="OC_PRODUCTIONORDER_CREATEDATETIME" dbtype="datetime" javatype="date"/>      
+	        <column name="OC_PRODUCTIONORDER_UPDATETIME" dbtype="datetime" javatype="date"/>      
+	    	<column name="OC_PRODUCTIONORDER_UPDATEUID" dbtype="int" javatype="integer"/>
+	    	<column name="OC_PRODUCTIONORDER_VERSION" dbtype="int" javatype="integer"/>
+	        <column name="OC_PRODUCTIONORDER_CLOSEDATETIME" dbtype="datetime" javatype="date"/>      
+	        <column name="OC_PRODUCTIONORDER_COMMENT" dbtype="varchar" javatype="string" size="255"/>      
+    	</columns>
+	    <indexes>
+	    	<index name="OC_PRODUCTIONORDER_ID">
+	    		<indexcolumn order="ASC" name="OC_PRODUCTIONORDER_ID"/>
+	    	</index>
+	    	<index name="OC_PRODUCTIONORDER_TRANSACTIONUID">
+	    		<indexcolumn order="ASC" name="OC_PRODUCTIONORDER_TRANSACTIONUID"/>
+	    	</index>
+	    	<index name="OC_PRODUCTIONORDER_PATIENTUID">
+	    		<indexcolumn order="ASC" name="OC_PRODUCTIONORDER_PATIENTUID"/>
+	    	</index>
+	    </indexes>
+    </table>
     
+    <table name="OC_PRODUCTIONORDERS_HISTORY" db="openclinic" sync="NONE">
+    	<columns>
+	    	<column name="OC_PRODUCTIONORDER_ID" dbtype="int" javatype="integer"/>
+	    	<column name="OC_PRODUCTIONORDER_TARGETPRODUCTSTOCKUID" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="OC_PRODUCTIONORDER_TRANSACTIONUID" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="OC_PRODUCTIONORDER_PATIENTUID" dbtype="int" javatype="integer"/>
+	        <column name="OC_PRODUCTIONORDER_CREATEDATETIME" dbtype="datetime" javatype="date"/>      
+	        <column name="OC_PRODUCTIONORDER_UPDATETIME" dbtype="datetime" javatype="date"/>      
+	    	<column name="OC_PRODUCTIONORDER_UPDATEUID" dbtype="int" javatype="integer"/>
+	    	<column name="OC_PRODUCTIONORDER_VERSION" dbtype="int" javatype="integer"/>
+	        <column name="OC_PRODUCTIONORDER_CLOSEDATETIME" dbtype="datetime" javatype="date"/>      
+	        <column name="OC_PRODUCTIONORDER_COMMENT" dbtype="varchar" javatype="string" size="255"/>      
+    	</columns>
+    </table>
+    
+    <table name="OC_PRODUCTIONORDERMATERIALS" db="openclinic" sync="NONE">
+    	<columns>
+	    	<column name="OC_MATERIAL_ID" dbtype="int" javatype="integer"/>
+	    	<column name="OC_MATERIAL_PRODUCTIONORDERID" dbtype="int" javatype="integer"/>
+	    	<column name="OC_MATERIAL_PRODUCTSTOCKUID" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="OC_MATERIAL_QUANTITY" dbtype="float" javatype="float"/>
+	        <column name="OC_MATERIAL_CREATEDATETIME" dbtype="datetime" javatype="date"/>      
+	        <column name="OC_MATERIAL_UPDATETIME" dbtype="datetime" javatype="date"/>      
+	    	<column name="OC_MATERIAL_UPDATEUID" dbtype="int" javatype="integer"/>
+	    	<column name="OC_MATERIAL_VERSION" dbtype="int" javatype="integer"/>
+	        <column name="OC_MATERIAL_COMMENT" dbtype="varchar" javatype="string" size="255"/>      
+    	</columns>
+	    <indexes>
+	    	<index name="OC_MATERIAL_PRODUCTIONORDERID">
+	    		<indexcolumn order="ASC" name="OC_MATERIAL_PRODUCTIONORDERID"/>
+	    	</index>
+	    	<index name="OC_MATERIAL_PRODUCTSTOCKUID">
+	    		<indexcolumn order="ASC" name="OC_MATERIAL_PRODUCTSTOCKUID"/>
+	    	</index>
+	    </indexes>
+	</table>
+	
+    <table name="OC_PRODUCTIONORDERMATERIALS_HISTORY" db="openclinic" sync="NONE">
+    	<columns>
+	    	<column name="OC_MATERIAL_ID" dbtype="int" javatype="integer"/>
+	    	<column name="OC_MATERIAL_PRODUCTIONORDERID" dbtype="int" javatype="integer"/>
+	    	<column name="OC_MATERIAL_PRODUCTSTOCKUID" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="OC_MATERIAL_QUANTITY" dbtype="int" javatype="integer"/>
+	        <column name="OC_MATERIAL_CREATEDATETIME" dbtype="datetime" javatype="date"/>      
+	        <column name="OC_MATERIAL_UPDATETIME" dbtype="datetime" javatype="date"/>      
+	    	<column name="OC_MATERIAL_UPDATEUID" dbtype="int" javatype="integer"/>
+	    	<column name="OC_MATERIAL_VERSION" dbtype="int" javatype="integer"/>
+	        <column name="OC_MATERIAL_COMMENT" dbtype="varchar" javatype="string" size="255"/>      
+    	</columns>
+	</table>
+	    
     <table name="OC_RESERVATIONS" db="openclinic" sync="NONE">
     	<columns>
 	    	<column name="OC_RESERVATION_SERVERID" dbtype="int" javatype="integer"/>
