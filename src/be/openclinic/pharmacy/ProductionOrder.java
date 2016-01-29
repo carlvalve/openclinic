@@ -291,7 +291,7 @@ public class ProductionOrder extends OC_Object{
 			ps.setTimestamp(7, new java.sql.Timestamp(getUpdateDateTime().getTime()));
 			ps.setInt(8, getUpdateUid());
 			ps.setInt(9, getVersion());
-			ps.setTimestamp(10, new java.sql.Timestamp(getCloseDateTime().getTime()));
+			ps.setTimestamp(10, getCloseDateTime()==null?null:new java.sql.Timestamp(getCloseDateTime().getTime()));
 			ps.setString(11, getComment());
 			bStored=ps.execute();
 		}
