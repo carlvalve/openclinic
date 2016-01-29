@@ -10,7 +10,7 @@ import be.mxs.common.util.db.MedwanQuery;
 import be.openclinic.common.OC_Object;
 
 public class ProductionOrderMaterial extends OC_Object{
-	private int id;
+	private int id=-1;
 	private int productionOrderId;
 	private String productStockUid;
 	private double quantity;
@@ -29,7 +29,7 @@ public class ProductionOrderMaterial extends OC_Object{
 			if(rs.next()){
 				productionOrderMaterial = new ProductionOrderMaterial();
 				productionOrderMaterial.setId(id);
-				productionOrderMaterial.setProductionOrderId(rs.getInt("OC_MATERIAL_PRODUCTORDERID"));
+				productionOrderMaterial.setProductionOrderId(rs.getInt("OC_MATERIAL_PRODUCTIONORDERID"));
 				productionOrderMaterial.setProductStockUid(rs.getString("OC_MATERIAL_PRODUCTSTOCKUID"));
 				productionOrderMaterial.setCreateDateTime(rs.getTimestamp("OC_MATERIAL_CREATEDATETIME"));
 				productionOrderMaterial.setUpdateDateTime(rs.getTimestamp("OC_MATERIAL_UPDATETIME"));
@@ -73,7 +73,7 @@ public class ProductionOrderMaterial extends OC_Object{
 			while(rs.next()){
 				productionOrderMaterial = new ProductionOrderMaterial();
 				productionOrderMaterial.setId(rs.getInt("OC_MATERIAL_ID"));
-				productionOrderMaterial.setProductionOrderId(rs.getInt("OC_MATERIAL_PRODUCTORDERID"));
+				productionOrderMaterial.setProductionOrderId(rs.getInt("OC_MATERIAL_PRODUCTIONORDERID"));
 				productionOrderMaterial.setProductStockUid(rs.getString("OC_MATERIAL_PRODUCTSTOCKUID"));
 				productionOrderMaterial.setCreateDateTime(rs.getTimestamp("OC_MATERIAL_CREATEDATETIME"));
 				productionOrderMaterial.setUpdateDateTime(rs.getTimestamp("OC_MATERIAL_UPDATETIME"));
@@ -139,7 +139,7 @@ public class ProductionOrderMaterial extends OC_Object{
 			ps.execute();
 			//STORE new version
 			setVersion(getVersion()+1);
-			ps=conn.prepareStatement("INSERT INTO OC_PRODUCTORDERMATERIALS(OC_MATERIAL_ID,"
+			ps=conn.prepareStatement("INSERT INTO OC_PRODUCTIONORDERMATERIALS(OC_MATERIAL_ID,"
 					+ " OC_MATERIAL_PRODUCTIONORDERID,"
 					+ " OC_MATERIAL_PRODUCTSTOCKUID,"
 					+ " OC_MATERIAL_QUANTITY,"

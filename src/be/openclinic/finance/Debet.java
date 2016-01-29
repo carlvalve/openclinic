@@ -3158,104 +3158,21 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
         String type="";
         Insurance insurance=null;
         insurance = Insurance.getMostInterestingInsuranceForPatient(personid);
-        String sCoverageInsurance=ScreenHelper.checkString(insurance.getExtraInsurarUid());
-        String sCoverageInsurance2=ScreenHelper.checkString(insurance.getExtraInsurarUid2());
-        Prestation prestation = Prestation.get(prestationUid);
-        double dPatientAmount=0,dInsurarAmount=0,dExtraInsurarAmount=0,dExtraInsurarAmount2=0;
-		InsuranceRule rule = insurance==null?null:Prestation.getInsuranceRule(prestationUid, insurance.getInsurarUid());
-        if(!Prestation.checkMaximumReached(personid, rule, quantity) && encounter!=null && prestation!=null && insurance!=null && insurance.getInsurar()!=null && prestation.isVisibleFor(insurance.getInsurar())){
-	        if (insurance != null) {
-	            type = insurance.getType();
-	            if (prestation != null) {
-	                double dPrice = prestation.getPrice(type);
-	                if(insurance.getInsurar()!=null && insurance.getInsurar().getNoSupplements()==0 && insurance.getInsurar().getCoverSupplements()==1){
-	                	dPrice+=prestation.getSupplement();
-	                }
-	                double dInsuranceMaxPrice = prestation.getInsuranceTariff(insurance.getInsurar().getUid(),insurance.getInsuranceCategoryLetter());
-	                if(encounter.getType().equalsIgnoreCase("admission") && prestation.getMfpAdmissionPercentage()>0){
-	                	dInsuranceMaxPrice = prestation.getInsuranceTariff(insurance.getInsurar().getUid(),"*H");
-	                }
-	                String sShare=ScreenHelper.checkString(prestation.getPatientShare(insurance)+"");
-	                if (sShare.length()>0){
-	                    dPatientAmount = quantity * dPrice * Double.parseDouble(sShare) / 100;
-	                    dInsurarAmount = quantity * dPrice - dPatientAmount;
-	                    if(dInsuranceMaxPrice>=0){
-	                    	dInsurarAmount=quantity * dInsuranceMaxPrice;
-	                   		dPatientAmount=quantity * dPrice - dInsurarAmount;
-	                    }
-	                    if(insurance.getInsurar()!=null && insurance.getInsurar().getNoSupplements()==0 && insurance.getInsurar().getCoverSupplements()==0){
-	                    	dPatientAmount+=quantity * prestation.getSupplement();
-	                    }
-	                }
-	            }
-		        //Now we have the patient share and the insurance share, let's calculate complementary insurances
-		        if(sCoverageInsurance.length()>0){
-		        	Insurar insurar = Insurar.get(sCoverageInsurance);
-		        	if(insurar!=null){
-		        		if(insurar.getCoverSupplements()==1 && insurance.getInsurar().getNoSupplements()==0 && insurance.getInsurar().getCoverSupplements()==0){
-		        			dExtraInsurarAmount=dPatientAmount;
-		        		}
-		        		else{
-		        			dExtraInsurarAmount=dPatientAmount-quantity * prestation.getSupplement();
-		        		}
-		    			dPatientAmount=dPatientAmount-dExtraInsurarAmount;
-		        	}
-		        }
-		        if(dPatientAmount>0 && sCoverageInsurance2.length()>0){
-		        	Insurar insurar = Insurar.get(sCoverageInsurance2);
-		        	if(insurar!=null){
-		        		dExtraInsurarAmount2=dPatientAmount;
-		        	}
-		        }
-	        }
-	        else {
-	            dPatientAmount=quantity * (prestation.getPrice("C")+prestation.getSupplement());
-	            dInsurarAmount = 0;
-	        }
-	        dPatientAmount= Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(dPatientAmount).replaceAll(",", "."));
-	        dInsurarAmount= Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(dInsurarAmount).replaceAll(",", "."));
-	        dExtraInsurarAmount= Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(dExtraInsurarAmount).replaceAll(",", "."));
-	        dExtraInsurarAmount2= Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(dExtraInsurarAmount2).replaceAll(",", "."));
-	        
-	        //Create new Debet
-	        Debet debet = new Debet();
-	        debet.setAmount(dPatientAmount);
-	        debet.setCreateDateTime(new java.util.Date());
-	        debet.setDate(date);
-	        debet.setEncounterUid(encounter.getUid());
-	        debet.setInsuranceUid(insurance.getUid());
-	        debet.setInsurarAmount(dInsurarAmount);
-	        debet.setExtraInsurarUid(sCoverageInsurance);
-	        debet.setExtraInsurarAmount(dExtraInsurarAmount);
-	        if(dExtraInsurarAmount2>0){
-	        	debet.setExtraInsurarUid2(sCoverageInsurance2);
-	        }
-	        debet.setPrestationUid(prestation.getUid());
-	        debet.setQuantity(quantity);
-	        debet.setUpdateDateTime(new java.util.Date());
-	        debet.setUpdateUser(userid);
-	        debet.setVersion(1);
-	        debet.setServiceUid(debet.determineServiceUid());
-	        debet.store();
-	        //Now that we have stored the debet, let's store a reference to it
-	        Pointer.storePointer(uid,debet.getUid());
-	        
-	        
-	        //Check if anesthesia prestation must be added
-	        if(prestation!=null && prestation.getAnesthesiaPercentage()>0){
-	        	Prestation anesthesiaPrestation = Prestation.get(MedwanQuery.getInstance().getConfigString("anesthesiaPrestationUid",""),date);
-	        	if(anesthesiaPrestation!=null){
-	        		dPatientAmount=0;
-	        		dInsurarAmount=0;
-	        		dExtraInsurarAmount=0;
-	        		dExtraInsurarAmount2=0;
-	        		insurance = Insurance.getMostInterestingInsuranceForPatient(personid);
-	    	        if (insurance != null) {
-		                double dPrice = prestation.getPrice(type)*(prestation.getAnesthesiaPercentage()/100);
-	                    if(insurance.getInsurar()!=null && insurance.getInsurar().getNoSupplements()==0 && insurance.getInsurar().getCoverSupplements()==1){
-	                    	dPrice+=prestation.getSupplement()*(prestation.getAnesthesiaPercentage()/100);
-	                    }
-		                double dInsuranceMaxPrice = prestation.getInsuranceTariff(insurance.getInsurar().getUid(),insurance.getInsuranceCategoryLetter())*(prestation.getAnesthesiaPercentage()/100);
+        if(insurance!=null){
+	        String sCoverageInsurance=ScreenHelper.checkString(insurance.getExtraInsurarUid());
+	        String sCoverageInsurance2=ScreenHelper.checkString(insurance.getExtraInsurarUid2());
+	        Prestation prestation = Prestation.get(prestationUid);
+	        double dPatientAmount=0,dInsurarAmount=0,dExtraInsurarAmount=0,dExtraInsurarAmount2=0;
+			InsuranceRule rule = insurance==null?null:Prestation.getInsuranceRule(prestationUid, insurance.getInsurarUid());
+	        if(!Prestation.checkMaximumReached(personid, rule, quantity) && encounter!=null && prestation!=null && insurance!=null && insurance.getInsurar()!=null && prestation.isVisibleFor(insurance.getInsurar())){
+		        if (insurance != null) {
+		            type = insurance.getType();
+		            if (prestation != null) {
+		                double dPrice = prestation.getPrice(type);
+		                if(insurance.getInsurar()!=null && insurance.getInsurar().getNoSupplements()==0 && insurance.getInsurar().getCoverSupplements()==1){
+		                	dPrice+=prestation.getSupplement();
+		                }
+		                double dInsuranceMaxPrice = prestation.getInsuranceTariff(insurance.getInsurar().getUid(),insurance.getInsuranceCategoryLetter());
 		                if(encounter.getType().equalsIgnoreCase("admission") && prestation.getMfpAdmissionPercentage()>0){
 		                	dInsuranceMaxPrice = prestation.getInsuranceTariff(insurance.getInsurar().getUid(),"*H");
 		                }
@@ -3268,59 +3185,144 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
 		                   		dPatientAmount=quantity * dPrice - dInsurarAmount;
 		                    }
 		                    if(insurance.getInsurar()!=null && insurance.getInsurar().getNoSupplements()==0 && insurance.getInsurar().getCoverSupplements()==0){
-		                    	dPatientAmount+=quantity*prestation.getSupplement()*(prestation.getAnesthesiaPercentage()/100);
+		                    	dPatientAmount+=quantity * prestation.getSupplement();
 		                    }
 		                }
-				        //Now we have the patient share and the insurance share, let's calculate complementary insurances
-				        if(sCoverageInsurance.length()>0){
-				        	Insurar insurar = Insurar.get(sCoverageInsurance);
-				        	if(insurar!=null){
-				        		if(insurar.getCoverSupplements()==1 && insurance.getInsurar().getNoSupplements()==0 && insurance.getInsurar().getCoverSupplements()==0){
-				        			dExtraInsurarAmount=dPatientAmount;
-				        		}
-				        		else{
-				        			dExtraInsurarAmount=dPatientAmount-quantity * prestation.getSupplement();
-				        		}
-				    			dPatientAmount=dPatientAmount-dExtraInsurarAmount;
-				        	}
-				        }
-				        if(dPatientAmount>0 && sCoverageInsurance2.length()>0){
-				        	Insurar insurar = Insurar.get(sCoverageInsurance2);
-				        	if(insurar!=null){
-				        		dExtraInsurarAmount2=dPatientAmount;
-				        	}
-				        }
-	    	        }
-	    	        else {
-	    	            dPatientAmount=quantity * (prestation.getPrice("C")+prestation.getSupplement())*(prestation.getAnesthesiaPercentage()/100);
-	    	            dInsurarAmount=0;
-	    	        }
-	    	        dPatientAmount= Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(dPatientAmount).replaceAll(",", "."));
-	    	        dInsurarAmount= Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(dInsurarAmount).replaceAll(",", "."));
-	    	        dExtraInsurarAmount= Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(dExtraInsurarAmount).replaceAll(",", "."));
-	    	        dExtraInsurarAmount2= Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(dExtraInsurarAmount2).replaceAll(",", "."));
-
-	    	        debet = new Debet();
-	    	        debet.setAmount(dPatientAmount);
-	    	        debet.setCreateDateTime(new java.util.Date());
-	    	        debet.setDate(date);
-	    	        debet.setEncounterUid(encounter.getUid());
-	    	        debet.setInsuranceUid(insurance.getUid());
-	    	        debet.setInsurarAmount(dInsurarAmount);
-	    	        debet.setExtraInsurarUid(sCoverageInsurance);
-	    	        debet.setExtraInsurarAmount(dExtraInsurarAmount);
-	    	        if(dExtraInsurarAmount2>0){
-	    	        	debet.setExtraInsurarUid2(sCoverageInsurance2);
-	    	        }
-	    	        debet.setPrestationUid(anesthesiaPrestation.getUid());
-	    	        debet.setQuantity(quantity);
-	    	        debet.setUpdateDateTime(new java.util.Date());
-	    	        debet.setUpdateUser(userid);
-	    	        debet.setVersion(1);
-	    	        debet.store();
-	    	        //Now that we have stored the debet, let's store a reference to it
-	    	        Pointer.storePointer(uid,debet.getUid());
-	        	}
+		            }
+			        //Now we have the patient share and the insurance share, let's calculate complementary insurances
+			        if(sCoverageInsurance.length()>0){
+			        	Insurar insurar = Insurar.get(sCoverageInsurance);
+			        	if(insurar!=null){
+			        		if(insurar.getCoverSupplements()==1 && insurance.getInsurar().getNoSupplements()==0 && insurance.getInsurar().getCoverSupplements()==0){
+			        			dExtraInsurarAmount=dPatientAmount;
+			        		}
+			        		else{
+			        			dExtraInsurarAmount=dPatientAmount-quantity * prestation.getSupplement();
+			        		}
+			    			dPatientAmount=dPatientAmount-dExtraInsurarAmount;
+			        	}
+			        }
+			        if(dPatientAmount>0 && sCoverageInsurance2.length()>0){
+			        	Insurar insurar = Insurar.get(sCoverageInsurance2);
+			        	if(insurar!=null){
+			        		dExtraInsurarAmount2=dPatientAmount;
+			        	}
+			        }
+		        }
+		        else {
+		            dPatientAmount=quantity * (prestation.getPrice("C")+prestation.getSupplement());
+		            dInsurarAmount = 0;
+		        }
+		        dPatientAmount= Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(dPatientAmount).replaceAll(",", "."));
+		        dInsurarAmount= Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(dInsurarAmount).replaceAll(",", "."));
+		        dExtraInsurarAmount= Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(dExtraInsurarAmount).replaceAll(",", "."));
+		        dExtraInsurarAmount2= Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(dExtraInsurarAmount2).replaceAll(",", "."));
+		        
+		        //Create new Debet
+		        Debet debet = new Debet();
+		        debet.setAmount(dPatientAmount);
+		        debet.setCreateDateTime(new java.util.Date());
+		        debet.setDate(date);
+		        debet.setEncounterUid(encounter.getUid());
+		        debet.setInsuranceUid(insurance.getUid());
+		        debet.setInsurarAmount(dInsurarAmount);
+		        debet.setExtraInsurarUid(sCoverageInsurance);
+		        debet.setExtraInsurarAmount(dExtraInsurarAmount);
+		        if(dExtraInsurarAmount2>0){
+		        	debet.setExtraInsurarUid2(sCoverageInsurance2);
+		        }
+		        debet.setPrestationUid(prestation.getUid());
+		        debet.setQuantity(quantity);
+		        debet.setUpdateDateTime(new java.util.Date());
+		        debet.setUpdateUser(userid);
+		        debet.setVersion(1);
+		        debet.setServiceUid(debet.determineServiceUid());
+		        debet.store();
+		        //Now that we have stored the debet, let's store a reference to it
+		        Pointer.storePointer(uid,debet.getUid());
+		        
+		        
+		        //Check if anesthesia prestation must be added
+		        if(prestation!=null && prestation.getAnesthesiaPercentage()>0){
+		        	Prestation anesthesiaPrestation = Prestation.get(MedwanQuery.getInstance().getConfigString("anesthesiaPrestationUid",""),date);
+		        	if(anesthesiaPrestation!=null){
+		        		dPatientAmount=0;
+		        		dInsurarAmount=0;
+		        		dExtraInsurarAmount=0;
+		        		dExtraInsurarAmount2=0;
+		        		insurance = Insurance.getMostInterestingInsuranceForPatient(personid);
+		    	        if (insurance != null) {
+			                double dPrice = prestation.getPrice(type)*(prestation.getAnesthesiaPercentage()/100);
+		                    if(insurance.getInsurar()!=null && insurance.getInsurar().getNoSupplements()==0 && insurance.getInsurar().getCoverSupplements()==1){
+		                    	dPrice+=prestation.getSupplement()*(prestation.getAnesthesiaPercentage()/100);
+		                    }
+			                double dInsuranceMaxPrice = prestation.getInsuranceTariff(insurance.getInsurar().getUid(),insurance.getInsuranceCategoryLetter())*(prestation.getAnesthesiaPercentage()/100);
+			                if(encounter.getType().equalsIgnoreCase("admission") && prestation.getMfpAdmissionPercentage()>0){
+			                	dInsuranceMaxPrice = prestation.getInsuranceTariff(insurance.getInsurar().getUid(),"*H");
+			                }
+			                String sShare=ScreenHelper.checkString(prestation.getPatientShare(insurance)+"");
+			                if (sShare.length()>0){
+			                    dPatientAmount = quantity * dPrice * Double.parseDouble(sShare) / 100;
+			                    dInsurarAmount = quantity * dPrice - dPatientAmount;
+			                    if(dInsuranceMaxPrice>=0){
+			                    	dInsurarAmount=quantity * dInsuranceMaxPrice;
+			                   		dPatientAmount=quantity * dPrice - dInsurarAmount;
+			                    }
+			                    if(insurance.getInsurar()!=null && insurance.getInsurar().getNoSupplements()==0 && insurance.getInsurar().getCoverSupplements()==0){
+			                    	dPatientAmount+=quantity*prestation.getSupplement()*(prestation.getAnesthesiaPercentage()/100);
+			                    }
+			                }
+					        //Now we have the patient share and the insurance share, let's calculate complementary insurances
+					        if(sCoverageInsurance.length()>0){
+					        	Insurar insurar = Insurar.get(sCoverageInsurance);
+					        	if(insurar!=null){
+					        		if(insurar.getCoverSupplements()==1 && insurance.getInsurar().getNoSupplements()==0 && insurance.getInsurar().getCoverSupplements()==0){
+					        			dExtraInsurarAmount=dPatientAmount;
+					        		}
+					        		else{
+					        			dExtraInsurarAmount=dPatientAmount-quantity * prestation.getSupplement();
+					        		}
+					    			dPatientAmount=dPatientAmount-dExtraInsurarAmount;
+					        	}
+					        }
+					        if(dPatientAmount>0 && sCoverageInsurance2.length()>0){
+					        	Insurar insurar = Insurar.get(sCoverageInsurance2);
+					        	if(insurar!=null){
+					        		dExtraInsurarAmount2=dPatientAmount;
+					        	}
+					        }
+		    	        }
+		    	        else {
+		    	            dPatientAmount=quantity * (prestation.getPrice("C")+prestation.getSupplement())*(prestation.getAnesthesiaPercentage()/100);
+		    	            dInsurarAmount=0;
+		    	        }
+		    	        dPatientAmount= Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(dPatientAmount).replaceAll(",", "."));
+		    	        dInsurarAmount= Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(dInsurarAmount).replaceAll(",", "."));
+		    	        dExtraInsurarAmount= Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(dExtraInsurarAmount).replaceAll(",", "."));
+		    	        dExtraInsurarAmount2= Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(dExtraInsurarAmount2).replaceAll(",", "."));
+	
+		    	        debet = new Debet();
+		    	        debet.setAmount(dPatientAmount);
+		    	        debet.setCreateDateTime(new java.util.Date());
+		    	        debet.setDate(date);
+		    	        debet.setEncounterUid(encounter.getUid());
+		    	        debet.setInsuranceUid(insurance.getUid());
+		    	        debet.setInsurarAmount(dInsurarAmount);
+		    	        debet.setExtraInsurarUid(sCoverageInsurance);
+		    	        debet.setExtraInsurarAmount(dExtraInsurarAmount);
+		    	        if(dExtraInsurarAmount2>0){
+		    	        	debet.setExtraInsurarUid2(sCoverageInsurance2);
+		    	        }
+		    	        debet.setPrestationUid(anesthesiaPrestation.getUid());
+		    	        debet.setQuantity(quantity);
+		    	        debet.setUpdateDateTime(new java.util.Date());
+		    	        debet.setUpdateUser(userid);
+		    	        debet.setVersion(1);
+		    	        debet.store();
+		    	        //Now that we have stored the debet, let's store a reference to it
+		    	        Pointer.storePointer(uid,debet.getUid());
+		        	}
+		        }
 	        }
         }
     }
