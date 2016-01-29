@@ -58,7 +58,38 @@
 			<td class='admin' width="<%=sTDAdminWidth%>"><%=getTran("web","comment",sWebLanguage) %></td>
 			<td class='admin2'><textarea class='text' cols='80' rows='2' name='ProductionOrderComment' id='ProductionOrderComment'><%=checkString(order.getComment()) %></textarea></td>
 			<td class='admin' width="<%=sTDAdminWidth%>"><%=getTran("web","quantityproduced",sWebLanguage) %></td>
-			<td class='admin2'><input type='text' class='text' size='5' name='ProductionOrderQuantity' id='ProductionOrderQuantity'><%=checkString(order.getComment()) %></textarea></td>
+			<td class='admin2'><input type='text' class='text' size='5' name='ProductionOrderQuantity' id='ProductionOrderQuantity' value='<%=order.getQuantity()%>'></td>
+		</tr>
+		<tr class='admin'>
+			<td colspan='2'><%=getTran("web","billofmaterials",sWebLanguage) %></td>
+			<td colspan='2'><input class='button' type='button' name='addmaterial' id='addmaterial' value='<%=getTran("web","addmaterials",sWebLanguage) %>' onclick='addMaterials()'/></td>
+		</tr>
+		<tr>
+			<td class='admin2' colspan='4'>
+				<div name='divMaterials' id='divMaterials'/>
+			</td>
 		</tr>
 	</table>
 </form>
+
+<script>
+	function addMaterials(){
+		  openPopup("/pharmacy/addMaterials.jsp&PopupHeight=200&PopupWidth=600&productionOrderId="+transactionForm.ProductionOrderId.value);
+	}
+	
+	function loadMaterials(){
+	    document.getElementById('divMaterials').innerHTML = "<img src='<c:url value="/_img/themes/default/ajax-loader.gif"/>'/><br/>Loading";
+	    var params = 'productionOrderId=' + transactionForm.ProductionOrderId.value;
+	    var today = new Date();
+	    var url= '<c:url value="/pharmacy/ajax/getProductionOrderMaterials.jsp"/>?ts='+today;
+		new Ajax.Request(url,{
+		  method: "POST",
+	      parameters: params,
+	      onSuccess: function(resp){
+	        $('divMaterials').innerHTML=resp.responseText;
+	      }
+		});
+	}
+	
+	window.setTimeout('loadMaterials();',200);
+</script>

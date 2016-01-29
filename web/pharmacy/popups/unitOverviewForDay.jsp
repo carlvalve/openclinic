@@ -86,6 +86,9 @@
 	            	}
 	            }
 	        }
+            else if(sourceDestination.getObjectType().equalsIgnoreCase("production")){
+	            sd = getTran("web","productionorder",sWebLanguage)+" #"+sourceDestination.getObjectUid();
+	        }
         }
 
         String movement = "", sClass = "";
@@ -133,7 +136,7 @@
 		%>
 	    <tr class="<%=sClass%>">
 	        <td><%=sOperation%></td>
-	        <td><%=movement+operation.getUnitsChanged()%></td>
+	        <td><%=(movement+operation.getUnitsChanged()).replaceAll("--","+")%></td>
 	        <td><b><%=sd%></b></td>
 	        <td><%=username%></td>
 	    </tr>
