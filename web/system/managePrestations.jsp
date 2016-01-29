@@ -406,9 +406,15 @@
 					                        		<option/>
 					                        		<%
 					                        			Vector vResults = Examination.searchAllExaminations();
+					                        			SortedMap vExams = new TreeMap();
 					                        			for(int n=0;n<vResults.size();n++){
 					                        				Hashtable h = (Hashtable)vResults.elementAt(n);
-					                        				out.println("<option value='"+h.get("id")+"' "+(((String)h.get("id")).equalsIgnoreCase(""+prestation.getProductionOrderPrescription())?"selected":"")+">"+getTran("examination",(String)h.get("id"),sWebLanguage)+"</option>");
+					                        				vExams.put(getTran("examination",(String)h.get("id"),sWebLanguage)+"."+h.get("id"),h.get("id"));
+					                        			}
+					                        			Iterator iExams = vExams.keySet().iterator();
+					                        			while(iExams.hasNext()){
+					                        				String id = (String)vExams.get((String)iExams.next());
+					                        				out.println("<option value='"+id+"' "+(id.equalsIgnoreCase(""+prestation.getProductionOrderPrescription())?"selected":"")+">"+getTran("examination",id,sWebLanguage)+"</option>");
 					                        			}
 					                        		%>
 					                        	</select>
