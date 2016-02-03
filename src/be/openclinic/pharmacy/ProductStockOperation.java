@@ -34,6 +34,7 @@ public class ProductStockOperation extends OC_Object{
     private String batchNumber;
     private Date batchEnd;
     private String batchComment;
+    private String batchType;
     private String receiveComment;
     private int unitsReceived;
     private String operationUID;
@@ -42,8 +43,24 @@ public class ProductStockOperation extends OC_Object{
     private String encounterUID;
     private String orderUID;
 
-    
-    public String getOrderUID() {
+    public String getBatchType() {
+		if(batchNumber==null && batchUid!=null && batchUid.length()>0){
+			Batch batch = Batch.get(batchUid);
+			if(batch!=null){
+				batchNumber=batch.getBatchNumber();
+				batchEnd=batch.getEnd();
+				batchComment= batch.getComment();
+				batchType=batch.getType();
+			}
+		}
+		return batchType;
+	}
+
+	public void setBatchType(String batchType) {
+		this.batchType = batchType;
+	}
+
+	public String getOrderUID() {
 		return orderUID;
 	}
 
@@ -110,6 +127,7 @@ public class ProductStockOperation extends OC_Object{
 				batchNumber=batch.getBatchNumber();
 				batchEnd=batch.getEnd();
 				batchComment= batch.getComment();
+				batchType=batch.getType();
 			}
 		}
 		return batchNumber;
@@ -126,6 +144,7 @@ public class ProductStockOperation extends OC_Object{
 				batchNumber=batch.getBatchNumber();
 				batchEnd=batch.getEnd();
 				batchComment= batch.getComment();
+				batchType=batch.getType();
 			}
 		}
 		return batchEnd;
@@ -142,6 +161,7 @@ public class ProductStockOperation extends OC_Object{
 				batchNumber=batch.getBatchNumber();
 				batchEnd=batch.getEnd();
 				batchComment= batch.getComment();
+				batchType=batch.getType();
 			}
 		}
 		return batchComment;
@@ -630,7 +650,7 @@ public class ProductStockOperation extends OC_Object{
 
             String sourceBatchUid="?";
             String destinationBatchUid="?";
-            if(isnew && this.getDescription().indexOf("delivery") > -1 || this.getDescription().indexOf("correctionout")>-1){
+            if(isnew && (this.getDescription().indexOf("delivery") > -1 || this.getDescription().indexOf("correctionout")>-1)){
             	//remove the units from this productstock
                 productStock.setLevel(currentProductStockLevel-this.getUnitsChanged()); // minus
                 //Remove the batch units from this batch
@@ -638,7 +658,9 @@ public class ProductStockOperation extends OC_Object{
                 	sourceBatchUid=batchUid;
                 }
                 else if(getBatchNumber()!=null && getBatchNumber().length()>0){
+                	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 	//Remark: delivery from a nonexistant batch should never occur!!!!
+                	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 	Batch batch = new Batch();
                 	batch.setUid("-1");
                 	batch.setUpdateUser(getUpdateUser());
@@ -646,15 +668,17 @@ public class ProductStockOperation extends OC_Object{
                 	batch.setComment(getBatchComment());
                 	batch.setEnd(getBatchEnd());
                 	batch.setLevel(-this.getUnitsChanged());
+                	batch.setType(this.getBatchType());
                 	batch.store();
                 	setBatchUid(batch.getUid());
                 	setBatchNumber("");
                 	setBatchEnd(null);
                 	setBatchComment("");
+                	setBatchType("");
                 	sourceBatchUid=batchUid;
                 }
             }
-            else if(isnew && this.getDescription().indexOf("receipt") > -1 || this.getDescription().indexOf("correctionin")>-1){
+            else if(isnew && (this.getDescription().indexOf("receipt") > -1 || this.getDescription().indexOf("correctionin")>-1)){
             	//add the units to this productstock
             	productStock.setLevel(currentProductStockLevel+this.getUnitsChanged()); // plus
                 //Add the batch units to this batch if it exists
