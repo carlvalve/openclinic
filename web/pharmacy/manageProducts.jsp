@@ -717,7 +717,7 @@
                     %>
                     <%-- productGroup --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","productGroup",sWebLanguage)%> *</td>
+                        <td class="admin" nowrap><%=getTran("Web","productGroup",sWebLanguage)%></td>
                         <td class="admin2">
                             <select class="text" name="EditProductGroup" id="EditProductGroup">
                                 <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>
@@ -737,14 +737,14 @@
 	                    }
                     %>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","productSubGroup",sWebLanguage)%> *</td>
+                        <td class="admin" nowrap><%=getTran("Web","productSubGroup",sWebLanguage)%></td>
                         <td class="admin2">
-		                    <div name="drugcategorydiv" id="drugcategorydiv"></div>
 		                    <input type="text" readonly class="text" name="EditProductSubGroupText" value="<%=sEditProductSubGroup+" "+sEditProductSubGroupDescr%>" size="120">
 		                 
 		                    <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchCategory('EditProductSubGroup','EditProductSubGroupText');">
 		                    <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="EditProductSubGroup.value='';EditProductSubGroupText.value='';">
 		                    <input type="hidden" name="EditProductSubGroup" id="EditProductSubGroup" value="<%=sEditProductSubGroup%>" onchange="updateDrugCategoryParents(this.value)">
+		                    <div name="drugcategorydiv" id="drugcategorydiv"></div>
                         </td>
                     </tr>
                     <%

@@ -23,7 +23,7 @@
 			ProductStock productStock = ProductStock.get(material.getProductStockUid());
 			if(productStock!=null && productStock.getProduct()!=null){
 				productname=productStock.getProduct().getName();
-				productunit=productStock.getProduct().getPackageUnits()+" "+ productStock.getProduct().getUnit();
+				productunit=productStock.getProduct().getPackageUnits()+" "+ getTran("product.unit",productStock.getProduct().getUnit(),sWebLanguage);
 			}
 			out.println("<tr>");
 			out.println("<td class='admin2'>"+ScreenHelper.formatDate(material.getCreateDateTime())+"</td>");
