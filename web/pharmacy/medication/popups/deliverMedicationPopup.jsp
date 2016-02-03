@@ -195,7 +195,7 @@
 			        	ProductStock productStock = operation.getProductStock();
 			        	if(productStock!=null){
 			        		Product product = productStock.getProduct();
-			        		if(product!=null && product.getProductSubGroup().toLowerCase().startsWith(MedwanQuery.getInstance().getConfigString("bloodProductsCategory","BP.").toLowerCase())){
+			        		if(product!=null && product.getProductSubGroup()!=null && product.getProductSubGroup().toLowerCase().startsWith(MedwanQuery.getInstance().getConfigString("bloodProductsCategory","BP.").toLowerCase())){
 			        			//It is a blood product delivery. Register it
 			        			Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
 								PreparedStatement ps = conn.prepareStatement("insert into OC_BLOODDELIVERIES("+
@@ -384,9 +384,30 @@
 	                            		productStockBatches+= productStock.getUid();
 										expiredProductStockBatches+= productStock.getUid();
 										int nProductStockBatches=0,nExpiredBatches=0;
-	                            		for(int n=0; n<batches.size(); n++){
+//If delivery to patient: first look for personal batches!!!!
+										for(int n=0; n<batches.size(); n++){
 	                            			Batch batch = (Batch)batches.elementAt(n);
-	                            			if(batch!=null){
+	                            			if(batch!=null && batch.getType().equalsIgnoreCase("production") && batch.getBatchNumber().equalsIgnoreCase(activePatient.personid) && (batch.getEnd()==null || !batch.getEnd().before(new java.util.Date()))){
+		                            			if(batch.getEnd()==null || !batch.getEnd().before(new java.util.Date()) || MedwanQuery.getInstance().getConfigInt("enableExpiredProductsDistribution",0)>0){
+		                            				if(nProductStockBatches<10){
+		                            					productStockBatches+= "$"+batch.getUid()+";"+batch.getBatchNumber()+";"+batch.getLevel()+";"+(batch.getEnd()==null?"":ScreenHelper.stdDateFormat.format(batch.getEnd()))+";"+batch.getComment();
+		                            					nProductStockBatches++;
+		                            				}
+		                            				else{
+		                            					break;
+		                            				}
+		                            			}
+		                            			else {
+		                            				if(nExpiredBatches<10){
+		                            					expiredProductStockBatches+="$"+batch.getUid()+";"+batch.getBatchNumber()+";"+batch.getLevel()+";"+(batch.getEnd()==null?"":ScreenHelper.stdDateFormat.format(batch.getEnd()))+";"+batch.getComment();
+		                            				}
+		                            				expiredQuantity+= batch.getLevel();
+		                            			}
+	                            			}
+	                            		}
+										for(int n=0; n<batches.size(); n++){
+	                            			Batch batch = (Batch)batches.elementAt(n);
+	                            			if(batch!=null && !batch.getType().equalsIgnoreCase("production")){
 		                            			if(batch.getEnd()==null || !batch.getEnd().before(new java.util.Date()) || MedwanQuery.getInstance().getConfigInt("enableExpiredProductsDistribution",0)>0){
 		                            				if(nProductStockBatches<10){
 		                            					productStockBatches+= "$"+batch.getUid()+";"+batch.getBatchNumber()+";"+batch.getLevel()+";"+(batch.getEnd()==null?"":ScreenHelper.stdDateFormat.format(batch.getEnd()))+";"+batch.getComment();

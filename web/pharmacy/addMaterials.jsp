@@ -21,36 +21,38 @@
 			quantity=new Double(Double.parseDouble(request.getParameter("EditMaterialQuantity"))).intValue();
 		}
 		catch(Exception e){}
-		//Reduce source stock with taken quantity
-		ProductStockOperation operation = new ProductStockOperation();
-		operation.setUid("-1");
-		operation.setCreateDateTime(new java.util.Date());
-		operation.setDate(dDate);
-		operation.setDescription(MedwanQuery.getInstance().getConfigString("productionStockOperationDescription","medicationdelivery.production"));
-		//Link operation to productionorder
-		operation.setSourceDestination(new ObjectReference("production",sProductionOrderId));
-		operation.setProductStockUid(sProductStockUid);
-		operation.setUnitsChanged(quantity);
-		operation.setVersion(1);
-		operation.setUpdateUser(activeUser.userid);
-		operation.store();
-		//Add materials to productorder
-		ProductionOrderMaterial material = new ProductionOrderMaterial();
-		material.setCreateDateTime(operation.getCreateDateTime());
-		material.setProductionOrderId(Integer.parseInt(sProductionOrderId));
-		material.setProductStockUid(operation.getProductStockUid());
-		material.setQuantity(operation.getUnitsChanged());
-		material.setUpdateDateTime(new java.util.Date());
-		material.setUpdateUid(Integer.parseInt(activeUser.userid));
-		material.setComment(request.getParameter("EditMaterialComment"));
-		material.store();
-		%>
-		<script>
-			window.opener.loadMaterials();
-			window.close();
-		</script>
-		<%
-		out.flush();
+		if(quantity!=0){
+			//Reduce source stock with taken quantity
+			ProductStockOperation operation = new ProductStockOperation();
+			operation.setUid("-1");
+			operation.setCreateDateTime(new java.util.Date());
+			operation.setDate(dDate);
+			operation.setDescription(MedwanQuery.getInstance().getConfigString("productionStockDeliveryOperationDescription","medicationdelivery.production"));
+			//Link operation to productionorder
+			operation.setSourceDestination(new ObjectReference("production",sProductionOrderId));
+			operation.setProductStockUid(sProductStockUid);
+			operation.setUnitsChanged(quantity);
+			operation.setVersion(1);
+			operation.setUpdateUser(activeUser.userid);
+			operation.store();
+			//Add materials to productorder
+			ProductionOrderMaterial material = new ProductionOrderMaterial();
+			material.setCreateDateTime(operation.getCreateDateTime());
+			material.setProductionOrderId(Integer.parseInt(sProductionOrderId));
+			material.setProductStockUid(operation.getProductStockUid());
+			material.setQuantity(operation.getUnitsChanged());
+			material.setUpdateDateTime(new java.util.Date());
+			material.setUpdateUid(Integer.parseInt(activeUser.userid));
+			material.setComment(request.getParameter("EditMaterialComment"));
+			material.store();
+			%>
+			<script>
+				window.opener.loadMaterials();
+				window.close();
+			</script>
+			<%
+			out.flush();
+		}
 	}
 %>
 <form name='transactionForm' method='post'>
