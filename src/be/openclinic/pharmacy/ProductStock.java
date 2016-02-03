@@ -721,6 +721,64 @@ public class ProductStock extends OC_Object implements Comparable {
             }
         }
     }
+    
+    public static Vector findMaterials(){
+        Vector foundObjects = new Vector();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection conn=MedwanQuery.getInstance().getOpenclinicConnection();
+        try {
+        	String sQuery="select * from OC_PRODUCTSTOCKS a, OC_PRODUCTS b"
+        			+ " where"
+        			+ " b.OC_PRODUCT_OBJECTID=replace(OC_STOCK_PRODUCTUID,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and"
+        			+ " b.OC_PRODUCT_PRODUCTSUBGROUP=?"
+        			+ " order by OC_PRODUCT_NAME";
+        	ps=conn.prepareStatement(sQuery);
+        	ps.setString(1, MedwanQuery.getInstance().getConfigString("ProductProductionMaterialSubGroup","MAT"));
+        	rs=ps.executeQuery();
+        	while(rs.next()){
+                ProductStock stock = new ProductStock();
+                stock.setUid(rs.getString("OC_STOCK_SERVERID")+"."+rs.getString("OC_STOCK_OBJECTID"));
+                stock.setServiceStockUid(rs.getString("OC_STOCK_SERVICESTOCKUID"));
+                stock.setProductUid(rs.getString("OC_STOCK_PRODUCTUID"));
+                stock.setDefaultImportance(rs.getString("OC_STOCK_DEFAULTIMPORTANCE")); 
+                stock.setSupplierUid(rs.getString("OC_STOCK_SUPPLIERUID"));
+                stock.setLevel(rs.getInt("OC_STOCK_LEVEL"));
+                stock.setMinimumLevel(rs.getInt("OC_STOCK_MINIMUMLEVEL"));
+                String tmpValue = rs.getString("OC_STOCK_MAXIMUMLEVEL");
+                if (tmpValue != null) {
+                    stock.setMaximumLevel(Integer.parseInt(tmpValue));
+                }
+                tmpValue = rs.getString("OC_STOCK_ORDERLEVEL");
+                if (tmpValue != null) {
+                    stock.setOrderLevel(Integer.parseInt(tmpValue));
+                }
+                stock.setBegin(rs.getDate("OC_STOCK_BEGIN"));
+                stock.setEnd(rs.getDate("OC_STOCK_END"));
+                stock.setCreateDateTime(rs.getTimestamp("OC_STOCK_CREATETIME"));
+                stock.setUpdateDateTime(rs.getTimestamp("OC_STOCK_UPDATETIME"));
+                stock.setUpdateUser(ScreenHelper.checkString(rs.getString("OC_STOCK_UPDATEUID")));
+                stock.setVersion(rs.getInt("OC_STOCK_VERSION"));
+                stock.setLocation(rs.getString("OC_STOCK_LOCATION"));
+                foundObjects.add(stock);
+        	}
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                conn.close();
+            }
+            catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+        return foundObjects;
+    }
+    
     //--- FIND ------------------------------------------------------------------------------------
     public static Vector find(String sFindServiceStockUid, String sFindProductUid, String sFindLevel,
                               String sFindMinimumLevel, String sFindMaximumLevel, String sFindOrderLevel,

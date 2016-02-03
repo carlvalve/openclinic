@@ -20,7 +20,14 @@ public class Batch extends OC_Object{
 	int level;
 	Date end;
 	String comment;
+	String type;
 	
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
 	public String getBatchNumber() {
 		return batchNumber;
 	}
@@ -78,6 +85,7 @@ public class Batch extends OC_Object{
 	                batch.setLevel(rs.getInt("OC_BATCH_LEVEL"));
 	                batch.setComment(rs.getString("OC_BATCH_COMMENT"));
 	                batch.setEnd(rs.getDate("OC_BATCH_END"));
+	                batch.setType(rs.getString("OC_BATCH_TYPE"));
 	
 	                // OBJECT variables
 	                batch.setCreateDateTime(rs.getTimestamp("OC_BATCH_CREATETIME"));
@@ -130,6 +138,7 @@ public class Batch extends OC_Object{
                 batch.setLevel(rs.getInt("OC_BATCH_LEVEL"));
                 batch.setComment(rs.getString("OC_BATCH_COMMENT"));
                 batch.setEnd(rs.getDate("OC_BATCH_END"));
+                batch.setType(rs.getString("OC_BATCH_TYPE"));
 
                 // OBJECT variables
                 batch.setCreateDateTime(rs.getTimestamp("OC_BATCH_CREATETIME"));
@@ -174,8 +183,8 @@ public class Batch extends OC_Object{
                 sSelect = "INSERT INTO OC_BATCHES (OC_BATCH_SERVERID, OC_BATCH_OBJECTID,"+
                           "  OC_BATCH_PRODUCTSTOCKUID, OC_BATCH_NUMBER, OC_BATCH_LEVEL,"+
                           "  OC_BATCH_END, OC_BATCH_COMMENT, OC_BATCH_CREATETIME,"+
-                          "  OC_BATCH_UPDATETIME, OC_BATCH_UPDATEUID)"+
-                          " VALUES(?,?,?,?,?,?,?,?,?,?)";
+                          "  OC_BATCH_UPDATETIME, OC_BATCH_UPDATEUID,OC_BATCH_TYPE)"+
+                          " VALUES(?,?,?,?,?,?,?,?,?,?,?)";
 
                 ps = oc_conn.prepareStatement(sSelect);
 
@@ -196,6 +205,7 @@ public class Batch extends OC_Object{
                 ps.setTimestamp(8,new java.sql.Timestamp(new java.util.Date().getTime())); // now
                 ps.setTimestamp(9,new java.sql.Timestamp(new java.util.Date().getTime())); // now
                 ps.setString(10,this.getUpdateUser());
+                ps.setString(11,this.getType());
 
                 ps.executeUpdate();
             }
@@ -205,7 +215,7 @@ public class Batch extends OC_Object{
                 sSelect = "UPDATE OC_BATCHES SET "+
                           "  OC_BATCH_PRODUCTSTOCKUID=?, OC_BATCH_NUMBER=?, OC_BATCH_LEVEL=?,"+
                           "  OC_BATCH_END=?, OC_BATCH_COMMENT=?, OC_BATCH_CREATETIME=?,"+
-                          "  OC_BATCH_UPDATETIME=?, OC_BATCH_UPDATEUID=?"+
+                          "  OC_BATCH_UPDATETIME=?, OC_BATCH_UPDATEUID=?, OC_BATCH_TYPE=?"+
                           " WHERE OC_BATCH_SERVERID=? AND OC_BATCH_OBJECTID=?";
 
                 ps = oc_conn.prepareStatement(sSelect);
@@ -219,9 +229,10 @@ public class Batch extends OC_Object{
                 ps.setTimestamp(6,new java.sql.Timestamp(new java.util.Date().getTime())); // now
                 ps.setTimestamp(7,new java.sql.Timestamp(new java.util.Date().getTime())); // now
                 ps.setString(8,this.getUpdateUser());
+                ps.setString(9,this.getType());
 
-                ps.setInt(9,Integer.parseInt(this.getUid().substring(0,this.getUid().indexOf("."))));
-                ps.setInt(10,Integer.parseInt(this.getUid().substring(this.getUid().indexOf(".")+1)));
+                ps.setInt(10,Integer.parseInt(this.getUid().substring(0,this.getUid().indexOf("."))));
+                ps.setInt(11,Integer.parseInt(this.getUid().substring(this.getUid().indexOf(".")+1)));
 
                 ps.executeUpdate();
             }
