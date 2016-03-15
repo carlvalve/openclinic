@@ -122,7 +122,17 @@
 	    	</index>
 	    </indexes>
     </table>
-    
+    <table name="ICD10_TO_NHIF" db="openclinic" sync="NONE">
+    	<columns>
+    		<column name="ICD10" dbtype="varchar" javatype="string" size="10"/>
+    		<column name="NHIF" dbtype="varchar" javatype="string" size="10"/>
+    	</columns>
+	    <indexes>
+	    	<index name="NHIF">
+	    		<indexcolumn order="ASC" name="ICD10"/>
+	    	</index>
+	    </indexes>
+    </table>
     <table name="AC_JOURNAL" db="ocadmin" sync="NONE">
     	<columns>
 	    	<column name="AC_JOURNAL_ID" dbtype="int" javatype="integer"/>
@@ -139,6 +149,20 @@
 	    	</index>
 	    	<index name="AC_JOURNAL_DATE">
 	    		<indexcolumn order="ASC" name="AC_JOURNAL_DATE"/>
+	    	</index>
+	    </indexes>
+    </table>
+    
+    <table name="OC_DRAWINGS" db="openclinic" sync="NONE">
+    	<columns>
+	    	<column name="OC_DRAWING_SERVERID" dbtype="int" javatype="integer"/>
+	    	<column name="OC_DRAWING_TRANSACTIONID" dbtype="int" javatype="integer"/>
+	    	<column name="OC_DRAWING_ITEMTYPE" dbtype="varchar" javatype="string" size="255"/>
+	  	    <column name="OC_DRAWING_DRAWING" dbtype="longblob" javatype="bytes"/>   
+    	</columns>
+	    <indexes>
+	    	<index name="OC_DRAWING_TRANSACTIONID">
+	    		<indexcolumn order="ASC" name="OC_DRAWING_TRANSACTIONID"/>
 	    	</index>
 	    </indexes>
     </table>
@@ -221,7 +245,28 @@
 	        <column name="OC_MATERIAL_COMMENT" dbtype="varchar" javatype="string" size="255"/>      
     	</columns>
 	</table>
-	    
+	
+	<table name="OC_RESERVATIONLOCKS" db="openclinic" sync="NONE">
+		<columns>
+			<column name="OC_RESERVATIONLOCK_OBJECTID" dbtype="int" javatype="integer"/>
+			<column name="OC_RESERVATIONLOCK_REFTYPE" dbtype="varchar" javatype="string" size="50"/>
+			<column name="OC_RESERVATIONLOCK_REFUID" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="OC_RESERVATIONLOCK_BEGIN" dbtype="datetime" javatype="date" />
+	    	<column name="OC_RESERVATIONLOCK_END" dbtype="datetime" javatype="date" />
+	    	<column name="OC_RESERVATIONLOCK_SERVICE" dbtype="varchar" javatype="string" size="255"/>
+	    	<column name="OC_RESERVATIONLOCK_UPDATETIME" dbtype="datetime" javatype="date" />
+	    	<column name="OC_RESERVATIONLOCK_UPDATEUID" dbtype="varchar" javatype="string" size="20"/>
+		</columns>
+		<indexes>
+	    	<index name="OC_RESERVATIONLOCK_OBJECTID">
+	    		<indexcolumn order="ASC" name="OC_RESERVATIONLOCK_OBJECTID"/>
+	    	</index>
+	    	<index name="OC_RESERVATIONLOCK_BEGIN_END">
+	    		<indexcolumn order="ASC" name="OC_RESERVATIONLOCK_BEGIN"/>
+	    		<indexcolumn order="ASC" name="OC_RESERVATIONLOCK_END"/>
+	    	</index>
+		</indexes>
+	</table>
     <table name="OC_RESERVATIONS" db="openclinic" sync="NONE">
     	<columns>
 	    	<column name="OC_RESERVATION_SERVERID" dbtype="int" javatype="integer"/>
@@ -2121,6 +2166,7 @@
 			<column name="OC_PLANNING_PLANNEDEND" dbtype="datetime" javatype="date"/>
 			<column name="OC_PLANNING_REMINDSENT" dbtype="datetime" javatype="date"/>
 			<column name="OC_PLANNING_COMMENT" dbtype="text" javatype="string"/>
+			<column name="OC_PLANNING_CONFIRMATIONDATE" dbtype="datetime" javatype="date"/>
 		</columns>
 		<indexes>
 			<index name="OC_PLANNING_PATIENTID">
@@ -2131,6 +2177,9 @@
 			</index>
 			<index name="OC_PLANNING_PLANNEDDATE">
 				<indexcolumn order="ASC" name="OC_PLANNING_PLANNEDDATE"/>
+			</index>
+			<index name="OC_PLANNING_CONFIRMATIONDATE">
+				<indexcolumn order="ASC" name="OC_PLANNING_CONFIRMATIONDATE"/>
 			</index>
 			<index name="OC_PLANNING_OBJECTID">
 				<indexcolumn order="ASC" name="OC_PLANNING_OBJECTID"/>
@@ -2610,6 +2659,8 @@
 			<column name="OC_ORDER_UPDATEUID" dbtype="varchar" javatype="string" size="50" nulls="0"/>
 			<column name="OC_ORDER_VERSION" dbtype="int" javatype="integer" nulls="0"/>
 			<column name="OC_ORDER_STATUS" dbtype="varchar" javatype="string" size="50" nulls="0"/>
+			<column name="OC_ORDER_FROM" dbtype="varchar" javatype="string" size="50"/>
+			<column name="OC_ORDER_PROCESSED" dbtype="int" javatype="integer"/>
 		</columns>
 		<indexes>
 			<index name="OC_ORDER_OBJECTID">
@@ -4591,12 +4642,12 @@
 		<sql db="MySQL">
             create view OC_DOCUMENTS as
             select *
-            from openclinic_dbo.OC_DOCUMENTS
+            from @openclinic@.OC_DOCUMENTS
 		</sql>
 		<sql db="Microsoft SQL Server">
             create view OC_DOCUMENTS as
             select *
-            from documents..OC_DOCUMENTS
+            from @openclinic@.dbo.OC_DOCUMENTS
 		</sql>
 	</view>
     <view name="UnitGroupsView" db="ocadmin" drop="1">

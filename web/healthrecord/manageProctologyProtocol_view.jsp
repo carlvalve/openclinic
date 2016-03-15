@@ -63,7 +63,7 @@
                     </tr>
                     <tr>
                         <td rowspan="3">
-                            <div id="pointer_div" onclick="point_it(event)" style = "background-image:url('<c:url value="/_img/anuscopie.gif"/>');width:77px;height:77px;"></div>
+							<%=ScreenHelper.createDrawingDiv(request, "canvasDiv", "be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OCDRAWING", transaction,"/_img/anuscopie.gif") %>
                         </td>
                     </tr>
                     <tr>
@@ -137,40 +137,4 @@
         document.transactionForm.submit();
     }
 
-    var cnv = document.getElementById("pointer_div");
-    var jg = new jsGraphics(cnv);
-
-    function point_it(event){
-        pos_x = event.offsetX?(event.offsetX):event.pageX-document.getElementById("pointer_div").offsetLeft;
-        pos_y = event.offsetY?(event.offsetY):event.pageY-document.getElementById("pointer_div").offsetTop;
-
-        if ((document.transactionForm.coord.value.indexOf(pos_x+","+pos_y)==-1)&&(pos_x > 5) && (pos_y > 5)){
-            jg.setColor("red");
-            jg.fillEllipse(437+pos_x,190+pos_y,5,5);
-            jg.paint();
-
-            document.transactionForm.coord.value += ";"+pos_x+","+pos_y;
-        }
-    }
-
-    function doClear() {
-        jg.clear();
-        document.transactionForm.coord.value = "";
-    }
-
-    function doPoint(){
-        var array = document.transactionForm.coord.value.split(";");
-        for(var i=0; i<array.length; i++){
-            if (array[i].length>0){
-                aCoord = array[i].split(",");
-                iX = aCoord[0]*1;
-                iY = aCoord[1]*1;
-                jg.setColor("red");
-                jg.fillEllipse(437+iX,190+iY,5,5);
-                jg.paint();
-            }
-        }
-    }
-
-    doPoint();
 </script>

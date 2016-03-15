@@ -1,8 +1,7 @@
-<%@page import="be.openclinic.pharmacy.ProductStock,
-                be.openclinic.pharmacy.ProductOrder"%>
+<%@page import="be.openclinic.pharmacy.*"%>
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
-<%=checkPermission("pharmacy.productorder","edit",activeUser)%>
+<%=checkPermission("pharmacy.manageproductorders","edit",activeUser)%>
 
 <%
     String sAction = checkString(request.getParameter("Action"));
@@ -15,6 +14,7 @@
            sEditPackagesOrdered = checkString(request.getParameter("EditPackagesOrdered")),
            sEditDateOrdered     = checkString(request.getParameter("EditDateOrdered")),
            sEditDateDeliveryDue = checkString(request.getParameter("EditDateDeliveryDue")),
+           sEditFrom			= checkString(request.getParameter("EditFrom")),
            sEditImportance      = checkString(request.getParameter("EditImportance")); // (native|high|low)
 
     // afgeleide data
@@ -31,13 +31,14 @@
         Debug.println("sEditDateOrdered     : "+sEditDateOrdered);
         Debug.println("sEditDateDeliveryDue : "+sEditDateDeliveryDue);
         Debug.println("sEditImportance      : "+sEditImportance);
+        Debug.println("sEditFrom      		: "+sEditFrom);
         Debug.println("sEditProductName     : "+sEditProductName+"\n");
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
     String msg = "",sSelectedProductStockUid = "", sSelectedDescription = "", sSelectedPackagesOrdered = "",
            sSelectedDateOrdered = "", sSelectedDateDeliveryDue = "", sSelectedImportance = "",
-           sSelectedProductName = "";
+           sSelectedProductName = "", sSelectedFrom="";
 
     // defaults
     if(sEditDescription.length()==0) sEditDescription = sEditProductName;
@@ -60,6 +61,15 @@
             }
         }
     }
+    if(sEditFrom.length()==0 && sEditProductStockUid.length()>0){
+        ProductStock productStock = ProductStock.get(sEditProductStockUid);
+        if(productStock!=null){
+			sEditFrom=checkString(productStock.getSupplierUid());
+			if(sEditFrom.length()==0){
+				sEditFrom=checkString(productStock.getServiceStock().getDefaultSupplierUid());
+			}
+        }
+    }
 
     boolean displayEditFields = false;
 
@@ -79,6 +89,7 @@
         if(sEditDateDeliveryDue.length() > 0) order.setDateDeliveryDue(ScreenHelper.parseDate(sEditDateDeliveryDue));
         order.setImportance(sEditImportance); // (native|high|low)
         order.setUpdateUser(activeUser.userid);
+        order.setFrom(sEditFrom);
 
         String orderWithSameDataUid = order.exists();
         boolean orderWithSameDataExists = orderWithSameDataUid.length()>0;
@@ -127,6 +138,7 @@
                 if(tmpDate!=null) sSelectedDateDeliveryDue = ScreenHelper.formatDate(tmpDate);
 
                 sSelectedProductName = order.getProductStock().getProduct().getName();
+                sSelectedFrom = checkString(order.getFrom());
             }
         }
         else if(sAction.equals("showDetailsAfterAddReject")){
@@ -138,6 +150,7 @@
             sSelectedDateDeliveryDue = sEditDateDeliveryDue;
             sSelectedImportance      = sEditImportance;
             sSelectedProductName     = sEditProductName;
+            sSelectedFrom			 = sEditFrom;
         }
         else if(sAction.equals("showDetailsNew")){
             sSelectedProductStockUid = sEditProductStockUid;
@@ -145,6 +158,7 @@
             sSelectedPackagesOrdered = sEditPackagesOrdered;
             sSelectedImportance      = sEditImportance;
             sSelectedProductName     = sEditProductName;
+            sSelectedFrom			 = sEditFrom;
         }
     }
 %>
@@ -196,6 +210,28 @@
                                 %><script>getToday(document.getElementsByName('EditDateOrdered')[0]);</script><%
                             }
                         %>
+                    </tr>
+
+                    <%-- supplier --%>
+                    <tr>
+                        <td class="admin"><%=getTran("Web","orderfrom",sWebLanguage)%></td>
+                        <td class="admin2">
+                        	<select class='text' name='EditFrom' id='EditFrom'>
+                        		<option value=''/>
+                        		<%
+                        			try{
+	                        			Vector servicestocks = ServiceStock.findAll();
+	                        			for(int n=0;n<servicestocks.size();n++){
+	                        				ServiceStock stock = (ServiceStock)servicestocks.elementAt(n);
+	                        				out.println("<option value='"+stock.getUid()+"' "+(sEditFrom.equalsIgnoreCase(stock.getUid())?"selected":"")+">"+stock.getName()+"</option>");
+	                        			}
+                        			}
+                        			catch(Exception r){
+                        				r.printStackTrace();
+                        			}
+                        		%>
+                        	</select>
+                        </td>
                     </tr>
 
                     <%-- DateDeliveryDue --%>

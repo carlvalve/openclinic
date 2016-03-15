@@ -47,7 +47,14 @@
     String sTextAreaRows = "2";
     String[] sCOLORS = {"#E6BC56","#FF4A12","#94B3C5","#ABC507","#74C6F1","#3E4F4F","#D1E26A","#C24798","#4096EE","#FF0084","#008C00"};
 
-
+	public String showMissingFields(AdminPerson person){
+		String s ="";
+		if(person.getMissingMandatoryFields().size()>0){
+			s="<script>openPopup('/_common/patient/showMissingFields.jsp&ts="+getTs()+"',200,300).focus();</script>";
+		}
+		return s;
+	}
+    
     //--- CHECK STRING ----------------------------------------------------------------------------
     public String checkString(String sString){
         return ScreenHelper.checkString(sString);
@@ -1027,6 +1034,7 @@
     String sJSMORRIS   = "<script src='"+sCONTEXTPATH+"/_common/_script/morris.min.js'></script>";
     String sJSJQUERY   = "<script src='"+sCONTEXTPATH+"/_common/_script/jquery-1.8.2.min.js'></script>";
     String sJSRAPHAEL  = "<script src='"+sCONTEXTPATH+"/_common/_script/raphael-min.js'></script>";
+    String sCANVAS  = "<script src='"+sCONTEXTPATH+"/_common/_script/canvas.js'></script>";
 
     // varia
     String sTDAdminWidth = "200";

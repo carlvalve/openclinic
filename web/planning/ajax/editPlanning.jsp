@@ -121,6 +121,7 @@
 	        try {
 	            //####################### IF APPOINTMENT TO SAVE ###################################//
 	            String sEditEstimatedtime = checkString(request.getParameter("EditEstimatedtime"));
+	            String sEditConfirmationDate = checkString(request.getParameter("EditConfirmationDate"));
 	            String sEditEffectiveDate = checkString(request.getParameter("EditEffectiveDate"))+" "+checkString(request.getParameter("EditEffectiveDateTime"));
 	            String sEditCancelationDate = checkString(request.getParameter("EditCancelationDate"))+" "+checkString(request.getParameter("EditCancelationDateTime"));
 	            String sEditPatientUID = checkString(request.getParameter("EditPatientUID"));
@@ -153,7 +154,11 @@
 		            planning.setCancelationDate(ScreenHelper.fullDateFormat.parse(sEditCancelationDate));
 				}
 				catch(Exception e){};
-				
+				try{
+		            planning.setConfirmationDate(ScreenHelper.parseDate(sEditConfirmationDate));
+				}
+				catch(Exception e){};
+				System.out.println(1);
 	            planning.setUserUID(sEditUserUID);
 	
 	            planning.setPatientUID(sEditPatientUID);
@@ -168,12 +173,15 @@
 	            planning.setComment(sEditComment);
 	            planning.setTempPlanningUid(tempplanninguid);
 	            planning.setServiceUid(sFindServiceUID);
+				System.out.println(2);
 	            boolean bError=false;
 	            if(dRepeatUntil!=null && dRepeatUntil.after(planning.getPlannedDate())){
 	            	//Repeatedly store this planning for each day in the period
 	            	while(!ScreenHelper.parseDate(ScreenHelper.formatDate(planning.getPlannedDate())).after(dRepeatUntil)){
 	            		planning.setUid(null);
+	    				System.out.println(3);
 	            		bError=!planning.store();
+	    				System.out.println(4);
 	            		if(bError){
 	            			break;
 	            		}
@@ -183,7 +191,9 @@
 	            	}
 	            }
 	            else{
+					System.out.println(5);
 	            	bError=!planning.store();
+					System.out.println(6);
 	            }
 	            if(!bError){
 	            	//Also 
@@ -206,8 +216,8 @@
 	            }
 	
 	        }
-	        catch (Exception e){
-	            Debug.printProjectErr(e, Thread.currentThread().getStackTrace());
+	        catch (Exception e2){
+	            Debug.printProjectErr(e2, Thread.currentThread().getStackTrace());
 	        }
     	}
     	else{
@@ -395,6 +405,13 @@
         </td>
     </tr>
     <tr>
+        <td class="admin"><%=HTMLEntities.htmlentities(getTran("planning", "provisionalbooking", sWebLanguage))%></td>
+        <td class="admin2">
+        	<%=ScreenHelper.newWriteDateField("EditConfirmationDate", planning.getConfirmationDate(), sWebLanguage, sCONTEXTPATH,"document.getElementById(\"checkConfirmationDate\").checked=false")%>
+        	<input type='checkbox' id='checkConfirmationDate' <%=ScreenHelper.formatDate(planning.getConfirmationDate()).length()==0?"checked":""%> onclick='if(this.checked){document.getElementById("EditConfirmationDate").value=""}'/> <%=HTMLEntities.htmlentities(getTran("planning", "planningconfirmed", sWebLanguage))%>
+        </td>
+    </tr>
+    <tr>
         <td class='admin'><%=HTMLEntities.htmlentities(getTran("planning", "user", sWebLanguage))%>*</td>
         <td class='admin2'>
             <input type="hidden" id="EditUserUID" name="EditUserUID" value="<%=planning.getUserUID()%>">
@@ -510,7 +527,7 @@
         <td class='admin'><%=getTran("planning","resource",sWebLanguage)%></td>
         <td class='admin2'>
         <% if(!checkString(request.getParameter("readonly")).equalsIgnoreCase("true")){ %>
-        	<a href="javascript:openPopup('/planning/manageResources.jsp&planninguid=<%=sFindPlanningUID%>&tempplanninguid='+document.getElementById('tempplanninguid').value+'&date='+document.getElementById('appointmentDateDay').value+'&begin='+(document.getElementById('appointmentDateHour').value*60+document.getElementById('appointmentDateMinutes').value*1)*60000+'&end='+(document.getElementById('appointmentDateEndHour').value*60+document.getElementById('appointmentDateEndMinutes').value*1)*60000+'&PopupWidth=800&PopupHeight=600&ts=<%=getTs()%>');void(0);"><%=getTran("web","edit.resources",sWebLanguage) %></a>
+        	<a href="javascript:openPopup('/planning/manageResources.jsp&planninguid=<%=sFindPlanningUID%>&tempplanninguid='+document.getElementById('tempplanninguid').value+'&date='+document.getElementById('appointmentDateDay').value+'&begin='+(document.getElementById('appointmentDateHour').value*60+document.getElementById('appointmentDateMinutes').value*1)*60000+'&end='+(document.getElementById('appointmentDateEndHour').value*60+document.getElementById('appointmentDateEndMinutes').value*1)*60000+'&PopupWidth=800&PopupHeight=600&ts=<%=getTs()%>&patientuid='+document.getElementById('EditPatientUID').value);void(0);"><%=getTran("web","edit.resources",sWebLanguage) %></a>
         <%} %>
             <span id='resources'></span>
             <input type='hidden' name='tempplanninguid' id='tempplanninguid'/>

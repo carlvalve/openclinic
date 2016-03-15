@@ -92,7 +92,7 @@
 						out.print("<img src='_img/icons/icon_warning.gif'/> <font style='font-size:12px;font-weight:bold;vertical-align:2px;}'>"+getTran("web","died",sWebLanguage)+" "+ScreenHelper.stdDateFormat.format(death)+"</font>");
 	            	}
 	            	else{
-	            		out.print(" ("+(activePatient.gender.equalsIgnoreCase("M")?getTran("web.occup","male",sWebLanguage):getTran("web.occup","female",sWebLanguage))+" - "+activePatient.getAge()+" "+getTran("web","years",sWebLanguage).toLowerCase()+")");
+	            		out.print(" ("+(activePatient.gender.equalsIgnoreCase("M")?getTran("web.occup","male",sWebLanguage):getTran("web.occup","female",sWebLanguage))+" - "+ activePatient.getAgeInMonths()/12+" "+getTran("web","years",sWebLanguage).toLowerCase()+ " "+ activePatient.getAgeInMonths()%12+" "+getTran("web","months",sWebLanguage).toLowerCase()+")");
 	            	}
             	}
             %>

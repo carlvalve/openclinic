@@ -31,7 +31,7 @@
 		</tr>
 		<tr>
 			<td class='admin'><%=getTran("web","exchangerate",sWebLanguage) %></td>
-			<td class='admin2'><input type='text' class='text' name='errate' id='errate' size='10' value='<%=sRate%>'/><%=MedwanQuery.getInstance().getConfigString("currency","") %> <span id='existingrate'></span></td>
+			<td class='admin2'><input type='text' class='text' name='errate' id='errate' size='15' value='<%=sRate%>'/><%=MedwanQuery.getInstance().getConfigString("currency","") %> <span id='existingrate'></span></td>
 		</tr>
 	</table>
 	<input type='submit' name='submit' value='<%=getTran("web","save",sWebLanguage) %>'/>

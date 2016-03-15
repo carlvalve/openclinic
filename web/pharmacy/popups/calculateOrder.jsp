@@ -6,7 +6,7 @@
                 be.openclinic.medical.Prescription"%>
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/_common/templateAddIns.jsp"%>
-<%=checkPermission("pharmacy.productorder","edit",activeUser)%>
+<%=checkPermission("pharmacy.manageproductorders","edit",activeUser)%>
 <%=sJSSORTTABLE%>
 
 <form name='orderForm' method='post'>
@@ -31,12 +31,11 @@
 				catch(Exception e){
 					quantity = 0;
 				}
-				
+				String sFrom = checkString(request.getParameter("from."+parameter.split("\\.")[1]+"."+parameter.split("\\.")[2]));
 				if(quantity>0 && productStock!=null){
 					Product product = productStock.getProduct();
 					if(product!=null){
 						productOrder = new ProductOrder();
-						
 						productOrder.setUid("-1");
 						productOrder.setCreateDateTime(new java.util.Date());
 						productOrder.setDateOrdered(new java.util.Date());
@@ -47,7 +46,7 @@
 						productOrder.setUpdateDateTime(new java.util.Date());
 						productOrder.setUpdateUser(activeUser.userid);
 						productOrder.setVersion(1);
-						
+						productOrder.setFrom(sFrom);
 						productOrder.store();
 					}
 				}
@@ -62,9 +61,10 @@
 		ServiceStock serviceStock = ServiceStock.get(sServiceStockUid);
 		
 		if(serviceStock!=null){
-			out.print(writeTableHeaderDirectText(serviceStock.getUid()+" "+serviceStock.getName(),sWebLanguage," window.close();"));
+			out.print(writeTableHeaderDirectText(serviceStock.getUid()+" "+serviceStock.getName()+" <a href='javascript:checkAll(true)'>"+getTran("web", "selectall", sWebLanguage)+"</a> / <a href='javascript:checkAll(false)'>"+getTran("web", "unselectall", sWebLanguage)+"</a>",sWebLanguage," window.close();"));
 			out.print("<table width='100%' class='sortable' cellpadding='0' cellspacing='1' id='searchresults'>");
-									
+			
+       		Vector servicestocks = ServiceStock.findAll();
 			Vector productStocks = serviceStock.getProductStocks();
 			int quantity, recCount = 0;
 			for(int n=0; n<productStocks.size(); n++){
@@ -81,15 +81,25 @@
 					if(recCount==1){
 						// header
 						out.print("<tr class='gray'>"+
-					               "<td width='250'>"+getTran("web","productname",sWebLanguage)+"</td>"+
-						           "<td width='60'>"+getTran("web","level",sWebLanguage)+"</td>"+
-					               "<td width='60'>"+getTran("web","orderlevel",sWebLanguage)+"</td>"+
-						           "<td width='70'>"+getTran("web","maximumlevel",sWebLanguage)+"</td>"+
-					               "<td width='60'>"+getTran("web","openorders",sWebLanguage)+"</td>"+
-						           "<td width='*'>"+getTran("web","order",sWebLanguage)+"</td>"+
+					               "<td>"+getTran("web","productname",sWebLanguage)+"</td>"+
+						           "<td>"+getTran("web","level",sWebLanguage)+"</td>"+
+					               "<td>"+getTran("web","orderlevel",sWebLanguage)+"</td>"+
+						           "<td>"+getTran("web","maximumlevel",sWebLanguage)+"</td>"+
+					               "<td>"+getTran("web","openorders",sWebLanguage)+"</td>"+
+						           "<td>"+getTran("web","order",sWebLanguage)+"</td>"+
+						           "<td>"+getTran("web","orderfrom",sWebLanguage)+"</td>"+
 					              "</tr>");
 					}
-					
+					String sEditFrom=checkString(productStock.getSupplierUid());
+					if(sEditFrom.length()==0){
+						sEditFrom=checkString(productStock.getServiceStock().getDefaultSupplierUid());
+					}
+					String sStockSelect="<option value=''/>";
+		   			for(int i=0;i<servicestocks.size();i++){
+		   				ServiceStock stock = (ServiceStock)servicestocks.elementAt(i);
+		   				sStockSelect+="<option value='"+stock.getUid()+"' "+(sEditFrom.equalsIgnoreCase(stock.getUid())?"selected":"")+">"+stock.getName()+"</option>";
+		   			}
+
 					// For every product to be ordered, add a line 
 					out.print("<tr>"+
 					           "<td class='admin'><input type='checkbox' name='productstock."+productStock.getUid()+"' checked id='prod"+n+"'/><label for='prod"+n+"' class='hand'>"+productStock.getProduct().getName()+"</label></td>"+
@@ -98,6 +108,7 @@
 					           "<td class='admin2'>"+productStock.getMaximumLevel()+"</td>"+
 					           "<td class='admin2'>"+ProductOrder.getOpenOrderedQuantity(productStock.getUid())+"</td>"+
 					           "<td class='admin2'><input size='4' type='text' class='text' name='quantity."+productStock.getUid()+"' value='"+quantity+"'/></td>"+
+					           "<td class='admin2'><select class='text' name='from."+productStock.getUid()+"' id='from."+productStock.getUid()+"'>"+sStockSelect+"</select></td>"+
 					          "</tr>");
 				}
 			}
@@ -127,3 +138,14 @@
 	}
 %>
 </form>
+
+<script>
+	function checkAll(bChecked){
+		var checkboxes = document.all;
+		for(n=0;n<checkboxes.length;n++){
+			if(checkboxes[n].name && checkboxes[n].name.indexOf('productstock.')>-1){
+				checkboxes[n].checked=bChecked;
+			}
+		}
+	}
+</script>

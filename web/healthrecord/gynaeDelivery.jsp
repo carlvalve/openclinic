@@ -329,12 +329,6 @@
                                         <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_DELIVERY_TYPE_CAESERIAN_INDICATION")%> id="tcaeserianindication" class="text" cols="50" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_TYPE_CAESERIAN_INDICATION" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_TYPE_CAESERIAN_INDICATION" property="value"/></textarea>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td/>
-                                    <td>
-                                        <a href="<c:url value="/healthrecord/loadPDF.jsp"/>?file=<%=MedwanQuery.getInstance().getConfigString("gynae.caeserian.url","")%>" target="_new"><%=getTran("gynaeco", "caeserian_url", sWebLanguage)%></a>
-                                    </td>
-                                </tr>
                             </table>
                         </td>
                     </tr>
@@ -745,9 +739,6 @@
             </td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_DELIVERY_ANESTHESIE")%> class="text" cols="50" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_ANESTHESIE" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_ANESTHESIE" property="value"/></textarea>
-                <br>
-                <a href="<c:url value="/healthrecord/loadPDF.jsp"/>?file=<%=MedwanQuery.getInstance().getConfigString("gynae.anesthesie.url","")%>" target="_new"><%=getTran("gynaeco", "anesthesie_url", sWebLanguage)%>
-                </a>
             </td>
         </tr>
         <%-- #################################### DELIVERANCE #################################--%>

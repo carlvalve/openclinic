@@ -3,7 +3,14 @@
 <%@include file="/includes/validateUser.jsp"%>
                 
 <%
-	Product product = Product.get(request.getParameter("productUid"));
+	Product product=null;
+	if(request.getParameter("productUid")!=null){
+		product = Product.get(request.getParameter("productUid"));
+	}
+	else if(request.getParameter("productStockUid")!=null){
+		ProductStock productStock = ProductStock.get(request.getParameter("productStockUid"));
+		product = productStock.getProduct();
+	}
 %>
 {
 	"name": "<%=product.getName() %>",

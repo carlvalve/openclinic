@@ -149,6 +149,12 @@
 <div id="responseByAjax">&nbsp;</div>
 <div id="weekSchedulerFormByAjax" style="display:none;position:absolute;background:white">&nbsp;</div>
 
+<%
+	if(MedwanQuery.getInstance().getConfigInt("warnUserOfMissingMandatoryPatientInformation",0)==1){
+		out.println(showMissingFields(activePatient));
+	}
+%>
+
 <script>
   function getAccessHistory(nb){
 	var url = "<c:url value='/curative/ajax/getHistoryAccess.jsp'/>?nb="+nb+"&ts="+new Date().getTime();

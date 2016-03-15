@@ -588,7 +588,7 @@ public double getLastYearsAveragePrice(Product product){
 	                        %>
 		                        <tr>
 		                            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","service",sWebLanguage)%>&nbsp;</td>
-		                            <td class="admin2"><%=sServiceName%></td>
+		                            <td class="admin2" colspan='2'><%=sServiceName%></td>
 		                        </tr>
 	                        <%
                         }
@@ -602,7 +602,7 @@ public double getLastYearsAveragePrice(Product product){
 	                        %>
 		                        <tr>
 		                            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","servicestock",sWebLanguage)%>&nbsp;</td>
-		                            <td class="admin2"><%=sServiceStockName%></td>
+		                            <td class="admin2" colspan='2'><%=sServiceStockName%> (<%=serviceStock.getUid() %>)</td>
 		                        </tr>
 	                        <%
                         }
@@ -611,7 +611,9 @@ public double getLastYearsAveragePrice(Product product){
                     <tr id="filtersection">
                         <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","productstock",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2"><input type='text' class='text' name='filter' id='filter' onkeyup='showSearchResults(this.value)' value='' size='10'/></td>
+                        <td class="admin2"><input class="button" type="button" name="returnButton0" value='<%=getTranNoLink("Web.manage","manageservicestocks",sWebLanguage)%>' onclick="doBackToPrevModule();"></td>
                     </tr>
+                    
                 </table>
                 
                 <%-- display message --%>
@@ -715,11 +717,21 @@ public double getLastYearsAveragePrice(Product product){
                     <tr>
                         <td class="admin2" nowrap><%=getTran("Web","supplier",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
-                            <input type="hidden" name="FindSupplierUid" value="<%=sFindSupplierUid%>">
-                            <input class="text" type="text" name="FindSupplierName" readonly size="<%=sTextWidth%>" value="<%=sFindSupplierName%>">
-                           
-                            <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchSupplier('FindSupplierUid','FindSupplierName');">
-                            <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="transactionForm.FindSupplierUid.value='';transactionForm.FindSupplierName.value='';">
+                        	<select class='text' name='FindSupplierUid' id='FindSupplierUid'>
+                        		<option value=''/>
+                        		<%
+                        			try{
+	                        			Vector servicestocks = ServiceStock.findAll();
+	                        			for(int n=0;n<servicestocks.size();n++){
+	                        				ServiceStock stock = (ServiceStock)servicestocks.elementAt(n);
+	                        				out.println("<option value='"+stock.getUid()+"' "+(sFindSupplierUid.equalsIgnoreCase(stock.getUid())?"selected":"")+">"+stock.getName()+"</option>");
+	                        			}
+                        			}
+                        			catch(Exception r){
+                        				r.printStackTrace();
+                        			}
+                        		%>
+                        	</select>
                         </td>
                     </tr>
                     
@@ -894,7 +906,7 @@ public double getLastYearsAveragePrice(Product product){
                             <input type="hidden" name="EditProductUid" id="EditProductUid" value="<%=sSelectedProductUid%>">
                             <input class="text" type="text" name="EditProductName" id="EditProductName" readonly size="<%=sTextWidth%>" value="<%=sSelectedProductName%>">
 
-                            <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchProduct('EditProductUid','EditProductName','EditSupplierUid','EditSupplierName');">
+                            <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchProduct('EditProductUid','EditProductName');">
                             <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="transactionForm.EditProductUid.value='';transactionForm.EditProductName.value='';">
                         </td>
                     </tr>
@@ -965,11 +977,21 @@ public double getLastYearsAveragePrice(Product product){
                     <tr>
                         <td class="admin" nowrap><%=getTran("Web","supplier",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
-                            <input type="hidden" name="EditSupplierUid" id="EditSupplierUid" value="<%=sSelectedSupplierUid%>">
-                            <input class="text" type="text" name="EditSupplierName" id="EditSupplierName" readonly size="<%=sTextWidth%>" value="<%=sSelectedSupplierName%>">
-                           
-                            <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchSupplier('EditSupplierUid','EditSupplierName');">
-                            <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="transactionForm.EditSupplierUid.value='';transactionForm.EditSupplierName.value='';">
+                        	<select class='text' name='EditSupplierUid' id='EditSupplierUid'>
+                        		<option value=''/>
+                        		<%
+                        			try{
+	                        			Vector servicestocks = ServiceStock.findAll();
+	                        			for(int n=0;n<servicestocks.size();n++){
+	                        				ServiceStock stock = (ServiceStock)servicestocks.elementAt(n);
+	                        				out.println("<option value='"+stock.getUid()+"' "+(sSelectedSupplierUid.equalsIgnoreCase(stock.getUid())?"selected":"")+">"+stock.getName()+"</option>");
+	                        			}
+                        			}
+                        			catch(Exception r){
+                        				r.printStackTrace();
+                        			}
+                        		%>
+                        	</select>
                         </td>
                     </tr>
                     
@@ -1250,7 +1272,7 @@ public double getLastYearsAveragePrice(Product product){
 
   <%-- popup : order product --%>
   function orderProduct(productStockUid,productName){
-    openPopup("pharmacy/popups/orderProduct.jsp&EditProductStockUid="+productStockUid+"&EditProductName="+productName+"&ts=<%=getTs()%>");
+    openPopup("pharmacy/popups/orderProduct.jsp&EditProductStockUid="+productStockUid+"&EditProductName="+encodeURIComponent(productName)+"&ts=<%=getTs()%>");
   }
 
   <%-- popup : order product --%>

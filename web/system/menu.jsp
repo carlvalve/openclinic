@@ -68,6 +68,7 @@
                     hMenu.put(getTran("web.manage","ManageAssetSuppliers",sWebLanguage),"main.do?Page=assets/manage_suppliers.jsp");
                     hMenu.put(getTran("web.manage","manageHistoryItems",sWebLanguage),"main.do?Page=system/manageHistoryItems.jsp");
                     hMenu.put(getTran("web.manage","managePlanningResourceAccess",sWebLanguage),"main.do?Page=system/managePlanningResourceAccess.jsp");
+                    hMenu.put(getTran("web.manage","managePlanningResourceLocks",sWebLanguage),"main.do?Page=planning/manageResourceLocks.jsp");
                     hMenu.put(getTran("web.manage","manageInsurerPrestations",sWebLanguage),"main.do?Page=system/manageInsurerPrestations.jsp");
 
                     out.print(ScreenHelper.writeTblHeader(getTran("Web","Manage",sWebLanguage),sCONTEXTPATH)+

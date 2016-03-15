@@ -43,6 +43,7 @@
             iMaxQuantity = new Double(Double.parseDouble(sEditUnitsChanged)).intValue();
         }
     }
+    System.out.println("a");
     
     // lookup available productStocks if none provided
     if(sEditProductStockUid.length() == 0 && sEditPrescriptionUid.length() > 0){
@@ -295,13 +296,14 @@
 
         // reuse srcdestUid-value from session
         String sPrevUsedDocument = checkString((String) session.getAttribute("PrevUsedDocument"));
+        /*
         if(sEditProductStockDocumentUid.length()==0 && sPrevUsedDocument.length() > 0){
         	sEditProductStockDocumentUid = sPrevUsedDocument;
         }
         if(sEditProductStockDocumentUid.length() > 0){
         	sEditProductStockDocumentUidText = getTran("operationdocumenttypes",OperationDocument.get(sEditProductStockDocumentUid).getType(),sWebLanguage);
         }
-
+		*/
         // reuse srcdestName-value from session
         String sPrevUsedSrcDestName = checkString((String)session.getAttribute("PrevUsedDeliverySrcDestName"));
         if(sEditSrcDestName.length()==0 && sEditPrescriptionUid.length() == 0 && sPrevUsedSrcDestName.length() > 0){
@@ -387,7 +389,7 @@
 //If delivery to patient: first look for personal batches!!!!
 										for(int n=0; n<batches.size(); n++){
 	                            			Batch batch = (Batch)batches.elementAt(n);
-	                            			if(batch!=null && batch.getType().equalsIgnoreCase("production") && batch.getBatchNumber().equalsIgnoreCase(activePatient.personid) && (batch.getEnd()==null || !batch.getEnd().before(new java.util.Date()))){
+	                            			if(activePatient!=null && batch!=null && batch.getType()!=null && batch.getType().equalsIgnoreCase("production") && batch.getBatchNumber()!=null && batch.getBatchNumber().equalsIgnoreCase(activePatient.personid) && (batch.getEnd()==null || !batch.getEnd().before(new java.util.Date()))){
 		                            			if(batch.getEnd()==null || !batch.getEnd().before(new java.util.Date()) || MedwanQuery.getInstance().getConfigInt("enableExpiredProductsDistribution",0)>0){
 		                            				if(nProductStockBatches<10){
 		                            					productStockBatches+= "$"+batch.getUid()+";"+batch.getBatchNumber()+";"+batch.getLevel()+";"+(batch.getEnd()==null?"":ScreenHelper.stdDateFormat.format(batch.getEnd()))+";"+batch.getComment();
@@ -407,7 +409,7 @@
 	                            		}
 										for(int n=0; n<batches.size(); n++){
 	                            			Batch batch = (Batch)batches.elementAt(n);
-	                            			if(batch!=null && !batch.getType().equalsIgnoreCase("production")){
+	                            			if(batch!=null && (batch.getType()==null || !batch.getType().equalsIgnoreCase("production"))){
 		                            			if(batch.getEnd()==null || !batch.getEnd().before(new java.util.Date()) || MedwanQuery.getInstance().getConfigInt("enableExpiredProductsDistribution",0)>0){
 		                            				if(nProductStockBatches<10){
 		                            					productStockBatches+= "$"+batch.getUid()+";"+batch.getBatchNumber()+";"+batch.getLevel()+";"+(batch.getEnd()==null?"":ScreenHelper.stdDateFormat.format(batch.getEnd()))+";"+batch.getComment();
@@ -427,7 +429,7 @@
 	                            		}
                             		}
                             	}
-                            	
+
                             	out.print("<script>var batches='"+productStockBatches+"';</script>");
                             	out.print("<script>var expiredbatches='"+expiredProductStockBatches+"';</script>");
                             	out.print("<script>var expiredquantity="+expiredQuantity+";</script>");
@@ -470,6 +472,7 @@
 						else{
 	                		%><input type="hidden" name="EditOperationDescr" value="<%=sSelectedOperationDescr%>"><%
 						}
+				    System.out.println("f");
 	                %>
 	                
                     <%-- UNITS CHANGED --%>

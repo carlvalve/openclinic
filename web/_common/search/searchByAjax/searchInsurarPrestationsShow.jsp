@@ -27,7 +27,7 @@
 						out.println("<td class='admin2'>"+prestation.getDescription()+"</td>");
 						out.println("<td class='admin2'>"+checkString(prestation.getType())+"</td>");
 						out.println("<td class='admin2'>"+checkString(prestation.getInvoiceGroup())+"</td>");
-						out.println("<td class='admin2'>"+getTran("prestation.class",prestation.getPrestationClass(),sWebLanguage)+"</td></tr>");
+						out.println("<td class='admin2'>"+getTran("prestation.class",checkString(prestation.getPrestationClass()),sWebLanguage)+"</td></tr>");
 					}
 				}
 				out.println("</tbody></table><table width='100%'>");
@@ -53,7 +53,7 @@
 					out.println("<td class='admin2'>"+prestation.getDescription()+"</td>");
 					out.println("<td class='admin2'>"+checkString(prestation.getType())+"</td>");
 					out.println("<td class='admin2'>"+checkString(prestation.getInvoiceGroup())+"</td>");
-					out.println("<td class='admin2'>"+getTran("prestation.class",prestation.getPrestationClass(),sWebLanguage)+"</td></tr>");
+					out.println("<td class='admin2'>"+getTran("prestation.class",checkString(prestation.getPrestationClass()),sWebLanguage)+"</td></tr>");
 				}
 			}
 		}

@@ -57,7 +57,6 @@
         Iterator rowAttrKeyIter;
         Enumeration cellAttrEnum;
         String sJS = "<script>";
-        
         for(int r=0; r<screen.getRows().size(); r++){
             row = (Hashtable)screen.getRows().get(r);
             if(!rowContainsItems(row)){
@@ -349,7 +348,7 @@
 
     <%-- BUTTONS --%>
     <%=ScreenHelper.alignButtonsStart()%>
-        <%=getButtonsHtml(request,activeUser,activePatient,"occup.customexamination",sWebLanguage)%>
+        <%=request.getParameter("readonly")!=null && request.getParameter("readonly").equalsIgnoreCase("true")?"":getButtonsHtml(request,activeUser,activePatient,"occup.customexamination",sWebLanguage)%>
     <%=ScreenHelper.alignButtonsStop()%>
 </form>
 

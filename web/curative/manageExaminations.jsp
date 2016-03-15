@@ -237,7 +237,7 @@
 	            examName = (String)examNames.get(n);
 	            verifiedExaminationVO = (VerifiedExaminationVO)exams.get(examName);
 	            
-	            if(MedwanQuery.getInstance().getConfigString("noShowExaminationsGender"+activePatient.gender,"").indexOf(verifiedExaminationVO.getTransactionType())<0){
+	            if(MedwanQuery.getInstance().getConfigString("noShowExaminationsGender"+activePatient.gender,"").indexOf(verifiedExaminationVO.getTransactionType()+";")<0){
 	            	// alternate row-style
 	            	if(sClass.length()==0) sClass = "1";
 	            	else                   sClass = "";

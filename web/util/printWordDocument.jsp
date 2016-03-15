@@ -40,11 +40,18 @@
 		docx.replaceText("${patient_firstname}",patient.firstname);
 		docx.replaceText("${patient_dateofbirth}",patient.dateOfBirth);
 		docx.replaceText("${patient_age}",patient.getAge()+"");
+		docx.replaceText("${patient_age_ext}",patient.getAgeInMonths()/12+" "+ScreenHelper.getTran("web","years",language).toLowerCase()+ " "+ patient.getAgeInMonths()%12+" "+ScreenHelper.getTran("web","months",language).toLowerCase());
 		docx.replaceText("${patient_gender}",patient.gender);
 		docx.replaceText("${patient_personid}",patient.personid);
 		docx.replaceText("${patient_immatnew}",patient.getID("immatnew"));
 		docx.replaceText("${patient_immatold}",patient.getID("immatold"));
 		docx.replaceText("${patient_natreg}",patient.getID("natreg"));
+		docx.replaceText("${patient_comment}",patient.comment);
+		docx.replaceText("${patient_comment1}",patient.comment1);
+		docx.replaceText("${patient_comment2}",patient.comment2);
+		docx.replaceText("${patient_comment3}",patient.comment3);
+		docx.replaceText("${patient_comment4}",patient.comment4);
+		docx.replaceText("${patient_comment5}",patient.comment5);
 		AdminPrivateContact apc = patient.getActivePrivate();
 		docx.replaceText("${patient_address}",apc.address);
 		docx.replaceText("${patient_zipcode}",apc.zipcode);
@@ -58,6 +65,13 @@
 		docx.replaceText("${patient_quarter}",apc.quarter);
 		docx.replaceText("${patient_business}",apc.business);
 		docx.replaceText("${patient_businessfunction}",apc.businessfunction);
+		//Clinical
+		String firstencounterdate="?";
+		try{
+			firstencounterdate=ScreenHelper.formatDate(Encounter.getFirstEncounter(patient.personid).getBegin());
+		}
+		catch(Exception e){};
+		docx.replaceText("${patient_1stencounterdate}",firstencounterdate);
 
 		
 	    response.setContentType("application/msword");

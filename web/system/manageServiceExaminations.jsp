@@ -124,30 +124,32 @@
 			        sMenuXML = MedwanQuery.getInstance().getConfigString("customExaminationsXMLFile","customexaminations.xml");
 			        sMenuXMLUrl = MedwanQuery.getInstance().getConfigString("templateSource") + sMenuXML;
 			        Debug.println("Reading '"+sMenuXMLUrl+"'");
-			        document = xmlReader.read(new URL(sMenuXMLUrl));
-			        if(document!=null){
-			            Element root = document.getRootElement();
-			            if(root!=null){
-			                Iterator elements = root.elementIterator("Row");
-			                while(elements.hasNext()){
-			                    Element e = (Element) elements.next();
-			                    if(e!=null){
-				                    String elementClass = "?";
-				                    Element eClass = e.element("class");
-				                    if(eClass!=null){
-				                    	elementClass = eClass.getText();
+			        try{
+				        document = xmlReader.read(new URL(sMenuXMLUrl));
+				        if(document!=null){
+				            Element root = document.getRootElement();
+				            if(root!=null){
+				                Iterator elements = root.elementIterator("Row");
+				                while(elements.hasNext()){
+				                    Element e = (Element) elements.next();
+				                    if(e!=null){
+					                    String elementClass = "?";
+					                    Element eClass = e.element("class");
+					                    if(eClass!=null){
+					                    	elementClass = eClass.getText();
+					                    }
+					                    if(exams.get(elementClass)==null){
+					                    	exams.put(elementClass,new TreeMap());
+					                    }
+					                    
+					                    SortedMap serviceExams = (TreeMap)exams.get(elementClass);
+					                    serviceExams.put(e.element("id").getText(),e.element("id").getText()+";"+e.element("transactiontype").getText());
 				                    }
-				                    if(exams.get(elementClass)==null){
-				                    	exams.put(elementClass,new TreeMap());
-				                    }
-				                    
-				                    SortedMap serviceExams = (TreeMap)exams.get(elementClass);
-				                    serviceExams.put(e.element("id").getText(),e.element("id").getText()+";"+e.element("transactiontype").getText());
-			                    }
-			                }
-			            }
+				                }
+				            }
+				        }
 			        }
-			        
+			        catch(Exception e){}
 			        // display examinations per service
 					Iterator examIter = exams.keySet().iterator();
 			        String sServiceId, sServiceName;

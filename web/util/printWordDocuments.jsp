@@ -19,7 +19,7 @@
 </form>
 <script>
 	function printWordDocument(name){
-		window.open("<c:url value="/util/printWordDocument.jsp"/>?name="+name);
+		window.open("<%=sCONTEXTPATH+ScreenHelper.customerInclude("util/printWordDocument.jsp",sAPPFULLDIR,sAPPDIR)%>?name="+name);
 		window.close();
 	}
 	window.focus();

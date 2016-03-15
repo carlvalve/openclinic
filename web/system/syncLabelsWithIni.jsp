@@ -80,7 +80,7 @@
         					 " *admin.category*labanalysis.refcomment*"+
                              " *labprofiles*activitycodes*worktime*patientsharecoverageinsurance*patientsharecoverageinsurance2*"+
                              " *urgency.origin*encountertype*prestation.type*product.productgroup*"+
-                             " *insurance.types*labanalysis.group*drug.category*planningresource*systemmessages*"; // default
+                             " *insurance.types*labanalysis.group*drug.category*planningresource*systemmessages*product.unit*credit.type*wicketcredit.type*"; // default
     }
     excludedLabelTypes+=MedwanQuery.getInstance().getConfigString("excludedLabelTypes","").replaceAll(",","*")+"*";
     excludedLabelTypes = excludedLabelTypes.toLowerCase();
