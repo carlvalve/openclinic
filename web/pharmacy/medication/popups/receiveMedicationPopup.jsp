@@ -283,13 +283,14 @@
 	        }
 	        
 	        String sPrevUsedDocument = checkString((String) session.getAttribute("PrevUsedReceiptDocument"));
+	        /*
 	        if(sEditProductStockDocumentUid.length()==0 && sPrevUsedDocument.length() > 0){
 	        	sEditProductStockDocumentUid = sPrevUsedDocument;
 	        }
 	        if(sEditProductStockDocumentUid.length() > 0){
 	        	sEditProductStockDocumentUidText = getTran("operationdocumenttypes",OperationDocument.get(sEditProductStockDocumentUid).getType(),sWebLanguage);
 	        }
-	        
+	        */
         	sEditUnitsChanged = "1";
         }
 

@@ -367,7 +367,7 @@
       var params = "&EditPlanningUID="+$F("EditPlanningUID")+"&appointmentDateDay="+$("appointmentDateDay").value +"&appointmentDateHour="+$("appointmentDateHour").value+"&appointmentDateMinutes="+
                    $("appointmentDateMinutes").value+"&appointmentDateEndDay="+$("appointmentDateDay").value+"&Action=save"+
                    "&appointmentDateEndHour="+$("appointmentDateEndHour").value+"&appointmentDateEndMinutes="+$("appointmentDateEndMinutes").value+
-                   "&EditEffectiveDate="+$("EditEffectiveDate").value+"&EditEffectiveDateTime="+$("EditEffectiveDateTime").value+"&EditCancelationDateTime="+$("EditCancelationDateTime").value+"&EditCancelationDate="+$("EditCancelationDate").value+
+                   "&EditEffectiveDate="+$("EditEffectiveDate").value+"&EditEffectiveDateTime="+$("EditEffectiveDateTime").value+"&EditCancelationDateTime="+$("EditCancelationDateTime").value+"&EditConfirmationDate="+$("EditConfirmationDate").value+"&EditCancelationDate="+$("EditCancelationDate").value+
                    "&EditUserUID="+$("EditUserUID").value+"&FindServiceUID="+$("FindServiceUID").value+"&EditPatientUID="+$("EditPatientUID").value+"&EditDescription="+encodeURIComponent($("EditDescription").value)+"&EditComment="+encodeURIComponent($("EditComment").value)+
                    "&EditContactUID="+$("EditContactUID").value+"&appointmentRepeatUntil="+$("appointmentRepeatUntil").value+"&EditContactName="+$("EditContactName").value+"&EditContext="+$("EditContext").value+"&tempplanninguid="+$("tempplanninguid").value;
 
@@ -379,7 +379,7 @@
       if($("ContactProduct") && $("ContactProduct").checked){
         params+="&EditContactType="+$("ContactProduct").value;
       }
-      else if($("ContactProduct") && $("ContactExamination").checked){
+      else if($("ContactExamination") && $("ContactExamination").checked){
         params+="&EditContactType="+$("ContactExamination").value;
       }
       else if($("ContactPrestation") && $("ContactPrestation").value=='prestation'){

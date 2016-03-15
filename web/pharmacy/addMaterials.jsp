@@ -72,6 +72,7 @@
 	            <input type="text" size="80" class="text" name="EditMaterialProductStockName" id="EditMaterialProductStockName"/>
 	            <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchProductStock('EditMaterialProductStockUid','EditMaterialProductStockName');">
 	            <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="transactionForm.EditMaterialProductStockUid.value='';transactionForm.EditMaterialProductStockName.value='';">
+				<div id="autocomplete_material" class="autocomple"></div>
 	        </td>
 	    </tr>
 	    <tr>
@@ -104,4 +105,42 @@
 			transactionForm.submit();
 		}
 	}
+	
+	new Ajax.Autocompleter('EditMaterialProductStockName','autocomplete_material','pharmacy/getProductStocksForMaterialName.jsp',{
+		  minChars:1,
+		  method:'post',
+		  afterUpdateElement:afterAutoComplete,
+		  callback:composeCallbackURL
+	});
+
+	function afterAutoComplete(field,item){
+		var regex = new RegExp('[-0123456789.]*-idcache','i');
+		var nomimage = regex.exec(item.innerHTML);
+		var id = nomimage[0].replace('-idcache','');
+		document.getElementById("EditMaterialProductStockUid").value = id;
+		getProductStock();
+	}
+		
+	function composeCallbackURL(field,item){
+		var url = "";
+		if(field.id=="EditMaterialProductStockName"){
+			url = "findMaterialName="+field.value;
+		}
+		return url;
+	}
+	
+	function getProductStock(){
+	    var url = "<c:url value=''/>medical/ajax/getProduct.jsp";
+	    var params = "productStockUid="+document.getElementById("EditMaterialProductStockUid").value;
+	    new Ajax.Request(url,{
+	      method: "POST",
+	      parameters: params,
+	      onSuccess: function(resp){
+	        var product =  eval('('+resp.responseText+')');
+	        document.getElementById("EditMaterialProductStockName").value=product.name;
+	      }
+	    });
+	}
+
+	document.getElementById("EditMaterialProductStockName").focus();
 </script>

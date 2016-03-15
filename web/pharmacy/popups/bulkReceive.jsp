@@ -6,7 +6,7 @@
 	while(params.hasMoreElements()){
 		String param = (String)params.nextElement();
 		
-		if(param.startsWith("receive.")){
+		if(param.startsWith("receive.") && checkString(request.getParameter("check"+param)).equalsIgnoreCase("1")){
 			String deliveryOperationUid = param.split("\\.")[1]+"."+param.split("\\.")[2];
 			
 			ProductStockOperation deliveryOperation = ProductStockOperation.get(deliveryOperationUid);
@@ -102,7 +102,7 @@
 			 out.print("<td>"+operation.getUnitsChanged()+"</td>");
 			 out.print("<td>"+operation.getUnitsReceived()+"</td>");
 			 out.print("<td>"+(operation.getBatchNumber()!=null?operation.getBatchNumber():"")+"</td>");
-			 out.print("<td><input type='text' class='text' size='5' onchange='validatemax("+(operation.getUnitsChanged()-operation.getUnitsReceived())+",this.value);' name='receive."+operation.getUid()+"' value='"+(operation.getUnitsChanged()-operation.getUnitsReceived())+"'></td>");
+			 out.print("<td><input type='text' class='text' size='5' onchange='validatemax("+(operation.getUnitsChanged()-operation.getUnitsReceived())+",this.value);' name='receive."+operation.getUid()+"' value='"+(operation.getUnitsChanged()-operation.getUnitsReceived())+"'><input type='checkbox' name='checkreceive."+operation.getUid()+"' value='1'/></td>");
 			out.print("</tr>");
 		}
 

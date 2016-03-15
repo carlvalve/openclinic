@@ -58,7 +58,7 @@
 	            <Menu labelid="import" accessrights="pharmacy.import.select" url="/main.do?Page=pharmacy/importFile.jsp"/>
 	        </Menu>
             <Menu labelid="pharmacy.reports" accessrights="pharmacy.select" url="/main.do?Page=pharmacy/reports.jsp"/>
-            <Menu labelid="pharmacy.productionorders" accessrights="system.manageproductionorders" url="/main.do?Page=pharmacy/manageProductionOrders.jsp&amp;EditActivePatientOnly=1&amp;autofind=1"/>
+            <Menu labelid="pharmacy.productionorders" accessrights="system.manageproductionorders" url="/main.do?Page=pharmacy/manageProductionOrders.jsp&amp;EditOpenOrdersOnly=1&amp;EditActivePatientOnly=1&amp;autofind=1"/>
         </Menu>
         <Menu labelid="financial" accessrights="financial.select">
             <Menu labelid="patientCreditEdit" patientselected="true" accessrights="financial.patientcreditedit.select" url="/main.do?Page=financial/patientCreditEdit.jsp"/>

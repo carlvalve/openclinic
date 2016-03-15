@@ -9,5 +9,6 @@
     +writeTblChild("main.do?Page=pharmacy/manageProductOrders.jsp",getTran("web","manageProductOrders",sWebLanguage))
     +writeTblChild("main.do?Page=pharmacy/viewOrderTickets.jsp",getTran("web","viewOrderTickets",sWebLanguage))
     +writeTblChild("main.do?Page=pharmacy/manageProductStockDocuments.jsp",getTran("web","manageProductStockDocuments",sWebLanguage))
+    +writeTblChild("/main.do?Page=pharmacy/manageProductionOrders.jsp&EditOpenOrdersOnly=1&autofind=1",getTran("web","pharmacy.productionorders",sWebLanguage))
     +ScreenHelper.writeTblFooter()
 %>

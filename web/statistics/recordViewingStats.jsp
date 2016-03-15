@@ -190,8 +190,8 @@
     		           "<td>"+line.name.toUpperCase()+"</td>"+
     		           "<td>"+line.profile+"</td>"+
     		           "<td>"+line.service+"</td>"+
-    		           "<td><b>"+deci.format(line.contacts)+"</b></td>"+
-    		           "<td><b>"+deci.format(creations)+"</b></td>"+
+    		           "<td><b>"+line.contacts+"</b></td>"+
+    		           "<td><b>"+creations+"</b></td>"+
     		          "</tr>");
     	}
     	

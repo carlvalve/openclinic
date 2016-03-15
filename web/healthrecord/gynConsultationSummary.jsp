@@ -380,51 +380,12 @@
 
                         <input type="hidden" id="EditCoordinates" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BREAST_EXAMINATION_COORDINATES" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BREAST_EXAMINATION_COORDINATES" property="value"/>">
                         <div id="divBreasts" name="divBreasts" style="display:none">
-                            <table style="background-image:url('<c:url value='/_img/mammae.gif'/>')" cellspacing="0" cellpadding="0" onmouseover='this.style.cursor="pointer"' onmouseout='this.style.cursor="default"'>
-                                <%
-                                    for (int i=1; i<21;i++){
-                                        %>
-                                        <tr height="7">
-                                        <%
-                                        for (int y=1;y<21;y++){
-                                            %>
-                                            <td id="rowBreastsH<%=i%>W<%=y%>" width="7" onclick="setCoord(this)" value="<%=i%>,<%=y%>"/>
-                                            <%
-                                        }
-                                        %>
-                                        </tr>
-                                        <%
-                                    }
-                                %>
-                            </table>
-                            <script>
-                                function setCoord(oObject){
-                                    if (oObject.style.backgroundColor == ''){
-                                        oObject.style.backgroundColor='black';
-
-                                        if ($("EditCoordinates").value.indexOf((oObject.value+"$"))<0){
-                                            $("EditCoordinates").value += (oObject.value+"$");
-                                        }
-                                    }
-                                    else {
-                                        oObject.style.backgroundColor='';
-                                        $("EditCoordinates").value = deleteRowFromArrayString($("EditCoordinates").value,oObject.value);
-                                    }
-                                }
-
-                                if ($("EditCoordinates").value.length>0){
-                                    var aCoords = $("EditCoordinates").value.split("$");
-
-                                    for (var i=0; i< aCoords.length; i++) {
-                                        if (aCoords[i].length>0) {
-                                            if (aCoords[i].indexOf(",")>-1){
-                                                var aCoordinate = aCoords[i].split(",");
-                                                setCoord($("rowBreastsH"+aCoordinate[0]+"W"+aCoordinate[1]));
-                                            }
-                                        }
-                                    }
-                                }
-                            </script>
+							<%=ScreenHelper.createDrawingDiv(request, "canvasDiv", "be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OCDRAWING", transaction,"/_img/mammae.png") %>
+							<script>
+								if(outlineImage.src.indexOf("data:")==0){
+									document.getElementById('divBreasts').style.display='';
+								}
+							</script>
                         </div>
                     </td>
                 </tr>
@@ -487,10 +448,6 @@
                         <input type="hidden" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ECHOGRAPHY5" property="itemId"/>]>.value">
                         <input type="hidden" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ECHOGRAPHY6" property="itemId"/>]>.value">
                         <input type="hidden" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ECHOGRAPHY7" property="itemId"/>]>.value">
-                        <br>
-                        <a href="<c:url value="/healthrecord/loadPDF.jsp"/>?file=<%=MedwanQuery.getInstance().getConfigString("echo.gyn.url","base/FR_EchoGyn.pdf")%>" target="_new"><%=getTran("gynaeco", "echogyn_url", sWebLanguage)%></a>
-                        <br>
-                        <a href="<c:url value="/healthrecord/loadPDF.jsp"/>?file=<%=MedwanQuery.getInstance().getConfigString("echo.firsttrim.url","base/FR_EchoPremierTrimestre.pdf")%>" target="_new"><%=getTran("gynaeco", "echofirsttrim_url", sWebLanguage)%></a>
                     </td>
                 </tr>
                 <tr>
@@ -739,7 +696,7 @@
         lmdate.setDate(d1[0]);
         lmdate.setMonth(d1[1] - 1);
         lmdate.setFullYear(d1[2]);
-        
+
         //Calculate number of weeks elapsed between last menstruation date and actual transaction date 
         var timeElapsed = trandate.getTime() - lmdate.getTime();
         timeElapsed = timeElapsed / (1000 * 3600 * 24 * 7);

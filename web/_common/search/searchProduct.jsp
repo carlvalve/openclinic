@@ -291,7 +291,7 @@ if(sReturnSupplierUidField.length() > 0 && sReturnSupplierNameField.length() > 0
 // set unitsPerTimeUnit
 if(sReturnUnitsPerTimeUnitField.length() > 0){
 	%>
-	    if(unitsPerTimeUnit < 0){
+	    if(unitsPerTimeUnit && unitsPerTimeUnit < 0){
 	      window.opener.document.getElementsByName("<%=sReturnUnitsPerTimeUnitField%>")[0].value = "";
 	    }
 	    else{
@@ -321,7 +321,7 @@ if(sReturnUnitsPerPackageField.length() > 0){
 //set unitsPerPackage
 if(sReturnTotalUnitsField.length() > 0){
 	%>
-	    if(productTotalUnits==0) productTotalUnits = 1;
+	if(productTotalUnits==0) productTotalUnits = 1;
 	
 	    window.opener.document.getElementsByName("<%=sReturnTotalUnitsField%>")[0].value = productTotalUnits;
 	    isNumber(window.opener.document.getElementsByName("<%=sReturnTotalUnitsField%>")[0]);
@@ -334,7 +334,6 @@ if(sReturnTotalUnitsField.length() > 0){
 	    }
 	<%
 }
-
 // set productStockUid
 if(sReturnProductStockUidField.length() > 0){
 	%>

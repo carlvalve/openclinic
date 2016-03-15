@@ -75,7 +75,7 @@
 			
 			                    <tr>
 			                        <td rowspan="3" style="text-align:center" width="100">
-			                            <div id="pointer_div" onclick="point_it(event)" onmouseover="this.style.cursor='hand'" onmouseout="this.style.cursor='default'" style="background-image:url('<c:url value="/_img/anuscopie.gif"/>');width:77px;height:77px"></div>
+										<%=ScreenHelper.createDrawingDiv(request, "canvasDiv", "be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OCDRAWING", transaction,"/_img/anuscopie.gif") %>
 			                        </td>
 			                    </tr>
 			
@@ -174,8 +174,6 @@
 
   <%-- DO CLEAR --%>
   function doClear(){
-    jg.clear();
-    document.transactionForm.coord.value = "";
   }
    
   <%-- SUBMIT FORM --%>
@@ -191,45 +189,4 @@
     }
   }
 
-  var cnv = document.getElementById("pointer_div");
-  var jg = new jsGraphics(cnv);
-
-  <%-- POINT IT --%>
-  function point_it(event){ 
-   var pos_x = Event.pointerX(event),
-       pos_y = Event.pointerY(event);
-   
-   if((document.transactionForm.coord.value.indexOf(pos_x+","+pos_y)==-1)&&(pos_x > 5) && (pos_y > 5)){
-     jg.setColor("red");
-     if(ie){
-       pos_x-= 5;
-       pos_y-= 140;
-     }
-     jg.fillEllipse(pos_x,pos_y,5,5);
-     jg.paint();
-     
-     document.transactionForm.coord.value+= ";"+(pos_x)+","+(pos_y);
-    } 
-  }
-
-  <%-- DO POINT  --%>
-  function doPoint(){
-    var array = document.transactionForm.coord.value.split(";");
-    for(var i=0; i<array.length; i++){
-      if(array[i].length>0){
-        var aCoord = array[i].split(",");
-        var iX = aCoord[0]*1,
-            iY = aCoord[1]*1;
-        jg.setColor("red");
-        if(ie==false){
-          iX+= 5;
-          iY+= 170;
-        }
-        jg.fillEllipse(iX,iY,5,5);
-        jg.paint();
-      }
-    }
-  }
-
-  doPoint();
 </script>

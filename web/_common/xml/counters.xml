@@ -1,5 +1,6 @@
 <counters>
     <counter name="OC_PRESCRIPTIONS" table="OC_PRESCRIPTIONS" field="OC_PRESCR_OBJECTID" bd='openclinic'/>
+    <counter name="OC_BATCHES" table="OC_BATCHES" field="OC_BATCH_OBJECTID" bd='openclinic'/>
     <counter name="OC_BEDS" table="OC_BEDS" field="OC_BED_OBJECTID" bd='openclinic'/>
     <counter name="OC_ENCOUNTERS" table="OC_ENCOUNTERS" field="OC_ENCOUNTER_OBJECTID" bd='openclinic'/>
     <counter name="OC_BALANCES" table="OC_BALANCES" field="OC_BALANCE_OBJECTID" bd='openclinic'/>

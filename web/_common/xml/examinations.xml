@@ -1333,4 +1333,11 @@
     <fr>Fiche laboratoire pour don de sang</fr>  
     <en>Lab record for blood gift</en> 
   </Row>  
+  <Row> 
+    <id>1119</id>  
+    <class>ccbrt</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CCBRT_VVFRECORD</transactiontype>  
+    <fr>Dossier fistule vésico-vaginale</fr>  
+    <en>Fistula card</en> 
+  </Row>  
 </Examinations>

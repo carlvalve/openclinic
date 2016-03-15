@@ -77,6 +77,9 @@
 	            if(serviceStock.hasOpenDeliveries()){
 	                html.append("&nbsp;<img src='"+sCONTEXTPATH+"/_img/icons/icon_incoming.gif' class='link' alt='"+getTranNoLink("web","incoming",sWebLanguage)+"'' onclick='javascript:bulkReceive(\""+serviceStock.getUid()+"\");'/></a>");
 	            }
+	            if(serviceStock.hasOpenOrders()){
+	                html.append("&nbsp;<img src='"+sCONTEXTPATH+"/_img/icons/icon_order.gif' class='link' alt='"+getTranNoLink("web","orders",sWebLanguage)+"'' onclick='javascript:acceptOrders(\""+serviceStock.getUid()+"\");'/></a>");
+	            }
 	            html.append("</td>");
 	            
 	            html.append("<td onclick=\"doShowDetails('"+sServiceStockUid+"');\">"+serviceStock.getName()+"</td>")
@@ -469,10 +472,21 @@
                     <tr>
                         <td class="admin2" nowrap><%=getTran("Web","defaultsupplier",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
-                            <input type="hidden" name="FindDefaultSupplierUid" value="<%=sFindDefaultSupplierUid%>">
-                            <input class="text" type="text" name="FindDefaultSupplierName" readonly size="<%=sTextWidth%>" value="<%=sFindDefaultSupplierName%>">
-                            <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchSupplier('FindDefaultSupplierUid','FindDefaultSupplierName');">
-                            <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="transactionForm.FindDefaultSupplierUid.value='';transactionForm.FindDefaultSupplierName.value='';">
+                        	<select class='text' name='FindDefaultSupplierUid' id='FindDefaultSupplierUid'>
+                        		<option value=''/>
+                        		<%
+                        			try{
+	                        			Vector servicestocks = ServiceStock.findAll();
+	                        			for(int n=0;n<servicestocks.size();n++){
+	                        				ServiceStock stock = (ServiceStock)servicestocks.elementAt(n);
+	                        				out.println("<option value='"+stock.getUid()+"' "+(sFindDefaultSupplierUid.equalsIgnoreCase(stock.getUid())?"selected":"")+">"+stock.getName()+"</option>");
+	                        			}
+                        			}
+                        			catch(Exception r){
+                        				r.printStackTrace();
+                        			}
+                        		%>
+                        	</select>
                         </td>
                     </tr>
                     
@@ -642,11 +656,21 @@
                     <tr>
                         <td class="admin" nowrap><%=getTran("Web","defaultsupplier",sWebLanguage)%>&nbsp;*&nbsp;</td>
                         <td class="admin2">
-                            <input type="hidden" name="EditDefaultSupplierUid" value="<%=sSelectedDefaultSupplierUid%>">
-                            <input class="text" type="text" name="EditDefaultSupplierName" readonly size="<%=sTextWidth%>" value="<%=sSelectedDefaultSupplierName%>">
-                          
-                            <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchSupplier('EditDefaultSupplierUid','EditDefaultSupplierName');">
-                            <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="transactionForm.EditDefaultSupplierUid.value='';transactionForm.EditDefaultSupplierName.value='';">
+                        	<select class='text' name='EditDefaultSupplierUid' id='EditDefaultSupplierUid'>
+                        		<option value=''/>
+                        		<%
+                        			try{
+	                        			Vector servicestocks = ServiceStock.findAll();
+	                        			for(int n=0;n<servicestocks.size();n++){
+	                        				ServiceStock stock = (ServiceStock)servicestocks.elementAt(n);
+	                        				out.println("<option value='"+stock.getUid()+"' "+(sSelectedDefaultSupplierUid.equalsIgnoreCase(stock.getUid())?"selected":"")+">"+stock.getName()+"</option>");
+	                        			}
+                        			}
+                        			catch(Exception r){
+                        				r.printStackTrace();
+                        			}
+                        		%>
+                        	</select>
                         </td>
                     </tr>
                     
@@ -991,7 +1015,6 @@
             %>clearSearchFields();<%
         }
     %>
-
     transactionForm.searchButton.disabled = true;
     transactionForm.clearButton.disabled = true;
     transactionForm.newButton.disabled = true;
@@ -1025,8 +1048,7 @@
     transactionForm.FindManagerName.value = "";
 
     transactionForm.FindDefaultSupplierUid.value = "";
-    transactionForm.FindDefaultSupplierName.value = "";
-  }
+}
 
   <%-- CLEAR EDIT FIELDS --%>
   function clearEditFields(){
@@ -1195,8 +1217,12 @@
   }
 
   function bulkReceive(serviceStockUid){
-    openPopup("pharmacy/popups/bulkReceive.jsp&ServiceStockUid="+serviceStockUid+"&ts=<%=getTs()%>",700,400);
-  }
+	    openPopup("pharmacy/popups/bulkReceive.jsp&ServiceStockUid="+serviceStockUid+"&ts=<%=getTs()%>",700,400);
+	}
+
+  function acceptOrders(serviceStockUid){
+	    openPopup("pharmacy/popups/acceptOrders.jsp&ServiceStockUid="+serviceStockUid+"&ts=<%=getTs()%>",700,400);
+	}
 
   function printFiche(serviceStockUid,serviceStockName){
 	openPopup("pharmacy/viewServiceStockFiches.jsp&ts=<%=getTs()%>&Action=find&FindServiceStockUid="+serviceStockUid+"&GetYear=<%=new SimpleDateFormat("yyyy").format(new java.util.Date())%>&FindServiceStockName="+serviceStockName,800,500);

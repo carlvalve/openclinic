@@ -210,10 +210,10 @@
       if($("EditTransactionUID")){
         params+="&EditTransactionUID="+$F("EditTransactionUID");
       }
-      if($("ContactProduct").checked){
+      if($("ContactProduct") && $("ContactProduct").checked){
         params+="&EditContactType="+$("ContactProduct").value;
       }
-      else if($("ContactExamination").checked){
+      else if($("ContactExamination") && $("ContactExamination").checked){
         params+="&EditContactType="+$("ContactExamination").value;
       }
         

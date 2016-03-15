@@ -483,13 +483,14 @@ Debug.println("a");
         displayEditFields = true;
         displaySearchFields = false;
         String sPrevUsedDocument = checkString((String) session.getAttribute("PrevUsedDocument"));
+        /*
         if(sEditProductStockDocumentUid.length()==0 && sPrevUsedDocument.length() > 0){
         	sEditProductStockDocumentUid = sPrevUsedDocument;
         }
         if(sEditProductStockDocumentUid.length() > 0){
         	sEditProductStockDocumentUidText = getTran("operationdocumenttypes",OperationDocument.get(sEditProductStockDocumentUid).getType(),sWebLanguage);
         }
-
+		*/
         // get specified record
         if((sAction.equals("showDetails") || sAction.equals("showDetailsAfterUpdateReject")) && sEditOrderUid.length()>0){
             ProductOrder order = ProductOrder.get(sEditOrderUid);

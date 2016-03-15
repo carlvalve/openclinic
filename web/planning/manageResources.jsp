@@ -2,6 +2,7 @@
 <%@include file="/includes/validateUser.jsp" %>
 <%
 	//Eerst zoeken we alle resources die aan het huidige planninguid gekoppeld werden
+	String patientuid = checkString(request.getParameter("patientuid"));
 	String planninguid = checkString(request.getParameter("planninguid"));
 	if(planninguid.length()==0){
 		planninguid=checkString(request.getParameter("tempplanninguid"));
@@ -21,6 +22,13 @@
 		enddate = new java.util.Date(ScreenHelper.getSQLDate(request.getParameter("date")).getTime()+Long.parseLong(request.getParameter("end")));
 	}
 	catch(Exception e){}
+	String activeservice="";
+	if(patientuid.length()>0){
+		Encounter activeEncounter=Encounter.getActiveEncounter(patientuid);
+		if(activeEncounter!=null){
+			activeservice=activeEncounter.getServiceUID();
+		}
+	}
 %>
 <form name="transactionForm" method="post">
 	<table width='100%'>
@@ -42,8 +50,8 @@
            			}
            		</script>
 			</td>
-			<td><%=getTran("web","from",sWebLanguage) %><%=ScreenHelper.writeDateTimeField("begin", "transactionForm", begindate, sWebLanguage, sCONTEXTPATH,"loadResourceReservations()") %></td>
-			<td><%=getTran("web","till",sWebLanguage) %><%=ScreenHelper.writeDateTimeField("end", "transactionForm", enddate, sWebLanguage, sCONTEXTPATH,"loadResourceReservations()") %></td>
+			<td><%=getTran("web","from",sWebLanguage) %><%=ScreenHelper.writeDateTimeField("begin", "transactionForm", begindate, sWebLanguage, sCONTEXTPATH,"loadResourceReservations()' onkeyup='loadResourceReservations()") %></td>
+			<td><%=getTran("web","till",sWebLanguage) %><%=ScreenHelper.writeDateTimeField("end", "transactionForm", enddate, sWebLanguage, sCONTEXTPATH,"loadResourceReservations()' onkeyup='loadResourceReservations()") %></td>
 			<td>
 				<input type='button' class='button' name='addButton' id='addButton' value='<%=getTran("web","add",sWebLanguage) %>' onclick='saveReservation()'/>
 				<input type='button' class='button' name='exitButton' id='exitButton' value='<%=getTran("web","close",sWebLanguage) %>' onclick='window.close();'/>
@@ -79,7 +87,7 @@
 	
 	function loadResourceReservations(){
 		var today = new Date();
-		var url= '<c:url value="/planning/ajax/getResourcesForPeriod.jsp"/>?excludeplanninguid=<%=planninguid%>&resourceuid='+document.getElementById('resource').value+'&begintime='+document.getElementById('beginTime').value+'&endtime='+document.getElementById('endTime').value+'&begin='+document.getElementById('begin').value+'&end='+document.getElementById('end').value+'&language=<%=sWebLanguage%>&ts='+today;
+		var url= '<c:url value="/planning/ajax/getResourcesForPeriod.jsp"/>?excludeplanninguid=<%=planninguid%>&resourceuid='+document.getElementById('resource').value+'&begintime='+document.getElementById('beginTime').value+'&endtime='+document.getElementById('endTime').value+'&begin='+document.getElementById('begin').value+'&end='+document.getElementById('end').value+'&language=<%=sWebLanguage%>&ts='+today+'&activeservice=<%=activeservice%>';
 		new Ajax.Request(url,{
 		method: "POST",
 		   parameters: "",

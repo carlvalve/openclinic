@@ -28,18 +28,38 @@
 		//First add produced quantity to product stock
 		if(nQuantity>0){
 			//If personalized batch doesn't exist, create it
-			if(!Batch.exists(order.getTargetProductStockUid(), order.getPatientUid()+"")){
-				Batch batch = new Batch();
-				batch.setUid("-1");
-				batch.setBatchNumber(order.getPatientUid()+"");
-				batch.setCreateDateTime(new java.util.Date());
-				batch.setLevel(0);
-				batch.setProductStockUid(order.getTargetProductStockUid());
-				batch.setType("production");
-				batch.setUpdateDateTime(new java.util.Date());
-				batch.setUpdateUser(activeUser.userid);
-				batch.setComment(AdminPerson.getFullName(order.getPatientUid()+""));
-				batch.store();
+			String sBatchId="";
+			if(order.getPatientUid()>0){
+				sBatchId=order.getPatientUid()+"";
+				if(!Batch.exists(order.getTargetProductStockUid(), sBatchId)){
+					Batch batch = new Batch();
+					batch.setUid("-1");
+					batch.setBatchNumber(order.getPatientUid()+"");
+					batch.setCreateDateTime(new java.util.Date());
+					batch.setLevel(0);
+					batch.setProductStockUid(order.getTargetProductStockUid());
+					batch.setType("production");
+					batch.setUpdateDateTime(new java.util.Date());
+					batch.setUpdateUser(activeUser.userid);
+					batch.setComment(AdminPerson.getFullName(order.getPatientUid()+""));
+					batch.store();
+				}
+			}
+			else{
+				sBatchId="O"+order.getId();
+				if(!Batch.exists(order.getTargetProductStockUid(), "O"+order.getId())){
+					Batch batch = new Batch();
+					batch.setUid("-1");
+					batch.setBatchNumber(sBatchId);
+					batch.setCreateDateTime(new java.util.Date());
+					batch.setLevel(0);
+					batch.setProductStockUid(order.getTargetProductStockUid());
+					batch.setType("production");
+					batch.setUpdateDateTime(new java.util.Date());
+					batch.setUpdateUser(activeUser.userid);
+					batch.setComment("O"+order.getId());
+					batch.store();
+				}
 			}
 			ProductStockOperation operation = new ProductStockOperation();
 			operation.setUid("-1");
@@ -53,7 +73,7 @@
 			operation.setVersion(1);
 			operation.setUpdateUser(activeUser.userid);
 			//Add person data to batch information
-			operation.setBatchUid(Batch.getByBatchNumber(order.getTargetProductStockUid(), order.getPatientUid()+"").getUid());
+			operation.setBatchUid(Batch.getByBatchNumber(order.getTargetProductStockUid(), sBatchId).getUid());
 			operation.store();
 			//Now close the production order
 			order.setCloseDateTime(dClose);
@@ -70,18 +90,22 @@
 		catch(Exception e){}
 		//Now save the production order
 		order.setQuantity(nQuantity);
-		order.setComment(request.getParameter("ProductionOrderComment"));
+		order.setComment(checkString(request.getParameter("ProductionOrderComment")));
 		order.store();
 	}
 	sTDAdminWidth="20%";
 	PatientInvoice invoice=null;
-	Debet debet = Debet.get(order.getDebetUid());
-	if(debet!=null){
-		invoice = debet.getPatientInvoice();
+	Debet debet=null;
+	if(order.getDebetUid()!=null){
+		debet = Debet.get(order.getDebetUid());
+		if(debet!=null){
+			invoice = debet.getPatientInvoice();
+		}
 	}
 	if(invoice==null){
 		invoice=new PatientInvoice();
 	}
+	System.out.println("OK");
 %>
 <form name='transactionForm' method='post'>
 	<input type='hidden' name='action' id='action'/>
@@ -96,23 +120,30 @@
 			<td class='admin2'><%=order.getCloseDateTime()!=null?ScreenHelper.formatDate(order.getCloseDateTime()):ScreenHelper.writeDateField("ProductionOrderCloseDateTime", "transactionForm", ScreenHelper.formatDate(order.getCloseDateTime()), true, false, sWebLanguage, sCONTEXTPATH)%></td>
 		</tr>
 		<tr>
-			<td class='admin' width="<%=sTDAdminWidth%>"><%=getTran("web","productionorderid",sWebLanguage) %></td>
-			<td class='admin2'><%=order.getId()>0?order.getId()+"":"" %><input type='hidden' name='ProductionOrderId' value='<%=order.getId()%>'/></td>
-			<td class='admin' width="<%=sTDAdminWidth%>"><%=getTran("web","patient",sWebLanguage) %></td>
-			<td class='admin2'><%=AdminPerson.getFullName(order.getPatientUid()+"") %></td>
+			<%if(order.getPatientUid()>0){ %>
+				<td class='admin' width="<%=sTDAdminWidth%>"><%=getTran("web","productionorderid",sWebLanguage) %></td>
+				<td class='admin2'><%=order.getId()>0?order.getId()+"":"" %><input type='hidden' name='ProductionOrderId' value='<%=order.getId()%>'/></td>
+				<td class='admin' width="<%=sTDAdminWidth%>"><%=getTran("web","patient",sWebLanguage) %></td>
+				<td class='admin2'><%=AdminPerson.getFullName(order.getPatientUid()+"") %></td>
+			<%}else{ %>
+				<td class='admin' width="<%=sTDAdminWidth%>"><%=getTran("web","productionorderid",sWebLanguage) %></td>
+				<td class='admin2' colspan='3'><%=order.getId()>0?order.getId()+"":"" %><input type='hidden' name='ProductionOrderId' value='<%=order.getId()%>'/></td>
+			<%} %>
 		</tr>
-		<tr>
-			<td class='admin' width="<%=sTDAdminWidth%>"><%=getTran("web","invoice",sWebLanguage) %></td>
-			<td class='admin2'><%=invoice.getUid() %></td>
-			<td class='admin' width="<%=sTDAdminWidth%>"><%=getTran("web","invoicedate",sWebLanguage) %></td>
-			<td class='admin2'><%=ScreenHelper.formatDate(invoice.getDate()) %></td>
-		</tr>
-		<tr>
-			<td class='admin' width="<%=sTDAdminWidth%>"><%=getTran("web","productionorderprescription",sWebLanguage)%></td>
-			<td class='admin2'><a href='javascript:viewProductionOrderPrescriptions("<%=debet==null||debet.getPrestation()==null?-1:debet.getPrestation().getProductionOrderPrescription()%>")'><%=debet==null||debet.getPrestation()==null?"":getTranNoLink("examination",debet.getPrestation().getProductionOrderPrescription()+"",sWebLanguage)%></a></td>
-			<td class='admin' width="<%=sTDAdminWidth%>"><%=getTran("web","linkedprestation",sWebLanguage) %></td>
-			<td class='admin2'><%=debet==null||debet.getPrestation()==null?"":debet.getPrestation().getDescription() %></td>
-		</tr>
+		<%if(order.getPatientUid()>0){ %>
+			<tr>
+				<td class='admin' width="<%=sTDAdminWidth%>"><%=getTran("web","invoice",sWebLanguage) %></td>
+				<td class='admin2'><%=invoice.getUid() %></td>
+				<td class='admin' width="<%=sTDAdminWidth%>"><%=getTran("web","invoicedate",sWebLanguage) %></td>
+				<td class='admin2'><%=ScreenHelper.formatDate(invoice.getDate()) %></td>
+			</tr>
+			<tr>
+				<td class='admin' width="<%=sTDAdminWidth%>"><%=getTran("web","productionorderprescription",sWebLanguage)%></td>
+				<td class='admin2'><a href='javascript:viewProductionOrderPrescriptions("<%=debet==null||debet.getPrestation()==null?-1:debet.getPrestation().getProductionOrderPrescription()%>")'><%=debet==null||debet.getPrestation()==null?"":getTranNoLink("examination",debet.getPrestation().getProductionOrderPrescription()+"",sWebLanguage)%></a></td>
+				<td class='admin' width="<%=sTDAdminWidth%>"><%=getTran("web","linkedprestation",sWebLanguage) %></td>
+				<td class='admin2'><%=debet==null||debet.getPrestation()==null?"":debet.getPrestation().getDescription() %></td>
+			</tr>
+		<%} %>
 		<tr>
 			<td class='admin' width="<%=sTDAdminWidth%>"><%=getTran("web","comment",sWebLanguage) %></td>
 			<td class='admin2'><textarea <%=order.getCloseDateTime()!=null?"readonly":"" %> class='text' cols='80' rows='2' name='ProductionOrderComment' id='ProductionOrderComment'><%=checkString(order.getComment()) %></textarea></td>

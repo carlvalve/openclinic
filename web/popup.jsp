@@ -300,7 +300,7 @@
 </script>
 <%-- End Floating layer -------------------------------------------------------------------------%>
 <body style="margin:2px;" onload="resizeMe();">
-<table width="100%" border="0" cellspacing="0" cellpadding="0" id="popuptbl" height="100%">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" id="popuptbl">
     <tr>
         <td colspan="3" style="vertical-align:top;" height="100%">
             <%
