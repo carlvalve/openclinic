@@ -66,7 +66,7 @@ public class PDFArchiveDocument extends PDFGeneralBasic {
                 }
                 else{
                 	// show link to open document, when server is configured
-                	String sServer = MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_url","http://localhost/openclinic/scan")+"/"+
+                	String sServer = MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_url","scan")+"/"+
                 	                 MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_dirTo","to");
                 	if(sServer.length() > 0){
                         sStorageName = sServer+"/"+sStorageName;

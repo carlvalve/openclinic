@@ -156,7 +156,7 @@ public class ScanDirectoryMonitor implements Runnable{
 	
 	//--- LOAD CONFIG -----------------------------------------------------------------------------
 	public static void loadConfig(){
-		SCANDIR_URL  = MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_url","http://localhost/openclinic/scan");
+		SCANDIR_URL  = MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_url","scan");
 		SCANDIR_BASE = MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_basePath","/var/tomcat/webapps/openclinic/scan");
 		SCANDIR_FROM = MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_dirFrom","from");
 	    SCANDIR_TO   = MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_dirTo","to");
@@ -463,7 +463,15 @@ public class ScanDirectoryMonitor implements Runnable{
     	Debug.println("DICOM object: "+obj);
     	if(obj!=null){
         	Debug.println("Patient ID: "+obj.getString(Tag.PatientID));
-        	AdminPerson person = AdminPerson.getAdminPerson(obj.getString(Tag.PatientID));
+        	int n = -1;
+        	try{
+        		n=Integer.parseInt(obj.getString(Tag.PatientID));
+        	}
+        	catch(Exception t){}
+        	AdminPerson person = new AdminPerson();
+        	if(n>-1){
+        		person=AdminPerson.getAdminPerson(obj.getString(Tag.PatientID));
+        	}
         	Debug.println("Patient Name: "+person.getFullName());
         	if(person.lastname.trim().length()>0){
 	    		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
@@ -516,8 +524,11 @@ public class ScanDirectoryMonitor implements Runnable{
 			    			transaction.getItems().add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()),
 			    					"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYDESCRIPTION",ScreenHelper.checkString(obj.getString(Tag.StudyDescription)).replaceAll("\\^", ", "),new Date(),itemContextVO));
 			    			itemContextVO = new ItemContextVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), "", "");
-			    			transaction.getItems().add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()),
-			    					"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYDATE",ScreenHelper.formatDate(new SimpleDateFormat("yyyyMMdd").parse(obj.getString(Tag.StudyDate))),new Date(),itemContextVO));
+			    			try{
+				    			transaction.getItems().add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()),
+				    					"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYDATE",ScreenHelper.formatDate(new SimpleDateFormat("yyyyMMdd").parse(obj.getString(Tag.StudyDate))),new Date(),itemContextVO));
+			    			}
+			    			catch(Exception er){er.printStackTrace();}
 			    			itemContextVO = new ItemContextVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), "", "");
 			    			try{
 				    			transaction.getItems().add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()),

@@ -27,8 +27,26 @@ public class ProductOrder extends OC_Object{
     private Date dateDelivered;
     private String importance; // (native|high|low)
     private String status;
+    private String from;
+    private int processed;
 
-    public String getStatus() {
+    public String getFrom() {
+		return from;
+	}
+
+	public void setFrom(String from) {
+		this.from = from;
+	}
+
+	public int getProcessed() {
+		return processed;
+	}
+
+	public void setProcessed(int processed) {
+		this.processed = processed;
+	}
+
+	public String getStatus() {
 		return status;
 	}
 
@@ -270,6 +288,8 @@ public class ProductOrder extends OC_Object{
                 order.setUpdateUser(ScreenHelper.checkString(rs.getString("OC_ORDER_UPDATEUID")));
                 order.setVersion(rs.getInt("OC_ORDER_VERSION"));
                 order.setStatus(rs.getString("OC_ORDER_STATUS"));
+                order.setFrom(rs.getString("OC_ORDER_FROM"));
+                order.setProcessed(rs.getInt("OC_ORDER_PROCESSED"));
             }
             else{
                 throw new Exception("ERROR : PRODUCTORDER "+orderUid+" NOT FOUND");
@@ -323,8 +343,9 @@ public class ProductOrder extends OC_Object{
                           "  OC_ORDER_DESCRIPTION, OC_ORDER_PRODUCTSTOCKUID, OC_ORDER_PACKAGESORDERED,"+
                           "  OC_ORDER_PACKAGESDELIVERED, OC_ORDER_DATEORDERED, OC_ORDER_DATEDELIVERYDUE,"+
                           "  OC_ORDER_DATEDELIVERED, OC_ORDER_IMPORTANCE,"+
-                          "  OC_ORDER_CREATETIME, OC_ORDER_UPDATETIME, OC_ORDER_UPDATEUID, OC_ORDER_VERSION, OC_ORDER_STATUS)"+
-                          " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,1,?)";
+                          "  OC_ORDER_CREATETIME, OC_ORDER_UPDATETIME, OC_ORDER_UPDATEUID, OC_ORDER_VERSION, OC_ORDER_STATUS,"
+                          + "OC_ORDER_FROM,OC_ORDER_PROCESSED)"+
+                          " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,1,?,?,?)";
 
                 ps = oc_conn.prepareStatement(sSelect);
 
@@ -362,6 +383,8 @@ public class ProductOrder extends OC_Object{
                 ps.setTimestamp(12,new java.sql.Timestamp(new java.util.Date().getTime())); // now
                 ps.setString(13,this.getUpdateUser());
                 ps.setString(14, this.getStatus());
+                ps.setString(15, this.getFrom());
+                ps.setInt(16, this.getProcessed());
 
                 ps.executeUpdate();
             }
@@ -374,7 +397,8 @@ public class ProductOrder extends OC_Object{
                               "  OC_ORDER_DESCRIPTION=?, OC_ORDER_PRODUCTSTOCKUID=?, OC_ORDER_PACKAGESORDERED=?,"+
                               "  OC_ORDER_PACKAGESDELIVERED=?, OC_ORDER_DATEORDERED=?, OC_ORDER_DATEDELIVERYDUE=?,"+
                               "  OC_ORDER_DATEDELIVERED=?, OC_ORDER_IMPORTANCE=?,"+
-                              "  OC_ORDER_UPDATETIME=?, OC_ORDER_UPDATEUID=?, OC_ORDER_VERSION=(OC_ORDER_VERSION+1), OC_ORDER_STATUS=?"+
+                              "  OC_ORDER_UPDATETIME=?, OC_ORDER_UPDATEUID=?, OC_ORDER_VERSION=(OC_ORDER_VERSION+1), OC_ORDER_STATUS=?,"
+                              + "OC_ORDER_FROM=?,OC_ORDER_PROCESSED=?"+
                               " WHERE OC_ORDER_SERVERID=? AND OC_ORDER_OBJECTID=?";
 
                     ps = oc_conn.prepareStatement(sSelect);
@@ -404,8 +428,10 @@ public class ProductOrder extends OC_Object{
                     ps.setTimestamp(9,new java.sql.Timestamp(new java.util.Date().getTime())); // now
                     ps.setString(10,this.getUpdateUser());
                     ps.setString(11, this.getStatus());
-                    ps.setInt(12,Integer.parseInt(this.getUid().substring(0,this.getUid().indexOf("."))));
-                    ps.setInt(13,Integer.parseInt(this.getUid().substring(this.getUid().indexOf(".")+1)));
+                    ps.setString(12, this.getFrom());
+                    ps.setInt(13, this.getProcessed());
+                    ps.setInt(14,Integer.parseInt(this.getUid().substring(0,this.getUid().indexOf("."))));
+                    ps.setInt(15,Integer.parseInt(this.getUid().substring(this.getUid().indexOf(".")+1)));
 
                     ps.executeUpdate();
                 }

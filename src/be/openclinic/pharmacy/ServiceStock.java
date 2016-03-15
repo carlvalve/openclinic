@@ -302,6 +302,35 @@ public class ServiceStock extends OC_Object{
     	return (ProductStockOperation.getOpenServiceStockDeliveries(this.getUid()).size() > 0);
     }
     
+    public boolean hasOpenOrders(){
+    	boolean bOpenOrders=false;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String sSelect;
+        Connection oc_conn = MedwanQuery.getInstance().getOpenclinicConnection();
+    	try{
+    		sSelect = "select * from OC_PRODUCTORDERS where OC_ORDER_FROM=? and OC_ORDER_PROCESSED=0";
+    		ps=oc_conn.prepareStatement(sSelect);
+    		ps.setString(1, this.getUid());
+    		rs=ps.executeQuery();
+    		bOpenOrders=rs.next();
+    	}
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                oc_conn.close();
+            }
+            catch (SQLException se){
+                se.printStackTrace();
+            }
+        }
+    	return bOpenOrders;
+    }
+    
     public Vector getOpenDeliveries(){
    	    return ProductStockOperation.getOpenServiceStockDeliveries(this.getUid());
     }
@@ -892,6 +921,47 @@ public class ServiceStock extends OC_Object{
             rs = ps.executeQuery();
             while(rs.next()){
                 foundObjects.add(get(rs.getString("OC_STOCK_SERVERID")+"."+rs.getString("OC_STOCK_OBJECTID")));
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                oc_conn.close();
+            }
+            catch(SQLException se){
+                se.printStackTrace();
+            }
+        }
+        
+        return foundObjects;
+    }
+    
+    //--- FIND (2:serviceid) ----------------------------------------------------------------------
+    public static Vector findAll(){
+        Vector foundObjects = new Vector();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        Connection oc_conn = MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+            String sSelect = "SELECT * FROM OC_SERVICESTOCKS order by OC_STOCK_NAME";
+            ps = oc_conn.prepareStatement(sSelect);
+            
+            // execute
+            rs = ps.executeQuery();
+            while(rs.next()){
+                ServiceStock stock = new ServiceStock();
+                
+                stock.setUid(rs.getString("OC_STOCK_SERVERID")+"."+rs.getString("OC_STOCK_OBJECTID"));
+                stock.setName(rs.getString("OC_STOCK_NAME"));
+                stock.setServiceUid(rs.getString("OC_STOCK_SERVICEUID"));
+                stock.setAuthorizedUserIds(rs.getString("OC_STOCK_AUTHORIZEDUSERS"));
+                
+                foundObjects.add(stock);
             }
         }
         catch(Exception e){

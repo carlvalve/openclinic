@@ -16,6 +16,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import org.dcm4che2.data.Implementation;
+
 import net.admin.system.AccessLog;
 
 
@@ -113,6 +115,129 @@ public class AdminPerson extends OC_Object{
         checkImmatnew = true;
         checkImmatold = false;
         checkArchiveFileCode = false;
+    }
+    
+    public Vector getMissingMandatoryFieldsTranslated(String language){
+    	Vector translatedFields = new Vector();
+    	Vector missingFields = getMissingMandatoryFields();
+    	for(int n=0;n<missingFields.size();n++){
+    		translatedFields.add(ScreenHelper.getTranNoLink("web", (String)missingFields.elementAt(n),language));
+    	}
+    	return translatedFields;
+    }
+    
+    public Vector getMissingMandatoryFields(){
+    	Vector missingFields=new Vector();
+    	String[] mandatoryFields = MedwanQuery.getInstance().getConfigString("ObligatoryFields_Admin","").split(",");
+    	for(int n=0;n<mandatoryFields.length;n++){
+    		if(mandatoryFields[n].equalsIgnoreCase("lastname") && ScreenHelper.checkString(lastname).length()==0){
+    			missingFields.add("lastname");
+    		}
+    		else if(mandatoryFields[n].equalsIgnoreCase("firstname") && ScreenHelper.checkString(firstname).length()==0){
+    			missingFields.add("firstname");
+    		}
+    		else if(mandatoryFields[n].equalsIgnoreCase("dateofbirth") && ScreenHelper.checkString(dateOfBirth).length()==0){
+    			missingFields.add("dateofbirth");
+    		}
+    		else if(mandatoryFields[n].equalsIgnoreCase("immatold") && ScreenHelper.checkString(getID("immatold")).length()==0){
+    			missingFields.add("immatold");
+    		}
+    		else if(mandatoryFields[n].equalsIgnoreCase("natreg") && ScreenHelper.checkString("natreg").length()==0){
+    			missingFields.add("natreg");
+    		}
+    		else if(mandatoryFields[n].equalsIgnoreCase("language") && ScreenHelper.checkString(language).length()==0){
+    			missingFields.add("language");
+    		}
+    		else if(mandatoryFields[n].equalsIgnoreCase("gender") && ScreenHelper.checkString(gender).length()==0){
+    			missingFields.add("gender");
+    		}
+    		else if(mandatoryFields[n].equalsIgnoreCase("candidate") && ScreenHelper.checkString(getID("candidate")).length()==0){
+    			missingFields.add("candidate");
+    		}
+    		else if(mandatoryFields[n].equalsIgnoreCase("engagement") && ScreenHelper.checkString(engagement).length()==0){
+    			missingFields.add("engagement");
+    		}
+    		else if(mandatoryFields[n].equalsIgnoreCase("pension") && ScreenHelper.checkString(pension).length()==0){
+    			missingFields.add("pension");
+    		}
+    		else if(mandatoryFields[n].equalsIgnoreCase("claimant") && ScreenHelper.checkString(claimant).length()==0){
+    			missingFields.add("claimant");
+    		}
+    		else if(mandatoryFields[n].equalsIgnoreCase("claimantexpiration") && ScreenHelper.checkString(claimantExpiration).length()==0){
+    			missingFields.add("claimantexpiration");
+    		}
+    		else if(mandatoryFields[n].equalsIgnoreCase("nativecountry") && ScreenHelper.checkString(nativeCountry).length()==0){
+    			missingFields.add("nativecountry");
+    		}
+    		else if(mandatoryFields[n].equalsIgnoreCase("nativetown") && ScreenHelper.checkString(nativeTown).length()==0){
+    			missingFields.add("nativetown");
+    		}
+    		else if(mandatoryFields[n].equalsIgnoreCase("comment") && ScreenHelper.checkString(comment).length()==0){
+    			missingFields.add("comment");
+    		}
+    		else if(mandatoryFields[n].equalsIgnoreCase("comment1") && ScreenHelper.checkString(comment1).length()==0){
+    			missingFields.add("comment1");
+    		}
+    		else if(mandatoryFields[n].equalsIgnoreCase("comment2") && ScreenHelper.checkString(comment2).length()==0){
+    			missingFields.add("comment2");
+    		}
+    		else if(mandatoryFields[n].equalsIgnoreCase("comment3") && ScreenHelper.checkString(comment3).length()==0){
+    			missingFields.add("comment3");
+    		}
+    		else if(mandatoryFields[n].equalsIgnoreCase("comment4") && ScreenHelper.checkString(comment4).length()==0){
+    			missingFields.add("comment4");
+    		}
+    		else if(mandatoryFields[n].equalsIgnoreCase("comment5") && ScreenHelper.checkString(comment5).length()==0){
+    			missingFields.add("comment5");
+    		}
+    	}
+		//AdminPrivate
+		AdminPrivateContact apc = getActivePrivate();
+		if(apc!=null){
+	    	mandatoryFields = MedwanQuery.getInstance().getConfigString("ObligatoryFields_AdminPrivate","").split(",");
+	    	for(int n=0;n<mandatoryFields.length;n++){
+	    		if(mandatoryFields[n].equalsIgnoreCase("pbegin") && ScreenHelper.checkString(apc.begin).length()==0){
+	    			missingFields.add("begin");
+	    		}
+	    		else if(mandatoryFields[n].equalsIgnoreCase("paddress") && ScreenHelper.checkString(apc.address).length()==0){
+	    			missingFields.add("address");
+	    		}
+	    		else if(mandatoryFields[n].equalsIgnoreCase("pzipcode") && ScreenHelper.checkString(apc.zipcode).length()==0){
+	    			missingFields.add("zipcode");
+	    		}
+	    		else if(mandatoryFields[n].equalsIgnoreCase("pcity") && ScreenHelper.checkString(apc.city).length()==0){
+	    			missingFields.add("city");
+	    		}
+	    		else if(mandatoryFields[n].equalsIgnoreCase("pcountry") && ScreenHelper.checkString(apc.country).length()==0){
+	    			missingFields.add("country");
+	    		}
+	    		else if(mandatoryFields[n].equalsIgnoreCase("pprovince") && ScreenHelper.checkString(apc.province).length()==0){
+	    			missingFields.add("province");
+	    		}
+	    		else if(mandatoryFields[n].equalsIgnoreCase("pdistrict") && ScreenHelper.checkString(apc.district).length()==0){
+	    			missingFields.add("district");
+	    		}
+	    		else if(mandatoryFields[n].equalsIgnoreCase("psector") && ScreenHelper.checkString(apc.sector).length()==0){
+	    			missingFields.add("sector");
+	    		}
+	    		else if(mandatoryFields[n].equalsIgnoreCase("pemail") && ScreenHelper.checkString(apc.email).length()==0){
+	    			missingFields.add("email");
+	    		}
+	    		else if(mandatoryFields[n].equalsIgnoreCase("ptelephone") && ScreenHelper.checkString(apc.telephone).length()==0){
+	    			missingFields.add("telephone");
+	    		}
+	    		else if(mandatoryFields[n].equalsIgnoreCase("pfax") && ScreenHelper.checkString(apc.fax).length()==0){
+	    			missingFields.add("fax");
+	    		}
+	    		else if(mandatoryFields[n].equalsIgnoreCase("pmobile") && ScreenHelper.checkString(apc.mobile).length()==0){
+	    			missingFields.add("mobile");
+	    		}
+	    		else if(mandatoryFields[n].equalsIgnoreCase("pcomment") && ScreenHelper.checkString(apc.comment).length()==0){
+	    			missingFields.add("comment");
+	    		}
+	    	}
+		}
+    	return missingFields;
     }
 
     //--- GET ADMIN PERSON ------------------------------------------------------------------------
@@ -2837,12 +2962,19 @@ public class AdminPerson extends OC_Object{
     }
 
     //--- GET AGE IN MONTHS -----------------------------------------------------------------------
-    public double getAgeInMonths(){
-    	long millis = new java.util.Date().getTime()-ScreenHelper.parseDate(this.dateOfBirth).getTime();
-    	long month=(365/12)*24*3600;
-    	month*=1000;
-    	double age =millis/month;
-    	return age;
+    public int getAgeInMonths(){
+    	try{
+	    	Calendar startCalendar = new GregorianCalendar();
+	    	startCalendar.setTime(ScreenHelper.parseDate(dateOfBirth));
+	    	Calendar endCalendar = new GregorianCalendar();
+	    	endCalendar.setTime(new java.util.Date());
+	    	int diffYear = endCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR);
+	    	int diffMonth = diffYear * 12 + endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
+	    	return diffMonth;
+    	}
+    	catch(Exception e){
+    		return -1;
+    	}
     }
     
     public static int getYearsBetween(java.util.Date begin,java.util.Date end){

@@ -24,6 +24,7 @@ import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.system.Debug;
 import be.mxs.common.util.system.HTMLEntities;
 import be.mxs.common.util.system.UpdateSystem;
+import be.openclinic.adt.Planning;
 import be.openclinic.adt.Queue;
 
 public class Monitor implements Runnable{
@@ -52,7 +53,10 @@ public class Monitor implements Runnable{
 	}
 	
 	public static void runScheduler(){
-		long day=24*3600*1000;
+		long second= 1000;
+		long minute = 60*second;
+		long hour=60*minute;
+		long day=24*hour;
 		// load scheduler config from XML
 		String sDoc=null;
 		SAXReader reader=null;
@@ -156,6 +160,13 @@ public class Monitor implements Runnable{
 				if(MedwanQuery.getInstance().getConfigInt("enableProfessionalCouncilRegistrationValidation",1)==1){
 					UpdateSystem systemUpdate = new UpdateSystem();
 					systemUpdate.validateCouncilRegistrations();
+				}
+    		}
+    		Date lastPlanningMaintenance = new SimpleDateFormat("yyyyMMddHHmmss").parse(MedwanQuery.getInstance().getConfigString("lastPlanningMaintenance","19000101010000"));
+    		if(new java.util.Date().getTime()-lastPlanningMaintenance.getTime()>=hour){
+				if(MedwanQuery.getInstance().getConfigInt("enablePlanningMaintenance",1)==1){
+					Planning.doMaintenance();;
+    				MedwanQuery.getInstance().setConfigString("lastPlanningMaintenance",new SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date()));
 				}
     		}
             //Waiting queue stats

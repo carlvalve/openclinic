@@ -42,6 +42,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.Timestamp;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -479,7 +480,6 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
                     		UserParameter.saveUserParameter("lastLabEmail", item.getValue(), returnedTransactionVO.getUser().userId);
                     	}
                     }
-                    
                     //If AUTOINVOICE items exist in the transaction, then automatically invoice the items
                     Collection invoiceItems = returnedTransactionVO.getItems();
                     Iterator iInvoiceItems = invoiceItems.iterator();
@@ -501,6 +501,41 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
                     		}
                     	}
                     }
+                    //If DRAWING items exist in the transaction, store their content in OC_DRAWINGS
+                    invoiceItems = returnedTransactionVO.getItems();
+                    iInvoiceItems = invoiceItems.iterator();
+                    while(iInvoiceItems.hasNext()){
+                    	ItemVO itemVO = (ItemVO)iInvoiceItems.next();
+                    	if(itemVO.getType().contains("OCDRAWING")){
+                    		Debug.println("OCDRAWING item detected: "+itemVO.getType());
+                    		//The name of the field that contains the drawing is in the value
+                    		String drawingitemname = itemVO.getValue();
+                    		if(request.getParameter(drawingitemname)!=null){
+                    			String inlineImage = request.getParameter(drawingitemname);
+                    			try{
+                    				Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+                    				PreparedStatement ps = conn.prepareStatement("delete from OC_DRAWINGS where OC_DRAWING_SERVERID=? and OC_DRAWING_TRANSACTIONID=? and OC_DRAWING_ITEMTYPE=?");
+                    				ps.setInt(1, returnedTransactionVO.getServerId());
+                    				ps.setInt(2, returnedTransactionVO.getTransactionId());
+                    				ps.setString(3, itemVO.getType());
+                    				ps.execute();
+                    				ps.close();
+                    				ps = conn.prepareStatement("insert into OC_DRAWINGS(OC_DRAWING_SERVERID,OC_DRAWING_TRANSACTIONID,OC_DRAWING_ITEMTYPE,OC_DRAWING_DRAWING) values(?,?,?,?)");
+                    				ps.setInt(1, returnedTransactionVO.getServerId());
+                    				ps.setInt(2, returnedTransactionVO.getTransactionId());
+                    				ps.setString(3, itemVO.getType());
+                    				ps.setBytes(4, ScreenHelper.base64Compress(inlineImage));
+                    				ps.execute();
+                    				ps.close();
+                    				conn.close();
+                    			}
+                    			catch(Exception o){
+                    				o.printStackTrace();
+                    			}
+                    		}
+                    	}
+                    }
+                    
 
                     //Delete diagnoses from OC_DIAGNOSES and ADD all+new again
                     Diagnosis.deleteDiagnosesByReferenceUID(returnedTransactionVO.getServerId()+"."+returnedTransactionVO.getTransactionId(),"Transaction");
