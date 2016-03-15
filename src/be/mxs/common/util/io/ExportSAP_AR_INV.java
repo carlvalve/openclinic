@@ -96,6 +96,17 @@ public class ExportSAP_AR_INV {
 				    	if(pssap !=null) pssap.close();
 				    	sapconn.close();
 					}
+					else if(last){
+						rs.close();
+						ps.close();
+						ps = conn.prepareStatement("select OC_EXCHANGERATE_RATE from OC_EXCHANGERATES where OC_EXCHANGERATE_DATE<? and OC_EXCHANGERATE_CURRENCY=? order by OC_EXCHANGERATE_DATE DESC");
+						ps.setDate(1, new java.sql.Date(currdate.getTime()));
+						ps.setString(2, currency);
+						rs = ps.executeQuery();
+						if(rs.next()){
+							exchangerate=rs.getDouble("OC_EXCHANGERATE_RATE");
+						}
+					}
 				}
 				catch(Exception s){
 					if(Debug.enabled) s.printStackTrace();

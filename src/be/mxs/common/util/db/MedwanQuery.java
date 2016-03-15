@@ -125,10 +125,46 @@ public class MedwanQuery {
 
         this.uri = uri;
 
+        
         // load config values from DB
         Statement configStatement = null;
         ResultSet rs = null;
         Connection oc_conn=getOpenclinicConnection();
+        //*****************************************//
+        //Section for setting session mode in MySQL//
+        //*****************************************//
+        try{
+            try{
+            	configStatement = oc_conn.createStatement();
+	        	//set session instruction
+	        	configStatement.execute("SET SESSION sql_mode = 'ansi'");
+	        	configStatement.close();
+            }
+            catch(Exception ee){}
+            oc_conn.close();
+            oc_conn=getAdminConnection();
+            try{
+            	configStatement = oc_conn.createStatement();
+	        	//set session instruction
+	        	configStatement.execute("SET SESSION sql_mode = 'ansi'");
+	        	configStatement.close();
+            }
+            catch(Exception ee){}
+            oc_conn.close();
+            oc_conn=getStatsConnection();
+            try{
+            	configStatement = oc_conn.createStatement();
+	        	//set session instruction
+	        	configStatement.execute("SET SESSION sql_mode = 'ansi'");
+	        	configStatement.close();
+            }
+            catch(Exception ee){}
+            oc_conn.close();
+        }
+        catch(Exception e){
+        	e.printStackTrace();
+        }
+        oc_conn=getOpenclinicConnection();
         try{
         	configStatement = oc_conn.createStatement();
             rs = configStatement.executeQuery("select * from OC_Config order by oc_key");

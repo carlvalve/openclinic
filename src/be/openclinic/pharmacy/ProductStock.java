@@ -122,6 +122,7 @@ public class ProductStock extends OC_Object implements Comparable {
     public int getLevel() {
         return level;
     }
+    
     public int getLevelIncludingOpenCommands() {
         int level = getLevel();
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
@@ -723,6 +724,10 @@ public class ProductStock extends OC_Object implements Comparable {
     }
     
     public static Vector findMaterials(){
+    	return findMaterials(null);
+    }
+    
+    public static Vector findMaterials(String name){
         Vector foundObjects = new Vector();
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -731,10 +736,11 @@ public class ProductStock extends OC_Object implements Comparable {
         	String sQuery="select * from OC_PRODUCTSTOCKS a, OC_PRODUCTS b"
         			+ " where"
         			+ " b.OC_PRODUCT_OBJECTID=replace(OC_STOCK_PRODUCTUID,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and"
-        			+ " b.OC_PRODUCT_PRODUCTSUBGROUP=?"
+        			+ (ScreenHelper.checkString(name).length()==0?"":" b.OC_PRODUCT_NAME like '%"+name+"%' and")
+        			+ " b.OC_PRODUCT_PRODUCTSUBGROUP in ?"
         			+ " order by OC_PRODUCT_NAME";
         	ps=conn.prepareStatement(sQuery);
-        	ps.setString(1, MedwanQuery.getInstance().getConfigString("ProductProductionMaterialSubGroup","MAT"));
+        	ps.setString(1, "('"+MedwanQuery.getInstance().getConfigString("ProductProductionMaterialSubGroup","MAT").replaceAll(",","','")+"')");
         	rs=ps.executeQuery();
         	while(rs.next()){
                 ProductStock stock = new ProductStock();

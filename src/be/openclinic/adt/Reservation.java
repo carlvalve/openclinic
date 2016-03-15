@@ -51,6 +51,44 @@ public class Reservation  extends OC_Object {
 		return planning;
 	}
 	
+	public static void saveReservationLock(String resourceuid,java.util.Date begin,java.util.Date end,String service,String userid){
+        PreparedStatement ps = null;
+        String sSelect = "insert into OC_RESERVATIONLOCKS(OC_RESERVATIONLOCK_REFTYPE,"
+        		+ "OC_RESERVATIONLOCK_REFUID,"
+        		+ "OC_RESERVATIONLOCK_BEGIN,"
+        		+ "OC_RESERVATIONLOCK_END,"
+        		+ "OC_RESERVATIONLOCK_SERVICE,"
+        		+ "OC_RESERVATIONLOCK_UPDATETIME,"
+        		+ "OC_RESERVATIONLOCK_UPDATEUID,"
+        		+ "OC_RESERVATIONLOCK_OBJECTID) "
+        		+ "VALUES(?,?,?,?,?,?,?,?)";
+        Connection oc_conn = MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+        	ps=oc_conn.prepareStatement(sSelect);
+        	ps.setString(1, "resource");
+        	ps.setString(2, resourceuid);
+        	ps.setTimestamp(3, new java.sql.Timestamp(begin.getTime()));
+        	ps.setTimestamp(4, new java.sql.Timestamp(end.getTime()));
+        	ps.setString(5, service);
+        	ps.setTimestamp(6, new java.sql.Timestamp(new java.util.Date().getTime()));
+        	ps.setString(7,userid);
+        	ps.setInt(8, MedwanQuery.getInstance().getOpenclinicCounter("OC_RESERVATIONLOCK_OBJECTID"));
+        	ps.execute();
+        }
+        catch(Exception e){
+            Debug.printProjectErr(e,Thread.currentThread().getStackTrace());
+        }
+        finally{
+            try{
+                if(ps!=null) ps.close();
+                oc_conn.close();
+            }
+            catch(Exception e){
+                Debug.printProjectErr(e,Thread.currentThread().getStackTrace());
+            }
+        }
+	}
+	
 	public static String getAccessibleResources(String userid){
 		String resources="";
         PreparedStatement ps = null;
@@ -82,6 +120,44 @@ public class Reservation  extends OC_Object {
             }
         }
 		return resources+";";
+	}
+	
+	public static Vector getReservationLocksForResourceUid(String sResourceUid, java.util.Date begin, java.util.Date end){
+		Vector reservations = new Vector();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String sSelect = "SELECT * FROM OC_RESERVATIONLOCKS WHERE "
+        		+ "OC_RESERVATIONLOCK_REFUID = ?"
+        		+ " AND OC_RESERVATIONLOCK_REFTYPE='resource'"+
+                " AND OC_RESERVATIONLOCK_BEGIN <= ?"+
+        		" AND OC_RESERVATIONLOCK_END >= ?"
+        		+ " ORDER by OC_RESERVATIONLOCK_BEGIN ASC";
+        Connection oc_conn = MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+        	ps=oc_conn.prepareStatement(sSelect);
+        	ps.setString(1, sResourceUid);
+        	ps.setTimestamp(2, new java.sql.Timestamp(end.getTime()));
+        	ps.setTimestamp(3, new java.sql.Timestamp(begin.getTime()));
+        	rs=ps.executeQuery();
+        	while(rs.next()){
+                reservations.add(rs.getInt("OC_RESERVATIONLOCK_OBJECTID")+";"+rs.getTimestamp("OC_RESERVATIONLOCK_BEGIN").getTime()+";"+rs.getTimestamp("OC_RESERVATIONLOCK_END").getTime()+";"+rs.getString("OC_RESERVATIONLOCK_SERVICE"));
+        	}
+        }
+        catch(Exception e){
+            Debug.printProjectErr(e,Thread.currentThread().getStackTrace());
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                oc_conn.close();
+            }
+            catch(Exception e){
+                Debug.printProjectErr(e,Thread.currentThread().getStackTrace());
+            }
+        }
+
+		return reservations;
 	}
 	
 	public static Vector getReservationsForResourceUid(String sResourceUid, java.util.Date begin, java.util.Date end){
@@ -169,6 +245,18 @@ public class Reservation  extends OC_Object {
         }
 
 		return reservations;
+	}
+	
+	public static void deleteResourceLock(String uid){
+        Connection oc_conn = MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+	        PreparedStatement ps = oc_conn.prepareStatement("delete from OC_RESERVATIONLOCKS where OC_RESERVATIONLOCK_OBJECTID=?");
+	        ps.setInt(1, Integer.parseInt(uid));
+	        ps.execute();
+        }
+        catch(Exception e){
+        	e.printStackTrace();
+        }
 	}
 	
 	public static void delete(String uid){

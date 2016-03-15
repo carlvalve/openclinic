@@ -268,7 +268,7 @@ public class PDFCalendarGenerator extends PDFBasic {
                 }
                 if(appointment.getContact()!=null && appointment.getContact().getObjectType()!=null && appointment.getContact().getObjectType().equalsIgnoreCase("prestation")){
                 	Prestation prestation = Prestation.get(appointment.getContact().getObjectUid());
-                	if(prestation!=null){
+                	if(prestation!=null && prestation.getCode()!=null){
                     	if(s.length()>0){
                     		s+="\n";
                     	}

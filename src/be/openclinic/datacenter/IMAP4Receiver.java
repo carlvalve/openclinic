@@ -47,7 +47,11 @@ public class IMAP4Receiver extends Receiver {
 			    	//Store the message in the oc_imports database here and delete it if successful
 		            SAXReader reader = new SAXReader(false);
 		            try{
-						Document document = reader.read(new ByteArrayInputStream(message[i].getContent().toString().getBytes("UTF-8")));
+		            	String theMessage = new String(message[i].getContent().toString());
+		            	if(theMessage.indexOf("</message>")>-1 && theMessage.indexOf("</message>")<theMessage.length()-10){
+		            		theMessage = theMessage.substring(0,theMessage.indexOf("</message>")+10);
+		            	}
+						Document document = reader.read(new ByteArrayInputStream(theMessage.getBytes()));
 						Element root = document.getRootElement();
 						Iterator msgs = root.elementIterator("data");
 						Vector ackMessages=new Vector();

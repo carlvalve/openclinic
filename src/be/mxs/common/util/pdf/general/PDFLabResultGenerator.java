@@ -889,7 +889,7 @@ public class PDFLabResultGenerator extends PDFOfficialBasic {
                 	}
 
 	                //Nu gaan we na of er een extra lijn met commentaar moet worden afgedrukt
-	                if(!MedwanQuery.getInstance().getLabel("labanalysis.refcomment",analysisCode,user.person.language).equals(analysisCode)){
+	                if(!MedwanQuery.getInstance().getLabel("labanalysis.refcomment",analysisCode,user.person.language).equalsIgnoreCase(analysisCode)){
 	                	cell=createLabelCourier("", 8, 45, fonttype);
 		                subTable.addCell(cell);
 		                
@@ -1037,7 +1037,7 @@ public class PDFLabResultGenerator extends PDFOfficialBasic {
                 	}
 
 	                //Nu gaan we na of er een extra lijn met commentaar moet worden afgedrukt
-	                if(!MedwanQuery.getInstance().getLabel("labanalysis.refcomment",analysisCode,user.person.language).equals(analysisCode)){
+	                if(!MedwanQuery.getInstance().getLabel("labanalysis.refcomment",analysisCode,user.person.language).equalsIgnoreCase(analysisCode)){
 	                	cell=createLabelCourier("", 8, 45, fonttype);
 		                subTable.addCell(cell);
 		                

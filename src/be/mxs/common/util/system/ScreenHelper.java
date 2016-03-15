@@ -20,7 +20,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.PageContext;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.sql.*;
 import java.sql.Date;
 import java.text.DecimalFormat;
@@ -29,6 +31,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.zip.Deflater;
+import java.util.zip.DeflaterOutputStream;
+import java.util.zip.Inflater;
+import java.util.zip.InflaterOutputStream;
 
 public class ScreenHelper {
     public static SimpleDateFormat hourFormat, stdDateFormat, fullDateFormat, fullDateFormatSS;
@@ -38,7 +44,74 @@ public class ScreenHelper {
     static{
     	reloadDateFormats();
     }
-
+    
+    public static String createDrawingDiv(HttpServletRequest request,String name, String itemtype, Object transaction,String image){
+    	String sContextPath=request.getRequestURI().replaceAll(request.getServletPath(),"");
+    	TransactionVO tran = (TransactionVO)transaction;
+    	String s = "<script src='"+sContextPath+"/_common/_script/canvas.js'></script>";
+    	s+="<table cellspacing='0' cellpadding='0'>";
+    	s+="<tr><td>";
+    	s+="<img src='"+sContextPath+"/_img/themes/default/canvas_small.png' width='14px' onclick='canvasSetRadius(1)'/>";
+    	s+="<img src='"+sContextPath+"/_img/themes/default/canvas_normal.png' width='14px' onclick='canvasSetRadius(5)'/>";
+    	s+="<img src='"+sContextPath+"/_img/themes/default/canvas_big.png' width='14px' onclick='canvasSetRadius(10)'/>";
+    	s+="</td><td>";
+    	s+="<img src='"+sContextPath+"/_img/themes/default/previous.jpg' width='14px' onclick='canvasReloadBaseImage()'/>";
+    	s+="<img src='"+sContextPath+"/_img/themes/default/erase.png' width='14px' onclick='canvasLoadImage(\""+sContextPath+image+"\")'/>";
+    	s+="</td><td/></tr><tr><td colspan='2'>";
+    	s+="<div id='"+name+"' onmouseover='this.style.cursor=\"hand\"'></div>";
+    	s+="</td><td valign='top'><table cellspacing='0' cellpadding='0'>";
+    	s+="<tr><td><img src='"+sContextPath+"/_img/themes/default/canvas_black.png' width='14px' onclick='canvasSetColor(\"black\")'/></td></tr>";
+    	s+="<tr><td><img src='"+sContextPath+"/_img/themes/default/canvas_white.png' width='14px' onclick='canvasSetColor(\"white\")'/></td></tr>";
+    	s+="<tr><td><img src='"+sContextPath+"/_img/themes/default/canvas_red.png' width='14px' onclick='canvasSetColor(\"red\")'/></td></tr>";
+    	s+="<tr><td><img src='"+sContextPath+"/_img/themes/default/canvas_blue.png' width='14px' onclick='canvasSetColor(\"blue\")'/></td></tr>";
+    	s+="<tr><td><img src='"+sContextPath+"/_img/themes/default/canvas_yellow.png' width='14px' onclick='canvasSetColor(\"yellow\")'/></td></tr>";
+    	s+="<tr><td><img src='"+sContextPath+"/_img/themes/default/canvas_green.png' width='14px' onclick='canvasSetColor(\"green\")'/></td></tr>";
+    	s+="</table></td></table>";
+    	s+="<input type='hidden' name='drawingContent' id='drawingContent'/>";
+    	s+="<input type='hidden' name='currentTransactionVO.items.<ItemVO[hashCode="+tran.getItem(itemtype).hashCode()+"]>.value' value='drawingContent'/>";
+    	s+="<script>";
+    	String sDrawing=ScreenHelper.getDrawing(tran.getServerId(),tran.getTransactionId(),itemtype);
+    	if(sDrawing.length()<10){
+    		s+="context = initCanvas('canvasDiv',100,100,'"+sContextPath+image+"');";
+    	}
+    	else {
+    		s+="context = initCanvas('canvasDiv',100,100,'"+sDrawing+"');";
+    	}
+    	s+="</script>";
+    	return s;
+    }
+    
+    public static String getDrawing(int serverid, int transactionid, String itemtype){
+    	String drawing="";
+    	Connection conn=MedwanQuery.getInstance().getOpenclinicConnection(); 
+    	PreparedStatement ps=null;
+    	ResultSet rs=null;
+    	try{
+    		ps=conn.prepareStatement("select OC_DRAWING_DRAWING from OC_DRAWINGS where OC_DRAWING_SERVERID=? and OC_DRAWING_TRANSACTIONID=? and OC_DRAWING_ITEMTYPE=?");
+    		ps.setInt(1, serverid);
+    		ps.setInt(2, transactionid);
+    		ps.setString(3, itemtype);
+    		rs=ps.executeQuery();
+    		if(rs.next()){
+    			drawing=base64Decompress(rs.getBytes("OC_DRAWING_DRAWING"));
+    		}
+    	}
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                conn.close();
+            }
+            catch(SQLException se){
+                se.printStackTrace();
+            }
+        }
+    	return drawing;
+    }
+    
     //--- GET OBJECT ID ---------------------------------------------------------------------------
     public static String getObjectId(String sUIDorID){ 
     	String sObjectId = "";
@@ -1321,6 +1394,20 @@ public static String removeAccents(String sTest){
               +"&nbsp;<img class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_compose.gif' alt='"+HTMLEntities.htmlentities(getTran("Web","putToday",sWebLanguage))+"' onclick=\"putTime($('"+sName+"Time'));getToday($('"+sName+"'));\">"
               +"&nbsp;"+writeTimeField(sName+"Time", formatSQLDate(dValue, "HH:mm"))
               +"&nbsp;"+getTran("web.occup", "medwan.common.hour", sWebLanguage);
+    }
+    
+    //--- NEW WRITE DATE TIME FIELD ---------------------------------------------------------------
+    public static String newWriteDateField(String sName, java.util.Date dValue, String sWebLanguage, String sCONTEXTDIR){
+        return "<input id='"+sName+"' type='text' maxlength='10' class='text' name='"+sName+"' value='"+getSQLDate(dValue)+"' size='12' onblur='if(!checkDate(this)){dateError(this);this.value=\"\";}'>"
+              +"&nbsp;<img name='popcal' class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_agenda.gif' alt='"+HTMLEntities.htmlentities(getTran("Web","Select",sWebLanguage))+"' onclick='gfPop1.fPopCalendar($(\""+sName+"\"));return false;'>"
+              +"&nbsp;<img class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_compose.gif' alt='"+HTMLEntities.htmlentities(getTran("Web","putToday",sWebLanguage))+"' onclick=\"getToday($('"+sName+"'));\">";
+    }
+    
+    //--- NEW WRITE DATE TIME FIELD ---------------------------------------------------------------
+    public static String newWriteDateField(String sName, java.util.Date dValue, String sWebLanguage, String sCONTEXTDIR, String onBlur){
+        return "<input id='"+sName+"' type='text' maxlength='10' class='text' name='"+sName+"' value='"+getSQLDate(dValue)+"' size='12' onblur='if(!checkDate(this)){dateError(this);this.value=\"\";};"+onBlur+"' onfocus='"+onBlur+"'>"
+              +"&nbsp;<img name='popcal' class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_agenda.gif' alt='"+HTMLEntities.htmlentities(getTran("Web","Select",sWebLanguage))+"' onclick='gfPop1.fPopCalendar($(\""+sName+"\"));return false;'>"
+              +"&nbsp;<img class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_compose.gif' alt='"+HTMLEntities.htmlentities(getTran("Web","putToday",sWebLanguage))+"' onclick=\"getToday($('"+sName+"'));\">";
     }
     
     //--- PLANNING DATE TIME FIELD ----------------------------------------------------------------
@@ -3017,8 +3104,8 @@ public static String removeAccents(String sTest){
     public static String writeDateTimeField(String sName, String sForm, java.util.Date dValue,
     		                                String sWebLanguage, String sCONTEXTDIR){        
         return "<input type='text' maxlength='10' class='text' name='"+sName+"' id='"+sName+"' value='"+getSQLDate(dValue)+"' size='12' onblur='if(!checkDate(this)){dateError(this);this.value=\"\";}'>"
-              +"&nbsp;<img name='popcal' class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_agenda.gif' alt='"+getTranNoLink("Web","Select",sWebLanguage)+"' onclick='gfPop1"+".fPopCalendar(document."+sForm+"."+sName+");return false;'>"
-              +"&nbsp;<img class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_compose.gif' alt='"+getTranNoLink("Web","PutToday",sWebLanguage)+"' onclick=\"getToday(document."+sForm+".all['"+sName+"']);getTime(document."+sForm+".all['"+sName+"Time'])\">"
+              +"&nbsp;<img name='popcal' class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_agenda.gif' alt='"+getTranNoLink("Web","Select",sWebLanguage)+"' onclick='gfPop1.fPopCalendar(document.getElementsByName(\""+sName+"\")[0]);return false;'>"
+              +"&nbsp;<img class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_compose.gif' alt='"+getTranNoLink("Web","PutToday",sWebLanguage)+"' onclick=\"getToday(document.getElementsByName('"+sName+"')[0]);getTime(document.getElementsByName('"+sName+"Time')[0])\">"
               +"&nbsp;"+writeTimeField(sName+"Time", formatSQLDate(dValue,"HH:mm"))
               +"&nbsp;"+getTran("web.occup","medwan.common.hour",sWebLanguage);
     }
@@ -3027,8 +3114,8 @@ public static String removeAccents(String sTest){
     public static String writeDateTimeField(String sName, String sForm, java.util.Date dValue,
     		                                String sWebLanguage, String sCONTEXTDIR,String code){        
         return "<input type='text' maxlength='10' class='text' name='"+sName+"' id='"+sName+"' value='"+getSQLDate(dValue)+"' size='12' onblur='if(!checkDate(this)){dateError(this);this.value=\"\";};"+checkString(code)+"'>"
-              +"&nbsp;<img name='popcal' class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_agenda.gif' alt='"+getTranNoLink("Web","Select",sWebLanguage)+"' onclick='gfPop1"+".fPopCalendar(document."+sForm+"."+sName+");return false;'>"
-              +"&nbsp;<img class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_compose.gif' alt='"+getTranNoLink("Web","PutToday",sWebLanguage)+"' onclick=\"getToday(document."+sForm+".all['"+sName+"']);getTime(document."+sForm+".all['"+sName+"Time'])\">"
+              +"&nbsp;<img name='popcal' class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_agenda.gif' alt='"+getTranNoLink("Web","Select",sWebLanguage)+"' onclick='gfPop1.fPopCalendar(document.getElementsByName(\""+sName+"\")[0]);return false;'>"
+              +"&nbsp;<img class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_compose.gif' alt='"+getTranNoLink("Web","PutToday",sWebLanguage)+"' onclick=\"getToday(document.getElementsByName('"+sName+"')[0]);getTime(document.getElementsByName('"+sName+"Time')[0])\">"
               +"&nbsp;"+writeTimeField(sName+"Time", formatSQLDate(dValue,"HH:mm"),code)
               +"&nbsp;"+getTran("web.occup","medwan.common.hour",sWebLanguage);
     }
@@ -3327,6 +3414,38 @@ public static String removeAccents(String sTest){
         }
 
         return serviceContexts;
+    }
+    
+    public static String base64Decompress(byte[] input){
+    	String s = "";
+    	ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        Inflater decompresser = new Inflater(true);
+        InflaterOutputStream inflaterOutputStream = new InflaterOutputStream(stream, decompresser);
+        try {
+			inflaterOutputStream.write(input);
+	        inflaterOutputStream.close();
+	        s=new String(stream.toByteArray());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        return s;
+    }
+    
+    public static byte[] base64Compress(String s){
+    	byte[] out = null;
+    	ByteArrayOutputStream stream = new ByteArrayOutputStream();
+    	Deflater compresser = new Deflater(Deflater.BEST_COMPRESSION, true);
+    	DeflaterOutputStream deflaterOutputStream = new DeflaterOutputStream(stream, compresser);
+    	try {
+			deflaterOutputStream.write(s.getBytes());
+	    	deflaterOutputStream.close();
+	    	out=stream.toByteArray();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return out;
     }
 
     //--- IS LIKE ---------------------------------------------------------------------------------

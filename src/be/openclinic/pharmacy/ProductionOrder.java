@@ -124,6 +124,68 @@ public class ProductionOrder extends OC_Object{
 		return orders;
 	}
 	
+	public static Vector getOpenProductionOrders(String patientid, String productStockUid, String debetUid, java.util.Date mindate, java.util.Date maxdate){
+		Vector orders = new Vector();
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		PreparedStatement ps = null;
+		ResultSet rs =null;
+		try{
+			String sQuery="SELECT * FROM OC_PRODUCTIONORDERS where OC_PRODUCTIONORDER_CLOSEDATETIME IS NULL";
+			if(ScreenHelper.checkString(patientid).length()>0){
+				sQuery+=" AND OC_PRODUCTIONORDER_PATIENTUID=?";
+			}
+			if(ScreenHelper.checkString(productStockUid).length()>0){
+				sQuery+=" AND OC_PRODUCTIONORDER_TARGETPRODUCTSTOCKUID=?";
+			}
+			if(mindate!=null){
+				sQuery+=" AND OC_PRODUCTIONORDER_CREATEDATETIME>=?";
+			}
+			if(maxdate!=null){
+				sQuery+=" AND OC_PRODUCTIONORDER_CREATEDATETIME<=?";
+			}
+			if(ScreenHelper.checkString(debetUid).length()>0){
+				sQuery+=" AND OC_PRODUCTIONORDER_DEBETUID=?";
+			}
+			sQuery+= " ORDER BY OC_PRODUCTIONORDER_CREATEDATETIME";
+			ps=conn.prepareStatement(sQuery);
+			int i=1;
+			if(ScreenHelper.checkString(patientid).length()>0){
+				ps.setInt(i++, Integer.parseInt(patientid));
+			}
+			if(ScreenHelper.checkString(productStockUid).length()>0){
+				ps.setString(i++, productStockUid);;
+			}
+			if(mindate!=null){
+				ps.setTimestamp(i++, new java.sql.Timestamp(mindate.getTime()));
+			}
+			if(maxdate!=null){
+				ps.setTimestamp(i++, new java.sql.Timestamp(maxdate.getTime()));
+			}
+			if(ScreenHelper.checkString(debetUid).length()>0){
+				ps.setString(i++, debetUid);;
+			}
+			rs=ps.executeQuery();
+			while(rs.next()){
+				orders.add(ProductionOrder.get(rs.getInt("OC_PRODUCTIONORDER_ID")));
+			}
+		}
+        catch(Exception e){
+        	e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                conn.close();
+
+            }
+            catch(SQLException se){
+                se.printStackTrace();
+            }
+        }
+		return orders;
+	}
+	
 	public static Vector getProductionOrders(String transactionuid){
 		Vector orders = new Vector();
 		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
