@@ -109,22 +109,27 @@ public class Invoice extends OC_Object {
    
    public String getServicesAsString(String language){
 	   String service="";
-	   HashSet services = new HashSet();
-	   for(int n=0;n<debets.size();n++){
-		   Debet debet = (Debet)debets.elementAt(n);
-		   if(ScreenHelper.checkString(debet.getServiceUid()).length()>0){
-			   services.add(debet.getServiceUid());
+	   try{
+		   HashSet services = new HashSet();
+		   for(int n=0;n<debets.size();n++){
+			   Debet debet = (Debet)debets.elementAt(n);
+			   if(ScreenHelper.checkString(debet.getServiceUid()).length()>0){
+				   services.add(debet.getServiceUid());
+			   }
+			   else if(debet.getEncounter()!=null && ScreenHelper.checkString(debet.getEncounter().getServiceUID()).length()>0){
+				   services.add(debet.getEncounter().getServiceUID());
+			   }
 		   }
-		   else if(debet.getEncounter()!=null && ScreenHelper.checkString(debet.getEncounter().getServiceUID()).length()>0){
-			   services.add(debet.getEncounter().getServiceUID());
+		   Iterator hs = services.iterator();
+		   while(hs.hasNext()){
+			   if(service.length()>0){
+				   service+=", ";
+			   }
+			   service+=ScreenHelper.getTran(null,"service", (String)hs.next(), language);
 		   }
 	   }
-	   Iterator hs = services.iterator();
-	   while(hs.hasNext()){
-		   if(service.length()>0){
-			   service+=", ";
-		   }
-		   service+=ScreenHelper.getTran("service", (String)hs.next(), language);
+	   catch(Exception e){
+		   e.printStackTrace();
 	   }
 	   return service;
    }
@@ -143,7 +148,7 @@ public class Invoice extends OC_Object {
 		   if(service.length()>0){
 			   service+=", ";
 		   }
-		   service+=ScreenHelper.getTran("service", (String)hs.next(), language);
+		   service+=ScreenHelper.getTran(null,"service", (String)hs.next(), language);
 	   }
 	   return service;
    }

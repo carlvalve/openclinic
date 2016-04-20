@@ -41,6 +41,15 @@ public class RequestedLabAnalysis {
     private java.util.Date updatetime;
     private int sampler;
     private int objectid;
+    private String tag;
+
+	public String getTag() {
+		return tag;
+	}
+
+	public void setTag(String tag) {
+		this.tag = tag;
+	}
 
 	public int getObjectid() {
 		return objectid;
@@ -1014,6 +1023,81 @@ public class RequestedLabAnalysis {
         return labAnalyses;
     }
 
+    //--- GET LABANALYSES FOR REQUEST -------------------------------------------------------------
+    public static Hashtable getLabAnalysesForLabRequest(int serverId, int transactionId, String editor){
+        Hashtable labAnalyses = new Hashtable();
+        RequestedLabAnalysis labAnalysis;
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+            String sSelect = "SELECT a.*,b.userId,b.updateTime,c.editorparameters FROM RequestedLabAnalyses a,Transactions b, Labanalysis c where a.serverid=b.serverid and a.transactionId=b.transactionId "+
+                             " and a.serverid = ? AND a.transactionid = ? and a.analysiscode=c.labcode and c.editor=?";
+            ps = oc_conn.prepareStatement(sSelect);
+            ps.setInt(1,serverId);
+            ps.setInt(2,transactionId);
+            ps.setString(3, editor);
+            rs = ps.executeQuery();
+
+            // get data from DB
+            while(rs.next()){
+                labAnalysis = new RequestedLabAnalysis();
+                labAnalysis.setServerId(serverId+"");
+                labAnalysis.setObjectid(rs.getInt("objectid"));
+                labAnalysis.setTransactionId(transactionId+"");
+
+                labAnalysis.patientId    = ScreenHelper.checkString(rs.getString("patientid"));
+                labAnalysis.analysisCode = ScreenHelper.checkString(rs.getString("analysiscode"));
+                labAnalysis.comment      = ScreenHelper.checkString(rs.getString("comment"));
+
+                // result..
+                labAnalysis.resultValue    = ScreenHelper.checkString(rs.getString("resultvalue"));
+                labAnalysis.resultUnit     = ScreenHelper.checkString(rs.getString("resultunit"));
+                labAnalysis.resultModifier = ScreenHelper.checkString(rs.getString("resultmodifier"));
+                labAnalysis.resultComment  = ScreenHelper.checkString(rs.getString("resultcomment"));
+                labAnalysis.resultRefMax   = ScreenHelper.checkString(rs.getString("resultrefmax"));
+                labAnalysis.resultRefMin   = ScreenHelper.checkString(rs.getString("resultrefmin"));
+                labAnalysis.resultUserId   = ScreenHelper.checkString(rs.getString("resultuserid"));
+                labAnalysis.requestUserId  = ScreenHelper.checkString(rs.getString("userId"));
+                labAnalysis.updatetime  =  rs.getTimestamp("updatetime");
+                labAnalysis.resultProvisional    = ScreenHelper.checkString(rs.getString("resultprovisional"));
+                labAnalysis.finalvalidation = rs.getInt("finalvalidator");
+                labAnalysis.tag = ScreenHelper.checkString(rs.getString("editorparameters"));
+
+                // result date
+                java.util.Date tmpDate = rs.getTimestamp("resultdate");
+                if(tmpDate!=null) labAnalysis.resultDate = tmpDate;
+                tmpDate = rs.getDate("updateTime");
+                if(tmpDate!=null) labAnalysis.requestDate = tmpDate;
+
+                labAnalyses.put(labAnalysis.analysisCode,labAnalysis);
+            }
+        }
+        catch(Exception e){
+
+            if(e.getMessage().endsWith("NOT FOUND")){
+                Debug.println(e.getMessage());
+            }
+            else{
+                e.printStackTrace();
+            }
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                oc_conn.close();
+            }
+            catch(SQLException se){
+                se.printStackTrace();
+            }
+        }
+
+        return labAnalyses;
+    }
+
     //--- DELETE LABANALYSES IN LABREQUEST --------------------------------------------------------
     public static void deleteLabAnalysesInLabRequest(int serverId, int transactionId){
         PreparedStatement ps = null;
@@ -1064,6 +1148,21 @@ public class RequestedLabAnalysis {
                                       Integer.parseInt(this.getTransactionId()),
                                       this.getAnalysisCode());
         store(objectExists);
+    }
+    
+    public static void setScanResultForReference(String sReference){
+		if(sReference.split("\\.").length>3){
+			Hashtable hAnalyses = RequestedLabAnalysis.getLabAnalysesForLabRequest(Integer.parseInt(sReference.split("\\.")[0]), Integer.parseInt(sReference.split("\\.")[1]), "scan");
+			Enumeration eAnalyses = hAnalyses.keys();
+			while(eAnalyses.hasMoreElements()){
+				RequestedLabAnalysis analysis =(RequestedLabAnalysis)(hAnalyses.get(eAnalyses.nextElement()));
+				if(analysis.getFinalvalidationdatetime()==null && analysis.getTag().equals("TP:"+sReference.split("\\.")[3])){
+					//This analysis must be updated (value=scan)
+					RequestedLabAnalysis.updateValue(Integer.parseInt(sReference.split("\\.")[0]), Integer.parseInt(sReference.split("\\.")[1]), analysis.getAnalysisCode(), "scan");
+					RequestedLabAnalysis.setFinalValidation(Integer.parseInt(sReference.split("\\.")[0]), Integer.parseInt(sReference.split("\\.")[1]), MedwanQuery.getInstance().getConfigInt("defaultLabValidator",4));
+				}
+			}
+		}
     }
 
     public void store(boolean objectExists){

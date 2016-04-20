@@ -691,14 +691,14 @@ public class InsuranceStats {
     		rs.close();
     		ps.close();
     		for(int n=0;n<20;n++){
-    			dataset.addValue(maleages[n],ScreenHelper.getTran("web.occup", "male", language),(n*5)+"");
-    			dataset.addValue(femaleages[n],ScreenHelper.getTran("web.occup", "female", language),(n*5)+"");
+    			dataset.addValue(maleages[n],ScreenHelper.getTran(null,"web.occup", "male", language),(n*5)+"");
+    			dataset.addValue(femaleages[n],ScreenHelper.getTran(null,"web.occup", "female", language),(n*5)+"");
     		}
 	    	// create chart
 	        final JFreeChart chart = ChartFactory.createBarChart(
 	            "", // chart title
-	            ScreenHelper.getTran("web","age",language), // domain axis label
-	            ScreenHelper.getTran("web","costs",language), // range axis label
+	            ScreenHelper.getTran(null,"web","age",language), // domain axis label
+	            ScreenHelper.getTran(null,"web","costs",language), // range axis label
 	            dataset, // data
 	            PlotOrientation.VERTICAL, // orientation
 	            true, // legend

@@ -143,7 +143,7 @@ public class PDFHospitalizedPatientsGenerator extends PDFBasic {
                 Enumeration enum2 = hServices.keys();
                 while(enum2.hasMoreElements()){
                     sServiceId = (String)enum2.nextElement();
-                    hSortedServices.put(ScreenHelper.getTran("service",sServiceId,sPrintLanguage).toLowerCase(),sServiceId);
+                    hSortedServices.put(ScreenHelper.getTran(null,"service",sServiceId,sPrintLanguage).toLowerCase(),sServiceId);
                 }
 
                 if(sToDate.length() == 0){

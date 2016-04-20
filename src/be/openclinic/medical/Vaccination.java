@@ -254,10 +254,10 @@ public class Vaccination {
 			else if(parameter.equalsIgnoreCase("location")){
 				sResult=vaccination.location;
 				if(sResult.startsWith("0")){
-					sResult=ScreenHelper.getTran("vaccinationlocation",MedwanQuery.getInstance().getConfigString("defaultVaccinationLocation"),((User)request.getSession().getAttribute("activeUser")).person.language);
+					sResult=ScreenHelper.getTran(null,"vaccinationlocation",MedwanQuery.getInstance().getConfigString("defaultVaccinationLocation"),((User)request.getSession().getAttribute("activeUser")).person.language);
 				}
 				else {
-					sResult=ScreenHelper.getTran("vaccinationlocation",(sResult+" ").substring(0,1),((User)request.getSession().getAttribute("activeUser")).person.language);
+					sResult=ScreenHelper.getTran(null,"vaccinationlocation",(sResult+" ").substring(0,1),((User)request.getSession().getAttribute("activeUser")).person.language);
 				}
 			}
 		}
@@ -341,15 +341,15 @@ public class Vaccination {
 					vaccinationAge=(vaccinationDate.getTime()-new java.util.Date().getTime()+age);
 					if("*bcg*polio0*polio1*penta1*pneumo1*rota1*polio2*penta2*pneumo2*rota2*polio3*penta3*pneumo3*rota3*".contains(type)){
 						//express in weeks
-						sResult+=" ("+vaccinationAge/week+" "+ScreenHelper.getTran("web","weeks",((User)request.getSession().getAttribute("activeUser")).person.language)+")";
+						sResult+=" ("+vaccinationAge/week+" "+ScreenHelper.getTran(null,"web","weeks",((User)request.getSession().getAttribute("activeUser")).person.language)+")";
 					}
 					else if("*measles*yellowfever*meningitisa*vita100*vita100a*vita200.1*alben200.1*vita200.1a*alben200.1a*vita200.1b*alben200.1b*vita200.2*alben400.1*vita200.2a*alben400.1a*vita200.2b*alben400.1b*vita200.2c*alben400.1c*vita200.2d*alben400.1d*".contains(type)){
 						//express in months
-						sResult+=" ("+vaccinationAge/month+" "+ScreenHelper.getTran("web","months",((User)request.getSession().getAttribute("activeUser")).person.language)+")";
+						sResult+=" ("+vaccinationAge/month+" "+ScreenHelper.getTran(null,"web","months",((User)request.getSession().getAttribute("activeUser")).person.language)+")";
 					}
 					else if("*vat1*vat2*vatr1*vatr2*vatr3*".contains(type)){
 						//express in years
-						sResult+=" ("+vaccinationAge/year+" "+ScreenHelper.getTran("web","years",((User)request.getSession().getAttribute("activeUser")).person.language)+")";
+						sResult+=" ("+vaccinationAge/year+" "+ScreenHelper.getTran(null,"web","years",((User)request.getSession().getAttribute("activeUser")).person.language)+")";
 					}
 				}
 				sResult="<td bgcolor='lightgreen'><img src='"+request.getRequestURI().replaceAll(request.getServletPath(),"")+"/_img/icons/icon_edit.gif' "

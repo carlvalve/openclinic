@@ -193,6 +193,35 @@ public class LabRequest {
 			e.printStackTrace();
 		}
     }
+    public Vector getMissingScans(){
+    	Vector missingScans = new Vector();
+        Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+            String sQuery="select distinct b.editorparameters from RequestedLabAnalyses a,LabAnalysis b"
+            		+ " where a.analysiscode=b.labcode and b.deletetime is null and serverid=? and transactionid=? "
+            		+ " and b.editor='scan' and not exists (select * from arch_documents where "+MedwanQuery.getInstance().getConfigString("lengthFunction","len")+"(arch_document_storagename)>0 and arch_document_reference=?"+MedwanQuery.getInstance().concatSign()+"replace(b.editorparameters,'TP:',''))";
+            PreparedStatement ps = oc_conn.prepareStatement(sQuery);
+            ps.setInt(1,getServerid());
+            ps.setInt(2,getTransactionid());
+            ps.setString(3,getServerid()+"."+getTransactionid()+".LAB.");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+            	missingScans.add(rs.getString("editorparameters"));
+            }
+            rs.close();
+            ps.close();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        try {
+			oc_conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+        return missingScans;
+    }
+    
     public void loadRequestAnalyses(Date date){
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{

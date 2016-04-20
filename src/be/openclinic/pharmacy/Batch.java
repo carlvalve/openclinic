@@ -531,6 +531,85 @@ public class Batch extends OC_Object{
         }
     	return operations;
     }
+    
+    public static Vector getBatchOperations(String batchUid, String productStockUid, String sLanguage){
+    	Vector operations = new Vector();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String sSelect;
+        Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+    	try{
+        	sSelect="SELECT * FROM OC_BATCHOPERATIONS,OC_PRODUCTSTOCKOPERATIONS WHERE OC_OPERATION_OBJECTID=replace(OC_BATCHOPERATION_PRODUCTSTOCKOPERATIONUID,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and OC_OPERATION_PRODUCTSTOCKUID=? and (OC_BATCHOPERATION_SOURCEUID=? OR OC_BATCHOPERATION_DESTINATIONUID=?) ORDER BY OC_BATCHOPERATION_UPDATETIME DESC";
+            ps = oc_conn.prepareStatement(sSelect);
+            ps.setString(1,productStockUid);
+            ps.setString(2,batchUid);
+            ps.setString(3,batchUid);
+            rs=ps.executeQuery();
+            while(rs.next()){
+            	BatchOperation batchOperation = null;
+            	java.util.Date date = rs.getTimestamp("OC_BATCHOPERATION_UPDATETIME");
+            	String thirdParty="?";
+        		String souid=rs.getString("OC_BATCHOPERATION_PRODUCTSTOCKOPERATIONUID");
+            	if(rs.getString("OC_BATCHOPERATION_SOURCEUID").equalsIgnoreCase(batchUid)){
+            		ProductStockOperation operation = ProductStockOperation.get(souid);
+            		if(operation!=null){
+            			if(operation.getDescription().indexOf("receipt")>-1){
+            				thirdParty=operation.getProductStock().getServiceStock().getService().getLabel(sLanguage);
+            			}
+            			else {
+            				if(operation.getSourceDestination().getObjectType().equalsIgnoreCase("servicestock")){
+            					ServiceStock serviceStock = ServiceStock.get(operation.getSourceDestination().getObjectUid());
+            					if(serviceStock!=null){
+            						thirdParty=serviceStock.getService().getLabel(sLanguage);
+            					}
+            				}
+            				else {
+            					thirdParty=operation.getSourceDestination().getObjectUid();
+            				}
+            			}
+            		}
+            		batchOperation = new BatchOperation("delivery", thirdParty, rs.getInt("OC_BATCHOPERATION_QUANTITY"),date,souid);
+            	}
+            	else {
+            		ProductStockOperation operation = ProductStockOperation.get(rs.getString("OC_BATCHOPERATION_PRODUCTSTOCKOPERATIONUID"));
+            		if(operation!=null){
+            			if(operation.getDescription().indexOf("receipt")>-1){
+            				if(operation.getProductStock()!=null && operation.getProductStock().getServiceStock()!=null && operation.getProductStock().getServiceStock().getService()!=null){
+            					thirdParty=operation.getProductStock().getServiceStock().getService().getLabel(sLanguage);
+            				}
+            			}
+            			else {
+            				if(operation.getSourceDestination().getObjectType().equalsIgnoreCase("servicestock")){
+            					ServiceStock serviceStock = ServiceStock.get(operation.getSourceDestination().getObjectUid());
+            					if(serviceStock!=null){
+            						thirdParty=serviceStock.getService().getLabel(sLanguage);
+            					}
+            				}
+            				else {
+            					thirdParty=operation.getSourceDestination().getObjectUid();
+            				}
+            			}
+            		}
+            		batchOperation = new BatchOperation("receipt", thirdParty, rs.getInt("OC_BATCHOPERATION_QUANTITY"),date,souid);
+            	}
+            	operations.add(batchOperation);
+            }
+    	}
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                oc_conn.close();
+            }
+            catch(SQLException se){
+                se.printStackTrace();
+            }
+        }
+    	return operations;
+    }
 
 }
 

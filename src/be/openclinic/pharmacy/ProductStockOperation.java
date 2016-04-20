@@ -42,8 +42,17 @@ public class ProductStockOperation extends OC_Object{
     private String documentUID;
     private String encounterUID;
     private String orderUID;
+    private String comment;
 
-    public String getBatchType() {
+    public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	public String getBatchType() {
 		if(batchNumber==null && batchUid!=null && batchUid.length()>0){
 			Batch batch = Batch.get(batchUid);
 			if(batch!=null){
@@ -340,6 +349,7 @@ public class ProductStockOperation extends OC_Object{
 	                operation.setBatchUid(rs.getString("OC_OPERATION_BATCHUID"));
 	                operation.setOperationUID(rs.getString("OC_OPERATION_UID"));
 	                operation.setReceiveComment(rs.getString("OC_OPERATION_RECEIVECOMMENT"));
+	                operation.setComment(rs.getString("OC_OPERATION_COMMENT"));
 	                operation.setUnitsReceived(rs.getInt("OC_OPERATION_UNITSRECEIVED"));
 	                operation.setReceiveProductStockUid(rs.getString("OC_OPERATION_RECEIVEPRODUCTSTOCKUID"));
 	                operation.setDocumentUID(rs.getString("OC_OPERATION_DOCUMENTUID"));
@@ -423,8 +433,8 @@ public class ProductStockOperation extends OC_Object{
                           "  OC_OPERATION_DESCRIPTION, OC_OPERATION_SRCDESTTYPE, OC_OPERATION_SRCDESTUID,"+
                           "  OC_OPERATION_DATE, OC_OPERATION_PRODUCTSTOCKUID, OC_OPERATION_UNITSCHANGED,"+
                           "  OC_OPERATION_CREATETIME, OC_OPERATION_UPDATETIME, OC_OPERATION_UPDATEUID, OC_OPERATION_PRESCRIPTIONUID,OC_OPERATION_VERSION,OC_OPERATION_BATCHUID,OC_OPERATION_UID,OC_OPERATION_RECEIVECOMMENT," +
-                          "  OC_OPERATION_UNITSRECEIVED,OC_OPERATION_RECEIVEPRODUCTSTOCKUID,OC_OPERATION_DOCUMENTUID,OC_OPERATION_ENCOUNTERUID,OC_OPERATION_ORDERUID)"+
-                          " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,1,?,?,?,?,?,?,?,?)";
+                          "  OC_OPERATION_UNITSRECEIVED,OC_OPERATION_RECEIVEPRODUCTSTOCKUID,OC_OPERATION_DOCUMENTUID,OC_OPERATION_ENCOUNTERUID,OC_OPERATION_ORDERUID,OC_OPERATION_COMMENT)"+
+                          " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,1,?,?,?,?,?,?,?,?,?)";
 
                 ps = oc_conn.prepareStatement(sSelect);
 
@@ -460,6 +470,7 @@ public class ProductStockOperation extends OC_Object{
                 ps.setString(18, this.getDocumentUID());
                 ps.setString(19, this.getEncounterUID());
                 ps.setString(20, this.getOrderUID());
+                ps.setString(21, this.getComment());
 
                 ps.executeUpdate();
             }
@@ -471,7 +482,7 @@ public class ProductStockOperation extends OC_Object{
                 sSelect = "UPDATE OC_PRODUCTSTOCKOPERATIONS SET OC_OPERATION_DESCRIPTION=?, OC_OPERATION_SRCDESTTYPE=?,"+
                           "  OC_OPERATION_SRCDESTUID=?, OC_OPERATION_DATE=?, OC_OPERATION_PRODUCTSTOCKUID=?, OC_OPERATION_UNITSCHANGED=?,"+
                           "  OC_OPERATION_UPDATETIME=?, OC_OPERATION_UPDATEUID=?, OC_OPERATION_PRESCRIPTIONUID=?,OC_OPERATION_VERSION=(OC_OPERATION_VERSION+1),OC_OPERATION_BATCHUID=?," +
-                          "  OC_OPERATION_RECEIVECOMMENT=?,OC_OPERATION_UNITSRECEIVED=?,OC_OPERATION_RECEIVEPRODUCTSTOCKUID=?,OC_OPERATION_DOCUMENTUID=?,OC_OPERATION_ENCOUNTERUID=?,OC_OPERATION_ORDERUID=?"+
+                          "  OC_OPERATION_RECEIVECOMMENT=?,OC_OPERATION_UNITSRECEIVED=?,OC_OPERATION_RECEIVEPRODUCTSTOCKUID=?,OC_OPERATION_DOCUMENTUID=?,OC_OPERATION_ENCOUNTERUID=?,OC_OPERATION_ORDERUID=?,OC_OPERATION_COMMENT=?"+
                           " WHERE OC_OPERATION_SERVERID=? AND OC_OPERATION_OBJECTID=?";
 
                 ps = oc_conn.prepareStatement(sSelect);
@@ -497,9 +508,10 @@ public class ProductStockOperation extends OC_Object{
                 ps.setString(14, this.getDocumentUID());
                 ps.setString(15, this.getEncounterUID());
                 ps.setString(16, this.getOrderUID());
+                ps.setString(17, this.getComment());
 
-                ps.setInt(17,Integer.parseInt(this.getUid().substring(0,this.getUid().indexOf("."))));
-                ps.setInt(18,Integer.parseInt(this.getUid().substring(this.getUid().indexOf(".")+1)));
+                ps.setInt(18,Integer.parseInt(this.getUid().substring(0,this.getUid().indexOf("."))));
+                ps.setInt(19,Integer.parseInt(this.getUid().substring(this.getUid().indexOf(".")+1)));
 
                 ps.executeUpdate();
             }
@@ -562,8 +574,8 @@ public class ProductStockOperation extends OC_Object{
                           "  OC_OPERATION_DESCRIPTION, OC_OPERATION_SRCDESTTYPE, OC_OPERATION_SRCDESTUID,"+
                           "  OC_OPERATION_DATE, OC_OPERATION_PRODUCTSTOCKUID, OC_OPERATION_UNITSCHANGED,"+
                           "  OC_OPERATION_CREATETIME, OC_OPERATION_UPDATETIME, OC_OPERATION_UPDATEUID, OC_OPERATION_PRESCRIPTIONUID,OC_OPERATION_VERSION,OC_OPERATION_BATCHUID,OC_OPERATION_UID,OC_OPERATION_RECEIVECOMMENT," +
-                          "  OC_OPERATION_UNITSRECEIVED,OC_OPERATION_RECEIVEPRODUCTSTOCKUID,OC_OPERATION_DOCUMENTUID,OC_OPERATION_ENCOUNTERUID,OC_OPERATION_ORDERUID)"+
-                          " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,1,?,?,?,?,?,?,?,?)";
+                          "  OC_OPERATION_UNITSRECEIVED,OC_OPERATION_RECEIVEPRODUCTSTOCKUID,OC_OPERATION_DOCUMENTUID,OC_OPERATION_ENCOUNTERUID,OC_OPERATION_ORDERUID,OC_OPERATION_COMMENT)"+
+                          " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,1,?,?,?,?,?,?,?,?,?)";
 
                 ps = oc_conn.prepareStatement(sSelect);
 
@@ -599,6 +611,7 @@ public class ProductStockOperation extends OC_Object{
                 ps.setString(18, this.getDocumentUID());
                 ps.setString(19, this.getEncounterUID());
                 ps.setString(20, this.getOrderUID());
+                ps.setString(21, this.getComment());
 
                 ps.executeUpdate();
             }
@@ -610,7 +623,7 @@ public class ProductStockOperation extends OC_Object{
                 sSelect = "UPDATE OC_PRODUCTSTOCKOPERATIONS SET OC_OPERATION_DESCRIPTION=?, OC_OPERATION_SRCDESTTYPE=?,"+
                           "  OC_OPERATION_SRCDESTUID=?, OC_OPERATION_DATE=?, OC_OPERATION_PRODUCTSTOCKUID=?, OC_OPERATION_UNITSCHANGED=?,"+
                           "  OC_OPERATION_UPDATETIME=?, OC_OPERATION_UPDATEUID=?, OC_OPERATION_PRESCRIPTIONUID=?,OC_OPERATION_VERSION=(OC_OPERATION_VERSION+1),OC_OPERATION_BATCHUID=?," +
-                          "  OC_OPERATION_RECEIVECOMMENT=?,OC_OPERATION_UNITSRECEIVED=?,OC_OPERATION_RECEIVEPRODUCTSTOCKUID=?,OC_OPERATION_DOCUMENTUID=?,OC_OPERATION_ENCOUNTERUID=?,OC_OPERATION_ORDERUID=?"+
+                          "  OC_OPERATION_RECEIVECOMMENT=?,OC_OPERATION_UNITSRECEIVED=?,OC_OPERATION_RECEIVEPRODUCTSTOCKUID=?,OC_OPERATION_DOCUMENTUID=?,OC_OPERATION_ENCOUNTERUID=?,OC_OPERATION_ORDERUID=?,OC_OPERATION_COMMENT=?"+
                           " WHERE OC_OPERATION_SERVERID=? AND OC_OPERATION_OBJECTID=?";
 
                 ps = oc_conn.prepareStatement(sSelect);
@@ -636,10 +649,11 @@ public class ProductStockOperation extends OC_Object{
                 ps.setString(14, this.getDocumentUID());
                 ps.setString(15, this.getEncounterUID());
                 ps.setString(16, this.getOrderUID());
+                ps.setString(17, this.getComment());
 
                 
-                ps.setInt(17,Integer.parseInt(this.getUid().substring(0,this.getUid().indexOf("."))));
-                ps.setInt(18,Integer.parseInt(this.getUid().substring(this.getUid().indexOf(".")+1)));
+                ps.setInt(18,Integer.parseInt(this.getUid().substring(0,this.getUid().indexOf("."))));
+                ps.setInt(19,Integer.parseInt(this.getUid().substring(this.getUid().indexOf(".")+1)));
 
                 ps.executeUpdate();
             }
@@ -729,7 +743,7 @@ public class ProductStockOperation extends OC_Object{
             		//Insurance & insurar
             		Insurance insurance = Insurance.getMostInterestingInsuranceForPatient(patient.personid);
             		double insuraramount=0;
-            		if(insurance!=null && insurance.getInsurar()!=null && prestation.isVisibleFor(insurance.getInsurar())){
+            		if(insurance!=null && insurance.getInsurar()!=null && prestation.isVisibleFor(insurance.getInsurar(),activeEncounter.getService())){
                     	Debug.println("Assurance existe et est visible");
             			patientamount = prestation.getPrice(insurance.getType());
 	            		debet.setInsurance(insurance);
@@ -744,6 +758,8 @@ public class ProductStockOperation extends OC_Object{
 	            			insuraramount=patientamount*(100-insurance.getPatientShare())/100;
 	            		}
 	            		patientamount=patientamount-insuraramount;
+	            		//If there are any supplements, then we have to add them to the patient price
+	            		patientamount+=prestation.getSupplement();
 	            		//Extrainsurar
 	            		double extrainsuraramount=0;
 	            		if(!MedwanQuery.getInstance().getConfigString("defaultExtraInsurar","-1").equalsIgnoreCase("-1")){
@@ -757,7 +773,8 @@ public class ProductStockOperation extends OC_Object{
 	            		debet.setAmount(Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(patientamount).replaceAll(",", "."))*debet.getQuantity());
 	            		debet.setInsurarAmount(Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(insuraramount).replaceAll(",", "."))*debet.getQuantity());
 	            		debet.setExtraInsurarAmount(Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(extrainsuraramount).replaceAll(",", "."))*debet.getQuantity());
-                    	Debug.println("Stockage de la prestation");
+                    	Debug.println("Sauvegarde de la prestation");
+                    	debet.store();
 	            		MedwanQuery.getInstance().getObjectCache().removeObject("debet", debet.getUid());
             		}
             	}
@@ -1289,6 +1306,7 @@ public class ProductStockOperation extends OC_Object{
                 operation.setDocumentUID(rs.getString("OC_OPERATION_DOCUMENTUID"));
                 operation.setEncounterUID(rs.getString("OC_OPERATION_ENCOUNTERUID"));
                 operation.setOrderUID(rs.getString("OC_OPERATION_ORDERUID"));
+                operation.setComment(rs.getString("OC_OPERATION_COMMENT"));
                 foundRecords.add(operation);
             }
         }
@@ -1707,6 +1725,7 @@ public class ProductStockOperation extends OC_Object{
                 operation.setEncounterUID(rs.getString("OC_OPERATION_ENCOUNTERUID"));
                 operation.setOrderUID(rs.getString("OC_OPERATION_ORDERUID"));
                 operation.setReceiveComment(rs.getString("OC_OPERATION_RECEIVECOMMENT"));
+                operation.setComment(rs.getString("OC_OPERATION_COMMENT"));
                 
                 operations.addElement(operation);
             }
@@ -1802,6 +1821,7 @@ public class ProductStockOperation extends OC_Object{
                 operation.setEncounterUID(rs.getString("OC_OPERATION_ENCOUNTERUID"));
                 operation.setOrderUID(rs.getString("OC_OPERATION_ORDERUID"));
                 operation.setReceiveComment(rs.getString("OC_OPERATION_RECEIVECOMMENT"));
+                operation.setComment(rs.getString("OC_OPERATION_COMMENT"));
 
                 operations.addElement(operation);
             }
@@ -1904,6 +1924,7 @@ public class ProductStockOperation extends OC_Object{
                 operation.setEncounterUID(rs.getString("OC_OPERATION_ENCOUNTERUID"));
                 operation.setOrderUID(rs.getString("OC_OPERATION_ORDERUID"));
                 operation.setReceiveComment(rs.getString("OC_OPERATION_RECEIVECOMMENT"));
+                operation.setComment(rs.getString("OC_OPERATION_COMMENT"));
 
                 vProdStockOperations.addElement(operation);
             }

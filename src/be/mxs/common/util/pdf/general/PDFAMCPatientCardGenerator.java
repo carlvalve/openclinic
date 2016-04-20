@@ -139,7 +139,7 @@ public class PDFAMCPatientCardGenerator extends PDFOfficialBasic {
             
             table2 = new PdfPTable(1000);
             //Name
-            cell=createLabel(ScreenHelper.getTran("web","lastname",sPrintLanguage)+":",6,1,Font.ITALIC);
+            cell=createLabel(ScreenHelper.getTran(null,"web","lastname",sPrintLanguage)+":",6,1,Font.ITALIC);
             cell.setColspan(300);
             cell.setBorder(PdfPCell.NO_BORDER);
             cell.setPadding(1);
@@ -153,7 +153,7 @@ public class PDFAMCPatientCardGenerator extends PDFOfficialBasic {
             table2.addCell(cell);
             
             //FirstName
-            cell=createLabel(ScreenHelper.getTran("web","firstname",sPrintLanguage)+":",6,1,Font.ITALIC);
+            cell=createLabel(ScreenHelper.getTran(null,"web","firstname",sPrintLanguage)+":",6,1,Font.ITALIC);
             cell.setColspan(300);
             cell.setBorder(PdfPCell.NO_BORDER);
             cell.setPadding(1);
@@ -167,7 +167,7 @@ public class PDFAMCPatientCardGenerator extends PDFOfficialBasic {
             table2.addCell(cell);
 
             //Date of birth
-            cell=createLabel(ScreenHelper.getTran("web","dateofbirth",sPrintLanguage)+":",6,1,Font.ITALIC);
+            cell=createLabel(ScreenHelper.getTran(null,"web","dateofbirth",sPrintLanguage)+":",6,1,Font.ITALIC);
             cell.setColspan(300);
             cell.setBorder(PdfPCell.NO_BORDER);
             cell.setPadding(1);
@@ -186,7 +186,7 @@ public class PDFAMCPatientCardGenerator extends PDFOfficialBasic {
             table2.addCell(cell);
 
             //Registration number
-            cell=createLabel(ScreenHelper.getTran("web","idcode",sPrintLanguage)+":",6,1,Font.ITALIC);
+            cell=createLabel(ScreenHelper.getTran(null,"web","idcode",sPrintLanguage)+":",6,1,Font.ITALIC);
             cell.setColspan(300);
             cell.setBorder(PdfPCell.NO_BORDER);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);

@@ -59,7 +59,7 @@ public class CsvInvoiceCplr {
 	                }
 	                if(!initialized){
 			            //Eerst consultaties
-			            sOutput+="\r\n\r\n"+ScreenHelper.getTran("hospital.statistics", "visits", "fr");
+			            sOutput+="\r\n\r\n"+ScreenHelper.getTran(null,"hospital.statistics", "visits", "fr");
 			            sOutput+="\r\n#;RECU;NOM ET PRENOM;MATRIC;CARTE;AFFECT;STATUT;SERVICE;TOTAL;PATIENT;ASSUREUR;ASSUREUR_COMPL;DATE;REF BON\r\n";
 	                }
 	                initialized=true;
@@ -183,7 +183,7 @@ public class CsvInvoiceCplr {
                 	sOutput+=insurarreference+"\r\n";
 	            	//Print totals
 	            	sOutput+=";";
-	            	sOutput+=ScreenHelper.getTran("web", "total", "fr")+";";
+	            	sOutput+=ScreenHelper.getTran(null,"web", "total", "fr")+";";
 	            	sOutput+=";";
 	            	sOutput+=";";
 	            	sOutput+=";";
@@ -230,7 +230,7 @@ public class CsvInvoiceCplr {
 	                }
 	            }
 	            if(services.size()>0){
-		            sOutput+="\r\n\r\n\r\n"+ScreenHelper.getTran("hospital.statistics", "admissions", "fr")+"\r\n";
+		            sOutput+="\r\n\r\n\r\n"+ScreenHelper.getTran(null,"hospital.statistics", "admissions", "fr")+"\r\n";
 	            }
 	            //Nu maken we de output voor elke dienst
 	            Iterator iServices = services.iterator();
@@ -347,7 +347,7 @@ public class CsvInvoiceCplr {
 	                	sOutput+=totalcomp+"\r\n";
 	                	//Print the totals
 	                	sOutput+=";";
-	                	sOutput+=ScreenHelper.getTran("web", "total", "fr")+";";
+	                	sOutput+=ScreenHelper.getTran(null,"web", "total", "fr")+";";
 	                	sOutput+=";";
 	                	sOutput+=";";
 	                	sOutput+=";";

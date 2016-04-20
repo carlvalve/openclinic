@@ -26,7 +26,7 @@ import javax.servlet.http.HttpSession;
 
 import net.admin.AdminPerson;
 import net.admin.User;
-public class PDFCalendarGenerator extends PDFBasic {
+public class PDFAppointmentGenerator extends PDFBasic {
     // declarations
     private PdfWriter docWriter;
     private User user;
@@ -43,7 +43,7 @@ public class PDFCalendarGenerator extends PDFBasic {
 		this.counter = counter;
 	}
 	//--- CONSTRUCTOR -----------------------------------------------------------------------------
-    public PDFCalendarGenerator(User user, String sProject, String sPrintLanguage) {
+    public PDFAppointmentGenerator(User user, String sProject, String sPrintLanguage) {
         this.user = user;
         this.sProject = sProject;
         this.sPrintLanguage = sPrintLanguage;
@@ -57,7 +57,7 @@ public class PDFCalendarGenerator extends PDFBasic {
 
     private SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
     //--- GENERATE PDF DOCUMENT BYTES -------------------------------------------------------------
-    public ByteArrayOutputStream generatePDFDocumentBytes(final HttpServletRequest req, String imageid, String trandate, AdminPerson activepatient) throws Exception {
+    public ByteArrayOutputStream generatePDFDocumentBytes(final HttpServletRequest req, String sAppointmentUid) throws Exception {
         ByteArrayOutputStream baosPDF = new ByteArrayOutputStream();
         docWriter = PdfWriter.getInstance(doc, baosPDF);
         this.req = req;
@@ -95,6 +95,7 @@ public class PDFCalendarGenerator extends PDFBasic {
         }
         return baosPDF;
     }
+    
     public void addHeader(String sHeader)throws Exception{
         //*** logo ***
         try {
@@ -139,6 +140,20 @@ public class PDFCalendarGenerator extends PDFBasic {
             Debug.printProjectErr(e, e.getStackTrace());
         }
     }
+    public void addKeyValueRow(String sKey, String sValue) {
+        try {
+            PdfPTable t = new PdfPTable(100);
+            t.setWidthPercentage(pageWidth);
+
+            t.addCell(this.createValueCell(10,sKey+":",20));
+            t.addCell(this.createBoldValueCell(10,sValue,80));
+
+            table.addCell(t);
+        } catch (Exception e) {
+            //  Debug.printProjectErr(e,Thread.currentThread().getStackTrace());
+            e.printStackTrace();
+        }
+    }
     public void addDateRow(Planning appointment) {
         try{
                 PdfPTable t = new PdfPTable(3);
@@ -156,6 +171,30 @@ public class PDFCalendarGenerator extends PDFBasic {
                     sContext += getTran("web","context")+": "+getTran("Web.Occup", appointment.getContextID());
                 }
                 t.addCell(this.createGrayCell(sContext, 1,8, Font.BOLD));
+
+                table.addCell(t);
+            } catch (Exception e) {
+                //  Debug.printProjectErr(e,Thread.currentThread().getStackTrace());
+                e.printStackTrace();
+            }
+        }
+    public void addDateRow(Planning appointment,int fontsize) {
+        try{
+                PdfPTable t = new PdfPTable(3);
+                t.setWidthPercentage(pageWidth);
+
+                // DATE
+                String sDate = getTran("web", "date") + " " + ScreenHelper.stdDateFormat.format(appointment.getPlannedDate()) + " " ;
+                String sTime = timeFormat.format(appointment.getPlannedDate()) + " => "+timeFormat.format(appointment.getPlannedEndDate()) ;
+                t.addCell(createGrayCell(sDate+" "+sTime, 1,fontsize, Font.BOLD));
+
+                t.addCell(this.createGrayCell("",1,fontsize));
+                //CONTEXT
+                String sContext = "";
+                if(appointment.getContextID().length()>0){
+                    sContext += getTran("web","context")+": "+getTran("Web.Occup", appointment.getContextID());
+                }
+                t.addCell(this.createGrayCell(sContext, 1,fontsize, Font.BOLD));
 
                 table.addCell(t);
             } catch (Exception e) {
@@ -300,7 +339,7 @@ public class PDFCalendarGenerator extends PDFBasic {
             e.printStackTrace();
         }
     }
-    public void addAppointmentRow(User user) {
+       public void addAppointmentRow(User user) {
         try {
             PdfPTable t = new PdfPTable(1);
             t.setWidthPercentage(pageWidth);

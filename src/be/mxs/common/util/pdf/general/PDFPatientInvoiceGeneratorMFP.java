@@ -136,12 +136,13 @@ public class PDFPatientInvoiceGeneratorMFP extends PDFInvoiceGenerator {
                     			for(int i=0;i<debets.size();i++){
                             		Debet debet = (Debet)debets.elementAt(i);
                             		if(debet!=null && debet.getServiceUid()!=null){
-                            			if(debet.getServiceUid()!=null && service!=null && service.code!=null && debet.getServiceUid().equalsIgnoreCase(service.code)){
+                            			if(service!=null && service.code!=null && debet.getServiceUid().equalsIgnoreCase(service.code)){
                             				hasDebets=true;
                             				break;
                             			}
                             		}
                             		else if(debet.getEncounter()!=null && debet.getEncounter().getServiceUID()!=null && debet.getEncounter().getServiceUID().equalsIgnoreCase(service.code)){
+                                		Debug.println("4");
                             			hasDebets=true;
                             			break;
                             		}
@@ -153,9 +154,9 @@ public class PDFPatientInvoiceGeneratorMFP extends PDFInvoiceGenerator {
 	                    			}
                             		Debug.println("Adding heading");
 	                                addHeading(invoice,subinvoices);
-                            		Debug.println("Adding patientdata admission");
+                            		Debug.println("Adding patientdata visit");
 	                                addPatientDataVisit(invoice,service,subinvoices,debets,insurance);
-                            		Debug.println("Adding invoice admission");
+                            		Debug.println("Adding invoice visit");
 	                                printInvoiceVisit(invoice,service,debets);
 	                        		subinvoices++;
                     			}
@@ -574,10 +575,10 @@ public class PDFPatientInvoiceGeneratorMFP extends PDFInvoiceGenerator {
 	        	cell=createLabelCell(insurance.getStatus().equalsIgnoreCase("partner")?person.lastname.toUpperCase()+", "+person.firstname+" (°"+person.dateOfBirth+")":"",40);
 	        	table.addCell(cell);
 	        	if(encounter.getCategories().equalsIgnoreCase("C")){
-		        	cell=createLabelCell(ScreenHelper.getTran("Web","recordnumber",sPrintLanguage)+": "+Pointer.getPointer("ENCOUNTER.ACCIDENT.RECORDNUMBER."+encounter.getUid()),30);
+		        	cell=createLabelCell(ScreenHelper.getTran(null,"Web","recordnumber",sPrintLanguage)+": "+Pointer.getPointer("ENCOUNTER.ACCIDENT.RECORDNUMBER."+encounter.getUid()),30);
 	        	}
 	        	else if(encounter.getCategories().equalsIgnoreCase("D")){
-		        	cell=createLabelCell(ScreenHelper.getTran("Web","insurer",sPrintLanguage)+": "+Pointer.getPointer("ENCOUNTER.ACCIDENT.INSURER."+encounter.getUid()),30);
+		        	cell=createLabelCell(ScreenHelper.getTran(null,"Web","insurer",sPrintLanguage)+": "+Pointer.getPointer("ENCOUNTER.ACCIDENT.INSURER."+encounter.getUid()),30);
 	        	}
 	        	else {
 		        	cell=createLabelCell("",30);
@@ -599,10 +600,10 @@ public class PDFPatientInvoiceGeneratorMFP extends PDFInvoiceGenerator {
 	        	cell=createLabelCell(insurance.getStatus().equalsIgnoreCase("child")?person.lastname.toUpperCase()+", "+person.firstname+" (°"+person.dateOfBirth+")":"",40);
 	        	table.addCell(cell);
 	        	if(encounter.getCategories().equalsIgnoreCase("C")){
-		        	cell=createLabelCell(ScreenHelper.getTran("Web","immatnumber",sPrintLanguage)+": "+Pointer.getPointer("ENCOUNTER.ACCIDENT.IMMAT."+encounter.getUid()),30);
+		        	cell=createLabelCell(ScreenHelper.getTran(null,"Web","immatnumber",sPrintLanguage)+": "+Pointer.getPointer("ENCOUNTER.ACCIDENT.IMMAT."+encounter.getUid()),30);
 	        	}
 	        	else if(encounter.getCategories().equalsIgnoreCase("D")){
-		        	cell=createLabelCell(ScreenHelper.getTran("Web","accidentnumber",sPrintLanguage)+": "+Pointer.getPointer("ENCOUNTER.ACCIDENT.NUMBER."+encounter.getUid()),30);
+		        	cell=createLabelCell(ScreenHelper.getTran(null,"Web","accidentnumber",sPrintLanguage)+": "+Pointer.getPointer("ENCOUNTER.ACCIDENT.NUMBER."+encounter.getUid()),30);
 	        	}
 	        	else {
 		        	cell=createLabelCell("",30);
@@ -770,10 +771,10 @@ public class PDFPatientInvoiceGeneratorMFP extends PDFInvoiceGenerator {
 	        	cell=createLabelCell(insurance.getStatus().equalsIgnoreCase("partner")?person.lastname.toUpperCase()+", "+person.firstname+" (°"+person.dateOfBirth+")":"",40);
 	        	table.addCell(cell);
 	        	if(encounter.getCategories().equalsIgnoreCase("C")){
-		        	cell=createLabelCell(ScreenHelper.getTran("Web","recordnumber",sPrintLanguage)+": "+Pointer.getPointer("ENCOUNTER.ACCIDENT.RECORDNUMBER."+encounter.getUid()),30);
+		        	cell=createLabelCell(ScreenHelper.getTran(null,"Web","recordnumber",sPrintLanguage)+": "+Pointer.getPointer("ENCOUNTER.ACCIDENT.RECORDNUMBER."+encounter.getUid()),30);
 	        	}
 	        	else if(encounter.getCategories().equalsIgnoreCase("D")){
-		        	cell=createLabelCell(ScreenHelper.getTran("Web","insurer",sPrintLanguage)+": "+Pointer.getPointer("ENCOUNTER.ACCIDENT.INSURER."+encounter.getUid()),30);
+		        	cell=createLabelCell(ScreenHelper.getTran(null,"Web","insurer",sPrintLanguage)+": "+Pointer.getPointer("ENCOUNTER.ACCIDENT.INSURER."+encounter.getUid()),30);
 	        	}
 	        	else {
 		        	cell=createLabelCell("",30);
@@ -795,10 +796,10 @@ public class PDFPatientInvoiceGeneratorMFP extends PDFInvoiceGenerator {
 	        	cell=createLabelCell(insurance.getStatus().equalsIgnoreCase("child")?person.lastname.toUpperCase()+", "+person.firstname+" (°"+person.dateOfBirth+")":"",40);
 	        	table.addCell(cell);
 	        	if(encounter.getCategories().equalsIgnoreCase("C")){
-		        	cell=createLabelCell(ScreenHelper.getTran("Web","immatnumber",sPrintLanguage)+": "+Pointer.getPointer("ENCOUNTER.ACCIDENT.IMMAT."+encounter.getUid()),30);
+		        	cell=createLabelCell(ScreenHelper.getTran(null,"Web","immatnumber",sPrintLanguage)+": "+Pointer.getPointer("ENCOUNTER.ACCIDENT.IMMAT."+encounter.getUid()),30);
 	        	}
 	        	else if(encounter.getCategories().equalsIgnoreCase("D")){
-		        	cell=createLabelCell(ScreenHelper.getTran("Web","accidentnumber",sPrintLanguage)+": "+Pointer.getPointer("ENCOUNTER.ACCIDENT.NUMBER."+encounter.getUid()),30);
+		        	cell=createLabelCell(ScreenHelper.getTran(null,"Web","accidentnumber",sPrintLanguage)+": "+Pointer.getPointer("ENCOUNTER.ACCIDENT.NUMBER."+encounter.getUid()),30);
 	        	}
 	        	else {
 		        	cell=createLabelCell("",30);
@@ -1049,7 +1050,7 @@ public class PDFPatientInvoiceGeneratorMFP extends PDFInvoiceGenerator {
             table.addCell(cell);
     		String sPrinted=getTran("web","printedby")+": "+user.person.lastname.toUpperCase()+", "+user.person.firstname+" "+ScreenHelper.fullDateFormatSS.format(new java.util.Date());
     		if(ScreenHelper.checkString(invoice.getComment()).length()>0){
-    			sPrinted+="\n\n\n"+ScreenHelper.getTran("web.finance","otherreference",sPrintLanguage)+": "+invoice.getComment();
+    			sPrinted+="\n\n\n"+ScreenHelper.getTran(null,"web.finance","otherreference",sPrintLanguage)+": "+invoice.getComment();
                 table.addCell(cell);
     		}
     		cell=createValueCell(sPrinted,50);
@@ -1079,7 +1080,7 @@ public class PDFPatientInvoiceGeneratorMFP extends PDFInvoiceGenerator {
     			signatures+=ptr.split(";")[0]+" - "+ScreenHelper.fullDateFormat.format(new SimpleDateFormat("yyyyMMddHHmmSSsss").parse(ptr.split(";")[1]));
     		}
     		if(signatures.length()>0){
-    			signatures="\n"+ScreenHelper.getTran("web.finance","signed.by",sPrintLanguage)+": "+signatures;
+    			signatures="\n"+ScreenHelper.getTran(null,"web.finance","signed.by",sPrintLanguage)+": "+signatures;
     		}
             cell=createValueCell(getTran("web","ctams.caregiver.signature")+signatures,33);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
@@ -1353,7 +1354,7 @@ public class PDFPatientInvoiceGeneratorMFP extends PDFInvoiceGenerator {
             cell=createValueCell("\n",100);
             table.addCell(cell);
     		if(ScreenHelper.checkString(invoice.getComment()).length()>0){
-    			cell=createValueCell(ScreenHelper.getTran("web.finance","otherreference",sPrintLanguage)+": "+invoice.getComment(),100);
+    			cell=createValueCell(ScreenHelper.getTran(null,"web.finance","otherreference",sPrintLanguage)+": "+invoice.getComment(),100);
                 table.addCell(cell);
     		}
             cell=createValueCell(getTran("web","printedby")+": "+user.person.lastname.toUpperCase()+", "+user.person.firstname+" "+ScreenHelper.fullDateFormatSS.format(new java.util.Date()),100);
@@ -1382,7 +1383,7 @@ public class PDFPatientInvoiceGeneratorMFP extends PDFInvoiceGenerator {
     			signatures+=ptr.split(";")[0]+" - "+ScreenHelper.fullDateFormat.format(new SimpleDateFormat("yyyyMMddHHmmSSsss").parse(ptr.split(";")[1]));
     		}
     		if(signatures.length()>0){
-    			signatures="\n"+ScreenHelper.getTran("web.finance","signed.by",sPrintLanguage)+": "+signatures;
+    			signatures="\n"+ScreenHelper.getTran(null,"web.finance","signed.by",sPrintLanguage)+": "+signatures;
     		}
             cell=createValueCell(getTran("web","ctams.caregiver.signature")+signatures,33);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);

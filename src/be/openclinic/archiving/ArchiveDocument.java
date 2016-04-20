@@ -4,8 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Types;
+import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
+
+import org.apache.pdfbox.util.operator.SetHorizontalTextScaling;
 
 import be.dpms.medwan.common.model.vo.authentication.UserVO;
 import be.mxs.common.model.vo.healthrecord.TransactionVO;
@@ -13,6 +17,7 @@ import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.system.Debug;
 import be.mxs.common.util.system.ScreenHelper;
 import be.openclinic.common.OC_Object;
+import be.openclinic.medical.RequestedLabAnalysis;
 
 public class ArchiveDocument extends OC_Object implements Comparable {
 
@@ -204,6 +209,93 @@ public class ArchiveDocument extends OC_Object implements Comparable {
 		return archDoc;
 	}
 	
+	public static ArchiveDocument saveLabDocument(boolean isNewTran, TransactionVO tran, int activeUser,String sTitle, String sDescription, String sPersonId){
+		ArchiveDocument archDoc = new ArchiveDocument();
+		String sUID = "", sUDI = "";
+
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		PreparedStatement ps = null;
+
+		if(isNewTran){
+			//*** create record ***			
+			String sSql = "INSERT INTO arch_documents (arch_document_serverid, arch_document_objectid, arch_document_udi,"+
+			              "  arch_document_title, arch_document_description, arch_document_category, arch_document_author,"+
+					      "  arch_document_date, arch_document_destination, arch_document_reference, arch_document_personid,"+
+			              "  arch_document_tran_serverid, arch_document_tran_transactionid, arch_document_storagename,"+
+					      "  arch_document_updatetime, arch_document_updateid)"+
+			              " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";			
+			try{
+				ps = conn.prepareStatement(sSql);
+				int psIdx = 1;
+
+				// IDs
+				int serverId = Integer.parseInt(MedwanQuery.getInstance().getConfigString("serverId")),
+				    objectId = MedwanQuery.getInstance().getOpenclinicCounter("ARCH_DOCUMENTS");
+				ps.setInt(psIdx++,serverId);
+				ps.setInt(psIdx++,objectId);
+				sUID = serverId+"."+objectId;
+
+				// get UDI
+				sUDI = generateUDI(objectId);
+				ps.setString(psIdx++,sUDI);
+				
+				ps.setString(psIdx++,sTitle);
+				ps.setString(psIdx++,sDescription);
+				ps.setString(psIdx++,"LABDOCUMENT");
+				ps.setString(psIdx++,"");
+				
+				// date
+				String sDate = ScreenHelper.stdDateFormat.format(new java.util.Date());
+				if(sDate.length() > 0){
+					sDate = ScreenHelper.convertToEUDate(sDate);
+				    ps.setDate(psIdx++,new java.sql.Date(ScreenHelper.parseDate(sDate).getTime()));
+				}
+				else{
+					ps.setNull(psIdx++,Types.NULL);
+				}
+				
+				ps.setString(psIdx++,"");
+				ps.setString(psIdx++,tran.getUid()+"."+sDescription);
+				
+				// personId
+				if(sPersonId.length() > 0){
+				    ps.setInt(psIdx++,Integer.parseInt(sPersonId));
+				}
+				else{
+					ps.setNull(psIdx++,Types.NULL);
+				}
+
+				// transactions' serverId and transactionId
+				ps.setInt(psIdx++,tran.getServerId());
+				ps.setInt(psIdx++,tran.getTransactionId().intValue());
+				
+				ps.setString(psIdx++,"");
+				
+				ps.setTimestamp(psIdx++,new java.sql.Timestamp(new java.util.Date().getTime())); // now
+				ps.setInt(psIdx++,activeUser);
+				
+				ps.executeUpdate();
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+			finally{
+				try{
+					if(ps!=null) ps.close();
+					if(conn!=null) conn.close();
+				}
+				catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		}
+
+		archDoc.udi = sUDI;
+		archDoc.setUid(sUID);
+		
+		return archDoc;
+	}
+	
 	//--- GET, TRHOUGH TRANSACTIONS ----------------------------------------------------------------
 	public static ArchiveDocument getThroughTransactions(String sUDI, int personId) throws Exception {
 		ArchiveDocument archDoc = null;
@@ -246,6 +338,59 @@ public class ArchiveDocument extends OC_Object implements Comparable {
 		return archDoc;		
 	}
 
+	public static ArchiveDocument getByReference(String sReference){
+		ArchiveDocument archDoc = null;
+
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		String sSql = "SELECT * FROM arch_documents"+
+		              " WHERE ARCH_DOCUMENT_REFERENCE = ?";
+		
+		try{
+			ps = conn.prepareStatement(sSql);
+			ps.setString(1,sReference);
+			rs = ps.executeQuery();
+			
+			if(rs.next()){
+				archDoc = new ArchiveDocument();
+				archDoc.setUid(rs.getInt("ARCH_DOCUMENT_SERVERID")+"."+rs.getInt("ARCH_DOCUMENT_OBJECTID"));
+				
+				archDoc.udi = ScreenHelper.checkString(rs.getString("ARCH_DOCUMENT_UDI"));
+				archDoc.title = ScreenHelper.checkString(rs.getString("ARCH_DOCUMENT_TITLE"));
+				archDoc.description = ScreenHelper.checkString(rs.getString("ARCH_DOCUMENT_DESCRIPTION"));
+				archDoc.category = ScreenHelper.checkString(rs.getString("ARCH_DOCUMENT_CATEGORY"));
+				archDoc.author = ScreenHelper.checkString(rs.getString("ARCH_DOCUMENT_AUTHOR"));
+				archDoc.date = rs.getDate("ARCH_DOCUMENT_DATE");
+				archDoc.destination = ScreenHelper.checkString(rs.getString("ARCH_DOCUMENT_DESTINATION"));
+				archDoc.reference = ScreenHelper.checkString(rs.getString("ARCH_DOCUMENT_REFERENCE"));
+				archDoc.personId = rs.getInt("ARCH_DOCUMENT_PERSONID");
+				archDoc.storageName = ScreenHelper.checkString(rs.getString("ARCH_DOCUMENT_STORAGENAME"));
+				archDoc.deleteDate = rs.getDate("ARCH_DOCUMENT_DELETEDATE");
+
+	            // link with transaction
+				archDoc.tranServerId = rs.getInt("ARCH_DOCUMENT_TRAN_SERVERID");
+				archDoc.tranTranId = rs.getInt("ARCH_DOCUMENT_TRAN_TRANSACTIONID");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		finally{
+			try{
+				if(rs!=null) rs.close();
+				if(ps!=null) ps.close();
+				if(conn!=null) conn.close();
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+		
+		return archDoc;		
+	}
+	
 	//--- GET -------------------------------------------------------------------------------------
 	public static ArchiveDocument get(String sUDI){
         return get(sUDI,false);		
@@ -564,6 +709,34 @@ public class ArchiveDocument extends OC_Object implements Comparable {
 		}	
 	}
 	
+	public static void initializeUDI(String sUDI){		
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		PreparedStatement ps = null;
+		
+		String sSql = "UPDATE arch_documents SET ARCH_DOCUMENT_STORAGENAME=''"+
+		              " WHERE ARCH_DOCUMENT_UDI = ?";
+		
+		try{
+			ps = conn.prepareStatement(sSql);
+			ps.setInt(1,Integer.parseInt(sUDI));
+			ps.executeUpdate();
+			
+			Debug.println("--> Archive-document marked as initialized : "+sUDI+" (sUDI)");
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		finally{
+			try{
+				if(ps!=null) ps.close();
+				if(conn!=null) conn.close();
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+		}	
+	}
+	
     //--- COMPARE TO ------------------------------------------------------------------------------
     public int compareTo(Object o) {
         int comp;
@@ -581,6 +754,10 @@ public class ArchiveDocument extends OC_Object implements Comparable {
     //--- SET STORAGE NAME ------------------------------------------------------------------------
     // also update linked transaction
     public static void setStorageName(String sUDI, String sStorageName){
+    	setStorageName(sUDI, sStorageName,true);
+    }
+    
+    public static void setStorageName(String sUDI, String sStorageName, boolean bUpdateTransaction){
     	if(Debug.enabled){
 	    	Debug.println("\n****************** setStorageName ********************");
 	    	Debug.println("sUDI         : "+sUDI);
@@ -602,7 +779,23 @@ public class ArchiveDocument extends OC_Object implements Comparable {
 			ps.close();
 			conn.close();
 			
-			if(recsUpdated > 0){
+			//If the scanned document is linked to a LAB request, update the corresponding labrequest analyses
+			sSql = "SELECT ARCH_DOCUMENT_REFERENCE"+
+				       " FROM arch_documents"+
+		               "  WHERE ARCH_DOCUMENT_UDI = ? and ARCH_DOCUMENT_CATEGORY='LABDOCUMENT'";	
+				ps = conn.prepareStatement(sSql);
+				ps.setString(1,sUDI);
+				rs = ps.executeQuery();
+				if(rs.next()){
+					//This document is linked to a LAB request
+					String sReference = ScreenHelper.checkString(rs.getString("ARCH_DOCUMENT_REFERENCE"));
+					RequestedLabAnalysis.setScanResultForReference(sReference);
+				}
+				rs.close();
+				ps.close();
+				conn.close();			
+			
+			if(recsUpdated > 0 && bUpdateTransaction){
 				Debug.println("--> Storagename set for archive-document with UDI '"+sUDI+"' : "+sStorageName);
 				
 				//*** 2 - get link with transaction ***

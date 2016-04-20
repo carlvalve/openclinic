@@ -514,8 +514,8 @@ public class ResultsProfile {
                 hLabProfileData.put("labcodeother",ScreenHelper.checkString(rs.getString("labcodeother")));
                 hLabProfileData.put("comment",ScreenHelper.checkString(rs.getString("comment")));
                 hLabProfileData.put("unit",ScreenHelper.checkString(rs.getString("unit")));
-                if(MedwanQuery.getInstance().getConfigInt("worklistsUseShortname",0)==1 && !ScreenHelper.getTran("labanalysis.short",(String)hLabProfileData.get("labID"),language).equals((String)hLabProfileData.get("labID"))){
-                	hLabProfileData.put("mnemonic",ScreenHelper.getTran("labanalysis.short",(String)hLabProfileData.get("labID"),language));
+                if(MedwanQuery.getInstance().getConfigInt("worklistsUseShortname",0)==1 && !ScreenHelper.getTran(null,"labanalysis.short",(String)hLabProfileData.get("labID"),language).equals((String)hLabProfileData.get("labID"))){
+                	hLabProfileData.put("mnemonic",ScreenHelper.getTran(null,"labanalysis.short",(String)hLabProfileData.get("labID"),language));
             	}
                 else {
                 	hLabProfileData.put("mnemonic",ScreenHelper.checkString(rs.getString("medidoccode")).length()>0?ScreenHelper.checkString(rs.getString("medidoccode")):(String)hLabProfileData.get("labcode"));

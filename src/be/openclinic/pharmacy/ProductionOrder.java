@@ -19,7 +19,66 @@ public class ProductionOrder extends OC_Object{
 	private java.util.Date closeDateTime;
 	private String comment;
 	private int quantity;
+	private String modifiers;
 	
+	public String getModifiers() {
+		return modifiers;
+	}
+
+	public void setModifiers(String modifiers) {
+		this.modifiers = modifiers;
+	}
+
+	public void setModifier(int index,String value){
+		if(getModifiers()==null){
+			setModifiers("");
+		}
+		String[] m = getModifiers().split(";");
+		if(m.length<=index){
+			setModifiers(getModifiers()+"; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;".substring(0,(index+1-m.length)*2));
+			m = getModifiers().split(";");
+		}
+		m[index]=value;
+		modifiers="";
+		for(int n=0;n<m.length;n++){
+			modifiers+=m[n]+";";
+		}
+	}
+
+	public String getTechnician(){
+		String s="";
+		if(getModifiers()!=null){
+			try{
+				s=getModifiers().split(";")[0];
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return s;
+	}
+
+	public void setTechnician(String s){
+		setModifier(0,s);
+	}
+
+	public String getDestination(){
+		String s="";
+		if(getModifiers()!=null){
+			try{
+				s=getModifiers().split(";")[1];
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return s;
+	}
+
+	public void setDestination(String s){
+		setModifier(1,s);
+	}
+
 	public int getQuantity() {
 		return quantity;
 	}
@@ -268,6 +327,7 @@ public class ProductionOrder extends OC_Object{
 				productionOrder.setUpdateUid(rs.getInt("OC_PRODUCTIONORDER_UPDATEUID"));
 				productionOrder.setVersion(rs.getInt("OC_PRODUCTIONORDER_VERSION"));
 				productionOrder.setComment(rs.getString("OC_PRODUCTIONORDER_COMMENT"));
+				productionOrder.setModifiers(rs.getString("OC_PRODUCTIONORDER_MODIFIERS"));
 			}
 		}
         catch(Exception e){
@@ -310,6 +370,7 @@ public class ProductionOrder extends OC_Object{
 					+ " OC_PRODUCTIONORDER_UPDATEUID,"
 					+ " OC_PRODUCTIONORDER_VERSION,"
 					+ " OC_PRODUCTIONORDER_CLOSEDATETIME,"
+					+ " OC_PRODUCTIONORDER_MODIFIERS,"
 					+ " OC_PRODUCTIONORDER_COMMENT)"
 					+ " SELECT OC_PRODUCTIONORDER_ID,"
 					+ " OC_PRODUCTIONORDER_TARGETPRODUCTSTOCKUID,"
@@ -321,6 +382,7 @@ public class ProductionOrder extends OC_Object{
 					+ " OC_PRODUCTIONORDER_UPDATEUID,"
 					+ " OC_PRODUCTIONORDER_VERSION,"
 					+ " OC_PRODUCTIONORDER_CLOSEDATETIME,"
+					+ " OC_PRODUCTIONORDER_MODIFIERS,"
 					+ " OC_PRODUCTIONORDER_COMMENT"
 					+ " FROM OC_PRODUCTIONORDERS WHERE OC_PRODUCTIONORDER_ID=?");
 			ps.setInt(1, id);
@@ -342,8 +404,9 @@ public class ProductionOrder extends OC_Object{
 					+ " OC_PRODUCTIONORDER_UPDATEUID,"
 					+ " OC_PRODUCTIONORDER_VERSION,"
 					+ " OC_PRODUCTIONORDER_CLOSEDATETIME,"
+					+ " OC_PRODUCTIONORDER_MODIFIERS,"
 					+ " OC_PRODUCTIONORDER_COMMENT)"
-					+ " VALUES(?,?,?,?,?,?,?,?,?,?,?)");
+					+ " VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
 			ps.setInt(1, id);
 			ps.setString(2, getTargetProductStockUid());
 			ps.setString(3, getDebetUid());
@@ -354,7 +417,8 @@ public class ProductionOrder extends OC_Object{
 			ps.setInt(8, getUpdateUid());
 			ps.setInt(9, getVersion());
 			ps.setTimestamp(10, getCloseDateTime()==null?null:new java.sql.Timestamp(getCloseDateTime().getTime()));
-			ps.setString(11, getComment());
+			ps.setString(11, getModifiers());
+			ps.setString(12, getComment());
 			bStored=ps.execute();
 		}
         catch(Exception e){

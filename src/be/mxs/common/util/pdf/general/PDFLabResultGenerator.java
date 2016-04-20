@@ -82,7 +82,7 @@ public class PDFLabResultGenerator extends PDFOfficialBasic {
 			e.printStackTrace();
 		}
         String sFooter=adminPerson.lastname.toUpperCase()+", "+adminPerson.firstname.toUpperCase()+" - "+sId+" - ";
-        String sFooter2=ScreenHelper.getTran("labresult", "footer", adminPerson.language);
+        String sFooter2=ScreenHelper.getTran(null,"labresult", "footer", adminPerson.language);
         Font font = FontFactory.getFont(FontFactory.HELVETICA,7);
         PDFFooter footer = new PDFFooter(sFooter+" - "+sFooter2);
         docWriter.setPageEvent(footer);

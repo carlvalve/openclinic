@@ -45,7 +45,7 @@ public class PDFHeader {
         }
         else if(sPrintLanguage.equalsIgnoreCase("F")){
             par = new Paragraph("OpenClinic ",FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)8*fontSizePercentage/100.0),Font.BOLD));
-            par.add(new Chunk(", "+ScreenHelper.getTran("pdf","header.knownas",sPrintLanguage)+" ",FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)8*fontSizePercentage/100.0),Font.NORMAL)));
+            par.add(new Chunk(", "+ScreenHelper.getTran(null,"pdf","header.knownas",sPrintLanguage)+" ",FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)8*fontSizePercentage/100.0),Font.NORMAL)));
             par.add(new Chunk("ABC123\n",FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)8*fontSizePercentage/100.0),Font.BOLD)));
             par.add(new Chunk("Pastoriestraat 58, 3370 Boutersem\n",FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)8*fontSizePercentage/100.0),Font.NORMAL)));
             par.add(new Chunk("Tél. (016) 72 10 47",FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)8*fontSizePercentage/100.0),Font.NORMAL)));
@@ -90,7 +90,7 @@ public class PDFHeader {
         }
         else if(sPrintLanguage.equalsIgnoreCase("F")){
             par = new Paragraph("OpenClinic ",FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)8*fontSizePercentage/100.0),Font.BOLD));
-            par.add(new Chunk(", "+ScreenHelper.getTran("pdf","header.knownas",sPrintLanguage)+" ",FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)8*fontSizePercentage/100.0),Font.NORMAL)));
+            par.add(new Chunk(", "+ScreenHelper.getTran(null,"pdf","header.knownas",sPrintLanguage)+" ",FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)8*fontSizePercentage/100.0),Font.NORMAL)));
             par.add(new Chunk("ABC123\n",FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)8*fontSizePercentage/100.0),Font.BOLD)));
             par.add(new Chunk("Pastoriestraat 58, 3370 Boutersem\n",FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)8*fontSizePercentage/100.0),Font.NORMAL)));
             par.add(new Chunk("Tél. (016) 72 10 47",FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)8*fontSizePercentage/100.0),Font.NORMAL)));

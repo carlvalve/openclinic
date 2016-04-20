@@ -946,6 +946,35 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
     	return getUnassignedInsurarDebets(sInsurarUid,begin,end,0);
     }
 
+    public boolean isSummarized(){
+    	boolean bSummarized = true;
+    	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try{
+        	ps=conn.prepareStatement("select * from OC_SUMMARYINVOICES a,OC_SUMMARYINVOICEITEMS b where OC_ITEM_PATIENTINVOICEUID=?"
+        			+ " and OC_SUMMARYINVOICE_OBJECTID=replace(OC_ITEM_SUMMARYINVOICEUID,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','')"
+        			+ " and OC_SUMMARYINVOICE_VALIDATED='validated'");
+        	ps.setString(1, this.getPatientInvoiceUid());
+        	rs=ps.executeQuery();
+        	bSummarized=rs.next();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                conn.close();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return bSummarized;
+    }
+    
     public static Vector getUnassignedInsurarDebets(String sInsurarUid, Date begin, Date end, int limit) {
         String sSelect = "";
         Insurar insurar = Insurar.get(sInsurarUid);
@@ -1131,7 +1160,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                         + " AND d.OC_DEBET_CREDITED=0"
                         + " AND " + MedwanQuery.getInstance().convert("int", "replace(d.OC_DEBET_INSURANCEUID,'" + serverid + "','')") + " = i.oc_insurance_objectid"
                         + " AND " + MedwanQuery.getInstance().convert("int", "replace(d.OC_DEBET_ENCOUNTERUID,'" + serverid + "','')") + " = e.oc_encounter_objectid"
-                        + " AND d.OC_DEBET_PATIENTINVOICEUID='"+serverid+"'"+MedwanQuery.getInstance().concatSign()+"v.OC_PATIENTINVOICE_OBJECTID"
+                        + " AND d.OC_DEBET_PATIENTINVOICEUID='"+serverid+"'"+MedwanQuery.getInstance().concatSign()+MedwanQuery.getInstance().convert("varchar","v.OC_PATIENTINVOICE_OBJECTID")
                         + " AND v.OC_PATIENTINVOICE_ACCEPTATIONUID IS NOT NULL AND v.OC_PATIENTINVOICE_ACCEPTATIONUID<>''"
                         + " AND (d.OC_DEBET_INSURARINVOICEUID = ' ' or d.OC_DEBET_INSURARINVOICEUID is null)"
                         + " AND v.OC_PATIENTINVOICE_DATE>=?"
@@ -3164,7 +3193,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
 	        Prestation prestation = Prestation.get(prestationUid);
 	        double dPatientAmount=0,dInsurarAmount=0,dExtraInsurarAmount=0,dExtraInsurarAmount2=0;
 			InsuranceRule rule = insurance==null?null:Prestation.getInsuranceRule(prestationUid, insurance.getInsurarUid());
-	        if(!Prestation.checkMaximumReached(personid, rule, quantity) && encounter!=null && prestation!=null && insurance!=null && insurance.getInsurar()!=null && prestation.isVisibleFor(insurance.getInsurar())){
+	        if(!Prestation.checkMaximumReached(personid, rule, quantity) && encounter!=null && prestation!=null && insurance!=null && insurance.getInsurar()!=null && prestation.isVisibleFor(insurance.getInsurar(),encounter.getService())){
 		        if (insurance != null) {
 		            type = insurance.getType();
 		            if (prestation != null) {

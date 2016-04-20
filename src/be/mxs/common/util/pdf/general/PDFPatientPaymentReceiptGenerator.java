@@ -98,7 +98,7 @@ public class PDFPatientPaymentReceiptGenerator extends PDFInvoiceGenerator {
 			if(receiptid>=MedwanQuery.getInstance().getConfigInt("maximumNumberOfReceipts",10000)){
 				MedwanQuery.getInstance().setOpenclinicCounter("RECEIPT",0);
 			}
-	        cell = createBorderlessCell(receiptid+" - "+ScreenHelper.getTran("web","receiptforpayment",sPrintLanguage).toUpperCase()+" "+credit.getUid().split("\\.")[1],10, 50,new Double(8*scaleFactor).intValue());
+	        cell = createBorderlessCell(receiptid+" - "+ScreenHelper.getTran(null,"web","receiptforpayment",sPrintLanguage).toUpperCase()+" "+credit.getUid().split("\\.")[1],10, 50,new Double(8*scaleFactor).intValue());
 	        cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
 	        cell.setPadding(2);
 	        table.addCell(cell);
@@ -108,7 +108,7 @@ public class PDFPatientPaymentReceiptGenerator extends PDFInvoiceGenerator {
 	        table.addCell(cell);
 
 	        //Patient
-	        cell = createValueCell(ScreenHelper.getTran("web","patient",sPrintLanguage)+":", 15,new Double(7*scaleFactor).intValue(),Font.NORMAL);
+	        cell = createValueCell(ScreenHelper.getTran(null,"web","patient",sPrintLanguage)+":", 15,new Double(7*scaleFactor).intValue(),Font.NORMAL);
 	        cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
 	        table.addCell(cell);
 	        cell = createBoldLabelCell(credit.getPatient().lastname.toUpperCase()+", "+credit.getPatient().firstname, 35,new Double(7*scaleFactor).intValue());
@@ -124,13 +124,13 @@ public class PDFPatientPaymentReceiptGenerator extends PDFInvoiceGenerator {
 	        cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 	        table.addCell(cell);
 
-	        cell = createUnderlinedTextCell(ScreenHelper.getTran("web","payments",sPrintLanguage), 40,new Double(7*scaleFactor).intValue());
+	        cell = createUnderlinedTextCell(ScreenHelper.getTran(null,"web","payments",sPrintLanguage), 40,new Double(7*scaleFactor).intValue());
 	        cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
 	        table.addCell(cell);
-	        cell = createUnderlinedTextCell(ScreenHelper.getTran("web","amount",sPrintLanguage), 10,new Double(7*scaleFactor).intValue());
+	        cell = createUnderlinedTextCell(ScreenHelper.getTran(null,"web","amount",sPrintLanguage), 10,new Double(7*scaleFactor).intValue());
 	        cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 	        table.addCell(cell);
-            cell = createValueCell(ScreenHelper.getTran("credit.type", credit.getType(),sPrintLanguage), 40,new Double(7*scaleFactor).intValue(),Font.NORMAL);
+            cell = createValueCell(ScreenHelper.getTran(null,"credit.type", credit.getType(),sPrintLanguage), 40,new Double(7*scaleFactor).intValue(),Font.NORMAL);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
             table.addCell(cell);
             cell = createValueCell(priceFormat.format(credit.getAmount()), 10,new Double(7*scaleFactor).intValue(),Font.NORMAL);
@@ -162,7 +162,7 @@ public class PDFPatientPaymentReceiptGenerator extends PDFInvoiceGenerator {
 	        cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
 	        table.addCell(cell);
 	
-	        cell = createValueCell(ScreenHelper.getTran("web","thankyou",sPrintLanguage), 10,new Double(7*scaleFactor).intValue(),Font.NORMAL);
+	        cell = createValueCell(ScreenHelper.getTran(null,"web","thankyou",sPrintLanguage), 10,new Double(7*scaleFactor).intValue(),Font.NORMAL);
 	        cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 	        table.addCell(cell);
 

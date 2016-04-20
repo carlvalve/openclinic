@@ -198,7 +198,7 @@ public class PDFStockOperationDocumentGenerator extends PDFOfficialBasic {
 
         try{
         	// title
-        	cell = createHeaderCell(ScreenHelper.getTran("operationdocumenttypes",document.getType(),sPrintLanguage).toUpperCase(),80,20);
+        	cell = createHeaderCell(ScreenHelper.getTran(null,"operationdocumenttypes",document.getType(),sPrintLanguage).toUpperCase(),80,20);
         	cell.setPaddingBottom(5);
         	table.addCell(cell);
         	cell = createHeaderCell(dateformat.format(document.getDate()),20,10);

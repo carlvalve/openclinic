@@ -66,11 +66,32 @@ public class ScreenHelper {
     	s+="<tr><td><img src='"+sContextPath+"/_img/themes/default/canvas_blue.png' width='14px' onclick='canvasSetColor(\"blue\")'/></td></tr>";
     	s+="<tr><td><img src='"+sContextPath+"/_img/themes/default/canvas_yellow.png' width='14px' onclick='canvasSetColor(\"yellow\")'/></td></tr>";
     	s+="<tr><td><img src='"+sContextPath+"/_img/themes/default/canvas_green.png' width='14px' onclick='canvasSetColor(\"green\")'/></td></tr>";
-    	s+="</table></td></table>";
+    	s+="</table></td></tr></table>";
     	s+="<input type='hidden' name='drawingContent' id='drawingContent'/>";
     	s+="<input type='hidden' name='currentTransactionVO.items.<ItemVO[hashCode="+tran.getItem(itemtype).hashCode()+"]>.value' value='drawingContent'/>";
     	s+="<script>";
     	String sDrawing=ScreenHelper.getDrawing(tran.getServerId(),tran.getTransactionId(),itemtype);
+    	if(sDrawing.length()<10){
+    		s+="context = initCanvas('canvasDiv',100,100,'"+sContextPath+image+"');";
+    	}
+    	else {
+    		s+="context = initCanvas('canvasDiv',100,100,'"+sDrawing+"');";
+    	}
+    	s+="</script>";
+    	return s;
+    }
+    
+    public static String createSignatureDiv(HttpServletRequest request,String name, String fieldname,String documentuid, String image){
+    	String sContextPath=request.getRequestURI().replaceAll(request.getServletPath(),"");
+    	String s = "<script src='"+sContextPath+"/_common/_script/canvas.js'></script>";
+    	s+="<table cellspacing='0' cellpadding='0'>";
+    	s+="<tr><td>";
+    	s+="<div id='"+name+"' onmouseover='this.style.cursor=\"hand\"'></div>";
+    	s+="</td></tr></table>";
+    	s+="<input type='hidden' name='drawingContent' id='drawingContent'/>";
+    	s+="<input type='hidden' name='"+fieldname+"' value='drawingContent'/>";
+    	s+="<script>";
+    	String sDrawing=ScreenHelper.getDrawing(Integer.parseInt(documentuid.split("\\.")[0]),Integer.parseInt(documentuid.split("\\.")[1]),documentuid.split("\\.")[2]);
     	if(sDrawing.length()<10){
     		s+="context = initCanvas('canvasDiv',100,100,'"+sContextPath+image+"');";
     	}
@@ -394,7 +415,7 @@ public class ScreenHelper {
 
     //--- GET LABEL -------------------------------------------------------------------------------
     public static String getLabel(String sType, String sID, String sLanguage, String sObject){
-        return "<label for='"+sObject+"'>"+getTran(sType,sID,sLanguage)+"</label>";
+        return "<label for='"+sObject+"'>"+getTran(null,sType,sID,sLanguage)+"</label>";
     }
     
     //--- LEFT ------------------------------------------------------------------------------------
@@ -492,10 +513,14 @@ public class ScreenHelper {
 
     //--- GET TRAN --------------------------------------------------------------------------------
     public static String getTran(String sType, String sID, String sLanguage){
-        return getTran(sType,sID,sLanguage,false);
+        return getTran(null,sType,sID,sLanguage,false);
     }
 
-    public static String getTran(String sType, String sID, String sLanguage, boolean displaySimplePopup){
+    public static String getTran(HttpServletRequest request,String sType, String sID, String sLanguage){
+        return getTran(request,sType,sID,sLanguage,false);
+    }
+
+    public static String getTran(HttpServletRequest request,String sType, String sID, String sLanguage, boolean displaySimplePopup){
         String labelValue = "";
 
         try{
@@ -578,13 +603,17 @@ public class ScreenHelper {
                 }
 
                 labelValue = label.value;
-
+                
                 // display link to label
                 if(labelValue==null || labelValue.trim().length()==0){
                     if(label.showLink==null || label.showLink.equals("1")){
                         String url = "system/"+(displaySimplePopup?"manageTranslationsPopupSimple":"manageTranslationsPopup")+".jsp&EditOldLabelID="+sID+"&EditOldLabelType="+sType+"&EditOldLabelLang="+sLanguage+"&Action=Select";
                         return "<a href='#' onClick=javascript:openPopup('"+url+"');>"+sID+"</a>"; // onclick without parenthesis
                     }
+                }
+                else if(request!=null && request.getSession().getAttribute("editmode")!=null && ((String)request.getSession().getAttribute("editmode")).equalsIgnoreCase("1")){
+                    String url = "system/"+(displaySimplePopup?"manageTranslationsPopupSimple":"manageTranslationsPopup")+".jsp&EditOldLabelID="+sID+"&EditOldLabelType="+sType+"&EditOldLabelLang="+sLanguage+"&Action=Select&Mode=mini";
+                    return "<span style='cursor: pointer;color: white;background-color: black;font-weight: bold' onclick=\"openPopup('"+url+"',700,100,'Edit');return false;\">"+(labelValue.length()>0?labelValue.substring(0, 1):"")+"</span>"+(labelValue.length()>1?labelValue.substring(1):""); // onclick without parenthesis
                 }
             }
         }
@@ -1118,19 +1147,19 @@ public static String removeAccents(String sTest){
 
     //--- SET ROW ---------------------------------------------------------------------------------
     public static String setRow(String sType, String sID, String sValue, String sLanguage){
-        return "<tr><td class='admin'>"+getTran(sType,sID,sLanguage)+"</td><td class='admin2'>"+sValue+"</td></tr>";
+        return "<tr><td class='admin'>"+getTran(null,sType,sID,sLanguage)+"</td><td class='admin2'>"+sValue+"</td></tr>";
     }
 
     //--- SET ADMIN PRIVATE CONTACT ---------------------------------------------------------------
     public static String setMaliAdminPrivateContact(AdminPrivateContact apc, String sLanguage){
         String sCountry = "&nbsp;";
         if(checkString(apc.country).trim().length() > 0){
-            sCountry = getTran("Country",apc.country,sLanguage);
+            sCountry = getTran(null,"Country",apc.country,sLanguage);
         }
 
         String sProvince = "&nbsp;";
         if(checkString(apc.province).trim().length() > 0){
-            sProvince = getTran("province",apc.province,sLanguage);
+            sProvince = getTran(null,"province",apc.province,sLanguage);
         }
         
         return(
@@ -1155,12 +1184,12 @@ public static String removeAccents(String sTest){
     public static String setCameroonAdminPrivateContact(AdminPrivateContact apc, String sLanguage){
         String sCountry = "&nbsp;";
         if(checkString(apc.country).trim().length()>0){
-            sCountry = getTran("Country",apc.country,sLanguage);
+            sCountry = getTran(null,"Country",apc.country,sLanguage);
         }
 
         String sProvince = "&nbsp;";
         if(checkString(apc.province).trim().length()>0){
-            sProvince = getTran("province",apc.province,sLanguage);
+            sProvince = getTran(null,"province",apc.province,sLanguage);
         }
         
         return(
@@ -1185,12 +1214,12 @@ public static String removeAccents(String sTest){
     public static String setOpenclinicAdminPrivateContact(AdminPrivateContact apc, String sLanguage){
         String sCountry = "&nbsp;";
         if(checkString(apc.country).trim().length()>0){
-            sCountry = getTran("Country",apc.country,sLanguage);
+            sCountry = getTran(null,"Country",apc.country,sLanguage);
         }
 
         String sProvince = "&nbsp;";
         if(checkString(apc.province).trim().length()>0){
-            sProvince = getTran("province",apc.province,sLanguage);
+            sProvince = getTran(null,"province",apc.province,sLanguage);
         }
         
         return(
@@ -1216,12 +1245,12 @@ public static String removeAccents(String sTest){
     public static String setAdminPrivateContact(AdminPrivateContact apc, String sLanguage){
         String sCountry = "&nbsp;";
         if(checkString(apc.country).trim().length()>0){
-            sCountry = getTran("Country",apc.country,sLanguage);
+            sCountry = getTran(null,"Country",apc.country,sLanguage);
         }
 
         String sProvince = "&nbsp;";
         if(checkString(apc.province).trim().length()>0){
-            sProvince = getTran("province",apc.province,sLanguage);
+            sProvince = getTran(null,"province",apc.province,sLanguage);
         }
         
         if(MedwanQuery.getInstance().getConfigInt("cnarEnabled",0)==1){
@@ -1263,12 +1292,12 @@ public static String removeAccents(String sTest){
     public static String setAdminPrivateContactBurundi(AdminPrivateContact apc, String sLanguage){
         String sCountry = "&nbsp;";
         if(checkString(apc.country).trim().length()>0){
-            sCountry = getTran("Country",apc.country,sLanguage);
+            sCountry = getTran(null,"Country",apc.country,sLanguage);
         }
 
         String sProvince = "&nbsp;";
         if(checkString(apc.province).trim().length()>0){
-            sProvince = getTran("province",apc.province,sLanguage);
+            sProvince = getTran(null,"province",apc.province,sLanguage);
         }
         
         return(
@@ -1293,12 +1322,12 @@ public static String removeAccents(String sTest){
     public static String setAdminPrivateContactCDO(AdminPrivateContact apc, String sLanguage){
         String sCountry = "&nbsp;";
         if(checkString(apc.country).trim().length()>0){
-            sCountry = getTran("Country",apc.country,sLanguage);
+            sCountry = getTran(null,"Country",apc.country,sLanguage);
         }
 
         String sProvince = "&nbsp;";
         if(checkString(apc.province).trim().length()>0){
-            sProvince = getTran("province",apc.province,sLanguage);
+            sProvince = getTran(null,"province",apc.province,sLanguage);
         }
         
         return(
@@ -1327,8 +1356,8 @@ public static String removeAccents(String sTest){
         }
 
         // datefield that ALSO accepts just a year
-        return "<input type='text' maxlength='10' class='text' id='"+sName+"' name='"+sName+"' value='"+sValue+"' size='12' onblur='if(!checkDateOnlyYearAllowed(this)){dateError(this);this.value=\"\";}'>" +"&nbsp;<img name='popcal' style='vertical-align:-1px;' onclick='gfPop"+gfPopType+".fPopCalendar(document."+sForm+"."+sName+");return false;' src='"+sCONTEXTDIR+"/_img/icons/icon_agenda.gif' alt='"+HTMLEntities.htmlentities(getTran("Web","Select",sWebLanguage))+"'></a>"+
-               "&nbsp;<img name='popcal' style='vertical-align:-1px;' onclick='gfPop"+gfPopType+".fPopCalendar(document."+sForm+"."+sName+");return false;' src='"+sCONTEXTDIR+"/_img/icons/icon_agenda.gif' alt='"+HTMLEntities.htmlentities(getTran("Web","Select",sWebLanguage))+"'></a>"+
+        return "<input type='text' maxlength='10' class='text' id='"+sName+"' name='"+sName+"' value='"+sValue+"' size='12' onblur='if(!checkDateOnlyYearAllowed(this)){dateError(this);this.value=\"\";}'>" +"&nbsp;<img name='popcal' style='vertical-align:-1px;' onclick='gfPop"+gfPopType+".fPopCalendar(document."+sForm+"."+sName+");return false;' src='"+sCONTEXTDIR+"/_img/icons/icon_agenda.gif' alt='"+HTMLEntities.htmlentities(getTran(null,"Web","Select",sWebLanguage))+"'></a>"+
+               "&nbsp;<img name='popcal' style='vertical-align:-1px;' onclick='gfPop"+gfPopType+".fPopCalendar(document."+sForm+"."+sName+");return false;' src='"+sCONTEXTDIR+"/_img/icons/icon_agenda.gif' alt='"+HTMLEntities.htmlentities(getTran(null,"Web","Select",sWebLanguage))+"'></a>"+
                "&nbsp;<img class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_compose.gif' alt='"+getTranNoLink("Web","PutToday",sWebLanguage)+"' onclick='getToday(document."+sForm+"."+sName+");'>";
     }
 
@@ -1355,7 +1384,7 @@ public static String removeAccents(String sTest){
         }
         
         return "<input type='text' maxlength='10' class='text' id='"+sName+"' name='"+sName+"' value='"+sValue+"' size='12' onblur='if(!checkDate(this)"+sExtraCondition+"){dateError(this);}else{"+sExtraOnBlur+"}'>"+
-               "&nbsp;<img name='popcal' style='vertical-align:-1px;' onclick='gfPop"+gfPopType+".fPopCalendar(document."+sForm+"."+sName+");return false;' src='"+sCONTEXTDIR+"/_img/icons/icon_agenda.gif' alt='"+HTMLEntities.htmlentities(getTran("Web","Select",sWebLanguage))+"'></a>"+
+               "&nbsp;<img name='popcal' style='vertical-align:-1px;' onclick='gfPop"+gfPopType+".fPopCalendar(document."+sForm+"."+sName+");return false;' src='"+sCONTEXTDIR+"/_img/icons/icon_agenda.gif' alt='"+HTMLEntities.htmlentities(getTran(null,"Web","Select",sWebLanguage))+"'></a>"+
                "&nbsp;<img class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_compose.gif' alt='"+getTranNoLink("Web","PutToday",sWebLanguage)+"' onclick='getToday(document."+sForm+"."+sName+");'>";
     }
     
@@ -1382,7 +1411,7 @@ public static String removeAccents(String sTest){
         }
         
         return "<input type='text' maxlength='10' class='text' id='"+sName+"' name='"+sName+"' value='"+sValue+"' size='12' onblur='if(!checkDate(this)"+sExtraCondition+"){dateError(this);}else{"+sExtraOnBlur+"}'>"
-              +"&nbsp;<img name='popcal' style='vertical-align:-1px;' onclick='gfPop"+gfPopType+".fPopCalendar(document."+sForm+"."+sName+");return false;' src='"+sCONTEXTDIR+"/_img/icons/icon_agenda.gif' alt='"+HTMLEntities.htmlentities(getTran("Web","Select",sWebLanguage))+"'></a>"
+              +"&nbsp;<img name='popcal' style='vertical-align:-1px;' onclick='gfPop"+gfPopType+".fPopCalendar(document."+sForm+"."+sName+");return false;' src='"+sCONTEXTDIR+"/_img/icons/icon_agenda.gif' alt='"+HTMLEntities.htmlentities(getTran(null,"Web","Select",sWebLanguage))+"'></a>"
               +"&nbsp;<img class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_compose.gif' alt='"+getTranNoLink("web","PutToday",sWebLanguage)+"' onclick='getToday(document."+sForm+"."+sName+");'>"
               +"&nbsp;<img class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_delete.gif' alt='"+getTranNoLink("web","clear",sWebLanguage)+"' onclick=\"document."+sForm+"."+sName+".value='';\">";
     }
@@ -1390,31 +1419,31 @@ public static String removeAccents(String sTest){
     //--- NEW WRITE DATE TIME FIELD ---------------------------------------------------------------
     public static String newWriteDateTimeField(String sName, java.util.Date dValue, String sWebLanguage, String sCONTEXTDIR){
         return "<input id='"+sName+"' type='text' maxlength='10' class='text' name='"+sName+"' value='"+getSQLDate(dValue)+"' size='12' onblur='if(!checkDate(this)){dateError(this);this.value=\"\";}'>"
-              +"&nbsp;<img name='popcal' class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_agenda.gif' alt='"+HTMLEntities.htmlentities(getTran("Web","Select",sWebLanguage))+"' onclick='gfPop1.fPopCalendar($(\""+sName+"\"));return false;'>"
-              +"&nbsp;<img class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_compose.gif' alt='"+HTMLEntities.htmlentities(getTran("Web","putToday",sWebLanguage))+"' onclick=\"putTime($('"+sName+"Time'));getToday($('"+sName+"'));\">"
+              +"&nbsp;<img name='popcal' class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_agenda.gif' alt='"+HTMLEntities.htmlentities(getTran(null,"Web","Select",sWebLanguage))+"' onclick='gfPop1.fPopCalendar($(\""+sName+"\"));return false;'>"
+              +"&nbsp;<img class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_compose.gif' alt='"+HTMLEntities.htmlentities(getTran(null,"Web","putToday",sWebLanguage))+"' onclick=\"putTime($('"+sName+"Time'));getToday($('"+sName+"'));\">"
               +"&nbsp;"+writeTimeField(sName+"Time", formatSQLDate(dValue, "HH:mm"))
-              +"&nbsp;"+getTran("web.occup", "medwan.common.hour", sWebLanguage);
+              +"&nbsp;"+getTran(null,"web.occup", "medwan.common.hour", sWebLanguage);
     }
     
     //--- NEW WRITE DATE TIME FIELD ---------------------------------------------------------------
     public static String newWriteDateField(String sName, java.util.Date dValue, String sWebLanguage, String sCONTEXTDIR){
         return "<input id='"+sName+"' type='text' maxlength='10' class='text' name='"+sName+"' value='"+getSQLDate(dValue)+"' size='12' onblur='if(!checkDate(this)){dateError(this);this.value=\"\";}'>"
-              +"&nbsp;<img name='popcal' class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_agenda.gif' alt='"+HTMLEntities.htmlentities(getTran("Web","Select",sWebLanguage))+"' onclick='gfPop1.fPopCalendar($(\""+sName+"\"));return false;'>"
-              +"&nbsp;<img class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_compose.gif' alt='"+HTMLEntities.htmlentities(getTran("Web","putToday",sWebLanguage))+"' onclick=\"getToday($('"+sName+"'));\">";
+              +"&nbsp;<img name='popcal' class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_agenda.gif' alt='"+HTMLEntities.htmlentities(getTran(null,"Web","Select",sWebLanguage))+"' onclick='gfPop1.fPopCalendar($(\""+sName+"\"));return false;'>"
+              +"&nbsp;<img class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_compose.gif' alt='"+HTMLEntities.htmlentities(getTran(null,"Web","putToday",sWebLanguage))+"' onclick=\"getToday($('"+sName+"'));\">";
     }
     
     //--- NEW WRITE DATE TIME FIELD ---------------------------------------------------------------
     public static String newWriteDateField(String sName, java.util.Date dValue, String sWebLanguage, String sCONTEXTDIR, String onBlur){
         return "<input id='"+sName+"' type='text' maxlength='10' class='text' name='"+sName+"' value='"+getSQLDate(dValue)+"' size='12' onblur='if(!checkDate(this)){dateError(this);this.value=\"\";};"+onBlur+"' onfocus='"+onBlur+"'>"
-              +"&nbsp;<img name='popcal' class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_agenda.gif' alt='"+HTMLEntities.htmlentities(getTran("Web","Select",sWebLanguage))+"' onclick='gfPop1.fPopCalendar($(\""+sName+"\"));return false;'>"
-              +"&nbsp;<img class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_compose.gif' alt='"+HTMLEntities.htmlentities(getTran("Web","putToday",sWebLanguage))+"' onclick=\"getToday($('"+sName+"'));\">";
+              +"&nbsp;<img name='popcal' class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_agenda.gif' alt='"+HTMLEntities.htmlentities(getTran(null,"Web","Select",sWebLanguage))+"' onclick='gfPop1.fPopCalendar($(\""+sName+"\"));return false;'>"
+              +"&nbsp;<img class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_compose.gif' alt='"+HTMLEntities.htmlentities(getTran(null,"Web","putToday",sWebLanguage))+"' onclick=\"getToday($('"+sName+"'));\">";
     }
     
     //--- PLANNING DATE TIME FIELD ----------------------------------------------------------------
     public static String planningDateTimeField(String sName, String dValue, String sWebLanguage, String sCONTEXTDIR){
         return "<input id='"+sName+"' type='text' maxlength='10' class='text' name='"+sName+"' value='"+dValue+"' size='12' onblur='if(!checkDate(this)){dateError(this);this.value=\"\";}'>"
-              +"&nbsp;<img name='popcal' class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_agenda.gif' alt='"+HTMLEntities.htmlentities(getTran("Web","Select",sWebLanguage))+"' onclick='gfPop1.fPopCalendar($(\""+sName+"\"));return false;'>"
-              +"&nbsp;<img class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_compose.gif' alt='"+HTMLEntities.htmlentities(getTran("Web","putToday",sWebLanguage))+"' onclick=\"getToday($('"+sName+"'));\">";
+              +"&nbsp;<img name='popcal' class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_agenda.gif' alt='"+HTMLEntities.htmlentities(getTran(null,"Web","Select",sWebLanguage))+"' onclick='gfPop1.fPopCalendar($(\""+sName+"\"));return false;'>"
+              +"&nbsp;<img class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_compose.gif' alt='"+HTMLEntities.htmlentities(getTran(null,"Web","putToday",sWebLanguage))+"' onclick=\"getToday($('"+sName+"'));\">";
     }
     
     //--- WRITE DATEE FIELD WITHOUT TODAY ---------------------------------------------------------
@@ -1430,7 +1459,7 @@ public static String removeAccents(String sTest){
         }
 
         return "<input type='text' maxlength='10' class='text' id='"+sName+"' name='"+sName+"' value='"+sValue+"' size='12' onblur='if(!checkDate(this)){dateError(this);this.value=\"\";}'>"
-              +"&nbsp;<img name='popcal' style='vertical-align:-1px;' onclick='gfPop"+gfPopType+".fPopCalendar(document."+sForm+"."+sName+");return false;' src='"+sCONTEXTDIR+"/_img/icons/icon_agenda.gif' alt='"+HTMLEntities.htmlentities(getTran("Web","Select",sWebLanguage))+"'></a>";
+              +"&nbsp;<img name='popcal' style='vertical-align:-1px;' onclick='gfPop"+gfPopType+".fPopCalendar(document."+sForm+"."+sName+");return false;' src='"+sCONTEXTDIR+"/_img/icons/icon_agenda.gif' alt='"+HTMLEntities.htmlentities(getTran(null,"Web","Select",sWebLanguage))+"'></a>";
     }
 
     //--- CHECK PERMISSION ------------------------------------------------------------------------
@@ -1581,7 +1610,7 @@ public static String removeAccents(String sTest){
 		        		ps.setString(3,sPrestationClass);
 		        		ResultSet rs = ps.executeQuery();
 		        		if(!rs.next()){
-		        			sMessage = getTranNoLink("web","noactiveprestationclass",activeUser.person.language)+" `"+getTran("prestation.class",sPrestationClass,activeUser.person.language)+"`";
+		        			sMessage = getTranNoLink("web","noactiveprestationclass",activeUser.person.language)+" `"+getTran(null,"prestation.class",sPrestationClass,activeUser.person.language)+"`";
 		        		}
 		        		rs.close();
 		        		ps.close();
@@ -1616,7 +1645,7 @@ public static String removeAccents(String sTest){
 			}
         }
         else if (transaction.getTransactionId()<0 && MedwanQuery.getInstance().getConfigInt("activateOutpatientConsultationPrestationCheck",0)==1 && sPrestationClass.length()>0){
-			sMessage = getTranNoLink("web","noactiveprestationclass",activeUser.person.language)+" `"+getTran("prestation.class",sPrestationClass,activeUser.person.language)+"`";
+			sMessage = getTranNoLink("web","noactiveprestationclass",activeUser.person.language)+" `"+getTran(null,"prestation.class",sPrestationClass,activeUser.person.language)+"`";
             jsAlert = "<script>"+(screenIsPopup?"window.close();":"window.history.go(-1);")+
                     "var popupUrl = '"+sAPPFULLDIR+"/_common/search/okPopup.jsp?ts="+getTs()+"&labelValue="+sMessage;
 
@@ -1669,21 +1698,21 @@ public static String removeAccents(String sTest){
     }
 
     //--- WRITE SELECT (SORTED) -------------------------------------------------------------------
-    public static String writeSelect(String sLabelType, String sSelected,String sWebLanguage){
-        return writeSelect(sLabelType,sSelected,sWebLanguage,false,true);
+    public static String writeSelect(HttpServletRequest request,String sLabelType, String sSelected,String sWebLanguage){
+        return writeSelect(request,sLabelType,sSelected,sWebLanguage,false,true);
     }
 
-    public static String writeSelect(String sLabelType, String sSelected,String sWebLanguage, boolean showLabelID){
-        return writeSelect(sLabelType,sSelected,sWebLanguage,showLabelID,true);
+    public static String writeSelect(HttpServletRequest request,String sLabelType, String sSelected,String sWebLanguage, boolean showLabelID){
+        return writeSelect(request,sLabelType,sSelected,sWebLanguage,showLabelID,true);
     }
 
     //--- WRITE SELECT UNSORTED -------------------------------------------------------------------
-    public static String writeSelectUnsorted(String sLabelType, String sSelected, String sWebLanguage){
-        return writeSelect(sLabelType,sSelected,sWebLanguage,false,false);
+    public static String writeSelectUnsorted(HttpServletRequest request,String sLabelType, String sSelected, String sWebLanguage){
+        return writeSelect(request,sLabelType,sSelected,sWebLanguage,false,false);
     }
 
     //--- WRITE SELECT ----------------------------------------------------------------------------
-    public static String writeSelect(String sLabelType, String sSelected, String sWebLanguage, boolean showLabelID, boolean sorted){
+    public static String writeSelect(HttpServletRequest request,String sLabelType, String sSelected, String sWebLanguage, boolean showLabelID, boolean sorted){
         String sOptions = "";
         Label label;
         Iterator it;
@@ -1743,6 +1772,15 @@ public static String removeAccents(String sTest){
                     }
                 }
             }
+        }
+        if(request!=null && checkString((String)request.getSession().getAttribute("editmode")).equalsIgnoreCase("1")){
+        	String optionUid = sLabelType+"."+new SimpleDateFormat("mmssSSS").format(new java.util.Date());
+        	sOptions+="<option style='display: none' id='"+optionUid+"'>test</option>";
+        	sOptions+="<script>";
+        	sOptions+="myselect=document.getElementById('"+optionUid+"').parentElement;";
+        	sOptions+="myselect.style='border:2px solid black; border-style: dotted';";
+        	sOptions+="myselect.onclick=function(){window.open('"+request.getRequestURI().replaceAll(request.getServletPath(),"")+"/popup.jsp?Page=system/manageTranslations.jsp&FindLabelType="+sLabelType+"&find=1','popup','toolbar=no,status=yes,scrollbars=yes,resizable=yes,width=800,height=500,menubar=no');return false;};";
+        	sOptions+="</script>";
         }
 
         return sOptions;
@@ -3107,7 +3145,7 @@ public static String removeAccents(String sTest){
               +"&nbsp;<img name='popcal' class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_agenda.gif' alt='"+getTranNoLink("Web","Select",sWebLanguage)+"' onclick='gfPop1.fPopCalendar(document.getElementsByName(\""+sName+"\")[0]);return false;'>"
               +"&nbsp;<img class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_compose.gif' alt='"+getTranNoLink("Web","PutToday",sWebLanguage)+"' onclick=\"getToday(document.getElementsByName('"+sName+"')[0]);getTime(document.getElementsByName('"+sName+"Time')[0])\">"
               +"&nbsp;"+writeTimeField(sName+"Time", formatSQLDate(dValue,"HH:mm"))
-              +"&nbsp;"+getTran("web.occup","medwan.common.hour",sWebLanguage);
+              +"&nbsp;"+getTran(null,"web.occup","medwan.common.hour",sWebLanguage);
     }
 
     //--- WRITE DATE TIME FIELD -------------------------------------------------------------------
@@ -3117,7 +3155,7 @@ public static String removeAccents(String sTest){
               +"&nbsp;<img name='popcal' class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_agenda.gif' alt='"+getTranNoLink("Web","Select",sWebLanguage)+"' onclick='gfPop1.fPopCalendar(document.getElementsByName(\""+sName+"\")[0]);return false;'>"
               +"&nbsp;<img class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_compose.gif' alt='"+getTranNoLink("Web","PutToday",sWebLanguage)+"' onclick=\"getToday(document.getElementsByName('"+sName+"')[0]);getTime(document.getElementsByName('"+sName+"Time')[0])\">"
               +"&nbsp;"+writeTimeField(sName+"Time", formatSQLDate(dValue,"HH:mm"),code)
-              +"&nbsp;"+getTran("web.occup","medwan.common.hour",sWebLanguage);
+              +"&nbsp;"+getTran(null,"web.occup","medwan.common.hour",sWebLanguage);
     }
 
     //--- GET SQL TIME ----------------------------------------------------------------------------
@@ -3448,6 +3486,15 @@ public static String removeAccents(String sTest){
     	return out;
     }
 
+    public static String removeLeadingZeros(String s){
+    	for(int n=0;n<s.length();n++){
+    		if(!s.substring(n).startsWith("0")){
+    			return s.substring(n);
+    		}
+    	}
+    	return"";
+    }
+    
     //--- IS LIKE ---------------------------------------------------------------------------------
     // SQL's LIKE-function with '_' representing any single char and '%' representing any group of chars
     public static boolean isLike(String sExpression, String sText){

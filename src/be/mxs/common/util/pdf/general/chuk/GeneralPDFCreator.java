@@ -935,7 +935,7 @@ public class GeneralPDFCreator extends PDFCreator {
             // address
             AdminPrivateContact contact = activePerson.getActivePrivate();
             if (contact!=null){
-                cell = new PdfPCell(new Paragraph(contact.district+" - "+ScreenHelper.getTran("province",contact.province,sPrintLanguage),FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)8*fontSizePercentage/100.0),Font.NORMAL)));
+                cell = new PdfPCell(new Paragraph(contact.district+" - "+ScreenHelper.getTran(null,"province",contact.province,sPrintLanguage),FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)8*fontSizePercentage/100.0),Font.NORMAL)));
                 cell.setColspan(4);
                 cell.setBorder(PdfPCell.BOX);
                 cell.setBorderColor(BaseColor.LIGHT_GRAY);

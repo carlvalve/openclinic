@@ -26,6 +26,7 @@ public class Dicom {
 		    dcmObj = din.readDicomObject();
 		}
 		catch (Exception e) {
+			e.printStackTrace();
 		    Debug.println(e.getMessage());
 		}
 		finally {

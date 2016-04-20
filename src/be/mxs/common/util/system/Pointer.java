@@ -73,17 +73,16 @@ public class Pointer {
 		return pointer;
 	}
 	
-	public static String getPointerAfter(String key,java.util.Date date){
-		String pointer = "";
+	public static java.util.Date getPointerDate(String key){
+		java.util.Date pointer = null;
 		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
 		PreparedStatement ps = null;
 		try{
-			ps=conn.prepareStatement("select OC_POINTER_VALUE from OC_POINTERS where OC_POINTER_KEY=? and OC_POINTER_UPDATETIME>?");
+			ps=conn.prepareStatement("select OC_POINTER_UPDATETIME from OC_POINTERS where OC_POINTER_KEY=?");
 			ps.setString(1, key);
-			ps.setTimestamp(2, new java.sql.Timestamp(date.getTime()));
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()){
-				pointer=rs.getString("OC_POINTER_VALUE");
+				pointer=rs.getTimestamp("OC_POINTER_UPDATETIME");
 			}
 			rs.close();
 			ps.close();
@@ -95,24 +94,50 @@ public class Pointer {
 		return pointer;
 	}
 	
+	public static String getPointerAfter(String key,java.util.Date date){
+		String pointer = "";
+		if(date!=null){
+			Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+			PreparedStatement ps = null;
+			try{
+				ps=conn.prepareStatement("select OC_POINTER_VALUE from OC_POINTERS where OC_POINTER_KEY=? and OC_POINTER_UPDATETIME>?");
+				ps.setString(1, key);
+				ps.setTimestamp(2, new java.sql.Timestamp(date.getTime()));
+				ResultSet rs = ps.executeQuery();
+				if(rs.next()){
+					pointer=rs.getString("OC_POINTER_VALUE");
+				}
+				rs.close();
+				ps.close();
+				conn.close();
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+		return pointer;
+	}
+	
 	public static String getPointerBefore(String key,java.util.Date date){
 		String pointer = "";
-		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
-		PreparedStatement ps = null;
-		try{
-			ps=conn.prepareStatement("select OC_POINTER_VALUE from OC_POINTERS where OC_POINTER_KEY=? and OC_POINTER_UPDATETIME<?");
-			ps.setString(1, key);
-			ps.setTimestamp(2, new java.sql.Timestamp(date.getTime()));
-			ResultSet rs = ps.executeQuery();
-			if(rs.next()){
-				pointer=rs.getString("OC_POINTER_VALUE");
+		if(date!=null){
+			Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+			PreparedStatement ps = null;
+			try{
+				ps=conn.prepareStatement("select OC_POINTER_VALUE from OC_POINTERS where OC_POINTER_KEY=? and OC_POINTER_UPDATETIME<?");
+				ps.setString(1, key);
+				ps.setTimestamp(2, new java.sql.Timestamp(date.getTime()));
+				ResultSet rs = ps.executeQuery();
+				if(rs.next()){
+					pointer=rs.getString("OC_POINTER_VALUE");
+				}
+				rs.close();
+				ps.close();
+				conn.close();
 			}
-			rs.close();
-			ps.close();
-			conn.close();
-		}
-		catch(Exception e){
-			e.printStackTrace();
+			catch(Exception e){
+				e.printStackTrace();
+			}
 		}
 		return pointer;
 	}
@@ -140,46 +165,50 @@ public class Pointer {
 	
 	public static Vector getPointers(String key,java.util.Date start, java.util.Date end){
 		Vector pointers = new Vector();
-		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
-		PreparedStatement ps = null;
-		try{
-			ps=conn.prepareStatement("select OC_POINTER_VALUE from OC_POINTERS where OC_POINTER_KEY=? and OC_POINTER_UPDATETIME between ? and ? order by OC_POINTER_VALUE");
-			ps.setString(1, key);
-			ps.setTimestamp(2, new java.sql.Timestamp(start.getTime()));
-			ps.setTimestamp(3, new java.sql.Timestamp(end.getTime()));
-			ResultSet rs = ps.executeQuery();
-			while(rs.next()){
-				pointers.add(rs.getString("OC_POINTER_VALUE"));
+		if(start!=null && end!=null){
+			Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+			PreparedStatement ps = null;
+			try{
+				ps=conn.prepareStatement("select OC_POINTER_VALUE from OC_POINTERS where OC_POINTER_KEY=? and OC_POINTER_UPDATETIME between ? and ? order by OC_POINTER_VALUE");
+				ps.setString(1, key);
+				ps.setTimestamp(2, new java.sql.Timestamp(start.getTime()));
+				ps.setTimestamp(3, new java.sql.Timestamp(end.getTime()));
+				ResultSet rs = ps.executeQuery();
+				while(rs.next()){
+					pointers.add(rs.getString("OC_POINTER_VALUE"));
+				}
+				rs.close();
+				ps.close();
+				conn.close();
 			}
-			rs.close();
-			ps.close();
-			conn.close();
-		}
-		catch(Exception e){
-			e.printStackTrace();
+			catch(Exception e){
+				e.printStackTrace();
+			}
 		}
 		return pointers;
 	}
 	
 	public static Vector getLoosePointers(String key,java.util.Date start, java.util.Date end){
 		Vector pointers = new Vector();
-		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
-		PreparedStatement ps = null;
-		try{
-			ps=conn.prepareStatement("select OC_POINTER_VALUE from OC_POINTERS where OC_POINTER_KEY like ? and OC_POINTER_UPDATETIME between ? and ? order by OC_POINTER_VALUE");
-			ps.setString(1, key+"%");
-			ps.setTimestamp(2, new java.sql.Timestamp(start.getTime()));
-			ps.setTimestamp(3, new java.sql.Timestamp(end.getTime()));
-			ResultSet rs = ps.executeQuery();
-			while(rs.next()){
-				pointers.add(rs.getString("OC_POINTER_VALUE"));
+		if(start!=null && end!=null){
+			Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+			PreparedStatement ps = null;
+			try{
+				ps=conn.prepareStatement("select OC_POINTER_VALUE from OC_POINTERS where OC_POINTER_KEY like ? and OC_POINTER_UPDATETIME between ? and ? order by OC_POINTER_VALUE");
+				ps.setString(1, key+"%");
+				ps.setTimestamp(2, new java.sql.Timestamp(start.getTime()));
+				ps.setTimestamp(3, new java.sql.Timestamp(end.getTime()));
+				ResultSet rs = ps.executeQuery();
+				while(rs.next()){
+					pointers.add(rs.getString("OC_POINTER_VALUE"));
+				}
+				rs.close();
+				ps.close();
+				conn.close();
 			}
-			rs.close();
-			ps.close();
-			conn.close();
-		}
-		catch(Exception e){
-			e.printStackTrace();
+			catch(Exception e){
+				e.printStackTrace();
+			}
 		}
 		return pointers;
 	}
@@ -232,48 +261,52 @@ public class Pointer {
 	}
 	
 	public static void storePointer(String key,String value,java.util.Date updatetime){
-		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
-		PreparedStatement ps = null;
-		try{
-			ps=conn.prepareStatement("INSERT INTO OC_POINTERS(OC_POINTER_KEY,OC_POINTER_VALUE,OC_POINTER_UPDATETIME) values(?,?,?)");
-			ps.setString(1, key);
-			ps.setString(2, value);
-			ps.setTimestamp(3, new java.sql.Timestamp(updatetime.getTime()));
-			ps.execute();
-			ps.close();
-			conn.close();
-		}
-		catch(Exception e){
-			e.printStackTrace();
-		}
-	}
-	
-	public static void storeUniquePointer(String key,String value,java.util.Date updatetime){
-		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
-		PreparedStatement ps = null;
-		try{
-			ps=conn.prepareStatement("select * from OC_POINTERS where OC_POINTER_KEY=? and OC_POINTER_VALUE=?");
-			ps.setString(1, key);
-			ps.setString(2, value);
-			ResultSet rs = ps.executeQuery();
-			if(!rs.next()){
-				rs.close();
-				ps.close();
+		if(updatetime!=null){
+			Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+			PreparedStatement ps = null;
+			try{
 				ps=conn.prepareStatement("INSERT INTO OC_POINTERS(OC_POINTER_KEY,OC_POINTER_VALUE,OC_POINTER_UPDATETIME) values(?,?,?)");
 				ps.setString(1, key);
 				ps.setString(2, value);
 				ps.setTimestamp(3, new java.sql.Timestamp(updatetime.getTime()));
 				ps.execute();
 				ps.close();
+				conn.close();
 			}
-			else {
-				rs.close();
-				ps.close();
+			catch(Exception e){
+				e.printStackTrace();
 			}
-			conn.close();
 		}
-		catch(Exception e){
-			e.printStackTrace();
+	}
+	
+	public static void storeUniquePointer(String key,String value,java.util.Date updatetime){
+		if(updatetime!=null){
+			Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+			PreparedStatement ps = null;
+			try{
+				ps=conn.prepareStatement("select * from OC_POINTERS where OC_POINTER_KEY=? and OC_POINTER_VALUE=?");
+				ps.setString(1, key);
+				ps.setString(2, value);
+				ResultSet rs = ps.executeQuery();
+				if(!rs.next()){
+					rs.close();
+					ps.close();
+					ps=conn.prepareStatement("INSERT INTO OC_POINTERS(OC_POINTER_KEY,OC_POINTER_VALUE,OC_POINTER_UPDATETIME) values(?,?,?)");
+					ps.setString(1, key);
+					ps.setString(2, value);
+					ps.setTimestamp(3, new java.sql.Timestamp(updatetime.getTime()));
+					ps.execute();
+					ps.close();
+				}
+				else {
+					rs.close();
+					ps.close();
+				}
+				conn.close();
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
 		}
 	}
 	

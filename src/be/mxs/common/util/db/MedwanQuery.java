@@ -53,7 +53,7 @@ import be.openclinic.datacenter.Monitor;
 import be.openclinic.datacenter.Scheduler;
 
 public class MedwanQuery {
-	private static DataSource dsOpenClinic = null;
+	private static DataSource dsOpenClinic = null; //test
 	private static DataSource dsLongOpenClinic = null;
 	private static DataSource dsAdmin = null;
 	private static DataSource dsLongAdmin = null;
@@ -2523,6 +2523,48 @@ public class MedwanQuery {
         return returncodes;
     }
     
+    public Vector findICD10CodesNhif(String keywords, String language){
+        Vector codes = new Vector();
+        String label = "labelen";
+        if(language.equalsIgnoreCase("FR")){
+            language = "F";
+        }
+        if(language.equalsIgnoreCase("EN")){
+            language = "E";
+        }
+        if(language.equalsIgnoreCase("NL")){
+            language = "N";
+        }
+        if(language.equalsIgnoreCase("F")){
+            label = "labelfr";
+        }
+        if(language.equalsIgnoreCase("N")){
+            label = "labelnl";
+        }
+        Connection conn = getOpenclinicConnection();
+        try{
+			PreparedStatement ps=conn.prepareStatement("select b.code,b."+label+" label from icd10_to_nhif a,icd10 b where nhif = ?"
+					+ " and a.icd10=b.code");
+			ps.setString(1, keywords);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				codes.add(new ICPCCode(rs.getString("code"),rs.getString("label")));
+			}
+			rs.close();
+			ps.close();
+        }
+        catch(Exception e){
+        }
+        finally{
+        	try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+        }
+        return codes;
+    }
+    
     public Vector findDSM4Codes(String keywords, String language){
         Vector codes = new Vector();
         Hashtable counters = new Hashtable();
@@ -3531,8 +3573,34 @@ public class MedwanQuery {
         return -1;
     }
     
-    //--- GET AGE ---------------------------------------------------------------------------------
+  //--- GET AGE ---------------------------------------------------------------------------------
     public int getAge(int personId){
+        Connection OccupdbConnection;
+        try{
+            OccupdbConnection = getOpenclinicConnection();
+            PreparedStatement Occupstatement = OccupdbConnection.prepareStatement("SELECT dateofbirth from AdminView where personid=?");
+            Occupstatement.setInt(1, personId);
+            ResultSet Occuprs = Occupstatement.executeQuery();
+            if(Occuprs.next()){
+                Date dateOfBirth = Occuprs.getDate("dateofbirth");
+                int age = new Double(getNrYears(dateOfBirth, new java.util.Date())).intValue();
+                Occuprs.close();
+                Occupstatement.close();
+                OccupdbConnection.close();
+                return age;
+            }
+            Occuprs.close();
+            Occupstatement.close();
+            OccupdbConnection.close();
+
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+  //--- GET AGE ---------------------------------------------------------------------------------
+    public int getAgeInMonths(int personId){
         Connection OccupdbConnection;
         try{
             OccupdbConnection = getOpenclinicConnection();

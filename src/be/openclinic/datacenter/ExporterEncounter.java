@@ -114,7 +114,7 @@ public class ExporterEncounter extends Exporter {
 					Iterator iterator = admissionServices.keySet().iterator();
 					while(iterator.hasNext()){
 						String key = (String)iterator.next();
-						String service = key+";"+ScreenHelper.getTran("service",key,"FR");
+						String service = key+";"+ScreenHelper.getTran(null,"service",key,"FR");
 						sb.append("<service serviceid='"+ScreenHelper.normalizeSpecialCharacters(service.replaceAll("'", "").replaceAll("&", "+"))+"' date='"+new SimpleDateFormat("yyyyMMddHHmmss").format(date)+"' totalbeds='"+admissionServices.get(key)+"' occupiedbeds='"+(occupiedServices.get(key)==null?0:occupiedServices.get(key))+"'/>");
 					}
 					sb.append("</services>");
