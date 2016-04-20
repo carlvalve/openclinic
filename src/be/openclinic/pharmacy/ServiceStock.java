@@ -700,6 +700,48 @@ public class ServiceStock extends OC_Object{
         return ids;
     }
     
+    public Vector getProductIds(){
+        Vector ids = new Vector();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        Connection oc_conn = MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+            String sSelect = "SELECT * FROM OC_PRODUCTSTOCKS"+
+                             " WHERE (OC_STOCK_END < ? OR OC_STOCK_END IS NULL)"+
+                             "  AND OC_STOCK_SERVICESTOCKUID = ?";
+            ps = oc_conn.prepareStatement(sSelect);
+
+            // set stock-end-date with hour and minutes = 0
+            Calendar today = new GregorianCalendar();
+            today.setTime(new java.util.Date());
+            today.set(today.get(Calendar.YEAR),today.get(Calendar.MONTH),today.get(Calendar.DATE),0,0,0);
+            ps.setTimestamp(1,new Timestamp(today.getTimeInMillis()));
+            ps.setString(2,this.getUid());
+
+            // execute
+            rs = ps.executeQuery();
+            while(rs.next()){
+                ids.add(rs.getString("OC_STOCK_PRODUCTUID")+";"+rs.getString("OC_STOCK_SERVERID")+"."+rs.getString("OC_STOCK_OBJECTID"));
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                oc_conn.close();
+            }
+            catch(SQLException se){
+                se.printStackTrace();
+            }
+        }
+        
+        return ids;
+    }
+    
     //--- GET PRODUCTSTOCKS -----------------------------------------------------------------------
     public Vector getProductStocks() throws SQLException{
         Vector stockIds = getProductStockIds();
@@ -726,12 +768,11 @@ public class ServiceStock extends OC_Object{
 
     //--- GET PRODUCTSTOCK ------------------------------------------------------------------------
     public ProductStock getProductStock(String productUid){
-        Vector stockIds = getProductStockIds();
+        Vector stockIds = getProductIds();
         
         for(int i=0; i<stockIds.size(); i++){
-            ProductStock productStock = ProductStock.get((String)stockIds.get(i));
-            if(productUid.equalsIgnoreCase(productStock.getProductUid())){
-                return ProductStock.get((String)stockIds.get(i));
+            if(productUid.equalsIgnoreCase(((String)stockIds.get(i)).split(";")[0])){
+                return ProductStock.get(((String)stockIds.get(i)).split(";")[1]);
             }
         }
         

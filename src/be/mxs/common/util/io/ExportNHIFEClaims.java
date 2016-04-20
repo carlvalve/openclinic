@@ -9,6 +9,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 
 import be.mxs.common.util.db.MedwanQuery;
 import net.admin.AdminPerson;
@@ -83,7 +84,20 @@ public class ExportNHIFEClaims {
     		//We exporteren automatisch voor de vorige maand, tenzij een specifieke periode wordt opgegeven
     		int activeyear = Integer.parseInt(new SimpleDateFormat("yyyy").format(new java.util.Date()));
     		int activemonth = Integer.parseInt(new SimpleDateFormat("MM").format(new java.util.Date()));
-    		if(args.length>4 && args[4].split("/").length>1){
+    		String activeday="01";
+    		if(args.length>4 && args[4].split("/").length>2){
+    			activeday=args[4].split("/")[0];
+    			activemonth= Integer.parseInt(args[4].split("/")[1]);
+    			activeyear= Integer.parseInt(args[4].split("/")[2]);
+    			if(activemonth==12){
+    				activemonth=1;
+    				activeyear+=1;
+    			}
+    			else{
+    				activemonth+=1;
+    			}
+    		}
+    		else if(args.length>4 && args[4].split("/").length>1){
     			activemonth= Integer.parseInt(args[4].split("/")[0]);
     			activeyear= Integer.parseInt(args[4].split("/")[1]);
     			if(activemonth==12){
@@ -96,32 +110,48 @@ public class ExportNHIFEClaims {
     		}
     		java.util.Date dBegin = null, dEnd = null;
     		if(activemonth==1){
-        		dBegin = new SimpleDateFormat("dd/MM/yyyy").parse("01/12/"+(activeyear-1));
+        		dBegin = new SimpleDateFormat("dd/MM/yyyy").parse(activeday+"/12/"+(activeyear-1));
         		dEnd = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/"+activeyear);
     		}
     		else {
-        		dBegin = new SimpleDateFormat("dd/MM/yyyy").parse("01/"+(activemonth-1)+"/"+activeyear);
+        		dBegin = new SimpleDateFormat("dd/MM/yyyy").parse(activeday+"/"+(activemonth-1)+"/"+activeyear);
         		dEnd = new SimpleDateFormat("dd/MM/yyyy").parse("01/"+(activemonth)+"/"+activeyear);
     		}
     		System.out.println("Investigating period "+new SimpleDateFormat("dd/MM/yyyy").format(dBegin)+" - "+new SimpleDateFormat("dd/MM/yyyy").format(dEnd));
     		//Search for all closed patient invoices for this insurer in the specified period
+    		HashSet zeroInvoices=new HashSet();
     		if(sConcatSign.equalsIgnoreCase("||")){
 	    		sSql="select distinct b.*,OC_INSURANCE_NR from oc_debets a, oc_patientinvoices b, oc_insurances c where"
 	    				+ " oc_debet_patientinvoiceuid='1.'||oc_patientinvoice_objectid and"
 	    				+ " oc_patientinvoice_date>=? and"
 	    				+ " oc_patientinvoice_date<? and"
+	    				+ " oc_patientinvoice_status='closed' and"
 	    				+ " oc_insurance_objectid=replace(oc_debet_insuranceuid,'1.','') and"
 	    				+ " length(oc_patientinvoice_comment)>0 and"
-	    				+ " oc_insurance_insuraruid=? order by oc_patientinvoice_objectid";
+	    				+ " oc_insurance_insuraruid=? order by oc_patientinvoice_date";
     		}
     		else{
-	    		sSql="select distinct b.*,OC_INSURANCE_NR from oc_debets a, oc_patientinvoices b, oc_insurances c where"
+    			sSql="select oc_patientinvoice_objectid from oc_patientinvoices where "
+	    				+ " oc_patientinvoice_date>=? and"
+	    				+ " oc_patientinvoice_date<? and"
+    					+ "(select sum(oc_debet_amount+oc_debet_insuraramount+oc_debet_extrainsuraramount) total from oc_debets where oc_debet_patientinvoiceuid='1.'+convert(varchar,oc_patientinvoice_objectid))<=0";
+    			ps = conn2.prepareStatement(sSql);
+        		ps.setDate(1, new java.sql.Date(dBegin.getTime()));
+        		ps.setDate(2, new java.sql.Date(dEnd.getTime()));
+        		rs=ps.executeQuery();
+        		while(rs.next()){
+        			zeroInvoices.add(rs.getInt("oc_patientinvoice_objectid"));
+        		}
+        		rs.close();
+        		ps.close();
+	    		sSql="select distinct b.*,a.oc_debet_encounteruid,OC_INSURANCE_NR from oc_debets a, oc_patientinvoices b, oc_insurances c where"
 	    				+ " oc_debet_patientinvoiceuid='1.'+convert(varchar,oc_patientinvoice_objectid) and"
 	    				+ " oc_patientinvoice_date>=? and"
 	    				+ " oc_patientinvoice_date<? and"
+	    				+ " oc_patientinvoice_status='closed' and"
 	    				+ " oc_insurance_objectid=replace(oc_debet_insuranceuid,'1.','') and"
 	    				+ " len(oc_patientinvoice_comment)>0 and"
-	    				+ " oc_insurance_insuraruid=? order by oc_patientinvoice_objectid";
+	    				+ " oc_insurance_insuraruid=? order by oc_patientinvoice_date";
     		}
     		ps = conn2.prepareStatement(sSql);
     		ps.setDate(1, new java.sql.Date(dBegin.getTime()));
@@ -132,6 +162,12 @@ public class ExportNHIFEClaims {
     		while(rs.next()){
     			lines++;
     			int nInvoiceObjectId=rs.getInt("oc_patientinvoice_objectid");
+				int nPatientId=rs.getInt("OC_PATIENTINVOICE_PATIENTUID");
+				String sInvoiceUid="1."+rs.getString("oc_patientinvoice_objectid");
+				String sEncounterUid=rs.getString("oc_debet_encounteruid");
+    			if(zeroInvoices.contains(nInvoiceObjectId)){
+    				continue;
+    			}
     			if(lines % 20 ==0){
     				conn.close();
     				conn =  DriverManager.getConnection(args[1]);    				
@@ -181,10 +217,11 @@ public class ExportNHIFEClaims {
     			//Nu gaan we controleren of voor deze factuur reeds een folio bestaat, 
     			//indien neen, creëer een nieuw folio obv het serial number
     			String sSerialNo = rs.getString("OC_PATIENTINVOICE_COMMENT");
-    			sSql="select * from Folios where ClaimNo=? and SerialNo=?";
+    			sSql="select * from Folios where ClaimNo=? and SerialNo=? and SourceDocumentNo=?";
     			ps2=nhifconn.prepareStatement(sSql);
     			ps2.setString(1, sub(sClaimNo,50));
     			ps2.setString(2, sub(sSerialNo,50));
+    			ps2.setString(3, sub(nInvoiceObjectId+"",50));
     			rs2=ps2.executeQuery();
     			if(rs2.next()){
     				sFolioId=rs2.getString("FolioID");
@@ -197,7 +234,6 @@ public class ExportNHIFEClaims {
     				ps2.close();
     				//Now let's find the patient data
     				PreparedStatement ps3 = conn.prepareStatement("select * from adminview where personid=?");
-    				int nPatientId=rs.getInt("OC_PATIENTINVOICE_PATIENTUID");
     				ps3.setInt(1, nPatientId);
     				ResultSet rs3 = ps3.executeQuery();
     				if(rs3.next()){
@@ -228,15 +264,18 @@ public class ExportNHIFEClaims {
 	    				ps2.setString(6, sub(rs3.getString("lastname"),50));
 	    				String sGender=rs3.getString("gender");
 	    				ps2.setString(7, sGender!=null && sGender.equalsIgnoreCase("M")?"Male":"Female");
-	    				String sInvoiceUid="1."+rs.getString("oc_patientinvoice_objectid");
 	    				java.util.Date dBirth = rs3.getDate("dateofbirth");
-	    				ps2.setDouble(8, dBirth==null?-1:getNrYears(dBirth, dInvoice));
+	    				int age=1;
+	    				if(dBirth!=null && Math.floor(getNrYears(dBirth, dInvoice))>1){
+	    					age=(int)Math.floor(getNrYears(dBirth, dInvoice));
+	    				}
+	    				ps2.setDouble(8, age);
 	    				ps2.setDate(9, new java.sql.Date(dInvoice.getTime()));
 	    				ps2.setString(10,nPatientId+"");
 	    				ps2.setString(11,sub(rs.getString("OC_PATIENTINVOICE_INSURARREFERENCE"),20));
 	    				ps2.setInt(12,1);
 	    				ps2.setString(13,null);
-	    				ps2.setString(14,null);
+	    				ps2.setString(14,sub(nInvoiceObjectId+"",50));
 	    				String sModifiers = rs.getString("OC_PATIENTINVOICE_MODIFIERS");
 	    				ps2.setString(15,sModifiers.split(";")[0]);
 	    				rs3.close();
@@ -246,14 +285,16 @@ public class ExportNHIFEClaims {
 	    				ps3=conn.prepareStatement("select * from oc_debets,oc_encounters where oc_debet_patientinvoiceuid=? and oc_encounter_objectid=replace(oc_debet_encounteruid,'1.','')");
 	    				ps3.setString(1, sInvoiceUid);
 	    				rs3=ps3.executeQuery();
-	    				if(rs3.next()){
+	    				while(rs3.next()){
 	    					String s = rs3.getString("oc_encounter_type");
 	    					if(s!=null && s.equalsIgnoreCase("admission")){
 	    						sStatus="IN";
-		    					dAdmitted=rs3.getDate("oc_encounter_begindate");
-		    					dDischarged=rs3.getDate("oc_encounter_enddate");
+	    						dAdmitted=rs3.getDate("oc_encounter_begindate");
+	    						dDischarged=rs3.getDate("oc_encounter_enddate");
 	    					}
 	    				}
+	    				rs3.close();
+	    				ps3.close();
 	    				ps2.setString(16, sStatus);
 	    				ps2.setDate(17, dAdmitted==null?null:new java.sql.Date(dAdmitted.getTime()));
 	    				ps2.setDate(18, dDischarged==null?null:new java.sql.Date(dDischarged.getTime()));
@@ -267,10 +308,11 @@ public class ExportNHIFEClaims {
     				ps3.close();
     				rs2.close();
     				ps2.close();
-        			sSql="select * from Folios where ClaimNo=? and SerialNo=?";
+        			sSql="select * from Folios where ClaimNo=? and SerialNo=? and SourceDocumentNo=?";
         			ps2=nhifconn.prepareStatement(sSql);
         			ps2.setString(1, sClaimNo);
         			ps2.setString(2, sSerialNo);
+        			ps2.setString(3, sub(nInvoiceObjectId+"",50));
         			rs2=ps2.executeQuery();
         			if(rs2.next()){
         				sFolioId=rs2.getString("FolioID");
@@ -282,12 +324,19 @@ public class ExportNHIFEClaims {
     			//Nu zouden we een folio moeten hebben waar we de folioitems (prestaties) kunnen aan toevoegen
     			if(sFolioId.length()>0){
     				//Eerst zoeken we alle prestaties op die aan de actieve factuur verbonden zijn
-    				PreparedStatement ps3=conn.prepareStatement("select * from oc_debets,oc_prestations where oc_prestation_objectid=replace(oc_debet_prestationuid,'1.','') and oc_debet_patientinvoiceuid=? and oc_debet_credited=0");
+    				PreparedStatement ps3=conn.prepareStatement("select sum(OC_DEBET_QUANTITY) OC_DEBET_QUANTITY,"
+						+ " oc_prestation_code,"
+						+ " oc_prestation_nomenclature"
+						+ " from oc_debets,oc_prestations "
+						+ " where "
+						+ " oc_prestation_objectid=replace(oc_debet_prestationuid,'1.','') and "
+						+ " oc_debet_patientinvoiceuid=? and oc_debet_credited=0"
+						+ " group by oc_prestation_code,oc_prestation_nomenclature");
     				ps3.setString(1, "1."+nInvoiceObjectId);
     				ResultSet rs3=ps3.executeQuery();
     				while(rs3.next()){
-    					String sDebetUid="OpenClinic invoice ID: "+nInvoiceObjectId+" Health service ID: "+rs3.getInt("oc_debet_objectid");
     					String sDebetInternalCode=rs3.getString("oc_prestation_code");
+    					String sDebetUid="OpenClinic invoice ID: "+nInvoiceObjectId+" Health service ID: "+sDebetInternalCode;
     					//Hier beslissen welke code wordt gebruikt: interne code of NHIF code
     					//interne code = OC_PRESTATION_CODE
     					//NHIF code = OC_PRESTATION_NOMENCLATURE
@@ -300,7 +349,7 @@ public class ExportNHIFEClaims {
 	    						e.printStackTrace();
 	    					}
 	    					int nQuantity=rs3.getInt("OC_DEBET_QUANTITY");
-	    					if(nQuantity>0){
+	    					if(nQuantity>-9999){
 		    					//Eerst kijken we of dit item nog niet is toegevoegd geworden
 		    					sSql="select * from FolioItems where FolioID=? and OtherDetails=?";
 		    					ps2=nhifconn.prepareStatement(sSql);
@@ -378,21 +427,60 @@ public class ExportNHIFEClaims {
     				}
     				rs3.close();
     				ps3.close();
+        			java.util.Date dBeginDate=null;
+        			java.util.Date dEndDate=null;
+    				ps3=conn.prepareStatement("select * from oc_debets,oc_encounters where oc_debet_patientinvoiceuid=? and oc_encounter_objectid=replace(oc_debet_encounteruid,'1.','')");
+    				ps3.setString(1, sInvoiceUid);
+    				rs3=ps3.executeQuery();
+    				while(rs3.next()){
+    					String s = rs3.getString("oc_encounter_type");
+   						java.util.Date d1=rs3.getDate("oc_encounter_begindate");
+   						if(dBeginDate==null || (d1!=null && d1.before(dBeginDate))){
+   							dBeginDate=d1;
+   						}
+   						java.util.Date d2=rs3.getDate("oc_encounter_enddate");
+   						if(dEndDate==null || (d2!=null && d2.after(dEndDate))){
+   							dEndDate=d2;
+   						}
+    				}
+    				rs3.close();
+    				ps3.close();
+    				if(dEndDate==null){
+    					dEndDate=new java.util.Date();
+    				}
     				//Nu gaan we alle ziektecodes opzoeken die aan de encounters van deze factuur verbonden zijn
     				//De codes moeten geconverteerd worden en daarna toegevoegd aan e-Claims
-    				ps3=conn.prepareStatement("select distinct oc_diagnosis_code from oc_debets,oc_diagnoses,oc_encounters a,oc_encounters b"+
-    										" where oc_debet_patientinvoiceuid=? and"+ 
-    										" a.OC_ENCOUNTER_OBJECTID=REPLACE(oc_debet_encounteruid,'1.','') and"+
-    										" b.OC_ENCOUNTER_PATIENTUID=a.OC_ENCOUNTER_PATIENTUID and"+
-    										" OC_DIAGNOSIS_ENCOUNTERUID='1.'+CONVERT(varchar,b.oc_encounter_objectid) and"+
-    										" DATEDIFF(day,a.oc_encounter_begindate,b.oc_encounter_begindate)=0 and oc_diagnosis_codetype='icd10'");
-    				ps3.setString(1, "1."+nInvoiceObjectId);
+    				ps3=conn.prepareStatement("select i1.type from healthrecord h,transactions t,items i1"+
+    										" where h.personid=? and"+ 
+    										" h.healthrecordid=t.healthrecordid and"+
+    										" (abs(DATEDIFF(day,t.updatetime,?))<=1 or"+
+    										" abs(DATEDIFF(day,t.updatetime,?))<=1 or"+
+    										" (t.updatetime>=? and"+
+    										" t.updatetime<=?)) and"+
+    										" i1.transactionid=t.transactionid and"+
+    										" i1.type like 'ICD10Code%'"+
+    										" union"+
+    										" select i1.type from healthrecord h,transactions t,items i1,items i2"+
+											" where h.personid=? and"+ 
+											" h.healthrecordid=t.healthrecordid and"+
+    										" i1.transactionid=t.transactionid and"+
+    										" i1.type like 'ICD10Code%' and"+
+    										" i2.transactionid=t.transactionid and"+
+    										" i2.type ='be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID' and"+
+    										" i2.value=?");
+    				ps3.setInt(1, nPatientId);
+    				ps3.setDate(2, new java.sql.Date(dBeginDate.getTime()));
+    				ps3.setDate(3, new java.sql.Date(dEndDate.getTime()));
+    				ps3.setDate(4, new java.sql.Date(dBeginDate.getTime()));
+    				ps3.setDate(5, new java.sql.Date(dEndDate.getTime()));
+    				ps3.setInt(6, nPatientId);
+    				ps3.setString(7, sEncounterUid);
     				rs3=ps3.executeQuery();
     				boolean bFoundUnmapped=false;
     				while(rs3.next()){
     					//We zoeken nu de mapping op naar de diagnoses in NHIF, indien niet gevonden gebruiken we 0
     					ps2=conn.prepareStatement("select * from icd10_to_nhif where icd10 like ?");
-    					String sIcd10=rs3.getString("oc_diagnosis_code");
+    					String sIcd10=rs3.getString("type").replaceAll("ICD10Code", "");
 						System.out.println("Adding ICD10 code "+sIcd10);
     					ps2.setString(1, sIcd10+"%");
     					rs2=ps2.executeQuery();

@@ -59,7 +59,7 @@ public class CsvInvoiceMSPLSAdmissions {
 	                }
 	                if(!initialized){
 			            //Eerst consultaties
-			            sOutput+="\r\n\r\n"+ScreenHelper.getTran("hospital.statistics", "visits", "fr");
+			            sOutput+="\r\n\r\n"+ScreenHelper.getTran(null,"hospital.statistics", "visits", "fr");
 			            sOutput+="\r\n#;FACTURE;NOM ET PRENOM ADHERENT;MATRICULE;No CARTE SANTE;PROVENANCE;BENEFICIAIRE;MONTANT TOTAL;MONTANT RECLAME;DATE;No ADMISSION\r\n";
 	                }
 	                initialized=true;
@@ -183,7 +183,7 @@ public class CsvInvoiceMSPLSAdmissions {
                 	sOutput+=sPatientUid+"\r\n";
 	            	//Print totals
 	            	sOutput+=";";
-	            	sOutput+=ScreenHelper.getTran("web", "total", "fr")+";";
+	            	sOutput+=ScreenHelper.getTran(null,"web", "total", "fr")+";";
 	            	sOutput+=";";
 	            	sOutput+=";";
 	            	sOutput+=";";

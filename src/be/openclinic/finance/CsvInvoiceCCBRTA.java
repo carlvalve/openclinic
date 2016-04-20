@@ -56,7 +56,7 @@ public class CsvInvoiceCCBRTA {
 	                debet = (Debet)debets.get(i);
 	                if(!initialized){
 			            //Eerst consultaties
-			            sOutput+="\r\n\r\n"+ScreenHelper.getTran("hospital.statistics", "visits", "fr");
+			            sOutput+="\r\n\r\n"+ScreenHelper.getTran(null,"hospital.statistics", "visits", "fr");
 			            sOutput+="\r\n#;RECEIPT;PATIENTID;NAME_FIRSTNAME;AGE;GENDER;DEPARTMENT;USER;TOTAL;PATIENT;INSURER;COMPL_INSURER;DATE\r\n";
 	                }
 	                initialized=true;
@@ -200,7 +200,7 @@ public class CsvInvoiceCCBRTA {
                 	sOutput+=(prevdate!=null?ScreenHelper.stdDateFormat.format(prevdate):ScreenHelper.stdDateFormat.format(date))+"\r\n";
 	            	//Print totals
 	            	sOutput+=";";
-	            	sOutput+=ScreenHelper.getTran("web", "total", "fr")+";";
+	            	sOutput+=ScreenHelper.getTran(null,"web", "total", "fr")+";";
 	            	sOutput+=";";
 	            	sOutput+=";";
 	            	sOutput+=";";

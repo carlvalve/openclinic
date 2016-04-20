@@ -190,37 +190,18 @@ public class ScanDirectoryMonitor implements Runnable{
         	if(files.size()>5000){
         		files=new Hashtable();
         	}
-        	MedwanQuery.getInstance().reloadConfigValues();
         	Debug.enabled=MedwanQuery.getInstance().getConfigString("Debug","Off").equalsIgnoreCase("on");
         	Debug.println("File cache size: "+files.size());
         	File scanDir = new File(SCANDIR_BASE+"/"+SCANDIR_FROM);
         	Debug.println("Scanning "+scanDir);
         	ScannableFileFilter fileFilter = new ScannableFileFilter(EXCLUDED_EXTENSIONS);        	
         	File[] scannableFiles = scanDir.listFiles(fileFilter); 
-        	if(scannableFiles.length > 0){
+        	if(scannableFiles!=null && scannableFiles.length > 0){
 	        	Debug.println(" ScannableFiles in 'scanDirectoryMonitor_dirFrom' : "+scannableFiles.length);
 	        	for(int i=0; i<scannableFiles.length; i++){
 	        		File file = (File)scannableFiles[i];
 	        		long lastSize=0;
 	        		boolean bSkip=!isFileUnlocked(file);
-	        		/*
-	        		if(files.get(file.getName())==null){
-	        			files.put(file.getName(),lastSize);
-	        		}
-	        		else {
-	        			lastSize=(Long)files.get(file.getName());
-		        		Debug.println("Last file size = "+lastSize+" bytes");
-		        		Debug.println("Actual file size = "+file.length()+" bytes");
-	        			if(file.length()>lastSize){
-	        				lastSize=file.length();
-		        			files.put(file.getName(),lastSize);
-	        			}
-	        			else{
-	        				bSkip=false;
-	        			}
-	        		}
-	        		*/
-	        		//long millis=MedwanQuery.getInstance().getConfigInt("archivingServerDocumentModificationTimeoutInMillis",60*1000);
 	        		if(bSkip){
 	        			Debug.println("Skipping file "+file.getName()+" because a process may still be writing to it.");
 	        			skippedFilesInRun++;

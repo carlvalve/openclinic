@@ -25,6 +25,8 @@ import be.openclinic.common.ObjectReference;
 import be.openclinic.finance.Debet;
 import be.openclinic.finance.Prestation;
 import be.openclinic.medical.Diagnosis;
+import be.openclinic.medical.LabAnalysis;
+import be.openclinic.medical.RequestedLabAnalysis;
 import net.admin.User;
 import net.admin.AdminPerson;
 import net.admin.Service;
@@ -470,6 +472,7 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
                         }
                     }
                     else if(returnedTransactionVO.getTransactionType().equals("be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_LAB_REQUEST")){
+              	  		System.out.println("//////////////////////////////////////////////////////////");
                     	//Bewaar SMS en e-mail in user profiel
                     	item = returnedTransactionVO.getItem("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_LAB_SMS");
                     	if(item!=null && ScreenHelper.checkString(item.getValue()).length()>0){

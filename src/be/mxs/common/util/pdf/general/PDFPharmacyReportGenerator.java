@@ -819,7 +819,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 		 	        row =t.addElement("row");
 			 		addCol(row,70,product.getName());
 			 		addCol(row,10,rs.getInt("quantity")+"");
-			 		addCol(row,20,product.getPackageUnits()+" "+ScreenHelper.getTran("product.unit",product.getUnit(),sPrintLanguage));
+			 		addCol(row,20,product.getPackageUnits()+" "+ScreenHelper.getTran(null,"product.unit",product.getUnit(),sPrintLanguage));
 				}
 			}
 
@@ -1082,7 +1082,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 				row =t.addElement("row");
 		        addCol(row,10,"");
 		        //Todo: add batch number
-				addCol(row,90,stock.getProduct()==null?ScreenHelper.getTranNoLink("web","unknown_product",sPrintLanguage):ScreenHelper.capitalize(stock.getProduct().getName())+(sBatchNumber.equalsIgnoreCase("?")?"":" ("+ScreenHelper.getTran("web", "batch", sPrintLanguage)+": "+sBatchNumber.toUpperCase()+")"));
+				addCol(row,90,stock.getProduct()==null?ScreenHelper.getTranNoLink("web","unknown_product",sPrintLanguage):ScreenHelper.capitalize(stock.getProduct().getName())+(sBatchNumber.equalsIgnoreCase("?")?"":" ("+ScreenHelper.getTran(null,"web", "batch", sPrintLanguage)+": "+sBatchNumber.toUpperCase()+")"));
 				//Todo: get incoming from uid and batchuid
 				int in = stock.getTotalUnitsInForPeriod(begin, new java.util.Date(end.getTime()+day),ScreenHelper.checkString(userid),sBatchNumber);
 				addCol(row,20,in+"");
@@ -1646,7 +1646,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 			for(int n=0;n<operations.size();n++){
 				ProductStockOperation operation = (ProductStockOperation)operations.elementAt(n);
 				if(!operation.getDate().before(begin)){
-					//if this operation falss after the end date, whe can stop
+					//if this operation falls after the end date, we can stop
 					if(operation.getDate().after(end)){
 						break;
 					}

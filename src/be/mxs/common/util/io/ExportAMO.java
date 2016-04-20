@@ -15,7 +15,6 @@ import java.util.Vector;
 import net.admin.User;
 
 import be.mxs.common.util.db.MedwanQuery;
-import be.mxs.common.util.system.Debug;
 import be.mxs.common.util.system.Mail;
 import be.mxs.common.util.system.Pointer;
 
@@ -57,7 +56,7 @@ public class ExportAMO {
 		    }
 		    rs.close();
 		    ps.close();
-		    String exportamofile="/temp/exportAMO.csv";
+		    String exportamofile="/tmp/exportAMO.csv";
 		    ps = conn.prepareStatement("select oc_value from oc_config where oc_key='exportAMOfile'");
 		    rs = ps.executeQuery();
 		    if(rs.next()){
@@ -212,7 +211,7 @@ public class ExportAMO {
 							"frank.verbeke@vub.ac.be\n" +
 							"Coordinateur Santé";
 			if(hasdata){
-				Debug.println("sending message to: "+args[3]);
+				System.out.println("sending message to: "+args[3]);
 				BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(exportamofile));
 				bufferedWriter.write(exportfile.toString());
 				bufferedWriter.flush();
@@ -220,7 +219,10 @@ public class ExportAMO {
 				Mail.sendMail(args[1], args[2], args[3], title, message,exportamofile,"exportAMO.csv");
 				System.out.println("Message successfully sent");
 				
-			    ps = conn.prepareStatement("update oc_config set oc_value=? where oc_key='lastAMOexport'");
+			    ps = conn.prepareStatement("delete from oc_config where oc_key='lastAMOexport'");
+			    ps.execute();
+			    ps.close();
+			    ps = conn.prepareStatement("insert into oc_config(oc_value,oc_key) values(?,'lastAMOexport')");
 			    ps.setString(1,new SimpleDateFormat("yyyyMMddHHmmssSSS").format(maxdate));
 			    ps.execute();
 			    ps.close();

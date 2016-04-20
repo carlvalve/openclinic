@@ -351,7 +351,7 @@ public class PersonMerger {
 
         //*** STEP 7.12 : UPDATE OC_PLANNING *****************************************************
         if(Debug.enabled) Debug.println("*** STEP 7.12 ***");
-        sQuery = "UPDATE OC_PLANNING SET OC_PLANNING_PATIENTID = ? WHERE OC_PLANNING_PATIENTID = ?";
+        sQuery = "UPDATE OC_PLANNING SET OC_PLANNING_PATIENTUID = ? WHERE OC_PLANNING_PATIENTUID = ?";
         ps = occupConn.prepareStatement(sQuery);
         ps.setString(1,keepPersonId+"");
         ps.setString(2,removePersonId+"");

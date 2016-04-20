@@ -12,8 +12,7 @@ import be.mxs.common.util.system.Debug;
 
 public class sendHtmlMail {
 	
-	static public boolean sendSimpleMail(String smtpServer, String sFrom, String sTo, String sSubject, String sMessage)
-			throws AddressException, MessagingException {    	
+	static public boolean sendSimpleMail(String smtpServer, String sFrom, String sTo, String sSubject, String sMessage){    	
 		boolean bSuccess=false;
 		try{
 	        Properties props = new Properties();
@@ -22,7 +21,6 @@ public class sendHtmlMail {
 	
 	        Session mailSession = Session.getDefaultInstance(props, null);
 	        mailSession.setDebug(true);
-	        //Transport transport = mailSession.getTransport();
 	        Transport transport = mailSession.getTransport("smtp");
 	
 	        MimeMessage message = new MimeMessage(mailSession);
@@ -30,8 +28,6 @@ public class sendHtmlMail {
 	        message.setFrom(new InternetAddress(sFrom));
 	        
 	        message.setHeader("content-type: text/plain", "charset=ISO-8859-1");
-	        //message.setHeader("content-type: text/html", "charset=ISO-8859-1"); 
-	        //This works!! Output is: Content-Type: text/html; charset=ISO-8859-1. Content-Transfer-Encoding: quoted-printable. content-type: text/html: charset=ISO-8859-1
 	 
 	        message.setContent(sMessage, "text/plain");
 	        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(sTo,false));
@@ -39,7 +35,6 @@ public class sendHtmlMail {
 	        transport.connect();
 	        transport.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
 	        transport.close();        
-	        //transport.sendMessage(message, message.getAllRecipients());
 	        bSuccess=true;
 		}
         catch(Exception e){

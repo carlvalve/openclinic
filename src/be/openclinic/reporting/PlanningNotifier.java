@@ -21,9 +21,15 @@ import be.openclinic.adt.Planning;
 import net.admin.AdminPerson;
 
 public class PlanningNotifier {
+	public void sendPlanningMessage(String patientid, String type, String planninguid){
+		
+	}
 	public void sendPlanningReminders(){
+		Debug.println("Analyzing planning reminders");
+		//Send warnings about upcoming appointments
 		if(MedwanQuery.getInstance().getConfigInt("warnPatientBeforeScheduledAppointmentEmail",0)==1 || MedwanQuery.getInstance().getConfigInt("warnPatientBeforeScheduledAppointmentSMS",0)==1){
 			int warntime=MedwanQuery.getInstance().getConfigInt("warnPatientBeforeScheduledAppointmentDays",0);
+			Debug.println("warntime="+warntime);
 			if(warntime>0){
 				//First we look for all plannings that should receive a reminder
 				Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
@@ -35,49 +41,51 @@ public class PlanningNotifier {
 					ps.setTimestamp(2, new java.sql.Timestamp(new java.util.Date().getTime()+warntime*day));
 					ResultSet rs =ps.executeQuery();
 					while(rs.next()){
-						String planninguid=rs.getString("oc_planning_serverid")+"."+rs.getString("oc_planning_objectid");
+						Debug.println("Found planning objectid "+rs.getInt("OC_PLANNING_OBJECTID"));
 						String patientid=rs.getString("oc_planning_patientuid");
+						String planninguid = rs.getInt("oc_PLANNING_SERVERID")+"."+rs.getInt("oc_PLANNING_OBJECTID");
 						AdminPerson patient = AdminPerson.getAdminPerson(patientid);
 						if(MedwanQuery.getInstance().getConfigInt("warnPatientBeforeScheduledAppointmentEmail",0)==1){
 							String sendto=patient.getActivePrivate().email;
-							if(sendto!=null && sendto.length()>0){
-								try{
-									String sMailTitle = MedwanQuery.getInstance().getLabel("sendhtmlmail", "appointmentreminder", language);
-									String sResult = MedwanQuery.getInstance().getLabel("web", "patientappointmentemailcontent", MedwanQuery.getInstance().getConfigString("warnPatientBeforeScheduledAppointmentLanguage","en"));
-									sResult=sResult.replaceAll("#patientname#", patient.getFullName());
-									sResult=sResult.replaceAll("#appointmentdate#", new SimpleDateFormat("dd/MM/yyyy HH:mm").format(rs.getTimestamp("oc_planning_planneddate")));
-									if(sendHtmlMail.sendSimpleMail(MedwanQuery.getInstance().getConfigString("PatientEdit.MailServer"), MedwanQuery.getInstance().getConfigString("planningNotifierEmailSender","frank.verbeke@mxs.be"), sendto, sMailTitle, sResult)){					
-										Planning.storeRemindSent(planninguid, new java.util.Date());
-										Debug.println("E-mail correctly sent appointment warning "+planninguid+" to "+sendto);
-									}
-									else{
-										Debug.println("Error sending e-mail with appointment warning "+planninguid+" to "+sendto);
-									}
-								}
-								catch(Exception m){
-									Debug.println("Error sending e-mail with appointment warning "+planninguid+" to "+sendto+": "+m.getMessage());
-								}
+							Debug.println("Send appointment reminder by e-mail to "+sendto);
+							if(MessageNotifier.validateEmailValue(sendto)!=null){
+								Debug.println("E-mail address "+sendto+" is valid");
+								String sResult = ScreenHelper.getTranNoLink("web", "patientappointmentemailcontent", MedwanQuery.getInstance().getConfigString("warnPatientBeforeScheduledAppointmentLanguage","en"));
+								sResult=sResult.replaceAll("#patientname#", patient.getFullName());
+								sResult=sResult.replaceAll("#appointmentdate#", new SimpleDateFormat("dd/MM/yyyy HH:mm").format(rs.getTimestamp("oc_planning_planneddate")));
+								MessageNotifier.SpoolMessage(MedwanQuery.getInstance().getOpenclinicCounter("OC_MESSAGES"), "simplemail", sResult, sendto, "appointmentreminder", MedwanQuery.getInstance().getConfigString("warnPatientBeforeScheduledAppointmentLanguage","en"));
+								Planning.storeRemindSent(planninguid, new java.util.Date());
+							}
+							else{
+								Debug.println("E-mail address "+sendto+" is NOT valid");
 							}
 						}
 						if(MedwanQuery.getInstance().getConfigInt("warnPatientBeforeScheduledAppointmentSMS",0)==1){
 							String sendto =patient.getActivePrivate().mobile;
-							if(sendto!=null && sendto.length()>0){
+							Debug.println("Send appointment reminder by sms to "+sendto);
+							if(MessageNotifier.validateSMSValue(sendto)!=null){
+								Debug.println("SMS number "+sendto+" is valid");
 								String sResult = MedwanQuery.getInstance().getLabel("web", "patientappointmentsmscontent", MedwanQuery.getInstance().getConfigString("warnPatientBeforeScheduledAppointmentLanguage","en"));
 								sResult=sResult.replaceAll("#patientname#", patient.getFullName());
 								sResult=sResult.replaceAll("#appointmentdate#", new SimpleDateFormat("dd/MM/yyyy HH:mm").format(rs.getTimestamp("oc_planning_planneddate")));
-								if(SendSMS.sendSMS(sendto, sResult)){
-									Debug.println("SMS correctly sent appointment warning "+planninguid+" to "+sendto);
-									Planning.storeRemindSent(planninguid, new java.util.Date());
-								}
-								else {
-									Debug.println("Error sending SMS with appointment warning "+planninguid+" to "+sendto);
-								}
+								MessageNotifier.SpoolMessage(MedwanQuery.getInstance().getOpenclinicCounter("OC_MESSAGES"), "sms", sResult, sendto, "appointmentreminder", MedwanQuery.getInstance().getConfigString("warnPatientBeforeScheduledAppointmentLanguage","en"));
+								Planning.storeRemindSent(planninguid, new java.util.Date());
 							}
 						}
 					}
+					rs.close();
+					ps.close();
 				}
 				catch(Exception e){
 					e.printStackTrace();
+				}
+				finally{
+					try{
+						conn.close();
+					}
+					catch(Exception e){
+						e.printStackTrace();
+					}
 				}
 			}
 		}

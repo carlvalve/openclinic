@@ -94,10 +94,10 @@ public class WHONetUtils {
 	}
 	
 	public static String ftpSendWHONetFile(java.util.Date start, boolean bUpdateExportDate,String sWebLanguage){
-		String message=ScreenHelper.getTran("web","error.sending.file",sWebLanguage);
+		String message=ScreenHelper.getTran(null,"web","error.sending.file",sWebLanguage);
 		StringBuffer file = createWHONetFile(start, bUpdateExportDate);
 		if(file.length()==0){
-			message=ScreenHelper.getTran("web","nothing.to.send",sWebLanguage);
+			message=ScreenHelper.getTran(null,"web","nothing.to.send",sWebLanguage);
 		}
 		else {
 			String ftpurl=MedwanQuery.getInstance().getConfigString("WHONetDestinationFtpServer","");
@@ -108,7 +108,7 @@ public class WHONetUtils {
 				ftp.pass(ftpurl.split("@")[0].split(":")[1]);
 				if(ftp.isConnected()){
 					ftp.storeFile("OpenClinicWHONet."+new SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date())+".csv", new StringBufferInputStream(file.toString()));
-					message=ScreenHelper.getTran("web","file.sent.to",sWebLanguage)+" "+ftpurl.split("@")[1];
+					message=ScreenHelper.getTran(null,"web","file.sent.to",sWebLanguage)+" "+ftpurl.split("@")[1];
 				}
 				ftp.disconnect();
 			}
@@ -120,16 +120,16 @@ public class WHONetUtils {
 	}
 	
 	public static String smtpSendWHONetFile(java.util.Date start, boolean bUpdateExportDate,String sWebLanguage){
-		String message=ScreenHelper.getTran("web","error.sending.file",sWebLanguage);
+		String message=ScreenHelper.getTran(null,"web","error.sending.file",sWebLanguage);
 		StringBuffer file = createWHONetFile(start, bUpdateExportDate);
 		if(file.length()==0){
-			message=ScreenHelper.getTran("web","nothing.to.send",sWebLanguage);
+			message=ScreenHelper.getTran(null,"web","nothing.to.send",sWebLanguage);
 		}
 		else {
 			String smtpurl=MedwanQuery.getInstance().getConfigString("WHONetDestinationSmtpServer","");
 			try{
 				Mail.sendMail(MedwanQuery.getInstance().getConfigString("DefaultMailServerAddress"), MedwanQuery.getInstance().getConfigString("DefaultFromMailAddress"), smtpurl, "OpenClinicWHONet."+new SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date())+".csv", file.toString(),null,null);
-				message=ScreenHelper.getTran("web","file.sent.to",sWebLanguage)+" "+smtpurl;
+				message=ScreenHelper.getTran(null,"web","file.sent.to",sWebLanguage)+" "+smtpurl;
 			}
 			catch(Exception e){
 				e.printStackTrace();
@@ -139,10 +139,10 @@ public class WHONetUtils {
 	}
 	
 	public static String copyWHONetFile(java.util.Date start, boolean bUpdateExportDate,String sWebLanguage){
-		String message=ScreenHelper.getTran("web","error.sending.file",sWebLanguage);
+		String message=ScreenHelper.getTran(null,"web","error.sending.file",sWebLanguage);
 		StringBuffer file = createWHONetFile(start, bUpdateExportDate);
 		if(file.length()==0){
-			message=ScreenHelper.getTran("web","nothing.to.send",sWebLanguage);
+			message=ScreenHelper.getTran(null,"web","nothing.to.send",sWebLanguage);
 		}
 		else {
 			try{
@@ -151,7 +151,7 @@ public class WHONetUtils {
 				bw.write(file.toString());
 				bw.flush();
 				bw.close();
-				message=ScreenHelper.getTran("web","file.sent.to",sWebLanguage)+" "+filename;
+				message=ScreenHelper.getTran(null,"web","file.sent.to",sWebLanguage)+" "+filename;
 			}
 			catch(Exception e){
 				e.printStackTrace();

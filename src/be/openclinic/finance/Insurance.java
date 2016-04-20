@@ -4,6 +4,7 @@ import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.system.Debug;
 import be.mxs.common.util.system.Pointer;
 import be.mxs.common.util.system.ScreenHelper;
+import be.openclinic.adt.Encounter;
 import be.openclinic.common.OC_Object;
 import net.admin.AdminPerson;
 
@@ -66,13 +67,32 @@ public class Insurance extends OC_Object {
 	}
 
 	public String getExtraInsurarUid(){
+		String underfiveinsurance=MedwanQuery.getInstance().getConfigString("CCBRTUnderFiveComplementaryInsurance","");
+		String[] underfiveexcludedclinictypes=MedwanQuery.getInstance().getConfigString("CCBRTUnderFiveExcludeServiceTypes","privateclinic").split(";");
+		double age = MedwanQuery.getInstance().getAgeDecimal(Integer.parseInt(getPatientUID()));
+		boolean bAcceptableClinic=true;
+		Encounter e = Encounter.getActiveEncounter(getPatientUID());
+		if(e!=null && e.getService()!=null){
+			for(int n=0;n<underfiveexcludedclinictypes.length;n++){
+				if(e.getService().code3.contentEquals(underfiveexcludedclinictypes[n])){
+					bAcceptableClinic=false;
+					break;
+				}
+			}
+		}
+		else{
+			bAcceptableClinic=false;
+		}
+		if(age<=MedwanQuery.getInstance().getConfigInt("CCBRTUnderFiveAgeLimitInYears",5) && underfiveinsurance.length()>0 && bAcceptableClinic){
+			return underfiveinsurance;
+		}
 		return extraInsurarUid;
 	}
 
 	public Insurar getExtraInsurar(){
         if(extrainsurar==null){
-            if(ScreenHelper.checkString(extraInsurarUid).length()>0){
-                insurar = Insurar.get(extraInsurarUid);
+            if(ScreenHelper.checkString(getExtraInsurarUid()).length()>0){
+                insurar = Insurar.get(getExtraInsurarUid());
             }
         }
         return extrainsurar;

@@ -275,6 +275,23 @@ public class PatientInvoice extends Invoice {
 		return s;
 	}
 
+	public void setEstimatedDeliveryDate(String s){
+		setModifier(10,s);
+	}
+
+	public String getEstimatedDeliveryDate(){
+		String s="";
+		if(getModifiers()!=null){
+			try{
+				s=getModifiers().split(";")[10];
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return s;
+	}
+
 	//MFP reporting section
 	
 	public String getSignatures(){
@@ -563,6 +580,25 @@ public class PatientInvoice extends Invoice {
     			insurers+=", ";
     		}
     		insurers+=ins.get(i.next());
+    	}
+    	return insurers;
+    }
+    
+    public Vector getInsurerObjects(){
+    	Vector insurers=new Vector();
+    	Hashtable ins = new Hashtable();
+    	Vector debets=getDebets();
+    	if(debets!=null){
+	    	for(int n=0;n<debets.size();n++){
+	    		Debet debet = (Debet)debets.elementAt(n);
+	    		if(debet.getInsurance()!=null && debet.getInsurance().getInsurar()!=null){
+	    			ins.put(debet.getInsurance().getInsurarUid(), debet.getInsurance().getInsurar());
+	    		}
+	    	}
+    	}
+    	Iterator i = ins.keySet().iterator();
+    	while(i.hasNext()){
+    		insurers.add(ins.get(i.next()));
     	}
     	return insurers;
     }

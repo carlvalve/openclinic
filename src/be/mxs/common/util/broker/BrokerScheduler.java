@@ -21,9 +21,11 @@ import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.system.Debug;
 import be.openclinic.adt.Planning;
 import be.openclinic.reporting.LabresultsNotifier;
+import be.openclinic.reporting.MessageNotifier;
 import be.openclinic.reporting.PlanningNotifier;
 
 public class BrokerScheduler implements Runnable{
+	static MessageNotifier msNotifier = new MessageNotifier();
 	static LabresultsNotifier lrNotifier = new LabresultsNotifier();
 	static PlanningNotifier plNotifier = new PlanningNotifier();
 	Thread thread;
@@ -46,11 +48,18 @@ public class BrokerScheduler implements Runnable{
 		if(lrNotifier==null){
 			lrNotifier = new LabresultsNotifier();
 		}
+		if(msNotifier==null){
+			msNotifier = new MessageNotifier();
+		}
 		if(plNotifier==null){
 			plNotifier=new PlanningNotifier();
 		}
+		Debug.println("Generating new lab messages");
 		lrNotifier.sendNewLabs();
+		Debug.println("Generating new planning messages");
 		plNotifier.sendPlanningReminders();
+		Debug.println("Running message spooler");
+		msNotifier.sendSpooledMessages();
 	}
 	
 	public void run() {

@@ -83,7 +83,7 @@ public class OpenclinicSlaveExporter implements Runnable{
 
 	private String translate(String s){
 		if(language!=null){
-			return ScreenHelper.getTran("web", s, language);
+			return ScreenHelper.getTran(null,"web", s, language);
 		}
 		else {
 			return s;

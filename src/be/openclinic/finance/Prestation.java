@@ -223,9 +223,36 @@ public class Prestation extends OC_Object{
 		return name;
 	}
 
+	public void setReservedForServiceType(String s){
+		setModifier(8,s+"");
+	}
+	
+	public String getReservedForServiceType(){
+		String s = "";
+		if(getModifiers()!=null){
+			try{
+				s =getModifiers().split(";")[8];
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return s;
+	}
+	
 	public boolean isVisibleFor(Insurar insurar){
 		if(insurar==null){
 			return true;
+		}
+		return insurar.isPrestationVisible(this.getUid()) && (insurar.getUseLimitedPrestationsList()==1 || getHideFromDefaultList()==0);
+	}
+	
+	public boolean isVisibleFor(Insurar insurar,Service service){
+		if(insurar==null){
+			return true;
+		}
+		if(getReservedForServiceType().length()>0 && (service==null || !getReservedForServiceType().equalsIgnoreCase(ScreenHelper.checkString(service.code3)))){
+			return false;
 		}
 		return insurar.isPrestationVisible(this.getUid()) && (insurar.getUseLimitedPrestationsList()==1 || getHideFromDefaultList()==0);
 	}

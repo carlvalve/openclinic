@@ -1,5 +1,6 @@
 package be.dpms.medwan.webapp.wl.struts.actions.healthrecord;
 
+import be.openclinic.archiving.ArchiveDocument;
 import be.openclinic.finance.Debet;
 import be.openclinic.medical.LabAnalysis;
 import be.openclinic.medical.RequestedLabAnalysis;
@@ -200,6 +201,33 @@ public class SaveLabAnalysesAction extends Action {
                 }
             	RequestedLabAnalysis.setObjectid(Integer.parseInt(sServerId), Integer.parseInt(sTransactionId), nObjectId);
             }
+        	//If analyses with editor = scan exist, make sure that arch_documents for each PDF type are created
+        	//Let's run through the analyses
+        	Hashtable analyses = RequestedLabAnalysis.getLabAnalysesForLabRequest(Integer.parseInt(sServerId), Integer.parseInt(sTransactionId),"scan");
+        	HashSet scantypes = new HashSet();
+        	Enumeration eAnalyses = analyses.keys();
+  	  		System.out.println(0);
+        	while(eAnalyses.hasMoreElements()){
+        		RequestedLabAnalysis rAnalysis = (RequestedLabAnalysis)(analyses.get(eAnalyses.nextElement()));
+          	  	String[] pars=rAnalysis.getTag().split(";");
+          	  	for(int n=0;n<pars.length;n++){
+          	  		System.out.println(1);
+          	  	  	if(pars[n].split(":").length>1 && pars[n].split(":")[0].equals("TP")){
+              	  		System.out.println(2);
+          	  	  	  	String type = pars[n].split(":")[1];
+          	  	  	  	if(!scantypes.contains(type)){
+                  	  		System.out.println(3);
+          	  	  	  		//We didn't check this type yet
+          	  	  	  		if(ArchiveDocument.getByReference(transaction.getUid()+".LAB."+type)==null){
+                      	  		System.out.println(4);
+          	  	  	  			//We need to add an arch_document for this scan type
+          	  	  	  			ArchiveDocument.saveLabDocument(true, transaction,Integer.parseInt(sUserId) , "labscan", "LAB."+type,sPatientId );
+          	  	  	  		}
+          	  	  	  		scantypes.add(type);
+          	  	  	  	}
+          	  	  	}
+          	  	}
+        	}
         }
 
         return mapping.findForward("examinationsOverview");

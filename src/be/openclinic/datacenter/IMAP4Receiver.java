@@ -80,16 +80,12 @@ public class IMAP4Receiver extends Receiver {
 						ImportMessage.sendAck(ackMessages);
 		            }
 		            catch(MessagingException e){
-		            	e.printStackTrace();
 		            	Debug.println(e.getMessage());
 		            } catch (UnsupportedEncodingException e) {
-		            	e.printStackTrace();
 		            	Debug.println(e.getMessage());
 		    		} catch (DocumentException e) {
-		            	e.printStackTrace();
 		            	Debug.println(e.getMessage());
 		    		} catch (IOException e) {
-		            	e.printStackTrace();
 		            	Debug.println(e.getMessage());
 		    		}
 		    	}

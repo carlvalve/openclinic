@@ -55,12 +55,12 @@ public class SendSMS {
 		else if(MedwanQuery.getInstance().getConfigString("smsgateway","").equalsIgnoreCase("hqsms")){
 			try {						
 				HttpClient client = new HttpClient();
-				PostMethod method = new PostMethod(MedwanQuery.getInstance().getConfigString("hqsms.url","http://api.hqsms.com/sms.do"));
+				PostMethod method = new PostMethod(MedwanQuery.getInstance().getConfigString("hqsms.url","https://api2.smsapi.com/sms.do"));
 				Vector<NameValuePair> vNvp = new Vector<NameValuePair>();
 				vNvp.add(new NameValuePair("normalize","1"));
-				vNvp.add(new NameValuePair("username",MedwanQuery.getInstance().getConfigString("hqsms.user","")));
-				vNvp.add(new NameValuePair("password",MedwanQuery.getInstance().getConfigString("hqsms.password","")));
-				vNvp.add(new NameValuePair("from",MedwanQuery.getInstance().getConfigString("hqsms.from","HQSMS.com")));
+				vNvp.add(new NameValuePair("username",MedwanQuery.getInstance().getConfigString("hqsms.user","frank.verbeke@post-factum.be")));
+				vNvp.add(new NameValuePair("password",MedwanQuery.getInstance().getConfigString("hqsms.password","MD5 password from http://ssl.smsapi.com")));
+				vNvp.add(new NameValuePair("from",MedwanQuery.getInstance().getConfigString("hqsms.from","Frank")));
 				vNvp.add(new NameValuePair("to",to));
 				vNvp.add(new NameValuePair("message",message));
 				NameValuePair[] nvp = new NameValuePair[vNvp.size()];
@@ -96,6 +96,16 @@ public class SendSMS {
 					sendSMS.send("modem.nokia", sPort, nBaudrate, "Nokia", "2690", sPinCode, to, message);
 				}			
 				bSuccess=true;
+			}
+			catch(Exception m){
+				
+			}
+		}
+		else if(MedwanQuery.getInstance().getConfigString("smsgateway","").equalsIgnoreCase("ccbrt-tigo")){
+			try{
+				//**************************************
+				//TODO: CCBRT Tigo communication code  *
+				//**************************************
 			}
 			catch(Exception m){
 				

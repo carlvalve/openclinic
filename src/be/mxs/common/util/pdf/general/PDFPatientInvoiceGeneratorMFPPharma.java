@@ -439,10 +439,10 @@ public class PDFPatientInvoiceGeneratorMFPPharma extends PDFInvoiceGenerator {
 	        	cell=createLabelCell("",2);
 	            table.addCell(cell);
 	        	if(encounter.getCategories().equalsIgnoreCase("C")){
-		        	cell=createLabelCell(ScreenHelper.getTran("Web","recordnumber",sPrintLanguage)+": "+Pointer.getPointer("ENCOUNTER.ACCIDENT.RECORDNUMBER."+encounter.getUid())+"\n"+ScreenHelper.getTran("Web","immatnumber",sPrintLanguage)+": "+Pointer.getPointer("ENCOUNTER.ACCIDENT.IMMAT."+encounter.getUid()),28);
+		        	cell=createLabelCell(ScreenHelper.getTran(null,"Web","recordnumber",sPrintLanguage)+": "+Pointer.getPointer("ENCOUNTER.ACCIDENT.RECORDNUMBER."+encounter.getUid())+"\n"+ScreenHelper.getTran(null,"Web","immatnumber",sPrintLanguage)+": "+Pointer.getPointer("ENCOUNTER.ACCIDENT.IMMAT."+encounter.getUid()),28);
 	        	}
 	        	else if(encounter.getCategories().equalsIgnoreCase("D")){
-		        	cell=createLabelCell(ScreenHelper.getTran("Web","insurer",sPrintLanguage)+": "+Pointer.getPointer("ENCOUNTER.ACCIDENT.INSURER."+encounter.getUid())+"\n"+ScreenHelper.getTran("Web","accidentnumber",sPrintLanguage)+": "+Pointer.getPointer("ENCOUNTER.ACCIDENT.NUMBER."+encounter.getUid()),28);
+		        	cell=createLabelCell(ScreenHelper.getTran(null,"Web","insurer",sPrintLanguage)+": "+Pointer.getPointer("ENCOUNTER.ACCIDENT.INSURER."+encounter.getUid())+"\n"+ScreenHelper.getTran(null,"Web","accidentnumber",sPrintLanguage)+": "+Pointer.getPointer("ENCOUNTER.ACCIDENT.NUMBER."+encounter.getUid()),28);
 	        	}
 	        	else {
 		        	cell=createLabelCell("",28);
@@ -664,7 +664,7 @@ public class PDFPatientInvoiceGeneratorMFPPharma extends PDFInvoiceGenerator {
             table.addCell(cell);
     		String sPrinted=getTran("web","printedby")+": "+user.person.lastname.toUpperCase()+", "+user.person.firstname+" "+ScreenHelper.fullDateFormatSS.format(new java.util.Date());
     		if(ScreenHelper.checkString(invoice.getComment()).length()>0){
-    			sPrinted+="\n\n\n"+ScreenHelper.getTran("web.finance","otherreference",sPrintLanguage)+": "+invoice.getComment();
+    			sPrinted+="\n\n\n"+ScreenHelper.getTran(null,"web.finance","otherreference",sPrintLanguage)+": "+invoice.getComment();
                 table.addCell(cell);
     		}
     		cell=createValueCell(sPrinted,50);
@@ -695,7 +695,7 @@ public class PDFPatientInvoiceGeneratorMFPPharma extends PDFInvoiceGenerator {
     			signatures+=ptr.split(";")[0]+" - "+ScreenHelper.fullDateFormat.format(new SimpleDateFormat("yyyyMMddHHmmSSsss").parse(ptr.split(";")[1]));
     		}
     		if(signatures.length()>0){
-    			cell=createValueCell(ScreenHelper.getTran("web.finance","signed.by",sPrintLanguage)+": "+signatures,50);
+    			cell=createValueCell(ScreenHelper.getTran(null,"web.finance","signed.by",sPrintLanguage)+": "+signatures,50);
                 table.addCell(cell);
     		}
     		else {
