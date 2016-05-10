@@ -756,7 +756,7 @@ public class UpdateSystem implements Runnable {
 	                    			String localcontext = request.getProtocol().split("/")[0].toLowerCase()+"://localhost:"+request.getServerPort()+request.getContextPath();
 	                    			String key=configelement.attributeValue("key");
 	                    			String value=configelement.attributeValue("value")+"";
-	                    			MedwanQuery.getInstance().setConfigString(key,value.replaceAll("\\$setupdir\\$", setupdir).replaceAll("\\$context\\$", context).replaceAll("\\$localcontext\\$", localcontext).replaceAll("\\$minicontext\\$", minicontext));
+	                    			MedwanQuery.getInstance().setConfigString(key.replaceAll("\\$setupdir\\$", setupdir).replaceAll("\\$context\\$", context).replaceAll("\\$localcontext\\$", localcontext).replaceAll("\\$minicontext\\$", minicontext).replaceAll("\\$project\\$", MedwanQuery.getInstance().getConfigString("defaultProject","oc")),value.replaceAll("\\$setupdir\\$", setupdir).replaceAll("\\$context\\$", context).replaceAll("\\$localcontext\\$", localcontext).replaceAll("\\$minicontext\\$", minicontext).replaceAll("\\$project\\$", MedwanQuery.getInstance().getConfigString("defaultProject","oc")));
 	                    		}
 	                    		else if(configelement.getName().equalsIgnoreCase("labels")){
 	                    			//This is a label list 

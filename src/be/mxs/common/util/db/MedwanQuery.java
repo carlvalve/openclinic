@@ -3540,6 +3540,9 @@ public class MedwanQuery {
     }
     
     public double getNrMonths(java.util.Date startDate, java.util.Date endDate){
+    	if(startDate==null || endDate==null){
+    		return -1;
+    	}
     	long millis = endDate.getTime()-startDate.getTime();
     	long month=(365/12)*24*3600;
     	month*=1000;

@@ -7,6 +7,9 @@ import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.Vector;
 
 import be.mxs.common.util.db.MedwanQuery;
@@ -186,15 +189,114 @@ public class SummaryInvoice extends OC_Object{
 		return consolidatedDebets;
 	}
 	
+    public Vector getDebetsForInsurance(String sInsuranceUid) {
+		Vector d = new Vector();
+		for(int n=0;n<getPatientInvoices().size();n++){
+			PatientInvoice invoice = (PatientInvoice)getPatientInvoices().elementAt(n);
+			for(int e=0;e<invoice.getDebets().size();e++){
+				Debet debet = (Debet)invoice.getDebets().elementAt(e);
+				if(debet !=null && debet.hasValidUid() && sInsuranceUid.equalsIgnoreCase(debet.getInsuranceUid())){
+					d.add(debet);
+				}
+			}
+		}
+        return d;
+    }
+    
+    public String getPatientInvoiceNumbers(){
+    	String s = "";
+    	SortedSet ss = new TreeSet();
+		for(int n=0;n<getPatientInvoices().size();n++){
+			ss.add(((PatientInvoice)getPatientInvoices().elementAt(n)).getInvoiceNumber());
+		}
+		Iterator iSs=ss.iterator();
+		while(iSs.hasNext()){
+			if(s.length()>0){
+				s+=", ";
+			}
+			s+=iSs.next();
+		}
+		return s;
+    }
+    
+    public Vector getAllDebets(){
+		Vector allDebets = new Vector();
+		for(int n=0;n<getPatientInvoices().size();n++){
+			PatientInvoice invoice = (PatientInvoice)getPatientInvoices().elementAt(n);
+			for(int d=0;d<invoice.getDebets().size();d++){
+				Debet debet = (Debet)invoice.getDebets().elementAt(d);
+				allDebets.add(debet);
+			}
+		}
+		return allDebets;
+    }
+
+    public String getServicesAsString(String language){
+ 	   String service="";
+ 	   try{
+ 		   HashSet services = new HashSet();
+ 		   Vector debets = getAllDebets();
+ 		   for(int n=0;n<debets.size();n++){
+ 			   Debet debet = (Debet)debets.elementAt(n);
+ 			   if(ScreenHelper.checkString(debet.getServiceUid()).length()>0){
+ 				   services.add(debet.getServiceUid());
+ 			   }
+ 			   else if(debet.getEncounter()!=null && ScreenHelper.checkString(debet.getEncounter().getServiceUID()).length()>0){
+ 				   services.add(debet.getEncounter().getServiceUID());
+ 			   }
+ 		   }
+ 		   Iterator hs = services.iterator();
+ 		   while(hs.hasNext()){
+ 			   if(service.length()>0){
+ 				   service+=", ";
+ 			   }
+ 			   service+=ScreenHelper.getTran(null,"service", (String)hs.next(), language);
+ 		   }
+ 	   }
+ 	   catch(Exception e){
+ 		   e.printStackTrace();
+ 	   }
+ 	   return service;
+    }
+    
+    public String getServicesAsString(Vector debets, String language){
+ 	   String service="";
+ 	   HashSet services = new HashSet();
+ 	   for(int n=0;n<debets.size();n++){
+ 		   Debet debet = (Debet)debets.elementAt(n);
+ 		   if(ScreenHelper.checkString(debet.getServiceUid()).length()>0){
+ 			   services.add(debet.getServiceUid());
+ 		   }
+ 	   }
+ 	   Iterator hs = services.iterator();
+ 	   while(hs.hasNext()){
+ 		   if(service.length()>0){
+ 			   service+=", ";
+ 		   }
+ 		   service+=ScreenHelper.getTran(null,"service", (String)hs.next(), language);
+ 	   }
+ 	   return service;
+    }
+    
+    public double getBalance(){
+    	double balance=0;
+    	Vector invoices = getPatientInvoices();
+    	for(int n=0;n<invoices.size();n++){
+    		PatientInvoice invoice = (PatientInvoice)invoices.elementAt(n);
+    		balance+=invoice.getBalance();
+    	}
+    	return balance;
+    }
+    
 	public Hashtable getConsolidatedCredits(){
 		Hashtable consolidatedCredits = new Hashtable();
 		for(int n=0;n<getPatientInvoices().size();n++){
 			PatientInvoice invoice = (PatientInvoice)getPatientInvoices().elementAt(n);
-			for(int d=0;d<invoice.getDebets().size();d++){
-				PatientCredit credit = (PatientCredit)invoice.getCredits().elementAt(d);
+			for(int d=0;d<invoice.getCredits().size();d++){
+				PatientCredit credit = PatientCredit.get((String)invoice.getCredits().elementAt(d));
 				if(credit !=null && credit.hasValidUid()){
 					if(consolidatedCredits.get(credit.getUid())==null){
-						consolidatedCredits.put(credit.getUid(), credit);
+						consolidatedCredits.put(credit.getUid(), credit.getUid());
 					}
 				}
 			}

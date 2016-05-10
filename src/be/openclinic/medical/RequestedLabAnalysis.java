@@ -731,7 +731,11 @@ public class RequestedLabAnalysis {
                 ps.setInt(1,Integer.parseInt(patientId));
                 ResultSet rs = ps.executeQuery();
                 if(rs.next()){
-                    setResultRefMin(getResultRefMin(rs.getString("gender"),new Double(MedwanQuery.getInstance().getNrMonths(rs.getDate("dateofbirth"), new java.util.Date())).intValue()));
+                    int ageInMonths=new Double(MedwanQuery.getInstance().getNrMonths(rs.getDate("dateofbirth"), new java.util.Date())).intValue();
+                    if(ageInMonths<0){
+                    	Debug.println("Cannot determine age for lab reference values for personid "+patientId);
+                    }
+                	setResultRefMin(getResultRefMin(rs.getString("gender"),ageInMonths));
                 }
                 rs.close();
                 ps.close();

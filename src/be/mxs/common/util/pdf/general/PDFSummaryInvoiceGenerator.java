@@ -450,7 +450,7 @@ public class PDFSummaryInvoiceGenerator extends PDFInvoiceGenerator {
 
 
     		String signatures="";
-    		Vector pointers=Pointer.getPointers("INVSIGN."+invoice.getUid());
+    		Vector pointers=Pointer.getPointers("SUMINVSIGN."+invoice.getUid());
     		for(int n=0;n<pointers.size();n++){
     			if(n>0){
     				signatures+=", ";

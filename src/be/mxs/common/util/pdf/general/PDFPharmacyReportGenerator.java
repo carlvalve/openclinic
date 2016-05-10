@@ -1,6 +1,7 @@
 package be.mxs.common.util.pdf.general;
 
 import be.mxs.common.util.pdf.official.PDFOfficialBasic;
+import be.mxs.common.util.system.HTMLEntities;
 import be.mxs.common.util.system.Pointer;
 import be.mxs.common.util.system.ScreenHelper;
 import be.mxs.common.util.db.MedwanQuery;
@@ -321,7 +322,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 				Batch batch = (Batch)batches.elementAt(i);
 				if(batch.getEnd()!=null && !batch.getEnd().after(date)){
 					//First find the product subcategory
-					String uid=stock.getProduct()==null?"|"+stock.getUid():stock.getProduct().getFullProductSubGroupName(sPrintLanguage)+"|"+stock.getUid()+"|"+new SimpleDateFormat("dd/MM/yyyy").format(batch.getEnd())+"|"+batch.getLevel()+"|"+batch.getBatchNumber();
+					String uid=stock.getProduct()==null?"|"+stock.getUid():HTMLEntities.unhtmlentities(stock.getProduct().getFullProductSubGroupName(sPrintLanguage))+"|"+stock.getUid()+"|"+new SimpleDateFormat("dd/MM/yyyy").format(batch.getEnd())+"|"+batch.getLevel()+"|"+batch.getBatchNumber();
 					stocks.put(uid, stock);
 				}
 			}
@@ -396,7 +397,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 			ProductStock stock = (ProductStock)productStocks.elementAt(n);
 			if(stock.getLevel()<stock.getMinimumLevel()){
 				//First find the product subcategory
-				String uid=stock.getProduct()==null?"|"+stock.getUid():stock.getProduct().getFullProductSubGroupName(sPrintLanguage)+"|"+stock.getUid();
+				String uid=stock.getProduct()==null?"|"+stock.getUid():HTMLEntities.unhtmlentities(stock.getProduct().getFullProductSubGroupName(sPrintLanguage))+"|"+stock.getUid();
 				stocks.put(uid, stock);
 			}
 		}
@@ -448,7 +449,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 		for(int n=0;n<productStocks.size();n++){
 			ProductStock stock = (ProductStock)productStocks.elementAt(n);
 			//First find the product subcategory
-			String uid=stock.getProduct()==null?"|"+stock.getUid():stock.getProduct().getFullProductSubGroupName(sPrintLanguage)+"|"+stock.getUid();
+			String uid=stock.getProduct()==null?"|"+stock.getUid():HTMLEntities.unhtmlentities(stock.getProduct().getFullProductSubGroupName(sPrintLanguage))+"|"+stock.getUid();
 			stocks.put(uid, stock);
 		}
 		
@@ -529,7 +530,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 		for(int n=0;n<productStocks.size();n++){
 			ProductStock stock = (ProductStock)productStocks.elementAt(n);
 			//First find the product subcategory
-			String uid=stock.getProduct()==null?"|"+stock.getUid():stock.getProduct().getFullProductSubGroupName(sPrintLanguage)+"|"+stock.getUid();
+			String uid=stock.getProduct()==null?"|"+stock.getUid():HTMLEntities.unhtmlentities(stock.getProduct().getFullProductSubGroupName(sPrintLanguage))+"|"+stock.getUid();
 			stocks.put(uid, stock);
 		}
 		
@@ -600,7 +601,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
  		for(int n=0;n<productStocks.size();n++){
  			ProductStock stock = (ProductStock)productStocks.elementAt(n);
  			//First find the product subcategory
- 			String uid=stock.getProduct()==null?"|"+stock.getUid():stock.getProduct().getFullProductSubGroupName(sPrintLanguage)+"|"+stock.getUid();
+ 			String uid=stock.getProduct()==null?"|"+stock.getUid():HTMLEntities.unhtmlentities(stock.getProduct().getFullProductSubGroupName(sPrintLanguage))+"|"+stock.getUid();
  			stocks.put(uid, stock);
  		}
  		
@@ -722,7 +723,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
  			ProductStock stock = (ProductStock)productStocks.elementAt(n);
  			//First find the product subcategory
  			Product product=stock.getProduct();
- 			String uid=stock.getProduct()==null?"|"+stock.getUid():stock.getProduct().getFullProductSubGroupName(sPrintLanguage)+"|"+(product!=null?product.getName():"")+" |"+stock.getUid();
+ 			String uid=stock.getProduct()==null?"|"+stock.getUid():HTMLEntities.unhtmlentities(stock.getProduct().getFullProductSubGroupName(sPrintLanguage))+"|"+(product!=null?product.getName():"")+" |"+stock.getUid();
  			stocks.put(uid, stock);
  		}
  		
@@ -1045,7 +1046,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 			//Todo: store incoming in uid
 			if(stock.getProduct()!=null && stock.getTotalUnitsInForPeriod(begin, new java.util.Date(end.getTime()+day),ScreenHelper.checkString(userid))>0){
 				//First find the product subcategory
-				String uid=stock.getProduct().getFullProductSubGroupName(sPrintLanguage)+"|"+ScreenHelper.capitalize(stock.getProduct().getName())+"|"+stock.getUid();
+				String uid=HTMLEntities.unhtmlentities(stock.getProduct().getFullProductSubGroupName(sPrintLanguage))+"|"+ScreenHelper.capitalize(stock.getProduct().getName())+"|"+stock.getUid();
 				stocks.put(uid, stock);
 			}
 		}
@@ -1281,7 +1282,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 				ProductStockOperation operation = (ProductStockOperation)receipts.elementAt(n);
 				String prodname="";
 				if(operation.getProductStock()!=null && operation.getProductStock().getProduct()!=null){
-					String key=new SimpleDateFormat("MM/yyyy").format(operation.getDate())+"|"+operation.getProductStock().getProduct().getFullProductSubGroupName(sPrintLanguage)+"|"+ScreenHelper.capitalize(operation.getProductStock().getProduct().getName())+"|"+ScreenHelper.checkString(operation.getBatchNumber()).toUpperCase()+" ";
+					String key=new SimpleDateFormat("MM/yyyy").format(operation.getDate())+"|"+HTMLEntities.unhtmlentities(operation.getProductStock().getProduct().getFullProductSubGroupName(sPrintLanguage))+"|"+ScreenHelper.capitalize(operation.getProductStock().getProduct().getName())+"|"+ScreenHelper.checkString(operation.getBatchNumber()).toUpperCase()+" ";
 					if(quantities.get(key)==null){
 						quantities.put(key, 0);
 						operations.put(key, operation.getProductStock().getProduct());
