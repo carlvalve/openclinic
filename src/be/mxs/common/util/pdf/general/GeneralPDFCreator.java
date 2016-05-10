@@ -759,7 +759,7 @@ public class GeneralPDFCreator extends PDFCreator {
             }
             else{                	
             	// no picture found
-            	imgCell = createValueCell(getTran("web","noPictureFound"),1);  
+            	imgCell = createValueCell("",1);  
             }
         }
 

@@ -1258,12 +1258,12 @@ public class Planning extends OC_Object {
 					" OC_PLANNING_CANCELLATIONWARNINGSENT is null and"+
 					" OC_PLANNING_CONFIRMATIONDATE<? and ("+
 					" select sum(oc_debet_amount) total from oc_patientinvoices,oc_debets where"+
-					" oc_debet_patientinvoiceuid=oc_patientinvoice_serverid||'.'||oc_patientinvoice_objectid and"+
+					" oc_debet_patientinvoiceuid="+MedwanQuery.getInstance().convert("varchar","oc_patientinvoice_serverid")+MedwanQuery.getInstance().concatSign()+"'.'"+MedwanQuery.getInstance().concatSign()+MedwanQuery.getInstance().convert("varchar","oc_patientinvoice_objectid")+" and"+
 					" oc_patientinvoice_patientuid=OC_PLANNING_PATIENTUID)"+
 					" - "+
 					" (select sum(oc_patientcredit_amount) total from oc_patientinvoices,oc_patientcredits where"+
 					" oc_patientcredit_type='patient.payment' and"+
-					" oc_patientcredit_invoiceuid=oc_patientinvoice_serverid||'.'||oc_patientinvoice_objectid and"+
+					" oc_patientcredit_invoiceuid="+MedwanQuery.getInstance().convert("varchar","oc_patientinvoice_serverid")+MedwanQuery.getInstance().concatSign()+"'.'"+MedwanQuery.getInstance().concatSign()+MedwanQuery.getInstance().convert("varchar","oc_patientinvoice_objectid")+" and"+
 					" oc_patientinvoice_patientuid=OC_PLANNING_PATIENTUID)>"+MedwanQuery.getInstance().getConfigInt("acceptableOpenBalanceForPlanningConfirmation",0);
             ps = oc_conn.prepareStatement(sSelect);
             ps.setTimestamp(1, new java.sql.Timestamp(new java.util.Date().getTime()+2*day));
@@ -1309,12 +1309,12 @@ public class Planning extends OC_Object {
             sSelect = 	" update OC_PLANNING set OC_PLANNING_CANCELATIONDATE=OC_PLANNING_CONFIRMATIONDATE,OC_PLANNING_CONFIRMATIONDATE=null where"+
 					" OC_PLANNING_CONFIRMATIONDATE<? and ("+
 					" select sum(oc_debet_amount) total from oc_patientinvoices,oc_debets where"+
-					" oc_debet_patientinvoiceuid=oc_patientinvoice_serverid||'.'||oc_patientinvoice_objectid and"+
+					" oc_debet_patientinvoiceuid="+MedwanQuery.getInstance().convert("varchar","oc_patientinvoice_serverid")+MedwanQuery.getInstance().concatSign()+"'.'"+MedwanQuery.getInstance().concatSign()+MedwanQuery.getInstance().convert("varchar","oc_patientinvoice_objectid")+" and"+
 					" oc_patientinvoice_patientuid=OC_PLANNING_PATIENTUID)"+
 					" - "+
 					" (select sum(oc_patientcredit_amount) total from oc_patientinvoices,oc_patientcredits where"+
 					" oc_patientcredit_type='patient.payment' and"+
-					" oc_patientcredit_invoiceuid=oc_patientinvoice_serverid||'.'||oc_patientinvoice_objectid and"+
+					" oc_patientcredit_invoiceuid="+MedwanQuery.getInstance().convert("varchar","oc_patientinvoice_serverid")+MedwanQuery.getInstance().concatSign()+"'.'"+MedwanQuery.getInstance().concatSign()+MedwanQuery.getInstance().convert("varchar","oc_patientinvoice_objectid")+" and"+
 					" oc_patientinvoice_patientuid=OC_PLANNING_PATIENTUID)>"+MedwanQuery.getInstance().getConfigInt("acceptableOpenBalanceForPlanningConfirmation",0);
             ps = oc_conn.prepareStatement(sSelect);
             ps.setTimestamp(1, new java.sql.Timestamp(new java.util.Date().getTime()));
@@ -1323,12 +1323,12 @@ public class Planning extends OC_Object {
             sSelect = 	" update OC_PLANNING set OC_PLANNING_CONFIRMATIONDATE=null where"+
 					" OC_PLANNING_CONFIRMATIONDATE<? and ("+
 					" select sum(oc_debet_amount) total from oc_patientinvoices,oc_debets where"+
-					" oc_debet_patientinvoiceuid=oc_patientinvoice_serverid||'.'||oc_patientinvoice_objectid and"+
+					" oc_debet_patientinvoiceuid="+MedwanQuery.getInstance().convert("varchar","oc_patientinvoice_serverid")+MedwanQuery.getInstance().concatSign()+"'.'"+MedwanQuery.getInstance().concatSign()+MedwanQuery.getInstance().convert("varchar","oc_patientinvoice_objectid")+" and"+
 					" oc_patientinvoice_patientuid=OC_PLANNING_PATIENTUID)"+
 					" - "+
 					" (select sum(oc_patientcredit_amount) total from oc_patientinvoices,oc_patientcredits where"+
 					" oc_patientcredit_type='patient.payment' and"+
-					" oc_patientcredit_invoiceuid=oc_patientinvoice_serverid||'.'||oc_patientinvoice_objectid and"+
+					" oc_patientcredit_invoiceuid="+MedwanQuery.getInstance().convert("varchar","oc_patientinvoice_serverid")+MedwanQuery.getInstance().concatSign()+"'.'"+MedwanQuery.getInstance().concatSign()+MedwanQuery.getInstance().convert("varchar","oc_patientinvoice_objectid")+" and"+
 					" oc_patientinvoice_patientuid=OC_PLANNING_PATIENTUID)<="+MedwanQuery.getInstance().getConfigInt("acceptableOpenBalanceForPlanningConfirmation",0);
             ps = oc_conn.prepareStatement(sSelect);
             ps.setTimestamp(1, new java.sql.Timestamp(new java.util.Date().getTime()+day));

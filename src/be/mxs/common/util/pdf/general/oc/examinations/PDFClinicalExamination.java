@@ -194,6 +194,28 @@ public class PDFClinicalExamination extends PDFGeneralBasic {
             addItemRow(table,getTran("Web.Occup","medwan.healthrecord.anamnese.general.objective"),itemValue);
         }
 
+        //*** Examen gynéco ***
+        itemValue = getItemSeriesValue(IConstants_PREFIX+"ITEM_TYPE_BREAST_EXAMINATION");
+        if(itemValue.length() > 0){
+            addItemRow(table,getTran("Web","breast-examination"),itemValue);
+        }
+        itemValue = getItemSeriesValue(IConstants_PREFIX+"ITEM_TYPE_OBJECTIVE_GYNINSPECTION");
+        if(itemValue.length() > 0){
+            addItemRow(table,getTran("Web","inspection"),itemValue);
+        }
+        itemValue = getItemSeriesValue(IConstants_PREFIX+"ITEM_TYPE_OBJECTIVE_SPECULUM");
+        if(itemValue.length() > 0){
+            addItemRow(table,getTran("Web","speculum"),itemValue);
+        }
+        itemValue = getItemSeriesValue(IConstants_PREFIX+"ITEM_TYPE_OBJECTIVE_VAGINAL_TOUCHE");
+        if(itemValue.length() > 0){
+            addItemRow(table,getTran("Web","vaginal.touche"),itemValue);
+        }
+        itemValue = getItemSeriesValue(IConstants_PREFIX+"ITEM_TYPE_ECHOGRAPHY");
+        if(itemValue.length() > 0){
+            addItemRow(table,getTran("gynaecology","gynaecology.echography"),itemValue);
+        }
+
         //*** Evaluation ***
         itemValue = getItemSeriesValue(IConstants_PREFIX+"[GENERAL.ANAMNESE]ITEM_TYPE_EVALUATION");
         if(itemValue.length() > 0){

@@ -20,6 +20,7 @@ import be.openclinic.finance.ExtraInsurarInvoice2;
 import be.openclinic.finance.InsurarInvoice;
 import be.openclinic.finance.Invoice;
 import be.openclinic.finance.PatientInvoice;
+import be.openclinic.finance.SummaryInvoice;
 
 public abstract class PDFInvoiceGenerator extends PDFBasic {
 
@@ -52,6 +53,13 @@ public abstract class PDFInvoiceGenerator extends PDFBasic {
         String sFooter = getConfigString("footer."+sProject);
         sFooter = sFooter.replaceAll("<br>","\n").replaceAll("<BR>","\n");
         PDFMFPFooter footer = new PDFMFPFooter(sFooter+"\n",patientinvoice.getAcceptationUid()!=null && patientinvoice.getAcceptationUid().length()>0);
+        docWriter.setPageEvent(footer);
+    }
+
+    protected void addMFPFooter(SummaryInvoice patientinvoice){
+        String sFooter = getConfigString("footer."+sProject);
+        sFooter = sFooter.replaceAll("<br>","\n").replaceAll("<BR>","\n");
+        PDFMFPFooter footer = new PDFMFPFooter(sFooter+"\n",patientinvoice.getValidated()!=null && patientinvoice.getValidated().length()>0);
         docWriter.setPageEvent(footer);
     }
 

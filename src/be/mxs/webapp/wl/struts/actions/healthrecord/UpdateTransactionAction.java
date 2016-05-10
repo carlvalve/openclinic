@@ -472,7 +472,6 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
                         }
                     }
                     else if(returnedTransactionVO.getTransactionType().equals("be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_LAB_REQUEST")){
-              	  		System.out.println("//////////////////////////////////////////////////////////");
                     	//Bewaar SMS en e-mail in user profiel
                     	item = returnedTransactionVO.getItem("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_LAB_SMS");
                     	if(item!=null && ScreenHelper.checkString(item.getValue()).length()>0){

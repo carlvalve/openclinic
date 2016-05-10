@@ -461,7 +461,13 @@ public class ScanDirectoryMonitor implements Runnable{
 	    		try{
 		    		String studyUid=obj.getString(Tag.StudyInstanceUID);
 		    		String seriesUid=obj.getString(Tag.SeriesNumber);
+		    		if(seriesUid==null || seriesUid.trim().length()==0){
+		    			seriesUid="1";
+		    		}
 		    		String sequence=obj.getString(Tag.InstanceNumber);
+		    		if(sequence==null || sequence.trim().length()==0){
+		    			sequence=file.getName();
+		    		}
 		    		//First check if file does not exist yet, do nothing if it exists 
 		    		ps =conn.prepareStatement("select * from OC_PACS where OC_PACS_STUDYUID=? and OC_PACS_SERIES=? and OC_PACS_SEQUENCE=?");
 		    		ps.setString(1, studyUid);

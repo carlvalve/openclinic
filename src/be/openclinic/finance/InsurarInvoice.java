@@ -1428,7 +1428,6 @@ public class InsurarInvoice extends Invoice {
     public static boolean setStatusOpen(String sInvoiceID,String UserId){
 
         PreparedStatement ps = null;
-        ResultSet rs = null;
         boolean okQuery = false;
         String sSelect = "update OC_INSURARINVOICES SET OC_INSURARINVOICE_STATUS ='open',OC_INSURARINVOICE_UPDATETIME=?,OC_INSURARINVOICE_UPDATEUID=? WHERE OC_INSURARINVOICE_OBJECTID = ? ";
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
@@ -1440,7 +1439,6 @@ public class InsurarInvoice extends Invoice {
 
             okQuery = (ps.executeUpdate()>0);
 
-            rs.close();
             ps.close();
       }
         catch(Exception e){
@@ -1449,7 +1447,6 @@ public class InsurarInvoice extends Invoice {
         }
         finally{
             try{
-                if(rs!=null)rs.close();
                 if(ps!=null)ps.close();
                 oc_conn.close();
             }
