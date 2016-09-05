@@ -33,9 +33,9 @@ public class ExportDHIS2CausesOfDeath {
 		    Connection connconf =  DriverManager.getConnection("jdbc:mysql://localhost:3306/openclinic_dbo?"+args[0]);
 		    HashSet agesdataset = new HashSet();
 		    HashSet gendersdataset = new HashSet();
-		    System.out.println("\n>>>>>>>>>>>>>>>>>>>> Sending Causes of Death per Age for entity "+entity);
+		    //System.out.println("\n>>>>>>>>>>>>>>>>>>>> Sending Causes of Death per Age for entity "+entity);
 		    sendAgesDataValueSet(args, agesdataset,entity);
-		    System.out.println("\n>>>>>>>>>>>>>>>>>>>> Sending Causes of Death per Gender for entity "+entity);
+		    //System.out.println("\n>>>>>>>>>>>>>>>>>>>> Sending Causes of Death per Gender for entity "+entity);
 		    sendGenderDataValueSet(args, gendersdataset,entity);
 		    
 		    //Update dc_dhis2deathdiagnosisvalues table for the period of active dataset
@@ -107,7 +107,7 @@ public class ExportDHIS2CausesOfDeath {
 		    	}
 		    	dataset = rs.getString("dc_diagnosisvalue_serverid")+"."+rs.getString("dc_diagnosisvalue_year")+"."+month+"."+rs.getString("dc_diagnosisvalue_serviceuid");
 		    	if(!activedataset.equalsIgnoreCase(dataset)){
-		    		if(activedataset.length()>0){
+		    		if(activedataset.length()>0 && !getConfigValue(connconf, "datacenterDHIS2OrgUnit."+activedataset.split("\\.")[0], "noop").equalsIgnoreCase("noop")){
 		    			boolean bOk=true;
 		    			//Prepare ages dataset for DHIS2-server
 		    	        dataValueSet = new DataValueSet();
@@ -263,7 +263,7 @@ public class ExportDHIS2CausesOfDeath {
 		    }
 		    rs.close();
 		    ps.close();
-    		if(activedataset.length()>0){
+    		if(activedataset.length()>0 && !getConfigValue(connconf, "datacenterDHIS2OrgUnit."+activedataset.split("\\.")[0], "noop").equalsIgnoreCase("noop")){
     			boolean bOk=true;
     			//Prepare ages dataset for DHIS2-server
     	        dataValueSet = new DataValueSet();
@@ -371,7 +371,7 @@ public class ExportDHIS2CausesOfDeath {
 		    	}
 		    	dataset = rs.getString("dc_diagnosisvalue_serverid")+"."+rs.getString("dc_diagnosisvalue_year")+"."+month+"."+rs.getString("dc_diagnosisvalue_serviceuid");
 		    	if(!activedataset.equalsIgnoreCase(dataset)){
-		    		if(activedataset.length()>0){
+		    		if(activedataset.length()>0 && !getConfigValue(connconf, "datacenterDHIS2OrgUnit."+activedataset.split("\\.")[0], "noop").equalsIgnoreCase("noop")){
 		    			boolean bOk=true;
 		    			//Prepare genders dataset for DHIS2-server
 		    	        dataValueSet = new DataValueSet();
@@ -510,7 +510,7 @@ public class ExportDHIS2CausesOfDeath {
 		    }
 		    rs.close();
 		    ps.close();
-    		if(activedataset.length()>0){
+    		if(activedataset.length()>0 && !getConfigValue(connconf, "datacenterDHIS2OrgUnit."+activedataset.split("\\.")[0], "noop").equalsIgnoreCase("noop")){
     			boolean bOk=true;
     			//Prepare genders dataset for DHIS2-server
     	        dataValueSet = new DataValueSet();

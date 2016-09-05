@@ -469,7 +469,7 @@ public abstract class PDFBasic {
     }
 
     protected PdfPCell createBoldBorderlessCell(String value, int height, int colspan,int fontSize){
-        cell = new PdfPCell(new Paragraph(value,FontFactory.getFont(FontFactory.HELVETICA,fontSize,Font.NORMAL)));
+        cell = new PdfPCell(new Paragraph(value,FontFactory.getFont(FontFactory.HELVETICA,fontSize,Font.BOLD)));
         cell.setPaddingTop(height);
         cell.setColspan(colspan);
         cell.setBorder(PdfPCell.NO_BORDER);
@@ -480,7 +480,7 @@ public abstract class PDFBasic {
     }
 
     protected PdfPCell createBoldBorderlessCell(String value, int colspan,int fontSize){
-        cell = new PdfPCell(new Paragraph(value,FontFactory.getFont(FontFactory.HELVETICA,fontSize,Font.NORMAL)));
+        cell = new PdfPCell(new Paragraph(value,FontFactory.getFont(FontFactory.HELVETICA,fontSize,Font.BOLD)));
         cell.setColspan(colspan);
         cell.setBorder(PdfPCell.NO_BORDER);
         cell.setVerticalAlignment(PdfPCell.ALIGN_TOP);

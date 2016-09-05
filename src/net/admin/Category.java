@@ -143,7 +143,13 @@ public class Category {
             if (rs.next()){
                 category.code = ScreenHelper.checkString(rs.getString("categoryid"));
                 category.labels = category.getCategoryLabels();
-                category.parentcode = ScreenHelper.checkString(rs.getString("categoryparentid"));
+                String pc = ScreenHelper.checkString(rs.getString("categoryparentid"));
+                if(pc.equalsIgnoreCase(category.code)){
+                	category.parentcode="";
+                }
+                else {
+                	category.parentcode = pc;
+                }
 
                 category.updatetime = rs.getDate("updatetime");
                 category.updateuserid = rs.getString("updateuserid");
@@ -249,7 +255,7 @@ public class Category {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        String sSelect = "SELECT categoryid FROM Categories WHERE categoryparentid = ?";
+        String sSelect = "SELECT categoryid FROM Categories WHERE categoryparentid = ? and not categoryid=categoryparentid";
         Vector vCategoryIDs = new Vector();
         String sCategoryID;
 

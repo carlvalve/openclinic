@@ -65,6 +65,8 @@ public class PDFMedicalImagingRequest2 extends PDFGeneralBasic {
         list.add(IConstants_PREFIX+"ITEM_TYPE_MIR2_ORIGINAL_MODIFIED_REASON"+itemIdx);
         list.add(IConstants_PREFIX+"ITEM_TYPE_MIR2_PROTOCOL"+itemIdx);
         list.add(IConstants_PREFIX+"ITEM_TYPE_MIR2_NOTHING_TO_MENTION"+itemIdx);
+        list.add(IConstants_PREFIX+"ITEM_TYPE_MIR2_RADIOLOGIST"+itemIdx);
+        list.add(IConstants_PREFIX+"ITEM_TYPE_MIR2_RADIOLOGIST2"+itemIdx);
         list.add(IConstants_PREFIX+"ITEM_TYPE_OTHER_REQUESTS_URGENT"+itemIdx);
         list.add(IConstants_PREFIX+"ITEM_TYPE_OTHER_REQUESTS_PRESTATION"+itemIdx);
         list.add(IConstants_PREFIX+"ITEM_TYPE_OTHER_REQUESTS_PRESTATION_REASON"+itemIdx);
@@ -146,6 +148,18 @@ public class PDFMedicalImagingRequest2 extends PDFGeneralBasic {
             itemValue = getItemValue(IConstants_PREFIX+"ITEM_TYPE_MIR2_NOTHING_TO_MENTION"+itemIdx);
             if(itemValue.length() > 0){
                 addItemRow(table,getTran("Web.Occup",IConstants_PREFIX+"ITEM_TYPE_MIR_NOTHING_TO_MENTION"),getTran("web.occup",itemValue));
+            }
+
+            // radiologist 1
+            itemValue = getItemValue(IConstants_PREFIX+"ITEM_TYPE_MIR2_RADIOLOGIST"+itemIdx);
+            if(itemValue.length() > 0){
+                addItemRow(table,getTran("web","radiologist"),getTran("radiologist",itemValue));
+            }
+
+            // radiologist 2
+            itemValue = getItemValue(IConstants_PREFIX+"ITEM_TYPE_MIR2_RADIOLOGIST2"+itemIdx);
+            if(itemValue.length() > 0){
+                addItemRow(table,getTran("web","radiologist"),getTran("radiologist",itemValue));
             }
 
             // add transaction to doc

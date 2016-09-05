@@ -1415,7 +1415,7 @@ public class Screen extends OC_Object {
                     sTmpLang = tokenizer.nextToken().toUpperCase();
                  
                     if(Integer.parseInt(screen.getExamId()) > -1){
-                        screen.addLabel(sTmpLang,ScreenHelper.getTranNoLink("examination",screen.getExamId(),sTmpLang));
+                        screen.addLabel(sTmpLang.toLowerCase(),ScreenHelper.getTranNoLink("examination",screen.getExamId(),sTmpLang));
                     }
                 }                  
                                                 

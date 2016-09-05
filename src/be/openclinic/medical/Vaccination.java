@@ -22,6 +22,23 @@ import be.mxs.common.util.system.ScreenHelper;
 public class Vaccination {
 	public String personid,date,type,batchnumber,expiry,location,observation,modifier;
 	
+	public Vaccination(String personid, String date, String type, String batchnumber, String expiry, String location,
+			String observation, String modifier) {
+		super();
+		this.personid = personid;
+		this.date = date;
+		this.type = type;
+		this.batchnumber = batchnumber;
+		this.expiry = expiry;
+		this.location = location;
+		this.observation = observation;
+		this.modifier = modifier;
+	}
+
+	public Vaccination(){
+		
+	}
+	
 	public long getAge(){
 		long d = 0;
 		try{
@@ -91,7 +108,7 @@ public class Vaccination {
 				vaccination.type=rs.getString("OC_VACCINATION_TYPE");
 				vaccination.batchnumber=rs.getString("OC_VACCINATION_BATCHNUMBER");
 				vaccination.expiry=rs.getString("OC_VACCINATION_EXPIRY");
-				vaccination.location=rs.getString("OC_VACCINATION_LOCATION");
+				vaccination.location=ScreenHelper.checkString(rs.getString("OC_VACCINATION_LOCATION"));
 				vaccination.observation=rs.getString("OC_VACCINATION_OBSERVATION");
 				vaccination.modifier=rs.getString("OC_VACCINATION_MODIFIER");
 				vaccinations.put(vaccination.type,vaccination);
@@ -252,12 +269,15 @@ public class Vaccination {
 				sResult=vaccination.modifier;
 			}
 			else if(parameter.equalsIgnoreCase("location")){
-				sResult=vaccination.location;
+				sResult=ScreenHelper.checkString(vaccination.location);
 				if(sResult.startsWith("0")){
-					sResult=ScreenHelper.getTran(null,"vaccinationlocation",MedwanQuery.getInstance().getConfigString("defaultVaccinationLocation"),((User)request.getSession().getAttribute("activeUser")).person.language);
+					sResult=ScreenHelper.getTranNoLink("vaccinationlocation",MedwanQuery.getInstance().getConfigString("defaultVaccinationLocation"),((User)request.getSession().getAttribute("activeUser")).person.language);
+				}
+				else if (sResult.length()==0){
+					sResult="?";
 				}
 				else {
-					sResult=ScreenHelper.getTran(null,"vaccinationlocation",(sResult+" ").substring(0,1),((User)request.getSession().getAttribute("activeUser")).person.language);
+					sResult=ScreenHelper.getTranNoLink("vaccinationlocation",(sResult+" ").substring(0,1),((User)request.getSession().getAttribute("activeUser")).person.language);
 				}
 			}
 		}

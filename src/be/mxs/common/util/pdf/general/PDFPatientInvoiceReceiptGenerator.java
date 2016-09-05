@@ -56,6 +56,10 @@ public class PDFPatientInvoiceReceiptGenerator extends PDFInvoiceGenerator {
             // get specified invoice
             PatientInvoice invoice = PatientInvoice.get(sInvoiceUid);
             printInvoice(invoice,invoice.getDebets());
+    		if(MedwanQuery.getInstance().getConfigInt("autoPrintPatientReceipt",0)==1){
+    			PdfAction action = new PdfAction(PdfAction.PRINTDIALOG);
+    			docWriter.setOpenAction(action);
+    		}
         }
 		catch(Exception e){
 			baosPDF.reset();
@@ -216,6 +220,12 @@ public class PDFPatientInvoiceReceiptGenerator extends PDFInvoiceGenerator {
 	            cell = createBoldLabelCell(service, 35,new Double(7*scaleFactor).intValue());
 	            cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
 	            table.addCell(cell);
+	        }
+	        //If associated clinicians have been registered, then show them
+	        String clinicians=invoice.getCliniciansAsString();
+	        if(clinicians.length()>0){
+	            table.addCell(createValueCell(getTran("web","clinician"),15,new Double(7*scaleFactor).intValue(),Font.NORMAL));
+	            table.addCell(createBoldLabelCell(clinicians,35,new Double(7*scaleFactor).intValue()));
 	        }
 	        cell=createValueCell("",50);
 	        cell.setBorder(PdfPCell.NO_BORDER);

@@ -4,11 +4,14 @@ import be.dpms.medwan.common.model.vo.occupationalmedicine.ExportActivityVO;
 import be.mxs.common.model.vo.healthrecord.TransactionVO;
 import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.system.Debug;
+import be.mxs.common.util.system.HTMLEntities;
 import be.mxs.common.util.system.ScreenHelper;
 import be.openclinic.adt.Encounter;
 import be.openclinic.common.OC_Object;
+import be.openclinic.finance.Insurance;
 import be.openclinic.medical.Prescription;
 
+import java.io.ByteArrayInputStream;
 import java.lang.reflect.Field;
 import java.sql.*;
 import java.sql.Date;
@@ -17,6 +20,11 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import org.dcm4che2.data.Implementation;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 
 import net.admin.system.AccessLog;
 
@@ -60,9 +68,9 @@ public class AdminPerson extends OC_Object{
     public String end;
     public Hashtable adminextends;
     public boolean export = true;
-    public boolean checkNatreg = true;
-    public boolean checkImmatnew = true;
-    public boolean checkImmatold = false;
+    public boolean checkNatreg = MedwanQuery.getInstance().getConfigInt("checkNatreg",1)==1;
+    public boolean checkImmatnew = MedwanQuery.getInstance().getConfigInt("checkImmatnew",1)==1;
+    public boolean checkImmatold = MedwanQuery.getInstance().getConfigInt("checkImmatold",0)==1;
     public boolean checkArchiveFileCode = false;
     String activeMedicalCenter="";
     String activeMD="";
@@ -111,10 +119,125 @@ public class AdminPerson extends OC_Object{
         socsec = new AdminSocSec();
 
         export = true;
-        checkNatreg = true;
-        checkImmatnew = true;
-        checkImmatold = false;
+        checkNatreg = MedwanQuery.getInstance().getConfigInt("checkNatreg",1)==1;
+        checkImmatnew = MedwanQuery.getInstance().getConfigInt("checkImmatnew",1)==1;
+        checkImmatold = MedwanQuery.getInstance().getConfigInt("checkImmatold",0)==1;
         checkArchiveFileCode = false;
+    }
+    
+    private String xe(String s){
+    	return HTMLEntities.xmlencode(ScreenHelper.checkString(s));
+    }
+    
+    public String toXml(){
+    	return toXmlElement().asXML();
+    }
+    
+    public Element toXmlElement(){
+        Element patient = DocumentHelper.createElement("patient");
+        patient.addAttribute("personid",ScreenHelper.checkString(personid));
+        patient.addElement("firstname").setText(xe(firstname));
+        patient.addElement("lastname").setText(xe(lastname));
+        patient.addElement("dateofbirth").setText(xe(dateOfBirth));
+        patient.addElement("sourceid").setText(xe(sourceid));
+        patient.addElement("gender").setText(xe(gender));
+        patient.addElement("language").setText(xe(language));
+        patient.addElement("immatnew").setText(xe(getID("immatnew")));
+        patient.addElement("natreg").setText(xe(getID("natreg")));
+        patient.addElement("immatold").setText(xe(getID("immatold")));
+        patient.addElement("nativecountry").setText(xe(nativeCountry));
+        patient.addElement("nativetown").setText(xe(nativeTown));
+        patient.addElement("comment").setText(xe(comment));
+        patient.addElement("comment").setText(xe(comment1));
+        patient.addElement("comment").setText(xe(comment2));
+        patient.addElement("comment").setText(xe(comment3));
+        patient.addElement("comment").setText(xe(comment4));
+        patient.addElement("comment").setText(xe(comment5));
+        if(getActivePrivate()!=null){
+        	AdminPrivateContact pc=getActivePrivate();
+        	Element priv = patient.addElement("private");
+        	priv.addElement("address").setText(xe(pc.address));
+        	priv.addElement("begin").setText(xe(pc.begin));
+        	priv.addElement("end").setText(xe(pc.end));
+        	priv.addElement("business").setText(xe(pc.business));
+        	priv.addElement("businessfunction").setText(xe(pc.businessfunction));
+        	priv.addElement("cell").setText(xe(pc.cell));
+        	priv.addElement("city").setText(xe(pc.city));
+        	priv.addElement("comment").setText(xe(pc.comment));
+        	priv.addElement("country").setText(xe(pc.country));
+        	priv.addElement("district").setText(xe(pc.district));
+        	priv.addElement("email").setText(xe(pc.email));
+        	priv.addElement("fax").setText(xe(pc.fax));
+        	priv.addElement("mobile").setText(xe(pc.mobile));
+        	priv.addElement("province").setText(xe(pc.province));
+        	priv.addElement("quarter").setText(xe(pc.quarter));
+        	priv.addElement("sanitarydistrict").setText(xe(pc.sanitarydistrict));
+        	priv.addElement("sector").setText(xe(pc.sector));
+        	priv.addElement("telephone").setText(xe(pc.telephone));
+        	priv.addElement("type").setText(xe(pc.type));
+        	priv.addElement("zipcode").setText(xe(pc.zipcode));
+        }
+        return patient;
+    }
+    
+    public static AdminPerson fromXml(String s,boolean bIncludePersonId){
+    	AdminPerson person = new AdminPerson();
+        SAXReader reader = new SAXReader(false);
+    	try {
+			Document document = reader.read(new ByteArrayInputStream(s.getBytes()));
+			Element patient = document.getRootElement();
+			person.fromXmlElement(patient, bIncludePersonId);
+		} catch (DocumentException e) {
+			e.printStackTrace();
+			return null;
+		}
+
+    	return person;
+    }
+    
+    public void fromXmlElement(Element patient,boolean bIncludePersonId){
+		if(bIncludePersonId){
+			personid=patient.attributeValue("personid");
+		}
+		comment=patient.elementText("comment");
+		comment1=patient.elementText("comment1");
+		comment2=patient.elementText("comment2");
+		comment3=patient.elementText("comment3");
+		comment4=patient.elementText("comment4");
+		comment5=patient.elementText("comment5");
+		dateOfBirth=patient.elementText("dateofbirth");
+		firstname=patient.elementText("firstname");
+		gender=patient.elementText("gender");
+		language=patient.elementText("language");
+		lastname=patient.elementText("lastname");
+		nativeCountry=patient.elementText("nativecountry");
+		nativeTown=patient.elementText("nativetown");
+		sourceid=patient.elementText("sourceid");
+		if(patient.element("private")!=null){
+			privateContacts=new Vector();
+			Element pc=patient.element("private");
+			AdminPrivateContact priv = new AdminPrivateContact();
+			priv.address=pc.elementText("address");
+			priv.begin=pc.elementText("begin");
+			priv.business=pc.elementText("business");
+			priv.businessfunction=pc.elementText("businessfunction");
+			priv.cell=pc.elementText("cell");
+			priv.city=pc.elementText("city");
+			priv.comment=pc.elementText("comment");
+			priv.country=pc.elementText("country");
+			priv.district=pc.elementText("district");
+			priv.email=pc.elementText("email");
+			priv.end=pc.elementText("end");
+			priv.fax=pc.elementText("fax");
+			priv.province=pc.elementText("province");
+			priv.quarter=pc.elementText("quarter");
+			priv.sanitarydistrict=pc.elementText("sanitarydistrict");
+			priv.sector=pc.elementText("sector");
+			priv.telephone=pc.elementText("telephone");
+			priv.type=pc.elementText("type");
+			priv.zipcode=pc.elementText("zipcode");
+			privateContacts.add(priv);
+		}
     }
     
     public Vector getMissingMandatoryFieldsTranslated(String language){
@@ -758,7 +881,86 @@ public class AdminPerson extends OC_Object{
 		}
         return ok;
     }
+    
+    public boolean addReceiverPersonId(String sPersonId){
+    	if(comment4==null){
+    		comment4="";
+    	}
+    	String[] receiverpersonids = comment4.split(";");
+    	boolean bFound=false;
+    	for(int n=0;n<receiverpersonids.length;n++){
+    		if(receiverpersonids[n].equalsIgnoreCase(sPersonId)){
+    			bFound=true;
+    			break;
+    		}
+    	}
+    	if(!bFound){
+    		if(comment4.length()>0){
+    			comment4+=";";
+    		}
+    		comment4+=sPersonId;
+    	}
+    	return !bFound;
+    }
+    
+    public boolean hasReceiverPersonId(String receiverid){
+    	if(comment4==null){
+    		comment4="";
+    	}
+    	String[] receiverpersonids = comment4.split(";");
+    	boolean bFound=false;
+    	for(int n=0;n<receiverpersonids.length;n++){
+    		String receiverpersonid = receiverpersonids[n];
+    		if(receiverpersonid.split(":").length==2 && receiverpersonid.split(":")[0].equalsIgnoreCase(receiverid)){
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    
+    public String getReceiverPersonId(String receiverid){
+    	if(comment4==null){
+    		comment4="";
+    	}
+    	String[] receiverpersonids = comment4.split(";");
+    	boolean bFound=false;
+    	for(int n=0;n<receiverpersonids.length;n++){
+    		String receiverpersonid = receiverpersonids[n];
+    		if(receiverpersonid.split(":").length==2 && receiverpersonid.split(":")[0].equalsIgnoreCase(receiverid)){
+    			return receiverpersonid.split(":")[1];
+    		}
+    	}
+    	return "";
+    }
+    
+    public String getReceiverPersonIdsToHtmlTable(String language){
+    	if(comment4==null){
+    		comment4="";
+    	}
+    	String ids="<table>";
+    	String[] receiverpersonids = comment4.split(";");
+    	boolean bFound=false;
+    	for(int n=0;n<receiverpersonids.length;n++){
+    		String receiverpersonid = receiverpersonids[n];
+    		if(receiverpersonid.split(":").length==2){
+    			ids+="<tr><td>"+ScreenHelper.getTran("sendRecordDestinations", receiverpersonid.split(":")[0], language)+"</td><td><b>"+receiverpersonid.split(":")[1]+"</b></td></tr>";
+    		}
+    	}
+    	ids+="</table>";
+    	return ids;
+    }
 
+    public String getReferenceInsuranceNumber(){
+    	Vector insurances = Insurance.getCurrentInsurances(personid);
+    	for(int n=0;n<insurances.size();n++){
+    		Insurance insurance = (Insurance)insurances.elementAt(n);
+    		if(insurance.getInsurar().getUid().equalsIgnoreCase(MedwanQuery.getInstance().getConfigString("referenceInsurarUid",""))){
+    			return ScreenHelper.checkString(insurance.getInsuranceNr());
+    		}
+    	}
+    	return "";
+    }
+    
     public boolean saveToDB(Connection connection) {
         boolean bReturn = true;
         boolean bNew=false;

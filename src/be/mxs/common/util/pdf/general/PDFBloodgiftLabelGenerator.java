@@ -104,9 +104,9 @@ public class PDFBloodgiftLabelGenerator extends PDFOfficialBasic {
 		TransactionVO bloodgift = MedwanQuery.getInstance().loadTransaction(MedwanQuery.getInstance().getConfigInt("serverId"), Integer.parseInt(giftid));
 		String sampledate=bloodgift.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTS_RECEPTIONDATE");
 		String abo="?",rhesus="?";
-    	RequestedLabAnalysis analysis = RequestedLabAnalysis.getByObjectid(Integer.parseInt(giftid), MedwanQuery.getInstance().getConfigString("cntsBloodgroupCode","ABO"));
+    	RequestedLabAnalysis analysis = RequestedLabAnalysis.getByPersonid(Integer.parseInt(personid), MedwanQuery.getInstance().getConfigString("cntsBloodgroupCode","ABO"));
     	if(analysis!=null) abo=analysis.getResultValue()+" "+analysis.getResultUnit();
-    	analysis = RequestedLabAnalysis.getByObjectid(Integer.parseInt(giftid), MedwanQuery.getInstance().getConfigString("cntsRhesusCode","Rh"));
+    	analysis = RequestedLabAnalysis.getByPersonid(Integer.parseInt(personid), MedwanQuery.getInstance().getConfigString("cntsRhesusCode","Rh"));
     	if(analysis!=null) rhesus=analysis.getResultValue()+" "+analysis.getResultUnit();
     	//String abo = transactiondata.split(";")[0];
     	//String rhesus = transactiondata.split(";")[1];

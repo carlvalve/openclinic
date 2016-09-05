@@ -306,6 +306,50 @@ public class Batch extends OC_Object{
         }
     }
     
+    public int getLevel(java.util.Date date){
+        int in=0,out=0;
+    	PreparedStatement ps = null;
+        ResultSet rs = null;
+        String sSelect;
+        Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+        	sSelect="select sum(oc_batchoperation_quantity) total from oc_batchoperations where oc_batchoperation_destinationuid=? and oc_batchoperation_updatetime<=?";
+        	ps=oc_conn.prepareStatement(sSelect);
+        	ps.setString(1, getUid());
+        	ps.setDate(2, new java.sql.Date(date.getTime()));
+        	rs=ps.executeQuery();
+        	if(rs.next()){
+        		in=rs.getInt("total");
+        	}
+        	rs.close();
+        	ps.close();
+        	sSelect="select sum(oc_batchoperation_quantity) total from oc_batchoperations where oc_batchoperation_sourceuid=? and oc_batchoperation_updatetime<=?";
+        	ps=oc_conn.prepareStatement(sSelect);
+        	ps.setString(1, getUid());
+        	ps.setDate(2, new java.sql.Date(date.getTime()));
+        	rs=ps.executeQuery();
+        	if(rs.next()){
+        		out=rs.getInt("total");
+        	}
+        	rs.close();
+        	ps.close();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                oc_conn.close();
+            }
+            catch(SQLException se){
+                se.printStackTrace();
+            }
+        }
+        return in-out;
+    }
+    
     public static boolean exists(String productStockUid, String batchNumber){
     	return getByBatchNumber(productStockUid, batchNumber)!=null;
     }

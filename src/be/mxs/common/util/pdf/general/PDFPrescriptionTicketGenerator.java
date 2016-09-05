@@ -70,6 +70,10 @@ public class PDFPrescriptionTicketGenerator extends PDFOfficialBasic {
             doc.open();
             sPrintLanguage=user.person.language;
             printPrescription(person,prescription,prescriptiondate,user);
+    		if(MedwanQuery.getInstance().getConfigInt("autoPrintPrescription",0)==1){
+    			PdfAction action = new PdfAction(PdfAction.PRINTDIALOG);
+    			docWriter.setOpenAction(action);
+    		}
 		}
 		catch(Exception e){
 			baosPDF.reset();

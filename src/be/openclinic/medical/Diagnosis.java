@@ -656,6 +656,10 @@ public class Diagnosis extends OC_Object{
         return vDiagnoses;
     }
 
+    public String getLabel(String language){
+    	return getCodeLabel(code,codeType.equalsIgnoreCase("icd10")?"ICD-10":"ICPC-2",language);
+    }
+    
     //--- GET CODE LABEL --------------------------------------------------------------------------
     public static String getCodeLabel(String code, String codeType, String language){
         String sLabel = "";

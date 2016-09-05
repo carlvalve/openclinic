@@ -325,10 +325,14 @@ public class ScanDirectoryMonitor implements Runnable{
     	    String sUDI = "00000000000"+file.getName();
 	        Debug.println("--> UDI1 : "+sUDI);
     	    //Remove extension
-    	    sUDI=sUDI.substring(0,sUDI.lastIndexOf("."));
+	        if(sUDI.lastIndexOf(".")>0){
+	        	sUDI=sUDI.substring(0,sUDI.lastIndexOf("."));
+	        }
 	        Debug.println("--> UDI2 : "+sUDI);
     	    //Only take last 11 characters
-    	    sUDI=sUDI.substring(sUDI.length()-11);
+	        if(sUDI.length()>=11){
+	        	sUDI=sUDI.substring(sUDI.length()-11);
+	        }
 	        Debug.println("--> UDI3 : "+sUDI);
 	        
 	        if(sUDI.length()==11){
@@ -508,8 +512,15 @@ public class ScanDirectoryMonitor implements Runnable{
 			    			transaction.getItems().add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()),
 			    					"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_SERIESID",seriesUid,new Date(),itemContextVO));
 			    			itemContextVO = new ItemContextVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), "", "");
+			    			String sDescription=ScreenHelper.checkString(obj.getString(Tag.StudyDescription));
+			    			if(sDescription.trim().length()==0){
+				    			sDescription=ScreenHelper.checkString(obj.getString(Tag.AcquisitionDeviceProcessingDescription));
+			    			}
+			    			if(sDescription.trim().length()==0){
+				    			sDescription=ScreenHelper.checkString(obj.getString(Tag.CodeMeaning));
+			    			}
 			    			transaction.getItems().add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()),
-			    					"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYDESCRIPTION",ScreenHelper.checkString(obj.getString(Tag.StudyDescription)).replaceAll("\\^", ", "),new Date(),itemContextVO));
+			    					"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYDESCRIPTION",sDescription.replaceAll("\\^", ", "),new Date(),itemContextVO));
 			    			itemContextVO = new ItemContextVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), "", "");
 			    			try{
 				    			transaction.getItems().add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()),

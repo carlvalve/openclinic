@@ -102,7 +102,7 @@ public class Insurance extends OC_Object {
     public boolean isAuthorized(){
     	boolean bAuthorized = false;
     	if(MedwanQuery.getInstance().getConfigString("InsuranceAgentAuthorizationNeededFor","").indexOf("*"+this.getInsurarUid()+"*")<=-1){
-    		return true;
+    		bAuthorized= true;
     	}
     	else{
 			Vector pointers = Pointer.getPointers("AUTH."+this.getInsurarUid()+"."+this.getPatientUID()+"."+new SimpleDateFormat("yyyyMM").format(new java.util.Date()));
@@ -122,7 +122,23 @@ public class Insurance extends OC_Object {
 	    		}
 	    	}
     	}
-    	
+    	if(bAuthorized && MedwanQuery.getInstance().getConfigString("lookupInsuranceBeneficiaries","").contains(getInsurarUid())){
+			try {
+	    		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+	    		PreparedStatement ps;
+				ps = conn.prepareStatement("select * from oc_beneficiaries where oc_beneficiary_id=?");
+	    		ps.setString(1,getInsuranceNr());
+	    		ResultSet rs = ps.executeQuery();
+	    		bAuthorized=rs.next();
+	    		rs.close();
+	    		ps.close();
+	    		conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+
     	return bAuthorized;
     }
     
@@ -669,6 +685,85 @@ public class Insurance extends OC_Object {
         return vInsurance;
     }
 
+    public static Vector findInsurances(String sFindStart, String sFindStop, String sFindInsurarUid,
+            String sFindNr){
+		Vector vInsurance = new Vector();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		String sSelect = "SELECT * FROM OC_INSURANCES ";
+		String sConditions  = "";
+		
+		if(sFindStart.length() > 0){sConditions+= " OC_INSURANCE_START > ? AND";}
+		if(sFindStop.length()  > 0){sConditions+= " (OC_INSURANCE_STOP > ? OR OC_INSURANCE_STOP IS NULL) AND";}
+		if(sFindInsurarUid.length()  > 0){sConditions+= " OC_INSURANCE_INSURARUID = ? AND";}
+		if(sFindNr.length()    > 0){sConditions+= " OC_INSURANCE_NR LIKE ? AND";}
+		
+		if(sConditions.length() > 0){
+		sConditions = " WHERE "+sConditions.substring(0,sConditions.length() - 3);
+		sSelect+= sConditions;
+		}
+		
+		int i = 1;
+		Insurance insurance;
+		
+		Connection oc_conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		try{
+			ps = oc_conn.prepareStatement(sSelect);
+			if(sFindStart.length() > 0){ps.setString(i++,sFindStart);}
+			if(sFindStop.length()  > 0){ps.setString(i++,sFindStop);}
+			if(sFindInsurarUid.length()  > 0){ps.setString(i++,sFindInsurarUid);}
+			if(sFindNr.length()    > 0){ps.setString(i++,"%"+sFindNr+"%");}
+			
+			rs = ps.executeQuery();
+			
+			while(rs.next()){
+				insurance = new Insurance();
+				insurance.setUid(ScreenHelper.checkString(rs.getString("OC_INSURANCE_SERVERID"))+"."+ScreenHelper.checkString(rs.getString("OC_INSURANCE_OBJECTID")));
+				
+				insurance.setPatientUID(ScreenHelper.checkString(rs.getString("OC_INSURANCE_PATIENTUID")));
+				insurance.setInsuranceNr(ScreenHelper.checkString(rs.getString("OC_INSURANCE_NR")));
+				insurance.setInsurarUid(ScreenHelper.checkString(rs.getString("OC_INSURANCE_INSURARUID")));
+				insurance.setType(ScreenHelper.checkString(rs.getString("OC_INSURANCE_TYPE")));
+				insurance.setMember(ScreenHelper.checkString(rs.getString("OC_INSURANCE_MEMBER")));
+				insurance.setMemberImmat(ScreenHelper.checkString(rs.getString("OC_INSURANCE_MEMBER_IMMAT")));
+				insurance.setMemberEmployer(ScreenHelper.checkString(rs.getString("OC_INSURANCE_MEMBER_EMPLOYER")));
+				insurance.setStatus(ScreenHelper.checkString(rs.getString("OC_INSURANCE_STATUS")));
+				insurance.setStart(rs.getTimestamp("OC_INSURANCE_START"));
+				insurance.setStop(rs.getTimestamp("OC_INSURANCE_STOP"));
+				insurance.setComment(new StringBuffer(ScreenHelper.checkString(rs.getString("OC_INSURANCE_COMMENT"))));
+				insurance.setInsuranceCategoryLetter(ScreenHelper.checkString(rs.getString("OC_INSURANCE_INSURANCECATEGORYLETTER")));
+				
+				insurance.setCreateDateTime(rs.getTimestamp("OC_INSURANCE_CREATETIME"));
+				insurance.setUpdateDateTime(rs.getTimestamp("OC_INSURANCE_UPDATETIME"));
+				insurance.setUpdateUser(ScreenHelper.checkString(rs.getString("OC_INSURANCE_UPDATEUID")));
+				insurance.setVersion(rs.getInt("OC_INSURANCE_VERSION"));
+				
+				insurance.setExtraInsurarUid(ScreenHelper.checkString(rs.getString("OC_INSURANCE_EXTRAINSURARUID")));
+				insurance.setExtraInsurarUid2(ScreenHelper.checkString(rs.getString("OC_INSURANCE_EXTRAINSURARUID2")));
+				insurance.setDefaultInsurance(rs.getInt("OC_INSURANCE_DEFAULT"));
+				insurance.setMembercategory(ScreenHelper.checkString(rs.getString("OC_INSURANCE_MEMBERCATEGORY")));
+				insurance.setFamilycode(ScreenHelper.checkString(rs.getString("OC_INSURANCE_FAMILYCODE")));
+				
+				vInsurance.addElement(insurance);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		finally{
+			try{
+				if(rs!=null)rs.close();
+				if(ps!=null)ps.close();
+				oc_conn.close();
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+		
+		return vInsurance;
+    }
+    
     //--- GET CURRENT INSURANCES ------------------------------------------------------------------
     public static Vector getCurrentInsurances(String sPatientUID){
         PreparedStatement ps = null;

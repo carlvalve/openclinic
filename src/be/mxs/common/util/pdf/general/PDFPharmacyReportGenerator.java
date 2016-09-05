@@ -130,6 +130,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 	private void addCol(org.dom4j.Element row, int size, String value){
 		org.dom4j.Element col = row.addElement("col");
 		col.addAttribute("size", size+"");
+		col.addAttribute("fontsize", MedwanQuery.getInstance().getConfigString("defaultPharmacyReportFontSize","8"));
 		col.setText(value);
 	}
 	private void addCol(org.dom4j.Element row, int size, String value, int fontsize){
@@ -142,6 +143,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 		org.dom4j.Element col = row.addElement("col");
 		col.addAttribute("size", size+"");
 		col.addAttribute("weight", "bold");
+		col.addAttribute("fontsize", MedwanQuery.getInstance().getConfigString("defaultPharmacyReportFontSize","8"));
 		col.setText(value);
 	}
 	
@@ -149,6 +151,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 		org.dom4j.Element col = row.addElement("col");
 		col.addAttribute("size", size+"");
 		col.addAttribute("align", "right");
+		col.addAttribute("fontsize", MedwanQuery.getInstance().getConfigString("defaultPharmacyReportFontSize","8"));
 		col.setText(value);
 	}
 	
@@ -156,6 +159,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 		org.dom4j.Element col = row.addElement("col");
 		col.addAttribute("size", size+"");
 		col.addAttribute("align", "center");
+		col.addAttribute("fontsize", MedwanQuery.getInstance().getConfigString("defaultPharmacyReportFontSize","8"));
 		col.setText(value);
 	}
 	
@@ -164,6 +168,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 		col.addAttribute("size", size+"");
 		col.addAttribute("align", "right");
 		col.addAttribute("weight", "bold");
+		col.addAttribute("fontsize", MedwanQuery.getInstance().getConfigString("defaultPharmacyReportFontSize","8"));
 		col.setText(value);
 	}
 
@@ -172,6 +177,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 		col.addAttribute("size", size+"");
 		col.addAttribute("align", "center");
 		col.addAttribute("weight", "bold");
+		col.addAttribute("fontsize", MedwanQuery.getInstance().getConfigString("defaultPharmacyReportFontSize","8"));
 		col.setText(value);
 	}
 
@@ -179,12 +185,14 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 		org.dom4j.Element col = row.addElement("col");
 		col.addAttribute("size", size+"");
 		col.setText(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#")).format(value));
+		col.addAttribute("fontsize", MedwanQuery.getInstance().getConfigString("defaultPharmacyReportFontSize","8"));
 	}
 
 	private void addPriceCol(org.dom4j.Element row, int size, double value,String format){
 		org.dom4j.Element col = row.addElement("col");
 		col.addAttribute("size", size+"");
 		col.setText(new DecimalFormat(format).format(value));
+		col.addAttribute("fontsize", MedwanQuery.getInstance().getConfigString("defaultPharmacyReportFontSize","8"));
 	}
 
 	private void addPriceBoldCol(org.dom4j.Element row, int size, double value,String format){
@@ -192,6 +200,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 		col.addAttribute("size", size+"");
 		col.addAttribute("weight", "bold");
 		col.setText(new DecimalFormat(format).format(value));
+		col.addAttribute("fontsize", MedwanQuery.getInstance().getConfigString("defaultPharmacyReportFontSize","8"));
 	}
 
 	private void addPriceBoldCol(org.dom4j.Element row, int size, double value){
@@ -199,6 +208,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 		col.addAttribute("size", size+"");
 		col.addAttribute("weight", "bold");
 		col.setText(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#")).format(value));
+		col.addAttribute("fontsize", MedwanQuery.getInstance().getConfigString("defaultPharmacyReportFontSize","8"));
 	}
 
     protected void printTable(String type,Hashtable parameters) throws DocumentException, ParseException{
@@ -211,7 +221,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
     		printServiceStockInventory(d, t, (String)parameters.get("begin"), (String)parameters.get("end"), (String)parameters.get("serviceStockUID"));
     	}
     	else if(type.equalsIgnoreCase("serviceStockInventorySummary")){
-    		printServiceStockInventory(d, t, (String)parameters.get("date"), (String)parameters.get("serviceStockUID"));
+    		printServiceStockInventory(d, t, (String)parameters.get("date"), (String)parameters.get("serviceStockUID"), (String)parameters.get("productGroup"), (String)parameters.get("productSubGroup"));
     	}
     	else if(type.equalsIgnoreCase("expiration")){
     		printExpiration(d, t, (String)parameters.get("date"), (String)parameters.get("serviceStockUID"));
@@ -298,12 +308,13 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 
     protected void printExpiration(org.dom4j.Document d, org.dom4j.Element t, String sDate, String sServiceStockUID) throws ParseException{
 		d.add(t);
-        t.addAttribute("size", "180");
+        t.addAttribute("size", "200");
         java.util.Date date = ScreenHelper.parseDate(sDate);
     	
 		//Add title rows
         org.dom4j.Element row =t.addElement("row");
 		row.addAttribute("type", "title");
+		addCol(row,20,ScreenHelper.getTranNoLink("web","code",sPrintLanguage));
 		addCol(row,80,ScreenHelper.getTranNoLink("web","article",sPrintLanguage));
 		addCol(row,20,ScreenHelper.getTranNoLink("web","expiration",sPrintLanguage));
 		addCol(row,20,ScreenHelper.getTranNoLink("web","stock",sPrintLanguage));
@@ -346,13 +357,14 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 			        if(n>0){
 			        	addCol(row,n*5,"");
 			        }
-					addBoldCol(row,180-n*5,subtitles[n]);
+					addBoldCol(row,200-n*5,subtitles[n]);
 					printedSubTitels.put(title, "1");
 				}
 			}
 			bInitialized=true;
 			//Nu printen we de gegevens van de productstock
 	        row =t.addElement("row");
+			addCol(row,20,stock.getProduct()==null?"":stock.getProduct().getCode());
 			addCol(row,80,stock.getProduct()==null?"":stock.getProduct().getName()+" ("+getTran("web","batchnumber.short")+": "+(key.split("\\|").length>4?key.split("\\|")[4]:"")+")");
 			addCol(row,20,key.split("\\|").length>2?key.split("\\|")[2]:"");
 			int level=0;
@@ -372,7 +384,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 		}
 		if(bInitialized){
 	        row =t.addElement("row");
-			addRightBoldCol(row,160,ScreenHelper.getTranNoLink("web","general.total",sPrintLanguage));
+			addRightBoldCol(row,180,ScreenHelper.getTranNoLink("web","general.total",sPrintLanguage));
 			addPriceBoldCol(row,20,generalTotal);
 		}
     }
@@ -380,12 +392,13 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 
     protected void printStockOut(org.dom4j.Document d, org.dom4j.Element t, String sDate, String sServiceStockUID) throws ParseException{
 		d.add(t);
-        t.addAttribute("size", "180");
+        t.addAttribute("size", "200");
         java.util.Date date = ScreenHelper.parseDate(sDate);
     	
 		//Add title rows
         org.dom4j.Element row =t.addElement("row");
 		row.addAttribute("type", "title");
+		addCol(row,20,ScreenHelper.getTranNoLink("web","code",sPrintLanguage));
 		addCol(row,100,ScreenHelper.getTranNoLink("web","article",sPrintLanguage));
 		addCol(row,40,ScreenHelper.getTranNoLink("web","stock",sPrintLanguage));
 		addCol(row,40,ScreenHelper.getTranNoLink("web","minstock",sPrintLanguage));
@@ -418,12 +431,13 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 			        if(n>0){
 			        	addCol(row,n*5,"");
 			        }
-					addBoldCol(row,180-n*5,subtitles[n]);
+					addBoldCol(row,200-n*5,subtitles[n]);
 					printedSubTitels.put(title, "1");
 				}
 			}
 			//Nu printen we de gegevens van de productstock
 	        row =t.addElement("row");
+			addCol(row,20,stock.getProduct()==null?"":stock.getProduct().getCode());
 			addCol(row,100,stock.getProduct()==null?"":stock.getProduct().getName());
 			addCol(row,40,stock.getLevel()+"");
 			addCol(row,40,stock.getMinimumLevel()+"");
@@ -431,26 +445,35 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
     }
 
 
-    protected void printServiceStockInventory(org.dom4j.Document d, org.dom4j.Element t, String sDate, String sServiceStockUID) throws ParseException{
+    protected void printServiceStockInventory(org.dom4j.Document d, org.dom4j.Element t, String sDate, String sServiceStockUID, String sProductGroup, String sProductSubGroup) throws ParseException{
 		d.add(t);
-        t.addAttribute("size", "180");
+        t.addAttribute("size", "230");
     	
 		//Add title rows
         org.dom4j.Element row =t.addElement("row");
 		row.addAttribute("type", "title");
+		addCol(row,20,ScreenHelper.getTranNoLink("web","code",sPrintLanguage));
 		addCol(row,90,ScreenHelper.getTranNoLink("web","article",sPrintLanguage));
-		addCol(row,30,ScreenHelper.getTranNoLink("web","theor.stock",sPrintLanguage));
-		addCol(row,30,ScreenHelper.getTranNoLink("web","pump",sPrintLanguage));
-		addCol(row,30,ScreenHelper.getTranNoLink("web","theor.value",sPrintLanguage));
+		addCol(row,30,ScreenHelper.getTranNoLink("web","batch",sPrintLanguage));
+		addCol(row,30,ScreenHelper.getTranNoLink("web","expires",sPrintLanguage));
+		addCol(row,20,ScreenHelper.getTranNoLink("web","theor.stock",sPrintLanguage));
+		addCol(row,20,ScreenHelper.getTranNoLink("web","pump",sPrintLanguage));
+		addCol(row,20,ScreenHelper.getTranNoLink("web","theor.value",sPrintLanguage));
 		
 		//Now we have to find all productstocks sorted by productsubgroup
 		SortedMap stocks = new TreeMap();
 		Vector productStocks = ServiceStock.getProductStocks(sServiceStockUID);
 		for(int n=0;n<productStocks.size();n++){
 			ProductStock stock = (ProductStock)productStocks.elementAt(n);
-			//First find the product subcategory
-			String uid=stock.getProduct()==null?"|"+stock.getUid():HTMLEntities.unhtmlentities(stock.getProduct().getFullProductSubGroupName(sPrintLanguage))+"|"+stock.getUid();
-			stocks.put(uid, stock);
+			if(stock!=null && stock.getProduct()!=null && stock.getProduct().getProductGroup()!=null && stock.getProduct().getProductGroup().startsWith(sProductGroup) && stock.getProduct().getProductSubGroup().startsWith(sProductSubGroup)){
+				//First find the product subcategory
+				String uid=stock.getProduct()==null?"|"+stock.getUid():HTMLEntities.unhtmlentities(ScreenHelper.getTranNoLink("product.productgroup",stock.getProduct().getProductGroup(),sPrintLanguage)+" > "+stock.getProduct().getFullProductSubGroupName(sPrintLanguage))+"|"+stock.getUid();
+				stocks.put(uid, stock);
+			}
+			else{
+				String uid="?|"+stock.getUid();
+				stocks.put(uid, stock);
+			}
 		}
 		
 		Hashtable printedSubTitels = new Hashtable();
@@ -470,8 +493,8 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 					//First look if we don't have to print a section total
 					if(bInitialized){
 				        row =t.addElement("row");
-						addRightBoldCol(row,150,ScreenHelper.getTranNoLink("web","total.for",sPrintLanguage)+": "+lasttitle);
-						addPriceBoldCol(row,30,sectionTotal);
+						addRightBoldCol(row,210,ScreenHelper.getTranNoLink("web","total.for",sPrintLanguage)+": "+(lasttitle.length()==0?"?":lasttitle));
+						addPriceBoldCol(row,20,sectionTotal);
 						sectionTotal=0;
 						bInitialized=false;
 					}
@@ -480,33 +503,64 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 			        if(n>0){
 			        	addCol(row,n*5,"");
 			        }
-					addBoldCol(row,180-n*5,subtitles[n]);
+					addBoldCol(row,230-n*5,subtitles[n]);
 					printedSubTitels.put(title, "1");
 				}
 				lasttitle=subtitles[n];
 			}
 			bInitialized=true;
+			//Look up all batches for this product
+			Vector batches = Batch.getAllBatches(stock.getUid());
+			int nBatchedQuantity=0;
 			java.util.Date date = ScreenHelper.parseDate(sDate);
-			//Nu printen we de gegevens van de productstock
-	        row =t.addElement("row");
-			addCol(row,90,stock.getProduct()==null?"":stock.getProduct().getName());
-			int level=stock.getLevel(date);
-			addCol(row,30,level+"");
-			double pump=0;
-			if(stock.getProduct()!=null){
-				pump=stock.getProduct().getLastYearsAveragePrice(new java.util.Date(date.getTime()+day));
+			for(int n=0;n<batches.size();n++){
+				Batch batch = (Batch)batches.elementAt(n);
+				int level=batch.getLevel(date);
+				if(level>0){
+					//Nu printen we de gegevens van de productstock
+			        row =t.addElement("row");
+					addCol(row,20,stock.getProduct()==null?"":stock.getProduct().getCode());
+					addCol(row,90,stock.getProduct()==null?"":stock.getProduct().getName());
+					addCol(row,30,batch.getBatchNumber());
+					addCol(row,30,batch.getEnd()==null?"":ScreenHelper.formatDate(batch.getEnd()));
+					nBatchedQuantity+=level;
+					addCol(row,20,level+"");
+					double pump=0;
+					if(stock.getProduct()!=null){
+						pump=stock.getProduct().getLastYearsAveragePrice(new java.util.Date(date.getTime()+day));
+					}
+					addPriceCol(row,20,pump,MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#,##0.00"));
+					addPriceCol(row,20,level*pump);
+					sectionTotal+=level*pump;
+					generalTotal+=level*pump;
+				}
 			}
-			addPriceCol(row,30,pump,MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#,##0.00"));
-			addPriceCol(row,30,level*pump);
-			sectionTotal+=level*pump;
-			generalTotal+=level*pump;
+			if(stock.getLevel(date)>nBatchedQuantity){
+				//Part of the stock has no batch associated 
+				//Nu printen we de gegevens van de productstock
+		        row =t.addElement("row");
+				addCol(row,20,stock.getProduct()==null?"":stock.getProduct().getCode());
+				addCol(row,90,stock.getProduct()==null?"":stock.getProduct().getName());
+				addCol(row,30,"");
+				addCol(row,30,"");
+				int level=stock.getLevel(date)-nBatchedQuantity;
+				addCol(row,20,level+"");
+				double pump=0;
+				if(stock.getProduct()!=null){
+					pump=stock.getProduct().getLastYearsAveragePrice(new java.util.Date(date.getTime()+day));
+				}
+				addPriceCol(row,20,pump,MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#,##0.00"));
+				addPriceCol(row,20,level*pump);
+				sectionTotal+=level*pump;
+				generalTotal+=level*pump;
+			}
 		}
 		if(bInitialized){
 	        row =t.addElement("row");
-			addRightBoldCol(row,150,ScreenHelper.getTranNoLink("web","total.for",sPrintLanguage)+": "+lasttitle);
-			addPriceBoldCol(row,30,sectionTotal);
-			addRightBoldCol(row,150,ScreenHelper.getTranNoLink("web","general.total",sPrintLanguage));
-			addPriceBoldCol(row,30,generalTotal);
+			addRightBoldCol(row,210,ScreenHelper.getTranNoLink("web","total.for",sPrintLanguage)+": "+(lasttitle.length()==0?"?":lasttitle));
+			addPriceBoldCol(row,20,sectionTotal);
+			addRightBoldCol(row,210,ScreenHelper.getTranNoLink("web","general.total",sPrintLanguage));
+			addPriceBoldCol(row,20,generalTotal);
 		}
     }
 
@@ -561,7 +615,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
  			java.util.Date date = ScreenHelper.parseDate(sDate);
  			//Nu printen we de gegevens van de productstock
  	        row =t.addElement("row");
- 			addCol(row,20,stock.getProduct()==null || stock.getProduct().getPrestationcode()==null?"":stock.getProduct().getPrestationcode());
+ 			addCol(row,20,stock.getProduct()==null?"":stock.getProduct().getCode());
  			addCol(row,80,stock.getProduct()==null || stock.getProduct().getName()==null?"":stock.getProduct().getName());
  			addCol(row,20,stock.getProduct()==null || stock.getProduct().getUnit()==null?"":ScreenHelper.getTranNoLink("product.unit",stock.getProduct().getUnit(),sPrintLanguage),7);
  			int averageConsumption=0;
@@ -577,11 +631,12 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
     
     protected void printServiceStockInventory(org.dom4j.Document d, org.dom4j.Element t, String sDateBegin, String sDateEnd, String sServiceStockUID) throws ParseException{
  		d.add(t);
-         t.addAttribute("size", "290");
+         t.addAttribute("size", "310");
 
  		//Add title rows
          org.dom4j.Element row =t.addElement("row");
  		row.addAttribute("type", "title");
+ 		addCol(row,20,ScreenHelper.getTranNoLink("web","code",sPrintLanguage),8);
  		addCol(row,70,ScreenHelper.getTranNoLink("web","article",sPrintLanguage),8);
  		addCol(row,20,ScreenHelper.getTranNoLink("web","unit",sPrintLanguage),8);
  		addCol(row,20,ScreenHelper.getTranNoLink("web","init.stock",sPrintLanguage),8);
@@ -622,7 +677,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
  					//First look if we don't have to print a section total
  					if(bInitialized){
  				        row =t.addElement("row");
- 						addRightBoldCol(row,190,ScreenHelper.getTranNoLink("web","total.for",sPrintLanguage)+": "+lasttitle);
+ 						addRightBoldCol(row,210,ScreenHelper.getTranNoLink("web","total.for",sPrintLanguage)+": "+lasttitle);
  						addPriceBoldCol(row,20,sectionTotal);
  						addCol(row,20,"");
  						addCol(row,20,"");
@@ -636,7 +691,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
  			        if(n>0){
  			        	addCol(row,n*5,"");
  			        }
- 					addBoldCol(row,210-n*5,subtitles[n]);
+ 					addBoldCol(row,230-n*5,subtitles[n]);
  					addCol(row,20,"");
  					addCol(row,20,"");
  					addCol(row,20,"");
@@ -650,6 +705,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
  			java.util.Date end = ScreenHelper.parseDate(sDateEnd);
  			//Nu printen we de gegevens van de productstock
  	        row =t.addElement("row");
+ 			addCol(row,20,stock.getProduct()==null?"":stock.getProduct().getCode());
  			addCol(row,70,stock.getProduct()==null?"":stock.getProduct().getName());
  			addCol(row,20,stock.getProduct()==null?"":ScreenHelper.getTranNoLink("product.unit",stock.getProduct().getUnit(),sPrintLanguage),7);
  			int initiallevel=stock.getLevel(begin);
@@ -674,13 +730,13 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
  		}
  		if(bInitialized){
  	        row =t.addElement("row");
- 			addRightBoldCol(row,190,ScreenHelper.getTranNoLink("web","total.for",sPrintLanguage)+": "+lasttitle);
+ 			addRightBoldCol(row,210,ScreenHelper.getTranNoLink("web","total.for",sPrintLanguage)+": "+lasttitle);
  			addPriceBoldCol(row,20,sectionTotal);
  			addCol(row,20,"");
  			addCol(row,20,"");
  			addCol(row,20,"");
  			addCol(row,20,"");
- 			addRightBoldCol(row,190,ScreenHelper.getTranNoLink("web","general.total",sPrintLanguage));
+ 			addRightBoldCol(row,210,ScreenHelper.getTranNoLink("web","general.total",sPrintLanguage));
  			addPriceBoldCol(row,20,generalTotal);
  			addCol(row,20,"");
  			addCol(row,20,"");
@@ -692,12 +748,12 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
     
     protected void printServiceStockOperations(org.dom4j.Document d, org.dom4j.Element t, String sDateBegin, String sDateEnd, String sServiceStockUID) throws ParseException{
  		d.add(t);
-        t.addAttribute("size", "260");
+        t.addAttribute("size", "280");
 
  		//Add title rows
         org.dom4j.Element row =t.addElement("row");
  		row.addAttribute("type", "title");
- 		addCol(row,80,"");
+ 		addCol(row,100,"");
  		addCol(row,40,ScreenHelper.getTranNoLink("web","initial.situation",sPrintLanguage));
  		addCol(row,40,ScreenHelper.getTranNoLink("web","entries",sPrintLanguage));
  		addCol(row,40,ScreenHelper.getTranNoLink("web","exits",sPrintLanguage));
@@ -705,6 +761,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
  		
 		row =t.addElement("row");
 		row.addAttribute("type", "title");
+ 		addCol(row,20,ScreenHelper.getTranNoLink("web","code",sPrintLanguage));
  		addCol(row,80,ScreenHelper.getTranNoLink("web","article",sPrintLanguage));
  		addCol(row,20,ScreenHelper.getTranNoLink("web","qte",sPrintLanguage));
  		addCol(row,20,ScreenHelper.getTranNoLink("web","amount",sPrintLanguage));
@@ -746,7 +803,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
  			        if(n>0){
  			        	addCol(row,n*5,"");
  			        }
- 					addBoldCol(row,260-n*5,subtitles[n]);
+ 					addBoldCol(row,280-n*5,subtitles[n]);
  					printedSubTitels.put(title, "1");
  				}
  				lasttitle=subtitles[n];
@@ -755,6 +812,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
  			java.util.Date end = ScreenHelper.parseDate(sDateEnd);
  			//Nu printen we de gegevens van de productstock
  	        row =t.addElement("row");
+ 			addCol(row,20,stock.getProduct()==null?"":stock.getProduct().getCode());
  			addCol(row,80,stock.getProduct()==null?"":stock.getProduct().getName());
  			int initiallevel=stock.getLevel(begin);
  			addCol(row,20,initiallevel+"");
@@ -776,10 +834,11 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
      }
     protected void printPatientDeliveries(org.dom4j.Document d, org.dom4j.Element t, String sDateBegin, String sDateEnd, String patientUid) throws ParseException{
  		d.add(t);
-        t.addAttribute("size", "100");
+        t.addAttribute("size", "110");
  		//Add title rows
         org.dom4j.Element row =t.addElement("row");
  		row.addAttribute("type", "title");
+ 		addCol(row,10,ScreenHelper.getTranNoLink("web","code",sPrintLanguage));
  		addCol(row,70,ScreenHelper.getTranNoLink("web","productstock",sPrintLanguage));
  		addCol(row,10,ScreenHelper.getTranNoLink("web","quantity",sPrintLanguage));
  		addCol(row,20,ScreenHelper.getTranNoLink("web","packageunits",sPrintLanguage));
@@ -818,6 +877,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 				product = Product.get(rs.getString("oc_stock_productuid"));
 				if(product!=null){
 		 	        row =t.addElement("row");
+			 		addCol(row,10,product.getCode());
 			 		addCol(row,70,product.getName());
 			 		addCol(row,10,rs.getInt("quantity")+"");
 			 		addCol(row,20,product.getPackageUnits()+" "+ScreenHelper.getTran(null,"product.unit",product.getUnit(),sPrintLanguage));
@@ -835,12 +895,13 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
     
     protected void printServiceOutgoingStockOperations(org.dom4j.Document d, org.dom4j.Element t, String sDateBegin, String sDateEnd, String sServiceStockUID) throws ParseException{
  		d.add(t);
-        t.addAttribute("size", "195");
+        t.addAttribute("size", "215");
 
  		//Add title rows
         org.dom4j.Element row =t.addElement("row");
  		row.addAttribute("type", "title");
  		addCol(row,30,ScreenHelper.getTranNoLink("web","document",sPrintLanguage));
+ 		addCol(row,20,ScreenHelper.getTranNoLink("web","code",sPrintLanguage));
  		addCol(row,80,ScreenHelper.getTranNoLink("web","article",sPrintLanguage));
  		addCol(row,20,ScreenHelper.getTranNoLink("web","year",sPrintLanguage));
  		addCol(row,20,ScreenHelper.getTranNoLink("web","qte",sPrintLanguage));
@@ -864,29 +925,33 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 		
 		 			if(activedate.length()>0 && (!date.equalsIgnoreCase(activedate) || !destination.equalsIgnoreCase(activedestination))){
 		 				row =t.addElement("row");
-		 		 		addRightBoldCol(row,170,ScreenHelper.getTranNoLink("web", "subtotal", sPrintLanguage));
+		 		 		addRightBoldCol(row,190,ScreenHelper.getTranNoLink("web", "subtotal", sPrintLanguage));
 		 		 		addPriceBoldCol(row,25,subtotal);
 		 		 		subtotal=0;
 		 		 		activedestination="$$$";
 		 			}
 		 			if(!date.equalsIgnoreCase(activedate)){
 		 				row =t.addElement("row");
-		 		 		addBoldCol(row,195,date);
+		 		 		addBoldCol(row,215,date);
 		 		 		activedate=date;
 		 			}
 		 			if(!destination.equalsIgnoreCase(activedestination)){
 		 				row =t.addElement("row");
 		 		 		addCol(row,10,"");
 		 	 			String document="";
-		 	 			if(operation.getDocument()!=null){
-		 	 				document=operation.getDocument().getReference();
+		 	 			if(operation.getDocument()!=null && operation.getDocument().hasValidUid()){
+		 	 				document=operation.getUid()+(operation.getDocument().getReference().length()==0?"":" ("+operation.getDocument().getReference()+")");
 		 	 			}
-		 		 		addBoldCol(row,60,getTran("web","document")+": "+document);
+		 	 			else if(operation.getSourceDestination().getObjectType().equalsIgnoreCase("patient")){
+		 	 				document=operation.getSourceDestination().getObjectUid();
+		 	 			}
+		 		 		addBoldCol(row,80,getTran("web","document")+": "+document);
 		 		 		addBoldCol(row,125,ScreenHelper.getTranNoLink("productstockoperation.medicationdelivery",operation.getDescription(),sPrintLanguage)+": "+operation.getSourceDestinationName());
 		 		 		activedestination=destination;
 		 			}
 		 	        row =t.addElement("row");
 			 		addCol(row,10,"");
+		 			addCol(row,20,ScreenHelper.checkString(product.getCode()));
 		 			addCol(row,100,ScreenHelper.checkString(product.getName())+(operation.getBatchNumber()!=null&&operation.getBatchNumber().length()>0?" ("+operation.getBatchNumber().toUpperCase()+")":""));
 		 			addCol(row,20,operation.getDate()==null?"":new SimpleDateFormat("yyyy").format(operation.getDate()));
 		 			addCol(row,20,operation.getUnitsChanged()+"");
@@ -903,25 +968,26 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
  		}
 		if(activedate.length()>0){
 			row =t.addElement("row");
-	 		addRightBoldCol(row,170,ScreenHelper.getTranNoLink("web", "subtotal", sPrintLanguage));
+	 		addRightBoldCol(row,190,ScreenHelper.getTranNoLink("web", "subtotal", sPrintLanguage));
 	 		addPriceBoldCol(row,25,subtotal);
 		}
 
  		row =t.addElement("row");
- 		addCol(row,195,"");
- 		addRightBoldCol(row,170,ScreenHelper.getTranNoLink("web", "total", sPrintLanguage));
+ 		addCol(row,215,"");
+ 		addRightBoldCol(row,190,ScreenHelper.getTranNoLink("web", "total", sPrintLanguage));
  		addPriceBoldCol(row,25,generaltotal);
  		
      }
     
     protected void printServiceOutgoingStockOperationsPerService(org.dom4j.Document d, org.dom4j.Element t, String sDateBegin, String sDateEnd, String sServiceStockUID) throws ParseException{
  		d.add(t);
-        t.addAttribute("size", "195");
+        t.addAttribute("size", "215");
 
  		//Add title rows
         org.dom4j.Element row =t.addElement("row");
  		row.addAttribute("type", "title");
  		addCol(row,30,ScreenHelper.getTranNoLink("web","service",sPrintLanguage));
+ 		addCol(row,20,ScreenHelper.getTranNoLink("web","code",sPrintLanguage));
  		addCol(row,80,ScreenHelper.getTranNoLink("web","article",sPrintLanguage));
  		addCol(row,20,ScreenHelper.getTranNoLink("web","year",sPrintLanguage));
  		addCol(row,20,ScreenHelper.getTranNoLink("web","qte",sPrintLanguage));
@@ -978,26 +1044,27 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 
  			if(activedate.length()>0 && (!date.equalsIgnoreCase(activedate) || !destination.equalsIgnoreCase(activedestination))){
  				row =t.addElement("row");
- 		 		addRightBoldCol(row,170,ScreenHelper.getTranNoLink("web", "subtotal", sPrintLanguage));
+ 		 		addRightBoldCol(row,190,ScreenHelper.getTranNoLink("web", "subtotal", sPrintLanguage));
  		 		addPriceBoldCol(row,25,subtotal);
  		 		subtotal=0;
  		 		activedestination="$$$";
  			}
  			if(!date.equalsIgnoreCase(activedate)){
  				row =t.addElement("row");
- 		 		addBoldCol(row,195,date);
+ 		 		addBoldCol(row,215,date);
  		 		activedate=date;
  			}
  			if(!destination.equalsIgnoreCase(activedestination)){
  				row =t.addElement("row");
  		 		addCol(row,10,"");
- 		 		addBoldCol(row,60,getTran("web","service")+": ");
+ 		 		addBoldCol(row,80,getTran("web","service")+": ");
  		 		addBoldCol(row,125,destination);
  		 		activedestination=destination;
  			}
  	        row =t.addElement("row");
  	        Product product = (Product)products.get(key.split(";")[3]);
 	 		addCol(row,10,"");
+ 			addCol(row,20,product!=null?ScreenHelper.checkString(product.getCode()):"");
  			addCol(row,100,product!=null?ScreenHelper.checkString(product.getName()):"");
  			addCol(row,20,new SimpleDateFormat("yyyy").format(ScreenHelper.getSQLDate(date)));
  			addCol(row,20,mDeliveries.get(key)+"");
@@ -1009,19 +1076,19 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
  		}
 		if(activedate.length()>0){
 			row =t.addElement("row");
-	 		addRightBoldCol(row,170,ScreenHelper.getTranNoLink("web", "subtotal", sPrintLanguage));
+	 		addRightBoldCol(row,190,ScreenHelper.getTranNoLink("web", "subtotal", sPrintLanguage));
 	 		addPriceBoldCol(row,25,subtotal);
 		}
 
  		row =t.addElement("row");
- 		addCol(row,195,"");
- 		addRightBoldCol(row,170,ScreenHelper.getTranNoLink("web", "total", sPrintLanguage));
+ 		addCol(row,215,"");
+ 		addRightBoldCol(row,190,ScreenHelper.getTranNoLink("web", "total", sPrintLanguage));
  		addPriceBoldCol(row,25,generaltotal);
      }
     
     protected void printServiceIncomingStockOperations(org.dom4j.Document d, org.dom4j.Element t, String sDateBegin, String sDateEnd, String sServiceStockUID, String userid) throws ParseException{
  		d.add(t);
-        t.addAttribute("size", "180");
+        t.addAttribute("size", "200");
 		java.util.Date begin = ScreenHelper.parseDate(sDateBegin);
 		java.util.Date end = ScreenHelper.parseDate(sDateEnd);
 
@@ -1029,6 +1096,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
         org.dom4j.Element row =t.addElement("row");
 		row.addAttribute("type", "title");
 		addCol(row,30,ScreenHelper.getTranNoLink("web","category",sPrintLanguage),8);
+		addCol(row,20,ScreenHelper.getTranNoLink("web","code",sPrintLanguage),8);
 		addCol(row,70,ScreenHelper.getTranNoLink("web","article",sPrintLanguage),8);
 		addCol(row,20,ScreenHelper.getTranNoLink("web","quantity",sPrintLanguage),8);
 		addCol(row,20,ScreenHelper.getTranNoLink("web","unit",sPrintLanguage),8);
@@ -1069,7 +1137,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 			        if(n>0){
 			        	addCol(row,n*5,"");
 			        }
-					addBoldCol(row,180-n*5,subtitles[n]);
+					addBoldCol(row,200-n*5,subtitles[n]);
 					printedSubTitels.put(title, "1");
 				}
 			}
@@ -1083,6 +1151,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 				row =t.addElement("row");
 		        addCol(row,10,"");
 		        //Todo: add batch number
+				addCol(row,20,stock.getProduct()==null?"":stock.getProduct().getCode());
 				addCol(row,90,stock.getProduct()==null?ScreenHelper.getTranNoLink("web","unknown_product",sPrintLanguage):ScreenHelper.capitalize(stock.getProduct().getName())+(sBatchNumber.equalsIgnoreCase("?")?"":" ("+ScreenHelper.getTran(null,"web", "batch", sPrintLanguage)+": "+sBatchNumber.toUpperCase()+")"));
 				//Todo: get incoming from uid and batchuid
 				int in = stock.getTotalUnitsInForPeriod(begin, new java.util.Date(end.getTime()+day),ScreenHelper.checkString(userid),sBatchNumber);
@@ -1099,7 +1168,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 		}
 		if(bInitialized){
 	        row =t.addElement("row");
-			addRightBoldCol(row,160,ScreenHelper.getTranNoLink("web","general.total",sPrintLanguage));
+			addRightBoldCol(row,180,ScreenHelper.getTranNoLink("web","general.total",sPrintLanguage));
 			addPriceBoldCol(row,20,generalTotal);
 		}
 
@@ -1107,13 +1176,14 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
     
     protected void printServiceIncomingStockOperationsPerOrder(org.dom4j.Document d, org.dom4j.Element t, String sDateBegin, String sDateEnd, String sServiceStockUID) throws ParseException{
  		d.add(t);
-        t.addAttribute("size", "190");
+        t.addAttribute("size", "210");
 		java.util.Date begin = ScreenHelper.parseDate(sDateBegin);
 		java.util.Date end = ScreenHelper.parseDate(sDateEnd);
 
 		//Add title rows
         org.dom4j.Element row =t.addElement("row");
 		row.addAttribute("type", "title");
+		addCol(row,20,ScreenHelper.getTranNoLink("web","code",sPrintLanguage),8);
 		addCol(row,90,ScreenHelper.getTranNoLink("web","article",sPrintLanguage),8);
 		addCol(row,20,ScreenHelper.getTranNoLink("web","expiry",sPrintLanguage),8);
 		addCol(row,20,ScreenHelper.getTranNoLink("web","quantity",sPrintLanguage),8);
@@ -1131,7 +1201,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 				//First check if we have to print the sectiontotal
 				if(!activedocument.equalsIgnoreCase("$$$")){
 					row =t.addElement("row");
-					addRightBoldCol(row, 170, getTran("web","total"));
+					addRightBoldCol(row, 190, getTran("web","total"));
 					addPriceBoldCol(row, 20, sectiontotal);
 					sectiontotal=0;
 				}
@@ -1140,7 +1210,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 					row =t.addElement("row");
 					addBoldCol(row,45,getTran("web","date")+": ?");
 					addBoldCol(row,45,getTran("web","ordernr")+": ?");
-					addBoldCol(row,100,getTran("web","supplier")+": ?");
+					addBoldCol(row,120,getTran("web","supplier")+": ?");
 				}
 				else {
 					OperationDocument document = OperationDocument.get(operation.getDocumentUID());
@@ -1148,19 +1218,20 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 						row =t.addElement("row");
 						addBoldCol(row,45,getTran("web","date")+": ?");
 						addBoldCol(row,45,getTran("web","ordernr")+": ?");
-						addBoldCol(row,100,getTran("web","supplier")+": ?");
+						addBoldCol(row,120,getTran("web","supplier")+": ?");
 					}
 					else {
 						row =t.addElement("row");
 						addBoldCol(row,45,getTran("web","date")+": "+new SimpleDateFormat("dd/MM/yyyy").format(document.getDate()));
 						addBoldCol(row,45,getTran("web","ordernr")+": "+document.getReference());
-						addBoldCol(row,100,getTran("web","supplier")+": "+document.getSourceName(sPrintLanguage));
+						addBoldCol(row,120,getTran("web","supplier")+": "+document.getSourceName(sPrintLanguage));
 					}
 				}
 				activedocument=ScreenHelper.checkString(operation.getDocumentUID());
 			}
 			//Now we print the operation data
 			row =t.addElement("row");
+			addCol(row,20,operation.getProductStock()==null || operation.getProductStock().getProduct()==null?"?":operation.getProductStock().getProduct().getCode());
 			addCol(row,90,operation.getProductStock()==null || operation.getProductStock().getProduct()==null?"?":operation.getProductStock().getProduct().getName());
 			addCol(row,20,operation.getBatchEnd()==null?"":new SimpleDateFormat("dd/MM/yyyy").format(operation.getBatchEnd()));
 			int in=operation.getUnitsChanged();
@@ -1176,7 +1247,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 		}
 		if(!activedocument.equalsIgnoreCase("$$$")){
 			row =t.addElement("row");
-			addRightBoldCol(row, 170, getTran("web","total"));
+			addRightBoldCol(row, 190, getTran("web","total"));
 			addPriceBoldCol(row, 20, sectiontotal);
 		}
      }
@@ -1216,7 +1287,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 			ProductStockOperation operation = (ProductStockOperation)operations.get(key);
 			String prodname="?";
 			if(operation.getProductStock()!=null && operation.getProductStock().getProduct()!=null){
-				prodname=operation.getProductStock().getProduct().getName();
+				prodname=operation.getProductStock().getProduct().getCode()+" "+operation.getProductStock().getProduct().getName();
 			}
 			if(!prodname.equals(activeproduct)){
 				//First check if we have to print the sectiontotal
@@ -1258,7 +1329,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
     protected void printServiceIncomingStockOperationsPerCategoryItem(org.dom4j.Document d, org.dom4j.Element t, String sDateBegin, String sDateEnd, String sServiceStockUID){
  		try{
 	    	d.add(t);
-	        t.addAttribute("size", "160");
+	        t.addAttribute("size", "180");
 			java.util.Date begin = ScreenHelper.parseDate(sDateBegin);
 			java.util.Date end = ScreenHelper.parseDate(sDateEnd);
 	
@@ -1266,6 +1337,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 	        org.dom4j.Element row =t.addElement("row");
 			row.addAttribute("type", "title");
 			addCol(row,20,ScreenHelper.getTranNoLink("web","month.and.batch",sPrintLanguage),8);
+			addCol(row,20,ScreenHelper.getTranNoLink("web","code",sPrintLanguage),8);
 			addCol(row,80,ScreenHelper.getTranNoLink("web","article",sPrintLanguage),8);
 			addCol(row,20,ScreenHelper.getTranNoLink("web","quantity",sPrintLanguage),8);
 			addCol(row,20,ScreenHelper.getTranNoLink("web","PU",sPrintLanguage),8);
@@ -1299,7 +1371,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 				if(!month.equals(activemonth)){
 					//We have to print the month
 					row =t.addElement("row");
-					addBoldCol(row, 160, month);
+					addBoldCol(row, 180, month);
 					activemonth=month;
 					printedSubTitels = new Hashtable();
 					activecategory="$$$";
@@ -1317,7 +1389,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 					        if(n>0){
 					        	addCol(row,n*5,"");
 					        }
-							addBoldCol(row,160-n*5,subtitles[n]);
+							addBoldCol(row,180-n*5,subtitles[n]);
 							printedSubTitels.put(title, "1");
 						}
 					}
@@ -1328,6 +1400,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 				//Now we print the operation data
 				row =t.addElement("row");
 				addCol(row,20,key.split("\\|")[3]);
+				addCol(row,20,product.getCode());
 				addCol(row,80,productname);
 				int in=(Integer)quantities.get(key);
 				addCol(row,20,in+"");
@@ -1347,16 +1420,18 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 
     protected void printServiceIncomingStockOperationsPerProvider(org.dom4j.Document d, org.dom4j.Element t, String sDateBegin, String sDateEnd, String sServiceStockUID,String provider) throws ParseException{
  		d.add(t);
-        t.addAttribute("size", "180");
+        t.addAttribute("size", "220");
 		java.util.Date begin = ScreenHelper.parseDate(sDateBegin);
 		java.util.Date end = ScreenHelper.parseDate(sDateEnd);
 
 		//Add title rows
         org.dom4j.Element row =t.addElement("row");
 		row.addAttribute("type", "title");
+		addCol(row,20,ScreenHelper.getTranNoLink("web","code",sPrintLanguage),8);
 		addCol(row,80,ScreenHelper.getTranNoLink("web","article",sPrintLanguage),8);
 		addCol(row,20,ScreenHelper.getTranNoLink("web","expiry",sPrintLanguage),8);
 		addCol(row,20,ScreenHelper.getTranNoLink("web","quantity",sPrintLanguage),8);
+		addCol(row,20,ScreenHelper.getTranNoLink("web","missed",sPrintLanguage),8);
 		addCol(row,20,ScreenHelper.getTranNoLink("web","unit",sPrintLanguage),8);
 		addCol(row,20,ScreenHelper.getTranNoLink("web","PU",sPrintLanguage),8);
 		addCol(row,20,ScreenHelper.getTranNoLink("web","totalprice",sPrintLanguage),8);
@@ -1373,6 +1448,9 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 				String provname="?";
 				if(operation.getDocument()!=null && ScreenHelper.checkString(operation.getDocument().getSourceName(sPrintLanguage)).length()>0){
 					provname=ScreenHelper.checkString(operation.getDocument().getSourceName(sPrintLanguage));
+				}
+				else{
+					provname=operation.getSourceDestinationName(sPrintLanguage);
 				}
 				if(provname.toLowerCase().startsWith(provider.toLowerCase())){
 					String docid="?";
@@ -1394,7 +1472,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 				//First check if we have to print the sectiontotal
 				if(!activeprovider.equalsIgnoreCase("$$$")){
 					row =t.addElement("row");
-					addRightBoldCol(row, 160, getTran("web","total"));
+					addRightBoldCol(row, 200, getTran("web","total"));
 					addPriceBoldCol(row, 20, sectiontotal);
 					sectiontotal=0;
 					activedocument = "$$$";
@@ -1402,7 +1480,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 				}
 				//We have to print the provider name
 				row =t.addElement("row");
-				addBoldCol(row, 180, getTran("web","provider")+": "+provname);
+				addBoldCol(row, 220, getTran("web","provider")+": "+provname);
 				activeprovider=provname;
 			}
 			String docid=key.split(";")[1];
@@ -1410,7 +1488,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 				//First check if we have to print the sectiontotal
 				if(!bNewProvider && !activedocument.equalsIgnoreCase("$$$")){
 					row =t.addElement("row");
-					addRightBoldCol(row, 160, getTran("web","total"));
+					addRightBoldCol(row, 200, getTran("web","total"));
 					addPriceBoldCol(row, 20, sectiontotal);
 					sectiontotal=0;
 					activedocument = "$$$";
@@ -1426,21 +1504,35 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 					}
 				}
 				row =t.addElement("row");
-				addBoldCol(row, 40, getTran("web","date")+": "+docdate);
-				addBoldCol(row, 140, getTran("web","docnr")+": "+docref);
+				addBoldCol(row, 40, getTran("web","docdate")+": "+docdate);
+				addBoldCol(row, 180, getTran("web","docnr")+": "+docref);
 				activedocument=docid;
 				operationdate="";
 			}
 			if(!operationdate.equalsIgnoreCase(ScreenHelper.getSQLDate(operation.getDate()))){
 				operationdate=ScreenHelper.getSQLDate(operation.getDate());
-				addBoldCol(row, 180, getTran("web","deliverydate")+": "+operationdate);
+				addBoldCol(row, 220, getTran("web","deliverydate")+": "+operationdate);
 			}
 			//Now we print the operation data
 			row =t.addElement("row");
+			addCol(row,20,operation.getProductStock()==null || operation.getProductStock().getProduct()==null?"?":operation.getProductStock().getProduct().getCode());
 			addCol(row,80,operation.getProductStock()==null || operation.getProductStock().getProduct()==null?"?":operation.getProductStock().getProduct().getName()+(operation.getBatchNumber()==null?"":" ("+operation.getBatchNumber().toUpperCase()+")"));
 			addCol(row,20,operation.getBatchEnd()==null?"":new SimpleDateFormat("dd/MM/yyyy").format(operation.getBatchEnd()));
 			int in=operation.getUnitsChanged();
 			addCol(row,20,in+"");
+			//Calculate missed items if an order was linked to this receipt
+			if(operation.getOrderUID()!=null && operation.getOrderUID().length()>0){
+				ProductOrder order = ProductOrder.get(operation.getOrderUID());
+				if(order!=null && order.hasValidUid()){
+					addCol(row,20,(order.getPackagesOrdered()-order.getPackagesDelivered())+"");
+				}
+				else{
+					addCol(row,20,"");
+				}
+			}
+			else{
+				addCol(row,20,"");
+			}
 			addCol(row,20,operation.getProductStock()==null || operation.getProductStock().getProduct()==null?"?":ScreenHelper.getTranNoLink("product.unit",operation.getProductStock().getProduct().getUnit(),sPrintLanguage),7);
 			double pump=0;
 			if(operation.getProductStock()!=null && operation.getProductStock().getProduct()!=null){
@@ -1452,37 +1544,36 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 		}
 		if(!activedocument.equalsIgnoreCase("$$$")){
 			row =t.addElement("row");
-			addRightBoldCol(row, 160, getTran("web","total"));
+			addRightBoldCol(row, 200, getTran("web","total"));
 			addPriceBoldCol(row, 20, sectiontotal);
 		}
 		row =t.addElement("row");
-		addCol(row, 180, "\n");
+		addCol(row, 220, "\n");
 		row =t.addElement("row");
-		addCol(row, 180, "\n");
+		addCol(row, 220, "\n");
 		row =t.addElement("row");
 		addRightBoldCol(row, 40, getTran("web","name"));
 		addRightBoldCol(row, 40, getTran("web","function"));
 		addRightBoldCol(row, 40, getTran("web","date"));
-		addRightBoldCol(row, 60, getTran("mdnac","signature"));
+		addRightBoldCol(row, 100, getTran("mdnac","signature"));
 		for(int n=0;n<4;n++){
 			row =t.addElement("row");
 			addRightBoldCol(row, 40, "\n");
 			addRightBoldCol(row, 40, "\n");
 			addRightBoldCol(row, 40, "\n");
-			addRightBoldCol(row, 60, "\n");
+			addRightBoldCol(row, 100, "\n");
 		}
-
-		
      }
     
     protected void printServiceOutgoingStockOperationsListingPerService(org.dom4j.Document d, org.dom4j.Element t, String sDateBegin, String sDateEnd, String sServiceStockUID, String destinationStockUID) throws ParseException{
  		d.add(t);
-        t.addAttribute("size", "170");
+        t.addAttribute("size", "190");
 
  		//Add title rows
         org.dom4j.Element row =t.addElement("row");
  		row.addAttribute("type", "title");
  		addCol(row,30,ScreenHelper.getTranNoLink("web","warehouse",sPrintLanguage));
+ 		addCol(row,20,ScreenHelper.getTranNoLink("web","code",sPrintLanguage));
  		addCol(row,80,ScreenHelper.getTranNoLink("web","article",sPrintLanguage));
  		addCol(row,20,ScreenHelper.getTranNoLink("web","qte",sPrintLanguage));
  		addCol(row,20,ScreenHelper.getTranNoLink("web","pu",sPrintLanguage));
@@ -1502,7 +1593,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
  			if(!destination.equalsIgnoreCase(activedestination)){
  				if(!activedestination.equalsIgnoreCase("$$$")){
  					row =t.addElement("row");
- 			 		addRightBoldCol(row,150,ScreenHelper.getTranNoLink("web", "subtotal", sPrintLanguage));
+ 			 		addRightBoldCol(row,170,ScreenHelper.getTranNoLink("web", "subtotal", sPrintLanguage));
  			 		addPriceBoldCol(row,20,subtotal);
  				}
  				row =t.addElement("row");
@@ -1510,12 +1601,13 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
  	 			if(operation.getDocument()!=null){
  	 				document=operation.getDocument().getReference();
  	 			}
- 		 		addBoldCol(row,170,date +"   -   "+getTran("web","document")+": "+document);
+ 		 		addBoldCol(row,190,date +"   -   "+getTran("web","document")+": "+document);
  		 		activedestination=destination;
  		 		subtotal=0;
  			}
  	        row =t.addElement("row");
 	 		addCol(row,30,"");
+ 			addCol(row,20,operation.getProductStock()!=null && operation.getProductStock().getProduct()!=null?ScreenHelper.checkString(operation.getProductStock().getProduct().getCode()):"");
  			addCol(row,80,operation.getProductStock()!=null && operation.getProductStock().getProduct()!=null?ScreenHelper.checkString(operation.getProductStock().getProduct().getName()):"");
  			addCol(row,20,operation.getUnitsChanged()+"");
  			double price=operation.getProductStock()==null || operation.getProductStock().getProduct()==null?0:operation.getProductStock().getProduct().getLastYearsAveragePrice(operation.getDate()==null?new java.util.Date():operation.getDate());
@@ -1527,41 +1619,42 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 
 		if(!activedestination.equalsIgnoreCase("$$$")){
 			row =t.addElement("row");
-	 		addRightBoldCol(row,150,ScreenHelper.getTranNoLink("web", "subtotal", sPrintLanguage));
+	 		addRightBoldCol(row,170,ScreenHelper.getTranNoLink("web", "subtotal", sPrintLanguage));
 	 		addPriceBoldCol(row,20,subtotal);
 		}
  		row =t.addElement("row");
- 		addCol(row,170,"");
- 		addRightBoldCol(row,150,ScreenHelper.getTranNoLink("web", "total", sPrintLanguage));
+ 		addCol(row,190,"");
+ 		addRightBoldCol(row,170,ScreenHelper.getTranNoLink("web", "total", sPrintLanguage));
  		addPriceBoldCol(row,20,generaltotal);
 		row =t.addElement("row");
-		addCol(row, 180, "\n");
+		addCol(row, 190, "\n");
 		row =t.addElement("row");
-		addCol(row, 180, "\n");
+		addCol(row, 190, "\n");
 		row =t.addElement("row");
 		addRightBoldCol(row, 40, getTran("web","name"));
 		addRightBoldCol(row, 40, getTran("web","function"));
 		addRightBoldCol(row, 40, getTran("web","date"));
-		addRightBoldCol(row, 60, getTran("mdnac","signature"));
+		addRightBoldCol(row, 70, getTran("mdnac","signature"));
 		for(int n=0;n<4;n++){
 			row =t.addElement("row");
 			addRightBoldCol(row, 40, "\n");
 			addRightBoldCol(row, 40, "\n");
 			addRightBoldCol(row, 40, "\n");
-			addRightBoldCol(row, 60, "\n");
+			addRightBoldCol(row, 70, "\n");
 		}
  		
      }
     
     protected void printServiceOutgoingStockOperationsListing(org.dom4j.Document d, org.dom4j.Element t, String sDateBegin, String sDateEnd, String sServiceStockUID, String userid) throws ParseException{
  		d.add(t);
-        t.addAttribute("size", "180");
+        t.addAttribute("size", "200");
 
  		//Add title rows
         org.dom4j.Element row =t.addElement("row");
  		row.addAttribute("type", "title");
  		addCol(row,20,ScreenHelper.getTranNoLink("web","document",sPrintLanguage));
  		addCol(row,20,ScreenHelper.getTranNoLink("web","date",sPrintLanguage));
+ 		addCol(row,20,ScreenHelper.getTranNoLink("web","code",sPrintLanguage));
  		addCol(row,80,ScreenHelper.getTranNoLink("web","article",sPrintLanguage));
  		addCol(row,20,ScreenHelper.getTranNoLink("web","qte",sPrintLanguage));
  		addCol(row,20,ScreenHelper.getTranNoLink("web","pu",sPrintLanguage));
@@ -1596,6 +1689,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
  			int quantity=(Integer)products.get(s);
  			addCol(row,20,document);
  			addCol(row,20,date);
+ 			addCol(row,20,stock!=null && stock.getProduct()!=null?ScreenHelper.checkString(stock.getProduct().getCode()):"");
  			addCol(row,80,stock!=null && stock.getProduct()!=null?ScreenHelper.checkString(stock.getProduct().getName()):"");
  			addCol(row,20,""+quantity);
  			double price=stock==null || stock.getProduct()==null?0:stock.getProduct().getLastYearsAveragePrice(date==null?new java.util.Date():ScreenHelper.getSQLDate(date));
@@ -1605,8 +1699,8 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
  		}
 
  		row =t.addElement("row");
- 		addCol(row,180,"");
- 		addBoldCol(row,160,ScreenHelper.getTranNoLink("web", "total", sPrintLanguage));
+ 		addCol(row,200,"");
+ 		addBoldCol(row,180,ScreenHelper.getTranNoLink("web", "total", sPrintLanguage));
  		addPriceBoldCol(row,20,generaltotal);
  		
      }
@@ -1673,10 +1767,13 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 					row=t.addElement("row");
 					addCol(row,25,ScreenHelper.stdDateFormat.format(operation.getDate()));
 					// Reference document
-		 			String document="";
-		 			if(operation.getDocument()!=null){
-		 				document=operation.getDocument().getReference();
-		 			}
+	 	 			String document="";
+	 	 			if(operation.getDocument()!=null && operation.getDocument().hasValidUid()){
+	 	 				document=operation.getUid()+(operation.getDocument().getReference().length()==0?"":" ("+operation.getDocument().getReference()+")");
+	 	 			}
+	 	 			else if(operation.getSourceDestination().getObjectType().equalsIgnoreCase("patient") || operation.getSourceDestination().getObjectType().equalsIgnoreCase("production")){
+	 	 				document=operation.getSourceDestination().getObjectUid();
+	 	 			}
 		 			addCol(row,30,document);
 					// Origin or Destination
 					if(operation.getSourceDestination().getObjectType().equalsIgnoreCase("servicestock")){
@@ -1828,7 +1925,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
                 table2.addCell(createBoldBorderlessCell(ScreenHelper.getTranNoLink("pharmacy.report","stockfile",sPrintLanguage), 1, 1, 10));
                 table2.addCell(createBorderlessCell(productStock==null||productStock.getServiceStock()==null?"":productStock.getServiceStock().getName(), 1, 1, 10));
                 table2.addCell(createBoldBorderlessCell(ScreenHelper.getTranNoLink("pharmacy.report","productname",sPrintLanguage), 1, 1, 10));
-                table2.addCell(createBorderlessCell(productStock==null||productStock.getProduct()==null?"":productStock.getProduct().getName(), 1, 1, 10));
+                table2.addCell(createBorderlessCell(productStock==null||productStock.getProduct()==null?"":productStock.getProduct().getCode()+" "+ productStock.getProduct().getName(), 1, 1, 10));
                 table2.addCell(createBoldBorderlessCell(ScreenHelper.getTranNoLink("pharmacy.report","productunit",sPrintLanguage), 1, 1, 10));
                 table2.addCell(createBorderlessCell(productStock==null||productStock.getProduct()==null?"":ScreenHelper.getTranNoLink("product.unit",productStock.getProduct().getUnit(),sPrintLanguage), 1, 1, 10));
                 table2.addCell(createBoldBorderlessCell(ScreenHelper.getTranNoLink("pharmacy.report","productcode",sPrintLanguage), 1, 1, 10));
@@ -1846,6 +1943,12 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
                 table2.addCell(emptyCell());
                 table2.addCell(createBoldBorderlessCell(ScreenHelper.getTranNoLink("pharmacy.report","minimumstock",sPrintLanguage), 1, 1, 10));
                 table2.addCell(createBorderlessCell(productStock==null?"":productStock.getMinimumLevel()+"", 1, 1, 10));
+                table2.addCell(emptyCell());
+                table2.addCell(createBoldBorderlessCell(ScreenHelper.getTranNoLink("pharmacy.report","median1year",sPrintLanguage), 1, 1, 10));
+                table2.addCell(createBorderlessCell(productStock==null?"":productStock.getMedianConsumption(12, true, false, false)+"", 1, 1, 10));
+                table2.addCell(emptyCell());
+                table2.addCell(createBoldBorderlessCell(ScreenHelper.getTranNoLink("pharmacy.report","mean1year",sPrintLanguage), 1, 1, 10));
+                table2.addCell(createBorderlessCell(productStock==null?"":productStock.getAverageConsumption(12, true, false, false)+"", 1, 1, 10));
                 cell = new PdfPCell(table2);
                 cell.setBorder(PdfPCell.NO_BORDER);
                 cell.setColspan(1);

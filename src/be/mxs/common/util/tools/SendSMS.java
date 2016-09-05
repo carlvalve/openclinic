@@ -1,5 +1,6 @@
 package be.mxs.common.util.tools;
 
+import java.net.InetAddress;
 import java.net.URLEncoder;
 import java.util.Enumeration;
 import java.util.Vector;
@@ -13,8 +14,62 @@ import org.smslib.modem.*;
 
 import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.system.Debug;
+import ie.omk.smpp.Address;
+import ie.omk.smpp.Connection;
+import ie.omk.smpp.message.BindResp;
+import ie.omk.smpp.message.SMPPPacket;
+import ie.omk.smpp.message.SubmitSM;
+import ie.omk.smpp.message.SubmitSMResp;
+import ie.omk.smpp.message.UnbindResp;
+import ie.omk.smpp.net.TcpLink;
+import ie.omk.smpp.util.Latin1Encoding;
 
 public class SendSMS {
+	public static boolean sendSMPP(String to, String message){
+		boolean bSuccess=false;
+		Debug.println("Trying to send message to "+to+" using SMPP gateway "+MedwanQuery.getInstance().getConfigString("smppgateway",""));
+		if(MedwanQuery.getInstance().getConfigString("smppgateway","").equalsIgnoreCase("orangemali")){
+		    bSuccess=true;
+			try {
+			    // First get the java.net.InetAddress for the SMSC:
+			    //Orange SMSC can only be reached from ip 41.73.116.155 (ANTIM server)
+			    //Create tunnel that maps 127.0.0.1:3339 onto 41.73.126.165:3339 (Orange SMSC)
+			    InetAddress smscAddr = InetAddress.getByName(MedwanQuery.getInstance().getConfigString("smppsmscaddress","41.73.126.165"));    
+			    TcpLink smscLink = new TcpLink(smscAddr, MedwanQuery.getInstance().getConfigInt("smppsmscport",3339));
+			    smscLink.open();
+			    Debug.println("Connection open<br/>");
+			    Connection connection = new Connection(smscLink);
+			    BindResp smppResponse = connection.bind(Connection.TRANSCEIVER,"RCV","Orange","SMPP",1,1,"3000");
+			    if (smppResponse.getCommandStatus() == 0) {
+			        Debug.println("Link established</br>");
+			    }
+			    else{
+			    	Debug.println("Error: "+smppResponse.getCommandStatus()+"</br>");
+				    bSuccess=false;
+			    }
+		        SubmitSM smppmessage = (SubmitSM) connection.newInstance(SMPPPacket.SUBMIT_SM);
+		        smppmessage.setDestination(new Address(1, 1, to));
+		        smppmessage.setMessageText(message);
+		        smppmessage.setAlphabet(new Latin1Encoding());
+		        SubmitSMResp messageResponse = (SubmitSMResp) connection.sendRequest(smppmessage);
+		        Debug.println("Submitted message ID: " + messageResponse.getMessageId()+"</br>");
+		        // Unbind.
+		        UnbindResp unbindResponse = connection.unbind();
+
+		        if (unbindResponse.getCommandStatus() == 0) {
+		            Debug.println("Successfully unbound from the SMSC</br>");
+		        } else {
+		            Debug.println("There was an error unbinding.</br>");
+				    bSuccess=false;
+		        }
+			} catch(Exception ux) {
+			    Debug.println(ux.getMessage());
+			    bSuccess=false;
+			}
+		}
+		return bSuccess;
+	}
+	
 	public static boolean sendSMS(String to, String message){
 		boolean bSuccess=false;
 		//if country prefix already included, don't do anything

@@ -2,25 +2,32 @@ package be.openclinic.finance;
 
 import be.mxs.common.util.system.ScreenHelper;
 import be.mxs.common.util.system.Debug;
+import be.mxs.common.util.system.HTMLEntities;
 import be.mxs.common.util.db.MedwanQuery;
 import be.openclinic.adt.Encounter;
 import be.openclinic.common.ObjectReference;
+import net.admin.AdminPerson;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.Vector;
+
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.Statement;
-
-
 
 public class InsurarInvoice extends Invoice {
     private String insurarUid;
@@ -1455,5 +1462,112 @@ public class InsurarInvoice extends Invoice {
             }
         }
         return okQuery;
+    }
+    
+    private String formatXMLDate(java.util.Date date){
+    	return new SimpleDateFormat("yyyy-MM-dd").format(date);
+    }
+    
+    private String formatXMLPeriod(java.util.Date date){
+    	return new SimpleDateFormat("yyyy-MM").format(date);
+    }
+    
+    public String exportToXML(String model, String status, String predecessor){
+    	if(ScreenHelper.checkString(status).length()==0){
+    		status="DIN";
+    	}
+    	if(ScreenHelper.checkString(predecessor).length()==0){
+    		predecessor="";
+    	}
+    	Document xml = DocumentHelper.createDocument();
+    	if(model.equalsIgnoreCase("paodes")){
+    		Element root = xml.addElement("message");
+    		root.addAttribute("type", "invoice");
+    		root.addAttribute("id", this.getUid());
+    		root.addAttribute("date",formatXMLDate(new java.util.Date()));
+    		root.addAttribute("sendertype", "0");
+    		root.addAttribute("sender", MedwanQuery.getInstance().getConfigString("paodesSenderId","unknown"));
+    		root.addAttribute("receivertype", "1");
+    		root.addAttribute("sender", MedwanQuery.getInstance().getConfigString("paodesReceiverId","unknown"));
+    		root.addAttribute("status", status);
+    		root.addAttribute("predecessor", predecessor);
+    		Element insurerinvoices = root.addElement("insurerinvoices");
+    		Element invoice = insurerinvoices.addElement("insurerinvoice");
+    		invoice.addAttribute("id", this.getUid());
+    		invoice.addAttribute("date",formatXMLDate(this.getDate()));
+    		invoice.addAttribute("period",formatXMLPeriod(this.getDate()));
+    		invoice.addAttribute("insureramount",""+new Double(this.getDebetAmount(this.getUid())).intValue());
+    		Element patientInvoicesElement=invoice.addElement("patientinvoices");
+    		Hashtable patientInvoiceDebets = new Hashtable();
+    		Vector debets = this.getDebets();
+    		for(int n=0;n<debets.size();n++){
+    			Debet debet = (Debet)debets.elementAt(n);
+    			if(patientInvoiceDebets.get(debet.getPatientInvoiceUid())==null){
+    				patientInvoiceDebets.put(debet.getPatientInvoiceUid(), new HashSet());
+    			}
+    			((HashSet)patientInvoiceDebets.get(debet.getPatientInvoiceUid())).add(debet);
+    		}
+    		Enumeration patientInvoices = patientInvoiceDebets.keys();
+    		while(patientInvoices.hasMoreElements()){
+    			String key = (String)patientInvoices.nextElement();
+    			PatientInvoice patientInvoice = PatientInvoice.get(key);
+        		Element patientInvoiceElement=patientInvoicesElement.addElement("patientinvoice");
+        		patientInvoiceElement.addAttribute("id", patientInvoice.getUid());
+        		patientInvoiceElement.addAttribute("date", formatXMLDate(patientInvoice.getDate()));
+        		Element patientElement = patientInvoiceElement.addElement("patient");
+        		String insurancenr="";
+        		AdminPerson patient = patientInvoice.getPatient();
+        		Vector insurances = Insurance.getCurrentInsurances(patientInvoice.getPatientUid());
+        		for(int n=0;n<insurances.size();n++){
+        			Insurance insurance = (Insurance)insurances.elementAt(n);
+        			if(insurance.getInsurarUid().equalsIgnoreCase(this.getInsurarUid())){
+        				insurancenr=insurance.getInsuranceNr();
+        			}
+        		}
+        		patientElement.addAttribute("insurancecode", insurancenr);
+        		patientElement.addElement("firstname").setText(HTMLEntities.xmlencode(patient.firstname));;
+        		patientElement.addElement("lastname").setText(HTMLEntities.xmlencode(patient.lastname));
+        		patientElement.addElement("gender").setText(patient.gender);
+        		patientElement.addElement("dateofbirth").setText(formatXMLDate(ScreenHelper.parseDate(patient.dateOfBirth)));
+				Element itemsElement = patientInvoiceElement.addElement("items");    			
+    			HashSet invoiceDebets = (HashSet)patientInvoiceDebets.get(key);
+    			Iterator iDebets = invoiceDebets.iterator();
+    			while(iDebets.hasNext()){
+    				Debet debet = (Debet)iDebets.next();
+    				Prestation prestation = debet.getPrestation();
+    				if(prestation!=null){
+	    				Element itemElement = itemsElement.addElement("item");
+	    				itemElement.setText(HTMLEntities.xmlencode(prestation.getDescription()));
+	    				itemElement.addAttribute("code", HTMLEntities.xmlencode(prestation.getCode()));
+	    				if(prestation.getPrestationClass().equalsIgnoreCase("forfait")){
+	        				itemElement.addAttribute("type", "1");
+	    				}
+	    				else if(prestation.getPrestationClass().equalsIgnoreCase("act")){
+	        				itemElement.addAttribute("type", "2");
+	    				}
+	    				else if(prestation.getPrestationClass().equalsIgnoreCase("drug")){
+	        				itemElement.addAttribute("type", "3");
+	    				}
+	    				else if(prestation.getPrestationClass().equalsIgnoreCase("lab")){
+	        				itemElement.addAttribute("type", "4");
+	    				}
+	    				else if(prestation.getPrestationClass().equalsIgnoreCase("img")){
+	        				itemElement.addAttribute("type", "5");
+	    				}
+	    				else {
+	        				itemElement.addAttribute("type", "99");
+	    				}
+	    				itemElement.addAttribute("certificate", HTMLEntities.xmlencode(ScreenHelper.checkString(patientInvoice.getInsurarreference())));
+	    				itemElement.addAttribute("date", formatXMLDate(debet.getDate()));
+	    				itemElement.addAttribute("quantity", ""+debet.getQuantity());
+	    				itemElement.addAttribute("patientamount", (ScreenHelper.checkString(debet.getExtraInsurarUid2()).length()>0?"":new Double(debet.getAmount()).intValue()+""));
+	    				itemElement.addAttribute("insureramount1", ""+new Double(debet.getInsurarAmount()).intValue());
+	    				itemElement.addAttribute("insureramount2", ""+new Double(debet.getExtraInsurarAmount()).intValue());
+	    				itemElement.addAttribute("insureramount3", (ScreenHelper.checkString(debet.getExtraInsurarUid2()).length()>0?new Double(debet.getAmount()).intValue()+"":"0"));
+    				}
+    			}
+    		}
+    	}
+    	return xml.asXML();
     }
 }

@@ -118,6 +118,15 @@ public class MessageNotifier {
 						Debug.println("Error sending E-mail with messageid "+messageId+" to "+sentto);
 					}
 				}
+				else if(transport.equalsIgnoreCase("smpp")){
+					if(SendSMS.sendSMPP(sentto, data)){
+						Debug.println("SMPP correctly sent messageid "+messageId+" to "+sentto);
+						setSpoolMessageSent(messageId,transport);
+					}
+					else {
+						Debug.println("Error sending SMPP with messageid "+messageId+" to "+sentto);
+					}
+				}
 			}
 		}
 		catch(Exception e){

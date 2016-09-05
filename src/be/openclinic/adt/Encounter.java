@@ -1317,6 +1317,29 @@ public class Encounter extends OC_Object {
 	    return transferHistory;
     }
 
+    public static String lastEtiology(String personid){
+    	String lastEtiology="";
+    	PreparedStatement ps = null;
+    	ResultSet rs = null;
+    	Connection conn = null;
+    	try{
+    		conn = MedwanQuery.getInstance().getOpenclinicConnection();
+    		ps = conn.prepareStatement("select * from OC_ENCOUNTERS where OC_ENCOUNTER_PATIENTUID=? and OC_ENCOUNTER_ETIOLOGY is not null and OC_ENCOUNTER_ETIOLOGY<>'' order by OC_ENCOUNTER_BEGINDATE DESC");
+    		ps.setString(1, personid);
+    		rs=ps.executeQuery();
+    		if(rs.next()){
+    			lastEtiology=rs.getString("OC_ENCOUNTER_SERVERID")+"."+rs.getString("OC_ENCOUNTER_OBJECTID");
+    		}
+    		rs.close();
+    		ps.close();
+    		conn.close();
+    	}
+    	catch(Exception e){
+    		e.printStackTrace();
+    	}
+    	return lastEtiology.trim();
+    }
+    
     //--- GET -------------------------------------------------------------------------------------
     public static Encounter get(String uid){
         Encounter encounter = (Encounter)MedwanQuery.getInstance().getObjectCache().getObject("encounter",uid);

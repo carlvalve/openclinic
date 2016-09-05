@@ -341,6 +341,13 @@ public class ScreenHelper {
     	}
     }
     
+    public static java.util.Date endOfDay(String sDate) throws ParseException{
+    	java.util.Date date = null;
+    	date = parseDate(sDate);
+    	date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(new SimpleDateFormat("dd/MM/yyyy").format(date)+" 23:59:59");
+    	return date;
+    }
+    
     //--- PARSE DATE ------------------------------------------------------------------------------
     public static java.util.Date parseDate(String sDate){
         return parseDate(sDate,stdDateFormat);
@@ -1357,7 +1364,6 @@ public static String removeAccents(String sTest){
 
         // datefield that ALSO accepts just a year
         return "<input type='text' maxlength='10' class='text' id='"+sName+"' name='"+sName+"' value='"+sValue+"' size='12' onblur='if(!checkDateOnlyYearAllowed(this)){dateError(this);this.value=\"\";}'>" +"&nbsp;<img name='popcal' style='vertical-align:-1px;' onclick='gfPop"+gfPopType+".fPopCalendar(document."+sForm+"."+sName+");return false;' src='"+sCONTEXTDIR+"/_img/icons/icon_agenda.gif' alt='"+HTMLEntities.htmlentities(getTran(null,"Web","Select",sWebLanguage))+"'></a>"+
-               "&nbsp;<img name='popcal' style='vertical-align:-1px;' onclick='gfPop"+gfPopType+".fPopCalendar(document."+sForm+"."+sName+");return false;' src='"+sCONTEXTDIR+"/_img/icons/icon_agenda.gif' alt='"+HTMLEntities.htmlentities(getTran(null,"Web","Select",sWebLanguage))+"'></a>"+
                "&nbsp;<img class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_compose.gif' alt='"+getTranNoLink("Web","PutToday",sWebLanguage)+"' onclick='getToday(document."+sForm+"."+sName+");'>";
     }
 
@@ -1419,8 +1425,8 @@ public static String removeAccents(String sTest){
     //--- NEW WRITE DATE TIME FIELD ---------------------------------------------------------------
     public static String newWriteDateTimeField(String sName, java.util.Date dValue, String sWebLanguage, String sCONTEXTDIR){
         return "<input id='"+sName+"' type='text' maxlength='10' class='text' name='"+sName+"' value='"+getSQLDate(dValue)+"' size='12' onblur='if(!checkDate(this)){dateError(this);this.value=\"\";}'>"
-              +"&nbsp;<img name='popcal' class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_agenda.gif' alt='"+HTMLEntities.htmlentities(getTran(null,"Web","Select",sWebLanguage))+"' onclick='gfPop1.fPopCalendar($(\""+sName+"\"));return false;'>"
-              +"&nbsp;<img class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_compose.gif' alt='"+HTMLEntities.htmlentities(getTran(null,"Web","putToday",sWebLanguage))+"' onclick=\"putTime($('"+sName+"Time'));getToday($('"+sName+"'));\">"
+              +"&nbsp;<img id='"+sName+"_popcal' name='popcal' class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_agenda.gif' alt='"+HTMLEntities.htmlentities(getTran(null,"Web","Select",sWebLanguage))+"' onclick='gfPop1.fPopCalendar($(\""+sName+"\"));return false;'>"
+              +"&nbsp;<img id='"+sName+"_today' class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_compose.gif' alt='"+HTMLEntities.htmlentities(getTran(null,"Web","putToday",sWebLanguage))+"' onclick=\"putTime($('"+sName+"Time'));getToday($('"+sName+"'));\">"
               +"&nbsp;"+writeTimeField(sName+"Time", formatSQLDate(dValue, "HH:mm"))
               +"&nbsp;"+getTran(null,"web.occup", "medwan.common.hour", sWebLanguage);
     }
@@ -1488,7 +1494,6 @@ public static String removeAccents(String sTest){
                 // Managing a page, means you can add, edit and delete.
                 else if(activeUser!=null && activeUser.getAccessRight(sScreen+".edit") &&
                          activeUser.getAccessRight(sScreen+".add") &&
-                         //activeUser.getAccessRight(sScreen+".select") &&
                          activeUser.getAccessRight(sScreen+".delete")){
                     jsAlert = "";
                 }
@@ -2023,7 +2028,7 @@ public static String removeAccents(String sTest){
 
     //--- GET TS ----------------------------------------------------------------------------------
     public static String getTs(){
-        return new java.util.Date().hashCode()+"";
+        return new java.util.Date().getTime()+"";
     }
 
     //--- GET DATE --------------------------------------------------------------------------------

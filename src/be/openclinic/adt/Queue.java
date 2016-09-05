@@ -142,7 +142,8 @@ public class Queue {
 		int interval = MedwanQuery.getInstance().getConfigInt("queuestats.median."+this.getId(),0);
 		if(interval>0){
 			Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
-			try {			PreparedStatement ps = conn.prepareStatement("select count(*) total from oc_queues where oc_queue_subjecttype='patient' and oc_queue_id=? and oc_queue_end is null and oc_queue_begin<?");
+			try {			
+				PreparedStatement ps = conn.prepareStatement("select count(*) total from oc_queues where oc_queue_subjecttype='patient' and oc_queue_id=? and oc_queue_end is null and oc_queue_begin<?");
 				ps.setString(1,this.getId());
 				ps.setTimestamp(2,new java.sql.Timestamp(this.getBegin().getTime()));
 				ResultSet rs = ps.executeQuery();

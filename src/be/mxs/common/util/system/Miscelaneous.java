@@ -34,6 +34,13 @@ public class Miscelaneous {
             e.printStackTrace();
         }
     }
+    
+    public static Date addMonthsToDate(Date referenceDate,int months){
+    	Calendar c = Calendar.getInstance(); 
+    	c.setTime(referenceDate); 
+    	c.add(Calendar.MONTH, months);
+    	return c.getTime();
+    }
 
     //--- GET IMAGE (1) ---------------------------------------------------------------------------
     public static com.itextpdf.text.Image getImage(String name, String project){

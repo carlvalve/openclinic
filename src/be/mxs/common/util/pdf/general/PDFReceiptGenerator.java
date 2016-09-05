@@ -56,6 +56,10 @@ public class PDFReceiptGenerator extends PDFInvoiceGenerator {
             addPatientData();
             addInsuranceData(insurance);
             printCreditReceipt(credit);
+    		if(MedwanQuery.getInstance().getConfigInt("autoPrintReceipt",0)==1){
+    			PdfAction action = new PdfAction(PdfAction.PRINTDIALOG);
+    			docWriter.setOpenAction(action);
+    		}
         }
 		catch(Exception e){
 			baosPDF.reset();

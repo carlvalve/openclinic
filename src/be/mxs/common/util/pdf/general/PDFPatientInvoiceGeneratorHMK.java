@@ -102,6 +102,10 @@ public class PDFPatientInvoiceGeneratorHMK extends PDFInvoiceGenerator {
             	doc.newPage();
             }
             printInvoice(invoice,invoice.getDebets());
+    		if(MedwanQuery.getInstance().getConfigInt("autoPrintPatientInvoice",0)==1){
+    			PdfAction action = new PdfAction(PdfAction.PRINTDIALOG);
+    			docWriter.setOpenAction(action);
+    		}
         }
 		catch(Exception e){
 			baosPDF.reset();

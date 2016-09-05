@@ -121,6 +121,75 @@ public class ProductionOrder extends OC_Object{
 		return orders;
 	}
 	
+	public static Vector getProductionOrders(java.util.Date begin, java.util.Date end){
+		Vector orders = new Vector();
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		PreparedStatement ps = null;
+		ResultSet rs =null;
+		try{
+			ps=conn.prepareStatement("SELECT * FROM OC_PRODUCTIONORDERS where OC_PRODUCTIONORDER_CREATEDATETIME>=? and OC_PRODUCTIONORDER_CREATEDATETIME<? ORDER BY OC_PRODUCTIONORDER_CREATEDATETIME");
+			ps.setDate(1, new java.sql.Date(begin.getTime()));
+			ps.setDate(2, new java.sql.Date(end.getTime()));
+			rs=ps.executeQuery();
+			while(rs.next()){
+				orders.add(ProductionOrder.get(rs.getInt("OC_PRODUCTIONORDER_ID")));
+			}
+		}
+        catch(Exception e){
+        	e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                conn.close();
+
+            }
+            catch(SQLException se){
+                se.printStackTrace();
+            }
+        }
+		return orders;
+	}
+	
+	public static Vector getProductionOrders(java.util.Date begin, java.util.Date end, String serviceStockUid){
+		Vector orders = new Vector();
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		PreparedStatement ps = null;
+		ResultSet rs =null;
+		try{
+			ps=conn.prepareStatement("SELECT * FROM OC_PRODUCTIONORDERS,OC_PRODUCTSTOCKS "
+					+ "where "
+					+ "OC_PRODUCTIONORDER_CREATEDATETIME>=? and "
+					+ "OC_PRODUCTIONORDER_CREATEDATETIME<? and "
+					+ "OC_STOCK_OBJECTID=replace(OC_PRODUCTIONORDER_TARGETPRODUCTSTOCKUID,'"+MedwanQuery.getInstance().getConfigInt("serverId")+".','') and "
+					+ "OC_STOCK_SERVICESTOCKUID=? "
+					+ "ORDER BY OC_PRODUCTIONORDER_CREATEDATETIME");
+			ps.setDate(1, new java.sql.Date(begin.getTime()));
+			ps.setDate(2, new java.sql.Date(end.getTime()));
+			ps.setString(3, serviceStockUid);
+			rs=ps.executeQuery();
+			while(rs.next()){
+				orders.add(ProductionOrder.get(rs.getInt("OC_PRODUCTIONORDER_ID")));
+			}
+		}
+        catch(Exception e){
+        	e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                conn.close();
+
+            }
+            catch(SQLException se){
+                se.printStackTrace();
+            }
+        }
+		return orders;
+	}
+	
 	public static Vector getProductionOrders(String patientid, String productStockUid, String debetUid, java.util.Date mindate, java.util.Date maxdate){
 		Vector orders = new Vector();
 		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();

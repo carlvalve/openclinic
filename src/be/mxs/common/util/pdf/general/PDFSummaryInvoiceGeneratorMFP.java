@@ -167,7 +167,10 @@ public class PDFSummaryInvoiceGeneratorMFP extends PDFInvoiceGenerator {
                     }
                 }
             }
-
+    		if(MedwanQuery.getInstance().getConfigInt("autoPrintPatientInvoice",0)==1){
+    			PdfAction action = new PdfAction(PdfAction.PRINTDIALOG);
+    			docWriter.setOpenAction(action);
+    		}
         }
 		catch(Exception e){
 			baosPDF.reset();

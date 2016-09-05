@@ -191,6 +191,12 @@ public class ProductionOrderMaterial extends OC_Object{
 	public String getProductStockUid() {
 		return productStockUid;
 	}
+	public ProductStock getProductStock(){
+		if(getProductStockUid()!=null){
+			return ProductStock.get(getProductStockUid());
+		}
+		return null;
+	}
 	public void setProductStockUid(String productStockUid) {
 		this.productStockUid = productStockUid;
 	}

@@ -326,9 +326,13 @@ public class ExporterMedical extends Exporter {
 								counter++;
 								lastDay=rs.getTimestamp("OC_VACCINATION_UPDATETIME");
 								java.util.Date birth=rs.getDate("dateofbirth");
+								String location=rs.getString("OC_VACCINATION_LOCATION");
+								if(location!=null && location.length()>0){
+									location=location.substring(0,1);
+								}
 								sb.append("<vaccination patient='"+rs.getString("OC_VACCINATION_PATIENTUID")+"' type='"+rs.getString("OC_VACCINATION_TYPE")+"' date='"+
 								rs.getString("OC_VACCINATION_DATE")+"' updatetime='"+new SimpleDateFormat("yyyyMMddHHmmssSSS").format(lastDay)+"' model='mali' location='"+
-										rs.getString("OC_VACCINATION_LOCATION").substring(0,1)+"' dateofbirth='"+(birth==null?"":new SimpleDateFormat("dd/MM/yyyy").format(birth))+"'/>");
+										location+"' dateofbirth='"+(birth==null?"":new SimpleDateFormat("dd/MM/yyyy").format(birth))+"'/>");
 							}
 							rs.close();
 							ps.close();

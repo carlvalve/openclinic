@@ -159,7 +159,7 @@ public class DHIS2Server
         client.register(feature);
         
         WebTarget target = client.target(this.getUrl()).path("dataValueSets");
-        //System.out.println(server.getUrl());  // to check where it was sent
+        System.out.println("URL="+this.getUrl());  // to check where it was sent
         
         // see stackoverflow.com/questions/27284046/
 

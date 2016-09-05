@@ -19,13 +19,63 @@ public class ServiceStock extends OC_Object{
     private AdminPerson stockManager;
     private Vector authorizedUsers;
     private String authorizedUserIds;
+    private Vector dispensingUsers;
+    private String dispensingUserIds;
+    private Vector validationUsers;
+    private String validationUserIds;
     private Service defaultSupplier;
     private int orderPeriodInMonths = -1;
     private int nosync=1;
     private int hidden;
+    private int validateoutgoingtransactions;
     
-    public int getHidden() {
+    public Vector getValidationUsers() {
+        User user;
+        if(validationUserIds!=null && validationUserIds.length() > 0){
+            StringTokenizer idTokenizer = new StringTokenizer(validationUserIds,"$");
+            String validationUserId;
+           
+            while(idTokenizer.hasMoreTokens()){
+            	validationUserId = idTokenizer.nextToken();
+            	Connection ad_conn = MedwanQuery.getInstance().getAdminConnection();
+                user = User.get(Integer.parseInt(validationUserId));
+               
+                try{
+					ad_conn.close();
+				}
+                catch(SQLException e){
+					e.printStackTrace();
+				}
+                
+                this.validationUsers.add(user);
+            }
+        }
+        
+        return this.validationUsers;
+	}
+
+	public void setValidationUsers(Vector validationUsers) {
+		this.validationUsers = validationUsers;
+	}
+
+	public String getValidationUserIds() {
+		return validationUserIds;
+	}
+
+	public void setValidationUserIds(String validationUserIds) {
+		this.validationUserIds = validationUserIds;
+	}
+
+	public int getHidden() {
 		return hidden;
+	}
+
+	public int getValidateoutgoingtransactions() {
+		return validateoutgoingtransactions;
+	}
+
+	public void setValidateoutgoingtransactions(int validateoutgoingtransactions) {
+		this.validateoutgoingtransactions = validateoutgoingtransactions;
 	}
 
 	public void setHidden(int hidden) {
@@ -41,6 +91,8 @@ public class ServiceStock extends OC_Object{
 	//--- CONSTRUCTOR -----------------------------------------------------------------------------
     public ServiceStock(){
         this.authorizedUsers = new Vector();
+        this.dispensingUsers = new Vector();
+        this.validationUsers = new Vector();
     }
     
     //--- NO SYNC ---------------------------------------------------------------------------------
@@ -109,6 +161,89 @@ public class ServiceStock extends OC_Object{
         this.stockManager = stockManager;
     }
     
+    //--- AUTHORISED USERS ------------------------------------------------------------------------
+    public Vector getDispensingUsers(){
+        User user;
+        if(dispensingUserIds!=null && dispensingUserIds.length() > 0){
+            StringTokenizer idTokenizer = new StringTokenizer(dispensingUserIds,"$");
+            String dispensingUserId;
+           
+            while(idTokenizer.hasMoreTokens()){
+            	dispensingUserId = idTokenizer.nextToken();
+            	Connection ad_conn = MedwanQuery.getInstance().getAdminConnection();
+                user = User.get(Integer.parseInt(dispensingUserId));
+               
+                try{
+					ad_conn.close();
+				}
+                catch(SQLException e){
+					e.printStackTrace();
+				}
+                
+                this.dispensingUsers.add(user);
+            }
+        }
+        
+        return this.dispensingUsers;
+    }
+    
+    public void setDispensingUsers(Vector dispensingUsers){
+        this.dispensingUsers = dispensingUsers;
+    }
+    public void addDispensingUser(User user){
+        this.dispensingUsers.addElement(user);
+    }
+    public void removeDispensingUser(User user){
+        this.dispensingUsers.removeElement(user);
+    }
+    public void setDispensingUserIds(String ids){
+        this.dispensingUserIds = ids;
+    }
+    public String getDispensingUserIds(){
+        return this.dispensingUserIds;
+    }
+    
+    public void addValidationUser(User user){
+        this.validationUsers.addElement(user);
+    }
+    public void removeValidationUser(User user){
+        this.validationUsers.removeElement(user);
+    }
+    
+    //--- IS DISPENSING USER ----------------------------------------------------------------------
+    public boolean isDispensingUser(String userid){
+        if(userid.equalsIgnoreCase(this.getStockManagerUid())) return true;
+      
+        if(dispensingUserIds!=null && dispensingUserIds.length() > 0){
+            StringTokenizer tokenizer = new StringTokenizer(dispensingUserIds,"$");
+            while(tokenizer.hasMoreTokens()){
+                if(userid.equalsIgnoreCase(tokenizer.nextToken())){
+                    return true;
+                }
+            }
+        }
+        else{
+        	return isAuthorizedUser(userid);
+        }
+        
+        return false;
+    }
+
+    //--- IS VALIDATION USER ----------------------------------------------------------------------
+    public boolean isValidationUser(String userid){
+        if(userid.equalsIgnoreCase(this.getStockManagerUid())) return true;
+      
+        if(validationUserIds!=null && validationUserIds.length() > 0){
+            StringTokenizer tokenizer = new StringTokenizer(validationUserIds,"$");
+            while(tokenizer.hasMoreTokens()){
+                if(userid.equalsIgnoreCase(tokenizer.nextToken())){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     //--- AUTHORISED USERS ------------------------------------------------------------------------
     public Vector getAuthorizedUsers(){
         User user;
@@ -251,6 +386,8 @@ public class ServiceStock extends OC_Object{
                 stock.setServiceUid(rs.getString("OC_STOCK_SERVICEUID"));
                 stock.setStockManagerUid(rs.getString("OC_STOCK_STOCKMANAGERUID"));
                 stock.setAuthorizedUserIds(rs.getString("OC_STOCK_AUTHORIZEDUSERS"));
+                stock.setDispensingUserIds(rs.getString("OC_STOCK_DISPENSINGUSERS"));
+                stock.setValidationUserIds(rs.getString("OC_STOCK_VALIDATIONUSERS"));
                 stock.setDefaultSupplierUid(rs.getString("OC_STOCK_DEFAULTSUPPLIERUID"));
 
                 // orderPeriodInMonths
@@ -270,6 +407,7 @@ public class ServiceStock extends OC_Object{
                 stock.setUpdateUser(ScreenHelper.checkString(rs.getString("OC_STOCK_UPDATEUID")));
                 stock.setVersion(rs.getInt("OC_STOCK_VERSION"));
                 stock.setHidden(rs.getInt("OC_STOCK_HIDDEN"));
+                stock.setValidateoutgoingtransactions(rs.getInt("OC_STOCK_VALIDATEOUTGOING"));
             } 
             else{
                 throw new Exception("ERROR : SERVICESTOCK "+stockUid+" NOT FOUND");
@@ -300,6 +438,22 @@ public class ServiceStock extends OC_Object{
     //--- OPEN DELIVERIES -------------------------------------------------------------------------
     public boolean hasOpenDeliveries(){
     	return (ProductStockOperation.getOpenServiceStockDeliveries(this.getUid()).size() > 0);
+    }
+    
+    //--- OPEN DELIVERIES -------------------------------------------------------------------------
+    public boolean hasUnvalidatedDeliveries(){
+    	if(getValidateoutgoingtransactions()==0){
+    		return false;
+    	}
+   		return (ProductStockOperation.getUnvalidatedServiceStockDeliveries(this.getUid()).size() > 0);
+    }
+    
+    //--- OPEN DELIVERIES -------------------------------------------------------------------------
+    public boolean hasUnvalidatedDeliveries(String userid){
+    	if(getValidateoutgoingtransactions()==0){
+    		return false;
+    	}
+   		return (ProductStockOperation.getUnvalidatedServiceStockDeliveries(this.getUid(),userid).size() > 0);
     }
     
     public boolean hasOpenOrders(){
@@ -351,8 +505,8 @@ public class ServiceStock extends OC_Object{
                           "  OC_STOCK_NAME, OC_STOCK_SERVICEUID, OC_STOCK_BEGIN, OC_STOCK_END,"+
                           "  OC_STOCK_STOCKMANAGERUID, OC_STOCK_AUTHORIZEDUSERS, OC_STOCK_DEFAULTSUPPLIERUID,"+
                           "  OC_STOCK_ORDERPERIODINMONTHS, OC_STOCK_CREATETIME, OC_STOCK_UPDATETIME,"+
-                          "  OC_STOCK_UPDATEUID, OC_STOCK_VERSION, OC_STOCK_NOSYNC, OC_STOCK_HIDDEN)"+
-                          " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,1,?,?)";
+                          "  OC_STOCK_UPDATEUID, OC_STOCK_VERSION, OC_STOCK_NOSYNC, OC_STOCK_HIDDEN,OC_STOCK_DISPENSINGUSERS,OC_STOCK_VALIDATEOUTGOING,OC_STOCK_VALIDATIONUSERS)"+
+                          " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,1,?,?,?,?,?)";
                 ps = oc_conn.prepareStatement(sSelect);
 
                 // set new servicestockuid
@@ -373,7 +527,7 @@ public class ServiceStock extends OC_Object{
                 else               ps.setNull(6,Types.TIMESTAMP);
 
                 // stockManagerUid
-                if(this.getStockManagerUid().length() > 0) ps.setString(7,this.getStockManagerUid());
+                if(this.getStockManagerUid()!=null) ps.setString(7,this.getStockManagerUid());
                 else                                       ps.setNull(7,Types.VARCHAR);
 
                 // authorized users
@@ -401,6 +555,28 @@ public class ServiceStock extends OC_Object{
                 ps.setString(13,this.getUpdateUser());
                 ps.setInt(14,this.getNosync());
                 ps.setInt(15, this.getHidden());
+                
+                // Dispensing users
+                StringBuffer dispensingUserIds = new StringBuffer();
+                for(int i=0; i<this.getDispensingUsers().size(); i++){
+                    user = (User)this.getDispensingUsers().elementAt(i);
+                    dispensingUserIds.append(user.userid+"$");
+                }
+                
+                if(dispensingUserIds.length() > 0) ps.setString(16,dispensingUserIds.toString());
+                else                               ps.setNull(16,Types.VARCHAR);
+                ps.setInt(17, this.getValidateoutgoingtransactions());
+                
+                // Validation users
+                StringBuffer validationUserIds = new StringBuffer();
+                for(int i=0; i<this.getValidationUsers().size(); i++){
+                    user = (User)this.getValidationUsers().elementAt(i);
+                    validationUserIds.append(user.userid+"$");
+                }
+                
+                if(validationUserIds.length() > 0) ps.setString(18,validationUserIds.toString());
+                else                               ps.setNull(18,Types.VARCHAR);
+
                 ps.executeUpdate();
             }
             else{
@@ -410,7 +586,7 @@ public class ServiceStock extends OC_Object{
                 sSelect = "UPDATE OC_SERVICESTOCKS SET OC_STOCK_NAME=?, OC_STOCK_SERVICEUID=?,"+
                           "  OC_STOCK_BEGIN=?, OC_STOCK_END=?, OC_STOCK_STOCKMANAGERUID=?,"+
                           "  OC_STOCK_AUTHORIZEDUSERS=?, OC_STOCK_DEFAULTSUPPLIERUID=?, OC_STOCK_ORDERPERIODINMONTHS=?,"+
-                          "  OC_STOCK_UPDATETIME=?, OC_STOCK_UPDATEUID=?, OC_STOCK_VERSION=(OC_STOCK_VERSION+1), OC_STOCK_NOSYNC=?, OC_STOCK_HIDDEN=?"+
+                          "  OC_STOCK_UPDATETIME=?, OC_STOCK_UPDATEUID=?, OC_STOCK_VERSION=(OC_STOCK_VERSION+1), OC_STOCK_NOSYNC=?, OC_STOCK_HIDDEN=?, OC_STOCK_DISPENSINGUSERS=?, OC_STOCK_VALIDATEOUTGOING=?, OC_STOCK_VALIDATIONUSERS=?"+
                           " WHERE OC_STOCK_SERVERID=? AND OC_STOCK_OBJECTID=?";
                 ps = oc_conn.prepareStatement(sSelect);
                 ps.setString(1,this.getName());
@@ -452,9 +628,30 @@ public class ServiceStock extends OC_Object{
                 ps.setInt(11,this.getNosync());
                 ps.setInt(12, this.getHidden());
                 
+                // Dispensing users
+                StringBuffer dispensingUserIds = new StringBuffer();
+                for(int i=0; i<this.getDispensingUsers().size(); i++){
+                    user = (User)this.getDispensingUsers().elementAt(i);
+                    dispensingUserIds.append(user.userid+"$");
+                }
+                
+                if(dispensingUserIds.length() > 0) ps.setString(13,dispensingUserIds.toString());
+                else                               ps.setNull(13,Types.VARCHAR);
+
+                ps.setInt(14, this.getValidateoutgoingtransactions());
+                
+                // Validation users
+                StringBuffer validationUserIds = new StringBuffer();
+                for(int i=0; i<this.getValidationUsers().size(); i++){
+                    user = (User)this.getValidationUsers().elementAt(i);
+                    validationUserIds.append(user.userid+"$");
+                }
+                
+                if(validationUserIds.length() > 0) ps.setString(15,validationUserIds.toString());
+                else                               ps.setNull(15,Types.VARCHAR);
                 // where
-                ps.setInt(13,Integer.parseInt(this.getUid().substring(0,this.getUid().indexOf("."))));
-                ps.setInt(14,Integer.parseInt(this.getUid().substring(this.getUid().indexOf(".")+1)));
+                ps.setInt(16,Integer.parseInt(this.getUid().substring(0,this.getUid().indexOf("."))));
+                ps.setInt(17,Integer.parseInt(this.getUid().substring(this.getUid().indexOf(".")+1)));
                 ps.executeUpdate();
             }
         }
@@ -1001,6 +1198,9 @@ public class ServiceStock extends OC_Object{
                 stock.setName(rs.getString("OC_STOCK_NAME"));
                 stock.setServiceUid(rs.getString("OC_STOCK_SERVICEUID"));
                 stock.setAuthorizedUserIds(rs.getString("OC_STOCK_AUTHORIZEDUSERS"));
+                stock.setDispensingUserIds(rs.getString("OC_STOCK_DISPENSINGUSERS"));
+                stock.setValidationUserIds(rs.getString("OC_STOCK_VALIDATIONUSERS"));
+                stock.setValidateoutgoingtransactions(rs.getInt("OC_STOCK_VALIDATEOUTGOING"));
                 
                 foundObjects.add(stock);
             }
@@ -1062,6 +1262,77 @@ public class ServiceStock extends OC_Object{
                                 stock.setName(rs.getString("OC_STOCK_NAME"));
                                 stock.setServiceUid(rs.getString("OC_STOCK_SERVICEUID"));
                                 stock.setAuthorizedUserIds(rs.getString("OC_STOCK_AUTHORIZEDUSERS"));
+                                stock.setDispensingUserIds(rs.getString("OC_STOCK_DISPENSINGUSERS"));
+                                stock.setValidationUserIds(rs.getString("OC_STOCK_VALIDATIONUSERS"));
+                                stock.setValidateoutgoingtransactions(rs.getInt("OC_STOCK_VALIDATEOUTGOING"));
+                                
+                                foundObjects.add(stock);
+                            }
+                        }
+                    }
+                //}
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                oc_conn.close();
+            }
+            catch (SQLException se){
+                se.printStackTrace();
+            }
+        }
+        
+        return foundObjects;
+    }
+    
+    //--- GET STOCKS BY USER ----------------------------------------------------------------------
+    public static Vector getStocksByValidationUser(String sUserId){
+        Vector foundObjects = new Vector();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        Connection oc_conn = MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+            String sSelect = "SELECT * FROM OC_SERVICESTOCKS b"+
+                             " where exists ("+
+            		         "  select * from OC_PRODUCTSTOCKS a"+
+            		         "   where a.OC_STOCK_SERVICESTOCKUID="+MedwanQuery.getInstance().convert("varchar","b.OC_STOCK_SERVERID")+
+            		                                                MedwanQuery.getInstance().concatSign()+"'.'"+MedwanQuery.getInstance().concatSign()+
+                                                                    MedwanQuery.getInstance().convert("varchar","b.OC_STOCK_OBJECTID")+
+                             "   )"+
+            		         "  order by OC_STOCK_NAME";
+            ps = oc_conn.prepareStatement(sSelect);
+            
+            // execute
+            rs = ps.executeQuery();
+            ServiceStock stock = null;
+            while(rs.next()){
+                /*if(rs.getString("OC_STOCK_STOCKMANAGERUID")!=null && rs.getString("OC_STOCK_STOCKMANAGERUID").equals(sUserId)){
+                    stock = new ServiceStock();
+                    stock.setUid(rs.getString("OC_STOCK_SERVERID")+"."+rs.getString("OC_STOCK_OBJECTID"));
+                    stock.setName(rs.getString("OC_STOCK_NAME"));
+                    foundObjects.add(stock);
+                } 
+                else{*/
+                    if(rs.getString("OC_STOCK_VALIDATIONUSERS")!=null){
+                        String[] s = rs.getString("OC_STOCK_VALIDATIONUSERS").split("\\$");
+                      
+                        for(int i=0; i<s.length; i++){
+                            if(s[i].equals(sUserId)){
+                                stock = new ServiceStock();
+                                
+                                stock.setUid(rs.getString("OC_STOCK_SERVERID")+"."+rs.getString("OC_STOCK_OBJECTID"));
+                                stock.setName(rs.getString("OC_STOCK_NAME"));
+                                stock.setServiceUid(rs.getString("OC_STOCK_SERVICEUID"));
+                                stock.setAuthorizedUserIds(rs.getString("OC_STOCK_AUTHORIZEDUSERS"));
+                                stock.setDispensingUserIds(rs.getString("OC_STOCK_DISPENSINGUSERS"));
+                                stock.setValidationUserIds(rs.getString("OC_STOCK_VALIDATIONUSERS"));
+                                stock.setValidateoutgoingtransactions(rs.getInt("OC_STOCK_VALIDATEOUTGOING"));
                                 
                                 foundObjects.add(stock);
                             }
@@ -1102,23 +1373,74 @@ public class ServiceStock extends OC_Object{
             rs = ps.executeQuery();
             ServiceStock stock = null;
             while(rs.next()){
-                    if(rs.getString("OC_STOCK_AUTHORIZEDUSERS")!=null){
-                        String[] s = rs.getString("OC_STOCK_AUTHORIZEDUSERS").split("\\$");
-                      
-                        for(int i=0; i<s.length; i++){
-                            if(s[i].equals(sUserId)){
-                                stock = new ServiceStock();
-                                
-                                stock.setUid(rs.getString("OC_STOCK_SERVERID")+"."+rs.getString("OC_STOCK_OBJECTID"));
-                                stock.setName(rs.getString("OC_STOCK_NAME"));
-                                stock.setServiceUid(rs.getString("OC_STOCK_SERVICEUID"));
-                                stock.setAuthorizedUserIds(rs.getString("OC_STOCK_AUTHORIZEDUSERS"));
-                                
-                                foundObjects.add(stock);
-                            }
-                        }
+                String[] s = (ScreenHelper.checkString(rs.getString("OC_STOCK_VALIDATIONUSERS"))+"$"+ScreenHelper.checkString(rs.getString("OC_STOCK_AUTHORIZEDUSERS"))).split("\\$");
+              
+                for(int i=0; i<s.length; i++){
+                    if(s[i].equals(sUserId)){
+                        stock = new ServiceStock();
+                        
+                        stock.setUid(rs.getString("OC_STOCK_SERVERID")+"."+rs.getString("OC_STOCK_OBJECTID"));
+                        stock.setName(rs.getString("OC_STOCK_NAME"));
+                        stock.setServiceUid(rs.getString("OC_STOCK_SERVICEUID"));
+                        stock.setAuthorizedUserIds(rs.getString("OC_STOCK_AUTHORIZEDUSERS"));
+                        stock.setDispensingUserIds(rs.getString("OC_STOCK_DISPENSINGUSERS"));
+                        stock.setValidationUserIds(rs.getString("OC_STOCK_VALIDATIONUSERS"));
+                        stock.setValidateoutgoingtransactions(rs.getInt("OC_STOCK_VALIDATEOUTGOING"));
+                        
+                        foundObjects.add(stock);
                     }
-                //}
+                }
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                oc_conn.close();
+            }
+            catch (SQLException se){
+                se.printStackTrace();
+            }
+        }
+        
+        return foundObjects;
+    }
+    
+    public static Vector getStocksByValidationUserWithEmpty(String sUserId){
+        Vector foundObjects = new Vector();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        Connection oc_conn = MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+            String sSelect = "SELECT * FROM OC_SERVICESTOCKS b"+
+            		         "  order by OC_STOCK_NAME";
+            ps = oc_conn.prepareStatement(sSelect);
+            
+            // execute
+            rs = ps.executeQuery();
+            ServiceStock stock = null;
+            while(rs.next()){
+                String[] s = (ScreenHelper.checkString(rs.getString("OC_STOCK_VALIDATIONUSERS"))+"$"+ScreenHelper.checkString(rs.getString("OC_STOCK_AUTHORIZEDUSERS"))).split("\\$");
+              
+                for(int i=0; i<s.length; i++){
+                    if(s[i].equals(sUserId)){
+                        stock = new ServiceStock();
+                        
+                        stock.setUid(rs.getString("OC_STOCK_SERVERID")+"."+rs.getString("OC_STOCK_OBJECTID"));
+                        stock.setName(rs.getString("OC_STOCK_NAME"));
+                        stock.setServiceUid(rs.getString("OC_STOCK_SERVICEUID"));
+                        stock.setAuthorizedUserIds(rs.getString("OC_STOCK_AUTHORIZEDUSERS"));
+                        stock.setDispensingUserIds(rs.getString("OC_STOCK_DISPENSINGUSERS"));
+                        stock.setValidationUserIds(rs.getString("OC_STOCK_VALIDATIONUSERS"));
+                        stock.setValidateoutgoingtransactions(rs.getInt("OC_STOCK_VALIDATEOUTGOING"));
+                        
+                        foundObjects.add(stock);
+                    }
+                }
             }
         }
         catch(Exception e){

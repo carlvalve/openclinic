@@ -861,7 +861,12 @@ public class Wicket extends OC_Object{
             toDate=new Date(ScreenHelper.parseDate(ScreenHelper.stdDateFormat.format(new Date())).getTime()+24*3600*1000-1);
         }
         else {
-            toDate=new Date(ScreenHelper.parseDate(sDateTo).getTime()+24*3600*1000-1);
+            try {
+				toDate=ScreenHelper.endOfDay(sDateTo);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }
 
         Vector vResults = new Vector();

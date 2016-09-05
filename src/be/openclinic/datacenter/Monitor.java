@@ -98,7 +98,13 @@ public class Monitor implements Runnable{
             	vNvp.add(new NameValuePair("softwareVersion",MedwanQuery.getInstance().getConfigString("updateVersion","")));
     			sDoc = MedwanQuery.getInstance().getConfigString("datacenterTemplateSource",MedwanQuery.getInstance().getConfigString("templateSource")) + "/globalhealthbarometer.xml";
 	            reader = new SAXReader(false);
-	            document = reader.read(new URL(sDoc));
+	            try{
+	            	document = reader.read(new URL(sDoc));
+	            }
+	            catch(Exception t){
+	            	Debug.print("URL="+sDoc);
+	            	throw t;
+	            }
 	            root = document.getRootElement();
 	            @SuppressWarnings("unchecked")
 				Iterator<Element> elements = root.elementIterator("parameter");

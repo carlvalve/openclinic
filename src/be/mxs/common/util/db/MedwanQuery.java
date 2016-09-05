@@ -192,6 +192,7 @@ public class MedwanQuery {
         // load config values from XML
         try{
             String sDoc = getConfigString("templateSource")+"config.xml";
+            System.out.println("config.xml = "+sDoc);
             Document document = reader.read(new URL(sDoc));
             Element root = document.getRootElement();
             Iterator elements = root.elementIterator("parameter");

@@ -98,6 +98,7 @@ public class ExportNHIFEClaims {
     			}
     		}
     		else if(args.length>4 && args[4].split("/").length>1){
+    			System.out.println("*"+args[4]+"*");
     			activemonth= Integer.parseInt(args[4].split("/")[0]);
     			activeyear= Integer.parseInt(args[4].split("/")[1]);
     			if(activemonth==12){
