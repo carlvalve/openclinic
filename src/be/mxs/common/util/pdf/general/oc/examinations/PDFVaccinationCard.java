@@ -119,7 +119,7 @@ public class PDFVaccinationCard extends PDFGeneralBasic {
                         if(bShowNext){
                             par = new Paragraph(getTran("Web.Occup","be.mxs.healthrecord.vaccination.next").toUpperCase()+": ",FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)7*fontSizePercentage/100.0),Font.ITALIC));
                             try{
-                                if(ScreenHelper.parseDate(getItemValue(tran,IConstants.ITEM_TYPE_VACCINATION_NEXT_DATE)).before(new Date())){
+                                if(getItemValue(tran,IConstants.ITEM_TYPE_VACCINATION_NEXT_DATE)!=null && ScreenHelper.parseDate(getItemValue(tran,IConstants.ITEM_TYPE_VACCINATION_NEXT_DATE))!=null && ScreenHelper.parseDate(getItemValue(tran,IConstants.ITEM_TYPE_VACCINATION_NEXT_DATE)).before(new Date())){
                                     par.add(new Chunk(getTran("Web.Occup",getItemValue(tran,IConstants.ITEM_TYPE_VACCINATION_NEXT_DATE)),FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)8*fontSizePercentage/100.0),Font.BOLD,BaseColor.RED)));
                                 }
                                 else{

@@ -165,7 +165,10 @@ public class PDFPatientInvoiceGeneratorMFP extends PDFInvoiceGenerator {
                     }
                 }
             }
-
+    		if(MedwanQuery.getInstance().getConfigInt("autoPrintPatientInvoice",0)==1){
+    			PdfAction action = new PdfAction(PdfAction.PRINTDIALOG);
+    			docWriter.setOpenAction(action);
+    		}
         }
 		catch(Exception e){
 			baosPDF.reset();
@@ -1261,7 +1264,7 @@ public class PDFPatientInvoiceGeneratorMFP extends PDFInvoiceGenerator {
         			patientshare+=debet.getAmount()+debet.getExtraInsurarAmount();
         			extrainsuraramount+=debet.getExtraInsurarAmount();
         			insureramount+=debet.getInsurarAmount();
-        	    	if(debet==null || debet.getInsurance()==null || debet.getInsurance().getInsurar()==null || debet.getInsurance().getInsurar().getNoSupplements()==0){
+        	    	if(debet.getInsurance()==null || debet.getInsurance().getInsurar()==null || debet.getInsurance().getInsurar().getNoSupplements()==1 || debet.getPrestation().getSupplement()!=0){
         	    		supplements+=debet.getPrestation().getSupplement()*debet.getQuantity();
         	    	}
             	}

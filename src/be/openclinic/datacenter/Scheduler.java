@@ -12,7 +12,9 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import be.mxs.common.util.db.MedwanQuery;
+import be.mxs.common.util.io.OrangeVaccinations;
 import be.mxs.common.util.system.Debug;
+import be.mxs.common.util.system.ScreenHelper;
 import be.openclinic.adt.Queue;
 
 public class Scheduler implements Runnable{
@@ -116,6 +118,15 @@ public class Scheduler implements Runnable{
         		if(MedwanQuery.getInstance().getConfigInt("datacenterEnabled",0)==1){
 	        		Debug.println("Running scheduler...");
         			runScheduler();
+        		}
+        		if(MedwanQuery.getInstance().getConfigInt("orangeVaccinationProgramEnabled",0)==1){
+        			if(ScreenHelper.getTranNoLink("web","patientvaccinationsubscriptionconfirmation","fr").equalsIgnoreCase("patientvaccinationsubscriptionconfirmation")){
+        				MedwanQuery.getInstance().reloadLabels();
+        			}
+	        		Debug.println("Running Orange vaccination program monitor...");
+        			OrangeVaccinations.loadNewPersons();
+        			OrangeVaccinations.sendReminders();
+        			OrangeVaccinations.updateVaccinations();
         		}
         		Thread.sleep(MedwanQuery.getInstance().getConfigInt("datacenterScheduleInterval",20000));
         	}

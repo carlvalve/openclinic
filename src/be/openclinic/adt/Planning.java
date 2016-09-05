@@ -12,6 +12,9 @@ import net.admin.User;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+
+import javax.print.CancelablePrintJob;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -66,6 +69,10 @@ public class Planning extends OC_Object {
 		}
 	}
 	
+	public void setPreparationDate(String n){
+		setModifier(0,n+"");
+	}
+	
 	public String getPreparationDate(){
 		String n="";
 		if(getModifiers()!=null){
@@ -78,11 +85,55 @@ public class Planning extends OC_Object {
 		}
 		return n;
 	}
-
-	public void setPreparationDate(String n){
-		setModifier(0,n+"");
+	
+	public void setNoshow(String n){
+		setModifier(1,n+"");
 	}
 	
+	public String getNoshow(){
+		String n="";
+		if(getModifiers()!=null){
+			try{
+				n=getModifiers().split(";")[1];
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return n;
+	}
+	
+	public String getCreateUser(){
+		String user=getUpdateUser();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String sSelect = "";
+        Connection oc_conn = MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+            sSelect = "SELECT * FROM OC_PLANNING_HISTORY WHERE OC_PLANNING_OBJECTID = ? and OC_PLANNING_VERSION=1";
+            ps = oc_conn.prepareStatement(sSelect);
+            ps.setInt(1,Integer.parseInt(getUid().split("\\.")[1]));
+            rs = ps.executeQuery();
+            if (rs.next()){
+            	user=rs.getString("OC_PLANNING_UPDATEUID");
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                oc_conn.close();
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        return user;
+ 	}
+
 	public String getAdmissionDate(){
 		String n="";
 		if(getModifiers()!=null){
@@ -269,9 +320,12 @@ public class Planning extends OC_Object {
         Calendar cal = GregorianCalendar.getInstance();
         cal.setTime(this.plannedDate);
         
-        if(this.getEstimatedtime()!=null){
-	        cal.add(Calendar.HOUR,Integer.parseInt(this.getEstimatedtime().split(":")[0]));
-	        cal.add(Calendar.MINUTE,Integer.parseInt(this.getEstimatedtime().split(":")[1]));
+        if(this.getEstimatedtime()!=null && this.getEstimatedtime().length()>0){
+        	try{
+	        	cal.add(Calendar.HOUR,Integer.parseInt(this.getEstimatedtime().split(":")[0]));
+		        cal.add(Calendar.MINUTE,Integer.parseInt(this.getEstimatedtime().split(":")[1]));
+        	}
+        	catch(Exception e){}
         }
         
         this.plannedEndDate = cal.getTime();
@@ -289,7 +343,7 @@ public class Planning extends OC_Object {
     }
     
     public String getEstimatedtime(){
-        return estimatedtime;
+        return ScreenHelper.checkString(estimatedtime);
     }
     public void setEstimatedtime(String estimatedtime){
         this.estimatedtime = estimatedtime;
@@ -375,7 +429,7 @@ public class Planning extends OC_Object {
                         planning.patientUID = rs.getString("OC_PLANNING_PATIENTUID");
                         planning.userUID = rs.getString("OC_PLANNING_USERUID");
                         planning.plannedDate = rs.getTimestamp("OC_PLANNING_PLANNEDDATE");
-                        planning.estimatedtime = rs.getString("OC_PLANNING_ESTIMATEDTIME");
+                        planning.estimatedtime = rs.getString("OC_PLANNING_ESTIMATIONTIME");
                         planning.effectiveDate = rs.getTimestamp("OC_PLANNING_EFFECTIVEDATE");
                         planning.cancelationDate = rs.getTimestamp("OC_PLANNING_CANCELATIONDATE");
                         planning.confirmationDate = rs.getTimestamp("OC_PLANNING_CONFIRMATIONDATE");
@@ -426,7 +480,7 @@ public class Planning extends OC_Object {
         try{
             String[] ids = sPlanningUID.split("\\.");
             String sQuery = "UPDATE OC_PLANNING"+
-                            "  SET OC_PLANNING_PLANNEDDATE=?, OC_PLANNING_ESTIMATEDTIME=?, OC_PLANNING_PLANNEDEND=?"+
+                            "  SET OC_PLANNING_PLANNEDDATE=?, OC_PLANNING_ESTIMATIONTIME=?, OC_PLANNING_PLANNEDEND=?"+
                             " WHERE OC_PLANNING_SERVERID = ? AND OC_PLANNING_OBJECTID = ?";
             ps = oc_conn.prepareStatement(sQuery);
 
@@ -506,6 +560,47 @@ public class Planning extends OC_Object {
         }
     }
     
+    public static void copyToHistoryCanceled(String uid,Date cancelationDate){
+    	String[] ids = ScreenHelper.checkString(uid).split("\\.");
+        if(ids.length==2){
+	    	Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+	        PreparedStatement ps = null;
+	        try{
+	        	String sSql="insert into OC_PLANNING_HISTORY(OC_PLANNING_PATIENTUID,OC_PLANNING_USERUID,OC_PLANNING_PLANNEDDATE,"
+	        			+ " OC_PLANNING_EFFECTIVEDATE,OC_PLANNING_CANCELATIONDATE,OC_PLANNING_CONTACTTYPE,OC_PLANNING_CONTACTUID,"
+	        			+ " OC_PLANNING_DESCRIPTION,OC_PLANNING_SERVERID,OC_PLANNING_TRANSACTIONUID,OC_PLANNING_CREATETIME,"
+	        			+ " OC_PLANNING_UPDATETIME,OC_PLANNING_UPDATEUID,OC_PLANNING_VERSION,OC_PLANNING_OBJECTID,OC_PLANNING_ESTIMATIONTIME,"
+	        			+ " OC_PLANNING_CONTEXTID,OC_PLANNING_SERVICEUID,OC_PLANNING_PLANNEDEND,OC_PLANNING_REMINDSENT,"
+	        			+ " OC_PLANNING_CANCELLATIONWARNINGSENT,OC_PLANNING_COMMENT,OC_PLANNING_CONFIRMATIONDATE,OC_PLANNING_MODIFIERS)"
+	        			+ " select OC_PLANNING_PATIENTUID,OC_PLANNING_USERUID,OC_PLANNING_PLANNEDDATE,"
+	        			+ " OC_PLANNING_EFFECTIVEDATE,?,OC_PLANNING_CONTACTTYPE,OC_PLANNING_CONTACTUID,"
+	        			+ " OC_PLANNING_DESCRIPTION,OC_PLANNING_SERVERID,OC_PLANNING_TRANSACTIONUID,OC_PLANNING_CREATETIME,"
+	        			+ " OC_PLANNING_UPDATETIME,OC_PLANNING_UPDATEUID,OC_PLANNING_VERSION,OC_PLANNING_OBJECTID,OC_PLANNING_ESTIMATIONTIME,"
+	        			+ " OC_PLANNING_CONTEXTID,OC_PLANNING_SERVICEUID,OC_PLANNING_PLANNEDEND,OC_PLANNING_REMINDSENT,"
+	        			+ " OC_PLANNING_CANCELLATIONWARNINGSENT,OC_PLANNING_COMMENT,OC_PLANNING_CONFIRMATIONDATE,OC_PLANNING_MODIFIERS"
+	        			+ " from OC_PLANNING where OC_PLANNING_SERVERID=? and OC_PLANNING_OBJECTID=?";
+	        	ps=oc_conn.prepareStatement(sSql);
+	            ps.setTimestamp(1, new java.sql.Timestamp(cancelationDate.getTime()));
+	            ps.setInt(2,Integer.parseInt(ids[0]));
+	            ps.setInt(3,Integer.parseInt(ids[1]));
+	            ps.execute();
+	            ps.close();
+	        }
+	        catch(Exception e){
+	        	e.printStackTrace();
+	        }
+	        finally{
+	            try{
+	                if(ps!=null) ps.close();
+	                oc_conn.close();
+	            }
+	            catch(Exception ee){
+	                Debug.printProjectErr(ee,Thread.currentThread().getStackTrace());
+	            }
+	        }
+        }
+    }
+    
     //--- STORE -----------------------------------------------------------------------------------
     public boolean store(){
         String ids[];
@@ -523,8 +618,12 @@ public class Planning extends OC_Object {
                 if(ids.length==2){
                 	
                 	//First copy the record to history
-                	
-                	copyToHistory(this.getUid());
+                	if(getCancelationDate()==null){
+                		copyToHistory(this.getUid());
+                	}
+                	else{
+                		copyToHistoryCanceled(this.getUid(),getCancelationDate());
+                	}
                 	
                     sSelect = "SELECT OC_PLANNING_VERSION FROM OC_PLANNING WHERE OC_PLANNING_SERVERID = ? AND OC_PLANNING_OBJECTID = ?";
                     ps = oc_conn.prepareStatement(sSelect);
@@ -551,7 +650,7 @@ public class Planning extends OC_Object {
                 this.setUid(ids[0]+"."+ids[1]);
             }
             
-            if(ids.length==2){
+            if(ids.length==2 && getCancelationDate()==null){
                 sSelect = " INSERT INTO OC_PLANNING ("+
                           " OC_PLANNING_SERVERID,"+
                           " OC_PLANNING_OBJECTID,"+
@@ -568,7 +667,7 @@ public class Planning extends OC_Object {
                           " OC_PLANNING_UPDATETIME,"+
                           " OC_PLANNING_UPDATEUID,"+
                           " OC_PLANNING_VERSION,"+
-                          " OC_PLANNING_ESTIMATEDTIME,"+
+                          " OC_PLANNING_ESTIMATIONTIME,"+
                           " OC_PLANNING_CONTEXTID,"+
                           " OC_PLANNING_SERVICEUID,"+
                           " OC_PLANNING_PLANNEDEND,"+
@@ -621,6 +720,9 @@ public class Planning extends OC_Object {
                     }
                 }
             }
+            else if(getCancelationDate()!=null){
+            	bInserOk=true;
+            }
         }
         catch(Exception e){
             Debug.printProjectErr(e,Thread.currentThread().getStackTrace());
@@ -666,7 +768,6 @@ public class Planning extends OC_Object {
             if(sUserUID.length() > 0){
                 sSelect+= " AND OC_PLANNING_USERUID = '"+sUserUID+"'";
             }
-            
             ps = oc_conn.prepareStatement(sSelect);
             
             int psIdx = 1;
@@ -684,7 +785,7 @@ public class Planning extends OC_Object {
                 planning.plannedDate = rs.getTimestamp("OC_PLANNING_PLANNEDDATE");
                 planning.effectiveDate = rs.getTimestamp("OC_PLANNING_EFFECTIVEDATE");
                 planning.cancelationDate = rs.getTimestamp("OC_PLANNING_CANCELATIONDATE");
-                planning.estimatedtime = rs.getString("OC_PLANNING_ESTIMATEDTIME");
+                planning.estimatedtime = rs.getString("OC_PLANNING_ESTIMATIONTIME");
                 
                 ObjectReference orContact = new ObjectReference();
                 orContact.setObjectType(rs.getString("OC_PLANNING_CONTACTTYPE"));
@@ -710,6 +811,7 @@ public class Planning extends OC_Object {
             }
         }
         catch(Exception e){
+        	e.printStackTrace();
             Debug.printProjectErr(e,Thread.currentThread().getStackTrace());
         }
         finally{
@@ -753,7 +855,7 @@ public class Planning extends OC_Object {
                 planning.plannedDate = rs.getTimestamp("OC_PLANNING_PLANNEDDATE");
                 planning.effectiveDate = rs.getTimestamp("OC_PLANNING_EFFECTIVEDATE");
                 planning.cancelationDate = rs.getTimestamp("OC_PLANNING_CANCELATIONDATE");
-                planning.estimatedtime = rs.getString("OC_PLANNING_ESTIMATEDTIME");
+                planning.estimatedtime = rs.getString("OC_PLANNING_ESTIMATIONTIME");
                 
                 ObjectReference orContact = new ObjectReference();
                 orContact.setObjectType(rs.getString("OC_PLANNING_CONTACTTYPE"));
@@ -827,7 +929,76 @@ public class Planning extends OC_Object {
                 planning.plannedDate = rs.getTimestamp("OC_PLANNING_PLANNEDDATE");
                 planning.effectiveDate = rs.getTimestamp("OC_PLANNING_EFFECTIVEDATE");
                 planning.cancelationDate = rs.getTimestamp("OC_PLANNING_CANCELATIONDATE");
-                planning.estimatedtime = rs.getString("OC_PLANNING_ESTIMATEDTIME");
+                planning.estimatedtime = rs.getString("OC_PLANNING_ESTIMATIONTIME");
+                ObjectReference orContact = new ObjectReference();
+                orContact.setObjectType(rs.getString("OC_PLANNING_CONTACTTYPE"));
+                orContact.setObjectUid(rs.getString("OC_PLANNING_CONTACTUID"));
+                planning.setContact(orContact);
+                planning.description = rs.getString("OC_PLANNING_DESCRIPTION");
+                planning.comment = rs.getString("OC_PLANNING_COMMENT");
+                planning.transactionUID = rs.getString("OC_PLANNING_TRANSACTIONUID");
+                planning.setCreateDateTime(rs.getTimestamp("OC_PLANNING_CREATETIME"));
+                planning.setUpdateDateTime(rs.getTimestamp("OC_PLANNING_UPDATETIME"));
+                planning.setUpdateUser(rs.getString("OC_PLANNING_UPDATEUID"));
+                planning.setVersion(rs.getInt("OC_PLANNING_VERSION"));
+                planning.setContextID(rs.getString("OC_PLANNING_CONTEXTID"));
+                planning.setServiceUid(rs.getString("OC_PLANNING_SERVICEUID"));
+                planning.setModifiers(rs.getString("OC_PLANNING_MODIFIERS"));
+                planning.setPlannedEndDate();
+                planning.setRemindSent(rs.getTimestamp("OC_PLANNING_REMINDSENT"));
+                planning.confirmationDate = rs.getTimestamp("OC_PLANNING_CONFIRMATIONDATE");
+                planning.setCancellationWarningSent(rs.getTimestamp("OC_PLANNING_CANCELLATIONWARNINGSENT"));
+                vPlannings.add(planning);
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                oc_conn.close();
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        return vPlannings;
+    }
+    
+    //--- GET PATIENT MISSED PLANNINGS ------------------------------------------------------------
+    public static Vector getPatientCanceledPlannings(String sPatientUID){
+        Vector vPlannings = new Vector();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String sSelect = "";
+        
+        Connection oc_conn = MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+            // today
+            Calendar today = Calendar.getInstance();
+            today.set(Calendar.HOUR,0);
+            today.set(Calendar.MINUTE,0);
+            today.set(Calendar.SECOND,0);
+            today.set(Calendar.MILLISECOND,0);
+            
+            sSelect = "SELECT * FROM OC_PLANNING_HISTORY WHERE OC_PLANNING_PATIENTUID = ?"+
+                      " AND OC_PLANNING_CANCELATIONDATE IS NOT NULL"+
+                      " ORDER BY OC_PLANNING_PLANNEDDATE DESC";
+            ps = oc_conn.prepareStatement(sSelect);
+            ps.setString(1,sPatientUID);
+            rs = ps.executeQuery();
+            Planning planning;
+            while (rs.next()){
+                planning = new Planning();
+                planning.setUid(rs.getInt("OC_PLANNING_SERVERID")+"."+rs.getInt("OC_PLANNING_OBJECTID"));
+                planning.patientUID = rs.getString("OC_PLANNING_PATIENTUID");
+                planning.userUID = rs.getString("OC_PLANNING_USERUID");
+                planning.plannedDate = rs.getTimestamp("OC_PLANNING_PLANNEDDATE");
+                planning.effectiveDate = rs.getTimestamp("OC_PLANNING_EFFECTIVEDATE");
+                planning.cancelationDate = rs.getTimestamp("OC_PLANNING_CANCELATIONDATE");
+                planning.estimatedtime = rs.getString("OC_PLANNING_ESTIMATIONTIME");
                 ObjectReference orContact = new ObjectReference();
                 orContact.setObjectType(rs.getString("OC_PLANNING_CONTACTTYPE"));
                 orContact.setObjectUid(rs.getString("OC_PLANNING_CONTACTUID"));
@@ -981,7 +1152,7 @@ public class Planning extends OC_Object {
                 if(sTmpDate.equalsIgnoreCase(sPlannedDate)){
                     sTmpUID = rs.getInt("OC_PLANNING_SERVERID")+"."+rs.getInt("OC_PLANNING_OBJECTID");
                     if(!sTmpUID.equalsIgnoreCase(sPlanningUID)){
-                        sTmpEstimatedTime = ScreenHelper.checkString(rs.getString("OC_PLANNING_ESTIMATEDTIME"));
+                        sTmpEstimatedTime = ScreenHelper.checkString(rs.getString("OC_PLANNING_ESTIMATIONTIME"));
                         dTmpEnd = dTmpBegin;
                         if(sTmpEstimatedTime.length() > 0){
                             aTime = sTmpEstimatedTime.split(":");
@@ -1100,7 +1271,7 @@ public class Planning extends OC_Object {
                 planning.plannedDate = rs.getTimestamp("OC_PLANNING_PLANNEDDATE");
                 planning.effectiveDate = rs.getTimestamp("OC_PLANNING_EFFECTIVEDATE");
                 planning.cancelationDate = rs.getTimestamp("OC_PLANNING_CANCELATIONDATE");
-                planning.estimatedtime = rs.getString("OC_PLANNING_ESTIMATEDTIME");
+                planning.estimatedtime = rs.getString("OC_PLANNING_ESTIMATIONTIME");
                 planning.confirmationDate = rs.getTimestamp("OC_PLANNING_CONFIRMATIONDATE");
                 
                 ObjectReference orContact = new ObjectReference();
@@ -1170,7 +1341,7 @@ public class Planning extends OC_Object {
 	                planning.plannedDate = rs.getTimestamp("OC_PLANNING_PLANNEDDATE");
 	                planning.effectiveDate = rs.getTimestamp("OC_PLANNING_EFFECTIVEDATE");
 	                planning.cancelationDate = rs.getTimestamp("OC_PLANNING_CANCELATIONDATE");
-	                planning.estimatedtime = rs.getString("OC_PLANNING_ESTIMATEDTIME");
+	                planning.estimatedtime = rs.getString("OC_PLANNING_ESTIMATIONTIME");
 	                planning.confirmationDate = rs.getTimestamp("OC_PLANNING_CONFIRMATIONDATE");
 	                
 	                ObjectReference orContact = new ObjectReference();

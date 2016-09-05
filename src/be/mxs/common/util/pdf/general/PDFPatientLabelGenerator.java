@@ -88,6 +88,10 @@ public class PDFPatientLabelGenerator extends PDFOfficialBasic {
                 }
                 printPatientCard(person);
             }
+    		if(MedwanQuery.getInstance().getConfigInt("autoPrintLabLabel",0)==1){
+    			PdfAction action = new PdfAction(PdfAction.PRINTDIALOG);
+    			docWriter.setOpenAction(action);
+    		}
 		}
 		catch(Exception e){
 			baosPDF.reset();

@@ -180,8 +180,11 @@ public class PDFPatientInvoiceGenerator extends PDFInvoiceGenerator {
 	                }
 	            }
 	            printInvoice(invoice,invoice.getDebets());
-
             }
+    		if(MedwanQuery.getInstance().getConfigInt("autoPrintPatientInvoice",0)==1){
+    			PdfAction action = new PdfAction(PdfAction.PRINTDIALOG);
+    			docWriter.setOpenAction(action);
+    		}
         }
 		catch(Exception e){
 			baosPDF.reset();
@@ -400,6 +403,12 @@ public class PDFPatientInvoiceGenerator extends PDFInvoiceGenerator {
         receiptTable.addCell(createEmptyCell(50));
         receiptTable.addCell(createValueCell(getTran("web","service"),10,8,Font.BOLD));
         receiptTable.addCell(createValueCell(invoice.getServicesAsString(sPrintLanguage),40,7,Font.NORMAL));
+        //If associated clinicians have been registered, then show them
+        String clinicians=invoice.getCliniciansAsString();
+        if(clinicians.length()>0){
+            receiptTable.addCell(createValueCell(getTran("web","clinician"),10,8,Font.BOLD));
+            receiptTable.addCell(createValueCell(clinicians,40,7,Font.NORMAL));
+        }
         receiptTable.addCell(createValueCell(getTran("web","prestations"),10,8,Font.BOLD));
         int nLines=2;
         for(int n=0;n<debets.size();n++){
@@ -666,7 +675,21 @@ public class PDFPatientInvoiceGenerator extends PDFInvoiceGenerator {
             table.setWidthPercentage(pageWidth);
             // "printed by" info
     		if(sProforma.equalsIgnoreCase("yes") && MedwanQuery.getInstance().getConfigInt("ebableProformaInvoiceComment",0)==1){
-	            table.addCell(createValueCell(getTran("web","proformainvoicecomment"),2));
+    			String comment = getTran("web","proformainvoicecomment");
+    			String clinictype="standardclinic";
+    			HashSet services = invoice.getServices();
+    			Iterator iServices = services.iterator();
+    			while(iServices.hasNext()){
+    				String uid = (String)iServices.next();
+    				Service service = Service.getService(uid);
+    				if(service!=null && service.code3!=null && service.code3.equalsIgnoreCase("privateclinic")){
+    					clinictype="privateclinic";
+    				}
+    			}
+    			if(!ScreenHelper.getTranNoLink("web","proformainvoicecomment."+clinictype,sPrintLanguage).equalsIgnoreCase("proformainvoicecomment."+clinictype)){
+    				comment=ScreenHelper.getTranNoLink("web","proformainvoicecomment."+clinictype,sPrintLanguage);
+    			}
+	            table.addCell(createValueCell(comment,2));
 	            cell=createValueCell("\n",2);
     		}
             table.addCell(createCell(new PdfPCell(getPrintedByInfo()),2,PdfPCell.ALIGN_LEFT,PdfPCell.NO_BORDER));
@@ -701,7 +724,11 @@ public class PDFPatientInvoiceGenerator extends PDFInvoiceGenerator {
             }
             else {
             	if(MedwanQuery.getInstance().getConfigInt("printPatientSignatureOnInvoice",1)==1){
-            		table.addCell(createValueCell(getTran("patientsignature"),1));
+            		String sSignature=getTran("patientsignature");
+            		if(invoice.hasPatientSignature()){
+            			sSignature+="\n"+getTran("electronicsignature")+" #"+ScreenHelper.base64Compress(invoice.getUid());
+            		}
+            		table.addCell(createValueCell(sSignature,1));
             	}
             	else {
             		table.addCell(createValueCell("",1));

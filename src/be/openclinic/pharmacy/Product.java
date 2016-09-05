@@ -40,8 +40,17 @@ public class Product extends OC_Object implements Comparable {
     private double margin;
     private boolean applyLowerPrices;
     private boolean automaticInvoicing;
+    private String code;
     
-    public String getRxnormcode() {
+    public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public String getRxnormcode() {
 		return rxnormcode;
 	}
 
@@ -396,6 +405,7 @@ public class Product extends OC_Object implements Comparable {
                     product.setMargin(rs.getDouble("OC_PRODUCT_MARGIN"));
                     product.setApplyLowerPrices(rs.getInt("OC_PRODUCT_APPLYLOWERPRICES")==1);
                     product.setAutomaticInvoicing(rs.getInt("OC_PRODUCT_AUTOMATICINVOICING")==1);
+                    product.setCode(ScreenHelper.checkString(rs.getString("OC_PRODUCT_CODE")));
                     
                     // timeUnit
                     String tmpValue = rs.getString("OC_PRODUCT_TIMEUNIT");
@@ -486,6 +496,7 @@ public class Product extends OC_Object implements Comparable {
                 product.setMargin(rs.getDouble("OC_PRODUCT_MARGIN"));
                 product.setApplyLowerPrices(rs.getInt("OC_PRODUCT_APPLYLOWERPRICES")==1);
                 product.setAutomaticInvoicing(rs.getInt("OC_PRODUCT_AUTOMATICINVOICING")==1);
+                product.setCode(ScreenHelper.checkString(rs.getString("OC_PRODUCT_CODE")));
 
                 // supplier
                 String supplierUid = rs.getString("OC_PRODUCT_SUPPLIERUID");
@@ -598,14 +609,14 @@ public class Product extends OC_Object implements Comparable {
                       "  OC_PRODUCT_TIMEUNITCOUNT,OC_PRODUCT_UNITSPERTIMEUNIT,OC_PRODUCT_PRODUCTGROUP,"+
                       "  OC_PRODUCT_CREATETIME,OC_PRODUCT_UPDATETIME,OC_PRODUCT_UPDATEUID,OC_PRODUCT_VERSION,OC_PRODUCT_PRESCRIPTIONINFO,"+
                       "  OC_PRODUCT_BARCODE,OC_PRODUCT_PRESTATIONCODE,OC_PRODUCT_PRESTATIONQUANTITY,OC_PRODUCT_MARGIN,OC_PRODUCT_APPLYLOWERPRICES,"+
-                      "  OC_PRODUCT_AUTOMATICINVOICING,OC_PRODUCT_PRODUCTSUBGROUP,OC_PRODUCT_ATCCODE,OC_PRODUCT_TOTALUNITS,OC_PRODUCT_RXNORMCODE) "
+                      "  OC_PRODUCT_AUTOMATICINVOICING,OC_PRODUCT_PRODUCTSUBGROUP,OC_PRODUCT_ATCCODE,OC_PRODUCT_TOTALUNITS,OC_PRODUCT_RXNORMCODE,OC_PRODUCT_CODE) "
                       + "SELECT OC_PRODUCT_SERVERID,OC_PRODUCT_OBJECTID,"+
                       "  OC_PRODUCT_NAME,OC_PRODUCT_UNIT,OC_PRODUCT_UNITPRICE,OC_PRODUCT_PACKAGEUNITS,"+
                       "  OC_PRODUCT_MINORDERPACKAGES,OC_PRODUCT_SUPPLIERUID,OC_PRODUCT_TIMEUNIT,"+
                       "  OC_PRODUCT_TIMEUNITCOUNT,OC_PRODUCT_UNITSPERTIMEUNIT,OC_PRODUCT_PRODUCTGROUP,"+
                       "  OC_PRODUCT_CREATETIME,OC_PRODUCT_UPDATETIME,OC_PRODUCT_UPDATEUID,OC_PRODUCT_VERSION,OC_PRODUCT_PRESCRIPTIONINFO,"+
                       "  OC_PRODUCT_BARCODE,OC_PRODUCT_PRESTATIONCODE,OC_PRODUCT_PRESTATIONQUANTITY,OC_PRODUCT_MARGIN,OC_PRODUCT_APPLYLOWERPRICES,"+
-                      "  OC_PRODUCT_AUTOMATICINVOICING,OC_PRODUCT_PRODUCTSUBGROUP,OC_PRODUCT_ATCCODE,OC_PRODUCT_TOTALUNITS,OC_PRODUCT_RXNORMCODE FROM OC_PRODUCTS WHERE OC_PRODUCT_SERVERID = ? AND OC_PRODUCT_OBJECTID = ?";
+                      "  OC_PRODUCT_AUTOMATICINVOICING,OC_PRODUCT_PRODUCTSUBGROUP,OC_PRODUCT_ATCCODE,OC_PRODUCT_TOTALUNITS,OC_PRODUCT_RXNORMCODE,OC_PRODUCT_CODE FROM OC_PRODUCTS WHERE OC_PRODUCT_SERVERID = ? AND OC_PRODUCT_OBJECTID = ?";
                 ps = oc_conn.prepareStatement(sSelect);
                 ps.setInt(1,Integer.parseInt(this.getUid().substring(0,this.getUid().indexOf("."))));
                 ps.setInt(2,Integer.parseInt(this.getUid().substring(this.getUid().indexOf(".")+1)));
@@ -629,8 +640,8 @@ public class Product extends OC_Object implements Comparable {
                       "  OC_PRODUCT_TIMEUNITCOUNT,OC_PRODUCT_UNITSPERTIMEUNIT,OC_PRODUCT_PRODUCTGROUP,"+
                       "  OC_PRODUCT_CREATETIME,OC_PRODUCT_UPDATETIME,OC_PRODUCT_UPDATEUID,OC_PRODUCT_VERSION,OC_PRODUCT_PRESCRIPTIONINFO,"+
                       "  OC_PRODUCT_BARCODE,OC_PRODUCT_PRESTATIONCODE,OC_PRODUCT_PRESTATIONQUANTITY,OC_PRODUCT_MARGIN,OC_PRODUCT_APPLYLOWERPRICES,"+
-                      "  OC_PRODUCT_AUTOMATICINVOICING,OC_PRODUCT_PRODUCTSUBGROUP,OC_PRODUCT_ATCCODE,OC_PRODUCT_TOTALUNITS,OC_PRODUCT_RXNORMCODE)"+
-                      " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                      "  OC_PRODUCT_AUTOMATICINVOICING,OC_PRODUCT_PRODUCTSUBGROUP,OC_PRODUCT_ATCCODE,OC_PRODUCT_TOTALUNITS,OC_PRODUCT_RXNORMCODE,OC_PRODUCT_CODE)"+
+                      " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
             ps = oc_conn.prepareStatement(sSelect);
             ps.setInt(1,Integer.parseInt(this.getUid().substring(0,this.getUid().indexOf("."))));
@@ -678,6 +689,7 @@ public class Product extends OC_Object implements Comparable {
             ps.setString(25, this.getAtccode());
             ps.setDouble(26, this.getTotalUnits());
             ps.setString(27, this.getRxnormcode());
+            ps.setString(28, this.getCode());
             ps.executeUpdate();
             
             //If a health service and a margin were provided, automatically update the health service price
@@ -863,6 +875,107 @@ public class Product extends OC_Object implements Comparable {
                 product.setMargin(rs.getDouble("OC_PRODUCT_MARGIN"));
                 product.setApplyLowerPrices(rs.getInt("OC_PRODUCT_APPLYLOWERPRICES")==1);
                 product.setAutomaticInvoicing(rs.getInt("OC_PRODUCT_AUTOMATICINVOICING")==1);
+                product.setCode(ScreenHelper.checkString(rs.getString("OC_PRODUCT_CODE")));
+                
+                // timeUnit
+                String tmpValue = rs.getString("OC_PRODUCT_TIMEUNIT");
+                if(tmpValue!=null){
+                    product.setTimeUnit(tmpValue);
+                }
+
+                // timeUnitCount
+                tmpValue = rs.getString("OC_PRODUCT_TIMEUNITCOUNT");
+                if(tmpValue!=null){
+                    product.setTimeUnitCount(Integer.parseInt(tmpValue));
+                }
+
+                // unitsPerTimeUnit
+                tmpValue = rs.getString("OC_PRODUCT_UNITSPERTIMEUNIT");
+                if(tmpValue!=null){
+                    product.setUnitsPerTimeUnit(Double.parseDouble(tmpValue));
+                }
+
+                // minimumOrderPackages
+                tmpValue = rs.getString("OC_PRODUCT_MINORDERPACKAGES");
+                if(tmpValue!=null){
+                    product.setMinimumOrderPackages(Integer.parseInt(tmpValue));
+                }
+
+                // OBJECT variables
+                product.setCreateDateTime(rs.getTimestamp("OC_PRODUCT_CREATETIME"));
+                product.setUpdateDateTime(rs.getTimestamp("OC_PRODUCT_UPDATETIME"));
+                product.setUpdateUser(ScreenHelper.checkString(rs.getString("OC_PRODUCT_UPDATEUID")));
+                product.setVersion(rs.getInt("OC_PRODUCT_VERSION"));
+                product.setTotalUnits(rs.getInt("OC_PRODUCT_TOTALUNITS"));
+                products.add(product);
+            }
+        }
+        catch(Exception e){
+            if(e.getMessage().endsWith("NOT FOUND")){
+                Debug.println(e.getMessage());
+            }
+            else{
+                e.printStackTrace();
+            }
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                oc_conn.close();
+
+            }
+            catch(SQLException se){
+                se.printStackTrace();
+            }
+        }    	
+        return products;
+    }
+    
+    public static Vector getLimitedDrugs(String name,int maxrows,String serviceStockUid){
+    	Vector products = new Vector();
+    	PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        Connection oc_conn = MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+            String sSelect = "SELECT * FROM OC_PRODUCTS,OC_PRODUCTSTOCKS"+
+                             " WHERE "
+                             + " OC_PRODUCT_NAME like ? AND"
+                             + " OC_PRODUCT_OBJECTID=replace(OC_STOCK_PRODUCTUID,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') AND"
+                             + " OC_STOCK_SERVICESTOCKUID=? AND"
+                             + " OC_STOCK_LEVEL>0"
+                             + " order by OC_PRODUCT_NAME";
+            ps = oc_conn.prepareStatement(sSelect);
+            ps.setString(1, "%"+name+"%");
+            ps.setString(2, serviceStockUid);
+            rs = ps.executeQuery();
+
+            int counter=0;
+            Product product;
+            // get data from DB
+            while (rs.next() && counter<=maxrows){
+            	counter++;
+                product = new Product();
+                product.setUid(rs.getString("OC_PRODUCT_SERVERID")+"."+rs.getString("OC_PRODUCT_OBJECTID"));
+
+                product.setName(rs.getString("OC_PRODUCT_NAME")+" ("+rs.getString("OC_STOCK_LEVEL")+")");
+                product.setUnit(rs.getString("OC_PRODUCT_UNIT"));
+                product.setUnitPrice(rs.getDouble("OC_PRODUCT_UNITPRICE"));
+                product.setPackageUnits(rs.getInt("OC_PRODUCT_PACKAGEUNITS"));
+                product.setSupplierUid(rs.getString("OC_PRODUCT_SUPPLIERUID"));
+                product.setProductGroup(rs.getString("OC_PRODUCT_PRODUCTGROUP"));
+                product.setProductSubGroup(rs.getString("OC_PRODUCT_PRODUCTSUBGROUP"));
+                product.setPrescriptionInfo(rs.getString("OC_PRODUCT_PRESCRIPTIONINFO"));
+                product.setBarcode(rs.getString("OC_PRODUCT_BARCODE"));
+                product.setAtccode(rs.getString("OC_PRODUCT_ATCCODE"));
+                product.setRxnormcode(rs.getString("OC_PRODUCT_RXNORMCODE"));
+                product.setPrestationcode(rs.getString("OC_PRODUCT_PRESTATIONCODE"));
+                product.setPrestationquantity(rs.getInt("OC_PRODUCT_PRESTATIONQUANTITY"));
+                product.setMargin(rs.getDouble("OC_PRODUCT_MARGIN"));
+                product.setApplyLowerPrices(rs.getInt("OC_PRODUCT_APPLYLOWERPRICES")==1);
+                product.setAutomaticInvoicing(rs.getInt("OC_PRODUCT_AUTOMATICINVOICING")==1);
+                product.setCode(ScreenHelper.checkString(rs.getString("OC_PRODUCT_CODE")));
                 
                 // timeUnit
                 String tmpValue = rs.getString("OC_PRODUCT_TIMEUNIT");
@@ -1108,6 +1221,92 @@ public class Product extends OC_Object implements Comparable {
         return foundObjects;
     }
 
+    public static Vector findWithCode(String sFindProductCode, String sFindProductName, String sFindUnit, String sFindUnitPriceMin,
+            String sFindUnitPriceMax, String sFindPackageUnits, String sFindMinOrderPackages,
+            String sFindSupplierUid, String sFindProductGroup, String sSortCol, String sSortDir){
+		Vector foundObjects = new Vector();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		Connection oc_conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		try{
+			String sTop = MedwanQuery.getInstance().topFunction(MedwanQuery.getInstance().getConfigString("maxProductsToShow","100"));
+			String sSelect = "SELECT "+sTop+" OC_PRODUCT_SERVERID,OC_PRODUCT_OBJECTID"+
+			           " FROM OC_PRODUCTS ";
+			
+			if(sFindProductCode.length()>0 || sFindProductName.length()>0 || sFindUnit.length()>0 || sFindUnitPriceMin.length()>0 ||
+				sFindUnitPriceMax.length()>0 || sFindPackageUnits.length()>0 || sFindMinOrderPackages.length()>0 ||
+				sFindSupplierUid.length()>0 || sFindProductGroup.length()>0){
+				sSelect+= "WHERE ";
+				
+				if(sFindProductCode.length() > 0){
+					sSelect+= "OC_PRODUCT_CODE LIKE ? AND ";
+				}
+				
+				if(sFindProductName.length() > 0){
+					String sLowerProductName = MedwanQuery.getInstance().getConfigParam("lowerCompare","OC_PRODUCT_NAME");
+					sSelect+= sLowerProductName+" LIKE ? AND ";
+				}
+				
+				if(sFindUnit.length() > 0)             sSelect+= "OC_PRODUCT_UNIT = ? AND ";
+				if(sFindUnitPriceMin.length() > 0)     sSelect+= "OC_PRODUCT_UNITPRICE >= ? AND ";
+				if(sFindUnitPriceMax.length() > 0)     sSelect+= "OC_PRODUCT_UNITPRICE <= ? AND ";
+				if(sFindPackageUnits.length() > 0)     sSelect+= "OC_PRODUCT_PACKAGEUNITS = ? AND ";
+				if(sFindMinOrderPackages.length() > 0) sSelect+= "OC_PRODUCT_MINORDERPACKAGES = ? AND ";
+				if(sFindProductGroup.length() > 0)     sSelect+= "OC_PRODUCT_PRODUCTGROUP = ? AND ";
+				
+				if(sFindSupplierUid.length() > 0){
+					sSelect+= "OC_PRODUCT_OBJECTID in (select replace(OC_STOCK_PRODUCTUID,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') from OC_PRODUCTSTOCKS where OC_STOCK_SERVICESTOCKUID='"+sFindSupplierUid+"') AND ";
+				}
+				
+				// remove last AND if any
+				if(sSelect.indexOf("AND ") > 0){
+				  sSelect = sSelect.substring(0,sSelect.lastIndexOf("AND "));
+				}
+			}
+			
+			// order
+			String sLimit = MedwanQuery.getInstance().limitFunction(MedwanQuery.getInstance().getConfigString("maxProductsToShow","100"));
+			sSelect+= "ORDER BY "+sSortCol+" "+sSortDir+sLimit;
+			
+			ps = oc_conn.prepareStatement(sSelect);
+			
+			// set questionmark values
+			int questionMarkIdx = 1;
+			if(sFindProductCode.length() > 0)      ps.setString(questionMarkIdx++,sFindProductCode+"%");
+			if(sFindProductName.length() > 0)      ps.setString(questionMarkIdx++,"%"+sFindProductName.toLowerCase()+"%");
+			if(sFindUnit.length() > 0)             ps.setString(questionMarkIdx++,sFindUnit);
+			if(sFindUnitPriceMin.length() > 0)     ps.setDouble(questionMarkIdx++,Double.parseDouble(sFindUnitPriceMin));
+			if(sFindUnitPriceMax.length() > 0)     ps.setDouble(questionMarkIdx++,Double.parseDouble(sFindUnitPriceMax));
+			if(sFindPackageUnits.length() > 0)     ps.setInt(questionMarkIdx++,Integer.parseInt(sFindPackageUnits));
+			if(sFindMinOrderPackages.length() > 0) ps.setInt(questionMarkIdx++,Integer.parseInt(sFindMinOrderPackages));
+			if(sFindProductGroup.length() > 0)     ps.setString(questionMarkIdx++,sFindProductGroup);
+			
+			// execute
+			System.out.println(sSelect);
+			rs = ps.executeQuery();
+			
+			while(rs.next()){
+				foundObjects.add(get(rs.getString("OC_PRODUCT_SERVERID")+"."+rs.getString("OC_PRODUCT_OBJECTID")));
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		finally{
+			try{
+				if(rs!=null) rs.close();
+				if(ps!=null) ps.close();
+				oc_conn.close();
+			}
+			catch(SQLException se){
+				se.printStackTrace();
+			}
+		}
+		
+		return foundObjects;
+	}
+	
     //--- FIND ------------------------------------------------------------------------------------
     public static Vector find(String sFindProductName, String sFindUnit, String sFindUnitPriceMin,
                               String sFindUnitPriceMax, String sFindPackageUnits, String sFindMinOrderPackages,

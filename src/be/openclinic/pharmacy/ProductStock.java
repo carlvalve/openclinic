@@ -3,12 +3,15 @@ import be.openclinic.common.OC_Object;
 import be.openclinic.common.ObjectReference;
 import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.system.ScreenHelper;
+import be.mxs.common.util.tools.sendHtmlMail;
 import be.mxs.common.util.system.Debug;
+import be.mxs.common.util.system.Miscelaneous;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -16,7 +19,10 @@ import java.util.GregorianCalendar;
 import java.util.Calendar;
 import java.sql.*;
 
+import net.admin.AdminPerson;
 import net.admin.Service;
+import webcab.lib.statistics.statistics.BasicStatistics;
+import webcab.lib.statistics.statistics.StatisticsException;
 /**
  * User: Frank Verbeke, Stijn Smets
  * Date: 10-sep-2006
@@ -118,6 +124,99 @@ public class ProductStock extends OC_Object implements Comparable {
         
     	return consumption;
     }
+
+    public long getMedianConsumption(int months, boolean bIncludePatients, boolean bIncludeStocks, boolean bOther){
+    	Date date = ScreenHelper.parseDate(new SimpleDateFormat("01/MM/yyyy").format(new Date()));
+    	date.setTime(date.getTime()-1);
+    	long consumption = 0;
+    	String destinationtypes="'$$$'";
+    	if(bOther){
+    		destinationtypes+=",''";
+    	}
+    	if(bIncludePatients){
+    		destinationtypes+=",'patient'";
+    	}
+    	if(bIncludeStocks){
+    		destinationtypes+=",'servicestock'";
+    	}
+    	String sQuery="select sum(oc_operation_unitschanged) total,year(oc_operation_date) year,month(oc_operation_date) month from oc_productstockoperations where oc_operation_description like '%delivery%' and oc_operation_srcdesttype in ("+destinationtypes+") and oc_operation_productstockuid=? and oc_operation_date>? and oc_operation_date<=? group by year(oc_operation_date),month(oc_operation_date)";
+    	Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+        double[] values = new double[months];
+        try{
+        	PreparedStatement ps = oc_conn.prepareStatement(sQuery);
+        	ps.setString(1, getUid());
+        	ps.setTimestamp(2, new java.sql.Timestamp(Miscelaneous.addMonthsToDate(date, -months).getTime()));
+        	ps.setTimestamp(3, new java.sql.Timestamp(date.getTime()));
+        	ResultSet rs = ps.executeQuery();
+        	while(rs.next()){
+        		values[(date.getYear()+1900-rs.getInt("year"))*12+date.getMonth()+1-rs.getInt("month")]=rs.getInt("total");
+        	}
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+			oc_conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        BasicStatistics basicStatistics = new BasicStatistics(values);
+        try {
+			consumption=Math.round(basicStatistics.median());
+		} catch (StatisticsException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return consumption;
+    }
+
+    public long getAverageConsumption(int months, boolean bIncludePatients, boolean bIncludeStocks, boolean bOther){
+    	Date date = ScreenHelper.parseDate(new SimpleDateFormat("01/MM/yyyy").format(new Date()));
+    	date.setTime(date.getTime()-1);
+    	long consumption = 0;
+    	String destinationtypes="'$$$'";
+    	if(bOther){
+    		destinationtypes+=",''";
+    	}
+    	if(bIncludePatients){
+    		destinationtypes+=",'patient'";
+    	}
+    	if(bIncludeStocks){
+    		destinationtypes+=",'servicestock'";
+    	}
+    	String sQuery="select sum(oc_operation_unitschanged) total,year(oc_operation_date) year,month(oc_operation_date) month from oc_productstockoperations where oc_operation_description like '%delivery%' and oc_operation_srcdesttype in ("+destinationtypes+") and oc_operation_productstockuid=? and oc_operation_date>? and oc_operation_date<=? group by year(oc_operation_date),month(oc_operation_date)";
+    	Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+        double[] values = new double[months];
+        try{
+        	PreparedStatement ps = oc_conn.prepareStatement(sQuery);
+        	ps.setString(1, getUid());
+        	ps.setTimestamp(2, new java.sql.Timestamp(Miscelaneous.addMonthsToDate(date, -months).getTime()));
+        	ps.setTimestamp(3, new java.sql.Timestamp(date.getTime()));
+        	ResultSet rs = ps.executeQuery();
+        	while(rs.next()){
+        		values[(date.getYear()+1900-rs.getInt("year"))*12+date.getMonth()+1-rs.getInt("month")]=rs.getInt("total");
+        	}
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+			oc_conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        BasicStatistics basicStatistics = new BasicStatistics(values);
+        try {
+			consumption=Math.round(basicStatistics.arithmeticMean());
+		} catch (StatisticsException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return consumption;
+    }
+
     //--- LEVEL -----------------------------------------------------------------------------------
     public int getLevel() {
         return level;
@@ -423,6 +522,7 @@ public class ProductStock extends OC_Object implements Comparable {
                 }
                 
             } else {
+            	ProductStock oldVersion = ProductStock.get(getUid());
                 //***** UPDATE *****
             	//First copy record to history
                 sSelect = "INSERT INTO OC_PRODUCTSTOCKS_HISTORY(OC_STOCK_SERVERID, OC_STOCK_OBJECTID," +
@@ -487,6 +587,14 @@ public class ProductStock extends OC_Object implements Comparable {
                 ps.setInt(14, Integer.parseInt(this.getUid().substring(0, this.getUid().indexOf("."))));
                 ps.setInt(15, Integer.parseInt(this.getUid().substring(this.getUid().indexOf(".") + 1)));
                 ps.executeUpdate();
+                
+                //If stock level went below minimumlevel, send email to stock manager
+                if(MedwanQuery.getInstance().getConfigInt("enablePharmacyEmailWarnings",0)==1 && oldVersion.getMinimumLevel()<=oldVersion.getLevel() && getLevel()<getMinimumLevel()){
+                	AdminPerson stockManager = getServiceStock().getStockManager();
+                	if(stockManager.getActivePrivate()!=null && ScreenHelper.checkString(stockManager.getActivePrivate().email).length()>0){
+                		sendHtmlMail.sendSimpleMail(MedwanQuery.getInstance().getConfigString("PatientEdit.MailServer"), MedwanQuery.getInstance().getConfigString("SA.MailAddress","frank.verbeke@post-factum.be"), stockManager.getActivePrivate().email,ScreenHelper.getTranNoLink("pharmacy", "productbelowminimumlevel", stockManager.language) , ScreenHelper.getTranNoLink("pharmacy", "productbelowminimumlevel", stockManager.language) + ":\n" + ScreenHelper.getTranNoLink("web", "servicestock", stockManager.language)+": "+getServiceStock().getName()+"\n"+ScreenHelper.getTranNoLink("web", "product", stockManager.language)+": "+getProduct().getName()+"\n"+ScreenHelper.getTranNoLink("web", "minimum", stockManager.language)+": "+getMinimumLevel()+"\n"+ScreenHelper.getTranNoLink("web", "level", stockManager.language)+": "+getLevel());
+                	}
+                }
             }
         }
         catch (Exception e) {

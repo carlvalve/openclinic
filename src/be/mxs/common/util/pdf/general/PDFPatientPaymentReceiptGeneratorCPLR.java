@@ -56,6 +56,10 @@ public class PDFPatientPaymentReceiptGeneratorCPLR extends PDFInvoiceGenerator {
             // get specified invoice
             PatientCredit credit = PatientCredit.get(sCreditUid);
             printCredit(credit);
+    		if(MedwanQuery.getInstance().getConfigInt("autoPrintPatientReceipt",0)==1){
+    			PdfAction action = new PdfAction(PdfAction.PRINTDIALOG);
+    			docWriter.setOpenAction(action);
+    		}
         }
 		catch(Exception e){
 			baosPDF.reset();

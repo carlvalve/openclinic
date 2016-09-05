@@ -2868,7 +2868,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
         Vector vUnassignedDebets = new Vector();
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try {
-            sSelect = "SELECT d.oc_debet_quantity,p.OC_PRESTATION_CODE,p.OC_PRESTATION_DESCRIPTION FROM OC_ENCOUNTERS e, OC_DEBETS d, OC_PRESTATIONS p WHERE d.oc_debet_credited<>1 and p.OC_PRESTATION_OBJECTID=replace(d.OC_DEBET_PRESTATIONUID,'"+MedwanQuery.getInstance().getConfigString("serverId","1")+".','') and e.OC_ENCOUNTER_PATIENTUID = ? "
+            sSelect = "SELECT d.oc_debet_quantity,p.OC_PRESTATION_CODE,p.OC_PRESTATION_DESCRIPTION,p.OC_PRESTATION_INVOICEGROUP,d.oc_debet_objectid FROM OC_ENCOUNTERS e, OC_DEBETS d, OC_PRESTATIONS p WHERE d.oc_debet_credited<>1 and p.OC_PRESTATION_OBJECTID=replace(d.OC_DEBET_PRESTATIONUID,'"+MedwanQuery.getInstance().getConfigString("serverId","1")+".','') and e.OC_ENCOUNTER_PATIENTUID = ? "
                     + " AND d.oc_debet_encounteruid=("+MedwanQuery.getInstance().convert("varchar", "e.oc_encounter_serverid")+MedwanQuery.getInstance().concatSign()+"'.'"+MedwanQuery.getInstance().concatSign()+MedwanQuery.getInstance().convert("varchar", "e.oc_encounter_objectid")+")";
             if (sDateBegin.length() > 0) {
                 sSelect += " AND d.OC_DEBET_DATE >= ?  ";
@@ -2902,7 +2902,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
             }
             rs = ps.executeQuery();
             while (rs.next()) {
-                vUnassignedDebets.add(rs.getInt("oc_debet_quantity")+"x "+rs.getString("OC_PRESTATION_CODE") + ": " + rs.getString("OC_PRESTATION_DESCRIPTION"));
+                vUnassignedDebets.add(rs.getInt("oc_debet_quantity")+"x "+rs.getString("OC_PRESTATION_CODE") + ": " + rs.getString("OC_PRESTATION_DESCRIPTION")+";"+rs.getString("OC_PRESTATION_INVOICEGROUP")+";"+rs.getString("OC_DEBET_OBJECTID"));
             }
         }
         catch (Exception e) {
@@ -2929,7 +2929,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
         Vector vUnassignedDebets = new Vector();
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try {
-            sSelect = "SELECT oc_debet_date,d.oc_debet_quantity,p.OC_PRESTATION_CODE,p.OC_PRESTATION_DESCRIPTION FROM OC_ENCOUNTERS e, OC_DEBETS d, OC_PRESTATIONS p WHERE d.oc_debet_credited<>1 and p.OC_PRESTATION_OBJECTID=replace(d.OC_DEBET_PRESTATIONUID,'"+MedwanQuery.getInstance().getConfigString("serverId","1")+".','') and e.OC_ENCOUNTER_PATIENTUID = ? "
+            sSelect = "SELECT oc_debet_date,d.oc_debet_quantity,p.OC_PRESTATION_CODE,p.OC_PRESTATION_DESCRIPTION,p.OC_PRESTATION_INVOICEGROUP,d.oc_debet_objectid FROM OC_ENCOUNTERS e, OC_DEBETS d, OC_PRESTATIONS p WHERE d.oc_debet_credited<>1 and p.OC_PRESTATION_OBJECTID=replace(d.OC_DEBET_PRESTATIONUID,'"+MedwanQuery.getInstance().getConfigString("serverId","1")+".','') and e.OC_ENCOUNTER_PATIENTUID = ? "
                     + " AND d.oc_debet_encounteruid=("+MedwanQuery.getInstance().convert("varchar", "e.oc_encounter_serverid")+MedwanQuery.getInstance().concatSign()+"'.'"+MedwanQuery.getInstance().concatSign()+MedwanQuery.getInstance().convert("varchar", "e.oc_encounter_objectid")+")";
             if (sDateBegin.length() > 0) {
                 sSelect += " AND d.OC_DEBET_DATE >= ?  ";
@@ -2966,7 +2966,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
             }
             rs = ps.executeQuery();
             while (rs.next()) {
-                vUnassignedDebets.add("<b>"+ScreenHelper.getSQLDate(rs.getDate("oc_debet_date"))+"</b>: "+ rs.getInt("oc_debet_quantity")+"x "+rs.getString("OC_PRESTATION_CODE") + " (" + rs.getString("OC_PRESTATION_DESCRIPTION")+")");
+                vUnassignedDebets.add("<b>"+ScreenHelper.getSQLDate(rs.getDate("oc_debet_date"))+"</b>: "+ rs.getInt("oc_debet_quantity")+"x "+rs.getString("OC_PRESTATION_CODE") + " (" + rs.getString("OC_PRESTATION_DESCRIPTION")+")"+";"+rs.getString("OC_PRESTATION_INVOICEGROUP")+";"+rs.getString("OC_DEBET_OBJECTID"));
             }
         }
         catch (Exception e) {

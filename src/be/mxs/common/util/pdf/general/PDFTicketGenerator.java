@@ -39,18 +39,23 @@ public class PDFTicketGenerator extends PDFInvoiceGenerator {
         this.req = req;
 
 		try{
-            doc.addProducer();
+
+			doc.addProducer();
             doc.addAuthor(user.person.firstname+" "+user.person.lastname);
 			doc.addCreationDate();
 			doc.addCreator("OpenClinic Software");
-            Rectangle rectangle = new Rectangle(0,0,new Float(MedwanQuery.getInstance().getConfigInt("ticketWidth",720)*72/254).floatValue(),new Float(MedwanQuery.getInstance().getConfigInt("ticketHeight",500)*72/254).floatValue());
+            Rectangle rectangle = new Rectangle(0,0,new Float(MedwanQuery.getInstance().getConfigInt("ticketWidth",720)*72/254).floatValue(),new Float(MedwanQuery.getInstance().getConfigInt("ticketHeight",800)*72/254).floatValue());
             doc.setPageSize(rectangle);
             doc.setMargins(MedwanQuery.getInstance().getConfigInt("patientReceiptLeftMargin",0), MedwanQuery.getInstance().getConfigInt("patientReceiptRightMargin",0), MedwanQuery.getInstance().getConfigInt("patientReceiptTopMargin",0), MedwanQuery.getInstance().getConfigInt("patientReceiptBottomMargin",0));
             doc.open();
 
-            // get specified invoice
+            // get specified ticket
             be.openclinic.adt.Queue queue = be.openclinic.adt.Queue.get(Integer.parseInt(objectid));
             printTicket(queue);
+    		if(MedwanQuery.getInstance().getConfigInt("autoPrintTicket",1)==1){
+    			PdfAction action = new PdfAction(PdfAction.PRINTDIALOG);
+    			docWriter.setOpenAction(action);
+    		}
         }
 		catch(Exception e){
 			baosPDF.reset();
@@ -67,7 +72,6 @@ public class PDFTicketGenerator extends PDFInvoiceGenerator {
 		if(baosPDF.size() < 1){
 			throw new DocumentException("document has no bytes");
 		}
-
 		return baosPDF;
 	}
     
@@ -86,12 +90,17 @@ public class PDFTicketGenerator extends PDFInvoiceGenerator {
 	        cell.setColspan(50);
 	        cell.setPadding(0);
 	        table.addCell(cell);
+	        cell = createBoldBorderlessCell(getTran("web","date")+": "+new SimpleDateFormat("dd/MM/yyyy HH:mm").format(queue.getBegin()), 1,50,12);
+	        cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+	        table.addCell(cell);
 	        cell = createBorderlessCell(getTran("queue",queue.getId()), 1,50,10);
 	        cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
 	        table.addCell(cell);
-	        cell = createBorderlessCell(AdminPerson.getFullName(queue.getSubjectuid())+" ("+queue.getSubjectuid()+")", 1,50,10);
-	        cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
-	        table.addCell(cell);
+	        if(queue.getSubjectuid()!=null && queue.getSubjectuid().length()>0){
+	        	cell = createBorderlessCell(AdminPerson.getFullName(queue.getSubjectuid())+" ("+queue.getSubjectuid()+")", 1,50,10);
+		        cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+		        table.addCell(cell);
+	        }
 	        cell = createBoldBorderlessCell(queue.getTicketnumber()+"", 1,50,MedwanQuery.getInstance().getConfigInt("PDFTicketFontSize",50));
 	        cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
 	        table.addCell(cell);

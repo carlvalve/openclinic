@@ -29,8 +29,17 @@ public class ProductOrder extends OC_Object{
     private String status;
     private String from;
     private int processed;
+    private String comment;
 
-    public String getFrom() {
+    public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	public String getFrom() {
 		return from;
 	}
 
@@ -290,6 +299,7 @@ public class ProductOrder extends OC_Object{
                 order.setStatus(rs.getString("OC_ORDER_STATUS"));
                 order.setFrom(rs.getString("OC_ORDER_FROM"));
                 order.setProcessed(rs.getInt("OC_ORDER_PROCESSED"));
+                order.setComment(rs.getString("OC_ORDER_COMMENT"));
             }
             else{
                 throw new Exception("ERROR : PRODUCTORDER "+orderUid+" NOT FOUND");
@@ -344,8 +354,8 @@ public class ProductOrder extends OC_Object{
                           "  OC_ORDER_PACKAGESDELIVERED, OC_ORDER_DATEORDERED, OC_ORDER_DATEDELIVERYDUE,"+
                           "  OC_ORDER_DATEDELIVERED, OC_ORDER_IMPORTANCE,"+
                           "  OC_ORDER_CREATETIME, OC_ORDER_UPDATETIME, OC_ORDER_UPDATEUID, OC_ORDER_VERSION, OC_ORDER_STATUS,"
-                          + "OC_ORDER_FROM,OC_ORDER_PROCESSED)"+
-                          " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,1,?,?,?)";
+                          + "OC_ORDER_FROM,OC_ORDER_PROCESSED,OC_ORDER_COMMENT)"+
+                          " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,1,?,?,?,?)";
 
                 ps = oc_conn.prepareStatement(sSelect);
 
@@ -385,6 +395,7 @@ public class ProductOrder extends OC_Object{
                 ps.setString(14, this.getStatus());
                 ps.setString(15, this.getFrom());
                 ps.setInt(16, this.getProcessed());
+                ps.setString(17, this.getComment());
 
                 ps.executeUpdate();
             }
@@ -398,7 +409,7 @@ public class ProductOrder extends OC_Object{
                               "  OC_ORDER_PACKAGESDELIVERED=?, OC_ORDER_DATEORDERED=?, OC_ORDER_DATEDELIVERYDUE=?,"+
                               "  OC_ORDER_DATEDELIVERED=?, OC_ORDER_IMPORTANCE=?,"+
                               "  OC_ORDER_UPDATETIME=?, OC_ORDER_UPDATEUID=?, OC_ORDER_VERSION=(OC_ORDER_VERSION+1), OC_ORDER_STATUS=?,"
-                              + "OC_ORDER_FROM=?,OC_ORDER_PROCESSED=?"+
+                              + "OC_ORDER_FROM=?,OC_ORDER_PROCESSED=?,OC_ORDER_COMMENT=?"+
                               " WHERE OC_ORDER_SERVERID=? AND OC_ORDER_OBJECTID=?";
 
                     ps = oc_conn.prepareStatement(sSelect);
@@ -430,8 +441,9 @@ public class ProductOrder extends OC_Object{
                     ps.setString(11, this.getStatus());
                     ps.setString(12, this.getFrom());
                     ps.setInt(13, this.getProcessed());
-                    ps.setInt(14,Integer.parseInt(this.getUid().substring(0,this.getUid().indexOf("."))));
-                    ps.setInt(15,Integer.parseInt(this.getUid().substring(this.getUid().indexOf(".")+1)));
+                    ps.setString(14, this.getComment());
+                    ps.setInt(15,Integer.parseInt(this.getUid().substring(0,this.getUid().indexOf("."))));
+                    ps.setInt(16,Integer.parseInt(this.getUid().substring(this.getUid().indexOf(".")+1)));
 
                     ps.executeUpdate();
                 }

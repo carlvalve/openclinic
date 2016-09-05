@@ -5,6 +5,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import be.mxs.common.util.system.ScreenHelper;
+
 /**
  * User: Frank Verbeke
  * Date: 6-sep-2007
@@ -48,7 +50,16 @@ public class CsvStats {
                         result.append(";");
                     }
                     try{
-                    	result.append((resultSet.getObject(n+1)+"").replaceAll(";", ","));
+                    	Object o = resultSet.getObject(n+1);
+                    	if(o.getClass().getName().indexOf("Date")>-1){
+                    		result.append(ScreenHelper.formatDate((java.sql.Date)o));
+                    	}
+                    	else if(o.getClass().getName().indexOf("Timestamp")>-1){
+                    		result.append(new java.text.SimpleDateFormat("dd/MM/yyyy hh:MM:ss").format((java.sql.Timestamp)o));
+                    	}
+                    	else{
+                    		result.append((o+"").replaceAll(";", ","));
+                    	}
                     }
                     catch(Exception q){
                     }

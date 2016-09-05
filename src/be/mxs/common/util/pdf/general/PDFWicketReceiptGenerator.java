@@ -46,6 +46,10 @@ public class PDFWicketReceiptGenerator extends PDFInvoiceGenerator {
             // get specified invoice
             addHeading(wicketCredit);
             printCreditReceipt(wicketCredit);
+    		if(MedwanQuery.getInstance().getConfigInt("autoPrintReceipt",0)==1){
+    			PdfAction action = new PdfAction(PdfAction.PRINTDIALOG);
+    			docWriter.setOpenAction(action);
+    		}
         }
 		catch(Exception e){
 			baosPDF.reset();

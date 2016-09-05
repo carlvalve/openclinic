@@ -2,6 +2,7 @@ package be.openclinic.datacenter;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
@@ -14,6 +15,7 @@ import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.apache.commons.io.IOUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -21,6 +23,7 @@ import org.dom4j.io.SAXReader;
 
 import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.system.Debug;
+import be.mxs.common.util.system.ScreenHelper;
 
 public class POP3Receiver extends Receiver {
 
@@ -171,6 +174,29 @@ public class POP3Receiver extends Receiver {
 		    			// TODO Auto-generated catch block
 		    			e.printStackTrace();
 		    		}
+		    	}
+		    	else {
+		            SAXReader reader = new SAXReader(false);
+		    		try {
+						Multipart multipart = (Multipart) message[i].getContent();
+					    for (int o = 0; o < multipart.getCount(); o++) {
+					        BodyPart bodyPart = multipart.getBodyPart(i);
+					        if(!Part.ATTACHMENT.equalsIgnoreCase(bodyPart.getDisposition()) &&
+					               ScreenHelper.checkString(bodyPart.getFileName()).length()==0) {
+					            continue; // dealing with attachments only
+					        } 
+			            	Document document = reader.read(bodyPart.getInputStream());
+			            	Element root = document.getRootElement();
+			            	if(root.attributeValue("type").equalsIgnoreCase("invoicefollowup")){
+			            	}
+					    }
+				    	message[i].setFlag(Flags.Flag.DELETED, true);
+		    		}
+					catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+				    	message[i].setFlag(Flags.Flag.DELETED, true);
+					}
 		    	}
 		    }
 	

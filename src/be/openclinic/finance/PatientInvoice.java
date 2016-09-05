@@ -42,6 +42,48 @@ public class PatientInvoice extends Invoice {
 		return modifiers;
 	}
 	
+	public static String getPatientSummaryInvoiceNumber(String uid){
+		String s="";
+		if(uid!=null && uid.length()>0){
+	        String sSelect = "SELECT OC_ITEM_SUMMARYINVOICEUID FROM OC_SUMMARYINVOICEITEMS WHERE OC_ITEM_PATIENTINVOICEUID=?";
+	        Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+	        ResultSet rs=null;
+	        PreparedStatement ps=null;
+	        try{
+	            ps = oc_conn.prepareStatement(sSelect);
+	            ps.setString(1,uid);
+	            rs = ps.executeQuery();
+	            
+	            if(rs.next()){
+	            	String sNumber = ScreenHelper.checkString(rs.getString("OC_ITEM_SUMMARYINVOICEUID"));
+	            	if(sNumber.length()>0){
+	            		s=sNumber.split("\\.")[1];
+	            	}
+	            	else{
+	                	if(uid.split("\\.").length>1){
+	                		s= uid.split("\\.")[1];
+	                	}
+	            	}
+	            }
+	
+	        }
+	        catch(Exception e){
+	            e.printStackTrace();
+	        }
+	        finally{
+	            try{
+	                if(rs!=null)rs.close();
+	                if(ps!=null)ps.close();
+	                oc_conn.close();
+	            }
+	            catch(Exception e){
+	                e.printStackTrace();
+	            }
+	        }
+		}
+		return s;
+	}
+	
 	public static String getPatientInvoiceNumber(String uid){
 		String s=uid;
 		if(uid!=null && uid.length()>0){
@@ -799,6 +841,74 @@ public class PatientInvoice extends Invoice {
         return patientInvoice;
     }
 
+    public boolean hasPatientSignature(){
+        boolean bHasSignature = false;
+    	PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        String sSelect = "SELECT * FROM OC_DRAWINGS where OC_DRAWING_SERVERID=? and OC_DRAWING_TRANSACTIONID=? and OC_DRAWING_ITEMTYPE='INVOICE_SIGN'";
+        Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+            ps = oc_conn.prepareStatement(sSelect);
+            ps.setInt(1,Integer.parseInt(this.getUid().split("\\.")[0]));
+            ps.setInt(2,Integer.parseInt(this.getUid().split("\\.")[1]));
+            rs = ps.executeQuery();
+            
+            if(rs.next()){
+            	bHasSignature=true;
+            }
+        }
+        catch(Exception e){
+            Debug.println("OpenClinic => PatientInvoice.java => getViaInvoiceUID => "+e.getMessage());
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null)rs.close();
+                if(ps!=null)ps.close();
+                oc_conn.close();
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+    	return bHasSignature;
+    }
+    
+    public java.util.Date getPatientSignatureDate(){
+        java.util.Date date = null;
+    	PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        String sSelect = "SELECT * FROM OC_DRAWINGS where OC_DRAWING_SERVERID=? and OC_DRAWING_TRANSACTIONID=? and OC_DRAWING_ITEMTYPE='INVOICE_SIGN'";
+        Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+            ps = oc_conn.prepareStatement(sSelect);
+            ps.setInt(1,Integer.parseInt(this.getUid().split("\\.")[0]));
+            ps.setInt(2,Integer.parseInt(this.getUid().split("\\.")[1]));
+            rs = ps.executeQuery();
+            
+            if(rs.next()){
+            	date=rs.getTimestamp("OC_DRAWING_DATE");
+            }
+        }
+        catch(Exception e){
+            Debug.println("OpenClinic => PatientInvoice.java => getViaInvoiceUID => "+e.getMessage());
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null)rs.close();
+                if(ps!=null)ps.close();
+                oc_conn.close();
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+    	return date;
+    }
+    
     //--- GET VIA INVOICE UID ---------------------------------------------------------------------
     public static PatientInvoice getViaInvoiceUID(String sInvoiceID){
         PatientInvoice patientInvoice = new PatientInvoice();

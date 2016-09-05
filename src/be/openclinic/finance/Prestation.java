@@ -58,7 +58,7 @@ public class Prestation extends OC_Object{
 		this.nomenclature = nomenclature;
 	}
 
-	private String modifiers; // 0=anesthesiaPercentage, 1=mfpadmissionpercentage, 2=flag1, 3=getAnesthesiaSupplementPercentag, 4=codedhis2
+	private String modifiers; // 0=anesthesiaPercentage, 1=mfpadmissionpercentage, 2=flag1, 3=getAnesthesiaSupplementPercentag, 4=codedhis2, 5=costcenter
     
     public String getServiceUid(){
 		return serviceUid;
@@ -240,6 +240,40 @@ public class Prestation extends OC_Object{
 		return s;
 	}
 	
+	public void setCostCenter(String s){
+		setModifier(9,s+"");
+	}
+	
+	public String getCostCenter(){
+		String s = "";
+		if(getModifiers()!=null){
+			try{
+				s =getModifiers().split(";")[9];
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return s;
+	}
+	
+	public void setTimeslot(String s){
+		setModifier(10,s+"");
+	}
+	
+	public String getTimeslot(){
+		String s = "";
+		if(getModifiers()!=null){
+			try{
+				s =getModifiers().split(";")[10];
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return s;
+	}
+	
 	public boolean isVisibleFor(Insurar insurar){
 		if(insurar==null){
 			return true;
@@ -251,7 +285,7 @@ public class Prestation extends OC_Object{
 		if(insurar==null){
 			return true;
 		}
-		if(getReservedForServiceType().length()>0 && (service==null || !getReservedForServiceType().equalsIgnoreCase(ScreenHelper.checkString(service.code3)))){
+		if(getReservedForServiceType().trim().length()>0 && (service==null || !getReservedForServiceType().equalsIgnoreCase(ScreenHelper.checkString(service.code3)))){
 			return false;
 		}
 		return insurar.isPrestationVisible(this.getUid()) && (insurar.getUseLimitedPrestationsList()==1 || getHideFromDefaultList()==0);
@@ -707,7 +741,7 @@ public class Prestation extends OC_Object{
 	            if(cats[n].indexOf("=")>-1 && cats[n].split("=")[0].equalsIgnoreCase(category)){
 	                try{
 	                    price = Double.parseDouble(cats[n].split("=")[1]);
-	                    if(price > 0){
+	                    if(MedwanQuery.getInstance().getConfigInt("allowZeroCategoryPricesForHealthServices",0)==1 || price > 0){
 	                        return price;
 	                    }
 	                }

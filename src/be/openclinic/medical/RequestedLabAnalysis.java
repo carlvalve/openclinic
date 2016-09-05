@@ -1463,6 +1463,82 @@ public class RequestedLabAnalysis {
         return labAnalysis;
     }
 
+    //--- GET -------------------------------------------------------------------------------------
+    public static RequestedLabAnalysis getByPersonid(int personid, String analysisCode){
+        // create LabRequest and initialize
+        RequestedLabAnalysis labAnalysis = new RequestedLabAnalysis();
+        labAnalysis.setAnalysisCode(analysisCode);
+        if(personid<0){
+        	return labAnalysis;
+        }
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+            String sSelect = "SELECT * FROM RequestedLabAnalyses where "+
+                             "  patientid = ?"+
+                             "  AND analysiscode = ? order by updatetime desc";
+            ps = oc_conn.prepareStatement(sSelect);
+            ps.setInt(1,personid);
+            ps.setString(2,analysisCode);
+            rs = ps.executeQuery();
+
+            // get data from DB
+            if(rs.next()){
+                labAnalysis.serverId = ScreenHelper.checkString(rs.getString("serverid"));
+                labAnalysis.transactionId = ScreenHelper.checkString(rs.getString("transactionid"));
+                labAnalysis.patientId = ScreenHelper.checkString(rs.getString("patientid"));
+                labAnalysis.comment   = ScreenHelper.checkString(rs.getString("comment"));
+
+                // result..
+                labAnalysis.resultValue    = ScreenHelper.checkString(rs.getString("resultvalue"));
+                labAnalysis.resultUnit     = ScreenHelper.checkString(rs.getString("resultunit"));
+                labAnalysis.resultModifier = ScreenHelper.checkString(rs.getString("resultmodifier"));
+                labAnalysis.resultComment  = ScreenHelper.checkString(rs.getString("resultcomment"));
+                labAnalysis.resultRefMax   = ScreenHelper.checkString(rs.getString("resultrefmax"));
+                labAnalysis.resultRefMin   = ScreenHelper.checkString(rs.getString("resultrefmin"));
+                labAnalysis.resultUserId   = ScreenHelper.checkString(rs.getString("resultuserid"));
+                labAnalysis.requestUserId   = ScreenHelper.checkString(rs.getString("resultuserid"));
+                labAnalysis.updatetime = rs.getTimestamp("updatetime");
+                labAnalysis.objectid = rs.getInt("objectid");
+                labAnalysis.resultProvisional   = ScreenHelper.checkString(rs.getString("resultprovisional"));
+
+                // result date
+                java.util.Date tmpDate = rs.getDate("resultdate");
+                if(tmpDate!=null) labAnalysis.resultDate = tmpDate;
+                tmpDate = rs.getDate("updateTime");
+                if(tmpDate!=null) labAnalysis.requestDate = tmpDate;
+            }
+            else{
+                throw new Exception("INFO : REQUESTED LABANALYSIS "+personid+"."+analysisCode+" NOT FOUND");
+            }
+        }
+        catch(Exception e){
+            labAnalysis = null;
+
+            if(e.getMessage().startsWith("INFO")){
+                Debug.println(e.getMessage());
+            }
+            else{
+                e.printStackTrace();
+            }
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                oc_conn.close();
+            }
+            catch(SQLException se){
+                se.printStackTrace();
+            }
+        }
+
+        return labAnalysis;
+    }
+
     //--- EXISTS ----------------------------------------------------------------------------------
     public static boolean exists(int serverId, int transactionId, String analysisCode){
         PreparedStatement ps = null;

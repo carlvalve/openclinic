@@ -56,6 +56,10 @@ public class PDFPatientInvoiceReceiptGeneratorCPLR extends PDFInvoiceGenerator {
             // get specified invoice
             PatientInvoice invoice = PatientInvoice.get(sInvoiceUid);
             printInvoice(invoice,invoice.getDebets());
+    		if(MedwanQuery.getInstance().getConfigInt("autoPrintPatientReceipt",0)==1){
+    			PdfAction action = new PdfAction(PdfAction.PRINTDIALOG);
+    			docWriter.setOpenAction(action);
+    		}
         }
 		catch(Exception e){
 			baosPDF.reset();
@@ -82,7 +86,7 @@ public class PDFPatientInvoiceReceiptGeneratorCPLR extends PDFInvoiceGenerator {
 	    	double scaleFactor = new Double(MedwanQuery.getInstance().getConfigInt("PDFReceiptFontScaleFactor",100))/100;
 	    	table = new PdfPTable(50);
 	        table.setWidthPercentage(98);
-	
+
 	        cell = createBorderlessCell(ScreenHelper.getTranNoLink("web","javaposcentername",sPrintLanguage), 1,50,new Double(10*titleScaleFactor).intValue());
 	        cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
 	        table.addCell(cell);
@@ -138,6 +142,12 @@ public class PDFPatientInvoiceReceiptGeneratorCPLR extends PDFInvoiceGenerator {
 		            totalinsurardebet+=debet.getInsurarAmount();
 		            totalextrainsurardebet+=debet.getExtraInsurarAmount();
 	            }
+	        }
+	        //If associated clinicians have been registered, then show them
+	        String clinicians=invoice.getCliniciansAsString();
+	        if(clinicians.length()>0){
+	            table.addCell(createValueCell(getTran("web","clinician"),15,new Double(7*scaleFactor).intValue(),Font.NORMAL));
+	            table.addCell(createBoldLabelCell(clinicians,35,new Double(7*scaleFactor).intValue()));
 	        }
 
 			//Create the receipt content

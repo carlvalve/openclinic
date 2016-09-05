@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Iterator;
 
 import net.admin.Service;
+import net.admin.User;
 
 public class Invoice extends OC_Object {
     protected String invoiceUid;
@@ -132,6 +133,30 @@ public class Invoice extends OC_Object {
 		   e.printStackTrace();
 	   }
 	   return service;
+   }
+   
+   public String getCliniciansAsString(){
+	   String clinician="";
+	   try{
+		   HashSet clinicians = new HashSet();
+		   for(int n=0;n<debets.size();n++){
+			   Debet debet = (Debet)debets.elementAt(n);
+			   if(ScreenHelper.checkString(debet.getPerformeruid()).length()>0){
+				   clinicians.add(debet.getPerformeruid());
+			   }
+		   }
+		   Iterator hs = clinicians.iterator();
+		   while(hs.hasNext()){
+			   if(clinician.length()>0){
+				   clinician+=", ";
+			   }
+			   clinician+=User.getFullUserName((String)hs.next());
+		   }
+	   }
+	   catch(Exception e){
+		   e.printStackTrace();
+	   }
+	   return clinician;
    }
    
    public String getServicesAsString(Vector debets, String language){
