@@ -44,13 +44,13 @@
 <table class="list" cellspacing="1" cellpadding="1" width="100%" onKeyDown="if(enterEvent(event,13)){closeModalbox();return false;}">
     <%-- MEAL NAME --%>
     <tr>
-        <td class="admin" width="250"><%=HTMLEntities.htmlentities(getTran("meals","mealName",sWebLanguage))%></td>
+        <td class="admin" width="250"><%=HTMLEntities.htmlentities(getTran(request,"meals","mealName",sWebLanguage))%></td>
         <td class="admin2"><%=checkString(HTMLEntities.htmlentities(item.name))%></td>
     </tr>
     
     <%-- MEAL TIME --%>
     <tr>
-        <td class="admin" width="250"><%=HTMLEntities.htmlentities(getTran("meals","mealTime",sWebLanguage))%></td>
+        <td class="admin" width="250"><%=HTMLEntities.htmlentities(getTran(request,"meals","mealTime",sWebLanguage))%></td>
         <td class="admin2">
             <%-- hour --%>
             <select style="width:40px;padding:2px" id="mealHour" class="text">
@@ -76,13 +76,13 @@
 	                    out.print(">"+(n<10?"0"+n:""+n)+"</option>");
 	                }
 	            %>
-	        </select>&nbsp;<%=HTMLEntities.htmlentities(getTran("hrm","uur",sWebLanguage))%>&nbsp;
+	        </select>&nbsp;<%=HTMLEntities.htmlentities(getTran(request,"hrm","uur",sWebLanguage))%>&nbsp;
         </td>
     </tr>
     
     <%-- MEAL ITEMS --%>
     <tr>
-        <td class="admin"><%=HTMLEntities.htmlentities(getTran("meals","mealItems",sWebLanguage))%></td>
+        <td class="admin"><%=HTMLEntities.htmlentities(getTran(request,"meals","mealItems",sWebLanguage))%></td>
         <td class="admin2">
             <ul id="mealItemList" class="items" style="width:380px">
                 <%
@@ -104,16 +104,16 @@
     
     <%-- MEAL TAKEN --%>
     <tr>
-        <td class="admin" width="100"><%=HTMLEntities.htmlentities(getTran("meals","mealtaken",sWebLanguage))%></td>
+        <td class="admin" width="100"><%=HTMLEntities.htmlentities(getTran(request,"meals","mealtaken",sWebLanguage))%></td>
         <td class="admin2">
-            <input type="radio" id="mealtakenyes" name="mealtaken" value="1" <%=(item.taken?"checked=true":"")%>/><%=getLabel("web","yes",sWebLanguage,"mealtakenyes")%>
-            <input type="radio" id="mealtakenno" name="mealtaken" value="0" <%=(!item.taken?"checked=true":"")%>/><%=getLabel("web","no",sWebLanguage,"mealtakenno")%>
+            <input type="radio" id="mealtakenyes" name="mealtaken" value="1" <%=(item.taken?"checked=true":"")%>/><%=getLabel(request,"web","yes",sWebLanguage,"mealtakenyes")%>
+            <input type="radio" id="mealtakenno" name="mealtaken" value="0" <%=(!item.taken?"checked=true":"")%>/><%=getLabel(request,"web","no",sWebLanguage,"mealtakenno")%>
         </td>
     </tr>
     
     <%-- MEAL NUTRICIENTS --%>
     <tr>
-        <td class="admin"><%=HTMLEntities.htmlentities(getTran("meals","mealNutricients",sWebLanguage))%></td>
+        <td class="admin"><%=HTMLEntities.htmlentities(getTran(request,"meals","mealNutricients",sWebLanguage))%></td>
         <td class="admin2">
             <a href="javascript:void(0)" id="mealNutricientsButton" class="link down" onclick="getNutricientsInMeal(true);"><%=getTranNoLink("meals","seemealNutricients",sWebLanguage)%></a>
             <ul id="mealNutricientList" class="items" style="display:none;width:380px"></ul>

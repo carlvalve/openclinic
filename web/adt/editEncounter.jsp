@@ -241,7 +241,7 @@
         	                    	patientAmount+=accountAccomodationDays*accomodationPrestation.getSupplement();
         	                    }
         	                }
-                            if(insurance.getInsurar()!=null && accomodationPrestation.isVisibleFor(insurance.getInsurar())){
+                            if(insurance.getInsurar()!=null && accomodationPrestation.isVisibleFor(insurance.getInsurar(),tmpService)){
 	                            debet.setAmount(patientAmount);
 	                            debet.setInsurarAmount(insurarAmount);
 	                            debet.setPrestationUid(accomodationPrestation.getUid());
@@ -331,7 +331,7 @@
             sEditEncounterServiceName = "";
         }else{
             sEditEncounterService = checkString(tmpEncounter.getService().code);
-            sEditEncounterServiceName = checkString(getTran("Service",tmpEncounter.getService().code,sWebLanguage));
+            sEditEncounterServiceName = checkString(getTran(request,"Service",tmpEncounter.getService().code,sWebLanguage));
         }
         
         if(tmpEncounter.getDestination()==null || checkString(tmpEncounter.getDestination().code).length()==0){
@@ -339,7 +339,7 @@
             sEditEncounterDestinationName = "";
         }else{
             sEditEncounterDestination = checkString(tmpEncounter.getDestination().code);
-            sEditEncounterDestinationName = checkString(getTran("Service",tmpEncounter.getDestination().code,sWebLanguage));
+            sEditEncounterDestinationName = checkString(getTran(request,"Service",tmpEncounter.getDestination().code,sWebLanguage));
         }
 
         if(tmpEncounter.getBed()==null){
@@ -406,7 +406,7 @@
     <table class='list' border='0' width='100%' cellspacing='1'>
         <%-- type --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","type",sWebLanguage)%> *</td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","type",sWebLanguage)%> *</td>
             <td class='admin2'>
             <%
             	if(sEditEncounterUID.split("\\.").length<=1 ||sEditEncounterType.length()==0){
@@ -421,7 +421,7 @@
                             if(sEditEncounterType.equalsIgnoreCase(sOptions[i])){
                                 out.print(" selected");
                             }
-                            out.print(">"+getTran("web",sOptions[i],sWebLanguage)+"</option>");
+                            out.print(">"+getTran(request,"web",sOptions[i],sWebLanguage)+"</option>");
                         }
                     %>
                 </select>
@@ -439,7 +439,7 @@
         
         <%-- date begin --%>
         <tr>
-            <td class="admin"><%=getTran("web","begindate",sWebLanguage)%> *</td>
+            <td class="admin"><%=getTran(request,"web","begindate",sWebLanguage)%> *</td>
             <td class="admin2">
                 <%=writeDateField("EditEncounterBegin","EditEncounterForm",sEditEncounterBegin+"' onkeyup='calculateAccomodationDates();' onclick='calculateAccomodationDates();' onchange='calculateAccomodationDates();",sWebLanguage)%>
                 <input class="text" name="EditEncounterBeginHour" value="<%=sEditEncounterBeginHour%>" size="5" onkeyup='calculateAccomodationDates();' onblur="checkTime(this);calculateAccomodationDates();" onkeypress="keypressTime(this)">
@@ -448,7 +448,7 @@
         
         <%-- date end --%>
         <tr>
-            <td class="admin"><%=getTran("web","enddate",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","enddate",sWebLanguage)%></td>
             <td class="admin2">
                 <%=writeDateField("EditEncounterEnd","EditEncounterForm",sEditEncounterEnd+"' onkeyup='calculateAccomodationDates();' onclick='calculateAccomodationDates();' onchange='calculateAccomodationDates();",sWebLanguage)%>
                 <input class="text" name="EditEncounterEndHour" value="<%=sEditEncounterEndHour%>" size="5" onkeyup='calculateAccomodationDates();' onblur="checkTime(this);calculateAccomodationDates();" onkeypress="keypressTime(this)">
@@ -457,11 +457,11 @@
                 
         <%-- origin --%>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","urgency.origin",sWebLanguage)%> *</td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","urgency.origin",sWebLanguage)%> *</td>
             <td class="admin2">
                 <select class="text" name="EditEncounterOrigin">
                     <option/>
-                    <%=ScreenHelper.writeSelect("urgency.origin",sEditEncounterOrigin,sWebLanguage)%>
+                    <%=ScreenHelper.writeSelect(request,"urgency.origin",sEditEncounterOrigin,sWebLanguage)%>
                 </select>
             </td>
         </tr>
@@ -469,31 +469,31 @@
         
         <%-- service --%>
         <tr id="Service">
-            <td class="admin"><%=getTran("web","service",sWebLanguage)%> *</td>
+            <td class="admin"><%=getTran(request,"web","service",sWebLanguage)%> *</td>
             <td class='admin2'>
                 <input type="hidden" name="EditEncounterService" id="EditEncounterService" value="<%=sEditEncounterService%>" onchange="EditEncounterForm.EditEncounterBed.value='';EditEncounterForm.EditEncounterBedName.value='';setBedButton();setTransfer();changeService();">
                 <input class="text" type="text" name="EditEncounterServiceName" id="EditEncounterServiceName" readonly size="<%=sTextWidth%>" value="<%=sEditEncounterServiceName%>" >
                 
-                <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTran("web","select",sWebLanguage)%>" onclick="searchService('EditEncounterService','EditEncounterServiceName');">
-                <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran("web","clear",sWebLanguage)%>" onclick="EditEncounterForm.EditEncounterService.value='';EditEncounterForm.EditEncounterServiceName.value='';">
+                <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTran(null,"web","select",sWebLanguage)%>" onclick="searchService('EditEncounterService','EditEncounterServiceName');">
+                <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran(null,"web","clear",sWebLanguage)%>" onclick="EditEncounterForm.EditEncounterService.value='';EditEncounterForm.EditEncounterServiceName.value='';">
             </td>
         </tr>
         
         <%-- manager --%>
         <tr>
-            <td class="admin"><%=getTran("web","manager",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","manager",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="hidden" name="EditEncounterManager" value="<%=sEditEncounterManager%>">
                 <input class="text" type="text" name="EditEncounterManagerName" readonly size="<%=sTextWidth%>" value="<%=sEditEncounterManagerName%>">
                
-                <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTran("web","select",sWebLanguage)%>" onclick="searchManager('EditEncounterManager','EditEncounterManagerName');">
-                <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran("web","clear",sWebLanguage)%>" onclick="EditEncounterForm.EditEncounterManager.value='';EditEncounterForm.EditEncounterManagerName.value='';">
+                <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTran(null,"web","select",sWebLanguage)%>" onclick="searchManager('EditEncounterManager','EditEncounterManagerName');">
+                <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran(null,"web","clear",sWebLanguage)%>" onclick="EditEncounterForm.EditEncounterManager.value='';EditEncounterForm.EditEncounterManagerName.value='';">
             </td>
         </tr>
         
        <%-- transfer --%>
        <tr id="transfer" style="visibility:visible;">
-           <td class="admin"><%=getTran("web","transferdate",sWebLanguage)%></td>
+           <td class="admin"><%=getTran(request,"web","transferdate",sWebLanguage)%></td>
            <td class='admin2'>
                <%=writeDateField("EditEncounterTransferDate","EditEncounterForm","",sWebLanguage)%>
                <input class="text" id="EditEncounterTransferHour" name="EditEncounterTransferHour" value="" size="5" onblur="checkTime(this)"/>
@@ -502,19 +502,19 @@
        
        <%-- bed --%>
        <tr id="Bed" style="visibility:visible;">
-            <td class="admin"><%=getTran("web","bed",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","bed",sWebLanguage)%></td>
             <td class='admin2'>
                 <input type="hidden" name="EditEncounterBed" value="<%=sEditEncounterBed%>" onchange="setBedButton();">
                 <input class="text" type="text" name="EditEncounterBedName" size="<%=sTextWidth%>" value="<%=sEditEncounterBedName%>" readonly>
                
-                <img src="<c:url value="/_img/icons/icon_search.gif"/>" id="SearchBedButton" class="link" alt="<%=getTran("web","select",sWebLanguage)%>" onclick="searchBed('EditEncounterBed','EditEncounterBedName');">
-                <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran("web","clear",sWebLanguage)%>" onclick="EditEncounterForm.EditEncounterBed.value='';EditEncounterForm.EditEncounterBedName.value='';">
+                <img src="<c:url value="/_img/icons/icon_search.gif"/>" id="SearchBedButton" class="link" alt="<%=getTran(null,"web","select",sWebLanguage)%>" onclick="searchBed('EditEncounterBed','EditEncounterBedName');">
+                <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran(null,"web","clear",sWebLanguage)%>" onclick="EditEncounterForm.EditEncounterBed.value='';EditEncounterForm.EditEncounterBedName.value='';">
             </td>
         </tr>
         
         <%-- INTERNAL TRANSFERS --%>
         <tr id="internaltransfers">
-            <td class="admin"><%=getTran("web","internal.transfers",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","internal.transfers",sWebLanguage)%></td>
             <td class="admin2">
                 <div id="divServices">
                     <table width="100%">
@@ -528,11 +528,11 @@
                             
                             %>
                             <tr>
-                                <td width="25"><img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran("web","delete",sWebLanguage)%>" onclick="deleteService('<%=encounterService.serviceUID%>')"></td>
+                                <td width="25"><img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran(null,"web","delete",sWebLanguage)%>" onclick="deleteService('<%=encounterService.serviceUID%>')"></td>
                                 <td width="200"><%=ScreenHelper.formatDate(encounterService.begin)+" - "%></td>
-                                <td><b><%=getTran("Service",encounterService.serviceUID, sWebLanguage)%></b></td>
-                                <td><%=getTran("web","bed",sWebLanguage)+": "+checkString(Bed.get(encounterService.bedUID).getName())%></td>
-                                <td><%=getTran("web","manager",sWebLanguage)+": "+(username!=null?username.get("firstname")+" "+username.get("lastname"):"")%></td>
+                                <td><b><%=getTran(request,"Service",encounterService.serviceUID, sWebLanguage)%></b></td>
+                                <td><%=getTran(request,"web","bed",sWebLanguage)+": "+checkString(Bed.get(encounterService.bedUID).getName())%></td>
+                                <td><%=getTran(request,"web","manager",sWebLanguage)+": "+(username!=null?username.get("firstname")+" "+username.get("lastname"):"")%></td>
                             </tr>
                             <%
                         }
@@ -544,11 +544,11 @@
                             
                             %>
                             <tr>
-                                <td width="25"><img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran("web","delete",sWebLanguage)%>" onclick="deleteService('<%=encounterService.serviceUID%>')"></td>
+                                <td width="25"><img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran(null,"web","delete",sWebLanguage)%>" onclick="deleteService('<%=encounterService.serviceUID%>')"></td>
                                 <td width="200"><%=ScreenHelper.formatDate(encounterService.begin)+" - "+ScreenHelper.fullDateFormat.format(encounterService.end)%></td>
-                                <td><b><%=getTran("Service",encounterService.serviceUID,sWebLanguage)%></b></td>
-                                <td><%=getTran("web","bed",sWebLanguage)+": "+checkString(Bed.get(encounterService.bedUID).getName())%></td>
-                                <td><%=getTran("web","manager",sWebLanguage)+": "+(username!=null?username.get("firstname")+" "+username.get("lastname"):"")%></td>
+                                <td><b><%=getTran(request,"Service",encounterService.serviceUID,sWebLanguage)%></b></td>
+                                <td><%=getTran(request,"web","bed",sWebLanguage)+": "+checkString(Bed.get(encounterService.bedUID).getName())%></td>
+                                <td><%=getTran(request,"web","manager",sWebLanguage)+": "+(username!=null?username.get("firstname")+" "+username.get("lastname"):"")%></td>
                             </tr>
                             <%
                         }
@@ -561,68 +561,68 @@
         
         <%-- SITUATION --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","situation",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","situation",sWebLanguage)%></td>
             <td class="admin2">
                 <select class="text" name="EditEncounterSituation" style="vertical-align:top;">
-                    <%=ScreenHelper.writeSelectUnsorted("encounter.situation",sEditEncounterSituation,sWebLanguage)%>
+                    <%=ScreenHelper.writeSelectUnsorted(request,"encounter.situation",sEditEncounterSituation,sWebLanguage)%>
                 </select>
             </td>
         </tr>
         
         <%-- OUTCOME --%>
         <tr>
-            <td class="admin"><%=getTran("web","outcome",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","outcome",sWebLanguage)%></td>
             <td class="admin2">
                 <select class="text" name="EditEncounterOutcome" style="vertical-align:top;">
-                    <option value=""><%=getTran("web","choose",sWebLanguage)%></option>
-                    <%=ScreenHelper.writeSelectUnsorted("encounter.outcome",sEditEncounterOutcome,sWebLanguage)%>
+                    <option value=""><%=getTran(request,"web","choose",sWebLanguage)%></option>
+                    <%=ScreenHelper.writeSelectUnsorted(request,"encounter.outcome",sEditEncounterOutcome,sWebLanguage)%>
                 </select>
             </td>
         </tr>
         
         <%-- DESTINATION --%>
         <tr id="Destination" style="visibility:visible;">
-            <td class="admin"><%=getTran("web","destination",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","destination",sWebLanguage)%></td>
             <td class='admin2'>
                 <input type="hidden" name="EditEncounterDestination" value="<%=sEditEncounterDestination%>">
                 <input class="text" type="text" name="EditEncounterDestinationName" id="EditEncounterDestinationName" readonly size="<%=sTextWidth%>" value="<%=sEditEncounterDestinationName%>" >
                
-                <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTran("web","select",sWebLanguage)%>" onclick="searchService('EditEncounterDestination','EditEncounterDestinationName');">
-                <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran("web","clear",sWebLanguage)%>" onclick="EditEncounterForm.EditEncounterDestination.value='';EditEncounterForm.EditEncounterDestinationName.value='';">
+                <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTran(null,"web","select",sWebLanguage)%>" onclick="searchService('EditEncounterDestination','EditEncounterDestinationName');">
+                <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran(null,"web","clear",sWebLanguage)%>" onclick="EditEncounterForm.EditEncounterDestination.value='';EditEncounterForm.EditEncounterDestinationName.value='';">
             </td>
         </tr>
         
         <%-- CATEGORY --%>
         <tr id="Category" style="visibility:visible;">
-            <td class="admin"><%=getTran("web","category",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","category",sWebLanguage)%></td>
             <td class='admin2'>
-                <input type='radio' class="hand" onClick='setcategoryfields()' id='EditEncounterCategoriesA' name='EditEncounterCategories' value='A' ondblclick='this.checked=!this.checked' <%=sEditEncounterCategories.indexOf("A")>=0?"checked":"" %>/><%=getLabel("web","mfp.disease.natural",sWebLanguage,"EditEncounterCategoriesA")%>&nbsp;
-                <input type='radio' class="hand" onClick='setcategoryfields()' id='EditEncounterCategoriesB' name='EditEncounterCategories' value='B' ondblclick='this.checked=!this.checked' <%=sEditEncounterCategories.indexOf("B")>=0?"checked":"" %>/><%=getLabel("web","mfp.disease.professional",sWebLanguage,"EditEncounterCategoriesB")%>&nbsp;
-                <input type='radio' class="hand" onClick='setcategoryfields()' id='EditEncounterCategoriesC' name='EditEncounterCategories' value='C' ondblclick='this.checked=!this.checked' <%=sEditEncounterCategories.indexOf("C")>=0?"checked":"" %>/><%=getLabel("web","mfp.disease.work",sWebLanguage,"EditEncounterCategoriesC")%>&nbsp;
-                <input type='radio' class="hand" onClick='setcategoryfields()' id='EditEncounterCategoriesD' name='EditEncounterCategories' value='D' ondblclick='this.checked=!this.checked' <%=sEditEncounterCategories.indexOf("D")>=0?"checked":"" %>/><%=getLabel("web","mfp.disease.traffic",sWebLanguage,"EditEncounterCategoriesD")%>&nbsp;
-                <input type='radio' class="hand" onClick='setcategoryfields()' id='EditEncounterCategoriesE' name='EditEncounterCategories' value='E' ondblclick='this.checked=!this.checked' <%=sEditEncounterCategories.indexOf("E")>=0?"checked":"" %>/><%=getLabel("web","mfp.disease.other",sWebLanguage,"EditEncounterCategoriesE")%>&nbsp;
+                <input type='radio' class="hand" onClick='setcategoryfields()' id='EditEncounterCategoriesA' name='EditEncounterCategories' value='A' ondblclick='this.checked=!this.checked' <%=sEditEncounterCategories.indexOf("A")>=0?"checked":"" %>/><%=getLabel(request,"web","mfp.disease.natural",sWebLanguage,"EditEncounterCategoriesA")%>&nbsp;
+                <input type='radio' class="hand" onClick='setcategoryfields()' id='EditEncounterCategoriesB' name='EditEncounterCategories' value='B' ondblclick='this.checked=!this.checked' <%=sEditEncounterCategories.indexOf("B")>=0?"checked":"" %>/><%=getLabel(request,"web","mfp.disease.professional",sWebLanguage,"EditEncounterCategoriesB")%>&nbsp;
+                <input type='radio' class="hand" onClick='setcategoryfields()' id='EditEncounterCategoriesC' name='EditEncounterCategories' value='C' ondblclick='this.checked=!this.checked' <%=sEditEncounterCategories.indexOf("C")>=0?"checked":"" %>/><%=getLabel(request,"web","mfp.disease.work",sWebLanguage,"EditEncounterCategoriesC")%>&nbsp;
+                <input type='radio' class="hand" onClick='setcategoryfields()' id='EditEncounterCategoriesD' name='EditEncounterCategories' value='D' ondblclick='this.checked=!this.checked' <%=sEditEncounterCategories.indexOf("D")>=0?"checked":"" %>/><%=getLabel(request,"web","mfp.disease.traffic",sWebLanguage,"EditEncounterCategoriesD")%>&nbsp;
+                <input type='radio' class="hand" onClick='setcategoryfields()' id='EditEncounterCategoriesE' name='EditEncounterCategories' value='E' ondblclick='this.checked=!this.checked' <%=sEditEncounterCategories.indexOf("E")>=0?"checked":"" %>/><%=getLabel(request,"web","mfp.disease.other",sWebLanguage,"EditEncounterCategoriesE")%>&nbsp;
             </td>
         </tr>
         
         <%-- ACCIDENT INFORMATION --%>
         <tr id="accidentinformation" style="visibility:visible;">
-            <td class="admin"><%=getTran("web","accidentinformation",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","accidentinformation",sWebLanguage)%></td>
             <td class='admin2'>
             	<table>
             		<tr id="workaccidentinformation" style="visibility:visible;">
             			<td class='admin2'>
-            				<%=getTran("web","recordnumber",sWebLanguage)%>: <input class="text" type="text" name="EditEncounterAccidentRecordNumber" id="EditEncounterAccidentRecordNumber" size="40" value="<%=sEditEncounterAccidentRecordNumber%>">
+            				<%=getTran(request,"web","recordnumber",sWebLanguage)%>: <input class="text" type="text" name="EditEncounterAccidentRecordNumber" id="EditEncounterAccidentRecordNumber" size="40" value="<%=sEditEncounterAccidentRecordNumber%>">
             			</td>
             			<td class='admin2'>
-            				<%=getTran("web","immatnumber",sWebLanguage)%>: <input class="text" type="text" name="EditEncounterAccidentImmat" id="EditEncounterAccidentImmat" size="40" value="<%=sEditEncounterAccidentImmat%>">
+            				<%=getTran(request,"web","immatnumber",sWebLanguage)%>: <input class="text" type="text" name="EditEncounterAccidentImmat" id="EditEncounterAccidentImmat" size="40" value="<%=sEditEncounterAccidentImmat%>">
             			</td>
             		</tr>
             		<tr id="trafficaccidentinformation" style="visibility:visible;">
             			<td class='admin2'>
-            				<%=getTran("web","insurer",sWebLanguage)%>: <input class="text" type="text" name="EditEncounterAccidentInsurer" id="EditEncounterAccidentInsurer" size="40" value="<%=sEditEncounterAccidentInsurer%>">
+            				<%=getTran(request,"web","insurer",sWebLanguage)%>: <input class="text" type="text" name="EditEncounterAccidentInsurer" id="EditEncounterAccidentInsurer" size="40" value="<%=sEditEncounterAccidentInsurer%>">
             			</td>
             			<td class='admin2'>
-            				<%=getTran("web","accidentnumber",sWebLanguage)%>: <input class="text" type="text" name="EditEncounterAccidentNumber" id="EditEncounterAccidentNumber" size="40" value="<%=sEditEncounterAccidentNumber%>">
+            				<%=getTran(request,"web","accidentnumber",sWebLanguage)%>: <input class="text" type="text" name="EditEncounterAccidentNumber" id="EditEncounterAccidentNumber" size="40" value="<%=sEditEncounterAccidentNumber%>">
             			</td>
             		</tr>
             	</table>
@@ -633,7 +633,7 @@
 		%>
         <%-- REFERENCE --%>
         <tr id="Reference" style="visibility:visible;">
-            <td class="admin"><%=getTran("web","reference",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","reference",sWebLanguage)%></td>
             <td class='admin2'>
 				<input type='text' class='text' size='<%=sTextWidth%>' id='EditEncounterReference' name='EditEncounterReference' value='<%=sEditEncounterReference %>'/>
             </td>
@@ -647,13 +647,13 @@
             Vector accomodationDebets = Encounter.getAccountedAccomodations(sEditEncounterUID);
         %>
         <tr id="alreadyAccountedAccomodation"  style="visibility: <%=accomodationDebets.size()>0?"visible":"visible"%>;">
-            <td class="admin"><%=getTran("web","alreadyaccountedaccomodation",sWebLanguage)%> </td><td class='admin2'> = <%=Encounter.getAccountedAccomodationDays(sEditEncounterUID)%> <%=getTran("web","days",sWebLanguage)%><%=tmpEncounter!=null && tmpEncounter.getDurationInDays()>0?" = <label id='d2'>"+Encounter.getAccountedAccomodationDays(sEditEncounterUID)*100/tmpEncounter.getDurationInDays()+"</label>%":""%>
+            <td class="admin"><%=getTran(request,"web","alreadyaccountedaccomodation",sWebLanguage)%> </td><td class='admin2'> = <%=Encounter.getAccountedAccomodationDays(sEditEncounterUID)%> <%=getTran(request,"web","days",sWebLanguage)%><%=tmpEncounter!=null && tmpEncounter.getDurationInDays()>0?" = <label id='d2'>"+Encounter.getAccountedAccomodationDays(sEditEncounterUID)*100/tmpEncounter.getDurationInDays()+"</label>%":""%>
             <BR/>
             <%
                 for(int n=0; n<accomodationDebets.size(); n++){
                     Debet debet = (Debet)accomodationDebets.elementAt(n);
                     if(debet==null && debet.getPrestation()==null){
-                    	out.print(ScreenHelper.stdDateFormat.format(debet.getDate())+": <b>"+debet.getQuantity()+"</b> "+getTran("web","days",sWebLanguage)+" ("+debet.getPrestation().getDescription()+") = <b>"+debet.getAmount()+" "+MedwanQuery.getInstance().getConfigString("currency","EUR")+"</b> ("+getTran("web","insurar",sWebLanguage)+" = "+debet.getInsurarAmount()+" "+MedwanQuery.getInstance().getConfigString("currency","EUR")+")</BR/>");
+                    	out.print(ScreenHelper.stdDateFormat.format(debet.getDate())+": <b>"+debet.getQuantity()+"</b> "+getTran(request,"web","days",sWebLanguage)+" ("+debet.getPrestation().getDescription()+") = <b>"+debet.getAmount()+" "+MedwanQuery.getInstance().getConfigString("currency","EUR")+"</b> ("+getTran(request,"web","insurar",sWebLanguage)+" = "+debet.getInsurarAmount()+" "+MedwanQuery.getInstance().getConfigString("currency","EUR")+")</BR/>");
                     }
                 }
             %>
@@ -662,7 +662,7 @@
         
         <%-- NOT ACCOUNTED ACCOMODATION --%>
         <tr id="notAccountedAccomodation" style="display: hidden;">
-            <td class="admin"><%=getTran("web","notaccountedaccomodation",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","notaccountedaccomodation",sWebLanguage)%></td>
             <td class='admin2'>
                 <select class="text" name="EditEncounterAccomodationPrestation" id="EditEncounterAccomodationPrestation" style="vertical-align:top;">
                     <%
@@ -682,7 +682,7 @@
                 </select>
                 <br/>
                 
-                <input type="checkbox" name="DoAccountAccomodationDays"/><%=getTran("web","doinvoice",sWebLanguage)%> <input type="text" class="text" name="AccountAccomodationDays" size="4" value="<%=tmpEncounter!=null?tmpEncounter.getDurationInDays()-accountedDays:0%>"/> <%=getTran("web","days",sWebLanguage)%> <%=tmpEncounter!=null?"("+getTran("web","actualencounterduration",sWebLanguage)+" = "+tmpEncounter.getDurationInDays()+" "+getTran("web","days",sWebLanguage)+")":""%>
+                <input type="checkbox" name="DoAccountAccomodationDays"/><%=getTran(request,"web","doinvoice",sWebLanguage)%> <input type="text" class="text" name="AccountAccomodationDays" size="4" value="<%=tmpEncounter!=null?tmpEncounter.getDurationInDays()-accountedDays:0%>"/> <%=getTran(request,"web","days",sWebLanguage)%> <%=tmpEncounter!=null?"("+getTran(request,"web","actualencounterduration",sWebLanguage)+" = "+tmpEncounter.getDurationInDays()+" "+getTran(request,"web","days",sWebLanguage)+")":""%>
             </td>
         </tr>
         <%
@@ -713,7 +713,7 @@
         <input type="hidden" id="maxTransferDate" value="<%=sMaxTransferDate%>">
     </table>
     
-    <%=getTran("web","colored_fields_are_obligate",sWebLanguage)%>
+    <%=getTran(request,"web","colored_fields_are_obligate",sWebLanguage)%>
 </form>
 
 <%
@@ -721,7 +721,7 @@
 	    %>
 	        <table class="list" width="100%" cellspacing="1">
 	            <tr class="admin">
-	                <td align="center"><a href="javascript:openPopup('healthrecord/findRFE.jsp&field=rfe&encounterUid=<%=sEditEncounterUID%>&ts=<%=getTs()%>',700,400);void(0);"><%=getTran("openclinic.chuk","rfe",sWebLanguage)%> <%=getTran("Web.Occup","ICPC-2",sWebLanguage)%>/<%=getTran("Web.Occup","ICD-10",sWebLanguage)%></a></td>
+	                <td align="center"><a href="javascript:openPopup('healthrecord/findRFE.jsp&field=rfe&encounterUid=<%=sEditEncounterUID%>&ts=<%=getTs()%>',700,400);void(0);"><%=getTran(request,"openclinic.chuk","rfe",sWebLanguage)%> <%=getTran(request,"Web.Occup","ICPC-2",sWebLanguage)%>/<%=getTran(request,"Web.Occup","ICD-10",sWebLanguage)%></a></td>
 	            </tr>
 	            <tr>
 	                <td id="rfe"><%=sRfe%></td>
@@ -745,7 +745,7 @@
                   EditEncounterForm.CloseActiveEncounter.value = "CLOSE";
                 }
 
-                if(yesnoDialogDirectText('<%=getTran("adt.encounter","encounter_close",sWebLanguage)%>')){
+                if(yesnoDialogDirectText('<%=getTran(null,"adt.encounter","encounter_close",sWebLanguage)%>')){
                   window.location.href='<c:url value="/main.do?Page=adt/editEncounter.jsp&EditEncounterUID="/><%=activeEncounter.getUid()%>';
                 }
                 else{

@@ -79,7 +79,7 @@
 
         outFDF.SetValue("serverId",transactionVO.getServerId()+"");
         outFDF.SetValue("transactionId",transactionVO.getTransactionId()+"");
-        outFDF.SetValue("p.title",getTran("web.userprofile",(activePatient.gender.equalsIgnoreCase("m")?"male_title":"female_title"),(request.getParameter("file").substring(5).startsWith("NL")?"NL":"FR")));
+        outFDF.SetValue("p.title",getTran(request,"web.userprofile",(activePatient.gender.equalsIgnoreCase("m")?"male_title":"female_title"),(request.getParameter("file").substring(5).startsWith("NL")?"NL":"FR")));
 
         String sFileName = getFullContext(request)+("/documents/"+request.getParameter("file")).replaceAll("//","/");
         outFDF.SetFile(sFileName);

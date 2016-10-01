@@ -71,15 +71,15 @@
         
         <td width="150" nowrap>
             <br><br>
-            <font color="red"><b><%=getTran("Web.Occup","medwan.healthrecord.audiometry.OD",sWebLanguage)%></b></font><br/>
-            <font color="blue"><b><%=getTran("Web.Occup","medwan.healthrecord.audiometry.OG",sWebLanguage)%></b></font><br/>
-            <font color="#000000"><b><%=getTran("openclinic.chuk","audiometry.bony.OD",sWebLanguage)%></b></font><br/>
-            <font color="#800080"><b><%=getTran("openclinic.chuk","audiometry.bony.OG",sWebLanguage)%></b></font><br/>
-            <font color="#00AA00"><b><%=getTran("Web.Occup","medwan.healthrecord.audiometry.normal",sWebLanguage)%> (<%=getTran("web",sGenderLabelId,sWebLanguage)%>, <%=iAge%> <%=getTran("web","year",sWebLanguage).toLowerCase()%>)</b></font>
+            <font color="red"><b><%=getTran(request,"Web.Occup","medwan.healthrecord.audiometry.OD",sWebLanguage)%></b></font><br/>
+            <font color="blue"><b><%=getTran(request,"Web.Occup","medwan.healthrecord.audiometry.OG",sWebLanguage)%></b></font><br/>
+            <font color="#000000"><b><%=getTran(request,"openclinic.chuk","audiometry.bony.OD",sWebLanguage)%></b></font><br/>
+            <font color="#800080"><b><%=getTran(request,"openclinic.chuk","audiometry.bony.OG",sWebLanguage)%></b></font><br/>
+            <font color="#00AA00"><b><%=getTran(request,"Web.Occup","medwan.healthrecord.audiometry.normal",sWebLanguage)%> (<%=getTran(request,"web",sGenderLabelId,sWebLanguage)%>, <%=iAge%> <%=getTran(request,"web","year",sWebLanguage).toLowerCase()%>)</b></font>
         </td>
 
         <td nowrap style="vertical-align:top;padding-left:20px">
-            <%=getTran("Web.Occup","medwan.common.history",sWebLanguage)%>
+            <%=getTran(request,"Web.Occup","medwan.common.history",sWebLanguage)%>
             <select name="historySelector" class="text" onchange="displayHistories()">
                 <option value=""><%=getTranNoLink("web","none",sWebLanguage)%></option>    
                 <%
@@ -151,7 +151,7 @@
 				    <tr>
 				        <td class="admin">
 				            <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-				            <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+				            <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
 				        </td>
 				        <td class="admin2">
 				            <input type="text" class="text" size="12" maxLength="10" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" id="trandate" OnBlur='checkDate(this)'> <script>writeTranDate();</script>
@@ -161,7 +161,7 @@
 				    <%-- RIGHT EAR ---------------------------------------------------------------------------------------------------%>
 				    <tr>
 				        <td class="admin" align="left">
-				            <%=getTran("Web.Occup","medwan.healthrecord.audiometry.OD",sWebLanguage)%>
+				            <%=getTran(request,"Web.Occup","medwan.healthrecord.audiometry.OD",sWebLanguage)%>
 				        </td>
 				        <td class="admin2" align="left">
 				            <table>
@@ -220,7 +220,7 @@
 				    <%-- LEFT EAR -------------------------------------------------------------------------------%>
 				    <tr>
 				        <td class="admin" align="left">
-				            <%=getTran("Web.Occup","medwan.healthrecord.audiometry.OG",sWebLanguage)%>
+				            <%=getTran(request,"Web.Occup","medwan.healthrecord.audiometry.OG",sWebLanguage)%>
 				        </td>
 				        <td class="admin2" align="left">
 				            <table>
@@ -277,7 +277,7 @@
 				
 				    <%-- RIGHT EAR - BONY ---------------------------------------------------------------------------%>
 				    <tr>
-				        <td class="admin" align="left"><%=getTran("openclinic.chuk","audiometry.bony.OD",sWebLanguage)%></td>
+				        <td class="admin" align="left"><%=getTran(request,"openclinic.chuk","audiometry.bony.OD",sWebLanguage)%></td>
 				        <td class="admin2" align="left">
 				            <table>
 				                <tr>
@@ -333,7 +333,7 @@
 				
 				    <%-- LEFT EAR - BONY ----------------------------------------------------------------------------%>
 				    <tr>
-				        <td class="admin" align="left"><%=getTran("openclinic.chuk","audiometry.bony.OG",sWebLanguage)%></td>
+				        <td class="admin" align="left"><%=getTran(request,"openclinic.chuk","audiometry.bony.OG",sWebLanguage)%></td>
 				        <td class="admin2" align="left">
 				            <table>
 				                <tr>
@@ -389,7 +389,7 @@
 				
 				    <%-- personal history --%>
 				    <tr>
-				        <td class="admin"><%=getTran("Web.Occup","personal.audiometric.history",sWebLanguage)%></td>
+				        <td class="admin"><%=getTran(request,"Web.Occup","personal.audiometric.history",sWebLanguage)%></td>
 				        <td class="admin2">
 				            <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" cols="80" rows="2" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_AUDIOMETRY_PERSONAL_HISTORY" property="itemId"/>]>.value"><%=ScreenHelper.getLastItem(request,sPREFIX+"ITEM_TYPE_AUDIOMETRY_PERSONAL_HISTORY").getValue()%></textarea>
 				        </td>
@@ -397,7 +397,7 @@
 				
 				    <%-- family history --%>
 				    <tr>
-				        <td class="admin"><%=getTran("Web.Occup","family.audiometric.history",sWebLanguage)%></td>
+				        <td class="admin"><%=getTran(request,"Web.Occup","family.audiometric.history",sWebLanguage)%></td>
 				        <td class="admin2">
 				            <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" cols="80" rows="2" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_AUDIOMETRY_FAMILY_HISTORY" property="itemId"/>]>.value"><%=ScreenHelper.getLastItem(request,sPREFIX+"ITEM_TYPE_AUDIOMETRY_FAMILY_HISTORY").getValue()%></textarea>
 				        </td>

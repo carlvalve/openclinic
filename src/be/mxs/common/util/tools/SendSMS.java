@@ -48,6 +48,12 @@ public class SendSMS {
 				    bSuccess=false;
 			    }
 		        SubmitSM smppmessage = (SubmitSM) connection.newInstance(SMPPPacket.SUBMIT_SM);
+		        if(MedwanQuery.getInstance().getConfigInt("enableSmppSource",0)==1){
+		        	Address sourceAddress = new Address();
+		        	sourceAddress.setNPI(MedwanQuery.getInstance().getConfigInt("smppSourceNPI",1));
+		        	sourceAddress.setTON(MedwanQuery.getInstance().getConfigInt("smppSourceTON",0));
+		        	sourceAddress.setAddress(MedwanQuery.getInstance().getConfigString("smppSourceAddress","Orange"));
+		        }
 		        smppmessage.setDestination(new Address(1, 1, to));
 		        smppmessage.setMessageText(message);
 		        smppmessage.setAlphabet(new Latin1Encoding());

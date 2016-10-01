@@ -46,7 +46,7 @@
         reqLabAnalysis.setResultProvisional(request.getParameter("EditResultProvisional"));
 
         reqLabAnalysis.update(serviceId,transactionId,analysisCode);
-        //msg = getTran("web.manage","labanalysissaved",sWebLanguage);
+        //msg = getTran(request,"web.manage","labanalysissaved",sWebLanguage);
     }
 
     // get specified analysis from Db
@@ -61,27 +61,27 @@
     <input type="hidden" name="Action">
     <%-- ANALYSIS CODE (uneditable) --%>
     <tr>
-        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web.manage","labanalysis.cols.code",sWebLanguage)%></td>
+        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web.manage","labanalysis.cols.code",sWebLanguage)%></td>
         <td class="admin2"><%=analysis.getAnalysisCode()%></td>
     </tr>
     <%-- ANALYSIS TYPE (uneditable) --%>
     <tr>
-        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web.manage","labanalysis.cols.type",sWebLanguage)%></td>
+        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web.manage","labanalysis.cols.type",sWebLanguage)%></td>
         <td class="admin2"><%=RequestedLabAnalysis.getAnalysisType(analysis.getAnalysisCode(),sWebLanguage)%></td>
     </tr>
     <%-- ANALYSIS NAME (uneditable) --%>
     <tr>
-        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web.manage","labanalysis.cols.name",sWebLanguage)%></td>
+        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web.manage","labanalysis.cols.name",sWebLanguage)%></td>
         <td class="admin2"><%=LabAnalysis.labelForCode(analysis.getAnalysisCode(), sWebLanguage)%></td>
     </tr>
     <%-- ANALYSIS MONSTER (uneditable) --%>
     <tr>
-        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web.manage","labanalysis.cols.monster",sWebLanguage)%></td>
-        <td class="admin2"><%=getTran("labanalysis.monster",RequestedLabAnalysis.getAnalysisMonster(analysis.getAnalysisCode()),sWebLanguage)%></td>
+        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web.manage","labanalysis.cols.monster",sWebLanguage)%></td>
+        <td class="admin2"><%=getTran(request,"labanalysis.monster",RequestedLabAnalysis.getAnalysisMonster(analysis.getAnalysisCode()),sWebLanguage)%></td>
     </tr>
     <%-- COMMENT --%>
     <tr>
-        <td class="admin"><%=getTran("Web.manage","labanalysis.cols.comment",sWebLanguage)%></td>
+        <td class="admin"><%=getTran(request,"Web.manage","labanalysis.cols.comment",sWebLanguage)%></td>
         <td class="admin2">
             <%
                 if(editable){
@@ -99,7 +99,7 @@
 <table width="100%" class="list" cellspacing="1" cellpadding="0">
     <%-- RESULT VALUE AND UNIT --%>
     <tr>
-        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web.manage","labanalysis.cols.resultvalue",sWebLanguage)%><%=(editable?"&nbsp;*&nbsp;":"")%></td>
+        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web.manage","labanalysis.cols.resultvalue",sWebLanguage)%><%=(editable?"&nbsp;*&nbsp;":"")%></td>
         <td class="admin2">
             <%
                 // value
@@ -116,7 +116,7 @@
     </tr>
     <%-- RESULT REF MIN --%>
     <tr>
-        <td class="admin"><%=getTran("Web.manage","labanalysis.cols.resultrefmin",sWebLanguage)%></td>
+        <td class="admin"><%=getTran(request,"Web.manage","labanalysis.cols.resultrefmin",sWebLanguage)%></td>
         <td class="admin2">
             <%
                 if(editable){
@@ -130,7 +130,7 @@
     </tr>
     <%-- RESULT REF MAX --%>
     <tr>
-        <td class="admin"><%=getTran("Web.manage","labanalysis.cols.resultrefmax",sWebLanguage)%></td>
+        <td class="admin"><%=getTran(request,"Web.manage","labanalysis.cols.resultrefmax",sWebLanguage)%></td>
         <td class="admin2">
             <%
                 if(editable){
@@ -145,26 +145,26 @@
     </tr>
     <%-- RESULT MODIFIER --%>
     <tr>
-        <td class="admin"><%=getTran("Web.manage","labanalysis.cols.resultmodifier",sWebLanguage)%></td>
+        <td class="admin"><%=getTran(request,"Web.manage","labanalysis.cols.resultmodifier",sWebLanguage)%></td>
         <td class="admin2">
             <%
                 if(editable){
                     %>
                         <select class="text" name="EditResultModifier">
                             <option></option>
-                            <%=ScreenHelper.writeSelect("labanalysis.resultmodifier",analysis.getResultModifier(),sWebLanguage)%>
+                            <%=ScreenHelper.writeSelect(request,"labanalysis.resultmodifier",analysis.getResultModifier(),sWebLanguage)%>
                         </select>
                     <%
                 }
                 else{
-                    %><%=getTran("labanalysis.resultmodifier",analysis.getResultModifier(),sWebLanguage)%><%
+                    %><%=getTran(request,"labanalysis.resultmodifier",analysis.getResultModifier(),sWebLanguage)%><%
                 }
             %>
         </td>
     </tr>
     <%-- RESULT COMMENT --%>
     <tr>
-        <td class="admin"><%=getTran("Web.manage","labanalysis.cols.resultcomment",sWebLanguage)%></td>
+        <td class="admin"><%=getTran(request,"Web.manage","labanalysis.cols.resultcomment",sWebLanguage)%></td>
         <td class="admin2">
             <%
                 if(editable){
@@ -178,7 +178,7 @@
     </tr>
     <%-- provisional --%>
     <tr>
-        <td class="admin"><%=getTran("Web.occup","lab.provisional",sWebLanguage)%></td>
+        <td class="admin"><%=getTran(request,"Web.occup","lab.provisional",sWebLanguage)%></td>
         <td class="admin2">
             <%
                 if(editable){
@@ -186,7 +186,7 @@
                 }
                 else{
                     if(checkString(analysis.getResultProvisional()).length()>0){
-                        out.println(getTran("web.occup","lab.provisional",sWebLanguage));
+                        out.println(getTran(request,"web.occup","lab.provisional",sWebLanguage));
                     }
                 }
             %>
@@ -194,7 +194,7 @@
     </tr>
     <%-- RESULT DATE --%>
     <tr>
-        <td class="admin"><%=getTran("Web.manage","labanalysis.cols.resultdate",sWebLanguage)%><%=(editable?"&nbsp;*&nbsp;":"")%></td>
+        <td class="admin"><%=getTran(request,"Web.manage","labanalysis.cols.resultdate",sWebLanguage)%><%=(editable?"&nbsp;*&nbsp;":"")%></td>
         <td class="admin2">
             <%
                 if(editable){
@@ -218,7 +218,7 @@
 
             %>
                 <tr>
-                    <td class="admin"><%=getTran("Web.manage","labanalysis.cols.resultuserid",sWebLanguage)%></td>
+                    <td class="admin"><%=getTran(request,"Web.manage","labanalysis.cols.resultuserid",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="hidden" name="EditResultUserId" value="<%=analysis.getResultUserId()%>">
                         <%=resultUserFullName%>

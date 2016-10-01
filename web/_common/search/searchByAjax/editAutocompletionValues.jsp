@@ -54,21 +54,21 @@
         if(!sCounterEdit.equals("")){
             //*** if edit counter ***
             medwanQuery.setAutocompletionCounterValues(sItemId,Integer.parseInt(sItemValue));
-            out.write(getTran("Web.manage","addNewValue",sWebLanguage)+
+            out.write(getTran(request,"Web.manage","addNewValue",sWebLanguage)+
             		  "<script>var getValues = ajaxChangeSearchResults(\"_common/search/searchByAjax/itemsTypesShow.jsp\",transactionForm,\"&itemTypeSelect="+sItemValue+"\",\"ItemsValuesByType\");</script>");
         }
         else{
             //*** IF UPDATE VALUE ***
             medwanQuery.delAutocompletionItemsValues(sItemId,"",0);
             medwanQuery.setAutocompletionItemsValues(sItemType,sItemValue,sUserId,sCounter);
-            out.write(getTran("Web.manage","addNewValue",sWebLanguage)+
+            out.write(getTran(request,"Web.manage","addNewValue",sWebLanguage)+
             		  "<script>var getValues = ajaxChangeSearchResults(\"_common/search/searchByAjax/itemsTypesShow.jsp\",transactionForm,\"&itemTypeSelect="+sItemValue+"\",\"ItemsValuesByType\");</script>");
         }
     }
     else{
         //*** if insert new value ***
         medwanQuery.setAutocompletionItemsValues(sItemType,sItemValue,sUserId,0);
-        out.write(getTran("Web.manage","addNewValue",sWebLanguage)+
+        out.write(getTran(request,"Web.manage","addNewValue",sWebLanguage)+
         		  "<script>var getValues = ajaxChangeSearchResults(\"_common/search/searchByAjax/itemsTypesShow.jsp\",transactionForm,\"&itemTypeSelect="+sItemValue+"\",\"ItemsValuesByType\");</script>");
     }
 %>

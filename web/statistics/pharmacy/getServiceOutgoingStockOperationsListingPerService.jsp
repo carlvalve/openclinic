@@ -31,13 +31,13 @@
 	    <%-- PERIOD --%>
 		<tr>
 			<td class='admin2'>
-				<%=getTran("web","from",sWebLanguage)%> <%=writeDateField("FindBeginDate","transactionForm",sBegin,sWebLanguage)%>
-				<%=getTran("web","to",sWebLanguage)%> <%=writeDateField("FindEndDate","transactionForm",sEnd,sWebLanguage)%>
+				<%=getTran(request,"web","from",sWebLanguage)%> <%=writeDateField("FindBeginDate","transactionForm",sBegin,sWebLanguage)%>
+				<%=getTran(request,"web","to",sWebLanguage)%> <%=writeDateField("FindEndDate","transactionForm",sEnd,sWebLanguage)%>
 			</td>
 		</tr>
 		<tr>
 			<td class='admin2'>
-				<%=getTran("web","destination",sWebLanguage)%>: 
+				<%=getTran(request,"web","destination",sWebLanguage)%>: 
 				<select name='destinationStockUid' id='destinationStockUid' class='text'>
 					<%
 						Vector serviceStocks = ServiceStock.find("","","","","","","OC_STOCK_NAME","ASC");

@@ -22,7 +22,7 @@
 
             //*** display product in one row ***
             html.append("<tr class='list"+sClass+"'>")
-                 .append("<td>"+getTran("productstockoperation.medicationdelivery",delivery.getDescription(),sWebLanguage)+"</td>")
+                 .append("<td>"+getTran(null,"productstockoperation.medicationdelivery",delivery.getDescription(),sWebLanguage)+"</td>")
                  .append("<td>"+delivery.getUnitsChanged()+"</td>")
                  .append("<td>"+ScreenHelper.formatDate(delivery.getDate())+"&nbsp;</td>")
                  .append("<td>"+delivery.getProductStock().getServiceStock().getName()+"</td>")
@@ -55,20 +55,20 @@
         <%-- product --%>
         <% ProductStock productStock = ProductStock.get(sProductStockUid); %>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","product",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","product",sWebLanguage)%></td>
             <td class="admin2"><%=productStock.getProduct().getName()%></td>
         </tr>
         
         <%-- patient --%>
         <% AdminPerson patient = AdminPerson.getAdminPerson(sPatientId); %>
         <tr>
-            <td class="admin"><%=getTran("web","patient",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","patient",sWebLanguage)%></td>
             <td class="admin2"><%=patient.firstname+" "+patient.lastname%></td>
         </tr>
         
         <%-- since --%>
         <tr>
-            <td class="admin"><%=getTran("web","since_uc",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","since_uc",sWebLanguage)%></td>
             <td class="admin2"><%=sSince%></td>
         </tr>
     </table>
@@ -85,23 +85,23 @@
                 <table width="100%" cellspacing="0" cellpadding="0" class="list">
                     <%-- header --%>
                     <tr class="admin">
-                        <td width="40%"><%=getTran("Web","description",sWebLanguage)%></td>
-                        <td width="10%"><%=getTran("Web","units",sWebLanguage)%></td>
-                        <td width="*"><%=getTran("Web","date",sWebLanguage)%></td>
-                        <td width="40%"><%=getTran("Web","serviceStock",sWebLanguage)%></td>
+                        <td width="40%"><%=getTran(request,"Web","description",sWebLanguage)%></td>
+                        <td width="10%"><%=getTran(request,"Web","units",sWebLanguage)%></td>
+                        <td width="*"><%=getTran(request,"Web","date",sWebLanguage)%></td>
+                        <td width="40%"><%=getTran(request,"Web","serviceStock",sWebLanguage)%></td>
                     </tr>
                     <%=deliveriesAsHtml%>
                 </table>
                 
                 <%-- number of deliveries found --%>
                 <span style="width:100%;text-align:left;">
-                    <%=deliveries.size()%> <%=getTran("web","deliveriesfound",sWebLanguage)%>
+                    <%=deliveries.size()%> <%=getTran(request,"web","deliveriesfound",sWebLanguage)%>
                 </span>
             <%
         }
         else{
             // no records found
-            %><%=getTran("web.manage","nodeliveriesfound",sWebLanguage)%><%
+            %><%=getTran(request,"web.manage","nodeliveriesfound",sWebLanguage)%><%
         }
     %>
     </div>

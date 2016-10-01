@@ -19,7 +19,7 @@
         <tr>
             <td class="admin">
                 <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-                <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+                <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
             </td>
             <td class="admin2">
                 <input type="text" class="text" size="12" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" id="trandate" OnBlur='checkDate(this)'>
@@ -28,7 +28,7 @@
         </tr>
         <%-- TYPE --%>
         <tr>
-            <td class='admin'><%=getTran("Web.Occup","medwan.common.type",sWebLanguage)%>&nbsp;</td>
+            <td class='admin'><%=getTran(request,"Web.Occup","medwan.common.type",sWebLanguage)%>&nbsp;</td>
             <td class='admin2'>
 				<%
 					ItemVO mirType=((TransactionVO)transaction).getItem("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR_TYPE");
@@ -38,34 +38,34 @@
 					}
 				%>
                 <select id="examination" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR_TYPE" property="itemId"/>]>.value">
-	            	<%=ScreenHelper.writeSelect("medwan.occupational-medicine.medical-imaging-request.type",sMirtype,sWebLanguage,false,true) %>
+	            	<%=ScreenHelper.writeSelect(request,"medwan.occupational-medicine.medical-imaging-request.type",sMirtype,sWebLanguage,false,true) %>
                 </select>
             </td>
         </tr>
         <%-- OTHER --%>
         <tr>
-            <td class='admin'><%=getTran("Web.Occup","othertype",sWebLanguage)%>&nbsp;</td>
+            <td class='admin'><%=getTran(request,"Web.Occup","othertype",sWebLanguage)%>&nbsp;</td>
             <td class='admin2'>
                 <input id="other" type="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR_OTHER" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR_OTHER" property="value"/>" class="text" size="40" onblur="limitLength(this);">
             </td>
         </tr>
         <%-- REMARK --%>
         <tr>
-            <td class='admin'><%=getTran("Web.Occup","medwan.common.remark",sWebLanguage)%>&nbsp;</td>
+            <td class='admin'><%=getTran(request,"Web.Occup","medwan.common.remark",sWebLanguage)%>&nbsp;</td>
             <td class='admin2'>
                 <textarea id="remark" onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_MIR_REMARK")%> class="text" cols='75' rows='2' name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR_REMARK" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR_REMARK" property="value"/></textarea>
             </td>
         </tr>
         <%-- EXAMINATION REASON --%>
         <tr>
-            <td class='admin'><%=getTran("Web.Occup","examinationreason",sWebLanguage)%>&nbsp;</td>
+            <td class='admin'><%=getTran(request,"Web.Occup","examinationreason",sWebLanguage)%>&nbsp;</td>
             <td class='admin2'>
                 <textarea id="reason" onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_MIR_EXAMINATIONREASON")%> class="text" cols='75' rows='2' name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR_EXAMINATIONREASON" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR_EXAMINATIONREASON" property="value"/></textarea>
             </td>
         </tr>
         <%-- PROVIDER --%>
         <tr>
-            <td class="admin"><%=getTran("Web.Occup","provider",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web.Occup","provider",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" id="providerCode" size="3" maxLength="3" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OTHER_REQUESTS_SUPPLIER" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OTHER_REQUESTS_SUPPLIER" property="value"/>" onKeyUp="if(document.getElementById('providerCode').value.length == 3){lookupProvider();}">
                 <span id="providerMsg"></span>
@@ -73,14 +73,14 @@
         </tr>
         <%-- VALUE --%>
         <tr>
-            <td class="admin"><%=getTran("Web.Occup","value",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web.Occup","value",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" size="10" onBlur="setDecimalLength(this,2);isNumber(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OTHER_REQUESTS_VALUE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OTHER_REQUESTS_VALUE" property="value"/>">
             </td>
         </tr>
         <%-- RESULT RECEIVED --%>
         <tr>
-            <td class="admin"><%=getTran("Web.occup","resultreceived",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web.occup","resultreceived",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR_RESULTRECEIVED" property="itemId"/>]>.value" value="medwan.common.true" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR_RESULTRECEIVED;value=medwan.common.true" property="value" outputString="checked"/>/>
             </td>
@@ -121,7 +121,7 @@
     else{
       var popupUrl = "<%=sCONTEXTPATH%>/_common/search/template.jsp?Page=okPopup.jsp&ts=<%=getTs()%>&labelType=web.manage&labelID=datamissing";
       var modalities = "dialogWidth:266px;dialogHeight:143px;center:yes;scrollbars:no;resizable:no;status:no;location:no;";
-      window.showModalDialog?window.showModalDialog(popupUrl,'',modalities):alert('<%=getTran("web.manage","datamissing",sWebLanguage)%>');
+      window.showModalDialog?window.showModalDialog(popupUrl,'',modalities):alert('<%=getTran(null,"web.manage","datamissing",sWebLanguage)%>');
 
       transactionForm.examination.focus();
     }
@@ -143,7 +143,7 @@
       }
       else{
         providerCode.focus();
-        document.getElementById('providerMsg').innerHTML = '<%=getTran("web.manage","invalidprovidercode",sWebLanguage)%>';
+        document.getElementById('providerMsg').innerHTML = '<%=getTran(null,"web.manage","invalidprovidercode",sWebLanguage)%>';
         document.getElementById('providerMsg').style.color = 'red';
         return false;
       }

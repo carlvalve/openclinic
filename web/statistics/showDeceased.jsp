@@ -17,7 +17,7 @@
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     
-    String sTitle = getTranNoLink("web","died",sWebLanguage)+" - "+getTran("web","month"+sMonth,sWebLanguage)+" "+sYear;
+    String sTitle = getTranNoLink("web","died",sWebLanguage)+" - "+getTran(request,"web","month"+sMonth,sWebLanguage)+" "+sYear;
 %>
 
 <%=writeTableHeaderDirectText(sTitle,sWebLanguage,"window.close()")%>
@@ -27,10 +27,10 @@
         // header
         out.print("<tr class='gray'>"+
                    "<td width='16'>#</td>"+
-                   "<td width='250'>"+getTran("web","lastname",sWebLanguage)+"</td>"+
-                   "<td width='250'>"+getTran("web","firstname",sWebLanguage)+"</td>"+
-                   "<td width='110'>"+getTran("web","dateofbirth",sWebLanguage)+"</td>"+
-                   "<td width='110'>"+getTran("web","enddate",sWebLanguage)+"</td>"+
+                   "<td width='250'>"+getTran(request,"web","lastname",sWebLanguage)+"</td>"+
+                   "<td width='250'>"+getTran(request,"web","firstname",sWebLanguage)+"</td>"+
+                   "<td width='110'>"+getTran(request,"web","dateofbirth",sWebLanguage)+"</td>"+
+                   "<td width='110'>"+getTran(request,"web","enddate",sWebLanguage)+"</td>"+
                   "</tr>");
     
         // search 
@@ -78,10 +78,10 @@
         
 <%
     if(n==0){
-      	%><%=getTran("web","noRecordsFound",sWebLanguage)%><%
+      	%><%=getTran(request,"web","noRecordsFound",sWebLanguage)%><%
     }
     else{
-      	%><%=n%> <%=getTran("web","recordsFound",sWebLanguage)%><%
+      	%><%=n%> <%=getTran(request,"web","recordsFound",sWebLanguage)%><%
     }
 %>
 

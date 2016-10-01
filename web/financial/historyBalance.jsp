@@ -52,7 +52,7 @@
     <table class='list' border='0' width='100%' cellspacing='1'>
         <%-- balance --%>
         <tr>
-            <td class="admin"><%=getTran("balance","balance",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"balance","balance",sWebLanguage)%></td>
             <td class="admin2"><b><%=checkString(Double.toString(balance.getBalance()))+" "+MedwanQuery.getInstance().getConfigParam("currency","€")%><b></td>
         </tr>
         <%
@@ -63,22 +63,22 @@
         %>
         <%-- date --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","date",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","date",sWebLanguage)%></td>
             <td class="admin2"><%=sDate%></td>
         </tr>
         <%-- max balance --%>
         <tr>
-            <td class="admin"><%=getTran("balance","maxbalance",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"balance","maxbalance",sWebLanguage)%></td>
             <td class="admin2"><%=balance.getMaximumBalance()+" "+MedwanQuery.getInstance().getConfigParam("currency","€")%></td>
         </tr>
         <%-- min balance --%>
         <tr>
-            <td class="admin"><%=getTran("balance","minbalance",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"balance","minbalance",sWebLanguage)%></td>
             <td class="admin2"><%=balance.getMinimumBalance()+" "+MedwanQuery.getInstance().getConfigParam("currency","€")%></td>
         </tr>
         <%-- remarks --%>
         <tr>
-            <td class="admin"><%=getTran("web","comment",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","comment",sWebLanguage)%></td>
             <td class="admin2"><%=checkString(balance.getRemarks().replaceAll("\n","<br>"))%></td>
         </tr>
         

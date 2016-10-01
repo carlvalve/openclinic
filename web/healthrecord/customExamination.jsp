@@ -44,7 +44,7 @@
     }
 
     //--- DISPLAY SCREEN --------------------------------------------------------------------------
-    private String displayScreen(Screen screen, TransactionVO transaction, String sWebLanguage){
+    private String displayScreen(HttpServletRequest request,Screen screen, TransactionVO transaction, String sWebLanguage){
         String sNewLineChar = "\n";
         StringBuffer sHtml = new StringBuffer();
 
@@ -138,7 +138,7 @@
 			                        if(screenItem.getHtmlElement().equals("label")){
 			                            String sTran = screenItem.getDefaultValue(); // consider default value as label, if any
 			                            if(screenItem.getDefaultValue().length()==0){
-			                                sTran = ScreenHelper.getTran("web",screenItem.getItemTypeId(),sWebLanguage);
+			                                sTran = ScreenHelper.getTran(null,"web",screenItem.getItemTypeId(),sWebLanguage);
 			                            }
 			                            
 			                            sTran = sTran.replaceAll("\"","");
@@ -186,7 +186,7 @@
 			                            sHtml.append("<select class='text' id='item_"+screenItem.getItemTypeId()+"'")	
 	    	                                  .append("name='currentTransactionVO.items.<ItemVO[hashCode="+itemVO.getItemId()+"]>.value'>")	                           
 			                                  .append("<option value='noChoiseMade'>").append(ScreenHelper.getTranNoLink("web","choose",sWebLanguage)).append("</option>")
-			                                  .append(ScreenHelper.writeSelect("CUSTOMEXAMINATION"+screen.getExamId()+"."+screenItem.getItemTypeId(),sValue,sWebLanguage,false,false))
+			                                  .append(ScreenHelper.writeSelect(request,"CUSTOMEXAMINATION"+screen.getExamId()+"."+screenItem.getItemTypeId(),sValue,sWebLanguage,false,false))
 			                                 .append("</select>");
 			                        }
 			                        //*** textArea ****************************
@@ -215,7 +215,7 @@
 			                                 .append(" onClick=\"document.getElementById('radio_"+screenItem.getItemTypeId()+"').value = this.value;this.style.border = 'none';document.getElementById('radio_"+screenItem.getItemTypeId()+"_no').style.border = 'none'\"")
 			                                 .append(" onDblClick=\"this.checked=false;document.getElementById('radio_"+screenItem.getItemTypeId()+"').value = 'none';\"")
 			                                 .append(">")
-			                                 .append("<label for='radio_"+screenItem.getItemTypeId()+"_yes'>"+getTran("web","yes",sWebLanguage)+"</label>");
+			                                 .append("<label for='radio_"+screenItem.getItemTypeId()+"_yes'>"+getTran(null,"web","yes",sWebLanguage)+"</label>");
 	
 				                        // followedBy
 				                        if(screenItem.getAttribute("Attr_followedBy").equals("newline")){
@@ -232,7 +232,7 @@
 			                                 .append(" onClick=\"document.getElementById('radio_"+screenItem.getItemTypeId()+"').value = this.value;this.style.border = 'none';document.getElementById('radio_"+screenItem.getItemTypeId()+"_yes').style.border = 'none'\"")
 			                                 .append(" onDblClick=\"this.checked=false;document.getElementById('radio_"+screenItem.getItemTypeId()+"').value = 'none';\"")
 			                                 .append(">")
-			                                 .append("<label for='radio_"+screenItem.getItemTypeId()+"_no'>"+getTran("web","no",sWebLanguage)+"</label>");
+			                                 .append("<label for='radio_"+screenItem.getItemTypeId()+"_no'>"+getTran(null,"web","no",sWebLanguage)+"</label>");
 				                        
 			                            // hidden-item
 			                            sHtml.append("<input type='hidden' id='radio_"+screenItem.getItemTypeId()+"'")
@@ -245,7 +245,7 @@
 		                                     .append("name='currentTransactionVO.items.<ItemVO[hashCode="+itemVO.getItemId()+"]>.value'")
 			                                 .append("id='cb_"+screenItem.getItemTypeId()+"'")
 			                                 .append("value='"+screenItem.getItemTypeId()+"' "+(sValue.equalsIgnoreCase(screenItem.getItemTypeId())?"checked":"")+">")
-			                                 .append("<label for='cb_"+screenItem.getItemTypeId()+"'>"+getTran("CUSTOMEXAMINATION"+screen.getExamId(),screenItem.getItemTypeId(),sWebLanguage)+"</label>");	                            
+			                                 .append("<label for='cb_"+screenItem.getItemTypeId()+"'>"+getTran(null,"CUSTOMEXAMINATION"+screen.getExamId(),screenItem.getItemTypeId(),sWebLanguage)+"</label>");	                            
 			                        }
 	
 			                        // required ? --> asterisk
@@ -321,7 +321,7 @@
         <tr>
             <td class="admin" width="<%=sTDAdminWidth%>">
                 <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("web.occup","history",sWebLanguage)%>">...</a>&nbsp;
-                <%=getTran("web.occup","medwan.common.date",sWebLanguage)%>
+                <%=getTran(request,"web.occup","medwan.common.date",sWebLanguage)%>
             </td>
             <td class="admin2" colspan="5">
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" id="trandate" OnBlur='checkDate(this)'>
@@ -334,7 +334,7 @@
             Screen screen = Screen.getByExamType(sCustomExamType,tran.getUpdateTime());
             if(Debug.enabled) tran.displayItems();
             
-            out.print(displayScreen(screen,tran,sWebLanguage));
+            out.print(displayScreen(request,screen,tran,sWebLanguage));
         %>            
     </table>
     
@@ -342,7 +342,7 @@
 	    Vector requiredFields = screen.getRequiredFields();
 	
 	    if(requiredFields.size() > 0){
-	    	%>&nbsp;<%=getTran("web","asterisk_fields_are_obligate",sWebLanguage)%><%
+	    	%>&nbsp;<%=getTran(request,"web","asterisk_fields_are_obligate",sWebLanguage)%><%
 	    }
 	%>
 

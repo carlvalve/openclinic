@@ -31,7 +31,7 @@
             if(!"no".equalsIgnoreCase(request.getParameter("header"))){
         %>
         <tr>
-            <td class="admin2" width="120" nowrap><%=getTran("web","name",sWebLanguage)%></td>
+            <td class="admin2" width="120" nowrap><%=getTran(request,"web","name",sWebLanguage)%></td>
             <td class="admin2" width="380" nowrap>
                 <input type="text" class="text" name="FindLabProcedureName" id="FindLabProcedureName" size="20" maxlength="20"  value="<%=sFindLabProcedureName%>" onkeyup="searchLabProcedures();">
             </td>

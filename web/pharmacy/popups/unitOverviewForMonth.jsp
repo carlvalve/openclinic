@@ -34,7 +34,7 @@
             sSelectedProductStockName = product.getName();
         }
         else{
-            sSelectedProductStockName = "<font color='red'>"+getTran("web","nonexistingProduct",sWebLanguage)+"</font>";
+            sSelectedProductStockName = "<font color='red'>"+getTran(request,"web","nonexistingProduct",sWebLanguage)+"</font>";
         }
     }
 %>
@@ -43,17 +43,17 @@
 <table width="100%" cellspacing="1">
     <%-- MONTH --%>
     <tr>
-        <td class="admin" width="<%=sTDAdminWidth%>">&nbsp;<%=getTran("web","month",sWebLanguage)%></td>
-        <td class="admin2"><%=getTran("web","month"+(Integer.parseInt(monthIdx)+1),sWebLanguage)%> <%=year%></td>
+        <td class="admin" width="<%=sTDAdminWidth%>">&nbsp;<%=getTran(request,"web","month",sWebLanguage)%></td>
+        <td class="admin2"><%=getTran(request,"web","month"+(Integer.parseInt(monthIdx)+1),sWebLanguage)%> <%=year%></td>
     </tr>
     <%-- SERVICE STOCK --%>
     <tr>
-        <td class="admin">&nbsp;<%=getTran("web","serviceStock",sWebLanguage)%></td>
+        <td class="admin">&nbsp;<%=getTran(request,"web","serviceStock",sWebLanguage)%></td>
         <td class="admin2"><%=sSelectedServiceStockName%></td>
     </tr>
     <%-- PRODUCT STOCK --%>
     <tr>
-        <td class="admin">&nbsp;<%=getTran("web","productStock",sWebLanguage)%></td>
+        <td class="admin">&nbsp;<%=getTran(request,"web","productStock",sWebLanguage)%></td>
         <td class="admin2"><%=sSelectedProductStockName%></td>
     </tr>
 </table>
@@ -66,10 +66,10 @@
         <%-- HEADER --%>
         <tr class="admin">
             <td></td>
-            <td style="text-align:right;">&nbsp;<%=getTran("web","in",sWebLanguage)%>&nbsp;</td>
-            <td style="text-align:right;">&nbsp;<%=getTran("web","out",sWebLanguage)%>&nbsp;</td>
-            <td style="text-align:right;">&nbsp;<%=getTran("web","netto",sWebLanguage)%>&nbsp;</td>
-            <td style="text-align:right;">&nbsp;<%=getTran("web","level",sWebLanguage)%>&nbsp;</td>
+            <td style="text-align:right;">&nbsp;<%=getTran(request,"web","in",sWebLanguage)%>&nbsp;</td>
+            <td style="text-align:right;">&nbsp;<%=getTran(request,"web","out",sWebLanguage)%>&nbsp;</td>
+            <td style="text-align:right;">&nbsp;<%=getTran(request,"web","netto",sWebLanguage)%>&nbsp;</td>
+            <td style="text-align:right;">&nbsp;<%=getTran(request,"web","level",sWebLanguage)%>&nbsp;</td>
         </tr>
         
         <%-- DISPLAY MONTHS --%>
@@ -119,7 +119,7 @@
 
                     %>
                         <tr <%=onclick%> class="<%=sClass%>">
-                            <td>&nbsp;<%=getTran("web","weekday"+dayOfWeek,sWebLanguage)%> <%=calendar.get(Calendar.DATE)%></td>
+                            <td>&nbsp;<%=getTran(request,"web","weekday"+dayOfWeek,sWebLanguage)%> <%=calendar.get(Calendar.DATE)%></td>
                             <td style="text-align:right;"><%=unitsIn%>&nbsp;</td>
                             <td style="text-align:right;"><%=unitsOut%>&nbsp;</td>
                             <td style="text-align:right;"><%=(unitsDiff<0?unitsDiff+"":(unitsDiff==0?unitsDiff+"":"+"+unitsDiff))%>&nbsp;</td>
@@ -136,7 +136,7 @@
             unitsDiff = unitsIn - unitsOut;
         %>
         <tr class="admin">
-            <td>&nbsp;<%=getTran("web","total",sWebLanguage)%></td>
+            <td>&nbsp;<%=getTran(request,"web","total",sWebLanguage)%></td>
             <td style="text-align:right;"><%=unitsIn%>&nbsp;</td>
             <td style="text-align:right;"><%=unitsOut%>&nbsp;</td>
             <td style="text-align:right;"><%=(unitsDiff<0?unitsDiff+"":(unitsDiff==0?unitsDiff+"":"+"+unitsDiff))%>&nbsp;</td>

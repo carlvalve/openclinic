@@ -106,11 +106,11 @@
     <%=writeTableHeader("Web.manage","ManageCarePrescriptions",sWebLanguage,"doBack();")%>
     <table class="menu" width="100%">
         <tr>
-            <td width="<%=sTDAdminWidth%>"><%=getTran("Web","care_type",sWebLanguage)%></td>
+            <td width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","care_type",sWebLanguage)%></td>
             <td>
                 <select class="text" name="FindCareUID" onchange="doChange()">
                     <option/>
-                    <%=ScreenHelper.writeSelect("care_type",sFindCareUID,sWebLanguage,true,true)%>
+                    <%=ScreenHelper.writeSelect(request,"care_type",sFindCareUID,sWebLanguage,true,true)%>
                 </select>
 
                 <input class="button" type="button" name="buttonNew" value="<%=getTranNoLink("Web","new",sWebLanguage)%>" onclick="doNew();">&nbsp;
@@ -137,7 +137,7 @@
     <br>
     <table width="100%" class="list" cellpadding="0" cellspacing="1">
          <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","care_type",sWebLanguage)%> ID *</td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","care_type",sWebLanguage)%> ID *</td>
             <td class="admin2">
                 <input type="text" class="text" name="EditCareTypeID" value="<%=sFindCareUID%>" size="80">
             </td>
@@ -146,7 +146,7 @@
             for (int i=0;i<aLanguages.length;i++){
             %>
         <tr>
-           <td class="admin"><%=getTran("web","care_type",sWebLanguage)%> <%=aLanguages[i]%></td>
+           <td class="admin"><%=getTran(request,"web","care_type",sWebLanguage)%> <%=aLanguages[i]%></td>
            <td class="admin2">
                 <input type="text" class="text" name="EditCareType<%=aLanguages[i]%>" value="<%=getTranNoLink("care_type",sFindCareUID,aLanguages[i])%>" size="80"><br>
            </td>
@@ -155,36 +155,36 @@
             }
             %>
         <tr>
-            <td class="admin"><%=getTran("Web","frequency",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin"><%=getTran(request,"Web","frequency",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <%-- Units Per Time Unit --%>
                 <input type="text" class="text" name="EditUnitsPerTimeUnit" value="<%=sEditUnitsPerTimeUnit%>" size="5" maxLength="5" onKeyUp="isNumber(this);">
                 <span id="EditUnitsPerTimeUnitLabel"></span>
 
                 <%-- Time Unit Count --%>
-                &nbsp;<%=getTran("web","per",sWebLanguage)%>
+                &nbsp;<%=getTran(request,"web","per",sWebLanguage)%>
                 <input type="text" class="text" name="EditTimeUnitCount" value="<%=sEditTimeUnitCount%>" size="5" maxLength="5">
 
                 <%-- Time Unit (dropdown : Hour|Day|Week|Month) --%>
                 <select class="text" name="EditTimeUnit">
                     <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>
-                    <%=ScreenHelper.writeSelectUnsorted("prescription.timeunit",sEditTimeUnit,sWebLanguage)%>
+                    <%=ScreenHelper.writeSelectUnsorted(request,"prescription.timeunit",sEditTimeUnit,sWebLanguage)%>
                 </select>
 
                 <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="clearDescriptionRule();">
             </td>
         </tr>
         <tr>
-            <td class="admin" nowrap><%=getTran("Web","schema",sWebLanguage)%>&nbsp;</td>
+            <td class="admin" nowrap><%=getTran(request,"Web","schema",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <table>
                     <tr>
-                        <td><input class="text" type="text" name="time1" value="<%=sTime1%>" size="2"><%=getTran("web","abbreviation.hour",sWebLanguage)%></td>
-                        <td><input class="text" type="text" name="time2" value="<%=sTime2%>" size="2"><%=getTran("web","abbreviation.hour",sWebLanguage)%></td>
-                        <td><input class="text" type="text" name="time3" value="<%=sTime3%>" size="2"><%=getTran("web","abbreviation.hour",sWebLanguage)%></td>
-                        <td><input class="text" type="text" name="time4" value="<%=sTime4%>" size="2"><%=getTran("web","abbreviation.hour",sWebLanguage)%></td>
-                        <td><input class="text" type="text" name="time5" value="<%=sTime5%>" size="2"><%=getTran("web","abbreviation.hour",sWebLanguage)%></td>
-                        <td><input class="text" type="text" name="time6" value="<%=sTime6%>" size="2"><%=getTran("web","abbreviation.hour",sWebLanguage)%></td>
+                        <td><input class="text" type="text" name="time1" value="<%=sTime1%>" size="2"><%=getTran(request,"web","abbreviation.hour",sWebLanguage)%></td>
+                        <td><input class="text" type="text" name="time2" value="<%=sTime2%>" size="2"><%=getTran(request,"web","abbreviation.hour",sWebLanguage)%></td>
+                        <td><input class="text" type="text" name="time3" value="<%=sTime3%>" size="2"><%=getTran(request,"web","abbreviation.hour",sWebLanguage)%></td>
+                        <td><input class="text" type="text" name="time4" value="<%=sTime4%>" size="2"><%=getTran(request,"web","abbreviation.hour",sWebLanguage)%></td>
+                        <td><input class="text" type="text" name="time5" value="<%=sTime5%>" size="2"><%=getTran(request,"web","abbreviation.hour",sWebLanguage)%></td>
+                        <td><input class="text" type="text" name="time6" value="<%=sTime6%>" size="2"><%=getTran(request,"web","abbreviation.hour",sWebLanguage)%></td>
                     </tr>
                     <tr>
                         <td><input class="text" type="text" name="quantity1" value="<%=sQuantity1%>" size="2">#</td>
@@ -206,7 +206,7 @@
             </td>
         </tr>
     </table>
-    <%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%>
+    <%=getTran(request,"Web","colored_fields_are_obligate",sWebLanguage)%>
     <script>
       transactionForm.EditCareTypeID.focus();
 

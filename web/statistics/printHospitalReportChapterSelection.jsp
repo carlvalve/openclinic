@@ -15,22 +15,22 @@
 	
 	<table width="100%" class="list" cellpadding="0" cellspacing="1">
 		<tr class="list1">
-			<td><input type='checkbox' name='chapter1' id="cb1" class="hand"/><%=getLabel("hospital.statistics","base.activity.information",sWebLanguage,"cb1")%></td>
+			<td><input type='checkbox' name='chapter1' id="cb1" class="hand"/><%=getLabel(request,"hospital.statistics","base.activity.information",sWebLanguage,"cb1")%></td>
 		</tr>
 		<tr class="list">
-			<td><input type='checkbox' name='chapter2' id="cb2" class="hand"/><%=getLabel("hospital.statistics","base.outcome.information",sWebLanguage,"cb2")%></td>
+			<td><input type='checkbox' name='chapter2' id="cb2" class="hand"/><%=getLabel(request,"hospital.statistics","base.outcome.information",sWebLanguage,"cb2")%></td>
 		</tr>
 		<tr class="list1">
-			<td><input type='checkbox' name='chapter3' id="cb3" class="hand"/><%=getLabel("hospital.statistics","pathology.profile",sWebLanguage,"cb3")%></td>
+			<td><input type='checkbox' name='chapter3' id="cb3" class="hand"/><%=getLabel(request,"hospital.statistics","pathology.profile",sWebLanguage,"cb3")%></td>
 		</tr>
 		<tr class="list">
-			<td><input type='checkbox' name='chapter4' id="cb4" class="hand"/><%=getLabel("hospital.statistics","comorbidity.profile",sWebLanguage,"cb4")%></td>
+			<td><input type='checkbox' name='chapter4' id="cb4" class="hand"/><%=getLabel(request,"hospital.statistics","comorbidity.profile",sWebLanguage,"cb4")%></td>
 		</tr>
 		<tr class="list1">
-			<td><input type='checkbox' name='chapter5' id="cb5" class="hand"/><%=getLabel("hospital.statistics","financial.profile",sWebLanguage,"cb5")%></td>
+			<td><input type='checkbox' name='chapter5' id="cb5" class="hand"/><%=getLabel(request,"hospital.statistics","financial.profile",sWebLanguage,"cb5")%></td>
 		</tr>
 		<tr class="list">
-			<td><input type='checkbox' name='chapter6' id="cb6" class="hand"/><%=getLabel("hospital.statistics","insurance.profile",sWebLanguage,"cb6")%></td>
+			<td><input type='checkbox' name='chapter6' id="cb6" class="hand"/><%=getLabel(request,"hospital.statistics","insurance.profile",sWebLanguage,"cb6")%></td>
 		</tr>
 		
 		<%-- BUTTON --%>

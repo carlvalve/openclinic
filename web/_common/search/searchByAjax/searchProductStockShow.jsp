@@ -55,7 +55,7 @@
         if(sSearchServiceUid.length()==0){
             if(displayProductStocksOfActiveUserService){
                 sSearchServiceUid = activeUser.activeService.code;
-                sSearchServiceName = getTran("service",sSearchServiceUid,sWebLanguage);
+                sSearchServiceName = getTran(request,"service",sSearchServiceUid,sWebLanguage);
             }
         }
     }
@@ -74,12 +74,12 @@
 
         // header
         sOut.append("<tr class='admin'>")
-             .append("<td>"+getTran("web","product",sWebLanguage)+"</td>")
-             .append("<td>"+getTran("web","service",sWebLanguage)+"</td>")
-             .append("<td>"+getTran("web","servicestock",sWebLanguage)+"</td>")
-             .append("<td align='right'>"+getTran("web","level",sWebLanguage)+"</td>")
-             .append("<td align='right'>"+getTran("web","orderlevel",sWebLanguage)+" </td>")
-             .append("<td>"+getTran("web","begindate",sWebLanguage)+"</td>")
+             .append("<td>"+getTran(request,"web","product",sWebLanguage)+"</td>")
+             .append("<td>"+getTran(request,"web","service",sWebLanguage)+"</td>")
+             .append("<td>"+getTran(request,"web","servicestock",sWebLanguage)+"</td>")
+             .append("<td align='right'>"+getTran(request,"web","level",sWebLanguage)+"</td>")
+             .append("<td align='right'>"+getTran(request,"web","orderlevel",sWebLanguage)+" </td>")
+             .append("<td>"+getTran(request,"web","begindate",sWebLanguage)+"</td>")
             .append("</tr>");
 
         // run thru found records
@@ -93,7 +93,7 @@
             // servicestock and service name
             serviceStock = productStock.getServiceStock();
             if(serviceStock==null){
-                sServiceStockName = "<font color='red'>"+getTran("web","nonexistingServiceStock",sWebLanguage)+"</font>";
+                sServiceStockName = "<font color='red'>"+getTran(request,"web","nonexistingServiceStock",sWebLanguage)+"</font>";
                 sServiceName = "";
             } 
             else{
@@ -104,7 +104,7 @@
 
                 // service name
                 if(serviceStock.getServiceUid().length() > 0){
-                    sServiceName = getTran("service",serviceStock.getServiceUid(),sWebLanguage);
+                    sServiceName = getTran(request,"service",serviceStock.getServiceUid(),sWebLanguage);
                 }
                 else{
                     sServiceName = "";
@@ -114,7 +114,7 @@
             // only search product-name when different product-UID
             product = productStock.getProduct();
             if(product==null){
-            	sProductName = "<font color='red'>"+getTran("web.manage","unexistingProduct",sWebLanguage)+"</font>";
+            	sProductName = "<font color='red'>"+getTran(request,"web.manage","unexistingProduct",sWebLanguage)+"</font>";
             }
             else{
             	sProductName = product.getName();
@@ -161,7 +161,7 @@
 
             // non-existing productname in red
             if(sProductName.length()==0){
-                sProductName = "<font color='red'>"+getTran("web","nonexistingproduct",sWebLanguage)+"</font>";
+                sProductName = "<font color='red'>"+getTran(request,"web","nonexistingproduct",sWebLanguage)+"</font>";
             }
 
             sOut.append("<td><b>"+sProductName+"</b></td>")
@@ -183,7 +183,7 @@
     if(sAction.equals("find")){
         if(iTotal==0){
             // 'no results' message
-            %><div><%=HTMLEntities.htmlentities(getTran("web","norecordsfound",sWebLanguage))%></div><%
+            %><div><%=HTMLEntities.htmlentities(getTran(request,"web","norecordsfound",sWebLanguage))%></div><%
         }
         else{
             %>
@@ -197,7 +197,7 @@
     // records found message
     if(sAction.equals("find")){
         if(iTotal > 0){
-            %><div><%=iTotal%> <%=HTMLEntities.htmlentities(getTran("web","recordsfound",sWebLanguage))%></div><%
+            %><div><%=iTotal%> <%=HTMLEntities.htmlentities(getTran(request,"web","recordsfound",sWebLanguage))%></div><%
         }
     }
 %>

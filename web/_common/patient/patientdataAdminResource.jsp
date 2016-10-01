@@ -5,31 +5,31 @@
 
         String sCategory = "&nbsp;";
         if (checkString((String)activePatient.adminextends.get("category")).length()>0) {
-            sCategory = getTran("admin.category",checkString((String)activePatient.adminextends.get("category")),sWebLanguage);
+            sCategory = getTran(request,"admin.category",checkString((String)activePatient.adminextends.get("category")),sWebLanguage);
         }
 
         String sStatut = "&nbsp;";
         if (checkString((String)activePatient.adminextends.get("statut")).length()>0) {
-            sStatut = getTran("admin.statut",checkString((String)activePatient.adminextends.get("statut")),sWebLanguage);
+            sStatut = getTran(request,"admin.statut",checkString((String)activePatient.adminextends.get("statut")),sWebLanguage);
         }
 
         String sGroup = "&nbsp;";
         if (checkString((String)activePatient.adminextends.get("usergroup")).length()>0) {
-            sGroup = getTran("usergroup",checkString((String)activePatient.adminextends.get("usergroup")),sWebLanguage);
+            sGroup = getTran(request,"usergroup",checkString((String)activePatient.adminextends.get("usergroup")),sWebLanguage);
         }
 
         %>
         <table width="100%" cellspacing="1" class="list" style="border-top:none;">
             <tr>
-                <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("admin","category",sWebLanguage)%></td>
+                <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"admin","category",sWebLanguage)%></td>
                 <td class="admin2"><%=sCategory%></td>
             </tr>
             <tr>
-                <td class="admin"><%=getTran("admin","statut",sWebLanguage)%></td>
+                <td class="admin"><%=getTran(request,"admin","statut",sWebLanguage)%></td>
                 <td class="admin2"><%=sStatut%></td>
             </tr>
             <tr>
-                <td class="admin"><%=getTran("admin","group",sWebLanguage)%></td>
+                <td class="admin"><%=getTran(request,"admin","group",sWebLanguage)%></td>
                 <td class="admin2"><%=sGroup%></td>
             </tr>
         </table>

@@ -50,16 +50,16 @@
     <table class="list" cellpadding="0" cellspacing="1" width="100%">
         <%-- PERIOD --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","period",sWebLanguage)%>&nbsp;</td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","period",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
-                <%=getTran("web","from",sWebLanguage)%>&nbsp;<%=writeDateField("begin","statForm",sBegin,sWebLanguage)%>&nbsp;
-                <%=getTran("web","to",sWebLanguage)%>&nbsp;<%=writeDateField("end","statForm",sEnd,sWebLanguage)%>&nbsp;
+                <%=getTran(request,"web","from",sWebLanguage)%>&nbsp;<%=writeDateField("begin","statForm",sBegin,sWebLanguage)%>&nbsp;
+                <%=getTran(request,"web","to",sWebLanguage)%>&nbsp;<%=writeDateField("end","statForm",sEnd,sWebLanguage)%>&nbsp;
             </td>
         </tr>
         
         <%-- DIAGNOSIS --%>
         <tr>
-            <td class="admin"><%=getTran("web","diagnosis",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web","diagnosis",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <select name="codetype" id="codetype" class="text" onChange="statForm.diagnosis.focus();">
                     <option value=""/>
@@ -74,11 +74,11 @@
         
         <%-- SITUATION --%>
         <tr>
-            <td class="admin"><%=getTran("Web","situation",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web","situation",sWebLanguage)%></td>
             <td class="admin2">
                 <select class="text" name="situation" id="situation">
                     <option value=""/>
-                    <%=ScreenHelper.writeSelectUnsorted("encounter.situation","",sWebLanguage)%>
+                    <%=ScreenHelper.writeSelectUnsorted(request,"encounter.situation","",sWebLanguage)%>
                 </select>&nbsp;&nbsp;
                 
                 <%-- BUTTONS --%>
@@ -148,9 +148,9 @@
 		    	    <table width="100%" class="list" cellpadding="0" cellspacing="1">
 		    	        <%-- header --%>
 		    	        <tr class="gray">
-		    	            <td width="80"><%=getTran("web","personId",sWebLanguage)%></td>
-		    	            <td width="220"><%=getTran("web","person",sWebLanguage)%></td>
-		    	            <td width="*"><%=getTran("web","period",sWebLanguage)%></td>
+		    	            <td width="80"><%=getTran(request,"web","personId",sWebLanguage)%></td>
+		    	            <td width="220"><%=getTran(request,"web","person",sWebLanguage)%></td>
+		    	            <td width="*"><%=getTran(request,"web","period",sWebLanguage)%></td>
 		    	        </tr>
 		    	<%
 			}
@@ -177,7 +177,7 @@
 	    	%>
 	    	    </table>
 	    	
-	    	    <%=recCount%> <%=getTran("web","recordsFound",sWebLanguage)%>
+	    	    <%=recCount%> <%=getTran(request,"web","recordsFound",sWebLanguage)%>
 	    
 	            <%=ScreenHelper.alignButtonsStart()%>
 	                <input type="button" class="button" name="backButton" value="<%=getTranNoLink("web","back",sWebLanguage)%>" onclick="doBack();">
@@ -185,7 +185,7 @@
 		    <%
 	    }
 	    else{
-	    	%><%=getTran("web","noRecordsFound",sWebLanguage)%><%
+	    	%><%=getTran(request,"web","noRecordsFound",sWebLanguage)%><%
 	    }
     }
 %>

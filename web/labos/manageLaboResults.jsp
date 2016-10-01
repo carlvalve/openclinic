@@ -42,7 +42,7 @@
 <%=writeTableHeader("Web","openPatientLaboResults",sWebLanguage," doBack();")%>
 <table class="list" width="100%">
     <tr>
-        <td><%=getTran("web","analysis",sWebLanguage)%></td>
+        <td><%=getTran(request,"web","analysis",sWebLanguage)%></td>
     <%
         Iterator requestsIterator = requestList.keySet().iterator();
         while (requestsIterator.hasNext()) {

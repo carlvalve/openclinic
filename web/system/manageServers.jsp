@@ -56,10 +56,10 @@
     <%-- SELECT SERVER --------------------------------------------------------------------------%>
     <table width="100%" cellspacing="0" cellpadding="0" class="menu">
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web.manage","server",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web.manage","server",sWebLanguage)%></td>
             <td class="admin2">
                 <select name="FindID" class="text" onchange="transactionForm.submit();">
-                    <option value="-1"><%=getTran("Web.Occup","medwan.common.create-new",sWebLanguage)%></option>
+                    <option value="-1"><%=getTran(request,"Web.Occup","medwan.common.create-new",sWebLanguage)%></option>
                     <%
                         // list servers as options
                         String sServerID, sServerName, sSelected, sSelectedServerID = "", sSelectedServerName = "", sSelectedFrom = "", sSelectedTo = "";
@@ -96,28 +96,28 @@
     <table class="list" width="100%" cellspacing="1">
         <%-- ServerID --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web.Manage","ServerID",sWebLanguage)%> *</td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web.Manage","ServerID",sWebLanguage)%> *</td>
             <td class="admin2">
                 <input class="text" type="text" name="EditServerID" value="<%=sSelectedServerID%>" size="50">
             </td>
         </tr>
         <%-- ServerName --%>
         <tr>
-            <td class="admin"><%=getTran("Web.Manage","ServerName",sWebLanguage)%> *</td>
+            <td class="admin"><%=getTran(request,"Web.Manage","ServerName",sWebLanguage)%> *</td>
             <td class="admin2">
                 <input type="text" class="text" name="EditServerName" value="<%=sSelectedServerName%>" size="50">
             </td>
         </tr>
         <%-- FromServerDirectory --%>
         <tr>
-            <td class="admin"><%=getTran("Web.Manage","FromServerDirectory",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web.Manage","FromServerDirectory",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" name="EditServerFrom" value="<%=sSelectedFrom%>" size="50">
             </td>
         </tr>
         <%-- ToServerDirectory --%>
         <tr>
-            <td class="admin"><%=getTran("Web.Manage","ToServerDirectory",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web.Manage","ToServerDirectory",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" name="EditServerTo" value="<%=sSelectedTo%>" size="50">
             </td>
@@ -147,7 +147,7 @@
         </tr>
     </table>
     <%-- indication of obligated fields --%>
-    <%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%>
+    <%=getTran(request,"Web","colored_fields_are_obligate",sWebLanguage)%>
     <script>
       transactionForm.EditServerID.focus();
 

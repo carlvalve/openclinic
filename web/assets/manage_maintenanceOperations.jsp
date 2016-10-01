@@ -26,7 +26,7 @@
     <table class="list" border="0" width="100%" cellspacing="1">
         <%-- search maintenance PLAN --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web.assets","maintenancePlan",sWebLanguage)%>&nbsp;</td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web.assets","maintenancePlan",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="hidden" name="searchMaintenancePlanUID" id="searchMaintenancePlanUID" value="">
                 <input type="text" class="text" id="searchMaintenancePlanName" name="searchMaintenancePlanName" size="20" readonly value="">
@@ -39,16 +39,16 @@
         
         <%-- search PERIOD PERFORMED --%>
         <tr>
-            <td class="admin"><%=getTran("web.assets","periodPerformed",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.assets","periodPerformed",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
-                <%=writeDateField("searchPeriodPerformedBegin","SearchForm","",sWebLanguage)%>&nbsp;&nbsp;<%=getTran("web","until",sWebLanguage)%>&nbsp;&nbsp; 
+                <%=writeDateField("searchPeriodPerformedBegin","SearchForm","",sWebLanguage)%>&nbsp;&nbsp;<%=getTran(request,"web","until",sWebLanguage)%>&nbsp;&nbsp; 
                 <%=writeDateField("searchPeriodPerformedEnd","SearchForm","",sWebLanguage)%>            
             </td>                        
         </tr>        
         
         <%-- search OPERATOR (person) --%>
         <tr>
-            <td class="admin"><%=getTran("web.assets","operator",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.assets","operator",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="searchOperator" name="searchOperator" size="40" maxLength="50" value="">
             </td>
@@ -56,11 +56,11 @@
         
         <%-- search RESULT --%>
         <tr>
-            <td class="admin"><%=getTran("web.assets","result",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.assets","result",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">                
                 <select class="text" id="searchResult" name="searchResult">
                     <option/>
-                    <%=ScreenHelper.writeSelect("assets.maintenanceoperations.result","",sWebLanguage)%>
+                    <%=ScreenHelper.writeSelect(request,"assets.maintenanceoperations.result","",sWebLanguage)%>
                 </select>
             </td>
         </tr>
@@ -146,7 +146,7 @@
     <table class="list" border="0" width="100%" cellspacing="1">
         <%-- MAINTENANCE PLAN (*) --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web.assets","maintenancePlan",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web.assets","maintenancePlan",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <input type="hidden" name="maintenancePlanUID" id="maintenancePlanUID" value="">
                 <input type="text" class="text" id="maintenancePlanName" name="maintenancePlanName" size="20" readonly value="">
@@ -159,7 +159,7 @@
         
         <%-- DATE (*) --%>
         <tr>
-            <td class="admin"><%=getTran("web.assets","date",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.assets","date",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <%=writeDateField("date","EditForm","",sWebLanguage)%>
             </td>
@@ -167,7 +167,7 @@
             
         <%-- OPERATOR (*) --%>
         <tr>
-            <td class="admin"><%=getTran("web.assets","operator",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.assets","operator",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="operator" name="operator" size="40" maxLength="50" value="">
             </td>
@@ -175,18 +175,18 @@
         
         <%-- RESULT (*) --%>
         <tr>
-            <td class="admin"><%=getTran("web.assets","result",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.assets","result",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">                
                 <select class="text" id="result" name="result">
                     <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>
-                    <%=ScreenHelper.writeSelect("assets.maintenanceoperations.result","",sWebLanguage)%>
+                    <%=ScreenHelper.writeSelect(request,"assets.maintenanceoperations.result","",sWebLanguage)%>
                 </select>
             </td>
         </tr>
         
         <%-- COMMENT --%>                
         <tr>
-            <td class="admin"><%=getTran("web","comment",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","comment",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea class="text" name="comment" id="comment" cols="80" rows="4" onKeyup="resizeTextarea(this,8);limitChars(this,255);"></textarea>
             </td>
@@ -194,7 +194,7 @@
                
         <%-- NEXT DATE --%>
         <tr>
-            <td class="admin"><%=getTran("web.assets","nextMaintenanceDate",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web.assets","nextMaintenanceDate",sWebLanguage)%></td>
             <td class="admin2">
                 <%=writeDateField("nextDate","EditForm","",sWebLanguage)%>
             </td>
@@ -210,7 +210,7 @@
             </td>
         </tr>
     </table>
-    <i><%=getTran("web","colored_fields_are_obligate",sWebLanguage)%></i>
+    <i><%=getTran(request,"web","colored_fields_are_obligate",sWebLanguage)%></i>
     
     <div id="divMessage" style="padding-top:10px;"></div>
 </form>

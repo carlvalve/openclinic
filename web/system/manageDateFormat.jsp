@@ -33,7 +33,7 @@
         MedwanQuery.getInstance().reloadConfigValues();
         ScreenHelper.reloadDateFormats();
         
-        sMsg = "<font color='green'>"+getTran("web","dataSaved",sWebLanguage)+"</font>";
+        sMsg = "<font color='green'>"+getTran(request,"web","dataSaved",sWebLanguage)+"</font>";
     }
 %>
 
@@ -45,7 +45,7 @@
     <table width="100%" cellspacing="1" cellpadding="0" class="list">
         <%-- date format --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","dateFormat",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","dateFormat",sWebLanguage)%></td>
             <td class="admin2">
                 <select name="EditDateFormat" class="text">
                     <%
@@ -56,7 +56,7 @@
                         String tmpFormat;
                         while(tokenizer.hasMoreTokens()) {
                         	tmpFormat = tokenizer.nextToken();
-                            %><option value="<%=tmpFormat%>" <%=(sConfiguredDateFormat.equals(tmpFormat)?"selected":"")%>><%=getTran("dateFormat",tmpFormat,sWebLanguage)%></option><%
+                            %><option value="<%=tmpFormat%>" <%=(sConfiguredDateFormat.equals(tmpFormat)?"selected":"")%>><%=getTran(request,"dateFormat",tmpFormat,sWebLanguage)%></option><%
                         }
                     %>
                 </select>

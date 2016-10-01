@@ -5,9 +5,9 @@
 
 <table width="100%" cellspacing="1" cellpadding="0" class="list">
 	<tr class="admin">
-		<td width='20%' colspan='2'><%=getTran("web","statistics.lab",sWebLanguage)%></td>
-		<td width='40%' colspan='4'><%=getTran("web","from",sWebLanguage)+": "+request.getParameter("start")%></td>
-		<td width='40%' colspan='4'><%=getTran("web","to",sWebLanguage)+": "+request.getParameter("end")%></td>
+		<td width='20%' colspan='2'><%=getTran(request,"web","statistics.lab",sWebLanguage)%></td>
+		<td width='40%' colspan='4'><%=getTran(request,"web","from",sWebLanguage)+": "+request.getParameter("start")%></td>
+		<td width='40%' colspan='4'><%=getTran(request,"web","to",sWebLanguage)+": "+request.getParameter("end")%></td>
 	</tr>
 
 <%
@@ -104,16 +104,16 @@
 				sResults.append("<tr><td colspan='8'><table width='100%'>")
 				        .append("<tr>")
 				         .append("<td class='admin2' width='50%' colspan='4'>LOINC: <b>"+rs.getString("medidoccode")+"</b></td>")
-				         .append("<td class='admin2' width='50%' colspan='4'>"+getTran("Web.manage","labanalysis.cols.editor",sWebLanguage)+": <b>"+getTranNoLink("web",_labEditor,sWebLanguage)+"</b></td>")
+				         .append("<td class='admin2' width='50%' colspan='4'>"+getTran(request,"Web.manage","labanalysis.cols.editor",sWebLanguage)+": <b>"+getTranNoLink("web",_labEditor,sWebLanguage)+"</b></td>")
 				        .append("<tr>")
 				        .append("</table></td></tr>");
 				
 				sResults.append("<tr>")
-				         .append("<td nowrap class='"+(data.length>2 && basicStatistics.percentile(0)<basicStatistics.arithmeticMean()-basicStatistics.sampleStdDeviation()*3?"red' style='cursor: pointer' onclick='showlowerthan(\""+_labCode+"\","+(basicStatistics.arithmeticMean()-basicStatistics.sampleStdDeviation()*3)+");":"text")+"' width='20%'>"+getTran("web","minimum",sWebLanguage)+": <b>"+(data.length<1?"?":deci.format(basicStatistics.percentile(0)))+"</b></td>")
-				         .append("<td nowrap class='"+(data.length>2 && basicStatistics.percentile(100)>basicStatistics.arithmeticMean()+basicStatistics.sampleStdDeviation()*3?"red' style='cursor: pointer' onclick='showgreaterthan(\""+_labCode+"\","+(basicStatistics.arithmeticMean()+basicStatistics.sampleStdDeviation()*3)+");":"text")+"' width='20%'>"+getTran("web","maximum",sWebLanguage)+": <b>"+(data.length<1?"?":deci.format(basicStatistics.percentile(100)))+"</b></td>")
-				         .append("<td nowrap class='text' width='20%'>"+getTran("web","mean",sWebLanguage)+": <b>"+deci.format(basicStatistics.arithmeticMean())+"</b></td>")
-				         .append("<td nowrap class='text' width='20%'>"+getTran("web","median",sWebLanguage)+": <b>"+(data.length<1?"?":deci.format(basicStatistics.median()))+"</b></td>")
-				         .append("<td nowrap class='text' width='20%'>"+getTran("web","standarddeviation",sWebLanguage)+": <b>"+deci.format(basicStatistics.sampleStdDeviation())+"</b></td>")
+				         .append("<td nowrap class='"+(data.length>2 && basicStatistics.percentile(0)<basicStatistics.arithmeticMean()-basicStatistics.sampleStdDeviation()*3?"red' style='cursor: pointer' onclick='showlowerthan(\""+_labCode+"\","+(basicStatistics.arithmeticMean()-basicStatistics.sampleStdDeviation()*3)+");":"text")+"' width='20%'>"+getTran(request,"web","minimum",sWebLanguage)+": <b>"+(data.length<1?"?":deci.format(basicStatistics.percentile(0)))+"</b></td>")
+				         .append("<td nowrap class='"+(data.length>2 && basicStatistics.percentile(100)>basicStatistics.arithmeticMean()+basicStatistics.sampleStdDeviation()*3?"red' style='cursor: pointer' onclick='showgreaterthan(\""+_labCode+"\","+(basicStatistics.arithmeticMean()+basicStatistics.sampleStdDeviation()*3)+");":"text")+"' width='20%'>"+getTran(request,"web","maximum",sWebLanguage)+": <b>"+(data.length<1?"?":deci.format(basicStatistics.percentile(100)))+"</b></td>")
+				         .append("<td nowrap class='text' width='20%'>"+getTran(request,"web","mean",sWebLanguage)+": <b>"+deci.format(basicStatistics.arithmeticMean())+"</b></td>")
+				         .append("<td nowrap class='text' width='20%'>"+getTran(request,"web","median",sWebLanguage)+": <b>"+(data.length<1?"?":deci.format(basicStatistics.median()))+"</b></td>")
+				         .append("<td nowrap class='text' width='20%'>"+getTran(request,"web","standarddeviation",sWebLanguage)+": <b>"+deci.format(basicStatistics.sampleStdDeviation())+"</b></td>")
 				        .append("</tr>");
 			}
 			//*** 2 - LIST/RADIO ******************************************************************
@@ -177,7 +177,7 @@
 				sResults.append("<tr><td colspan='8'><table width='100%'>")
 				        .append("<tr>")
 				         .append("<td class='admin2' width='50%' colspan='4'>LOINC: <b>"+rs.getString("medidoccode")+"</b></td>")
-				         .append("<td class='admin2' width='50%' colspan='4'>"+getTran("Web.manage","labanalysis.cols.editor",sWebLanguage)+": <b>"+getTranNoLink("web",_labEditor,sWebLanguage)+"</b></td>")
+				         .append("<td class='admin2' width='50%' colspan='4'>"+getTran(request,"Web.manage","labanalysis.cols.editor",sWebLanguage)+": <b>"+getTranNoLink("web",_labEditor,sWebLanguage)+"</b></td>")
 					    .append("</tr>")
 				        .append("</table></td></tr>");
 				
@@ -252,7 +252,7 @@
 				sResults.append("<tr><td colspan='8'><table width='100%'>")
 				        .append("<tr>")
 				         .append("<td class='admin2' width='50%' colspan='4'>LOINC: <b>"+rs.getString("medidoccode")+"</b></td>")
-				         .append("<td class='admin2' width='50%' colspan='4'>"+getTran("Web.manage","labanalysis.cols.editor",sWebLanguage)+": <b>"+getTranNoLink("web",_labEditor,sWebLanguage)+"</b></td>")
+				         .append("<td class='admin2' width='50%' colspan='4'>"+getTran(request,"Web.manage","labanalysis.cols.editor",sWebLanguage)+": <b>"+getTranNoLink("web",_labEditor,sWebLanguage)+"</b></td>")
 					    .append("</tr>")
 				        .append("</table></td></tr>");
 				
@@ -277,7 +277,7 @@
 
 				sResults.append("<tr><td colspan='8'><table width='100%'><tr>");
 				sResults.append("<td class='admin2' width='50%' colspan='4'>LOINC: <b>"+rs.getString("medidoccode")+"</b></td>");
-				sResults.append("<td class='admin2' width='50%' colspan='4'>"+getTran("Web.manage","labanalysis.cols.editor",sWebLanguage)+": <b>"+getTranNoLink("web",_labEditor,sWebLanguage)+"</b></td>");
+				sResults.append("<td class='admin2' width='50%' colspan='4'>"+getTran(request,"Web.manage","labanalysis.cols.editor",sWebLanguage)+": <b>"+getTranNoLink("web",_labEditor,sWebLanguage)+"</b></td>");
 				sResults.append("</table></td></tr>");
 			}
 			
@@ -286,7 +286,7 @@
 			// voor elke labanalyse een lijn wegschrijven met een reeks basisparameters en hyperlinks
 			out.println("<tr>");
 			 out.println("<td class='admin'>"+_labCode+"</td>");
-			 out.println("<td class='admin'>"+getTran("labanalysis",labcode,sWebLanguage)+"</td>");
+			 out.println("<td class='admin'>"+getTran(request,"labanalysis",labcode,sWebLanguage)+"</td>");
 		 	 out.println("<td class='admin' width='5%'>"+_labCount+"</td>");
 	 		 out.println("<td class='admin2' colspan='7'>"+sResults.toString()+"</td>");
 			out.println("</tr>");			

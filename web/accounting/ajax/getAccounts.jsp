@@ -6,9 +6,9 @@
 <table width="100%" class="sortable" id="searchresults" cellspacing="1" style="border:none;">
     <%-- header --%>
     <tr class="admin" style="padding-left:1px;">
-        <td><%=HTMLEntities.htmlentities(getTran("web","code",sWebLanguage))%></td>
-        <td><%=HTMLEntities.htmlentities(getTran("web","type",sWebLanguage))%></td>
-        <td><%=HTMLEntities.htmlentities(getTran("web","name",sWebLanguage))%></td>
+        <td><%=HTMLEntities.htmlentities(getTran(request,"web","code",sWebLanguage))%></td>
+        <td><%=HTMLEntities.htmlentities(getTran(request,"web","type",sWebLanguage))%></td>
+        <td><%=HTMLEntities.htmlentities(getTran(request,"web","name",sWebLanguage))%></td>
     </tr>
     
     <tbody class="hand">

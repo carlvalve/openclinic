@@ -11,8 +11,8 @@
 		<table width='100%'>
 			<tr>
 				<td class='admin2'>
-					<%=getTran("web","from",sWebLanguage)%> <%=writeDateField("FindBeginDate","transactionForm",ScreenHelper.formatDate(new java.util.Date()),sWebLanguage)%>
-					<%=getTran("web","to",sWebLanguage)%> <%=writeDateField("FindEndDate","transactionForm",ScreenHelper.formatDate(new java.util.Date()),sWebLanguage)%>
+					<%=getTran(request,"web","from",sWebLanguage)%> <%=writeDateField("FindBeginDate","transactionForm",ScreenHelper.formatDate(new java.util.Date()),sWebLanguage)%>
+					<%=getTran(request,"web","to",sWebLanguage)%> <%=writeDateField("FindEndDate","transactionForm",ScreenHelper.formatDate(new java.util.Date()),sWebLanguage)%>
 				</td>
 				<td class='admin2'>
 					<input type='button' class="button" name='print' value='<%=getTranNoLink("web","print",sWebLanguage)%>' onclick='printReport();'/>

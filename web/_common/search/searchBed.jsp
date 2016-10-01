@@ -29,8 +29,8 @@
         <%-- search fields row 1 --%>
         <tr height='25'>
             <td nowrap>
-                <%=getTran("web", "service", sWebLanguage)%>
-                <br/><%=getTran("web", "bed", sWebLanguage)%>&nbsp;&nbsp;
+                <%=getTran(request,"web", "service", sWebLanguage)%>
+                <br/><%=getTran(request,"web", "bed", sWebLanguage)%>&nbsp;&nbsp;
             </td>
             <td nowrap>
                 <select class='text' name='ServiceUID' id='ServiceUid' onchange='doFind();'>

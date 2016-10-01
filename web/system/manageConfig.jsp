@@ -73,12 +73,12 @@
 
                 Config.addConfig(objConfig);
 
-                msg = "Key '"+sEditOc_key+"' "+getTran("Web", "added", sWebLanguage);
+                msg = "Key '"+sEditOc_key+"' "+getTran(request,"Web", "added", sWebLanguage);
             } 
             else {
                 // record found
                 keyAllreadyExists = true;
-                msg = "Key '"+sEditOc_key+"' "+getTran("Web", "exists", sWebLanguage);
+                msg = "Key '"+sEditOc_key+"' "+getTran(request,"Web", "exists", sWebLanguage);
             }
 
             sFindKey = sEditOc_key;
@@ -111,7 +111,7 @@
 
             Config.saveConfig(objConfig);
 
-            msg = "Key '"+sEditOc_key+"' "+getTran("Web", "saved", sWebLanguage);
+            msg = "Key '"+sEditOc_key+"' "+getTran(request,"Web", "saved", sWebLanguage);
             sAction = "Show";
 
             MedwanQuery.getInstance().reloadConfigValues();
@@ -125,7 +125,7 @@
             MedwanQuery.reload();
             sEditDeleted = "";
 
-            msg = "Key '"+sEditOc_key+"' "+getTran("Web", "deleted", sWebLanguage);
+            msg = "Key '"+sEditOc_key+"' "+getTran(request,"Web", "deleted", sWebLanguage);
             sAction = "New";
 
             MedwanQuery.getInstance().reloadConfigValues();
@@ -169,7 +169,7 @@
             <td class="admin2"><input type="text" class="text" name="FindKey" size="40" value="<%=sFindKey%>"></td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("Web","value",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web","value",sWebLanguage)%></td>
             <td class="admin2"><input type="text" class="text" name="FindValue" size="40" value="<%=sFindValue%>"></td>
         </tr>
         
@@ -183,7 +183,7 @@
                 <input class='button' type="button" name="Backbutton" value='<%=getTranNoLink("Web","Back",sWebLanguage)%>' onclick="doBack();">
                 &nbsp;
                 <img src='<c:url value="/_img/themes/default/pijl.gif"/>'>
-                <a  href="<c:url value='/main.do?Page=system/manageConfigTabbed.jsp?ts='/><%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran("Web.Manage","manageConfigurationTabbed",sWebLanguage)%></a>&nbsp;
+                <a  href="<c:url value='/main.do?Page=system/manageConfigTabbed.jsp?ts='/><%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran(request,"Web.Manage","manageConfigurationTabbed",sWebLanguage)%></a>&nbsp;
             </td>
         </tr>
     </table>
@@ -203,7 +203,7 @@
                 </tr>
                 <%-- value --%>
                 <tr>
-                    <td class="admin"><%=getTran("Web","value",sWebLanguage)%></td>
+                    <td class="admin"><%=getTran(request,"Web","value",sWebLanguage)%></td>
                     <td class="admin2">
                     <%
                         if(sSelectedSQL_value.length() > 0 && sSelectedSQL_value.toLowerCase().startsWith("select")){
@@ -233,15 +233,15 @@
                 </tr>
                 <%-- default value --%>
                 <tr>
-                    <td class="admin"><%=getTran("Web.Manage.Config","Defaultvalue",sWebLanguage)%></td>
+                    <td class="admin"><%=getTran(request,"Web.Manage.Config","Defaultvalue",sWebLanguage)%></td>
                     <td class="admin2"><%=writeTextarea("EditDefaultvalue","","4","",sSelectedDefaultvalue)%></td>
                 </tr>
                 <%-- systemvalue overwritable --%>
                 <tr>
-                    <td class="admin"><%=getTran("Web.Manage.Config","OverrideSystemValue",sWebLanguage)%></td>
+                    <td class="admin"><%=getTran(request,"Web.Manage.Config","OverrideSystemValue",sWebLanguage)%></td>
                     <td class="admin2">
-                        <input type="radio" name="EditOverride" value="0" onDblClick="uncheckRadio(this);" <%if(sSelectedOverride.equals("0")){out.print("checked");}%>><%=getTran("Web","No",sWebLanguage)%>
-                        <input type="radio" name="EditOverride" value="1" onDblClick="uncheckRadio(this);" <%if(sSelectedOverride.equals("1")){out.print("checked");}%>><%=getTran("Web","Yes",sWebLanguage)%>
+                        <input type="radio" name="EditOverride" value="0" onDblClick="uncheckRadio(this);" <%if(sSelectedOverride.equals("0")){out.print("checked");}%>><%=getTran(request,"Web","No",sWebLanguage)%>
+                        <input type="radio" name="EditOverride" value="1" onDblClick="uncheckRadio(this);" <%if(sSelectedOverride.equals("1")){out.print("checked");}%>><%=getTran(request,"Web","Yes",sWebLanguage)%>
                     </td>
                 </tr>
                 <%-- SQL --%>
@@ -251,19 +251,19 @@
                 </tr>
                 <%-- comment --%>
                 <tr>
-                    <td class="admin"><%=getTran("Web","Comment",sWebLanguage)%></td>
+                    <td class="admin"><%=getTran(request,"Web","Comment",sWebLanguage)%></td>
                     <td class="admin2"><%=writeTextarea("EditComment","","4","",sSelectedComment)%></td>
                 </tr>
                 <%-- synchronize --%>
                 <tr>
-                    <td class="admin"><%=getTran("Web.manage","synchronise",sWebLanguage)%></td>
+                    <td class="admin"><%=getTran(request,"Web.manage","synchronise",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="checkbox" name="EditSynchronize" value="1" <%=(sSelectedSynchronize.equals("1")?"CHECKED":"")%>>
                     </td>
                 </tr>
                 <%-- deleted --%>
                 <tr>
-                    <td class="admin"><%=getTran("Web","deleted",sWebLanguage)%></td>
+                    <td class="admin"><%=getTran(request,"Web","deleted",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="checkbox" name="EditDeleted" <%=(sEditDeleted.equals("on")?"CHECKED":"")%>>
                     </td>
@@ -294,7 +294,7 @@
                           if(sAction.equals("Show") || sAction.equals("New")){
                               if(msg == null){
                                   // std message
-                                  %><%=getTran("Web.Manage","noDataChanged",sWebLanguage)%><%
+                                  %><%=getTran(request,"Web.Manage","noDataChanged",sWebLanguage)%><%
                               }
                               else{
                                   // custom (red) message

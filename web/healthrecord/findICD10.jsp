@@ -7,7 +7,7 @@
     <table border="0" width="250" cellspacing="0" cellpadding="5" style="border:1px solid #aaa">
         <tr>
             <td bgcolor="#dddddd" style="text-align:center">
-              <%=getTran("web","searchInProgress",sWebLanguage)%>
+              <%=getTran(request,"web","searchInProgress",sWebLanguage)%>
             </td>
         </tr>
     </table>
@@ -17,7 +17,7 @@
 <form name="icd10Form" method="POST" onSubmit="doFind();">
     <table class='menu' width='100%' cellspacing="0">
         <tr>
-            <td nowrap><%=getTran("Web","Keyword",sWebLanguage)%>&nbsp;&nbsp;</td>
+            <td nowrap><%=getTran(request,"Web","Keyword",sWebLanguage)%>&nbsp;&nbsp;</td>
             <td>
                 <input type='text' class='text' name='keywords' size='40' value="<%=request.getParameter("keywords")!=null?request.getParameter("keywords"):""%>" onblur="limitLength(this);"/>
                 <input class='button' type='button' name='findButton' onClick='doFind();' value='<%=getTranNoLink("Web","Find",sWebLanguage)%>'/>
@@ -62,7 +62,7 @@
                 // display 'no results' message
                 %>
                     <tr class='label2'>
-                        <td colspan='3'><%=getTran("web","norecordsfound",sWebLanguage)%></td>
+                        <td colspan='3'><%=getTran(request,"web","norecordsfound",sWebLanguage)%></td>
                     </tr>
                 <%
             }

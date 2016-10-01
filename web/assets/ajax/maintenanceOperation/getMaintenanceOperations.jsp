@@ -101,7 +101,7 @@
         }
     }
     else{
-        sReturn = "<td colspan='4'>"+getTran("web","noRecordsFound",sWebLanguage)+"</td>";
+        sReturn = "<td colspan='4'>"+getTran(request,"web","noRecordsFound",sWebLanguage)+"</td>";
     }
 %>
 
@@ -111,16 +111,16 @@
 <table width="100%" class="sortable" id="searchresults" cellspacing="1" style="border:none;">
     <%-- header --%>
     <tr class="admin" style="padding-left:1px;">    
-        <td width="25%" nowrap><%=HTMLEntities.htmlentities(getTran("web.assets","maintenancePlan",sWebLanguage))%></td>
-        <td width="7%" nowrap><asc><%=HTMLEntities.htmlentities(getTran("web.assets","date",sWebLanguage))%></asc></td>
-        <td width="25%" nowrap><%=HTMLEntities.htmlentities(getTran("web.assets","operator",sWebLanguage))%></td>
-        <td width="*" nowrap><%=HTMLEntities.htmlentities(getTran("web.assets","result",sWebLanguage))%></td>
+        <td width="25%" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.assets","maintenancePlan",sWebLanguage))%></td>
+        <td width="7%" nowrap><asc><%=HTMLEntities.htmlentities(getTran(request,"web.assets","date",sWebLanguage))%></asc></td>
+        <td width="25%" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.assets","operator",sWebLanguage))%></td>
+        <td width="*" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.assets","result",sWebLanguage))%></td>
     </tr>
     
     <tbody class="hand"><%=sReturn%></tbody>
 </table> 
 
-&nbsp;<i><%=operations.size()+" "+getTran("web","recordsFound",sWebLanguage)%></i>
+&nbsp;<i><%=operations.size()+" "+getTran(request,"web","recordsFound",sWebLanguage)%></i>
         <%
     }
     else{

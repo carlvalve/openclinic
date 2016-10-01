@@ -27,11 +27,11 @@
     <%=writeTableHeader("Web","statistics.activitystats.diagnosticcoding",sWebLanguage," doBack();")%>
     <table class="menu" width="100%" cellspacing="0">
          <tr>
-            <td><%=getTran("Web","Begin",sWebLanguage)%></td>
+            <td><%=getTran(request,"Web","Begin",sWebLanguage)%></td>
             <td><%=writeDateField("FindBegin","transactionForm",sFindBegin,sWebLanguage)%></td>
         </tr>
         <tr>
-            <td><%=getTran("Web","End",sWebLanguage)%></td>
+            <td><%=getTran(request,"Web","End",sWebLanguage)%></td>
             <td><%=writeDateField("FindEnd","transactionForm",sFindEnd,sWebLanguage)%></td>
         </tr>
         
@@ -83,7 +83,7 @@
     	}
     	for(int n=0;n<lines.size();n++){
     		Line line = (Line)lines.elementAt(n);
-    		out.println("<tr><td class='admin2'>"+line.name.toUpperCase()+"</td><td><b>"+getTran("web","diagnoses",sWebLanguage)+": "+ new DecimalFormat("#,###").format(line.total)+" ("+new DecimalFormat("##0.0").format(100*line.total/generaltotal)+"%)</b></td><td><b>"+getTran("web","encounters",sWebLanguage)+": "+new DecimalFormat("#,###").format(line.contacts)+"</b></td></tr>");
+    		out.println("<tr><td class='admin2'>"+line.name.toUpperCase()+"</td><td><b>"+getTran(request,"web","diagnoses",sWebLanguage)+": "+ new DecimalFormat("#,###").format(line.total)+" ("+new DecimalFormat("##0.0").format(100*line.total/generaltotal)+"%)</b></td><td><b>"+getTran(request,"web","encounters",sWebLanguage)+": "+new DecimalFormat("#,###").format(line.contacts)+"</b></td></tr>");
     	}
         rs.close();
         ps.close();

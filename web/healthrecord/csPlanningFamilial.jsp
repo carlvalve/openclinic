@@ -21,7 +21,7 @@
         <%-- DATE --%>
         <tr>
             <td class="admin" width="<%=sTDAdminWidth%>">
-                <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;<%=getTran("Web.Occup", "medwan.common.date", sWebLanguage)%>
+                <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;<%=getTran(request,"Web.Occup", "medwan.common.date", sWebLanguage)%>
             </td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" id="trandate" OnBlur="checkDate(this);">
@@ -37,71 +37,71 @@
                 <mxs:propertyAccessorI18N name="transaction.items" scope="page"
                                           compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PLANNING_FAMILIAL_TYPE_UTILISATRICE;value=nouvelle"
                                           property="value"
-                                          outputString="checked"/>><%=getLabel("cs.planification", "nouvelle", sWebLanguage, "utilisatricenew")%>
+                                          outputString="checked"/>><%=getLabel(request,"cs.planification", "nouvelle", sWebLanguage, "utilisatricenew")%>
                 <input type="radio" onDblClick="uncheckRadio(this);" id="utilisatrice" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PLANNING_FAMILIAL_TYPE_UTILISATRICE" property="itemId"/>]>.value" value="fin.mois"
                 <mxs:propertyAccessorI18N name="transaction.items" scope="page"
                                           compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PLANNING_FAMILIAL_TYPE_UTILISATRICE;value=fin.mois"
                                           property="value"
-                                          outputString="checked"/>><%=getLabel("cs.planification", "fin.mois", sWebLanguage, "utilisatrice")%>
+                                          outputString="checked"/>><%=getLabel(request,"cs.planification", "fin.mois", sWebLanguage, "utilisatrice")%>
             </td>
         </tr>
         
         <tr>
-            <td class="admin"><%=getTran("cs.planification", "methode", sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"cs.planification", "methode", sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="checkbox" id="actions_1" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PLANNING_FAMILIAL_PILULE" property="itemId"/>]>.value" value="true"
                 <mxs:propertyAccessorI18N name="transaction.items" scope="page"
                                           compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PLANNING_FAMILIAL_PILULE;value=true"
                                           property="value"
-                                          outputString="checked"/>><%=getLabel("cs.planification", "pilule", sWebLanguage, "actions_1")%>
+                                          outputString="checked"/>><%=getLabel(request,"cs.planification", "pilule", sWebLanguage, "actions_1")%>
                 <br/>
                 <input type="checkbox" id="actions_2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PLANNING_FAMILIAL_DEPO_PROVERA" property="itemId"/>]>.value" value="true"
                 <mxs:propertyAccessorI18N name="transaction.items" scope="page"
                                           compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PLANNING_FAMILIAL_DEPO_PROVERA;value=true"
                                           property="value"
-                                          outputString="checked"/>><%=getLabel("cs.planification", "depo.provera", sWebLanguage, "actions_2")%>
+                                          outputString="checked"/>><%=getLabel(request,"cs.planification", "depo.provera", sWebLanguage, "actions_2")%>
                 <br/>
                 <input type="checkbox" id="actions_3" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PLANNING_FAMILIAL_IMPLANT" property="itemId"/>]>.value" value="true"
                 <mxs:propertyAccessorI18N name="transaction.items" scope="page"
                                           compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PLANNING_FAMILIAL_IMPLANT;value=true"
                                           property="value"
-                                          outputString="checked"/>><%=getLabel("cs.planification", "implant", sWebLanguage, "actions_3")%>
+                                          outputString="checked"/>><%=getLabel(request,"cs.planification", "implant", sWebLanguage, "actions_3")%>
                 <br/>
                 <input type="checkbox" id="actions_4" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PLANNING_FAMILIAL_DIU" property="itemId"/>]>.value" value="true"
                 <mxs:propertyAccessorI18N name="transaction.items" scope="page"
                                           compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PLANNING_FAMILIAL_DIU;value=true"
                                           property="value"
-                                          outputString="checked"/>><%=getLabel("cs.planification", "diu", sWebLanguage, "actions_4")%>
+                                          outputString="checked"/>><%=getLabel(request,"cs.planification", "diu", sWebLanguage, "actions_4")%>
                 <br/>
                 <input type="checkbox" id="actions_5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PLANNING_FAMILIAL_MJF" property="itemId"/>]>.value" value="true"
                 <mxs:propertyAccessorI18N name="transaction.items" scope="page"
                                           compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PLANNING_FAMILIAL_MJF;value=true"
                                           property="value"
-                                          outputString="checked"/>><%=getLabel("cs.planification", "mjf", sWebLanguage, "actions_5")%>
+                                          outputString="checked"/>><%=getLabel(request,"cs.planification", "mjf", sWebLanguage, "actions_5")%>
                 <br/>
                 <input type="checkbox" id="actions_6" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PLANNING_FAMILIAL_BARRIERES" property="itemId"/>]>.value" value="true"
                 <mxs:propertyAccessorI18N name="transaction.items" scope="page"
                                           compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PLANNING_FAMILIAL_BARRIERES;value=true"
                                           property="value"
-                                          outputString="checked"/>><%=getLabel("cs.planification", "barrieres", sWebLanguage, "actions_6")%>
+                                          outputString="checked"/>><%=getLabel(request,"cs.planification", "barrieres", sWebLanguage, "actions_6")%>
                 <br/>
                 <input type="checkbox" id="actions_7" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PLANNING_FAMILIAL_AUTO_OBSERVATION" property="itemId"/>]>.value" value="true"
                 <mxs:propertyAccessorI18N name="transaction.items" scope="page"
                                           compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PLANNING_FAMILIAL_AUTO_OBSERVATION;value=true"
                                           property="value"
-                                          outputString="checked"/>><%=getLabel("cs.planification", "auto.observation", sWebLanguage, "actions_7")%>
+                                          outputString="checked"/>><%=getLabel(request,"cs.planification", "auto.observation", sWebLanguage, "actions_7")%>
                 <br/>
                 <input type="checkbox" id="actions_8" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PLANNING_FAMILIAL_LIGATURE" property="itemId"/>]>.value" value="true"
                 <mxs:propertyAccessorI18N name="transaction.items" scope="page"
                                           compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PLANNING_FAMILIAL_LIGATURE;value=true"
                                           property="value"
-                                          outputString="checked"/>><%=getLabel("cs.planification", "ligature", sWebLanguage, "actions_8")%>
+                                          outputString="checked"/>><%=getLabel(request,"cs.planification", "ligature", sWebLanguage, "actions_8")%>
                 <br/>
                 <input type="checkbox" id="actions_9" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PLANNING_FAMILIAL_VASECTOMIE" property="itemId"/>]>.value" value="true"
                 <mxs:propertyAccessorI18N name="transaction.items" scope="page"
                                           compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PLANNING_FAMILIAL_VASECTOMIE;value=true"
                                           property="value"
-                                          outputString="checked"/>><%=getLabel("cs.planification", "vasectomie", sWebLanguage, "actions_9")%>
+                                          outputString="checked"/>><%=getLabel(request,"cs.planification", "vasectomie", sWebLanguage, "actions_9")%>
             </td>
         </tr>
         
@@ -113,18 +113,18 @@
                 <mxs:propertyAccessorI18N name="transaction.items" scope="page"
                                           compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PLANNING_FAMILIAL_NOUVEAU_CAS;value=yes"
                                           property="value"
-                                          outputString="checked"/>><%=getLabel("web", "yes", sWebLanguage, "newcase1")%>
+                                          outputString="checked"/>><%=getLabel(request,"web", "yes", sWebLanguage, "newcase1")%>
                 <input type="radio" onDblClick="uncheckRadio(this);" id="newcase2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PLANNING_FAMILIAL_NOUVEAU_CAS" property="itemId"/>]>.value" value="no"
                 <mxs:propertyAccessorI18N name="transaction.items" scope="page"
                                           compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PLANNING_FAMILIAL_NOUVEAU_CAS;value=no"
                                           property="value"
-                                          outputString="checked"/>><%=getLabel("web", "no", sWebLanguage, "newcase2")%>
+                                          outputString="checked"/>><%=getLabel(request,"web", "no", sWebLanguage, "newcase2")%>
             </td>
         </tr>
         
         <%-- COMMENT --%>
         <tr>
-            <td class="admin"><%=getTran("web","comment",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","comment",sWebLanguage)%></td>
             <td colspan="3" class="admin2">
                 <textarea id="comment" rows="1" onKeyup="resizeTextarea(this,10);" class="text" cols="75" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PLANNING_FAMILIAL_COMMENTAIRE_0" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PLANNING_FAMILIAL_COMMENTAIRE_0" property="value"/><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PLANNING_FAMILIAL_COMMENTAIRE_1" property="value"/><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PVV_COMMENTAIRE_2" property="value"/><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PLANNING_FAMILIAL_COMMENTAIRE_2" property="value"/><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PLANNING_FAMILIAL_COMMENTAIRE_3" property="value"/><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PLANNING_FAMILIAL_COMMENTAIRE_4" property="value"/></textarea>
               

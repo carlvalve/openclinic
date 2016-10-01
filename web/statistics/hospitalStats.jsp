@@ -100,10 +100,10 @@
 		    <table width="100%" class="menu" cellspacing="1" cellpadding="0">
 		        <%-- PERIOD --%>
 		        <tr>
-		            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","period",sWebLanguage)%>&nbsp;</td>
+		            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","period",sWebLanguage)%>&nbsp;</td>
 		            <td class="admin2">
-		                <%=getTran("web","from",sWebLanguage)%>&nbsp;<%=writeDateField("begin","diagstats",begin,sWebLanguage)%>&nbsp;
-		                <%=getTran("web","to",sWebLanguage)%>&nbsp;<%=writeDateField("end","diagstats",end,sWebLanguage)%>&nbsp;
+		                <%=getTran(request,"web","from",sWebLanguage)%>&nbsp;<%=writeDateField("begin","diagstats",begin,sWebLanguage)%>&nbsp;
+		                <%=getTran(request,"web","to",sWebLanguage)%>&nbsp;<%=writeDateField("end","diagstats",end,sWebLanguage)%>&nbsp;
 		            </td>
 		        </tr>
 		        
@@ -134,7 +134,7 @@
 	    // header-title
 	    out.print("<table width='100%' cellpadding='0' cellspacing='1' class='menu'>"+
 	               "<tr>"+
-	    		    "<td class='admin'><center>"+getTran("web","contact.statistics.for",sWebLanguage)+" "+getTran("web","hospitalname",sWebLanguage)+" "+getTran("web","between",sWebLanguage)+" "+ ScreenHelper.stdDateFormat.format(serviceStats.getBegin())+" "+getTran("web","and",sWebLanguage)+" "+ ScreenHelper.stdDateFormat.format(serviceStats.getEnd())+"<center></td>"+
+	    		    "<td class='admin'><center>"+getTran(request,"web","contact.statistics.for",sWebLanguage)+" "+getTran(request,"web","hospitalname",sWebLanguage)+" "+getTran(request,"web","between",sWebLanguage)+" "+ ScreenHelper.stdDateFormat.format(serviceStats.getBegin())+" "+getTran(request,"web","and",sWebLanguage)+" "+ ScreenHelper.stdDateFormat.format(serviceStats.getEnd())+"<center></td>"+
 	               "</tr>"+
 	    		  "</table>");	    		    		
 %>
@@ -146,16 +146,16 @@
   <%
       Correlation correlation = new Correlation();
       if(serviceStats.nonPeriodPatientsZero()){
-    	  drawGraph(serviceStats.getPeriodPatients(),0,out,sWebLanguage,getTran("web","patients",sWebLanguage),getTran("web","weekly.evolution.of",sWebLanguage)+" # <b>"+getTran("web","patients",sWebLanguage)+"<b>",0,HospitalStats.getBedCapacity(),correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodPatientsY(),0),correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodPatientsY(),serviceStats.getX().length));
+    	  drawGraph(serviceStats.getPeriodPatients(),0,out,sWebLanguage,getTran(request,"web","patients",sWebLanguage),getTran(request,"web","weekly.evolution.of",sWebLanguage)+" # <b>"+getTran(request,"web","patients",sWebLanguage)+"<b>",0,HospitalStats.getBedCapacity(),correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodPatientsY(),0),correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodPatientsY(),serviceStats.getX().length));
       }
       if(serviceStats.nonPeriodAdmissionsZero()){
-    	  drawGraph(serviceStats.getPeriodAdmissions(),1,out,sWebLanguage,getTran("web","admissions.short",sWebLanguage),getTran("web","weekly.evolution.of",sWebLanguage)+" # <b>"+getTran("web","admissions",sWebLanguage)+"<b>",1,-2,correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodAdmissionsY(),0),correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodAdmissionsY(),serviceStats.getX().length));
+    	  drawGraph(serviceStats.getPeriodAdmissions(),1,out,sWebLanguage,getTran(request,"web","admissions.short",sWebLanguage),getTran(request,"web","weekly.evolution.of",sWebLanguage)+" # <b>"+getTran(request,"web","admissions",sWebLanguage)+"<b>",1,-2,correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodAdmissionsY(),0),correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodAdmissionsY(),serviceStats.getX().length));
       }
       if(serviceStats.nonPeriodAdmissionDaysZero()){
-    	  drawGraph(serviceStats.getPeriodAdmissionDays(),2,out,sWebLanguage,getTran("web","admission.days.short",sWebLanguage),getTran("web","weekly.evolution.of",sWebLanguage)+" # <b>"+getTran("web","admission.days",sWebLanguage)+"<b>",2,-2,correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodAdmissionDaysY(),0),correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodAdmissionDaysY(),serviceStats.getX().length));
+    	  drawGraph(serviceStats.getPeriodAdmissionDays(),2,out,sWebLanguage,getTran(request,"web","admission.days.short",sWebLanguage),getTran(request,"web","weekly.evolution.of",sWebLanguage)+" # <b>"+getTran(request,"web","admission.days",sWebLanguage)+"<b>",2,-2,correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodAdmissionDaysY(),0),correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodAdmissionDaysY(),serviceStats.getX().length));
       }
       if(serviceStats.nonPeriodVisitsZero()){
-    	  drawGraph(serviceStats.getPeriodVisits(),3,out,sWebLanguage,getTran("web","visits",sWebLanguage),getTran("web","weekly.evolution.of",sWebLanguage)+" # <b>"+getTran("web","visits",sWebLanguage)+"<b>",3,-2,correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodVisitsY(),0),correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodVisitsY(),serviceStats.getX().length));
+    	  drawGraph(serviceStats.getPeriodVisits(),3,out,sWebLanguage,getTran(request,"web","visits",sWebLanguage),getTran(request,"web","weekly.evolution.of",sWebLanguage)+" # <b>"+getTran(request,"web","visits",sWebLanguage)+"<b>",3,-2,correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodVisitsY(),0),correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodVisitsY(),serviceStats.getX().length));
       }
   %>
   
@@ -169,9 +169,9 @@
     <center>
         <table class="menu" width="100%">
             <tr>
-                <td><%=getTran("web","mean.value",sWebLanguage)%>: <b><%=deciComma.format(correlation.mean(serviceStats.getPeriodPatientsY()))%></b></td>
-                <td><%=getTran("web","pearsson",sWebLanguage)%>: <b><%=deciComma.format(correlation.pearsonCorrelationCoefficient(serviceStats.getX(),serviceStats.getPeriodPatientsY()))%></b></td>
-                <td colspan="2"><%=getTran("web","linear.regression",sWebLanguage)%>: <b>patients = <%=deciComma.format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),serviceStats.getPeriodPatientsY())[0])%> x weeks+<%=deciComma.format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),serviceStats.getPeriodPatientsY())[1])%></b></td>
+                <td><%=getTran(request,"web","mean.value",sWebLanguage)%>: <b><%=deciComma.format(correlation.mean(serviceStats.getPeriodPatientsY()))%></b></td>
+                <td><%=getTran(request,"web","pearsson",sWebLanguage)%>: <b><%=deciComma.format(correlation.pearsonCorrelationCoefficient(serviceStats.getX(),serviceStats.getPeriodPatientsY()))%></b></td>
+                <td colspan="2"><%=getTran(request,"web","linear.regression",sWebLanguage)%>: <b>patients = <%=deciComma.format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),serviceStats.getPeriodPatientsY())[0])%> x weeks+<%=deciComma.format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),serviceStats.getPeriodPatientsY())[1])%></b></td>
             </tr>
             <tr>
                 <td>+Y1: <b><%=deciComma.format(correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodPatientsY(),serviceStats.getX().length+52))%></b></td>
@@ -188,9 +188,9 @@
     <center>
         <table class="menu" width="100%">
             <tr>
-                <td><%=getTran("web","mean.value",sWebLanguage)%>: <b><%=deciComma.format(correlation.mean(serviceStats.getPeriodAdmissionsY()))%></b></td>
-                <td><%=getTran("web","pearsson",sWebLanguage)%>: <b><%=deciComma.format(correlation.pearsonCorrelationCoefficient(serviceStats.getX(),serviceStats.getPeriodAdmissionsY()))%></b></td>
-                <td colspan="2"><%=getTran("web","linear.regression",sWebLanguage)%>: <b>admissions = <%=deciComma.format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),serviceStats.getPeriodAdmissionsY())[0])%> x weeks+<%=deciComma.format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),serviceStats.getPeriodAdmissionsY())[1])%></b></td>
+                <td><%=getTran(request,"web","mean.value",sWebLanguage)%>: <b><%=deciComma.format(correlation.mean(serviceStats.getPeriodAdmissionsY()))%></b></td>
+                <td><%=getTran(request,"web","pearsson",sWebLanguage)%>: <b><%=deciComma.format(correlation.pearsonCorrelationCoefficient(serviceStats.getX(),serviceStats.getPeriodAdmissionsY()))%></b></td>
+                <td colspan="2"><%=getTran(request,"web","linear.regression",sWebLanguage)%>: <b>admissions = <%=deciComma.format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),serviceStats.getPeriodAdmissionsY())[0])%> x weeks+<%=deciComma.format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),serviceStats.getPeriodAdmissionsY())[1])%></b></td>
             </tr>
             <tr>
                 <td>+Y1: <b><%=deciComma.format(correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodAdmissionsY(),serviceStats.getX().length+52))%></b></td>
@@ -207,9 +207,9 @@
     <center>
         <table class="menu" width="100%">
             <tr>
-                <td><%=getTran("web","mean.value",sWebLanguage)%>: <b><%=deciComma.format(correlation.mean(serviceStats.getPeriodAdmissionDaysY()))%></b></td>
-                <td><%=getTran("web","pearsson",sWebLanguage)%>: <b><%=deciComma.format(correlation.pearsonCorrelationCoefficient(serviceStats.getX(),serviceStats.getPeriodAdmissionDaysY()))%></b></td>
-                <td colspan="2"><%=getTran("web","linear.regression",sWebLanguage)%>: <b>admission days = <%=deciComma.format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),serviceStats.getPeriodAdmissionDaysY())[0])%> x weeks+<%=deciComma.format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),serviceStats.getPeriodAdmissionDaysY())[1])%></b></td>
+                <td><%=getTran(request,"web","mean.value",sWebLanguage)%>: <b><%=deciComma.format(correlation.mean(serviceStats.getPeriodAdmissionDaysY()))%></b></td>
+                <td><%=getTran(request,"web","pearsson",sWebLanguage)%>: <b><%=deciComma.format(correlation.pearsonCorrelationCoefficient(serviceStats.getX(),serviceStats.getPeriodAdmissionDaysY()))%></b></td>
+                <td colspan="2"><%=getTran(request,"web","linear.regression",sWebLanguage)%>: <b>admission days = <%=deciComma.format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),serviceStats.getPeriodAdmissionDaysY())[0])%> x weeks+<%=deciComma.format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),serviceStats.getPeriodAdmissionDaysY())[1])%></b></td>
             </tr>
             <tr>
                 <td>+Y1: <b><%=deciComma.format(correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodAdmissionDaysY(),serviceStats.getX().length+52))%></b></td>
@@ -229,9 +229,9 @@
         <center>
             <table class="menu" width="100%">
                 <tr>
-                    <td><%=getTran("web","mean.value",sWebLanguage)%>: <b><%=deciComma.format(correlation.mean(serviceStats.getPeriodVisitsY()))%></b></td>
-                    <td><%=getTran("web","pearsson",sWebLanguage)%>: <b><%=deciComma.format(correlation.pearsonCorrelationCoefficient(serviceStats.getX(),serviceStats.getPeriodVisitsY()))%></b></td>
-                    <td colspan="2"><%=getTran("web","linear.regression",sWebLanguage)%>: <b>visits = <%=deciComma.format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),serviceStats.getPeriodVisitsY())[0])%> x weeks+<%=deciComma.format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),serviceStats.getPeriodVisitsY())[1])%></b></td>
+                    <td><%=getTran(request,"web","mean.value",sWebLanguage)%>: <b><%=deciComma.format(correlation.mean(serviceStats.getPeriodVisitsY()))%></b></td>
+                    <td><%=getTran(request,"web","pearsson",sWebLanguage)%>: <b><%=deciComma.format(correlation.pearsonCorrelationCoefficient(serviceStats.getX(),serviceStats.getPeriodVisitsY()))%></b></td>
+                    <td colspan="2"><%=getTran(request,"web","linear.regression",sWebLanguage)%>: <b>visits = <%=deciComma.format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),serviceStats.getPeriodVisitsY())[0])%> x weeks+<%=deciComma.format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),serviceStats.getPeriodVisitsY())[1])%></b></td>
                 </tr>
                 <tr>
                     <td>+Y1: <b><%=deciComma.format(correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodVisitsY(),serviceStats.getX().length+52))%></b></td>
@@ -248,7 +248,7 @@
 	    // footer-title
 	    out.print("<table width='100%' cellpadding='0' cellspacing='1' class='menu' style='border-top:none;'>"+
 	               "<tr>"+
-	    		    "<td class='admin'><center>"+getTran("web","activity.statistics.for",sWebLanguage)+" "+getTran("web","hospitalname",sWebLanguage)+" "+getTran("web","between",sWebLanguage)+" "+ ScreenHelper.stdDateFormat.format(serviceStats.getBegin())+" "+getTran("web","and",sWebLanguage)+" "+ScreenHelper.stdDateFormat.format(serviceStats.getEnd())+"<center></td>"+
+	    		    "<td class='admin'><center>"+getTran(request,"web","activity.statistics.for",sWebLanguage)+" "+getTran(request,"web","hospitalname",sWebLanguage)+" "+getTran(request,"web","between",sWebLanguage)+" "+ ScreenHelper.stdDateFormat.format(serviceStats.getBegin())+" "+getTran(request,"web","and",sWebLanguage)+" "+ScreenHelper.stdDateFormat.format(serviceStats.getEnd())+"<center></td>"+
 	               "</tr>"+
 	    		  "</table>");
 	        		
@@ -262,7 +262,7 @@
 	    while(transactionTypes.hasMoreElements()){
 	        String transactionType = (String)transactionTypes.nextElement();
 	        double[] values = serviceStats.getPeriodTransactions(transactionType);
-	        drawGraph(values,n,out,sWebLanguage,getTran("web","examinations",sWebLanguage),getTran("web","weekly.evolution.of",sWebLanguage)+" # <b>"+getTran("web.occup",transactionType, sWebLanguage)+"</b>",n,0,correlation.estimateY(serviceStats.getX(),values,0),correlation.estimateY(serviceStats.getX(),values,serviceStats.getX().length));
+	        drawGraph(values,n,out,sWebLanguage,getTran(request,"web","examinations",sWebLanguage),getTran(request,"web","weekly.evolution.of",sWebLanguage)+" # <b>"+getTran(request,"web.occup",transactionType, sWebLanguage)+"</b>",n,0,correlation.estimateY(serviceStats.getX(),values,0),correlation.estimateY(serviceStats.getX(),values,serviceStats.getX().length));
 	        n++;
 	
 	        Examination examination = new Examination(transactionType);
@@ -279,11 +279,11 @@
 	        sComments+= "<center>"+
 	                    "<table class='menu' width='100%'>"+
 	                     "<tr>"+
-	                      "<td>"+getTran("web","mean.value",sWebLanguage)+": <b>"+deciComma.format(correlation.mean(values))+"</b></td>\n"+
-		                  "<td>"+getTran("web","pearsson",sWebLanguage)+": <b>"+deciComma.format(correlation.pearsonCorrelationCoefficient(serviceStats.getX(), values))+"</b></td>\n"+
-		                  "<td colspan=\"2\">"+getTran("web","linear.regression", sWebLanguage)+": <b>"+getTran("web", "examinations", sWebLanguage)+" = "+deciComma.format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),values)[0])+" x "+getTran("web", "weeks",sWebLanguage)+"+"+deciComma.format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),values)[1])+"</b></td>"+
-		                  "<td>"+getTran("web","unit.cost",sWebLanguage)+": <b>"+examination.getCost()+"</b></td>"+
-		                  "<td>"+getTran("web","period.cost",sWebLanguage)+": <b>"+deciLong.format(examination.getCost()*sumValues(values))+"</b></td>"+
+	                      "<td>"+getTran(request,"web","mean.value",sWebLanguage)+": <b>"+deciComma.format(correlation.mean(values))+"</b></td>\n"+
+		                  "<td>"+getTran(request,"web","pearsson",sWebLanguage)+": <b>"+deciComma.format(correlation.pearsonCorrelationCoefficient(serviceStats.getX(), values))+"</b></td>\n"+
+		                  "<td colspan=\"2\">"+getTran(request,"web","linear.regression", sWebLanguage)+": <b>"+getTran(request,"web", "examinations", sWebLanguage)+" = "+deciComma.format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),values)[0])+" x "+getTran(request,"web", "weeks",sWebLanguage)+"+"+deciComma.format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),values)[1])+"</b></td>"+
+		                  "<td>"+getTran(request,"web","unit.cost",sWebLanguage)+": <b>"+examination.getCost()+"</b></td>"+
+		                  "<td>"+getTran(request,"web","period.cost",sWebLanguage)+": <b>"+deciLong.format(examination.getCost()*sumValues(values))+"</b></td>"+
 		                "</tr>"+
 		                "<tr>"+
 		                 "<td>+Y1: <b>"+deciComma.format(correlation.estimateY(serviceStats.getX(),values,serviceStats.getX().length+52))+" ("+deciLong.format(correlation.estimateY(serviceStats.getX(),values,serviceStats.getX().length+52)*examination.getCost()*serviceStats.getX().length)+")</b></td>"+
@@ -304,14 +304,14 @@
         sComments+= "<p/>"+
                     "<center>"+
                      "<table class='menu' width='100%'>"+
-                      "<tr><td colspan='7'><b>"+getTran("web","costtotals",sWebLanguage).toUpperCase()+"</b></td></tr>"+
-                      "<tr><td colspan='7'><b>"+getTran("web","costtotals.overhead",sWebLanguage).toUpperCase()+"</b></td></tr>"+
+                      "<tr><td colspan='7'><b>"+getTran(request,"web","costtotals",sWebLanguage).toUpperCase()+"</b></td></tr>"+
+                      "<tr><td colspan='7'><b>"+getTran(request,"web","costtotals.overhead",sWebLanguage).toUpperCase()+"</b></td></tr>"+
                       "<tr>"+
-                       "<td colspan='7'>"+getTran("web","period",sWebLanguage)+": <b>"+deciLong.format(overhead)+"</b></td>"+
+                       "<td colspan='7'>"+getTran(request,"web","period",sWebLanguage)+": <b>"+deciLong.format(overhead)+"</b></td>"+
                       "</tr>"+
-                      "<tr><td colspan='7'><b>"+getTran("web","costtotals.specific",sWebLanguage).toUpperCase()+"</b></td></tr>"+
+                      "<tr><td colspan='7'><b>"+getTran(request,"web","costtotals.specific",sWebLanguage).toUpperCase()+"</b></td></tr>"+
                       "<tr>"+
-                       "<td>"+getTran("web","period",sWebLanguage)+": <b>"+deciLong.format(_periodCost)+"</b></td>"+
+                       "<td>"+getTran(request,"web","period",sWebLanguage)+": <b>"+deciLong.format(_periodCost)+"</b></td>"+
                        "<td>+Y1: <b>"+deciLong.format(_costY1)+"</b></td>"+
                        "<td>+Y2: <b>"+deciLong.format(_costY2)+"</b></td>"+
                        "<td>+Y3: <b>"+deciLong.format(_costY3)+"</b></td>"+
@@ -319,9 +319,9 @@
                        "<td>+Y5: <b>"+deciLong.format(_costY5)+"</b></td>"+
                        "<td>+Y10: <b>"+deciLong.format(_costY10)+"</b></td>"+
                       "</tr>"+
-                      "<tr><td colspan='7'><b>"+getTran("web","costtotals.total",sWebLanguage).toUpperCase()+"</b></td></tr>"+
+                      "<tr><td colspan='7'><b>"+getTran(request,"web","costtotals.total",sWebLanguage).toUpperCase()+"</b></td></tr>"+
                       "<tr>"+
-                       "<td>"+getTran("web","period",sWebLanguage)+": <b>"+deciLong.format(overhead+_periodCost)+"</b></td>"+
+                       "<td>"+getTran(request,"web","period",sWebLanguage)+": <b>"+deciLong.format(overhead+_periodCost)+"</b></td>"+
                        "<td>+Y1: <b>"+deciLong.format(overhead+_costY1)+"</b></td>"+
                        "<td>+Y2: <b>"+deciLong.format(overhead+_costY2)+"</b></td>"+
                        "<td>+Y3: <b>"+deciLong.format(overhead+_costY3)+"</b></td>"+

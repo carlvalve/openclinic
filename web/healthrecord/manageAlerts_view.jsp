@@ -17,7 +17,7 @@
     <table class="list" width='100%' border='0' cellspacing="1">
         <%-- name --%>
         <tr>
-            <td width ="<%=sTDAdminWidth%>" class='admin'><%=getTran("Web.Occup","medwan.common.name",sWebLanguage)%>&nbsp;</td>
+            <td width ="<%=sTDAdminWidth%>" class='admin'><%=getTran(request,"Web.Occup","medwan.common.name",sWebLanguage)%>&nbsp;</td>
             <td class='admin2'>
                 <input class="text" type="text" size="50" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ALERTS_LABEL" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ALERTS_LABEL" property="value"/>" onblur="limitLength(this);">
             </td>
@@ -25,7 +25,7 @@
         
         <%-- description --%>
         <tr>
-            <td class='admin'><%=getTran("Web.Occup","medwan.common.description",sWebLanguage)%>&nbsp;</td>
+            <td class='admin'><%=getTran(request,"Web.Occup","medwan.common.description",sWebLanguage)%>&nbsp;</td>
             <td class='admin2'>
                 <textarea onKeyup="resizeTextarea(this,10);" class="text" cols="74" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ALERTS_DESCRIPTION" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ALERTS_DESCRIPTION" property="value"/></textarea>
             </td>
@@ -33,7 +33,7 @@
         
         <%-- expiration date --%>
         <tr>
-            <td class='admin'><%=getTran("Web.Occup","medwan.common.expiration-date",sWebLanguage)%>&nbsp;</td>
+            <td class='admin'><%=getTran(request,"Web.Occup","medwan.common.expiration-date",sWebLanguage)%>&nbsp;</td>
             <td class='admin2'>
                 <input id="expiration" class="text" type="text" size="11" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ALERTS_EXPIRATION_DATE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ALERTS_EXPIRATION_DATE" property="value" formatType="date"/>" onblur="checkDate(this);">
                 <script>writeMyDate("expiration");</script>

@@ -30,10 +30,10 @@
         }
 		String[] prestations = sPrestationUIDs.split(";");
         prestationcontent ="<table width='100%'>";
-        prestationcontent+="<tr><td width='50%'><b>"+getTran("web","prestation",sWebLanguage)+
-        "</b></td><td width='16%'><b>"+getTran("web","quantity",sWebLanguage)+
-        "</b></td><td width='16%'><b>"+getTran("web.finance","amount.patient",sWebLanguage)+
-        "</b></td><td><b>"+getTran("web.finance","amount.insurar",sWebLanguage)+"</b></td></tr>";
+        prestationcontent+="<tr><td width='50%'><b>"+getTran(request,"web","prestation",sWebLanguage)+
+        "</b></td><td width='16%'><b>"+getTran(request,"web","quantity",sWebLanguage)+
+        "</b></td><td width='16%'><b>"+getTran(request,"web.finance","amount.patient",sWebLanguage)+
+        "</b></td><td><b>"+getTran(request,"web.finance","amount.insurar",sWebLanguage)+"</b></td></tr>";
 		for(int n=0;n<prestations.length;n++){
 	        Prestation prestation = Prestation.get(prestations[n].split("=")[0]);
 	        quantity=Integer.parseInt(prestations[n].split("=")[1]);
@@ -116,9 +116,9 @@
       	pa=new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(dPatientAmount);
       	pi=new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(dInsurarAmount);
         prestationcontent ="<table width='100%'>";
-        prestationcontent+="<tr><td width='50%'><b>"+getTran("web","prestation",sWebLanguage)+
-        "</b></td><td width='25%'><b>"+getTran("web.finance","amount.patient",sWebLanguage)+
-        "</b></td><td><b>"+getTran("web.finance","amount.insurar",sWebLanguage)+"</b></td></tr>";
+        prestationcontent+="<tr><td width='50%'><b>"+getTran(request,"web","prestation",sWebLanguage)+
+        "</b></td><td width='25%'><b>"+getTran(request,"web.finance","amount.patient",sWebLanguage)+
+        "</b></td><td><b>"+getTran(request,"web.finance","amount.insurar",sWebLanguage)+"</b></td></tr>";
         prestationcontent+="<tr>";
         prestationcontent+="<td><input type='hidden' name='PPC_"+prestation.getUid()+"'/>"+prestation.getDescription()+"</td>";
         prestationcontent+="<td "+(sCoverageInsurance.length()>0?"class='strikeonly'":"")+"><input type='hidden' name='PPP_"+prestation.getUid()+"' value='"+pa+"'/>"+pa+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>";
@@ -142,9 +142,9 @@
 		ps.setString(1,sPrestationGroupUID);
 		ResultSet rs = ps.executeQuery();
         prestationcontent ="<table width='100%'>";
-        prestationcontent+="<tr><td width='50%'><b>"+getTran("web","prestation",sWebLanguage)+
-        "</b></td><td width='25%'><b>"+getTran("web.finance","amount.patient",sWebLanguage)+
-        "</b></td><td><b>"+getTran("web.finance","amount.insurar",sWebLanguage)+"</b></td></tr>";
+        prestationcontent+="<tr><td width='50%'><b>"+getTran(request,"web","prestation",sWebLanguage)+
+        "</b></td><td width='25%'><b>"+getTran(request,"web.finance","amount.patient",sWebLanguage)+
+        "</b></td><td><b>"+getTran(request,"web.finance","amount.insurar",sWebLanguage)+"</b></td></tr>";
 		while(rs.next()){
 	        Prestation prestation = Prestation.get(rs.getString("oc_prestationgroup_prestationuid"));
 	        if (insurar != null) {

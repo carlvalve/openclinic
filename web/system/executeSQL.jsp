@@ -161,6 +161,9 @@
                         else if (column.type==java.sql.Types.TIMESTAMP){
                             result.append(pad(fullDateFormat.format(rs.getDate(column.name)),column.width,maxColWidth)+colSeparator);
                         }
+                        else {
+                            result.append(pad(rs.getString(column.name),column.width,maxColWidth)+colSeparator);
+                        }
                     }
 
                     if (counter >= maxRows){

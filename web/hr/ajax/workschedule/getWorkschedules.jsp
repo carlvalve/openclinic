@@ -83,7 +83,7 @@
                       "<td class='hand' style='padding-left:5px'>"+ScreenHelper.getSQLDate(workschedule.begin)+"</td>"+
                       "<td class='hand' style='padding-left:5px'>"+ScreenHelper.getSQLDate(workschedule.end)+"</td>"+
                       "<td class='hand' style='padding-left:5px'>"+workschedule.fte+"%</td>"+
-                      "<td class='hand' style='padding-left:5px'>"+getTran("web.hr",sScheduleType+"Schedule",sWebLanguage)+"</td>"+
+                      "<td class='hand' style='padding-left:5px'>"+getTran(request,"web.hr",sScheduleType+"Schedule",sWebLanguage)+"</td>"+
                       "<td class='hand' style='padding-left:5px'>"+sScheduleHours+"</td>"+
                      "</tr>");
             
@@ -105,7 +105,7 @@
         }
     }
     else{
-        sReturn = "<td colspan='5'>"+getTran("web","noRecordsFound",sWebLanguage)+"</td>";
+        sReturn = "<td colspan='5'>"+getTran(request,"web","noRecordsFound",sWebLanguage)+"</td>";
     }
 %>
 
@@ -115,11 +115,11 @@
 <table width="100%" class="sortable" id="searchresults" cellspacing="1" style="border:none;">
     <%-- header --%>
     <tr class="admin" style="padding-left:1px;">
-        <td width="10%" nowrap><%=HTMLEntities.htmlentities(getTran("web.hr","begin",sWebLanguage))%></td>
-        <td width="10%" nowrap><%=HTMLEntities.htmlentities(getTran("web.hr","end",sWebLanguage))%></td>
-        <td width="10%" nowrap><%=HTMLEntities.htmlentities(getTran("web.hr","fte",sWebLanguage))%></td>
-        <td width="20%" nowrap><%=HTMLEntities.htmlentities(getTran("web.hr","type",sWebLanguage))%></td>
-        <td width="*" nowrap><%=HTMLEntities.htmlentities(getTran("web.hr","hours",sWebLanguage))%></td>
+        <td width="10%" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.hr","begin",sWebLanguage))%></td>
+        <td width="10%" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.hr","end",sWebLanguage))%></td>
+        <td width="10%" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.hr","fte",sWebLanguage))%></td>
+        <td width="20%" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.hr","type",sWebLanguage))%></td>
+        <td width="*" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.hr","hours",sWebLanguage))%></td>
     </tr>
     
     <tbody class="hand">
@@ -127,7 +127,7 @@
     </tbody>
 </table> 
 
-&nbsp;<i><%=workschedules.size()+" "+getTran("web","recordsFound",sWebLanguage)%></i>
+&nbsp;<i><%=workschedules.size()+" "+getTran(request,"web","recordsFound",sWebLanguage)%></i>
         <%
     }
     else{

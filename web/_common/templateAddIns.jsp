@@ -35,6 +35,10 @@ function hideSelects(){
   }
 }
 
+function uncheckRadio(radioitem){
+	radioitem.checked=false;	
+}
+
 <%-- UNHIDE SELECTS --%>
 function unhideSelects(){
   var selects = document.getElementsByTagName("SELECT");
@@ -98,7 +102,7 @@ function checkSaveButton(){
   %>
 
   if(alertAnyway || (sFormBeginStatus!=sFormCurrStatus)){
-    discardFormData = yesnoDialogDirectText('<%=getTran("Web.Occup","medwan.common.buttonquestion",sWebLanguage)%>');
+    discardFormData = yesnoDialogDirectText('<%=getTran(null,"Web.Occup","medwan.common.buttonquestion",sWebLanguage)%>');
   }
 
   return discardFormData;
@@ -108,7 +112,7 @@ function checkSaveButton(){
 %>
 function verifyPrestationCheck(){
   if(document.getElementById('prestationsVerified').value=='0'){
-    if(window.showModalDialog?yesnoDialog("web.occup","exported-activities-not-validated"):yesnoDialogDirectText('<%=getTran("web.occup","exported-activities-not-validated",sWebLanguage)%>')){
+    if(window.showModalDialog?yesnoDialog("web.occup","exported-activities-not-validated"):yesnoDialogDirectText('<%=getTran(null,"web.occup","exported-activities-not-validated",sWebLanguage)%>')){
       showExportedActivities();
       return false;
     }

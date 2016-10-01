@@ -73,13 +73,13 @@
 
 	//Nu gaan we alle records tonen
 	if(records.size()>0){
-		out.println("<tr class='admin'><td>#</td><td>"+getTran("web","date",sWebLanguage)+"</td><td>"+getTran("web","insurance.number",sWebLanguage)+"</td><td>"+getTran("web","patient",sWebLanguage)+"</td><td>"+getTran("web","administrator",sWebLanguage)+"</td>");
+		out.println("<tr class='admin'><td>#</td><td>"+getTran(request,"web","date",sWebLanguage)+"</td><td>"+getTran(request,"web","insurance.number",sWebLanguage)+"</td><td>"+getTran(request,"web","patient",sWebLanguage)+"</td><td>"+getTran(request,"web","administrator",sWebLanguage)+"</td>");
 		Iterator m = invoicegroups.keySet().iterator();
 		while(m.hasNext()){
 			String invoicegroup=(String)m.next();
 			out.println("<td>"+invoicegroup+"</td>");
 		}
-		out.println("<td>"+getTran("web","total",sWebLanguage)+"</td><td>"+getTran("web","received",sWebLanguage)+"</td><td>"+getTran("web", "to.be.collected", sWebLanguage)+"</td></tr>");
+		out.println("<td>"+getTran(request,"web","total",sWebLanguage)+"</td><td>"+getTran(request,"web","received",sWebLanguage)+"</td><td>"+getTran(request,"web", "to.be.collected", sWebLanguage)+"</td></tr>");
 	}
 	Iterator i = records.keySet().iterator();
 	int counter=0;
@@ -128,7 +128,7 @@
 		}
 		out.println("<td class='admin2'>"+new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#")).format(patienttotal+insurartotal)+"</td><td class='admin2'>"+new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#")).format(patienttotal)+"</td><td class='admin2'>"+new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#")).format(insurartotal)+"</td></tr>");
 	}
-	out.println("<tr class='admin'><td colspan='5'>"+getTran("web","total",sWebLanguage)+"</td>");
+	out.println("<tr class='admin'><td colspan='5'>"+getTran(request,"web","total",sWebLanguage)+"</td>");
 	Iterator m = invoicegroups.keySet().iterator();
 	while(m.hasNext()){
 		String invoicegroup=(String)m.next();

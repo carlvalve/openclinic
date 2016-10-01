@@ -54,8 +54,8 @@
                       " onclick=\"displayLeave('"+leave.getUid()+"');\">"+
                       "<td class='hand' style='padding-left:5px'>"+ScreenHelper.getSQLDate(leave.begin)+"</td>"+
                       "<td class='hand' style='padding-left:5px'>"+ScreenHelper.getSQLDate(leave.end)+"</td>"+
-                      "<td class='hand' style='padding-left:5px'>"+deci.format(leave.duration).replaceAll(",",".")+" "+getTran("web","days",sWebLanguage)+"</td>"+
-                      "<td class='hand' style='padding-left:5px'>"+getTran("hr.leave.type",leave.type,sWebLanguage)+"</td>"+
+                      "<td class='hand' style='padding-left:5px'>"+deci.format(leave.duration).replaceAll(",",".")+" "+getTran(request,"web","days",sWebLanguage)+"</td>"+
+                      "<td class='hand' style='padding-left:5px'>"+getTran(request,"hr.leave.type",leave.type,sWebLanguage)+"</td>"+
                       "<td class='hand' style='padding-left:5px'>"+leave.episodeCode+"</td>"+
                      "</tr>");
         }
@@ -75,7 +75,7 @@
         }
     }
     else{
-        sReturn = "<td colspan='5'>"+getTran("web","noRecordsFound",sWebLanguage)+"</td>";
+        sReturn = "<td colspan='5'>"+getTran(request,"web","noRecordsFound",sWebLanguage)+"</td>";
     }
 %>
 
@@ -85,11 +85,11 @@
 <table width="100%" class="sortable" id="searchresults" cellspacing="1" style="border:none;">
     <%-- header --%>
     <tr class="admin" style="padding-left:1px;">
-        <td width="10%" nowrap><asc><%=HTMLEntities.htmlentities(getTran("web.hr","begin",sWebLanguage))%></asc></td>
-        <td width="10%" nowrap><%=HTMLEntities.htmlentities(getTran("web.hr","end",sWebLanguage))%></td>
-        <td width="15%" nowrap><%=HTMLEntities.htmlentities(getTran("web","duration",sWebLanguage))%></td>
-        <td width="20%" nowrap><%=HTMLEntities.htmlentities(getTran("web.hr","type",sWebLanguage))%></td>
-        <td width="45%" nowrap><%=HTMLEntities.htmlentities(getTran("web.hr","episodeCode",sWebLanguage))%></td>
+        <td width="10%" nowrap><asc><%=HTMLEntities.htmlentities(getTran(request,"web.hr","begin",sWebLanguage))%></asc></td>
+        <td width="10%" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.hr","end",sWebLanguage))%></td>
+        <td width="15%" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web","duration",sWebLanguage))%></td>
+        <td width="20%" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.hr","type",sWebLanguage))%></td>
+        <td width="45%" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.hr","episodeCode",sWebLanguage))%></td>
     </tr>
     
     <tbody class="hand">
@@ -97,7 +97,7 @@
     </tbody>
 </table> 
 
-&nbsp;<i><%=leaves.size()+" "+getTran("web","recordsFound",sWebLanguage)%></i>
+&nbsp;<i><%=leaves.size()+" "+getTran(request,"web","recordsFound",sWebLanguage)%></i>
         <%
     }
     else{

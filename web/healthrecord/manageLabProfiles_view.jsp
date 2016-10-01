@@ -36,7 +36,7 @@
   <%-- INPUT & BUTTONS --%>
   <tr>
     <td class="menu" width="10%">
-      <%=getTran("Web.manage","labprofiles.cols.code",sWebLanguage)%>&nbsp;
+      <%=getTran(request,"Web.manage","labprofiles.cols.code",sWebLanguage)%>&nbsp;
       <input type="text" name="FindProfileCode" class="text" size="20" value="<%=(action.equals("details")?"":sFindProfileCode)%>" onblur="limitLength(this);">
     </td>
 
@@ -208,10 +208,10 @@ Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
 			ad_conn.close();
             // message
             if(recordExists){
-                out.print(getTran("Web.Occup","labprofiles.profile",sWebLanguage)+" '"+sEditProfileCode+"' "+getTran("Web","exists",sWebLanguage));
+                out.print(getTran(request,"Web.Occup","labprofiles.profile",sWebLanguage)+" '"+sEditProfileCode+"' "+getTran(request,"Web","exists",sWebLanguage));
             }
             else{
-                out.print(getTran("Web","dataissaved",sWebLanguage));
+                out.print(getTran(request,"Web","dataissaved",sWebLanguage));
                 action = "save";
             }
         }
@@ -236,7 +236,7 @@ Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         if(ps!=null) ps.close();
 
         // message
-        out.print(getTran("Web.Occup","labprofiles.profile",sWebLanguage)+" '"+sEditProfileCode+"' "+getTran("Web","deleted",sWebLanguage));
+        out.print(getTran(request,"Web.Occup","labprofiles.profile",sWebLanguage)+" '"+sEditProfileCode+"' "+getTran(request,"Web","deleted",sWebLanguage));
     }
 
     //--- ADD LABANALYSIS -------------------------------------------------------------------------
@@ -294,19 +294,19 @@ Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
 
             // message
             if(sLabCodeOther.equals("1")){
-                out.print(getTran("Web.Occup","labanalysis.analysis",sWebLanguage)+" '"+sLabCode+" ("+sLabComment+")' "+getTran("Web","added",sWebLanguage));
+                out.print(getTran(request,"Web.Occup","labanalysis.analysis",sWebLanguage)+" '"+sLabCode+" ("+sLabComment+")' "+getTran(request,"Web","added",sWebLanguage));
             }
             else{
-                out.print(getTran("Web.Occup","labanalysis.analysis",sWebLanguage)+" '"+sLabCode+"' "+getTran("Web","added",sWebLanguage));
+                out.print(getTran(request,"Web.Occup","labanalysis.analysis",sWebLanguage)+" '"+sLabCode+"' "+getTran(request,"Web","added",sWebLanguage));
             }
         }
         else{
             // message
             if(sLabCodeOther.equals("1")){
-                out.print(getTran("Web.Occup","labanalysis.analysis",sWebLanguage)+" '"+sLabCode+" ("+sLabComment+")' "+getTran("Web","exists",sWebLanguage));
+                out.print(getTran(request,"Web.Occup","labanalysis.analysis",sWebLanguage)+" '"+sLabCode+" ("+sLabComment+")' "+getTran(request,"Web","exists",sWebLanguage));
             }
             else{
-                out.print(getTran("Web.Occup","labanalysis.analysis",sWebLanguage)+" '"+sLabCode+"' "+getTran("Web","exists",sWebLanguage));
+                out.print(getTran(request,"Web.Occup","labanalysis.analysis",sWebLanguage)+" '"+sLabCode+"' "+getTran(request,"Web","exists",sWebLanguage));
             }
         }
     }
@@ -342,10 +342,10 @@ Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
 
         // message
         if(sLabCodeOther.equals("1")){
-            out.print(getTran("Web.Occup","labanalysis.analysis",sWebLanguage)+" '"+sLabCode+" ("+sLabComment+")' "+getTran("Web","removed",sWebLanguage));
+            out.print(getTran(request,"Web.Occup","labanalysis.analysis",sWebLanguage)+" '"+sLabCode+" ("+sLabComment+")' "+getTran(request,"Web","removed",sWebLanguage));
         }
         else{
-            out.print(getTran("Web.Occup","labanalysis.analysis",sWebLanguage)+" '"+sLabCode+"' "+getTran("Web","removed",sWebLanguage));
+            out.print(getTran(request,"Web.Occup","labanalysis.analysis",sWebLanguage)+" '"+sLabCode+"' "+getTran(request,"Web","removed",sWebLanguage));
         }
     }
 
@@ -356,19 +356,19 @@ Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         %>
         <table width="100%" cellspacing="1" cellpadding="0" class="list">
           <tr>
-            <td class='titleadmin' width='15%'>&nbsp;<%=getTran("Web.manage","labprofiles.cols.code",sWebLanguage)%></td>
+            <td class='titleadmin' width='15%'>&nbsp;<%=getTran(request,"Web.manage","labprofiles.cols.code",sWebLanguage)%></td>
             <td class='titleadmin' width='30%'>
             <%
-                String descr = getTran("Web","description",sWebLanguage);
+                String descr = getTran(request,"Web","description",sWebLanguage);
                 if(sWebLanguage.equalsIgnoreCase("n")){
-                    %>&nbsp;<%=descr%>&nbsp;<%=getTran("Web.manage","labprofiles.cols.NL",sWebLanguage)%><%
+                    %>&nbsp;<%=descr%>&nbsp;<%=getTran(request,"Web.manage","labprofiles.cols.NL",sWebLanguage)%><%
                 }
                 else if(sWebLanguage.equalsIgnoreCase("f")){
-                    %>&nbsp;<%=descr%>&nbsp;<%=getTran("Web.manage","labprofiles.cols.FR",sWebLanguage)%><%
+                    %>&nbsp;<%=descr%>&nbsp;<%=getTran(request,"Web.manage","labprofiles.cols.FR",sWebLanguage)%><%
                 }
             %>
             </td>
-            <td class='titleadmin' width='*%'>&nbsp;<%=getTran("Web.manage","labprofiles.cols.comment",sWebLanguage)%></td>
+            <td class='titleadmin' width='*%'>&nbsp;<%=getTran(request,"Web.manage","labprofiles.cols.comment",sWebLanguage)%></td>
           </tr>
 
           <tbody class="hand">
@@ -400,7 +400,7 @@ Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
             %>
                 <tr class="list<%=sClass%>" onclick="showDetails('<%=sEditProfileCode%>','<%=sProfileID%>');">
                   <td>&nbsp;<%=sEditProfileCode%></td>
-                  <td>&nbsp;<%=getTran(sLabeltype,sProfileID,sWebLanguage)%></td>
+                  <td>&nbsp;<%=getTran(request,sLabeltype,sProfileID,sWebLanguage)%></td>
                   <td>&nbsp;<%=sComment%></td>
                 </tr>
             <%
@@ -417,10 +417,10 @@ Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
 
           <table border="0" width="100%">
             <tr height="30">
-              <td><%=iTotal%> <%=getTran("Web","recordsFound",sWebLanguage)%></td>
+              <td><%=iTotal%> <%=getTran(request,"Web","recordsFound",sWebLanguage)%></td>
               <td align="right">
                 <img src='<c:url value="/_img/themes/default/pijl.gif"/>'>
-                <a  href="<c:url value='/main.do'/>?Page=healthrecord/manageLabAnalysis_view.jsp&ts=<%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran("Web.Occup","medwan.system-related-actions.manage-labAnalysis",sWebLanguage)%></a>&nbsp;
+                <a  href="<c:url value='/main.do'/>?Page=healthrecord/manageLabAnalysis_view.jsp&ts=<%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran(request,"Web.Occup","medwan.system-related-actions.manage-labAnalysis",sWebLanguage)%></a>&nbsp;
               </td>
             </tr>
           </table>
@@ -465,8 +465,8 @@ Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
                 sComment         = checkString(Occuprs.getString(2));
 
                 // get labels
-                sNL = getTran(sLabeltype,sProfileID,"n");
-                sFR = getTran(sLabeltype,sProfileID,"f");
+                sNL = getTran(request,sLabeltype,sProfileID,"n");
+                sFR = getTran(request,sLabeltype,sProfileID,"f");
             }
 
             if(Occuprs!=null) Occuprs.close();
@@ -488,15 +488,15 @@ Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
   <tr class="admin">
     <td colspan="2">
     <%
-        if(iTotal > 0) out.print(getTran("Web","edit",sWebLanguage));
-        else           out.print(getTran("Web","new",sWebLanguage));
+        if(iTotal > 0) out.print(getTran(request,"Web","edit",sWebLanguage));
+        else           out.print(getTran(request,"Web","new",sWebLanguage));
     %>
     </td>
   </tr>
 
   <%-- PROFILE CODE --%>
   <tr>
-    <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web.manage","labprofiles.cols.code",sWebLanguage)%></td>
+    <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web.manage","labprofiles.cols.code",sWebLanguage)%></td>
     <td class="admin2">
         <input type="text" name="EditProfileCode" tabindex="1" class="text" value="<%=sEditProfileCode%>" size="20" onblur="limitLength(this);">
     </td>
@@ -504,7 +504,7 @@ Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
 
   <%-- LABEL NL --%>
   <tr>
-    <td class="admin"><%=getTran("Web.manage","labprofiles.cols.NL",sWebLanguage)%></td>
+    <td class="admin"><%=getTran(request,"Web.manage","labprofiles.cols.NL",sWebLanguage)%></td>
     <td class="admin2">
         <input type="text" name="EditNL" class="text" tabindex="2" value="<%=sNL%>" size="50" onblur="limitLength(this);">
     </td>
@@ -512,7 +512,7 @@ Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
 
   <%-- LABEL FR --%>
   <tr>
-    <td class="admin"><%=getTran("Web.manage","labprofiles.cols.FR",sWebLanguage)%></td>
+    <td class="admin"><%=getTran(request,"Web.manage","labprofiles.cols.FR",sWebLanguage)%></td>
     <td class="admin2">
         <input type="text" name="EditFR" class="text" tabindex="3" value="<%=sFR%>" size="50" onblur="limitLength(this);">
     </td>
@@ -523,15 +523,15 @@ Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
       if(!action.equals("new")){
           %>
             <tr>
-              <td class="admin"><%=getTran("Web.manage","labprofiles.analyse",sWebLanguage)%></td>
+              <td class="admin"><%=getTran(request,"Web.manage","labprofiles.analyse",sWebLanguage)%></td>
               <td class="admin2">
                 <table border="0" class="list" cellspacing="1">
                   <%-- HEADER --%>
                   <tr class="admin">
-                    <td>&nbsp;<%=getTran("web.manage","labanalysis.cols.code",sWebLanguage)%></td>
-                    <td>&nbsp;<%=getTran("web.manage","labanalysis.cols.type",sWebLanguage)%></td>
-                    <td>&nbsp;<%=getTran("web.manage","labanalysis.cols.name",sWebLanguage)%></td>
-                    <td>&nbsp;<%=getTran("web.manage","labanalysis.cols.comment",sWebLanguage)%></td>
+                    <td>&nbsp;<%=getTran(request,"web.manage","labanalysis.cols.code",sWebLanguage)%></td>
+                    <td>&nbsp;<%=getTran(request,"web.manage","labanalysis.cols.type",sWebLanguage)%></td>
+                    <td>&nbsp;<%=getTran(request,"web.manage","labanalysis.cols.name",sWebLanguage)%></td>
+                    <td>&nbsp;<%=getTran(request,"web.manage","labanalysis.cols.comment",sWebLanguage)%></td>
                     <td width="16">&nbsp;</td>
                   </tr>
 
@@ -585,13 +585,13 @@ Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
                           sLabComment   = checkString(Occuprs.getString(5));
 
                           // translate labtype
-                               if(sLabType.equals("1")) sLabType = getTran("Web.occup","labanalysis.type.blood",sWebLanguage);
-                          else if(sLabType.equals("2")) sLabType = getTran("Web.occup","labanalysis.type.urine",sWebLanguage);
-                          else if(sLabType.equals("3")) sLabType = getTran("Web.occup","labanalysis.type.other",sWebLanguage);
-                          else if(sLabType.equals("4")) sLabType = getTran("Web.occup","labanalysis.type.stool",sWebLanguage);
-                          else if(sLabType.equals("5")) sLabType = getTran("Web.occup","labanalysis.type.sputum",sWebLanguage);
-                          else if(sLabType.equals("6")) sLabType = getTran("Web.occup","labanalysis.type.smear",sWebLanguage);
-                          else if(sLabType.equals("7")) sLabType = getTran("Web.occup","labanalysis.type.liquid",sWebLanguage);
+                               if(sLabType.equals("1")) sLabType = getTran(request,"Web.occup","labanalysis.type.blood",sWebLanguage);
+                          else if(sLabType.equals("2")) sLabType = getTran(request,"Web.occup","labanalysis.type.urine",sWebLanguage);
+                          else if(sLabType.equals("3")) sLabType = getTran(request,"Web.occup","labanalysis.type.other",sWebLanguage);
+                          else if(sLabType.equals("4")) sLabType = getTran(request,"Web.occup","labanalysis.type.stool",sWebLanguage);
+                          else if(sLabType.equals("5")) sLabType = getTran(request,"Web.occup","labanalysis.type.sputum",sWebLanguage);
+                          else if(sLabType.equals("6")) sLabType = getTran(request,"Web.occup","labanalysis.type.smear",sWebLanguage);
+                          else if(sLabType.equals("7")) sLabType = getTran(request,"Web.occup","labanalysis.type.liquid",sWebLanguage);
 
                           // alternate row-style
                           if((iTotal%2)==0) sClass = "1";
@@ -601,7 +601,7 @@ Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
                               <tr class="list<%=sClass%>">
                                 <td>&nbsp;<%=sLabCode%></td>
                                 <td>&nbsp;<%=sLabType%></td>
-                                <td>&nbsp;<%=getTran("labanalysis",sLabID,sWebLanguage)%></td>
+                                <td>&nbsp;<%=getTran(request,"labanalysis",sLabID,sWebLanguage)%></td>
                                 <%
                                     if(sLabCodeOther.equals("1")){
                                         %><td>&nbsp;<%=sLabComment%></td><%
@@ -624,7 +624,7 @@ Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
                       if(iTotal == 0){
                           %>
                               <tr class="list">
-                                <td colspan="5"><%=getTran("web","norecordsfound",sWebLanguage)%></td>
+                                <td colspan="5"><%=getTran(request,"web","norecordsfound",sWebLanguage)%></td>
                               </tr>
                           <%
                       }
@@ -688,7 +688,7 @@ Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
 
   <%-- COMMENT TEXTAREA --%>
   <tr>
-    <td class="admin"><%=getTran("Web.manage","labprofiles.cols.comment",sWebLanguage)%></td>
+    <td class="admin"><%=getTran(request,"Web.manage","labprofiles.cols.comment",sWebLanguage)%></td>
     <td class="admin2">
       <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" tabindex="7" class="text" cols="80" rows="2" name="EditComment"><%=sComment%></textarea>
     </td>
@@ -743,7 +743,7 @@ Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
 
   <%-- link to labanalyses --%>
   <img src='<c:url value="/_img/themes/default/pijl.gif"/>'>
-  <a  href="<c:url value='/main.do'/>?Page=healthrecord/manageLabAnalysis_view.jsp&ts=<%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran("Web.Occup","medwan.system-related-actions.manage-labAnalysis",sWebLanguage)%></a>&nbsp;
+  <a  href="<c:url value='/main.do'/>?Page=healthrecord/manageLabAnalysis_view.jsp&ts=<%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran(request,"Web.Occup","medwan.system-related-actions.manage-labAnalysis",sWebLanguage)%></a>&nbsp;
 <%=ScreenHelper.alignButtonsStop()%>
 
 <script>

@@ -1,4 +1,5 @@
 <counters>
+    <counter name="OC_MESSAGES" table="OC_MESSAGES" field="OC_MESSAGE_MESSAGEID" bd='openclinic'/>
     <counter name="OC_PRESCRIPTIONS" table="OC_PRESCRIPTIONS" field="OC_PRESCR_OBJECTID" bd='openclinic'/>
     <counter name="OC_BATCHES" table="OC_BATCHES" field="OC_BATCH_OBJECTID" bd='openclinic'/>
     <counter name="OC_BEDS" table="OC_BEDS" field="OC_BED_OBJECTID" bd='openclinic'/>
@@ -8,6 +9,7 @@
     <counter name="OC_DEBETS" table="OC_DEBETS" field="OC_DEBET_OBJECTID" bd='openclinic'/>
     <counter name="OC_PRODUCTS" table="OC_PRODUCTS" field="OC_PRODUCT_OBJECTID" bd='openclinic'/>
     <counter name="OC_PRESTATIONS" table="OC_PRESTATIONS" field="OC_PRESTATION_OBJECTID" bd='openclinic'/>
+    <counter name="OC_SUMMARYINVOICE_OBJECTID" table="OC_SUMMARYINVOICES" field="OC_SUMMARYINVOICE_OBJECTID" bd='openclinic'/>
     <counter name="OC_SERVICESTOCKS" table="OC_SERVICESTOCKS" field="OC_STOCK_OBJECTID" bd='openclinic'/>
     <counter name="OC_PRODUCTSTOCKS" table="OC_PRODUCTSTOCKS" field="OC_STOCK_OBJECTID" bd='openclinic'/>
     <counter name="OC_PRODUCTSTOCKOPERATIONS" table="OC_PRODUCTSTOCKOPERATIONS" field="OC_OPERATION_OBJECTID" bd='openclinic'/>

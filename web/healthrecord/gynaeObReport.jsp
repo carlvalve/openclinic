@@ -34,7 +34,7 @@
         <%-- DATE --%>
         <tr>
             <td class="admin" width="<%=sTDAdminWidth%>">
-                <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;<%=getTran("Web.Occup", "medwan.common.date", sWebLanguage)%>
+                <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;<%=getTran(request,"Web.Occup", "medwan.common.date", sWebLanguage)%>
             </td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" id="trandate" OnBlur='checkDate(this)'>
@@ -46,11 +46,11 @@
             <tr>
                 <td class='tabs' width="2">&nbsp;</td>
                 <td class='tabunselected' width="1%" onclick="activateTab(1)" id="td1" nowrap>
-                    &nbsp;<b><%=getTran("Web.Occup", "obreport.section1", sWebLanguage)%>
+                    &nbsp;<b><%=getTran(request,"Web.Occup", "obreport.section1", sWebLanguage)%>
                 </b>&nbsp;</td>
                 <td class='tabs' width="2">&nbsp;</td>
                 <td class='tabunselected' width="1%" onclick="activateTab(3)" id="td3" nowrap>
-                    &nbsp;<b><%=getTran("Web.Occup", "obreport.section2", sWebLanguage)%>
+                    &nbsp;<b><%=getTran(request,"Web.Occup", "obreport.section2", sWebLanguage)%>
                 </b>&nbsp;</td>
                 <td class='tabs'>&nbsp;</td>
             </tr>

@@ -83,11 +83,11 @@
             <table width="100%" class="list" cellspacing="0" style="border:none;">
                 <%-- header --%>
                 <tr class="admin">
-                    <td width="80"><%=HTMLEntities.htmlentities(getTran("web","date",sWebLanguage))%></td>
-                    <td width="30%"><%=HTMLEntities.htmlentities(getTran("web.finance","encounter",sWebLanguage))%></td>
-                    <td width="100" align="right"><%=HTMLEntities.htmlentities(getTran("web","amount",sWebLanguage))%>&nbsp;&nbsp;</td>
-                    <td width="200"><%=HTMLEntities.htmlentities(getTran("web","type",sWebLanguage))%></td>
-                    <td width="*"><%=HTMLEntities.htmlentities(getTran("web","description",sWebLanguage))%></td>
+                    <td width="80"><%=HTMLEntities.htmlentities(getTranNoLink("web","date",sWebLanguage))%></td>
+                    <td width="30%"><%=HTMLEntities.htmlentities(getTranNoLink("web.finance","encounter",sWebLanguage))%></td>
+                    <td width="100" align="right"><%=HTMLEntities.htmlentities(getTranNoLink("web","amount",sWebLanguage))%>&nbsp;&nbsp;</td>
+                    <td width="200"><%=HTMLEntities.htmlentities(getTranNoLink("web","type",sWebLanguage))%></td>
+                    <td width="*"><%=HTMLEntities.htmlentities(getTranNoLink("web","description",sWebLanguage))%></td>
                 </tr>
 
                 <tbody class="hand">

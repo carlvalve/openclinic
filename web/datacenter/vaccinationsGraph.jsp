@@ -22,5 +22,5 @@
 </div>
 <script>
     setGraph(<%=sJsArray%>);
-    Modalbox.setTitle("<%=HTMLEntities.htmlentities(getTran("datacenterserver", serverId + "", sWebLanguage)+"<br/>"+getTran("web",type,sWebLanguage))%>");
+    Modalbox.setTitle("<%=HTMLEntities.htmlentities(getTran(request,"datacenterserver", serverId + "", sWebLanguage)+"<br/>"+getTran(request,"web",type,sWebLanguage))%>");
 </script>

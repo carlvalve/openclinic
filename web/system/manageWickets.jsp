@@ -63,7 +63,7 @@
         wicket.delete();
         sEditWicketUID = "";
         
-        sMsg = getTran("web","dataIsDeleted",sWebLanguage);
+        sMsg = getTran(request,"web","dataIsDeleted",sWebLanguage);
         sAction = "SEARCH";
     }
 
@@ -90,7 +90,7 @@
         wicket.store();
         
         sEditWicketUID = wicket.getUid();
-        sMsg = getTran("web","dataSaved",sWebLanguage);
+        sMsg = getTran(request,"web","dataSaved",sWebLanguage);
     }
 
     if(sEditWicketUID.length() > 0){
@@ -115,7 +115,7 @@
 			    <table class='list' border='0' width='100%' cellspacing='1'>
 			        <%-- service --%>
 			        <tr>
-			            <td class="admin2"><%=getTran("Web","wicket",sWebLanguage)%></td>
+			            <td class="admin2"><%=getTran(request,"Web","wicket",sWebLanguage)%></td>
 			            <td class='admin2'>
 			                <input type="hidden" name="FindWicketService" value="<%=sEditWicketService%>">
 			                <input class="text" type="text" name="FindWicketServiceName" readonly size="<%=sTextWidth%>" value="<%=sFindWicketServiceName%>">
@@ -161,7 +161,7 @@
 		                       "</a>" +
 		                      "</td>" +
 		                      "<td onclick=\"doSelect('"+wicket.getUid()+"');\">"+sDate+"</td>" +
-		                      "<td onclick=\"doSelect('"+wicket.getUid()+"');\">"+wicket.getUid()+"&nbsp;"+checkString(getTran("Service", wicket.getServiceUID(), sWebLanguage))+"</td>" +
+		                      "<td onclick=\"doSelect('"+wicket.getUid()+"');\">"+wicket.getUid()+"&nbsp;"+checkString(getTran(request,"Service", wicket.getServiceUID(), sWebLanguage))+"</td>" +
 		                      "<td onclick=\"doSelect('"+wicket.getUid()+"');\">"+wicket.getBalance()+"</td>" +
 		                     "</tr>");
 
@@ -192,7 +192,7 @@
     	}
         else{
 		    %>
-		        <%=getTran("web","norecordsfound",sWebLanguage)%>
+		        <%=getTran(request,"web","norecordsfound",sWebLanguage)%>
 		        <br><br>
 		    <%
     	}
@@ -228,8 +228,9 @@
     <table class='list' border='0' width='100%' cellspacing='1'>
         <%-- wicket service --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","wicket",sWebLanguage)%></td>            
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","wicket",sWebLanguage)%></td>            
             <td class='admin2'>
+            <%if(sEditWicketUID.length()==0){ %>
                 <select class="text" name="EditWicketService">
                     <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>
 			        <%
@@ -246,16 +247,22 @@
 			                    sSelected = "";
 			                }
 			                
-			                %><option value="<%=sServiceId%>" <%=sSelected%>><%=getTran("service",sServiceId,sWebLanguage)%></option><%
+			                %><option value="<%=sServiceId%>" <%=sSelected%>><%=getTran(request,"service",sServiceId,sWebLanguage)%></option><%
 			            }
 			        %>
                 </select>
+                <%}
+				  else{
+				%>
+				<%=getTran(request,"service",sEditWicketService,sWebLanguage)%>
+				<input type="hidden" name="EditWicketService" value="<%=sEditWicketService%>"/>
+				<%} %>
             </td>
         </tr>
         
         <%-- authorized users --%>
         <tr>
-            <td class="admin" nowrap><%=getTran("Web","Authorizedusers",sWebLanguage)%>&nbsp;</td>
+            <td class="admin" nowrap><%=getTran(request,"Web","Authorizedusers",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <%-- add row --%>
                 <input type="hidden" name="AuthorizedUserIdAdd" value="">

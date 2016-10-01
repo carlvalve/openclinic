@@ -3,10 +3,10 @@
 <%=checkPermission("statistics","select",activeUser)%>
 <table width='100%'>
 	<tr class='admin'>
-		<td><%=getTran("web","name",sWebLanguage)%></td>
-		<td><%=getTran("web","dateofbirth",sWebLanguage)%></td>
-		<td><%=getTran("web","gender",sWebLanguage)%></td>
-		<td><%=getTran("web","creationdate",sWebLanguage)%></td>
+		<td><%=getTran(request,"web","name",sWebLanguage)%></td>
+		<td><%=getTran(request,"web","dateofbirth",sWebLanguage)%></td>
+		<td><%=getTran(request,"web","gender",sWebLanguage)%></td>
+		<td><%=getTran(request,"web","creationdate",sWebLanguage)%></td>
 	</tr>
 <%
 	String begin = checkString(request.getParameter("start"));

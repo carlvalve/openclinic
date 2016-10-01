@@ -62,19 +62,19 @@
             sLabID = Integer.toString(objLabAnalysis.getLabId());
             sLabType = objLabAnalysis.getLabtype();
             sLabCode = objLabAnalysis.getLabcode();
-            sLabLabel = getTran("labanalysis",objLabAnalysis.getLabId()+"",sWebLanguage);
+            sLabLabel = getTran(request,"labanalysis",objLabAnalysis.getLabId()+"",sWebLanguage);
             sCodeOther = objLabAnalysis.getLabcodeother();
             sComment = objLabAnalysis.getComment();
             sMonster = getTranNoLink("labanalysis.monster",objLabAnalysis.getMonster(),sWebLanguage);
 
             // translate labtype
-                 if (sLabType.equals("1")) sLabType = getTran("Web.occup", "labanalysis.type.blood", sWebLanguage);
-            else if (sLabType.equals("2")) sLabType = getTran("Web.occup", "labanalysis.type.urine", sWebLanguage);
-            else if (sLabType.equals("3")) sLabType = getTran("Web.occup", "labanalysis.type.other", sWebLanguage);
-            else if (sLabType.equals("4")) sLabType = getTran("Web.occup", "labanalysis.type.stool", sWebLanguage);
-            else if (sLabType.equals("5")) sLabType = getTran("Web.occup", "labanalysis.type.sputum", sWebLanguage);
-            else if (sLabType.equals("6")) sLabType = getTran("Web.occup", "labanalysis.type.smear", sWebLanguage);
-            else if (sLabType.equals("7")) sLabType = getTran("Web.occup", "labanalysis.type.liquid", sWebLanguage);
+                 if (sLabType.equals("1")) sLabType = getTran(request,"Web.occup", "labanalysis.type.blood", sWebLanguage);
+            else if (sLabType.equals("2")) sLabType = getTran(request,"Web.occup", "labanalysis.type.urine", sWebLanguage);
+            else if (sLabType.equals("3")) sLabType = getTran(request,"Web.occup", "labanalysis.type.other", sWebLanguage);
+            else if (sLabType.equals("4")) sLabType = getTran(request,"Web.occup", "labanalysis.type.stool", sWebLanguage);
+            else if (sLabType.equals("5")) sLabType = getTran(request,"Web.occup", "labanalysis.type.sputum", sWebLanguage);
+            else if (sLabType.equals("6")) sLabType = getTran(request,"Web.occup", "labanalysis.type.smear", sWebLanguage);
+            else if (sLabType.equals("7")) sLabType = getTran(request,"Web.occup", "labanalysis.type.liquid", sWebLanguage);
 
             sOut.append(writeRow(sLabType, sLabCode, sLabLabel, sCodeOther, sComment,objLabAnalysis.getUnavailable(), iTotal,sWebLanguage));
             sScript.append("<script>addLabAnalysisToArray(")
@@ -105,19 +105,19 @@
             sLabID = Integer.toString(objLabAnalysis.getLabId());
             sLabType = objLabAnalysis.getLabtype();
             sLabCode = objLabAnalysis.getLabcode();
-            sLabLabel = getTran("labanalysis",objLabAnalysis.getLabId()+"",sWebLanguage);
+            sLabLabel = getTran(request,"labanalysis",objLabAnalysis.getLabId()+"",sWebLanguage);
             sCodeOther = objLabAnalysis.getLabcodeother();
             sComment = objLabAnalysis.getComment();
             sMonster = getTranNoLink("labanalysis.monster",objLabAnalysis.getMonster(),sWebLanguage);
 
             // translate labtype
-            if (sLabType.equals("1")) sLabType = getTran("Web.occup", "labanalysis.type.blood", sWebLanguage);
-            else if (sLabType.equals("2")) sLabType = getTran("Web.occup", "labanalysis.type.urine", sWebLanguage);
-            else if (sLabType.equals("3")) sLabType = getTran("Web.occup", "labanalysis.type.other", sWebLanguage);
-            else if (sLabType.equals("4")) sLabType = getTran("Web.occup", "labanalysis.type.stool", sWebLanguage);
-            else if (sLabType.equals("5")) sLabType = getTran("Web.occup", "labanalysis.type.sputum", sWebLanguage);
-            else if (sLabType.equals("6")) sLabType = getTran("Web.occup", "labanalysis.type.smear", sWebLanguage);
-            else if (sLabType.equals("7")) sLabType = getTran("Web.occup", "labanalysis.type.liquid", sWebLanguage);
+            if (sLabType.equals("1")) sLabType = getTran(request,"Web.occup", "labanalysis.type.blood", sWebLanguage);
+            else if (sLabType.equals("2")) sLabType = getTran(request,"Web.occup", "labanalysis.type.urine", sWebLanguage);
+            else if (sLabType.equals("3")) sLabType = getTran(request,"Web.occup", "labanalysis.type.other", sWebLanguage);
+            else if (sLabType.equals("4")) sLabType = getTran(request,"Web.occup", "labanalysis.type.stool", sWebLanguage);
+            else if (sLabType.equals("5")) sLabType = getTran(request,"Web.occup", "labanalysis.type.sputum", sWebLanguage);
+            else if (sLabType.equals("6")) sLabType = getTran(request,"Web.occup", "labanalysis.type.smear", sWebLanguage);
+            else if (sLabType.equals("7")) sLabType = getTran(request,"Web.occup", "labanalysis.type.liquid", sWebLanguage);
 
             sOut.append(writeRow(sLabType, sLabCode, sLabLabel, sCodeOther, sComment,objLabAnalysis.getUnavailable(), iTotal,sWebLanguage));
             sScript.append("<script>addLabAnalysisToArray(")
@@ -152,13 +152,13 @@
                 sMonster = getTranNoLink("labanalysis.monster",objLabAnalysis.getMonster(),sWebLanguage);
 
                 // translate labtype
-                     if(sLabType.equals("1")) sLabType = getTran("Web.occup","labanalysis.type.blood",sWebLanguage);
-                else if(sLabType.equals("2")) sLabType = getTran("Web.occup","labanalysis.type.urine",sWebLanguage);
-                else if(sLabType.equals("3")) sLabType = getTran("Web.occup","labanalysis.type.other",sWebLanguage);
-                else if(sLabType.equals("4")) sLabType = getTran("Web.occup","labanalysis.type.stool",sWebLanguage);
-                else if(sLabType.equals("5")) sLabType = getTran("Web.occup","labanalysis.type.sputum",sWebLanguage);
-                else if(sLabType.equals("6")) sLabType = getTran("Web.occup","labanalysis.type.smear",sWebLanguage);
-                else if(sLabType.equals("7")) sLabType = getTran("Web.occup","labanalysis.type.liquid",sWebLanguage);
+                     if(sLabType.equals("1")) sLabType = getTran(request,"Web.occup","labanalysis.type.blood",sWebLanguage);
+                else if(sLabType.equals("2")) sLabType = getTran(request,"Web.occup","labanalysis.type.urine",sWebLanguage);
+                else if(sLabType.equals("3")) sLabType = getTran(request,"Web.occup","labanalysis.type.other",sWebLanguage);
+                else if(sLabType.equals("4")) sLabType = getTran(request,"Web.occup","labanalysis.type.stool",sWebLanguage);
+                else if(sLabType.equals("5")) sLabType = getTran(request,"Web.occup","labanalysis.type.sputum",sWebLanguage);
+                else if(sLabType.equals("6")) sLabType = getTran(request,"Web.occup","labanalysis.type.smear",sWebLanguage);
+                else if(sLabType.equals("7")) sLabType = getTran(request,"Web.occup","labanalysis.type.liquid",sWebLanguage);
 
                 sOut.append(writeRow(sLabType,sLabCode,sLabLabel,sCodeOther,sComment,objLabAnalysis.getUnavailable(),iTotal,sWebLanguage));
                 sScript.append("<script>addLabAnalysisToArray(")
@@ -188,8 +188,8 @@
     <%-- SEARCH INPUTS --------------------------------------------------------------------------%>
     <tr>
       <td width="50%" height="25">
-        &nbsp;<%=getTran("web.manage","labanalysis.cols.code",sWebLanguage)%>/<%=getTran("web.manage","labanalysis.cols.name",sWebLanguage)%>&nbsp;<input class="text" type="text" id="FindCode" name="FindCode" value="<%=sSearchCode%>" size="16">
-        &nbsp;<%=getTran("web.occup","labprofiles.profile",sWebLanguage)%>
+        &nbsp;<%=getTran(request,"web.manage","labanalysis.cols.code",sWebLanguage)%>/<%=getTran(request,"web.manage","labanalysis.cols.name",sWebLanguage)%>&nbsp;<input class="text" type="text" id="FindCode" name="FindCode" value="<%=sSearchCode%>" size="16">
+        &nbsp;<%=getTran(request,"web.occup","labprofiles.profile",sWebLanguage)%>
 
         <%-- SELECT A LABPROFILE --%>
         <select name="FindProfileID" class="text" onchange="searchForm.submit()">
@@ -248,16 +248,16 @@
             <%-- HEADER --%>
             <tr class="admin">
               <td width="17">&nbsp;</td>
-              <td width="80">&nbsp;<a class="underlined" href="#" onClick="searchForm.sortCol.value='code';searchForm.submit();"><%=getTran("web.manage","labanalysis.cols.code",sWebLanguage)%></a></td>
-              <td width="80">&nbsp;<a class="underlined" href="#" onClick="searchForm.sortCol.value='type';searchForm.submit();"><%=getTran("web.manage","labanalysis.cols.type",sWebLanguage)%></a></td>
-              <td width="180">&nbsp;<a class="underlined" href="#" onClick="searchForm.sortCol.value='name';searchForm.submit();"><%=getTran("web.manage","labanalysis.cols.name",sWebLanguage)%></a></td>
-              <td width="170">&nbsp;<a class="underlined" href="#" onClick="searchForm.sortCol.value='comment';searchForm.submit();"><%=getTran("web.manage","labanalysis.cols.comment",sWebLanguage)%></a></td>
+              <td width="80">&nbsp;<a class="underlined" href="#" onClick="searchForm.sortCol.value='code';searchForm.submit();"><%=getTran(request,"web.manage","labanalysis.cols.code",sWebLanguage)%></a></td>
+              <td width="80">&nbsp;<a class="underlined" href="#" onClick="searchForm.sortCol.value='type';searchForm.submit();"><%=getTran(request,"web.manage","labanalysis.cols.type",sWebLanguage)%></a></td>
+              <td width="180">&nbsp;<a class="underlined" href="#" onClick="searchForm.sortCol.value='name';searchForm.submit();"><%=getTran(request,"web.manage","labanalysis.cols.name",sWebLanguage)%></a></td>
+              <td width="170">&nbsp;<a class="underlined" href="#" onClick="searchForm.sortCol.value='comment';searchForm.submit();"><%=getTran(request,"web.manage","labanalysis.cols.comment",sWebLanguage)%></a></td>
             </tr>
             <%=sOut%>
 
             <%
                 if(showMsg){
-                    out.print("<tr><td colspan='5'><br>"+iTotal+" "+getTran("web","recordsfound",sWebLanguage)+"</td></tr>");
+                    out.print("<tr><td colspan='5'><br>"+iTotal+" "+getTran(request,"web","recordsfound",sWebLanguage)+"</td></tr>");
                 }
             %>
           </table>

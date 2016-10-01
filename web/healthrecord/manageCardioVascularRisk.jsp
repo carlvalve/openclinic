@@ -57,7 +57,7 @@
         <tr>
             <td class="admin" width="20%">
                 <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-                <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+                <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
             </td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" id="trandate" onblur='checkDate(this)'>
@@ -67,7 +67,7 @@
 
         <%-- SYSTOLIC PRESSURE --%>
         <tr>
-            <td class="admin"><%=getTran("Web.Occup",sPREFIX+"item_type_recruitment_sce_sbp",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web.Occup",sPREFIX+"item_type_recruitment_sce_sbp",sWebLanguage)%></td>
             <td class="admin2" nowrap>
                 <input id="sbpr" <%=setRightClick("ITEM_TYPE_CARDIAL_CLINICAL_EXAMINATION_SYSTOLIC_PRESSURE_LEFT")%> type="text" class="text" size="3" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIAL_CLINICAL_EXAMINATION_SYSTOLIC_PRESSURE_LEFT" property="itemId"/>]>.value" value="<%=getLastItemValue(request,sPREFIX+"ITEM_TYPE_CARDIAL_CLINICAL_EXAMINATION_SYSTOLIC_PRESSURE_LEFT")%>" onblur="setBP(this);"> mmHg
             </td>
@@ -75,7 +75,7 @@
 
         <%-- CHOLESTEROL --%>
         <tr>
-            <td class="admin"><%=getTran("Web.Occup","medwan.healthrecord.laboratory-examinations.blood.totale-cholesterol",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web.Occup","medwan.healthrecord.laboratory-examinations.blood.totale-cholesterol",sWebLanguage)%></td>
             <td class="admin2" nowrap>
                 <input id="chol" <%=setRightClick("ext_medidoc_57131a.b")%> type="text" class="text" size="3" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.iconstants.ext_medidoc_57131a.b" property="itemId"/>]>.value" value="<%=getLastItemValue(request,sPREFIX+"ext_medidoc_57131a.b")%>" onblur="setCholesterol(this);"> mg/dl
             </td>
@@ -83,18 +83,18 @@
 
         <%-- SMOKING ? --%>
         <tr>
-            <td class="admin"><%=getTran("Web.Occup","Smoking",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web.Occup","Smoking",sWebLanguage)%></td>
             <td class="admin2">
                 <input id="smoker" type="radio" onDblClick="uncheckRadio(this);" <%=setRightClick("ITEM_TYPE_CE_ROKER")%> name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CE_ROKER" property="itemId"/>]>.value" <%=getLastItemValue(request,sPREFIX+"ITEM_TYPE_CE_ROKER").equalsIgnoreCase("healthrecord.ce.smoker")?"checked":""%> value="healthrecord.ce.smoker" onclick="showCardio()">
-                <%=getLabel("Web.Occup","healthrecord.ce.smoker",sWebLanguage, "smoker")%>&nbsp;
+                <%=getLabel(request,"Web.Occup","healthrecord.ce.smoker",sWebLanguage, "smoker")%>&nbsp;
                 <input id="nonsmoker" type="radio" onDblClick="uncheckRadio(this);" <%=setRightClick("ITEM_TYPE_CE_ROKER")%> name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CE_ROKER" property="itemId"/>]>.value" <%=getLastItemValue(request,sPREFIX+"ITEM_TYPE_CE_ROKER").equalsIgnoreCase("healthrecord.ce.not_smoker")?"checked":""%> value="healthrecord.ce.not_smoker" onclick="showCardio()">
-                <%=getLabel("Web.Occup","healthrecord.ce.not_smoker",sWebLanguage, "nonsmoker")%>
+                <%=getLabel(request,"Web.Occup","healthrecord.ce.not_smoker",sWebLanguage, "nonsmoker")%>
             </td>
         </tr>
 
         <%-- NOTICED PHYSICIAN --%>
         <tr>
-            <td class="admin"><%=getTran("Web.occup","noticed_physician",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web.occup","noticed_physician",sWebLanguage)%></td>
             <td class="admin2">
                 <input <%=setRightClick("ITEM_TYPE_CARDIOVASCULAR_RISK_NOTICED_PHYSICIAN")%> type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIOVASCULAR_RISK_NOTICED_PHYSICIAN" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIOVASCULAR_RISK_NOTICED_PHYSICIAN;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true">
             </td>
@@ -102,7 +102,7 @@
 
         <%-- COMMENT --%>
         <tr>
-            <td class="admin"><%=getTran("Web","Comment",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web","Comment",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea id="comment" onkeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_CARDIOVASCULAR_RISK_COMMENT")%> class="text" cols="80" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIOVASCULAR_RISK_COMMENT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIOVASCULAR_RISK_COMMENT" property="value"/></textarea>
             </td>
@@ -139,12 +139,12 @@
     }
 
     if(document.getElementById("sbpr").value.length==0){
-      alertDialogDirectText("<%=getTran("web.manage","datamissing",sWebLanguage)%> (<%=getTran("Web.Occup",sPREFIX+"item_type_recruitment_sce_sbp",sWebLanguage)%>)");
+      alertDialogDirectText("<%=getTran(null,"web.manage","datamissing",sWebLanguage)%> (<%=getTran(request,"Web.Occup",sPREFIX+"item_type_recruitment_sce_sbp",sWebLanguage)%>)");
       document.getElementById("sbpr").focus();
       return 0;
     }
     else if(document.getElementById("chol").value.length==0){
-      alertDialogDirectText("<%=getTran("web.manage","datamissing",sWebLanguage)%> (<%=getTran("Web.Occup","medwan.healthrecord.laboratory-examinations.blood.totale-cholesterol",sWebLanguage)%>)");
+      alertDialogDirectText("<%=getTran(null,"web.manage","datamissing",sWebLanguage)%> (<%=getTran(request,"Web.Occup","medwan.healthrecord.laboratory-examinations.blood.totale-cholesterol",sWebLanguage)%>)");
       document.getElementById("chol").focus();
       return 0;
     }
@@ -163,7 +163,7 @@
       int minBP = 40;
       int maxBP = 300;
 
-      String outOfBoundsMsgBP = getTran("Web.Occup","out-of-bounds-value-minmax",sWebLanguage);
+      String outOfBoundsMsgBP = getTran(request,"Web.Occup","out-of-bounds-value-minmax",sWebLanguage);
       outOfBoundsMsgBP = outOfBoundsMsgBP.replaceAll("#min#",minBP+"");
       outOfBoundsMsgBP = outOfBoundsMsgBP.replaceAll("#max#",maxBP+"");
   %>
@@ -178,7 +178,7 @@
       int minChol = 0;
       int maxChol = 1000;
 
-      String outOfBoundsMsgChol = getTran("Web.Occup","out-of-bounds-value-minmax",sWebLanguage);
+      String outOfBoundsMsgChol = getTran(request,"Web.Occup","out-of-bounds-value-minmax",sWebLanguage);
       outOfBoundsMsgChol = outOfBoundsMsgChol.replaceAll("#min#",minChol+"");
       outOfBoundsMsgChol = outOfBoundsMsgChol.replaceAll("#max#",maxChol+"");
   %>

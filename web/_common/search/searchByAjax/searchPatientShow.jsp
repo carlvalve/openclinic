@@ -133,10 +133,10 @@
 			    %>
 			    <%-- header --%>
 			    <tr class="admin">
-			        <td nowrap><%=HTMLEntities.htmlentities(getTran("Web","personid",sWebLanguage))%></td>
-			        <td nowrap><%=HTMLEntities.htmlentities(getTran("Web","name",sWebLanguage))%></td>
-			        <td width="50" nowrap><%=HTMLEntities.htmlentities(getTran("Web","gender",sWebLanguage))%></td>
-			        <td width="110" nowrap><%=HTMLEntities.htmlentities(getTran("Web","dateofbirth",sWebLanguage))%></td>
+			        <td nowrap><%=HTMLEntities.htmlentities(getTran(request,"Web","personid",sWebLanguage))%></td>
+			        <td nowrap><%=HTMLEntities.htmlentities(getTran(request,"Web","name",sWebLanguage))%></td>
+			        <td width="50" nowrap><%=HTMLEntities.htmlentities(getTran(request,"Web","gender",sWebLanguage))%></td>
+			        <td width="110" nowrap><%=HTMLEntities.htmlentities(getTran(request,"Web","dateofbirth",sWebLanguage))%></td>
 			    </tr>
 			
 			    <tbody class="hand">
@@ -149,7 +149,7 @@
 		        %>
 		        <tr>
 		            <td colspan="3">
-		                <%=HTMLEntities.htmlentities(getTran("web","norecordsfound",sWebLanguage))%><br>
+		                <%=HTMLEntities.htmlentities(getTran(request,"web","norecordsfound",sWebLanguage))%><br>
 		                <a href="javascript:addPerson()"><%=HTMLEntities.htmlentities(getTranNoLink("web","add.this.person",sWebLanguage))%></a>
 		            </td>
 		        </tr>

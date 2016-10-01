@@ -11,12 +11,12 @@
                         <td>
                             <center>
                                 <br><br>
-                                <%=getTran("web.occup","do_you_take_over_contact",sWebLanguage)%>
+                                <%=getTran(request,"web.occup","do_you_take_over_contact",sWebLanguage)%>
                                 <br><br><br>
 
-                                <input type="button" name="buttonYes" class="button" value="&nbsp;&nbsp;<%=getTran("web.occup","medwan.common.yes",sWebLanguage)%>&nbsp;&nbsp;" onclick="doClose(1);"/>
+                                <input type="button" name="buttonYes" class="button" value="&nbsp;&nbsp;<%=getTran(request,"web.occup","medwan.common.yes",sWebLanguage)%>&nbsp;&nbsp;" onclick="doClose(1);"/>
                                 &nbsp;
-                                <input type="button" name="buttonNo" class="button" value="&nbsp;&nbsp;<%=getTran("web.occup","medwan.common.no",sWebLanguage)%>&nbsp;&nbsp;" onclick="doClose(0)"/>
+                                <input type="button" name="buttonNo" class="button" value="&nbsp;&nbsp;<%=getTran(request,"web.occup","medwan.common.no",sWebLanguage)%>&nbsp;&nbsp;" onclick="doClose(0)"/>
 
                                 <br><br>
                             </center>

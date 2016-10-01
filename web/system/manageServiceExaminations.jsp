@@ -48,7 +48,7 @@
 			}
 		}
 
-		sMsg = getTran("web","dataSaved",sWebLanguage);
+		sMsg = getTran(request,"web","dataSaved",sWebLanguage);
 		sAction = "edit";
     }
 %>
@@ -61,7 +61,7 @@
     <%-- SEARCH SERVICE --%>
     <table width="100%" class="menu" cellspacing="0">
         <tr height="22">
-            <td class="admin2" width="160">&nbsp;<%=getTran("web","service",sWebLanguage)%></td>
+            <td class="admin2" width="160">&nbsp;<%=getTran(request,"web","service",sWebLanguage)%></td>
             <td class="admin2">
                 <input class="text" type="text" name="FindServiceText" READONLY size="<%=sTextWidth%>" title="<%=sFindServiceText%>" value="<%=sFindServiceText%>">                
                 <img src='<%=sCONTEXTPATH%>/_img/icons/icon_search.gif' id='buttonService' class='link' alt='<%=getTranNoLink("Web","select",sWebLanguage)%>'
@@ -155,14 +155,14 @@
 			        String sServiceId, sServiceName;
 			        while(examIter.hasNext()){
 			        	sServiceId = (String)examIter.next();
-			        	sServiceName = getTran("web",sServiceId,sWebLanguage);
+			        	sServiceName = getTran(request,"web",sServiceId,sWebLanguage);
 			           
 			        	// header
 			        	%>
 			        	    <tr class="admin">
 			        	        <td colspan="5"><b><%=sServiceName%></b>&nbsp;
-			        	            <a href="javascript:void(0);" onclick="checkAll(true,'<%=sServiceId%>');"><%=getTran("web.manage.checkDb","checkAll",sWebLanguage)%></a>
-		                            <a href="javascript:void(0);" onclick="checkAll(false,'<%=sServiceId%>');"><%=getTran("web.manage.checkDb","uncheckAll",sWebLanguage)%></a>
+			        	            <a href="javascript:void(0);" onclick="checkAll(true,'<%=sServiceId%>');"><%=getTran(request,"web.manage.checkDb","checkAll",sWebLanguage)%></a>
+		                            <a href="javascript:void(0);" onclick="checkAll(false,'<%=sServiceId%>');"><%=getTran(request,"web.manage.checkDb","uncheckAll",sWebLanguage)%></a>
 		                        </td>
 		                    </tr>
 		                <%
@@ -178,7 +178,7 @@
 			        		}
 			        		
 			        		sExamId = (String)examsIter.next();
-			        		sExamName = getTran("examination",sExamId,sWebLanguage)+" ("+sExamId+")";
+			        		sExamName = getTran(request,"examination",sExamId,sWebLanguage)+" ("+sExamId+")";
 			        		
 							String screen = MedwanQuery.getInstance().getForward(((String)serviceExams.get(sExamId)).split(";")[1]);
 			        		out.print("<td class='admin'>"+
@@ -204,8 +204,8 @@
 		    </table>    
 		    
 			<%-- UN/CHECK ALL --%>
-			<a href="javascript:void(0);" onclick="checkAll(true,'all');"><%=getTran("web.manage.checkDb","checkAll",sWebLanguage)%></a>
-			<a href="javascript:void(0);" onclick="checkAll(false,'all');"><%=getTran("web.manage.checkDb","uncheckAll",sWebLanguage)%></a>
+			<a href="javascript:void(0);" onclick="checkAll(true,'all');"><%=getTran(request,"web.manage.checkDb","checkAll",sWebLanguage)%></a>
+			<a href="javascript:void(0);" onclick="checkAll(false,'all');"><%=getTran(request,"web.manage.checkDb","uncheckAll",sWebLanguage)%></a>
 					
 			<%-- BUTTONS --%>
 			<%=ScreenHelper.alignButtonsStart()%>

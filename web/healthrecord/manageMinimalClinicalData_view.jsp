@@ -20,7 +20,7 @@
 	    <tr>
 	        <td class="admin" width="<%=sTDAdminWidth%>">
 	            <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-	            <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+	            <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
 	        </td>
 	        <td class="admin2">
 	            <input type="text" class="text" size="12" maxLength="10" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" id="trandate" OnBlur='checkDate(this)'>
@@ -37,7 +37,7 @@
                 <table class="list" cellspacing="1" cellpadding="0" width="100%">
                     <%-- COMMENT --%>	
     		        <tr>
-				        <td class="admin" width="<%=sTDAdminWidth%>" nowrap><%=getTran("web","comment",sWebLanguage)%>&nbsp;</td>
+				        <td class="admin" width="<%=sTDAdminWidth%>" nowrap><%=getTran(request,"web","comment",sWebLanguage)%>&nbsp;</td>
 				        <td class="admin2">
 			            	<textarea id="focusField" onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_MCD_COMMENT")%> class="text" cols="80" rows="5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MCD_COMMENT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MCD_COMMENT" property="value"/></textarea>
 			            </td>

@@ -17,15 +17,15 @@ boolean bHasConflicts=false;
 %>
 <table width='100%'>
 	<tr class='admin'>
-		<td colspan='6'><%=ScreenHelper.getTran("web","resourceavailability.for",request.getParameter("language")) %>: <%=ScreenHelper.getTran("planningresource", resourceuid, request.getParameter("language"))%></td>
+		<td colspan='6'><%=ScreenHelper.getTran(request,"web","resourceavailability.for",request.getParameter("language")) %>: <%=ScreenHelper.getTran(request,"planningresource", resourceuid, request.getParameter("language"))%></td>
 	</tr>
 	<tr>
-		<td class='admin'><%=ScreenHelper.getTran("web","begin",request.getParameter("language")) %></td>
-		<td class='admin'><%=ScreenHelper.getTran("web","end",request.getParameter("language")) %></td>
-		<td class='admin'><%=ScreenHelper.getTran("web","duration",request.getParameter("language")) %></td>
-		<td class='admin'><%=ScreenHelper.getTran("web","user",request.getParameter("language")) %></td>
-		<td class='admin'><%=ScreenHelper.getTran("web","patient",request.getParameter("language")) %></td>
-		<td class='admin'><%=ScreenHelper.getTran("web","comment",request.getParameter("language")) %></td>
+		<td class='admin'><%=ScreenHelper.getTran(request,"web","begin",request.getParameter("language")) %></td>
+		<td class='admin'><%=ScreenHelper.getTran(request,"web","end",request.getParameter("language")) %></td>
+		<td class='admin'><%=ScreenHelper.getTran(request,"web","duration",request.getParameter("language")) %></td>
+		<td class='admin'><%=ScreenHelper.getTran(request,"web","user",request.getParameter("language")) %></td>
+		<td class='admin'><%=ScreenHelper.getTran(request,"web","patient",request.getParameter("language")) %></td>
+		<td class='admin'><%=ScreenHelper.getTran(request,"web","comment",request.getParameter("language")) %></td>
 	</tr>
 <%
 		Vector reservations = Reservation.getReservationsForResourceUid(resourceuid,ScreenHelper.getSQLTime(begin+" 00:00", "dd/MM/yyyy HH:mm"),ScreenHelper.getSQLTime(end+" 23:59", "dd/MM/yyyy HH:mm"));
@@ -59,11 +59,11 @@ boolean bHasConflicts=false;
 					String reservationservice = lock.split(";")[3];
 					try{
 						if(activeservice.startsWith(reservationservice) || (reservationbegin.before(dbegin) && !reservationend.after(dbegin))||(!reservationbegin.before(dend) && reservationend.after(dend))){
-							out.println("<tr class='gray'><td>"+new SimpleDateFormat("dd/MM/yyyy HH:mm").format(reservationbegin)+"</td><td>"+new SimpleDateFormat("dd/MM/yyyy HH:mm").format(reservationend)+"</td><td>"+ScreenHelper.getDuration(reservationbegin,reservationend)+"</td><td colspan='3'><img height='12px' src='"+sCONTEXTPATH+"/_img/icons/icon_ok.gif'> "+ScreenHelper.getTran("web","lock",request.getParameter("language"))+": "+ScreenHelper.getTran("service",reservationservice,request.getParameter("language"))+"</td></tr>");
+							out.println("<tr class='gray'><td>"+new SimpleDateFormat("dd/MM/yyyy HH:mm").format(reservationbegin)+"</td><td>"+new SimpleDateFormat("dd/MM/yyyy HH:mm").format(reservationend)+"</td><td>"+ScreenHelper.getDuration(reservationbegin,reservationend)+"</td><td colspan='3'><img height='12px' src='"+sCONTEXTPATH+"/_img/icons/icon_ok.gif'> "+ScreenHelper.getTran(request,"web","lock",request.getParameter("language"))+": "+ScreenHelper.getTran(request,"service",reservationservice,request.getParameter("language"))+"</td></tr>");
 						}
 						else {
-							out.println("<tr class='gray'><td>"+new SimpleDateFormat("dd/MM/yyyy HH:mm").format(reservationbegin)+"</td><td>"+new SimpleDateFormat("dd/MM/yyyy HH:mm").format(reservationend)+"</td><td>"+ScreenHelper.getDuration(reservationbegin,reservationend)+"</td><td colspan='3'><img height='12px' src='"+sCONTEXTPATH+"/_img/icons/icon_error.gif'> "+ScreenHelper.getTran("web","lock",request.getParameter("language"))+": "+ScreenHelper.getTran("service",reservationservice,request.getParameter("language"))+"</td></tr>");
-							//out.println("<tr><td class='adminred'>"+new SimpleDateFormat("dd/MM/yyyy HH:mm").format(reservationbegin)+"</td><td class='adminred'>"+new SimpleDateFormat("dd/MM/yyyy HH:mm").format(reservationend)+"</td><td class='adminred'>"+ScreenHelper.getDuration(reservationbegin,reservationend)+"</td><td class='adminred' colspan='3'>"+ScreenHelper.getTran("web","lock",request.getParameter("language"))+": "+ScreenHelper.getTran("service",reservationservice,request.getParameter("language"))+"</td></tr>");
+							out.println("<tr class='gray'><td>"+new SimpleDateFormat("dd/MM/yyyy HH:mm").format(reservationbegin)+"</td><td>"+new SimpleDateFormat("dd/MM/yyyy HH:mm").format(reservationend)+"</td><td>"+ScreenHelper.getDuration(reservationbegin,reservationend)+"</td><td colspan='3'><img height='12px' src='"+sCONTEXTPATH+"/_img/icons/icon_error.gif'> "+ScreenHelper.getTran(request,"web","lock",request.getParameter("language"))+": "+ScreenHelper.getTran(request,"service",reservationservice,request.getParameter("language"))+"</td></tr>");
+							//out.println("<tr><td class='adminred'>"+new SimpleDateFormat("dd/MM/yyyy HH:mm").format(reservationbegin)+"</td><td class='adminred'>"+new SimpleDateFormat("dd/MM/yyyy HH:mm").format(reservationend)+"</td><td class='adminred'>"+ScreenHelper.getDuration(reservationbegin,reservationend)+"</td><td class='adminred' colspan='3'>"+ScreenHelper.getTran(request,"web","lock",request.getParameter("language"))+": "+ScreenHelper.getTran(request,"service",reservationservice,request.getParameter("language"))+"</td></tr>");
 							bHasConflicts=true;
 						}
 					}

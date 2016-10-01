@@ -102,7 +102,7 @@
     String sHtml = "<select class='text' id='weekScheduleTypeSelect' name='weekScheduleTypeSelect' onChange='setWeekScheduleType(this.options[this.selectedIndex].text);setTimeBlocksString(this.options[this.selectedIndex].value);'>"+
                        getWeekScheduleOptions("",sWebLanguage)+
                    "</select> "+
-                   "<input class='button' type='button' value="+getTran("web","back",sWebLanguage)+" onclick='doBack();'>";    
+                   "<input class='button' type='button' value="+getTran(request,"web","back",sWebLanguage)+" onclick='doBack();'>";    
 %>
 
 <%=HTMLEntities.htmlentities(sHtml)%>

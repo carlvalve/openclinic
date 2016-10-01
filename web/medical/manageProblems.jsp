@@ -9,8 +9,8 @@
         if (activeProblems.size() > 0){
             sbProblemList.append("<table width='100%' cellspacing='0'>" +
                                   "<tr class='admin'>" +
-                                   "<td>"+getTran("web.occup", "medwan.common.description", sWebLanguage)+"</td>" +
-                                   "<td>"+getTran("web.occup", "medwan.common.datebegin", sWebLanguage)+"</td>" +
+                                   "<td>"+getTran(null,"web.occup", "medwan.common.description", sWebLanguage)+"</td>" +
+                                   "<td>"+getTran(null,"web.occup", "medwan.common.datebegin", sWebLanguage)+"</td>" +
                                   "</tr>");
         }
         
@@ -139,10 +139,10 @@
            onKeyDown='if(enterEvent(event,13)){doFind();return false;}else{return true;}'>
         <tr>
             <td class="admin2" width="<%=sTDAdminWidth%>">
-                <%=getTran("medical.diagnosis", "period", sWebLanguage)%>
+                <%=getTran(request,"medical.diagnosis", "period", sWebLanguage)%>
             </td>
             <td class="admin2">
-                <%=getTran("web", "from", sWebLanguage)%>&nbsp;
+                <%=getTran(request,"web", "from", sWebLanguage)%>&nbsp;
                 <%
                     String sBeginDate = "";
                     if (sFindProblemBeginDate != null && sFindProblemBeginDate.length() > 0){
@@ -150,7 +150,7 @@
                     }
                     out.print(writeDateField("FindProblemBeginDate", "FindProblemForm", sBeginDate, sWebLanguage));
                 %>&nbsp;
-                <%=getTran("web", "to", sWebLanguage)%>&nbsp;
+                <%=getTran(request,"web", "to", sWebLanguage)%>&nbsp;
                 <%
                     String sEndDate = "";
                     if (sFindProblemEndDate != null && sFindProblemEndDate.length() > 0){
@@ -162,7 +162,7 @@
         </tr>
         <tr>
             <td class="admin2">
-                <%=getTran("medical.diagnosis", "diagnosiscode", sWebLanguage)%>
+                <%=getTran(request,"medical.diagnosis", "diagnosiscode", sWebLanguage)%>
             </td>
             <td class="admin2">
                 <input class="text" type="text" id="fLabel" name="FindProblemCodeLabel"
@@ -179,21 +179,21 @@
         </tr>
         <%-- certainty --%>
         <tr>
-            <td class="admin"><%=getTran("medical.diagnosis", "certainty", sWebLanguage)%> *</td>
+            <td class="admin"><%=getTran(request,"medical.diagnosis", "certainty", sWebLanguage)%> *</td>
             <td class="admin2">
                 <select class="text" name="FindProblemCertainty">
                     <option/>
-                    <%=ScreenHelper.writeSelect("medical.diagnosis.certainty", "", sWebLanguage, false, false)%>
+                    <%=ScreenHelper.writeSelect(request,"medical.diagnosis.certainty", "", sWebLanguage, false, false)%>
                 </select>
             </td>
         </tr>
         <%-- gravity --%>
         <tr>
-            <td class="admin"><%=getTran("medical.diagnosis", "gravity", sWebLanguage)%> *</td>
+            <td class="admin"><%=getTran(request,"medical.diagnosis", "gravity", sWebLanguage)%> *</td>
             <td class="admin2">
                 <select class="text" name="FindProblemGravity">
                     <option/>
-                    <%=ScreenHelper.writeSelect("medical.diagnosis.gravity", "", sWebLanguage, false, false)%>
+                    <%=ScreenHelper.writeSelect(request,"medical.diagnosis.gravity", "", sWebLanguage, false, false)%>
                 </select>
             </td>
         </tr>
@@ -282,7 +282,7 @@
                         "<td onclick=\"doSelect('"+tmpProblem.getUid()+"');\">"+sEnd+"</td>" +
                         "</tr>";
             } else {
-                sOutput = "<tr valign='top'><td/><td style='{color: red}'><b><i>!!!</i></b></td><td style='{color: red}'><b><i>"+getTran("web", "diagnosis.restrictedaccess", sWebLanguage).toUpperCase()+"</i></td><td>"+sBegin+"</td><td>"+sEnd+"</td></tr>";
+                sOutput = "<tr valign='top'><td/><td style='{color: red}'><b><i>!!!</i></b></td><td style='{color: red}'><b><i>"+getTran(request,"web", "diagnosis.restrictedaccess", sWebLanguage).toUpperCase()+"</i></td><td>"+sBegin+"</td><td>"+sEnd+"</td></tr>";
             }
 
 
@@ -302,14 +302,14 @@
 <%=writeTableHeader("Web.manage", "manageProblems", sWebLanguage, "")%>
 <table class="list" width="100%" cellspacing="0">
     <tr>
-        <td class="titleadmin" colspan="5">&nbsp;<%=getTran("medical.problem","active",sWebLanguage)%></td>
+        <td class="titleadmin" colspan="5">&nbsp;<%=getTran(request,"medical.problem","active",sWebLanguage)%></td>
     </tr>
     <tr class="admin">
         <td width="1%"/>
-        <td width="10%"><%=getTran("web","code",sWebLanguage)%></td>
-        <td width="59%"><%=getTran("web","comment",sWebLanguage)%></td>
-        <td width="15%"><%=getTran("web","begindate",sWebLanguage)%></td>
-        <td width="15%"><%=getTran("web","enddate",sWebLanguage)%></td>
+        <td width="10%"><%=getTran(request,"web","code",sWebLanguage)%></td>
+        <td width="59%"><%=getTran(request,"web","comment",sWebLanguage)%></td>
+        <td width="15%"><%=getTran(request,"web","begindate",sWebLanguage)%></td>
+        <td width="15%"><%=getTran(request,"web","enddate",sWebLanguage)%></td>
     </tr>
     <%=sResultsActive%>
     <tr>
@@ -317,25 +317,25 @@
     </tr>
     <%
         if(iFoundActiveRecords > 0){
-            out.print("<tr><td colspan='5'>&nbsp;"+iFoundActiveRecords+" "+getTran("web", "recordsfound", sWebLanguage)+"</td></tr>");
+            out.print("<tr><td colspan='5'>&nbsp;"+iFoundActiveRecords+" "+getTran(request,"web", "recordsfound", sWebLanguage)+"</td></tr>");
         } 
         else{
-            out.print("<tr><td colspan='5'>&nbsp;"+getTran("web", "norecordsfound", sWebLanguage)+"</td></tr>");
+            out.print("<tr><td colspan='5'>&nbsp;"+getTran(request,"web", "norecordsfound", sWebLanguage)+"</td></tr>");
         }
     %>
     <tr>
         <td>&nbsp;</td>
     </tr>
     <tr>
-        <td class="titleadmin" colspan="5">&nbsp;<%=getTran("medical.problem", "passive", sWebLanguage)%>
+        <td class="titleadmin" colspan="5">&nbsp;<%=getTran(request,"medical.problem", "passive", sWebLanguage)%>
         </td>
     </tr>
     <tr class="admin">
         <td width="1%"/>
-        <td width="10%"><%=getTran("web", "code", sWebLanguage)%></td>
-        <td width="59%"><%=getTran("web", "comment", sWebLanguage)%></td>
-        <td width="15%"><%=getTran("web", "begindate", sWebLanguage)%></td>
-        <td width="15%"><%=getTran("web", "enddate", sWebLanguage)%></td>
+        <td width="10%"><%=getTran(request,"web", "code", sWebLanguage)%></td>
+        <td width="59%"><%=getTran(request,"web", "comment", sWebLanguage)%></td>
+        <td width="15%"><%=getTran(request,"web", "begindate", sWebLanguage)%></td>
+        <td width="15%"><%=getTran(request,"web", "enddate", sWebLanguage)%></td>
     </tr>
     <%=sResultsPassive%>
     <tr>
@@ -343,10 +343,10 @@
     </tr>
     <%
         if (iFoundPassiveRecords > 0){
-            out.print("<tr><td colspan='5'>&nbsp;"+iFoundPassiveRecords+" "+getTran("web", "recordsfound", sWebLanguage)+"</td></tr>");
+            out.print("<tr><td colspan='5'>&nbsp;"+iFoundPassiveRecords+" "+getTran(request,"web", "recordsfound", sWebLanguage)+"</td></tr>");
         } 
         else {
-            out.print("<tr><td colspan='5'>&nbsp;"+getTran("web", "norecordsfound", sWebLanguage)+"</td></tr>");
+            out.print("<tr><td colspan='5'>&nbsp;"+getTran(request,"web", "norecordsfound", sWebLanguage)+"</td></tr>");
         }
     %>
     <tr>
@@ -354,10 +354,10 @@
     </tr>
     <%
         if((iFoundActiveRecords+iFoundPassiveRecords) > 0){
-            out.print("<tr><td colspan='5'>&nbsp;"+getTran("web.occup", "total", sWebLanguage)+": "+(iFoundActiveRecords+iFoundPassiveRecords)+" "+getTran("web", "recordsfound", sWebLanguage)+"</td></tr>");
+            out.print("<tr><td colspan='5'>&nbsp;"+getTran(request,"web.occup", "total", sWebLanguage)+": "+(iFoundActiveRecords+iFoundPassiveRecords)+" "+getTran(request,"web", "recordsfound", sWebLanguage)+"</td></tr>");
         }
         else {
-            out.print("<tr><td colspan='5'>&nbsp;"+getTran("web", "norecordsfound", sWebLanguage)+"</td></tr>");
+            out.print("<tr><td colspan='5'>&nbsp;"+getTran(request,"web", "norecordsfound", sWebLanguage)+"</td></tr>");
         }
     %>
 </table>
@@ -378,7 +378,7 @@
     
     <table class="list" width="100%" cellspacing="1">
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","begin",sWebLanguage)%> *</td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","begin",sWebLanguage)%> *</td>
             <td class="admin2">
                 <%
                     String sBeginDate;
@@ -393,7 +393,7 @@
             </td>
         </tr>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","end",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","end",sWebLanguage)%></td>
             <td class="admin2">
                 <%
                     String sEndDate = "";
@@ -407,7 +407,7 @@
         </tr>
         <%-- code --%>
         <tr>
-            <td class="admin"><%=getTran("medical.problems","problem",sWebLanguage)%> *</td>
+            <td class="admin"><%=getTran(request,"medical.problems","problem",sWebLanguage)%> *</td>
             <td class="admin2">
                 <input class="text" type="text" id="eLabel" name="EditProblemCodeLabel" value="<%=sEditProblemCodeLabel%>" readonly size="<%=sTextWidth%>">
               
@@ -420,26 +420,26 @@
         </tr>
         <%-- certainty --%>
         <tr>
-            <td class="admin"><%=getTran("medical.diagnosis","certainty",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"medical.diagnosis","certainty",sWebLanguage)%></td>
             <td class="admin2">
                 <select class="text" name="EditProblemCertainty">
                     <option/>
-                    <%=ScreenHelper.writeSelect("medical.diagnosis.certainty", sEditProblemCertainty, sWebLanguage, false, false)%>
+                    <%=ScreenHelper.writeSelect(request,"medical.diagnosis.certainty", sEditProblemCertainty, sWebLanguage, false, false)%>
                 </select>
             </td>
         </tr>
         <%-- gravity --%>
         <tr>
-            <td class="admin"><%=getTran("medical.diagnosis","gravity",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"medical.diagnosis","gravity",sWebLanguage)%></td>
             <td class="admin2">
                 <select class="text" name="EditProblemGravity">
                     <option/>
-                    <%=ScreenHelper.writeSelect("medical.diagnosis.gravity",sEditProblemGravity,sWebLanguage,false,false)%>
+                    <%=ScreenHelper.writeSelect(request,"medical.diagnosis.gravity",sEditProblemGravity,sWebLanguage,false,false)%>
                 </select>
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("web","comment",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","comment",sWebLanguage)%></td>
             <td class="admin2">
                 <%=writeTextarea("EditProblemComment","","","",sEditProblemComment)%>
             </td>
@@ -451,7 +451,7 @@
         <%=ScreenHelper.setFormButtonsStop()%>
     </table>
     
-    <%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%>
+    <%=getTran(request,"Web","colored_fields_are_obligate",sWebLanguage)%>
     <input type="hidden" name="Action" value="">
 </form>
 

@@ -12,7 +12,7 @@
     private String getParent(String sCode, String sWebLanguage){
         String sReturn = "";
         if(sCode!=null && (sCode.trim().length()>0)){
-            String sLabel = getTran("Service",sCode,sWebLanguage);
+            String sLabel = getTran(null,"Service",sCode,sWebLanguage);
 
             Vector vParentIDs = Service.getParentIds(sCode);
             Iterator iter = vParentIDs.iterator();
@@ -41,7 +41,7 @@
     private String writeMyRow(String sType, String sID, String sWebLanguage, String sIcon){
         String row = "";
         
-        String sLabel = getTran(sType, sID, sWebLanguage).replaceAll("'","´");
+        String sLabel = getTran(null,sType, sID, sWebLanguage).replaceAll("'","´");
         boolean hasBeds = !needsbeds || Service.hasBeds(sID);
         boolean acceptsvisits = !needsvisits || Service.acceptsVisits(sID);
         Service service=Service.getService(sID);
@@ -238,13 +238,13 @@
                 sViewCode = sFindCode;
             }
             
-            String sLabel = HTMLEntities.htmlentities(getTran("Service",sViewCode,sWebLanguage));
+            String sLabel = HTMLEntities.htmlentities(getTran(request,"Service",sViewCode,sWebLanguage));
             Service sService = Service.getService(sViewCode);
 
             if(sService!=null){
                 String sCountry = HTMLEntities.htmlentities(checkString(sService.country));
                 if(sCountry.length() > 0){
-                    sCountry = HTMLEntities.htmlentities(getTran("Country",sCountry,sWebLanguage));
+                    sCountry = HTMLEntities.htmlentities(getTran(request,"Country",sCountry,sWebLanguage));
                 }
 
                 out.print(HTMLEntities.htmlentities(setRow("Web","Address",checkString(sService.address),sWebLanguage)));
@@ -303,7 +303,7 @@
 	        
 			    %>
 			    <tr>
-			        <td colspan="3"><%=HTMLEntities.htmlentities(getTran("web","no"+serviceType+"found",sWebLanguage))%>
+			        <td colspan="3"><%=HTMLEntities.htmlentities(getTran(request,"web","no"+serviceType+"found",sWebLanguage))%>
 			        </td>
 			    </tr>
 			    <%

@@ -3,7 +3,7 @@
 <%@ page import="java.util.*" %>
 <%@ page import="be.openclinic.medical.LabRequest" %>
 <%@ page import="java.util.Date" %>
-<%@ page import="be.openclinic.medical.LabAnalysis" %>
+<%@ page import="be.openclinic.medical.LabAnalysis,be.openclinic.archiving.*" %>
 <%@ page import="java.text.DecimalFormat" %>
 
 <%!
@@ -20,7 +20,7 @@
 	public String getComplexARVResult(String id, String arvs, String sWebLanguage,java.util.Date validationDate) {
 	    String sReturn = "<input type='hidden' id='resultAntiviro."+id+"' name='resultAntiviro."+id+"' value='"+arvs+"'/>";
 	    sReturn += "<a class='link' style='padding-left:2px' href='javascript:void(0)' onclick='openComplexARVResult(document.getElementById(\"resultAntiviro."+id+"\").value,\""+id+"\")'>"+getTranNoLink("web", "openAntivirogramresult", sWebLanguage)+"</a>";
-	    sReturn += " "+getTran("web","resultcomplete",sWebLanguage)+" <input type='checkbox' "+(validationDate!=null?"checked":"")+" name='validateAntiviro."+id+"'/>";
+	    sReturn += " "+getTran(null,"web","resultcomplete",sWebLanguage)+" <input type='checkbox' "+(validationDate!=null?"checked":"")+" name='validateAntiviro."+id+"'/>";
 	    return sReturn;
 	}
 
@@ -88,7 +88,7 @@
 %>
 <table class="list" width="100%">
     <tr>
-        <td colspan="3"><%=getTran("web","analysis",sWebLanguage)%></td>
+        <td colspan="3"><%=getTran(request,"web","analysis",sWebLanguage)%></td>
 	    <%
 	        Iterator requestsIterator = requestList.keySet().iterator();
 	        while(requestsIterator.hasNext()){
@@ -96,7 +96,7 @@
 	            
 	            out.print("<td>"+ScreenHelper.fullDateFormat.format(labRequest.getRequestdate())+"&nbsp;&nbsp;&nbsp;"+
 	                       "<a href='javascript:showRequest("+labRequest.getServerid()+","+labRequest.getTransactionid()+")'><b>"+labRequest.getTransactionid()+"</b></a>&nbsp;&nbsp;&nbsp;"+
-	                       "<a href='javascript:printRequest("+labRequest.getServerid()+","+labRequest.getTransactionid()+")'><b>"+getTran("web","print",sWebLanguage)+"</b></a></td>");
+	                       "<a href='javascript:printRequest("+labRequest.getServerid()+","+labRequest.getTransactionid()+")'><b>"+getTran(request,"web","print",sWebLanguage)+"</b></a></td>");
 	        }
 	    %>
     </tr>
@@ -111,6 +111,8 @@
             Hashtable analysisList = (Hashtable)groups.get(groupname);
             out.print("<tr>"+
                        "<td class='color color"+i+"' rowspan='"+(analysisList.size())+"'><b>"+MedwanQuery.getInstance().getLabel("labanalysis.group",groupname,sWebLanguage)+"</b></td>");
+            HashSet scanshandeled = new HashSet();
+            Hashtable scans = new Hashtable();
 
             SortedSet sortedSet = new TreeSet();
             sortedSet.addAll(analysisList.keySet());
@@ -159,9 +161,9 @@
                     String result = "";
                     
                     if(requestedLabAnalysis!=null){
-                    	if(!analysis.getEditor().equalsIgnoreCase("antibiogram") && !analysis.getEditor().equalsIgnoreCase("antivirogram") && !analysis.getEditor().equalsIgnoreCase("antibiogramnew") && !analysis.getEditor().equalsIgnoreCase("calculated")){
+                    	if(!analysis.getEditor().equalsIgnoreCase("antibiogram") && !analysis.getEditor().equalsIgnoreCase("scan") && !analysis.getEditor().equalsIgnoreCase("antivirogram") && !analysis.getEditor().equalsIgnoreCase("antibiogramnew") && !analysis.getEditor().equalsIgnoreCase("calculated")){
                     		if(analysis.getLimitedVisibility()>0 && !activeUser.getAccessRight("labos.limitedvisibility.select")){
-                    			result = getTran("web","invisible",sWebLanguage);	
+                    			result = getTran(request,"web","invisible",sWebLanguage);	
                     		}
                     		else if(requestedLabAnalysis.getFinalvalidation()>0){
 	                    		result = requestedLabAnalysis.getResultValue();
@@ -170,6 +172,32 @@
 	                    		result = "?";
 	                    	}
                     	}
+                        else if (analysis.getEditor().equals("scan")){
+                        	String sReference=labRequest.getServerid()+"."+labRequest.getTransactionid()+".LAB."+analysis.getEditorparametersParameter("TP");
+                        	boolean bAddReference=false;
+                        	if(!scanshandeled.contains(sReference)){
+                        		scanshandeled.add(sReference);
+                        		bAddReference=true;
+                        		ArchiveDocument doc = ArchiveDocument.getByReference(sReference);
+                        		if(doc!=null){
+                        			scans.put(sReference,doc);
+                        		}
+                        	}
+                        	ArchiveDocument doc = (ArchiveDocument)scans.get(sReference);
+                        	if(doc!=null){
+                        		if(doc.storageName!=null && doc.storageName.length()>0){
+			                    	String sServer = 	MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_url","scan")+"/"+
+	                    	                 			MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_dirTo","to");
+	                            	result=(bAddReference?"<input type='hidden' name='resultreference."+doc.reference+"'/>":"")+"<a href='javascript:window.open(\""+sCONTEXTPATH+"/"+sServer+"/"+doc.storageName+"\",\"_new\",\"toolbar=no,status=yes,scrollbars=yes,resizable=yes,width=800,height=500,menubar=no\");void(0);' title='"+sServer+"/"+doc.storageName+"' target='_new'><img src='"+sCONTEXTPATH+"/_img/icons/icon_labo.png'/> "+ScreenHelper.removeLeadingZeros(doc.udi)+"</a>";
+	                        	}
+                        		else{
+                        			result="<span title='"+ScreenHelper.removeLeadingZeros(doc.udi)+"'>?</span>";
+                        		}
+                        	}
+                        	else{
+                        		result="Error";
+                        	}
+                        }
                     	else if(analysis.getEditor().equalsIgnoreCase("antibiogram")){
 	                    	if(requestedLabAnalysis.existsNonEmptyAntibiogrammesByUid(labRequest.getServerid()+"."+labRequest.getTransactionid()+"."+requestedLabAnalysis.getAnalysisCode())){
 	                        	result = getComplexResult(labRequest.getServerid()+"."+labRequest.getTransactionid()+"."+requestedLabAnalysis.getAnalysisCode(), RequestedLabAnalysis.getAntibiogrammes(labRequest.getServerid()+"."+labRequest.getTransactionid()+"."+requestedLabAnalysis.getAnalysisCode()), sWebLanguage);                        	

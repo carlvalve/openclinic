@@ -121,7 +121,7 @@
 
     <table width="100%" class="list" cellspacing="0" cellpadding="0" style="border:none;">
         <tr style="height:30px;">
-            <td class="admin2" width="50"><%=getTran("web","month",sWebLanguage)%></td>
+            <td class="admin2" width="50"><%=getTran(request,"web","month",sWebLanguage)%></td>
             
             <%-- ARROWS --%>
             <td class="admin2" width="150" nowrap>                
@@ -130,7 +130,7 @@
                 <input type="button" class="button" name="buttonNext" value=" > " onclick="showNextMonth();"/>                        
                                
                 <%-- only past dates --%>
-                <script>writeMyDate("DisplayedMonth","<c:url value='/_img/icons/icon_agenda.gif'/>","<%=getTran("web","putToday",sWebLanguage)%>",true,false);</script>
+                <script>writeMyDate("DisplayedMonth","<c:url value='/_img/icons/icon_agenda.gif'/>","<%=getTran(null,"web","putToday",sWebLanguage)%>",true,false);</script>
             </td>
             
             <%-- BUTTONS --%>
@@ -152,7 +152,7 @@
         <%-- instructions --%>
         <tr>                
             <td class="admin2" colspan="3">                
-                <%=getTran("hr.salarycalculations","instructions",sWebLanguage)%>                 
+                <%=getTran(request,"hr.salarycalculations","instructions",sWebLanguage)%>                 
             </td>
         </tr>
     </table>
@@ -200,13 +200,13 @@
                       
             <%-- days header (7 days) --%>
             <div class="dayHeaders" id="monthScheduler_dayHeaders">
-                <div id="dayHeader_0" style="border-left: 1px solid #eee;"><%=getTran("web","saturday",sWebLanguage)%></div>
-                <div id="dayHeader_1"><%=getTran("web","sunday",sWebLanguage)%></div>
-                <div id="dayHeader_2"><%=getTran("web","monday",sWebLanguage)%></div>
-                <div id="dayHeader_3"><%=getTran("web","tuesday",sWebLanguage)%></div>
-                <div id="dayHeader_4"><%=getTran("web","wednesday",sWebLanguage)%></div>
-                <div id="dayHeader_5"><%=getTran("web","thursday",sWebLanguage)%></div>
-                <div id="dayHeader_6"><%=getTran("web","friday",sWebLanguage)%></div>
+                <div id="dayHeader_0" style="border-left: 1px solid #eee;"><%=getTran(request,"web","saturday",sWebLanguage)%></div>
+                <div id="dayHeader_1"><%=getTran(request,"web","sunday",sWebLanguage)%></div>
+                <div id="dayHeader_2"><%=getTran(request,"web","monday",sWebLanguage)%></div>
+                <div id="dayHeader_3"><%=getTran(request,"web","tuesday",sWebLanguage)%></div>
+                <div id="dayHeader_4"><%=getTran(request,"web","wednesday",sWebLanguage)%></div>
+                <div id="dayHeader_5"><%=getTran(request,"web","thursday",sWebLanguage)%></div>
+                <div id="dayHeader_6"><%=getTran(request,"web","friday",sWebLanguage)%></div>
             </div>   
         </div>
         
@@ -215,7 +215,7 @@
                 <%    
                     // cells on the left containing number of the month
                     for(int i=0; i<6; i++){                       
-                        out.write("<div class='weekCell' style='line-height:"+dayRowHeight+"px;'>"+getTran("web","weekShort",sWebLanguage)+(i+1)+"</div>");
+                        out.write("<div class='weekCell' style='line-height:"+dayRowHeight+"px;'>"+getTran(request,"web","weekShort",sWebLanguage)+(i+1)+"</div>");
                     } 
                 %>
             </div>
@@ -511,7 +511,7 @@
     
     <%-- add data which were entered but not yet added --%>
     if(document.getElementById("addDuration").value.length > 0 && document.getElementById("addCode").value.length > 0){
-        if(window.showModalDialog?yesnoDialog("web","firstAddData"):yesnoDialogDirectText('<%=getTran("web","firstAddData",sWebLanguage)%>')){
+        if(window.showModalDialog?yesnoDialog("web","firstAddData"):yesnoDialogDirectText('<%=getTran(null,"web","firstAddData",sWebLanguage)%>')){
         okToSubmit = addCC();
       }
     }
@@ -568,7 +568,7 @@
     
     <%-- add data which were entered but not yet added --%>
     if(document.getElementById("addDuration").value.length > 0 && document.getElementById("addCode").value.length > 0){
-        if(window.showModalDialog?yesnoDialog("web","firstAddData"):yesnoDialogDirectText('<%=getTran("web","firstAddData",sWebLanguage)%>')){
+        if(window.showModalDialog?yesnoDialog("web","firstAddData"):yesnoDialogDirectText('<%=getTran(null,"web","firstAddData",sWebLanguage)%>')){
         okToSubmit = addCC();
       }
     }

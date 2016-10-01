@@ -16,7 +16,7 @@
 <table class="list" width="100%" cellspacing="1" onKeyDown="if(enterEvent(event,13)){searchNutricientItems();return false;}">
     <%-- NUTRIENT NAME --%>
     <tr>
-        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("meals","name",sWebLanguage)%></td>
+        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"meals","name",sWebLanguage)%></td>
         <td class="admin2" style="padding-left:5px;">
             <input type="text" class="text" id="FindNutricientName" name="FindNutricientName" size="50" maxLength="100">&nbsp;&nbsp;
             
@@ -53,7 +53,7 @@
   function openNutricientItem(id){
     var params = "nutricientItemId="+id;
     var url = "<c:url value='/meals/ajax/getNutricientItem.jsp'/>?ts="+new Date().getTime();
-    Modalbox.show(url,{title:"<%=getTran("meals","nutricientitem",sWebLanguage)%>",params:params,width:530});
+    Modalbox.show(url,{title:"<%=getTran(null,"meals","nutricientitem",sWebLanguage)%>",params:params,width:530});
   }
 
   <%-- SET NUTRICIENT ITEM --%>

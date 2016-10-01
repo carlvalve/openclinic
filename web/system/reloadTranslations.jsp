@@ -2,11 +2,11 @@
 <%@include file="/includes/validateUser.jsp"%>
 <%
     String sReload = checkString(request.getParameter("ReloadButton"));
-    String sText = getTran("Web.Translations","ReloadText",sWebLanguage);
+    String sText = getTran(request,"Web.Translations","ReloadText",sWebLanguage);
 
     if (sReload.length()>0){
         reloadSingleton(session);
-        sText = getTran("Web.Translations","TranslationsAreReloaded",sWebLanguage);
+        sText = getTran(request,"Web.Translations","TranslationsAreReloaded",sWebLanguage);
     }
 %>
 <form name="workForm" method="post">

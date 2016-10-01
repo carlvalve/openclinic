@@ -28,7 +28,7 @@
             
             html.append("<td>"+ScreenHelper.stdDateFormat.format(doc.date)+"</td>")
                 .append("<td><a href='javascript:void(0);' onClick=\"openArchiveDocumentTran('"+doc.tranServerId+"','"+doc.tranTranId+"');\">"+doc.title+"</a></td>")
-                .append("<td>"+getTran("arch.doc.category",doc.category,sWebLanguage)+"</td>")
+                .append("<td>"+getTran(null,"arch.doc.category",doc.category,sWebLanguage)+"</td>")
                 .append("<td>"+doc.author+"</td>");
             
             // buttons
@@ -98,7 +98,7 @@
 	        msg = msg.replaceAll("#totalRecords#",Integer.toString(maxDocs));
         }
         else{
-        	msg = foundDocsCount+" "+getTran("web","recordsFound",sWebLanguage);
+        	msg = foundDocsCount+" "+getTran(request,"web","recordsFound",sWebLanguage);
         }
     }
 %>
@@ -110,7 +110,7 @@
     <table width="100%" class="list" cellspacing="1" onKeyDown="if(enterEvent(event,13)){doSearch();}">
         <%-- find title --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>" nowrap><%=getTran("web","title",sWebLanguage)%>&nbsp;</td>
+            <td class="admin" width="<%=sTDAdminWidth%>" nowrap><%=getTran(request,"web","title",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" name="FindTitle" size="50" maxLength="255" value="<%=sFindTitle%>">
             </td>
@@ -118,32 +118,32 @@
 			        
         <%-- find category --%>
         <tr>
-            <td class="admin" nowrap><%=getTran("web","category",sWebLanguage)%>&nbsp;</td>
+            <td class="admin" nowrap><%=getTran(request,"web","category",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <select class="text" name="FindCategory">
                     <option/>
-                    <%=ScreenHelper.writeSelect("arch.doc.category",sFindCategory,sWebLanguage)%>
+                    <%=ScreenHelper.writeSelect(request,"arch.doc.category",sFindCategory,sWebLanguage)%>
                 </select>
             </td>
         </tr>
         
         <%-- find begin --%>
         <tr>
-            <td class="admin" nowrap><%=getTran("web","begindate",sWebLanguage)%>&nbsp;</td>
+            <td class="admin" nowrap><%=getTran(request,"web","begindate",sWebLanguage)%>&nbsp;</td>
             <td class="admin2"><%=writeDateField("FindBegin","transactionForm",sFindBegin,sWebLanguage)%></td>
         </tr>
         
         <%-- find end --%>
         <tr>
-            <td class="admin" nowrap><%=getTran("web","enddate",sWebLanguage)%>&nbsp;</td>
+            <td class="admin" nowrap><%=getTran(request,"web","enddate",sWebLanguage)%>&nbsp;</td>
             <td class="admin2"><%=writeDateField("FindEnd","transactionForm",sFindEnd,sWebLanguage)%></td>
         </tr>
         
         <%-- only scanned --%>
         <tr>
-            <td class="admin" nowrap><%=getTran("web","onlyScannedDocuments",sWebLanguage)%>&nbsp;</td>
+            <td class="admin" nowrap><%=getTran(request,"web","onlyScannedDocuments",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
-                <input type="checkbox" name="OnlyScanned" id="onlyScannedCB" value="true" <%=(onlyScanned?"checked":"")%>><%=getLabel("web","onlyScannedDocuments",sWebLanguage,"onlyScannedCB")%>
+                <input type="checkbox" name="OnlyScanned" id="onlyScannedCB" value="true" <%=(onlyScanned?"checked":"")%>><%=getLabel(request,"web","onlyScannedDocuments",sWebLanguage,"onlyScannedCB")%>
             </td>
         </tr>
         
@@ -165,10 +165,10 @@
             %>
                 <table width="100%" cellspacing="0" cellpadding="0" class="sortable" id="searchresults">
                     <tr class="admin">
-                        <td width="100"><%=getTran("web","date",sWebLanguage)%></td>
-                        <td width="300"><%=getTran("web","title",sWebLanguage)%></td>
-                        <td width="150"><%=getTran("web","category",sWebLanguage)%></td>
-                        <td width="200"><%=getTran("web","author",sWebLanguage)%></td>
+                        <td width="100"><%=getTran(request,"web","date",sWebLanguage)%></td>
+                        <td width="300"><%=getTran(request,"web","title",sWebLanguage)%></td>
+                        <td width="150"><%=getTran(request,"web","category",sWebLanguage)%></td>
+                        <td width="200"><%=getTran(request,"web","author",sWebLanguage)%></td>
                         <td width="*"/>
                     </tr>
                     <%=sHTML%>
@@ -194,7 +194,7 @@
         }
         else{
             // no records found
-            %><%=getTran("web","norecordsfound",sWebLanguage)%><br><br><%
+            %><%=getTran(request,"web","norecordsfound",sWebLanguage)%><br><br><%
         }
     %>    
 </form>

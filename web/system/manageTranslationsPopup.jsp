@@ -6,6 +6,8 @@
 
 <%
     String sAction = checkString(request.getParameter("Action"));
+	boolean bMini = checkString(request.getParameter("Mode")).equalsIgnoreCase("mini");
+	boolean bMaxi = checkString(request.getParameter("Mode")).equalsIgnoreCase("maxi");
 
     // get values from form
     String findLabelID    = checkString(request.getParameter("FindLabelID")),
@@ -56,7 +58,7 @@
         for(int i=0; i<invalidLabelKeyChars.length(); i++){
             if((editLabelType+editLabelID).indexOf(invalidLabelKeyChars.charAt(i)) > -1){
                 invalidCharFound = true;
-                msg = getTran("Web.manage","invalidcharsfound",sWebLanguage)+" '"+invalidLabelKeyChars+"'";
+                msg = getTran(null,"Web.manage","invalidcharsfound",sWebLanguage)+" '"+invalidLabelKeyChars+"'";
                 break;
             }
         }
@@ -88,11 +90,18 @@
 
                 //reloadSingleton(session);
 
-                msg = "'"+editLabelType+"$"+editLabelID+"$"+editLabelLang+"' "+getTran("Web","saved",sWebLanguage);
+                msg = "'"+editLabelType+"$"+editLabelID+"$"+editLabelLang+"' "+getTran(null,"Web","saved",sWebLanguage);
             }
             else{
                 sAction = "Add";
             }
+        }
+        if(bMini){
+        	out.println("<script>");
+        	out.println("window.opener.location.reload();");
+        	out.println("window.close();");
+        	out.println("</script>");
+        	out.flush();
         }
     }
 
@@ -109,7 +118,7 @@
         for(int i=0; i<invalidLabelKeyChars.length(); i++){
             if((editLabelType+editLabelID).indexOf(invalidLabelKeyChars.charAt(i)) > -1){
                 invalidCharFound = true;
-                msg = getTran("Web.manage","invalidcharsfound",sWebLanguage)+" '"+invalidLabelKeyChars+"'";
+                msg = getTran(null,"Web.manage","invalidcharsfound",sWebLanguage)+" '"+invalidLabelKeyChars+"'";
                 break;
             }
         }
@@ -128,7 +137,7 @@
             if(!label.exists()){
                 label.saveToDB();
 
-                msg = "'"+editLabelType+"$"+editLabelID+"$"+editLabelLang+"' "+getTran("Web","added",sWebLanguage);
+                msg = "'"+editLabelType+"$"+editLabelID+"$"+editLabelLang+"' "+getTran(null,"Web","added",sWebLanguage);
 
                 editOldLabelID = editLabelID;
                 editOldLabelType = editLabelType;
@@ -140,7 +149,7 @@
             else{
                 // a label with the given ids allready exists
                 labelAllreadyExists = true;
-                msg = getTran("Web.Manage","labelExists",sWebLanguage);
+                msg = getTran(null,"Web.Manage","labelExists",sWebLanguage);
             }
         }
     }
@@ -148,7 +157,7 @@
     else if(sAction.equals("Delete")) {
         Label.delete(editLabelType,editLabelID,editLabelLang);
         reloadSingleton(session);
-        msg = "'"+editLabelType+"$"+editLabelID+"$"+editLabelLang+"' "+getTran("Web","deleted",sWebLanguage);
+        msg = "'"+editLabelType+"$"+editLabelID+"$"+editLabelLang+"' "+getTran(null,"Web","deleted",sWebLanguage);
         editLabelID = "";
     }
 
@@ -160,89 +169,93 @@
         }
     }
 %>
+<%if(!bMini){ %>
 <%-- Start Floating Layer -----------------------------------------------------------------------%>
 <div id="FloatingLayer" style="position:absolute;width:250px;left:220px;top:160px;visibility:hidden">
     <table border="0" width="250" cellspacing="0" cellpadding="5" style="border:1px solid #aaa">
         <tr>
-            <td bgcolor="#dddddd" style="text-align:center"><%=getTran("web","searchInProgress",sWebLanguage)%></td>
+            <td bgcolor="#dddddd" style="text-align:center"><%=getTran(null,"web","searchInProgress",sWebLanguage)%></td>
         </tr>
     </table>
 </div>
+<%} %>
 <%-- End Floating layer -------------------------------------------------------------------------%>
 
 <form name="transactionForm" method="post" action="<c:url value='/popup.jsp'/>?Page=system/manageTranslationsPopup.jsp&ts=<%=getTs()%>">
+<%if(!bMini & !bMaxi){ %>
+
     <%=writeTableHeader("Web","ManageTranslations",sWebLanguage," window.close();")%>
 
-<%-- SEARCH TABLE -------------------------------------------------------------------------------%>
-<table width="100%" cellspacing="1" class="menu" onkeydown="if(enterEvent(event,13)){doFind();}">
-    <%-- LABEL TYPE --%>
-    <tr>
-      <td class="admin" width="<%=sTDAdminWidth%>">&nbsp;<%=getTran("Web","type",sWebLanguage)%></td>
-      <td class="admin2">
-          <select name="FindLabelType" class="text">
-              <option></option>
-              <%
-                  String sTmpLabeltype;
-                  Vector vLabelTypes = Label.getLabelTypes();
-                  Iterator iter = vLabelTypes.iterator();
-
-                  while(iter.hasNext()){
-                      sTmpLabeltype = (String)iter.next();
-                      %><option value="<%=sTmpLabeltype%>" <%=(sTmpLabeltype.equals(findLabelType)?"selected":"")%>><%=sTmpLabeltype%></option><%
-                  }
-              %>
-          </select>
-      </td>
-  </tr>
-
-  <%-- LABEL ID --%>
-  <tr>
-      <td class="admin">&nbsp;<%=getTran("Web.Translations","labelid",sWebLanguage)%></td>
-      <td class="admin2">
-          <input type="text" class="text" name="FindLabelID" value="<%=findLabelID%>" size="50">
-      </td>
-  </tr>
-  
-  <%-- LABEL LANGUAGE --%>
-  <tr>
-      <td class="admin">&nbsp;<%=getTran("Web","Language",sWebLanguage)%></td>
-      <td class="admin2">
-          <select name="FindLabelLang" class="text">
-              <option></option>
-              <%
-                  String tmpLang;
-                  StringTokenizer tokenizer = new StringTokenizer(supportedLanguages,",");
-                  while(tokenizer.hasMoreTokens()){
-                      tmpLang = tokenizer.nextToken();
-                      %><option value="<%=tmpLang%>" <%=(findLabelLang.equals(tmpLang)?"selected":"")%>><%=getTran("Web.language",tmpLang,sWebLanguage)%></option><%
-                  }
-              %>
-          </select>
-      </td>
-  </tr>
-  
-  <%-- LABEL VALUE --%>
-  <tr>
-      <td class="admin">&nbsp;<%=getTran("Web.Translations","label",sWebLanguage)%></td>
-      <td class="admin2"><input type="text" class="text" name="FindLabelValue" value="<%=findLabelValue%>" size="50"></td>
-  </tr>
-  
-  <%-- EXCLUSIONS --%>
-  <tr>
-      <td class="admin">&nbsp;<%=getTran("Web.Translations","exclusion",sWebLanguage)%></td>
-      <td class="admin2">
-          <input type="checkbox" class="hand" name="excludeFunctions" id="excludeFunctionsCB" value="true" <%=(excludeFunctions?" CHECKED":"")%>><%=getLabel("web","functions",sWebLanguage,"excludeFunctionsCB")%>&nbsp;
-          <input type="checkbox" class="hand" name="excludeServices" id="excludeServicesCB" value="true" <%=(excludeServices?" CHECKED":"")%>><%=getLabel("web","services",sWebLanguage,"excludeServicesCB")%>
-          &nbsp;&nbsp;
-
-           <%-- SEARCH BUTTONS --%>
-          <input type="button" class="button" name="FindButton"  value="<%=getTranNoLink("Web","Find",sWebLanguage)%>" onclick="doFind();">&nbsp;
-          <input type="button" class="button" name="ClearButton" value="<%=getTranNoLink("Web","Clear",sWebLanguage)%>" onClick="clearFindFields();">&nbsp;
-          <input type="button" class="button" name="NewButton"   value="<%=getTranNoLink("Web","New",sWebLanguage)%>" onClick="doNew();">
-      </td>
-  </tr>
-</table>
-
+	<%-- SEARCH TABLE -------------------------------------------------------------------------------%>
+	<table width="100%" cellspacing="1" class="menu" onkeydown="if(enterEvent(event,13)){doFind();}">
+	    <%-- LABEL TYPE --%>
+	    <tr>
+	      <td class="admin" width="<%=sTDAdminWidth%>">&nbsp;<%=getTran(null,"Web","type",sWebLanguage)%></td>
+	      <td class="admin2">
+	          <select name="FindLabelType" class="text">
+	              <option></option>
+	              <%
+	                  String sTmpLabeltype;
+	                  Vector vLabelTypes = Label.getLabelTypes();
+	                  Iterator iter = vLabelTypes.iterator();
+	
+	                  while(iter.hasNext()){
+	                      sTmpLabeltype = (String)iter.next();
+	                      %><option value="<%=sTmpLabeltype%>" <%=(sTmpLabeltype.equals(findLabelType)?"selected":"")%>><%=sTmpLabeltype%></option><%
+	                  }
+	              %>
+	          </select>
+	      </td>
+	  </tr>
+	
+	  <%-- LABEL ID --%>
+	  <tr>
+	      <td class="admin">&nbsp;<%=getTran(null,"Web.Translations","labelid",sWebLanguage)%></td>
+	      <td class="admin2">
+	          <input type="text" class="text" name="FindLabelID" value="<%=findLabelID%>" size="50">
+	      </td>
+	  </tr>
+	  
+	  <%-- LABEL LANGUAGE --%>
+	  <tr>
+	      <td class="admin">&nbsp;<%=getTran(null,"Web","Language",sWebLanguage)%></td>
+	      <td class="admin2">
+	          <select name="FindLabelLang" class="text">
+	              <option></option>
+	              <%
+	                  String tmpLang;
+	                  StringTokenizer tokenizer = new StringTokenizer(supportedLanguages,",");
+	                  while(tokenizer.hasMoreTokens()){
+	                      tmpLang = tokenizer.nextToken();
+	                      %><option value="<%=tmpLang%>" <%=(findLabelLang.equals(tmpLang)?"selected":"")%>><%=getTran(null,"Web.language",tmpLang,sWebLanguage)%></option><%
+	                  }
+	              %>
+	          </select>
+	      </td>
+	  </tr>
+	  
+	  <%-- LABEL VALUE --%>
+	  <tr>
+	      <td class="admin">&nbsp;<%=getTran(null,"Web.Translations","label",sWebLanguage)%></td>
+	      <td class="admin2"><input type="text" class="text" name="FindLabelValue" value="<%=findLabelValue%>" size="50"></td>
+	  </tr>
+	  
+	  <%-- EXCLUSIONS --%>
+	  <tr>
+	      <td class="admin">&nbsp;<%=getTran(null,"Web.Translations","exclusion",sWebLanguage)%></td>
+	      <td class="admin2">
+	          <input type="checkbox" class="hand" name="excludeFunctions" id="excludeFunctionsCB" value="true" <%=(excludeFunctions?" CHECKED":"")%>><%=getLabel(request,"web","functions",sWebLanguage,"excludeFunctionsCB")%>&nbsp;
+	          <input type="checkbox" class="hand" name="excludeServices" id="excludeServicesCB" value="true" <%=(excludeServices?" CHECKED":"")%>><%=getLabel(request,"web","services",sWebLanguage,"excludeServicesCB")%>
+	          &nbsp;&nbsp;
+	
+	           <%-- SEARCH BUTTONS --%>
+	          <input type="button" class="button" name="FindButton"  value="<%=getTranNoLink("Web","Find",sWebLanguage)%>" onclick="doFind();">&nbsp;
+	          <input type="button" class="button" name="ClearButton" value="<%=getTranNoLink("Web","Clear",sWebLanguage)%>" onClick="clearFindFields();">&nbsp;
+	          <input type="button" class="button" name="NewButton"   value="<%=getTranNoLink("Web","New",sWebLanguage)%>" onClick="doNew();">
+	      </td>
+	  </tr>
+	</table>
+<%} %>
 <script>
   <%-- do find --%>
   function doFind(){
@@ -307,7 +320,7 @@
             foundLabels.append("<tr class='list"+sClass+"'  onclick=\"setLabel('"+sLabelType+"','"+sLabelID+"','"+sLabelLang+"');\">")
                         .append("<td colspan='2'>"+sLabelType+"</td>")
                         .append("<td>"+sLabelID+"</td>")
-                        .append("<td>"+getTran("web.language",sLabelLang,sWebLanguage)+"</td>")
+                        .append("<td>"+getTran(null,"web.language",sLabelLang,sWebLanguage)+"</td>")
                         .append("<td colspan='2'>"+sLabelValue+"</td>");
 
             recsFound++;
@@ -324,10 +337,10 @@
                           <img id="Input_Hist_S" src="<c:url value='/_img/icons/icon_plus.png'/>" OnClick='showD("Input_Hist","Input_Hist_S","Input_Hist_H")' <%=(sAction.equals("Find")?"style='display:none'":"")%>>
                           <img id="Input_Hist_H" src="<c:url value='/_img/icons/icon_minus.png'/>" OnClick='hideD("Input_Hist","Input_Hist_S", "Input_Hist_H")' <%=(sAction.equals("Find")?"":"style='display:none'")%>>
                       </td>
-                      <td width="25%"><%=getTran("Web.Translations","LabelType",sWebLanguage)%></td>
-                      <td width="25%"><%=getTran("Web.Translations","LabelID",sWebLanguage)%></td>
-                      <td width="10%"><%=getTran("Web","Language",sWebLanguage)%></td>
-                      <td width="38%"><%=getTran("Web","Value",sWebLanguage)%></td>
+                      <td width="25%"><%=getTran(null,"Web.Translations","LabelType",sWebLanguage)%></td>
+                      <td width="25%"><%=getTran(null,"Web.Translations","LabelID",sWebLanguage)%></td>
+                      <td width="10%"><%=getTran(null,"Web","Language",sWebLanguage)%></td>
+                      <td width="38%"><%=getTran(null,"Web","Value",sWebLanguage)%></td>
                       <td align="right" width="1%">
                           <a href="#topp" class="topbutton">&nbsp;</a>
                       </td>
@@ -354,7 +367,7 @@
         }
 
         %>
-            <span><%=recsFound%> <%=getTran("web","recordsfound",sWebLanguage)%></span>
+            <span><%=recsFound%> <%=getTran(null,"web","recordsfound",sWebLanguage)%></span>
 
             <%-- CLOSE BUTTON --%>
             <%=ScreenHelper.alignButtonsStart()%>
@@ -394,9 +407,10 @@
 
             <%-- EDIT TABLE ---------------------------------------------------------------------%>
             <table class="list" width="100%" cellspacing="1">
+    	<%if(!bMini){%>
               <%-- type --%>
               <tr>
-                  <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web.Translations","LabelType",sWebLanguage)%></td>
+                  <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(null,"Web.Translations","LabelType",sWebLanguage)%></td>
                   <td class="admin2">
                       <input type="text" class="normal" name="EditLabelType" value="<%=editLabelType%>" size="80">
                   </td>
@@ -404,54 +418,64 @@
 
               <%-- id --%>
               <tr>
-                  <td class="admin"><%=getTran("Web.Translations","LabelID",sWebLanguage)%></td>
+                  <td class="admin"><%=getTran(null,"Web.Translations","LabelID",sWebLanguage)%></td>
                   <td class="admin2">
                       <input type="text" class="normal" name="EditLabelID" value="<%=editLabelID%>" size="80">
                   </td>
               </tr>
               <%-- language --%>
               <tr>
-                  <td class="admin"><%=getTran("Web","Language",sWebLanguage)%></td>
+                  <td class="admin"><%=getTran(null,"Web","Language",sWebLanguage)%></td>
                   <td class="admin2">
                       <select name="EditLabelLang" class="text">
                           <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>
                           <%
-                              tokenizer = new StringTokenizer(supportedLanguages,",");
+                          StringTokenizer tokenizer = new StringTokenizer(supportedLanguages,",");
                               while(tokenizer.hasMoreTokens()){
-                                  tmpLang = tokenizer.nextToken();
+                                  String tmpLang = tokenizer.nextToken();
 
-                                  %><option value="<%=tmpLang%>" <%=(editLabelLang.equals(tmpLang)?"selected":"")%>><%=getTran("Web.language",tmpLang,sWebLanguage)%></option><%
+                                  %><option value="<%=tmpLang%>" <%=(editLabelLang.equals(tmpLang)?"selected":"")%>><%=getTran(null,"Web.language",tmpLang,sWebLanguage)%></option><%
                               }
                           %>
                       </select>
                   </td>
               </tr>
+        <%}else{ %>
+        	<input type='hidden' name='EditLabelType' value='<%=editLabelType%>'/>
+        	<input type='hidden' name='EditLabelID' value='<%=editLabelID%>'/>
+        	<input type='hidden' name='EditLabelLang' value='<%=sWebLanguage%>'/>
+        	<input type='hidden' name='EditShowLink' value='<%=editShowLink%>'/>
+        	<input type='hidden' name='Mode' id='Mode' value='mini'/>
+        <%} %>
               <%-- value --%>
               <tr>
-                  <td class="admin"><%=getTran("Web.Translations","Label",sWebLanguage)%></td>
+                  <td class="admin"><%=getTran(null,"Web.Translations","Label",sWebLanguage)%></td>
                   <td class="admin2">
                       <textarea name="EditLabelValue" class="normal" rows="4" cols="80" onKeyDown="textCounter(document.transactionForm.EditLabelValue,document.transactionForm.remLen,250)" onKeyUp="textCounter(document.transactionForm.EditLabelValue,document.transactionForm.remLen,250);resizeTextarea(this,10);"><%=editLabelValue%></textarea>
                       <input readonly type="text" class="normal" name="remLen" size="3" value="250">
                   </td>
               </tr>
+    	<%if(!bMini){%>
               <%-- show link --%>
               <tr>
-                  <td class="admin"><%=getTran("Web.Translations","ShowLink",sWebLanguage)%></td>
+                  <td class="admin"><%=getTran(null,"Web.Translations","ShowLink",sWebLanguage)%></td>
                   <td class="admin2">
                       <select name="EditShowLink" class="text">
-                          <option value="1"<%=(editShowLink.equals("1")?" selected":"")%>><%=getTran("Web","Yes",sWebLanguage)%></option>
-                          <option value="0"<%=(editShowLink.equals("0")?" selected":"")%>><%=getTran("Web","No",sWebLanguage)%></option>
+                          <option value="1"<%=(editShowLink.equals("1")?" selected":"")%>><%=getTran(null,"Web","Yes",sWebLanguage)%></option>
+                          <option value="0"<%=(editShowLink.equals("0")?" selected":"")%>><%=getTran(null,"Web","No",sWebLanguage)%></option>
                       </select>
                   </td>
               </tr>
+        <%} %>
             </table>
             
+    	<%if(!bMini){%>
             <%-- MESSAGE --%>
             <%
                 if(sAction.equals("Add") || sAction.equals("Save") || sAction.equals("Delete")){
                     if(msg==null){
                         // std message
-                        out.print(getTran("Web.Manage","noDataChanged",sWebLanguage));
+                        out.print(getTran(null,"Web.Manage","noDataChanged",sWebLanguage));
                     }
                     else{
                         // custom (red) message
@@ -459,14 +483,27 @@
                     }
                 }
             %>
-            
-            <%-- BUTTONS --%>
-            <%=ScreenHelper.alignButtonsStart()%>
-                <input class="button" type="button" name="AddButton" value="<%=getTranNoLink("Web","Add",sWebLanguage)%>" onclick="checkAdd();">&nbsp;
-                <input class="button" type="button" name="SaveButton" value="<%=getTranNoLink("Web","Save",sWebLanguage)%>" onclick="checkSave();">&nbsp;
-                <input class="button" type="button" name="DeleteButton" value="<%=getTranNoLink("Web","Delete",sWebLanguage)%>" onclick="askDelete();">&nbsp;
-                <input class="button" type="button" name="closeButton" value="<%=getTranNoLink("Web","close",sWebLanguage)%>" onclick="window.close();">
-            <%=ScreenHelper.alignButtonsStop()%>
+        <%} %>
+          <table width='100%'>
+          	<tr>
+	          	<td>
+	            <%-- BUTTONS --%>
+		            <%=ScreenHelper.alignButtonsStart()%>
+			    	<%if(!bMini){%>
+	                	<input class="button" type="button" name="AddButton" value="<%=getTranNoLink("Web","Add",sWebLanguage)%>" onclick="checkAdd();">&nbsp;
+	                	<input class="button" type="button" name="DeleteButton" value="<%=getTranNoLink("Web","Delete",sWebLanguage)%>" onclick="askDelete();">&nbsp;
+			        <%} %>
+	                <input class="button" type="button" name="SaveButton" value="<%=getTranNoLink("Web","Save",sWebLanguage)%>" onclick="checkSave();">&nbsp;
+	                <input class="button" type="button" name="closeButton" value="<%=getTranNoLink("Web","close",sWebLanguage)%>" onclick="window.close();">
+		            <%=ScreenHelper.alignButtonsStop()%>
+	            </td>
+	            <td>
+			    	<%if(bMini){%>
+	                	<right><input class="button" type="button" name="ExtendedButton" value="<%=getTranNoLink("Web","extended",sWebLanguage)%>" onclick="document.getElementById('Mode').value='maxi';transactionForm.submit();">&nbsp;</right>
+			        <%} %>
+			    </td>
+			</tr>
+          </table>
         <%
     }
 %>
@@ -488,7 +525,7 @@
             clearEditFields();
           <%
       }
-      else if(sAction.equals("Edit")){
+      else {
           %>
             textCounter(transactionForm.EditLabelValue,transactionForm.remLen,250);
             transactionForm.EditLabelType.focus();

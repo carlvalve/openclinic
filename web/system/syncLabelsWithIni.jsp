@@ -80,7 +80,8 @@
         					 " *admin.category*labanalysis.refcomment*"+
                              " *labprofiles*activitycodes*worktime*patientsharecoverageinsurance*patientsharecoverageinsurance2*"+
                              " *urgency.origin*encountertype*prestation.type*product.productgroup*"+
-                             " *insurance.types*labanalysis.group*drug.category*planningresource*systemmessages*product.unit*credit.type*wicketcredit.type*"; // default
+                             " *insurance.types*labanalysis.group*drug.category*planningresource*systemmessages*product.unit*credit.type*wicketcredit.type*"+
+                             " *productstockoperation.sourcedestinationtype*queue*anonymousqueue*costcenter*"; // default
     }
     excludedLabelTypes+=MedwanQuery.getInstance().getConfigString("excludedLabelTypes","").replaceAll(",","*")+"*";
     excludedLabelTypes = excludedLabelTypes.toLowerCase();
@@ -122,13 +123,13 @@
     
     <%-- FROM DATE --%>
     <tr>
-        <td class="admin" width="<%=sTDAdminWidth%>">&nbsp;<%=getTran("Web.control","from",sWebLanguage)%></td>
+        <td class="admin" width="<%=sTDAdminWidth%>">&nbsp;<%=getTran(request,"Web.control","from",sWebLanguage)%></td>
         <td class="admin2"><%=writeDateField("FindLabelDate","transactionForm",findLabelDate,sWebLanguage)%></td>
     </tr>
     
     <%-- LABEL TYPE --%>
     <tr>
-        <td class="admin">&nbsp;<%=getTran("Web","type",sWebLanguage)%></td>
+        <td class="admin">&nbsp;<%=getTran(request,"Web","type",sWebLanguage)%></td>
         <td class="admin2">
             <select name="FindLabelType" class="text">
                 <option></option>
@@ -155,7 +156,7 @@
     
     <%-- LABEL ID --%>
     <tr>
-        <td class="admin">&nbsp;<%=getTran("Web.Translations","labelid",sWebLanguage)%></td>
+        <td class="admin">&nbsp;<%=getTran(request,"Web.Translations","labelid",sWebLanguage)%></td>
         <td class="admin2">
             <input type="text" class="text" name="FindLabelID" value="<%=findLabelID%>" size="<%=sTextWidth%>">
         </td>
@@ -163,10 +164,10 @@
     
     <%-- LABEL LANGUAGE --%>
     <tr>
-        <td class="admin">&nbsp;<%=getTran("Web","Language",sWebLanguage)%></td>
+        <td class="admin">&nbsp;<%=getTran(request,"Web","Language",sWebLanguage)%></td>
         <td class="admin2">
             <select name="FindLabelLang" class="text">
-                <option value=""><%=getTran("web","choose",sWebLanguage)%></option>
+                <option value=""><%=getTran(request,"web","choose",sWebLanguage)%></option>
                 <%
                     String tmpLang;
                     StringTokenizer tokenizer = new StringTokenizer(supportedLanguages,",");
@@ -181,7 +182,7 @@
     
     <%-- LABEL VALUE --%>
     <tr>
-        <td class="admin">&nbsp;<%=getTran("Web.Translations","label",sWebLanguage)%></td>
+        <td class="admin">&nbsp;<%=getTran(request,"Web.Translations","label",sWebLanguage)%></td>
         <td class="admin2">
             <input type="text" class="text" name="FindLabelValue" value="<%=findLabelValue%>" size="<%=sTextWidth%>">&nbsp;&nbsp;
         </td>
@@ -189,7 +190,7 @@
     
     <%-- EXCLUDED TYPES --%>
     <tr height="22">
-        <td class="admin">&nbsp;<%=getTran("web.translations","Excludedtypes",sWebLanguage)%></td>
+        <td class="admin">&nbsp;<%=getTran(request,"web.translations","Excludedtypes",sWebLanguage)%></td>
         <td class="admin2"><%=excludedLabelTypes%></td>
     </tr>
     
@@ -218,7 +219,7 @@
     if(action.equals("insert")){
         //*** In Db, not in ini (DB to INI) *******************************************************
         String paramName, paramValue;
-        String insertMsg = getTran("Web","DataIsSaved",sWebLanguage);
+        String insertMsg = getTran(request,"Web","DataIsSaved",sWebLanguage);
 
         if(dataDirection.equals("dbToIni")){
             // ADD TO INI FILE
@@ -333,7 +334,7 @@
         else if(action.equals("delete")){
             Vector recsToBeDeleted = new Vector();
             String paramName, paramValue, lineID;
-            String deleteMsg = getTran("Web", "DataIsDeleted", sWebLanguage);
+            String deleteMsg = getTran(request,"Web", "DataIsDeleted", sWebLanguage);
 
             // PUT ASIDE RECORDS SPECIFIED FOR DELETION IN REQUEST
             Enumeration e = request.getParameterNames();
@@ -406,8 +407,8 @@
             <table width="100%" cellspacing="1">
                 <tr>
                     <td>
-                        <a href="javascript:checkAll(true);"><%=getTran("Web.Manage.CheckDb","CheckAll",sWebLanguage)%></a>
-                        <a href="javascript:checkAll(false);"><%=getTran("Web.Manage.CheckDb","UncheckAll",sWebLanguage)%></a>
+                        <a href="javascript:checkAll(true);"><%=getTran(request,"Web.Manage.CheckDb","CheckAll",sWebLanguage)%></a>
+                        <a href="javascript:checkAll(false);"><%=getTran(request,"Web.Manage.CheckDb","UncheckAll",sWebLanguage)%></a>
                     </td>
                     <td align="right">
                         <a href='#bottom'><img src='<c:url value='/_img/themes/default/bottom.gif'/>' class='link' border="0"></a>
@@ -601,8 +602,8 @@
             <table width="100%" cellspacing="1">
                 <tr>
                     <td>
-                        <a href="javascript:checkAll(true);"><%=getTran("Web.Manage.CheckDb","CheckAll",sWebLanguage)%></a>
-                        <a href="javascript:checkAll(false);"><%=getTran("Web.Manage.CheckDb","UncheckAll",sWebLanguage)%></a>
+                        <a href="javascript:checkAll(true);"><%=getTran(request,"Web.Manage.CheckDb","CheckAll",sWebLanguage)%></a>
+                        <a href="javascript:checkAll(false);"><%=getTran(request,"Web.Manage.CheckDb","UncheckAll",sWebLanguage)%></a>
                     </td>
                     <td align="right">
                         <a href='#topp'><img src='<c:url value='/_img/themes/default/top.gif'/>' class='link' border="0"></a>
@@ -620,8 +621,8 @@
                 <%-- NUMBER OF LABELS FOUND --%>
                 <tr>
                     <td colspan="2">
-                        <%=labelCount%> <%=getTran("Web.Manage","labelsFound",sWebLanguage)%><br>
-                        <%=invalidLabelCount%> <%=getTran("Web.Manage","invalidLabelsFound",sWebLanguage)%>
+                        <%=labelCount%> <%=getTran(request,"Web.Manage","labelsFound",sWebLanguage)%><br>
+                        <%=invalidLabelCount%> <%=getTran(request,"Web.Manage","invalidLabelsFound",sWebLanguage)%>
                     </td>
                 </tr>
             </table>
@@ -638,7 +639,7 @@
 <%-- link to manage translations --%>
 <%=ScreenHelper.alignButtonsStart()%>
     <img src='<c:url value="/_img/themes/default/pijl.gif"/>'>
-    <a  href="<c:url value='/main.do'/>?Page=system/manageTranslations.jsp?ts=<%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran("Web","managetranslations",sWebLanguage)%></a>&nbsp;
+    <a  href="<c:url value='/main.do'/>?Page=system/manageTranslations.jsp?ts=<%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran(request,"Web","managetranslations",sWebLanguage)%></a>&nbsp;
 <%=ScreenHelper.alignButtonsStop()%>
 
 <a name="bottom">&nbsp;<a/>

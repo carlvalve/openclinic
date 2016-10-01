@@ -93,18 +93,18 @@
 
 <form name="searchForm" method="post">
   <%=writeTableHeader("web.manage","manageglobalhealthbarometerdata",sWebLanguage,"doBack();")%>
-  <h4><%=getTran("web","globalhealthbarometerinfo",sWebLanguage)%> <%=getTran("web","redrowsaremandatory",sWebLanguage)%></h4><br/><hr/>
+  <h4><%=getTran(request,"web","globalhealthbarometerinfo",sWebLanguage)%> <%=getTran(request,"web","redrowsaremandatory",sWebLanguage)%></h4><br/><hr/>
   <table width="100%" class="menu" cellspacing="0" cellpadding="1">
 <%
-	out.println(writeConfigRowSelect(getTran("web","centerCountry",sWebLanguage),"globalHealthBarometerCenterCountry","orange","<option value=''/>"+ScreenHelper.writeSelectUpperCase("country", MedwanQuery.getInstance().getConfigString("globalHealthBarometerCenterCountry"), sWebLanguage,false,true)));
-	out.println(writeConfigRow(getTran("web","centerCity",sWebLanguage),"globalHealthBarometerCenterCity","orange"));
-	out.println(writeConfigRow(getTran("web","centerName",sWebLanguage),"globalHealthBarometerCenterName",""));
-	out.println(writeConfigRow(getTran("web","centerEmail",sWebLanguage),"globalHealthBarometerCenterEmail",""));
-	out.println(writeConfigRow(getTran("web","centerContact",sWebLanguage),"globalHealthBarometerCenterContact",""));
-	out.println(writeConfigRowSelect(getTran("web","centerType",sWebLanguage),"globalHealthBarometerCenterType","","<option value=''/>"+ScreenHelper.writeSelect("centerType", MedwanQuery.getInstance().getConfigString("globalHealthBarometerCenterType"), sWebLanguage)));
-	out.println(writeConfigRowSelect(getTran("web","centerLevel",sWebLanguage),"globalHealthBarometerCenterLevel","","<option value=''/>"+ScreenHelper.writeSelect("centerLevel", MedwanQuery.getInstance().getConfigString("globalHealthBarometerCenterLevel"), sWebLanguage)));
-	out.println(writeConfigRow(getTran("web","centerBeds",sWebLanguage),"globalHealthBarometerCenterBeds",""));
-	out.println(writeConfigRowSelect(getTran("web","globalhealthbarometerEnabled",sWebLanguage),"globalhealthbarometerEnabled","",ScreenHelper.writeSelect("yesno", MedwanQuery.getInstance().getConfigString("globalhealthbarometerEnabled","1"), sWebLanguage)));
+	out.println(writeConfigRowSelect(getTran(request,"web","centerCountry",sWebLanguage),"globalHealthBarometerCenterCountry","orange","<option value=''/>"+ScreenHelper.writeSelectUpperCase("country", MedwanQuery.getInstance().getConfigString("globalHealthBarometerCenterCountry"), sWebLanguage,false,true)));
+	out.println(writeConfigRow(getTran(request,"web","centerCity",sWebLanguage),"globalHealthBarometerCenterCity","orange"));
+	out.println(writeConfigRow(getTran(request,"web","centerName",sWebLanguage),"globalHealthBarometerCenterName",""));
+	out.println(writeConfigRow(getTran(request,"web","centerEmail",sWebLanguage),"globalHealthBarometerCenterEmail",""));
+	out.println(writeConfigRow(getTran(request,"web","centerContact",sWebLanguage),"globalHealthBarometerCenterContact",""));
+	out.println(writeConfigRowSelect(getTran(request,"web","centerType",sWebLanguage),"globalHealthBarometerCenterType","","<option value=''/>"+ScreenHelper.writeSelect(request,"centerType", MedwanQuery.getInstance().getConfigString("globalHealthBarometerCenterType"), sWebLanguage)));
+	out.println(writeConfigRowSelect(getTran(request,"web","centerLevel",sWebLanguage),"globalHealthBarometerCenterLevel","","<option value=''/>"+ScreenHelper.writeSelect(request,"centerLevel", MedwanQuery.getInstance().getConfigString("globalHealthBarometerCenterLevel"), sWebLanguage)));
+	out.println(writeConfigRow(getTran(request,"web","centerBeds",sWebLanguage),"globalHealthBarometerCenterBeds",""));
+	out.println(writeConfigRowSelect(getTran(request,"web","globalhealthbarometerEnabled",sWebLanguage),"globalhealthbarometerEnabled","",ScreenHelper.writeSelect(request,"yesno", MedwanQuery.getInstance().getConfigString("globalhealthbarometerEnabled","1"), sWebLanguage)));
 	
 	
 %>

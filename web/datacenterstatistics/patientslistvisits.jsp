@@ -43,11 +43,11 @@
 	String service="";
 	java.util.Date activedate=null;
 	StringBuffer sOut = new StringBuffer();
-	sOut.append("<tr class='admin'><td colspan='1'><b>").append(getTran("web","visits",sWebLanguage)).append("</b></td><td colspan='3'><b>")
-			.append(getTran("web","period",sWebLanguage)).append(": ").append(sBegin).append("- ").append(sEnd).append("</b></td></tr>");
+	sOut.append("<tr class='admin'><td colspan='1'><b>").append(getTran(request,"web","visits",sWebLanguage)).append("</b></td><td colspan='3'><b>")
+			.append(getTran(request,"web","period",sWebLanguage)).append(": ").append(sBegin).append("- ").append(sEnd).append("</b></td></tr>");
 	sOut.append("</table><table width='100%' border='0' class='sortable' id='searchresults'>");
-	sOut.append("<tr><th><a href='#' class='underlined'>"+getTran("web","encounterid",sWebLanguage)+"</a></th><th><a href='#' class='underlined'>"+getTran("web","name",sWebLanguage)+"</a></th><th><a href='#' class='underlined'>"+getTran("web","dateofbirth",sWebLanguage)+
-			"</a></th><th><a href='#' class='underlined'>"+getTran("web","date",sWebLanguage)+"</a></th><th><a href='#' class='underlined'>"+getTran("web","service",sWebLanguage)+"</a></th><th><a href='#' class='underlined'>"+getTran("web","assureur",sWebLanguage)+"</a></th></tr>");
+	sOut.append("<tr><th><a href='#' class='underlined'>"+getTran(request,"web","encounterid",sWebLanguage)+"</a></th><th><a href='#' class='underlined'>"+getTran(request,"web","name",sWebLanguage)+"</a></th><th><a href='#' class='underlined'>"+getTran(request,"web","dateofbirth",sWebLanguage)+
+			"</a></th><th><a href='#' class='underlined'>"+getTran(request,"web","date",sWebLanguage)+"</a></th><th><a href='#' class='underlined'>"+getTran(request,"web","service",sWebLanguage)+"</a></th><th><a href='#' class='underlined'>"+getTran(request,"web","assureur",sWebLanguage)+"</a></th></tr>");
 	while(rs.next()){
 		java.util.Date d=rs.getDate("dateofbirth");
 		java.util.Date d2=rs.getDate("oc_begindate");
@@ -69,7 +69,7 @@
 		service=s;
 		encounteruid=i;
 	}
-	sOut.append("</table><table><tr><td colspan='4'><b>").append(getTran("web","totalpatients",sWebLanguage)).append(": ").append(counter).append("</b></td></tr></table>");
+	sOut.append("</table><table><tr><td colspan='4'><b>").append(getTran(request,"web","totalpatients",sWebLanguage)).append(": ").append(counter).append("</b></td></tr></table>");
 	rs.close();
 	ps.close();
 	out.println(sOut);

@@ -44,7 +44,7 @@
                     sProductName = product.getName();
                 }
                 else{
-                    sProductName = "<font color='red'>"+getTran("web","nonExistingProduct",sWebLanguage)+"</font>";
+                    sProductName = "<font color='red'>"+getTran(null,"web","nonExistingProduct",sWebLanguage)+"</font>";
                 }
             }
 
@@ -56,26 +56,26 @@
 
             // only compose prescription-rule if all data is available
             if(!sTimeUnit.equals("0") && !sTimeUnitCount.equals("0") && !sUnitsPerTimeUnit.equals("0")){
-                sPrescrRule = getTran("web.prescriptions","prescriptionrule",sWebLanguage);
+                sPrescrRule = getTran(null,"web.prescriptions","prescriptionrule",sWebLanguage);
                 sPrescrRule = sPrescrRule.replaceAll("#unitspertimeunit#",unitCountDeci.format(Double.parseDouble(sUnitsPerTimeUnit)));
 
                 // productunit
                 if(Double.parseDouble(sUnitsPerTimeUnit)==1){
-                    sProductUnit = getTran("product.unit",product.getUnit(),sWebLanguage);
+                    sProductUnit = getTran(null,"product.unit",product.getUnit(),sWebLanguage);
                 }
                 else{
-                    sProductUnit = getTran("product.unit",product.getUnit(),sWebLanguage);
+                    sProductUnit = getTran(null,"product.unit",product.getUnit(),sWebLanguage);
                 }
                 sPrescrRule = sPrescrRule.replaceAll("#productunit#",sProductUnit.toLowerCase());
 
                 // timeunitCount
                 if(Integer.parseInt(sTimeUnitCount)==1){
                     sPrescrRule = sPrescrRule.replaceAll("#timeunitcount#","");
-                    timeUnitTran = getTran("prescription.timeunit",sTimeUnit,sWebLanguage);
+                    timeUnitTran = getTran(null,"prescription.timeunit",sTimeUnit,sWebLanguage);
                 }
                 else{
                     sPrescrRule = sPrescrRule.replaceAll("#timeunitcount#",sTimeUnitCount);
-                    timeUnitTran = getTran("prescription.timeunits",sTimeUnit,sWebLanguage);
+                    timeUnitTran = getTran(null,"prescription.timeunits",sTimeUnit,sWebLanguage);
                 }
                 sPrescrRule = sPrescrRule.replaceAll("#timeunit#",timeUnitTran.toLowerCase());
             }
@@ -208,13 +208,13 @@
 
                 // show saved data
                 sAction = "findShowOverview"; // showDetails
-                msg = getTran("web","dataissaved",sWebLanguage);
+                msg = getTran(request,"web","dataissaved",sWebLanguage);
             }
             //***** reject new addition *****
             else{
                 // show rejected data
                 sAction = "showDetailsAfterAddReject";
-                msg = "<font color='red'>"+getTran("web.manage","chronicmedicationexists",sWebLanguage)+"</font>";
+                msg = "<font color='red'>"+getTran(request,"web.manage","chronicmedicationexists",sWebLanguage)+"</font>";
             }
         }
         else{
@@ -224,7 +224,7 @@
 
                 // show saved data
                 sAction = "findShowOverview"; // showDetails
-                msg = getTran("web","dataissaved",sWebLanguage);
+                msg = getTran(request,"web","dataissaved",sWebLanguage);
             }
             //***** reject double record thru update *****
             else{
@@ -232,7 +232,7 @@
                     // nothing : just updating a record with its own data
                     if(medication.changed()){
                         medication.store(false);
-                        msg = getTran("web","dataissaved",sWebLanguage);
+                        msg = getTran(request,"web","dataissaved",sWebLanguage);
                     }
                     sAction = "findShowOverview"; // showDetails
                 }
@@ -240,7 +240,7 @@
                     // tried to update one medication with exact the same data as an other medication
                     // show rejected data
                     sAction = "showDetailsAfterUpdateReject";
-                    msg = "<font color='red'>"+getTran("web.manage","chronicmedicationexists",sWebLanguage)+"</font>";
+                    msg = "<font color='red'>"+getTran(request,"web.manage","chronicmedicationexists",sWebLanguage)+"</font>";
                 }
             }
         }
@@ -250,7 +250,7 @@
     //--- DELETE ----------------------------------------------------------------------------------
     else if(sAction.equals("delete") && sEditMedicationUid.length()>0){
         ChronicMedication.delete(sEditMedicationUid);
-        msg = getTran("web","dataisdeleted",sWebLanguage);
+        msg = getTran(request,"web","dataisdeleted",sWebLanguage);
         sAction = "findShowOverview"; // display overview even if only one record remains
     }
 
@@ -303,7 +303,7 @@
                     sSelectedProductUnit = product.getUnit();
 
                     if(sSelectedProductName.length()==0){
-                        sSelectedProductName = getTran("web","nonexistingproduct",sWebLanguage);
+                        sSelectedProductName = getTran(request,"web","nonexistingproduct",sWebLanguage);
                     }
                 }
             }
@@ -373,7 +373,7 @@
                         }
                     %>
                     <tr>
-                        <td class="admin" width="<%=sTDAdminWidth%>" nowrap><%=getTran("Web","product",sWebLanguage)%>&nbsp;*&nbsp;</td>
+                        <td class="admin" width="<%=sTDAdminWidth%>" nowrap><%=getTran(request,"Web","product",sWebLanguage)%>&nbsp;*&nbsp;</td>
                         <td class="admin2">
                             <input type="hidden" name="EditProductUid" value="<%=sSelectedProductUid%>">
                             <input type="hidden" name="EditProductUnit" value="<%=sSelectedProductUnit%>">
@@ -386,20 +386,20 @@
                     
                     <%-- ***** prescription-rule ***** --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","prescriptionrule",sWebLanguage)%>&nbsp;*&nbsp;</td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","prescriptionrule",sWebLanguage)%>&nbsp;*&nbsp;</td>
                         <td class="admin2">
                             <%-- Units Per Time Unit --%>
                             <input type="text" class="text" style="vertical-align:-1px;" name="EditUnitsPerTimeUnit" value="<%=(sSelectedUnitsPerTimeUnit.length()>0?(doubleFormat.format(Double.parseDouble(sSelectedUnitsPerTimeUnit))).replaceAll(",","."):"")%>" size="5" maxLength="5" onKeyUp="isNumber(this);">
                             <span id="EditUnitsPerTimeUnitLabel"></span>
 
                             <%-- Time Unit Count --%>
-                            &nbsp;<%=getTran("web","per",sWebLanguage)%>
+                            &nbsp;<%=getTran(request,"web","per",sWebLanguage)%>
                             <input type="text" class="text" style="vertical-align:-1px;" name="EditTimeUnitCount" value="<%=sSelectedTimeUnitCount%>" size="5" maxLength="5">
 
                             <%-- Time Unit (dropdown : Hour|Day|Week|Month) --%>
                             <select class="text" name="EditTimeUnit" onChange="setEditUnitsPerTimeUnitLabel();setEditTimeUnitCount();" style="vertical-align:-3px;">
                                 <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>
-                                <%=ScreenHelper.writeSelectUnsorted("prescription.timeunit",sSelectedTimeUnit,sWebLanguage)%>
+                                <%=ScreenHelper.writeSelectUnsorted(request,"prescription.timeunit",sSelectedTimeUnit,sWebLanguage)%>
                             </select>
 
                             <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" style="vertical-align:-4px;" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="clearDescriptionRule();">
@@ -407,7 +407,7 @@
                     </tr>
                     <%-- date begin --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","begindate",sWebLanguage)%>&nbsp;*&nbsp;</td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","begindate",sWebLanguage)%>&nbsp;*&nbsp;</td>
                         <td class="admin2">
                             <input type="text" maxlength="10" class="text" name="EditDateBegin" value="<%=sSelectedDateBegin%>" size="12" onblur="if(!checkDate(this)){alertDialog('Web.Occup','date.error');this.value='';}">
                             <img name="popcal" class="link" src="<%=sCONTEXTPATH%>/_img/icons/icon_agenda.gif" alt="<%=getTranNoLink("Web","Select",sWebLanguage)%>" onclick="gfPop1.fPopCalendar(document.transactionForm.all['EditDateBegin']);return false;">
@@ -416,7 +416,7 @@
                     </tr>
                     <%-- prescriber --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","prescriber",sWebLanguage)%></td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","prescriber",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="hidden" name="EditPrescriberUid" value="<%=sSelectedPrescriberUid%>">
                             <input class="text" type="text" name="EditPrescriberFullName" readonly size="<%=sTextWidth%>" value="<%=sSelectedPrescriberFullName%>">
@@ -427,7 +427,7 @@
                     </tr>
                     <%-- comment --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","comment",sWebLanguage)%></td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","comment",sWebLanguage)%></td>
                         <td class="admin2">
                             <textarea name="EditComment" cols="80" rows="2" onKeyup="resizeTextarea(this,10);limitLength(this);" class="text"><%=sSelectedComment%></textarea>
                         </td>
@@ -463,7 +463,7 @@
                 </table>
                 
                 <%-- indication of obligated fields --%>
-                <%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%>
+                <%=getTran(request,"Web","colored_fields_are_obligate",sWebLanguage)%>
                 <br><br>
                 
                 <script>
@@ -519,17 +519,17 @@
                         <%-- header --%>
                         <tr>
                             <td class="admin" width="22" nowrap>&nbsp;</td>
-                            <td class="admin" width="25%"><%=getTran("Web","prescriber",sWebLanguage)%></td>
-                            <td class="admin" width="20%"><%=getTran("Web","productName",sWebLanguage)%></td>
-                            <td class="admin" width="10%"><%=getTran("Web","begindate",sWebLanguage)%></td>
-                            <td class="admin" width="45%"><%=getTran("Web","prescriptionrule",sWebLanguage)%></td>
+                            <td class="admin" width="25%"><%=getTran(request,"Web","prescriber",sWebLanguage)%></td>
+                            <td class="admin" width="20%"><%=getTran(request,"Web","productName",sWebLanguage)%></td>
+                            <td class="admin" width="10%"><%=getTran(request,"Web","begindate",sWebLanguage)%></td>
+                            <td class="admin" width="45%"><%=getTran(request,"Web","prescriptionrule",sWebLanguage)%></td>
                         </tr>
                         <tbody class="hand"><%=medications%></tbody>
                     </table>
                     
                     <%-- number of records found --%>
                     <span style="width:49%;text-align:left;">
-                        <%=foundMedicationCount%> <%=getTran("web","recordsfound",sWebLanguage)%>
+                        <%=foundMedicationCount%> <%=getTran(request,"web","recordsfound",sWebLanguage)%>
                     </span>
                     
                     <%
@@ -547,7 +547,7 @@
             }
             else{
                 // no records found
-                %><%=getTran("web","norecordsfound",sWebLanguage)%><br><br><%
+                %><%=getTran(request,"web","norecordsfound",sWebLanguage)%><br><br><%
             }
         }
 

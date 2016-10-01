@@ -50,12 +50,12 @@ HashSet errors = new HashSet();
 %>
 <table width='100%'>
 	<tr>
-		<td class='admin'><%=getTran("web","totalfilesreceived",sWebLanguage) %></td>
+		<td class='admin'><%=getTran(request,"web","totalfilesreceived",sWebLanguage) %></td>
 		<td class='admin2'><%=i %></td>
 	</tr>
 	<%if(errors.size()>0){ %>
 	<tr>
-		<td class='admin'><%=getTran("web","errorfilesreceived",sWebLanguage) %></td>
+		<td class='admin'><%=getTran(request,"web","errorfilesreceived",sWebLanguage) %></td>
 		<td class='admin2'>
 		<%
 			Iterator iErrors = errors.iterator();
@@ -67,7 +67,7 @@ HashSet errors = new HashSet();
 	</tr>
 	<%} %>
 	<tr>
-		<td class='admin'><%=getTran("web","patientids",sWebLanguage) %> (<%=patients.size() %>)</td>
+		<td class='admin'><%=getTran(request,"web","patientids",sWebLanguage) %> (<%=patients.size() %>)</td>
 		<td class='admin2'>
 			<table width='100%'>
 		<%
@@ -81,7 +81,7 @@ HashSet errors = new HashSet();
 		</td>
 	</tr>
 	<tr>
-		<td class='admin'><%=getTran("web","studyids",sWebLanguage) %> (<%=studies.size() %>)</td>
+		<td class='admin'><%=getTran(request,"web","studyids",sWebLanguage) %> (<%=studies.size() %>)</td>
 		<td class='admin2'>
 		<table width='100%'>
 		<%

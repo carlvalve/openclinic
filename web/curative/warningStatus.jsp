@@ -6,7 +6,7 @@
 <table width="100%" class="list" height="100%" cellspacing="0">
     <tr class="admin">
         <td>
-            <%=getTran("curative","warning.status.title",sWebLanguage)%>&nbsp;
+            <%=getTran(request,"curative","warning.status.title",sWebLanguage)%>&nbsp;
             <a href="<c:url value='/healthrecord/manageAlertsPage.do'/>?ts=<%=getTs()%>"><img src="<c:url value='/_img/icons/icon_new.gif'/>" class="link" alt="<%=getTranNoLink("web","managealerts",sWebLanguage)%>" style="vertical-align:-4px;"></a>
         </td>
     </tr>

@@ -58,7 +58,7 @@
                 if (sDescriptionType.length() > 0) {
                     sDescription = checkString((String) descrTypeTranHash.get(sDescriptionType));
                     if (sDescription.length() == 0) {
-                        sDescription = getTran("productstockoperation.patientmedicationreceipt",sDescriptionType,sWebLanguage);
+                        sDescription = getTran(null,"productstockoperation.patientmedicationreceipt",sDescriptionType,sWebLanguage);
                         descrTypeTranHash.put(sDescriptionType,sDescription);
                     }
                 }
@@ -67,7 +67,7 @@
                 product = productStock.getProduct();
                 if (product != null) sProductName = product.getName();
                 else {
-                    sProductName = "<font color='red'>" + getTran("web.manage","unexistingproduct",sWebLanguage) + "</font>";
+                    sProductName = "<font color='red'>" + getTran(null,"web.manage","unexistingproduct",sWebLanguage) + "</font>";
                 }
 
                 // alternate row-style
@@ -170,10 +170,10 @@
         String sResult = operation.store();
         if(sResult==null){
             if(sEditOperationUid.equals("-1")){
-                msg = getTran("web.manage","medicationreceived",sWebLanguage);
+                msg = getTran(request,"web.manage","medicationreceived",sWebLanguage);
             }
             else{
-                msg = getTran("web","dataissaved",sWebLanguage);
+                msg = getTran(request,"web","dataissaved",sWebLanguage);
             }
 
             sEditOperationUid = operation.getUid();
@@ -254,7 +254,7 @@
                     sSelectedSrcDestName = ScreenHelper.getFullUserName(sSelectedSrcDestUid);
                 }
                 else if(sSelectedSrcDestType.indexOf("service") > -1){
-                    sSelectedSrcDestName = getTran("Service",sSelectedSrcDestUid,sWebLanguage);
+                    sSelectedSrcDestName = getTran(request,"Service",sSelectedSrcDestUid,sWebLanguage);
                 }
             }
         }
@@ -293,22 +293,22 @@
                 <table class="list" width="100%" cellspacing="1">
                     <%-- description --%>
                     <tr>
-                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","description",sWebLanguage)%> *</td>
+                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","description",sWebLanguage)%> *</td>
                         <td class="admin2">
                             <select class="text" name="EditOperationDescr" onChange="displaySrcDestSelector();" style="vertical-align:-2px;">
                                 <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>
-                                <%=ScreenHelper.writeSelectUnsorted("productstockoperation.patientmedicationreceipt",sSelectedOperationDescr,sWebLanguage)%>
+                                <%=ScreenHelper.writeSelectUnsorted(request,"productstockoperation.patientmedicationreceipt",sSelectedOperationDescr,sWebLanguage)%>
                             </select>
                         </td>
                     </tr>
                     
                     <%-- SourceDestination type --%>
                     <tr height="23">
-                        <td class="admin"><%=getTran("web","receivedfrom",sWebLanguage)%>&nbsp;*</td>
+                        <td class="admin"><%=getTran(request,"web","receivedfrom",sWebLanguage)%>&nbsp;*</td>
                         <td class="admin2">
                             <select class="text" name="EditSrcDestType" onChange="displaySrcDestSelector();" style="vertical-align:-2px;">
                                 <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>
-                                <%=ScreenHelper.writeSelectUnsorted("productstockoperation.patientsourcedestinationtype","patient",sWebLanguage)%>
+                                <%=ScreenHelper.writeSelectUnsorted(request,"productstockoperation.patientsourcedestinationtype","patient",sWebLanguage)%>
                             </select>
                             
                             <%-- SOURCE DESTINATION SELECTOR --%>
@@ -401,13 +401,13 @@
                     
                     <%-- operation date --%>
                     <tr>
-                        <td class="admin"><%=getTran("Web","date",sWebLanguage)%> *</td>
+                        <td class="admin"><%=getTran(request,"Web","date",sWebLanguage)%> *</td>
                         <td class="admin2"><%=writeDateField("EditOperationDate","transactionForm",sSelectedOperationDate,sWebLanguage)%></td>
                     </tr>
                     
                     <%-- Product stock --%>
                     <tr>
-                        <td class="admin"><%=getTran("Web","product",sWebLanguage)%> *</td>
+                        <td class="admin"><%=getTran(request,"Web","product",sWebLanguage)%> *</td>
                         <td class="admin2">
                             <input type="hidden" name="EditProductStockUid" value="<%=sSelectedProductStockUid%>">
                             <input class="text" type="text" name="EditProductStockName" readonly size="<%=sTextWidth%>" value="<%=sSelectedProductName%>">
@@ -429,7 +429,7 @@
                     
                     <%-- current productStock level --%>
                     <tr>
-                        <td class="admin"><%=getTran("Web","currentstocklevel",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"Web","currentstocklevel",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="text" class="text" size="5" maxLength="5" name="ProductStockLevel" value="<%=sSelectedProductStockLevel%>" READONLY>
                         </td>
@@ -437,7 +437,7 @@
                     
                     <%-- units changed --%>
                     <tr>
-                        <td class="admin"><%=getTran("Web","packages",sWebLanguage)%> *</td>
+                        <td class="admin"><%=getTran(request,"Web","packages",sWebLanguage)%> *</td>
                         <td class="admin2">
                             <input class="text" type="text" name="EditUnitsChanged" size="5" maxLength="5" value="<%=sSelectedUnitsChanged%>" onKeyUp="if(this.value=='0'){this.value='';}isNumber(this);" <%=(sAction.equals("showDetails")?"READONLY":"")%>>
                         </td>
@@ -469,7 +469,7 @@
                 </table>
                 
                 <%-- indication of obligated fields --%>
-                <%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%>
+                <%=getTran(request,"Web","colored_fields_are_obligate",sWebLanguage)%>
                 <br><br>
             <%
         }
@@ -484,7 +484,7 @@
                 <%-- sub title --%>
                 <table width="100%" cellspacing="0">
                     <tr>
-                        <td class="titleadmin">&nbsp;<%=getTran("Web.manage","medicationreceiptstoactivepatient",sWebLanguage)%>&nbsp;<%=activePatient.lastname+" "+activePatient.firstname%></td>
+                        <td class="titleadmin">&nbsp;<%=getTran(request,"Web.manage","medicationreceiptstoactivepatient",sWebLanguage)%>&nbsp;<%=activePatient.lastname+" "+activePatient.firstname%></td>
                     </tr>
                 </table>
             <%
@@ -494,11 +494,11 @@
                     <table width='100%' cellspacing="0" cellpadding="0" class="sortable" id="searchresults">
                         <%-- header --%>
                         <tr class="admin">
-                            <td width="30%"><%=getTran("Web","description",sWebLanguage)%></td>
-                            <td width="8%"><SORTTYPE:DATE><%=getTran("Web","date",sWebLanguage)%></SORTTYPE:DATE></td>
-                            <td width="25%"><%=getTran("Web","product",sWebLanguage)%></td>
-                            <td width="10%"><%=getTran("Web","unitschanged",sWebLanguage)%></td>
-                            <td width="*"><%=getTran("Web","username",sWebLanguage)%></td>
+                            <td width="30%"><%=getTran(request,"Web","description",sWebLanguage)%></td>
+                            <td width="8%"><SORTTYPE:DATE><%=getTran(request,"Web","date",sWebLanguage)%></SORTTYPE:DATE></td>
+                            <td width="25%"><%=getTran(request,"Web","product",sWebLanguage)%></td>
+                            <td width="10%"><%=getTran(request,"Web","unitschanged",sWebLanguage)%></td>
+                            <td width="*"><%=getTran(request,"Web","username",sWebLanguage)%></td>
                         </tr>
                         <tbody class="hand"><%=receiptsHtml%></tbody>
                     </table>
@@ -506,7 +506,7 @@
                     <!--
                     <%-- number of records found --%>
                     <span style="width:49%;text-align:left;">
-                        <%=foundReceiptCount%> <%=getTran("web","receiptsfound",sWebLanguage)%>
+                        <%=foundReceiptCount%> <%=getTran(request,"web","receiptsfound",sWebLanguage)%>
                     </span>
                     -->
                     
@@ -526,7 +526,7 @@
             }
             else{
                 // no records found
-                %><%=getTran("web.manage","noreceiptsfound",sWebLanguage)%><br><%
+                %><%=getTran(request,"web.manage","noreceiptsfound",sWebLanguage)%><br><%
             }
         }
     %>

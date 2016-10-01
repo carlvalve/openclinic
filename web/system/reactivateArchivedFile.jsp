@@ -10,7 +10,7 @@
 
     // after reactivation, the page is reloaded, losing the reactivated-message, so here that is fixed.
     boolean displaymsg = checkString(request.getParameter("displaymsg")).equals("true");
-    if (displaymsg) msg = getTran("Web.manage", "archivedfilereactivated", sWebLanguage);
+    if (displaymsg) msg = getTran(request,"Web.manage", "archivedfilereactivated", sWebLanguage);
 
     //#############################################################################################
     //### Search ##################################################################################
@@ -31,7 +31,7 @@
         Iterator iter = vAH.iterator();
 
 
-        String altTitle = getTran("web.manage", "reactivatefile", sWebLanguage);
+        String altTitle = getTran(request,"web.manage", "reactivatefile", sWebLanguage);
 
         while (iter.hasNext()) {
             objAH = (AdminHistory) iter.next();
@@ -50,7 +50,7 @@
         }
         if (vAH.size() == 0) {
             // no records found
-            msg = getTran("web", "nopatientsfound", sWebLanguage);
+            msg = getTran(request,"web", "nopatientsfound", sWebLanguage);
         }
     }
     //#############################################################################################
@@ -60,7 +60,7 @@
         // get data of requested history-person
         String historyPersonid = checkString(request.getParameter("historyPersonid"));
         if (!AdminHistory.existsByPersonid(historyPersonid)) {
-            msg = getTran("web.manage", "personnotfound", sWebLanguage);
+            msg = getTran(request,"web.manage", "personnotfound", sWebLanguage);
         } else {
             AdminHistory.reactivateArchivedFile(historyPersonid);
         }
@@ -76,28 +76,28 @@
     <table border="0" width="100%" cellspacing="1" class="menu">
         <%-- search fields : row 1 --%>
         <tr>
-            <td width="<%=sTDAdminWidth%>" nowrap><%=getTran("Web","Name",sWebLanguage)%></td>
+            <td width="<%=sTDAdminWidth%>" nowrap><%=getTran(request,"Web","Name",sWebLanguage)%></td>
             <td><input class="text" TYPE="TEXT" style="text-transform:uppercase" NAME="name" VALUE="<%=sName%>" size="<%=sTextWidth%>" onblur="limitLength(this);"></td>
         </tr>
         <tr>
-            <td><%=getTran("Web","Firstname",sWebLanguage)%></td>
+            <td><%=getTran(request,"Web","Firstname",sWebLanguage)%></td>
             <td><input class="text" type="TEXT" style="text-transform:uppercase" name="firstname" value="<%=sFirstname%>" size="<%=sTextWidth%>" onblur="limitLength(this);"></td>
         </tr>
         <tr>
-            <td><%=getTran("Web","DateOfBirth",sWebLanguage)%></td>
+            <td><%=getTran(request,"Web","DateOfBirth",sWebLanguage)%></td>
             <td><input class="text" type="TEXT" name="dateofbirth" value="<%=sDateofbirth%>" size="<%=sTextWidth%>" OnBlur="checkDate(this)" maxlength="10"></td>
         </tr>
         <%-- search fields : row 2 --%>
         <tr>
-            <td><%=getTran("Web","natreg.short",sWebLanguage)%></td>
+            <td><%=getTran(request,"Web","natreg.short",sWebLanguage)%></td>
             <td><input class="text" TYPE="TEXT" NAME="natreg" VALUE="<%=sNatreg%>" size="<%=sTextWidth%>" onblur="limitLength(this);"></td>
         </tr>
         <tr>
-            <td><%=getTran("Web","immatnew",sWebLanguage)%></td>
+            <td><%=getTran(request,"Web","immatnew",sWebLanguage)%></td>
             <td><input class="text" type="TEXT" style="text-transform:uppercase" name="immatnew" value="<%=sImmatnew%>" size="<%=sTextWidth%>" onblur="limitLength(this);"></td>
         </tr>
         <tr>
-            <td><%=getTran("Web","immatold",sWebLanguage)%></td>
+            <td><%=getTran(request,"Web","immatold",sWebLanguage)%></td>
             <td><input class="text" type="TEXT" style="text-transform:uppercase" name="immatold" value="<%=sImmatold%>" size="<%=sTextWidth%>" onblur="limitLength(this);"></td>
         </tr>
         <%-- BUTTONS --%>
@@ -118,11 +118,11 @@
                 <table width="100%" cellspacing="0">
                     <%-- header --%>
                     <tr height="20" class="admin">
-                        <td width="107">&nbsp;<%=getTran("Web","immatnew",sWebLanguage)%></td>
-                        <td width="107"><%=getTran("Web","natreg.short",sWebLanguage)%></td>
-                        <td width="*"><%=getTran("Web","name",sWebLanguage)%></td>
-                        <td width="50"><%=getTran("Web","gender",sWebLanguage)%>&nbsp;</td>
-                        <td width="110"><%=getTran("Web","dateofbirth",sWebLanguage)%></td>
+                        <td width="107">&nbsp;<%=getTran(request,"Web","immatnew",sWebLanguage)%></td>
+                        <td width="107"><%=getTran(request,"Web","natreg.short",sWebLanguage)%></td>
+                        <td width="*"><%=getTran(request,"Web","name",sWebLanguage)%></td>
+                        <td width="50"><%=getTran(request,"Web","gender",sWebLanguage)%>&nbsp;</td>
+                        <td width="110"><%=getTran(request,"Web","dateofbirth",sWebLanguage)%></td>
                     </tr>
                     <tbody class="hand">
                         <%=sResult%>
@@ -142,7 +142,7 @@
         <br><br>
         <%-- link to archive active file --%>
         <img src="<c:url value="/_img/themes/default/pijl.gif"/>">
-        <a  href="<c:url value='/main.do'/>?Page=system/archiveActiveFile.jsp?ts=<%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran("Web.manage","archiveactivefile",sWebLanguage)%></a>&nbsp;
+        <a  href="<c:url value='/main.do'/>?Page=system/archiveActiveFile.jsp?ts=<%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran(request,"Web.manage","archiveactivefile",sWebLanguage)%></a>&nbsp;
     <%=ScreenHelper.alignButtonsStop()%>
 </form>
 
@@ -166,7 +166,7 @@
   }
 
   function doReactivate(personid){
-      if(window.showModalDialog?yesnoDialog("web.manage","areyousuretoarchiveactivefile"):yesnoDialogDirectText('<%=getTran("web.manage","areyousuretoarchiveactivefile",sWebLanguage)%>')){
+      if(window.showModalDialog?yesnoDialog("web.manage","areyousuretoarchiveactivefile"):yesnoDialogDirectText('<%=getTran(null,"web.manage","areyousuretoarchiveactivefile",sWebLanguage)%>')){
       <%-- set parameter for activePatient to be initialised (in dropdownmenu) --%>
       reactivateForm.action = reactivateForm.action+"&personid="+personid;
 

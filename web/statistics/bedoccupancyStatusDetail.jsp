@@ -30,14 +30,14 @@
     
     <table width="100%" class="menu" cellspacing="1" cellpadding="0">
         <tr class="admin">
-            <td colspan="2"><%=getTran("web","bed",sWebLanguage)+" "+sBedName%></td>
+            <td colspan="2"><%=getTran(request,"web","bed",sWebLanguage)+" "+sBedName%></td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("Web","Begin",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web","Begin",sWebLanguage)%></td>
             <td class="admin2"><%=writeDateField("FindBegin","transactionForm",sFindBegin,sWebLanguage)%></td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("Web","End",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web","End",sWebLanguage)%></td>
             <td class="admin2"><%=writeDateField("FindEnd","transactionForm",sFindEnd,sWebLanguage)%></td>
         </tr>
         
@@ -101,10 +101,10 @@
 	                          
 	                // header
 	                out.print("<tr class='admin'>"+
-	                           "<td>"+getTran("web","service",sWebLanguage)+"</td>"+
-	                           "<td>"+getTran("web","person",sWebLanguage)+"</td>"+
-	                           "<td width='80'>"+getTran("web","begin",sWebLanguage)+"</td>"+
-	                           "<td width='80'>"+getTran("web","end",sWebLanguage)+"</td>"+
+	                           "<td>"+getTran(request,"web","service",sWebLanguage)+"</td>"+
+	                           "<td>"+getTran(request,"web","person",sWebLanguage)+"</td>"+
+	                           "<td width='80'>"+getTran(request,"web","begin",sWebLanguage)+"</td>"+
+	                           "<td width='80'>"+getTran(request,"web","end",sWebLanguage)+"</td>"+
 	                          "</tr>");
 	            }
 	            
@@ -117,7 +117,7 @@
 	
 	            sServiceID = checkString(rs.getString("OC_ENCOUNTER_SERVICEUID"));
 	            if(sServiceID.length()>0){
-	                sServiceID = getTran("service",sServiceID,sWebLanguage);
+	                sServiceID = getTran(request,"service",sServiceID,sWebLanguage);
 	            }
 	            
 	            sBeginDate = ScreenHelper.getSQLDate(rs.getDate("OC_ENCOUNTER_BEGINDATE"));
@@ -128,11 +128,11 @@
 
 	        out.print("</table>");
 	        
-	        out.print(getTran("web","total",sWebLanguage)+": "+iTotal+"<br>");
-        	%><%=iTotal%> <%=getTran("web","recordsFound",sWebLanguage)%><%
+	        out.print(getTran(request,"web","total",sWebLanguage)+": "+iTotal+"<br>");
+        	%><%=iTotal%> <%=getTran(request,"web","recordsFound",sWebLanguage)%><%
         }
         else{
-        	%><%=getTran("web","noRecordsFound",sWebLanguage)%><%
+        	%><%=getTran(request,"web","noRecordsFound",sWebLanguage)%><%
         }
         
         rs.close();

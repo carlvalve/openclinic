@@ -182,20 +182,20 @@
   
     <%-- TITLE --%>
     <div class="landlist">
-        <h3><%=getTran("datacenter","gisVisualiser",sWebLanguage)%></h3>
+        <h3><%=getTran(request,"datacenter","gisVisualiser",sWebLanguage)%></h3>
         
     	<div class="subcontent">
     <table class="content" width="100%" cellpadding="1" cellspacing="0" border="0">    
         <%-- DATES (from & to) --%>
         <tr>
             <td> 
-	            <%=getTran("datacenter","dateFrom",sWebLanguage)%>&nbsp;  
+	            <%=getTran(request,"datacenter","dateFrom",sWebLanguage)%>&nbsp;  
                 <span id="dateFromDiv" style="vertical-align:top;border:1px solid #fff;padding:1px;">
 	                <%=writeDateField("dateFrom","gisForm",sDateFrom,sWebLanguage)%>
 	            </span>                
             </td>
             <td> 
-                <%=getTran("datacenter","dateTo",sWebLanguage)%>&nbsp;
+                <%=getTran(request,"datacenter","dateTo",sWebLanguage)%>&nbsp;
                 <span id="dateToDiv" style="vertical-align:top;border:1px solid #fff;padding:1px;"> 
 	                <%=writeDateField("dateTo","gisForm",sDateTo,sWebLanguage)%>  
 	            </span>          
@@ -205,7 +205,7 @@
         <%-- AVAILABLE SERVER GROUPS --%>
         <tr>
             <td width="200" style="vertical-align:top;">
-                <%=getTran("datacenter","serverGroups",sWebLanguage)%>&nbsp;<br>
+                <%=getTran(request,"datacenter","serverGroups",sWebLanguage)%>&nbsp;<br>
                 <select name="availableServerGroupIds" id="availableServerGroupIds">
                     <option value=""><%=MedwanQuery.getInstance().getLabel("datacenter","choose",sWebLanguage)%></option> 
                     <%
@@ -229,7 +229,7 @@
             
             <%-- CHOSEN SERVER GROUPS --%>
             <td width="*">
-                <%=getTran("datacenter","serverGroupsToDisplay",sWebLanguage)%>&nbsp;<br>
+                <%=getTran(request,"datacenter","serverGroupsToDisplay",sWebLanguage)%>&nbsp;<br>
                 
                 <%-- arrows --%>
                 <span style="vertical-align:top;">
@@ -257,7 +257,7 @@
     
         <%-- PARAMETER (type of data to visualize) --%>   
         <tr>
-            <td><%=getTran("datacenter","parameter",sWebLanguage)%>&nbsp;</td>            
+            <td><%=getTran(request,"datacenter","parameter",sWebLanguage)%>&nbsp;</td>            
             <td class="admin2">
                 <span id="parameterDiv" style="border:1px solid #fff;padding:1px;">
 	                <select name="parameter" onChange="toggleDates(this.options[this.selectedIndex].value);toggleDiagnoses(this.options[this.selectedIndex].value);">   
@@ -311,7 +311,7 @@
         
         <%-- DIAGNOSIS CODES (mainly KPGS) --%>   
         <tr id="diagnoses" style="display:none;">
-            <td><%=getTran("datacenter","diagnosis",sWebLanguage)%>&nbsp;</td>            
+            <td><%=getTran(request,"datacenter","diagnosis",sWebLanguage)%>&nbsp;</td>            
             <td class="admin2">
                 <span id="diagnosisCodeDiv" style="border:1px solid #fff;padding:1px;">
 	                <select name="diagnosisCode">  
@@ -341,7 +341,7 @@
     
         <%-- GRAPH TYPE --%>
         <tr>
-            <td><%=getTran("datacenter","graphType",sWebLanguage)%>&nbsp;</td>            
+            <td><%=getTran(request,"datacenter","graphType",sWebLanguage)%>&nbsp;</td>            
             <td class="admin2">
                 <span id="graphTypeDiv" style="border:1px solid #fff;padding:1px;">
 	                <select name="graphType">                 

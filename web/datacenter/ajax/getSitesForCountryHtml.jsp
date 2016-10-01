@@ -129,7 +129,7 @@
 			out.println("</table>");
 	    }
 		else{
-			out.println(HTMLEntities.htmlentities(getTran("web","noDataFound",sWebLanguage)));
+			out.println(HTMLEntities.htmlentities(getTran(request,"web","noDataFound",sWebLanguage)));
 		}
     }
     catch(Exception e){

@@ -434,11 +434,12 @@
 		<config key="tmpDir" value="/temp"/>
 		<config key="tmpDirectory" value="/temp"/>
 		<config key="tempDirectory" value="/temp"/>
-		<config key="DocumentsURL" value="$context$/documents/"/>
-		<config key="datacenterTemplateSource" value="$context$/_common/xml/"/>
-		<config key="imageSource" value="$context$"/>
-		<config key="templateSource" value="$context$/_common/xml/"/>
+		<config key="DocumentsURL" value="$localcontext$/documents/"/>
+		<config key="datacenterTemplateSource" value="$localcontext$/_common/xml/"/>
+		<config key="imageSource" value="$localcontext$"/>
+		<config key="templateSource" value="$localcontext$/_common/xml/"/>
 		<config key="projectname" value="$minicontext$"/>
+		<config key="PDFIMG.logo_pdf.jpg.$project$" value="$localcontext$/projects/$project$/_img/logo_$project$.gif"/>
 	</os>
 	<os code="linux">
 		<config key="DocumentsFolder" value="$setupdir$documents"/>
@@ -455,6 +456,7 @@
 		<config key="imageSource" value="$context$"/>
 		<config key="templateSource" value="$context$/_common/xml/"/>
 		<config key="projectname" value="$minicontext$"/>
+		<config key="PDFIMG.logo_pdf.jpg.$project$" value="$localcontext$/projects/$project$/_img/logo_$project$.gif"/>
 	</os>
 	<database code="mysql">
 		<config key="charindexFunction" value="locate"/>
@@ -476,6 +478,7 @@
 		<config key="stddevFunction" value="stddev"/>
 		<config key="topFunction" value="no"/>
 		<config key="lengthFunction" value="length"/>
+		<config key="closeAdmisionServicesQuery" value="update oc_encounter_services,servicesview set oc_encounter_serviceenddate=date_add(oc_encounter_servicebegindate,INTERVAL (select max(serviceadmissionlimit) from servicesview where oc_encounter_serviceuid=serviceid) day) where OC_ENCOUNTER_SERVICEENDDATE is null and serviceadmissionlimit>0 and datediff(now(),OC_ENCOUNTER_SERVICEBEGINDATE)>serviceadmissionlimit and oc_encounter_serviceuid=serviceid and oc_encounter_serviceenddate is null"/>
 	</database>
 	<database code="sqlserver">
 		<config key="charindexFunction" value="charindex"/>
@@ -497,5 +500,6 @@
 		<config key="stddevFunction" value="stdev"/>
 		<config key="topFunction" value="top"/>
 		<config key="lengthFunction" value="len"/>
+		<config key="closeAdmisionServicesQuery" value="update oc_encounter_services set oc_encounter_serviceenddate=dateadd(d,serviceadmissionlimit,oc_encounter_servicebegindate) from oc_encounter_services,servicesview where OC_ENCOUNTER_SERVICEENDDATE is null and serviceadmissionlimit>0 and datediff(d,OC_ENCOUNTER_SERVICEBEGINDATE,getdate())>serviceadmissionlimit and oc_encounter_serviceuid=serviceid and  oc_encounter_serviceenddate is null"/>
 	</database>
 </sections>

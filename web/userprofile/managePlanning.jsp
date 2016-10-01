@@ -42,7 +42,7 @@
     <table width='100%' cellspacing="1" cellpadding="0" class="list">
         <tr>
             <%-- EXAM_DURATION --%>
-            <td class="admin"><%=getTran("web", "examduration", sWebLanguage)%>
+            <td class="admin"><%=getTran(request,"web", "examduration", sWebLanguage)%>
             </td>
             <td class="admin2">
                 <select  style="margin-left:30px;margin-right:10px;" name="PlanningExamDuration" id="PlanningExamDuration" size="1">
@@ -51,12 +51,12 @@
                             out.write("<option value='"+i+"' "+((Integer.parseInt(sEditExamDuration)==i)?"selected=selected":"")+">"+i+"</option>");
                         }
                     %>
-                </select><%=getTran("web.occup", "medwan.common.minutes", sWebLanguage)%>
+                </select><%=getTran(request,"web.occup", "medwan.common.minutes", sWebLanguage)%>
             </td>
         </tr>
         <tr>
             <%-- DOUBLE BOOKING PROHIBITED --%>
-            <td class="admin"><%=getTran("web", "doublebookingprohibited", sWebLanguage)%>
+            <td class="admin"><%=getTran(request,"web", "doublebookingprohibited", sWebLanguage)%>
             </td>
             <td class="admin2">
             	<input type='checkbox' style="margin-left:30px;margin-right:10px;" name='PlanningDoubleBookingProhibited' id='PlanningDoubleBookingProhibited' <%=sEditDoubleBookingProhibited.equalsIgnoreCase("1")?"checked":"" %> value="1"/>
@@ -64,7 +64,7 @@
         </tr>
         <tr>
             <td class="admin" width="<%=sTDAdminWidth%>">
-                <%=getTran("planning", "users_with_permission", sWebLanguage)%>
+                <%=getTran(request,"planning", "users_with_permission", sWebLanguage)%>
             </td>
             <td class="admin2">
                 <input type="hidden" name="EditUserIDs" value="<%=sEditUserIDs%>">
@@ -97,7 +97,7 @@
             </td>
         </tr>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("hrm", "uur", sWebLanguage)%>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"hrm", "uur", sWebLanguage)%>
             </td>
             <td class="admin2">
                 <br/> <br/>
@@ -112,7 +112,7 @@
             </td>
         </tr>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web.UserProfile", "agenda.zoom", sWebLanguage)%>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web.UserProfile", "agenda.zoom", sWebLanguage)%>
             </td>
             <td class="admin2">
                 <div id="zoom_slider" style="margin-left:30px;" class="slider" style="width:200px;">
@@ -124,10 +124,10 @@
                          <div class="spacer"><span></span>
                     </div>
                     <div class="days" id="weekScheduler_dayRow">
-                        <div><%=getTran("web", "monday", sWebLanguage)%><span></span></div>
-                        <div><%=getTran("web", "Tuesday", sWebLanguage)%><span></span></div>
-                        <div><%=getTran("web", "Wednesday", sWebLanguage)%><span></span></div>
-                        <div><%=getTran("web", "Thursday", sWebLanguage)%><span></span></div>
+                        <div><%=getTran(request,"web", "monday", sWebLanguage)%><span></span></div>
+                        <div><%=getTran(request,"web", "Tuesday", sWebLanguage)%><span></span></div>
+                        <div><%=getTran(request,"web", "Wednesday", sWebLanguage)%><span></span></div>
+                        <div><%=getTran(request,"web", "Thursday", sWebLanguage)%><span></span></div>
                     </div>
                 </div>
                     <div id="weekScheduler_hours">
@@ -240,7 +240,7 @@
             formEdit.EditUserName.value = "";
         }
         function doDelete(id, index) {
-            if (confirm("<%=getTran("Web","AreYouSure",sWebLanguage)%>")) {
+            if (confirm("<%=getTran(null,"Web","AreYouSure",sWebLanguage)%>")) {
                 formEdit.EditUserIDs.value = deleteRowFromArrayString(formEdit.EditUserIDs.value, id);
                 tableUsers.deleteRow(index);
             }

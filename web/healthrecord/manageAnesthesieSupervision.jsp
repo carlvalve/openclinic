@@ -7,13 +7,13 @@
     private StringBuffer addSA(int iTotal,String sHeure,String sSys,String sDias,String sRythme,String sStage,String sFreq,String sSat, String sMedication, String sWebLanguage){
         StringBuffer sTmp = new StringBuffer();
         if (sStage.length()>0){
-            sStage = getTran("anesthesie_stage",sStage,sWebLanguage);
+            sStage = getTran(null,"anesthesie_stage",sStage,sWebLanguage);
         }
         sTmp.append(
                     "<tr id='rowSA"+iTotal+"'>" +
                         "<td class=\"admin2\">" +
-                        "   <a href='javascript:deleteSA(rowSA"+iTotal+")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran("Web.Occup","medwan.common.delete",sWebLanguage) + "' border='0'></a> "+
-                        "   <a href='javascript:editSA(rowSA"+iTotal+")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_edit.gif' alt='" + getTran("Web.Occup","medwan.common.edit",sWebLanguage) + "' border='0'></a>" +
+                        "   <a href='javascript:deleteSA(rowSA"+iTotal+")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran(null,"Web.Occup","medwan.common.delete",sWebLanguage) + "' border='0'></a> "+
+                        "   <a href='javascript:editSA(rowSA"+iTotal+")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_edit.gif' alt='" + getTran(null,"Web.Occup","medwan.common.edit",sWebLanguage) + "' border='0'></a>" +
                         "</td>" +
                         "<td class=\"admin2\">&nbsp;" + sHeure + "</td>" +
                         "<td class=\"admin2\">&nbsp;" +sSys + "</td>" +
@@ -132,7 +132,7 @@
         <tr>
             <td class="admin">
                 <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-                <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+                <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
             </td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" id="trandate" OnBlur='checkDate(this)'>
@@ -145,18 +145,18 @@
                 <table cellspacing="1" cellpadding="0" width="100%" border="0" id="tblSA" class="list">
                     <tr>
                         <td class="admin" width="40" rowspan="2"/>
-                        <td class="admin" width="75" rowspan="2" style="vertical-align:bottom;padding-bottom:4px;"><%=getTran("Web.occup","medwan.common.hour",sWebLanguage)%></td>
-                        <td class="admin" width="100" colspan="2"><center><%=getTran("openclinic.chuk","ta",sWebLanguage)%></center></td>
-                        <td class="admin" width="75" rowspan="2" style="vertical-align:bottom;padding-bottom:4px;"><%=getTran("openclinic.chuk","heartfrequency",sWebLanguage)%></td>
-                        <td class="admin" width="90" rowspan="2" style="vertical-align:bottom;padding-bottom:4px;"><%=getTran("openclinic.chuk","stage",sWebLanguage)%></td>
-                        <td class="admin" width="75" rowspan="2" style="vertical-align:bottom;padding-bottom:4px;"><%=getTran("openclinic.chuk","respiration",sWebLanguage)%></td>
-                        <td class="admin" width="75" rowspan="2" style="vertical-align:bottom;padding-bottom:4px;"><%=getTran("openclinic.chuk","sa",sWebLanguage)%> O2</td>
-                        <td class="admin" width="150" rowspan="2" style="vertical-align:bottom;padding-bottom:4px;"><%=getTran("openclinic.chuk","medication",sWebLanguage)%></td>
+                        <td class="admin" width="75" rowspan="2" style="vertical-align:bottom;padding-bottom:4px;"><%=getTran(request,"Web.occup","medwan.common.hour",sWebLanguage)%></td>
+                        <td class="admin" width="100" colspan="2"><center><%=getTran(request,"openclinic.chuk","ta",sWebLanguage)%></center></td>
+                        <td class="admin" width="75" rowspan="2" style="vertical-align:bottom;padding-bottom:4px;"><%=getTran(request,"openclinic.chuk","heartfrequency",sWebLanguage)%></td>
+                        <td class="admin" width="90" rowspan="2" style="vertical-align:bottom;padding-bottom:4px;"><%=getTran(request,"openclinic.chuk","stage",sWebLanguage)%></td>
+                        <td class="admin" width="75" rowspan="2" style="vertical-align:bottom;padding-bottom:4px;"><%=getTran(request,"openclinic.chuk","respiration",sWebLanguage)%></td>
+                        <td class="admin" width="75" rowspan="2" style="vertical-align:bottom;padding-bottom:4px;"><%=getTran(request,"openclinic.chuk","sa",sWebLanguage)%> O2</td>
+                        <td class="admin" width="150" rowspan="2" style="vertical-align:bottom;padding-bottom:4px;"><%=getTran(request,"openclinic.chuk","medication",sWebLanguage)%></td>
                         <td class="admin" rowspan="2"/>
                     </tr>
                     <tr>
-                        <td class="admin"><%=getTran("openclinic.chuk","sys",sWebLanguage)%></td>
-                        <td class="admin"><%=getTran("openclinic.chuk","dias",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"openclinic.chuk","sys",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"openclinic.chuk","dias",sWebLanguage)%></td>
                     </tr>
                     <tr>
                         <td class="admin2"/>
@@ -175,9 +175,9 @@
                         <td class="admin2">
                             <select class="text" name="svstage">
                                 <option/>
-                                <option value="pre_anesthesie"><%=getTran("anesthesie_stage","pre_anesthesie",sWebLanguage)%></option>
-                                <option value="anesthesie"><%=getTran("anesthesie_stage","anesthesie",sWebLanguage)%></option>
-                                <option value="post_anesthesie"><%=getTran("anesthesie_stage","post_anesthesie",sWebLanguage)%></option>
+                                <option value="pre_anesthesie"><%=getTran(request,"anesthesie_stage","pre_anesthesie",sWebLanguage)%></option>
+                                <option value="anesthesie"><%=getTran(request,"anesthesie_stage","anesthesie",sWebLanguage)%></option>
+                                <option value="post_anesthesie"><%=getTran(request,"anesthesie_stage","post_anesthesie",sWebLanguage)%></option>
                             </select>
                         </td>
                         <td class="admin2">
@@ -304,13 +304,13 @@ function addSA(){
 function checkStage(){
       var sDescrStage = "";
       if (transactionForm.svstage.value=="pre_anesthesie"){
-          sDescrStage = "<%=getTran("anesthesie_stage","pre_anesthesie",sWebLanguage)%>";
+          sDescrStage = "<%=getTran(null,"anesthesie_stage","pre_anesthesie",sWebLanguage)%>";
       }
       else if (transactionForm.svstage.value=="anesthesie"){
-          sDescrStage = "<%=getTran("anesthesie_stage","anesthesie",sWebLanguage)%>";
+          sDescrStage = "<%=getTran(null,"anesthesie_stage","anesthesie",sWebLanguage)%>";
       }
       else if (transactionForm.svstage.value=="post_anesthesie"){
-          sDescrStage = "<%=getTran("anesthesie_stage","post_anesthesie",sWebLanguage)%>";
+          sDescrStage = "<%=getTran(null,"anesthesie_stage","post_anesthesie",sWebLanguage)%>";
       }
 
     return sDescrStage;

@@ -27,17 +27,17 @@
         sType = objLA.getLabtype();
         sCode = objLA.getLabcode();
         sCodeOther = objLA.getLabcodeother();
-        sText = getTran("labanalysis", sID, sWebLanguage);
+        sText = getTran(request,"labanalysis", sID, sWebLanguage);
     }
 
     // translate labtype
-    if (sType.equals("1")) sType = getTran("Web.occup", "labanalysis.type.blood", sWebLanguage);
-    else if (sType.equals("2")) sType = getTran("Web.occup", "labanalysis.type.urine", sWebLanguage);
-    else if (sType.equals("3")) sType = getTran("Web.occup", "labanalysis.type.other", sWebLanguage);
-    else if (sType.equals("4")) sType = getTran("Web.occup", "labanalysis.type.stool", sWebLanguage);
-    else if (sType.equals("5")) sType = getTran("Web.occup", "labanalysis.type.sputum", sWebLanguage);
-    else if (sType.equals("6")) sType = getTran("Web.occup", "labanalysis.type.smear", sWebLanguage);
-    else if (sType.equals("7")) sType = getTran("Web.occup", "labanalysis.type.liquid", sWebLanguage);
+    if (sType.equals("1")) sType = getTran(request,"Web.occup", "labanalysis.type.blood", sWebLanguage);
+    else if (sType.equals("2")) sType = getTran(request,"Web.occup", "labanalysis.type.urine", sWebLanguage);
+    else if (sType.equals("3")) sType = getTran(request,"Web.occup", "labanalysis.type.other", sWebLanguage);
+    else if (sType.equals("4")) sType = getTran(request,"Web.occup", "labanalysis.type.stool", sWebLanguage);
+    else if (sType.equals("5")) sType = getTran(request,"Web.occup", "labanalysis.type.sputum", sWebLanguage);
+    else if (sType.equals("6")) sType = getTran(request,"Web.occup", "labanalysis.type.smear", sWebLanguage);
+    else if (sType.equals("7")) sType = getTran(request,"Web.occup", "labanalysis.type.liquid", sWebLanguage);
 
     // multiple records found, open search-window, allowing the user to select a record.
     if (recCount > 1) {

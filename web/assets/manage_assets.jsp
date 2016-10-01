@@ -26,7 +26,7 @@
     <table class="list" border="0" width="100%" cellspacing="1">
         <%-- search CODE --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","code",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","code",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" id="searchCode" name="searchCode" size="20" maxLength="20" value="">
             </td>
@@ -34,7 +34,7 @@
         
         <%-- search DESCRIPTION --%>                
         <tr>
-            <td class="admin"><%=getTran("web","description",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","description",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" id="searchDescription" name="searchDescription" size="50" maxLength="50" value="">
             </td>
@@ -42,7 +42,7 @@
         
         <%-- search SERIAL NUMBER --%>
         <tr>
-            <td class="admin"><%=getTran("web.assets","serialnumber",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web.assets","serialnumber",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" id="searchSerialnumber" name="searchSerialnumber" size="20" maxLength="30" value="">
             </td>
@@ -50,18 +50,18 @@
         
         <%-- search ASSET TYPE --%>
         <tr>
-            <td class="admin"><%=getTran("web.assets","assetType",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web.assets","assetType",sWebLanguage)%></td>
             <td class="admin2">
                 <select class="text" id="searchAssetType" name="searchAssetType">
                     <option/>
-                    <%=ScreenHelper.writeSelect("assets.type","",sWebLanguage)%>
+                    <%=ScreenHelper.writeSelect(request,"assets.type","",sWebLanguage)%>
                 </select>
             </td>
         </tr>   
                 
         <%-- search SUPPLIER --%>
         <tr>
-            <td class="admin"><%=getTran("web.assets","supplier",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web.assets","supplier",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="hidden" name="searchSupplierUID" id="searchSupplierUID" value="">
                 <input type="text" class="text" name="searchSupplierName" id="searchSupplierName" readonly size="30" value="">
@@ -74,9 +74,9 @@
         
         <%-- search PURCHASE PERIOD --%>
         <tr>
-            <td class="admin"><%=getTran("web.assets","purchasePeriod",sWebLanguage)%>&nbsp;(<%=getTran("web.assets","begin",sWebLanguage)%> - <%=getTran("web.assets","end",sWebLanguage)%>)</td>
+            <td class="admin"><%=getTran(request,"web.assets","purchasePeriod",sWebLanguage)%>&nbsp;(<%=getTran(request,"web.assets","begin",sWebLanguage)%> - <%=getTran(request,"web.assets","end",sWebLanguage)%>)</td>
             <td class="admin2">
-                <%=writeDateField("searchPurchaseBegin","SearchForm","",sWebLanguage)%>&nbsp;&nbsp;<%=getTran("web","until",sWebLanguage)%>&nbsp;&nbsp; 
+                <%=writeDateField("searchPurchaseBegin","SearchForm","",sWebLanguage)%>&nbsp;&nbsp;<%=getTran(request,"web","until",sWebLanguage)%>&nbsp;&nbsp; 
                 <%=writeDateField("searchPurchaseEnd","SearchForm","",sWebLanguage)%>            
             </td>                        
         </tr>
@@ -168,7 +168,7 @@
     <table class="list" border="0" width="100%" cellspacing="1">    
         <%-- CODE (*) --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web.assets","code",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web.assets","code",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="code" name="code" size="20" maxLength="20" value="">
             </td>
@@ -176,7 +176,7 @@
 
         <%-- PARENT --%>
         <tr>
-            <td class="admin"><%=getTran("web.assets","parent",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.assets","parent",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="hidden" name="parentUID" id="parentUID" value="">
                 <input type="text" class="text" id="parentCode" name="parentCode" size="20" readonly value="">
@@ -189,7 +189,7 @@
 
         <%-- DESCRIPTION (*) --%>                    
         <tr>
-            <td class="admin"><%=getTran("web","description",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web","description",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <textarea class="text" name="description" id="description" cols="80" rows="4" onKeyup="resizeTextarea(this,8);limitChars(this,245);"></textarea>
             </td>
@@ -197,7 +197,7 @@
         
         <%-- SERIAL NUMBER --%>
         <tr>
-            <td class="admin"><%=getTran("web.assets","serialnumber",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.assets","serialnumber",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="serialnumber" name="serialnumber" size="20" maxLength="30" value="">
             </td>
@@ -205,7 +205,7 @@
         
         <%-- QUANTITY (*) --%>
         <tr>
-            <td class="admin"><%=getTran("web.assets","quantity",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.assets","quantity",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="quantity" name="quantity" size="8" maxLength="8" value="1" onKeyUp="isNumber(this);" onBlur="if(isNumber(this))setDecimalLength(this,2,true);">
             </td>
@@ -213,18 +213,18 @@
        
         <%-- ASSET TYPE (*) --%>
         <tr>
-            <td class="admin"><%=getTran("web.assets","type",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.assets","type",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <select class="text" id="assetType" name="assetType">
                     <option/>
-                    <%=ScreenHelper.writeSelect("assets.type","",sWebLanguage)%>
+                    <%=ScreenHelper.writeSelect(request,"assets.type","",sWebLanguage)%>
                 </select>
             </td>
         </tr>       
         
         <%-- SUPPLIER --%>
         <tr>
-            <td class="admin"><%=getTran("web.assets","supplier",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.assets","supplier",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="hidden" name="supplierUID" id="supplierUID" value="">
                 <input type="text" class="text" name="supplierName" id="supplierName" readonly size="30" value="">
@@ -237,7 +237,7 @@
         
         <%-- PURCHASE DATE --%>
         <tr>
-            <td class="admin"><%=getTran("web.assets","purchaseDate",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.assets","purchaseDate",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <%=writeDateField("purchaseDate","EditForm","",sWebLanguage)%>        
             </td>                        
@@ -245,7 +245,7 @@
         
         <%-- PURCHASE PRICE (+currency) --%>
         <tr>
-            <td class="admin"><%=getTran("web.assets","purchasePrice",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.assets","purchasePrice",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="purchasePrice" name="purchasePrice" size="8" maxLength="8" value="" onKeyUp="isNumber(this);" onBlur="if(isNumber(this))setDecimalLength(this,2,true);"> <%=MedwanQuery.getInstance().getConfigParam("currency","€")%>&nbsp;
             </td>
@@ -253,7 +253,7 @@
         
         <%-- RECEIPT BY --%>
         <tr>
-            <td class="admin"><%=getTran("web.assets","receiptBy",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.assets","receiptBy",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="receiptBy" name="receiptBy" size="50" maxLength="50" value="">
             </td>
@@ -261,7 +261,7 @@
         
         <%-- PURCHASE DOCUMENTS (multi-add) --%>   
         <tr>
-            <td class="admin" nowrap><%=getTran("web.assets","purchaseDocuments",sWebLanguage)%>&nbsp;</td>
+            <td class="admin" nowrap><%=getTran(request,"web.assets","purchaseDocuments",sWebLanguage)%>&nbsp;</td>
             <td class="admin2" style="padding:5px;padding-bottom:0;">
                 <input type="hidden" id="purchaseDocuments" name="purchaseDocuments" value="">
                                     
@@ -273,7 +273,7 @@
                             <td width="40" nowrap/>
                             <%-- 1 - type --%>
                             <td width="10%" nowrap style="padding-left:0px;">
-                                <%=getTran("web.assets","documentId",sWebLanguage)%>&nbsp;*&nbsp;
+                                <%=getTran(request,"web.assets","documentId",sWebLanguage)%>&nbsp;*&nbsp;
                             </td>    
                             <%-- 2 - empty --%>
                             <td width="*" nowrap>&nbsp;</td>      
@@ -304,37 +304,37 @@
         
         <%-- WRITE OFF METHOD --%>
         <tr>
-            <td class="admin"><%=getTran("web.assets","writeOffMethod",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.assets","writeOffMethod",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <select class="text" id="writeOffMethod" name="writeOffMethod">
                     <option/>
-                    <%=ScreenHelper.writeSelect("assets.writeOffMethod","",sWebLanguage)%>
+                    <%=ScreenHelper.writeSelect(request,"assets.writeOffMethod","",sWebLanguage)%>
                 </select>
             </td>
         </tr>
         
         <%-- WRITE OFF PERIOD --%>
         <tr>
-            <td class="admin"><%=getTran("web.assets","writeOffPeriod",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.assets","writeOffPeriod",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
-                <input type="text" class="text" id="writeOffPeriod" name="writeOffPeriod" size="2" maxLength="2" value="" onKeyUp="isNumber(this);">&nbsp;<%=getTran("web","year",sWebLanguage).toLowerCase()%>&nbsp;
+                <input type="text" class="text" id="writeOffPeriod" name="writeOffPeriod" size="2" maxLength="2" value="" onKeyUp="isNumber(this);">&nbsp;<%=getTran(request,"web","year",sWebLanguage).toLowerCase()%>&nbsp;
             </td>
         </tr>
 
         <%-- ANNUITIY --%>
         <tr>
-            <td class="admin"><%=getTran("web.assets","annuity",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.assets","annuity",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <select class="text" id="annuity" name="annuity">
                     <option/>
-                    <%=ScreenHelper.writeSelect("assets.annuity","",sWebLanguage)%>
+                    <%=ScreenHelper.writeSelect(request,"assets.annuity","",sWebLanguage)%>
                 </select>
             </td>
         </tr>        
         
         <%-- CHARACTERISTICS --%>                
         <tr>
-            <td class="admin"><%=getTran("web.assets","characteristics",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.assets","characteristics",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <textarea class="text" name="characteristics" id="characteristics" cols="80" rows="4" onKeyup="resizeTextarea(this,8);"></textarea>
             </td>
@@ -342,7 +342,7 @@
         
         <%-- ACCOUNTING CODE --%>
         <tr>
-            <td class="admin"><%=getTran("web.assets","accountingCode",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.assets","accountingCode",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="accountingCode" name="accountingCode" size="20" maxLength="20" value="">
             </td>
@@ -350,7 +350,7 @@
         
         <%-- GAINS (multi-add: date, value (+currency)) --%>
         <tr>
-            <td class="admin" nowrap><%=getTran("web.assets","gains",sWebLanguage)%>&nbsp;</td>
+            <td class="admin" nowrap><%=getTran(request,"web.assets","gains",sWebLanguage)%>&nbsp;</td>
             <td class="admin2" style="padding:5px;">
                 <input type="hidden" id="gains" name="gains" value="">
                                      
@@ -361,11 +361,11 @@
                         <td width="40" nowrap/>
                         <%-- 1 - date --%>
                         <td width="110" nowrap style="padding-left:0px;">
-                            <%=getTran("web.assets","date",sWebLanguage)%>&nbsp;*&nbsp;
+                            <%=getTran(request,"web.assets","date",sWebLanguage)%>&nbsp;*&nbsp;
                         </td>    
                         <%-- 2 - value --%>
                         <td width="100" nowrap style="padding-left:0px;">
-                            <%=getTran("web.assets","value",sWebLanguage)%>&nbsp;*&nbsp;
+                            <%=getTran(request,"web.assets","value",sWebLanguage)%>&nbsp;*&nbsp;
                         </td>    
                         <%-- 3 - empty --%>
                         <td width="*" nowrap>&nbsp;</td>      
@@ -397,7 +397,7 @@
         
         <%-- LOSSES (multi-add: date, value (+currency)) --%>  
         <tr>
-            <td class="admin" nowrap><%=getTran("web.assets","losses",sWebLanguage)%>&nbsp;</td>
+            <td class="admin" nowrap><%=getTran(request,"web.assets","losses",sWebLanguage)%>&nbsp;</td>
             <td class="admin2" style="padding:5px;">
                 <input type="hidden" id="losses" name="losses" value="">
                                      
@@ -408,11 +408,11 @@
                         <td width="40" nowrap/>
                         <%-- 1 - date --%>
                         <td width="110" nowrap style="padding-left:0px;">
-                            <%=getTran("web.assets","date",sWebLanguage)%>&nbsp;*&nbsp;
+                            <%=getTran(request,"web.assets","date",sWebLanguage)%>&nbsp;*&nbsp;
                         </td>    
                         <%-- 2 - value --%>
                         <td width="100" nowrap style="padding-left:0px;">
-                            <%=getTran("web.assets","value",sWebLanguage)%>&nbsp;*&nbsp;
+                            <%=getTran(request,"web.assets","value",sWebLanguage)%>&nbsp;*&nbsp;
                         </td>    
                         <%-- 3 - empty --%>
                         <td width="*" nowrap>&nbsp;</td>      
@@ -444,7 +444,7 @@
 
         <%-- RESIDUAL VALUE HISTORY (calculated) --%>
         <tr id="residualValueHistoryDiv" style="visibility:visible;">
-            <td class="admin" width="<%=sTDAdminWidth%>" nowrap><%=getTran("web.assets","residualValueHistory",sWebLanguage)%>&nbsp;</td>
+            <td class="admin" width="<%=sTDAdminWidth%>" nowrap><%=getTran(request,"web.assets","residualValueHistory",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <div id="residualValueHistory" class="admin">
                     <%-- javascript --%>
@@ -454,18 +454,18 @@
                     
         <%-- LOAN (own table) -------------------------------------------------------------------%>
         <tr>
-            <td class="admin" nowrap><%=getTran("web.assets","loan",sWebLanguage)%>&nbsp;</td>
+            <td class="admin" nowrap><%=getTran(request,"web.assets","loan",sWebLanguage)%>&nbsp;</td>
             <td class="admin2" style="padding:5px;">
                 <table class="list" cellspacing="1" cellpadding="0">
                 
             <%-- subtitle : loan --%>
             <tr class="admin">
-                <td colspan="2"><%=getTran("web.assets","loan",sWebLanguage)%></td>        
+                <td colspan="2"><%=getTran(request,"web.assets","loan",sWebLanguage)%></td>        
             </tr>
         
             <%-- LOAN DATE --%>
             <tr>
-                <td class="admin" width="150" nowrap><%=getTran("web.assets","loanDate",sWebLanguage)%>&nbsp;</td>
+                <td class="admin" width="150" nowrap><%=getTran(request,"web.assets","loanDate",sWebLanguage)%>&nbsp;</td>
                 <td class="admin2">
                     <%=writeDateField("loanDate","EditForm","",sWebLanguage)%>            
                 </td>                        
@@ -473,7 +473,7 @@
             
             <%-- LOAN AMOUNT --%>
             <tr>
-                <td class="admin" nowrap><%=getTran("web.assets","loanAmount",sWebLanguage)%>&nbsp;</td>
+                <td class="admin" nowrap><%=getTran(request,"web.assets","loanAmount",sWebLanguage)%>&nbsp;</td>
                 <td class="admin2">
                     <input type="text" class="text" id="loanAmount" name="loanAmount" size="8" maxLength="8" value="" onKeyUp="isNumber(this);">&nbsp;<%=MedwanQuery.getInstance().getConfigParam("currency","€")%>&nbsp;
                 </td>
@@ -481,7 +481,7 @@
                 
             <%-- LOAN INTEREST RATE (text!) --%>
             <tr>
-                <td class="admin" nowrap><%=getTran("web.assets","loadInterestRate",sWebLanguage)%>&nbsp;</td>
+                <td class="admin" nowrap><%=getTran(request,"web.assets","loadInterestRate",sWebLanguage)%>&nbsp;</td>
                 <td class="admin2">
                     <input type="text" class="text" id="loanInterestRate" name="loanInterestRate" size="30" maxLength="30" value="">
                 </td>
@@ -489,7 +489,7 @@
             
             <%-- LOAN REIMBURSEMENT PLAN (multi-add: date, capital, interest, total (calculated)) --%>  
             <tr>
-                <td class="admin" nowrap><%=getTran("web.assets","loadReimbursementPlan",sWebLanguage)%>&nbsp;</td>
+                <td class="admin" nowrap><%=getTran(request,"web.assets","loadReimbursementPlan",sWebLanguage)%>&nbsp;</td>
                 <td class="admin2" style="padding:5px;">
                     <input type="hidden" id="loanReimbursementPlan" name="loanReimbursementPlan" value="">
                                          
@@ -500,19 +500,19 @@
                             <td width="40" nowrap/>
                             <%-- 1 - date --%>
                             <td width="130" nowrap style="padding-left:0px;">
-                                <%=getTran("web.assets","date",sWebLanguage)%>&nbsp;*&nbsp;
+                                <%=getTran(request,"web.assets","date",sWebLanguage)%>&nbsp;*&nbsp;
                             </td>
                             <%-- 2 - capital (+currency) --%>
                             <td width="100" nowrap style="padding-left:0px;">
-                                <%=getTran("web.assets","capital",sWebLanguage)%>&nbsp;*&nbsp;
+                                <%=getTran(request,"web.assets","capital",sWebLanguage)%>&nbsp;*&nbsp;
                             </td>
                             <%-- 3 - interest (+currency) --%>
                             <td width="100" nowrap style="padding-left:0px;">
-                                <%=getTran("web.assets","interest",sWebLanguage)%>&nbsp;*&nbsp;
+                                <%=getTran(request,"web.assets","interest",sWebLanguage)%>&nbsp;*&nbsp;
                             </td>    
                             <%-- 4 - total --%>
                             <td width="100" nowrap style="padding-left:0px;">
-                                <%=getTran("web.assets","total",sWebLanguage)%>&nbsp;
+                                <%=getTran(request,"web.assets","total",sWebLanguage)%>&nbsp;
                             </td>   
                             <%-- 5 - empty --%>
                             <td width="*" nowrap>&nbsp;</td>      
@@ -552,7 +552,7 @@
                         
             <%-- LOAN COMMENT --%>                
             <tr>
-                <td class="admin" nowrap><%=getTran("web.assets","comment",sWebLanguage)%>&nbsp;</td>
+                <td class="admin" nowrap><%=getTran(request,"web.assets","comment",sWebLanguage)%>&nbsp;</td>
                 <td class="admin2">
                     <textarea class="text" name="loanComment" id="loanComment" cols="80" rows="4" onKeyup="resizeTextarea(this,8);"></textarea>
                 </td>
@@ -560,7 +560,7 @@
             
             <%-- LOAN DOCUMENTS (multi-add) --%>
             <tr>
-                <td class="admin" nowrap><%=getTran("web.assets","loanDocuments",sWebLanguage)%>&nbsp;</td>
+                <td class="admin" nowrap><%=getTran(request,"web.assets","loanDocuments",sWebLanguage)%>&nbsp;</td>
                 <td class="admin2" style="padding:5px;padding-bottom:0;">
                     <input type="hidden" id="loanDocuments" name="loanDocuments" value="">
                               
@@ -572,7 +572,7 @@
                                 <td width="40" nowrap/>
                                 <%-- 1 - documentId --%>
                                 <td width="100" nowrap style="padding-left:0px;">
-                                    <%=getTran("web.assets","documentId",sWebLanguage)%>&nbsp;*&nbsp;
+                                    <%=getTran(request,"web.assets","documentId",sWebLanguage)%>&nbsp;*&nbsp;
                                 </td>    
                                 <%-- 2 - empty --%>
                                 <td width="*" nowrap>&nbsp;</td>      
@@ -607,7 +607,7 @@
                             
         <%-- SALE DATE --%>
         <tr>
-            <td class="admin" nowrap><%=getTran("web.assets","saleDate",sWebLanguage)%>&nbsp;</td>
+            <td class="admin" nowrap><%=getTran(request,"web.assets","saleDate",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <%=writeDateField("saleDate","EditForm","",sWebLanguage)%>&nbsp;            
             </td>                        
@@ -615,7 +615,7 @@
         
         <%-- SALE VALUE --%>
         <tr>
-            <td class="admin" nowrap><%=getTran("web.assets","saleValue",sWebLanguage)%>&nbsp;</td>
+            <td class="admin" nowrap><%=getTran(request,"web.assets","saleValue",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="saleValue" name="saleValue" size="8" maxLength="8" value="" onKeyUp="isNumber(this);">&nbsp;<%=MedwanQuery.getInstance().getConfigParam("currency","€")%>&nbsp;
             </td>
@@ -623,7 +623,7 @@
         
         <%-- SALE CLIENT --%>        
         <tr>
-            <td class="admin" nowrap><%=getTran("web.assets","saleClient",sWebLanguage)%>&nbsp;</td>
+            <td class="admin" nowrap><%=getTran(request,"web.assets","saleClient",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <textarea class="text" name="saleClient" id="saleClient" cols="80" rows="4" onKeyup="resizeTextarea(this,8);limitChars(this,245);"></textarea>
             </td>
@@ -639,7 +639,7 @@
             </td>
         </tr>
     </table>
-    <i><%=getTran("web","colored_fields_are_obligate",sWebLanguage)%></i>
+    <i><%=getTran(request,"web","colored_fields_are_obligate",sWebLanguage)%></i>
     
     <div id="divMessage" style="padding-top:10px;"></div>
 </form>

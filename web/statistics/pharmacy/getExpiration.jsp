@@ -12,7 +12,7 @@
 	<table width='100%'>
 		<tr>
 			<td class='admin2'>
-				<%=getTran("web","date",sWebLanguage)%> <%=writeDateField("FindDate","transactionForm",ScreenHelper.formatDate(new java.util.Date()),sWebLanguage)%>
+				<%=getTran(request,"web","date",sWebLanguage)%> <%=writeDateField("FindDate","transactionForm",ScreenHelper.formatDate(new java.util.Date()),sWebLanguage)%>
 			</td>
 			<td class='admin2'>
 				<input type='button' class="button" name='print' value='<%=getTranNoLink("web","print",sWebLanguage)%>' onclick='printReport();'/>

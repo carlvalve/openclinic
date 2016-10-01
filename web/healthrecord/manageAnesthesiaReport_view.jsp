@@ -72,7 +72,7 @@
                     sProductName = "";
                 }
                 if (sProductName.length() == 0) {
-                    sProductName = "<font color='red'>" + getTran("web", "nonexistingproduct", sWebLanguage) + "</font>";
+                    sProductName = "<font color='red'>" + getTran(null,"web", "nonexistingproduct", sWebLanguage) + "</font>";
                 }
             }
 
@@ -84,7 +84,7 @@
 
             // only compose prescriptio-rule if all data is available
             if (!sTimeUnit.equals("0") && !sTimeUnitCount.equals("0") && !sUnitsPerTimeUnit.equals("0")) {
-                sPrescrRule = getTran("web.prescriptions", "prescriptionrule", sWebLanguage);
+                sPrescrRule = getTran(null,"web.prescriptions", "prescriptionrule", sWebLanguage);
                 sPrescrRule = sPrescrRule.replaceAll("#unitspertimeunit#", unitCountDeci.format(Double.parseDouble(sUnitsPerTimeUnit)));
                 if (product != null) {
                     sProductUnit = product.getUnit();
@@ -93,21 +93,21 @@
                 }
                 // productunits
                 if (Double.parseDouble(sUnitsPerTimeUnit) == 1) {
-                    sProductUnit = getTran("product.unit", sProductUnit, sWebLanguage);
+                    sProductUnit = getTran(null,"product.unit", sProductUnit, sWebLanguage);
                 } else {
-                    sProductUnit = getTran("product.unit", sProductUnit, sWebLanguage);
+                    sProductUnit = getTran(null,"product.unit", sProductUnit, sWebLanguage);
                 }
                 sPrescrRule = sPrescrRule.replaceAll("#productunit#", sProductUnit.toLowerCase());
 
                 // timeunits
                 if (Integer.parseInt(sTimeUnitCount) == 1) {
                     sPrescrRule = sPrescrRule.replaceAll("#timeunitcount#", "");
-                    timeUnitTran = getTran("prescription.timeunit", sTimeUnit, sWebLanguage);
+                    timeUnitTran = getTran(null,"prescription.timeunit", sTimeUnit, sWebLanguage);
                 } else {
                     sPrescrRule = sPrescrRule.replaceAll("#timeunitcount#", sTimeUnitCount);
-                    timeUnitTran = getTran("prescription.timeunits", sTimeUnit, sWebLanguage);
+                    timeUnitTran = getTran(request,"prescription.timeunits", sTimeUnit, sWebLanguage);
                 }
-                sPrescrRule = sPrescrRule.replaceAll("#timeunit#", timeUnitTran.toLowerCase());
+                sPrescrRule = sPrescrRule.null("#timeunit#", timeUnitTran.toLowerCase());
             }
 
             //*** display prescription in one row ***
@@ -167,7 +167,7 @@
         <tr>
             <td class="admin" colspan="2">
                 <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-                <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+                <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
             </td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" id="trandate" OnBlur='checkDate(this)'>
@@ -175,58 +175,58 @@
             </td>
         </tr>
         <tr>
-            <td class="admin" rowspan="3"><%=getTran("openclinic.chuk","anesthesie",sWebLanguage)%></td>
-            <td class="admin"><%=getTran("openclinic.chuk","begin_hour",sWebLanguage)%></td>
+            <td class="admin" rowspan="3"><%=getTran(request,"openclinic.chuk","anesthesie",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","begin_hour",sWebLanguage)%></td>
             <td class="admin2">
                 <input type='text' class='text' id="abeginhour" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_ANESTHESIA_BEGIN" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_ANESTHESIA_BEGIN" property="value"/>" onblur="checkTime(this);calculateInterval('abeginhour', 'aendhour', 'aduration')" size='5'>
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","end_hour",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","end_hour",sWebLanguage)%></td>
             <td class="admin2">
                 <input type='text' class='text' id="aendhour" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_ANESTHESIA_END" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_ANESTHESIA_END" property="value"/>" onblur="checkTime(this);calculateInterval('abeginhour', 'aendhour', 'aduration')" size='5'>
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","duration",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","duration",sWebLanguage)%></td>
             <td class="admin2">
                 <input readonly type='text' class='text' id="aduration" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_ANESTHESIA_DIFFERENCE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_ANESTHESIA_DIFFERENCE" property="value"/>" size='5'>
             </td>
         </tr>
         <tr>
-            <td class="admin" rowspan="3"><%=getTran("openclinic.chuk","intervention",sWebLanguage)%></td>
-            <td class="admin"><%=getTran("openclinic.chuk","begin_hour",sWebLanguage)%></td>
+            <td class="admin" rowspan="3"><%=getTran(request,"openclinic.chuk","intervention",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","begin_hour",sWebLanguage)%></td>
             <td class="admin2">
                 <input type='text' class='text' id="ibeginhour" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_INTERVENTION_BEGIN" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_INTERVENTION_BEGIN" property="value"/>" onblur="checkTime(this);calculateInterval('ibeginhour', 'iendhour', 'iduration')" size='5'>
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","end_hour",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","end_hour",sWebLanguage)%></td>
             <td class="admin2">
                 <input type='text' class='text' id="iendhour" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_INTERVENTION_END" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_INTERVENTION_END" property="value"/>" onblur="checkTime(this);calculateInterval('ibeginhour', 'iendhour', 'iduration')" size='5'>
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","duration",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","duration",sWebLanguage)%></td>
             <td class="admin2">
                 <input readonly type='text' class='text' id="iduration" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_INTERVENTION_DIFFERENCE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_INTERVENTION_DIFFERENCE" property="value"/>" size='5'>
             </td>
         </tr>
         <tr>
-            <td class="admin" colspan="2"><%=getTran("openclinic.chuk","diagnostic",sWebLanguage)%></td>
+            <td class="admin" colspan="2"><%=getTran(request,"openclinic.chuk","diagnostic",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_ANESTHESIA_REPORT_DIAGNOSTIC")%> class="text" cols="100" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_DIAGNOSTIC" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_DIAGNOSTIC" property="value"/></textarea>
             </td>
         </tr>
         <tr>
-            <td class="admin" colspan="2"><%=getTran("openclinic.chuk","intervention",sWebLanguage)%></td>
+            <td class="admin" colspan="2"><%=getTran(request,"openclinic.chuk","intervention",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_ANESTHESIA_REPORT_INTERVENTION")%> class="text" cols="100" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_INTERVENTION" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_INTERVENTION" property="value"/></textarea>
             </td>
         </tr>
         <tr>
-            <td class="admin" rowspan="3"><%=getTran("openclinic.chuk","teamcomposition",sWebLanguage)%></td>
-            <td class="admin"><%=getTran("openclinic.chuk","anesthesist",sWebLanguage)%></td>
+            <td class="admin" rowspan="3"><%=getTran(request,"openclinic.chuk","teamcomposition",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","anesthesist",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="hidden" id="EditAnesthesistID" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_ANESTHESIST" property="itemId"/>]>.value" value="<%=sAnesthesistID%>">
                 <input class="text" type="text" name="EditAnesthesistName" readonly size="<%=sTextWidth%>" value="<%=sAnesthesisitName%>">
@@ -235,7 +235,7 @@
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","surgeon",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","surgeon",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="hidden" id="EditSurgeonID" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_SURGEON" property="itemId"/>]>.value" value="<%=sSurgeonID%>">
                 <input class="text" type="text" name="EditSurgeonName" readonly size="<%=sTextWidth%>" value="<%=sSurgeonName%>">
@@ -244,7 +244,7 @@
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","nurse",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","nurse",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="hidden" id="EditNurseID" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_NURSE" property="itemId"/>]>.value" value="<%=sNurseID%>">
                 <input class="text" type="text" name="EditNurseName" readonly size="<%=sTextWidth%>" value="<%=sNurseName%>">
@@ -254,112 +254,112 @@
         </tr>
         <%-- DESCRIPTION --%>
         <tr>
-            <td class="admin" colspan="2"><%=getTran("Web","description",sWebLanguage)%></td>
+            <td class="admin" colspan="2"><%=getTran(request,"Web","description",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_ANESTHESIA_REPORT_DESCRIPTION")%> class="text" cols="100" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_DESCRIPTION" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_DESCRIPTION" property="value"/></textarea>
             </td>
         </tr>
         <tr>
-            <td class="admin" rowspan="2"><%=getTran("openclinic.chuk","incidents",sWebLanguage)%></td>
-            <td class="admin"><%=getTran("openclinic.chuk","foresees",sWebLanguage)%></td>
+            <td class="admin" rowspan="2"><%=getTran(request,"openclinic.chuk","incidents",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","foresees",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_ANESTHESIA_REPORT_FORESEES")%> class="text" cols="100" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_FORESEES" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_FORESEES" property="value"/></textarea>
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","unforesees",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","unforesees",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_ANESTHESIA_REPORT_UNFORESEES")%> class="text" cols="100" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_UNFORESEES" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_UNFORESEES" property="value"/></textarea>
             </td>
         </tr>
         <tr>
-            <td class="admin" colspan="2"><%=getTran("openclinic.chuk","anesthesie",sWebLanguage)%></td>
+            <td class="admin" colspan="2"><%=getTran(request,"openclinic.chuk","anesthesie",sWebLanguage)%></td>
             <td class="admin2">
                 <table>
                     <tr>
                         <td width="150">
-                            <input id="a1" <%=setRightClick("ITEM_TYPE_ANESTHESIA_REPORT_ANESTHESIE_GENERAL")%> type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_ANESTHESIE_GENERAL" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_ANESTHESIE_GENERAL;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><%=getLabel("openclinic.chuk","anesthesie.general",sWebLanguage,"a1")%>
+                            <input id="a1" <%=setRightClick("ITEM_TYPE_ANESTHESIA_REPORT_ANESTHESIE_GENERAL")%> type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_ANESTHESIE_GENERAL" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_ANESTHESIE_GENERAL;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><%=getLabel(request,"openclinic.chuk","anesthesie.general",sWebLanguage,"a1")%>
                         </td>
                         <td width="150">
-                            <input id="a2" <%=setRightClick("ITEM_TYPE_ANESTHESIA_REPORT_ANESTHESIE_REGIONAL")%> type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_ANESTHESIE_REGIONAL" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_ANESTHESIE_REGIONAL;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><%=getLabel("openclinic.chuk","anesthesie.regional",sWebLanguage,"a2")%>
+                            <input id="a2" <%=setRightClick("ITEM_TYPE_ANESTHESIA_REPORT_ANESTHESIE_REGIONAL")%> type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_ANESTHESIE_REGIONAL" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_ANESTHESIE_REGIONAL;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><%=getLabel(request,"openclinic.chuk","anesthesie.regional",sWebLanguage,"a2")%>
                         </td>
                         <td>
-                            <input id="a3" <%=setRightClick("ITEM_TYPE_ANESTHESIA_REPORT_ANESTHESIE_LOCAL")%> type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_ANESTHESIE_LOCAL" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_ANESTHESIE_LOCAL;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><%=getLabel("openclinic.chuk","anesthesie.local",sWebLanguage,"a3")%>
+                            <input id="a3" <%=setRightClick("ITEM_TYPE_ANESTHESIA_REPORT_ANESTHESIE_LOCAL")%> type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_ANESTHESIE_LOCAL" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_ANESTHESIE_LOCAL;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><%=getLabel(request,"openclinic.chuk","anesthesie.local",sWebLanguage,"a3")%>
                         </td>
                     </tr>
                 </table>
             </td>
         </tr>
         <tr>
-            <td class="admin" colspan="2"><%=getTran("openclinic.chuk","technical",sWebLanguage)%></td>
+            <td class="admin" colspan="2"><%=getTran(request,"openclinic.chuk","technical",sWebLanguage)%></td>
             <td class="admin2">
                 <table>
                     <tr>
                         <td width="150">
-                            <input id="t1" <%=setRightClick("ITEM_TYPE_ANESTHESIA_REPORT_TECHNICAL_MASK")%> type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_TECHNICAL_MASK" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_TECHNICAL_MASK;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><%=getLabel("openclinic.chuk","technical.mask",sWebLanguage,"t1")%>
+                            <input id="t1" <%=setRightClick("ITEM_TYPE_ANESTHESIA_REPORT_TECHNICAL_MASK")%> type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_TECHNICAL_MASK" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_TECHNICAL_MASK;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><%=getLabel(request,"openclinic.chuk","technical.mask",sWebLanguage,"t1")%>
                         </td>
                         <td width="150">
-                            <input id="t2" <%=setRightClick("ITEM_TYPE_ANESTHESIA_REPORT_TECHNICAL_TUBEORAL")%> type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_TECHNICAL_TUBEORAL" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_TECHNICAL_TUBEORAL;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><%=getLabel("openclinic.chuk","technical.tubeoral",sWebLanguage,"t2")%>
+                            <input id="t2" <%=setRightClick("ITEM_TYPE_ANESTHESIA_REPORT_TECHNICAL_TUBEORAL")%> type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_TECHNICAL_TUBEORAL" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_TECHNICAL_TUBEORAL;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><%=getLabel(request,"openclinic.chuk","technical.tubeoral",sWebLanguage,"t2")%>
                         </td>
                         <td>
-                            <input id="t3" <%=setRightClick("ITEM_TYPE_ANESTHESIA_REPORT_TECHNICAL_TUBENASAL")%> type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_TECHNICAL_TUBENASAL" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_TECHNICAL_TUBENASAL;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><%=getLabel("openclinic.chuk","technical.tubenasal",sWebLanguage,"t3")%>
+                            <input id="t3" <%=setRightClick("ITEM_TYPE_ANESTHESIA_REPORT_TECHNICAL_TUBENASAL")%> type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_TECHNICAL_TUBENASAL" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_TECHNICAL_TUBENASAL;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><%=getLabel(request,"openclinic.chuk","technical.tubenasal",sWebLanguage,"t3")%>
                         </td>
                     </tr>
                 </table>
             </td>
         </tr>
         <tr>
-            <td class="admin" colspan="2"><%=getTran("openclinic.chuk","position",sWebLanguage)%></td>
+            <td class="admin" colspan="2"><%=getTran(request,"openclinic.chuk","position",sWebLanguage)%></td>
             <td class="admin2">
                 <table>
                     <tr>
                         <td width="150">
-                            <input id="p1" <%=setRightClick("ITEM_TYPE_ANESTHESIA_REPORT_POSITION_BACK")%> type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_POSITION_BACK" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_POSITION_BACK;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><%=getLabel("openclinic.chuk","position.back",sWebLanguage,"p1")%>
+                            <input id="p1" <%=setRightClick("ITEM_TYPE_ANESTHESIA_REPORT_POSITION_BACK")%> type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_POSITION_BACK" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_POSITION_BACK;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><%=getLabel(request,"openclinic.chuk","position.back",sWebLanguage,"p1")%>
                         </td>
                         <td width="150">
-                            <input id="p2" <%=setRightClick("ITEM_TYPE_ANESTHESIA_REPORT_POSITION_CENTRAL")%> type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_POSITION_CENTRAL" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_POSITION_CENTRAL;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><%=getLabel("openclinic.chuk","position.central",sWebLanguage,"p2")%>
+                            <input id="p2" <%=setRightClick("ITEM_TYPE_ANESTHESIA_REPORT_POSITION_CENTRAL")%> type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_POSITION_CENTRAL" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_POSITION_CENTRAL;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><%=getLabel(request,"openclinic.chuk","position.central",sWebLanguage,"p2")%>
                         </td>
                         <td>
-                            <input id="p3" <%=setRightClick("ITEM_TYPE_ANESTHESIA_REPORT_POSITION_SIDE")%> type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_POSITION_SIDE" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_POSITION_SIDE;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><%=getLabel("openclinic.chuk","position.side",sWebLanguage,"p3")%>
+                            <input id="p3" <%=setRightClick("ITEM_TYPE_ANESTHESIA_REPORT_POSITION_SIDE")%> type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_POSITION_SIDE" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_POSITION_SIDE;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><%=getLabel(request,"openclinic.chuk","position.side",sWebLanguage,"p3")%>
                         </td>
                     </tr>
                 </table>
             </td>
         </tr>
         <tr>
-            <td class="admin" colspan="2"><%=getTran("openclinic.chuk","respiration",sWebLanguage)%></td>
+            <td class="admin" colspan="2"><%=getTran(request,"openclinic.chuk","respiration",sWebLanguage)%></td>
             <td class="admin2">
                 <table>
                     <tr>
                         <td width="150">
-                            <input id="r1" <%=setRightClick("ITEM_TYPE_ANESTHESIA_REPORT_RESPIRATION_SPONTANEOUS")%> type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_RESPIRATION_SPONTANEOUS" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_RESPIRATION_SPONTANEOUS;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><%=getLabel("openclinic.chuk","respiration.spontaneous",sWebLanguage,"r1")%>
+                            <input id="r1" <%=setRightClick("ITEM_TYPE_ANESTHESIA_REPORT_RESPIRATION_SPONTANEOUS")%> type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_RESPIRATION_SPONTANEOUS" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_RESPIRATION_SPONTANEOUS;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><%=getLabel(request,"openclinic.chuk","respiration.spontaneous",sWebLanguage,"r1")%>
                         </td>
                         <td width="150">
-                            <input id="r2" <%=setRightClick("ITEM_TYPE_ANESTHESIA_REPORT_RESPIRATION_ASSIST")%> type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_RESPIRATION_ASSIST" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_RESPIRATION_ASSIST;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><%=getLabel("openclinic.chuk","respiration.assist",sWebLanguage,"r2")%>
+                            <input id="r2" <%=setRightClick("ITEM_TYPE_ANESTHESIA_REPORT_RESPIRATION_ASSIST")%> type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_RESPIRATION_ASSIST" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_RESPIRATION_ASSIST;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><%=getLabel(request,"openclinic.chuk","respiration.assist",sWebLanguage,"r2")%>
                         </td>
                         <td>
-                            <input id="r3" <%=setRightClick("ITEM_TYPE_ANESTHESIA_REPORT_RESPIRATION_VERIFY")%> type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_RESPIRATION_VERIFY" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_RESPIRATION_VERIFY;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><%=getLabel("openclinic.chuk","respiration.verify",sWebLanguage,"r3")%>
+                            <input id="r3" <%=setRightClick("ITEM_TYPE_ANESTHESIA_REPORT_RESPIRATION_VERIFY")%> type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_RESPIRATION_VERIFY" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_RESPIRATION_VERIFY;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><%=getLabel(request,"openclinic.chuk","respiration.verify",sWebLanguage,"r3")%>
                         </td>
                     </tr>
                 </table>
             </td>
         </tr>
         <tr>
-            <td class="admin" rowspan="2"><%=getTran("openclinic.chuk","technical_problems",sWebLanguage)%></td>
-            <td class="admin"><%=getTran("openclinic.chuk","reference_equipment",sWebLanguage)%></td>
+            <td class="admin" rowspan="2"><%=getTran(request,"openclinic.chuk","technical_problems",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","reference_equipment",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_ANESTHESIA_REPORT_TP_REFERENCE")%> class="text" cols="100" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_TP_REFERENCE" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_TP_REFERENCE" property="value"/></textarea>
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","problem_description",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","problem_description",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_ANESTHESIA_REPORT_TP_DESCRIPTION")%> class="text" cols="100" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_TP_DESCRIPTION" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_TP_DESCRIPTION" property="value"/></textarea>
             </td>
         </tr>
         <tr>
-            <td class="admin" rowspan="3"><%=getTran("openclinic.chuk","pharmacovigilance",sWebLanguage)%></td>
-            <td class="admin"><%=getTran("openclinic.chuk","administer_medicines",sWebLanguage)%></td>
+            <td class="admin" rowspan="3"><%=getTran(request,"openclinic.chuk","pharmacovigilance",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","administer_medicines",sWebLanguage)%></td>
             <td class="admin2">
                 <%
                     Vector vActivePrescriptions = Prescription.findActive(activePatient.personid, activeUser.userid, "", "", "", "", "", "");
@@ -372,21 +372,21 @@
                         out.print(prescriptions);
                     }
                     else {
-                        out.print(getTran("web","noactiveprescriptionsfound",sWebLanguage));
+                        out.print(getTran(request,"web","noactiveprescriptionsfound",sWebLanguage));
                     }
                 %>
             </td>
         </tr>
         <tr>
-            <td class="admin" rowspan="2"><%=getTran("openclinic.chuk","inferior_effects",sWebLanguage)%></td>
+            <td class="admin" rowspan="2"><%=getTran(request,"openclinic.chuk","inferior_effects",sWebLanguage)%></td>
             <td class="admin2">
-                <span style="width:100px;"><%=getTran("openclinic.chuk","allergies",sWebLanguage)%></span>
+                <span style="width:100px;"><%=getTran(request,"openclinic.chuk","allergies",sWebLanguage)%></span>
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_ANESTHESIA_REPORT_PHARMACO_ALLERGIES")%> class="text" cols="100" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_PHARMACO_ALLERGIES" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_PHARMACO_ALLERGIES" property="value"/></textarea>
             </td>
         </tr>
         <tr>
             <td class="admin2">
-                <span style="width:100px;"><%=getTran("openclinic.chuk","others",sWebLanguage)%></span>
+                <span style="width:100px;"><%=getTran(request,"openclinic.chuk","others",sWebLanguage)%></span>
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_ANESTHESIA_REPORT_PHARMACO_OTHERS")%> class="text" cols="100" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_PHARMACO_OTHERS" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_PHARMACO_OTHERS" property="value"/></textarea>
             </td>
         </tr>

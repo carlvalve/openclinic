@@ -31,7 +31,7 @@
     <table class="list" width="100%" cellspacing="1">
         <!-- Diagnose code -->
         <tr>
-            <td class="admin" nowrap><%=getTran("medical.diagnosis","diagnosiscode",sWebLanguage)%> *</td>
+            <td class="admin" nowrap><%=getTran(request,"medical.diagnosis","diagnosiscode",sWebLanguage)%> *</td>
             <td class="admin2"><%=sCode%></td>
         </tr>
         
@@ -84,10 +84,10 @@
         %>
             <!-- confirmed -->
             <tr>
-                <td class="admin" nowrap><%=getTran("medical.diagnosis","confirmed",sWebLanguage)%> *</td>
+                <td class="admin" nowrap><%=getTran(request,"medical.diagnosis","confirmed",sWebLanguage)%> *</td>
                 <td class="admin2">
-                    <input type="radio" name="confirmed" id="confirmed" value="medwan.common.true"/><%=getLabel("web","yes",sWebLanguage,"confirmed")%>
-                    <input type="radio" name="confirmed" id="confirmedNO" value="medwan.common.false"/><%=getLabel("web","no",sWebLanguage,"confirmedNO")%>
+                    <input type="radio" name="confirmed" id="confirmed" value="medwan.common.true"/><%=getLabel(request,"web","yes",sWebLanguage,"confirmed")%>
+                    <input type="radio" name="confirmed" id="confirmedNO" value="medwan.common.false"/><%=getLabel(request,"web","no",sWebLanguage,"confirmedNO")%>
                 </td>
             </tr>
         <%
@@ -96,10 +96,10 @@
         %>
             <!-- digestif -->
             <tr>
-                <td class="admin" nowrap><%=getTran("medical.diagnosis","digestive.problems",sWebLanguage)%> *</td>
+                <td class="admin" nowrap><%=getTran(request,"medical.diagnosis","digestive.problems",sWebLanguage)%> *</td>
                 <td class="admin2">
-                    <input type="radio" name="digestive" id="digestive" value="medwan.common.true"/><%=getLabel("web","yes",sWebLanguage,"digestive")%>
-                    <input type="radio" name="digestive" id="digestiveNO" value="medwan.common.false"/><%=getLabel("web","no",sWebLanguage,"digestiveNO")%>
+                    <input type="radio" name="digestive" id="digestive" value="medwan.common.true"/><%=getLabel(request,"web","yes",sWebLanguage,"digestive")%>
+                    <input type="radio" name="digestive" id="digestiveNO" value="medwan.common.false"/><%=getLabel(request,"web","no",sWebLanguage,"digestiveNO")%>
                 </td>
             </tr>
         <%
@@ -109,10 +109,10 @@
         %>
             <!-- pregnant -->
             <tr>
-                <td class="admin" nowrap><%=getTran("medical.diagnosis","pregnant",sWebLanguage)%> *</td>
+                <td class="admin" nowrap><%=getTran(request,"medical.diagnosis","pregnant",sWebLanguage)%> *</td>
                 <td class="admin2">
-                    <input type="radio" name="pregnant" id="pregnant" value="medwan.common.true"/><%=getLabel("web","yes",sWebLanguage,"pregnant")%>
-                    <input type="radio" name="pregnant" id="pregnantNO" value="medwan.common.false"/><%=getLabel("web","no",sWebLanguage,"pregnantNO")%>
+                    <input type="radio" name="pregnant" id="pregnant" value="medwan.common.true"/><%=getLabel(request,"web","yes",sWebLanguage,"pregnant")%>
+                    <input type="radio" name="pregnant" id="pregnantNO" value="medwan.common.false"/><%=getLabel(request,"web","no",sWebLanguage,"pregnantNO")%>
                 </td>
             </tr>
         <%
@@ -121,10 +121,10 @@
         %>
             <!-- chronic -->
             <tr>
-                <td class="admin" nowrap><%=getTran("medical.diagnosis","chronic",sWebLanguage)%> *</td>
+                <td class="admin" nowrap><%=getTran(request,"medical.diagnosis","chronic",sWebLanguage)%> *</td>
                 <td class="admin2">
-                    <input type="radio" name="chronic" id="chronic" value="medwan.common.true"/><%=getLabel("web","yes",sWebLanguage,"chronic")%>
-                    <input type="radio" name="chronic" id="chronicNO" value="medwan.common.false"/><%=getLabel("web","no",sWebLanguage,"chronicNO")%>
+                    <input type="radio" name="chronic" id="chronic" value="medwan.common.true"/><%=getLabel(request,"web","yes",sWebLanguage,"chronic")%>
+                    <input type="radio" name="chronic" id="chronicNO" value="medwan.common.false"/><%=getLabel(request,"web","no",sWebLanguage,"chronicNO")%>
                 </td>
             </tr>
         <%
@@ -133,10 +133,10 @@
         %>
             <!-- vaccination -->
             <tr>
-                <td class="admin" nowrap><%=getTran("medical.diagnosis","vaccination",sWebLanguage)%> *</td>
+                <td class="admin" nowrap><%=getTran(request,"medical.diagnosis","vaccination",sWebLanguage)%> *</td>
                 <td class="admin2">
-                    <input type="radio" name="vaccination" id="vaccination" value="medwan.common.true"/><%=getLabel("web","yes",sWebLanguage,"vaccination")%>
-                    <input type="radio" name="vaccination" id="vaccinationNO" value="medwan.common.false"/><%=getLabel("web","no",sWebLanguage,"vaccinationNO")%>
+                    <input type="radio" name="vaccination" id="vaccination" value="medwan.common.true"/><%=getLabel(request,"web","yes",sWebLanguage,"vaccination")%>
+                    <input type="radio" name="vaccination" id="vaccinationNO" value="medwan.common.false"/><%=getLabel(request,"web","no",sWebLanguage,"vaccinationNO")%>
                 </td>
             </tr>
         <%
@@ -145,10 +145,10 @@
         %>
             <!-- severe -->
             <tr>
-                <td class="admin" nowrap><%=getTran("medical.diagnosis","severe",sWebLanguage)%> *</td>
+                <td class="admin" nowrap><%=getTran(request,"medical.diagnosis","severe",sWebLanguage)%> *</td>
                 <td class="admin2">
-                    <input type="radio" name="severe" id="severe" value="medwan.common.true"/><%=getLabel("web","yes",sWebLanguage,"severe")%>
-                    <input type="radio" name="severe" id="severeNO" value="medwan.common.false"/><%=getLabel("web","no",sWebLanguage,"severeNO")%>
+                    <input type="radio" name="severe" id="severe" value="medwan.common.true"/><%=getLabel(request,"web","yes",sWebLanguage,"severe")%>
+                    <input type="radio" name="severe" id="severeNO" value="medwan.common.false"/><%=getLabel(request,"web","no",sWebLanguage,"severeNO")%>
                 </td>
             </tr>
         <%
@@ -157,10 +157,10 @@
         %>
             <!-- severe -->
             <tr>
-                <td class="admin" nowrap><%=getTran("medical.diagnosis","deshydration",sWebLanguage)%> *</td>
+                <td class="admin" nowrap><%=getTran(request,"medical.diagnosis","deshydration",sWebLanguage)%> *</td>
                 <td class="admin2">
-                    <input type="radio" name="deshydration" id="deshydration" value="medwan.common.true"/><%=getLabel("web","yes",sWebLanguage,"deshydration")%>
-                    <input type="radio" name="deshydration" id="deshydrationNO" value="medwan.common.false"/><%=getLabel("web","no",sWebLanguage,"deshydrationNO")%>
+                    <input type="radio" name="deshydration" id="deshydration" value="medwan.common.true"/><%=getLabel(request,"web","yes",sWebLanguage,"deshydration")%>
+                    <input type="radio" name="deshydration" id="deshydrationNO" value="medwan.common.false"/><%=getLabel(request,"web","no",sWebLanguage,"deshydrationNO")%>
                 </td>
             </tr>
         <%
@@ -169,10 +169,10 @@
         %>
             <!-- bloody -->
             <tr>
-                <td class="admin" nowrap><%=getTran("medical.diagnosis","bloody",sWebLanguage)%> *</td>
+                <td class="admin" nowrap><%=getTran(request,"medical.diagnosis","bloody",sWebLanguage)%> *</td>
                 <td class="admin2">
-                    <input type="radio" name="bloody" id="bloody" value="medwan.common.true"/><%=getLabel("web","yes",sWebLanguage,"bloody")%>
-                    <input type="radio" name="bloody" id="bloodyNO" value="medwan.common.false"/><%=getLabel("web","no",sWebLanguage,"bloodyNO")%>
+                    <input type="radio" name="bloody" id="bloody" value="medwan.common.true"/><%=getLabel(request,"web","yes",sWebLanguage,"bloody")%>
+                    <input type="radio" name="bloody" id="bloodyNO" value="medwan.common.false"/><%=getLabel(request,"web","no",sWebLanguage,"bloodyNO")%>
                 </td>
             </tr>
         <%
@@ -181,10 +181,10 @@
         %>
             <!-- bloody -->
             <tr>
-                <td class="admin" nowrap><%=getTran("medical.diagnosis","bkplus",sWebLanguage)%> *</td>
+                <td class="admin" nowrap><%=getTran(request,"medical.diagnosis","bkplus",sWebLanguage)%> *</td>
                 <td class="admin2">
-                    <input type="radio" name="bkplus" id="bkplus" value="medwan.common.true"/><%=getLabel("web","yes",sWebLanguage,"bkplus")%>
-                    <input type="radio" name="bkplus" id="bkplusNO" value="medwan.common.false"/><%=getLabel("web","no",sWebLanguage,"bkplusNO")%>
+                    <input type="radio" name="bkplus" id="bkplus" value="medwan.common.true"/><%=getLabel(request,"web","yes",sWebLanguage,"bkplus")%>
+                    <input type="radio" name="bkplus" id="bkplusNO" value="medwan.common.false"/><%=getLabel(request,"web","no",sWebLanguage,"bkplusNO")%>
                 </td>
             </tr>
         <%
@@ -193,10 +193,10 @@
         %>
             <!-- bloody -->
             <tr>
-                <td class="admin" nowrap><%=getTran("medical.diagnosis","cutaneous",sWebLanguage)%> *</td>
+                <td class="admin" nowrap><%=getTran(request,"medical.diagnosis","cutaneous",sWebLanguage)%> *</td>
                 <td class="admin2">
-                    <input type="radio" name="cutaneous" id="cutaneous" value="medwan.common.true"/><%=getLabel("web","yes",sWebLanguage,"cutaneous")%>
-                    <input type="radio" name="cutaneous" id="cutaneousNO" value="medwan.common.false"/><%=getLabel("web","no",sWebLanguage,"cutaneousNO")%>
+                    <input type="radio" name="cutaneous" id="cutaneous" value="medwan.common.true"/><%=getLabel(request,"web","yes",sWebLanguage,"cutaneous")%>
+                    <input type="radio" name="cutaneous" id="cutaneousNO" value="medwan.common.false"/><%=getLabel(request,"web","no",sWebLanguage,"cutaneousNO")%>
                 </td>
             </tr>
         <%
@@ -205,10 +205,10 @@
         %>
             <!-- severe -->
             <tr>
-                <td class="admin" nowrap><%=getTran("medical.diagnosis","bacillaire",sWebLanguage)%> *</td>
+                <td class="admin" nowrap><%=getTran(request,"medical.diagnosis","bacillaire",sWebLanguage)%> *</td>
                 <td class="admin2">
-                    <input type="radio" name="bacillaire" id="bacillaire" value="medwan.common.true"/><%=getLabel("web","yes",sWebLanguage,"bacillaire")%>
-                    <input type="radio" name="bacillaire" id="bacillaireNO" value="medwan.common.false"/><%=getLabel("web","no",sWebLanguage,"bacillaireNO")%>
+                    <input type="radio" name="bacillaire" id="bacillaire" value="medwan.common.true"/><%=getLabel(request,"web","yes",sWebLanguage,"bacillaire")%>
+                    <input type="radio" name="bacillaire" id="bacillaireNO" value="medwan.common.false"/><%=getLabel(request,"web","no",sWebLanguage,"bacillaireNO")%>
                 </td>
             </tr>
         <%
@@ -217,10 +217,10 @@
         %>
             <!-- severe -->
             <tr>
-                <td class="admin" nowrap><%=getTran("medical.diagnosis","amibienne",sWebLanguage)%> *</td>
+                <td class="admin" nowrap><%=getTran(request,"medical.diagnosis","amibienne",sWebLanguage)%> *</td>
                 <td class="admin2">
-                    <input type="radio" name="amibienne" id="amibienne" value="medwan.common.true"/><%=getLabel("web","yes",sWebLanguage,"amibienne")%>
-                    <input type="radio" name="amibienne" id="amibienneNO" value="medwan.common.false"/><%=getLabel("web","no",sWebLanguage,"amibienneNO")%>
+                    <input type="radio" name="amibienne" id="amibienne" value="medwan.common.true"/><%=getLabel(request,"web","yes",sWebLanguage,"amibienne")%>
+                    <input type="radio" name="amibienne" id="amibienneNO" value="medwan.common.false"/><%=getLabel(request,"web","no",sWebLanguage,"amibienneNO")%>
                 </td>
             </tr>
         <%
@@ -229,10 +229,10 @@
         %>
             <!-- severe -->
             <tr>
-                <td class="admin" nowrap><%=getTran("medical.diagnosis","shigellosis",sWebLanguage)%> *</td>
+                <td class="admin" nowrap><%=getTran(request,"medical.diagnosis","shigellosis",sWebLanguage)%> *</td>
                 <td class="admin2">
-                    <input type="radio" name="shigellosis" id="shigellosis" value="medwan.common.true"/><%=getLabel("web","yes",sWebLanguage,"shigellosis")%>
-                    <input type="radio" name="shigellosis" id="shigellosisNO" value="medwan.common.false"/><%=getLabel("web","no",sWebLanguage,"shigellosisNO")%>
+                    <input type="radio" name="shigellosis" id="shigellosis" value="medwan.common.true"/><%=getLabel(request,"web","yes",sWebLanguage,"shigellosis")%>
+                    <input type="radio" name="shigellosis" id="shigellosisNO" value="medwan.common.false"/><%=getLabel(request,"web","no",sWebLanguage,"shigellosisNO")%>
                 </td>
             </tr>
         <%
@@ -241,10 +241,10 @@
         %>
             <!-- severe -->
             <tr>
-                <td class="admin" nowrap><%=getTran("medical.diagnosis","intestinal",sWebLanguage)%> *</td>
+                <td class="admin" nowrap><%=getTran(request,"medical.diagnosis","intestinal",sWebLanguage)%> *</td>
                 <td class="admin2">
-                    <input type="radio" name="intestinal" id="intestinal" value="medwan.common.true"/><%=getLabel("web","yes",sWebLanguage,"intestinal")%>
-                    <input type="radio" name="intestinal" id="intestinalNO" value="medwan.common.false"/><%=getLabel("web","no",sWebLanguage,"intestinalNO")%>
+                    <input type="radio" name="intestinal" id="intestinal" value="medwan.common.true"/><%=getLabel(request,"web","yes",sWebLanguage,"intestinal")%>
+                    <input type="radio" name="intestinal" id="intestinalNO" value="medwan.common.false"/><%=getLabel(request,"web","no",sWebLanguage,"intestinalNO")%>
                 </td>
             </tr>
         <%
@@ -253,10 +253,10 @@
         %>
             <!-- severe -->
             <tr>
-                <td class="admin" nowrap><%=getTran("medical.diagnosis","urinary",sWebLanguage)%> *</td>
+                <td class="admin" nowrap><%=getTran(request,"medical.diagnosis","urinary",sWebLanguage)%> *</td>
                 <td class="admin2">
-                    <input type="radio" name="urinary" id="urinary" value="medwan.common.true"/><%=getLabel("web","yes",sWebLanguage,"urinary")%>
-                    <input type="radio" name="urinary" id="urinaryNO" value="medwan.common.false"/><%=getLabel("web","no",sWebLanguage,"urinaryNO")%>
+                    <input type="radio" name="urinary" id="urinary" value="medwan.common.true"/><%=getLabel(request,"web","yes",sWebLanguage,"urinary")%>
+                    <input type="radio" name="urinary" id="urinaryNO" value="medwan.common.false"/><%=getLabel(request,"web","no",sWebLanguage,"urinaryNO")%>
                 </td>
             </tr>
         <%
@@ -265,10 +265,10 @@
         %>
             <!-- severe -->
             <tr>
-                <td class="admin" nowrap><%=getTran("medical.diagnosis","aptitudephys",sWebLanguage)%> *</td>
+                <td class="admin" nowrap><%=getTran(request,"medical.diagnosis","aptitudephys",sWebLanguage)%> *</td>
                 <td class="admin2">
-                    <input type="radio" name="aptitudephys" id="aptitudephys" value="medwan.common.true"/><%=getLabel("web","yes",sWebLanguage,"aptitudephys")%>
-                    <input type="radio" name="aptitudephys" id="aptitudephysNO "value="medwan.common.false"/><%=getLabel("web","no",sWebLanguage,"aptitudephysNO")%>
+                    <input type="radio" name="aptitudephys" id="aptitudephys" value="medwan.common.true"/><%=getLabel(request,"web","yes",sWebLanguage,"aptitudephys")%>
+                    <input type="radio" name="aptitudephys" id="aptitudephysNO "value="medwan.common.false"/><%=getLabel(request,"web","no",sWebLanguage,"aptitudephysNO")%>
                 </td>
             </tr>
         <%
@@ -277,10 +277,10 @@
         %>
             <!-- severe -->
             <tr>
-                <td class="admin" nowrap><%=getTran("medical.diagnosis","birthcert",sWebLanguage)%> *</td>
+                <td class="admin" nowrap><%=getTran(request,"medical.diagnosis","birthcert",sWebLanguage)%> *</td>
                 <td class="admin2">
-                    <input type="radio" name="birthcert" id="birthcert" value="medwan.common.true"/><%=getLabel("web","yes",sWebLanguage,"birthcert")%>
-                    <input type="radio" name="birthcert" id="birthcertNO" value="medwan.common.false"/><%=getLabel("web","no",sWebLanguage,"birthcertNO")%>
+                    <input type="radio" name="birthcert" id="birthcert" value="medwan.common.true"/><%=getLabel(request,"web","yes",sWebLanguage,"birthcert")%>
+                    <input type="radio" name="birthcert" id="birthcertNO" value="medwan.common.false"/><%=getLabel(request,"web","no",sWebLanguage,"birthcertNO")%>
                 </td>
             </tr>
         <%
@@ -289,10 +289,10 @@
         %>
             <!-- severe -->
             <tr>
-                <td class="admin" nowrap><%=getTran("medical.diagnosis","deathcert",sWebLanguage)%> *</td>
+                <td class="admin" nowrap><%=getTran(request,"medical.diagnosis","deathcert",sWebLanguage)%> *</td>
                 <td class="admin2">
-                    <input type="radio" name="deathcert" id="deathcert" value="medwan.common.true"/><%=getLabel("web","yes",sWebLanguage,"deathcert")%>
-                    <input type="radio" name="deathcert" id="deathcertNO" value="medwan.common.false"/><%=getLabel("web","no",sWebLanguage,"deathcertNO")%>
+                    <input type="radio" name="deathcert" id="deathcert" value="medwan.common.true"/><%=getLabel(request,"web","yes",sWebLanguage,"deathcert")%>
+                    <input type="radio" name="deathcert" id="deathcertNO" value="medwan.common.false"/><%=getLabel(request,"web","no",sWebLanguage,"deathcertNO")%>
                 </td>
             </tr>
         <%
@@ -301,10 +301,10 @@
         %>
             <!-- severe -->
             <tr>
-                <td class="admin" nowrap><%=getTran("medical.diagnosis","restcert",sWebLanguage)%> *</td>
+                <td class="admin" nowrap><%=getTran(request,"medical.diagnosis","restcert",sWebLanguage)%> *</td>
                 <td class="admin2">
-                    <input type="radio" name="restcert" id="restcert" value="medwan.common.true"/><%=getLabel("web","yes",sWebLanguage,"restcert")%>
-                    <input type="radio" name="restcert" id="restcertNO" value="medwan.common.false"/><%=getLabel("web","no",sWebLanguage,"restcertNO")%>
+                    <input type="radio" name="restcert" id="restcert" value="medwan.common.true"/><%=getLabel(request,"web","yes",sWebLanguage,"restcert")%>
+                    <input type="radio" name="restcert" id="restcertNO" value="medwan.common.false"/><%=getLabel(request,"web","no",sWebLanguage,"restcertNO")%>
                 </td>
             </tr>
         <%
@@ -312,24 +312,24 @@
         %>
         <!-- newcase -->
         <tr>
-            <td class="admin" nowrap><%=getTran("medical.diagnosis","newcase",sWebLanguage)%> *</td>
+            <td class="admin" nowrap><%=getTran(request,"medical.diagnosis","newcase",sWebLanguage)%> *</td>
             <td class="admin2">
-                <input type="radio" name="newcase" id="newcase" value="medwan.common.true"/><%=getLabel("web","yes",sWebLanguage,"newcase")%>
-                <input type="radio" name="newcase" id="newcaseNO" value="medwan.common.false"/><%=getLabel("web","no",sWebLanguage,"newcaseNO")%>
+                <input type="radio" name="newcase" id="newcase" value="medwan.common.true"/><%=getLabel(request,"web","yes",sWebLanguage,"newcase")%>
+                <input type="radio" name="newcase" id="newcaseNO" value="medwan.common.false"/><%=getLabel(request,"web","no",sWebLanguage,"newcaseNO")%>
             </td>
         </tr>
         <!-- planned -->
         <tr>
-            <td class="admin" nowrap><%=getTran("medical.diagnosis","planned",sWebLanguage)%> *</td>
+            <td class="admin" nowrap><%=getTran(request,"medical.diagnosis","planned",sWebLanguage)%> *</td>
             <td class="admin2">
-                <input type="radio" name="planned" id="planned" value="medwan.common.true"/><%=getLabel("web","yes",sWebLanguage,"planned")%>
-                <input type="radio" name="planned" id="plannedNO" value="medwan.common.false"/><%=getLabel("web","no",sWebLanguage,"plannedNO")%>
+                <input type="radio" name="planned" id="planned" value="medwan.common.true"/><%=getLabel(request,"web","yes",sWebLanguage,"planned")%>
+                <input type="radio" name="planned" id="plannedNO" value="medwan.common.false"/><%=getLabel(request,"web","no",sWebLanguage,"plannedNO")%>
             </td>
         </tr>
         
         <!-- transfer to problem list -->
         <tr>
-            <td class="admin" nowrap><%=getTran("medical.diagnosis","transfer.problemlist",sWebLanguage)%>&nbsp;</td>
+            <td class="admin" nowrap><%=getTran(request,"medical.diagnosis","transfer.problemlist",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="checkbox" name="DiagnosisTransferToProblemlist" id="DiagnosisTransferToProblemlist"/>
             </td>
@@ -340,7 +340,7 @@
         <%=ScreenHelper.setFormButtonsStop()%>
     </table>
     
-    <%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%>
+    <%=getTran(request,"Web","colored_fields_are_obligate",sWebLanguage)%>
 </form>
 
 <script>

@@ -65,7 +65,7 @@
     <table border="0" width="100%" align="center" cellspacing="0" class="menu">
         <%-- CATEGORY SELECTOR --%>
         <tr>
-            <td>&nbsp;<%=getTran("web","category",sWebLanguage)%></td>
+            <td>&nbsp;<%=getTran(request,"web","category",sWebLanguage)%></td>
             <td>
                 <select name="SelectCategory" class="text" onChange="doSearch();">
                     <option/>
@@ -101,8 +101,8 @@
                     <%-- HEADER --%>
                     <tr class="admin">
                         <td width="25" nowrap>&nbsp;</td>
-                        <td width="25%"><%=getTran("web","id",sWebLanguage)%></td>
-                        <td width="73%"><%=getTran("web","name",sWebLanguage)%></td>
+                        <td width="25%"><%=getTran(request,"web","id",sWebLanguage)%></td>
+                        <td width="73%"><%=getTran(request,"web","name",sWebLanguage)%></td>
                     </tr>
                         
                     <tbody class="hand">
@@ -142,7 +142,7 @@
                         if(foundRecs==0){
                             %>
                            <tr>
-                               <td colspan="2"><%=getTran("web","norecordsfound",sWebLanguage)%></td>
+                               <td colspan="2"><%=getTran(request,"web","norecordsfound",sWebLanguage)%></td>
                            </tr>
                             <%
                         }
@@ -179,7 +179,7 @@
                     </tr>
                     <%-- CATEGORY --%>
                     <tr>
-                        <td class="admin"><%=getTran("Web.Occup","be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DLD_CANDIDATE_CATEGORY",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"Web.Occup","be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DLD_CANDIDATE_CATEGORY",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="text" class="text" name="EditCategory" value="<%=sCategory%>" size="80">
                         </td>

@@ -24,7 +24,7 @@
 			<%-- PROFILE NAME --%>
 			<table class="list" width="100%" cellpadding="1" cellspacing="1" onKeyDown="if(enterEvent(event,13)){searchProfilesWindow();return false;}">
 			    <tr>
-			        <td class="admin" width="100"><%=getTran("meals","name",sWebLanguage)%></td>
+			        <td class="admin" width="100"><%=getTran(request,"meals","name",sWebLanguage)%></td>
 			        <td class="admin2">
 			            <input type="text" class="text" name="FindProfileName" id="FindProfileNameWindow" size="30" value="<%=sFindProfileName%>" maxLength="100">&nbsp;&nbsp;
 			          
@@ -45,8 +45,8 @@
 					<table width="100%" class="sortable" id="searchresultsProfiles" cellspacing="1" cellpadding="1">
 					    <%-- HEADER --%>
 					    <tr class="gray">
-					        <td width="200"><%=HTMLEntities.htmlentities(getTran("meals","profile",sWebLanguage))%></td>
-					        <td width="*"><%=HTMLEntities.htmlentities(getTran("meals","meals",sWebLanguage))%></td>
+					        <td width="200"><%=HTMLEntities.htmlentities(getTran(request,"meals","profile",sWebLanguage))%></td>
+					        <td width="*"><%=HTMLEntities.htmlentities(getTran(request,"meals","meals",sWebLanguage))%></td>
 					    </tr>
 					    
 				    	<tbody class="hand">
@@ -69,7 +69,7 @@
 					    </tbody>
 					</table>
 
-					<%=lProfiles.size()%> <%=HTMLEntities.htmlentities(getTran("web","recordsFound",sWebLanguage))%><br><br>
+					<%=lProfiles.size()%> <%=HTMLEntities.htmlentities(getTran(request,"web","recordsFound",sWebLanguage))%><br><br>
                     <script>ts_makeSortable(document.getElementById("searchresultsProfiles"));</script>	
 					
 					<input type="button" class="button" name="backButton" value="<%=HTMLEntities.htmlentities(getTranNoLink("web","close",sWebLanguage))%>" onclick="closeModalbox();">
@@ -78,7 +78,7 @@
 			    }
 		    	else{
 		    		%>
-		    		    <%=HTMLEntities.htmlentities(getTran("web","noRecordsfound",sWebLanguage))%>
+		    		    <%=HTMLEntities.htmlentities(getTran(request,"web","noRecordsfound",sWebLanguage))%>
 		    		    <input type="button" class="button" name="backButton" value="<%=HTMLEntities.htmlentities(getTranNoLink("web","close",sWebLanguage))%>" onclick="openBackProfile();">
 		    	     	<script>Modalbox.resizeToContent();</script>
      			    <%
@@ -95,8 +95,8 @@
 				    <%-- HEADER --%>
 				    <tr class="gray">
 				        <td width="25">&nbsp;</td>
-				        <td width="200"><%=HTMLEntities.htmlentities(getTran("meals","name",sWebLanguage))%></td>
-				        <td width="*"><%=HTMLEntities.htmlentities(getTran("meals","meals",sWebLanguage))%></td>
+				        <td width="200"><%=HTMLEntities.htmlentities(getTran(request,"meals","name",sWebLanguage))%></td>
+				        <td width="*"><%=HTMLEntities.htmlentities(getTran(request,"meals","meals",sWebLanguage))%></td>
 				    </tr>
 				    
 				    <tbody class="hand">
@@ -120,13 +120,13 @@
 				    </tbody>
 				</table>
 				
-				<%=lProfiles.size()%> <%=HTMLEntities.htmlentities(getTran("web","recordsFound",sWebLanguage))%>
+				<%=lProfiles.size()%> <%=HTMLEntities.htmlentities(getTran(request,"web","recordsFound",sWebLanguage))%>
                 <script>ts_makeSortable(document.getElementById("searchresultsProfiles"));</script>	
 			</div>
 	    	<%
     	}
     	else{
-    		%><%=HTMLEntities.htmlentities(getTran("web","noRecordsfound",sWebLanguage))%><%
+    		%><%=HTMLEntities.htmlentities(getTran(request,"web","noRecordsfound",sWebLanguage))%><%
     	}
     }
 %>

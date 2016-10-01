@@ -5,12 +5,12 @@
 <form id="searchForm">
     <table class="menu" width="100%" cellspacing="0">
         <tr>
-            <td><%=getTran("web.finance", "invoicetype", sWebLanguage)%>
+            <td><%=getTran(request,"web.finance", "invoicetype", sWebLanguage)%>
             </td>
             <td>
-                <input type="radio" id="FindTypePatient" name="FindInvoiceType" value="patient" checked="true"><%=getLabel("web", "patient", sWebLanguage, "FindTypePatient")%>
-                <input type="radio" id="FindTypeInsurar" name="FindInvoiceType" value="insurar"><%=getLabel("web", "insurar", sWebLanguage, "FindTypeInsurar")%>
-                <input type="radio" id="FindExtraInvoiceType" name="FindInvoiceType" value="extrainsurar"><%=getLabel("web", "extrainsurar", sWebLanguage, "FindExtraInvoiceType")%>
+                <input type="radio" id="FindTypePatient" name="FindInvoiceType" value="patient" checked="true"><%=getLabel(request,"web", "patient", sWebLanguage, "FindTypePatient")%>
+                <input type="radio" id="FindTypeInsurar" name="FindInvoiceType" value="insurar"><%=getLabel(request,"web", "insurar", sWebLanguage, "FindTypeInsurar")%>
+                <input type="radio" id="FindExtraInvoiceType" name="FindInvoiceType" value="extrainsurar"><%=getLabel(request,"web", "extrainsurar", sWebLanguage, "FindExtraInvoiceType")%>
             </td>
         </tr>
         <tr>

@@ -31,13 +31,13 @@
     <table width="100%" cellspacing="0" cellpadding="0" class="menu">
         <tr height="25">
             <%-- lastname --%>
-            <td class="admin2"><%=getTran("Web","name",sWebLanguage)%>&nbsp;</td>
+            <td class="admin2"><%=getTran(request,"Web","name",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" name="FindLastname" id="FindLastname" size="28" maxLength="255" value="<%=sFindLastname%>" >
             </td>
             
             <%-- firstname --%>
-            <td class="admin2"><%=getTran("Web","firstname",sWebLanguage)%>&nbsp;</td>
+            <td class="admin2"><%=getTran(request,"Web","firstname",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" name="FindFirstname" id="FindFirstname" size="28" maxLength="255" value="<%=sFindFirstname%>">
             </td>

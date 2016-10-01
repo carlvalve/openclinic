@@ -3,6 +3,14 @@
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
 <%
+	int maxQuantity=0;
+	String sProductStockUid = checkString(request.getParameter("EditMaterialProductStockUid"));
+	if(sProductStockUid.length()>0){
+		ProductStock productStock = ProductStock.get(sProductStockUid);
+		if(productStock!=null && productStock.getLevel()>0){
+			maxQuantity=productStock.getLevel();
+		}
+	}
 	String sProductionOrderId=checkString(request.getParameter("productionOrderId"));
 	String sAction = checkString(request.getParameter("action"));
 	Debug.println("sProductionOrderId = "+sProductionOrderId);
@@ -10,7 +18,6 @@
 	if(sAction.equalsIgnoreCase("save")){
 		Debug.println("EditMaterialQuantity      = "+request.getParameter("EditMaterialQuantity"));
 		//Add material to bill of materials
-		String sProductStockUid = request.getParameter("EditMaterialProductStockUid");
 		java.util.Date dDate =new java.util.Date();
 		try{
 			dDate=ScreenHelper.parseDate(request.getParameter("EditMaterialDate"));
@@ -21,7 +28,38 @@
 			quantity=new Double(Double.parseDouble(request.getParameter("EditMaterialQuantity"))).intValue();
 		}
 		catch(Exception e){}
-		if(quantity!=0){
+		if(MedwanQuery.getInstance().getConfigInt("enableCCBRTProductionOrderMecanism",0)==1){
+			if(sProductStockUid.length()>0){
+				ProductStock productStock = ProductStock.get(sProductStockUid);
+				if(productStock!=null && productStock.getProduct()!=null){
+					ProductOrder order = new ProductOrder();
+					order.setCreateDateTime(new java.util.Date());
+					order.setDateOrdered(new java.util.Date());
+					order.setDescription(productStock.getProduct().getName()+" ("+getTranNoLink("web","productionorder",sWebLanguage)+" #"+sProductionOrderId+")");
+					order.setFrom(MedwanQuery.getInstance().getConfigString("mainProductionWarehouseUID",""));
+					order.setImportance("type1native");
+					order.setPackagesOrdered(quantity);
+					order.setProductStockUid(sProductStockUid);
+					order.setUpdateDateTime(new java.util.Date());
+					order.setUpdateUser(activeUser.userid);
+					order.setUid("-1");
+					order.setVersion(1);
+					order.setProductionorderuid(sProductionOrderId);
+					order.store();
+					//Add materials to productorder
+					ProductionOrderMaterial material = new ProductionOrderMaterial();
+					material.setCreateDateTime(order.getCreateDateTime());
+					material.setProductionOrderId(Integer.parseInt(sProductionOrderId));
+					material.setProductStockUid(order.getProductStockUid());
+					material.setQuantity(quantity);
+					material.setUpdateDateTime(new java.util.Date());
+					material.setUpdateUid(Integer.parseInt(activeUser.userid));
+					material.setComment(request.getParameter("EditMaterialComment"));
+					material.store();
+				}
+			}
+		}
+		else if(quantity!=0){
 			//Reduce source stock with taken quantity
 			ProductStockOperation operation = new ProductStockOperation();
 			operation.setUid("-1");
@@ -45,28 +83,28 @@
 			material.setUpdateUid(Integer.parseInt(activeUser.userid));
 			material.setComment(request.getParameter("EditMaterialComment"));
 			material.store();
-			%>
-			<script>
-				window.opener.loadMaterials();
-				window.close();
-			</script>
-			<%
-			out.flush();
 		}
+		%>
+		<script>
+			window.opener.loadMaterials();
+			window.close();
+		</script>
+		<%
+		out.flush();
 	}
 %>
 <form name='transactionForm' method='post'>
 	<input type='hidden' name='action' id='action'/>
 	<table width='100%'>
-		<tr class='admin'><td colspan='2'><%=getTran("web","addmaterials",sWebLanguage) %></td></tr>
+		<tr class='admin'><td colspan='2'><%=getTran(request,"web","addmaterials",sWebLanguage) %></td></tr>
 	    <tr>
-			<td class='admin'><%=getTran("web","date",sWebLanguage) %></td>
+			<td class='admin'><%=getTran(request,"web","date",sWebLanguage) %></td>
 			<td class='admin2'>
 				<%=ScreenHelper.writeDateField("EditMaterialDate", "transactionForm", ScreenHelper.formatDate(new java.util.Date()), true, false, sWebLanguage, sCONTEXTPATH) %>
 	        </td>
 		</tr>
 		<tr>
-			<td class='admin'><%=getTran("web","product",sWebLanguage) %></td>
+			<td class='admin'><%=getTran(request,"web","product",sWebLanguage) %></td>
 			<td class='admin2'>
 	            <input type="hidden" name="EditMaterialProductStockUid" id="EditMaterialProductStockUid">
 	            <input type="text" size="80" class="text" name="EditMaterialProductStockName" id="EditMaterialProductStockName"/>
@@ -76,43 +114,55 @@
 	        </td>
 	    </tr>
 	    <tr>
-			<td class='admin'><%=getTran("web","quantity",sWebLanguage) %></td>
+			<td class='admin'><%=getTran(request,"web","quantity",sWebLanguage) %></td>
 			<td class='admin2'>
 	            <input type="text" size="10" class="text" name="EditMaterialQuantity" id="EditMaterialQuantity" value='0'/>
+				<%if(MedwanQuery.getInstance().getConfigInt("enableCCBRTProductionOrderMecanism",0)==0){ %>
+	        	 (<=<span id='maxquantityspan'><%=maxQuantity%></span>)
+	        	<%} %>
 	        </td>
 		</tr>
 	    <tr>
-			<td class='admin'><%=getTran("web","comment",sWebLanguage) %></td>
+			<td class='admin'><%=getTran(request,"web","comment",sWebLanguage) %></td>
 			<td class='admin2'>
 	            <textarea type="text" cols="80" class="text" name="EditMaterialComment" id="EditMaterialComment" ></textarea>
 	        </td>
 		</tr>
 	</table>
-	<input type='button' class='button' name='saveButton' value='<%=getTran("web","save",sWebLanguage) %>' onclick='doSave();'/>
+	<input type='button' class='button' name='saveButton' value='<%=getTran(null,"web","save",sWebLanguage) %>' onclick='doSave();'/>
 </form>
 
 <script>
+	var maxQuantity=<%=maxQuantity%>;
+	if(document.getElementById('maxquantityspan')){
+		document.getElementById('maxquantityspan').innerHTML=maxQuantity;
+	}
+	
 	function searchProductStock(productStockUidField,productStockNameField){
-    	openPopup("/_common/search/searchProductStock.jsp&ts=<%=getTs()%>&PopupWidth=600&ReturnProductStockUidField="+productStockUidField+"&ReturnProductStockNameField="+productStockNameField);
+    	openPopup("/_common/search/searchProductStock2.jsp&ts=<%=getTs()%>&PopupWidth=600&PopupHeight=400&ReturnProductStockUidField="+productStockUidField+"&ReturnProductStockNameField="+productStockNameField+"&ReturnServiceStockFunction=getProductStock()");
   	}
 	
 	function doSave(){
+		<%if(MedwanQuery.getInstance().getConfigInt("enableCCBRTProductionOrderMecanism",0)==0){ %>
+			if(maxQuantity<1*document.getElementById('EditMaterialQuantity').value){
+				alert('<%=getTranNoLink("web","quantityexceedsstocklevel",sWebLanguage)%>');
+			}
+		<%}%>
 		if(document.getElementById('EditMaterialProductStockUid').value.length==0 || 1*document.getElementById('EditMaterialQuantity').value==0){
-			alert('<%=getTran("web","somedataismissing",sWebLanguage)%>');
+			alert('<%=getTranNoLink("web","somedataismissing",sWebLanguage)%>');
 		}
 		else{
 			document.getElementById('action').value='save';
 			transactionForm.submit();
 		}
 	}
-	
 	new Ajax.Autocompleter('EditMaterialProductStockName','autocomplete_material','pharmacy/getProductStocksForMaterialName.jsp',{
 		  minChars:1,
 		  method:'post',
 		  afterUpdateElement:afterAutoComplete,
 		  callback:composeCallbackURL
 	});
-
+	
 	function afterAutoComplete(field,item){
 		var regex = new RegExp('[-0123456789.]*-idcache','i');
 		var nomimage = regex.exec(item.innerHTML);
@@ -138,6 +188,10 @@
 	      onSuccess: function(resp){
 	        var product =  eval('('+resp.responseText+')');
 	        document.getElementById("EditMaterialProductStockName").value=product.name;
+	    	maxQuantity=product.quantity;
+			<%if(MedwanQuery.getInstance().getConfigInt("enableCCBRTProductionOrderMecanism",0)==0){ %>
+		    	document.getElementById('maxquantityspan').innerHTML=maxQuantity;
+		    <%}%>
 	      }
 	    });
 	}

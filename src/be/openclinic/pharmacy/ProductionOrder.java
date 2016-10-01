@@ -4,17 +4,20 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Vector;
 
 import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.system.ScreenHelper;
 import be.openclinic.common.OC_Object;
+import net.admin.User;
 
 public class ProductionOrder extends OC_Object{
 	private int id=-1;
 	private String targetProductStockUid;
 	private String debetUid;
-	private int patientUid;
+	private int patientUid=-1;
 	private int updateUid;
 	private java.util.Date closeDateTime;
 	private String comment;
@@ -79,6 +82,23 @@ public class ProductionOrder extends OC_Object{
 		setModifier(1,s);
 	}
 
+	public String getEstimatedDelivery(){
+		String s="";
+		if(getModifiers()!=null){
+			try{
+				s=getModifiers().split(";")[2];
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return s;
+	}
+
+	public void setEstimatedDelivery(String s){
+		setModifier(2,s);
+	}
+
 	public int getQuantity() {
 		return quantity;
 	}
@@ -90,6 +110,44 @@ public class ProductionOrder extends OC_Object{
 	public Vector getMaterials() {
 		return ProductionOrderMaterial.getProductionOrderMaterials(getId());
 	}
+
+    public boolean canClose(User user){
+    	if(getCloseDateTime()!=null){
+    		return false;
+    	}
+    	Hashtable productstocks = new Hashtable();
+		Vector materials = getMaterials();
+		for(int n=0;n<materials.size();n++){
+			ProductionOrderMaterial material = (ProductionOrderMaterial)materials.elementAt(n);
+			ProductStock productStock = ProductStock.get(material.getProductStockUid());
+			if(productStock!=null && productStock.hasValidUid()){
+				if(productstocks.get(productStock.getUid())==null){
+					productstocks.put(productStock.getUid(),material.getQuantity());
+				}
+				else{
+					productstocks.put(productStock.getUid(),material.getQuantity()+(Double)productstocks.get(productStock.getUid()));
+				}
+			}
+		}
+		if(materials.size()==0){
+			return false;
+		}
+		Enumeration eProducts = productstocks.keys();
+		while(eProducts.hasMoreElements()){
+			String key = (String)eProducts.nextElement();
+			ProductStock productStock = ProductStock.get(key);
+			double nQuantity=(Double)productstocks.get(key);
+			int nLinked=productStock.getReceivedForProductionOrder(this.getId()+"");
+			if(productStock.getLevel()<nQuantity){
+				return false;
+			}
+			if(MedwanQuery.getInstance().getConfigInt("enableCCBRTProductionOrderMecanism",0)==1 && nLinked<nQuantity && !user.getAccessRightNoSA("pharmacy.overridelinkedmaterialsrequirement.select")){
+				return false;
+			}
+		} 
+    	return true;
+    }
+    
 
 	public static Vector getProductionOrders(int patientid){
 		Vector orders = new Vector();
@@ -314,14 +372,14 @@ public class ProductionOrder extends OC_Object{
 		return orders;
 	}
 	
-	public static Vector getProductionOrders(String transactionuid){
+	public static Vector getProductionOrders(String debetuid){
 		Vector orders = new Vector();
 		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
 		PreparedStatement ps = null;
 		ResultSet rs =null;
 		try{
 			ps=conn.prepareStatement("SELECT * FROM OC_PRODUCTIONORDERS where OC_PRODUCTIONORDER_DEBETUID=? ORDER BY OC_PRODUCTIONORDER_CREATEDATETIME");
-			ps.setString(1, transactionuid);
+			ps.setString(1, debetuid);
 			rs=ps.executeQuery();
 			while(rs.next()){
 				orders.add(ProductionOrder.get(rs.getInt("OC_PRODUCTIONORDER_ID")));

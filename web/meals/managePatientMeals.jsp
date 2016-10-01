@@ -17,7 +17,7 @@
 <table width="100%" class="list" cellpadding="0" cellspacing="1">
     <tr class="gray">
         <%-- CALENDAR (title) --%>
-        <td><%=getTran("meals","chooseADay",sWebLanguage)%></td>
+        <td><%=getTran(request,"meals","chooseADay",sWebLanguage)%></td>
         
         <%-- DATE & BUTTONS --%>
         <td>
@@ -72,11 +72,11 @@
     
     var url = "<c:url value='/meals/ajax/getPatientMeal.jsp'/>?ts="+new Date().getTime();
     if(update){
-      Modalbox.show(url,{title:"<%=getTran("meals","updatePatientmeal",sWebLanguage)%> "+$F("datechoosed"),params:params,width:530});
+      Modalbox.show(url,{title:"<%=getTran(null,"meals","updatePatientmeal",sWebLanguage)%> "+$F("datechoosed"),params:params,width:530});
     }
     else{
       params+= "&saveButtonIsAddButton=true";
-      Modalbox.show(url,{title:"<%=getTran("meals","addPatientmeal",sWebLanguage)%> "+$F("datechoosed"),params:params,width:530});
+      Modalbox.show(url,{title:"<%=getTran(null,"meals","addPatientmeal",sWebLanguage)%> "+$F("datechoosed"),params:params,width:530});
     }
   }
   
@@ -86,21 +86,21 @@
                  "&FindMealByDay="+encodeURI($F("datechoosed"))+
                  "&saveButtonIsAddButton=true";
     var url = "<c:url value='/meals/ajax/getPatientProfile.jsp'/>?ts="+new Date().getTime();
-    Modalbox.show(url,{title:"<%=getTran("meals","addPatientProfile",sWebLanguage)%> "+$F("datechoosed"),params:params,width:530});
+    Modalbox.show(url,{title:"<%=getTran(null,"meals","addPatientProfile",sWebLanguage)%> "+$F("datechoosed"),params:params,width:530});
   }
     
   <%-- GET MEALS --%>
   function getMeals(){
     var params = "withSearchFields=1";
     var url = "<c:url value='/meals/ajax/getMeals.jsp'/>?ts="+new Date().getTime();
-    Modalbox.show(url,{title:"<%=getTran("meals","searchMeals",sWebLanguage)%>",params:params,width:530});
+    Modalbox.show(url,{title:"<%=getTran(null,"meals","searchMeals",sWebLanguage)%>",params:params,width:530});
   }
 
   <%-- GET PROFILES --%>
   function getProfiles(){
     var params = "withSearchFields=1";
     var url = "<c:url value='/meals/ajax/getProfiles.jsp'/>?ts="+new Date().getTime();
-    Modalbox.show(url,{title:"<%=getTran("meals","searchProfiles",sWebLanguage)%>",params:params,width:530});
+    Modalbox.show(url,{title:"<%=getTran(null,"meals","searchProfiles",sWebLanguage)%>",params:params,width:530});
   }
 
   <%-- SET PATIENT MEAL --%>

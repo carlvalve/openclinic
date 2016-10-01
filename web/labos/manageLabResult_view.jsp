@@ -1,7 +1,7 @@
 <%@page import="be.mxs.common.util.system.*,be.openclinic.medical.RequestedLabAnalysis,
                 java.util.*,
                 be.openclinic.medical.LabRequest,
-                be.openclinic.medical.LabAnalysis,
+                be.openclinic.medical.LabAnalysis,be.openclinic.archiving.*,
                 java.text.DecimalFormat"%>
 <%@include file="/includes/validateUser.jsp"%>
 <%=checkPermission("system.management","select",activeUser)%>
@@ -53,14 +53,14 @@
 <%=writeTableHeader("Web","patientLaboResults",sWebLanguage," doBack();")%>
 <table class="list" width="100%" cellpadding="0" cellspacing="1">
     <tr>
-        <td class="admin2"><%=getTran("web","analysis",sWebLanguage)%></td>
+        <td class="admin2"><%=getTran(request,"web","analysis",sWebLanguage)%></td>
 	    <%
 	        LabRequest labRequest;
 	        Iterator requestsIterator = requestList.keySet().iterator();
 	        while(requestsIterator.hasNext()){
 	            labRequest = (LabRequest)requestList.get(requestsIterator.next());
 	            out.print("<td>"+ScreenHelper.formatDate(labRequest.getRequestdate(),ScreenHelper.fullDateFormat)+"<br/>"+labRequest.getTransactionid()+"<br/>"+
-	                       "<a href='javascript:printRequest("+labRequest.getServerid()+","+labRequest.getTransactionid()+")'><b>"+getTran("web","print",sWebLanguage)+"</b></a>"+
+	                       "<a href='javascript:printRequest("+labRequest.getServerid()+","+labRequest.getTransactionid()+")'><b>"+getTran(request,"web","print",sWebLanguage)+"</b></a>"+
 	                      "</td>");
 	            out.print("<td>"+MedwanQuery.getInstance().getLabel("web","sampler",sWebLanguage)+"</td>");
 	            out.print("<td>"+MedwanQuery.getInstance().getLabel("web","sampletakendatetime",sWebLanguage)+"</td>");
@@ -76,7 +76,9 @@
     <%
         String abnormal = MedwanQuery.getInstance().getConfigString("abnormalModifiers","*+*++*+++*-*--*---*h*hh*hhh*l*ll*lll*");
         DecimalFormat deci = new DecimalFormat("#,###.###");
-    
+        HashSet scanshandeled = new HashSet();
+        Hashtable scans = new Hashtable();
+
         Iterator groupsIterator = groups.keySet().iterator();
         while(groupsIterator.hasNext()){
             String groupname = (String)groupsIterator.next();
@@ -129,7 +131,7 @@
                     }
                     out.print("<tr bgcolor='#FFFCD6'><td width='25%' nowrap>"+sEdit+" <b>"+MedwanQuery.getInstance().getLabel("labanalysis",c,sWebLanguage)+" "+u+refs+"</b></td>");
                   
-                    String result = (requestedLabAnalysis!=null?requestedLabAnalysis.getFinalvalidation()>0 && requestedLabAnalysis.getResultValue().length()>0?analysis.getLimitedVisibility()>0 && !activeUser.getAccessRight("labos.limitedvisibility.select")?getTran("web","invisible",sWebLanguage):requestedLabAnalysis.getResultValue()+(checkString(requestedLabAnalysis.getResultComment()).length()>0?"<br/>"+requestedLabAnalysis.getResultComment():""):"?":"");
+                    String result = (requestedLabAnalysis!=null?requestedLabAnalysis.getFinalvalidation()>0 && requestedLabAnalysis.getResultValue().length()>0?analysis.getLimitedVisibility()>0 && !activeUser.getAccessRight("labos.limitedvisibility.select")?getTran(request,"web","invisible",sWebLanguage):requestedLabAnalysis.getResultValue()+(checkString(requestedLabAnalysis.getResultComment()).length()>0?"<br/>"+requestedLabAnalysis.getResultComment():""):"?":"");
                 	if(analysis.getEditor().equalsIgnoreCase("calculated")){
                 		if(analysis.getEditorparameters().startsWith("OP:CONC|")){
                 			//Especially useful for phenotypes
@@ -160,6 +162,32 @@
 							}
                 		}
                 	}
+                    else if (analysis.getEditor().equals("scan")){
+                    	String sReference=labRequest.getServerid()+"."+labRequest.getTransactionid()+".LAB."+analysis.getEditorparametersParameter("TP");
+                    	boolean bAddReference=false;
+                    	if(!scanshandeled.contains(sReference)){
+                    		scanshandeled.add(sReference);
+                    		bAddReference=true;
+                    		ArchiveDocument doc = ArchiveDocument.getByReference(sReference);
+                    		if(doc!=null){
+                    			scans.put(sReference,doc);
+                    		}
+                    	}
+                    	ArchiveDocument doc = (ArchiveDocument)scans.get(sReference);
+                    	if(doc!=null){
+                    		if(doc.storageName!=null && doc.storageName.length()>0){
+		                    	String sServer = 	MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_url","scan")+"/"+
+                    	                 			MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_dirTo","to");
+                            	result=(bAddReference?"<input type='hidden' name='resultreference."+doc.reference+"'/>":"")+"<img src='"+sCONTEXTPATH+"/_img/icons/icon_erase.gif' onclick='eraseScan(\""+doc.udi+"\")'/><a href='javascript:window.open(\""+sCONTEXTPATH+"/"+sServer+"/"+doc.storageName+"\",\"_new\",\"toolbar=no,status=yes,scrollbars=yes,resizable=yes,width=800,height=500,menubar=no\");void(0);' title='"+sServer+"/"+doc.storageName+"' target='_new'><img src='"+sCONTEXTPATH+"/_img/icons/icon_labo.png'/> "+ScreenHelper.removeLeadingZeros(doc.udi)+"</a>";
+                        	}
+                    		else{
+                    			result="<span title='"+ScreenHelper.removeLeadingZeros(doc.udi)+"'>?</span>";
+                    		}
+                    	}
+                    	else{
+                    		result="Error";
+                    	}
+                    }
                 	else if(analysis.getEditor().equalsIgnoreCase("antivirogram")){
                 		String[] arvs = result.split(";");
                 		result="";
@@ -169,7 +197,7 @@
                 					result+="<br/>";
                 				}
                 				try{
-                					result+=getTran("arv"+arvs[n].split("=")[0].split("\\.")[0],arvs[n].split("=")[0].split("\\.")[1],sWebLanguage)+": "+getTran("arvresistance",arvs[n].split("=")[1],sWebLanguage);
+                					result+=getTran(request,"arv"+arvs[n].split("=")[0].split("\\.")[0],arvs[n].split("=")[0].split("\\.")[1],sWebLanguage)+": "+getTran(request,"arvresistance",arvs[n].split("=")[1],sWebLanguage);
                 				}
                 				catch(Exception e){}
                 			}
@@ -223,6 +251,9 @@
     window.location.href="<c:url value="/main.do"/>?Page=labos/showLabRequestList.jsp";
   }
   function reactivate(serverid,transactionid,labanalysiscode){
-    window.open("<c:url value="/"/>labos/reactivateAnalysis.jsp?serverid="+serverid+"&transactionid="+transactionid+"&labanalysiscode="+labanalysiscode);
-  }
+	    window.open("<c:url value="/"/>labos/reactivateAnalysis.jsp?serverid="+serverid+"&transactionid="+transactionid+"&labanalysiscode="+labanalysiscode);
+	  }
+  function eraseScan(uid){
+	    window.open("<c:url value="/"/>labos/eraseScan.jsp?uid="+uid);
+	  }
 </script>

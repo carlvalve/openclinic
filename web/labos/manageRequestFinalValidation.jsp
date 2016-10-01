@@ -81,24 +81,24 @@
     
     <table width="100%" class='list' cellspacing="1" cellpadding="0">
         <tr>
-            <td class="admin2"><%=getTran("web","ID",sWebLanguage)%><br/><%=getTran("web","date",sWebLanguage)%></td>
-            <td class="admin2"><%=getTran("web","patient",sWebLanguage)%><br/><%=getTran("web","service",sWebLanguage)%></td>
+            <td class="admin2"><%=getTran(request,"web","ID",sWebLanguage)%><br/><%=getTran(request,"web","date",sWebLanguage)%></td>
+            <td class="admin2"><%=getTran(request,"web","patient",sWebLanguage)%><br/><%=getTran(request,"web","service",sWebLanguage)%></td>
     <%
         String worklistAnalyses = RequestedLabAnalysis.findUnvalidatedAnalyses();
         String[] profileAnalysis = worklistAnalyses.split(",");
         for(int n=0; n<profileAnalysis.length; n++){
             String c = profileAnalysis[n].replaceAll("'","");
             LabAnalysis l = LabAnalysis.getLabAnalysisByLabcode(profileAnalysis[n].replaceAll("'",""));
-            if(MedwanQuery.getInstance().getConfigInt("worklistsUseShortname",0)==1 && l!=null && !getTran("labanalysis.short",l.getLabId()+"",sWebLanguage).equals(l.getLabId()+"")){
-            	c=getTran("labanalysis.short",l.getLabId()+"",sWebLanguage);
+            if(MedwanQuery.getInstance().getConfigInt("worklistsUseShortname",0)==1 && l!=null && !getTran(request,"labanalysis.short",l.getLabId()+"",sWebLanguage).equals(l.getLabId()+"")){
+            	c=getTran(request,"labanalysis.short",l.getLabId()+"",sWebLanguage);
             }
             else if(l!=null && ScreenHelper.checkString(l.getMedidoccode()).length()>0){
                 c = l.getMedidoccode();
             }
             out.print("<td class='admin2'>"+c+"</td>");
         }
-        out.print("<td class='admin2'>"+getTran("web","lab.validated",sWebLanguage)+"</td>");
-        out.print("<td class='admin2'>"+getTran("web","comment",sWebLanguage)+"</td>");
+        out.print("<td class='admin2'>"+getTran(request,"web","lab.validated",sWebLanguage)+"</td>");
+        out.print("<td class='admin2'>"+getTran(request,"web","comment",sWebLanguage)+"</td>");
         out.print("</tr>");
         
         // Find all lab requests for this worklist
@@ -264,7 +264,7 @@
                 out.print("</tr>");
             }
             out.print("<tr><td colspan='"+(profileAnalysis.length+4)+"'><hr/></td></tr>");
-            out.print("<tr><td colspan='2'><input readonly style='background: yellow' type='text' size='5'/> = "+MedwanQuery.getInstance().getLabel("web","notechnicalvalidation",sWebLanguage)+"</td><td><input class='button' type='submit' name='save' value='"+getTran("web","save",sWebLanguage)+"'/></tr>");
+            out.print("<tr><td colspan='2'><input readonly style='background: yellow' type='text' size='5'/> = "+MedwanQuery.getInstance().getLabel("web","notechnicalvalidation",sWebLanguage)+"</td><td><input class='button' type='submit' name='save' value='"+getTran(request,"web","save",sWebLanguage)+"'/></tr>");
         }
     %>
     </table>

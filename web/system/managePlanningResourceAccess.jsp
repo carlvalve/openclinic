@@ -5,11 +5,11 @@
 <form name='transactionForm' method='post'>
 	<table>
         <tr>
-            <td class="admin" nowrap><%=getTran("Web","resource",sWebLanguage)%>&nbsp;</td>
+            <td class="admin" nowrap><%=getTran(request,"Web","resource",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
             	<select class='text' name='resource' id='resource' onchange='loadAuthorizedUsers();'>
             		<option/>
-            		<%=ScreenHelper.writeSelect("planningresource", "", sWebLanguage) %>
+            		<%=ScreenHelper.writeSelect(request,"planningresource", "", sWebLanguage) %>
             	</select>
            		<%
            			String authorizedresources = Reservation.getAccessibleResources(activeUser.userid);
@@ -25,7 +25,7 @@
             </td>
         </tr>
         <tr>
-            <td class="admin" nowrap><%=getTran("Web","Authorizedusers",sWebLanguage)%>&nbsp;</td>
+            <td class="admin" nowrap><%=getTran(request,"Web","Authorizedusers",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <%-- add row --%>
                 <input type="hidden" name="AuthorizedUserIdAdd" id="AuthorizedUserIdAdd" value="">

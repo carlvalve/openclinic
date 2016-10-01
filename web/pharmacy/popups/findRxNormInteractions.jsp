@@ -60,12 +60,12 @@
 %>
 <form name="transactionForm" method="post">
 	<input type='text' class='text' size='80' name='key' value='<%=key%>'/>
-	<input type='submit' name='submit' value='<%=getTran("web","find",sWebLanguage) %>'/>
+	<input type='submit' name='submit' value='<%=getTran(null,"web","find",sWebLanguage) %>'/>
 	
 	<table width="100%">
 		<tr class='admin'>
-			<td width='25%'><%=getTran("web","drugnames",sWebLanguage) %></td>
-			<td><%=getTran("web","interaction",sWebLanguage) %></td>
+			<td width='25%'><%=getTran(request,"web","drugnames",sWebLanguage) %></td>
+			<td><%=getTran(request,"web","interaction",sWebLanguage) %></td>
 		</tr>
 	<%
 		SortedMap codes=getRxNormInteractions(key);
@@ -86,7 +86,7 @@
 		if(counter==0){
 		%>
 			<tr>
-			<td class='admin' colspan="2"><%= getTran("web","no_known_interactions",sWebLanguage)%></td>
+			<td class='admin' colspan="2"><%= getTran(request,"web","no_known_interactions",sWebLanguage)%></td>
 		</tr>
 		<%
 		}

@@ -22,9 +22,9 @@
         
         while(screenIter.hasNext()){
         	tmpScreen = (Screen)screenIter.next();
-        	Debug.println("savedscreen ("+tmpScreen.getUid()+") : "+tmpScreen.getLabel(sWebLanguage));
+        	Debug.println("savedscreen ("+tmpScreen.getUid()+") : "+tmpScreen.getLabel(sWebLanguage.toLowerCase()));
         	
-            %><option value="<%=tmpScreen.getUid()%>"><%=tmpScreen.getLabel(sWebLanguage)%></option><%	
+            %><option value="<%=tmpScreen.getUid()%>"><%=tmpScreen.getLabel(sWebLanguage.toLowerCase())%></option><%	
         }                    
     %>
 </select>

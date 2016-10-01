@@ -13,6 +13,7 @@
            sFindPrestationDescr   = checkString(request.getParameter("FindPrestationDescr")),
            sFindPrestationType    = checkString(request.getParameter("FindPrestationType")),
  		   sFindPrestationSort    = checkString(request.getParameter("FindPrestationSort")),
+ 		   sEncounterUid	      = checkString(request.getParameter("encounteruid")),
            sFindPrestationPrice   = checkString(request.getParameter("FindPrestationPrice"));
 
     String sFunction = checkString(request.getParameter("doFunction"));
@@ -74,14 +75,30 @@
         Prestation prestation;
         
         String category = "";            
-        Insurance insurance = activePatient!=null?Insurance.getMostInterestingInsuranceForPatient(checkString(activePatient.personid)):null;
+        Insurance insurance = null;
+        
+        if(sCheckInsurance.split("\\.").length==2){
+        	insurance=Insurance.get(sCheckInsurance);
+        }
+        else{
+        	insurance = activePatient!=null?Insurance.getMostInterestingInsuranceForPatient(checkString(activePatient.personid)):null;
+        }
         if(insurance!=null){
             category = insurance.getType();
         }
-
+		Encounter encounter = null;
+		if(sEncounterUid.length()>0){
+			encounter=Encounter.get(sEncounterUid);
+		}
+		else if(activePatient!=null){
+			encounter=Encounter.getActiveEncounter(activePatient.personid);
+		}
         while(prestationsIter.hasNext()){
             prestation = (Prestation)prestationsIter.next();
-            if(prestation==null || !prestation.isVisibleFor(insurar)){
+            if(prestation==null || (encounter!=null && !prestation.isVisibleFor(insurar,encounter.getService()))){
+            	continue;
+            }
+            if(MedwanQuery.getInstance().getConfigInt("showZeroPricePrestationsWithoutCategoryPrice",1)==0 && prestation.getCategories().indexOf(category+"=")<0 && prestation.getPrice()==0){
             	continue;
             }
             if(prestation!=null && !checkString(prestation.getType()).equalsIgnoreCase("con.openinsurance")){
@@ -94,7 +111,7 @@
 	
 	             // type
 	             sType = checkString(prestation.getType());
-	             sTypeTran = getTran("prestation.type",sType,sWebLanguage);
+	             sTypeTran = getTran(request,"prestation.type",sType,sWebLanguage);
 	
 	             // price
 	             double price = prestation.getPrice();
@@ -110,7 +127,7 @@
 	             if(sClass.equals("")) sClass = "1";
 	             else                  sClass = "";
 	             
-		         if(prestation.getVariablePrice()==1){
+		         if(activeUser.getAccessRight("financial.entervariableprice.select") && prestation.getVariablePrice()==1){
 	                 sHtml.append("<tr class='list"+sClass+"' title='"+sSelectTran+"' onclick=\"setPrestationVariable('"+sUid+"','"+sCode+"','"+sDescr+"','"+sType+"','"+sPrice+"','"+sSupplement+"');\">")
 	                       .append("<td width='60px'>"+prestation.getUid()+"</td>")
 	                       .append("<td>"+sCode+"</td>")
@@ -138,24 +155,24 @@
 			    <table id="searchresults" class="sortable" width="100%" cellpadding="1" cellspacing="0">
 			        <%-- header --%>
 			        <tr class="admin">
-			            <td><%=HTMLEntities.htmlentities(getTran("web","id",sWebLanguage))%></td>
-			            <td><%=HTMLEntities.htmlentities(getTran("web","code",sWebLanguage))%></td>
-			            <td><%=HTMLEntities.htmlentities(getTran("web","description",sWebLanguage))%></td>
-			            <td><%=HTMLEntities.htmlentities(getTran("web","type",sWebLanguage))%></td>
-			            <td><%=HTMLEntities.htmlentities(getTran("web","price",sWebLanguage))%> <%=HTMLEntities.htmlentities(sCurrency)%> </td>
-			            <td><%=HTMLEntities.htmlentities(getTran("web","categories",sWebLanguage))%></td>
+			            <td><%=HTMLEntities.htmlentities(getTran(request,"web","id",sWebLanguage))%></td>
+			            <td><%=HTMLEntities.htmlentities(getTran(request,"web","code",sWebLanguage))%></td>
+			            <td><%=HTMLEntities.htmlentities(getTran(request,"web","description",sWebLanguage))%></td>
+			            <td><%=HTMLEntities.htmlentities(getTran(request,"web","type",sWebLanguage))%></td>
+			            <td><%=HTMLEntities.htmlentities(getTran(request,"web","price",sWebLanguage))%> <%=HTMLEntities.htmlentities(sCurrency)%> </td>
+			            <td><%=HTMLEntities.htmlentities(getTran(request,"web","categories",sWebLanguage))%></td>
 			        </tr>
 			
 			        <tbody class="hand"><%=HTMLEntities.htmlentities(sHtml.toString())%></tbody>
 			    </table>
 	    
-                <%=recCount%> <%=HTMLEntities.htmlentities(getTran("web","norecordsfound",sWebLanguage))%>
+                <%=recCount%> <%=HTMLEntities.htmlentities(getTran(request,"web","norecordsfound",sWebLanguage))%>
                 <script>sortables_init();</script>
 	        <%
 	    }
         else{
 	        // display 'no results' message
-	        %><%=HTMLEntities.htmlentities(getTran("web","norecordsfound",sWebLanguage))%><%
+	        %><%=HTMLEntities.htmlentities(getTran(request,"web","norecordsfound",sWebLanguage))%><%
         }
     }
 %>

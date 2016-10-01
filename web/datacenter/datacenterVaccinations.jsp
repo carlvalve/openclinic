@@ -16,20 +16,20 @@
 	<table width='100%'>
 		<tr class='admin'>
 			<td>
-				<%=getTran("web","from",sWebLanguage) %>
+				<%=getTran(request,"web","from",sWebLanguage) %>
 				<%=ScreenHelper.writeDateField("from", "transactionForm", sBegin, true, false, sWebLanguage, sCONTEXTPATH) %>
 				
-				<%=getTran("web","to",sWebLanguage) %>
+				<%=getTran(request,"web","to",sWebLanguage) %>
 				<%=ScreenHelper.writeDateField("to", "transactionForm", sEnd, true, false, sWebLanguage, sCONTEXTPATH) %>
 			</td>
 			<td>
-				<%=getTran("web","servers",sWebLanguage) %>
+				<%=getTran(request,"web","servers",sWebLanguage) %>
 				<select class='text' name='servers' id='servers' size='3' multiple>
-					<option value='all'><%=getTran("web","all",sWebLanguage) %></option>
+					<option value='all'><%=getTran(request,"web","all",sWebLanguage) %></option>
 					<option value='1'>A</option>
 					<option value='2'>B</option>
 				</select>
-				<input type='submit' name='submit' value='<%=getTran("web","search",sWebLanguage) %>'/>
+				<input type='submit' name='submit' value='<%=getTran(null,"web","search",sWebLanguage) %>'/>
 			</td>
 		</tr>
 	</table>

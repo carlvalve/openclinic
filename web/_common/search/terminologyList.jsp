@@ -62,7 +62,7 @@
             tObj.setUpdateUser(activeUser.userid);
 
             tObj.store();
-            sMessage = "<font color='green'>"+getTran("web","dataIsSaved",sWebLanguage)+"</font>";
+            sMessage = "<font color='green'>"+getTran(request,"web","dataIsSaved",sWebLanguage)+"</font>";
             sEditTerminologyUid = tObj.getUid();
     }
     //*** DELETE **************************************************************
@@ -86,13 +86,13 @@
     <table width="100%" cellspacing="1" cellpadding="0" class="list">    
         <%-- TYPE --%>
         <tr>
-            <td class="admin2" width="100"><%=getTran("terminology","type",sWebLanguage)%></td>
+            <td class="admin2" width="100"><%=getTran(request,"terminology","type",sWebLanguage)%></td>
             <td class="admin2"><input class="text" type="text" name="FindTerminologyType" value="<%=sFindTerminologyType%>" size="<%=sTextWidth%>" readonly/></td>
         </tr>
         
         <%-- PHRASE --%>
         <tr>
-            <td class="admin2"><%=getTran("terminology","phrase",sWebLanguage)%></td>
+            <td class="admin2"><%=getTran(request,"terminology","phrase",sWebLanguage)%></td>
             <td class="admin2"><input class="text" type="text" name="FindTerminologyPhrase" value="<%=sFindTerminologyPhrase%>" size="<%=sTextWidth%>"/></td>
         </tr>
         
@@ -135,7 +135,7 @@
 		        
 		        <%-- PHRASE --%>
 		        <tr>
-		            <td class="admin"><%=getTran("terminology","phrase",sWebLanguage)%></td>
+		            <td class="admin"><%=getTran(request,"terminology","phrase",sWebLanguage)%></td>
 		            <td class="admin2">
 		                <textarea class="text" name="EditTerminologyPhrase" style="width:310px;" rows="<%=sTextAreaRows%>"><%=sEditTerminologyPhrase%></textarea>
 		            </td>
@@ -213,7 +213,7 @@
             <%                        
         } 
         else{
-            %><%=getTran("web","norecordsFound",sWebLanguage)%><%
+            %><%=getTran(request,"web","norecordsFound",sWebLanguage)%><%
         }
     }
 %>
@@ -338,7 +338,7 @@ function doEdit(id){
 }
 
 function doDelete(id){
-  if(yesnoDialogDirectText('<%=getTran("Web","areYouSureToDelete",sWebLanguage)%>')){
+  if(yesnoDialogDirectText('<%=getTran(null,"Web","areYouSureToDelete",sWebLanguage)%>')){
     EditForm.EditTerminologyUid.value = id;
     EditForm.Action.value = "delete";
     EditForm.submit();

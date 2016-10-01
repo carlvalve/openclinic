@@ -24,7 +24,7 @@
 	    if(rs.getInt("total")>0){
 	        %>
 	        <script>
-	        if(window.showModalDialog?yesnoDialog("web","statistics.patientexists"):yesnoDialogDirectText('<%=getTran("web","statistics.patientexists",sWebLanguage)%>')){
+	        if(window.showModalDialog?yesnoDialog("web","statistics.patientexists"):yesnoDialogDirectText('<%=getTran(null,"web","statistics.patientexists",sWebLanguage)%>')){
 	            window.opener.document.getElementsByName('newPatient')[0].value='1';
 	            window.opener.document.getElementsByName('EditPatientForm')[0].submit();
 	          }

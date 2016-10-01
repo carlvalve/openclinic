@@ -307,11 +307,11 @@
         <%-- LEGEND --%>
         <b>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <font color="red"><%=getTran("Web.Occup","medwan.common.normal",sWebLanguage)%></font>
+        <font color="red"><%=getTran(request,"Web.Occup","medwan.common.normal",sWebLanguage)%></font>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <font color="blue"><%=getTran("Web.Occup","medwan.recruitment.measurement",sWebLanguage)%></font>
+        <font color="blue"><%=getTran(request,"Web.Occup","medwan.recruitment.measurement",sWebLanguage)%></font>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <font color="green"><%=getTran("Web.Occup","medwan.common.today",sWebLanguage)%></font>
+        <font color="green"><%=getTran(request,"Web.Occup","medwan.common.today",sWebLanguage)%></font>
         </b>
         <br><br>
     <%
@@ -334,7 +334,7 @@
 			        <tr>
 			            <td class="admin" width="<%=sTDAdminWidth%>">
 			                <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-			                <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+			                <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
 			            </td>
 			            <td class="admin2">
 			                <input id="trandate" onchange="calculateToday()" type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>">
@@ -343,30 +343,30 @@
 			        </tr>
 			        <%-- FEV1 --%>
 			        <tr>
-			            <td class='admin'><%=getTran("Web.Occup","be.mxs.healthrecord.respiratory-function-examination.fev1",sWebLanguage)%></td>
+			            <td class='admin'><%=getTran(request,"Web.Occup","be.mxs.healthrecord.respiratory-function-examination.fev1",sWebLanguage)%></td>
 			            <td class='admin2'>
 			                <input id="MyFEV1" onKeyUp="calculateFEV1Percent()" onchange="calculateToday()" <%=setRightClick("ITEM_TYPE_RESP_FUNC_EX_FEV1")%> type="text" class="text" size="7" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RESP_FUNC_EX_FEV1" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RESP_FUNC_EX_FEV1" property="value"/>" onBlur="checkValue(this,0,<%=maxValueY%>,true);">
-			                &nbsp;<%=getTran("Web.Occup","medwan.common.liter",sWebLanguage)%>
+			                &nbsp;<%=getTran(request,"Web.Occup","medwan.common.liter",sWebLanguage)%>
 			                &nbsp;<input id="MyFEV1pct" readonly <%=setRightClick("ITEM_TYPE_RESP_FUNC_EX_FEV1_A")%> tabindex="-1" type="text" class="text" size="3" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RESP_FUNC_EX_FEV1_A" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RESP_FUNC_EX_FEV1_A" property="value"/>">%
 			            </td>
 			        </tr>
 			
 			        <%-- FVC --%>
 			        <tr>
-			            <td class='admin'><%=getTran("Web.Occup","be.mxs.healthrecord.respiratory-function-examination.fvc",sWebLanguage)%></td>
+			            <td class='admin'><%=getTran(request,"Web.Occup","be.mxs.healthrecord.respiratory-function-examination.fvc",sWebLanguage)%></td>
 			            <td class='admin2'>
 			                <input id="MyFVC" onKeyUp="calculateFVCPercent()" onchange="calculateToday()" <%=setRightClick("ITEM_TYPE_RESP_FUNC_EX_FVC")%> type="text" class="text" size="7" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RESP_FUNC_EX_FVC" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RESP_FUNC_EX_FVC" property="value"/>" onBlur="checkValue(this,0,<%=maxValueY%>,true);">
-			                &nbsp;<%=getTran("Web.Occup","medwan.common.liter",sWebLanguage)%>
+			                &nbsp;<%=getTran(request,"Web.Occup","medwan.common.liter",sWebLanguage)%>
 			                &nbsp;<input id="MyFVCpct" readonly <%=setRightClick("ITEM_TYPE_RESP_FUNC_EX_FVC_A")%> tabindex="-1" type="text" class="text" size="3" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RESP_FUNC_EX_FVC_A" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RESP_FUNC_EX_FVC_A" property="value"/>">%
 			            </td>
 			        </tr>
 			
 			        <%-- VC --%>
 			        <tr>
-			            <td class='admin'><%=getTran("Web.Occup","be.mxs.healthrecord.respiratory-function-examination.vc",sWebLanguage)%></td>
+			            <td class='admin'><%=getTran(request,"Web.Occup","be.mxs.healthrecord.respiratory-function-examination.vc",sWebLanguage)%></td>
 			            <td class='admin2'>
 			                <input  id="MyVC" onKeyUp="calculateVCPercent()" <%=setRightClick("ITEM_TYPE_RESP_FUNC_EX_VC")%> type="text" class="text" size="7" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RESP_FUNC_EX_VC" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RESP_FUNC_EX_VC" property="value"/>" onBlur="checkValue(this,0,<%=maxValueY%>,true);">
-			                &nbsp;<%=getTran("Web.Occup","medwan.common.liter",sWebLanguage)%>
+			                &nbsp;<%=getTran(request,"Web.Occup","medwan.common.liter",sWebLanguage)%>
 			                &nbsp;<input id="MyVCpct" readonly <%=setRightClick("ITEM_TYPE_RESP_FUNC_EX_VC_A")%> tabindex="-1" type="text" class="text" size="3" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RESP_FUNC_EX_VC_A" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RESP_FUNC_EX_VC_A" property="value"/>">%
 			            </td>
 			        </tr>
@@ -381,30 +381,30 @@
 			
 			        <%-- PEF --%>
 			        <tr>
-			            <td class='admin'><%=getTran("Web.Occup","be.mxs.healthrecord.respiratory-function-examination.pef",sWebLanguage)%></td>
+			            <td class='admin'><%=getTran(request,"Web.Occup","be.mxs.healthrecord.respiratory-function-examination.pef",sWebLanguage)%></td>
 			            <td class='admin2'>
 			                <input id="MyPEF" onKeyUp="calculatePEFPercent()" onchange="calculateToday()" type="text" class="text" size="7" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RESP_FUNC_EX_PEF" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RESP_FUNC_EX_PEF" property="value"/>"  onBlur="checkValue(this,0,1500,false);">
-			                &nbsp;<%=getTran("Web.Occup","medwan.common.liter-per-minute",sWebLanguage)%>
+			                &nbsp;<%=getTran(request,"Web.Occup","medwan.common.liter-per-minute",sWebLanguage)%>
 			                &nbsp;<input id="MyPEFpct" <%=setRightClick("ITEM_TYPE_RESP_FUNC_EX_PEF_A")%> tabindex="-1" type="text" class="text" size="3" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RESP_FUNC_EX_PEF_A" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RESP_FUNC_EX_PEF_A" property="value"/>">%
 			            </td>
 			        </tr>
 			
 			        <%-- CAUSE OF FAILURE (dropdown) --%>
 			        <tr>
-			            <td class='admin'><%=getTran("Web.Occup","be.mxs.healthrecord.respiratory-function-examination.raison-failure",sWebLanguage)%>&nbsp;</td>
+			            <td class='admin'><%=getTran(request,"Web.Occup","be.mxs.healthrecord.respiratory-function-examination.raison-failure",sWebLanguage)%>&nbsp;</td>
 			            <td class='admin2'>
 			                <select <%=setRightClick("ITEM_TYPE_RESP_FUNC_EX_RAISON_FAILURE")%> id="EditFailure" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RESP_FUNC_EX_RAISON_FAILURE" property="itemId"/>]>.value" class="text">
 			                    <option/>
-			                    <option value="medwan.healthrecord.technical-problem"><%=getTran("Web.Occup","medwan.healthrecord.technical-problem",sWebLanguage)%>
-			                    <option value="medwan.healthrecord.non-compliance"><%=getTran("Web.Occup","medwan.healthrecord.non-compliance",sWebLanguage)%>
-			                    <option value="medwan.healthrecord.illness-employer"><%=getTran("Web.Occup","medwan.healthrecord.illness-employer",sWebLanguage)%>
+			                    <option value="medwan.healthrecord.technical-problem"><%=getTran(request,"Web.Occup","medwan.healthrecord.technical-problem",sWebLanguage)%>
+			                    <option value="medwan.healthrecord.non-compliance"><%=getTran(request,"Web.Occup","medwan.healthrecord.non-compliance",sWebLanguage)%>
+			                    <option value="medwan.healthrecord.illness-employer"><%=getTran(request,"Web.Occup","medwan.healthrecord.illness-employer",sWebLanguage)%>
 			                </select>
 			            </td>
 			        </tr>
 			
 			        <%-- COMMENT --%>
 			        <tr>
-			            <td class='admin'><%=getTran("Web.Occup","be.mxs.healthrecord.respiratory-function-examination.comment",sWebLanguage)%>&nbsp;</td>
+			            <td class='admin'><%=getTran(request,"Web.Occup","be.mxs.healthrecord.respiratory-function-examination.comment",sWebLanguage)%>&nbsp;</td>
 			            <td class='admin2'>
 			                <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_RESP_FUNC_EX_COMMENT")%> class="text" cols="60" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RESP_FUNC_EX_COMMENT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RESP_FUNC_EX_COMMENT" property="value"/></textarea>
 			            </td>
@@ -437,7 +437,7 @@
   function checkValue(inputField,min,max,focus){
     if(isNumber(inputField)){
       if(!checkMinMaxOpen(min,max,inputField)){
-        var msg = '<%=getTran("Web.Occup","out-of-bounds-value-minmax",sWebLanguage)%>';
+        var msg = '<%=getTran(null,"Web.Occup","out-of-bounds-value-minmax",sWebLanguage)%>';
         msg = msg.replace('#min#',min);
         msg = msg.replace('#max#',max);
         if(focus) inputField.focus();
@@ -511,7 +511,7 @@
     DFEV1.SetFrame(50,50,300,175);
     DFEV1.XScale = "";
     DFEV1.YScale = " l";
-    DFEV1.SetText(" "," ","<%=getTran("Web.Occup","be.mxs.healthrecord.respiratory-function-examination.fev1",sWebLanguage)%>");
+    DFEV1.SetText(" "," ","<%=getTran(null,"Web.Occup","be.mxs.healthrecord.respiratory-function-examination.fev1",sWebLanguage)%>");
 
     DFEV1.SetBorder(Date.UTC(aFEV1Date[0].substr(aFEV1Date[0].lastIndexOf("/")+1),aFEV1Date[0].substr(aFEV1Date[0].indexOf("/")+1,2)*1-1,28,0,0,0),Date.UTC(today.getFullYear(),today.getMonth()+1,today.getDate(),0,0,0),0,maxValueY);
     DFEV1.Draw("#FFFFFF","#000000",false,"","","#DDDDFF");
@@ -549,7 +549,7 @@
     DFVC.YScale = " l";
 
     DFVC.SetBorder(Date.UTC(aFVCDate[0].substr(aFVCDate[0].lastIndexOf("/")+1),aFVCDate[0].substr(aFVCDate[0].indexOf("/")+1,2)*1-1,28,0,0,0),Date.UTC(today.getFullYear(),today.getMonth()+1,today.getDate(),0,0,0),0,maxValueY);
-    DFVC.SetText(" "," ","<%=getTran("Web.Occup","be.mxs.healthrecord.respiratory-function-examination.fvc",sWebLanguage)%>");
+    DFVC.SetText(" "," ","<%=getTran(null,"Web.Occup","be.mxs.healthrecord.respiratory-function-examination.fvc",sWebLanguage)%>");
     DFVC.Draw("#FFFFFF","#000000",false,"","","#DDDDFF");
 
     for (i=0; i<aFVCValue.length; i++){

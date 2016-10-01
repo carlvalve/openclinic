@@ -465,12 +465,15 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 		Vector productStocks = ServiceStock.getProductStocks(sServiceStockUID);
 		for(int n=0;n<productStocks.size();n++){
 			ProductStock stock = (ProductStock)productStocks.elementAt(n);
-			if(stock!=null && stock.getProduct()!=null && stock.getProduct().getProductGroup()!=null && stock.getProduct().getProductGroup().startsWith(sProductGroup) && stock.getProduct().getProductSubGroup().startsWith(sProductSubGroup)){
+			if(stock.getLevel()==0){
+				continue;
+			}
+			if(stock!=null && stock.getProduct()!=null && ScreenHelper.checkString(stock.getProduct().getProductGroup()).startsWith(sProductGroup) && ScreenHelper.checkString(stock.getProduct().getProductSubGroup()).startsWith(sProductSubGroup)){
 				//First find the product subcategory
-				String uid=stock.getProduct()==null?"|"+stock.getUid():HTMLEntities.unhtmlentities(ScreenHelper.getTranNoLink("product.productgroup",stock.getProduct().getProductGroup(),sPrintLanguage)+" > "+stock.getProduct().getFullProductSubGroupName(sPrintLanguage))+"|"+stock.getUid();
+				String uid=stock.getProduct()==null?"|"+stock.getUid():(stock.getProduct().getProductGroup()==null?"?":HTMLEntities.unhtmlentities(ScreenHelper.getTranNoLink("product.productgroup",stock.getProduct().getProductGroup(),sPrintLanguage))+" > "+stock.getProduct().getFullProductSubGroupName(sPrintLanguage))+"|"+stock.getUid();
 				stocks.put(uid, stock);
 			}
-			else{
+			else if(sProductGroup.length()==0 && sProductSubGroup.length()==0){
 				String uid="?|"+stock.getUid();
 				stocks.put(uid, stock);
 			}

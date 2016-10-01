@@ -26,7 +26,7 @@
     <table class="list" border="0" width="100%" cellspacing="1">        
         <%-- search NAME --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","name",sWebLanguage)%>&nbsp;</td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","name",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="searchName" name="searchName" size="40" maxLength="50" value="">
             </td>
@@ -34,7 +34,7 @@
         
         <%-- search ASSET --%>    
         <tr>
-            <td class="admin"><%=getTran("web.assets","asset",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.assets","asset",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="hidden" name="searchAssetUID" id="searchAssetUID" value="">
                 <input type="text" class="text" id="searchAssetCode" name="searchAssetCode" size="20" readonly value="">
@@ -47,7 +47,7 @@
         
         <%-- search OPERATOR (person) --%>
         <tr>
-            <td class="admin"><%=getTran("web","operator",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web","operator",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="searchOperator" name="searchOperator" size="40" maxLength="50" value="">
             </td>
@@ -115,7 +115,7 @@
     <table class="list" border="0" width="100%" cellspacing="1">
         <%-- name (*) --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web.assets","name",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web.assets","name",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="name" name="name" size="20" maxLength="30" value="">
             </td>
@@ -123,7 +123,7 @@
         
         <%-- asset (code) (*) --%>
         <tr>
-            <td class="admin"><%=getTran("web.assets","asset",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.assets","asset",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <input type="hidden" name="assetUID" id="assetUID" value="">
                 <input type="text" class="text" id="assetCode" name="assetCode" size="20" value="" readonly>
@@ -136,7 +136,7 @@
              
         <%-- startDate --%>
         <tr>
-            <td class="admin"><%=getTran("web.assets","startDate",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.assets","startDate",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <%=writeDateField("startDate","EditForm","",sWebLanguage)%>
             </td>
@@ -144,15 +144,15 @@
              
         <%-- frequency --%>
         <tr>
-            <td class="admin"><%=getTran("web.assets","frequency",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.assets","frequency",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
-                <input type="text" class="text" id="frequency" name="frequency" size="5" maxLength="5" value="" onKeyUp="isNumber(this);">&nbsp;<%=getTran("web","days",sWebLanguage)%>&nbsp;
+                <input type="text" class="text" id="frequency" name="frequency" size="5" maxLength="5" value="" onKeyUp="isNumber(this);">&nbsp;<%=getTran(request,"web","days",sWebLanguage)%>&nbsp;
             </td>
         </tr>  
              
         <%-- operator (person) --%>
         <tr>
-            <td class="admin"><%=getTran("web.assets","operator",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.assets","operator",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="operator" name="operator" size="40" maxLength="50" value="">
             </td>
@@ -160,7 +160,7 @@
              
         <%-- plan manager (emailaddress) --%>
         <tr>
-            <td class="admin"><%=getTran("web.assets","planManagerEmail",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.assets","planManagerEmail",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="text" name="planManager" id="planManager" size="40" maxLength="60" value="">
             </td>
@@ -168,7 +168,7 @@
        
         <%-- instructions --%>                
         <tr>
-            <td class="admin"><%=getTran("web.assets","instructions",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web.assets","instructions",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea class="text" name="instructions" id="instructions" cols="80" rows="4" onKeyup="resizeTextarea(this,8);"></textarea>
             </td>
@@ -185,7 +185,7 @@
             </td>
         </tr>
     </table>
-    <i><%=getTran("web","colored_fields_are_obligate",sWebLanguage)%></i>
+    <i><%=getTran(request,"web","colored_fields_are_obligate",sWebLanguage)%></i>
     
     <div id="divMessage" style="padding-top:10px;"></div>
 </form>

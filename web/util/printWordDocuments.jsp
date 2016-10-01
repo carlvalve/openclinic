@@ -3,7 +3,7 @@
 <form name='transactionForm' method='post'>
 	<input type='hidden' name='action' id='action' value=''/>
 	<table width='100%'>
-		<tr class='admin'><td colspan='4'><%=getTran("web","printworddocuments",sWebLanguage) %></td></tr>
+		<tr class='admin'><td colspan='4'><%=getTran(request,"web","printworddocuments",sWebLanguage) %></td></tr>
 		<%
 			Connection conn = MedwanQuery.getInstance().getAdminConnection();
 			PreparedStatement ps = conn.prepareStatement("select name from WordDocuments order by name");

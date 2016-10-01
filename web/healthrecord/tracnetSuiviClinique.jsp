@@ -20,7 +20,7 @@
         <tr>
             <td class="admin" width="<%=sTDAdminWidth%>">
                 <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-                <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+                <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
             </td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" id="trandate" OnBlur='checkDate(this)'>
@@ -28,50 +28,50 @@
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","weigth",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","weigth",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" size="5" id="idweight" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BIOMETRY_WEIGHT" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BIOMETRY_WEIGHT" property="value"/>" onblur="isNumber(this);calculateBMI();"/> Kg
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","heigth",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","heigth",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" size="5" id="idheight" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BIOMETRY_HEIGHT" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BIOMETRY_HEIGHT" property="value"/>" onblur="isNumber(this);calculateBMI();"/> cm
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","bmi",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","bmi",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" readonly class="text" size="5" id="idbmi" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_CLINIQUE_BMI" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_CLINIQUE_BMI" property="value"/>"/>
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","tracnet.suivi.clinique.screening.tbc",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","tracnet.suivi.clinique.screening.tbc",sWebLanguage)%></td>
             <td class="admin2">
                 <input <%=setRightClick("ITEM_TYPE_TRACNET_SUIVI_CLINIQUE_SCREENING_TBC")%> type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_CLINIQUE_SCREENING_TBC" property="itemId"/>]>.value" value="+" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_CLINIQUE_SCREENING_TBC;value=+" property="value" outputString="checked"/>>+
                 <input <%=setRightClick("ITEM_TYPE_TRACNET_SUIVI_CLINIQUE_SCREENING_TBC")%> type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_CLINIQUE_SCREENING_TBC" property="itemId"/>]>.value" value="-" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_CLINIQUE_SCREENING_TBC;value=-" property="value" outputString="checked"/>>-
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","tracnet.suivi.clinique.anamnese",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","tracnet.suivi.clinique.anamnese",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_TRACNET_SUIVI_CLINIQUE_ANAMNESE")%> class="text" cols="100" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_CLINIQUE_ANAMNESE" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_CLINIQUE_ANAMNESE" property="value"/></textarea>
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","tracnet.suivi.clinique.examen.clinique",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","tracnet.suivi.clinique.examen.clinique",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_TRACNET_SUIVI_CLINIQUE_EXAMEN_CLINIQUE")%> class="text" cols="100" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_CLINIQUE_EXAMEN_CLINIQUE" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_CLINIQUE_EXAMEN_CLINIQUE" property="value"/></textarea>
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","tracnet.suivi.clinique.diagnosis",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","tracnet.suivi.clinique.diagnosis",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_TRACNET_SUIVI_CLINIQUE_DIAGNOSIS")%> class="text" cols="100" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_CLINIQUE_DIAGNOSIS" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_CLINIQUE_DIAGNOSIS" property="value"/></textarea>
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","tracnet.suivi.clinique.cat",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","tracnet.suivi.clinique.cat",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_TRACNET_SUIVI_CLINIQUE_CAT")%> class="text" cols="100" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_CLINIQUE_CAT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_CLINIQUE_CAT" property="value"/></textarea>
             </td>

@@ -78,10 +78,10 @@
                  .append("<td><img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.gif' class='link' title='"+deleteTran+"' onclick=\"doDelete('"+labResult.getServerId()+"','"+labResult.getTransactionId()+"','"+labResult.getAnalysisCode()+"');\">")
                  .append("<td><img src='"+sCONTEXTPATH+"/_img/icons/icon_view.gif' class='link' title='"+labrequestTran+"' onclick=\"showLabRequest('"+labResult.getServerId()+"','"+labResult.getTransactionId()+"');\">")
                  .append("<td onclick=\"showResultDetails('"+labResult.getServerId()+"','"+labResult.getTransactionId()+"','"+labResult.getAnalysisCode()+"');\">"+labResult.getAnalysisCode()+"</td>")
-                 .append("<td onclick=\"showResultDetails('"+labResult.getServerId()+"','"+labResult.getTransactionId()+"','"+labResult.getAnalysisCode()+"');\">"+getTran("labanalysis",labResult.getAnalysisCode(),sWebLanguage)+"</td>")
+                 .append("<td onclick=\"showResultDetails('"+labResult.getServerId()+"','"+labResult.getTransactionId()+"','"+labResult.getAnalysisCode()+"');\">"+getTran(null,"labanalysis",labResult.getAnalysisCode(),sWebLanguage)+"</td>")
                  .append("<td onclick=\"showResultDetails('"+labResult.getServerId()+"','"+labResult.getTransactionId()+"','"+labResult.getAnalysisCode()+"');\">"+labResult.getResultValue()+" "+labResult.getResultUnit()+"</td>")
                  .append("<td onclick=\"showResultDetails('"+labResult.getServerId()+"','"+labResult.getTransactionId()+"','"+labResult.getAnalysisCode()+"');\">"+(labResult.getResultValue()!=null && labResult.getResultValue().length()>0?resultDate:"")+"</td>")
-                 .append("<td onclick=\"showResultDetails('"+labResult.getServerId()+"','"+labResult.getTransactionId()+"','"+labResult.getAnalysisCode()+"');\">"+(labResult.getResultModifier().length()>0?getTran("labanalysis.resultmodifier",labResult.getResultModifier(),sWebLanguage):"")+"</td>")
+                 .append("<td onclick=\"showResultDetails('"+labResult.getServerId()+"','"+labResult.getTransactionId()+"','"+labResult.getAnalysisCode()+"');\">"+(labResult.getResultModifier().length()>0?getTran(null,"labanalysis.resultmodifier",labResult.getResultModifier(),sWebLanguage):"")+"</td>")
                 .append("</tr>");
         }
 
@@ -146,10 +146,10 @@
                  .append("<td><img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.gif' class='link' title='"+deleteTran+"' onclick=\"doDelete('"+labResult.getServerId()+"','"+labResult.getTransactionId()+"','"+labResult.getAnalysisCode()+"');\">")
                  .append("<td><img src='"+sCONTEXTPATH+"/_img/icons/icon_view.gif' class='link' title='"+labrequestTran+"' onclick=\"showLabRequest('"+labResult.getServerId()+"','"+labResult.getTransactionId()+"');\">")
                  .append("<td onclick=\"showResultDetails('"+labResult.getServerId()+"','"+labResult.getTransactionId()+"','"+labResult.getAnalysisCode()+"');\">"+labResult.getAnalysisCode()+"</td>")
-                 .append("<td colspan='3' onclick=\"showResultDetails('"+labResult.getServerId()+"','"+labResult.getTransactionId()+"','"+labResult.getAnalysisCode()+"');\">"+getTran("labanalysis",labResult.getAnalysisCode(),sWebLanguage)+"</td>")
+                 .append("<td colspan='3' onclick=\"showResultDetails('"+labResult.getServerId()+"','"+labResult.getTransactionId()+"','"+labResult.getAnalysisCode()+"');\">"+getTran(null,"labanalysis",labResult.getAnalysisCode(),sWebLanguage)+"</td>")
                  .append("<td onclick=\"showResultDetails('"+labResult.getServerId()+"','"+labResult.getTransactionId()+"','"+labResult.getAnalysisCode()+"');\">"+labResult.getResultValue()+" "+labResult.getResultUnit()+"</td>")
                  .append("<td onclick=\"showResultDetails('"+labResult.getServerId()+"','"+labResult.getTransactionId()+"','"+labResult.getAnalysisCode()+"');\">"+resultDate+"</td>")
-                 .append("<td onclick=\"showResultDetails('"+labResult.getServerId()+"','"+labResult.getTransactionId()+"','"+labResult.getAnalysisCode()+"');\">"+(labResult.getResultModifier().length()>0?getTran("labanalysis.resultmodifier",labResult.getResultModifier(),sWebLanguage):"")+"</td>")
+                 .append("<td onclick=\"showResultDetails('"+labResult.getServerId()+"','"+labResult.getTransactionId()+"','"+labResult.getAnalysisCode()+"');\">"+(labResult.getResultModifier().length()>0?getTran(null,"labanalysis.resultmodifier",labResult.getResultModifier(),sWebLanguage):"")+"</td>")
                 .append("</tr>");
         }
 
@@ -235,7 +235,7 @@
     %>
     <table width="100%" cellspacing="0">
         <tr class="Admin">
-            <td><%=getTran("Web.manage",titleType,sWebLanguage)%>&nbsp;<%=personName%></td>
+            <td><%=getTran(request,"Web.manage",titleType,sWebLanguage)%>&nbsp;<%=personName%></td>
         </tr>
     </table>
 
@@ -244,11 +244,11 @@
         <tr>
             <td class="admin2" colspan="2" height="22">
                 <%-- RESULT DATE --%>
-                &nbsp;<%=getTran("Web.manage","labanalysis.cols.resultdate",sWebLanguage)%>&nbsp;
+                &nbsp;<%=getTran(request,"Web.manage","labanalysis.cols.resultdate",sWebLanguage)%>&nbsp;
                 <%=writeDateField("FindResultDate","transactionForm",sFindResultDate,sWebLanguage)%>&nbsp;
 
                 <%-- LAB CODE --%>
-                &nbsp;<%=getTran("Web.manage","labanalysis.cols.analysiscode",sWebLanguage)%>&nbsp;
+                &nbsp;<%=getTran(request,"Web.manage","labanalysis.cols.analysiscode",sWebLanguage)%>&nbsp;
                 <input type="text" class="text" name="FindLabCode" value="<%=sFindLabCode%>" size="5" maxLength="5">
 
                 <%-- buttons --%>
@@ -284,7 +284,7 @@
         analysis.store(true); // object exists, so update
 
         // message
-        msg = getTran("web.manage","labResultIsSaved",sWebLanguage);
+        msg = getTran(request,"web.manage","labResultIsSaved",sWebLanguage);
         sAction = "find";
     }
     //--- DELETE ----------------------------------------------------------------------------------
@@ -292,7 +292,7 @@
         RequestedLabAnalysis.delete(Integer.parseInt(sEditServerId),Integer.parseInt(sEditTransactionId),sEditLabCode);
 
         // message
-        msg = getTran("web.manage","labResultIsDeleted",sWebLanguage);
+        msg = getTran(request,"web.manage","labResultIsDeleted",sWebLanguage);
         sAction = "find";
     }
 
@@ -336,32 +336,32 @@
                         <td width="18"></td>
                         <td width="18"></td>
                         <td width="18"></td>
-                        <td width="12%">&nbsp;<%=getTran("Web.manage","labanalysis.cols.analysiscode",sWebLanguage)%></td>
+                        <td width="12%">&nbsp;<%=getTran(request,"Web.manage","labanalysis.cols.analysiscode",sWebLanguage)%></td>
 
                         <%
                             if(resultType.equals("")){
                                 // display both patient and user
                                 %>
-                                    <td width="30%">&nbsp;<%=getTran("Web.manage","labanalysis.cols.patient",sWebLanguage)%></td>
-                                    <td width="30%">&nbsp;<%=getTran("Web.manage","labanalysis.cols.user",sWebLanguage)%></td>
+                                    <td width="30%">&nbsp;<%=getTran(request,"Web.manage","labanalysis.cols.patient",sWebLanguage)%></td>
+                                    <td width="30%">&nbsp;<%=getTran(request,"Web.manage","labanalysis.cols.user",sWebLanguage)%></td>
                                 <%
                             }
                             else{
                                 // display patient OR user
                                 %>
-                                    <td width="30%">&nbsp;<%=getTran("Web.manage","labanalysis.cols."+(resultType.equalsIgnoreCase("user")?"patient":"user"),sWebLanguage)%></td>
+                                    <td width="30%">&nbsp;<%=getTran(request,"Web.manage","labanalysis.cols."+(resultType.equalsIgnoreCase("user")?"patient":"user"),sWebLanguage)%></td>
                                 <%
                             }
 
                             // urgency
                             if(resultType.equals("")){
-                                %><td width="10%">&nbsp;<%=getTran("Web.manage","labanalysis.cols.urgency",sWebLanguage)%></td><%
+                                %><td width="10%">&nbsp;<%=getTran(request,"Web.manage","labanalysis.cols.urgency",sWebLanguage)%></td><%
                             }
                         %>
 
-                        <td width="*">&nbsp;<%=getTran("Web.manage","labanalysis.cols.resultvalue",sWebLanguage)%></td>
-                        <td width="*">&nbsp;<%=getTran("Web.manage","labanalysis.cols.resultdate",sWebLanguage)%></td>
-                        <td width="10%">&nbsp;<%=getTran("Web.manage","labanalysis.cols.resultmodifier",sWebLanguage)%></td>
+                        <td width="*">&nbsp;<%=getTran(request,"Web.manage","labanalysis.cols.resultvalue",sWebLanguage)%></td>
+                        <td width="*">&nbsp;<%=getTran(request,"Web.manage","labanalysis.cols.resultdate",sWebLanguage)%></td>
+                        <td width="10%">&nbsp;<%=getTran(request,"Web.manage","labanalysis.cols.resultmodifier",sWebLanguage)%></td>
                     </tr>
 
                     <%=labResultsHtml%>
@@ -376,13 +376,13 @@
 
                 <%-- number of records found --%>
                 <span style="width:49%;text-align:left;">
-                    <a href="#topp" class="topbutton">&nbsp;</a> &nbsp; <%=foundObjectCount%> <%=getTran("web","recordsfound",sWebLanguage)%>
+                    <a href="#topp" class="topbutton">&nbsp;</a> &nbsp; <%=foundObjectCount%> <%=getTran(request,"web","recordsfound",sWebLanguage)%>
                 </span>
             <%
         }
         else{
             // no records found
-            %><%=getTran("web","norecordsfound",sWebLanguage)%><%
+            %><%=getTran(request,"web","norecordsfound",sWebLanguage)%><%
         }
     }
 %>

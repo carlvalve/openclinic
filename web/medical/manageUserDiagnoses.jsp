@@ -31,7 +31,7 @@
     }
     else if(sAction.equals("DELETE")){        
         UserDiagnosis.deleteUserDiagnosis(activeUser.userid,sDeleteDiagnosisCode,sDeleteDiagnosisCodeType);
-        sMessage = getTran("medical.diagnosis","delete_mycode",sWebLanguage);
+        sMessage = getTran(request,"medical.diagnosis","delete_mycode",sWebLanguage);
     }
 
     Vector vUserDiagnoses = UserDiagnosis.selectUserDiagnoses(activeUser.userid,"","","");
@@ -66,13 +66,13 @@
         <%-- header --%>
         <tr>
             <td class="admin" width="20">&nbsp;</td>
-            <td class="admin" width="100"><%=getTran("web","code",sWebLanguage)%></td>
-            <td class="admin" width="900"><%=getTran("web.manage","diagnosis",sWebLanguage)%></td>
+            <td class="admin" width="100"><%=getTran(request,"web","code",sWebLanguage)%></td>
+            <td class="admin" width="900"><%=getTran(request,"web.manage","diagnosis",sWebLanguage)%></td>
         </tr>
         <%=sbResults%>
         <%
             if(sbResults.length()==0){
-	            %><tr><td colspan="2"><%=getTran("web","norecordsfound",sWebLanguage)%></td></tr><%
+	            %><tr><td colspan="2"><%=getTran(request,"web","norecordsfound",sWebLanguage)%></td></tr><%
             }
         %>
     </table>
@@ -85,11 +85,11 @@
 <form name="EditDiagnosisForm" method="POST" action="<c:url value='/main.do'/>?Page=medical/manageUserDiagnoses.jsp&ts=<%=getTs()%>">
     <table class='list' width='100%' cellspacing="1">
         <tr class="admin">
-            <td colspan='2'>&nbsp;&nbsp;<%=getTran("web.manage","adduserdiagnoses",sWebLanguage)%></td>
+            <td colspan='2'>&nbsp;&nbsp;<%=getTran(request,"web.manage","adduserdiagnoses",sWebLanguage)%></td>
         </tr>
         <tr>
             <td class='admin' width='<%=sTDAdminWidth%>'>
-                <%=getTran("medical.diagnosis","diagnosiscode",sWebLanguage)%>
+                <%=getTran(request,"medical.diagnosis","diagnosiscode",sWebLanguage)%>
             </td>
             <td class="admin2">
                 <input type="hidden" name="EditDiagnosisCode" id="EditDiagnosisCode" value="">

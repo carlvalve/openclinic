@@ -10,8 +10,8 @@
 	private String addErgotherapy(int iTotal, String sTmpErgotherapyDate, String sTmpErgotherapyObservation, String sTmpErgotherapyConclusion, String sWebLanguage) {
 	    return "<tr id='rowErgotherapy" + iTotal + "'>"
 	            + "<td width='36'>"
-	            + " <a href='javascript:deleteErgotherapy(rowErgotherapy" + iTotal + ")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran("Web.Occup", "medwan.common.delete", sWebLanguage) + "' border='0'></a> "
-	            + " <a href='javascript:editErgotherapy(rowErgotherapy" + iTotal + ")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_edit.gif' alt='" + getTran("Web.Occup", "medwan.common.edit", sWebLanguage) + "' border='0'></a>"
+	            + " <a href='javascript:deleteErgotherapy(rowErgotherapy" + iTotal + ")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran(null,"Web.Occup", "medwan.common.delete", sWebLanguage) + "' border='0'></a> "
+	            + " <a href='javascript:editErgotherapy(rowErgotherapy" + iTotal + ")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_edit.gif' alt='" + getTran(null,"Web.Occup", "medwan.common.edit", sWebLanguage) + "' border='0'></a>"
 	            + "</td>"
 	            + "<td>&nbsp;" + sTmpErgotherapyDate + "</td>"
 	            + "<td>&nbsp;" + sTmpErgotherapyObservation + "</td>"
@@ -85,7 +85,7 @@
         <tr>
             <td class="admin" width="<%=sTDAdminWidth%>">
                 <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-            	<%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+            	<%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
             </td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" id="trandate" OnBlur='checkDate(this)'>
@@ -100,14 +100,14 @@
 	    </tr>
     <%--  MOTIF --%>
     <tr>
-        <td class="admin" width="<%=sTDAdminWidth%>" nowrap><%=getTran("web","reason",sWebLanguage)%>&nbsp;</td>
+        <td class="admin" width="<%=sTDAdminWidth%>" nowrap><%=getTran(request,"web","reason",sWebLanguage)%>&nbsp;</td>
         <td class="admin2" width="100%">
             <textarea id="focusField" onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_ERGOTHERAPY_REASON")%> class="text" cols="80" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ERGOTHERAPY_REASON" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ERGOTHERAPY_REASON" property="value"/></textarea>
         </td>
     </tr>
     <%--  HISTORIQUE --%>
     <tr>
-        <td class="admin"><%=getTran("web","short.history",sWebLanguage)%>&nbsp;</td>
+        <td class="admin"><%=getTran(request,"web","short.history",sWebLanguage)%>&nbsp;</td>
         <td class="admin2">
             <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_ERGOTHERAPY_HISTORY")%> class="text" cols="80" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ERGOTHERAPY_HISTORY" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ERGOTHERAPY_HISTORY" property="value"/></textarea>
         </td>
@@ -115,14 +115,14 @@
     
     <%--  PERSPECTIVE DE LA VIE DU MALADE --%>
     <tr>
-        <td class="admin" width="<%=sTDAdminWidth%>" nowrap><%=getTran("web","life.perspective",sWebLanguage)%>&nbsp;</td>
+        <td class="admin" width="<%=sTDAdminWidth%>" nowrap><%=getTran(request,"web","life.perspective",sWebLanguage)%>&nbsp;</td>
         <td class="admin2" width="100%">
             <textarea id="focusField" onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_ERGOTHERAPY_LIFEPERSPECTIVE")%> class="text" cols="80" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ERGOTHERAPY_LIFEPERSPECTIVE" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ERGOTHERAPY_LIFEPERSPECTIVE" property="value"/></textarea>
         </td>
     </tr>
     <%--  PROBLEME DE SOINS --%>
     <tr>
-        <td class="admin"><%=getTran("web","care.problems",sWebLanguage)%>&nbsp;</td>
+        <td class="admin"><%=getTran(request,"web","care.problems",sWebLanguage)%>&nbsp;</td>
         <td class="admin2">
             <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_ERGOTHERAPY_CAREPROBLEMS")%> class="text" cols="80" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ERGOTHERAPY_CAREPROBLEMS" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ERGOTHERAPY_CAREPROBLEMS" property="value"/></textarea>
         </td>
@@ -130,55 +130,55 @@
     
     <%--  OBJECTIF --%>
     <tr>
-        <td class="admin"><%=getTran("web","objective",sWebLanguage)%>&nbsp;</td>
+        <td class="admin"><%=getTran(request,"web","objective",sWebLanguage)%>&nbsp;</td>
         <td class="admin2">
             <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_ERGOTHERAPY_OBJECTIVE")%> class="text" cols="80" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ERGOTHERAPY_OBJECTIVE" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ERGOTHERAPY_OBJECTIVE" property="value"/></textarea>
         </td>
     </tr>
     <tr class="admin" >
-        <td colspan="2" > <%=getTran("web","activity.plan",sWebLanguage)%></td>
+        <td colspan="2" > <%=getTran(request,"web","activity.plan",sWebLanguage)%></td>
     </tr>
     <tr>
-        <td class="admin"><%=getTran("web","activity.calendar",sWebLanguage)%>&nbsp;</td>
+        <td class="admin"><%=getTran(request,"web","activity.calendar",sWebLanguage)%>&nbsp;</td>
         <td class="admin2">
 			<table>
 				<tr>
-					<td><%=getTran("web","monday",sWebLanguage)%></td>
-					<td><%=getTran("web","tuesday",sWebLanguage)%></td>
-					<td><%=getTran("web","wednesday",sWebLanguage)%></td>
-					<td><%=getTran("web","thursday",sWebLanguage)%></td>
-					<td><%=getTran("web","friday",sWebLanguage)%></td>
-					<td><%=getTran("web","saturday",sWebLanguage)%></td>
+					<td><%=getTran(request,"web","monday",sWebLanguage)%></td>
+					<td><%=getTran(request,"web","tuesday",sWebLanguage)%></td>
+					<td><%=getTran(request,"web","wednesday",sWebLanguage)%></td>
+					<td><%=getTran(request,"web","thursday",sWebLanguage)%></td>
+					<td><%=getTran(request,"web","friday",sWebLanguage)%></td>
+					<td><%=getTran(request,"web","saturday",sWebLanguage)%></td>
 				</tr>
 				<tr>
 					<td>
 						<select name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ERGOTHERAPY_MONDAY" property="itemId"/>]>.value">
-							<%=ScreenHelper.writeSelect("ergotherapy.activity",tran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ERGOTHERAPY_MONDAY"),sWebLanguage)%>
+							<%=ScreenHelper.writeSelect(request,"ergotherapy.activity",tran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ERGOTHERAPY_MONDAY"),sWebLanguage)%>
 						</select>
 					</td>
 					<td>
 						<select name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ERGOTHERAPY_TUESDAY" property="itemId"/>]>.value">
-							<%=ScreenHelper.writeSelect("ergotherapy.activity",tran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ERGOTHERAPY_TUESDAY"),sWebLanguage)%>
+							<%=ScreenHelper.writeSelect(request,"ergotherapy.activity",tran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ERGOTHERAPY_TUESDAY"),sWebLanguage)%>
 						</select>
 					</td>
 					<td>
 						<select name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ERGOTHERAPY_WEDNESDAY" property="itemId"/>]>.value">
-							<%=ScreenHelper.writeSelect("ergotherapy.activity",tran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ERGOTHERAPY_WEDNESDAY"),sWebLanguage)%>
+							<%=ScreenHelper.writeSelect(request,"ergotherapy.activity",tran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ERGOTHERAPY_WEDNESDAY"),sWebLanguage)%>
 						</select>
 					</td>
 					<td>
 						<select name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ERGOTHERAPY_THURSDAY" property="itemId"/>]>.value">
-							<%=ScreenHelper.writeSelect("ergotherapy.activity",tran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ERGOTHERAPY_THURSDAY"),sWebLanguage)%>
+							<%=ScreenHelper.writeSelect(request,"ergotherapy.activity",tran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ERGOTHERAPY_THURSDAY"),sWebLanguage)%>
 						</select>
 					</td>
 					<td>
 						<select name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ERGOTHERAPY_FRIDAY" property="itemId"/>]>.value">
-							<%=ScreenHelper.writeSelect("ergotherapy.activity",tran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ERGOTHERAPY_FRIDAY"),sWebLanguage)%>
+							<%=ScreenHelper.writeSelect(request,"ergotherapy.activity",tran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ERGOTHERAPY_FRIDAY"),sWebLanguage)%>
 						</select>
 					</td>
 					<td>
 						<select name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ERGOTHERAPY_SATURDAY" property="itemId"/>]>.value">
-							<%=ScreenHelper.writeSelect("ergotherapy.activity",tran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ERGOTHERAPY_SATURDAY"),sWebLanguage)%>
+							<%=ScreenHelper.writeSelect(request,"ergotherapy.activity",tran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ERGOTHERAPY_SATURDAY"),sWebLanguage)%>
 						</select>
 					</td>
 				</tr>
@@ -186,16 +186,16 @@
         </td>
     </tr>
     <tr class="admin" >
-        <td colspan="2" > <%=getTran("web","observations",sWebLanguage)%></td>
+        <td colspan="2" > <%=getTran(request,"web","observations",sWebLanguage)%></td>
     </tr>
     <tr>
     	<td colspan="2">
 	    	<table id="tblErgotherapy" width="100%">
 	    		<tr>
 	                <td class="admin" width="36">&nbsp;</td>
-	  	     		<td class="admin"><%=getTran("web","date",sWebLanguage)%></td>
-		     		<td class="admin"><%=getTran("web","observation",sWebLanguage)%></td>
-		     		<td class="admin"><%=getTran("web","conclusion",sWebLanguage)%></td>
+	  	     		<td class="admin"><%=getTran(request,"web","date",sWebLanguage)%></td>
+		     		<td class="admin"><%=getTran(request,"web","observation",sWebLanguage)%></td>
+		     		<td class="admin"><%=getTran(request,"web","conclusion",sWebLanguage)%></td>
 	                <td class="admin">&nbsp;</td>
 		     	</tr>
 		     	<tr>

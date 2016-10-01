@@ -20,20 +20,22 @@
 
   <%-- DO SAVE --%>
   function doSave(){
-    if("<%=MedwanQuery.getInstance().getConfigString("InsuranceAgentAuthorizationNeededFor","$$").replaceAll("\\*","")%>"==document.getElementById('EditInsurarUID').value && document.getElementById('EditInsuranceNr').value==''){
-      alertDialog("web","insurancenr.mandatory");
-    }
-    else if("<%=MedwanQuery.getInstance().getConfigString("InsuranceAgentAuthorizationNeededFor","$$").replaceAll("\\*","")%>"==document.getElementById('EditInsurarUID').value && document.getElementById('EditInsuranceStatus').value==''){
-      alertDialog("web","insurancestatus.mandatory");
-    }
-   	else if(EditInsuranceForm.EditInsuranceStart && EditInsuranceForm.EditInsuranceStart.value.length<8){
-   	  alertDialog("web","insurancedatestart.mandatory");
-   	}
-  	else{
-      EditInsuranceForm.EditSaveButton.disabled = true;
-      EditInsuranceForm.Action.value = "SAVE";
-      EditInsuranceForm.submit();
-    }
+	if(validateInsuranceNumber()){
+	    if("<%=MedwanQuery.getInstance().getConfigString("InsuranceAgentAuthorizationNeededFor","$$").replaceAll("\\*","")%>"==document.getElementById('EditInsurarUID').value && document.getElementById('EditInsuranceNr').value==''){
+	      alertDialog("web","insurancenr.mandatory");
+	    }
+	    else if("<%=MedwanQuery.getInstance().getConfigString("InsuranceAgentAuthorizationNeededFor","$$").replaceAll("\\*","")%>"==document.getElementById('EditInsurarUID').value && document.getElementById('EditInsuranceStatus').value==''){
+	      alertDialog("web","insurancestatus.mandatory");
+	    }
+	   	else if(EditInsuranceForm.EditInsuranceStart && EditInsuranceForm.EditInsuranceStart.value.length<8){
+	   	  alertDialog("web","insurancedatestart.mandatory");
+	   	}
+	  	else{
+	      EditInsuranceForm.EditSaveButton.disabled = true;
+	      EditInsuranceForm.Action.value = "SAVE";
+	      EditInsuranceForm.submit();
+	    }
+	}
   }
 </script>
 
@@ -196,7 +198,7 @@
     <table class='list' border='0' width='100%' cellspacing='1'>
         <%-- insurancenr --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("insurance","insurancenr",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"insurance","insurancenr",sWebLanguage)%></td>
             <td class="admin2">
                 <input class="text" type="text" name="EditInsuranceNr" id="EditInsuranceNr" value="<%=sEditInsuranceNr%>" size="<%=sTextWidth%>"/>
             </td>
@@ -204,18 +206,18 @@
         
         <%-- status --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("insurance","status",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"insurance","status",sWebLanguage)%></td>
             <td class="admin2">
                 <select class="text" name="EditInsuranceStatus" id="EditInsuranceStatus" onchange="setStatus();">
                     <option value=""></option>
-                    <%=ScreenHelper.writeSelectUnsorted("insurance.status",sEditInsuranceStatus,sWebLanguage)%>
+                    <%=ScreenHelper.writeSelectUnsorted(request,"insurance.status",sEditInsuranceStatus,sWebLanguage)%>
                 </select>
             </td>
         </tr>
         
         <%-- member --%>
         <tr>
-            <td class="admin"><%=getTran("insurance","member",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"insurance","member",sWebLanguage)%></td>
             <td class="admin2">
                 <input class="text" type="text" name="EditInsuranceMember" id="EditInsuranceMember" value="<%=sEditInsuranceMember%>" size="<%=sTextWidth%>"/>
             </td>
@@ -225,14 +227,14 @@
 %>
         <%-- immat --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("insurance","memberimmat",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"insurance","memberimmat",sWebLanguage)%></td>
             <td class="admin2">
                 <input class="text" type="text" name="EditInsuranceMemberImmat" id="EditInsuranceMemberImmat" value="<%=sEditInsuranceMemberImmat%>" size="<%=sTextWidth%>"/>
             </td>
         </tr>
         <%-- employer --%>
         <tr>
-            <td class="admin"><%=getTran("insurance","memberemployer",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"insurance","memberemployer",sWebLanguage)%></td>
             <td class="admin2">
                 <input class="text" type="text" name="EditInsuranceMemberEmployer" value="<%=sEditInsuranceMemberEmployer%>" size="<%=sTextWidth%>"/>
             </td>
@@ -245,21 +247,21 @@
 %>
         <%-- membercategory --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("insurance","membercategory",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"insurance","membercategory",sWebLanguage)%></td>
             <td class="admin2">
             	<select class="text" name="EditInsuranceMemberCategory" id="EditInsuranceMemberCategory">
             		<option></option>
-            		<%=ScreenHelper.writeSelect("membercategory", sEditInsuranceMemberCategory, sWebLanguage) %>
+            		<%=ScreenHelper.writeSelect(request,"membercategory", sEditInsuranceMemberCategory, sWebLanguage) %>
             	</select>
             </td>
         </tr>
         <%-- employer --%>
         <tr>
-            <td class="admin"><%=getTran("insurance","familycode",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"insurance","familycode",sWebLanguage)%></td>
             <td class="admin2">
             	<select class="text" name="EditInsuranceFamilyCode" id="EditInsuranceFamilyCode">
             		<option></option>
-            		<%=ScreenHelper.writeSelect("familycode", sEditInsuranceFamilyCode, sWebLanguage) %>
+            		<%=ScreenHelper.writeSelect(request,"familycode", sEditInsuranceFamilyCode, sWebLanguage) %>
             	</select>
             </td>
         </tr>
@@ -268,7 +270,7 @@
  %>
         <%-- company --%>
         <tr>
-            <td class="admin"><%=getTran("web","company",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","company",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="hidden" name="EditInsurarUID" id="EditInsurarUID" value="<%=sEditInsurarUID%>"/>
                 <input class="text" type="text" readonly name="EditInsuranceInsurarName" value="<%=sEditInsuranceInsurarName%>" size="<%=sTextWidth%>"/>
@@ -279,7 +281,7 @@
         </tr>
         <%-- category --%>
         <tr>
-            <td class="admin"><%=getTran("web","category",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","category",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="hidden" name="EditInsuranceCategoryLetter" value="<%=sEditInsuranceCategoryLetter%>"/>
                 <input class="text" type="text" readonly name="EditInsuranceCategory" value="<%=sEditInsuranceCategory%>" size="<%=sTextWidth%>"/>
@@ -287,32 +289,94 @@
         </tr>
         <%-- type --%>
         <tr>
-            <td class="admin"><%=getTran("web","tariff",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","tariff",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="hidden" name="EditInsuranceType" value="<%=sEditInsuranceType%>"/>
-                <input class="text" type="text" readonly name="EditInsuranceTypeName" value="<%=sEditInsuranceType.length()>0?getTran("insurance.types",sEditInsuranceType,sWebLanguage):""%>" size="<%=sTextWidth%>" readonly/>
+                <input class="text" type="text" readonly name="EditInsuranceTypeName" value="<%=sEditInsuranceType.length()>0?getTran(request,"insurance.types",sEditInsuranceType,sWebLanguage):""%>" size="<%=sTextWidth%>" readonly/>
             </td>
         </tr>
         <%-- complementary coverage --%>
         <tr>
-            <td class="admin"><%=getTran("web","complementarycoverage",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","complementarycoverage",sWebLanguage)%></td>
             <td class="admin2">
                 <select class="text" name="EditExtraInsurarUID" id="EditExtraInsurarUID">
                     <option value=""></option>
-                    <%=ScreenHelper.writeSelect("patientsharecoverageinsurance",sEditExtraInsurarUID,sWebLanguage)%>
+					<%
+						Hashtable extrainsurars = (Hashtable)((Hashtable)MedwanQuery.getInstance().getLabels().get(sWebLanguage.toLowerCase())).get("patientsharecoverageinsurance");
+						boolean bApprovalNeeded=false;
+						if(extrainsurars!=null){
+							Enumeration eExtrainsurars = extrainsurars.keys();
+							while(eExtrainsurars.hasMoreElements()){
+								String key = (String)eExtrainsurars.nextElement();
+								//Check if the insurer needs approval
+								boolean bCanAdd=false;
+								Insurar insr = Insurar.get(key);
+								if(insr!=null && (insr.getNeedsApproval()==0 || activeUser.getAccessRight("financial.insurerapproval.select"))){
+									bCanAdd=true;
+								}
+								if(insr!=null && insr.getNeedsApproval()==1 && !activeUser.getAccessRight("financial.insurerapproval.select")){
+									bApprovalNeeded=true;
+								}
+								if(bCanAdd || sEditExtraInsurarUID.equalsIgnoreCase(key)){
+									out.println("<option value='"+key+"' "+(sEditExtraInsurarUID.equalsIgnoreCase(key)?"selected":"")+">"+getTran(request,"patientsharecoverageinsurance",key,sWebLanguage)+"</option>");								
+								}
+								else{
+									out.println("<option value='"+key+"' disabled "+(sEditExtraInsurarUID.equalsIgnoreCase(key)?"selected":"")+">"+getTran(request,"patientsharecoverageinsurance",key,sWebLanguage)+"</option>");								
+								}
+							}
+						}
+					%>
                 </select>
+                <%
+					if(bApprovalNeeded){
+				%>
+					<input type='button' class='button' value='<%=getTranNoLink("web","requestapproval",sWebLanguage)%>' onclick='requestInsurerApproval(1)'/>
+				<%
+					}
+                %>
             </td>
         </tr>
         <%
         	if(MedwanQuery.getInstance().getConfigInt("enableComplementaryInsurance2",0)==1){
         %>
         <tr>
-            <td class="admin"><%=getTran("web","complementarycoverage2",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","complementarycoverage2",sWebLanguage)%></td>
             <td class="admin2">
                 <select class="text" name="EditExtraInsurarUID2" id="EditExtraInsurarUID2">
                     <option value=""></option>
-                    <%=ScreenHelper.writeSelect("patientsharecoverageinsurance2",sEditExtraInsurarUID2,sWebLanguage)%>
+					<%
+						bApprovalNeeded=false;
+						Hashtable extrainsurars2 = (Hashtable)((Hashtable)MedwanQuery.getInstance().getLabels().get(sWebLanguage.toLowerCase())).get("patientsharecoverageinsurance2");
+						if(extrainsurars2!=null){
+							Enumeration eExtrainsurars2 = extrainsurars2.keys();
+							while(eExtrainsurars2.hasMoreElements()){
+								String key = (String)eExtrainsurars2.nextElement();
+								//Check if the insurer needs approval
+								boolean bCanAdd=false;
+								Insurar insr = Insurar.get(key);
+								if(insr!=null && (insr.getNeedsApproval()==0 || activeUser.getAccessRight("financial.insurerapproval.select"))){
+									bCanAdd=true;
+								}
+								if(insr!=null && insr.getNeedsApproval()==1 && !activeUser.getAccessRight("financial.insurerapproval.select")){
+									bApprovalNeeded=true;
+								}
+								if(bCanAdd || sEditExtraInsurarUID2.equalsIgnoreCase(key)){
+									out.println("<option value='"+key+"' "+(sEditExtraInsurarUID2.equalsIgnoreCase(key)?"selected":"")+">"+getTran(request,"patientsharecoverageinsurance2",key,sWebLanguage)+"</option>");								
+								}
+								else{
+									out.println("<option value='"+key+"' disabled "+(sEditExtraInsurarUID2.equalsIgnoreCase(key)?"selected":"")+">"+getTran(request,"patientsharecoverageinsurance2",key,sWebLanguage)+"</option>");								
+								}
+							}
+						}
+					%>
                 </select>
+                <%
+					if(bApprovalNeeded){
+				%>
+					<input type='button' class='button' value='<%=getTranNoLink("web","requestapproval",sWebLanguage)%>' onclick='requestInsurerApproval(2)'/>
+				<%
+					}
+                %>
             </td>
         </tr>
 		<%
@@ -320,14 +384,14 @@
 		%>        
         <%-- start --%>
         <tr>
-            <td class="admin"><%=getTran("web","default.insurance",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","default.insurance",sWebLanguage)%></td>
             <td class="admin2">
 				<input type='checkbox' name='EditInsuranceDefault' id='EditInsuranceDefault' value='1' <%=sEditInsuranceDefault.equalsIgnoreCase("1")?"checked":"" %>/>
             </td>
         </tr>
         <%-- start --%>
         <tr>
-            <td class="admin"><%=getTran("web","start",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","start",sWebLanguage)%></td>
             <td class="admin2">
                 <%
                 	if(sEditInsuranceUID.length()==0 || activeUser.getAccessRight("financial.modifyinsurancebegin.select")){
@@ -341,7 +405,7 @@
         </tr>
         <%-- stop --%>
         <tr>
-            <td class="admin"><%=getTran("web","stop",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","stop",sWebLanguage)%></td>
             <td class="admin2">
                 <%
                 	if(sEditInsuranceUID.length()==0 || activeUser.getAccessRight("financial.modifyinsuranceend.select")){
@@ -355,7 +419,7 @@
         </tr>
         <%-- comment --%>
         <tr>
-            <td class="admin"><%=getTran("web","comment",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","comment",sWebLanguage)%></td>
             <td class="admin2">
                 <%=writeTextarea("EditInsuranceComment","69","4","",sEditInsuranceComment)%>
             </td>
@@ -405,6 +469,29 @@
 	    alert('error');
       }
     });
+  }
+  
+  function validateInsuranceNumber(){
+	  <%if(MedwanQuery.getInstance().getConfigInt("enablePAODES",0)==1){%>
+	  	//Only set limitation for UDAM numbers
+	  	if(document.getElementById("EditInsurarUID").value=='<%=MedwanQuery.getInstance().getConfigString("UDAMInsurerCode","1.4")%>'){
+	  		if(document.getElementById('EditInsuranceNr').value.length!=<%=MedwanQuery.getInstance().getConfigInt("UDAMInsurerCodeLength",21)%>){
+	  			alert('<%=getTranNoLink("paodes","insurancenrmustbe21characters",sWebLanguage).replaceAll("@@size@@",MedwanQuery.getInstance().getConfigString("UDAMInsurerCodeLength","21"))%>');
+	  			document.getElementById('EditInsuranceNr').focus();
+	  			return false;
+	  		}
+	  	}
+	  <%}%>
+	  return true;
+  }
+
+  function requestInsurerApproval(type){
+	  if(type==1){
+		  openPopup("/financial/requestInsurerApproval.jsp&ts=<%=getTs()%>&PopupWidth=500&PopupHeight=100&insurertype=patientsharecoverageinsurance");
+	  }
+	  else{
+		  openPopup("/financial/requestInsurerApproval.jsp&ts=<%=getTs()%>&PopupWidth=500&PopupHeight=100&insurertype=patientsharecoverageinsurance2");
+	  }
   }
 
   checkInsuranceAuthorization();

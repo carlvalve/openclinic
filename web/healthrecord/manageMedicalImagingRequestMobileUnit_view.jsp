@@ -16,13 +16,13 @@
     <input type="hidden" readonly name="be.mxs.healthrecord.updateTransaction.actionForwardKey" value="/main.do?Page=curative/index.jsp&ts=<%=getTs()%>"/>
     <input type="hidden" name="subClass" value="MOBILE_UNIT"/>
     <%=writeHistoryFunctions(((TransactionVO)transaction).getTransactionType(),sWebLanguage)%>
-    <%=contextHeader(request,sWebLanguage,getTran("web.occup","mer_mobile_unit",sWebLanguage))%>
+    <%=contextHeader(request,sWebLanguage,getTran(request,"web.occup","mer_mobile_unit",sWebLanguage))%>
     <table class="list" width="100%" class="list" cellspacing="1">
         <%-- DATE --%>
         <tr>
             <td class="admin" width="<%=sTDAdminWidth%>">
                 <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-                <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+                <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
             </td>
             <td class="admin2">
                 <input type="text" class="text" size="12" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" id="trandate" OnBlur='checkDate(this)'>
@@ -32,7 +32,7 @@
 
         <%-- AANVRAGENDE GENEESHEER --%>
         <tr>
-            <td class='admin'><%=getTran("Web.Occup","be.mxs.common.model.vo.healthrecord.iconstants.item_type_mir_applying_physician",sWebLanguage)%></td>
+            <td class='admin'><%=getTran(request,"Web.Occup","be.mxs.common.model.vo.healthrecord.iconstants.item_type_mir_applying_physician",sWebLanguage)%></td>
             <td class='admin2'>
                 <select id="applying_physician" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_APPLYING_PHYSICIAN" property="itemId"/>]>.value">
                     <option>test</option>
@@ -89,7 +89,7 @@
 
         <%-- TYPE --%>
         <tr>
-            <td class='admin'><%=getTran("Web.Occup","be.mxs.common.model.vo.healthrecord.iconstants.item_type_mir_type",sWebLanguage)%></td>
+            <td class='admin'><%=getTran(request,"Web.Occup","be.mxs.common.model.vo.healthrecord.iconstants.item_type_mir_type",sWebLanguage)%></td>
             <td class='admin2'>
                 <%
                     String type = checkString(request.getParameter("type"));
@@ -97,15 +97,15 @@
                         %>
                             <select id="examination" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_TYPE" property="itemId"/>]>.value">
                                 <option value="0" <%=(type.equals("0")?"SELECTED":"")%>><%=getTranNoLink("web","choose",sWebLanguage)%>
-                                <option value="1" <%=(type.equals("1")?"SELECTED":"")%>><%=getTran("Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-1",sWebLanguage)%>
-                                <option value="2" <%=(type.equals("2")?"SELECTED":"")%>><%=getTran("Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-2",sWebLanguage)%>
-                                <option value="3" <%=(type.equals("3")?"SELECTED":"")%>><%=getTran("Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-3",sWebLanguage)%>
-                                <option value="4" <%=(type.equals("4")?"SELECTED":"")%>><%=getTran("Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-4",sWebLanguage)%>
-                                <option value="5" <%=(type.equals("5")?"SELECTED":"")%>><%=getTran("Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-5",sWebLanguage)%>
-                                <option value="6" <%=(type.equals("6")?"SELECTED":"")%>><%=getTran("Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-6",sWebLanguage)%>
-                                <option value="7" <%=(type.equals("7")?"SELECTED":"")%>><%=getTran("Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-7",sWebLanguage)%>
-                                <option value="8" <%=(type.equals("8")?"SELECTED":"")%>><%=getTran("Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-8",sWebLanguage)%>
-                                <option value="9" <%=(type.equals("9")?"SELECTED":"")%>><%=getTran("Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-9",sWebLanguage)%>
+                                <option value="1" <%=(type.equals("1")?"SELECTED":"")%>><%=getTran(request,"Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-1",sWebLanguage)%>
+                                <option value="2" <%=(type.equals("2")?"SELECTED":"")%>><%=getTran(request,"Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-2",sWebLanguage)%>
+                                <option value="3" <%=(type.equals("3")?"SELECTED":"")%>><%=getTran(request,"Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-3",sWebLanguage)%>
+                                <option value="4" <%=(type.equals("4")?"SELECTED":"")%>><%=getTran(request,"Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-4",sWebLanguage)%>
+                                <option value="5" <%=(type.equals("5")?"SELECTED":"")%>><%=getTran(request,"Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-5",sWebLanguage)%>
+                                <option value="6" <%=(type.equals("6")?"SELECTED":"")%>><%=getTran(request,"Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-6",sWebLanguage)%>
+                                <option value="7" <%=(type.equals("7")?"SELECTED":"")%>><%=getTran(request,"Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-7",sWebLanguage)%>
+                                <option value="8" <%=(type.equals("8")?"SELECTED":"")%>><%=getTran(request,"Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-8",sWebLanguage)%>
+                                <option value="9" <%=(type.equals("9")?"SELECTED":"")%>><%=getTran(request,"Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-9",sWebLanguage)%>
                             </select>
                         <%
                     }
@@ -113,15 +113,15 @@
                         %>
                             <select id="examination" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_TYPE" property="itemId"/>]>.value">
                                 <option value="0" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_TYPE;value=0" property="value" outputString="selected"/>>
-                                <option value="1" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_TYPE;value=1" property="value" outputString="selected"/>><%=getTran("Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-1",sWebLanguage)%>
-                                <option value="2" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_TYPE;value=2" property="value" outputString="selected"/>><%=getTran("Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-2",sWebLanguage)%>
-                                <option value="3" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_TYPE;value=3" property="value" outputString="selected"/>><%=getTran("Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-3",sWebLanguage)%>
-                                <option value="4" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_TYPE;value=4" property="value" outputString="selected"/>><%=getTran("Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-4",sWebLanguage)%>
-                                <option value="5" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_TYPE;value=5" property="value" outputString="selected"/>><%=getTran("Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-5",sWebLanguage)%>
-                                <option value="6" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_TYPE;value=6" property="value" outputString="selected"/>><%=getTran("Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-6",sWebLanguage)%>
-                                <option value="7" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_TYPE;value=7" property="value" outputString="selected"/>><%=getTran("Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-7",sWebLanguage)%>
-                                <option value="8" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_TYPE;value=8" property="value" outputString="selected"/>><%=getTran("Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-8",sWebLanguage)%>
-                                <option value="9" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_TYPE;value=9" property="value" outputString="selected"/>><%=getTran("Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-9",sWebLanguage)%>
+                                <option value="1" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_TYPE;value=1" property="value" outputString="selected"/>><%=getTran(request,"Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-1",sWebLanguage)%>
+                                <option value="2" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_TYPE;value=2" property="value" outputString="selected"/>><%=getTran(request,"Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-2",sWebLanguage)%>
+                                <option value="3" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_TYPE;value=3" property="value" outputString="selected"/>><%=getTran(request,"Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-3",sWebLanguage)%>
+                                <option value="4" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_TYPE;value=4" property="value" outputString="selected"/>><%=getTran(request,"Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-4",sWebLanguage)%>
+                                <option value="5" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_TYPE;value=5" property="value" outputString="selected"/>><%=getTran(request,"Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-5",sWebLanguage)%>
+                                <option value="6" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_TYPE;value=6" property="value" outputString="selected"/>><%=getTran(request,"Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-6",sWebLanguage)%>
+                                <option value="7" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_TYPE;value=7" property="value" outputString="selected"/>><%=getTran(request,"Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-7",sWebLanguage)%>
+                                <option value="8" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_TYPE;value=8" property="value" outputString="selected"/>><%=getTran(request,"Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-8",sWebLanguage)%>
+                                <option value="9" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_TYPE;value=9" property="value" outputString="selected"/>><%=getTran(request,"Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-9",sWebLanguage)%>
                             </select>
                         <%
                     }
@@ -131,7 +131,7 @@
 
         <%-- EXAMINATION REASON --%>
         <tr>
-            <td class='admin'><%=getTran("Web.Occup","examinationreason",sWebLanguage)%>&nbsp;</td>
+            <td class='admin'><%=getTran(request,"Web.Occup","examinationreason",sWebLanguage)%>&nbsp;</td>
             <td class='admin2'>
                 <textarea id="reason" onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_MIR2_EXAMINATIONREASON")%> class="text" cols='80' rows='2' name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_EXAMINATIONREASON" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_EXAMINATIONREASON" property="value"/></textarea>
             </td>
@@ -139,7 +139,7 @@
 
         <%-- IDENTIFICATIE NR RX --%>
         <tr>
-            <td class='admin'><%=getTran("Web.Occup","be.mxs.common.model.vo.healthrecord.iconstants.item_type_mir_identification_rx",sWebLanguage)%></td>
+            <td class='admin'><%=getTran(request,"Web.Occup","be.mxs.common.model.vo.healthrecord.iconstants.item_type_mir_identification_rx",sWebLanguage)%></td>
             <td class='admin2'>
                 <input type="text" id='rxid' class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_IDENTIFICATION_RX" property="itemId"/>]>.value" value="<%=sIdentificationRX%>" READONLY>
             </td>
@@ -147,7 +147,7 @@
 
         <%-- PROTOCOL --%>
         <tr>
-            <td class='admin'><%=getTran("Web.Occup","be.mxs.common.model.vo.healthrecord.iconstants.item_type_mir_protocol",sWebLanguage)%></td>
+            <td class='admin'><%=getTran(request,"Web.Occup","be.mxs.common.model.vo.healthrecord.iconstants.item_type_mir_protocol",sWebLanguage)%></td>
             <td class='admin2'>
                 <textarea id="protocol" onKeyup="resizeTextarea(this,10);limitChars(this,255);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_PROTOCOL" property="itemId"/>]>.value" class="text" rows="2" cols="80"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_PROTOCOL" property="value"/></textarea>
             </td>
@@ -155,7 +155,7 @@
 
         <%-- NIETS TE MELDEN --%>
         <tr>
-            <td class="admin"><%=getTran("Web.Occup","be.mxs.common.model.vo.healthrecord.iconstants.item_type_mir_nothing_to_mention",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web.Occup","be.mxs.common.model.vo.healthrecord.iconstants.item_type_mir_nothing_to_mention",sWebLanguage)%></td>
             <td class="admin2">
                 <input id="nothing_to_mention" type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_NOTHING_TO_MENTION" property="itemId"/>]>.value" value="medwan.common.true" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_NOTHING_TO_MENTION;value=medwan.common.true" property="value" outputString="checked"/>>
             </td>
@@ -163,7 +163,7 @@
 
         <%-- ALS PRESTATIE HERNEMEN --%>
         <tr>
-            <td class="admin"><%=getTran("Web.Occup","medwan.healthrecord.prestation_recapture",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web.Occup","medwan.healthrecord.prestation_recapture",sWebLanguage)%></td>
             <td class="admin2">
                 <input <%=setRightClick("ITEM_TYPE_OTHER_REQUESTS_PRESTATION")%> type="checkbox" id="recapture" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OTHER_REQUESTS_PRESTATION" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OTHER_REQUESTS_PRESTATION;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true">
             </td>
@@ -180,36 +180,36 @@
         <%-- BUTTONS ---------------------------------------------------------------------------------%>
                 <INPUT class="button" type="button" value="<%=getTranNoLink("Web.Occup","medwan.common.print",sWebLanguage)%>" onclick="doPrintPDF();">&nbsp;
                 <button accesskey="<%=ScreenHelper.getAccessKey(getTranNoLink("accesskey","save",sWebLanguage))%>" class="buttoninvisible" onclick="doSave();"></button>
-                <button class="button" name="ButtonSave" id="ButtonSave" onclick="doSave();"><%=getTran("accesskey","save",sWebLanguage)%></button>
+                <button class="button" name="ButtonSave" id="ButtonSave" onclick="doSave();"><%=getTran(request,"accesskey","save",sWebLanguage)%></button>
                 <INPUT class="button" type="button" value="<%=getTranNoLink("Web","back",sWebLanguage)%>" onclick="doBack();"/>
             </td>
         </tr>
     </table>
 <%
     // compose email (will be sent by UpdateTransactionAction)
-    String sMailSubject = getTran("web.occup","mir.email.subject",sWebLanguage);
+    String sMailSubject = getTran(request,"web.occup","mir.email.subject",sWebLanguage);
     sMailSubject = sMailSubject.replaceFirst("#firstname#",activePatient.firstname);
     sMailSubject = sMailSubject.replaceFirst("#lastname#",activePatient.lastname);
     sMailSubject = sMailSubject.replaceFirst("#immatnew#",activePatient.getID("immatnew"));
 
-    String sMailMessage = getTran("web.occup","mir.email.message.line1",sWebLanguage);
+    String sMailMessage = getTran(request,"web.occup","mir.email.message.line1",sWebLanguage);
     sMailMessage = sMailMessage.replaceFirst("#date#",getDate());
 
     sMailMessage+= "\n";
 
     // patient gegevens
-    sMailMessage+= "\n "+getTran("web.occup","medwan.admin.firstname",sWebLanguage)+" : "+activePatient.firstname;
-    sMailMessage+= "\n "+getTran("web.occup","medwan.admin.lastname",sWebLanguage)+" : "+activePatient.lastname;
-    sMailMessage+= "\n "+getTran("web","immatnew",sWebLanguage)+" : "+activePatient.getID("immatnew");
+    sMailMessage+= "\n "+getTran(request,"web.occup","medwan.admin.firstname",sWebLanguage)+" : "+activePatient.firstname;
+    sMailMessage+= "\n "+getTran(request,"web.occup","medwan.admin.lastname",sWebLanguage)+" : "+activePatient.lastname;
+    sMailMessage+= "\n "+getTran(request,"web","immatnew",sWebLanguage)+" : "+activePatient.getID("immatnew");
 
     // Identificatienummer RX
-    sMailMessage+= "\n "+getTran("web.occup","be.mxs.common.model.vo.healthrecord.iconstants.item_type_mir_identification_rx",sWebLanguage)+" : "+sIdentificationRX;
+    sMailMessage+= "\n "+getTran(request,"web.occup","be.mxs.common.model.vo.healthrecord.iconstants.item_type_mir_identification_rx",sWebLanguage)+" : "+sIdentificationRX;
 
     // slotzin
-    sMailMessage+= "\n\n "+getTran("web.occup","mir.email.message.end",sWebLanguage);
+    sMailMessage+= "\n\n "+getTran(request,"web.occup","mir.email.message.end",sWebLanguage);
 
     /*
-    String sMailMessage = getTran("web.occup","mir.email.message",sWebLanguage);
+    String sMailMessage = getTran(request,"web.occup","mir.email.message",sWebLanguage);
     sMailMessage = sMailMessage.replaceFirst("#date#",getDate());
     sMailMessage = sMailMessage.replaceFirst("#firstname#",activePatient.firstname);
     sMailMessage = sMailMessage.replaceFirst("#lastname#",activePatient.lastname);

@@ -348,7 +348,7 @@
 
             <table width="100%" class="list" cellspacing="0">
                 <tr>
-                    <td class="admin2" width="160">&nbsp;<%=getTran("web","service",sWebLanguage)%></td>
+                    <td class="admin2" width="160">&nbsp;<%=getTran(request,"web","service",sWebLanguage)%></td>
                     <td class="admin2">
                         <input class="text" type="text" name="FindServiceText" READONLY size="<%=sTextWidth%>" title="<%=sFindServiceText%>" value="<%=sFindServiceText%>">
                         <input type="hidden" name="FindServiceCode" value="<%=sFindServiceCode%>">
@@ -431,13 +431,13 @@
         if(service!=null){
             // translate
             if(service.parentcode.trim().length()>0){
-                sServiceParentCodeText = getTran("service",service.parentcode,sWebLanguage);
+                sServiceParentCodeText = getTran(request,"service",service.parentcode,sWebLanguage);
             }
             if(service.country.trim().length()>0){
-                sServiceCountryText = getTran("Country",service.country,sWebLanguage);
+                sServiceCountryText = getTran(request,"Country",service.country,sWebLanguage);
             }
             if(service.contactcountry.trim().length()>0){
-                sContactCountryText = getTran("Country",service.contactcountry,sWebLanguage);
+                sContactCountryText = getTran(request,"Country",service.contactcountry,sWebLanguage);
             }
             
             StringTokenizer tokenizer = new StringTokenizer(supportedLanguages,",");
@@ -462,14 +462,14 @@
             <table width="100%" class="list" cellspacing="1">
                 <%-- Service --%>
                 <tr>
-                    <td class="admin" width="<%=sTDAdminWidth%>"> <%=getTran("Web.Manage.Service","ID",sWebLanguage)%> *</td>
+                    <td class="admin" width="<%=sTDAdminWidth%>"> <%=getTran(request,"Web.Manage.Service","ID",sWebLanguage)%> *</td>
                     <td class="admin2">
                         <input type="text" class="text" name="EditServiceCode" value="<%=service.code%>" size="<%=sTextWidth%>">
                     </td>
                 </tr>
                 <%-- ParentID --%>
                 <tr>
-                    <td class="admin"> <%=getTran("Web.Manage.Service","ParentID",sWebLanguage)%></td>
+                    <td class="admin"> <%=getTran(request,"Web.Manage.Service","ParentID",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="text" readonly class="text" name="EditServiceParentCode" value="<%=service.parentcode%>"> <input type="text" readonly class="text" name="EditServiceParentText" value="<%=sServiceParentCodeText%>" size="<%=sTextWidth%>">
                         <%=ScreenHelper.writeServiceButton("buttonService","EditServiceParentCode","EditServiceParentText",sWebLanguage,sCONTEXTPATH)%>
@@ -477,14 +477,14 @@
                 </tr>
                 <%-- ShowOrder --%>
                 <tr>
-                    <td class="admin"> <%=getTran("Web.manage.Service","ShowOrder",sWebLanguage)%></td>
+                    <td class="admin"> <%=getTran(request,"Web.manage.Service","ShowOrder",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="text" class="text" name="EditServiceShowOrder" value="<%=service.showOrder%>" size="<%=sTextWidth%>">
                     </td>
                 </tr>
                 <%-- Language --%>
                 <tr>
-                    <td class="admin"> <%=getTran("Web","Language",sWebLanguage)%></td>
+                    <td class="admin"> <%=getTran(request,"Web","Language",sWebLanguage)%></td>
                     <td class="admin2">
                         <select name="EditServiceLanguage" select-one class="text">
                             <%
@@ -492,7 +492,7 @@
                                 while(stokenizer.hasMoreTokens()){
                                     tmpLang = stokenizer.nextToken();
 
-                                    %><option value='<%=tmpLang%>' <%=(service.language.equalsIgnoreCase(tmpLang)?"SELECTED":"")%>><%=getTran("Web.Language",tmpLang,sWebLanguage)%></option><%
+                                    %><option value='<%=tmpLang%>' <%=(service.language.equalsIgnoreCase(tmpLang)?"SELECTED":"")%>><%=getTran(request,"Web.Language",tmpLang,sWebLanguage)%></option><%
                                 }
                             %>
                         </select>
@@ -501,11 +501,11 @@
                 <%-- Inscode --%>
                 <% 	if(MedwanQuery.getInstance().getConfigInt("enableDHIS2",0)==1){ %>
                 <tr>
-                    <td class="admin"> <%=getTran("Web.Manage.Service","dhis2code",sWebLanguage)%></td>
+                    <td class="admin"> <%=getTran(request,"Web.Manage.Service","dhis2code",sWebLanguage)%></td>
                     <td class="admin2">
                         <select class="text" name="EditServiceInscode" id="EditServiceInscode">
                         	<option value=""></option>
-                        	<%=ScreenHelper.writeSelect("dhis2services", service.inscode, sWebLanguage) %>
+                        	<%=ScreenHelper.writeSelect(request,"dhis2services", service.inscode, sWebLanguage) %>
                         </select>
                     </td>
                 </tr>
@@ -513,7 +513,7 @@
                    	else{
                 %>
                 <tr>
-                    <td class="admin"> <%=getTran("Web.Manage.Service","Inscode",sWebLanguage)%></td>
+                    <td class="admin"> <%=getTran(request,"Web.Manage.Service","Inscode",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="text" class="text" name="EditServiceInscode" value="<%=service.inscode%>" size="<%=sTextWidth%>">
                     </td>
@@ -527,7 +527,7 @@
 
                         %>
                             <tr>
-                                <td class="admin"> <%=getTran("Web","Description",sWebLanguage)%> <%=tmpLang%> *</td>
+                                <td class="admin"> <%=getTran(request,"Web","Description",sWebLanguage)%> <%=tmpLang%> *</td>
                                 <td class="admin2">
                                     <input type="text" class="text" name="EditLabelValue<%=tmpLang%>" value="<%=checkString((String)labelValues.get(tmpLang))%>" size="<%=sTextWidth%>">
                                 </td>
@@ -537,28 +537,28 @@
                 %>
                 <%-- Address --%>
                 <tr>
-                    <td class="admin"> <%=getTran("Web","Address",sWebLanguage)%></td>
+                    <td class="admin"> <%=getTran(request,"Web","Address",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="text" class="text" name="EditServiceAddress" value="<%=service.address%>" size="<%=sTextWidth%>">
                     </td>
                 </tr>
                 <%-- Zipcode --%>
                 <tr>
-                    <td class="admin"> <%=getTran("Web","Zipcode",sWebLanguage)%></td>
+                    <td class="admin"> <%=getTran(request,"Web","Zipcode",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="text" class="text" name="EditServiceZipcode" value="<%=service.zipcode%>" size="<%=sTextWidth%>" onblur="limitLength(this);">
                     </td>
                 </tr>
                 <%-- City --%>
                 <tr>
-                    <td class="admin"> <%=getTran("Web","City",sWebLanguage)%></td>
+                    <td class="admin"> <%=getTran(request,"Web","City",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="text" class="text" name="EditServiceCity" value="<%=service.city%>" size="<%=sTextWidth%>">
                     </td>
                 </tr>
                 <%-- Country --%>
                 <tr>
-                    <td class="admin"> <%=getTran("Web","Country",sWebLanguage)%></td>
+                    <td class="admin"> <%=getTran(request,"Web","Country",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="text" readonly class="text" name="EditServiceCountryText" value="<%=sServiceCountryText%>" size="<%=sTextWidth%>">
                         <%=ScreenHelper.writeSearchButton("buttonCountry","Country","EditServiceCountry","EditServiceCountryText","",sWebLanguage,sCONTEXTPATH)%>
@@ -567,61 +567,64 @@
                 </tr>
                 <%-- Telephone --%>
                 <tr>
-                    <td class="admin"> <%=getTran("Web","Telephone",sWebLanguage)%></td>
+                    <td class="admin"> <%=getTran(request,"Web","Telephone",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="text" class="text" name="EditServiceTelephone" value="<%=service.telephone%>" size="<%=sTextWidth%>">
                     </td>
                 </tr>
                 <%-- Fax --%>
                 <tr>
-                    <td class="admin"> <%=getTran("Web","Fax",sWebLanguage)%></td>
+                    <td class="admin"> <%=getTran(request,"Web","Fax",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="text" class="text" name="EditServiceFax" value="<%=service.fax%>" size="<%=sTextWidth%>">
                     </td>
                 </tr>
                 <%-- Email --%>
                 <tr>
-                    <td class="admin"> <%=getTran("Web","Email",sWebLanguage)%></td>
+                    <td class="admin"> <%=getTran(request,"Web","Email",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="text" class="text" name="EditServiceEmail" value="<%=service.email%>" size="<%=sTextWidth%>">
                     </td>
                 </tr>
                 <%-- contract --%>
                 <tr>
-                    <td class="admin"> <%=getTran("Web","contract",sWebLanguage)%></td>
+                    <td class="admin"> <%=getTran(request,"Web","contract",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="text" class="text" name="EditServiceContract" value="<%=service.contract%>" size="<%=sTextWidth%>">
                     </td>
                 </tr>
                 <%-- contracttype --%>
                 <tr>
-                    <td class="admin"> <%=getTran("Web","contracttype",sWebLanguage)%></td>
+                    <td class="admin"> <%=getTran(request,"Web","contracttype",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="text" class="text" name="EditServiceContractType" value="<%=service.contracttype%>" size="<%=sTextWidth%>">
                     </td>
                 </tr>
                 <%-- contractdate --%>
                 <tr>
-                    <td class="admin"> <%=getTran("Web","contractdate",sWebLanguage)%></td>
+                    <td class="admin"> <%=getTran(request,"Web","contractdate",sWebLanguage)%></td>
                     <td class="admin2"><%=writeDateField("EditServiceContractDate","transactionForm",checkString(service.contractdate),sWebLanguage)%></td>
                 </tr>
                 <%-- contactperson --%>
                 <tr>
-                    <td class="admin"> <%=getTran("Web","contactperson",sWebLanguage)%></td>
+                    <td class="admin"> <%=getTran(request,"Web","contactperson",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="text" class="text" name="EditServiceContactPerson" value="<%=service.contactperson%>" size="<%=sTextWidth%>">
                     </td>
                 </tr>
                 <%-- NACE (code3) --%>
                 <tr>
-                    <td class="admin"> <%=getTran("Web","nacecode",sWebLanguage)%></td>
+                    <td class="admin"> <%=getTran(request,"Web","servicetype",sWebLanguage)%></td>
                     <td class="admin2">
-                        <input type="text" class="text" name="EditServiceCode3" value="<%=service.code3%>" size="<%=sTextWidth%>">
+		                <select class="text" name="EditServiceCode3" style="vertical-align:top;">
+		                	<option/>
+		                	<%=ScreenHelper.writeSelect(request,"servicetypes", service.code3, sWebLanguage) %>
+		                </select>
                     </td>
                 </tr>
                 <%-- Total beds --%>
                 <tr>
-                    <td class="admin"> <%=getTran("Web","totalbeds",sWebLanguage)%></td>
+                    <td class="admin"> <%=getTran(request,"Web","totalbeds",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="text" class="text" name="EditTotalBeds" value="<%=service.totalbeds%>" size="<%=sTextWidth%>">
                     </td>
@@ -629,7 +632,7 @@
                 <%-- Service admission limit --%>
                 <% if(MedwanQuery.getInstance().getConfigInt("autoCloseAdmissions", 0)==1){ %>
                 <tr>
-                    <td class="admin"> <%=getTran("Web","serviceadmissionlimit",sWebLanguage)%></td>
+                    <td class="admin"> <%=getTran(request,"Web","serviceadmissionlimit",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="text" class="text" name="EditServiceAdmissionLimit" value="<%=service.serviceadmissionlimit%>" size="<%=sTextWidth%>">
                     </td>
@@ -637,13 +640,13 @@
                 <%} %>
                 <%-- MEDICAL CENTRE (code5) --%>
                 <tr>
-                    <td class="admin"> <%=getTran("Web","medicalcentre",sWebLanguage)%></td>
+                    <td class="admin"> <%=getTran(request,"Web","medicalcentre",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="text" class="text" name="EditServiceCode5" value="<%=service.code5%>" size="<%=sTextWidth%>">
                     </td>
                 </tr>
                 <tr>
-                    <td class="admin"> <%=getTran("Web","stayprestation",sWebLanguage)%></td>
+                    <td class="admin"> <%=getTran(request,"Web","stayprestation",sWebLanguage)%></td>
                     <td class="admin2">
 		                <select class="text" name="EditStayPrestationUid" style="vertical-align:top;">
 		                	<option value=''></option>
@@ -661,7 +664,7 @@
                 </tr>
                 
 	            <tr>
-		            <td class='admin'><%=getTran("web","invoicingcareprovider",sWebLanguage)%></td>
+		            <td class='admin'><%=getTran(request,"web","invoicingcareprovider",sWebLanguage)%></td>
 		            <td class='admin2'>
 		            	<select class='text' name='EditCareProvider' id='EditCareProvider'>
 		            		<option value=''></option>
@@ -686,11 +689,11 @@
                 
                 <%-- Costcenter --%>
                 <tr>
-                    <td class="admin"> <%=getTran("Web","costcenter",sWebLanguage)%></td>
+                    <td class="admin"> <%=getTran(request,"Web","costcenter",sWebLanguage)%></td>
                     <td class="admin2">
                     	<select name="EditServiceCostcenter" class="text">
                     	<option value=''/>
-                    	<%=ScreenHelper.writeSelect("costcenter",checkString(service.costcenter),sWebLanguage,false,true) %>
+                    	<%=ScreenHelper.writeSelect(request,"costcenter",checkString(service.costcenter),sWebLanguage,false,true) %>
                     	</select>
                     </td>
                 </tr>
@@ -701,7 +704,7 @@
                         %>
                             <%-- DEFAULT CONTEXT --%>
                             <tr>
-                                <td class="admin"> <%=getTran("Web","defaultcontext",sWebLanguage)%></td>
+                                <td class="admin"> <%=getTran(request,"Web","defaultcontext",sWebLanguage)%></td>
                                 <td class="admin2">
                                     <select name="EditServiceDefaultContext" select-one class="text">
                                         <option value="">
@@ -716,7 +719,7 @@
                                                 Element element;
                                                 while(elements.hasNext()){
                                                     element = (Element)elements.next();
-                                                    out.println("<option value='"+element.attribute("id").getValue()+"' "+(element.attribute("id").getValue().equalsIgnoreCase(service.defaultContext)?"selected":"")+"/>"+getTran("Web.Occup",element.attribute("id").getValue(),sWebLanguage));
+                                                    out.println("<option value='"+element.attribute("id").getValue()+"' "+(element.attribute("id").getValue().equalsIgnoreCase(service.defaultContext)?"selected":"")+"/>"+getTran(request,"Web.Occup",element.attribute("id").getValue(),sWebLanguage));
                                                 }
                                             }
                                         %>
@@ -734,7 +737,7 @@
                                 }
                             %>
                             <tr>
-                                <td class="admin" nowrap><%=getTran("Web","defaultServiceStock",sWebLanguage)%>&nbsp;</td>
+                                <td class="admin" nowrap><%=getTran(request,"Web","defaultServiceStock",sWebLanguage)%>&nbsp;</td>
                                 <td class="admin2">
                                     <input type="hidden" name="EditDefaultServiceStockUid" value="<%=service.defaultServiceStockUid%>">
                                     <input class="text" type="text" name="EditDefaultServiceStockName" readonly size="<%=sTextWidth%>" value="<%=serviceStockName%>">
@@ -754,7 +757,7 @@
                     }
                 %>
                 <tr>
-                    <td class="admin"><%=getTran("web","wicket",sWebLanguage)%></td>
+                    <td class="admin"><%=getTran(request,"web","wicket",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="checkbox" class="hand" name="EditServiceWicket" <%=sChecked%>/>
                     </td>
@@ -766,7 +769,7 @@
                     }
                 %>
                 <tr>
-                    <td class="admin"> <%=getTran("Web","acceptsvisits",sWebLanguage)%></td>
+                    <td class="admin"> <%=getTran(request,"Web","acceptsvisits",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="checkbox" class="hand" name="EditServiceAcceptsVisits" <%=sChecked%>/>
                     </td>
@@ -779,17 +782,17 @@
                     }
                 %>
                 <tr>
-                    <td class="admin"><%=getTran("web","inactive",sWebLanguage)%></td>
+                    <td class="admin"><%=getTran(request,"web","inactive",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="checkbox" class="hand" name="EditServiceInactive" <%=sChecked%>/>
                     </td>
                 </tr>
                 <%-- COMMENT --%>
                 <tr>
-                    <td class="admin"> <%=getTran("Web","Comment",sWebLanguage)%></td>
+                    <td class="admin"> <%=getTran(request,"Web","Comment",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="text" class="text" name="EditServiceComment" value="<%=service.comment%>" size="<%=sTextWidth%>">
-                        <BR/><%=getTran("web","noexams",sWebLanguage)%>
+                        <BR/><%=getTran(request,"web","noexams",sWebLanguage)%>
                     </td>
                 </tr>
                 <%-- spacer --%>
@@ -797,32 +800,32 @@
 
                 <%-- contact-section ------------------------------------------------------------%>
                 <tr>
-                    <td colspan="2" class="admin" height="22"><%=getTran("web","service.contactaddress",sWebLanguage)%></td>
+                    <td colspan="2" class="admin" height="22"><%=getTran(request,"web","service.contactaddress",sWebLanguage)%></td>
                 </tr>
                 <%-- ContactAddress --%>
                 <tr>
-                    <td class="admin"> <%=getTran("Web","address",sWebLanguage)%></td>
+                    <td class="admin"> <%=getTran(request,"Web","address",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="text" class="text" name="EditContactAddress" value="<%=service.contactaddress%>" size="<%=sTextWidth%>" onblur="limitLength(this);">
                     </td>
                 </tr>
                 <%-- ContactZipcode --%>
                 <tr>
-                    <td class="admin"> <%=getTran("Web","zipcode",sWebLanguage)%></td>
+                    <td class="admin"> <%=getTran(request,"Web","zipcode",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="text" class="text" name="EditContactZipcode" value="<%=service.contactzipcode%>" size="<%=sTextWidth%>" onblur="limitLength(this);">
                     </td>
                 </tr>
                 <%-- ContactCity --%>
                 <tr>
-                    <td class="admin"> <%=getTran("Web","city",sWebLanguage)%></td>
+                    <td class="admin"> <%=getTran(request,"Web","city",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="text" class="text" name="EditContactCity" value="<%=service.contactcity%>" size="<%=sTextWidth%>" onblur="limitLength(this);">
                     </td>
                 </tr>
                 <%-- ContactCountry --%>
                 <tr>
-                    <td class="admin"> <%=getTran("Web","Country",sWebLanguage)%></td>
+                    <td class="admin"> <%=getTran(request,"Web","Country",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="text" readonly class="text" name="EditContactCountryText" value="<%=sContactCountryText%>" size="<%=sTextWidth%>" onblur="limitLength(this);">
                         <%=ScreenHelper.writeSearchButton("buttonContactCountry","Country","EditContactCountry","EditContactCountryText","",sWebLanguage,sCONTEXTPATH)%>
@@ -831,21 +834,21 @@
                 </tr>
                 <%-- ContactTelephone --%>
                 <tr>
-                    <td class="admin"> <%=getTran("Web","telephone",sWebLanguage)%></td>
+                    <td class="admin"> <%=getTran(request,"Web","telephone",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="text" class="text" name="EditContactTelephone" value="<%=service.contacttelephone%>" size="<%=sTextWidth%>" onblur="limitLength(this);">
                     </td>
                 </tr>
                 <%-- ContactFax --%>
                 <tr>
-                    <td class="admin"> <%=getTran("Web","fax",sWebLanguage)%></td>
+                    <td class="admin"> <%=getTran(request,"Web","fax",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="text" class="text" name="EditContactFax" value="<%=service.contactfax%>" size="<%=sTextWidth%>" onblur="limitLength(this);">
                     </td>
                 </tr>
                 <%-- ContactEmail --%>
                 <tr>
-                    <td class="admin"> <%=getTran("Web","email",sWebLanguage)%></td>
+                    <td class="admin"> <%=getTran(request,"Web","email",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="text" class="text" name="EditContactEmail" value="<%=service.contactemail%>" size="<%=sTextWidth%>" onblur="limitLength(this);">
                     </td>
@@ -853,7 +856,7 @@
             </table>
             
             <%-- indication of obligated fields --%>
-            <%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%>
+            <%=getTran(request,"Web","colored_fields_are_obligate",sWebLanguage)%>
             
             <%-- EDIT BUTTONS --%>
             <%=ScreenHelper.alignButtonsStart()%>

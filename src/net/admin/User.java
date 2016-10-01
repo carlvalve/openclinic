@@ -1368,6 +1368,16 @@ public class User extends OC_Object {
         }
     }
     
+    //--- GET ACCESSRIGHT -------------------------------------------------------------------------
+    public boolean getAccessRightNoSA(String sPermission){
+        if(Application.isDisabled(sPermission)){
+            return false;
+        }
+        else{
+            return (accessRights.get(sPermission.toLowerCase())!=null);
+        }
+    }
+    
     //--- IS ADMIN --------------------------------------------------------------------------------
     public boolean isAdmin(){
     	return getAccessRight("sa");

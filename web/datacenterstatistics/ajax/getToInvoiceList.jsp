@@ -6,9 +6,9 @@
      <table width='100%' cellspacing='0' class="sortable" id="searchresults">
         <%-- header --%>
         <tr height='20' class='gray'>
-            <td width='100'><%=getTran("Web","prestations",sWebLanguage)%></td>
-            <td width='100'><%=getTran("Web","amount",sWebLanguage)%></td>
-            <td width='*'><%=getTran("Web","name",sWebLanguage)%></td>
+            <td width='100'><%=getTran(request,"Web","prestations",sWebLanguage)%></td>
+            <td width='100'><%=getTran(request,"Web","amount",sWebLanguage)%></td>
+            <td width='*'><%=getTran(request,"Web","name",sWebLanguage)%></td>
         </tr>
             <tbody>
     <%
@@ -35,4 +35,4 @@
     %>
          </tbody>
      </table>
-<span><br /><%=recsFound%> <%=HTMLEntities.htmlentities(getTran("web","recordsfound",sWebLanguage))%></span>
+<span><br /><%=recsFound%> <%=HTMLEntities.htmlentities(getTran(request,"web","recordsfound",sWebLanguage))%></span>

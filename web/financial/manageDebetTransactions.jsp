@@ -130,7 +130,7 @@
             String sType = "", sBegin = "", sEnd = "";
 
             if (checkString(encounter.getType()).length() > 0) {
-                sType = ", " + getTran("encountertype", encounter.getType(), sWebLanguage);
+                sType = ", " + getTran(request,"encountertype", encounter.getType(), sWebLanguage);
             }
 
             if (encounter.getBegin() != null) {
@@ -149,12 +149,12 @@
     <table class='list' border='0' width='100%' cellspacing='1'>
         <%-- date --%>
         <tr>
-            <td class='admin' width="<%=sTDAdminWidth%>"><%=getTran("Web","date",sWebLanguage)%> *</td>
+            <td class='admin' width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","date",sWebLanguage)%> *</td>
             <td class='admin2'><%=writeDateField("EditDebetDate","EditForm",sEditDebetDate,sWebLanguage)%></td>
         </tr>
         <%-- amount --%>
         <tr>
-            <td class='admin'><%=getTran("web","amount",sWebLanguage)%> *</td>
+            <td class='admin'><%=getTran(request,"web","amount",sWebLanguage)%> *</td>
             <td class='admin2'>
                 <input class='text' type='text' name='EditDebetAmount' value='<%=sEditDebetAmount%>' size='20' onblur="isNumberNegAndPos(this)"> <%=MedwanQuery.getInstance().getConfigParam("currency","€")%>
             </td>
@@ -162,7 +162,7 @@
         <%-- prestation --%>
         <tr>
             <td class='admin'>
-               <%=getTran("web","prestation",sWebLanguage)%>
+               <%=getTran(request,"web","prestation",sWebLanguage)%>
             </td>
             <td class='admin2'>
                 <input type="hidden" name="EditDebetPrestationUID" value="<%=sEditDebetPrestationUID%>">
@@ -173,12 +173,12 @@
         </tr>
         <%-- description --%>
         <tr>
-            <td class='admin'><%=getTran("web","description",sWebLanguage)%></td>
+            <td class='admin'><%=getTran(request,"web","description",sWebLanguage)%></td>
             <td class='admin2'><%=writeTextarea("EditDebetDescription","","","",sEditDebetDescription)%></td>
         </tr>
         <%-- encounter --%>
         <tr>
-            <td class='admin'><%=getTran("web","encounter",sWebLanguage)%></td>
+            <td class='admin'><%=getTran(request,"web","encounter",sWebLanguage)%></td>
             <td class='admin2'>
                 <input type="hidden" name="EditDebetEncounterUID" value="<%=sEditDebetEncounterUID%>">
                 <input class="text" type="text" name="EditDebetEncounterName" readonly size="<%=sTextWidth%>" value="<%=sEditDebetEncounterName%>">
@@ -189,7 +189,7 @@
 
         <%-- suppliertype --%>
         <tr>
-            <td class='admin'><%=getTran("web","suppliertype",sWebLanguage)%></td>
+            <td class='admin'><%=getTran(request,"web","suppliertype",sWebLanguage)%></td>
             <td class='admin2'>
                 <%
                     String sEditCheckPerson  = "";
@@ -200,8 +200,8 @@
                         sEditCheckService = " checked";
                     }
                 %>
-                <input type='radio' name='EditDebetSupplierType' id='Editperson' value='Person' onclick='changeEditType();' <%=sEditCheckPerson%>><label for='Editperson'><%=getTran("web","person",sWebLanguage)%></label>
-                <input type='radio' name='EditDebetSupplierType' id='Editservice' value='Service' onclick='changeEditType();' <%=sEditCheckService%>><label for='Editservice'><%=getTran("web","service",sWebLanguage)%></label>
+                <input type='radio' name='EditDebetSupplierType' id='Editperson' value='Person' onclick='changeEditType();' <%=sEditCheckPerson%>><label for='Editperson'><%=getTran(request,"web","person",sWebLanguage)%></label>
+                <input type='radio' name='EditDebetSupplierType' id='Editservice' value='Service' onclick='changeEditType();' <%=sEditCheckService%>><label for='Editservice'><%=getTran(request,"web","service",sWebLanguage)%></label>
             </td>
         </tr>
         <%-- supplier --%>
@@ -221,11 +221,11 @@
             if (sEditDebetRefName.length()>0){
         %>
         <tr>
-            <td class='admin'><%=getTran("web","reftype",sWebLanguage)%></td>
+            <td class='admin'><%=getTran(request,"web","reftype",sWebLanguage)%></td>
             <td class='admin2'>
 
-                <input onclick="setRefCheck();" type='radio' name='EditDebetRefType' id='EditReftransaction' readonly value='Transaction' <%=sEditCheckTransaction%>><label for='EditReftransaction'><%=getTran("web","transaction",sWebLanguage)%></label>
-                <input onclick="setRefCheck();" type='radio' name='EditDebetRefType' id='EditRefprescription' readonly value='MedicationDelivery' <%=sEditCheckPrescription%>><label for='EditRefprescription'><%=getTran("web","prescription",sWebLanguage)%></label>
+                <input onclick="setRefCheck();" type='radio' name='EditDebetRefType' id='EditReftransaction' readonly value='Transaction' <%=sEditCheckTransaction%>><label for='EditReftransaction'><%=getTran(request,"web","transaction",sWebLanguage)%></label>
+                <input onclick="setRefCheck();" type='radio' name='EditDebetRefType' id='EditRefprescription' readonly value='MedicationDelivery' <%=sEditCheckPrescription%>><label for='EditRefprescription'><%=getTran(request,"web","prescription",sWebLanguage)%></label>
                 <script>
                     function setRefCheck(){
                         if('<%=sEditCheckTransaction.length()%>'.length>0){
@@ -251,12 +251,12 @@
         <script>
              if(EditForm.EditDebetRefName.value == ""){
                 document.getElementById("EditReftransaction").checked = true;
-                document.getElementById("EditRefTypeLabel").innerText = "<%=getTran("Web","transaction",sWebLanguage)%>";
+                document.getElementById("EditRefTypeLabel").innerText = "<%=getTran(null,"Web","transaction",sWebLanguage)%>";
             }else{
                 if(document.getElementById("EditReftransaction").checked == true){
-                    document.getElementById("EditRefTypeLabel").innerText = "<%=getTran("Web","transaction",sWebLanguage)%>";
+                    document.getElementById("EditRefTypeLabel").innerText = "<%=getTran(null,"Web","transaction",sWebLanguage)%>";
                 }else{
-                    document.getElementById("EditRefTypeLabel").innerText = "<%=getTran("Web","prescription",sWebLanguage)%>";
+                    document.getElementById("EditRefTypeLabel").innerText = "<%=getTran(null,"Web","prescription",sWebLanguage)%>";
                 }
             }
         </script>
@@ -272,7 +272,7 @@
             </td>
         </tr>
     </table>
-    <%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%>
+    <%=getTran(request,"Web","colored_fields_are_obligate",sWebLanguage)%>
     <input type='hidden' name='Action' value=''>
     <input type='hidden' name='EditDebetUID' value='<%=sEditDebetUID%>'>
     <input type='hidden' name='EditDebetBalanceUID' value='<%=sEditDebetBalanceUID%>'>
@@ -291,7 +291,7 @@
           EditForm.submit();
         }
         else {
-                    window.showModalDialog?alertDialog("web.manage","dataMissing"):alertDialogDirectText('<%=getTran("web.manage","dataMissing",sWebLanguage)%>');
+                    window.showModalDialog?alertDialog("web.manage","dataMissing"):alertDialogDirectText('<%=getTran(null,"web.manage","dataMissing",sWebLanguage)%>');
         }
     }
 
@@ -301,9 +301,9 @@
 
     function changeEditType(){
         if(document.getElementById("Editperson").checked == true){
-             document.getElementById("EditTypeLabel").innerText = "<%=getTran("Web","person",sWebLanguage)%>";
+             document.getElementById("EditTypeLabel").innerText = "<%=getTran(null,"Web","person",sWebLanguage)%>";
         }else{
-             document.getElementById("EditTypeLabel").innerText = "<%=getTran("Web","service",sWebLanguage)%>";
+             document.getElementById("EditTypeLabel").innerText = "<%=getTran(null,"Web","service",sWebLanguage)%>";
         }
         EditForm.EditDebetSupplierUID.value = "";
         EditForm.EditDebetSupplierName.value = "";
@@ -311,9 +311,9 @@
 
     function changeEditRefType(){
         if(document.getElementById("EditRefperson").checked){
-             document.getElementById("EditRefTypeLabel").innerText = "<%=getTran("Web","person",sWebLanguage)%>";
+             document.getElementById("EditRefTypeLabel").innerText = "<%=getTran(null,"Web","person",sWebLanguage)%>";
         }else{
-             document.getElementById("EditRefTypeLabel").innerText = "<%=getTran("Web","service",sWebLanguage)%>";
+             document.getElementById("EditRefTypeLabel").innerText = "<%=getTran(null,"Web","service",sWebLanguage)%>";
         }
         EditForm.EditDebetRefUID.value = "";
         EditForm.EditDebetRefName.value = "";
@@ -329,12 +329,12 @@
 
     if(EditForm.EditDebetSupplierName.value == ""){
         document.getElementById("Editperson").checked = true;
-        document.getElementById("EditTypeLabel").innerText = "<%=getTran("Web","person",sWebLanguage)%>";
+        document.getElementById("EditTypeLabel").innerText = "<%=getTran(null,"Web","person",sWebLanguage)%>";
     }else{
         if(document.getElementById("Editperson").checked == true){
-            document.getElementById("EditTypeLabel").innerText = "<%=getTran("Web","person",sWebLanguage)%>";
+            document.getElementById("EditTypeLabel").innerText = "<%=getTran(null,"Web","person",sWebLanguage)%>";
         }else{
-            document.getElementById("EditTypeLabel").innerText = "<%=getTran("Web","service",sWebLanguage)%>";
+            document.getElementById("EditTypeLabel").innerText = "<%=getTran(null,"Web","service",sWebLanguage)%>";
         }
     }
 

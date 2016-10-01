@@ -25,7 +25,7 @@
         String sDelErrorId = checkString(request.getParameter("DelErrorId"));
         if(sDelErrorId.length() > 0){
             be.openclinic.system.Error.delete(sDelErrorId);
-            sMsg = getTran("web","dataIsDeleted",sWebLanguage);
+            sMsg = getTran(request,"web","dataIsDeleted",sWebLanguage);
         }
     }
     //--- DELETE ERROR ----------------------------------------------------------------------------
@@ -42,7 +42,7 @@
         }
 
         be.openclinic.system.Error.delete(delFromDate,delUntilDate);
-        sMsg = getTran("web","dataIsDeleted",sWebLanguage);
+        sMsg = getTran(request,"web","dataIsDeleted",sWebLanguage);
     }
 %>
 
@@ -56,11 +56,11 @@
     <table width="100%" class="list" cellspacing="1" cellpadding="1">
         <%-- BEGIN & END --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","Begin",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","Begin",sWebLanguage)%></td>
             <td class="admin2"><%=writeDateField("FindBegin","transactionForm",sFindBegin,sWebLanguage)%></td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("Web","End",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web","End",sWebLanguage)%></td>
             <td class="admin2"><%=writeDateField("FindEnd","transactionForm",sFindEnd,sWebLanguage)%></td>
         </tr>
         <%-- BUTTONS --%>
@@ -87,8 +87,8 @@
                 <table width="100%" cellspacing="1">
                     <tr>
                         <td style="vertical-align:bottom;">
-                            <a href="javascript:viewAllErrors(true);"><%=getTran("Web.Manage","viewAllErrors",sWebLanguage)%></a>
-                            <a href="javascript:viewAllErrors(false);"><%=getTran("Web.Manage","hideAllErrors",sWebLanguage)%></a>
+                            <a href="javascript:viewAllErrors(true);"><%=getTran(request,"Web.Manage","viewAllErrors",sWebLanguage)%></a>
+                            <a href="javascript:viewAllErrors(false);"><%=getTran(request,"Web.Manage","hideAllErrors",sWebLanguage)%></a>
                         </td>
                         <%-- link to bottom --%>
                         <td align="right">
@@ -101,9 +101,9 @@
                     <%-- HEADER --%>
                     <tr class="admin">
                         <td width="20">&nbsp;</td>
-                        <td width="150"><%=getTran("Web","date",sWebLanguage)%></td>
-                        <td width="220"><%=getTran("Web.Occup","medwan.authentication.login",sWebLanguage)%></td>
-                        <td width="*"><%=getTran("Web.Statistics","Page",sWebLanguage)%></td>
+                        <td width="150"><%=getTran(request,"Web","date",sWebLanguage)%></td>
+                        <td width="220"><%=getTran(request,"Web.Occup","medwan.authentication.login",sWebLanguage)%></td>
+                        <td width="*"><%=getTran(request,"Web.Statistics","Page",sWebLanguage)%></td>
                     </tr>
                     <tbody class="hand">
                     <%
@@ -145,7 +145,7 @@
 
                         // no records found
                         if(iCounter==0){
-                            %><tr><td colspan="4"><%=getTran("web","norecordsfound",sWebLanguage)%></td></tr><%
+                            %><tr><td colspan="4"><%=getTran(request,"web","norecordsfound",sWebLanguage)%></td></tr><%
                         }
                     %>
                     </tbody>
@@ -155,8 +155,8 @@
                     if(iCounter > 15){
                        %>
                            <div>
-                               <a href="javascript:viewAllErrors(true);"><%=getTran("Web.Manage","viewAllErrors",sWebLanguage)%></a>
-                               <a href="javascript:viewAllErrors(false);"><%=getTran("Web.Manage","hideAllErrors",sWebLanguage)%></a>
+                               <a href="javascript:viewAllErrors(true);"><%=getTran(request,"Web.Manage","viewAllErrors",sWebLanguage)%></a>
+                               <a href="javascript:viewAllErrors(false);"><%=getTran(request,"Web.Manage","hideAllErrors",sWebLanguage)%></a>
                            </div>
                        <%
                     }
@@ -164,7 +164,7 @@
                     // number of records found
                     if(iCounter > 0){
                         %>
-                            <div style="padding-bottom:5px;padding-top:2px;"><%=getTran("Web.Occup","total-number",sWebLanguage)%> : <%=iCounter%></div>
+                            <div style="padding-bottom:5px;padding-top:2px;"><%=getTran(request,"Web.Occup","total-number",sWebLanguage)%> : <%=iCounter%></div>
                         <%
                     }
                 %>
@@ -178,9 +178,9 @@
             %>
                 <table class="list" width="100%" cellspacing="0" cellpadding="1">
                     <tr height="22">
-                        <td class="admin2" align="right"><%=getTran("Web","from",sWebLanguage)%></td>
+                        <td class="admin2" align="right"><%=getTran(request,"Web","from",sWebLanguage)%></td>
                      
-                        <td class="admin2" align="left"><%=writeDateField("DelFromDate","transactionForm",sDelFromDate,sWebLanguage)%> <%=getTran("Web","to",sWebLanguage)%> 
+                        <td class="admin2" align="left"><%=writeDateField("DelFromDate","transactionForm",sDelFromDate,sWebLanguage)%> <%=getTran(request,"Web","to",sWebLanguage)%> 
                             <%=writeDateField("DelUntilDate","transactionForm",sDelUntilDate,sWebLanguage)%>&nbsp;&nbsp;
                             
                             <input type="button" class="button" name="deleteRangeButton" value="<%=getTranNoLink("web","delete",sWebLanguage)%>" onClick="deleteErrors();">

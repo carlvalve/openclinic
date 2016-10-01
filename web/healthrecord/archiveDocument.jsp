@@ -24,7 +24,7 @@
         <%-- date --%>
         <tr>
             <td class="admin">
-                <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("web.occup","history",sWebLanguage)%>">...</a>&nbsp;<%=getTran("web.occup","medwan.common.date",sWebLanguage)%>&nbsp;*&nbsp;
+                <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("web.occup","history",sWebLanguage)%>">...</a>&nbsp;<%=getTran(request,"web.occup","medwan.common.date",sWebLanguage)%>&nbsp;*&nbsp;
             </td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" id="trandate" OnBlur="checkDate(this);">
@@ -37,7 +37,7 @@
             if(!tran.isNew()){
                 %>
 			        <tr>
-			            <td width="<%=sTDAdminWidth%>" class="admin"><%=getTran("web","udi",sWebLanguage)%>&nbsp;</td>
+			            <td width="<%=sTDAdminWidth%>" class="admin"><%=getTran(request,"web","udi",sWebLanguage)%>&nbsp;</td>
 			            <td class="admin2">
 			                <% String sUDI = tran.getItemValue(ScreenHelper.ITEM_PREFIX+"ITEM_TYPE_DOC_UDI"); %>   
 			                <input type="hidden" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DOC_UDI" property="itemId"/>]>.value" value="<%=sUDI%>">              
@@ -50,7 +50,7 @@
         
         <%-- title --%>
         <tr>
-            <td class="admin"><%=getTran("web","title",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web","title",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="title" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DOC_TITLE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DOC_TITLE" property="value"/>" size="50" maxLenght="255">
             </td>
@@ -58,7 +58,7 @@
         
         <%-- description --%>
         <tr>
-            <td class="admin"><%=getTran("web","description",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web","description",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" class="text" cols="80" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DOC_DESCRIPTION" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DOC_DESCRIPTION" property="value"/></textarea>
             </td>
@@ -66,18 +66,18 @@
 			        
         <%-- category --%>
         <tr>
-            <td class="admin"><%=getTran("web","category",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web","category",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <select class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DOC_CATEGORY" property="itemId"/>]>.value" id="category">
                     <option/>
-                    <%=ScreenHelper.writeSelect("arch.doc.category",tran.getItemValue(ScreenHelper.ITEM_PREFIX+"ITEM_TYPE_DOC_CATEGORY"),sWebLanguage)%>
+                    <%=ScreenHelper.writeSelect(request,"arch.doc.category",tran.getItemValue(ScreenHelper.ITEM_PREFIX+"ITEM_TYPE_DOC_CATEGORY"),sWebLanguage)%>
                 </select>
             </td>
         </tr>
         
         <%-- author --%>
         <tr>
-            <td class="admin"><%=getTran("web","author",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web","author",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="author" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DOC_AUTHOR" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DOC_AUTHOR" property="value"/>" size="50" maxLenght="255">
             </td>
@@ -85,7 +85,7 @@
         
         <%-- destination --%>
         <tr>
-            <td class="admin"><%=getTran("web","destination",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web","destination",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="destination" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DOC_DESTINATION" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DOC_DESTINATION" property="value"/>" size="50" maxLenght="255">
             </td>
@@ -93,7 +93,7 @@
         
         <%-- reference --%>
         <tr>
-            <td class="admin"><%=getTran("web","paperReference",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web","paperReference",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="reference" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DOC_REFERENCE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DOC_REFERENCE" property="value"/>" size="50" maxLenght="50">
             </td>
@@ -102,9 +102,20 @@
         <%-- storage-name (read-only) --%>
         <%
             if(!tran.isNew()){
+            	if(checkString(tran.getItemValue(ScreenHelper.ITEM_PREFIX+"ITEM_TYPE_DOC_SENDEREMAIL")).length()>0){
+            		%>
+			        <%-- reference --%>
+			        <tr>
+			            <td class="admin"><%=getTran(request,"web","receivedfrom",sWebLanguage)%>&nbsp;</td>
+			            <td class="admin2">
+			            	<%=tran.getItemValue(ScreenHelper.ITEM_PREFIX+"ITEM_TYPE_DOC_SENDEREMAIL") %>
+			            </td>
+			        </tr>
+            		<%
+            	}
                 %>
 			        <tr>
-			            <td class="admin"><%=getTran("web","storageName",sWebLanguage)%>&nbsp;</td>
+			            <td class="admin"><%=getTran(request,"web","storageName",sWebLanguage)%>&nbsp;</td>
 			            <td class="admin2">
 			                <% String sStorageName = tran.getItemValue(ScreenHelper.ITEM_PREFIX+"ITEM_TYPE_DOC_STORAGENAME"); %>   
 			                <input type="hidden" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DOC_STORAGENAME" property="itemId"/>]>.value" value="<%=sStorageName%>">
@@ -130,7 +141,7 @@
 			}
 	    %>
     </table>
-    &nbsp;<%=getTran("web","asterisk_fields_are_obligate",sWebLanguage)%>
+    &nbsp;<%=getTran(request,"web","asterisk_fields_are_obligate",sWebLanguage)%>
 
 	<%-- BUTTONS --%>
 	<%=ScreenHelper.alignButtonsStart()%>

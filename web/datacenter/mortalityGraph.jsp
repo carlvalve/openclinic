@@ -59,5 +59,5 @@
     setGraph2Named(<%=sJsArray%>,<%=sJsArray2%>,'barchart','<%=getTranNoLink("web","monthlymortalitypct",sWebLanguage)%>','<%=getTranNoLink("web","monthlymortalityabs",sWebLanguage)%>');
     setGraph2Named(<%=sJsArray3%>,<%=sJsArray4%>,'barchart2','<%=getTranNoLink("web","yearlymortalitypct",sWebLanguage)%>','<%=getTranNoLink("web","yearlymortalityabs",sWebLanguage)%>');
     
-    Modalbox.setTitle("<%=HTMLEntities.htmlentities(getTran("datacenterserver", serverId + "", sWebLanguage)+"<br/>"+code+" - "+MedwanQuery.getInstance().getCodeTran("ICD10Code"+code,sWebLanguage)+" ("+getTranNoLink("web","mortality",sWebLanguage)+")")%>");
+    Modalbox.setTitle("<%=HTMLEntities.htmlentities(getTran(request,"datacenterserver", serverId + "", sWebLanguage)+"<br/>"+code+" - "+MedwanQuery.getInstance().getCodeTran("ICD10Code"+code,sWebLanguage)+" ("+getTranNoLink("web","mortality",sWebLanguage)+")")%>");
 </script>

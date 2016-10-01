@@ -18,7 +18,7 @@
             sSelected = "";
         }
 
-        return "<option value='"+sValue+"'"+sSelected+">"+getTran(sCode,sValue,sWebLanguage)+"</option>";
+        return "<option value='"+sValue+"'"+sSelected+">"+getTran(null,sCode,sValue,sWebLanguage)+"</option>";
     }
 %>
 
@@ -34,7 +34,7 @@
                 
                 <table width='100%' cellspacing="1" cellpadding="0" class="list">
                     <tr>
-                        <td class="admin" width='<%=sTDAdminWidth%>'><%=getTran("Web.UserProfile","Focus",sWebLanguage)%></td>
+                        <td class="admin" width='<%=sTDAdminWidth%>'><%=getTran(request,"Web.UserProfile","Focus",sWebLanguage)%></td>
                         <td class="admin2">
                             <select name='DefaultFocus' class="text">
                                 <%=writeOption("DefaultFocus","Web","Name",activeUser,sWebLanguage)%>

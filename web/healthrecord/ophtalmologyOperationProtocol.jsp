@@ -39,7 +39,7 @@
 			        <tr>
 			            <td class="admin" width="<%=sTDAdminWidth%>" nowrap>
 			                <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-			                <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+			                <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
 			            </td>
 			            <td class="admin2" colspan="2">
 			                <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" id="trandate" OnBlur='checkDate(this)'>
@@ -54,7 +54,7 @@
 			
 			        <%-- start --%>
 			        <tr>
-			            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("openclinic.chuk","start",sWebLanguage)%></td>
+			            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"openclinic.chuk","start",sWebLanguage)%></td>
 			            <td class="admin2" colspan="2">
 			                <input <%=setRightClick("ITEM_TYPE_OPHTALMOLOGY_OPERATION_PROTOCOL_STARTHOUR")%> class="text" type="text" size="5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPHTALMOLOGY_OPERATION_PROTOCOL_STARTHOUR" property="itemId"/>]>.value" value="<%=sTranStartHour%>" onblur="checkTime(this);"onkeypress="keypressTime(this)"/>
 			            </td>
@@ -62,7 +62,7 @@
 			
 			        <%-- end --%>
 			        <tr>
-			            <td class="admin"><%=getTran("openclinic.chuk","end",sWebLanguage)%></td>
+			            <td class="admin"><%=getTran(request,"openclinic.chuk","end",sWebLanguage)%></td>
 			            <td class="admin2" colspan="2">
 			                <input <%=setRightClick("ITEM_TYPE_OPHTALMOLOGY_OPERATION_PROTOCOL_ENDHOUR")%> class="text" type="text" size="5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPHTALMOLOGY_OPERATION_PROTOCOL_ENDHOUR" property="itemId"/>]>.value" value="<%=sTranEndHour%>" onblur="checkTime(this);"onkeypress="keypressTime(this)"/>
 			            </td>
@@ -70,7 +70,7 @@
 			
 			        <%-- surgeon --%>
 			        <tr>
-			            <td class="admin"><%=getTran("openclinic.chuk","surgeon",sWebLanguage)%></td>
+			            <td class="admin"><%=getTran(request,"openclinic.chuk","surgeon",sWebLanguage)%></td>
 			            <td class="admin2" colspan="2">
 			                <input type="hidden" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPHTALMOLOGY_OPERATION_PROTOCOL_SURGEON" property="itemId"/>]>.value" value="<%=sTranSurgeon%>">
 			                <input class="text" type="text" name="surgeonName" readonly size="<%=sTextWidth%>" value="<%=sSurgeonName%>">
@@ -81,7 +81,7 @@
 			
 			        <%-- remarks --%>
 			        <tr height="200">
-			            <td class="admin" style="vertical-align:top;padding-top:3px;"><%=getTran("openclinic.chuk","remarks",sWebLanguage)%></td>
+			            <td class="admin" style="vertical-align:top;padding-top:3px;"><%=getTran(request,"openclinic.chuk","remarks",sWebLanguage)%></td>
 			            <td class="admin2" style="vertical-align:top;padding-top:3px;" colspan="2">
 			                <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_OPHTALMOLOGY_OPERATION_PROTOCOL_REMARKS")%> class="text" cols="80" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPHTALMOLOGY_OPERATION_PROTOCOL_REMARKS" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPHTALMOLOGY_OPERATION_PROTOCOL_REMARKS" property="value"/></textarea>
 			            </td>
@@ -96,13 +96,13 @@
     <table class="list" cellspacing="1" cellpadding="0" width="100%">  
         <tr class="admin">
             <td>&nbsp;</td>
-            <td align="center"><%=getTran("openclinic.chuk","right.eye",sWebLanguage)%></td>
-            <td align="center"><%=getTran("openclinic.chuk","left.eye",sWebLanguage)%></td>
+            <td align="center"><%=getTran(request,"openclinic.chuk","right.eye",sWebLanguage)%></td>
+            <td align="center"><%=getTran(request,"openclinic.chuk","left.eye",sWebLanguage)%></td>
         </tr>
 
         <%-- vision_preop --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>" nowrap><%=getTran("openclinic.chuk","vision_preop",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>" nowrap><%=getTran(request,"openclinic.chuk","vision_preop",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_OPHTALMOLOGY_OPERATION_PROTOCOL_VISION_PREOP_RIGHT")%> class="text" cols="80" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPHTALMOLOGY_OPERATION_PROTOCOL_VISION_PREOP_RIGHT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPHTALMOLOGY_OPERATION_PROTOCOL_VISION_PREOP_RIGHT" property="value"/></textarea>
             </td>
@@ -113,7 +113,7 @@
 
         <%-- intervention --%>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","intervention",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","intervention",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_OPHTALMOLOGY_OPERATION_PROTOCOL_INTERVENTION_RIGHT")%> class="text" cols="80" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPHTALMOLOGY_OPERATION_PROTOCOL_INTERVENTION_RIGHT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPHTALMOLOGY_OPERATION_PROTOCOL_INTERVENTION_RIGHT" property="value"/></textarea>
             </td>
@@ -124,7 +124,7 @@
 
         <%-- vision_postop --%>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","vision_postop",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","vision_postop",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_OPHTALMOLOGY_OPERATION_PROTOCOL_VISION_POSTOP_RIGHT")%> class="text" cols="80" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPHTALMOLOGY_OPERATION_PROTOCOL_VISION_POSTOP_RIGHT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPHTALMOLOGY_OPERATION_PROTOCOL_VISION_POSTOP_RIGHT" property="value"/></textarea>
             </td>
@@ -135,7 +135,7 @@
 
         <%-- complications --%>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","complications",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","complications",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_OPHTALMOLOGY_OPERATION_PROTOCOL_COMPLICATIONS_RIGHT")%> class="text" cols="80" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPHTALMOLOGY_OPERATION_PROTOCOL_COMPLICATIONS_RIGHT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPHTALMOLOGY_OPERATION_PROTOCOL_COMPLICATIONS_RIGHT" property="value"/></textarea>
             </td>
@@ -146,7 +146,7 @@
 
         <%-- care.post --%>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","care.post.op",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","care.post.op",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_OPHTALMOLOGY_OPERATION_PROTOCOL_CARE_RIGHT")%> class="text" cols="80" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPHTALMOLOGY_OPERATION_PROTOCOL_CARE_RIGHT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPHTALMOLOGY_OPERATION_PROTOCOL_CARE_RIGHT" property="value"/></textarea>
             </td>
@@ -157,7 +157,7 @@
 
         <%-- conclusion --%>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","conclusion",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","conclusion",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_OPHTALMOLOGY_OPERATION_PROTOCOL_CONCLUSION_RIGHT")%> class="text" cols="80" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPHTALMOLOGY_OPERATION_PROTOCOL_CONCLUSION_RIGHT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPHTALMOLOGY_OPERATION_PROTOCOL_CONCLUSION_RIGHT" property="value"/></textarea>
             </td>

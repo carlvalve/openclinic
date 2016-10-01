@@ -62,7 +62,7 @@
     %>
     <%-- INVOICE DATE --%>
     <tr>
-        <td class="admin2" width="120" nowrap><%=getTran("Web","date",sWebLanguage)%>&nbsp;</td>
+        <td class="admin2" width="120" nowrap><%=getTran(request,"Web","date",sWebLanguage)%>&nbsp;</td>
         <td class="admin2" width="330" nowrap>
             <%=writeDateField("FindInvoiceDate","SearchForm",sFindInvoiceDate,sWebLanguage)%>
         </td>
@@ -70,7 +70,7 @@
 
     <%-- INVOICE NR --%>
     <tr>
-        <td class="admin2"><%=getTran("web","number",sWebLanguage)%></td>
+        <td class="admin2"><%=getTran(request,"web","number",sWebLanguage)%></td>
         <td class="admin2">
             <input type="text" class="text" name="FindInvoiceNr" size="10" maxlength="10" onKeyUp="if(!isNumber(this)){this.value='';}" value="<%=sFindInvoiceNr%>">
         </td>
@@ -78,7 +78,7 @@
 
     <%-- INVOICE BALANCE MIN --%>
     <tr>
-        <td class="admin2"><%=getTran("web", "balance", sWebLanguage)%> <%=getTran("web","min",sWebLanguage)%></td>
+        <td class="admin2"><%=getTran(request,"web", "balance", sWebLanguage)%> <%=getTran(request,"web","min",sWebLanguage)%></td>
         <td class="admin2">
             <input type="text" class="text" name="FindInvoiceBalanceMin" size="10" maxlength="8" onKeyUp="if(!isNumberNegativeAllowed(this)){this.value='';}" value="<%=sFindInvoiceBalanceMin%>">&nbsp;<%=sCurrency%>
         </td>
@@ -86,7 +86,7 @@
 
     <%-- INVOICE BALANCE MAX --%>
     <tr>
-        <td class="admin2"><%=getTran("web","balance",sWebLanguage)%> <%=getTran("web","max",sWebLanguage)%></td>
+        <td class="admin2"><%=getTran(request,"web","balance",sWebLanguage)%> <%=getTran(request,"web","max",sWebLanguage)%></td>
         <td class="admin2">
             <input type="text" class="text" name="FindInvoiceBalanceMax" size="10" maxlength="8" onKeyUp="if(!isNumberNegativeAllowed(this)){this.value='';}" value="<%=sFindInvoiceBalanceMax%>">&nbsp;<%=sCurrency%>
         </td>
@@ -94,11 +94,11 @@
 
     <%-- INVOICE STATUS --%>
     <tr>
-        <td class="admin2"><%=getTran("web.finance","patientinvoice.status",sWebLanguage)%></td>
+        <td class="admin2"><%=getTran(request,"web.finance","patientinvoice.status",sWebLanguage)%></td>
         <td class="admin2">
             <select class="text" name="FindInvoiceStatus">
                 <option value=""></option>
-                <%=ScreenHelper.writeSelect("finance.patientinvoice.status",sFindInvoiceStatus,sWebLanguage)%>
+                <%=ScreenHelper.writeSelect(request,"finance.patientinvoice.status",sFindInvoiceStatus,sWebLanguage)%>
             </select>
         </td>
     </tr>

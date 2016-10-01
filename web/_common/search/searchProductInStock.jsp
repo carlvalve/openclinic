@@ -128,13 +128,13 @@
 
         // header
         sOut.append("<tr class='admin'>")
-             .append("<td width='20%'>"+getTran("web","product",sWebLanguage)+"</td>")
-             .append("<td width='10%'>"+getTran("web","unit",sWebLanguage)+"</td>")
-             .append("<td width='10%' style='text-align:right;'>"+getTran("web","unitprice",sWebLanguage)+"&nbsp;</td>")
-             .append("<td width='27%'>"+getTran("web","service",sWebLanguage)+"</td>")
-             .append("<td width='12%'>"+getTran("web","servicestock",sWebLanguage)+"</td>")
-             .append("<td align='right' width='6%'>"+getTran("web","level",sWebLanguage)+"&nbsp;&nbsp;</td>")
-             .append("<td width='15%'>"+getTran("web","productGroup",sWebLanguage)+"</td>")
+             .append("<td width='20%'>"+getTran(request,"web","product",sWebLanguage)+"</td>")
+             .append("<td width='10%'>"+getTran(request,"web","unit",sWebLanguage)+"</td>")
+             .append("<td width='10%' style='text-align:right;'>"+getTran(request,"web","unitprice",sWebLanguage)+"&nbsp;</td>")
+             .append("<td width='27%'>"+getTran(request,"web","service",sWebLanguage)+"</td>")
+             .append("<td width='12%'>"+getTran(request,"web","servicestock",sWebLanguage)+"</td>")
+             .append("<td align='right' width='6%'>"+getTran(request,"web","level",sWebLanguage)+"&nbsp;&nbsp;</td>")
+             .append("<td width='15%'>"+getTran(request,"web","productGroup",sWebLanguage)+"</td>")
             .append("</tr>");
 
         // tbody
@@ -176,7 +176,7 @@
                     // productGroup
                     sProductGroup = checkString(product.getProductGroup());
                     if(sProductGroup.length() > 0){
-                        sProductGroup = getTran("product.productgroup",sProductGroup,sWebLanguage);
+                        sProductGroup = getTran(request,"product.productgroup",sProductGroup,sWebLanguage);
                     }
 
                     // supplier
@@ -219,13 +219,13 @@
         <%-- SEARCH FIELDS --%>
         <tr height="25">
             <%-- productname --%>
-            <td class="admin2"><%=getTran("Web","product",sWebLanguage)%>&nbsp;</td>
+            <td class="admin2"><%=getTran(request,"Web","product",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="text" name="SearchProductName" class="text" value="<%=sSearchProductName%>" size="30">
             </td>
 
             <%-- service --%>
-            <td class="admin2"><%=getTran("Web","service",sWebLanguage)%>&nbsp;</td>
+            <td class="admin2"><%=getTran(request,"Web","service",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="hidden" name="SearchServiceUid" value="<%=sSearchServiceUid%>">
                 <input type="text" name="SearchServiceName" class="text" value="<%=sSearchServiceName%>" size="40" readonly onKeyDown="if(deleteKeyPressed(event))clearSelectedService();">
@@ -235,11 +235,11 @@
             </td>
 
             <%-- productgroup --%>
-            <td class="admin2"><%=getTran("web","productgroup",sWebLanguage)%>&nbsp;</td>
+            <td class="admin2"><%=getTran(request,"web","productgroup",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <select class="text" name="SearchProductGroup" onKeyDown="if(deleteKeyPressed(event))this.selectedIndex=0;">
                     <option value=""></option>
-                    <%=ScreenHelper.writeSelectUnsorted("product.productgroup",sSearchProductGroup,sWebLanguage)%>
+                    <%=ScreenHelper.writeSelectUnsorted(request,"product.productgroup",sSearchProductGroup,sWebLanguage)%>
                 </select>
             </td>
 
@@ -258,7 +258,7 @@
         // records found message
         if(sAction.equals("find")){
             if(iTotal > 0){
-                %><%=iTotal%> <%=getTran("web","recordsfound",sWebLanguage)%><%
+                %><%=iTotal%> <%=getTran(request,"web","recordsfound",sWebLanguage)%><%
             }
         }
     %>
@@ -267,7 +267,7 @@
 
     <%-- link to searchProduct popup --%>
     <div>
-        <a href="javascript:searchProduct('<%=sReturnProductUidField%>','<%=sReturnProductNameField%>','<%=sReturnProductUnitField%>','<%=sReturnUnitsPerTimeUnitField%>','<%=sReturnUnitsPerPackageField%>','<%=sReturnProductStockUidField%>');"><%=getTran("web.manage","searchInProductCatalog",sWebLanguage)%></a>
+        <a href="javascript:searchProduct('<%=sReturnProductUidField%>','<%=sReturnProductNameField%>','<%=sReturnProductUnitField%>','<%=sReturnUnitsPerTimeUnitField%>','<%=sReturnUnitsPerPackageField%>','<%=sReturnProductStockUidField%>');"><%=getTran(request,"web.manage","searchInProductCatalog",sWebLanguage)%></a>
     </div>
 
     <%-- link to searchUserProduct popup --%>
@@ -275,7 +275,7 @@
         if(displaySearchUserProductsLink){
             %>
                 <div>
-                    <a href="javascript:searchUserProduct('<%=sReturnProductUidField%>','<%=sReturnProductNameField%>','<%=sReturnProductUnitField%>','<%=sReturnUnitsPerTimeUnitField%>','<%=sReturnUnitsPerPackageField%>','<%=sReturnProductStockUidField%>');"><%=getTran("web.manage","searchInUserProducts",sWebLanguage)%></a>
+                    <a href="javascript:searchUserProduct('<%=sReturnProductUidField%>','<%=sReturnProductNameField%>','<%=sReturnProductUnitField%>','<%=sReturnUnitsPerTimeUnitField%>','<%=sReturnUnitsPerPackageField%>','<%=sReturnProductStockUidField%>');"><%=getTran(request,"web.manage","searchInUserProducts",sWebLanguage)%></a>
                 </div>
             <%
         }

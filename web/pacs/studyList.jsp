@@ -3,11 +3,11 @@
 <%@ page import="be.mxs.common.util.db.*" %>
 <table width='100%'>
 	<tr class='admin'>
-		<td><%=getTran("web", "date", sWebLanguage) %></td>
-		<td><%=getTran("web", "studyid", sWebLanguage) %></td>
-		<td><%=getTran("web", "modality", sWebLanguage) %></td>
-		<td><%=getTran("web", "seriesid", sWebLanguage) %></td>
-		<td><%=getTran("web", "description", sWebLanguage) %></td>
+		<td><%=getTran(request,"web", "date", sWebLanguage) %></td>
+		<td><%=getTran(request,"web", "studyid", sWebLanguage) %></td>
+		<td><%=getTran(request,"web", "modality", sWebLanguage) %></td>
+		<td><%=getTran(request,"web", "seriesid", sWebLanguage) %></td>
+		<td><%=getTran(request,"web", "description", sWebLanguage) %></td>
 	</tr>
 <%
 	try{

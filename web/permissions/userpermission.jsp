@@ -62,7 +62,7 @@
                 sTmp = "";
             }
             
-            sOut.append("<option value='"+wicket.getUid()+"'"+sTmp+">"+wicket.getUid()+"&nbsp;"+getTran("service",wicket.getServiceUID(),sWebLanguage));
+            sOut.append("<option value='"+wicket.getUid()+"'"+sTmp+">"+wicket.getUid()+"&nbsp;"+getTran(null,"service",wicket.getServiceUID(),sWebLanguage));
         }
 
         return sOut.toString();
@@ -326,7 +326,7 @@
                     <td colspan="2">
                         <table width="100%" cellpadding="0" cellspacing="0">
                             <tr>
-                                <td><%=(getTran("Web.Permissions","PermissionsFor",sWebLanguage)+" "+activePatient.lastname+" "+activePatient.firstname+" &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Login: "+thisUser.userid+" "+sPasswordString)%></td>
+                                <td><%=(getTran(request,"Web.Permissions","PermissionsFor",sWebLanguage)+" "+activePatient.lastname+" "+activePatient.firstname+" &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Login: "+thisUser.userid+" "+sPasswordString)%></td>
                                 <td align="right">
                                     <img onmouseover="this.style.cursor='hand'" onmouseout="this.style.cursor='default'" onClick="doBack();" style="vertical-align:-2px;" border="0" src="<%=sCONTEXTPATH%>/_img/themes/default/arrow_left.gif" alt="<%=getTranNoLink("Web","Back",sWebLanguage)%>">
                                 </td>
@@ -337,7 +337,7 @@
 
                 <%-- user project --%>
                 <tr>
-                    <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","Applications",sWebLanguage)%></td>
+                    <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","Applications",sWebLanguage)%></td>
                     <td class="admin2">
                         <select name="EditUserProject" class="text"><%=sProjects%></select>
                         <%=sMyProfileDescription%>
@@ -346,7 +346,7 @@
 
                 <%-- profile id --%>
                 <tr>
-                    <td class="admin"><%=getTran("Web.UserProfile","UserProfile",sWebLanguage)%></td>
+                    <td class="admin"><%=getTran(request,"Web.UserProfile","UserProfile",sWebLanguage)%></td>
                     <td class="admin2">
                         <select name="EditUserProfileID" class="text"><%=sProfiles%></select>
                     </td>
@@ -354,7 +354,7 @@
 
                 <%-- default page --%>
                 <tr>
-                    <td class="admin"><%=getTran("Web.UserProfile","DefaultPage",sWebLanguage)%></td>
+                    <td class="admin"><%=getTran(request,"Web.UserProfile","DefaultPage",sWebLanguage)%></td>
                     <td class="admin2">
                         <select name='EditDefaultPage' class="text">
                             <option/>
@@ -404,7 +404,7 @@
 
                 <%-- default wicket --%>
                 <tr>
-                    <td class="admin"><%=getTran("Web.UserProfile","DefaultWicket",sWebLanguage)%></td>
+                    <td class="admin"><%=getTran(request,"Web.UserProfile","DefaultWicket",sWebLanguage)%></td>
                     <td class="admin2">
                         <select name='EditDefaultWicket' class='text'>
                             <option/>
@@ -413,12 +413,12 @@
                     </td>
                 </tr>
 
-                <%=writeMyCheckbox(getTran("Web.Permissions","SA",sWebLanguage),"EditSA","sa",thisUser)%>
-                <%=writeMyCheckbox(getTran("Web.Permissions","ClearPassword",sWebLanguage),"EditClearPassword","",thisUser)%>
+                <%=writeMyCheckbox(getTran(request,"Web.Permissions","SA",sWebLanguage),"EditSA","sa",thisUser)%>
+                <%=writeMyCheckbox(getTran(request,"Web.Permissions","ClearPassword",sWebLanguage),"EditClearPassword","",thisUser)%>
 
                 <%-- alias (numbers not allowed) --%>
                 <tr>
-                    <td class="admin"><%=getTran("Web.UserProfile","alias",sWebLanguage)%></td>
+                    <td class="admin"><%=getTran(request,"Web.UserProfile","alias",sWebLanguage)%></td>
                     <td class="admin2">
                     	<input type='hidden' name='aliasMsgOK' id='aliasMsgOK' value=''/>
                         <input type='text' class='text' name='Editalias' id='Editalias' value='<%=thisUser.getParameter("alias").trim()%>' onKeyup="blurAlias(this,'<%=thisUser.userid%>');"> <span id="aliasMsg"></span>
@@ -427,7 +427,7 @@
                 
                 <%-- organizationID --%>
                 <tr>
-                    <td class="admin"><%=getTran("Web.UserProfile","organisationId",sWebLanguage)%></td>
+                    <td class="admin"><%=getTran(request,"Web.UserProfile","organisationId",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type='text' class='text' name='Editorganisationid' id='Editorganisationid' value='<%=thisUser.getParameter("organisationId").trim()%>'>
                     </td>
@@ -437,11 +437,11 @@
                     if(MedwanQuery.getInstance().getConfigInt("enableMedicalCouncilLookup",0)==1){
                 %>
                 <tr>
-                    <td class="admin"><%=getTran("Web.UserProfile","AutomaticOrganizationIdValidation",sWebLanguage)%></td>
+                    <td class="admin"><%=getTran(request,"Web.UserProfile","AutomaticOrganizationIdValidation",sWebLanguage)%></td>
                     <td class="admin2">
                       <%
                           out.print("<select name='EditAutomaticOrganizationIdValidation' id='council' onchange='showRegistrationStatus();'>"+
-                                     "<option value=''/>"+ScreenHelper.writeSelect("professional.councils",thisUser.getParameter("automaticorganizationidvalidation"),sWebLanguage)+
+                                     "<option value=''/>"+ScreenHelper.writeSelect(request,"professional.councils",thisUser.getParameter("automaticorganizationidvalidation"),sWebLanguage)+
                                     "</select>");
                           out.print(" &nbsp;<a href='javascript:councilLookup("+thisUser.userid+");'><img id='councillookup' src='"+sCONTEXTPATH+"/_img/icons/icon_search.gif' title='"+getTranNoLink("web","verify",sWebLanguage)+"'/></a> &nbsp;&nbsp;&nbsp;<label id='registrationstatus'></label>");
                       %>
@@ -453,7 +453,7 @@
         
                 <%-- medicalCenterCode --%>
                 <tr>
-                    <td class="admin"><%=getTran("Web.UserProfile","medicalCenterCode",sWebLanguage)%></td>
+                    <td class="admin"><%=getTran(request,"Web.UserProfile","medicalCenterCode",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type='text' class='text' name='Editmedicalcentercode' id="medicalcentercode" value='<%=thisUser.getParameter("medicalcentercode").trim()%>' onKeyUp='isNumberLimited(this,0,99999);lookupMedicalCenter();' onBlur="checkMedicalCenterLength();">
                         <span id="medicalCenterMsg"></span>
@@ -462,7 +462,7 @@
                 
                 <%-- service --%>
                 <tr>
-                    <td class="admin"><%=getTran("web","service",sWebLanguage)%></td>
+                    <td class="admin"><%=getTran(request,"web","service",sWebLanguage)%></td>
                     <td class="admin2">
                         <%
                             String serviceText = "";
@@ -483,7 +483,7 @@
                 
                 <%-- INSURANCE AGENT --%>
                 <tr>
-                    <td class="admin"><%=getTran("web","insuranceagent",sWebLanguage)%></td>
+                    <td class="admin"><%=getTran(request,"web","insuranceagent",sWebLanguage)%></td>
                     <td class="admin2">
                         <%
                             String insuranceagenttext = "";
@@ -501,7 +501,7 @@
                 
                 <%-- LANGUAGE --%>
                 <tr>
-                    <td class="admin" width='<%=sTDAdminWidth%>'><%=getTran("Web","language",sWebLanguage)%></td>
+                    <td class="admin" width='<%=sTDAdminWidth%>'><%=getTran(request,"Web","language",sWebLanguage)%></td>
                     <td class="admin2">
                         <select name="ChangeLanguage" class="text">
                             <%
@@ -521,8 +521,8 @@
                     </td>
                 </tr>
                 
-                <%=writeMyInput(getTran("Web.UserProfile","computerNumber",sWebLanguage),"Editcomputernumber",thisUser)%>
-                <%=writeMyCheckbox(getTran("web","isinvoicingcareprovider",sWebLanguage),"EditInvoicingCareProvider","invoicingcareprovider",thisUser)%>
+                <%=writeMyInput(getTran(request,"Web.UserProfile","computerNumber",sWebLanguage),"Editcomputernumber",thisUser)%>
+                <%=writeMyCheckbox(getTran(request,"web","isinvoicingcareprovider",sWebLanguage),"EditInvoicingCareProvider","invoicingcareprovider",thisUser)%>
                 <%=writeMyCheckbox("Stop","EditStop","stop",thisUser)%>
             </table>
 
@@ -651,7 +651,7 @@
               else{
                 transactionForm.Editmedicalcentercode.focus();
                 
-                document.getElementById('medicalCenterMsg').innerHTML = '<%=getTran("web.manage","invalidmedicalcentercode",sWebLanguage)%>';
+                document.getElementById('medicalCenterMsg').innerHTML = '<%=getTran(null,"web.manage","invalidmedicalcentercode",sWebLanguage)%>';
                 document.getElementById('medicalCenterMsg').style.color = 'red';
                 return false;
               }

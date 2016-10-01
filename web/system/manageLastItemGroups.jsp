@@ -76,7 +76,7 @@
     //--- DELETE -------------------------------------------------------------------------------------------------------
     if (sAction.equals("Delete")) {
         MedwanQuery.getInstance().deleteLastItemGroup(sEditDestinationItemType);
-        msg = getTran("web.manage", "lastitemgroupdeleted", sWebLanguage);
+        msg = getTran(request,"web.manage", "lastitemgroupdeleted", sWebLanguage);
         sAction = "Find";
     }
 
@@ -100,7 +100,7 @@
     <table class="list" width="100%" cellspacing="1">
         <%-- DESTINATION ITEM --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web.manage","destinationItem",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web.manage","destinationItem",sWebLanguage)%></td>
             <td class="admin2">
                 <select type="text" class="text" name="EditDestinationItemType" onChange="doSearchSourceItems();">
                     <option><%=getTranNoLink("web","choose",sWebLanguage)%></option>
@@ -135,7 +135,7 @@
         </tr>
         <%-- SELECTED SOURCE ITEMS --%>
         <tr>
-            <td class="admin" nowrap><%=getTran("Web","sourceItems",sWebLanguage)%>&nbsp;</td>
+            <td class="admin" nowrap><%=getTran(request,"Web","sourceItems",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <%-- add row --%>
                 <input type="hidden" name="SourceItemIdAdd">

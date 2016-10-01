@@ -13,7 +13,7 @@
 		ps.setDate(1,new java.sql.Date(ScreenHelper.parseDate(start).getTime()));
 		ResultSet rs = ps.executeQuery();
 		sResult+="<table width='50%'>";
-		sResult+="<tr class='admin'><td>"+getTran("web","date",sWebLanguage)+"</td><td>"+getTran("web","patient",sWebLanguage)+"</td><td>"+getTran("web","type",sWebLanguage)+"</td><td>"+getTran("web","destination",sWebLanguage)+"</td></tr>";
+		sResult+="<tr class='admin'><td>"+getTran(request,"web","date",sWebLanguage)+"</td><td>"+getTran(request,"web","patient",sWebLanguage)+"</td><td>"+getTran(request,"web","type",sWebLanguage)+"</td><td>"+getTran(request,"web","destination",sWebLanguage)+"</td></tr>";
 		while (rs.next()){
 			int transactionId=rs.getInt("OC_NOTIFIER_TRANSACTIONID");
 			TransactionVO transactionVO = MedwanQuery.getInstance().loadTransaction(MedwanQuery.getInstance().getConfigInt("serverId"), transactionId);
@@ -39,7 +39,7 @@
 <form name="transactionForm" method="post">
 	<table>
 		<tr>
-			<td><%=getTran("web","messagessince",sWebLanguage)%></td>
+			<td><%=getTran(request,"web","messagessince",sWebLanguage)%></td>
 			<td><%=writeDateField("start","transactionForm",start,sWebLanguage)%></td>
 			<td><input type='submit' name='submit' value='<%=getTranNoLink("web","find",sWebLanguage)%>'/></td>
 		</tr>

@@ -32,7 +32,7 @@
 			out.print((batches.size()==0?"checked":"")+"/>? ("+totalQuantity+")<br/>");
 		}
 		if(expired>0){
-			out.print("<br/><hr/><font color='red'>"+HTMLEntities.htmlentities(getTran("web","expired",sWebLanguage))+": "+expired+"</font><br/>");
+			out.print("<br/><hr/><font color='red'>"+HTMLEntities.htmlentities(getTran(request,"web","expired",sWebLanguage))+": "+expired+"</font><br/>");
 		}
 	}
 %>

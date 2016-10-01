@@ -135,7 +135,7 @@
 	    			
                 %>
 			        <tr>
-			            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","message",sWebLanguage)%>&nbsp;<%=languages[l].toUpperCase()%>&nbsp;</td>
+			            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","message",sWebLanguage)%>&nbsp;<%=languages[l].toUpperCase()%>&nbsp;</td>
 			            <td class="admin2"><%=sMessage%></td>
 			        </tr>
 			    <%
@@ -160,7 +160,7 @@
 	    	for(int l=0; l<languages.length; l++){
                 %>
 			        <tr>
-			            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","message",sWebLanguage)%>&nbsp;<%=languages[l].toUpperCase()%>&nbsp;</td>
+			            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","message",sWebLanguage)%>&nbsp;<%=languages[l].toUpperCase()%>&nbsp;</td>
 			            <td class="admin2">
 			                <textarea class="text" name="Message<%=languages[l].toUpperCase()%>" cols="80" rows="4" onKeyup="limitChars(this,255);resizeTextarea(this,4);"><%=checkString((String)messagesHash.get(languages[l].toUpperCase()))%></textarea>
 			            </td>
@@ -187,7 +187,7 @@
     <br>
     
     <%-- 3 : HISTORY OF USED MESSAGES ---------------------------------%>
-    <%=writeTableHeaderDirectText(getTran("web","usedMessages",sWebLanguage)+" ("+sWebLanguage.toUpperCase()+")",sWebLanguage,"doBack();")%>
+    <%=writeTableHeaderDirectText(getTran(request,"web","usedMessages",sWebLanguage)+" ("+sWebLanguage.toUpperCase()+")",sWebLanguage,"doBack();")%>
     <table width="100%" align="center" cellspacing="1" class="list">
         <%-- a MESSAGE for each supported language --%>
         <%        		
@@ -230,7 +230,7 @@
         	}
 		%>
     </table>
-    <%=prevMsgCount%> <%=getTran("web","recordsFound",sWebLanguage)%>
+    <%=prevMsgCount%> <%=getTran(request,"web","recordsFound",sWebLanguage)%>
 </form>
 
 <%=ScreenHelper.alignButtonsStart()%>

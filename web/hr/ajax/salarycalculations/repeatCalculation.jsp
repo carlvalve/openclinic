@@ -185,35 +185,35 @@
                     }
                 %>
                 <tr>
-                    <td width="100" class="admin"><%=HTMLEntities.htmlentities(getTran("web","type",sWebLanguage))%>&nbsp;*&nbsp;</td>
+                    <td width="100" class="admin"><%=HTMLEntities.htmlentities(getTran(request,"web","type",sWebLanguage))%>&nbsp;*&nbsp;</td>
                     <td class="admin2">
 		                <select class="text" id="Type" name="Type">
-		                    <%=ScreenHelper.writeSelect("hr.salarycalculation.type",sSelectedType,sWebLanguage)%>
+		                    <%=ScreenHelper.writeSelect(request,"hr.salarycalculation.type",sSelectedType,sWebLanguage)%>
 		                </select>
                     </td>
                 </tr>
                 
                 <%-- 1 - calculation begin date (*) --%>
                 <tr>
-                    <td class="admin"><%=HTMLEntities.htmlentities(getTran("hr.salarycalculations","beginDate",sWebLanguage))%>&nbsp;*&nbsp;</td>
+                    <td class="admin"><%=HTMLEntities.htmlentities(getTran(request,"hr.salarycalculations","beginDate",sWebLanguage))%>&nbsp;*&nbsp;</td>
                     <td class="admin2">
                         <input type="text" id="Begin" name="Begin" value="<%=sCalculationBegin%>" class="text" size="10" maxLength="10" onBlur="if(!checkDate(this)){this.focus();alertDialog('web.occup','date.error');}">
                         <span id="beginDateSelector"></span>
                         
                         <%-- date selector (only past) --%>
-                        <script>document.getElementById("beginDateSelector").innerHTML = getMyDate("Begin","<c:url value='/_img/icons/icon_agenda.gif'/>","<%=getTran("web","putToday",sWebLanguage)%>",true,false);</script>
+                        <script>document.getElementById("beginDateSelector").innerHTML = getMyDate("Begin","<c:url value='/_img/icons/icon_agenda.gif'/>","<%=getTran(null,"web","putToday",sWebLanguage)%>",true,false);</script>
                     </td>
                 </tr>
                 
                 <%-- 2 - calculation end date --%>
                 <tr>
-                    <td class="admin"><%=HTMLEntities.htmlentities(getTran("hr.salarycalculations","endDate",sWebLanguage))%>&nbsp;*&nbsp;</td>
+                    <td class="admin"><%=HTMLEntities.htmlentities(getTran(request,"hr.salarycalculations","endDate",sWebLanguage))%>&nbsp;*&nbsp;</td>
                     <td class="admin2">
                         <input type="text" id="End" name="End" value="<%=sCalculationEnd%>" class="text" size="10" maxLength="10" onBlur="if(!checkDate(this)){this.focus();alertDialog('web.occup','date.error');}">
                         <span id="endDateSelector"></span>
                         
                         <%-- date selector (only past) --%>
-                        <script>document.getElementById("endDateSelector").innerHTML = getMyDate("End","<c:url value='/_img/icons/icon_agenda.gif'/>","<%=getTran("web","putToday",sWebLanguage)%>",true,false);</script>
+                        <script>document.getElementById("endDateSelector").innerHTML = getMyDate("End","<c:url value='/_img/icons/icon_agenda.gif'/>","<%=getTran(null,"web","putToday",sWebLanguage)%>",true,false);</script>
                     </td>
                 </tr>
                 
@@ -221,20 +221,20 @@
                 <tr>
                     <td class="admin">&nbsp;</td>
                     <td class="admin2">
-                        <input type="checkbox" name="IncludeWeekends" id="IncludeWeekendsCB" class="hand" value="true"><%=getLabel("hr.salarycalculations","includeWeekends",sWebLanguage,"IncludeWeekendsCB")%>
+                        <input type="checkbox" name="IncludeWeekends" id="IncludeWeekendsCB" class="hand" value="true"><%=getLabel(request,"hr.salarycalculations","includeWeekends",sWebLanguage,"IncludeWeekendsCB")%>
                     </td>
                 </tr>
                              
                 <%-- 4 - calculation codes --%>
                 <tr>
-                    <td class="admin"><%=HTMLEntities.htmlentities(getTran("hr.salarycalculations","codes",sWebLanguage))%>&nbsp;*&nbsp;</td>
+                    <td class="admin"><%=HTMLEntities.htmlentities(getTran(request,"hr.salarycalculations","codes",sWebLanguage))%>&nbsp;*&nbsp;</td>
                     <td class="admin2">
                         <table id="tblCC" cellpadding="0" cellspacing="0" width="98%" class="sortable" headerRowCount="2" style="border:1px solid #ccc;">
                             <%-- a - header --%>
                             <tr class="admin">
                                 <td width="36">&nbsp;</td>
-                                <td width="100" style="padding-left:1px;"><%=getTran("web","duration",sWebLanguage)%></td>
-                                <td width="380" style="padding-left:1px;"><%=getTran("web","code",sWebLanguage)%></td>
+                                <td width="100" style="padding-left:1px;"><%=getTran(request,"web","duration",sWebLanguage)%></td>
+                                <td width="380" style="padding-left:1px;"><%=getTran(request,"web","code",sWebLanguage)%></td>
                             </tr>
                             
                             <%-- b - add row --%>
@@ -244,7 +244,7 @@
                                                                 
                                 <%-- duration (hours) --%>
                                 <td class="admin" nowrap>
-                                    <input type="text" class="text" id="addDuration" name="addDuration" size="3" maxLength="4" onKeyUp="removeTrailingZeros(this);if(!isInteger(this))this.value='';"></input>&nbsp;<%=getTran("web","hours",sWebLanguage)%>
+                                    <input type="text" class="text" id="addDuration" name="addDuration" size="3" maxLength="4" onKeyUp="removeTrailingZeros(this);if(!isInteger(this))this.value='';"></input>&nbsp;<%=getTran(request,"web","hours",sWebLanguage)%>
                                 </td>
                                 
                                 <%-- code (and label) --%>

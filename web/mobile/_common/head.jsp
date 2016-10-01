@@ -67,10 +67,10 @@
 				// link to full-size application	
 				if(session.getAttribute("activePatient")!=null){
 					String pid = ((AdminPerson)session.getAttribute("activePatient")).personid;
-					%><a href='<%="http://"+request.getServerName()+request.getRequestURI().replaceAll(request.getServletPath(),"")%>/main.do?Page=curative/index.jsp&PersonID=<%=pid%>&ts=<%=new java.util.Date().getTime()+""%>'><%=getTran("web","desktop.interface",activeUser)%></a><%
+					%><a href='<%="http://"+request.getServerName()+request.getRequestURI().replaceAll(request.getServletPath(),"")%>/main.do?Page=curative/index.jsp&PersonID=<%=pid%>&ts=<%=new java.util.Date().getTime()+""%>'><%=getTran(request,"web","desktop.interface",activeUser)%></a><%
 				}
 				else{
-					%><a href='<%="http://"+request.getServerName()+request.getRequestURI().replaceAll(request.getServletPath(),"")%>/main.do?CheckService=true&CheckMedicalCenter=true&ts=<%=new java.util.Date().getTime()+""%>'><%=getTran("web","desktop.interface",activeUser)%></a><%
+					%><a href='<%="http://"+request.getServerName()+request.getRequestURI().replaceAll(request.getServletPath(),"")%>/main.do?CheckService=true&CheckMedicalCenter=true&ts=<%=new java.util.Date().getTime()+""%>'><%=getTran(request,"web","desktop.interface",activeUser)%></a><%
 				}
 			%>
         </td>

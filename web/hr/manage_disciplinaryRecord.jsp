@@ -28,7 +28,7 @@
     <table class="list" border="0" width="100%" cellspacing="1">
         <%-- date --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web.hr","date",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web.hr","date",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2" nowrap> 
                 <%=writeDateField("date","EditForm","",sWebLanguage)%>            
             </td>                        
@@ -36,7 +36,7 @@
         
         <%-- title --%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","title",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.hr","title",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="title" name="title" size="50" maxLength="255" value="">
             </td>
@@ -44,7 +44,7 @@
         
         <%-- description --%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","description",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web.hr","description",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea class="text" name="description" id="description" cols="80" rows="4" onKeyup="resizeTextarea(this,8);"></textarea>
             </td>
@@ -52,26 +52,26 @@
                  
         <%-- decision --%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","decision",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.hr","decision",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <select class="text" id="decision" name="decision">
                     <option/>
-                    <%=ScreenHelper.writeSelect("hr.disrec.decision","",sWebLanguage)%>
+                    <%=ScreenHelper.writeSelect(request,"hr.disrec.decision","",sWebLanguage)%>
                 </select>
             </td>
         </tr>
             
         <%-- duration --%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","duration",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web.hr","duration",sWebLanguage)%></td>
             <td class="admin2">
-                <input type="text" class="text" id="duration" name="duration" size="3" maxLength="3" value="" onKeyUp="isNumber(this);"> <%=getTran("web","days",sWebLanguage)%>
+                <input type="text" class="text" id="duration" name="duration" size="3" maxLength="3" value="" onKeyUp="isNumber(this);"> <%=getTran(request,"web","days",sWebLanguage)%>
             </td>
         </tr>
         
         <%-- decisionBy --%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","decisionBy",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.hr","decisionBy",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="decisionBy" name="decisionBy" size="50" maxLength="100" value="">
             </td>
@@ -79,7 +79,7 @@
         
         <%-- followUp --%>                    
         <tr>
-            <td class="admin"><%=getTran("web.hr","followUp",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web.hr","followUp",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea class="text" name="followUp" id="followUp" cols="80" rows="4" onKeyup="limitChars(this,6000);resizeTextarea(this,8);"></textarea>
             </td>
@@ -95,7 +95,7 @@
             </td>
         </tr>
     </table>
-    <i><%=getTran("web","colored_fields_are_obligate",sWebLanguage)%></i>
+    <i><%=getTran(request,"web","colored_fields_are_obligate",sWebLanguage)%></i>
     
     <div id="divMessage" style="padding-top:10px;"></div>
 </form>

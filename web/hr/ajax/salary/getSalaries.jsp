@@ -68,7 +68,7 @@
         }
     }
     else{
-        sReturn = "<td colspan='5'>"+getTran("web","noRecordsFound",sWebLanguage)+"</td>";
+        sReturn = "<td colspan='5'>"+getTran(request,"web","noRecordsFound",sWebLanguage)+"</td>";
     }
 %>
 
@@ -78,10 +78,10 @@
 <table width="100%" class="sortable" id="searchresults" cellspacing="1" style="border:none;">
     <%-- header --%>
     <tr class="admin" style="padding-left:1px;">
-        <td width="10%" nowrap><asc><%=HTMLEntities.htmlentities(getTran("web.hr","begin",sWebLanguage))%></asc></td>
-        <td width="10%" nowrap><%=HTMLEntities.htmlentities(getTran("web.hr","end",sWebLanguage))%></td>
-        <td width="10%" nowrap><%=HTMLEntities.htmlentities(getTran("web.hr","contract",sWebLanguage))%></td>
-        <td width="10%" nowrap><%=HTMLEntities.htmlentities(getTran("web.hr","grossSalary",sWebLanguage))%></td>
+        <td width="10%" nowrap><asc><%=HTMLEntities.htmlentities(getTran(request,"web.hr","begin",sWebLanguage))%></asc></td>
+        <td width="10%" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.hr","end",sWebLanguage))%></td>
+        <td width="10%" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.hr","contract",sWebLanguage))%></td>
+        <td width="10%" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.hr","grossSalary",sWebLanguage))%></td>
         <td width="*" nowrap>&nbsp;</td>
     </tr>
     
@@ -90,7 +90,7 @@
     </tbody>
 </table> 
 
-&nbsp;<i><%=salaries.size()+" "+getTran("web","recordsFound",sWebLanguage)%></i>
+&nbsp;<i><%=salaries.size()+" "+getTran(request,"web","recordsFound",sWebLanguage)%></i>
         <%
     }
     else{

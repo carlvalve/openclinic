@@ -28,14 +28,14 @@
 %>
 
 <table width="100%" class="list" cellpadding="0" cellspacing="1">
-	<tr class='admin'><td colspan='2'><%=getTran("web","statistics.newpatients",sWebLanguage)%></td></tr>
+	<tr class='admin'><td colspan='2'><%=getTran(request,"web","statistics.newpatients",sWebLanguage)%></td></tr>
 	
 	<tr class='admin2'>
-		<td class='admin'><%=getTran("web","period",sWebLanguage)%></td>
+		<td class='admin'><%=getTran(request,"web","period",sWebLanguage)%></td>
 		<td class='admin2'><%=begin%> - <%=end%></td>
 	</tr>
 	<tr>
-		<td class='admin'><%=getTran("web","statistics.newpatients",sWebLanguage)%></td>
+		<td class='admin'><%=getTran(request,"web","statistics.newpatients",sWebLanguage)%></td>
 		<td class='admin2'><%=total>0?"<a href='javascript:shownewpatients()'>"+total+"</a>":"0" %></td>
 	</tr>
 </table>

@@ -60,7 +60,7 @@
 		out.print("<table class='list' padding='0' cellspacing='1' width='"+sTABLE_WIDTH+"' style='border-bottom:none;'>");
 		
 		// title
-		out.print("<tr class='admin'><td colspan='2'>"+getTran("mobile","patients",activeUser)+"</td></tr>");
+		out.print("<tr class='admin'><td colspan='2'>"+getTran(request,"mobile","patients",activeUser)+"</td></tr>");
 		
 		// Show list of patients
 		Iterator patientlist = patients.iterator();
@@ -87,17 +87,17 @@
 		    <input type="hidden" name="action" value="">
 		    
 			<table class="list" padding="0" cellspacing="1" width="<%=sTABLE_WIDTH%>">
-    		    <tr class="admin"><td colspan="2"><%=getTran("mobile","searchPatient",activeUser)%></td></tr>
+    		    <tr class="admin"><td colspan="2"><%=getTran(request,"mobile","searchPatient",activeUser)%></td></tr>
     		
-				<tr><td class="admin" width="100" nowrap width="70"><%=getTran("web","personid",activeUser)%></td><td><input name="patientpersonid" type="text" class="text" size="10" value="<%=patientpersonid%>"></td></tr>
-				<tr><td class="admin" nowrap><%=getTran("web","name",activeUser)%></td><td><input name="patientname" type="text" class="text" size="20" value="<%=patientname%>"></td></tr>
-				<tr><td class="admin" nowrap><%=getTran("web","firstname",activeUser)%></td><td><input name="patientfirstname" type="text" class="text" size="20" value="<%=patientfirstname%>"></td></tr>
-				<tr><td class="admin" nowrap><%=getTran("web","dateofbirth",activeUser)%></td><td><input name="patientdateofbirth" type="text" class="text" size="10" value="<%=patientdateofbirth%>"></td></tr>
-				<tr><td class="admin" nowrap><%=getTran("web","service",activeUser)%></td><td><input name="patientservice" type="text" class="text" size="20" value="<%=patientservice%>"></td></tr>
+				<tr><td class="admin" width="100" nowrap width="70"><%=getTran(request,"web","personid",activeUser)%></td><td><input name="patientpersonid" type="text" class="text" size="10" value="<%=patientpersonid%>"></td></tr>
+				<tr><td class="admin" nowrap><%=getTran(request,"web","name",activeUser)%></td><td><input name="patientname" type="text" class="text" size="20" value="<%=patientname%>"></td></tr>
+				<tr><td class="admin" nowrap><%=getTran(request,"web","firstname",activeUser)%></td><td><input name="patientfirstname" type="text" class="text" size="20" value="<%=patientfirstname%>"></td></tr>
+				<tr><td class="admin" nowrap><%=getTran(request,"web","dateofbirth",activeUser)%></td><td><input name="patientdateofbirth" type="text" class="text" size="10" value="<%=patientdateofbirth%>"></td></tr>
+				<tr><td class="admin" nowrap><%=getTran(request,"web","service",activeUser)%></td><td><input name="patientservice" type="text" class="text" size="20" value="<%=patientservice%>"></td></tr>
 				
 		        <%
 					if(sAction.equals("search")){
-						out.print("<tr><td colspan='2' style='text-align:center;'><div id='msgDiv'><font color='red'>"+getTran("web","noPatientsFound",activeUser)+"</font></div></td></tr>");
+						out.print("<tr><td colspan='2' style='text-align:center;'><div id='msgDiv'><font color='red'>"+getTran(request,"web","noPatientsFound",activeUser)+"</font></div></td></tr>");
 					}
 				%>
 			</table>

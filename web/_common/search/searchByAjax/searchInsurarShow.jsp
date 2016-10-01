@@ -52,8 +52,8 @@
 <table id="searchresults" class="sortable" cellpadding="0" cellspacing="0" width="100%">
     <%-- header --%>
     <tr class="admin">
-        <td><%=HTMLEntities.htmlentities(getTran("system.manage","insurarName",sWebLanguage))%></td>
-        <td><%=HTMLEntities.htmlentities(getTran("system.manage","insurarContact",sWebLanguage))%></td>
+        <td><%=HTMLEntities.htmlentities(getTran(request,"system.manage","insurarName",sWebLanguage))%></td>
+        <td><%=HTMLEntities.htmlentities(getTran(request,"system.manage","insurarContact",sWebLanguage))%></td>
     </tr>
     
     <tbody class="hand">
@@ -98,16 +98,16 @@
 	    // number of found records
 	    if(insurarCount > 0){
 	        %>
-	            <%=insurarCount%> <%=HTMLEntities.htmlentities(getTran("web","recordsFound",sWebLanguage))%>
+	            <%=insurarCount%> <%=HTMLEntities.htmlentities(getTran(request,"web","recordsFound",sWebLanguage))%>
 	            <script>sortables_init();</script>
 	        <%
 	    }
 	    else{
 	    	if(!sRestrictedListOnly.equalsIgnoreCase("1")){
-	        	%><br><%=HTMLEntities.htmlentities(getTran("web","noRecordsFound",sWebLanguage))%><%
+	        	%><br><%=HTMLEntities.htmlentities(getTran(request,"web","noRecordsFound",sWebLanguage))%><%
 	    	}
 	    	else{
-	        	%><br><%=HTMLEntities.htmlentities(getTran("web","noRecordsFoundwithlimitedprestationlist",sWebLanguage))%><%
+	        	%><br><%=HTMLEntities.htmlentities(getTran(request,"web","noRecordsFoundwithlimitedprestationlist",sWebLanguage))%><%
 	    	}
 	    }
 	

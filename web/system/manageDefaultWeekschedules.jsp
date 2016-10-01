@@ -30,13 +30,13 @@
     <table border="0" width="100%" cellspacing="1">
         <%-- weekScheduleType select --%>
         <tr>
-            <td class="admin" width="150" nowrap><%=getTran("web.hr","weekSchedule",sWebLanguage)%>&nbsp;</td>
+            <td class="admin" width="150" nowrap><%=getTran(request,"web.hr","weekSchedule",sWebLanguage)%>&nbsp;</td>
             <td class="admin2" id="weekScheduleTypeSelectTR"><%-- ajax --%></td>
         </tr>
         
         <%-- weekScheduleType (new value) --%>
         <tr>
-            <td class="admin" nowrap><%=getTran("web.hr","weekScheduleType",sWebLanguage)%>&nbsp;</td>
+            <td class="admin" nowrap><%=getTran(request,"web.hr","weekScheduleType",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="weekScheduleType" name="weekScheduleType" size="20" maxLength="50" value="">
             </td>
@@ -44,7 +44,7 @@
                                         
         <%-- weekSchedule/timeBlocks (multi-add) --%>
         <tr>
-            <td class="admin" nowrap><%=getTran("web.hr","timeBlocks",sWebLanguage)%></td>
+            <td class="admin" nowrap><%=getTran(request,"web.hr","timeBlocks",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="hidden" id="timeBlocks" name="timeBlocks" value="">
                                      
@@ -55,19 +55,19 @@
                         <td width="40" nowrap/>
                         <%-- 1 - timeBlockDay --%>
                         <td width="100" nowrap style="padding-left:0px;">
-                            <%=getTran("web.hr","timeBlockDay",sWebLanguage)%>&nbsp;
+                            <%=getTran(request,"web.hr","timeBlockDay",sWebLanguage)%>&nbsp;
                         </td>
                         <%-- 2 - timeBlockStart --%>
                         <td width="70" nowrap style="padding-left:0px;">
-                            <%=getTran("web.hr","timeBlockStart",sWebLanguage)%>&nbsp;
+                            <%=getTran(request,"web.hr","timeBlockStart",sWebLanguage)%>&nbsp;
                         </td>
                         <%-- 3 - timeBlockEnd --%>
                         <td width="70" nowrap style="padding-left:0px;">
-                            <%=getTran("web.hr","timeBlockEnd",sWebLanguage)%>&nbsp;
+                            <%=getTran(request,"web.hr","timeBlockEnd",sWebLanguage)%>&nbsp;
                         </td>    
                         <%-- 4 - timeBlockHours --%>
                         <td width="80" nowrap style="padding-left:0px;">
-                            <%=getTran("web.hr","timeBlockHours",sWebLanguage)%>&nbsp;*&nbsp;
+                            <%=getTran(request,"web.hr","timeBlockHours",sWebLanguage)%>&nbsp;*&nbsp;
                         </td>    
                         <%-- 5 - empty --%>
                         <td width="100" nowrap/>    
@@ -83,7 +83,7 @@
                         <td class="admin"> 
                             <select class="text" id="tbDayIdx" name="tbDayIdx">
                                 <option/>
-                                <%=ScreenHelper.writeSelectUnsorted("hr.workschedule.days","",sWebLanguage)%>
+                                <%=ScreenHelper.writeSelectUnsorted(request,"hr.workschedule.days","",sWebLanguage)%>
                             </select>&nbsp;
                         </td>
                         <%-- 2 - tbBeginHour --%>
@@ -96,7 +96,7 @@
                         </td>    
                         <%-- 4 - tbDuration --%>
                         <td class="admin" nowrap> 
-                            <input type="text" class="text" id="tbDuration" name="tbDuration" size="2" maxLength="5" onKeypress="keypressTime(this);" onBlur="checkTime(this);" value="">&nbsp;<%=getTran("web","hours",sWebLanguage)%>&nbsp;
+                            <input type="text" class="text" id="tbDuration" name="tbDuration" size="2" maxLength="5" onKeypress="keypressTime(this);" onBlur="checkTime(this);" value="">&nbsp;<%=getTran(request,"web","hours",sWebLanguage)%>&nbsp;
                         </td>
                         <%-- 5 - buttons --%>
                         <td class="admin">
@@ -119,7 +119,7 @@
         </tr>
     </table>
     
-    <i><%=getTran("web","colored_fields_are_obligate",sWebLanguage)%></i><br>
+    <i><%=getTran(request,"web","colored_fields_are_obligate",sWebLanguage)%></i><br>
     
     <div id="divMessage" style="padding-top:10px;"></div><br>
     
@@ -127,7 +127,7 @@
     
     <%-- link to manageConfig --%>
     <img src='<c:url value="/_img/themes/default/pijl.gif"/>'>
-    <a  href="<c:url value='/main.do'/>?Page=system/manageConfig.jsp?ts=<%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran("Web.Manage","manageConfiguration",sWebLanguage)%></a>&nbsp;    
+    <a  href="<c:url value='/main.do'/>?Page=system/manageConfig.jsp?ts=<%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran(request,"Web.Manage","manageConfiguration",sWebLanguage)%></a>&nbsp;    
 </form>
     
 <script>  

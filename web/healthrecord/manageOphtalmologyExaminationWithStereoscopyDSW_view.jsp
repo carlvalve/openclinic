@@ -41,14 +41,14 @@
                     if(useTemplate.equalsIgnoreCase("yes")){
                     %>
                         <a href="javascript:subScreen('cbVisiotest','/healthrecord/template.jsp?Page=manageOphtalmologyVisiotest.jsp&be.mxs.healthrecord.transaction_id=currentTransaction&ts=<%=getTs()%>');">
-                            <%=getTran("Web.Occup","medwan.healthrecord.ophtalmology.visiotest",sWebLanguage)%>
+                            <%=getTran(request,"Web.Occup","medwan.healthrecord.ophtalmology.visiotest",sWebLanguage)%>
                         </a>
                     <%
                     }
                     else{
                     %>
                         <a href="javascript:forward('cbVisiotest','/healthrecord/viewTransaction.jsp?Page=manageOphtalmologyVisiotest.jsp&historyBack=2&be.mxs.healthrecord.transaction_id=<%=transactionVO.getTransactionId()%>&be.mxs.healthrecord.server_id=<%=transactionVO.getServerId()%>&ts=<%=getTs()%>');">
-                            <%=getTran("Web.Occup","medwan.healthrecord.ophtalmology.visiotest",sWebLanguage)%>
+                            <%=getTran(request,"Web.Occup","medwan.healthrecord.ophtalmology.visiotest",sWebLanguage)%>
                         </a>
                     <%
                     }
@@ -56,14 +56,14 @@
                 // no link
                 else {
                 %>
-                <%=getTran("Web.Occup","medwan.healthrecord.ophtalmology.visiotest",sWebLanguage)%>
+                <%=getTran(request,"Web.Occup","medwan.healthrecord.ophtalmology.visiotest",sWebLanguage)%>
                 <%
                 }
             %>
             </td>
             <%-- executed checkbox --%>
             <td class="admin2">
-                <%=getTran("Web.Occup","medwan.common.executed",sWebLanguage)%>
+                <%=getTran(request,"Web.Occup","medwan.common.executed",sWebLanguage)%>
                 <input id="cbVisiotest" disabled type="checkbox" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_VISIOTEST;value=medwan.common.true" property="value" outputString="checked"/> />
             </td>
         </tr>
@@ -84,14 +84,14 @@
                     if(useTemplate.equalsIgnoreCase("yes")){
                     %>
                         <a href="javascript:subScreen('cbErgovision','/main.do?Page=/healthrecord/manageOphtalmologyErgovision.jsp&be.mxs.healthrecord.transaction_id=currentTransaction&ts=<%=getTs()%>');">
-                            <%=getTran("Web.Occup","medwan.healthrecord.ophtalmology.ergovision",sWebLanguage)%>
+                            <%=getTran(request,"Web.Occup","medwan.healthrecord.ophtalmology.ergovision",sWebLanguage)%>
                         </a>
                     <%
                     }
                     else{
                     %>
                         <a href="javascript:forward('cbErgovision','/main.do?Page=/healthrecord/manageOphtalmologyErgovision.jsp&historyBack=2&be.mxs.healthrecord.transaction_id=<%=transactionVO.getTransactionId()%>&be.mxs.healthrecord.server_id=<%=transactionVO.getServerId()%>&ts=<%=getTs()%>');">
-                            <%=getTran("Web.Occup","medwan.healthrecord.ophtalmology.ergovision",sWebLanguage)%>
+                            <%=getTran(request,"Web.Occup","medwan.healthrecord.ophtalmology.ergovision",sWebLanguage)%>
                         </a>
                     <%
                     }
@@ -99,14 +99,14 @@
                 // no link
                 else {
                     %>
-                    <%=getTran("Web.Occup","medwan.healthrecord.ophtalmology.ergovision",sWebLanguage)%>
+                    <%=getTran(request,"Web.Occup","medwan.healthrecord.ophtalmology.ergovision",sWebLanguage)%>
                     <%
                 }
             %>
             </td>
             <%-- executed checkbox --%>
             <td class="admin2">
-                <%=getTran("Web.Occup","medwan.common.executed",sWebLanguage)%>
+                <%=getTran(request,"Web.Occup","medwan.common.executed",sWebLanguage)%>
                 <input id="cbErgovision" disabled type="checkbox" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION;value=medwan.common.true" property="value" outputString="checked"/> />
             </td>
         </tr>
@@ -117,7 +117,7 @@
         if(activeUser.getAccessRight("occup.ophtalmology.consultation.add") || activeUser.getAccessRight("occup.ophtalmology.consultation.edit")){
             %>
                 <button accesskey="<%=ScreenHelper.getAccessKey(getTranNoLink("accesskey","save",sWebLanguage))%>" class="buttoninvisible" onclick="submitForm(true);"></button>
-                <button class="button" name="ButtonSave" onclick="submitForm(true);"><%=getTran("accesskey","save",sWebLanguage)%></button>
+                <button class="button" name="ButtonSave" onclick="submitForm(true);"><%=getTran(request,"accesskey","save",sWebLanguage)%></button>
                 <input class="button" type="button" name="ButtonSaveClose" value="<%=getTranNoLink("Web","save_and_close",sWebLanguage)%>" onclick="submitForm(false);"/>
             <%
         }

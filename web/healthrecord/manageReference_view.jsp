@@ -31,7 +31,7 @@
         <tr>
             <td class="admin" width="<%=sTDAdminWidth%>">
                 <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-                <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+                <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
             </td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" id="trandate" OnBlur='checkDate(this)'>
@@ -44,24 +44,24 @@
             String sCentre = "";
             if(item!=null) sCentre = item.getValue();
         %>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web.Occup","medwan.common.reference_centre",sWebLanguage)%>&nbsp;</td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web.Occup","medwan.common.reference_centre",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <select class="text" <%=setRightClick("ITEM_TYPE_REFERENCE_REF_CENTR")%> name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REFERENCE_REF_CENTR" property="itemId"/>]>.value">
                     <option><%=getTranNoLink("web","choose",sWebLanguage)%></option>
-                    <%=ScreenHelper.writeSelect("reference.referencecenter",sCentre,sWebLanguage)%>
+                    <%=ScreenHelper.writeSelect(request,"reference.referencecenter",sCentre,sWebLanguage)%>
                 </select>
             </td>
         </tr>
         
         <%-- Anamnese--%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web.Occup","medwan.common.anamnese",sWebLanguage)%>&nbsp;</td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web.Occup","medwan.common.anamnese",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" class="text" <%=setRightClick("ITEM_TYPE_REFERENCE_ANAMNESE")%> cols="50" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REFERENCE_ANAMNESE" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REFERENCE_ANAMNESE" property="value"/></textarea>
             </td>
             
             <%-- Complementary exams--%>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web.Occup","medwan.common.complementary_exams",sWebLanguage)%>&nbsp;</td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web.Occup","medwan.common.complementary_exams",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" class="text" <%=setRightClick("ITEM_TYPE_REFERENCE_EXAM_COMPL")%> cols="50" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REFERENCE_EXAM_COMPL" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REFERENCE_EXAM_COMPL" property="value"/></textarea>
             </td>
@@ -69,13 +69,13 @@
         
         <%-- Treatment Recieved--%>
         <tr>
-            <td class="admin"><%=getTran("Web.Occup","medwan.common.treatement_recieved",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"Web.Occup","medwan.common.treatement_recieved",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" class="text" <%=setRightClick("ITEM_TYPE_REFERENCE_TRAIT_RECU")%> cols="50" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REFERENCE_TRAIT_RECU" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REFERENCE_TRAIT_RECU" property="value"/></textarea>
             </td>
             
             <%-- Transfer reason--%>
-            <td class="admin"><%=getTran("Web.Occup","medwan.common.transfer_reason",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"Web.Occup","medwan.common.transfer_reason",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" class="text" <%=setRightClick("ITEM_TYPE_REFERENCE_RAISON_TRANSF")%> cols="50" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REFERENCE_RAISON_TRANSF" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REFERENCE_RAISON_TRANSF" property="value"/></textarea>
             </td>
@@ -84,7 +84,7 @@
        <tr>
             <td class="admin"/>
             <td class="admin2" colspan="3">
-                <%=getTran("Web.Occup","PrintLanguage",sWebLanguage)%>
+                <%=getTran(request,"Web.Occup","PrintLanguage",sWebLanguage)%>
                 <select class="text" name="PrintLanguageRef">
                     <%
                         String sPrintLanguage = checkString(request.getParameter("PrintLanguage"));
@@ -113,12 +113,12 @@
     <table class="list" width="100%" cellspacing="1">
         <%-- title --%>
         <tr>
-            <td colspan="4"><%=getTran("Web.Occup","medwan.common.contre_reference",sWebLanguage)%></td>
+            <td colspan="4"><%=getTran(request,"Web.Occup","medwan.common.contre_reference",sWebLanguage)%></td>
         </tr>
         
         <%-- Reference ID--%>
         <tr>
-            <td class="admin"><%=getTran("Web.Occup","medwan.common.reference_id",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"Web.Occup","medwan.common.reference_id",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" <%=setRightClick("ITEM_TYPE_REFERENCE_ID_REF")%> name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REFERENCE_ID_REF" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REFERENCE_ID_REF" property="value"/>">
             </td>
@@ -128,13 +128,13 @@
         
         <%-- Significal results--%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web.Occup","medwan.common.significal_results",sWebLanguage)%>&nbsp;</td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web.Occup","medwan.common.significal_results",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" class="text" <%=setRightClick("ITEM_TYPE_REFERENCE_RESULTS_SIGNIF")%> cols="50" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REFERENCE_RESULTS_SIGNIF" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REFERENCE_RESULTS_SIGNIF" property="value"/></textarea>
             </td>
             
             <%-- Diagnostic--%>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web.Occup","medwan.common.diagnostic",sWebLanguage)%>&nbsp;</td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web.Occup","medwan.common.diagnostic",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" class="text" <%=setRightClick("ITEM_TYPE_REFERENCE_DIAGN")%> cols="50" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REFERENCE_DIAGN" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REFERENCE_DIAGN" property="value"/></textarea>
             </td>
@@ -142,13 +142,13 @@
         
         <%-- treatment recieved and intervention--%>
         <tr>
-            <td class="admin"><%=getTran("Web.Occup","medwan.common.treatment_received_intervention",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"Web.Occup","medwan.common.treatment_received_intervention",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" class="text" <%=setRightClick("ITEM_TYPE_REFERENCE_TRAIT_RECU_INTERV")%> cols="50" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REFERENCE_TRAIT_RECU_INTERV" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REFERENCE_TRAIT_RECU_INTERV" property="value"/></textarea>
             </td>
             
             <%-- Recommendations/treatment to follow--%>
-            <td class="admin"><%=getTran("Web.Occup","medwan.common.recommendations_treatment_to_follow",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"Web.Occup","medwan.common.recommendations_treatment_to_follow",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" class="text" <%=setRightClick("ITEM_TYPE_REFERENCE_RECOM_TRAIT_SUIVRE")%> cols="50" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REFERENCE_RECOM_TRAIT_SUIVRE" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REFERENCE_RECOM_TRAIT_SUIVRE" property="value"/></textarea>
             </td>
@@ -158,7 +158,7 @@
         <tr>
             <td class="admin"/>
             <td class="admin2" colspan="3">
-                <%=getTran("Web.Occup","PrintLanguage",sWebLanguage)%>
+                <%=getTran(request,"Web.Occup","PrintLanguage",sWebLanguage)%>
                 <select class="text" name="PrintLanguageContraRef">
                     <%
                         tokenizer = new StringTokenizer(supportedLanguages,",");

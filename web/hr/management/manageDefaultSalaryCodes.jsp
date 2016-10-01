@@ -79,14 +79,14 @@
 
         <%-- 3 - calculation codes --%>
         <tr>
-            <td class="admin"><%=HTMLEntities.htmlentities(getTran("hr.salarycalculations","codes",sWebLanguage))%></td>
+            <td class="admin"><%=HTMLEntities.htmlentities(getTran(request,"hr.salarycalculations","codes",sWebLanguage))%></td>
             <td class="admin2">
                 <table id="tblCC" cellpadding="0" cellspacing="0" width="98%" class="sortable" headerRowCount="2" style="border:1px solid #ccc;">
                     <%-- a - header --%>
                     <tr class="admin">
                         <td width="20">&nbsp;</td>
-                        <td width="100" style="padding-left:1px;"><%=getTran("web","duration",sWebLanguage)%></td>
-                        <td width="380" style="padding-left:1px;"><%=getTran("web","code",sWebLanguage)%></td>
+                        <td width="100" style="padding-left:1px;"><%=getTran(request,"web","duration",sWebLanguage)%></td>
+                        <td width="380" style="padding-left:1px;"><%=getTran(request,"web","code",sWebLanguage)%></td>
                     </tr>
                     
                     <%-- b - add row --%>
@@ -96,7 +96,7 @@
                                                         
                         <%-- duration (hours) --%>
                         <td class="admin" nowrap>
-                            <input type="text" class="text" id="addDuration" name="addDuration" size="3" maxLength="3" onKeyUp="removeTrailingZeros(this);if(!isInteger(this))this.value='';"></input>&nbsp;<%=getTran("web","hours",sWebLanguage)%>
+                            <input type="text" class="text" id="addDuration" name="addDuration" size="3" maxLength="3" onKeyUp="removeTrailingZeros(this);if(!isInteger(this))this.value='';"></input>&nbsp;<%=getTran(request,"web","hours",sWebLanguage)%>
                         </td>
                         
                         <%-- code (and label) --%>

@@ -34,16 +34,16 @@
 				    <tr>
 				        <td width="25"><img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","delete",sWebLanguage)%>" onclick="deleteService('<%=encounterService.serviceUID%>')"></td>
 				        <td width="200"><%=ScreenHelper.formatDate(encounterService.begin)+" - "+ScreenHelper.formatDate(encounterService.end)%></td>
-				        <td><b><%=getTran("Service",encounterService.serviceUID,sWebLanguage)%></b></td>
-				        <td><%=getTran("web","bed",sWebLanguage)+": "+checkString(Bed.get(encounterService.bedUID).getName())%></td>
-				        <td><%=getTran("web","manager",sWebLanguage)+": "+(username!=null?username.get("firstname")+" "+username.get("lastname"):"")%></td>
+				        <td><b><%=getTran(request,"Service",encounterService.serviceUID,sWebLanguage)%></b></td>
+				        <td><%=getTran(request,"web","bed",sWebLanguage)+": "+checkString(Bed.get(encounterService.bedUID).getName())%></td>
+				        <td><%=getTran(request,"web","manager",sWebLanguage)+": "+(username!=null?username.get("firstname")+" "+username.get("lastname"):"")%></td>
 				    </tr>
 				<%
 	        }
 	        %></table><%
         }
         else{
-        	%><i><%=getTran("web","noRecordsFound",sWebLanguage)%></i><%
+        	%><i><%=getTran(request,"web","noRecordsFound",sWebLanguage)%></i><%
         }
         
         // refresh maxTransferDate-variable

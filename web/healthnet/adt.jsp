@@ -12,7 +12,7 @@
 
 <table width="100%">
     <tr class="admin">
-        <td colspan="5"><b><%=getTran("healthnet","adt",sWebLanguage)%> <%=getTran("healthnet","today",sWebLanguage)%></b></td>
+        <td colspan="5"><b><%=getTran(request,"healthnet","adt",sWebLanguage)%> <%=getTran(request,"healthnet","today",sWebLanguage)%></b></td>
     </tr>
 <%
     String sQuery = "select distinct hn_source from HealthNetIntegratedMessages where 1=1 "+where+" order by hn_source";
@@ -21,7 +21,7 @@
     ResultSet rs = ps.executeQuery();
     while (rs.next()) {
         String source=rs.getString("hn_source");
-        out.println("<tr><td class='admin' colspan='3'>"+getTran("healthnet.site",source,sWebLanguage)+"</td></tr>");
+        out.println("<tr><td class='admin' colspan='3'>"+getTran(request,"healthnet.site",source,sWebLanguage)+"</td></tr>");
         String sQuery2="select count(*) total from HealthNetEncounters where hn_source=? and hn_begin>?";
         PreparedStatement ps2 = oc_conn.prepareStatement(sQuery2);
         ps2.setString(1,source);
@@ -52,13 +52,13 @@
         }
         rs2.close();
         ps2.close();
-        out.println("<tr><td>"+getTran("healthnet","in",sWebLanguage)+": "+hn_in+"</td><td>"+getTran("healthnet","out",sWebLanguage)+": "+hn_out+"</td><td>"+getTran("healthnet","transfert",sWebLanguage)+": "+hn_trans+"</td></tr>");
+        out.println("<tr><td>"+getTran(request,"healthnet","in",sWebLanguage)+": "+hn_in+"</td><td>"+getTran(request,"healthnet","out",sWebLanguage)+": "+hn_out+"</td><td>"+getTran(request,"healthnet","transfert",sWebLanguage)+": "+hn_trans+"</td></tr>");
     }
     rs.close();
     ps.close();
 %>
     <tr class="admin">
-        <td colspan="5"><%=getTran("healthnet","adt",sWebLanguage)%> <%=getTran("healthnet","week",sWebLanguage)%></td>
+        <td colspan="5"><%=getTran(request,"healthnet","adt",sWebLanguage)%> <%=getTran(request,"healthnet","week",sWebLanguage)%></td>
     </tr>
 <%
     sQuery = "select distinct hn_source from HealthNetIntegratedMessages where 1=1 "+where+" order by hn_source";
@@ -66,7 +66,7 @@
     rs = ps.executeQuery();
     while (rs.next()) {
         String source=rs.getString("hn_source");
-        out.println("<tr><td class='admin' colspan='3'>"+getTran("healthnet.site",source,sWebLanguage)+"</td></tr>");
+        out.println("<tr><td class='admin' colspan='3'>"+getTran(request,"healthnet.site",source,sWebLanguage)+"</td></tr>");
         String sQuery2="select count(*) total from HealthNetEncounters where hn_source=? and hn_begin>?";
         PreparedStatement ps2 = oc_conn.prepareStatement(sQuery2);
         ps2.setString(1,source);
@@ -97,13 +97,13 @@
         }
         rs2.close();
         ps2.close();
-        out.println("<tr><td>"+getTran("healthnet","in",sWebLanguage)+": "+hn_in+"</td><td>"+getTran("healthnet","out",sWebLanguage)+": "+hn_out+"</td><td>"+getTran("healthnet","transfert",sWebLanguage)+": "+hn_trans+"</td></tr>");
+        out.println("<tr><td>"+getTran(request,"healthnet","in",sWebLanguage)+": "+hn_in+"</td><td>"+getTran(request,"healthnet","out",sWebLanguage)+": "+hn_out+"</td><td>"+getTran(request,"healthnet","transfert",sWebLanguage)+": "+hn_trans+"</td></tr>");
     }
     rs.close();
     ps.close();
 %>
     <tr class="admin">
-        <td colspan="5"><%=getTran("healthnet","adt",sWebLanguage)%> <%=getTran("healthnet","month",sWebLanguage)%></td>
+        <td colspan="5"><%=getTran(request,"healthnet","adt",sWebLanguage)%> <%=getTran(request,"healthnet","month",sWebLanguage)%></td>
     </tr>
 <%
     sQuery = "select distinct hn_source from HealthNetIntegratedMessages where 1=1 "+where+" order by hn_source";
@@ -111,7 +111,7 @@
     rs = ps.executeQuery();
     while (rs.next()) {
         String source=rs.getString("hn_source");
-        out.println("<tr><td class='admin' colspan='3'>"+getTran("healthnet.site",source,sWebLanguage)+"</td></tr>");
+        out.println("<tr><td class='admin' colspan='3'>"+getTran(request,"healthnet.site",source,sWebLanguage)+"</td></tr>");
         String sQuery2="select count(*) total from HealthNetEncounters where hn_source=? and hn_begin>?";
         PreparedStatement ps2 = oc_conn.prepareStatement(sQuery2);
         ps2.setString(1,source);
@@ -144,7 +144,7 @@
         }
         rs2.close();
         ps2.close();
-        out.println("<tr><td>"+getTran("healthnet","in",sWebLanguage)+": "+hn_in+"</td><td>"+getTran("healthnet","out",sWebLanguage)+": "+hn_out+"</td><td>"+getTran("healthnet","transfert",sWebLanguage)+": "+hn_trans+"</td></tr>");
+        out.println("<tr><td>"+getTran(request,"healthnet","in",sWebLanguage)+": "+hn_in+"</td><td>"+getTran(request,"healthnet","out",sWebLanguage)+": "+hn_out+"</td><td>"+getTran(request,"healthnet","transfert",sWebLanguage)+": "+hn_trans+"</td></tr>");
     }
     rs.close();
     ps.close();

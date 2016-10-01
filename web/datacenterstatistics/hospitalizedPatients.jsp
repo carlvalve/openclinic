@@ -11,7 +11,7 @@
     <%=writeTableHeader("Web","statistics.hospitalizedpatients",sWebLanguage," doBack();")%>
     <table class="menu" width="100%" cellspacing="0">
         <tr>
-            <td width="<%=sTDAdminWidth%>"><%=getTran("web","service",sWebLanguage)%></td>
+            <td width="<%=sTDAdminWidth%>"><%=getTran(request,"web","service",sWebLanguage)%></td>
             <td>
                 <input class="text" type="text" name="FindServiceText" READONLY size="<%=sTextWidth%>" title="<%=sFindServiceText%>" value="<%=sFindServiceText%>">
                 <%=ScreenHelper.writeServiceButton("ButtonService","FindServiceCode","FindServiceText",sWebLanguage,sCONTEXTPATH)%>
@@ -19,11 +19,11 @@
             </td>
         </tr>
          <tr>
-            <td><%=getTran("Web","Begin",sWebLanguage)%></td>
+            <td><%=getTran(request,"Web","Begin",sWebLanguage)%></td>
             <td><%=writeDateField("FindBegin","transactionForm",sFindBegin,sWebLanguage)%></td>
         </tr>
         <tr>
-            <td><%=getTran("Web","End",sWebLanguage)%></td>
+            <td><%=getTran(request,"Web","End",sWebLanguage)%></td>
             <td><%=writeDateField("FindEnd","transactionForm",sFindEnd,sWebLanguage)%></td>
         </tr>
         <%=ScreenHelper.setSearchFormButtonsStart()%>
@@ -44,7 +44,7 @@
 
         while (e.hasMoreElements()){
             sServiceId = (String) e.nextElement();
-            hSortedServices.put(getTran("service", sServiceId, sWebLanguage).toLowerCase(), sServiceId);
+            hSortedServices.put(getTran(request,"service", sServiceId, sWebLanguage).toLowerCase(), sServiceId);
         }
 
         Vector v = new Vector(hSortedServices.keySet());
@@ -95,13 +95,13 @@
             </span>
 
             <table class="list" width="100%" cellspacing="1" cellpadding="0">
-                <tr class="admin"><td colspan="<%=hOutcomes.size()+5%>"><%=getTran("service",sServiceId,sWebLanguage)%></td></tr>
+                <tr class="admin"><td colspan="<%=hOutcomes.size()+5%>"><%=getTran(request,"service",sServiceId,sWebLanguage)%></td></tr>
                 <tr class="gray">
-                    <td align="center" rowspan="2"><%=getTran("web","date",sWebLanguage)%></td>
-                    <td align="center" rowspan="2"><%=getTran("web.statistics","brought.forward",sWebLanguage)%></td>
-                    <td align="center" rowspan="2"><%=getTran("web.statistics","new.patients",sWebLanguage)%></td>
-                    <td colspan="<%=hOutcomes.size()+1%>" align="center"><%=getTran("web.statistics","departures",sWebLanguage)%></td>
-                    <td rowspan="2" align="center"><%=getTran("web","carried.forward",sWebLanguage)%></td>
+                    <td align="center" rowspan="2"><%=getTran(request,"web","date",sWebLanguage)%></td>
+                    <td align="center" rowspan="2"><%=getTran(request,"web.statistics","brought.forward",sWebLanguage)%></td>
+                    <td align="center" rowspan="2"><%=getTran(request,"web.statistics","new.patients",sWebLanguage)%></td>
+                    <td colspan="<%=hOutcomes.size()+1%>" align="center"><%=getTran(request,"web.statistics","departures",sWebLanguage)%></td>
+                    <td rowspan="2" align="center"><%=getTran(request,"web","carried.forward",sWebLanguage)%></td>
                 </tr>
                 <tr class="gray">
                     <%
@@ -114,7 +114,7 @@
                         <%
                     }
                     %>
-                    <td width="100" align="center"><%=getTran("web.statistics","subtotal",sWebLanguage)%></td>
+                    <td width="100" align="center"><%=getTran(request,"web.statistics","subtotal",sWebLanguage)%></td>
                 </tr>
             <%
                 vRows = (Vector)hServices.get(sServiceId);
@@ -197,7 +197,7 @@
         }            
 
         if (hServices.size()==0){
-            out.print(getTran("web","norecordsfound",sWebLanguage));
+            out.print(getTran(request,"web","norecordsfound",sWebLanguage));
         }
         else{
             // link to top of page

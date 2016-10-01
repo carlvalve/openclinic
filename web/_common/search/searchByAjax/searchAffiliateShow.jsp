@@ -70,13 +70,13 @@
 			    %>
 			    <%-- header --%>
 			    <tr class="admin">
-			        <td colspan='4'><%=HTMLEntities.htmlentities(getTran("Web", "affiliates.for.insurer", sWebLanguage))%> <%=sInsurarName.length()==0?"?":sInsurarName %> <%=HTMLEntities.htmlentities(getTran("Web", "and", sWebLanguage))%> <%=HTMLEntities.htmlentities(getTran("Web", "insurancenumber", sWebLanguage))%> <%=sFindInsuranceNr.length()==0?"?":sFindInsuranceNr %></td>
+			        <td colspan='4'><%=HTMLEntities.htmlentities(getTran(request,"Web", "affiliates.for.insurer", sWebLanguage))%> <%=sInsurarName.length()==0?"?":sInsurarName %> <%=HTMLEntities.htmlentities(getTran(request,"Web", "and", sWebLanguage))%> <%=HTMLEntities.htmlentities(getTran(request,"Web", "insurancenumber", sWebLanguage))%> <%=sFindInsuranceNr.length()==0?"?":sFindInsuranceNr %></td>
 			    </tr>
 			    <tr class="admin">
-			        <td nowrap><%=HTMLEntities.htmlentities(getTran("Web", "name", sWebLanguage))%></td>
-			        <td nowrap><%=HTMLEntities.htmlentities(getTran("Web", "insurancenr", sWebLanguage))%></td>
-			        <td width="50" nowrap><%=HTMLEntities.htmlentities(getTran("Web", "gender", sWebLanguage))%></td>
-			        <td width="110" nowrap><%=HTMLEntities.htmlentities(getTran("Web", "dateofbirth", sWebLanguage))%></td>
+			        <td nowrap><%=HTMLEntities.htmlentities(getTran(request,"Web", "name", sWebLanguage))%></td>
+			        <td nowrap><%=HTMLEntities.htmlentities(getTran(request,"Web", "insurancenr", sWebLanguage))%></td>
+			        <td width="50" nowrap><%=HTMLEntities.htmlentities(getTran(request,"Web", "gender", sWebLanguage))%></td>
+			        <td width="110" nowrap><%=HTMLEntities.htmlentities(getTran(request,"Web", "dateofbirth", sWebLanguage))%></td>
 			    </tr>
 			
 			    <tbody class="hand"><%=HTMLEntities.htmlentities(results.toString())%></tbody>
@@ -87,7 +87,7 @@
 			    %>
 			    <tr>
 			        <td colspan="3">
-			            <%=HTMLEntities.htmlentities(getTran("web","norecordsfound",sWebLanguage))%><br>
+			            <%=HTMLEntities.htmlentities(getTran(request,"web","norecordsfound",sWebLanguage))%><br>
 			        </td>
 			    </tr>
 			    <%

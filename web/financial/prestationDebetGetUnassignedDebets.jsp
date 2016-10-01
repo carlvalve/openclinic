@@ -27,7 +27,7 @@
                             encounter = debet.getEncounter();
 
                             if (encounter != null) {
-                                sEncounterName = getTran("web","insurance.coverage",sWebLanguage);
+                                sEncounterName = getTran(null,"web","insurance.coverage",sWebLanguage);
                                 sPatientName = ScreenHelper.getFullPersonName(encounter.getPatientUID());
                              }
                         }
@@ -45,7 +45,7 @@
                         sCredited = "";
 
                         if (debet.getCredited() > 0) {
-                            sCredited = getTran("web.occup", "medwan.common.yes", sWebLanguage);
+                            sCredited = getTran(null,"web.occup", "medwan.common.yes", sWebLanguage);
                         }
                         hSort.put(sPatientName.toUpperCase() + "=" + debet.getDate().getTime() + "=" + debet.getUid(), " onclick=\"setDebet('" + debet.getUid() + "');\">"
                                 + "<td>" + ScreenHelper.getSQLDate(debet.getDate()) + "</td>"
@@ -79,12 +79,12 @@
 %>
 <table width="100%" cellspacing="0">
     <tr class="admin">
-        <td><%=HTMLEntities.htmlentities(getTran("web","date",sWebLanguage))%></td>
-        <td><%=HTMLEntities.htmlentities(getTran("web.finance","encounter",sWebLanguage))%></td>
-        <td><%=HTMLEntities.htmlentities(getTran("web","prestation",sWebLanguage))%></td>
-        <td><%=HTMLEntities.htmlentities(getTran("web","totalamount",sWebLanguage))%></td>
-        <td><%=HTMLEntities.htmlentities(getTran("web","amounttoreimburse",sWebLanguage))%></td>
-        <td><%=HTMLEntities.htmlentities(getTran("web","canceled",sWebLanguage))%></td>
+        <td><%=HTMLEntities.htmlentities(getTran(request,"web","date",sWebLanguage))%></td>
+        <td><%=HTMLEntities.htmlentities(getTran(request,"web.finance","encounter",sWebLanguage))%></td>
+        <td><%=HTMLEntities.htmlentities(getTran(request,"web","prestation",sWebLanguage))%></td>
+        <td><%=HTMLEntities.htmlentities(getTran(request,"web","totalamount",sWebLanguage))%></td>
+        <td><%=HTMLEntities.htmlentities(getTran(request,"web","amounttoreimburse",sWebLanguage))%></td>
+        <td><%=HTMLEntities.htmlentities(getTran(request,"web","canceled",sWebLanguage))%></td>
     </tr>
     <tbody class="hand">
 <%

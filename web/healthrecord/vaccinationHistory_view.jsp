@@ -95,16 +95,16 @@
 <table class="list" width="100%" cellspacing="0">
     <%-- PAGE TITLE --%>
     <tr class="admin">
-        <td colspan="3"><%=getTran("Web.Occup","history",sWebLanguage)%></td>
+        <td colspan="3"><%=getTran(request,"Web.Occup","history",sWebLanguage)%></td>
         <td align="right"><a href="javascript:history.go(-1);return false;"><img border="0" src='<c:url value="/_img/themes/default/arrow_left.gif"/>'></a></td>
     </tr>
 
     <%-- HEADER --%>
     <tr class="label">
-        <td width="25%"><%=getTran("Web.Occup","be.mxs.healthrecord.vaccination.status",sWebLanguage).toUpperCase()%></td>
-        <td width="25%"><%=getTran("Web.Occup","medwan.common.date",sWebLanguage).toUpperCase()%></td>
-        <td width="25%"><%=getTran("Web.Occup","be.mxs.healthrecord.vaccination.next-date",sWebLanguage).toUpperCase()%></td>
-        <td width="25%"><%=getTran("Web.Occup","medwan.common.remark",sWebLanguage).toUpperCase()%></td>
+        <td width="25%"><%=getTran(request,"Web.Occup","be.mxs.healthrecord.vaccination.status",sWebLanguage).toUpperCase()%></td>
+        <td width="25%"><%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage).toUpperCase()%></td>
+        <td width="25%"><%=getTran(request,"Web.Occup","be.mxs.healthrecord.vaccination.next-date",sWebLanguage).toUpperCase()%></td>
+        <td width="25%"><%=getTran(request,"Web.Occup","medwan.common.remark",sWebLanguage).toUpperCase()%></td>
     </tr>
 
     <%
@@ -136,10 +136,10 @@
 
             %>
                 <tr<%=sClass%>>
-                    <td><%=getTran("Web.Occup",sStatus,sWebLanguage)%></td>
+                    <td><%=getTran(request,"Web.Occup",sStatus,sWebLanguage)%></td>
                     <td><a href="<c:url value='/healthrecord/manageVaccination.do'/>?be.mxs.healthrecord.transaction_id=<%=transactionId%>&be.mxs.healthrecord.server_id=<%=serverId%>&ts=<%=getTs()%>"><%=sDate%></a></td>
                     <td><%=sNextDate%></td>
-                    <td><%=sName%><%=sComment.length()>0?" ("+getTran("Web.Occup",sComment,sWebLanguage)+")":""%></td>
+                    <td><%=sName%><%=sComment.length()>0?" ("+getTran(request,"Web.Occup",sComment,sWebLanguage)+")":""%></td>
                 </tr>
             <%
         }

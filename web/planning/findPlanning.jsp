@@ -8,7 +8,7 @@
         return "<script>sTabs+= ',"+sId+"';</script>"+
                "<td style='border-bottom:1px solid #000;width:10px'>&nbsp;</td>"+
                // "<td class='tabs' width='5'>&nbsp;</td>"+
-               "<td class='tabunselected' width='1%' style='padding:2px 4px;text-align:center;' onclick='activateTab(\""+sId+"\")' id='tab"+sId+"' nowrap><b>"+getTran("planning",sId,sLanguage)+"</b></td>";
+               "<td class='tabunselected' width='1%' style='padding:2px 4px;text-align:center;' onclick='activateTab(\""+sId+"\")' id='tab"+sId+"' nowrap><b>"+getTranNoLink("planning",sId,sLanguage)+"</b></td>";
     }
 
     //--- WRITE TAB BEGIN -------------------------------------------------------------------------
@@ -84,11 +84,11 @@ ClientMsg.prototype = {
         <% if(activePatient!=null){%>
         <script>sTabs += ',patient';</script>
         <td style='width:10px'>&nbsp;</td>
-        <td class='tabunselected' width='1%' style='padding:2px 4px;text-align:center;' onclick='activatePatient("patient");' id='tabpatient' nowrap><b><%=getTran("planning", "patient", sWebLanguage)%></b></td>
+        <td class='tabunselected' width='1%' style='padding:2px 4px;text-align:center;' onclick='activatePatient("patient");' id='tabpatient' nowrap><b><%=getTran(request,"planning", "patient", sWebLanguage)%></b></td>
         <% } %>
         <script>sTabs += ',service';</script>
         <td style='width:10px'>&nbsp;</td>
-        <td class='tabunselected' width='1%' style='padding:2px 4px;text-align:center;' onclick='activateService("service");' id='tabservice' nowrap><b><%=getTran("planning", "service", sWebLanguage)%></b></td>
+        <td class='tabunselected' width='1%' style='padding:2px 4px;text-align:center;' onclick='activateService("service");' id='tabservice' nowrap><b><%=getTran(request,"planning", "service", sWebLanguage)%></b></td>
         <%=writeTab("missedAppointments","planning",sWebLanguage)%>
         <%=writeTab("resource","planning",sWebLanguage)%>
         <%=writeTab("managePlanning","web.userprofile",sWebLanguage)%>
@@ -136,7 +136,7 @@ ClientMsg.prototype = {
         if(!initialize){
       	displayCountedWeek(makeDate($('beginDate').value),$("FindUserUID").options[$("FindUserUID").selectedIndex].value);
         }
-        $("tableHeaderTitle").update("&nbsp;&nbsp;<%=getTran("planning","useropenplanning",sWebLanguage)%>")
+        $("tableHeaderTitle").update("&nbsp;&nbsp;<%=getTranNoLink("planning","useropenplanning",sWebLanguage)%>")
         togglePrintButtons(sTab);
       }
     else if(sTab=="resource"){
@@ -150,6 +150,23 @@ ClientMsg.prototype = {
     String sTab = checkString(request.getParameter("Tab"));
     sTab = "user";
   %>
+
+	function activateTab2(sTab){
+
+	    document.getElementById('tr0_1-view').style.display = 'none';
+	    td0_1.className="tabunselected";
+	    if(sTab=='Main'){
+	      document.getElementById('tr0_1-view').style.display = '';
+	      td0_1.className="tabselected";
+	    }
+
+	    document.getElementById('tr1_1-view').style.display = 'none';
+	    td1_1.className="tabunselected";
+	    if(sTab=='Extended'){
+	      document.getElementById('tr1_1-view').style.display = '';
+	      td1_1.className="tabselected";
+	    }
+  	}
 
   function doBack(){
     history.go(-1);
@@ -190,7 +207,7 @@ ClientMsg.prototype = {
 	      $("PatientID").value = "<%=activePatient.personid%>";
 	      displayWeek(makeDate($('beginDate').value));
 
-	      $("tableHeaderTitle").update("&nbsp;&nbsp;<%=getTran("planning","patientplanningstoday",sWebLanguage)%>")
+	      $("tableHeaderTitle").update("&nbsp;&nbsp;<%=getTranNoLink("planning","patientplanningstoday",sWebLanguage)%>")
 	    <%    
 	       }
 	    %>
@@ -214,7 +231,7 @@ ClientMsg.prototype = {
 
 	    $("tab"+sTab).className = "tabselected";
 	      displayWeek(makeDate($('beginDate').value));
-	      $("tableHeaderTitle").update("&nbsp;&nbsp;<%=getTran("planning","serviceplanningstoday",sWebLanguage)%>")
+	      $("tableHeaderTitle").update("&nbsp;&nbsp;<%=getTranNoLink("planning","serviceplanningstoday",sWebLanguage)%>")
 	    togglePrintButtons(sTab);
 	  }
 	     

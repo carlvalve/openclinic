@@ -29,7 +29,7 @@
     <table class="list" border="0" width="100%" cellspacing="1">   
         <%-- *** languages (multi-add) *** --%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","languages",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web.hr","languages",sWebLanguage)%></td>
             <td class="admin2" style="padding:10px;padding-left:5px;">
                 <input type="hidden" id="languages" name="languages" value="">
                                         
@@ -40,19 +40,19 @@
                         <td width="40" nowrap/>
                         <%-- 1 - language --%>
                         <td style="padding-left:0px;">
-                            <%=getTran("web.hr","languages.language",sWebLanguage)%>&nbsp;*&nbsp;
+                            <%=getTran(request,"web.hr","languages.language",sWebLanguage)%>&nbsp;*&nbsp;
                         </td>
                         <%-- 2 - spoken --%>
                         <td style="padding-left:0px;">
-                            <%=getTran("web.hr","languages.spoken",sWebLanguage)%>&nbsp;*&nbsp;
+                            <%=getTran(request,"web.hr","languages.spoken",sWebLanguage)%>&nbsp;*&nbsp;
                         </td>    
                         <%-- 3 - reading --%>
                         <td style="padding-left:0px;">
-                            <%=getTran("web.hr","languages.reading",sWebLanguage)%>&nbsp;
+                            <%=getTran(request,"web.hr","languages.reading",sWebLanguage)%>&nbsp;
                         </td>    
                         <%-- 4 - writing --%>
                         <td style="padding-left:0px;">
-                            <%=getTran("web.hr","languages.writing",sWebLanguage)%>&nbsp;
+                            <%=getTran(request,"web.hr","languages.writing",sWebLanguage)%>&nbsp;
                         </td>    
                         <%-- 5 - empty --%>
                         <td nowrap/>    
@@ -66,28 +66,28 @@
                         <td class="admin">
                             <select class="text" id="lsLanguage" name="lsLanguage">
                                 <option/>
-                                <%=ScreenHelper.writeSelectUnsorted("hr.skills.languages","",sWebLanguage)%>
+                                <%=ScreenHelper.writeSelectUnsorted(request,"hr.skills.languages","",sWebLanguage)%>
                             </select>&nbsp;
                         </td>
                         <%-- 2 - spoken --%>
                         <td class="admin">
                             <select class="text" id=lsSpoken name="lsSpoken">
                                 <option/>
-                                <%=ScreenHelper.writeSelectUnsorted("hr.skills.range1","",sWebLanguage)%>
+                                <%=ScreenHelper.writeSelectUnsorted(request,"hr.skills.range1","",sWebLanguage)%>
                             </select>&nbsp;
                         </td>    
                         <%-- 3 - reading --%>
                         <td class="admin">
                             <select class="text" id="lsReading" name="lsReading">
                                 <option/>
-                                <%=ScreenHelper.writeSelectUnsorted("hr.skills.range1","",sWebLanguage)%>
+                                <%=ScreenHelper.writeSelectUnsorted(request,"hr.skills.range1","",sWebLanguage)%>
                             </select>&nbsp;
                         </td>    
                         <%-- 4 - writing --%>
                         <td class="admin">
                             <select class="text" id="lsWriting" name="lsWriting">
                                 <option/>
-                                <%=ScreenHelper.writeSelectUnsorted("hr.skills.range1","",sWebLanguage)%>
+                                <%=ScreenHelper.writeSelectUnsorted(request,"hr.skills.range1","",sWebLanguage)%>
                             </select>&nbsp;
                         </td>
                         <%-- 5 - buttons --%>
@@ -102,45 +102,45 @@
                                             
         <%-- drivingLicense --%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","drivingLicense",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web.hr","drivingLicense",sWebLanguage)%></td>
             <td class="admin2">
                 <select class="text" id="drivingLicense" name="drivingLicense">
                     <option/>
-                    <%=ScreenHelper.writeSelectUnsorted("hr.skills.drivinglicense","",sWebLanguage)%>
+                    <%=ScreenHelper.writeSelectUnsorted(request,"hr.skills.drivinglicense","",sWebLanguage)%>
                 </select>
             </td>
         </tr>
                                             
         <%-- *** computerSkills *** --%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","computerSkills",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web.hr","computerSkills",sWebLanguage)%></td>
             <td class="admin2" style="padding:10px;padding-left:5px;">
                 <table class="list" cellpadding="0" cellspacing="1">
                     <%-- 1 : Office applications --%>
                     <tr>
-                        <td class="admin"><%=getTran("web.hr","itOffice",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin"><%=getTran(request,"web.hr","itOffice",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <select class="text" id="itOffice" name="itOffice">
                                 <option/>
-                                <%=ScreenHelper.writeSelectUnsorted("hr.skills.range1","",sWebLanguage)%>
+                                <%=ScreenHelper.writeSelectUnsorted(request,"hr.skills.range1","",sWebLanguage)%>
                             </select>
                         </td>
                     </tr>
                     
                     <%-- 2 : Internet and e-mail --%>
                     <tr>
-                        <td class="admin"><%=getTran("web.hr","itInternet",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin"><%=getTran(request,"web.hr","itInternet",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <select class="text" id="itInternet" name="itInternet">
                                 <option/>
-                                <%=ScreenHelper.writeSelectUnsorted("hr.skills.range1","",sWebLanguage)%>
+                                <%=ScreenHelper.writeSelectUnsorted(request,"hr.skills.range1","",sWebLanguage)%>
                             </select>
                         </td>
                     </tr>
                     
                     <%-- 3 : Other applications --%>
                     <tr>
-                        <td class="admin"><%=getTran("web.hr","itOther",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin"><%=getTran(request,"web.hr","itOther",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <textarea class="text" id="itOther" name="itOther" cols="60" rows="3" onKeyup="resizeTextarea(this,8);"></textarea>
                         </td>
@@ -151,29 +151,29 @@
                                             
         <%-- communicationSkills --%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","communicationSkills",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web.hr","communicationSkills",sWebLanguage)%></td>
             <td class="admin2">
                 <select class="text" id="communicationSkills" name="communicationSkills">
                     <option/>
-                    <%=ScreenHelper.writeSelectUnsorted("hr.skills.range2","",sWebLanguage)%>
+                    <%=ScreenHelper.writeSelectUnsorted(request,"hr.skills.range2","",sWebLanguage)%>
                 </select>
             </td>
         </tr>
                                             
         <%-- stressResistance --%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","stressResistance",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web.hr","stressResistance",sWebLanguage)%></td>
             <td class="admin2">
                 <select class="text" id="stressResistance" name="stressResistance">
                     <option/>
-                    <%=ScreenHelper.writeSelectUnsorted("hr.skills.range2","",sWebLanguage)%>
+                    <%=ScreenHelper.writeSelectUnsorted(request,"hr.skills.range2","",sWebLanguage)%>
                 </select>
             </td>
         </tr>
         
         <%-- comment --%>                    
         <tr>
-            <td class="admin"><%=getTran("web.hr","comment",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web.hr","comment",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea class="text" name="comment" id="comment" cols="82" rows="4" onKeyup="resizeTextarea(this,8);"></textarea>
             </td>
@@ -188,7 +188,7 @@
             </td>
         </tr>
     </table>
-    <i><%=getTran("web","colored_fields_are_obligate",sWebLanguage)%></i>
+    <i><%=getTran(request,"web","colored_fields_are_obligate",sWebLanguage)%></i>
     
     <div id="divMessage" style="padding-top:10px;"></div>
 </form>
@@ -281,10 +281,10 @@
       }
     });
   }
-  
+
   <%-- CLEAR SKILL --%>
   function clearSkill(){
-    if(yesnoDialog('<%=getTran("web","areYouSureToClear",sWebLanguage)%>')){                 
+    if(yesnoDialog('<%=getTranNoLink("web","areYouSureToClear",sWebLanguage)%>')){                 
       $("languages").value = "";
       $("drivingLicense").value = "";
       $("itOffice").value = "";
@@ -350,7 +350,6 @@
       }
     }
   }
-  
   <%-- DISPLAY LANGUAGE SKILL --%>
   function displayLanguageSkill(iLSIndex,sTmpLang,sTmpSpoken,sTmpReading,sTmpWriting){
     var tblLS = document.getElementById("tblLS"); // FF
@@ -414,6 +413,7 @@
     setRowStyle(tr,iLSIndex);
   }
   
+
   <%-- ADD LANGUAGE SKILL --%>
   function addLS(){
     if(isAtLeastOneLSFieldFilled() && EditForm.lsLanguage.value.length > 0){
@@ -433,7 +433,6 @@
         var tblLS = document.getElementById("tblLS"); // FF
         var tr = tblLS.insertRow(tblLS.rows.length);
         tr.id = "rowLS"+iLSIndex;
-
         var td = tr.insertCell(0);
         td.innerHTML = "<a href='javascript:deleteLS(rowLS"+iLSIndex+")'>"+
                         "<img src='<%=sCONTEXTPATH%>/_img/icons/icon_delete.gif' alt='<%=getTranNoLink("web","delete",sWebLanguage)%>' border='0'>"+
@@ -578,7 +577,6 @@
 
   <%-- IS AT LEAST ONE LS FIELD FILLED --%>
   function isAtLeastOneLSFieldFilled(){
-    //if(EditForm.lsLanguage.value.length > 0) return true;
     if(EditForm.lsSpoken.value.length > 0) return true;
     if(EditForm.lsReading.value.length > 0) return true;
     if(EditForm.lsWriting.value.length > 0) return true;
@@ -597,10 +595,10 @@
   <%-- DELETE LANGUAGE SKILL --%>
   function deleteLS(rowid){
       if(yesnoDeleteDialog()){
-      sLS = deleteRowFromArrayString(sLS,rowid.id);
-      tblLS.deleteRow(rowid.rowIndex);
-      clearLSFields();
-    }
+      	sLS = deleteRowFromArrayString(sLS,rowid.id);
+      	tblLS.deleteRow(rowid.rowIndex);
+      	clearLSFields();
+      }
   }
 
   <%-- EDIT LANGUAGE SKILL --%>

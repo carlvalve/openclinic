@@ -59,34 +59,34 @@
 <form name='transactionForm' method='post'>
 	<table>
 		<tr class='admin'>
-			<td colspan='2'><%=getTran("web","editvaccination",sWebLanguage) %></td>
+			<td colspan='2'><%=getTran(request,"web","editvaccination",sWebLanguage) %></td>
 		</tr>
 		<tr>
-			<td class='admin'><%=getTran("web","date",sWebLanguage) %></td>
+			<td class='admin'><%=getTran(request,"web","date",sWebLanguage) %></td>
 			<td class='admin2'>
 				<%=ScreenHelper.writeDateField("date", "transactionForm", date, true, false, sWebLanguage, sCONTEXTPATH) %>
 			</td>
 		</tr>
 		<tr>
-			<td class='admin'><%=getTran("web","type",sWebLanguage) %></td>
+			<td class='admin'><%=getTran(request,"web","type",sWebLanguage) %></td>
 			<td class='admin2'>
-				<input type='hidden' name="type" id="type" value="<%=type %>"/><%=getTran("web",type,sWebLanguage) %>
+				<input type='hidden' name="type" id="type" value="<%=type %>"/><%=getTran(request,"web",type,sWebLanguage) %>
 			</td>
 		</tr>
 		<tr>
-			<td class='admin'><%=getTran("web","batchnumber",sWebLanguage) %></td>
+			<td class='admin'><%=getTran(request,"web","batchnumber",sWebLanguage) %></td>
 			<td class='admin2'>
 				<input type='text' name='batchnumber' id='batchnumber' value='<%=batchnumber%>'/>
 			</td>
 		</tr>
 		<tr>
-			<td class='admin'><%=getTran("web","expirydate",sWebLanguage) %></td>
+			<td class='admin'><%=getTran(request,"web","expirydate",sWebLanguage) %></td>
 			<td class='admin2'>
 				<input type='text' name='expirydate' id='expirydate' value='<%=expirydate%>'/>
 			</td>
 		</tr>
 		<tr>
-			<td class='admin'><%=getTran("web","vaccinationlocation",sWebLanguage) %></td>
+			<td class='admin'><%=getTran(request,"web","vaccinationlocation",sWebLanguage) %></td>
 			<td class='admin2'>
 				<select name='vaccinationlocation' id='vaccinationlocation' onchange='if(this.value==1){document.getElementById("vaccinationlocationtext").style.visibility="visible"} else {document.getElementById("vaccinationlocationtext").value="";document.getElementById("vaccinationlocationtext").style.visibility="hidden"}'>
 					<%
@@ -100,16 +100,16 @@
 							}
 						}
 					%>
-					<option value='1' <%=(vaccinationlocation.length()>1 && vaccinationlocation.substring(0,1).equalsIgnoreCase("1"))?"selected":"" %>><%=getTran("web","other",sWebLanguage) %></option>
+					<option value='1' <%=(vaccinationlocation.length()>1 && vaccinationlocation.substring(0,1).equalsIgnoreCase("1"))?"selected":"" %>><%=getTran(request,"web","other",sWebLanguage) %></option>
 				</select>
 				<input type='text' name='vaccinationlocationtext' id='vaccinationlocationtext' value='<%=vaccinationlocation.length()>1?vaccinationlocation.substring(2):""%>'  size='80'/>
 			</td>
 		</tr>
 		<tr>
-			<td class='admin'><%=getTran("web","observation",sWebLanguage) %></td>
+			<td class='admin'><%=getTran(request,"web","observation",sWebLanguage) %></td>
 			<td class='admin2'>
 				<select name='observationselector' id='observationselector' onchange='if(this.value==4){document.getElementById("observationcomment").style.visibility="visible"} else {document.getElementById("observationcomment").value="";document.getElementById("observationcomment").style.visibility="hidden"}'>
-					<%=ScreenHelper.writeSelect("malivaccinationobservations", observationselector, sWebLanguage) %>
+					<%=ScreenHelper.writeSelect(request,"malivaccinationobservations", observationselector, sWebLanguage) %>
 				</select>
 				<input type='text' name='observationcomment' id='observationcomment' value='<%=observationcomment%>'/>
 			</td>
@@ -118,10 +118,10 @@
 			if(type.toLowerCase().startsWith("polio")){
 		%>
 		<tr>
-			<td class='admin'><%=getTran("web","vaccinationmodifier",sWebLanguage) %></td>
+			<td class='admin'><%=getTran(request,"web","vaccinationmodifier",sWebLanguage) %></td>
 			<td class='admin2'>
 				<select name='modifier' id='modifier'>
-					<%=ScreenHelper.writeSelect("malivaccinationmodifiers", modifier, sWebLanguage) %>
+					<%=ScreenHelper.writeSelect(request,"malivaccinationmodifiers", modifier, sWebLanguage) %>
 				</select>
 			</td>
 		</tr>
@@ -129,8 +129,8 @@
 			}
 		%>
 	</table>
-	<input type='submit' class='button' name='submit' value='<%=getTran("web","save",sWebLanguage)%>'/>
-	<input type='submit' class='button' name='delete' value='<%=getTran("web","delete",sWebLanguage)%>'/>
+	<input type='submit' class='button' name='submit' value='<%=getTran(null,"web","save",sWebLanguage)%>'/>
+	<input type='submit' class='button' name='delete' value='<%=getTran(null,"web","delete",sWebLanguage)%>'/>
 </form>
 <script>
 	if(document.getElementById("vaccinationlocation").value==1){document.getElementById("vaccinationlocationtext").style.visibility="visible"} else {document.getElementById("vaccinationlocationtext").value="";document.getElementById("vaccinationlocationtext").style.visibility="hidden"};

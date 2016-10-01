@@ -11,7 +11,10 @@
            sPrintLanguage = checkString(request.getParameter("PrintLanguage")),
            sPrintModel = checkString(request.getParameter("PrintModel")),
            sProforma      = checkString(request.getParameter("Proforma"));
-    ByteArrayOutputStream baosPDF = null;
+ 
+
+
+	ByteArrayOutputStream baosPDF = null;
 
     try{
         // PDF generator

@@ -214,7 +214,6 @@
             
             while(rs.next()){
                 sValue = checkString(rs.getString("value"));
-                System.out.println("sValue : "+sValue); /////////
                 if(sValue.length() > 0){
                     valueParts = sValue.split("\\$"); // sItemTypeShort $ user defined label $ order
                     
@@ -225,7 +224,6 @@
                     if(valueParts.length > 2) sOrder = checkString(valueParts[2]);
                     else                      sOrder = ""; // keep value from being copied
                     
-                    System.out.println("sItemTypeShort : "+sItemTypeShort); //////
                     item = new ItemVO(new Integer(IdentifierFactory.getInstance().getTemporaryNewIdentifier()),
 		                    		  ScreenHelper.ITEM_PREFIX+sItemTypeShort.toUpperCase(),
 		                              "", // default value
@@ -629,14 +627,12 @@
         if(sConcatCheckboxes.length() > 0){
         	String[] checkboxes = sConcatCheckboxes.split(";"); 
 
-            System.out.println("checkboxes.length : "+checkboxes.length); //////
         	for(int i=0; i<checkboxes.length; i++){
         		sParamName = checkboxes[i];
                 Debug.println("sParamName : "+sParamName); ///
 
 	            if(sParamName.startsWith("cb_")){
                     cbCount = Integer.parseInt(sParamName.substring(sParamName.indexOf("_")+1));
-                    System.out.println("cbCount : "+cbCount); //////
                     
                     sItemLabel = checkString(request.getParameter("UserDefinedLabel_"+cbCount));
                     sItemType = checkString(request.getParameter("ItemType_"+cbCount));
@@ -653,7 +649,6 @@
                     Parameter parameter = new Parameter("HistoryItem."+sTranTypeShort,
                     		                            sItemTypeShort+"$"+sItemLabel+"$"+sOrder+"$"+sAddFunction,
                     		                            activeUser.userid);
-                    System.out.println("new parameter : HistoryItem."+sTranTypeShort+", "+sItemTypeShort+"$"+sItemLabel+"$"+sOrder+"$"+sAddFunction); //////
                     updateParameter(activeUser,parameter);
                 }
             }
@@ -664,7 +659,7 @@
             session.setAttribute("activeUser",activeUser);
         }
         
-        sMsg = "<font color='green'>"+getTran("web","dataIsSaved",sWebLanguage)+"</font>";
+        sMsg = "<font color='green'>"+getTran(request,"web","dataIsSaved",sWebLanguage)+"</font>";
         sAction = "displayItems";
     }
 %>
@@ -679,7 +674,7 @@
     <%-- TRAN TYPE SELECT --%>
     <table width="100%" cellspacing="1" cellpadding="0" class="list">
         <tr height="20">
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","examinationType",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","examinationType",sWebLanguage)%></td>
             <td class="admin2">
                 <select name="TranType" class="text" onChange="displayHistItems();">
                     <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>
@@ -765,23 +760,23 @@
                         
                 // header
                 %>
-                    <%=userHistItems.size()%>/<%=xmlHistItems.size()%> <%=getTran("web","itemsSelected",sWebLanguage)%><br><br>
+                    <%=userHistItems.size()%>/<%=xmlHistItems.size()%> <%=getTran(request,"web","itemsSelected",sWebLanguage)%><br><br>
                     
                     <table class="sortable" id="tblHistItems" width="100%" cellspacing="1" cellpadding="0" style="border:1px solid #ccc;">
                         <%-- HEADER --%>
                         <tr>
                             <td class="admin" width="14"></td>
-                            <td class="admin" width="300"><%=getTran("web","itemType",sWebLanguage)%></td>
-                            <td class="admin" width="125"><%=getTran("web","defaultOrder",sWebLanguage)%></td>
-                            <td class="admin" width="125"><%=getTran("web","savedOrder",sWebLanguage)%></td>
+                            <td class="admin" width="300"><%=getTran(request,"web","itemType",sWebLanguage)%></td>
+                            <td class="admin" width="125"><%=getTran(request,"web","defaultOrder",sWebLanguage)%></td>
+                            <td class="admin" width="125"><%=getTran(request,"web","savedOrder",sWebLanguage)%></td>
                             <td class="admin" width="125">
                                 <NOSORT>
-                                    <%=getTran("web","newOrder",sWebLanguage)%><br>
+                                    <%=getTran(request,"web","newOrder",sWebLanguage)%><br>
                                     <img src="<c:url value='/_img/icons/icon_delete.gif'/>" class="link" alt="<%=getTranNoLink("web","clear",sWebLanguage)%>" onClick="clearOrder();">
                                     <img src="<c:url value='/_img/icons/icon_default.gif'/>" class="link" alt="<%=getTranNoLink("web","setDefaultValues",sWebLanguage)%>" onClick="setDefaultOrder();">
                                 </NOSORT>
                             </td>
-                            <td class="admin" width="200"><%=getTran("web","label",sWebLanguage)%></td>
+                            <td class="admin" width="200"><%=getTran(request,"web","label",sWebLanguage)%></td>
                         </tr>
                 <%
                 
@@ -791,7 +786,6 @@
                 int tabIndex = 1, defaultOrder;
                 ItemVO item;
                 
-                System.out.println("xmlHistItems.size() : "+xmlHistItems.size()); ////
                 for(int i=0; i< xmlHistItems.size(); i++){
                     xmlItem = (ItemAndLabel)xmlHistItems.get(i);
                     
@@ -802,7 +796,6 @@
                    
                     // checked ? + label
                     userItem = getItemFromVector(userHistItems,sItemType);
-                    System.out.println("--> userItem : "+(userItem==null)); ////////
                     sChecked = "";
                     int order = 0, savedOrder = 0;
                     sImg = "themes/default/uncheck.gif";
@@ -858,8 +851,8 @@
                 </table>
                 
                 <%-- INSTRUCTIONS --%>
-                <%=getTran("web.userprofile","historyItemsManageInstructions",sWebLanguage)%><br>
-                <%=getTran("web.userprofile","historyItemsAreManagedByAdmin",sWebLanguage)%>
+                <%=getTran(request,"web.userprofile","historyItemsManageInstructions",sWebLanguage)%><br>
+                <%=getTran(request,"web.userprofile","historyItemsAreManagedByAdmin",sWebLanguage)%>
             <%
         }
 
@@ -871,8 +864,8 @@
                     <table width="100%" cellspacing="0" cellpadding="0">
                         <tr>
                             <td>
-                                <a href="javascript:checkAll(true);"><%=getTran("web.manage","checkAll",sWebLanguage)%></a>
-                                <a href="javascript:checkAll(false);"><%=getTran("web.manage","uncheckAll",sWebLanguage)%></a>
+                                <a href="javascript:checkAll(true);"><%=getTran(request,"web.manage","checkAll",sWebLanguage)%></a>
+                                <a href="javascript:checkAll(false);"><%=getTran(request,"web.manage","uncheckAll",sWebLanguage)%></a>
                             </td>
                             
                             <%
@@ -889,7 +882,7 @@
                 <%
             }
             else{
-                %>&nbsp;<%=getTran("web","noItemsToSelectFound",sWebLanguage)%><%
+                %>&nbsp;<%=getTran(request,"web","noItemsToSelectFound",sWebLanguage)%><%
             }
         }
     %>

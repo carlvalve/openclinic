@@ -49,19 +49,19 @@
         //Verzekeringsgegevens
 		Insurar insurar = Insurar.get(ScreenHelper.checkString(credit.getInsurarUid()));
         if(insurar!=null){
-        	content+=printer.LEFT+(ScreenHelper.getTran("web","insurance",sWebLanguage)+":              ").substring(0,15)+printer.BOLD+insurar.getName()+printer.NOTBOLD+printer.LF;
+        	content+=printer.LEFT+(ScreenHelper.getTran(request,"web","insurance",sWebLanguage)+":              ").substring(0,15)+printer.BOLD+insurar.getName()+printer.NOTBOLD+printer.LF;
         }
 
 		//Afdrukken van betalingsgegevens
-		content+=printer.LEFT+printer.UNDERLINE+ScreenHelper.getTran("web","payments",sWebLanguage)+printer.NOTUNDERLINE+printer.LF;
-           content+=printer.LEFT+ScreenHelper.stdDateFormat.format(credit.getDate())+"  "+ScreenHelper.getTran("credit.type",credit.getType(),sWebLanguage)+": "+priceFormat.format(credit.getAmount())+" "+sCurrency+printer.LF;
+		content+=printer.LEFT+printer.UNDERLINE+ScreenHelper.getTran(request,"web","payments",sWebLanguage)+printer.NOTUNDERLINE+printer.LF;
+           content+=printer.LEFT+ScreenHelper.stdDateFormat.format(credit.getDate())+"  "+ScreenHelper.getTran(request,"credit.type",credit.getType(),sWebLanguage)+": "+priceFormat.format(credit.getAmount())+" "+sCurrency+printer.LF;
            if(credit.getComment()!=null && credit.getComment().length()>0){
 			content+=printer.LEFT+"---------------------------------------------------------------------------------".substring(0,48)+printer.LF;
            	content+=printer.LEFT+credit.getComment()+printer.LF;
            }
 		//Totale kost en betalingen
 		content+=printer.LEFT+printer.UNDERLINE+"                                                                              ".substring(0,48)+printer.NOTUNDERLINE+printer.LF;
-		content+=printer.LEFT+printer.DOUBLE+ScreenHelper.getTran("web","total",sWebLanguage)+": "+priceFormat.format(credit.getAmount())+" "+sCurrency+printer.NOTBOLD+printer.REGULAR+printer.LF;
+		content+=printer.LEFT+printer.DOUBLE+ScreenHelper.getTran(request,"web","total",sWebLanguage)+": "+priceFormat.format(credit.getAmount())+" "+sCurrency+printer.NOTBOLD+printer.REGULAR+printer.LF;
 		net.admin.User activeUser = net.admin.User.get(Integer.parseInt(sUserId));
 		//out.print("{\"message\":\""+printer.printReceipt(activeUser.project, sWebLanguage,content,"8"+creditnumber)+"\"}");
 		//Send print instruction to JAVAPOS server

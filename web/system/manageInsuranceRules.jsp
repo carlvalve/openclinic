@@ -43,7 +43,7 @@
 <form name='EditForm' id="EditForm" method='POST' action='<c:url value="/main.do?Page=system/manageInsuranceRules.jsp"/>'>
 	<table class='list' border='0' width='100%' cellspacing='1'>
 	        <tr>
-	            <td class='admin'><%=getTran("web","prestation",sWebLanguage)%></td>
+	            <td class='admin'><%=getTran(request,"web","prestation",sWebLanguage)%></td>
 	            <td class='admin2'>
 	                <input type="hidden" name="tmpPrestationUID" id="tmpPrestationUID" value="<%=sPrestUid %>">
 	                <input type="hidden" name="tmpPrestationName">
@@ -72,29 +72,29 @@
 	                        }
 	                    %>
 	                </select>
-	                <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTran("Web","select",sWebLanguage)%>" onclick="searchPrestation();">
-                	<img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran("Web","clear",sWebLanguage)%>" onclick="EditForm.EditPrestationName.selectedIndex=-1;EditForm.tmpPrestationUID.value='';">
+	                <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTran(null,"Web","select",sWebLanguage)%>" onclick="searchPrestation();">
+                	<img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran(null,"Web","clear",sWebLanguage)%>" onclick="EditForm.EditPrestationName.selectedIndex=-1;EditForm.tmpPrestationUID.value='';">
 	            </td>
 	        </tr>
 	        <tr>
-		        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("medical.accident", "insurancecompany", sWebLanguage)%>
+		        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"medical.accident", "insurancecompany", sWebLanguage)%>
 		        </td>
 		        <td class="admin2">
 		            <input type="hidden" name="EditInsurarUID" value="<%=sInsurarUid %>">
 		            <input type="text" class="text" readonly name="EditInsurarText" value="<%=sInsurarText %>" size="100">
-		            <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTran("Web","select",sWebLanguage)%>" onclick="searchInsurar();">
-		            <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran("Web","clear",sWebLanguage)%>" onclick="doClearInsurar()">
+		            <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTran(null,"Web","select",sWebLanguage)%>" onclick="searchInsurar();">
+		            <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran(null,"Web","clear",sWebLanguage)%>" onclick="doClearInsurar()">
 		        </td>
 		    </tr>
 		    <tr>
-		        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","quantity",sWebLanguage)%>
+		        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","quantity",sWebLanguage)%>
 		        </td>
 		        <td class="admin2">
                             <input type="text" class="text" name="EditPrestationQuantity" size="10" maxlength="8" value="<%=sQuantity%>" onKeyup="if(!isNumber(this)){this.value='';}">
 		        </td>
 		    </tr>
 		    <tr>
-		        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","days",sWebLanguage)%>
+		        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","days",sWebLanguage)%>
 		        </td>
 		        <td class="admin2">
                             <input type="text" class="text" name="EditPrestationDays" size="10" maxlength="8" value="<%=sDays%>" onKeyup="if(!isNumber(this)){this.value='';}">
@@ -133,7 +133,7 @@
 			nDays=rs.getDouble("oc_insurancerule_period");
 			out.println("<tr class='list'>");
 			%>
-				<td><img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran("Web","delete",sWebLanguage)%>" onclick='selectPrestation("<%=iud%>","<%=pud %>",-1,-1);'></td>
+				<td><img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran(null,"Web","delete",sWebLanguage)%>" onclick='selectPrestation("<%=iud%>","<%=pud %>",-1,-1);'></td>
 			<%
 			out.print("<td><a href='javascript:selectPrestation(\""+iud+"\",\""+pud+"\","+nQuantity+","+nDays+");'>"+rs.getString("oc_insurar_name")+"</a></td><td>"+rs.getString("oc_prestation_description")+"</td><td>"+
 					nQuantity+"</td><td>"+nDays+"</td></tr>");

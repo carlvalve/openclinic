@@ -35,8 +35,8 @@
 			User user = User.get(Integer.parseInt(pointer.split(";")[1]));
 			String username = user!=null?user.person.getFullName():"?";
 			
-			out.print(HTMLEntities.htmlentities("<td class='admin'>"+ScreenHelper.getTran("web","insurance.agent.authorization",language)+"</td>"+
-			                                    "<td class='admin2'>"+ScreenHelper.getTran("web","authorized.by",language)+": "+username+" "+ScreenHelper.getTran("web","until",language)+" <b>"+ScreenHelper.fullDateFormatSS.format(dValidUntil)+"</b></td>"));
+			out.print(HTMLEntities.htmlentities("<td class='admin'>"+ScreenHelper.getTran(request,"web","insurance.agent.authorization",language)+"</td>"+
+			                                    "<td class='admin2'>"+ScreenHelper.getTran(request,"web","authorized.by",language)+": "+username+" "+ScreenHelper.getTran(request,"web","until",language)+" <b>"+ScreenHelper.fullDateFormatSS.format(dValidUntil)+"</b></td>"));
 			bValid = true;
 		}
 	}
@@ -46,8 +46,8 @@
 			User user = User.get(Integer.parseInt(userid));
 			if(user!=null && ((user.getParameter("insuranceagent")!=null && user.getParameter("insuranceagent").equalsIgnoreCase(insuraruid)) || user.getAccessRight("financial.authorizeanyinsurance.select"))){
 				// This agent can give an authorization for performing prestation encoding
-				out.print(HTMLEntities.htmlentities("<td class='admin'>"+ScreenHelper.getTran("web","insurance.agent.authorize",language)+"</td>"+
-				                                    "<td class='admin2'><input type='checkbox' class='text' name='EditAuthorization' id='EditAuthorization' value='"+new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())+";"+userid+"'>"+ScreenHelper.getTran("web","authorize.until",language)+" <b>"+ScreenHelper.fullDateFormatSS.format(new Date(new Date().getTime()+24*3600*1000))+"</b></td>"));
+				out.print(HTMLEntities.htmlentities("<td class='admin'>"+ScreenHelper.getTran(request,"web","insurance.agent.authorize",language)+"</td>"+
+				                                    "<td class='admin2'><input type='checkbox' class='text' name='EditAuthorization' id='EditAuthorization' value='"+new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())+";"+userid+"'>"+ScreenHelper.getTran(request,"web","authorize.until",language)+" <b>"+ScreenHelper.fullDateFormatSS.format(new Date(new Date().getTime()+24*3600*1000))+"</b></td>"));
 			}
 		}
 	}

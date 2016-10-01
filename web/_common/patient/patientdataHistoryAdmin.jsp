@@ -12,16 +12,16 @@ try{
     // language
     sWebLanguage = activeUser.person.language;
     if ((activeHistoryPatient.language!=null)&&(activeHistoryPatient.language.trim().length()>0)) {
-        sLanguage = getTran("Web.language",activeHistoryPatient.language,sWebLanguage);
+        sLanguage = getTran(request,"Web.language",activeHistoryPatient.language,sWebLanguage);
     }
 
     // Gender
     if ((activeHistoryPatient.gender!=null)&&(activeHistoryPatient.gender.trim().length()>0)) {
         if (activeHistoryPatient.gender.equalsIgnoreCase("m")){
-            sGender = getTran("web.occup","male",sWebLanguage);
+            sGender = getTran(request,"web.occup","male",sWebLanguage);
         }
         else if (activeHistoryPatient.gender.equalsIgnoreCase("f")){
-            sGender = getTran("web.occup","female",sWebLanguage);
+            sGender = getTran(request,"web.occup","female",sWebLanguage);
         }
     }
     // sTracnetID
@@ -46,7 +46,7 @@ try{
 
     // civilstatus
     if ((activeHistoryPatient.comment2!=null)&&(activeHistoryPatient.comment2.trim().length()>0)) {
-        sCivilStatus = getTran("civil.status",activeHistoryPatient.comment2,sWebLanguage);
+        sCivilStatus = getTran(request,"civil.status",activeHistoryPatient.comment2,sWebLanguage);
     }
 
     // comment
@@ -61,7 +61,7 @@ try{
 
     // nativeCountry
     if ((activeHistoryPatient.nativeCountry!=null)&&(activeHistoryPatient.nativeCountry.trim().length()>0)) {
-        sNativeCountry = getTran("Country",activeHistoryPatient.nativeCountry,sWebLanguage);
+        sNativeCountry = getTran(request,"Country",activeHistoryPatient.nativeCountry,sWebLanguage);
     }
 
     // nat reg

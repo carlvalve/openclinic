@@ -33,7 +33,7 @@
                     	groupedDebets.put(sDebetUid,oneGroup);                        
                     }
                     else if(debet!=null){
-                    	System.out.println("Prestation "+debet.getPrestationUid()+" missing on debet "+debet.getUid());
+                    	Debug.println("Prestation "+debet.getPrestationUid()+" missing on debet "+debet.getUid());
                     }
                 }
             }
@@ -258,7 +258,7 @@
 	                // credited ?
 	                sCredited = "";
 	                if(debet.getCredited() > 0){
-	                    sCredited = getTran("web.occup","medwan.common.yes",sWebLanguage);
+	                    sCredited = getTran(null,"web.occup","medwan.common.yes",sWebLanguage);
 	                    dExtraInsurarAmount=0;
 	                }
 	                String sInsurer="";
@@ -324,15 +324,15 @@
 <table width="100%" cellspacing="0" cellpadding="0" id="debetsTable" style="padding:1px;">
     <tr class="admin">
         <td width="4%">&nbsp;</td>
-        <td width="8%"><%=HTMLEntities.htmlentities(getTran("web","date",sWebLanguage))%></td>
-        <td width="23%"><%=HTMLEntities.htmlentities(getTran("web.finance","encounter",sWebLanguage))%></td>
-        <td width="23%"><%=HTMLEntities.htmlentities(getTran("web","prestation",sWebLanguage))%></td>
-        <td width="7%"><%=HTMLEntities.htmlentities(getTran("web","insurar",sWebLanguage))%></td>
-        <td width="7%"><%=HTMLEntities.htmlentities(getTran("web","total",sWebLanguage))%></td>
-        <td width="7%"><%=HTMLEntities.htmlentities(getTran("web","amount",sWebLanguage))%></td>
+        <td width="8%"><%=HTMLEntities.htmlentities(getTranNoLink("web","date",sWebLanguage))%></td>
+        <td width="23%"><%=HTMLEntities.htmlentities(getTranNoLink("web.finance","encounter",sWebLanguage))%></td>
+        <td width="23%"><%=HTMLEntities.htmlentities(getTranNoLink("web","prestation",sWebLanguage))%></td>
+        <td width="7%"><%=HTMLEntities.htmlentities(getTranNoLink("web","insurar",sWebLanguage))%></td>
+        <td width="7%"><%=HTMLEntities.htmlentities(getTranNoLink("web","total",sWebLanguage))%></td>
+        <td width="7%"><%=HTMLEntities.htmlentities(getTranNoLink("web","amount",sWebLanguage))%></td>
         <td width="7%"><%=HTMLEntities.htmlentities(getTranNoLink("web.finance","amount.insurar",sWebLanguage))%></td>
         <td width="7%"><%=HTMLEntities.htmlentities(getTranNoLink("web.finance","amount.complementaryinsurar",sWebLanguage))%></td>
-        <td width="7%"><%=HTMLEntities.htmlentities(getTran("web","canceled",sWebLanguage))%></td>
+        <td width="7%"><%=HTMLEntities.htmlentities(getTranNoLink("web","canceled",sWebLanguage))%></td>
     </tr>
     
 	<%		
@@ -350,7 +350,7 @@
 	    	%><tbody><%=debetsToHtml(groupDebets(vUnassignedDebets),"",sWebLanguage,sGroupIdx)%></tbody><%	    	        
 	    }
 	    else{
-	    	%><tr><td colspan="7"><%=getTran("web","noRecordsFound",sWebLanguage)%></td></tr><%
+	    	%><tr><td colspan="7"><%=getTranNoLink("web","noRecordsFound",sWebLanguage)%></td></tr><%
 	    }
 	}
 	catch(Exception e){

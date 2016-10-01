@@ -74,7 +74,7 @@
 
                         </div>
                         <div id="footer_info">
-                        <a href="javascript:window.location.href='datacenterHomePublic.jsp';">Public</a> - <a href="javascript:setLanguage('PT')">Pt</a> <a href="javascript:setLanguage('ES')">Es</a> <a href="javascript:setLanguage('FR')">Fr</a> <a href="javascript:setLanguage('EN')">En</a> - Vrije Universiteit Brussel</div>
+                        <a href="javascript:window.location.href='datacenterHomePublic.jsp';">Public</a> - <a href="javascript:setLanguage('PT')">Pt</a> <a href="javascript:setLanguage('ES')">Es</a> <a href="javascript:setLanguage('FR')">Fr</a> <a href="javascript:setLanguage('EN')">En</a></div>
                 </div>
             </div>
         </div>
@@ -118,13 +118,13 @@
                             <table width="100%" class="content">
                                 <tr><td colspan="2"></td></tr>
                                 <tr class="last">
-                                    <td><%=getTran("web","login",sWebLanguage)%></td>
+                                    <td><%=getTran(request,"web","login",sWebLanguage)%></td>
                                     <td>
                                         <input type="text" name="username" class="text"/>
                                     </td>
                                 </tr>
                                 <tr class="last">
-                                    <td><%=getTran("web","password",sWebLanguage)%></td>
+                                    <td><%=getTran(request,"web","password",sWebLanguage)%></td>
                                     <td>
                                         <input type="password" name="password" class="text"/><br/>
                                     </td>
@@ -132,7 +132,7 @@
                                 <tr class="last">
                                     <td>&nbsp;</td>
                                     <td>
-                                        <a href="javascript:void(0)" class="button" onclick="$('transactionForm').submit()"><span class="title"><%=getTran("web","save",sWebLanguage)%></span></a>
+                                        <a href="javascript:void(0)" class="button" onclick="$('transactionForm').submit()"><span class="title"><%=getTran(request,"web","save",sWebLanguage)%></span></a>
                                     </td>
                                 </tr>
                             </table>

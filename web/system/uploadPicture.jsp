@@ -34,11 +34,11 @@ if (MultipartFormDataRequest.isMultipartFormData(request)) {
     <input type="hidden" name="todo" value="upload">
     <table width="100%" border="0" cellspacing="1" class="list">
         <tr class="admin">
-            <td colspan="2">&nbsp;&nbsp;<%=getTran("Web","upload.picture",sWebLanguage)%></td>
+            <td colspan="2">&nbsp;&nbsp;<%=getTran(request,"Web","upload.picture",sWebLanguage)%></td>
         </tr>
 
         <tr>
-            <td class="admin"><%= getTran("Web.Occup","medwan.common.selectfile",sWebLanguage)%></td>
+            <td class="admin"><%= getTran(request,"Web.Occup","medwan.common.selectfile",sWebLanguage)%></td>
             <td class="admin2"><input type="file" name="uploadfile" size="80" class="text"></td>
         </tr>
 

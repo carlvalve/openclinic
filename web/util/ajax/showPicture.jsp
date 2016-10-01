@@ -43,7 +43,7 @@
             %>
 				<table width="100%">
     	            <tr>
-    	                <td align="center"><%=getTran("web","picturedoesnotexist",sWebLanguage)%></td>
+    	                <td align="center"><%=getTran(request,"web","picturedoesnotexist",sWebLanguage)%></td>
     	            </tr>
     	            <tr>
     	                <td align="center" style="line-height:30px;"><a href="javascript:void(0)" onclick="storePicture()">

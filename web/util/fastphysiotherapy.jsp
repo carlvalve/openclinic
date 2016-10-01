@@ -116,37 +116,37 @@
 			<td>
 				<table>
 					<tr class='admin'>
-						<td colspan='3'><%=getTran("web","fastphysiotherapy",sWebLanguage) %></td>
+						<td colspan='3'><%=getTran(request,"web","fastphysiotherapy",sWebLanguage) %></td>
 					</tr>
 			       <tr>
-			           <td class="admin"><%=getTran("openclinic.chuk","urgency.origin",sWebLanguage)%> *</td>
+			           <td class="admin"><%=getTran(request,"openclinic.chuk","urgency.origin",sWebLanguage)%> *</td>
 			           <td class="admin2" colspan='2'>
 			               <select class="text" name="EditEncounterOriginCNAR1" id="EditEncounterOriginCNAR1" onchange="loadSelect('cnar.origin.'+this.options[this.selectedIndex].value,document.getElementById('EditEncounterOriginCNAR2'))">
 			                   <option/>
 			                   <%
-			                       out.print(ScreenHelper.writeSelect("urgency.origin","",sWebLanguage));
+			                       out.print(ScreenHelper.writeSelect(request,"urgency.origin","",sWebLanguage));
 			                   %>
 			               </select>
 			               <select class='text' name='EditEncounterOriginCNAR2' id='EditEncounterOriginCNAR2'>
 			                   <%
-			                       out.print(ScreenHelper.writeSelect("cnar.origin.","",sWebLanguage));
+			                       out.print(ScreenHelper.writeSelect(request,"cnar.origin.","",sWebLanguage));
 			                   %>
 			               </select>
 			           </td>
 			       </tr>
 			       	<tr>
-			            <td class="admin"><%=getTran("Web","etiology",sWebLanguage)%></td>
+			            <td class="admin"><%=getTran(request,"Web","etiology",sWebLanguage)%></td>
 			            <td class='admin2' colspan='2'>
-			            	<input type="checkbox" name="prestation.newcase" value="1"/><%=getTran("Web","newcase",sWebLanguage)%>
+			            	<input type="checkbox" name="prestation.newcase" value="1"/><%=getTran(request,"Web","newcase",sWebLanguage)%>
 			                <select class="text" name="prestation.etiology" style="vertical-align:top;">
-			                    <option value=""><%=getTran("web","choose",sWebLanguage)%></option>
-			                    <%=ScreenHelper.writeSelect("encounter.etiology","",sWebLanguage)%>
+			                    <option value=""><%=getTran(request,"web","choose",sWebLanguage)%></option>
+			                    <%=ScreenHelper.writeSelect(request,"encounter.etiology","",sWebLanguage)%>
 			                </select>
 						</td>            
 			       	</tr>
 					<tr>
-						<td class='admin'><%=getTran("web","date",sWebLanguage) %>: <%=writeDateField("date","transactionForm",ScreenHelper.getDate(),sWebLanguage) %></td>
-						<td class='admin'><%=getTran("web","prestation",sWebLanguage) %>: 
+						<td class='admin'><%=getTran(request,"web","date",sWebLanguage) %>: <%=writeDateField("date","transactionForm",ScreenHelper.getDate(),sWebLanguage) %></td>
+						<td class='admin'><%=getTran(request,"web","prestation",sWebLanguage) %>: 
 							<select name='prestation' id ='prestation' class='text'>
 								<%
 									Vector kinedeliveries = Prestation.getPrestationsByClass(MedwanQuery.getInstance().getConfigString("kinePrestationClass","kine"));
@@ -157,10 +157,10 @@
 								%>
 							</select>
 						</td>
-						<td class='admin'><input type='button' class='button' name='addButton' id='addButton' value='<%=getTran("web","add",sWebLanguage)%>' onclick='addPrestation();'/></td>
+						<td class='admin'><input type='button' class='button' name='addButton' id='addButton' value='<%=getTran(null,"web","add",sWebLanguage)%>' onclick='addPrestation();'/></td>
 					</tr>
 					<tr class='admin'>
-						<td class='admin'><input type='submit' class='button' name='saveButton' id='saveButton' value='<%=getTran("web","save",sWebLanguage)%>'/></td>
+						<td class='admin'><input type='submit' class='button' name='saveButton' id='saveButton' value='<%=getTran(null,"web","save",sWebLanguage)%>'/></td>
 						<td class='admin' colspan='2'/>
 					</tr>
 				</table>

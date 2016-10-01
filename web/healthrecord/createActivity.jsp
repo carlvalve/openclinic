@@ -9,7 +9,7 @@
     String labelen = checkString(request.getParameter("labelen"));
     boolean activityStored = false;
 
-    String labelTran = getTran("web.translations","label",sWebLanguage);
+    String labelTran = getTran(request,"web.translations","label",sWebLanguage);
 
     if(action.equals("createActivity")){
         // store activity (in labels)
@@ -61,12 +61,12 @@
   <table width='100%' border='0' cellspacing='1' cellpadding='0'>
     <%-- TITLE --%>
     <tr class="admin">
-      <td colspan="2"><%=getTran("web.manage","createActivity",sWebLanguage)%></td>
+      <td colspan="2"><%=getTran(request,"web.manage","createActivity",sWebLanguage)%></td>
     </tr>
 
     <%-- INPUTFIELDS --%>
     <tr>
-      <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web.manage","labanalysis.cols.code",sWebLanguage)%></td>
+      <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web.manage","labanalysis.cols.code",sWebLanguage)%></td>
       <td class="admin2"><input class="text" type="text" name="activityCode" value="<%=activityCode%>" size="10" onBlur="isNumber(this);"></td>
     </tr>
 

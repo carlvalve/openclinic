@@ -31,14 +31,14 @@
     }
 %>
 	<tr>
-		<td><%=getTran("web","prestations",sWebLanguage)+": "+totalDebets %></td>
-		<td><%=getTran("web","patients",sWebLanguage)+": "+hPatients.size() %></td>
-		<td><%=getTran("web","encounters",sWebLanguage)+": "+hEncounters.size() %></td>
+		<td><%=getTran(request,"web","prestations",sWebLanguage)+": "+totalDebets %></td>
+		<td><%=getTran(request,"web","patients",sWebLanguage)+": "+hPatients.size() %></td>
+		<td><%=getTran(request,"web","encounters",sWebLanguage)+": "+hEncounters.size() %></td>
 	</tr>
 	<tr>
-		<td><%=getTran("web","insuraramount",sWebLanguage)+": "+new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(totalInsurarAmount) %></td>
-		<td><%=getTran("web","extrainsuraramount",sWebLanguage)+": "+new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(totalExtraInsurarAmount) %></td>
-		<td><%=getTran("web","patientamount",sWebLanguage)+": "+new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(totalPatientAmount) %></td>
+		<td><%=getTran(request,"web","insuraramount",sWebLanguage)+": "+new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(totalInsurarAmount) %></td>
+		<td><%=getTran(request,"web","extrainsuraramount",sWebLanguage)+": "+new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(totalExtraInsurarAmount) %></td>
+		<td><%=getTran(request,"web","patientamount",sWebLanguage)+": "+new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(totalPatientAmount) %></td>
 	</tr>
 </table>
 <%

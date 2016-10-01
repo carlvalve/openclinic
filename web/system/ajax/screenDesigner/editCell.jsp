@@ -86,7 +86,7 @@
 	    
 		sHtml+= "</table>";
 		
-		sHtml+= "<i>"+getTran("web.manage","printlabelsInfo",sWebLanguage)+"</i>";
+		sHtml+= "<i>"+getTran(null,"web.manage","printlabelsInfo",sWebLanguage)+"</i>";
 		
 	    return sHtml;
 	}
@@ -114,7 +114,7 @@
     <table cellpadding="0" cellspacing="1" class="list" width="98%">
         <%-- width --%>
         <tr>
-            <td class="admin" width="80"><%=getTran("web","width",sWebLanguage)%></td>
+            <td class="admin" width="80"><%=getTran(request,"web","width",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" name="EditWidth" value="<%=screen.getCellAttribute(cell,"width")%>" size="4" maxLength="3"
                  onBlur="if(this.value.length>0 && !isNumberLimited(this,100,500)){alertDialogDirectText('<%=getTranNoLink("web.occup","out-of-bounds-value",sWebLanguage)%> (100~500px)');this.focus();}"> px
@@ -123,7 +123,7 @@
         
         <%-- colspan --%>
         <tr>
-            <td class="admin"><%=getTran("web","colspan",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","colspan",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" name="EditColspan" value="<%=screen.getCellAttribute(cell,"colspan")%>" size="4" maxLength="2"
                  onBlur="if(this.value.length>0 && !isNumberLimited(this,1,10)){alertDialogDirectText('<%=getTranNoLink("web.occup","out-of-bounds-value",sWebLanguage)%> (1~10)');this.focus();}">
@@ -132,7 +132,7 @@
         
         <%-- class/style --%>
         <tr>
-            <td class="admin"><%=getTran("web","style",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web","style",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2" style="padding:5px">
                 <input type="hidden" name="EditClass" value="<%=screen.getCellAttribute(cell,"class")%>">
                 
@@ -159,7 +159,7 @@
         
         <%-- LIST ITEMS --%>
         <tr>
-            <td class="admin"><%=getTran("web","items",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","items",sWebLanguage)%></td>
             <td class="admin2" style="padding:5px;">
                 <table id="itemsTable" width="100%" cellpadding="0" cellspacing="1" class="list">
                     <%-- header --%>
@@ -249,7 +249,7 @@
                     %>
                 </table>
                 
-                <font color="#999999"><%=getTran("web.manage","customExamCellEditInfo",sWebLanguage).replaceAll("\r\n","<br/>")%></font>
+                <font color="#999999"><%=getTran(request,"web.manage","customExamCellEditInfo",sWebLanguage).replaceAll("\r\n","<br/>")%></font>
             </td>
         </tr>
         

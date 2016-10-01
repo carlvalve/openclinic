@@ -70,7 +70,7 @@
     <table class="list" border="0" width="100%" cellspacing="1">
         <%-- code --%>
         <tr>
-            <td class="admin" nowrap><%=getTran("web","code",sWebLanguage)%> *</td>
+            <td class="admin" nowrap><%=getTran(request,"web","code",sWebLanguage)%> *</td>
             <td class="admin2">
                 <input type="text" class="text" id="EditAccountCode" name="EditAccountCode" size="20" maxLength="20" value="<%=checkString(account.getCode())%>">
             </td>
@@ -78,17 +78,17 @@
 
         <%-- Type --%>
         <tr>
-            <td class="admin" nowrap><%=getTran("web","type",sWebLanguage)%> *</td>
+            <td class="admin" nowrap><%=getTran(request,"web","type",sWebLanguage)%> *</td>
             <td class="admin2">
                 <select class="text" id="EditAccountType" name="EditAccountType"> 
-                    <%=ScreenHelper.writeSelect("account.type",checkString(account.getType()),sWebLanguage)%>
+                    <%=ScreenHelper.writeSelect(request,"account.type",checkString(account.getType()),sWebLanguage)%>
                 </select>
             </td>                        
         </tr>
        
         <%-- name --%>                    
         <tr>
-            <td class="admin" nowrap><%=getTran("web","name",sWebLanguage)%> *</td>
+            <td class="admin" nowrap><%=getTran(request,"web","name",sWebLanguage)%> *</td>
             <td class="admin2">
                 <input type="text" class="text" name="EditAccountName" id="EditAccountName" size="80" maxLength="255" value="<%=checkString(account.getName())%>"/>
             </td>
@@ -115,7 +115,7 @@
             </td>
         </tr>
     </table>
-    <%=getTran("web","colored_fields_are_obligate",sWebLanguage)%>
+    <%=getTran(request,"web","colored_fields_are_obligate",sWebLanguage)%>
     
     <div id="divMessage" style="padding-top:10px;"></div>
 </form>

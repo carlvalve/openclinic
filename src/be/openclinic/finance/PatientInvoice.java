@@ -27,6 +27,7 @@ import be.mxs.common.util.db.MedwanQuery;
 import be.openclinic.adt.Encounter;
 import be.openclinic.medical.Diagnosis;
 import be.openclinic.medical.ReasonForEncounter;
+import be.openclinic.pharmacy.ProductionOrder;
 
 public class PatientInvoice extends Invoice {
     private String patientUid;
@@ -40,6 +41,33 @@ public class PatientInvoice extends Invoice {
     
 	public String getModifiers() {
 		return modifiers;
+	}
+	
+	public boolean createProductionOrders(){
+		boolean bCreated = false;
+		Vector debets = getDebets();
+		for(int n=0;n<debets.size();n++){
+			Debet debet = (Debet)debets.elementAt(n);
+			Prestation prestation = debet.getPrestation();
+			if(prestation.getProductionOrder().trim().length()>0){
+				//Check if the value of the paid sum >= minimum payment
+				if(getAmountPaid()>=getPatientAmount()*prestation.getProductionOrderPaymentLevel()/100){
+					if(ProductionOrder.getProductionOrders(null,null,debet.getUid(),null,null).size()==0){
+						//Add the target productstockuid to the candidate production orders
+						ProductionOrder productionOrder = new ProductionOrder();
+						productionOrder.setCreateDateTime(debet.getDate());
+						productionOrder.setPatientUid(Integer.parseInt(getPatientUid()));
+						productionOrder.setTargetProductStockUid(prestation.getProductionOrder());
+						productionOrder.setDebetUid(debet.getUid());
+						productionOrder.setUpdateDateTime(new java.sql.Timestamp(new java.util.Date().getTime()));
+						productionOrder.setUpdateUid(Integer.parseInt(getUpdateUser()));
+						productionOrder.store();
+						bCreated=true;
+					}
+				}
+			}
+		}
+		return bCreated;
 	}
 	
 	public static String getPatientSummaryInvoiceNumber(String uid){
@@ -761,7 +789,7 @@ public class PatientInvoice extends Invoice {
             PatientCredit credit = PatientCredit.get((String)getCredits().elementAt(n));
             b-=credit.getAmount();
         }
-        if(MedwanQuery.getInstance().getConfigInt("currencyDecimals",2)>0 && b<1/Math.pow(10,MedwanQuery.getInstance().getConfigInt("currencyDecimals",2))){
+        if(MedwanQuery.getInstance().getConfigInt("currencyDecimals",2)>0 && b>0 && b<1/Math.pow(10,MedwanQuery.getInstance().getConfigInt("currencyDecimals",2))){
         	b=0;
         }
         else {
@@ -1077,7 +1105,7 @@ public class PatientInvoice extends Invoice {
                     ids = new String[] {MedwanQuery.getInstance().getConfigString("serverId"),MedwanQuery.getInstance().getOpenclinicCounter("OC_INVOICES")+""};
                     this.setUid(ids[0]+"."+ids[1]);
                     this.setInvoiceUid(ids[1]);
-                    if(MedwanQuery.getInstance().getConfigInt("alternateInvoiceNumberingForClosedInvoicesOnly",0)==0 || this.getStatus().equalsIgnoreCase("closed")){
+                    if(ScreenHelper.checkString(this.getNumber()).length()==0 && (MedwanQuery.getInstance().getConfigInt("alternateInvoiceNumberingForClosedInvoicesOnly",0)==0 || this.getStatus().equalsIgnoreCase("closed"))){
                     	this.setNumber(getInvoiceNumberCounter("PatientInvoice"));
                     }
                 }
@@ -1086,7 +1114,7 @@ public class PatientInvoice extends Invoice {
                 ids = new String[] {MedwanQuery.getInstance().getConfigString("serverId"),MedwanQuery.getInstance().getOpenclinicCounter("OC_INVOICES")+""};
                 this.setUid(ids[0]+"."+ids[1]);
                 this.setInvoiceUid(ids[1]);
-                if(MedwanQuery.getInstance().getConfigInt("alternateInvoiceNumberingForClosedInvoicesOnly",0)==0 || this.getStatus().equalsIgnoreCase("closed")){
+                if(ScreenHelper.checkString(this.getNumber()).length()==0 && (MedwanQuery.getInstance().getConfigInt("alternateInvoiceNumberingForClosedInvoicesOnly",0)==0 || this.getStatus().equalsIgnoreCase("closed"))){
                 	this.setNumber(getInvoiceNumberCounter("PatientInvoice"));
                 }
             }

@@ -1058,42 +1058,42 @@
     <class>general.medicine</class>  
     <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MCD</transactiontype>  
     <fr>Données cliniques minimales (hospitalisation)</fr>  
-    <en>Vital signs</en> 
+    <en>Minimal clinical data</en> 
   </Row>  
   <Row> 
     <id>1081</id>  
     <class>neuropsychiatry</class>  
     <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_EMG</transactiontype>  
     <fr>EMG</fr>  
-    <en>Operation protocol (Gynaecology)</en> 
+    <en>EMG</en> 
   </Row>  
   <Row> 
     <id>1082</id>  
     <class>neuropsychiatry</class>  
     <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_EEG</transactiontype>  
     <fr>EEG</fr>  
-    <en>Minimal clinical data</en> 
+    <en>EEG</en> 
   </Row>  
   <Row> 
     <id>1083</id>  
     <class>neuropsychiatry</class>  
     <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_ERGOTHERAPY</transactiontype>  
     <fr>Ergotherapie</fr>  
-    <en>Vaccination PCV13</en> 
+    <en>Ergotherapy</en> 
   </Row>  
   <Row> 
     <id>1084</id>  
     <class>neuropsychiatry</class>  
     <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MEETINGREPORT</transactiontype>  
     <fr>Rapport d'entretien service social</fr>  
-    <en>Vaccination VAR</en> 
+    <en>Social service encounter</en> 
   </Row>  
   <Row> 
     <id>1085</id>  
     <class>neuropsychiatry</class>  
     <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_PSYCHOLOGYFOLLOWUP</transactiontype>  
     <fr>Fiche de suivi psychologique</fr>  
-    <en>Vaccination VAA</en> 
+    <en>Psychologist follow-up</en> 
   </Row>  
   <Row> 
     <id>1086</id>  
@@ -1339,5 +1339,117 @@
     <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CCBRT_VVFRECORD</transactiontype>  
     <fr>Dossier fistule vésico-vaginale</fr>  
     <en>Fistula card</en> 
+  </Row>  
+  <Row> 
+    <id>1120</id>  
+    <class>ccbrt</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CCBRT_SPECTACLEPRESCRIPTION</transactiontype>  
+    <fr>Prescription de lunettes</fr>  
+    <en>Spectacle prescription</en> 
+  </Row>  
+  <Row> 
+    <id>1121</id>  
+    <class>general.medicine</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_HPRC_ADMISSION</transactiontype>  
+    <fr>Fiche d'admission en hospitalisation (modèle HPRC)</fr>  
+    <en>Inpatient admission form (HPRC model)</en> 
+  </Row>  
+  <Row> 
+    <id>1122</id>  
+    <class>general.medicine</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_HPRC_ADMISSIONFOLLOWUP</transactiontype>  
+    <fr>Fiche de suivi d'hospitalisation (modèle HPRC)</fr>  
+    <en>Inpatient follow-up form (HPRC model)</en> 
+  </Row>  
+  <Row> 
+    <id>1123</id>  
+    <class>general.medicine</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_HPRC_DISCHARGE</transactiontype>  
+    <fr>Synthèse de sortie d'hospitalisation (modèle HPRC)</fr>  
+    <en>Inpatient discharge summary (HPRC model)</en> 
+  </Row>  
+  <Row> 
+    <id>1124</id>  
+    <class>msas</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSAS_REGISTRY_CONSULTATIONS</transactiontype>  
+    <fr>MSAS - Registre de consultation générale</fr>  
+    <en>MSAS - Outpatient consultations register</en> 
+  </Row>  
+  <Row> 
+    <id>1125</id>  
+    <class>msas</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSAS_REGISTRY_HEALTHYCHILDREN</transactiontype>  
+    <fr>MSAS - Registre de consultation enfants sains</fr>  
+    <en>MSAS - Healthy children consultations register</en> 
+  </Row>  
+  <Row> 
+    <id>1126</id>  
+    <class>msas</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSAS_REGISTRY_POSTNATAL</transactiontype>  
+    <fr>MSAS - Registre de consultation post-natale</fr>  
+    <en>MSAS - Post-natal consultations register</en> 
+  </Row>  
+  <Row> 
+    <id>1127</id>  
+    <class>msas</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSAS_REGISTRY_DELIVERIES</transactiontype>  
+    <fr>MSAS - Registre des accouchements</fr>  
+    <en>MSAS - Deliveries register</en> 
+  </Row>  
+  <Row> 
+    <id>1128</id>  
+    <class>msas</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSAS_REGISTRY_PRENATAL</transactiontype>  
+    <fr>MSAS - Registre de consultation pre-natale</fr>  
+    <en>MSAS - Pre-natal consultations register</en> 
+  </Row>  
+  <Row> 
+    <id>1129</id>  
+    <class>msas</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSAS_REGISTRY_DECEASED</transactiontype>  
+    <fr>MSAS - Registre de décès</fr>  
+    <en>MSAS - Deceased register</en> 
+  </Row>  
+  <Row> 
+    <id>1130</id>  
+    <class>msas</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSAS_REGISTRY_ABORTION</transactiontype>  
+    <fr>MSAS - Registre de soins après avortement</fr>  
+    <en>MSAS - Post-abortion care register</en> 
+  </Row>  
+  <Row> 
+    <id>1131</id>  
+    <class>msas</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSAS_REGISTRY_SICKCHILDREN</transactiontype>  
+    <fr>MSAS - Registre enfants malades</fr>  
+    <en>MSAS - Sick children register</en> 
+  </Row>  
+  <Row> 
+    <id>1132</id>  
+    <class>msas</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSAS_REGISTRY_ADMISSION</transactiontype>  
+    <fr>MSAS - Registre hospitalisation</fr>  
+    <en>MSAS - In-patient admission register</en> 
+  </Row>  
+  <Row> 
+    <id>1133</id>  
+    <class>ccbrt</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CCBRT_VVFSCREENING</transactiontype>  
+    <fr>VVF screening</fr>  
+    <en>VVF screening</en> 
+  </Row>  
+  <Row> 
+    <id>1134</id>  
+    <class>ccbrt</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CCBRT_VVF6MONTHSURVEY</transactiontype>  
+    <fr>VVF évaluation après 6 mois</fr>  
+    <en>VVF survey after 6 months</en> 
+  </Row>  
+  <Row> 
+    <id>1135</id>  
+    <class>ccbrt</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CCBRT_VVFSURGERY</transactiontype>  
+    <fr>VVF Examen chirurgical</fr>  
+    <en>VVF Surgery examination</en> 
   </Row>  
 </Examinations>

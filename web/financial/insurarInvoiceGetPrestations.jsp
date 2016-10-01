@@ -129,7 +129,7 @@
 
     //--- ADD PERIOD DEBETS -----------------------------------------------------------------------
     private String addPeriodDebets(Vector vDebets, String sClass, String sWebLanguage, boolean bChecked,
-    		                       java.util.Date begin, java.util.Date end, String sServiceUid){
+    		                       java.util.Date begin, java.util.Date end, String sServiceUid, String sShowSummarizedOnly,int[] selecteddebets){
         StringBuffer sReturn = new StringBuffer();
         boolean bBaseInvoicingOnPatientInvoiceDate=false;
 
@@ -139,6 +139,8 @@
             Prestation prestation;
             String sEncounterName, sPrestationDescription, sPatientName,sDate;
             Hashtable hSort = new Hashtable();
+            HashSet hSummarizedInvoices=new HashSet();
+            HashSet hNotSummarizedInvoices=new HashSet();
 
             String sImage = "_img/themes/default/check.gif";
             if (!bChecked) {
@@ -149,6 +151,18 @@
             for (int i=0;i<vDebets.size(); i++){
                 debet = (Debet) vDebets.elementAt(i);
                 if(debet!=null){
+                	if(hNotSummarizedInvoices.contains(debet.getPatientInvoiceUid())){
+                		continue;
+                	}
+                	else if(!hSummarizedInvoices.contains(debet.getPatientInvoiceUid()) && sShowSummarizedOnly.equalsIgnoreCase("true")){
+                		if(debet.isSummarized()){
+                			hSummarizedInvoices.add(debet.getPatientInvoiceUid());
+                		}
+                		else {
+                			hNotSummarizedInvoices.add(debet.getPatientInvoiceUid());
+                			continue;
+                		}
+                	}
                 	if(i==0){
                 		bBaseInvoicingOnPatientInvoiceDate=(debet.getInsurance()!=null && debet.getInsurance().getInsurar()!=null && debet.getInsurance().getInsurar().getIncludeAllPatientInvoiceDebets()==1);
                 	}
@@ -171,7 +185,7 @@
                             //continue;
                         }
                         if(sServiceUid.length()>0){
-                       		if(sServiceUid.indexOf("'"+debet.determineServiceUid()+"'")<0){
+                       		if(sServiceUid.toUpperCase().indexOf("'"+debet.determineServiceUid().toUpperCase()+"'")<0){
                        			continue;
                        		}
                         }
@@ -247,6 +261,7 @@
                                        +"<td>" +debet.getQuantity()+" x "+ HTMLEntities.htmlentities(sPrestationDescription)+"</td>"
                                        +"<td>"+new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","0.00")).format(debet.getInsurarAmount())+" "+MedwanQuery.getInstance().getConfigParam("currency", "€")+"</td>"
                                        +"</tr>");
+                        selecteddebets[0]++;
                     }
                 }
             }
@@ -261,12 +276,12 @@
 <table width="100%" cellspacing="1" cellpadding="0">
     <tr class="gray">
         <td width="50"/>
-        <td><%=HTMLEntities.htmlentities(getTran("web.control","output_h_4",sWebLanguage))%></td>
-        <td><%=HTMLEntities.htmlentities(getTran("web.finance","encounter",sWebLanguage))%></td>
-        <td><%=HTMLEntities.htmlentities(getTran("web.finance","patientinvoice",sWebLanguage))%></td>
-        <td><%=HTMLEntities.htmlentities(getTran("web", "date", sWebLanguage))%></td>
-        <td><%=HTMLEntities.htmlentities(getTran("web","prestation",sWebLanguage))%></td>
-        <td><%=HTMLEntities.htmlentities(getTran("web","amount",sWebLanguage))%></td>
+        <td><%=HTMLEntities.htmlentities(getTran(request,"web.control","output_h_4",sWebLanguage))%></td>
+        <td><%=HTMLEntities.htmlentities(getTran(request,"web.finance","encounter",sWebLanguage))%></td>
+        <td><%=HTMLEntities.htmlentities(getTran(request,"web.finance","patientinvoice",sWebLanguage))%></td>
+        <td><%=HTMLEntities.htmlentities(getTran(request,"web", "date", sWebLanguage))%></td>
+        <td><%=HTMLEntities.htmlentities(getTran(request,"web","prestation",sWebLanguage))%></td>
+        <td><%=HTMLEntities.htmlentities(getTran(request,"web","amount",sWebLanguage))%></td>
     </tr>
 <%
 	try{
@@ -278,9 +293,11 @@
     String sEditInsurarInvoiceUID = checkString(request.getParameter("EditInsurarInvoiceUID"));
     String sEditBegin = checkString(request.getParameter("EditBegin"));
     String sEditEnd = checkString(request.getParameter("EditEnd"));
+    String sShowSummarizedOnly = checkString(request.getParameter("ShowSummarized"));
     String sClass = "";
     InsurarInvoice insurarInvoice = null;
     String s=""; 
+    int[] selecteddebets={0};
     Vector vDebets=new Vector(),vUnassignedDebets=new Vector();
     if (sEditInsurarInvoiceUID.length() > 0) {
         insurarInvoice = InsurarInvoice.get(sEditInsurarInvoiceUID);
@@ -302,7 +319,10 @@
         }
         catch(Exception e){}
 		Insurar insurar = Insurar.get(sInsurarUid);
-        if(insurar!=null && insurar.getRequireValidation()==1){
+		if(insurar!=null && sShowSummarizedOnly.equalsIgnoreCase("true")){
+        	vUnassignedDebets = Debet.getUnassignedValidatedAndSignedSummarizedInsurarDebets(sInsurarUid,begin,end,MedwanQuery.getInstance().getConfigInt("maximumUnassignedInsurerDebets",30000));
+		}
+		else if(insurar!=null && insurar.getRequireValidation()==1){
         	vUnassignedDebets = Debet.getUnassignedValidatedAndSignedInsurarDebets(sInsurarUid,begin,end,MedwanQuery.getInstance().getConfigInt("maximumUnassignedInsurerDebets",30000));
         }
         else {
@@ -318,10 +338,10 @@
         	
         	s= "<tr><td bgcolor='black' colspan='6'><font style='color: white; font-size: 14px;'>"+sWarning+"</font></td></tr>"+s;
         }
-        s += addPeriodDebets(vUnassignedDebets, sClass, sWebLanguage, false,begin,end,sServiceUid);
+        s += addPeriodDebets(vUnassignedDebets, sClass, sWebLanguage, false,begin,end,sServiceUid,sShowSummarizedOnly,selecteddebets);
     }
     
-   	s += "<tr><td colspan='6'>"+(vUnassignedDebets.size()+vDebets.size())+" "+getTranNoLink("web","records.loaded",sWebLanguage)+"</td></tr>";
+   	s += "<tr><td colspan='6'>"+(selecteddebets[0]+vDebets.size())+" "+getTranNoLink("web","records.loaded",sWebLanguage)+"</td></tr>";
     out.print(s);
 	}
 catch(Exception e){

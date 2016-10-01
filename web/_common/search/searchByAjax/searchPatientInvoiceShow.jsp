@@ -91,27 +91,27 @@
 			   <table class="sortable" id="searchresults" width="100%" cellpadding="0" cellspacing="0">
 			       <%-- header --%>
 			       <tr class="admin">
-			           <td width="100" nowrap><%=HTMLEntities.htmlentities(getTran("web","date",sWebLanguage))%></td>
-			           <td width="110" nowrap><%=HTMLEntities.htmlentities(getTran("web","invoicenumber",sWebLanguage))%></td>
+			           <td width="100" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web","date",sWebLanguage))%></td>
+			           <td width="110" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web","invoicenumber",sWebLanguage))%></td>
 			           <td width="120" nowrap style="text-align:right;">
-			               <%=HTMLEntities.htmlentities(getTran("web","balance",sWebLanguage))%>
+			               <%=HTMLEntities.htmlentities(getTran(request,"web","balance",sWebLanguage))%>
 			               <%=HTMLEntities.htmlentities(sCurrency)%>&nbsp;&nbsp;
 			           </td>
 			           <td width="120" nowrap>
-			               <%=HTMLEntities.htmlentities(getTran("web.finance","patientinvoice.status",sWebLanguage))%>
+			               <%=HTMLEntities.htmlentities(getTran(request,"web.finance","patientinvoice.status",sWebLanguage))%>
 			           </td>
 			       </tr>
 			
 			       <%=sHtml.toString()%>
 			   </table>
 			   
-               <%=recCount%> <%=HTMLEntities.htmlentities(getTran("web","recordsfound",sWebLanguage))%>
+               <%=recCount%> <%=HTMLEntities.htmlentities(getTran(request,"web","recordsfound",sWebLanguage))%>
                <script>sortables_init();</script>
 		   <%
         }
         else{
             // display 'no results' message
-            %><%=HTMLEntities.htmlentities(getTran("web","norecordsfound",sWebLanguage))%><%
+            %><%=HTMLEntities.htmlentities(getTran(request,"web","norecordsfound",sWebLanguage))%><%
         }
     }
 %>

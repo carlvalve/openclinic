@@ -3,7 +3,7 @@
 <%=checkPermission("statistics.globalpathologydistribution","select",activeUser)%>
 
 <table border="0" width="100%">
-    <tr class="admin"><td><%=getTran("web","statistics.mortality",sWebLanguage)%></td></tr>
+    <tr class="admin"><td><%=getTran(request,"web","statistics.mortality",sWebLanguage)%></td></tr>
 </table>
 
 <form method="POST">
@@ -55,7 +55,7 @@
         
         String s1 = "<tr>", s2 = "<tr>";
         for(int n=1; n<13; n++){
-            s1+= ("<td class='admin' width='8%'>"+getTran("web","month"+n,sWebLanguage)+"</td>");
+            s1+= ("<td class='admin' width='8%'>"+getTran(request,"web","month"+n,sWebLanguage)+"</td>");
             s2+= ("<td class='admin2' width='8%'><a href='javascript:showDeceased("+n+","+request.getParameter("year")+")'>"+(months.get(n+"")==null?"0":months.get(n+""))+"</a></td>");
         }
         s1+= "</tr>";
@@ -64,7 +64,7 @@
         out.print(s1+s2);
         
         // total
-        out.print("<tr><td class='admin'>"+getTran("web","total",sWebLanguage)+"</td><td class='admin2' colspan='11'>"+total+"</td></tr>");
+        out.print("<tr><td class='admin'>"+getTran(request,"web","total",sWebLanguage)+"</td><td class='admin2' colspan='11'>"+total+"</td></tr>");
     }
 %>
 </table>

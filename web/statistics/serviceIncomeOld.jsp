@@ -31,12 +31,12 @@
     <table>
         <tr>
             <td>
-                <%=getTran("web","from",sWebLanguage)%>&nbsp;</td><td><%=writeDateField("begin","serviceIncome",sBegin,sWebLanguage)%>&nbsp;<%=getTran("web","to",sWebLanguage)%>&nbsp;<%=writeDateField("end","serviceIncome",sEnd,sWebLanguage)%>&nbsp;
+                <%=getTran(request,"web","from",sWebLanguage)%>&nbsp;</td><td><%=writeDateField("begin","serviceIncome",sBegin,sWebLanguage)%>&nbsp;<%=getTran(request,"web","to",sWebLanguage)%>&nbsp;<%=writeDateField("end","serviceIncome",sEnd,sWebLanguage)%>&nbsp;
                 <input type="submit" class="button" name="find" value="<%=getTranNoLink("web","find",sWebLanguage)%>"/>
             </td>
         </tr>
         <tr>
-        	<td><%=getTran("Web","service",sWebLanguage)%></td><td colspan='2'><input type='hidden' name='statserviceid' id='statserviceid' value='<%=service %>'>
+        	<td><%=getTran(request,"Web","service",sWebLanguage)%></td><td colspan='2'><input type='hidden' name='statserviceid' id='statserviceid' value='<%=service %>'>
         		<input class='text' type='text' name='statservicename' id='statservicename' readonly size='40' value='<%=serviceName %>'>
         		<img src='_img/icons/icon_search.gif' class='link' alt='<%=getTranNoLink("Web","select",sWebLanguage)%>' onclick='searchService("statserviceid","statservicename");'>
         		<img src='_img/icons/icon_delete.gif' class='link' alt='<%=getTranNoLink("Web","clear",sWebLanguage)%>' onclick='statserviceid.value="";statservicename.value="";'>
@@ -83,8 +83,8 @@
                     out.println("<tr><td/><td colspan='4'><hr/></td></tr><tr><td colspan='2'/><td><b>"+(totalserviceinsurarincome+totalservicepatientincome)+"</b></td><td><b>"+totalservicepatientincome+"</b></td><td><b>"+totalserviceinsurarincome+"</b></td></tr>");
                 }
                 activeservice=serviceuid;
-                out.println("<tr class='admin'><td>"+(activeservice.length()==0?"?":activeservice+": "+getTran("service",activeservice,sWebLanguage))+"</td>"+
-                        "<td>#</td><td>"+getTran("web","total",sWebLanguage)+"</td><td>"+getTran("web","patient",sWebLanguage)+"</td><td>"+getTran("web","insurar",sWebLanguage)+"</td></tr>");
+                out.println("<tr class='admin'><td>"+(activeservice.length()==0?"?":activeservice+": "+getTran(request,"service",activeservice,sWebLanguage))+"</td>"+
+                        "<td>#</td><td>"+getTran(request,"web","total",sWebLanguage)+"</td><td>"+getTran(request,"web","patient",sWebLanguage)+"</td><td>"+getTran(request,"web","insurar",sWebLanguage)+"</td></tr>");
                 totalpatientincome+=totalservicepatientincome;
                 totalinsurarincome+=totalserviceinsurarincome;
                 totalserviceinsurarincome=0;
@@ -94,13 +94,13 @@
             int insurarincome = rs.getInt("insurarincome");
             totalserviceinsurarincome+=insurarincome;
             totalservicepatientincome+=patientincome;
-            out.println("<tr><td class='admin'>"+rs.getString("oc_prestation_code")+": "+rs.getString("oc_prestation_description")+"</td><td>"+rs.getInt("quantity")+" ("+rs.getInt("number")+" "+getTran("web","invoices",sWebLanguage)+")</td><td>"+(patientincome+insurarincome)+"</td><td>"+patientincome+"</td><td>"+insurarincome+"</td></tr>");
+            out.println("<tr><td class='admin'>"+rs.getString("oc_prestation_code")+": "+rs.getString("oc_prestation_description")+"</td><td>"+rs.getInt("quantity")+" ("+rs.getInt("number")+" "+getTran(request,"web","invoices",sWebLanguage)+")</td><td>"+(patientincome+insurarincome)+"</td><td>"+patientincome+"</td><td>"+insurarincome+"</td></tr>");
         }
         if(activeservice!=null){
             out.println("<tr><td/><td colspan='4'><hr/></td></tr><tr><td colspan='2'/><td><b>"+(totalserviceinsurarincome+totalservicepatientincome)+"</b></td><td><b>"+totalservicepatientincome+"</b></td><td><b>"+totalserviceinsurarincome+"</b></td></tr>");
             totalpatientincome+=totalservicepatientincome;
             totalinsurarincome+=totalserviceinsurarincome;
-            out.println("<tr class='admin'><td>"+getTran("web","allservices",sWebLanguage)+"</td><td/><td><b>"+(totalinsurarincome+totalpatientincome)+"</b></td><td><b>"+totalpatientincome+"</b></td><td><b>"+totalinsurarincome+"</b></td></tr>");
+            out.println("<tr class='admin'><td>"+getTran(request,"web","allservices",sWebLanguage)+"</td><td/><td><b>"+(totalinsurarincome+totalpatientincome)+"</b></td><td><b>"+totalpatientincome+"</b></td><td><b>"+totalinsurarincome+"</b></td></tr>");
         }
         rs.close();
         ps.close();

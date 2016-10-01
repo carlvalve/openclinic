@@ -19,10 +19,10 @@
         // yes/no
         sOut.append("<td>&nbsp;");
         if(sTmpBeroepPA.equalsIgnoreCase("Y")){
-            sOut.append(getTran("Web","yes",sWebLanguage));
+            sOut.append(getTran(null,"Web","yes",sWebLanguage));
         }
         else if(sTmpBeroepPA.equalsIgnoreCase("N")){
-            sOut.append(getTran("Web","no",sWebLanguage));
+            sOut.append(getTran(null,"Web","no",sWebLanguage));
         }
         sOut.append("</td>")
             .append("</tr>");
@@ -56,10 +56,10 @@
         // yes/no
         sOut.append("<td>&nbsp;");
         if(sTmpBZErkenning.equalsIgnoreCase("Y")){
-            sOut.append(getTran("Web","yes",sWebLanguage));
+            sOut.append(getTran(null,"Web","yes",sWebLanguage));
         }
         else if(sTmpBZErkenning.equalsIgnoreCase("N")){
-            sOut.append(getTran("Web","no",sWebLanguage));
+            sOut.append(getTran(null,"Web","no",sWebLanguage));
         }
         sOut.append("</td>")
             .append("</tr>");
@@ -311,17 +311,17 @@
 <table class="list" width="100%" border="0" cellspacing="1">
     <%-- HISTORY --------------------------------------------------------------------------------%>
     <tr class="admin">
-        <td><%=getTran("Web.Occup","HistoryWorkpost",sWebLanguage)%></td>
+        <td><%=getTran(request,"Web.Occup","HistoryWorkpost",sWebLanguage)%></td>
     </tr>
     <tr>
         <td>
             <table cellspacing="1" id="tblBeroeps" width="100%">
                 <tr>
                     <td width="36" class="admin">&nbsp;</td>
-                    <td width="150" class="admin"><%=getTran("Web.Occup","medwan.common.date-begin",sWebLanguage)%></td>
-                    <td width="150" class="admin"><%=getTran("Web.Occup","medwan.common.date-end",sWebLanguage)%></td>
-                    <td width="250" class="admin"><%=getTran("Web.Occup","medwan.common.description",sWebLanguage)%></td>
-                    <td width="100" class="admin"><%=getTran("Web.Occup","medwan.occupational-medicine.ploegenarbeid",sWebLanguage)%></td>
+                    <td width="150" class="admin"><%=getTran(request,"Web.Occup","medwan.common.date-begin",sWebLanguage)%></td>
+                    <td width="150" class="admin"><%=getTran(request,"Web.Occup","medwan.common.date-end",sWebLanguage)%></td>
+                    <td width="250" class="admin"><%=getTran(request,"Web.Occup","medwan.common.description",sWebLanguage)%></td>
+                    <td width="100" class="admin"><%=getTran(request,"Web.Occup","medwan.occupational-medicine.ploegenarbeid",sWebLanguage)%></td>
                     <td class="admin">&nbsp;</td>
                 </tr>
                 <tr>
@@ -332,8 +332,8 @@
                     <td class="admin2">
                         <select class="text" name="BeroepsPA">
                             <option/>
-                            <option value="Y"><%=getTran("Web","Yes",sWebLanguage)%></option>
-                            <option value="N"><%=getTran("Web","No",sWebLanguage)%></option>
+                            <option value="Y"><%=getTran(request,"Web","Yes",sWebLanguage)%></option>
+                            <option value="N"><%=getTran(request,"Web","No",sWebLanguage)%></option>
                         </select>
                     </td>
                     <td class="admin2">
@@ -355,16 +355,16 @@
 
     <%-- ONGEVALLEN -----------------------------------------------------------------------------%>
     <tr class="admin">
-        <td><%=getTran("Web.Occup","medwan.healthrecord.work-accidents",sWebLanguage)%></td>
+        <td><%=getTran(request,"Web.Occup","medwan.healthrecord.work-accidents",sWebLanguage)%></td>
     </tr>
     <tr>
         <td>
             <table cellspacing="1" id="tblAO" width="100%">
                 <tr>
                     <td width="36" class="admin">&nbsp;</td>
-                    <td width="150" class="admin"><%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%></td>
-                    <td width="250" class="admin"><%=getTran("Web.Occup","medwan.common.description",sWebLanguage)%></td>
-                    <td width="70" class="admin">%<%=getTran("Web.Occup","PI",sWebLanguage)%></td>
+                    <td width="150" class="admin"><%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%></td>
+                    <td width="250" class="admin"><%=getTran(request,"Web.Occup","medwan.common.description",sWebLanguage)%></td>
+                    <td width="70" class="admin">%<%=getTran(request,"Web.Occup","PI",sWebLanguage)%></td>
                     <td class="admin">&nbsp;</td>
                 </tr>
                 <tr>
@@ -390,17 +390,17 @@
 
     <%-- ZIEKTEN -----------------------------------------------------------------------------------------------------%>
     <tr class="admin">
-        <td><%=getTran("Web.Occup","medwan.occupational-medicine.manage-professional-diseases",sWebLanguage)%></td>
+        <td><%=getTran(request,"Web.Occup","medwan.occupational-medicine.manage-professional-diseases",sWebLanguage)%></td>
     </tr>
     <tr>
         <td>
             <table cellspacing="1" id="tblBZ" width="100%">
                 <tr>
                     <td width="36" class="admin">&nbsp;</td>
-                    <td width="150" class="admin"><%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%></td>
-                    <td width="250" class="admin"><%=getTran("Web.Occup","medwan.common.description",sWebLanguage)%></td>
-                    <td width="70" class="admin">%<%=getTran("Web.Occup","PI",sWebLanguage)%></td>
-                    <td width="100" class="admin"><%=getTran("Web.Occup","Recognized",sWebLanguage)%></td>
+                    <td width="150" class="admin"><%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%></td>
+                    <td width="250" class="admin"><%=getTran(request,"Web.Occup","medwan.common.description",sWebLanguage)%></td>
+                    <td width="70" class="admin">%<%=getTran(request,"Web.Occup","PI",sWebLanguage)%></td>
+                    <td width="100" class="admin"><%=getTran(request,"Web.Occup","Recognized",sWebLanguage)%></td>
                     <td class="admin">&nbsp;</td>
                 </tr>
                 <tr>
@@ -411,8 +411,8 @@
                     <td class="admin2">
                         <select name="BeroepsziektenErkenning" class="text">
                             <option/>
-                            <option value="Y"><%=getTran("Web","Yes",sWebLanguage)%></option>
-                            <option value="N"><%=getTran("Web","No",sWebLanguage)%></option>
+                            <option value="Y"><%=getTran(request,"Web","Yes",sWebLanguage)%></option>
+                            <option value="N"><%=getTran(request,"Web","No",sWebLanguage)%></option>
                         </select>
                     </td>
                     <td class="admin2">
@@ -455,7 +455,7 @@ function addBeroep(){
     if((beginDate!="" && endDate!="") && !before(beginDate,endDate)){
       var popupUrl = "<%=sCONTEXTPATH%>/_common/search/template.jsp?Page=okPopup.jsp&ts=<%=getTs()%>&labelType=Web.Occup&labelID=endMustComeAfterBegin";
       var modalities = "dialogWidth:266px;dialogHeight:163px;center:yes;scrollbars:no;resizable:no;status:no;location:no;";
-      window.showModalDialog?window.showModalDialog(popupUrl,'',modalities):alert('<%=getTran("Web.Occup","endMustComeAfterBegin",sWebLanguage)%>');
+      window.showModalDialog?window.showModalDialog(popupUrl,'',modalities):alert('<%=getTran(null,"Web.Occup","endMustComeAfterBegin",sWebLanguage)%>');
       transactionForm.BeroepsDateEnd.select();
       return false;
     }
@@ -479,10 +479,10 @@ function addBeroep(){
       row.cells[3].innerHTML = "&nbsp;"+transactionForm.BeroepsDescription.value;
 
       if(transactionForm.BeroepsPA.value == "Y"){
-        row.cells[4].innerHTML = "&nbsp;<%=getTran("Web","yes",sWebLanguage)%>";
+        row.cells[4].innerHTML = "&nbsp;<%=getTran(request,"Web","yes",sWebLanguage)%>";
       }
       else if(transactionForm.BeroepsPA.value == "N"){
-        row.cells[4].innerHTML = "&nbsp;<%=getTran("Web","no",sWebLanguage)%>";
+        row.cells[4].innerHTML = "&nbsp;<%=getTran(request,"Web","no",sWebLanguage)%>";
       }
 
       // reset
@@ -664,10 +664,10 @@ function addBZ(){
     row.cells[3].innerHTML = "&nbsp;"+sBI;
 
     if(transactionForm.BeroepsziektenErkenning.value == "Y"){
-      row.cells[4].innerHTML = "&nbsp;<%=getTran("Web","yes",sWebLanguage)%>";
+      row.cells[4].innerHTML = "&nbsp;<%=getTran(request,"Web","yes",sWebLanguage)%>";
     }
     else if(transactionForm.BeroepsziektenErkenning.value == "N"){
-      row.cells[4].innerHTML = "&nbsp;<%=getTran("Web","no",sWebLanguage)%>";
+      row.cells[4].innerHTML = "&nbsp;<%=getTran(request,"Web","no",sWebLanguage)%>";
     }
 
     // reset

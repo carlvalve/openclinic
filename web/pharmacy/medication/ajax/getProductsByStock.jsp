@@ -24,8 +24,8 @@
   			<table width="100%" cellspacing="0" cellpadding="0" class="sortable" id="searchresults">
                 <%-- header --%>
                 <tr class="admin" width="100%">
-                    <td width="22"><%=getTran("Web","level",sWebLanguage)%></td>
-                    <td width="100%"><%=getTran("Web","productName",sWebLanguage)%></td>
+                    <td width="22"><%=getTran(request,"Web","level",sWebLanguage)%></td>
+                    <td width="100%"><%=getTran(request,"Web","productName",sWebLanguage)%></td>
                 </tr>
 		<%
 

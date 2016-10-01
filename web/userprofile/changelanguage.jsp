@@ -21,7 +21,7 @@
                 <table width='100%' cellspacing="1" cellpadding="0" class="list">
                     <%-- language --%>
                     <tr>
-                        <td class="admin" width='<%=sTDAdminWidth%>'><%=getTran("Web","language",sWebLanguage)%></td>
+                        <td class="admin" width='<%=sTDAdminWidth%>'><%=getTran(request,"Web","language",sWebLanguage)%></td>
                         <td class="admin2">
                             <select name="ChangeLanguage" class="text">
                                 <%

@@ -6,7 +6,7 @@
     private String getParent(String sCode, String sWebLanguage) {
         String sReturn = "";
         if ((sCode != null) && (sCode.trim().length() > 0)) {
-            String sLabel = getTran("admin.category", sCode, sWebLanguage);
+            String sLabel = getTran(null,"admin.category", sCode, sWebLanguage);
 
             Vector vParentIDs = Category.getParentIds(sCode);
             Iterator iter = vParentIDs.iterator();
@@ -19,13 +19,13 @@
 
                     sReturn = getParent(sParentID, sWebLanguage)
                             + "<img src='" + sCONTEXTPATH + "/_img/themes/default/pijl.gif'>"
-                            + "<a href='javascript:populateCategory(\"" + sCode + "\")' title='" + getTran("Web.Occup", "medwan.common.open", sWebLanguage) + "'>" + sLabel + "</a>";
+                            + "<a href='javascript:populateCategory(\"" + sCode + "\")' title='" + getTran(null,"Web.Occup", "medwan.common.open", sWebLanguage) + "'>" + sLabel + "</a>";
                 }
             }
 
             if (sReturn.trim().length() == 0) {
                 sReturn = sReturn + "<img src='" + sCONTEXTPATH + "/_img/themes/default/pijl.gif'>"
-                        + "<a href='javascript:populateCategory(\"" + sCode + "\")' title='" + getTran("Web.Occup", "medwan.common.open", sWebLanguage) + "'>" + sLabel + "</a>";
+                        + "<a href='javascript:populateCategory(\"" + sCode + "\")' title='" + getTran(null,"Web.Occup", "medwan.common.open", sWebLanguage) + "'>" + sLabel + "</a>";
             }
         }
         return sReturn;
@@ -35,7 +35,7 @@
     private String writeMyRow(String sType, String sID, String sWebLanguage, String sIcon) {
 
         String row = "";
-        String sLabel = getTran(sType, sID, sWebLanguage);
+        String sLabel = getTran(null,sType, sID, sWebLanguage);
         Category category=Category.getCategory(sID);
 
         if (category!=null){
@@ -43,13 +43,13 @@
             String sClass="";
 
             if (sIcon.length() == 0 && Category.getChildIds(sID).size()>0) {
-                sIcon = "<img src='" + sCONTEXTPATH + "/_img/themes/default/menu_tee_plus.gif' onclick='populateCategory(\"" + sID + "\")' alt='" + getTran("Web.Occup", "medwan.common.open", sWebLanguage) + "'>";
+                sIcon = "<img src='" + sCONTEXTPATH + "/_img/themes/default/menu_tee_plus.gif' onclick='populateCategory(\"" + sID + "\")' alt='" + getTran(null,"Web.Occup", "medwan.common.open", sWebLanguage) + "'>";
             }
 
             row += "<tr>" +
-                    " <td>" + sIcon + "</td><td><img src='" + sCONTEXTPATH + "/_img/icons/icon_view.gif' alt='" + getTran("Web", "view", sWebLanguage) + "' onclick='viewCategory(\"" + sID + "\")'></td>" +
+                    " <td>" + sIcon + "</td><td><img src='" + sCONTEXTPATH + "/_img/icons/icon_view.gif' alt='" + getTran(null,"Web", "view", sWebLanguage) + "' onclick='viewCategory(\"" + sID + "\")'></td>" +
                     " <td class='"+sClass+"'>" + sID + "</td>"+
-                    "<td class='"+sClass+"'><a href='javascript:selectParentCategory(\"" + sID + "\",\"" + sLabel + "\")' title='" + getTran("Web", "select", sWebLanguage) + "'>" + sLabel + "</a></td>"+
+                    "<td class='"+sClass+"'><a href='javascript:selectParentCategory(\"" + sID + "\",\"" + sLabel + "\")' title='" + getTran(null,"Web", "select", sWebLanguage) + "'>" + sLabel + "</a></td>"+
                     "</tr>";
         }
         return row;
@@ -134,7 +134,7 @@
             if (iTotal == 0) {
                 sViewCode = sFindCode;
             }
-            String sLabel = HTMLEntities.htmlentities(getTran("admin.category", sViewCode, sWebLanguage));
+            String sLabel = HTMLEntities.htmlentities(getTran(request,"admin.category", sViewCode, sWebLanguage));
             Category category = Category.getCategory(sViewCode);
 
             if (category != null) {
@@ -168,7 +168,7 @@
     } else {
     %>
     <tr>
-        <td colspan="3"><%=HTMLEntities.htmlentities(getTran("web", "norecordsfound", sWebLanguage))%></td>
+        <td colspan="3"><%=HTMLEntities.htmlentities(getTran(request,"web", "norecordsfound", sWebLanguage))%></td>
     </tr>
     <%
         }

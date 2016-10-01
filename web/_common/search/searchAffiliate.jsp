@@ -37,11 +37,11 @@
     <table width="100%" cellspacing="0" cellpadding="0" class="menu">
         <%-- search fields row 1 --%>
         <tr height="25">
-            <td nowrap>&nbsp;<%=getTran("Web","name",sWebLanguage)%>&nbsp;&nbsp;</td>
+            <td nowrap>&nbsp;<%=getTran(request,"Web","name",sWebLanguage)%>&nbsp;&nbsp;</td>
             <td nowrap>
                 <input type="text" name="FindLastname" class="text" value="<%=sFindLastname%>" onblur="limitLength(this);" >
             </td>
-            <td nowrap>&nbsp;<%=getTran("Web", "firstname",sWebLanguage)%>&nbsp;&nbsp;</td>
+            <td nowrap>&nbsp;<%=getTran(request,"Web", "firstname",sWebLanguage)%>&nbsp;&nbsp;</td>
             <td nowrap>
                 <input type="text" name="FindFirstname" class="text" value="<%=sFindFirstname%>" onblur="limitLength(this);">
             </td>
@@ -49,11 +49,11 @@
         
         <%-- search fields row 2 --%>
         <tr>
-            <td height="25" nowrap>&nbsp;<%=getTran("Web","dateofbirth", sWebLanguage)%>&nbsp;&nbsp;</td>
+            <td height="25" nowrap>&nbsp;<%=getTran(request,"Web","dateofbirth", sWebLanguage)%>&nbsp;&nbsp;</td>
             <td nowrap>
                 <input type="text" name="FindDOB" class="text" value="<%=sFindDOB%>" onblur="checkDate(this);">
             </td>
-            <td nowrap>&nbsp;<%=getTran("Web","gender",sWebLanguage)%>&nbsp;&nbsp;</td>
+            <td nowrap>&nbsp;<%=getTran(request,"Web","gender",sWebLanguage)%>&nbsp;&nbsp;</td>
             <td nowrap>
                 <select class="text" name="FindGender">
                     <option/>

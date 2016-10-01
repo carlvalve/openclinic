@@ -8,7 +8,7 @@
 
 <%!
     //--- ADD UNASSIGNED CREDITS ------------------------------------------------------------------
-    private String addUnassignedCredits(Vector vCredits, String sWebLanguage){
+    private String addUnassignedCredits(Vector vCredits, String sWebLanguage, User activeUser){
         DecimalFormat priceFormat = new DecimalFormat("#,##0.00"),
         	          deciLong    = new DecimalFormat("###,###,###,###");
         String sHtml = "", sClass = "";
@@ -63,7 +63,9 @@
                         }
 
                         hSort.put(credit.getDate().getTime()+"="+credit.getUid(),
-                                   " onclick=\"selectCredit('"+credit.getUid()+"','"+ScreenHelper.formatDate(credit.getDate())+"','"+credit.getAmount()+"','"+credit.getType()+"','"+credit.getEncounterUid()+"','"+HTMLEntities.htmlentities(sEncounterName)+"','"+HTMLEntities.htmlentities(ScreenHelper.checkString(credit.getComment()).replaceAll("'","´").replaceAll("\r\n","<br>"))+"','"+checkString(credit.getInvoiceUid())+"','"+wicketUid+"');\">"+
+                        		   (!credit.getType().equalsIgnoreCase("reduction") || activeUser.getAccessRight("financial.invoicereduction.select")?
+                                   " onclick=\"selectCredit('"+credit.getUid()+"','"+ScreenHelper.formatDate(credit.getDate())+"','"+credit.getAmount()+"','"+credit.getType()+"','"+credit.getEncounterUid()+"','"+HTMLEntities.htmlentities(sEncounterName)+"','"+HTMLEntities.htmlentities(ScreenHelper.checkString(credit.getComment()).replaceAll("'","´").replaceAll("\r\n","<br>"))+"','"+checkString(credit.getInvoiceUid())+"','"+wicketUid+"');\">":
+                                   " onclick='alert(\""+ScreenHelper.getTranNoLink("web","nopermission",sWebLanguage)+"\")'>")+
                                    "<td><b>"+credit.getUid().split("\\.")[1]+"</b>&nbsp;</td>"+
                                    "<td>"+ScreenHelper.formatDate(credit.getDate())+"</td>"+
                                    "<td>"+HTMLEntities.htmlentities(sEncounterName)+"</td>"+
@@ -131,21 +133,21 @@
             <table width="100%" class="list" cellspacing="0" style="border:none;">
                 <%-- header --%>
                 <tr class="admin">
-                    <td colspan="8"><%=HTMLEntities.htmlentities(getTran("web","paymentsforencounter",sWebLanguage))+" #"+sEncounterUID%></td>
+                    <td colspan="8"><%=HTMLEntities.htmlentities(getTran(request,"web","paymentsforencounter",sWebLanguage))+" #"+sEncounterUID%></td>
                 </tr>
                 <tr>
                     <td class="admin" width="20">#</td>
-                    <td class="admin" width="80"><%=HTMLEntities.htmlentities(getTran("web","date",sWebLanguage))%></td>
-                    <td class="admin" width="20%"><%=HTMLEntities.htmlentities(getTran("web.finance","encounter",sWebLanguage))%></td>
-                    <td class="admin" width="90" align="right"><%=HTMLEntities.htmlentities(getTran("web","amount",sWebLanguage))%>&nbsp;&nbsp;</td>
-                    <td class="admin" width="160"><%=HTMLEntities.htmlentities(getTran("web","type",sWebLanguage))%></td>
-                    <td class="admin" width="160"><%=HTMLEntities.htmlentities(getTran("web","invoice",sWebLanguage))%></td>
-                    <td class="admin" width="*"><%=HTMLEntities.htmlentities(getTran("web","description",sWebLanguage))%></td>
-                    <td class="admin" width="120"><%=HTMLEntities.htmlentities(getTran("web","wicket",sWebLanguage))%></td>
+                    <td class="admin" width="80"><%=HTMLEntities.htmlentities(getTran(request,"web","date",sWebLanguage))%></td>
+                    <td class="admin" width="20%"><%=HTMLEntities.htmlentities(getTran(request,"web.finance","encounter",sWebLanguage))%></td>
+                    <td class="admin" width="90" align="right"><%=HTMLEntities.htmlentities(getTran(request,"web","amount",sWebLanguage))%>&nbsp;&nbsp;</td>
+                    <td class="admin" width="160"><%=HTMLEntities.htmlentities(getTran(request,"web","type",sWebLanguage))%></td>
+                    <td class="admin" width="160"><%=HTMLEntities.htmlentities(getTran(request,"web","invoice",sWebLanguage))%></td>
+                    <td class="admin" width="*"><%=HTMLEntities.htmlentities(getTran(request,"web","description",sWebLanguage))%></td>
+                    <td class="admin" width="120"><%=HTMLEntities.htmlentities(getTran(request,"web","wicket",sWebLanguage))%></td>
                 </tr>
 
                 <tbody class="hand">
-                    <%=addUnassignedCredits(vCredits,sWebLanguage)%>
+                    <%=addUnassignedCredits(vCredits,sWebLanguage,activeUser)%>
                 </tbody>
             </table>
         <%

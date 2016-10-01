@@ -43,13 +43,13 @@
     <table width="100%" cellspacing="0" cellpadding="0" class="menu">
         <tr height="23">
             <%-- servicestock name --%>
-            <td class="admin2">&nbsp;<%=getTran("Web","name",sWebLanguage)%></td>
+            <td class="admin2">&nbsp;<%=getTran(request,"Web","name",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" name='SearchServiceStockName' class="text" value="<%=sSearchServiceStockName%>" size="20">
             </td>
 
             <%-- service --%>
-            <td class="admin2"><%=getTran("Web","service",sWebLanguage)%></td>
+            <td class="admin2"><%=getTran(request,"Web","service",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="hidden" name="SearchServiceUid" value="<%=sSearchServiceUid%>">
                 <input type="text" name='SearchServiceName' class="text" value="<%=sSearchServiceName%>" size="40" READONLY>
@@ -61,7 +61,7 @@
 
         <tr height="23">
             <%-- manager --%>
-            <td class="admin2">&nbsp;<%=getTran("Web", "manager", sWebLanguage)%></td>
+            <td class="admin2">&nbsp;<%=getTran(request,"Web", "manager", sWebLanguage)%></td>
             <td class="admin2">
                 <input type="hidden" name="SearchManagerUid" value="<%=sSearchManagerUid%>">
                 <input type="text" name='SearchManagerName' class="text" value="<%=sSearchManagerName%>" size="40" READONLY>

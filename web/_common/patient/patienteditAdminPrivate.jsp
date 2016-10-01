@@ -162,12 +162,12 @@
 			  //District
               +(
        	      		MedwanQuery.getInstance().getConfigInt("showAdminPrivateDistrict",1)==0?"<input type='hidden' name='PDistrict' value='"+checkString(apc.district)+"'/>":
-            		"<tr><td class='admin'>"+getTran("web","district",sWebLanguage)+"</td><td class='admin2'>"+sDistricts+"</td></tr>"
+            		"<tr><td class='admin'>"+getTran(request,"web","district",sWebLanguage)+"</td><td class='admin2'>"+sDistricts+"</td></tr>"
                )
 			  //Sector
               +(
       	      		MedwanQuery.getInstance().getConfigInt("showAdminPrivateSector",1)==0?"<input type='hidden' name='PSector' value='"+checkString(apc.sector)+"'/>":
-            		"<tr><td class='admin'>"+getTran("web","community",sWebLanguage)+"</td><td class='admin2'>"+sCities+"</td></tr>"
+            		"<tr><td class='admin'>"+getTran(request,"web","community",sWebLanguage)+"</td><td class='admin2'>"+sCities+"</td></tr>"
                )
 			  //Zipcode
               +(
@@ -197,8 +197,8 @@
 			  //Province
               +(
        	      		MedwanQuery.getInstance().getConfigInt("showAdminPrivateProvince",1)==0?"<input type='hidden' name='PProvince' value='"+checkString(apc.province)+"'/>":
-            	    "<tr><td class='admin'>"+getTran("web","province",sWebLanguage)+"</td><td class='admin2'><select class='text' name='PProvince' id='PProvince'><option/>"
-                    +ScreenHelper.writeSelect("province",apc.province,sWebLanguage,false,true)
+            	    "<tr><td class='admin'>"+getTran(request,"web","province",sWebLanguage)+"</td><td class='admin2'><select class='text' name='PProvince' id='PProvince'><option/>"
+                    +ScreenHelper.writeSelect(request,"province",apc.province,sWebLanguage,false,true)
                     +"</select></td></tr>"
                )
 			  //City
@@ -234,7 +234,7 @@
 </table>
 <script>
   function newAPC(){
-    retVal = makeMsgBox("?","<%=getTran("Web.admin","recuperation_old_data",sWebLanguage)%>",32,3,0,4096);
+    retVal = makeMsgBox("?","<%=getTran(null,"Web.admin","recuperation_old_data",sWebLanguage)%>",32,3,0,4096);
 
     if (retVal==7){
       document.getElementsByName("PAddress")[0].value = "";

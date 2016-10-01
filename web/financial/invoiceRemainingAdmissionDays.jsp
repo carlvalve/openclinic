@@ -31,7 +31,7 @@
                 	patientAmount+=debet.getQuantity()*pStay.getSupplement();
                 }
             }
-			if(insurance.getInsurar()!=null && pStay!=null && pStay.isVisibleFor(insurance.getInsurar())){
+			if(insurance.getInsurar()!=null && pStay!=null && pStay.isVisibleFor(insurance.getInsurar(),encounter.getService())){
 	            debet.setAmount(patientAmount);
 	            debet.setInsurarAmount(insurarAmount);
 	            debet.setPrestationUid(pStay.getUid());

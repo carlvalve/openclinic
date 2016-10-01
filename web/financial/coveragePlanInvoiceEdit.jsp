@@ -35,7 +35,7 @@
     
     <table class="menu" width="100%">
         <tr>
-            <td width="<%=sTDAdminWidth%>"><%=getTran("web.finance","reimbursement.documentid",sWebLanguage)%></td>
+            <td width="<%=sTDAdminWidth%>"><%=getTran(request,"web.finance","reimbursement.documentid",sWebLanguage)%></td>
             <td>
                 <input type="text" class="text" name="FindCoveragePlanInvoiceUID" id="FindCoveragePlanInvoiceUID" onblur="isNumber(this)" value="<%=sFindCoveragePlanInvoiceUID%>">
                 <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchCoveragePlanInvoice();">
@@ -85,7 +85,7 @@
 
 <table class='list' border='0' width='100%' cellspacing='1'>
     <tr>
-        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","coverageplan",sWebLanguage)%></td>
+        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","coverageplan",sWebLanguage)%></td>
         <td class="admin2">
             <input type="hidden" name="EditInsurarUID" value="<%=checkString(coveragePlanInvoice.getInsurarUid())%>">
             <input type="text" class="text" readonly name="EditInsurarText" value="<%=sInsurarText%>" size="100">
@@ -106,7 +106,7 @@
             <table class='list' width='100%' cellspacing='1' id="invoicedetailstable">
                 <%-- DOCUMENT ID --%>
                 <tr>
-                    <td class="admin"><%=getTran("web.finance","reimbursement.documentid",sWebLanguage)%></td>
+                    <td class="admin"><%=getTran(request,"web.finance","reimbursement.documentid",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="text" class="text" readonly name="EditInvoiceUID" id="EditInvoiceUID" value="<%=checkString(coveragePlanInvoice.getInvoiceUid())%>">
                     </td>
@@ -114,7 +114,7 @@
                 
                 <%-- DATE --%>
                 <tr>
-                    <td class='admin'><%=getTran("Web","date",sWebLanguage)%> *</td>
+                    <td class='admin'><%=getTran(request,"Web","date",sWebLanguage)%> *</td>
                     <%
                         Date activeDate = coveragePlanInvoice.getDate();
                         if(activeDate==null) activeDate = new Date();
@@ -124,7 +124,7 @@
                 
                 <%-- STATUS --%>
                 <tr>
-                    <td class='admin'><%=getTran("Web.finance","patientinvoice.status",sWebLanguage)%> *</td>
+                    <td class='admin'><%=getTran(request,"Web.finance","patientinvoice.status",sWebLanguage)%> *</td>
                     <td class='admin2'>
                         <select class="text" id="EditStatus" name="EditStatus" onchange="doStatus()" <%=coveragePlanInvoice.getStatus()!=null && (coveragePlanInvoice.getStatus().equalsIgnoreCase("closed") || coveragePlanInvoice.getStatus().equalsIgnoreCase("canceled"))?"disabled":""%>>
                             <option/>
@@ -134,20 +134,20 @@
                                     activeStatus = "open";
                                 }
                             %>
-                            <%=ScreenHelper.writeSelect("finance.patientinvoice.status",activeStatus,sWebLanguage)%>
+                            <%=ScreenHelper.writeSelect(request,"finance.patientinvoice.status",activeStatus,sWebLanguage)%>
                         </select>
                     </td>
                 </tr>
                 
                 <%-- PERIOD --%>
                 <tr id="period" style="visibility: hidden">
-                    <td class='admin'><%=getTran("web","period",sWebLanguage)%></td>
+                    <td class='admin'><%=getTran(request,"web","period",sWebLanguage)%></td>
                     <td class="admin2">
                         <%
                             Date previousmonth=new Date(ScreenHelper.parseDate(new SimpleDateFormat("01/MM/yyyy").format(new Date())).getTime()-1);
                         %>
                         <%=writeDateField("EditBegin","EditForm",new SimpleDateFormat("01/MM/yyyy").format(previousmonth),sWebLanguage)%>
-                        <%=getTran("web","to",sWebLanguage)%>
+                        <%=getTran(request,"web","to",sWebLanguage)%>
                         <%=writeDateField("EditEnd","EditForm",ScreenHelper.stdDateFormat.format(previousmonth),sWebLanguage)%>
                      
                         &nbsp;<input type="button" class="button" name="update" value="<%=getTranNoLink("web","update",sWebLanguage)%>" onclick="changeCoveragePlan();"/>
@@ -157,7 +157,7 @@
                 
                 <%-- BALANCE --%>
                 <tr>
-                    <td class='admin'><%=getTran("web.finance","balance",sWebLanguage)%></td>
+                    <td class='admin'><%=getTran(request,"web.finance","balance",sWebLanguage)%></td>
                     <td class='admin2'>
                         <input class='text' readonly type='text' id='EditBalance' name='EditBalance' value='<%=new DecimalFormat("#.#").format(coveragePlanInvoice.getBalance())%>' size='20'> <%=MedwanQuery.getInstance().getConfigParam("currency","€")%>
                     </td>
@@ -165,7 +165,7 @@
                 
                 <%-- PRESTATIONS --%>
                 <tr>
-                    <td class='admin'><%=getTran("web","prestations",sWebLanguage)%></td>
+                    <td class='admin'><%=getTran(request,"web","prestations",sWebLanguage)%></td>
                     <td class='admin2'>
                         <div id="divPrestations" style="height:120px;" class="searchResults"></div>
                         <input class='button' type="button" name="ButtonDebetSelectAll" id="ButtonDebetSelectAll" value="<%=getTranNoLink("web","selectall",sWebLanguage)%>" onclick="selectAll('cbDebet',true,'ButtonDebetSelectAll','ButtonDebetDeselectAll',true);">&nbsp;
@@ -175,7 +175,7 @@
                 
                 <%-- CREDITS --%>
                 <tr>
-                    <td class='admin'><%=getTran("web.finance","credits",sWebLanguage)%></td>
+                    <td class='admin'><%=getTran(request,"web.finance","credits",sWebLanguage)%></td>
                     <td class='admin2'>
                         <div id="divCredits" style="height:120px;" class="searchResults"></div>
                       
@@ -196,7 +196,7 @@
                             // pdf print button for existing invoices
                             if(checkString(coveragePlanInvoice.getUid()).length() > 0){
                         %>
-                        <%=getTran("Web.Occup","PrintLanguage",sWebLanguage)%>
+                        <%=getTran(request,"Web.Occup","PrintLanguage",sWebLanguage)%>
 
                         <%
                             String sPrintLanguage = activeUser.person.language;
@@ -220,8 +220,8 @@
                         </select>
                         
                         <select class="text" name="PrintType">
-                            <option value="sortbydate" <%=MedwanQuery.getInstance().getConfigString("defaultInvoiceSortType","sortbydate").equalsIgnoreCase("sortbydate")?"selected":""%>><%=getTran("web","sortbydate",sWebLanguage)%></option>
-                            <option value="sortbypatient" <%=MedwanQuery.getInstance().getConfigString("defaultInvoiceSortType","sortbydate").equalsIgnoreCase("sortbypatient")?"selected":""%>><%=getTran("web","sortbypatient",sWebLanguage)%></option>
+                            <option value="sortbydate" <%=MedwanQuery.getInstance().getConfigString("defaultInvoiceSortType","sortbydate").equalsIgnoreCase("sortbydate")?"selected":""%>><%=getTran(request,"web","sortbydate",sWebLanguage)%></option>
+                            <option value="sortbypatient" <%=MedwanQuery.getInstance().getConfigString("defaultInvoiceSortType","sortbydate").equalsIgnoreCase("sortbypatient")?"selected":""%>><%=getTran(request,"web","sortbypatient",sWebLanguage)%></option>
                         </select>
                         
                         <select class="text" name="PrintModel">
@@ -242,7 +242,7 @@
         </td>
     </tr>
 </table>
-<%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%>
+<%=getTran(request,"Web","colored_fields_are_obligate",sWebLanguage)%>
 
 <div id="divMessage"></div>
 
@@ -290,7 +290,7 @@
       });
     }
     else{
-                window.showModalDialog?alertDialog("web.manage","dataMissing"):alertDialogDirectText('<%=getTran("web.manage","dataMissing",sWebLanguage)%>');
+                window.showModalDialog?alertDialog("web.manage","dataMissing"):alertDialogDirectText('<%=getTran(null,"web.manage","dataMissing",sWebLanguage)%>');
     }
   }
 

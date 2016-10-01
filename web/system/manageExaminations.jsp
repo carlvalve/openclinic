@@ -58,7 +58,7 @@
             if(!examinationWithSameNameExists && !examinationWithSameTypeExists){
                 sExamID = MedwanQuery.getInstance().getOpenclinicCounter("ExaminationID")+"";
                 bQueryInsert = true;
-                msg = getTran("web.manage","examinationadded",sWebLanguage);
+                msg = getTran(request,"web.manage","examinationadded",sWebLanguage);
 
                 // create label object for examination and save it
                 Label label = new Label();
@@ -74,17 +74,17 @@
             }
             else{
                 if(examinationWithSameTypeExists){
-                    msg = "<font color='red'>"+getTran("web.manage","examinationOfSameTypeExists",sWebLanguage)+"</script>";
+                    msg = "<font color='red'>"+getTran(request,"web.manage","examinationOfSameTypeExists",sWebLanguage)+"</script>";
                 }
                 else{
-                    msg = "<font color='red'>"+getTran("web.manage","examinationWithSameNameExists",sWebLanguage)+"</script>";
+                    msg = "<font color='red'>"+getTran(request,"web.manage","examinationWithSameNameExists",sWebLanguage)+"</script>";
                 }
             }
         }
         //*** UPDATE examination ***
         else{
             bQueryUpdate = true;
-            msg = getTran("web.manage","examinationsaved",sWebLanguage);
+            msg = getTran(request,"web.manage","examinationsaved",sWebLanguage);
         }
 
         // save/add examination
@@ -124,7 +124,7 @@
 
         Examination.deleteExamination(objExam.getId());
         sExamID = "-1";
-        msg = getTran("web.manage","examinationdeleted",sWebLanguage);
+        msg = getTran(request,"web.manage","examinationdeleted",sWebLanguage);
     }
 %>
 
@@ -134,7 +134,7 @@
     <table width="100%" class="menu" cellspacing="0">
         <%-- SEARCH --%>
         <tr>
-            <td class="admin2" width="<%=sTDAdminWidth%>">&nbsp;<%=getTran("Web.manage","examination",sWebLanguage)%></td>
+            <td class="admin2" width="<%=sTDAdminWidth%>">&nbsp;<%=getTran(request,"Web.manage","examination",sWebLanguage)%></td>
             <td class="admin2">
                 <select name="FindExamID" class="text" onChange="transactionForm.submit();">
                     <option value="-1"><%=getTranNoLink("web","choose",sWebLanguage)%></option>
@@ -150,7 +150,7 @@
                         // get examinations
                         while (iter.hasNext()) {
                             hResults = (Hashtable) iter.next();
-                            hExaminations.put(getTran("examination", (String) hResults.get("id"), sWebLanguage), hResults.get("id"));
+                            hExaminations.put(getTran(request,"examination", (String) hResults.get("id"), sWebLanguage), hResults.get("id"));
                         }
 
                         // sort examinations
@@ -163,7 +163,7 @@
                         while (it.hasNext()) {
                             sKey = (String) it.next();
                             sID = (String) hExaminations.get(sKey);
-                            sKey = getTran("examination", sID, sWebLanguage);
+                            sKey = getTran(request,"examination", sID, sWebLanguage);
 
                             // alternate row-style
                             if(sClass.equals("")) sClass = "1";
@@ -215,7 +215,7 @@
                         if(sExamID.equals("-1")){
                             %>
                                 <tr class="list">
-                                    <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web.manage","examination",sWebLanguage)%>&nbsp;*&nbsp;</td>
+                                    <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web.manage","examination",sWebLanguage)%>&nbsp;*&nbsp;</td>
                                     <td class="admin2">
                                         <input type="text" class="normal" name="EditExamName" value="<%=sEditExamName%>" size="50" maxLength="255">
                                     </td>
@@ -228,7 +228,7 @@
 
                             %>
                                 <tr class="list">
-                                    <td class="admin"><%=getTran("web.manage","examination",sWebLanguage)%></td>
+                                    <td class="admin"><%=getTran(request,"web.manage","examination",sWebLanguage)%></td>
                                     <td class="admin2"><%=examNameLink%></td>
                                 </tr>
                             <%
@@ -236,46 +236,46 @@
                     %>
                     <%-- priority --%>
                     <tr class="list">
-                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","Priority",sWebLanguage)%></td>
+                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","Priority",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="text" class="text" name="EditPriority" value="<%=sEditPriority%>" size="10" onBlur="isNumber(this);">
                         </td>
                     </tr>
                     <%-- data --%>
                     <tr>
-                        <td class="admin"><%=getTran("web","Data",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"web","Data",sWebLanguage)%></td>
                         <td class="admin2">
                             <textarea onKeyup="resizeTextarea(this,10);" class="text" cols="130" rows="2" name="EditData"><%=sEditData%></textarea>
                         </td>
                     </tr>
                     <%-- transactionType --%>
                     <tr>
-                        <td class="admin"><%=getTran("Web.Translations","transactionType",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"Web.Translations","transactionType",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="text" class="normal" size="130" maxLength="255" name="EditTransactionType" value="<%=sEditTranType%>">
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin"><%=getTran("web","required.invoicable",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"web","required.invoicable",sWebLanguage)%></td>
                         <td class="admin2">
-                            <input type="checkbox" class="hand" name="EditRequiredInvoicable" <%=MedwanQuery.getInstance().getConfigInt(sEditTranType.split("\\&")[0]+".requiredInvoicable",0)==1?"checked":"" %>/><%=getTran("web","invoicable",sWebLanguage)%>
+                            <input type="checkbox" class="hand" name="EditRequiredInvoicable" <%=MedwanQuery.getInstance().getConfigInt(sEditTranType.split("\\&")[0]+".requiredInvoicable",0)==1?"checked":"" %>/><%=getTran(request,"web","invoicable",sWebLanguage)%>
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin"><%=getTran("web","required.prestationcode",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"web","required.prestationcode",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="text" class="normal" size="20" maxLength="20" name="EditRequiredPrestation" value="<%=MedwanQuery.getInstance().getConfigString(sEditTranType.split("\\&")[0]+".requiredPrestation")%>">
-                            <input type="checkbox" class="hand" name="EditRequiredPrestationInvoiced" <%=MedwanQuery.getInstance().getConfigInt(sEditTranType.split("\\&")[0]+".requiredPrestation.invoiced",0)==1?"checked":"" %>/><%=getTran("web","invoiced",sWebLanguage)%>
+                            <input type="checkbox" class="hand" name="EditRequiredPrestationInvoiced" <%=MedwanQuery.getInstance().getConfigInt(sEditTranType.split("\\&")[0]+".requiredPrestation.invoiced",0)==1?"checked":"" %>/><%=getTran(request,"web","invoiced",sWebLanguage)%>
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin"><%=getTran("web","required.prestationclass",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"web","required.prestationclass",sWebLanguage)%></td>
                         <td class="admin2">
                         	<select class="text" name="EditRequiredPrestationClass">
                         		<option value=""></option>
-                        		<%=ScreenHelper.writeSelect("prestation.class", MedwanQuery.getInstance().getConfigString(sEditTranType.split("\\&")[0]+".requiredPrestationClass"), sWebLanguage, false, true) %>
+                        		<%=ScreenHelper.writeSelect(request,"prestation.class", MedwanQuery.getInstance().getConfigString(sEditTranType.split("\\&")[0]+".requiredPrestationClass"), sWebLanguage, false, true) %>
                         	</select>
-                            <input type="checkbox" class="hand" name="EditRequiredPrestationClassInvoiced" <%=MedwanQuery.getInstance().getConfigInt(sEditTranType.split("\\&")[0]+".requiredPrestationClass.invoiced",0)==1?"checked":"" %>/><%=getTran("web","invoiced",sWebLanguage)%>
+                            <input type="checkbox" class="hand" name="EditRequiredPrestationClassInvoiced" <%=MedwanQuery.getInstance().getConfigInt(sEditTranType.split("\\&")[0]+".requiredPrestationClass.invoiced",0)==1?"checked":"" %>/><%=getTran(request,"web","invoiced",sWebLanguage)%>
                         </td>
                     </tr>
                     <tr>
@@ -292,7 +292,7 @@
                     </tr>
                 </table>
                 <%-- indication of obligated fields --%>
-                <%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%>
+                <%=getTran(request,"Web","colored_fields_are_obligate",sWebLanguage)%>
             <%
         }
     %>

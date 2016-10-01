@@ -33,9 +33,9 @@
 
         // header
         sOut.append("<tr class='admin'>")
-             .append("<td>"+getTran("web","name",sWebLanguage)+"</td>")
-             .append("<td>"+getTran("web","service",sWebLanguage)+"</td>")
-             .append("<td>"+getTran("web","manager",sWebLanguage)+"</td>")
+             .append("<td>"+getTran(request,"web","name",sWebLanguage)+"</td>")
+             .append("<td>"+getTran(request,"web","service",sWebLanguage)+"</td>")
+             .append("<td>"+getTran(request,"web","manager",sWebLanguage)+"</td>")
             .append("</tr>");
 
         // tbody
@@ -50,7 +50,10 @@
             
             if(!serviceStock.getUid().equalsIgnoreCase(sExcludeServiceStockUid)){
                 sServiceName = getTranNoLink("Service", serviceStock.getServiceUid(),sWebLanguage);
-                sManagerName = serviceStock.getStockManager().lastname+" "+serviceStock.getStockManager().firstname;
+                sManagerName = "";
+                if(serviceStock.getStockManager()!=null){
+                	sManagerName=serviceStock.getStockManager().lastname+" "+serviceStock.getStockManager().firstname;
+                }
 
                 // supplyingService
 
@@ -58,7 +61,7 @@
                     if(serviceStock.getService().code!=null){
                         sSupplyingServiceUid = serviceStock.getService().code;
 
-                        if(sSupplyingServiceUid.length() > 0) sSupplyingServiceName = getTran("service",serviceStock.getService().code,sWebLanguage);
+                        if(sSupplyingServiceUid.length() > 0) sSupplyingServiceName = getTran(request,"service",serviceStock.getService().code,sWebLanguage);
                         else                                  sSupplyingServiceName = "";
 
                         // alternate row-style
@@ -72,7 +75,7 @@
                                 cellClass = " class='strike'";
                             }
                             if(productStock!=null){
-                                level = " <i>("+getTran("web","level",sWebLanguage)+" = "+productStock.getLevel()+")</i>";
+                                level = " <i>("+getTran(request,"web","level",sWebLanguage)+" = "+productStock.getLevel()+")</i>";
                             }
                         }
 
@@ -97,7 +100,7 @@
     // display search results
     if(sAction.equals("find")){
         if(iTotal==0){
-    	    %><%=HTMLEntities.htmlentities(getTran("web","noRecordsFound",sWebLanguage))%><%
+    	    %><%=HTMLEntities.htmlentities(getTran(request,"web","noRecordsFound",sWebLanguage))%><%
         }
         else{                    
             %>
@@ -105,7 +108,7 @@
 	                <%=HTMLEntities.htmlentities(sOut.toString())%>		        
 				</table>
 				
-				<%=iTotal%> <%=HTMLEntities.htmlentities(getTran("web","recordsFound",sWebLanguage))%>
+				<%=iTotal%> <%=HTMLEntities.htmlentities(getTran(request,"web","recordsFound",sWebLanguage))%>
             <%
         }
     }

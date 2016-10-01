@@ -57,7 +57,7 @@
 
             TransactionItem.saveTransactionItem(objTI, transactionTypeId, itemTypeId);
 
-            msg = "'" + itemTypeId + "' " + getTran("Web", "saved", sWebLanguage);
+            msg = "'" + itemTypeId + "' " + getTran(request,"Web", "saved", sWebLanguage);
         } else {
             // check if record with new ids allready exists
             boolean bExists = false;
@@ -72,7 +72,7 @@
 
                 TransactionItem.saveTransactionItem(objTI, oldTransactionTypeId, oldItemTypeId);
 
-                msg = "'" + itemTypeId + "' " + getTran("Web", "saved", sWebLanguage);
+                msg = "'" + itemTypeId + "' " + getTran(request,"Web", "saved", sWebLanguage);
             } else {
                 // a record with the given ids allready exists
                 showAlert = true;
@@ -97,7 +97,7 @@
             sFindKey1 = transactionTypeId;
             sFindKey2 = itemTypeId;
 
-            msg = "'" + itemTypeId + "' " + getTran("Web", "added", sWebLanguage);
+            msg = "'" + itemTypeId + "' " + getTran(request,"Web", "added", sWebLanguage);
         } else {
             // a record with the given ids allready exists
             showAlert = true;
@@ -106,7 +106,7 @@
     //*** DELETE *************************************************************************************
     else if (sAction.equals("Delete") && !transactionTypeId.equals("") && !itemTypeId.equals("")) {
         TransactionItem.deleteTransactionItem(sFindKey1, sFindKey2);
-        msg = "'" + sFindKey2 + "' " + getTran("Web", "deleted", sWebLanguage);
+        msg = "'" + sFindKey2 + "' " + getTran(request,"Web", "deleted", sWebLanguage);
         sFindKey2 = "-1";
     }
 
@@ -162,7 +162,7 @@
     <td class="admin2" width="<%=sTDAdminWidth%>">&nbsp;TransactionTypeId</td>
     <td class="admin2">
       <select name="FindKey1" class="text" onchange="transactionForm.submit();">
-        <option value="-1"><%=getTran("Web","select",sWebLanguage)%></option>
+        <option value="-1"><%=getTran(request,"Web","select",sWebLanguage)%></option>
         <%=sOut1%>
       </select>
     </td>
@@ -171,7 +171,7 @@
     <td class="admin2">&nbsp;ItemTypeId</td>
     <td class="admin2">
       <select name="FindKey2" class="text" onchange="transactionForm.submit();">
-        <option value="-1"><%=getTran("Web","select",sWebLanguage)%></option>
+        <option value="-1"><%=getTran(request,"Web","select",sWebLanguage)%></option>
         <%=sOut2%>
       </select>
 
@@ -217,7 +217,7 @@
 
           <%-- link to synchronise transactionItems with ini --%>
           <img src='<c:url value="/_img/themes/default/pijl.gif"/>'>
-          <a  href="<c:url value='/main.do?Page=system/syncTransactionItemsWithIni.jsp?ts='/><%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran("Web.manage","synchronizetransactionitemswithini",sWebLanguage)%></a>&nbsp;
+          <a  href="<c:url value='/main.do?Page=system/syncTransactionItemsWithIni.jsp?ts='/><%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran(request,"Web.manage","synchronizetransactionitemswithini",sWebLanguage)%></a>&nbsp;
       </td>
   </tr>
   <%-- MESSAGE -----------------------------------------------------------------------------------%>
@@ -225,7 +225,7 @@
     <td class="admin2" colspan="2">
     <%
         if(msg == null){
-            msg = getTran("Web.Manage","noDataChanged",sWebLanguage);
+            msg = getTran(request,"Web.Manage","noDataChanged",sWebLanguage);
         }
         out.print(msg);
     %>

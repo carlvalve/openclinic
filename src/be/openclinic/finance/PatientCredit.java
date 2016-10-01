@@ -384,7 +384,7 @@ public class PatientCredit extends OC_Object {
                 if(invoice.getBalance()>0 && invoice.getBalance()<Double.parseDouble(MedwanQuery.getInstance().getConfigString("minimumInvoiceBalance","1"))){
                 	invoice.setBalance(0);
                 }
-                if(invoice.getBalance()==0){
+                if(invoice.getBalance()==0 && (MedwanQuery.getInstance().getConfigInt("enableCloseAntedatedInvoices",1)==1 || invoice.getDate().equals(ScreenHelper.parseDate(ScreenHelper.formatDate(new java.util.Date()))))){
                     invoice.setStatus(MedwanQuery.getInstance().getConfigString("patientInvoiceClosedStatus","closed"));
                 }
                 invoice.store();

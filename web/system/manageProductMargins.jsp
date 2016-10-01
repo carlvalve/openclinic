@@ -66,15 +66,15 @@
 <table class="list" cellspacing="1" cellpadding="0" width="100%">
     <%-- PROFIT MARGIN --%>
 	<tr>
-		<td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","default.profit.margin",sWebLanguage)%></td>
+		<td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","default.profit.margin",sWebLanguage)%></td>
 		<td class="admin2">
-		    <input type="text" class="text" size="5" name="profitMargin" value="<%=MedwanQuery.getInstance().getConfigString("defaultProductsMargin","0")%>" onKeyUp="isNumber(this);"/>% <%=getTran("web","zero.is.nocalculation",sWebLanguage)%>
+		    <input type="text" class="text" size="5" name="profitMargin" value="<%=MedwanQuery.getInstance().getConfigString("defaultProductsMargin","0")%>" onKeyUp="isNumber(this);"/>% <%=getTran(request,"web","zero.is.nocalculation",sWebLanguage)%>
 		</td>
 	</tr>
 	
     <%-- APPLY TO LOWER PRICES --%>
     <tr>
-        <td class="admin" nowrap><%=getTran("Web","apply.lower.prices",sWebLanguage)%></td>
+        <td class="admin" nowrap><%=getTran(request,"Web","apply.lower.prices",sWebLanguage)%></td>
         <td class="admin2">
             <input type="checkbox" name="EditApplyLowerPrices" value="1" <%=MedwanQuery.getInstance().getConfigString("applyLowerProductMargins","0").equalsIgnoreCase("1")?"checked":"" %>>
         </td>

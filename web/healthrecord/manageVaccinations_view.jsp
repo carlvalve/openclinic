@@ -32,19 +32,19 @@
                                     <td>
                                         <table border='0' width='100%' class='list'>
                                             <tr>
-                                                <td class='admin' width="*"><%=getTran("Web.Occup","medwan.common.type",sWebLanguage)%>&nbsp;</td>
+                                                <td class='admin' width="*"><%=getTran(request,"Web.Occup","medwan.common.type",sWebLanguage)%>&nbsp;</td>
                                                 <td class='admin2' width="80%"><input type="text" readonly class='text' size='20' name="item-type" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VACCINATION_TYPE" property="value"/>"/></td>
                                             </tr>
                                             <tr>
-                                                <td class='admin'><%=getTran("Web.Occup","be.mxs.healthrecord.vaccination.current-status",sWebLanguage)%>&nbsp;</td>
+                                                <td class='admin'><%=getTran(request,"Web.Occup","be.mxs.healthrecord.vaccination.current-status",sWebLanguage)%>&nbsp;</td>
                                                 <td class='admin2'><input type="text" readonly class="text" size="20" name="old-status" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VACCINATION_STATUS" property="value"/>"/></td>
                                             </tr>
                                             <tr>
-                                                <td class='admin'><%=getTran("Web.Occup","medwan.common.comment",sWebLanguage)%>&nbsp;</td>
+                                                <td class='admin'><%=getTran(request,"Web.Occup","medwan.common.comment",sWebLanguage)%>&nbsp;</td>
                                                 <td class='admin2'><logic:present name="vaccinationInfo" property="comment"><mxs:propertyAccessorI18N name="vaccinationInfo" scope="page" property="comment"/></logic:present></td>
                                             </tr>
                                             <tr>
-                                                <td class='admin'><%=getTran("Web.Occup","be.mxs.healthrecord.vaccination.new-status",sWebLanguage)%>&nbsp;</td>
+                                                <td class='admin'><%=getTran(request,"Web.Occup","be.mxs.healthrecord.vaccination.new-status",sWebLanguage)%>&nbsp;</td>
                                                 <td class='admin2'>
                                                     <select name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VACCINATION_STATUS" property="itemId"/>]>.value" class="text">
                                                         <logic:iterate id="vaccinationStatus" scope="session" name="be.mxs.webapp.wl.session.SessionContainerFactory.WO_SESSION_CONTAINER" property="currentVaccinationInfoVO.valueList">
@@ -54,17 +54,17 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td class='admin'><%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>&nbsp;</td>
+                                                <td class='admin'><%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>&nbsp;</td>
                                                 <td class='admin2'><input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VACCINATION_DATE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VACCINATION_DATE" property="value" formatType="date"/>" id="trandate" OnBlur='checkDate(this)'/>
                                                     <script>writeTranDate();</script>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td class='admin'><%=getTran("Web.Occup","be.mxs.healthrecord.vaccination.next-date",sWebLanguage)%>&nbsp;</td>
+                                                <td class='admin'><%=getTran(request,"Web.Occup","be.mxs.healthrecord.vaccination.next-date",sWebLanguage)%>&nbsp;</td>
                                                 <td class='admin2'><input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VACCINATION_NEXT_DATE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VACCINATION_NEXT_DATE" property="value" formatType="date"/>"/></td>
                                             </tr>
                                             <tr>
-                                                <td class='admin'><%=getTran("Web.Occup","medwan.common.remark",sWebLanguage)%>&nbsp;</td>
+                                                <td class='admin'><%=getTran(request,"Web.Occup","medwan.common.remark",sWebLanguage)%>&nbsp;</td>
                                                 <td class='admin2'>
                                                     <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" class="text" cols="110" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_COMMENT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_COMMENT" property="value"/></textarea>
                                                 </td>

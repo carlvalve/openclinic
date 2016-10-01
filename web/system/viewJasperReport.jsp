@@ -17,7 +17,7 @@
 
 <table width='100%'>
 	<tr class='admin'>
-		<td colspan='2'><%=getTran("web","jasperreportdetails",sWebLanguage) %></td>
+		<td colspan='2'><%=getTran(request,"web","jasperreportdetails",sWebLanguage) %></td>
 	</tr>
 	<%
 		String uid = request.getParameter("uid");
@@ -40,7 +40,7 @@
 		out.println("<tr><td nowrap class='admin'>Query</td><td class='admin2'>"+root.elementText("queryString").replace("\n"," ").replace("$P", "<b>$P").replaceAll("}", "}</b>").replaceAll(" and", "<br/>and").replaceAll(" from", "<br/>from").replaceAll(" where", "<br/>where")+"</td></tr>");
 	%>
 	<tr class='admin'>
-		<td colspan='2'><%=getTran("web","fields",sWebLanguage) %></td>
+		<td colspan='2'><%=getTran(request,"web","fields",sWebLanguage) %></td>
 	</tr>
 	<%
 		Iterator elements = root.elementIterator("field");
@@ -50,7 +50,7 @@
 		}
 	%>
 	<tr class='admin'>
-		<td colspan='2'><%=getTran("web","parameters",sWebLanguage) %></td>
+		<td colspan='2'><%=getTran(request,"web","parameters",sWebLanguage) %></td>
 	</tr>
 	<%
 		elements = root.elementIterator("parameter");

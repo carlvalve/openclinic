@@ -21,8 +21,8 @@
 	        prestationcontent = "<table class='list' cellpadding='0' cellspacing='1' width='100%'>"+
 	                             "<tr class='admin'>"+
 	          	                  "<td width='25'>&nbsp;</td>"+
-	          	     	          "<td width='80'>"+getTran("web","code",sWebLanguage)+"</td>"+
-		                          "<td width='*'>"+getTran("web","description",sWebLanguage)+"</td>"+
+	          	     	          "<td width='80'>"+getTran(request,"web","code",sWebLanguage)+"</td>"+
+		                          "<td width='*'>"+getTran(request,"web","description",sWebLanguage)+"</td>"+
 	                             "</tr>";
 	        
 	    	String sSql = "select oc_prestationgroup_prestationuid from oc_prestationgroups_prestations"+
@@ -58,7 +58,7 @@
 	        Debug.println("--> recCount : "+recCount);
 		    
 		    prestationcontent+= "</table>";	
-		    prestationcontent+= recCount+" "+getTran("web","recordsFound",sWebLanguage);		
+		    prestationcontent+= recCount+" "+getTran(request,"web","recordsFound",sWebLanguage);		
 		}
 		catch(Exception e){
 			e.printStackTrace();

@@ -46,7 +46,7 @@
 		sServerId = "";
 		sObjectId = "";
 		
-		sMsg = getTran("web","dataIsDeleted",sWebLanguage);
+		sMsg = getTran(request,"web","dataIsDeleted",sWebLanguage);
 		//sAction = "find";
     }
     //*** EDIT *************************************************
@@ -106,7 +106,7 @@
 		ps.close();
 		
 		sAction = "find";
-		sMsg = getTran("web","dataIsSaved",sWebLanguage);
+		sMsg = getTran(request,"web","dataIsSaved",sWebLanguage);
 	}
 %>
     
@@ -125,7 +125,7 @@
     <table width="100%" border="0" class="list" cellpadding="1" cellspacing="1">
         <%-- service --%>
         <tr>
-            <td class="admin"><%=getTran("web","service",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","service",sWebLanguage)%></td>
             <td class="admin2">
                 <input readonly class="text" type="text" name="immoService" id="immoService" value="<%=sImmoService%>" size="20"/>
                 <input readonly class="text" type="text" name="immoServiceName" id="immoServiceName" value="<%=sImmoServiceName%>" size="60"/>
@@ -136,21 +136,21 @@
         </tr>
         <%-- location --%>
         <tr>
-            <td class="admin"><%=getTran("web","immolocation",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","immolocation",sWebLanguage)%></td>
             <td class="admin2">
             	<input class="text" type="text" name="immoLocation" id="immoLocation" value="<%=sImmoLocation%>" size="50"/>
             </td>
         </tr>
         <%-- code --%>
         <tr>
-            <td class="admin"><%=getTran("web","code",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","code",sWebLanguage)%></td>
             <td class="admin2">
             	<input class="text" type="text" name="immoCode" id="immoCode" value="<%=sImmoCode%>" size="50"/>
             </td>
         </tr>
         <%-- bailleur (~verhuurder) --%>
         <tr>
-            <td class="admin"><%=getTran("web","bailleur",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","bailleur",sWebLanguage)%></td>
             <td class="admin2">
             	<input class="text" type="text" name="immoBuyer" id="immoBuyer" value="<%=sImmoBuyer%>" size="50"/>
             </td>
@@ -158,7 +158,7 @@
         
         <%-- comment --%>
         <tr>
-            <td class="admin"><%=getTran("web","comment",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","comment",sWebLanguage)%></td>
             <td class="admin2">
 	        <%
 	            if(sAction.equals("new") || sAction.equals("edit")){
@@ -227,11 +227,11 @@
 			<tr class="admin">
 				<td width="60"/>
 				<td width="50">ID</td>
-				<td width="120"><%=getTran("web","service",sWebLanguage)%></td>
-				<td width="180"><%=getTran("web","immolocation",sWebLanguage)%></td>
-				<td width="100"><%=getTran("web","code",sWebLanguage)%></td>
-				<td width="200"><%=getTran("web","bailleur",sWebLanguage)%></td>
-				<td width="*"><%=getTran("web","comment",sWebLanguage)%></td>
+				<td width="120"><%=getTran(request,"web","service",sWebLanguage)%></td>
+				<td width="180"><%=getTran(request,"web","immolocation",sWebLanguage)%></td>
+				<td width="100"><%=getTran(request,"web","code",sWebLanguage)%></td>
+				<td width="200"><%=getTran(request,"web","bailleur",sWebLanguage)%></td>
+				<td width="*"><%=getTran(request,"web","comment",sWebLanguage)%></td>
 			</tr>
         <%
 			while(rs.next()){
@@ -273,10 +273,10 @@
 		<%
 		
 		if(recordCount > 0){
-		    sMsg = recordCount+" "+getTran("web","recordsFound",sWebLanguage);
+		    sMsg = recordCount+" "+getTran(request,"web","recordsFound",sWebLanguage);
 		}
 		else{
-		    sMsg = getTran("web","noRecordsFound",sWebLanguage);
+		    sMsg = getTran(request,"web","noRecordsFound",sWebLanguage);
 		}
 	}
 

@@ -7,12 +7,12 @@
 <%=sJSSORTTABLE%>
 <%=sJSSTRINGFUNCTIONS%>
 
-<%String sTextFind = getTran("web", "find", sWebLanguage);%>
+<%String sTextFind = getTran(request,"web", "find", sWebLanguage);%>
 
 <table class="list" width="100%" cellspacing="0">
     <%-- PAGE TITLE --%>
     <tr class="admin">
-        <td colspan="7"><%=getTran("curative","planning.status.title",sWebLanguage)%>&nbsp;
+        <td colspan="7"><%=getTran(request,"curative","planning.status.title",sWebLanguage)%>&nbsp;
         <a href="<c:url value='/main.do'/>?Page=planning/findPlanning.jsp&ts=<%=getTs()%>"><img src="<c:url value='/_img/icons/icon_new.gif'/>" class="link" alt="<%=getTranNoLink("web","planning",sWebLanguage)%>" style="vertical-align:-4px;"></a></td>
     </tr>
     <%
@@ -27,14 +27,14 @@
             		
 		                <%-- HEADER --%>
 		                <tr class="gray">
-		                    <td><%=getTran("web.occup","medwan.common.date",sWebLanguage)%></td>
-		                    <td><%=getTran("web","from",sWebLanguage)%></td>
-		                    <td><%=getTran("web","to",sWebLanguage)%></td>
-		                    <td><%=getTran("planning","cancelationdate",sWebLanguage)%></td>
-		                    <td><%=getTran("planning","user",sWebLanguage)%></td>
-		                    <td><%=getTran("web","context",sWebLanguage)%></td>
-		                    <td><%=getTran("web","prestation",sWebLanguage)%></td>
-		                    <td><%=getTran("web","description",sWebLanguage)%></td>
+		                    <td><%=getTran(request,"web.occup","medwan.common.date",sWebLanguage)%></td>
+		                    <td><%=getTran(request,"web","from",sWebLanguage)%></td>
+		                    <td><%=getTran(request,"web","to",sWebLanguage)%></td>
+		                    <td><%=getTran(request,"planning","cancelationdate",sWebLanguage)%></td>
+		                    <td><%=getTran(request,"planning","user",sWebLanguage)%></td>
+		                    <td><%=getTran(request,"web","context",sWebLanguage)%></td>
+		                    <td><%=getTran(request,"web","prestation",sWebLanguage)%></td>
+		                    <td><%=getTran(request,"web","description",sWebLanguage)%></td>
 		                </tr>
             <%
             Planning planning;
@@ -54,7 +54,7 @@
             java.util.Date dTmp;
             ObjectReference orContact;
             ExaminationVO examination;
-            String sTextAdd = getTran("web", "add", sWebLanguage);
+            String sTextAdd = getTran(request,"web", "add", sWebLanguage);
 
             while (it.hasNext()){
                 // alternate row-style
@@ -92,7 +92,7 @@
                              	User user = activeUser;
                              	String userService=user.getParameter("defaultserviceid");
                              	if(userService!=null && userService.length()>0){
-                             		userService=" ("+userService.toUpperCase()+": "+getTran("service",userService,sWebLanguage)+")";
+                             		userService=" ("+userService.toUpperCase()+": "+getTran(request,"service",userService,sWebLanguage)+")";
                              	}
                              	
                                 if(planning.getUserUID().equals(activeUser.userid)){
@@ -104,13 +104,13 @@
                                  	user.person.initialize(user.personid);
                                  	userService=user.getParameter("defaultserviceid");
                                  	if(userService!=null && userService.length()>0){
-                                 		userService=" ("+userService.toUpperCase()+": "+getTran("service",userService,sWebLanguage)+")";
+                                 		userService=" ("+userService.toUpperCase()+": "+getTran(request,"service",userService,sWebLanguage)+")";
                                  	}
                                     out.print(user.person.firstname.toUpperCase()+" "+user.person.lastname.toUpperCase()+userService);
                                 }
                             %>
                         </td>
-                        <td><%=getTran("Web.Occup",planning.getContextID(),sWebLanguage)%></td>
+                        <td><%=getTran(request,"Web.Occup",planning.getContextID(),sWebLanguage)%></td>
                         <td>
                             <%
                                 orContact = planning.getContact();
@@ -119,11 +119,11 @@
                                         examination = MedwanQuery.getInstance().getExamination(orContact.getObjectUid(), sWebLanguage);
                                         if(checkString(planning.getTransactionUID()).length()==0){
                                             out.print("<img src='_img/icons/icon_add.gif' onclick='doExamination(\""+planning.getUid()+"\",\""+planning.getPatientUID()+"\",\""+examination.getTransactionType()+"\")' alt='"+sTextAdd+"' class='link'/> "
-                                               +getTran("examination", examination.getId().toString(), sWebLanguage));
+                                               +getTran(request,"examination", examination.getId().toString(), sWebLanguage));
                                         }
                                         else {
                                             out.print("<img src='_img/icons/icon_search.gif' onclick='openExamination(\""+planning.getTransactionUID().split("\\.")[0]+"\",\""+planning.getTransactionUID().split("\\.")[1]+"\",\""+planning.getPatientUID()+"\",\""+examination.getTransactionType()+"\")' alt='"+sTextFind+"' class='link'/> "
-                                               +getTran("examination", examination.getId().toString(), sWebLanguage));
+                                               +getTran(request,"examination", examination.getId().toString(), sWebLanguage));
                                         }
                                     }
                                 }
@@ -141,7 +141,7 @@
             <%
         }
         else{
-        	//out.print("&nbsp;"+getTran("web","noRecordsFound",sWebLanguage));
+        	//out.print("&nbsp;"+getTran(request,"web","noRecordsFound",sWebLanguage));
         }
     %>
 </table>
@@ -153,7 +153,7 @@
   }
  
   function deleteAppointment2(){
-    if(confirm("<%=getTran("Web","AreYouSure",sWebLanguage)%>")){
+    if(confirm("<%=getTran(null,"Web","AreYouSure",sWebLanguage)%>")){
       var url = "<c:url value='/planning/ajax/editPlanning.jsp'/>?ts=<%=getTs()%>";
       var params = "&Action=delete&Page=Curative&AppointmentID="+actualAppointmentId;
       var div = "responseByAjax";
@@ -170,7 +170,7 @@
   function openAppointment(planningUid){
     actualAppointmentId = planningUid;
     var url = "<c:url value='/planning/ajax/editPlanning.jsp'/>";
-    Modalbox.show(url,{title:'<%=getTran("web", "planning", sWebLanguage)%>',width: 650,method:'post',params:"FindUserUID="+<%=activeUser.userid%>+ "&FindPlanningUID="+planningUid+"&ts=<%=getTs()%>"}, {evalScripts: true} );
+    Modalbox.show(url,{title:'<%=getTranNoLink("web", "planning", sWebLanguage)%>',width: 650, height: 480, method:'post',params:"FindUserUID=<%=activeUser.userid%>&FindPlanningUID="+planningUid+"&ts=<%=getTs()%>"}, {evalScripts: true} );
   }
   function goodTime(){
     if($("appointmentDateHour").value > $("appointmentDateEndHour").value){
@@ -182,6 +182,23 @@
     }
   }
     
+	function activateTab2(sTab){
+
+	    document.getElementById('tr0_1-view').style.display = 'none';
+	    td0_1.className="tabunselected";
+	    if(sTab=='Main'){
+	      document.getElementById('tr0_1-view').style.display = '';
+	      td0_1.className="tabselected";
+	    }
+
+	    document.getElementById('tr1_1-view').style.display = 'none';
+	    td1_1.className="tabunselected";
+	    if(sTab=='Extended'){
+	      document.getElementById('tr1_1-view').style.display = '';
+	      td1_1.className="tabselected";
+	    }
+  	}
+
   function saveAppointment(){
     if($("EditPatientUID").value.length==0 || $F("EditUserUID").length==0 || $F("appointmentDateDay").trim().length==0 ){
       if($("EditPatientUID").value.length==0){
@@ -205,7 +222,7 @@
                    $("appointmentDateMinutes").value+"&appointmentDateEndDay="+$("appointmentDateDay").value+"&Action=save"+
                    "&appointmentDateEndHour="+$("appointmentDateEndHour").value+"&appointmentDateEndMinutes="+$("appointmentDateEndMinutes").value+
                    "&EditEffectiveDate="+$("EditEffectiveDate").value+"&EditEffectiveDateTime="+$("EditEffectiveDateTime").value+"&EditCancelationDateTime="+$("EditCancelationDateTime").value+"&EditCancelationDate="+$("EditCancelationDate").value+
-                   "&EditUserUID="+$("EditUserUID").value+"&EditPatientUID="+$("EditPatientUID").value+"&EditDescription="+encodeURIComponent($("EditDescription").value)+
+                   "&EditUserUID="+$("EditUserUID").value+"&EditServiceUID="+$("EditServiceUID").value+"&EditPatientUID="+$("EditPatientUID").value+"&EditDescription="+encodeURIComponent($("EditDescription").value)+
                    "&EditContactUID="+$("EditContactUID").value+"&EditContactName="+$("EditContactName").value+"&EditContext="+$("EditContext").value;
       if($("EditTransactionUID")){
         params+="&EditTransactionUID="+$F("EditTransactionUID");
@@ -239,6 +256,10 @@
   function searchUser(fieldUID,fieldName){
     openPopup("/_common/search/searchUser.jsp&ts="+new Date().getTime()+"&ReturnUserID="+fieldUID+"&ReturnName="+fieldName+"&displayImmatNew=no");
   }
+  function searchService(serviceUidField,serviceNameField){
+    openPopup("/_common/search/searchService.jsp&ts=<%=getTs()%>&VarSelectDefaultStay=true&VarCode="+serviceUidField+"&VarText="+serviceNameField);
+    document.getElementById(serviceNameField).focus();
+  }
   function searchMyPatient(fieldUID, fieldName){
     openPopup("/_common/search/searchPatient.jsp&ts="+new Date().getTime()+"&ReturnPersonID="+fieldUID+"&ReturnName="+fieldName+"&displayImmatNew=no");
   }
@@ -262,4 +283,18 @@
       document.getElementById("EditContext").disabled = true;
     }
   }
+  
+  function printAppointment(){
+	    var url = "<c:url value="/"/>planning/printAppointmentPdf.jsp?AppointmentUid="+actualAppointmentId;
+	    printwindow=window.open(url,"PatientAppointment<%=getTs()%>","height=600,width=900,toolbar=yes,status=no,scrollbars=yes,resizable=yes,menubar=yes");
+	    window.setTimeout("closeDeadWindow();",5000);
+	}
+
+	function closeDeadWindow(){
+		if(printwindow.document.URL==""){
+			printwindow.close();
+		}	
+	}
+
+
 </script>

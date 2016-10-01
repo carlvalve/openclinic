@@ -38,7 +38,7 @@
         // service
         sServiceUID = checkString(tmpBed.getServiceUID());
         if(sServiceUID.length() > 0){
-            sServiceName = getTran("Service",sServiceUID,sWebLanguage);
+            sServiceName = getTran(request,"Service",sServiceUID,sWebLanguage);
         } 
         else{
             sServiceName = "";
@@ -69,23 +69,23 @@
     }
         
     if(sBeds.length()==0){
-        out.print(getTran("web","noRecordsFound",sWebLanguage));
+        out.print(getTran(request,"web","noRecordsFound",sWebLanguage));
     }
     else{       
 	    %>
-	        <i><b><%=getTran("Service",sFindBedService,sWebLanguage)%></b></i>
+	        <i><b><%=getTran(request,"Service",sFindBedService,sWebLanguage)%></b></i>
 	        <table width="100%" cellspacing="0" cellpadding="0" class="sortable" id="searchresults">
 	            <tr class="admin">
 	                <td width="20">&nbsp;</td>
-	                <td width="20%"><%=getTran("web","bed",sWebLanguage)%></td>
-	                <td width="7%"><%=getTran("web","priority",sWebLanguage)%></td>
-	                <td width="30%"><%=getTran("web","location",sWebLanguage)%></td>
-	                <td width="43%"><%=getTran("web","comment",sWebLanguage)%></td>
+	                <td width="20%"><%=getTran(request,"web","bed",sWebLanguage)%></td>
+	                <td width="7%"><%=getTran(request,"web","priority",sWebLanguage)%></td>
+	                <td width="30%"><%=getTran(request,"web","location",sWebLanguage)%></td>
+	                <td width="43%"><%=getTran(request,"web","comment",sWebLanguage)%></td>
 	            </tr>
 	            <%=sBeds%>
 	        </table>
 	
-	        <div><%=vBeds.size()%> <%=getTran("web","recordsFound",sWebLanguage)%></div><br>
+	        <div><%=vBeds.size()%> <%=getTran(request,"web","recordsFound",sWebLanguage)%></div><br>
 	        <script>sortables_init();</script>
 	    <%
     }

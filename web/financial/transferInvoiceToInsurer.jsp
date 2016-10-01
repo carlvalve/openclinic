@@ -11,10 +11,10 @@
 	<input type='hidden' name='patientinvoiceuid' id='patientinvoiceuid' value='<%=sPatientInvoiceUid%>'/>
 		<table width='100%'>
 			<tr class='admin'>
-				<td colspan='2'><%=getTran("Web.finance","transfer.insurer", sWebLanguage) %></td>
+				<td colspan='2'><%=getTran(request,"Web.finance","transfer.insurer", sWebLanguage) %></td>
 			</tr>
 			<tr>
-				<td class='admin'><%=getTran("web", "insurance", sWebLanguage) %></td>
+				<td class='admin'><%=getTran(request,"web", "insurance", sWebLanguage) %></td>
 				<td class='admin2'>
 					<!-- Create list of active insurances for patient -->
 					<select class='text' name='insuranceuid' id='insuranceuid'>
@@ -29,29 +29,29 @@
 				</td>
 			</tr>
 			<tr>
-				<td class='admin'><%=getTran("web", "extrainsurar", sWebLanguage) %></td>
+				<td class='admin'><%=getTran(request,"web", "extrainsurar", sWebLanguage) %></td>
 				<td class='admin2'>
 					<!-- Create list of active complementary insurances for patient -->
 					<select class='text' name='extrainsuraruid' id='extrainsuraruid'>
 						<option />
-	                    <%=ScreenHelper.writeSelect("patientsharecoverageinsurance","",sWebLanguage)%>
+	                    <%=ScreenHelper.writeSelect(request,"patientsharecoverageinsurance","",sWebLanguage)%>
 	                </select>
 				</td>
 			</tr>
 			<tr>
-				<td class='admin'><%=getTran("web", "complementarycoverage2", sWebLanguage) %></td>
+				<td class='admin'><%=getTran(request,"web", "complementarycoverage2", sWebLanguage) %></td>
 				<td class='admin2'>
 					<!-- Create list of active patient share coverages for patient -->
 					<select class='text' name='extrainsurar2uid' id='extrainsurar2uid'>
 						<option />
-	                    <%=ScreenHelper.writeSelect("patientsharecoverageinsurance2","",sWebLanguage)%>
+	                    <%=ScreenHelper.writeSelect(request,"patientsharecoverageinsurance2","",sWebLanguage)%>
 	                </select>
 				</td>
 			</tr>
 			<tr>
 				<td colspan='2' class='admin2'>
-					<input type='submit' name='submit' value='<%=getTran("web","execute",sWebLanguage)%>'/>
-					<input type='button' name='close' value='<%=getTran("web","close",sWebLanguage)%>' onclick='window.close();'/>
+					<input type='submit' name='submit' value='<%=getTran(null,"web","execute",sWebLanguage)%>'/>
+					<input type='button' name='close' value='<%=getTran(null,"web","close",sWebLanguage)%>' onclick='window.close();'/>
 				</td>
 			</tr>
 		</table>

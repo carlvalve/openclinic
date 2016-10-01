@@ -93,16 +93,16 @@
 %>
 
 <table class="list" width="100%" cellspacing="1" cellpadding="0">
-    <tr class="admin"><td colspan="2"><%=getTran("web","history",sWebLanguage)%></td></tr>
+    <tr class="admin"><td colspan="2"><%=getTran(request,"web","history",sWebLanguage)%></td></tr>
     <%=sHTML%>
 </table>
     
 <%
     if (sUnits.length()>0){
-        out.print(getTran("TRANSACTION_TYPE_LAB_RESULT",request.getParameter("itemType"),sWebLanguage)+" ("+getTran("TRANSACTION_TYPE_LAB_RESULT","be.mxs.common.model.vo.healthrecord.IConstants.EXT_"+format+"UNIT_"+sUnits,sWebLanguage)+")");
+        out.print(getTran(request,"TRANSACTION_TYPE_LAB_RESULT",request.getParameter("itemType"),sWebLanguage)+" ("+getTran(request,"TRANSACTION_TYPE_LAB_RESULT","be.mxs.common.model.vo.healthrecord.IConstants.EXT_"+format+"UNIT_"+sUnits,sWebLanguage)+")");
     }
     else if (vals<1){
-        out.print("<div class='text'>&nbsp;"+getTran("Web.Occup","medwan.common.no-measurements",sWebLanguage)+"</div>");
+        out.print("<div class='text'>&nbsp;"+getTran(request,"Web.Occup","medwan.common.no-measurements",sWebLanguage)+"</div>");
     }
 %>
 	

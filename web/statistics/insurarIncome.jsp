@@ -159,7 +159,7 @@
 			if(!month.equalsIgnoreCase(id.split("\\|")[0])){
 				if(month.length() > 0){
 					out.print("<tr>"+
-				               "<td class='admin'>"+getTran("web","total",sWebLanguage)+" "+month+"</td>"+
+				               "<td class='admin'>"+getTran(request,"web","total",sWebLanguage)+" "+month+"</td>"+
 				               "<td class='admin'>"+deciPrice.format(totalmonthdebets)+" "+MedwanQuery.getInstance().getConfigString("currency","")+"</td>"+
 				               "<td class='admin'>"+deciPrice.format(totalmonthcredits)+" "+MedwanQuery.getInstance().getConfigString("currency","")+"</td>"+
 				               "<td class='admin'>"+deciComma.format(totalmonthcredits*100/totalmonthdebets)+"%</td>"+
@@ -187,7 +187,7 @@
 		
 		if(month.length() > 0){
 			out.print("<tr>"+
-		               "<td class='admin'>"+getTran("web","total",sWebLanguage)+" "+month+"</td>"+
+		               "<td class='admin'>"+getTran(request,"web","total",sWebLanguage)+" "+month+"</td>"+
 			           "<td class='admin'>"+deciPrice.format(totalmonthdebets)+" "+MedwanQuery.getInstance().getConfigString("currency","")+"</td>"+
 		               "<td class='admin'>"+deciPrice.format(totalmonthcredits)+" "+MedwanQuery.getInstance().getConfigString("currency","")+"</td>"+
 			           "<td class='admin'>"+deciComma.format(totalmonthcredits*100/totalmonthdebets)+"%</td>"+
@@ -196,7 +196,7 @@
 		
 		// total-footer
 		out.print("<tr class='gray'>"+
-		           "<td>"+getTran("web","totalperiod",sWebLanguage)+"</td>"+
+		           "<td>"+getTran(request,"web","totalperiod",sWebLanguage)+"</td>"+
 				   "<td>"+deciPrice.format(totalperioddebets)+" "+MedwanQuery.getInstance().getConfigString("currency","")+"</td>"+
 		           "<td>"+deciPrice.format(totalperiodcredits)+" "+MedwanQuery.getInstance().getConfigString("currency","")+"</td>"+
 		           "<td>"+deciComma.format(totalperiodcredits*100/totalperioddebets)+"%</td>"+
@@ -205,7 +205,7 @@
 		out.print("</table>");
 	}
 	else{
-	    %><%=getTran("web","noRecordsFound",sWebLanguage)%><%	
+	    %><%=getTran(request,"web","noRecordsFound",sWebLanguage)%><%	
 	}
 %>
 

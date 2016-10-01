@@ -9,13 +9,13 @@
             <table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                     <td class='tabs' width='5'>&nbsp;</td>
-                    <td class='tabunselected' width="1%" onclick="activateTab('Admin')" id="td0" nowrap>&nbsp;<b><%=getTran("Web","actualpersonaldata",sWebLanguage)%></b>&nbsp;</td>
+                    <td class='tabunselected' width="1%" onclick="activateTab('Admin')" id="td0" nowrap>&nbsp;<b><%=getTran(request,"Web","actualpersonaldata",sWebLanguage)%></b>&nbsp;</td>
                     <td class='tabs' width='5'>&nbsp;</td>
-                    <td class='tabunselected' width="1%" onclick="activateTab('AdminPrivate')" id="td1" nowrap>&nbsp;<b><%=getTran("Web","private",sWebLanguage)%></b>&nbsp;</td>
+                    <td class='tabunselected' width="1%" onclick="activateTab('AdminPrivate')" id="td1" nowrap>&nbsp;<b><%=getTran(request,"Web","private",sWebLanguage)%></b>&nbsp;</td>
                     <td class='tabs' width='5'>&nbsp;</td>
-                    <td class='tabunselected' width="1%" onclick="activateTab('AdminFamilyRelation')" id="td3" nowrap>&nbsp;<b><%=getTran("Web","AdminFamilyRelation",sWebLanguage)%></b>&nbsp;</td>
+                    <td class='tabunselected' width="1%" onclick="activateTab('AdminFamilyRelation')" id="td3" nowrap>&nbsp;<b><%=getTran(request,"Web","AdminFamilyRelation",sWebLanguage)%></b>&nbsp;</td>
                     <td class='tabs' width='5'>&nbsp;</td>
-                    <td class='tabunselected' width="1%" onclick="activateTab('AdminResource')" id="td4" nowrap>&nbsp;<b><%=getTran("Web","AdminResource",sWebLanguage)%></b>&nbsp;</td>
+                    <td class='tabunselected' width="1%" onclick="activateTab('AdminResource')" id="td4" nowrap>&nbsp;<b><%=getTran(request,"Web","AdminResource",sWebLanguage)%></b>&nbsp;</td>
                     <td width="*" class='tabs'>&nbsp;</td>
                 </tr>
             </table>

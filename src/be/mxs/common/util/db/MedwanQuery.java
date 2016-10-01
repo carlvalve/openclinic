@@ -192,7 +192,7 @@ public class MedwanQuery {
         // load config values from XML
         try{
             String sDoc = getConfigString("templateSource")+"config.xml";
-            System.out.println("config.xml = "+sDoc);
+            Debug.println("config.xml = "+sDoc);
             Document document = reader.read(new URL(sDoc));
             Element root = document.getRootElement();
             Iterator elements = root.elementIterator("parameter");
@@ -1230,6 +1230,8 @@ public class MedwanQuery {
         
         return labelValue;
     }
+    
+    
     
     //--- STORE LABEL -----------------------------------------------------------------------------
     public void storeLabel(String labelType, String labelId, String labelLang, String labelValue, int updateUserId){

@@ -1,3 +1,4 @@
+<%@page import="be.mxs.common.util.system.HTMLEntities"%>
 <%@page import="java.io.StringReader,
                 org.dom4j.DocumentException,
                 java.util.Vector"%>
@@ -17,6 +18,9 @@
         public String employeeselected;
         public String dossierselected;
         public String activeencounter;
+        private String enableParameter;
+        private String accesskey;
+        public boolean isEnabled;
         public Vector menus;
         
         //--- CONSTRUCTOR -------------------------------------------------------------------------
@@ -27,7 +31,10 @@
             patientselected = "";
             employeeselected = "";
             dossierselected = "";
+            enableParameter="";
+            isEnabled=false;
             menus = new Vector();
+            accesskey="";
         }
         
         //--- PARSE -------------------------------------------------------------------------------
@@ -38,6 +45,12 @@
             this.employeeselected = checkString(eMenu.attributeValue("employeeselected"));
             this.dossierselected = checkString(eMenu.attributeValue("dossierselected"));
             this.activeencounter = checkString(eMenu.attributeValue("activeencounter"));
+            this.enableParameter = checkString(eMenu.attributeValue("enableparameter"));
+            this.accesskey = checkString(eMenu.attributeValue("accesskey"));
+            this.isEnabled=false;
+            if(this.enableParameter.length()==0 || MedwanQuery.getInstance().getConfigInt(this.enableParameter,0)==1){
+            	this.isEnabled=true;
+            }
 
             // replace ; by & if url is no javascript
             if(checkString(eMenu.attributeValue("url")).indexOf("javascript:") > -1){
@@ -62,6 +75,9 @@
         public String makeMenu(boolean bMenu, String sWebLanguage, String sParentMenu, User user, boolean last, 
                                AdminPerson activePatient, boolean isEmployee){
             String sReturn = "";
+            if(!isEnabled){
+            	return "";
+            }
             try{
                 if(this.accessrights.length() > 0){
                     // permission 'sa' can see everything
@@ -122,7 +138,7 @@
                 String sTranslation = getTranNoLink("Web",this.labelid,sWebLanguage);
                 String subsubMenu = "";
                 if(this.menus.size() > 0){
-                    Menu subMenu;
+                    Menu subMenu=null;
                     for(int y=0; y<this.menus.size(); y++){
                         subMenu = (Menu)this.menus.elementAt(y);
 
@@ -151,10 +167,16 @@
                 } 
                 else{
                 	if(this.url.startsWith("javascript:")){
-                        sReturn+= "<li><a href='#' onClick=\""+this.url+"\">"+sTranslation+"</a></li>";
+                        sReturn+= "<li><a  href='#' onClick=\""+this.url+"\">"+sTranslation+"</a></li>";
+                        if(this.accesskey.length()>0){
+                        	sReturn+="<input type='button' value='button' name='buttonalert' accesskey='"+this.accesskey+"' onclick=\""+this.url.replace("javascript:","")+"\" style='display: none'/>";
+                        }
                 	}
                 	else{
                 		sReturn+= "<li><a href='#' onClick=\"javascript:clickMenuItem('"+this.url+"');\">"+sTranslation+"</a></li>";
+                        if(this.accesskey.length()>0){
+                        	sReturn+="<input type='button' value='button' name='buttonalert' accesskey='"+this.accesskey+"' onclick=\"window.location.href=\'"+this.url+"\';\"  style='display: none'/>";
+                        }
                     }
                 }
             }
@@ -290,6 +312,9 @@
                             else if((menu.patientselected.equalsIgnoreCase("true")&!bMenu) || (menu.employeeselected.equalsIgnoreCase("true")&!isEmployee)){
                                 continue;
                             }
+                            else if(!menu.isEnabled){
+                            	continue;
+                            }
                             else if(menu.menus.size() > 0){
                                 if(!menu.labelid.equalsIgnoreCase("hidden")){
                                     for(int y=0; y<menu.menus.size(); y++){
@@ -314,7 +339,7 @@
                                     }
                                     
                                     out.print("<li class='menu_"+menu.labelid+"'>");
-                                    out.print("<a href='javascript:void(0)' class='parent'>"+getTranNoLink("Web",menu.labelid,sWebLanguage)+"</a>");
+                                    out.print("<a "+(menu.accesskey.length()>0?"accesskey=\""+menu.accesskey+"\"":"")+" href='javascript:void(0)' class='parent'>"+getTranNoLink("Web",menu.labelid,sWebLanguage)+"</a>");
                                     out.print("<ul class='level2'>");
                                     out.print(subs);
                                     out.print("</ul></li>");
@@ -345,10 +370,10 @@
                                         out.print("<li class='menu_"+menu.labelid+"'>");
 
                                     	if(menu.url.startsWith("javascript:")){
-                                    		out.print("<a href='#' onClick=\""+menu.url+"\">"+getTranNoLink("Web",menu.labelid,sWebLanguage)+"</a>");                                            
+                                    		out.print("<a "+(menu.accesskey.length()>0?"accesskey=\""+menu.accesskey+"\"":"")+" href='#' onClick=\""+menu.url+"\">"+getTranNoLink("Web",menu.labelid,sWebLanguage)+"</a>");                                            
                                     	}
                                     	else{
-                                    		out.print("<a href='#' onClick=\"javascript:clickMenuItem('"+menu.url+"');\">"+getTranNoLink("Web",menu.labelid,sWebLanguage)+"</a>");
+                                    		out.print("<a "+(menu.accesskey.length()>0?"accesskey=\""+menu.accesskey+"\"":"")+" href='#' onClick=\"javascript:clickMenuItem('"+menu.url+"');\">"+getTranNoLink("Web",menu.labelid,sWebLanguage)+"</a>");
                                         }
                                     	
                                         out.print("</li>");                                       
@@ -441,7 +466,10 @@
     }
     document.getElementsByName('barcode')[0].style.visibility = "hidden";
     if(barcode.substring(0,1)=="0"){
-      window.location.href = "<c:url value='/main.do'/>?Page=curative/index.jsp&ts=<%=ScreenHelper.getTs()%>&PersonID="+barcode.substring(1);
+        window.location.href = "<c:url value='/main.do'/>?Page=curative/index.jsp&ts=<%=ScreenHelper.getTs()%>&PersonID="+barcode.substring(1);
+    }
+    else if(barcode.substring(0,1)=="T"){
+        window.location.href = "<c:url value='/main.do'/>?Page=curative/loadTicketPerson.jsp&ts=<%=ScreenHelper.getTs()%>&TicketID="+barcode.substring(1);
     }
     else if(barcode.substring(0,1)=="1"){
       alert("OldBarcode = "+oldbarcode);
@@ -470,6 +498,21 @@
       url = "<c:url value='/main.do'/>?Page=financial/patientCreditEdit.jsp&ts=<%=ScreenHelper.getTs()%>&LoadPatientId=true&FindPatientCreditUID="+barcode.substring(1);
       window.location.href = url;
     }
+  }
+
+  function executeLocalDeviceCommand(devicetype,examtype){
+  	var url = "<%=MedwanQuery.getInstance().getConfigString("executeDeviceCommand","http://localhost/diagnostics/startDevice.jsp")%>?ts="+new Date().getTime()+
+  		"&devicetype="+devicetype+
+		"&examtype="+examtype+
+		"&personid=<%=activePatient==null?"":activePatient.personid%>"+
+		"&lastname=<%=activePatient==null?"":activePatient.lastname%>"+
+		"&firstname=<%=activePatient==null?"":activePatient.firstname%>"+
+		"&dateofbirth=<%=activePatient==null?"":activePatient.dateOfBirth%>"+
+		"&gender=<%=activePatient==null?"":activePatient.gender%>"+
+		"&userid=<%=activeUser==null?"":activeUser.userid%>"+
+		"&username=<%=activeUser==null?"":activeUser.person.getFullName()%>"+
+		"&clinicname=<%=getTranNoLink("web","hospitalname",sWebLanguage)%>";
+  	window.open(url);
   }
 
   <%-- READ BARCODE 3 --%>
@@ -596,6 +639,23 @@
     });
     return POSPrinterServer;
   }
+  
+  function toggleEditMode(dorefresh){
+    var today = new Date();
+    var url= '<c:url value="/system/toggleEditMode.jsp"/>?language=<%=sWebLanguage%>&ts='+today;
+	new Ajax.Request(url,{
+	  method: "POST",
+      parameters: "",
+      onSuccess: function(resp){
+    	  if(document.getElementById('editmode')){
+    		  document.getElementById('editmode').innerHTML=resp.responseText;
+    	  }
+    	  if(dorefresh){
+    		  window.location.reload();
+    	  }
+      }
+	});
+  }
 
   <%-- CONFIRM LOGOUT --%>
   function confirmLogout(){
@@ -677,7 +737,7 @@
     popup.document.write("<table width='100%' height='100%' cellspacing='0' cellpadding='0'>");
      popup.document.write("<tr>");
       popup.document.write("<td bgcolor='#eeeeee' style='text-align:center'>");
-       popup.document.write("<%=getTran("web","searchInProgress",sWebLanguage)%>");
+       popup.document.write("<%=getTran(null,"web","searchInProgress",sWebLanguage)%>");
       popup.document.write("</td>");
      popup.document.write("</tr>");
     popup.document.write("</table>");
@@ -696,6 +756,10 @@
   <%-- show sourge force --%>
   function showsourceforge(){
     window.open("http://sourceforge.net/projects/open-clinic");
+  }
+  <%-- show wiki --%>
+  function showwiki(){
+    window.open("http://ice.minf.be/xwiki");
   }
   <%-- open RFE list --%>
   function openRFEList(){

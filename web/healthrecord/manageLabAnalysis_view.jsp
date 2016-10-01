@@ -85,7 +85,7 @@
   <%-- INPUT & BUTTONS --%>
   <tr>
     <td class="menu" colspan="2">
-      &nbsp;<%=getTran("Web.manage","labanalysis.cols.code_name",sWebLanguage)%>&nbsp;
+      &nbsp;<%=getTran(request,"Web.manage","labanalysis.cols.code_name",sWebLanguage)%>&nbsp;
       <input class="text" type="text" name="FindLabCode" size="18" value="<%=(action.equals("details")?"":sFindLabCode)%>" onblur="limitLength(this);">
       <input class="button" type="submit" name="findButton" value="<%=getTranNoLink("Web","find",sWebLanguage)%>" onclick="searchForm.Action.value='find';"/>&nbsp;
       <input class="button" type="button" name="clearButton" value="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="doClear();">&nbsp;
@@ -282,10 +282,10 @@
 
             // message
             if(recordExists){
-                out.print("<span style='color:red;'>"+getTran("Web.Occup","labanalysis.analysis",sWebLanguage)+" '"+sEditLabCode+"' "+getTran("Web","exists",sWebLanguage)+"</span>");
+                out.print("<span style='color:red;'>"+getTran(request,"Web.Occup","labanalysis.analysis",sWebLanguage)+" '"+sEditLabCode+"' "+getTran(request,"Web","exists",sWebLanguage)+"</span>");
             }
             else{
-                out.print(getTran("Web","dataissaved",sWebLanguage));
+                out.print(getTran(request,"Web","dataissaved",sWebLanguage));
                 action = "save";
             }
         }
@@ -304,7 +304,7 @@
         if(ps!=null) ps.close();
 
         // message
-        out.print(getTran("Web.Occup","labanalysis.analysis",sWebLanguage)+" '"+sEditLabCode+"' "+getTran("Web","deleted",sWebLanguage));
+        out.print(getTran(request,"Web.Occup","labanalysis.analysis",sWebLanguage)+" '"+sEditLabCode+"' "+getTran(request,"Web","deleted",sWebLanguage));
     }
 
     //--- SEARCH ----------------------------------------------------------------------------------
@@ -314,23 +314,23 @@
         %>
         <table width="100%" cellspacing="1" cellpadding="0" class="list" onMouseOver='this.style.cursor="hand"' onMouseOut='this.style.cursor="default"'>
             <tr>
-                <td class='titleadmin' width='6%'>&nbsp;<%=getTran("Web.manage","labanalysis.cols.code",sWebLanguage)%></td>
-                <td class='titleadmin' width='7%'>&nbsp;<%=getTran("Web.manage","labanalysis.cols.other",sWebLanguage)%></td>
-                <td class='titleadmin' width='7%'>&nbsp;<%=getTran("Web.manage","labanalysis.cols.type",sWebLanguage)%></td>
+                <td class='titleadmin' width='6%'>&nbsp;<%=getTran(request,"Web.manage","labanalysis.cols.code",sWebLanguage)%></td>
+                <td class='titleadmin' width='7%'>&nbsp;<%=getTran(request,"Web.manage","labanalysis.cols.other",sWebLanguage)%></td>
+                <td class='titleadmin' width='7%'>&nbsp;<%=getTran(request,"Web.manage","labanalysis.cols.type",sWebLanguage)%></td>
                 <td class='titleadmin' width='25%'>
                 <%
-                    String descr = getTran("Web","description",sWebLanguage);
+                    String descr = getTran(request,"Web","description",sWebLanguage);
                     if(sWebLanguage.equalsIgnoreCase("n")){
-                        %>&nbsp;<%=descr%>&nbsp;<%=getTran("Web.manage","labanalysis.cols.NL",sWebLanguage)%><%
+                        %>&nbsp;<%=descr%>&nbsp;<%=getTran(request,"Web.manage","labanalysis.cols.NL",sWebLanguage)%><%
                     }
                     else if(sWebLanguage.equalsIgnoreCase("f")){
-                        %>&nbsp;<%=descr%>&nbsp;<%=getTran("Web.manage","labanalysis.cols.FR",sWebLanguage)%><%
+                        %>&nbsp;<%=descr%>&nbsp;<%=getTran(request,"Web.manage","labanalysis.cols.FR",sWebLanguage)%><%
                     }
                 %>
                 </td>
-                <td class='titleadmin' width='15%'>&nbsp;<%=getTran("Web.manage","labanalysis.cols.monster",sWebLanguage)%></td>
-                <td class='titleadmin' width='10%'>&nbsp;<%=getTran("Web.manage","labanalysis.cols.biomonitoring",sWebLanguage)%></td>
-                <td class='titleadmin' width='*%'>&nbsp;<%=getTran("Web.manage","labanalysis.cols.medidoccode",sWebLanguage)%></td>
+                <td class='titleadmin' width='15%'>&nbsp;<%=getTran(request,"Web.manage","labanalysis.cols.monster",sWebLanguage)%></td>
+                <td class='titleadmin' width='10%'>&nbsp;<%=getTran(request,"Web.manage","labanalysis.cols.biomonitoring",sWebLanguage)%></td>
+                <td class='titleadmin' width='*%'>&nbsp;<%=getTran(request,"Web.manage","labanalysis.cols.medidoccode",sWebLanguage)%></td>
             </tr>
         <%
 
@@ -364,21 +364,21 @@
             sLabCodeOther  = checkString(Occuprs.getString(7));
 
             // translate labtype
-                 if(sLabType.equals("1")) sLabType = getTran("Web.occup","labanalysis.type.blood",sWebLanguage);
-            else if(sLabType.equals("2")) sLabType = getTran("Web.occup","labanalysis.type.urine",sWebLanguage);
-            else if(sLabType.equals("3")) sLabType = getTran("Web.occup","labanalysis.type.other",sWebLanguage);
-            else if(sLabType.equals("4")) sLabType = getTran("Web.occup","labanalysis.type.stool",sWebLanguage);
-            else if(sLabType.equals("5")) sLabType = getTran("Web.occup","labanalysis.type.sputum",sWebLanguage);
-            else if(sLabType.equals("6")) sLabType = getTran("Web.occup","labanalysis.type.smear",sWebLanguage);
-            else if(sLabType.equals("7")) sLabType = getTran("Web.occup","labanalysis.type.liquid",sWebLanguage);
+                 if(sLabType.equals("1")) sLabType = getTran(request,"Web.occup","labanalysis.type.blood",sWebLanguage);
+            else if(sLabType.equals("2")) sLabType = getTran(request,"Web.occup","labanalysis.type.urine",sWebLanguage);
+            else if(sLabType.equals("3")) sLabType = getTran(request,"Web.occup","labanalysis.type.other",sWebLanguage);
+            else if(sLabType.equals("4")) sLabType = getTran(request,"Web.occup","labanalysis.type.stool",sWebLanguage);
+            else if(sLabType.equals("5")) sLabType = getTran(request,"Web.occup","labanalysis.type.sputum",sWebLanguage);
+            else if(sLabType.equals("6")) sLabType = getTran(request,"Web.occup","labanalysis.type.smear",sWebLanguage);
+            else if(sLabType.equals("7")) sLabType = getTran(request,"Web.occup","labanalysis.type.liquid",sWebLanguage);
 
             // translate biomonitoring
-                 if(sBiomonitoring.equals("0")) sBiomonitoring = getTran("Web","no",sWebLanguage);
-            else if(sBiomonitoring.equals("1")) sBiomonitoring = getTran("Web","yes",sWebLanguage);
+                 if(sBiomonitoring.equals("0")) sBiomonitoring = getTran(request,"Web","no",sWebLanguage);
+            else if(sBiomonitoring.equals("1")) sBiomonitoring = getTran(request,"Web","yes",sWebLanguage);
 
             // translate labcodeother
                  if(sLabCodeOther.equals("0")) sLabCodeOther = "";
-            else if(sLabCodeOther.equals("1")) sLabCodeOther = getTran("web.occup","labanalysis.labCodeOther",sWebLanguage);
+            else if(sLabCodeOther.equals("1")) sLabCodeOther = getTran(request,"web.occup","labanalysis.labCodeOther",sWebLanguage);
 
             // alternate row-style
             if((iTotal%2)==0) sClass = "1";
@@ -389,7 +389,7 @@
                     <td>&nbsp;<%=sEditLabCode%></td>
                     <td>&nbsp;<%=sLabCodeOther%></td>
                     <td>&nbsp;<%=sLabType%></td>
-                    <td>&nbsp;<%=getTran(sLabLabelType,sLabID,sWebLanguage)%></td>
+                    <td>&nbsp;<%=getTran(request,sLabLabelType,sLabID,sWebLanguage)%></td>
                     <td>&nbsp;<%=sMonster%></td>
                     <td>&nbsp;<%=sBiomonitoring%></td>
                     <td>&nbsp;<%=sMedidoccode%></td>
@@ -406,10 +406,10 @@
         %>
           <table border="0" width="100%">
               <tr height="30">
-                  <td><%=iTotal%> <%=getTran("Web","recordsFound",sWebLanguage)%></td>
+                  <td><%=iTotal%> <%=getTran(request,"Web","recordsFound",sWebLanguage)%></td>
                   <td align="right">
                       <img src='<c:url value="/_img/themes/default/pijl.gif"/>'>
-                      <a  href="<c:url value='/main.do'/>?Page=healthrecord/manageLabProfiles_view.jsp&ts=<%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran("Web.Occup","medwan.system-related-actions.manage-labProfiles",sWebLanguage)%></a>&nbsp;
+                      <a  href="<c:url value='/main.do'/>?Page=healthrecord/manageLabProfiles_view.jsp&ts=<%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran(request,"Web.Occup","medwan.system-related-actions.manage-labProfiles",sWebLanguage)%></a>&nbsp;
                   </td>
               </tr>
           </table>
@@ -461,8 +461,8 @@
 
                 // get labels
                 if(action.equals("details")){
-                    sNL = getTran(sLabLabelType,sLabID,"n");
-                    sFR = getTran(sLabLabelType,sLabID,"f");
+                    sNL = getTran(request,sLabLabelType,sLabID,"n");
+                    sFR = getTran(request,sLabLabelType,sLabID,"f");
                 }
             }
 
@@ -497,41 +497,41 @@
   <tr class="admin">
     <td colspan="2">
     <%
-        if(iTotal > 0) out.print(getTran("Web","edit",sWebLanguage));
-        else           out.print(getTran("Web","new",sWebLanguage));
+        if(iTotal > 0) out.print(getTran(request,"Web","edit",sWebLanguage));
+        else           out.print(getTran(request,"Web","new",sWebLanguage));
     %>
     </td>
   </tr>
 
   <%-- CODE --%>
   <tr>
-    <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web.manage","labanalysis.cols.code",sWebLanguage)%></td>
+    <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web.manage","labanalysis.cols.code",sWebLanguage)%></td>
     <td class="admin2">
       <input type="text" name="EditLabCode" class="text" value="<%=sEditLabCode%>" size="20" onblur="limitLength(this);">
-      <input type="checkbox" id="LabCodeOther" value="1" name="LabCodeOther" <%=(sLabCodeOther.equals("1")?"checked":"")%>><%=getLabel("web.occup","labanalysis.labCodeOther",sWebLanguage,"LabCodeOther")%>
+      <input type="checkbox" id="LabCodeOther" value="1" name="LabCodeOther" <%=(sLabCodeOther.equals("1")?"checked":"")%>><%=getLabel(request,"web.occup","labanalysis.labCodeOther",sWebLanguage,"LabCodeOther")%>
     </td>
   </tr>
 
   <%-- TYPE --%>
   <tr>
-    <td class="admin"><%=getTran("Web.manage","labanalysis.cols.type",sWebLanguage)%></td>
+    <td class="admin"><%=getTran(request,"Web.manage","labanalysis.cols.type",sWebLanguage)%></td>
     <td class="admin2">
       <select name="LabType" class="text">
         <option value="0"></option>
-        <option value="1" <%=(sLabType.equals("1")?"selected":"")%>><%=getTran("web.occup","labanalysis.type.blood",sWebLanguage)%></option>
-        <option value="2" <%=(sLabType.equals("2")?"selected":"")%>><%=getTran("web.occup","labanalysis.type.urine",sWebLanguage)%></option>
-        <option value="3" <%=(sLabType.equals("3")?"selected":"")%>><%=getTran("web.occup","labanalysis.type.other",sWebLanguage)%></option>
-        <option value="4" <%=(sLabType.equals("4")?"selected":"")%>><%=getTran("web.occup","labanalysis.type.stool",sWebLanguage)%></option>
-        <option value="5" <%=(sLabType.equals("5")?"selected":"")%>><%=getTran("web.occup","labanalysis.type.sputum",sWebLanguage)%></option>
-        <option value="6" <%=(sLabType.equals("6")?"selected":"")%>><%=getTran("web.occup","labanalysis.type.smear",sWebLanguage)%></option>
-        <option value="7" <%=(sLabType.equals("7")?"selected":"")%>><%=getTran("web.occup","labanalysis.type.liquid",sWebLanguage)%></option>
+        <option value="1" <%=(sLabType.equals("1")?"selected":"")%>><%=getTran(request,"web.occup","labanalysis.type.blood",sWebLanguage)%></option>
+        <option value="2" <%=(sLabType.equals("2")?"selected":"")%>><%=getTran(request,"web.occup","labanalysis.type.urine",sWebLanguage)%></option>
+        <option value="3" <%=(sLabType.equals("3")?"selected":"")%>><%=getTran(request,"web.occup","labanalysis.type.other",sWebLanguage)%></option>
+        <option value="4" <%=(sLabType.equals("4")?"selected":"")%>><%=getTran(request,"web.occup","labanalysis.type.stool",sWebLanguage)%></option>
+        <option value="5" <%=(sLabType.equals("5")?"selected":"")%>><%=getTran(request,"web.occup","labanalysis.type.sputum",sWebLanguage)%></option>
+        <option value="6" <%=(sLabType.equals("6")?"selected":"")%>><%=getTran(request,"web.occup","labanalysis.type.smear",sWebLanguage)%></option>
+        <option value="7" <%=(sLabType.equals("7")?"selected":"")%>><%=getTran(request,"web.occup","labanalysis.type.liquid",sWebLanguage)%></option>
       </select>
     </td>
   </tr>
 
   <%-- NL --%>
   <tr>
-    <td class="admin"><%=getTran("Web.manage","labanalysis.cols.NL",sWebLanguage)%></td>
+    <td class="admin"><%=getTran(request,"Web.manage","labanalysis.cols.NL",sWebLanguage)%></td>
     <td class="admin2">
       <input type="text" name="EditNL" class="text" value="<%=sNL%>" size="50" onblur="limitLength(this);">
     </td>
@@ -539,7 +539,7 @@
 
   <%-- FR --%>
   <tr>
-    <td class="admin"><%=getTran("Web.manage","labanalysis.cols.FR",sWebLanguage)%></td>
+    <td class="admin"><%=getTran(request,"Web.manage","labanalysis.cols.FR",sWebLanguage)%></td>
     <td class="admin2">
       <input type="text" name="EditFR" class="text" value="<%=sFR%>" size="50" onblur="limitLength(this);">
     </td>
@@ -547,7 +547,7 @@
 
   <%-- MONSTER --%>
   <tr>
-    <td class="admin"><%=getTran("Web.manage","labanalysis.cols.monster",sWebLanguage)%></td>
+    <td class="admin"><%=getTran(request,"Web.manage","labanalysis.cols.monster",sWebLanguage)%></td>
     <td class="admin2">
       <input type="text" name="EditMonster" class="text" value="<%=sMonster%>" size="50" onblur="limitLength(this);">
     </td>
@@ -555,16 +555,16 @@
 
   <%-- BIOMONITORING --%>
   <tr>
-    <td class="admin"><%=getTran("Web.manage","labanalysis.cols.biomonitoring",sWebLanguage)%></td>
+    <td class="admin"><%=getTran(request,"Web.manage","labanalysis.cols.biomonitoring",sWebLanguage)%></td>
     <td class="admin2">
-      <input type="radio" onDblClick="uncheckRadio(this);hideBiomonOptions();" onClick="showBiomonOptions();" id="bioYes" name="EditBiomonitoring" value="1" <%=(sBiomonitoring.equals("1")?"checked":"")%>><%=getLabel("Web","yes",sWebLanguage,"bioYes")%>
-      <input type="radio" onDblClick="uncheckRadio(this);" onClick="hideBiomonOptions();" id="bioNo"  name="EditBiomonitoring" value="0" <%=(sBiomonitoring.equals("0")?"checked":"")%>><%=getLabel("Web","no",sWebLanguage,"bioNo")%>
+      <input type="radio" onDblClick="uncheckRadio(this);hideBiomonOptions();" onClick="showBiomonOptions();" id="bioYes" name="EditBiomonitoring" value="1" <%=(sBiomonitoring.equals("1")?"checked":"")%>><%=getLabel(request,"Web","yes",sWebLanguage,"bioYes")%>
+      <input type="radio" onDblClick="uncheckRadio(this);" onClick="hideBiomonOptions();" id="bioNo"  name="EditBiomonitoring" value="0" <%=(sBiomonitoring.equals("0")?"checked":"")%>><%=getLabel(request,"Web","no",sWebLanguage,"bioNo")%>
     </td>
   </tr>
 
   <%-- limitValue --%>
   <tr id="biomonOption1" style="display:none;">
-    <td class="admin">&nbsp;-&nbsp;<%=getTran("Web.manage","labanalysis.cols.limitvalue",sWebLanguage)%></td>
+    <td class="admin">&nbsp;-&nbsp;<%=getTran(request,"Web.manage","labanalysis.cols.limitvalue",sWebLanguage)%></td>
     <td class="admin2">
       <input type="text" name="EditLimitValue" class="text" id="limitValue" value="<%=sLimitValue%>" size="10" onBlur="isNumber(this);">
     </td>
@@ -572,7 +572,7 @@
 
   <%-- shortTimeValue --%>
   <tr id="biomonOption2" style="display:none;">
-    <td class="admin">&nbsp;-&nbsp;<%=getTran("Web.manage","labanalysis.cols.shorttimevalue",sWebLanguage)%></td>
+    <td class="admin">&nbsp;-&nbsp;<%=getTran(request,"Web.manage","labanalysis.cols.shorttimevalue",sWebLanguage)%></td>
     <td class="admin2">
       <input type="text" name="EditShortTimeValue" id="shortTimeValue" class="text" value="<%=sShortTimeValue%>" size="10" onBlur="isNumber(this);">
     </td>
@@ -603,7 +603,7 @@
 
   <%-- MEDIDOC CODE --%>
   <tr>
-    <td class="admin"><%=getTran("Web.manage","labanalysis.cols.medidoccode",sWebLanguage)%></td>
+    <td class="admin"><%=getTran(request,"Web.manage","labanalysis.cols.medidoccode",sWebLanguage)%></td>
     <td class="admin2">
       <input type="text" name="EditMedidoccode" class="text" value="<%=sMedidoccode%>" size="50" onblur="limitLength(this);">
     </td>
@@ -611,7 +611,7 @@
 
   <%-- PRESTATION CODE --%>
   <tr>
-    <td class="admin"><%=getTran("Web.manage","labanalysis.cols.prestationcode",sWebLanguage)%></td>
+    <td class="admin"><%=getTran(request,"Web.manage","labanalysis.cols.prestationcode",sWebLanguage)%></td>
     <td class="admin2">
       <input type="text" name="EditPrestationcode" class="text" value="<%=sPrestationCode%>" size="50" onblur="limitLength(this);">
     </td>
@@ -619,7 +619,7 @@
 
   <%-- COMMENT --%>
   <tr>
-    <td class="admin"><%=getTran("Web.manage","labanalysis.cols.comment",sWebLanguage)%></td>
+    <td class="admin"><%=getTran(request,"Web.manage","labanalysis.cols.comment",sWebLanguage)%></td>
     <td class="admin2">
       <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" class="text" cols="80" rows="2" name="EditComment"><%=sComment%></textarea>
     </td>
@@ -687,7 +687,7 @@
 
   <%-- link to labprofiles --%>
   <img src='<c:url value="/_img/themes/default/pijl.gif"/>'>
-  <a  href="<c:url value='/main.do'/>?Page=healthrecord/manageLabProfiles_view.jsp&ts=<%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran("Web.Occup","medwan.system-related-actions.manage-labProfiles",sWebLanguage)%></a>&nbsp;
+  <a  href="<c:url value='/main.do'/>?Page=healthrecord/manageLabProfiles_view.jsp&ts=<%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran(request,"Web.Occup","medwan.system-related-actions.manage-labProfiles",sWebLanguage)%></a>&nbsp;
 <%=ScreenHelper.alignButtonsStop()%>
 
 <script>

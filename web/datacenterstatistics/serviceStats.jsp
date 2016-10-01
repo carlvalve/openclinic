@@ -60,7 +60,7 @@
     String service=checkString(request.getParameter("ServiceID"));
     String serviceName = "";
     if(service.length()>0){
-        serviceName=getTran("service",service,sWebLanguage);
+        serviceName=getTran(request,"service",service,sWebLanguage);
     }
     if(begin==null){
         begin="01/01/"+new SimpleDateFormat("yyyy").format(new java.util.Date());
@@ -74,15 +74,15 @@
     <%=writeTableHeader("Web","statistics.servicestats",sWebLanguage," doBack();")%>
     <table width="100%" class="menu" cellspacing="0" cellpadding="0">
         <tr>
-            <td><%=getTran("web","from",sWebLanguage)%>&nbsp;</td>
+            <td><%=getTran(request,"web","from",sWebLanguage)%>&nbsp;</td>
             <td>
                 <%=writeDateField("begin","diagstats",begin,sWebLanguage)%>&nbsp;
-                <%=getTran("web","to",sWebLanguage)%>&nbsp;
+                <%=getTran(request,"web","to",sWebLanguage)%>&nbsp;
                 <%=writeDateField("end","diagstats",end,sWebLanguage)%>&nbsp;
             </td>
         </tr>
         <tr>
-            <td><%=getTran("Web","service",sWebLanguage)%></td>
+            <td><%=getTran(request,"Web","service",sWebLanguage)%></td>
             <td colspan='2'>
                 <input type="hidden" name="ServiceID" value="<%=service%>">
                 <input class="text" type="text" name="ServiceName" readonly size="<%=sTextWidth%>" value="<%=serviceName%>" >
@@ -113,7 +113,7 @@
 else {
     Service myservice = Service.getService(service);
     ServiceStats serviceStats = new ServiceStats(service, ScreenHelper.parseDate(begin), ScreenHelper.parseDate(end));
-    out.println("<table width='100%'><tr><td class='admin'><center>"+getTran("web","statistics.for",sWebLanguage)+" "+(myservice!=null?myservice.getLabel(sWebLanguage):getTran("web","hospitalname",sWebLanguage))+" "+getTran("web","between",sWebLanguage)+" "+ ScreenHelper.stdDateFormat.format(serviceStats.getBegin())+" "+getTran("web","and",sWebLanguage)+" "+ ScreenHelper.stdDateFormat.format(serviceStats.getEnd())+"<center></td></tr></table>");
+    out.println("<table width='100%'><tr><td class='admin'><center>"+getTran(request,"web","statistics.for",sWebLanguage)+" "+(myservice!=null?myservice.getLabel(sWebLanguage):getTran(request,"web","hospitalname",sWebLanguage))+" "+getTran(request,"web","between",sWebLanguage)+" "+ ScreenHelper.stdDateFormat.format(serviceStats.getBegin())+" "+getTran(request,"web","and",sWebLanguage)+" "+ ScreenHelper.stdDateFormat.format(serviceStats.getEnd())+"<center></td></tr></table>");
 
 %>
 <SCRIPT Language="JavaScript" src="<c:url value='/_common/_script/diagram2.js'/>"></SCRIPT>
@@ -122,10 +122,10 @@ document.open();
 _BFont="font-family:arial;font-weight:bold;font-size:8pt;line-height:8pt;";
 <%
     Correlation correlation = new Correlation();
-    if (serviceStats.nonPeriodPatientsZero()) drawGraph(serviceStats.getPeriodPatients(),0,out,sWebLanguage,getTran("web","patients",sWebLanguage),getTran("web","weekly.evolution.of",sWebLanguage)+" # <b>"+getTran("web","patients",sWebLanguage)+"<b>",0,HospitalStats.getBedCapacity(),correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodPatientsY(),0),correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodPatientsY(),serviceStats.getX().length));
-    if (serviceStats.nonPeriodAdmissionsZero()) drawGraph(serviceStats.getPeriodAdmissions(),1,out,sWebLanguage,getTran("web","admissions.short",sWebLanguage),getTran("web","weekly.evolution.of",sWebLanguage)+" # <b>"+getTran("web","admissions",sWebLanguage)+"<b>",1,-2,correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodAdmissionsY(),0),correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodAdmissionsY(),serviceStats.getX().length));
-    if (serviceStats.nonPeriodAdmissionDaysZero()) drawGraph(serviceStats.getPeriodAdmissionDays(),2,out,sWebLanguage,getTran("web","admission.days.short",sWebLanguage),getTran("web","weekly.evolution.of",sWebLanguage)+" # <b>"+getTran("web","admission.days",sWebLanguage)+"<b>",2,-2,correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodAdmissionDaysY(),0),correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodAdmissionDaysY(),serviceStats.getX().length));
-    if (serviceStats.nonPeriodVisitsZero()) drawGraph(serviceStats.getPeriodVisits(),3,out,sWebLanguage,getTran("web","visits",sWebLanguage),getTran("web","weekly.evolution.of",sWebLanguage)+" # <b>"+getTran("web","visits",sWebLanguage)+"<b>",3,-2,correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodVisitsY(),0),correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodVisitsY(),serviceStats.getX().length));
+    if (serviceStats.nonPeriodPatientsZero()) drawGraph(serviceStats.getPeriodPatients(),0,out,sWebLanguage,getTran(request,"web","patients",sWebLanguage),getTran(request,"web","weekly.evolution.of",sWebLanguage)+" # <b>"+getTran(request,"web","patients",sWebLanguage)+"<b>",0,HospitalStats.getBedCapacity(),correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodPatientsY(),0),correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodPatientsY(),serviceStats.getX().length));
+    if (serviceStats.nonPeriodAdmissionsZero()) drawGraph(serviceStats.getPeriodAdmissions(),1,out,sWebLanguage,getTran(request,"web","admissions.short",sWebLanguage),getTran(request,"web","weekly.evolution.of",sWebLanguage)+" # <b>"+getTran(request,"web","admissions",sWebLanguage)+"<b>",1,-2,correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodAdmissionsY(),0),correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodAdmissionsY(),serviceStats.getX().length));
+    if (serviceStats.nonPeriodAdmissionDaysZero()) drawGraph(serviceStats.getPeriodAdmissionDays(),2,out,sWebLanguage,getTran(request,"web","admission.days.short",sWebLanguage),getTran(request,"web","weekly.evolution.of",sWebLanguage)+" # <b>"+getTran(request,"web","admission.days",sWebLanguage)+"<b>",2,-2,correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodAdmissionDaysY(),0),correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodAdmissionDaysY(),serviceStats.getX().length));
+    if (serviceStats.nonPeriodVisitsZero()) drawGraph(serviceStats.getPeriodVisits(),3,out,sWebLanguage,getTran(request,"web","visits",sWebLanguage),getTran(request,"web","weekly.evolution.of",sWebLanguage)+" # <b>"+getTran(request,"web","visits",sWebLanguage)+"<b>",3,-2,correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodVisitsY(),0),correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodVisitsY(),serviceStats.getX().length));
 %>
 window.moveTo(0,0);
 window.resizeTo(screen.width,screen.height);
@@ -134,9 +134,9 @@ window.resizeTo(screen.width,screen.height);
         <center>
             <table class="menu" width="60%">
                 <tr>
-                    <td><%=getTran("web","mean.value",sWebLanguage)%>: <b><%=new DecimalFormat("#0.00").format(correlation.mean(serviceStats.getPeriodPatientsY()))%></b></td>
-                    <td><%=getTran("web","pearsson",sWebLanguage)%>: <b><%=new DecimalFormat("#0.00").format(correlation.pearsonCorrelationCoefficient(serviceStats.getX(),serviceStats.getPeriodPatientsY()))%></b></td>
-                    <td colspan="2"><%=getTran("web","linear.regression",sWebLanguage)%>: <b>patients = <%=new DecimalFormat("#0.00").format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),serviceStats.getPeriodPatientsY())[0])%> x weeks + <%=new DecimalFormat("#0.00").format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),serviceStats.getPeriodPatientsY())[1])%></b></td>
+                    <td><%=getTran(request,"web","mean.value",sWebLanguage)%>: <b><%=new DecimalFormat("#0.00").format(correlation.mean(serviceStats.getPeriodPatientsY()))%></b></td>
+                    <td><%=getTran(request,"web","pearsson",sWebLanguage)%>: <b><%=new DecimalFormat("#0.00").format(correlation.pearsonCorrelationCoefficient(serviceStats.getX(),serviceStats.getPeriodPatientsY()))%></b></td>
+                    <td colspan="2"><%=getTran(request,"web","linear.regression",sWebLanguage)%>: <b>patients = <%=new DecimalFormat("#0.00").format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),serviceStats.getPeriodPatientsY())[0])%> x weeks + <%=new DecimalFormat("#0.00").format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),serviceStats.getPeriodPatientsY())[1])%></b></td>
                 </tr>
                 <tr>
                     <td>+Y1: <b><%=new DecimalFormat("#0.00").format(correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodPatientsY(),serviceStats.getX().length+52))%></b></td>
@@ -150,9 +150,9 @@ window.resizeTo(screen.width,screen.height);
         <center>
             <table class="menu" width="60%">
                 <tr>
-                    <td><%=getTran("web","mean.value",sWebLanguage)%>: <b><%=new DecimalFormat("#0.00").format(correlation.mean(serviceStats.getPeriodAdmissionsY()))%></b></td>
-                    <td><%=getTran("web","pearsson",sWebLanguage)%>: <b><%=new DecimalFormat("#0.00").format(correlation.pearsonCorrelationCoefficient(serviceStats.getX(),serviceStats.getPeriodAdmissionsY()))%></b></td>
-                    <td colspan="2"><%=getTran("web","linear.regression",sWebLanguage)%>: <b>admissions = <%=new DecimalFormat("#0.00").format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),serviceStats.getPeriodAdmissionsY())[0])%> x weeks + <%=new DecimalFormat("#0.00").format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),serviceStats.getPeriodAdmissionsY())[1])%></b></td>
+                    <td><%=getTran(request,"web","mean.value",sWebLanguage)%>: <b><%=new DecimalFormat("#0.00").format(correlation.mean(serviceStats.getPeriodAdmissionsY()))%></b></td>
+                    <td><%=getTran(request,"web","pearsson",sWebLanguage)%>: <b><%=new DecimalFormat("#0.00").format(correlation.pearsonCorrelationCoefficient(serviceStats.getX(),serviceStats.getPeriodAdmissionsY()))%></b></td>
+                    <td colspan="2"><%=getTran(request,"web","linear.regression",sWebLanguage)%>: <b>admissions = <%=new DecimalFormat("#0.00").format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),serviceStats.getPeriodAdmissionsY())[0])%> x weeks + <%=new DecimalFormat("#0.00").format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),serviceStats.getPeriodAdmissionsY())[1])%></b></td>
                 </tr>
                 <tr>
                     <td>+Y1: <b><%=new DecimalFormat("#0.00").format(correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodAdmissionsY(),serviceStats.getX().length+52))%></b></td>
@@ -166,9 +166,9 @@ window.resizeTo(screen.width,screen.height);
     <center>
         <table class="menu" width="60%">
             <tr>
-                <td><%=getTran("web","mean.value",sWebLanguage)%>: <b><%=new DecimalFormat("#0.00").format(correlation.mean(serviceStats.getPeriodAdmissionDaysY()))%></b></td>
-                <td><%=getTran("web","pearsson",sWebLanguage)%>: <b><%=new DecimalFormat("#0.00").format(correlation.pearsonCorrelationCoefficient(serviceStats.getX(),serviceStats.getPeriodAdmissionDaysY()))%></b></td>
-                <td colspan="2"><%=getTran("web","linear.regression",sWebLanguage)%>: <b>admission days = <%=new DecimalFormat("#0.00").format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),serviceStats.getPeriodAdmissionDaysY())[0])%> x weeks + <%=new DecimalFormat("#0.00").format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),serviceStats.getPeriodAdmissionDaysY())[1])%></b></td>
+                <td><%=getTran(request,"web","mean.value",sWebLanguage)%>: <b><%=new DecimalFormat("#0.00").format(correlation.mean(serviceStats.getPeriodAdmissionDaysY()))%></b></td>
+                <td><%=getTran(request,"web","pearsson",sWebLanguage)%>: <b><%=new DecimalFormat("#0.00").format(correlation.pearsonCorrelationCoefficient(serviceStats.getX(),serviceStats.getPeriodAdmissionDaysY()))%></b></td>
+                <td colspan="2"><%=getTran(request,"web","linear.regression",sWebLanguage)%>: <b>admission days = <%=new DecimalFormat("#0.00").format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),serviceStats.getPeriodAdmissionDaysY())[0])%> x weeks + <%=new DecimalFormat("#0.00").format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),serviceStats.getPeriodAdmissionDaysY())[1])%></b></td>
             </tr>
             <tr>
                 <td>+Y1: <b><%=new DecimalFormat("#0.00").format(correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodAdmissionDaysY(),serviceStats.getX().length+52))%></b></td>
@@ -185,9 +185,9 @@ window.resizeTo(screen.width,screen.height);
         <center>
             <table class="menu" width="60%">
                 <tr>
-                    <td><%=getTran("web","mean.value",sWebLanguage)%>: <b><%=new DecimalFormat("#0.00").format(correlation.mean(serviceStats.getPeriodVisitsY()))%></b></td>
-                    <td><%=getTran("web","pearsson",sWebLanguage)%>: <b><%=new DecimalFormat("#0.00").format(correlation.pearsonCorrelationCoefficient(serviceStats.getX(),serviceStats.getPeriodVisitsY()))%></b></td>
-                    <td colspan="2"><%=getTran("web","linear.regression",sWebLanguage)%>: <b>visits = <%=new DecimalFormat("#0.00").format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),serviceStats.getPeriodVisitsY())[0])%> x weeks + <%=new DecimalFormat("#0.00").format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),serviceStats.getPeriodVisitsY())[1])%></b></td>
+                    <td><%=getTran(request,"web","mean.value",sWebLanguage)%>: <b><%=new DecimalFormat("#0.00").format(correlation.mean(serviceStats.getPeriodVisitsY()))%></b></td>
+                    <td><%=getTran(request,"web","pearsson",sWebLanguage)%>: <b><%=new DecimalFormat("#0.00").format(correlation.pearsonCorrelationCoefficient(serviceStats.getX(),serviceStats.getPeriodVisitsY()))%></b></td>
+                    <td colspan="2"><%=getTran(request,"web","linear.regression",sWebLanguage)%>: <b>visits = <%=new DecimalFormat("#0.00").format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),serviceStats.getPeriodVisitsY())[0])%> x weeks + <%=new DecimalFormat("#0.00").format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),serviceStats.getPeriodVisitsY())[1])%></b></td>
                 </tr>
                 <tr>
                     <td>+Y1: <b><%=new DecimalFormat("#0.00").format(correlation.estimateY(serviceStats.getX(),serviceStats.getPeriodVisitsY(),serviceStats.getX().length+52))%></b></td>

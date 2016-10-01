@@ -1,7 +1,7 @@
 <%@include file="/mobile/_common/head.jsp"%>
 
 <table class="list" padding="0" cellspacing="1" width="<%=sTABLE_WIDTH%>">
-	<tr class="admin"><td><%=getTran("mobile","clinicaldata",activeUser)%></td></tr>
+	<tr class="admin"><td><%=getTran(request,"mobile","clinicaldata",activeUser)%></td></tr>
 <%
 	String sMinDate = stdDateFormat.format(new java.util.Date().getTime()-dataFreshness);
 	Vector transactions = MedwanQuery.getInstance().getTransactionsAfter(Integer.parseInt(activePatient.personid),new java.util.Date(new java.util.Date().getTime()-dataFreshness));
@@ -15,7 +15,7 @@
 			transaction = (TransactionVO)transactions.elementAt(n);
 			
 			// second row : trantype and user
-			sSecondRow = "<tr><td class='admin2'>"+getTran("web.occup",transaction.getTransactionType(),activeUser)+"</td></tr>";
+			sSecondRow = "<tr><td class='admin2'>"+getTran(request,"web.occup",transaction.getTransactionType(),activeUser)+"</td></tr>";
 			
 			// first row : date
 			if(transaction.getTransactionType().equalsIgnoreCase(ITEM_PREFIX+"TRANSACTION_TYPE_MIR2")){
@@ -30,7 +30,7 @@
 		}
 	}
 	else{
-		out.print("<tr><td><i>"+getTran("web","noData",activeUser)+"</i></td></tr>");
+		out.print("<tr><td><i>"+getTran(request,"web","noData",activeUser)+"</i></td></tr>");
 	}
 %>
 </table>

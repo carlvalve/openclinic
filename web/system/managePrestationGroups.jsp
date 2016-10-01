@@ -53,7 +53,7 @@
 		}
 		
 		sEditPrestationGroup = MedwanQuery.getInstance().getConfigInt("serverId",1)+"."+newGroupCounter;
-		sMsg = getTran("web","groupAdded",sWebLanguage);
+		sMsg = getTran(request,"web","groupAdded",sWebLanguage);
 	}
     //*** DELETE group ***
     else if(sAction.equals("deleteGroup")){
@@ -67,7 +67,7 @@
 		ps.executeUpdate();
 		ps.close();
 		
-		sMsg = getTran("web","groupDeleted",sWebLanguage);
+		sMsg = getTran(request,"web","groupDeleted",sWebLanguage);
 	}
     //*** ADD prestation ***
 	else if(sAction.equals("addPrestation")){
@@ -92,13 +92,13 @@
 			ps.execute();
 			ps.close();
 			
-			sMsg = getTran("web","prestationAdded",sWebLanguage);
+			sMsg = getTran(request,"web","prestationAdded",sWebLanguage);
 		}
 		else{
 			rs.close();
 			ps.close();
 			
-			sMsg = getTran("web","prestationAlreadyExists",sWebLanguage);
+			sMsg = getTran(request,"web","prestationAlreadyExists",sWebLanguage);
 		}
 	}
     //*** DELETE prestation ***
@@ -113,7 +113,7 @@
 		ps.executeUpdate();
 		ps.close();
 
-		sMsg = getTran("web","prestationDeleted",sWebLanguage);
+		sMsg = getTran(request,"web","prestationDeleted",sWebLanguage);
 	}
 %>
 <form name='EditForm' method='POST'>
@@ -123,7 +123,7 @@
 	<table width="100%" class="list" cellpadding="0" cellspacing="1">
 		<%-- PRESTATION GROUP --%>
 		<tr>
-			<td width="120" class="admin2"><%=getTran("web","prestationgroup",sWebLanguage)%></td>
+			<td width="120" class="admin2"><%=getTran(request,"web","prestationgroup",sWebLanguage)%></td>
 			<td width="180" class="admin2" nowrap>
 				<select class="text" name="EditPrestationGroup" id="EditPrestationGroup" onchange="loadPrestations();">
                     <option/>
@@ -152,7 +152,7 @@
 		
 		<%-- PRESTATION --%>
 		<tr>
-            <td class="admin2"><%=getTran("web","prestation",sWebLanguage)%></td>
+            <td class="admin2"><%=getTran(request,"web","prestation",sWebLanguage)%></td>
             <td class="admin2" colspan="2">
                 <input type="hidden" name="tmpPrestationUID">
                 <input type="hidden" name="tmpPrestationName">

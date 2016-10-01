@@ -50,7 +50,7 @@
     
 <form name='configForm' method='post'>
 	<span style="width:50%;text-align:left">
-		<input type='checkbox' class="hand" value='1' name='advanced' id="advanced" onclick='configForm.submit();' style="vertical-align:-3px;" <%=checkString(request.getParameter("advanced")).equalsIgnoreCase("1")?"checked":"" %>/><label for="advanced" class="hand"><%=getTran("web","advanced",sWebLanguage)%></label></label>&nbsp;
+		<input type='checkbox' class="hand" value='1' name='advanced' id="advanced" onclick='configForm.submit();' style="vertical-align:-3px;" <%=checkString(request.getParameter("advanced")).equalsIgnoreCase("1")?"checked":"" %>/><label for="advanced" class="hand"><%=getTran(request,"web","advanced",sWebLanguage)%></label></label>&nbsp;
 		<input type='submit' class="button" name='save' value='<%=getTranNoLink("web","save",sWebLanguage)%>'/>
 	</span>
 	
@@ -64,11 +64,11 @@
 		<tr>
 			<td class='admin' width="120">
 			    <img src='<%=sCONTEXTPATH%>/_img/icons/icon_plus.png' OnClick='expandAll();' class="link">
-                <img src='<%=sCONTEXTPATH%>/_img/icons/icon_minus.png' OnClick='collapseAll();' class="link">&nbsp;<%=getTran("web","name",sWebLanguage)%>&nbsp;
+                <img src='<%=sCONTEXTPATH%>/_img/icons/icon_minus.png' OnClick='collapseAll();' class="link">&nbsp;<%=getTran(request,"web","name",sWebLanguage)%>&nbsp;
             </td>
-			<td class='admin' width="250"><%=getTran("web","value",sWebLanguage)%>&nbsp;</td>
-			<td class='admin' width="200"><%=getTran("web","default",sWebLanguage)%>&nbsp;</td>
-			<td class='admin' width="400"><%=getTran("web","description",sWebLanguage)%>&nbsp;</td>
+			<td class='admin' width="250"><%=getTran(request,"web","value",sWebLanguage)%>&nbsp;</td>
+			<td class='admin' width="200"><%=getTran(request,"web","default",sWebLanguage)%>&nbsp;</td>
+			<td class='admin' width="400"><%=getTran(request,"web","description",sWebLanguage)%>&nbsp;</td>
 		</tr>
 		
 	<%
@@ -179,7 +179,7 @@
 							
 							// unit
 							String sUnit = checkString(parameter.attributeValue("unit")); // id
-							sUnit = getTran("web",sUnit,sWebLanguage); // label
+							sUnit = getTran(request,"web",sUnit,sWebLanguage); // label
 
      						String sModus = checkString(parameter.attributeValue("modus"));
 							

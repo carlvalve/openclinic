@@ -304,6 +304,18 @@ tr.admin {
  background-repeat:repeat-x;
 }
 
+tr.adminng {
+ font-family:arial, sans-serif;
+ font-weight:bolder;
+ text-align:left;
+ text-indent:5px;
+ padding:1px;
+ color:#303030;
+ height:22px;
+ font-size:11px;
+ background-color: #588DC6;
+}
+
 tr.adminnogradient {
  font-family:arial, sans-serif;
  font-weight:bolder;
@@ -914,6 +926,14 @@ TEXTAREA.text {
  COLOR:black;
  FONT-FAMILY:arial, helvetica;
  background:url("../../_img/themes/default/back_input.png") no-repeat white;
+ resize:both;
+}
+TEXTAREA.redbox {
+ border:3px solid red;
+ FONT-WEIGHT:normal;
+ FONT-SIZE:11px;
+ COLOR:black;
+ FONT-FAMILY:arial, helvetica;
  resize:both;
 }
 

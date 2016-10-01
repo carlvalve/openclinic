@@ -19,7 +19,7 @@
     
     <table width="100%" class="menu" cellspacing="1" cellpadding="0">
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","stardate",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","stardate",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" name="startdate" value="<%=checkString(request.getParameter("startdate")).length()>0?checkString(request.getParameter("startdate")):ScreenHelper.formatDate(new Date())%>" id="trandate" OnBlur='checkDate(this)'>
                 <script>writeTranDate();</script>
@@ -60,8 +60,8 @@
                 String servicename = (String)servicesiterator.next();
                 out.print("<tr class='admin'>"+
                            "<td colspan='3'><b>"+servicename+"</b></td>"+
-                           "<td>"+getTran("web","patient",sWebLanguage)+"</td>"+
-                           "<td>"+getTran("web","prescriber",sWebLanguage)+"</td>"+
+                           "<td>"+getTran(request,"web","patient",sWebLanguage)+"</td>"+
+                           "<td>"+getTran(request,"web","prescriber",sWebLanguage)+"</td>"+
                           "</tr>");
                 
                 Hashtable requests = (Hashtable)services.get(servicename);

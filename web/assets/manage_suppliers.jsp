@@ -26,7 +26,7 @@
     <table class="list" border="0" width="100%" cellspacing="1">
         <%-- search CODE --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","code",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","code",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" id="searchCode" name="searchCode" size="20" maxLength="50" value="">
             </td>
@@ -34,7 +34,7 @@
         
         <%-- search NAME --%>                
         <tr>
-            <td class="admin"><%=getTran("web","name",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","name",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" id="searchName" name="searchName" size="50" maxLength="100" value="">
             </td>
@@ -42,7 +42,7 @@
         
         <%-- search VAT NUMBER --%>
         <tr>
-            <td class="admin"><%=getTran("web.assets","vatNumber",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web.assets","vatNumber",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" id="searchVatNumber" name="searchVatNumber" size="20" maxLength="50" value="">
             </td>
@@ -100,7 +100,7 @@
     <table class="list" border="0" width="100%" cellspacing="1">
         <%-- code --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","code",sWebLanguage)%>&nbsp;</td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","code",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="code" name="code" size="20" maxLength="30" value="">
             </td>
@@ -108,7 +108,7 @@
         
         <%-- name (*) --%>
         <tr>
-            <td class="admin"><%=getTran("web","name",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web","name",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="name" name="name" size="80" maxLength="100" value="">
             </td>
@@ -116,7 +116,7 @@
              
         <%-- address --%>
         <tr>
-            <td class="admin"><%=getTran("web","address",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web","address",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="address" name="address" size="80" maxLength="100" value="">
             </td>
@@ -124,7 +124,7 @@
              
         <%-- city --%>
         <tr>
-            <td class="admin"><%=getTran("web","city",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web","city",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="city" name="city" size="50" maxLength="100" value="">
             </td>
@@ -132,7 +132,7 @@
              
         <%-- zipcode --%>
         <tr>
-            <td class="admin"><%=getTran("web","zipcode",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web","zipcode",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="zipcode" name="zipcode" size="20" maxLength="20" value="">
             </td>
@@ -140,7 +140,7 @@
              
         <%-- country --%>
         <tr>
-            <td class="admin"><%=getTran("web","country",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web","country",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="hidden" name="countryCode" id="countryCode" value="">
                 <input type="text" class="text" id="country" name="country" size="40" value="" readonly>
@@ -153,7 +153,7 @@
        
         <%-- vatNumber --%>
         <tr>
-            <td class="admin"><%=getTran("web.assets","vatNumber",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.assets","vatNumber",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="vatNumber" name="vatNumber" size="20" maxLength="30" value="">
             </td>
@@ -161,7 +161,7 @@
              
         <%-- taxIDNumber --%>
         <tr>
-            <td class="admin"><%=getTran("web.assets","taxIDNumber",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.assets","taxIDNumber",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="taxIDNumber" name="taxIDNumber" size="20" maxLength="30" value="">
             </td>
@@ -169,7 +169,7 @@
              
         <%-- contactPerson --%>
         <tr>
-            <td class="admin"><%=getTran("web.assets","contactPerson",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.assets","contactPerson",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="contactPerson" name="contactPerson" size="80" maxLength="100" value="">
             </td>
@@ -177,7 +177,7 @@
              
         <%-- telephone --%>
         <tr>
-            <td class="admin"><%=getTran("web","telephone",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web","telephone",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="telephone" name="telephone" size="20" maxLength="30" value="">
             </td>
@@ -185,7 +185,7 @@
              
         <%-- email --%>
         <tr>
-            <td class="admin"><%=getTran("web","email",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web","email",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="email" name="email" size="50" maxLength="50" value="">
             </td>
@@ -193,7 +193,7 @@
              
         <%-- accountingCode --%>
         <tr>
-            <td class="admin"><%=getTran("web.assets","accountingCode",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.assets","accountingCode",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="accountingCode" name="accountingCode" size="30" maxLength="50" value="">
             </td>
@@ -201,7 +201,7 @@
         
         <%-- comment --%>                
         <tr>
-            <td class="admin"><%=getTran("web","comment",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","comment",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea class="text" name="comment" id="comment" cols="80" rows="4" onKeyup="resizeTextarea(this,8);limitChars(this,255);"></textarea>
             </td>
@@ -217,7 +217,7 @@
             </td>
         </tr>
     </table>
-    <i><%=getTran("web","colored_fields_are_obligate",sWebLanguage)%></i>
+    <i><%=getTran(request,"web","colored_fields_are_obligate",sWebLanguage)%></i>
     
     <div id="divMessage" style="padding-top:10px;"></div>
 </form>

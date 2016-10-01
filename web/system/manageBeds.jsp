@@ -83,7 +83,7 @@
         }
         else{   	
         	if(bedExistsInService(sEditName,sEditBedService)){
-                sMsg = "<font color='red'>"+getTran("web","bedAllreadyExistsInService",sWebLanguage)+"</font>";
+                sMsg = "<font color='red'>"+getTran(request,"web","bedAllreadyExistsInService",sWebLanguage)+"</font>";
                 bedExists = true;
         	}
         	else{
@@ -116,7 +116,7 @@
 	        tmpBed.store();
 	        
 	        sEditUID = tmpBed.getUid();
-	        sMsg = "<font color='green'>"+getTran("web","dataIsSaved",sWebLanguage)+"</font>";
+	        sMsg = "<font color='green'>"+getTran(request,"web","dataIsSaved",sWebLanguage)+"</font>";
     	}
     }
     //*** DELETE **********************************************************************************
@@ -134,7 +134,7 @@
         }
         
         sEditUID = "";
-        sMsg = "<font color='green'>"+getTran("web","dataIsDeleted",sWebLanguage)+"</font>";
+        sMsg = "<font color='green'>"+getTran(request,"web","dataIsDeleted",sWebLanguage)+"</font>";
     }
     
     if(sEditUID.length() > 0){
@@ -146,7 +146,7 @@
         sEditLocation       = tmpBed.getLocation();
         sEditComment        = tmpBed.getComment();
         sEditBedService     = tmpBed.getService().code;
-        sEditBedServiceName = getTran("Service",sEditBedService,sWebLanguage);
+        sEditBedServiceName = getTran(request,"Service",sEditBedService,sWebLanguage);
     }
 
     //--- SEARCH ----------------------------------------------------------------------------------
@@ -161,7 +161,7 @@
     <table class="list" width="100%" cellspacing="1" onKeyDown="if(enterEvent(event,13)){doFind();return false;}else{return true;}">
         <%-- service --%>
         <tr>
-            <td class="admin2" width="<%=sTDAdminWidth%>"><%=getTran("web","service",sWebLanguage)%></td>
+            <td class="admin2" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","service",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="hidden" name="FindBedService" value="<%=sFindBedService%>">
                 <input class="text" type="text" name="FindBedServiceName" readonly size="<%=sTextWidth%>" value="<%=sFindBedServiceName%>">
@@ -173,7 +173,7 @@
         
         <%-- name --%>
         <tr>
-            <td class="admin2"><%=getTran("web","name",sWebLanguage)%></td>
+            <td class="admin2"><%=getTran(request,"web","name",sWebLanguage)%></td>
             <td class="admin2"><input class="text" name="FindBedName" value="<%=sFindBedName%>" size="<%=sTextWidth%>"></td>
         </tr>
         
@@ -217,7 +217,7 @@
     <table class="list" width="100%" cellspacing="1">
         <%-- service --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","service",sWebLanguage)%> *</td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","service",sWebLanguage)%> *</td>
             <td class="admin2">
                 <input type="hidden" name="EditBedService" value="<%=sEditBedService%>">
                 <input class="text" type="text" name="EditBedServiceName" readonly size="<%=sTextWidth%>" value="<%=sEditBedServiceName%>">
@@ -229,19 +229,19 @@
         
         <%-- name --%>
         <tr>
-            <td class="admin"><%=getTran("web","name",sWebLanguage)%> *</td>
+            <td class="admin"><%=getTran(request,"web","name",sWebLanguage)%> *</td>
             <td class="admin2"><input class="text" type="text" name="EditName" value="<%=sEditName%>" size="<%=sTextWidth%>"></td>
         </tr>
 
         <%-- priority --%>
         <tr>
-            <td class="admin"><%=getTran("web","priority",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","priority",sWebLanguage)%></td>
             <td class="admin2"><input class="text" type="text" name="EditPriority" value="<%=sEditPriority%>" size="2"></td>
         </tr>
         
         <%-- location --%>
         <tr>
-            <td class="admin"><%=getTran("web","location",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","location",sWebLanguage)%></td>
             <td class="admin2">
                 <input class="text" type="text" name="EditLocation" value="<%=sEditLocation%>" size="<%=sTextWidth%>">
                
@@ -266,7 +266,7 @@
         
         <%-- comment --%>
         <tr>
-            <td class="admin"><%=getTran("web","comment",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","comment",sWebLanguage)%></td>
             <td class="admin2"><%=writeTextarea("EditComment","","","",sEditComment)%></td>
         </tr>
         
@@ -304,7 +304,7 @@
         <input name="ReturnField" value="EditLocation" type="hidden"/>
         <tr>
             <td class="admin" width="<%=sTDAdminWidth%>">
-                <%=getTran("web","doc_upload",sWebLanguage)%>
+                <%=getTran(request,"web","doc_upload",sWebLanguage)%>
                 <br>
             </td>
             <td class="admin2">
@@ -314,7 +314,7 @@
         </tr>
     </table>
     
-    <%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%>
+    <%=getTran(request,"Web","colored_fields_are_obligate",sWebLanguage)%>
 </form>
 
 <%-- 4 : BACK TO SEARCH FORM --%>

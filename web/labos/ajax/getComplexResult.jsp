@@ -17,7 +17,7 @@
     String[] antibiogram = sAntibiogramuid.split("\\.");%>
 <table width="580" class="data" cellpadding="0" cellspacing="0" id="antibiogramtable">
     <tr width="100%">
-        <td rowspan="4" style="vertical-align:top;" class="top label nobottom"><%=getTran("web","germs",sWebLanguage)%></td>
+        <td rowspan="4" style="vertical-align:top;" class="top label nobottom"><%=getTran(request,"web","germs",sWebLanguage)%></td>
     </tr>
     <tr>
         <td colspan="9" class='first nobottom last top'>1 -
@@ -40,15 +40,15 @@
     </tr>
     <tr style="padding-top:10px">
         <td class="label nobottom">&nbsp;</td>
-        <td colspan="3" class="first nobottom"><b><%=getTran("web", "1germe", sWebLanguage)%>
+        <td colspan="3" class="first nobottom"><b><%=getTran(request,"web", "1germe", sWebLanguage)%>
         </b></td>
-        <td colspan="3" class="first nobottom"><b><%=getTran("web", "2germe", sWebLanguage)%>
+        <td colspan="3" class="first nobottom"><b><%=getTran(request,"web", "2germe", sWebLanguage)%>
         </b></td>
-        <td colspan="3" class='first last nobottom'><b><%=getTran("web", "3germe", sWebLanguage)%>
+        <td colspan="3" class='first last nobottom'><b><%=getTran(request,"web", "3germe", sWebLanguage)%>
         </b></td>
     </tr>
     <tr>
-        <td class="label"><%=HTMLEntities.htmlentities(getTran("web", "antibiotic", sWebLanguage))%>
+        <td class="label"><%=HTMLEntities.htmlentities(getTran(request,"web", "antibiotic", sWebLanguage))%>
         </td>
         <td class='first col1'><i><b>S</b></i></td>
         <td><i><b>I</b></i></td>
@@ -61,102 +61,102 @@
         <td class='last col2'><i><b>R</b></i></td>
     </tr>
     <tr>
-        <td class="label"><%=HTMLEntities.htmlentities(getTran("web", "penicillineg", sWebLanguage))%>
+        <td class="label"><%=HTMLEntities.htmlentities(getTran(request,"web", "penicillineg", sWebLanguage))%>
         </td>
         <%=getRadios("penicillineg", 1)%>
     </tr>
     <tr>
-        <td class="label"><%=HTMLEntities.htmlentities(getTran("web", "oxacilline", sWebLanguage))%>
+        <td class="label"><%=HTMLEntities.htmlentities(getTran(request,"web", "oxacilline", sWebLanguage))%>
         </td>
         <%=getRadios("oxacilline", 2)%>
     </tr>
     <tr>
-        <td class="label"><%=HTMLEntities.htmlentities(getTran("web", "ampicilline", sWebLanguage))%>
+        <td class="label"><%=HTMLEntities.htmlentities(getTran(request,"web", "ampicilline", sWebLanguage))%>
         </td>
         <%=getRadios("ampicilline", 3)%>
     </tr>
     <tr>
-        <td class="label"><%=HTMLEntities.htmlentities(getTran("web", "amoxicacclavu", sWebLanguage))%>
+        <td class="label"><%=HTMLEntities.htmlentities(getTran(request,"web", "amoxicacclavu", sWebLanguage))%>
         </td>
         <%=getRadios("amoxicacclavu", 4)%>
     </tr>
     <tr>
-        <td class="label"><%=HTMLEntities.htmlentities(getTran("web", "cefalotine", sWebLanguage))%>
+        <td class="label"><%=HTMLEntities.htmlentities(getTran(request,"web", "cefalotine", sWebLanguage))%>
         </td>
         <%=getRadios("cefalotine", 5)%>
     </tr>
     <tr>
-        <td class="label"><%=HTMLEntities.htmlentities(getTran("web", "mecillinam", sWebLanguage))%>
+        <td class="label"><%=HTMLEntities.htmlentities(getTran(request,"web", "mecillinam", sWebLanguage))%>
         </td>
         <%=getRadios("mecillinam", 6)%>
     </tr>
     <tr>
-        <td class="label"><%=HTMLEntities.htmlentities(getTran("web", "cefotaxime", sWebLanguage))%>
+        <td class="label"><%=HTMLEntities.htmlentities(getTran(request,"web", "cefotaxime", sWebLanguage))%>
         </td>
         <%=getRadios("cefotaxime", 7)%>
     </tr>
     <tr>
-        <td class="label"><%=HTMLEntities.htmlentities(getTran("web", "gentamicine", sWebLanguage))%>
+        <td class="label"><%=HTMLEntities.htmlentities(getTran(request,"web", "gentamicine", sWebLanguage))%>
         </td>
         <%=getRadios("gentamicine", 8)%>
     </tr>
     <tr>
-        <td class="label"><%=HTMLEntities.htmlentities(getTran("web", "amikacine", sWebLanguage))%>
+        <td class="label"><%=HTMLEntities.htmlentities(getTran(request,"web", "amikacine", sWebLanguage))%>
         </td>
         <%=getRadios("amikacine", 9)%>
     </tr>
     <tr>
-        <td class="label"><%=HTMLEntities.htmlentities(getTran("web", "chloramphenicol", sWebLanguage))%>
+        <td class="label"><%=HTMLEntities.htmlentities(getTran(request,"web", "chloramphenicol", sWebLanguage))%>
         </td>
         <%=getRadios("chloramphenicol", 10)%>
     </tr>
     <tr>
-        <td class="label"><%=HTMLEntities.htmlentities(getTran("web", "tetracycline", sWebLanguage))%>
+        <td class="label"><%=HTMLEntities.htmlentities(getTran(request,"web", "tetracycline", sWebLanguage))%>
         </td>
         <%=getRadios("tetracycline", 11)%>
     </tr>
     <tr>
-        <td class="label"><%=HTMLEntities.htmlentities(getTran("web", "colistine", sWebLanguage))%>
+        <td class="label"><%=HTMLEntities.htmlentities(getTran(request,"web", "colistine", sWebLanguage))%>
         </td>
         <%=getRadios("colistine", 12)%>
     </tr>
     <tr>
-        <td class="label"><%=HTMLEntities.htmlentities(getTran("web", "erythromycine", sWebLanguage))%>
+        <td class="label"><%=HTMLEntities.htmlentities(getTran(request,"web", "erythromycine", sWebLanguage))%>
         </td>
         <%=getRadios("erythromycine", 13)%>
     </tr>
     <tr>
-        <td class="label"><%=HTMLEntities.htmlentities(getTran("web", "lincomycine", sWebLanguage))%>
+        <td class="label"><%=HTMLEntities.htmlentities(getTran(request,"web", "lincomycine", sWebLanguage))%>
         </td>
         <%=getRadios("lincomycine", 14)%>
     </tr>
     <tr>
-        <td class="label"><%=HTMLEntities.htmlentities(getTran("web", "pristinamycine", sWebLanguage))%>
+        <td class="label"><%=HTMLEntities.htmlentities(getTran(request,"web", "pristinamycine", sWebLanguage))%>
         </td>
         <%=getRadios("pristinamycine", 15)%>
     </tr>
     <tr>
-        <td class="label"><%=HTMLEntities.htmlentities(getTran("web", "cotrimoxazole", sWebLanguage))%>
+        <td class="label"><%=HTMLEntities.htmlentities(getTran(request,"web", "cotrimoxazole", sWebLanguage))%>
         </td>
         <%=getRadios("cotrimoxazole", 16)%>
     </tr>
     <tr>
-        <td class="label"><%=HTMLEntities.htmlentities(getTran("web", "nitrofurane", sWebLanguage))%>
+        <td class="label"><%=HTMLEntities.htmlentities(getTran(request,"web", "nitrofurane", sWebLanguage))%>
         </td>
         <%=getRadios("nitrofurane", 17)%>
     </tr>
     <tr>
-        <td class="label"><%=HTMLEntities.htmlentities(getTran("web", "acnalidixique", sWebLanguage))%>
+        <td class="label"><%=HTMLEntities.htmlentities(getTran(request,"web", "acnalidixique", sWebLanguage))%>
         </td>
         <%=getRadios("acnalidixique", 18)%>
     </tr>
     <tr>
-        <td class="label"><%=HTMLEntities.htmlentities(getTran("web", "ciprofloxacine", sWebLanguage))%>
+        <td class="label"><%=HTMLEntities.htmlentities(getTran(request,"web", "ciprofloxacine", sWebLanguage))%>
         </td>
         <%=getRadios("ciprofloxacine", 19)%>
     </tr>
     <tr>
-    	<td class="label"><%=HTMLEntities.htmlentities(getTran("web","imipenem",sWebLanguage))%>
+    	<td class="label"><%=HTMLEntities.htmlentities(getTran(request,"web","imipenem",sWebLanguage))%>
     	</td>
          <%=getRadios("imipenem",20)%>
     </tr>
@@ -168,10 +168,10 @@
     	}
         for(int i=0;i<extraAb.length;i++){
             // IF AB HAS A TRADUCTION THEN SHOW IT
-            if(getTran("web",extraAb[i],sWebLanguage).indexOf("<a")<0){
+            if(getTran(request,"web",extraAb[i],sWebLanguage).indexOf("<a")<0){
     %>
     <tr>
-        <td class="label"><%=HTMLEntities.htmlentities(getTran("web", extraAb[i], sWebLanguage))%>
+        <td class="label"><%=HTMLEntities.htmlentities(getTran(request,"web", extraAb[i], sWebLanguage))%>
         </td>
         <%=getRadios(extraAb[i], 21+i)%>
     </tr>

@@ -173,7 +173,7 @@
                     days = days * 90;
                     if(enc.getEnd()!=null){
 	                    String manager= (!(enc==null) && enc.getManagerUID()!=null && enc.getManagerUID().length()>0? User.getFullUserName(enc.getManagerUID()):"");
-	                    sTmpServiceID = "<td style='text-decoration: line-through'>"+sTmpServiceID+" "+getTran("Service",sTmpServiceID,sWebLanguage)+"</td><td style='text-decoration: line-through'>"+manager+"</td><td style='text-decoration: line-through'>"+sBed+"</td><td style='text-decoration: line-through'>"+ScreenHelper.stdDateFormat.format(enc.getBegin())+" "+img+"</td>";
+	                    sTmpServiceID = "<td style='text-decoration: line-through'>"+sTmpServiceID+" "+getTran(request,"Service",sTmpServiceID,sWebLanguage)+"</td><td style='text-decoration: line-through'>"+manager+"</td><td style='text-decoration: line-through'>"+sBed+"</td><td style='text-decoration: line-through'>"+ScreenHelper.stdDateFormat.format(enc.getBegin())+" "+img+"</td>";
                     }
                     else{
 	                    if(duration > days || duration < 0){
@@ -181,7 +181,7 @@
 	                    }
                     
 	                    String manager= (!(enc==null) && enc.getManagerUID()!=null && enc.getManagerUID().length()>0? User.getFullUserName(enc.getManagerUID()):"");
-	                    sTmpServiceID = "<td>"+sTmpServiceID+" "+getTran("Service",sTmpServiceID,sWebLanguage)+"</td><td>"+manager+"</td><td>"+sBed+"</td>"+sHospDate;
+	                    sTmpServiceID = "<td>"+sTmpServiceID+" "+getTran(request,"Service",sTmpServiceID,sWebLanguage)+"</td><td>"+manager+"</td><td>"+sBed+"</td>"+sHospDate;
                     }
                 }
                 else {
@@ -249,7 +249,7 @@
         
         if(iCounter==0){
             // display 'no results' message
-            %><tr><td><%=getTran("web","nopatientsfound",sWebLanguage)%></td></tr><%
+            %><tr><td><%=getTran(request,"web","nopatientsfound",sWebLanguage)%></td></tr><%
         }
         else if(iOverallCounter+iCounter==1 && !bRS && sLink.length()>0){
             %><script>window.location.href = "<c:url value=''/><%=sLink%>";</script><%
@@ -260,18 +260,18 @@
 				    <%-- header --%>
 				    <tr height="20" class="admin">
 				        <td><%=sPrevious%></td>
-				        <td><%=getTran("Web","immatnew",sWebLanguage)%></td>
-				        <td><%=getTran("Web","natreg.short",sWebLanguage)%></td>
-				        <td><%=getTran("Web","name",sWebLanguage)%></td>
-				        <td><%=getTran("Web","gender",sWebLanguage)%>&nbsp;</td>
-				        <td><%=getTran("Web","dateofbirth",sWebLanguage)%></td>
+				        <td><%=getTran(request,"Web","immatnew",sWebLanguage)%></td>
+				        <td><%=getTran(request,"Web","natreg.short",sWebLanguage)%></td>
+				        <td><%=getTran(request,"Web","name",sWebLanguage)%></td>
+				        <td><%=getTran(request,"Web","gender",sWebLanguage)%>&nbsp;</td>
+				        <td><%=getTran(request,"Web","dateofbirth",sWebLanguage)%></td>
 				        <%
 				            if("On".equalsIgnoreCase(MedwanQuery.getInstance().getConfigString("showServiceInPatientList"))){
 				                %>
-				                    <td><%=getTran("Web","service",sWebLanguage)%></td>
-				                    <td><%=getTran("Web","manager",sWebLanguage)%></td>
-				                    <td><%=getTran("Web","bed",sWebLanguage)%></td>
-				                    <td><%=getTran("Web","date",sWebLanguage)%></td>
+				                    <td><%=getTran(request,"Web","service",sWebLanguage)%></td>
+				                    <td><%=getTran(request,"Web","manager",sWebLanguage)%></td>
+				                    <td><%=getTran(request,"Web","bed",sWebLanguage)%></td>
+				                    <td><%=getTran(request,"Web","date",sWebLanguage)%></td>
 				                <%
 				            }
 				
@@ -291,7 +291,7 @@
       		            }
                     %>
                     
-                    <%=getTran("web","totalpatients",sWebLanguage)+": "+lResults.size()%>
+                    <%=getTran(request,"web","totalpatients",sWebLanguage)+": "+lResults.size()%>
                 
                     <%                    
                         if(sNext.trim().length()>0){
@@ -303,15 +303,15 @@
         }
     }
     else{
-        %><b><%=getTran("web","nopatientsfound",sWebLanguage)%></b><%
+        %><b><%=getTran(request,"web","nopatientsfound",sWebLanguage)%></b><%
         	
         // if admin : create dossier and go to agenda
         if((sName.length()>0 || sFirstname.length() > 0 || sDateOfBirth.length()>0 || simmatnew.length()>0) && 
         	activeUser.getAccessRight("patient.administration.add")){
 	        %>
 	            <br><br>
-	            <img src="<%=sCONTEXTPATH%>/_img/themes/default/pijl.gif"/>&nbsp;<a href="<c:url value='/patientnew.do'/>?PatientNew=true&pLastname=<%=sName%>&pFirstname=<%=sFirstname%>&pImmatnew=<%=simmatnew%>&pNatreg=<%=snatreg%>&pDateofbirth=<%=sDateOfBirth%>&pDistrict=<%=sDistrict%>"><%=getTran("web","new_patient",sWebLanguage)%></a><br>
-	            <img src="<%=sCONTEXTPATH%>/_img/themes/default/pijl.gif"/>&nbsp;<a href="<c:url value='/_common/patient/patienteditSave.jsp'/>?Lastname=<%=sName%>&Firstname=<%=sFirstname%>&DateOfBirth=<%=sDateOfBirth%>&NatReg=<%=snatreg%>&ImmatNew=<%=simmatnew%>&PDistrict=<%=sDistrict%>&PBegin=<%=getDate()%>&NextPage=planning/findPlanning.jsp&SavePatientEditForm=ok"><%=getTran("web","create_person_and_go_to_agenda",sWebLanguage)%></a>
+	            <img src="<%=sCONTEXTPATH%>/_img/themes/default/pijl.gif"/>&nbsp;<a href="<c:url value='/patientnew.do'/>?PatientNew=true&pLastname=<%=sName%>&pFirstname=<%=sFirstname%>&pImmatnew=<%=simmatnew%>&pNatreg=<%=snatreg%>&pDateofbirth=<%=sDateOfBirth%>&pDistrict=<%=sDistrict%>"><%=getTran(request,"web","new_patient",sWebLanguage)%></a><br>
+	            <img src="<%=sCONTEXTPATH%>/_img/themes/default/pijl.gif"/>&nbsp;<a href="<c:url value='/_common/patient/patienteditSave.jsp'/>?Lastname=<%=sName%>&Firstname=<%=sFirstname%>&DateOfBirth=<%=sDateOfBirth%>&NatReg=<%=snatreg%>&ImmatNew=<%=simmatnew%>&PDistrict=<%=sDistrict%>&PBegin=<%=getDate()%>&NextPage=planning/findPlanning.jsp&SavePatientEditForm=ok"><%=getTran(request,"web","create_person_and_go_to_agenda",sWebLanguage)%></a>
 	        <%
         }
     }

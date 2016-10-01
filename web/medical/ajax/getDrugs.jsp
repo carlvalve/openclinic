@@ -5,10 +5,17 @@
 <ul id="autocompletion">
     <%
         String sDrugName      = checkString(request.getParameter("findDrugName")).toUpperCase(),
-               sField     = checkString(request.getParameter("field"));
+               sField     = checkString(request.getParameter("field")),
+               sServiceStockUid = checkString(request.getParameter("serviceStockUid"));
 
         int iMaxRows = MedwanQuery.getInstance().getConfigInt("MaxSearchFieldsRows",30);
-        List lResults = Product.getLimitedDrugs(sDrugName,iMaxRows);
+        List lResults = null;
+        if(sServiceStockUid.length()==0){
+        	lResults = Product.getLimitedDrugs(sDrugName,iMaxRows);
+        }
+        else {
+        	lResults = Product.getLimitedDrugs(sDrugName,iMaxRows,sServiceStockUid);
+        }
         String levels="";
         if(lResults.size() > 0){
             Iterator it = lResults.iterator();
@@ -18,15 +25,21 @@
                 product = (Product)it.next();
                 
                 out.write("<li>");
-                levels=product.getAccessibleStockLevels();
-                if(levels.equalsIgnoreCase("0/0")){
-                	out.write("<font color='lightgray'>"+HTMLEntities.htmlentities(product.getName())+" ("+levels+")</font>");
+                if(sServiceStockUid.length()==0){
+                	levels=product.getAccessibleStockLevels();
+	                if(levels.equalsIgnoreCase("0/0")){
+	                	out.write("<font color='lightgray'>"+HTMLEntities.htmlentities(product.getName())+" ("+levels+")</font>");
+	                }
+	                else if(levels.indexOf("0/")==0){
+	                	out.write(HTMLEntities.htmlentities(product.getName())+" ("+levels+")");
+	                }
+	                else {
+	                	out.write("<b>"+HTMLEntities.htmlentities(product.getName())+"</b> ("+levels+")");
+	                }
                 }
-                else if(levels.indexOf("0/")==0){
-                	out.write(HTMLEntities.htmlentities(product.getName())+" ("+levels+")");
-                }
-                else {
-                	out.write("<b>"+HTMLEntities.htmlentities(product.getName())+"</b> ("+levels+")");
+                else{
+                	out.write("<b>"+HTMLEntities.htmlentities(product.getName())+"</b>");
+                	
                 }
                 out.write("<span style='display:none'>"+product.getUid()+"-idcache</span>");
                 out.write("</li>");

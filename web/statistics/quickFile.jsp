@@ -101,13 +101,13 @@
     <tr>
         <td class="admin">ID</td>
         <td class="admin2"><input type="bold" class="text" name="PatientUID" id="pi" value="" size="10"/></td>
-        <td class="admin"><%=getTran("web","name",sWebLanguage)%></td>
+        <td class="admin"><%=getTran(request,"web","name",sWebLanguage)%></td>
         <td class="admin2"><input type="bold" class="text" name="patientLastname" id="pl" value="<%=sPatientLastname%>" size="25"/></td>
-        <td class="admin"><%=HTMLEntities.htmlentities(getTran("web","firstname",sWebLanguage))%></td>
+        <td class="admin"><%=HTMLEntities.htmlentities(getTran(request,"web","firstname",sWebLanguage))%></td>
         <td class="admin2"><input type="text" class="text" name="patientFirstname" id="pf" value="<%=sPatientFirstname%>" size="15"/></td>
-        <td class="admin"><%=getTran("web","dateofbirth",sWebLanguage)%></td>
+        <td class="admin"><%=getTran(request,"web","dateofbirth",sWebLanguage)%></td>
         <td class="admin2"><input type="text" class="text" name="patientDateOfBirth" id="pd" value="<%=sPatientDateOfBirth%>" size="12" maxlength="10" OnBlur='checkDate(this)'/></td>
-        <td class="admin"><%=getTran("web","gender",sWebLanguage)%></td>
+        <td class="admin"><%=getTran(request,"web","gender",sWebLanguage)%></td>
         <td class="admin2">
             <select class="text" name="patientGender" id="pg">
                 <option value=""/>
@@ -259,7 +259,7 @@
 	%>
 </table>
 
-<%=persons.size()%> <%=getTran("web","recordsFound",sWebLanguage)%>
+<%=persons.size()%> <%=getTran(request,"web","recordsFound",sWebLanguage)%>
 <%
 }
 else if(persons.size()==1){
@@ -281,7 +281,7 @@ else if(persons.size()==1){
 <table width="100%" class="list" border="0" cellpadding="0" cellspacing="1">
     <%-- type --%>
     <tr>
-        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","type",sWebLanguage)%></td>
+        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","type",sWebLanguage)%></td>
         <td class='admin2'>
             <select class='text' name='EditEncounterType' onchange="checkEncounterType();">
                 <%
@@ -292,7 +292,7 @@ else if(persons.size()==1){
                         if(sEditEncounterType.equalsIgnoreCase(sOptions[i])){
                             out.print(" selected");
                         }
-                        out.print(">"+getTran("web",sOptions[i],sWebLanguage)+"</option>");
+                        out.print(">"+getTran(request,"web",sOptions[i],sWebLanguage)+"</option>");
                     }
                 %>
             </select>
@@ -301,7 +301,7 @@ else if(persons.size()==1){
     
     <%-- date begin --%>
     <tr>
-        <td class="admin"><%=HTMLEntities.htmlentities(getTran("Web","begindate",sWebLanguage))%></td>
+        <td class="admin"><%=HTMLEntities.htmlentities(getTran(request,"Web","begindate",sWebLanguage))%></td>
         <td class="admin2">
             <%=writeDateField("EditEncounterBegin","EditPatientForm",sEditEncounterBegin+"' onblur='validatePeriod();",sWebLanguage)%>
         </td>
@@ -309,7 +309,7 @@ else if(persons.size()==1){
 
     <%-- date end --%>
     <tr>
-        <td class="admin"><%=getTran("Web","enddate",sWebLanguage)%></td>
+        <td class="admin"><%=getTran(request,"Web","enddate",sWebLanguage)%></td>
         <td class="admin2">
             <%=writeDateField("EditEncounterEnd","EditPatientForm",sEditEncounterEnd+"' onblur='validatePeriod();",sWebLanguage)%>
         </td>
@@ -317,18 +317,18 @@ else if(persons.size()==1){
     
     <%-- origin --%>
     <tr>
-        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("openclinic.chuk","urgency.origin",sWebLanguage)%></td>
+        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"openclinic.chuk","urgency.origin",sWebLanguage)%></td>
         <td class="admin2">
             <select class="text" name="EditEncounterOrigin" style="vertical-align:-2px;">
                 <option/>
-                <%=ScreenHelper.writeSelect("urgency.origin",sEditEncounterOrigin,sWebLanguage)%>
+                <%=ScreenHelper.writeSelect(request,"urgency.origin",sEditEncounterOrigin,sWebLanguage)%>
             </select>
         </td>
     </tr>
     
     <%-- service --%>
     <tr id="Service">
-        <td class="admin"><%=getTran("Web","service",sWebLanguage)%></td>
+        <td class="admin"><%=getTran(request,"Web","service",sWebLanguage)%></td>
         <td class='admin2'>
             <input type="hidden" name="EditEncounterService" value="<%=sEditEncounterService%>">
             <input class="text" type="text" name="EditEncounterServiceName" readonly size="<%=sTextWidth%>" value="<%=sEditEncounterServiceName%>" >
@@ -340,11 +340,11 @@ else if(persons.size()==1){
     
     <%-- outcome --%>
     <tr>
-        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","outcome",sWebLanguage)%></td>
+        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","outcome",sWebLanguage)%></td>
         <td class="admin2">
             <select class="text" name="EditEncounterOutcome" style="vertical-align:-2px;">
-                <option value=""><%=getTran("web","choose",sWebLanguage)%></option>
-                <%=HTMLEntities.htmlentities(ScreenHelper.writeSelectUnsorted("encounter.outcome", sEditEncounterOutcome, sWebLanguage))%>
+                <option value=""><%=getTran(request,"web","choose",sWebLanguage)%></option>
+                <%=HTMLEntities.htmlentities(ScreenHelper.writeSelectUnsorted(request,"encounter.outcome", sEditEncounterOutcome, sWebLanguage))%>
             </select>
         </td>
     </tr>
@@ -353,7 +353,7 @@ else if(persons.size()==1){
 	    String sRfe = ReasonForEncounter.getReasonsForEncounterAsHtml(sEditEncounterUID,sWebLanguage,"_img/icons/icon_delete.gif","deleteRFE($serverid,$objectid)");
 	%>
     <tr class="admin">
-        <td align="left" colspan="2"><a href="javascript:openPopup('healthrecord/findRFE.jsp&field=rfe&patientuid=<%=sPatientUID%>&encounterUid=<%=sEditEncounterUID%>&ts=<%=getTs()%>',700,400)"><%=getTran("openclinic.chuk","rfe",sWebLanguage)%> <%=getTran("Web.Occup","ICPC-2",sWebLanguage)%>/<%=getTran("Web.Occup","ICD-10",sWebLanguage)%></a></td>
+        <td align="left" colspan="2"><a href="javascript:openPopup('healthrecord/findRFE.jsp&field=rfe&patientuid=<%=sPatientUID%>&encounterUid=<%=sEditEncounterUID%>&ts=<%=getTs()%>',700,400)"><%=getTran(request,"openclinic.chuk","rfe",sWebLanguage)%> <%=getTran(request,"Web.Occup","ICPC-2",sWebLanguage)%>/<%=getTran(request,"Web.Occup","ICD-10",sWebLanguage)%></a></td>
     </tr>
     <tr>
         <td id="rfe" colspan="2"><%=sRfe%></td>
@@ -361,7 +361,7 @@ else if(persons.size()==1){
     <tr class="admin">
         <td align="left" colspan="2">
 	        <a href="javascript:openPopup('healthrecord/findICPC.jsp&ts=<%=getTs()%>&patientuid=<%=sPatientUID%>&showpatientencounters=1',700,400);void(0);"><%=
-	            getTran("openclinic.chuk","diagnostic",sWebLanguage)%> <%=getTran("Web.Occup", "ICPC-2", sWebLanguage)%>/<%=getTran("Web.Occup", "ICD-10", sWebLanguage)%>
+	            getTran(request,"openclinic.chuk","diagnostic",sWebLanguage)%> <%=getTran(request,"Web.Occup", "ICPC-2", sWebLanguage)%>/<%=getTran(request,"Web.Occup", "ICD-10", sWebLanguage)%>
 	        </a>
         </td>
     </tr>
@@ -388,7 +388,7 @@ else if(persons.size()==1){
                 %>
 <tr>
     <td class="admin2"><b><a href="<c:url value='/'/>popup.jsp?Page=statistics/quickFile.jsp&PopupHeight=600&PopupWidth=1000&EditEncounterUID=<%=encounter.getUid()%>&PatientUID=<%=activePerson.personid%>&findEncounter=1"/><%=ScreenHelper.stdDateFormat.format(encounter.getBegin())+" -> "+(encounter.getEnd()==null?"":ScreenHelper.stdDateFormat.format(encounter.getEnd()))%></b></td>
-    <td class="admin2"><b><%=(encounter.getService()==null?"":encounter.getService().getLabel(sWebLanguage))+(encounter.getOutcome()==null?"":" ("+getTran("encounter.outcome",encounter.getOutcome(),sWebLanguage)+")")%></b></td>
+    <td class="admin2"><b><%=(encounter.getService()==null?"":encounter.getService().getLabel(sWebLanguage))+(encounter.getOutcome()==null?"":" ("+getTran(request,"encounter.outcome",encounter.getOutcome(),sWebLanguage)+")")%></b></td>
 </tr>
                 <%
             }

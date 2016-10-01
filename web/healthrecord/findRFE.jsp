@@ -13,7 +13,7 @@
     <table border="0" width="250" cellspacing="0" cellpadding="5" style="border:1px solid #aaa">
         <tr>
             <td bgcolor="#dddddd" style="text-align:center">
-              <%=getTran("web","searchInProgress",sWebLanguage)%>
+              <%=getTran(request,"web","searchInProgress",sWebLanguage)%>
             </td>
         </tr>
     </table>
@@ -38,9 +38,9 @@
     <form name="RFEForm" method="post" onKeyDown='if(enterEvent(event,13)){doFind();}'>
     	<input type='hidden' name='reloadroot' value='<%=reloadroot %>'/>
         <table class='menu' width='100%' cellspacing="0" cellpadding="0">
-            <tr class="admin"><td colspan="3"><%=getTran("openclinic.chuk","rfe",sWebLanguage)%></td></tr>
+            <tr class="admin"><td colspan="3"><%=getTran(request,"openclinic.chuk","rfe",sWebLanguage)%></td></tr>
             <tr>
-                <td class="admin2" nowrap><%=getTran("Web","Keyword",sWebLanguage)%>&nbsp;&nbsp;</td>
+                <td class="admin2" nowrap><%=getTran(request,"Web","Keyword",sWebLanguage)%>&nbsp;&nbsp;</td>
                 <td class="admin2" colspan='2'>
                     <input type='text' class='text' id='keywords' name='keywords' size='40' value="<%=keywords%>" onblur="limitLength(this);"/>
                 
@@ -64,7 +64,7 @@
 
                     // header
                     if(codes.size() > 0){
-                        out.print("<tr class='admin'><td colspan='3'>"+getTran("Web.Occup","ICPC-2",sWebLanguage)+(bManageLocalCodes?" &nbsp;(<a href='javascript:addnewlocalcode(\""+keywords+"\")'>"+getTran("web","managelocalcodes",sWebLanguage)+"</a>)":"")+"</td></tr>");
+                        out.print("<tr class='admin'><td colspan='3'>"+getTran(request,"Web.Occup","ICPC-2",sWebLanguage)+(bManageLocalCodes?" &nbsp;(<a href='javascript:addnewlocalcode(\""+keywords+"\")'>"+getTran(request,"web","managelocalcodes",sWebLanguage)+"</a>)":"")+"</td></tr>");
                     }
 
                     %><tbody class="hand"><%
@@ -110,7 +110,7 @@
 		
 		                // header
 		                if(codes.size() > 0){
-		                    out.print("<tr class='admin'><td colspan='3'>"+getTran("Web.Occup","ICD-10",sWebLanguage)+"</td></tr>");
+		                    out.print("<tr class='admin'><td colspan='3'>"+getTran(request,"Web.Occup","ICD-10",sWebLanguage)+"</td></tr>");
 		                }
 		
 		                %><tbody class="hand"><%
@@ -152,10 +152,10 @@
 	                    // display 'no results' message
 	                    %>
 	                        <tr class="label2">
-	                            <td colspan='3'><%=getTran("web","norecordsfound",sWebLanguage)%> 
+	                            <td colspan='3'><%=getTran(request,"web","norecordsfound",sWebLanguage)%> 
 	                            <%
 	                                if(bManageLocalCodes){
-	                                    %> (<a href='javascript:addnewlocalcode("<%=keywords%>")'><%=getTran("web","managelocalcodes",sWebLanguage)%></a>)</td><%
+	                                    %> (<a href='javascript:addnewlocalcode("<%=keywords%>")'><%=getTran(request,"web","managelocalcodes",sWebLanguage)%></a>)</td><%
 	                                }
 	                            %>
 	                        </tr>
@@ -169,7 +169,7 @@
         
         <%
             if(foundRecords > 0){
-                %><%=foundRecords%> <%=getTran("web","recordsFound",sWebLanguage)%><%
+                %><%=foundRecords%> <%=getTran(request,"web","recordsFound",sWebLanguage)%><%
             }
         %>
     </form>

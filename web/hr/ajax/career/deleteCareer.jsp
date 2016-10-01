@@ -18,10 +18,10 @@
     String sMessage = "";
     
     if(!errorOccurred){
-        sMessage = getTran("web","dataIsDeleted",sWebLanguage);
+        sMessage = getTran(request,"web","dataIsDeleted",sWebLanguage);
     }
     else{
-        sMessage = getTran("web","error",sWebLanguage);
+        sMessage = getTran(request,"web","error",sWebLanguage);
     }
 %>
 

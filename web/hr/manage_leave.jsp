@@ -28,7 +28,7 @@
     <table class="list" border="0" width="100%" cellspacing="1">
         <%-- begin (*) --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web.hr","begin",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web.hr","begin",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2" nowrap> 
                 <%=writeDateField("begin","EditForm","",sWebLanguage,"calculateDuration();")%>            
             </td>                        
@@ -36,7 +36,7 @@
         
         <%-- end (*) --%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","end",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.hr","end",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2" nowrap> 
                 <%=writeDateField("end","EditForm","",sWebLanguage,"calculateDuration();")%>            
             </td>                        
@@ -44,26 +44,26 @@
                         
         <%-- duration (calculated) (*) --%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","duration",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.hr","duration",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
-                <input type="text" class="text" id="duration" name="duration" size="3" maxLength="6" value="" onKeyUp="if(isNumber(this))setDecimalLength(this,2,false);"> <%=getTran("web","days",sWebLanguage)%>
+                <input type="text" class="text" id="duration" name="duration" size="3" maxLength="6" value="" onKeyUp="if(isNumber(this))setDecimalLength(this,2,false);"> <%=getTran(request,"web","days",sWebLanguage)%>
             </td>
         </tr>
                                   
         <%-- type (*) --%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","type",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.hr","type",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <select class="text" id="type" name="type">
                     <option/>
-                    <%=ScreenHelper.writeSelect("hr.leave.type","",sWebLanguage)%>
+                    <%=ScreenHelper.writeSelect(request,"hr.leave.type","",sWebLanguage)%>
                 </select>
             </td>
         </tr>
         
         <%-- requestDate --%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","requestDate",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web.hr","requestDate",sWebLanguage)%></td>
             <td class="admin2" nowrap> 
                 <%=writeDateField("requestDate","EditForm","",sWebLanguage)%>            
             </td>                        
@@ -71,7 +71,7 @@
         
         <%-- authorizationDate --%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","authorizationDate",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web.hr","authorizationDate",sWebLanguage)%></td>
             <td class="admin2" nowrap> 
                 <%=writeDateField("authorizationDate","EditForm","",sWebLanguage)%>            
             </td>                        
@@ -79,7 +79,7 @@
         
         <%-- authorizedBy --%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","authorizedBy",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web.hr","authorizedBy",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" id="authorizedBy" name="authorizedBy" size="50" maxLength="255" value="">
             </td>
@@ -87,7 +87,7 @@
         
         <%-- episodeCode --%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","episodeCode",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web.hr","episodeCode",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" id="episodeCode" name="episodeCode" size="20" maxLength="50" value="">
             </td>
@@ -95,7 +95,7 @@
         
         <%-- comment --%>                    
         <tr>
-            <td class="admin"><%=getTran("web.hr","comment",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web.hr","comment",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea class="text" name="comment" id="comment" cols="80" rows="4" onKeyup="resizeTextarea(this,8);"></textarea>
             </td>
@@ -111,7 +111,7 @@
             </td>
         </tr>
     </table>
-    <i><%=getTran("web","colored_fields_are_obligate",sWebLanguage)%></i>
+    <i><%=getTran(request,"web","colored_fields_are_obligate",sWebLanguage)%></i>
     
     <div id="divMessage" style="padding-top:10px;"></div>
 </form>

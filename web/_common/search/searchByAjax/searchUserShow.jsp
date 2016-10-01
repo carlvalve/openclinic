@@ -27,7 +27,7 @@
             sServiceName = checkString((String)hServices.get(sServiceID));
 
             if(sServiceName.length()==0){
-                sServiceName = getTran("service",sServiceID,sWebLanguage);
+                sServiceName = getTran(null,"service",sServiceID,sWebLanguage);
                 hServices.put(sServiceID,sServiceName);
             }
             
@@ -166,8 +166,8 @@
 	                <table width="100%" cellpadding="0" cellspacing="0" class="sortable" id="searchresults1" style="border-top:none;">
 	                    <%-- header --%>
 	                    <tr class="admin">
-	                        <td width="200"><%=HTMLEntities.htmlentities(getTran("Web","name",sWebLanguage))%></td>
-	                        <td width="300"><%=HTMLEntities.htmlentities(getTran("Web","service",sWebLanguage))%></td>
+	                        <td width="200"><%=HTMLEntities.htmlentities(getTran(request,"Web","name",sWebLanguage))%></td>
+	                        <td width="300"><%=HTMLEntities.htmlentities(getTran(request,"Web","service",sWebLanguage))%></td>
 	                    </tr>
 	                    <tbody class="hand">
 	                        <%=HTMLEntities.htmlentities(getHtml((Vector)(usersPerDiv.get(checkString(request.getParameter("FindServiceID")))),sWebLanguage))%>
@@ -177,11 +177,11 @@
 	                <%
 	                    if(((Vector)usersPerDiv.get(checkString(request.getParameter("FindServiceID")))).size()==0){
 	                        // no records found message
-	                        %><div><%=HTMLEntities.htmlentities(getTran("web","nousersFoundInDivision",sWebLanguage))%></div><%
+	                        %><div><%=HTMLEntities.htmlentities(getTran(request,"web","nousersFoundInDivision",sWebLanguage))%></div><%
 	                    }
 	                    else{
 	                        // X records found message
-			                %><div><%=((Vector)usersPerDiv.get(checkString(request.getParameter("FindServiceID")))).size()%> <%=HTMLEntities.htmlentities(getTran("web","usersFoundInDivision",sWebLanguage))%></div><%
+			                %><div><%=((Vector)usersPerDiv.get(checkString(request.getParameter("FindServiceID")))).size()%> <%=HTMLEntities.htmlentities(getTran(request,"web","usersFoundInDivision",sWebLanguage))%></div><%
 	                    }
 	                %>
 	            </td>
@@ -195,8 +195,8 @@
                 <table width="100%" cellpadding="0" cellspacing="0" class="sortable" id="searchresults2" style="border-top:none;">
                     <%-- header --%>
                     <tr class="admin">
-                        <td width="200"><%=HTMLEntities.htmlentities(getTran("Web","name",sWebLanguage))%></td>
-                        <td width="300"><%=HTMLEntities.htmlentities(getTran("Web","service",sWebLanguage))%></td>
+                        <td width="200"><%=HTMLEntities.htmlentities(getTran(request,"Web","name",sWebLanguage))%></td>
+                        <td width="300"><%=HTMLEntities.htmlentities(getTran(request,"Web","service",sWebLanguage))%></td>
                     </tr>
 
                     <tbody class="hand">
@@ -207,11 +207,11 @@
                 <%
                     if(((Vector)usersPerDiv.get("varia")).size()==0){
                         // no records found message
-                        %><div><%=HTMLEntities.htmlentities(getTran("web","nousersFoundInDivision",sWebLanguage))%></div><%
+                        %><div><%=HTMLEntities.htmlentities(getTran(request,"web","nousersFoundInDivision",sWebLanguage))%></div><%
                     }
                     else{
                         // X records found message
-                        %><div><%=((Vector)usersPerDiv.get("varia")).size()%> <%=HTMLEntities.htmlentities(getTran("web","usersFoundInDivision",sWebLanguage))%></div><%
+                        %><div><%=((Vector)usersPerDiv.get("varia")).size()%> <%=HTMLEntities.htmlentities(getTran(request,"web","usersFoundInDivision",sWebLanguage))%></div><%
                     }
                 %>
             </td>

@@ -45,7 +45,7 @@
 		    sHtml+= "</table>";
 		}
 		else{
-			sHtml = "&nbsp;<i>"+getTran("web","noData",sWebLanguage)+"</i>";
+			sHtml = "&nbsp;<i>"+getTran(null,"web","noData",sWebLanguage)+"</i>";
 		}
 	    
 	    return sHtml;
@@ -82,7 +82,7 @@
 		    sHtml+= "</table>";
 		}
 		else{
-			sHtml = "&nbsp;<i>"+getTran("web","noData",sWebLanguage)+"</i>";
+			sHtml = "&nbsp;<i>"+getTran(null,"web","noData",sWebLanguage)+"</i>";
 		}
 		
 	    return sHtml;
@@ -122,17 +122,17 @@
 			}
 		}
 		else{
-			sHtml = "&nbsp;<i>"+getTran("web","noData",sWebLanguage)+"</i>";
+			sHtml = "&nbsp;<i>"+getTran(null,"web","noData",sWebLanguage)+"</i>";
 		}
 		
 	    return sHtml;
 	}
 
 	//--- GET TRAN --------------------------------------------------------------------------------
-	public static String getTran(String labelType, String labelId, User activeUser){
+	public static String getTran(HttpServletRequest request,String labelType, String labelId, User activeUser){
 		return MedwanQuery.getInstance().getLabel(labelType,labelId,activeUser.person.language);
 	}
-	public static String getTran(String labelType, String labelId, String sLanguage){
+	public static String getTran(HttpServletRequest request,String labelType, String labelId, String sLanguage){
 		return MedwanQuery.getInstance().getLabel(labelType,labelId,sLanguage);
 	}
 	

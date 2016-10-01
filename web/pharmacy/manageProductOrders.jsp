@@ -48,7 +48,7 @@
             // translate importance
             sImportance = checkString(order.getImportance());
             if(sImportance.length() > 0){
-                sImportance = getTran("productorder.importance",sImportance,sWebLanguage);
+                sImportance = getTran(null,"productorder.importance",sImportance,sWebLanguage);
             }
 
             // alternate row-style
@@ -114,7 +114,7 @@
                         sProductName = product.getName();
                     }
                     else{
-                        sProductName = "<font color='red'>"+getTran("web.manage","unexistingproduct",sWebLanguage)+"</font>";
+                        sProductName = "<font color='red'>"+getTran(null,"web.manage","unexistingproduct",sWebLanguage)+"</font>";
                     }
 
                     // service stock
@@ -123,19 +123,19 @@
                         sServiceStockName = serviceStock.getName();
                     }
                     else{
-                        sServiceStockName = "<font color='red'>"+getTran("web.manage","unexistingservicestock",sWebLanguage)+"</font>";
+                        sServiceStockName = "<font color='red'>"+getTran(null,"web.manage","unexistingservicestock",sWebLanguage)+"</font>";
                     }
                 }
                 else{
-                    sProductName = "<font color='red'>"+getTran("web.manage","unexistingproduct",sWebLanguage)+"</font>";
-                    sServiceStockName = "<font color='red'>"+getTran("web.manage","unexistingservicestock",sWebLanguage)+"</font>";
+                    sProductName = "<font color='red'>"+getTran(null,"web.manage","unexistingproduct",sWebLanguage)+"</font>";
+                    sServiceStockName = "<font color='red'>"+getTran(null,"web.manage","unexistingservicestock",sWebLanguage)+"</font>";
                 }
             }
 
             // translate importance
             sImportance = checkString(order.getImportance());
             if(sImportance.length() > 0){
-                sImportance = getTran("productorder.importance",sImportance,sWebLanguage);
+                sImportance = getTran(null,"productorder.importance",sImportance,sWebLanguage);
             }
 
             // alternate row-style
@@ -176,6 +176,7 @@ Debug.println("a");
            sEditBatchNumber     = checkString(request.getParameter("EditBatchNumber")),
            sEditBatchComment    = checkString(request.getParameter("EditBatchComment")),
            sEditSupplier        = checkString(request.getParameter("EditSupplier")),
+           sEditComment         = checkString(request.getParameter("EditComment")),
            sEditBatchEnd        = checkString(request.getParameter("EditBatchEnd")),
            sEditImportance = checkString(request.getParameter("EditImportance")); // (native|high|low)
            
@@ -184,7 +185,7 @@ Debug.println("a");
 
     String sEditProductStockDocumentUidText = "";
     if(sEditProductStockDocumentUid.length() > 0){
-        sEditProductStockDocumentUidText = getTran("operationdocumenttypes",OperationDocument.get(sEditProductStockDocumentUid).getType(),sWebLanguage);
+        sEditProductStockDocumentUidText = getTran(request,"operationdocumenttypes",OperationDocument.get(sEditProductStockDocumentUid).getType(),sWebLanguage);
     }
            
     String sEditProductName = checkString(request.getParameter("EditProductName"));
@@ -215,7 +216,7 @@ Debug.println("a");
            sSelectedPackagesDelivered = "", sSelectedDateOrdered = "", sSelectedDateDeliveryDue = "",
            sSelectedDateDelivered = "", sSelectedImportance = "", sSelectedProductName = "", sSelectedServiceStockName="",
            sFindServiceName = "", sFindServiceStockName = "", sFindProductName = "", sDeliveredQuantity="",
-           sFindSupplierUid = "", sFindSupplierName = "", sFindDateDeliveredSince = "";
+           sFindSupplierUid = "", sFindSupplierName = "", sFindDateDeliveredSince = "", comment="";
 
     int nTotalPackagesDelivered = 0, nPackagesActualOrder = 0;
     
@@ -302,6 +303,7 @@ Debug.println("a");
         else{
         	orderIsClosed = false;
         }
+        comment=existingOrder.getComment();
     }
 
     if(sAction.length()==0) sAction = "find"; // default action
@@ -318,7 +320,6 @@ Debug.println("a");
    	 catch(Exception e){
    		 // empty
    	 }
-   	Debug.println("e");
 
      ProductStockOperation operation = new ProductStockOperation();
      if(sEditProductStockOperationUid.length()>0){
@@ -416,6 +417,7 @@ Debug.println("a");
 	            operation.setUpdateDateTime(new java.util.Date());
 	            operation.setUpdateUser(activeUser.userid);
 	            operation.setOrderUID(sEditOrderUid);
+	            operation.setComment(sEditComment);
 				operation.store();            
 				if(productStock!=null){
 		            if(productStock.getProduct()!=null && request.getParameter("EditPrice")!=null){
@@ -455,7 +457,7 @@ Debug.println("a");
     //--- DELETE ----------------------------------------------------------------------------------
     else if(sAction.equals("delete") && sEditOrderUid.length() > 0){
         ProductOrder.delete(sEditOrderUid);
-        msg = getTran("web","dataisdeleted",sWebLanguage);
+        msg = getTran(request,"web","dataisdeleted",sWebLanguage);
         sAction = "findShowOverview"; // display overview even if only one record remains
     }
 
@@ -469,12 +471,8 @@ Debug.println("a");
 						                  sFindPackagesOrdered,sFindDateDeliveryDue,sFindDateOrdered,
 						                  sFindSupplierUid,sFindServiceStockUid,"OC_ORDER_DATEORDERED","DESC",
 						                  sFindDateDeliveredSince);
-       	Debug.println("f.1");
-
         if(displayDeliveredOrders) ordersHtml = ordersToHtml(orders,sWebLanguage);
-       	Debug.println("f.2");
         if(displayUndeliveredOrders) ordersHtml = undeliveredOrdersToHtml(orders,sWebLanguage);
-       	Debug.println("f.3");
         foundOrderCount = orders.size();
     }
 
@@ -488,7 +486,7 @@ Debug.println("a");
         	sEditProductStockDocumentUid = sPrevUsedDocument;
         }
         if(sEditProductStockDocumentUid.length() > 0){
-        	sEditProductStockDocumentUidText = getTran("operationdocumenttypes",OperationDocument.get(sEditProductStockDocumentUid).getType(),sWebLanguage);
+        	sEditProductStockDocumentUidText = getTran(request,"operationdocumenttypes",OperationDocument.get(sEditProductStockDocumentUid).getType(),sWebLanguage);
         }
 		*/
         // get specified record
@@ -580,14 +578,14 @@ Debug.println("a");
                 <table width="100%" class="list" cellpadding="0" cellspacing="1" onKeyDown="if(enterEvent(event,13)){doSearch(<%=displayDeliveredOrders%>);}">
                     <%-- description --%>
                     <tr>
-                        <td class="admin2" width="<%=sTDAdminWidth%>" nowrap><%=getTran("Web","description",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2" width="<%=sTDAdminWidth%>" nowrap><%=getTran(request,"Web","description",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <input type="text" class="text" name="FindDescription" value="<%=sFindDescription%>" size="<%=sTextWidth%>" maxLength="255">
                         </td>
                     </tr>
                     <%-- Supplier --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","supplier",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","supplier",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <input type="hidden" name="FindSupplierUid" value="<%=sFindSupplierUid%>">
                             <input class="text" type="text" name="FindSupplierName" readonly size="<%=sTextWidth%>" value="<%=sFindSupplierName%>">
@@ -598,7 +596,7 @@ Debug.println("a");
                     </tr>
                     <%-- Service --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","Service",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","Service",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <input type="hidden" name="FindServiceUid" value="<%=sFindServiceUid%>">
                             <input class="text" type="text" name="FindServiceName" readonly size="<%=sTextWidth%>" value="<%=sFindServiceName%>">
@@ -609,7 +607,7 @@ Debug.println("a");
                     </tr>
                     <%-- ServiceStock --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","ServiceStock",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","ServiceStock",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <input type="hidden" name="FindServiceStockUid" value="<%=sFindServiceStockUid%>">
                             <input class="text" type="text" name="FindServiceStockName" readonly size="<%=sTextWidth%>" value="<%=sFindServiceStockName%>">
@@ -620,7 +618,7 @@ Debug.println("a");
                     </tr>
                     <%-- ProductStock --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","ProductStock",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","ProductStock",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <input type="hidden" name="FindProductStockUid" value="<%=sFindProductStockUid%>">
                             <input class="text" type="text" name="FindProductName" readonly size="<%=sTextWidth%>" value="<%=sFindProductName%>">
@@ -631,40 +629,40 @@ Debug.println("a");
                     </tr>
                     <%-- PackagesOrdered --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","PackagesOrdered",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","PackagesOrdered",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <input type="text" class="text" name="FindPackagesOrdered" value="<%=sFindPackagesOrdered%>" size="5" maxLength="5" onKeyUp="isNumber(this);">
                         </td>
                     </tr>
                     <%-- PackagesDelivered --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","PackagesDelivered",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","PackagesDelivered",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <input type="text" class="text" name="FindPackagesDelivered" value="<%=sFindPackagesDelivered%>" size="5" maxLength="5" onKeyUp="isNumber(this);">
                         </td>
                     </tr>
                     <%-- DateOrdered --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","DateOrdered",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","DateOrdered",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2"><%=writeDateField("FindDateOrdered","transactionForm",sFindDateOrdered,sWebLanguage)%></td>
                     </tr>
                     <%-- DateDeliveryDue --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","DateDeliveryDue",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","DateDeliveryDue",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2"><%=writeDateField("FindDateDeliveryDue","transactionForm",sFindDateDeliveryDue,sWebLanguage)%></td>
                     </tr>
                     <%-- DateDelivered --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","DateDelivered",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","DateDelivered",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2"><%=writeDateField("FindDateDelivered","transactionForm",sFindDateDelivered,sWebLanguage)%></td>
                     </tr>
                     <%-- importance (dropdown : native|high|low) --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","Importance",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","Importance",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <select class="text" name="FindImportance">
                                 <option value=""></option>
-                                <%=ScreenHelper.writeSelectUnsorted("productorder.importance",sFindImportance,sWebLanguage)%>
+                                <%=ScreenHelper.writeSelectUnsorted(request,"productorder.importance",sFindImportance,sWebLanguage)%>
                             </select>
                         </td>
                     </tr>
@@ -678,7 +676,7 @@ Debug.println("a");
                             <%-- since 1 --%>
                             <%if(displayDeliveredOrders){ %>
                             <span id="sinceDiv" >
-                                <%=getTran("Web","since",sWebLanguage)%>&nbsp;<%=ScreenHelper.writeDateField("FindDateDeliveredSince","transactionForm",sFindDateDeliveredSince,true,false,sWebLanguage,sCONTEXTPATH)%>&nbsp;
+                                <%=getTran(request,"Web","since",sWebLanguage)%>&nbsp;<%=ScreenHelper.writeDateField("FindDateDeliveredSince","transactionForm",sFindDateDeliveredSince,true,false,sWebLanguage,sCONTEXTPATH)%>&nbsp;
                             </span>
 							<%} %>
                             <input type="button" class="button" name="clearButton" value="<%=getTranNoLink("Web","Clear",sWebLanguage)%>" onclick="clearSearchFields();">
@@ -687,7 +685,7 @@ Debug.println("a");
                             <%-- since 2 --%>
                             <%if(displayUndeliveredOrders){ %>
                             <span id="sinceDiv" >
-                                <%=getTran("Web","since",sWebLanguage)%>&nbsp;<%=ScreenHelper.writeDateField("FindDateDeliveredSince","transactionForm",sFindDateDeliveredSince,true,false,sWebLanguage,sCONTEXTPATH)%>
+                                <%=getTran(request,"Web","since",sWebLanguage)%>&nbsp;<%=ScreenHelper.writeDateField("FindDateDeliveredSince","transactionForm",sFindDateDeliveredSince,true,false,sWebLanguage,sCONTEXTPATH)%>
                             </span>
 							<%} %>
 
@@ -732,10 +730,10 @@ Debug.println("a");
 	                            <td class="titleadmin">&nbsp;
 	                                <%
 	                                    if(sFindServiceUid.length() > 0){
-	                                        %><%=getTran("Web.manage","UndeliveredOrdersFor"+(activePatient==null?"User":"Patient")+"Division",sWebLanguage)%>&nbsp;'<%=getTran("service",sFindServiceUid,sWebLanguage)%>'<%
+	                                        %><%=getTran(request,"Web.manage","UndeliveredOrdersFor"+(activePatient==null?"User":"Patient")+"Division",sWebLanguage)%>&nbsp;'<%=getTran(null,"service",sFindServiceUid,sWebLanguage)%>'<%
 	                                    }
 	                                    else{
-	                                        %><%=getTran("Web.manage","UndeliveredOrders",sWebLanguage)%><%
+	                                        %><%=getTran(request,"Web.manage","UndeliveredOrders",sWebLanguage)%><%
 	                                    }
 	                                %>
 	                            </td>
@@ -746,21 +744,21 @@ Debug.println("a");
 	                        <%-- header --%>
 	                        <tr class="admin">
 	                            <td nowrap>&nbsp;</td>
-	                            <td><%=HTMLEntities.htmlentities(getTran("Web","description",sWebLanguage))%></td>
-	                            <td><%=HTMLEntities.htmlentities(getTran("Web","servicestock",sWebLanguage))%></td>
-	                            <td><%=HTMLEntities.htmlentities(getTran("Web","product",sWebLanguage))%></td>
-	                            <td><%=HTMLEntities.htmlentities(getTran("Web","packagesordered",sWebLanguage))%></td>
-	                            <td><%=HTMLEntities.htmlentities(getTran("Web","packagesdelivered",sWebLanguage))%></td>
-	                            <td><%=HTMLEntities.htmlentities(getTran("Web","dateordered",sWebLanguage))%></td>
-	                            <td><%=HTMLEntities.htmlentities(getTran("Web","datedeliverydue",sWebLanguage))%></td>
-	                            <td><%=HTMLEntities.htmlentities(getTran("Web","importance",sWebLanguage))%></td>
+	                            <td><%=HTMLEntities.htmlentities(getTran(request,"Web","description",sWebLanguage))%></td>
+	                            <td><%=HTMLEntities.htmlentities(getTran(request,"Web","servicestock",sWebLanguage))%></td>
+	                            <td><%=HTMLEntities.htmlentities(getTran(request,"Web","product",sWebLanguage))%></td>
+	                            <td><%=HTMLEntities.htmlentities(getTran(request,"Web","packagesordered",sWebLanguage))%></td>
+	                            <td><%=HTMLEntities.htmlentities(getTran(request,"Web","packagesdelivered",sWebLanguage))%></td>
+	                            <td><%=HTMLEntities.htmlentities(getTran(request,"Web","dateordered",sWebLanguage))%></td>
+	                            <td><%=HTMLEntities.htmlentities(getTran(request,"Web","datedeliverydue",sWebLanguage))%></td>
+	                            <td><%=HTMLEntities.htmlentities(getTran(request,"Web","importance",sWebLanguage))%></td>
 	                        </tr>
 	                        <tbody class="hand"><%=ordersHtml%></tbody>
 	                    </table>
 	                    
 	                    <%-- number of records found --%>
 	                    <span style="width:49%;text-align:left;">
-	                        <%=foundOrderCount%> <%=getTran("web","recordsfound",sWebLanguage)%>
+	                        <%=foundOrderCount%> <%=getTran(request,"web","recordsfound",sWebLanguage)%>
 	                    </span>
 	                    <%
 	                    Debug.println("i");
@@ -779,7 +777,7 @@ Debug.println("a");
             	}
                 else{
                     // no records found
-                    %><%=getTran("web","noUndeliveredOrdersFound",sWebLanguage)%><br><%
+                    %><%=getTran(request,"web","noUndeliveredOrdersFound",sWebLanguage)%><br><%
                 }
             }
 
@@ -794,10 +792,10 @@ Debug.println("a");
 	                            <td class="titleadmin">&nbsp;
 	                                <%
 	                                    if(sFindServiceUid.length() > 0){
-	                                        %><%=getTran("Web.manage","DeliveredOrdersFor"+(activePatient==null?"User":"Patient")+"Division",sWebLanguage)%>&nbsp;'<%=getTran("service",sFindServiceUid,sWebLanguage)%>' <%=getTran("web","since",sWebLanguage)%> <%=sFindDateDeliveredSince%><%
+	                                        %><%=getTran(request,"Web.manage","DeliveredOrdersFor"+(activePatient==null?"User":"Patient")+"Division",sWebLanguage)%>&nbsp;'<%=getTran(null,"service",sFindServiceUid,sWebLanguage)%>' <%=getTran(request,"web","since",sWebLanguage)%> <%=sFindDateDeliveredSince%><%
 	                                    }
 	                                    else{
-	                                        %><%=getTran("Web.manage","DeliveredOrders",sWebLanguage)%><%
+	                                        %><%=getTran(request,"Web.manage","DeliveredOrders",sWebLanguage)%><%
 	                                    }
 	                                %>
 	                            </td>
@@ -811,25 +809,25 @@ Debug.println("a");
 		                <%-- header --%>
 		                <tr class="admin">
 		                    <td nowrap>&nbsp;</td>
-		                    <td><%=HTMLEntities.htmlentities(getTran("Web","description",sWebLanguage))%></td>
-		                    <td><%=HTMLEntities.htmlentities(getTran("Web","servicestock",sWebLanguage))%></td>
-		                    <td><%=HTMLEntities.htmlentities(getTran("Web","product",sWebLanguage))%></td>
-		                    <td><%=HTMLEntities.htmlentities(getTran("Web","packagesordered",sWebLanguage))%></td>
-		                    <td><%=HTMLEntities.htmlentities(getTran("Web","packagesdelivered",sWebLanguage))%></td>
-		                    <td><%=HTMLEntities.htmlentities(getTran("Web","dateordered",sWebLanguage))%></td>
-		                    <td><%=HTMLEntities.htmlentities(getTran("Web","datedelivered",sWebLanguage))%></td>
-		                    <td><%=HTMLEntities.htmlentities(getTran("Web","importance",sWebLanguage))%></td>
+		                    <td><%=HTMLEntities.htmlentities(getTran(request,"Web","description",sWebLanguage))%></td>
+		                    <td><%=HTMLEntities.htmlentities(getTran(request,"Web","servicestock",sWebLanguage))%></td>
+		                    <td><%=HTMLEntities.htmlentities(getTran(request,"Web","product",sWebLanguage))%></td>
+		                    <td><%=HTMLEntities.htmlentities(getTran(request,"Web","packagesordered",sWebLanguage))%></td>
+		                    <td><%=HTMLEntities.htmlentities(getTran(request,"Web","packagesdelivered",sWebLanguage))%></td>
+		                    <td><%=HTMLEntities.htmlentities(getTran(request,"Web","dateordered",sWebLanguage))%></td>
+		                    <td><%=HTMLEntities.htmlentities(getTran(request,"Web","datedelivered",sWebLanguage))%></td>
+		                    <td><%=HTMLEntities.htmlentities(getTran(request,"Web","importance",sWebLanguage))%></td>
 		                </tr>
 		                <tbody class="hand"><%=ordersHtml%></tbody>
 		            </table>
                     
                     <%-- number of records found --%>
-                    <%=foundOrderCount%> <%=getTran("web","deliveredOrdersFound",sWebLanguage)%><br>
+                    <%=foundOrderCount%> <%=getTran(request,"web","deliveredOrdersFound",sWebLanguage)%><br>
                     <%
                 }
                 else{
                     // no records found
-                    %><%=getTran("web","noDeliveredOrdersFound",sWebLanguage)%><br><%
+                    %><%=getTran(request,"web","noDeliveredOrdersFound",sWebLanguage)%><br><%
                 }
             }
         }
@@ -843,21 +841,21 @@ Debug.println("a");
                     <table class="list" width="100%" cellspacing="1">
                         <%-- servicestock --%>
                         <tr>
-                            <td class="admin"><%=getTran("Web","servicestock",sWebLanguage)%> *</td>
+                            <td class="admin"><%=getTran(request,"Web","servicestock",sWebLanguage)%> *</td>
                             <td class="admin2">
                                 <input type="text" readonly class="greytext" value="<%=sSelectedServiceStockName%>" size="<%=sTextWidth%>" maxLength="255">
                             </td>
                         </tr>
                         <%-- description --%>
                         <tr>
-                            <td class="admin"><%=getTran("Web","description",sWebLanguage)%> *</td>
+                            <td class="admin"><%=getTran(request,"Web","description",sWebLanguage)%> *</td>
                             <td class="admin2">
                                 <input type="text" readonly class="greytext" name="EditDescription" value="<%=sSelectedDescription%>" size="<%=sTextWidth%>" maxLength="255">
                             </td>
                         </tr>
                         <%-- ProductStock --%>
                         <tr>
-                            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","ProductStock",sWebLanguage)%>&nbsp;</td>
+                            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","ProductStock",sWebLanguage)%>&nbsp;</td>
                             <td class="admin2">
                                 <input type="hidden" name="EditProductStockUid" value="<%=sSelectedProductStockUid%>">
                                 <input class="greytext" readonly type="text" name="EditProductName" readonly size="<%=sTextWidth%>" value="<%=sSelectedProductName%>">
@@ -865,38 +863,38 @@ Debug.println("a");
                         </tr>
                         <%-- PackagesOrdered --%>
                         <tr>
-                            <td class="admin"><%=getTran("Web","PackagesOrdered",sWebLanguage)%>&nbsp;*</td>
+                            <td class="admin"><%=getTran(request,"Web","PackagesOrdered",sWebLanguage)%>&nbsp;*</td>
                             <td class="admin2">
                                 <input type="text" readonly class="greytext" name="EditPackagesOrdered" value="<%=sSelectedPackagesOrdered%>" size="5" maxLength="5" onKeyUp="if(!isNumberLimited(this,1,99999)){this.value='';}">
                             </td>
                         </tr>
                         <%-- PackagesDelivered --%>
                         <tr>
-                            <td class="admin"><%=getTran("Web","register.delivery",sWebLanguage)%>&nbsp;(max = <%=Integer.parseInt(sSelectedPackagesOrdered)-nTotalPackagesDelivered+nPackagesActualOrder %>)</td>
+                            <td class="admin"><%=getTran(request,"Web","register.delivery",sWebLanguage)%>&nbsp;(max = <%=Integer.parseInt(sSelectedPackagesOrdered)-nTotalPackagesDelivered+nPackagesActualOrder %>)</td>
                             <td class="admin2">
                                 <input type="text" class="text" name="EditPackagesDelivered" value="<%=nPackagesActualOrder==0?Integer.parseInt(sSelectedPackagesOrdered)-nTotalPackagesDelivered:nPackagesActualOrder%>" size="5" maxLength="5" onKeyUp="if(!isNumberLimited(this,0,<%=Integer.parseInt(sSelectedPackagesOrdered)-nTotalPackagesDelivered+nPackagesActualOrder%>)){alertDialog('web','number.out.of.limits');this.value=''}">
                             </td>
                         </tr>
                         <tr>
-                            <td class="admin"><%=getTran("Web","batch",sWebLanguage)%><%=MedwanQuery.getInstance().getConfigInt("pharmacyOrderBatchNumberMandatory",0)==1?"&nbsp;*":""%></td>
+                            <td class="admin"><%=getTran(request,"Web","batch",sWebLanguage)%><%=MedwanQuery.getInstance().getConfigInt("pharmacyOrderBatchNumberMandatory",0)==1?"&nbsp;*":""%></td>
                             <td class="admin2">
                                 <input type="text" class="text" name="EditBatchNumber" value="<%=checkString(operation.getBatchNumber()) %>" size="25" maxLength="50"/>
                             </td>
                         </tr>
                         <tr>
-                            <td class="admin"><%=getTran("Web","batch.expiration",sWebLanguage)%><%=MedwanQuery.getInstance().getConfigInt("pharmacyOrderBatchEndMandatory",0)==1?"&nbsp;*":""%></td>
+                            <td class="admin"><%=getTran(request,"Web","batch.expiration",sWebLanguage)%><%=MedwanQuery.getInstance().getConfigInt("pharmacyOrderBatchEndMandatory",0)==1?"&nbsp;*":""%></td>
                             <td class="admin2">
                                 <%=writeDateField("EditBatchEnd","transactionForm",operation.getBatchEnd()==null?"":ScreenHelper.formatDate(operation.getBatchEnd()),sWebLanguage)%>
                             </td>
                         </tr>
                         <tr>
-                            <td class="admin"><%=getTran("Web","batch.comment",sWebLanguage)%></td>
+                            <td class="admin"><%=getTran(request,"Web","batch.comment",sWebLanguage)%></td>
                             <td class="admin2">
                                 <input type="text" class="text" name="EditBatchComment" value="<%=checkString(operation.getBatchComment()) %>" size="80" maxLength="255"/>
                             </td>
                         </tr>
                         <tr>
-                            <td class="admin"><%=getTran("Web","supplier",sWebLanguage)%><%=MedwanQuery.getInstance().getConfigInt("pharmacyOrderSupplierMandatory",0)==1?"&nbsp;*":""%></td>
+                            <td class="admin"><%=getTran(request,"Web","supplier",sWebLanguage)%><%=MedwanQuery.getInstance().getConfigInt("pharmacyOrderSupplierMandatory",0)==1?"&nbsp;*":""%></td>
                             <td class="admin2">
 				               <input type="hidden" name="EditSupplierID" id="EditSupplierID" value="" onchange="">
 				               <input class="text" type="text" name="EditSupplier" id="EditSupplier" readonly size="<%=sTextWidth%>" value="" >
@@ -906,7 +904,7 @@ Debug.println("a");
                         </tr>
                         <%-- Prices --%>
                         <tr>
-                            <td class="admin"><%=getTran("Web","unitprice",sWebLanguage)%><%=MedwanQuery.getInstance().getConfigInt("pharmacyOrderPriceMandatory",0)==1?"&nbsp;*":""%></td>
+                            <td class="admin"><%=getTran(request,"Web","unitprice",sWebLanguage)%><%=MedwanQuery.getInstance().getConfigInt("pharmacyOrderPriceMandatory",0)==1?"&nbsp;*":""%></td>
                             <td class="admin2">
                             <%
                             	String sPrice = "";
@@ -925,21 +923,21 @@ Debug.println("a");
                         </tr>
                         <%-- Comment --%>
                         <tr>
-                            <td class="admin"><%=getTran("Web","comment",sWebLanguage)%>&nbsp;</td>
+                            <td class="admin"><%=getTran(request,"Web","comment",sWebLanguage)%>&nbsp;</td>
                             <td class="admin2">
-                                <textarea onKeyup="resizeTextarea(this,10);" type="text" class="text" name="EditComment" value="" cols="80"></textarea>
+                                <textarea onKeyup="resizeTextarea(this,10);" type="text" class="text" name="EditComment" cols="80"><%=operation.getComment() %></textarea>
                             </td>
                         </tr>
                         <%-- DateOrdered --%>
                         <tr>
-                            <td class="admin"><%=getTran("Web","DateOrdered",sWebLanguage)%>&nbsp;*</td>
+                            <td class="admin"><%=getTran(request,"Web","DateOrdered",sWebLanguage)%>&nbsp;*</td>
                             <td class="admin2">
                                 <input type="text" readonly class="greytext" size="12" maxLength="12" value="<%=sSelectedDateOrdered%>" name="EditDateOrdered" id="EditDateOrdered" onBlur="checkDate(this);">
                             </td>
                         </tr>
                         <%-- DateDeliveryDue --%>
                         <tr>
-                            <td class="admin"><%=getTran("Web","DateDeliveryDue",sWebLanguage)%>&nbsp;</td>
+                            <td class="admin"><%=getTran(request,"Web","DateDeliveryDue",sWebLanguage)%>&nbsp;</td>
                             <td class="admin2">
                                 <input type="text" class="text" size="12" maxLength="12" value="<%=sSelectedDateDeliveryDue%>" name="EditDateDeliveryDue" id="EditDateDeliveryDue" onBlur="checkDate(this);">
 
@@ -953,7 +951,7 @@ Debug.println("a");
                         </tr>
                         <%-- DateDelivered --%>
                         <tr>
-                            <td class="admin"><%=getTran("Web","DateDelivered",sWebLanguage)%>&nbsp;</td>
+                            <td class="admin"><%=getTran(request,"Web","DateDelivered",sWebLanguage)%>&nbsp;</td>
                             <td class="admin2">
                                 <input type="text" class="text" size="12" maxLength="12" value="<%=ScreenHelper.formatDate(new java.util.Date())%>" name="EditDateDelivered" id="EditDateDelivered" onBlur="checkDate(this);">
 
@@ -966,7 +964,7 @@ Debug.println("a");
                             </td>
                         </tr>
 	                    <tr id='documentline'>
-	                        <td class="admin"><%=getTran("Web","productstockoperationdocument",sWebLanguage)%><%=MedwanQuery.getInstance().getConfigInt("pharmacyOrderDocumentMandatory",0)==1?"&nbsp;*":""%></td>
+	                        <td class="admin"><%=getTran(request,"Web","productstockoperationdocument",sWebLanguage)%><%=MedwanQuery.getInstance().getConfigInt("pharmacyOrderDocumentMandatory",0)==1?"&nbsp;*":""%></td>
 		                    <td class="admin2">
 		                    	<input type='text' class='text' name='EditProductStockDocumentUid' id='EditProductStockDocumentUid' size='10' value="<%=sEditProductStockDocumentUid %>" readonly/>
 		                    	<img src='<c:url value="/_img/icons/icon_search.gif"/>' class='link' alt='<%=getTranNoLink("Web","select",sWebLanguage)%>' onclick="searchDocument('EditProductStockDocumentUid','EditProductStockDocumentUidText');">&nbsp;
@@ -976,17 +974,17 @@ Debug.println("a");
 	                    </tr>
                         <%-- importance (dropdown : native|high|low) --%>
                         <tr>
-                            <td class="admin"><%=getTran("Web","Importance",sWebLanguage)%>&nbsp;*</td>
+                            <td class="admin"><%=getTran(request,"Web","Importance",sWebLanguage)%>&nbsp;*</td>
                             <td class="admin2">
                                 <select class="text" name="EditImportance">
                                     <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>
-                                    <%=ScreenHelper.writeSelectUnsorted("productorder.importance",sSelectedImportance,sWebLanguage)%>
+                                    <%=ScreenHelper.writeSelectUnsorted(request,"productorder.importance",sSelectedImportance,sWebLanguage)%>
                                 </select>
                             </td>
                         </tr>
                         <%-- importance (dropdown : native|high|low) --%>
                         <tr>
-                            <td class="admin"><%=getTran("Web","close.order",sWebLanguage)%></td>
+                            <td class="admin"><%=getTran(request,"Web","close.order",sWebLanguage)%></td>
                             <td class="admin2">
                             	<input type='checkbox' name='closeOrder'/>
                             </td>
@@ -1020,7 +1018,7 @@ Debug.println("a");
                     </table>
                     
                     <%-- indication of obligated fields --%>
-                    <%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%>
+                    <%=getTran(request,"Web","colored_fields_are_obligate",sWebLanguage)%>
                     <br><br>
                 <%
             }
@@ -1031,49 +1029,54 @@ Debug.println("a");
                     <table class="list" width="100%" cellspacing="1">
                         <%-- description --%>
                         <tr>
-                            <td class="admin"><%=getTran("Web","description",sWebLanguage)%>&nbsp;</td>
+                            <td class="admin"><%=getTran(request,"Web","description",sWebLanguage)%>&nbsp;</td>
                             <td class="admin2"><%=sSelectedDescription%></td>
                         </tr>
                         <%-- ProductStock --%>
                         <tr>
-                            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","ProductStock",sWebLanguage)%>&nbsp;</td>
+                            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","ProductStock",sWebLanguage)%>&nbsp;</td>
                             <td class="admin2"><%=sSelectedProductName%></td>
                         </tr>
                         <%-- PackagesOrdered --%>
                         <tr>
-                            <td class="admin"><%=getTran("Web","PackagesOrdered",sWebLanguage)%>&nbsp;</td>
+                            <td class="admin"><%=getTran(request,"Web","PackagesOrdered",sWebLanguage)%>&nbsp;</td>
                             <td class="admin2"><%=sSelectedPackagesOrdered%></td>
                         </tr>
                         <%-- PackagesDelivered --%>
                         <tr>
-                            <td class="admin"><%=getTran("Web","PackagesDelivered",sWebLanguage)%>&nbsp;</td>
+                            <td class="admin"><%=getTran(request,"Web","PackagesDelivered",sWebLanguage)%>&nbsp;</td>
                             <td class="admin2"><%=sSelectedPackagesDelivered%></td>
                         </tr>
                         <%-- DateOrdered --%>
                         <tr>
-                            <td class="admin"><%=getTran("Web","DateOrdered",sWebLanguage)%>&nbsp;</td>
+                            <td class="admin"><%=getTran(request,"Web","DateOrdered",sWebLanguage)%>&nbsp;</td>
                             <td class="admin2"><%=sSelectedDateOrdered%></td>
                         </tr>
                         <%-- DateDeliveryDue --%>
                         <tr>
-                            <td class="admin"><%=getTran("Web","DateDeliveryDue",sWebLanguage)%>&nbsp;</td>
+                            <td class="admin"><%=getTran(request,"Web","DateDeliveryDue",sWebLanguage)%>&nbsp;</td>
                             <td class="admin2"><%=sSelectedDateDeliveryDue%></td>
                         </tr>
                         <%-- DateDelivered --%>
                         <tr>
-                            <td class="admin"><%=getTran("Web","DateDelivered",sWebLanguage)%>&nbsp;</td>
+                            <td class="admin"><%=getTran(request,"Web","DateDelivered",sWebLanguage)%>&nbsp;</td>
                             <td class="admin2"><%=sSelectedDateDelivered%></td>
                         </tr>
                         <%-- importance (dropdown : native|high|low) --%>
                         <tr>
-                            <td class="admin"><%=getTran("Web","Importance",sWebLanguage)%>&nbsp;*</td>
-                            <td class="admin2"><%=getTran("productorder.importance",sSelectedImportance,sWebLanguage)%></td>
+                            <td class="admin"><%=getTran(request,"Web","Importance",sWebLanguage)%>&nbsp;*</td>
+                            <td class="admin2"><%=getTran(request,"productorder.importance",sSelectedImportance,sWebLanguage)%></td>
+                        </tr>
+                        <%-- comment --%>
+                        <tr>
+                            <td class="admin"><%=getTran(request,"Web","comment",sWebLanguage)%>&nbsp;*</td>
+                            <td class="admin2"><font color='red'><b><%=checkString(comment)%></b></font></td>
                         </tr>
                         <%-- display message --%>
                         <tr>
                             <td class="admin"/>
                             <td class="admin2">
-                                <span id="msgArea"><%=getTran("web.manage","orderclosedanduneditable",sWebLanguage)%></span>
+                                <span id="msgArea"><%=getTran(request,"web.manage","orderclosedanduneditable",sWebLanguage)%></span>
                             </td>
                         </tr>
                         
@@ -1107,6 +1110,7 @@ Debug.println("a");
 	             out.print("<td>"+HTMLEntities.htmlentities(getTranNoLink("web","batch",sWebLanguage))+"</td>");
 	             out.print("<td>"+HTMLEntities.htmlentities(getTranNoLink("web","batch.expiration",sWebLanguage))+"</td>");
 	             out.print("<td>"+HTMLEntities.htmlentities(getTranNoLink("web","supplier",sWebLanguage))+"</td>");
+	             out.print("<td>"+HTMLEntities.htmlentities(getTranNoLink("web","comment",sWebLanguage))+"</td>");
 	            out.print("</tr>");
 	            
 	            for(int n=0; n<operations.size(); n++){
@@ -1121,14 +1125,19 @@ Debug.println("a");
 	    	            	<img src='<c:url value="_img/icons/icon_delete.gif"/>' onclick='doDeleteOperation("<%=sEditOrderUid%>","<%=operation.getUid()%>");'/>
 	    	            </td>
 	    	            <%
+	    	            String sOperationType="productstockoperation.medicationreceipt";
+	    	            if(operation.getDescription().indexOf("delivery")>-1){
+	    	            	sOperationType="productstockoperation.medicationdelivery";
+	    	            }
 	    	            
 	    	            out.print("<td class='admin'>"+ScreenHelper.formatDate(operation.getDate())+"</td>"+
-	    	                      "<td class='admin2'>"+getTran("productstockoperation.medicationreceipt",operation.getDescription(),sWebLanguage)+"</td>"+
+	    	                      "<td class='admin2'>"+getTran(request,sOperationType,operation.getDescription(),sWebLanguage)+"</td>"+
 	    	                      "<td class='admin2'>"+operation.getUnitsChanged()+"</td>"+
 	    	                      "<td class='admin2'>"+operation.getDocumentUID()+"</td>"+
 	    	                      "<td class='admin2'>"+(operation.getBatchNumber()!=null?operation.getBatchNumber():"")+"</td>"+
 	    	                      "<td class='admin2'>"+(operation.getBatchEnd()!=null?ScreenHelper.formatDate(operation.getBatchEnd()):"")+"</td>"+
-	    	                      "<td class='admin2'>"+(operation.getSourceDestination()!=null?operation.getSourceDestination().getObjectUid():"")+"</td>");
+	    	                      "<td class='admin2'>"+operation.getSourceDestinationName()+"</td>"+
+			                      "<td class='admin2'>"+operation.getComment()+"</td>");
 
 	            		out.print("</tr>");
 	            	}

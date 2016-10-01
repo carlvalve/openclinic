@@ -10,7 +10,7 @@
         String sReturn = "";
 
         if ((sCode!=null)&&(sCode.trim().length()>0)) {
-            String sLabel = getTran("Service",sCode,sWebLanguage);
+            String sLabel = getTran(null,"Service",sCode,sWebLanguage);
             Service service = Service.getService(sCode);
 
             if (service!=null) {
@@ -35,7 +35,7 @@
 
     //--- WRITE MY ROW ----------------------------------------------------------------------------
     private String writeMyRow(String sID, String sWebLanguage, String sIcon){
-        String sLabel = getTran("Service",sID.trim(), sWebLanguage);
+        String sLabel = getTran(null,"Service",sID.trim(), sWebLanguage);
         if(sIcon.length()==0){
             sIcon = "<img src='"+sCONTEXTPATH+"/_img/themes/default/menu_tee_plus.gif' onclick='populateService(\""+sID+"\")'"
                 +" alt='"+getTranNoLink("Web.Occup","medwan.common.open",sWebLanguage)+"'>";
@@ -172,7 +172,7 @@
     <table border="0" width="250" cellspacing="0" cellpadding="5" style="border:1px solid #aaa">
         <tr>
             <td bgcolor="#dddddd" style="text-align:center">
-              <%=getTran("web","searchInProgress",sWebLanguage)%>
+              <%=getTran(request,"web","searchInProgress",sWebLanguage)%>
             </td>
         </tr>
     </table>
@@ -190,7 +190,7 @@
         <table width='100%' border='0' cellspacing='0' cellpadding='0' class='menu'>
             <tr>
                 <td width='100%' height='25'>
-                    &nbsp;<%=getTran("Web","Find",sWebLanguage)%>&nbsp;&nbsp;
+                    &nbsp;<%=getTran(request,"Web","Find",sWebLanguage)%>&nbsp;&nbsp;
                     <input type="text" NAME='FindText' class="text" value="<%=sFindText%>" size="40">
 
                     <%-- buttons --%>
@@ -219,14 +219,14 @@
                                         sViewCode = sFindCode;
                                     }
 
-                                    String sLabel = getTran("Service",sViewCode,sWebLanguage);
+                                    String sLabel = getTran(request,"Service",sViewCode,sWebLanguage);
 
                                     Service service = Service.getService(sViewCode);
 
                                     if(service!=null){
                                         String sCountry = checkString(service.country);
                                         if(sCountry.length() > 0){
-                                            sCountry = getTran("Country",sCountry,sWebLanguage);
+                                            sCountry = getTran(request,"Country",sCountry,sWebLanguage);
                                         }
 
                                         out.print(setRow("Web","Address", checkString(service.address),sWebLanguage));
@@ -269,7 +269,7 @@
                                             // display 'no results' message
                                             %>
                                                 <tr>
-                                                    <td colspan='3'><%=getTran("web","norecordsfound",sWebLanguage)%></td>
+                                                    <td colspan='3'><%=getTran(request,"web","norecordsfound",sWebLanguage)%></td>
                                                 </tr>
                                             <%
                                         }

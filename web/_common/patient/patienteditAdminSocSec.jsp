@@ -20,14 +20,14 @@
 
         out.print(
                 normalRow("Web.socsec","covered","SCovered","AdminSocSec",sWebLanguage)
-                    +"<input type='radio' name='SCovered' value='medwan.common.yes' id='rbSCYes' onDblClick='uncheckRadio(this)'"+srbSCYes+"/>"+getLabel("web.occup","medwan.common.yes",sWebLanguage,"rbSCYes")
-                    +"<input type='radio' name='SCovered' value='medwan.common.no' id='rbSCNo' onDblClick='uncheckRadio(this)'"+srbSCNo+"/>"+getLabel("web.occup","medwan.common.no",sWebLanguage,"rbSCNo")
+                    +"<input type='radio' name='SCovered' value='medwan.common.yes' id='rbSCYes' onDblClick='uncheckRadio(this)'"+srbSCYes+"/>"+getLabel(request,"web.occup","medwan.common.yes",sWebLanguage,"rbSCYes")
+                    +"<input type='radio' name='SCovered' value='medwan.common.no' id='rbSCNo' onDblClick='uncheckRadio(this)'"+srbSCNo+"/>"+getLabel(request,"web.occup","medwan.common.no",sWebLanguage,"rbSCNo")
                     +"</td></tr>"
                 +inputRow("Web.socsec","enterprise","SEnterprise","AdminSocSec",socsec.enterprise,"T",true, true,sWebLanguage)
                 +inputRow("Web.socsec","assurancenumber","SAssurancenumber","AdminSocSec",socsec.assurancenumber,"T",true, true,sWebLanguage)
                 +normalRow("Web.socsec","assurancetype","SAssurancetype","AdminSocSec",sWebLanguage)
                         +"<select class='text' name='SAssurancetype'></option>"
-                        +ScreenHelper.writeSelect("assurancetype",socsec.assurancetype,sWebLanguage)
+                        +ScreenHelper.writeSelect(request,"assurancetype",socsec.assurancetype,sWebLanguage)
                         +"</select></td></tr>"
                 +inputRow("Web","start","SStart","AdminSocSec",socsec.start,"D",true,false,sWebLanguage)
                 +inputRow("Web","stop","SStop","AdminSocSec",socsec.stop,"D",true,false,sWebLanguage)

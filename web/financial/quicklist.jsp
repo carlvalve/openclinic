@@ -52,6 +52,7 @@
 	String prestationcontent = "", pa = "", pi = "";
 	Insurance bestInsurance = null;
 	int recCount = 0;
+	Encounter encounter = Encounter.getActiveEncounter(activePatient.personid);
 %>
 <form name="transactionForm" id="transactionForm">
     <%=writeTableHeader("web","quicklist",sWebLanguage," window.close()")%>
@@ -90,7 +91,7 @@
 						hasContent = true;
 						prestation = Prestation.getByCode(val);
 						if(prestation!=null && prestation.getDescription()!=null){
-							if(mustCheckInsurance && !prestation.isVisibleFor(insurar)){
+							if(mustCheckInsurance && !prestation.isVisibleFor(insurar,encounter.getService())){
 								sLine+= "<td bgcolor='"+getItemColor(sPrestations,i,n)+"' width='"+(100/cols)+"%'>"+
 							             "<input disabled type='checkbox' name='prest."+prestation.getUid()+"' id='prest."+prestation.getUid()+"'/>"+
 								         "<input disabled type='text' class='text' name='quant."+prestation.getUid()+"' id='quant."+prestation.getUid()+"' value='1' size='1'/><font style='color: lightgray;text-decoration:line-through'>"+prestation.getDescription()+
@@ -116,10 +117,10 @@
 			
 			%>			
 		    </table>
-			<br><%=recCount%> <%=getTran("web","recordsFound",sWebLanguage)%>
+			<br><%=recCount%> <%=getTran(request,"web","recordsFound",sWebLanguage)%>
 		
 		    <%-- BUTTONS --%>
-		    <input type="button" name="submit" value="<%=getTranNoLink("web","save",sWebLanguage)%>" class="button" onclick="savePrestations()"/>
+		    <input accesskey="S" type="button" name="submit" value="<%=getTranNoLink("web","save",sWebLanguage)%>" class="button" onclick="savePrestations()"/>
       	    <%
 			
       	    if(MedwanQuery.getInstance().getConfigInt("enableQuickInvoicing",0)==1){
@@ -128,7 +129,7 @@
 		}
 		else{
 			%>
-			    <%=getTran("web","noRecordsFound",sWebLanguage)%>
+			    <%=getTran(request,"web","noRecordsFound",sWebLanguage)%>
 			
 				<%=ScreenHelper.alignButtonsStart()%>
 				    <input type="button" class="button" name="closeButton" value="<%=getTranNoLink("web","close",sWebLanguage)%>" onClick="window.close();">

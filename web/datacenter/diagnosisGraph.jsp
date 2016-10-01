@@ -22,5 +22,5 @@
 </div>
 <script>
     setGraph(<%=sJsArray%>);
-    Modalbox.setTitle("<%=HTMLEntities.htmlentities(getTran("datacenterserver", serverId + "", sWebLanguage)+"<br/>"+code+" "+MedwanQuery.getInstance().getCodeTran("ICD10Code"+code,sWebLanguage))%>");
+    Modalbox.setTitle("<%=HTMLEntities.htmlentities(getTran(request,"datacenterserver", serverId + "", sWebLanguage)+"<br/>"+code+" "+MedwanQuery.getInstance().getCodeTran("ICD10Code"+code,sWebLanguage))%>");
 </script>

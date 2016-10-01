@@ -21,9 +21,9 @@
 
 <table width="100%" id="antivirogramtable">
     <tr width="100%" class='admin'>
-        <td width="33%" class="longTitle"><%=HTMLEntities.htmlentities(getTran("web","arv.coltitle1",sWebLanguage))%></td>
-        <td width="33%" class="longTitle"><%=HTMLEntities.htmlentities(getTran("web","arv.coltitle2",sWebLanguage))%></td>
-        <td class="longTitle"><%=HTMLEntities.htmlentities(getTran("web","arv.coltitle3",sWebLanguage))%></td>
+        <td width="33%" class="longTitle"><%=HTMLEntities.htmlentities(getTran(request,"web","arv.coltitle1",sWebLanguage))%></td>
+        <td width="33%" class="longTitle"><%=HTMLEntities.htmlentities(getTran(request,"web","arv.coltitle2",sWebLanguage))%></td>
+        <td class="longTitle"><%=HTMLEntities.htmlentities(getTran(request,"web","arv.coltitle3",sWebLanguage))%></td>
     </tr>
 	<tr>
 		<td valign="top">
@@ -31,14 +31,14 @@
 			<%
 		        // EXTRA LAB RESULTS
 		        for(int i=0;i<MedwanQuery.getInstance().getConfigInt("maxARVlines",12);i++){
-		            if(getTran("arva",i+"",sWebLanguage).indexOf("<a")<0){
+		            if(getTran(request,"arva",i+"",sWebLanguage).indexOf("<a")<0){
 		                %>
 				    <tr>
-				        <td class='admin'><%=HTMLEntities.htmlentities(getTran("arva",i+"",sWebLanguage))%></td>
+				        <td class='admin'><%=HTMLEntities.htmlentities(getTran(request,"arva",i+"",sWebLanguage))%></td>
 				        <td>
 				        	<select class='text' name="arvA.<%=i%>" id="arvA.<%=i%>">
 				        		<option/>
-				        		<%=ScreenHelper.writeSelect("arvresistance",extractResistance(arvs,"a."+i),sWebLanguage)%>
+				        		<%=ScreenHelper.writeSelect(request,"arvresistance",extractResistance(arvs,"a."+i),sWebLanguage)%>
 				        	</select>
 				        </td>
 				    </tr>
@@ -53,14 +53,14 @@
 			<%
 		        // EXTRA LAB RESULTS
 		        for(int i=0;i<MedwanQuery.getInstance().getConfigInt("maxARVlines",12);i++){
-		            if(getTran("arvb",i+"",sWebLanguage).indexOf("<a")<0){
+		            if(getTran(request,"arvb",i+"",sWebLanguage).indexOf("<a")<0){
 		                %>
 				    <tr>
-				        <td class='admin'><%=HTMLEntities.htmlentities(getTran("arvb",i+"",sWebLanguage))%></td>
+				        <td class='admin'><%=HTMLEntities.htmlentities(getTran(request,"arvb",i+"",sWebLanguage))%></td>
 				        <td>
 				        	<select class='text' name="arvB.<%=i%>" id="arvB.<%=i%>">
 				        		<option/>
-				        		<%=ScreenHelper.writeSelect("arvresistance",extractResistance(arvs,"b."+i),sWebLanguage)%>
+				        		<%=ScreenHelper.writeSelect(request,"arvresistance",extractResistance(arvs,"b."+i),sWebLanguage)%>
 				        	</select>
 				        </td>
 				    </tr>
@@ -75,14 +75,14 @@
 			<%
 		        // EXTRA LAB RESULTS
 		        for(int i=0;i<MedwanQuery.getInstance().getConfigInt("maxARVlines",12);i++){
-		            if(getTran("arvc",i+"",sWebLanguage).indexOf("<a")<0){
+		            if(getTran(request,"arvc",i+"",sWebLanguage).indexOf("<a")<0){
 		                %>
 				    <tr>
-				        <td class='admin'><%=HTMLEntities.htmlentities(getTran("arvc",i+"",sWebLanguage))%></td>
+				        <td class='admin'><%=HTMLEntities.htmlentities(getTran(request,"arvc",i+"",sWebLanguage))%></td>
 				        <td>
 				        	<select class='text' name="arvC.<%=i%>" id="arvC.<%=i%>">
 				        		<option/>
-				        		<%=ScreenHelper.writeSelect("arvresistance",extractResistance(arvs,"c."+i),sWebLanguage)%>
+				        		<%=ScreenHelper.writeSelect(request,"arvresistance",extractResistance(arvs,"c."+i),sWebLanguage)%>
 				        	</select>
 				        </td>
 				    </tr>

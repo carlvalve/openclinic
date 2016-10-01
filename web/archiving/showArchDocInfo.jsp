@@ -23,13 +23,13 @@
 <table class="list" width="100%" border="0" cellspacing="1"> 
     <%-- date --%>
     <tr>
-        <td width="150" class="admin"><%=getTran("web","date",sWebLanguage)%>&nbsp;</td>
+        <td width="150" class="admin"><%=getTran(request,"web","date",sWebLanguage)%>&nbsp;</td>
         <td class="admin2"><%=ScreenHelper.stdDateFormat.format(doc.date)%></td>
     </tr>
     
     <%-- UDI --%>
     <tr>
-       <td class="admin"><%=getTran("web","udi",sWebLanguage)%>&nbsp;</td>
+       <td class="admin"><%=getTran(request,"web","udi",sWebLanguage)%>&nbsp;</td>
        <td class="admin2"> 
            <div onClick="printBarcode('<%=sUDI%>');" style="cursor:pointer"><b><font style="background-color:yellow;border:1px solid orange;padding:2px;height:18px;">&nbsp;<%=sUDI%>&nbsp;</font></b></div>
 	   </td>
@@ -37,43 +37,43 @@
 
     <%-- title --%>
     <tr>
-        <td class="admin"><%=getTran("web","title",sWebLanguage)%>&nbsp;</td>
+        <td class="admin"><%=getTran(request,"web","title",sWebLanguage)%>&nbsp;</td>
         <td class="admin2"><%=doc.title%></td>
     </tr>
     
     <%-- description --%>
     <tr>
-        <td class="admin"><%=getTran("web","description",sWebLanguage)%>&nbsp;</td>
+        <td class="admin"><%=getTran(request,"web","description",sWebLanguage)%>&nbsp;</td>
         <td class="admin2"><%=doc.description.replaceAll("\r\n","<br>")%></td>
     </tr>
        
     <%-- category --%>
     <tr>
-        <td class="admin"><%=getTran("web","category",sWebLanguage)%>&nbsp;</td>
+        <td class="admin"><%=getTran(request,"web","category",sWebLanguage)%>&nbsp;</td>
         <td class="admin2"><%=doc.category%></td>
     </tr>
     
     <%-- author --%>
     <tr>
-        <td class="admin"><%=getTran("web","author",sWebLanguage)%>&nbsp;</td>
+        <td class="admin"><%=getTran(request,"web","author",sWebLanguage)%>&nbsp;</td>
         <td class="admin2"><%=doc.author%></td>
     </tr>
     
     <%-- destination --%>
     <tr>
-        <td class="admin"><%=getTran("web","destination",sWebLanguage)%>&nbsp;</td>
+        <td class="admin"><%=getTran(request,"web","destination",sWebLanguage)%>&nbsp;</td>
         <td class="admin2"><%=doc.destination%></td>
     </tr>
     
     <%-- reference --%>
     <tr>
-        <td class="admin"><%=getTran("web","paperReference",sWebLanguage)%>&nbsp;</td>
+        <td class="admin"><%=getTran(request,"web","paperReference",sWebLanguage)%>&nbsp;</td>
         <td class="admin2"><%=doc.reference%></td>
     </tr>
     
     <%-- storage-name --%>
     <tr>
-        <td class="admin"><%=getTran("web","storageName",sWebLanguage)%>&nbsp;</td>
+        <td class="admin"><%=getTran(request,"web","storageName",sWebLanguage)%>&nbsp;</td>
         <td class="admin2">
         <%
 	        if(doc.storageName.length()==0){

@@ -50,7 +50,7 @@
 					Debug.println("sVaccType : "+sVaccType); 
 					
 					out.println("<tr>"+
-				                 "<td class='admin2'><input type='checkbox' name='cb"+vacc.getId()+"'"+(activeVaccinations.indexOf("*"+vacc.getId()+"*")>-1?"checked":"")+"/>"+getLabel("web.occup",sVaccType,sWebLanguage,"cb"+vacc.getId())+"</td>"+
+				                 "<td class='admin2'><input type='checkbox' name='cb"+vacc.getId()+"'"+(activeVaccinations.indexOf("*"+vacc.getId()+"*")>-1?"checked":"")+"/>"+getLabel(request,"web.occup",sVaccType,sWebLanguage,"cb"+vacc.getId())+"</td>"+
 					            "</tr>");
 				}
 			}		

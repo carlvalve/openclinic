@@ -31,7 +31,7 @@
     <table class="list" border="0" width="100%" cellspacing="1">        
         <%-- contract --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web.hr","contract",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web.hr","contract",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <input type="hidden" name="contract" id="contract" value="">
                 <input type="text" class="text" name="contractName" id="contractName" readonly size="20" value="">
@@ -44,7 +44,7 @@
         
         <%-- begin date (*) --%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","begin",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.hr","begin",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2" nowrap> 
                 <%=writeDateField("beginDate","EditForm","",sWebLanguage)%>            
             </td>                        
@@ -52,7 +52,7 @@
         
         <%-- end date --%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","end",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.hr","end",sWebLanguage)%>&nbsp;</td>
             <td class="admin2" nowrap> 
                 <%=writeDateField("endDate","EditForm","",sWebLanguage)%>            
             </td>                        
@@ -74,7 +74,7 @@
             }
         %>
         <tr>
-            <td class="admin"><%=getTran("web.hr","grossSalary",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.hr","grossSalary",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="salary" name="salary" size="10" maxLength="14" onKeyUp="isNumber(this)" onBlur="if(isNumber(this))setDecimalLength(this,<%=decimalLength%>,true);" value="">&nbsp;<%=MedwanQuery.getInstance().getConfigParam("currency","")%>&nbsp;
             </td>
@@ -82,18 +82,18 @@
                     
         <%-- gross salary period (*) --%>  
         <tr>
-            <td class="admin"><%=getTran("web.hr","grossSalaryPeriod",sWebLanguage)%>&nbsp;*&nbsp;</td> 
+            <td class="admin"><%=getTran(request,"web.hr","grossSalaryPeriod",sWebLanguage)%>&nbsp;*&nbsp;</td> 
             <td class="admin2">                                                  
                 <select class="text" id="salaryPeriod" name="salaryPeriod">
                     <option/>
-                    <%=ScreenHelper.writeSelectUnsorted("hr.salary.period","period3",sWebLanguage)%>
+                    <%=ScreenHelper.writeSelectUnsorted(request,"hr.salary.period","period3",sWebLanguage)%>
                 </select>&nbsp;  
             </td>
         </tr>
                       
         <%-- XML 1 - benefits (multi-add) -------------------------------------------------------%>   
         <tr>
-            <td class="admin" nowrap><%=getTran("web.hr","benefits",sWebLanguage)%></td>
+            <td class="admin" nowrap><%=getTran(request,"web.hr","benefits",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="hidden" id="benefits" name="benefits" value="">
                                      
@@ -104,23 +104,23 @@
                         <td width="5%" nowrap/>
                         <%-- 1 - beginDate --%>
                         <td width="15%" nowrap>
-                            <%=getTran("web.hr","beginDate",sWebLanguage)%>&nbsp;*&nbsp;
+                            <%=getTran(request,"web.hr","beginDate",sWebLanguage)%>&nbsp;*&nbsp;
                         </td>
                         <%-- 2 - endDate --%>
                         <td width="15%" nowrap>
-                            <%=getTran("web.hr","endDate",sWebLanguage)%>&nbsp;
+                            <%=getTran(request,"web.hr","endDate",sWebLanguage)%>&nbsp;
                         </td>
                         <%-- 3 - period --%>
                         <td width="15%" nowrap>
-                            <%=getTran("web.hr","period",sWebLanguage)%>&nbsp;*&nbsp;
+                            <%=getTran(request,"web.hr","period",sWebLanguage)%>&nbsp;*&nbsp;
                         </td>    
                         <%-- 4 - type --%>
                         <td width="15%" nowrap>
-                            <%=getTran("web.hr","type",sWebLanguage)%>&nbsp;*&nbsp;
+                            <%=getTran(request,"web.hr","type",sWebLanguage)%>&nbsp;*&nbsp;
                         </td>    
                         <%-- 5 - amount --%>
                         <td width="20%" nowrap>
-                            <%=getTran("web.hr","amount",sWebLanguage)%>&nbsp;
+                            <%=getTran(request,"web.hr","amount",sWebLanguage)%>&nbsp;
                         </td>    
                         <%-- 6 - empty --%>
                         <td nowrap>&nbsp;</td>      
@@ -144,14 +144,14 @@
                         <td class="admin">                                                        
                             <select class="text" id="bePeriod" name="bePeriod">
                                 <option/>
-                                <%=ScreenHelper.writeSelectUnsorted("hr.salary.period","",sWebLanguage)%>
+                                <%=ScreenHelper.writeSelectUnsorted(request,"hr.salary.period","",sWebLanguage)%>
                             </select>&nbsp;
                         </td>  
                         <%-- 4 - beType --%>
                         <td class="admin">                                                        
                             <select class="text" id="beType" name="beType">
                                 <option/>
-                                <%=ScreenHelper.writeSelectUnsorted("hr.salary.benefit.type","",sWebLanguage)%>
+                                <%=ScreenHelper.writeSelectUnsorted(request,"hr.salary.benefit.type","",sWebLanguage)%>
                             </select>&nbsp;
                         </td>   
                         <%-- 5 - amount --%>
@@ -170,7 +170,7 @@
                 
         <%-- XML 2 - bonuses (multi-add) --------------------------------------------------------%>
         <tr>
-            <td class="admin" nowrap><%=getTran("web.hr","bonuses",sWebLanguage)%></td>
+            <td class="admin" nowrap><%=getTran(request,"web.hr","bonuses",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="hidden" id="bonuses" name="bonuses" value="">
                                      
@@ -181,27 +181,27 @@
                         <td width="5%" nowrap/>
                         <%-- 1 - beginDate --%>
                         <td width="15%" nowrap>
-                            <%=getTran("web.hr","beginDate",sWebLanguage)%>&nbsp;*&nbsp;
+                            <%=getTran(request,"web.hr","beginDate",sWebLanguage)%>&nbsp;*&nbsp;
                         </td>
                         <%-- 2 - endDate --%>
                         <td width="15%" nowrap>
-                            <%=getTran("web.hr","endDate",sWebLanguage)%>&nbsp;
+                            <%=getTran(request,"web.hr","endDate",sWebLanguage)%>&nbsp;
                         </td>
                         <%-- 3 - period --%>
                         <td width="15%" nowrap>
-                            <%=getTran("web.hr","period",sWebLanguage)%>&nbsp;*&nbsp;
+                            <%=getTran(request,"web.hr","period",sWebLanguage)%>&nbsp;*&nbsp;
                         </td>    
                         <%-- 4 - type --%>
                         <td width="15%" nowrap>
-                            <%=getTran("web.hr","type",sWebLanguage)%>&nbsp;*&nbsp;
+                            <%=getTran(request,"web.hr","type",sWebLanguage)%>&nbsp;*&nbsp;
                         </td>   
                         <%-- 5 - percentage --%>
                         <td width="10%" nowrap>
-                            <%=getTran("web","percentage",sWebLanguage)%>&nbsp;
+                            <%=getTran(request,"web","percentage",sWebLanguage)%>&nbsp;
                         </td>    
                         <%-- 6 - amount --%>
                         <td width="10%" nowrap>
-                            <%=getTran("web.hr","amount",sWebLanguage)%>&nbsp;*&nbsp;
+                            <%=getTran(request,"web.hr","amount",sWebLanguage)%>&nbsp;*&nbsp;
                         </td>    
                         <%-- 7 - empty --%>
                         <td >&nbsp;</td>    
@@ -225,19 +225,19 @@
                         <td class="admin">                                                        
                             <select class="text" id="boPeriod" name="boPeriod">
                                 <option/>
-                                <%=ScreenHelper.writeSelectUnsorted("hr.salary.period","",sWebLanguage)%>
+                                <%=ScreenHelper.writeSelectUnsorted(request,"hr.salary.period","",sWebLanguage)%>
                             </select>&nbsp;
                         </td>  
                         <%-- 4 - boType --%>
                         <td class="admin">                                                        
                             <select class="text" id="boType" name="boType" onChange="calculateBonus();">
                                 <option/>
-                                <%=ScreenHelper.writeSelectUnsorted("hr.salary.bonus.type","",sWebLanguage)%>
+                                <%=ScreenHelper.writeSelectUnsorted(request,"hr.salary.bonus.type","",sWebLanguage)%>
                             </select>&nbsp;
                         </td>   
                         <%-- 5 - boPercentage --%>
                         <td class="admin"> 
-                            <input type="text" class="text" id="boPercentage" name="boPercentage" size="2" maxLength="5" onKeyUp="isNumber(this)" onBlur="if(isNumber(this)){setDecimalLength(this,2,true);calculateBonus();}" onBlur="if(isNumber(this))calculateBonusAmount(this.value);" value="">&nbsp;<%=getTran("web","percent",sWebLanguage).toLowerCase()%>
+                            <input type="text" class="text" id="boPercentage" name="boPercentage" size="2" maxLength="5" onKeyUp="isNumber(this)" onBlur="if(isNumber(this)){setDecimalLength(this,2,true);calculateBonus();}" onBlur="if(isNumber(this))calculateBonusAmount(this.value);" value="">&nbsp;<%=getTran(request,"web","percent",sWebLanguage).toLowerCase()%>
                         </td>
                         <%-- 6 - boAmount --%>
                         <td class="admin"> 
@@ -255,7 +255,7 @@
         
         <%-- XML 3 - otherIncome (multi-add) ----------------------------------------------------%>     
         <tr>
-            <td class="admin" nowrap><%=getTran("web.hr","otherIncome",sWebLanguage)%></td>
+            <td class="admin" nowrap><%=getTran(request,"web.hr","otherIncome",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="hidden" id="otherIncome" name="otherIncome" value="">
                                      
@@ -266,23 +266,23 @@
                         <td width="5%" nowrap/>
                         <%-- 1 - beginDate --%>
                         <td width="15%">
-                            <%=getTran("web.hr","beginDate",sWebLanguage)%>&nbsp;*&nbsp;
+                            <%=getTran(request,"web.hr","beginDate",sWebLanguage)%>&nbsp;*&nbsp;
                         </td>
                         <%-- 2 - endDate --%>
                         <td width="15%">
-                            <%=getTran("web.hr","endDate",sWebLanguage)%>&nbsp;
+                            <%=getTran(request,"web.hr","endDate",sWebLanguage)%>&nbsp;
                         </td>
                         <%-- 3 - period --%>
                         <td width="15%">
-                            <%=getTran("web.hr","period",sWebLanguage)%>&nbsp;
+                            <%=getTran(request,"web.hr","period",sWebLanguage)%>&nbsp;
                         </td>    
                         <%-- 4 - type --%>
                         <td width="15%">
-                            <%=getTran("web.hr","type",sWebLanguage)%>&nbsp;*&nbsp;
+                            <%=getTran(request,"web.hr","type",sWebLanguage)%>&nbsp;*&nbsp;
                         </td>    
                         <%-- 5 - amount --%>
                         <td width="20%" nowrap>
-                            <%=getTran("web.hr","amount",sWebLanguage)%>&nbsp;*&nbsp;
+                            <%=getTran(request,"web.hr","amount",sWebLanguage)%>&nbsp;*&nbsp;
                         </td>    
                         <%-- 6 - empty --%>
                         <td nowrap>&nbsp;</td>   
@@ -306,14 +306,14 @@
                         <td class="admin">                                                        
                             <select class="text" id="oiPeriod" name="oiPeriod">
                                 <option/>
-                                <%=ScreenHelper.writeSelectUnsorted("hr.salary.period","",sWebLanguage)%>
+                                <%=ScreenHelper.writeSelectUnsorted(request,"hr.salary.period","",sWebLanguage)%>
                             </select>&nbsp;
                         </td>  
                         <%-- 4 - oiType --%>
                         <td class="admin">                                                        
                             <select class="text" id="oiType" name="oiType" onChange="calculateOtherIncome();">
                                 <option/>
-                                <%=ScreenHelper.writeSelectUnsorted("hr.salary.otherIncome.type","",sWebLanguage)%>
+                                <%=ScreenHelper.writeSelectUnsorted(request,"hr.salary.otherIncome.type","",sWebLanguage)%>
                             </select>&nbsp;
                         </td>   
                         <%-- 5 - oiAmount --%>
@@ -332,7 +332,7 @@
         
         <%-- XML 4 - deductions (multi-add) -----------------------------------------------------%>
         <tr>
-            <td class="admin" nowrap><%=getTran("web.hr","deductions",sWebLanguage)%></td>
+            <td class="admin" nowrap><%=getTran(request,"web.hr","deductions",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="hidden" id="deductions" name="deductions" value="">
                                      
@@ -343,23 +343,23 @@
                         <td width="5%" nowrap/>
                         <%-- 1 - beginDate --%>
                         <td width="15%" nowrap>
-                            <%=getTran("web.hr","beginDate",sWebLanguage)%>&nbsp;*&nbsp;
+                            <%=getTran(request,"web.hr","beginDate",sWebLanguage)%>&nbsp;*&nbsp;
                         </td>
                         <%-- 2 - endDate --%>
                         <td width="15%" nowrap>
-                            <%=getTran("web.hr","endDate",sWebLanguage)%>&nbsp;
+                            <%=getTran(request,"web.hr","endDate",sWebLanguage)%>&nbsp;
                         </td>
                         <%-- 3 - period --%>
                         <td width="15%" nowrap>
-                            <%=getTran("web.hr","period",sWebLanguage)%>&nbsp;
+                            <%=getTran(request,"web.hr","period",sWebLanguage)%>&nbsp;
                         </td>    
                         <%-- 4 - type --%>
                         <td width="15%" nowrap>
-                            <%=getTran("web.hr","type",sWebLanguage)%>&nbsp;*&nbsp;
+                            <%=getTran(request,"web.hr","type",sWebLanguage)%>&nbsp;*&nbsp;
                         </td>    
                         <%-- 5 - amount --%>
                         <td width="20%" nowrap>
-                            <%=getTran("web.hr","amount",sWebLanguage)%>&nbsp;*&nbsp;
+                            <%=getTran(request,"web.hr","amount",sWebLanguage)%>&nbsp;*&nbsp;
                         </td>    
                         <%-- 6 - empty --%>
                         <td nowrap>&nbsp;</td>      
@@ -383,14 +383,14 @@
                         <td class="admin">                                                        
                             <select class="text" id="dePeriod" name="dePeriod">
                                 <option/>
-                                <%=ScreenHelper.writeSelectUnsorted("hr.salary.period","",sWebLanguage)%>
+                                <%=ScreenHelper.writeSelectUnsorted(request,"hr.salary.period","",sWebLanguage)%>
                             </select>&nbsp;
                         </td>  
                         <%-- 4 - deType --%>
                         <td class="admin">                                                        
                             <select class="text" id="deType" name="deType" onChange="calculateDeduction();">
                                 <option/>
-                                <%=ScreenHelper.writeSelectUnsorted("hr.salary.deduction.type","",sWebLanguage)%>
+                                <%=ScreenHelper.writeSelectUnsorted(request,"hr.salary.deduction.type","",sWebLanguage)%>
                             </select>&nbsp;
                         </td>   
                         <%-- 5 - deAmount --%>
@@ -409,7 +409,7 @@
         
         <%-- comment --%>                    
         <tr>
-            <td class="admin"><%=getTran("web.hr","comment",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web.hr","comment",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea class="text" name="comment" id="comment" cols="80" rows="4" onKeyup="resizeTextarea(this,8);"></textarea>
             </td>
@@ -425,7 +425,7 @@
             </td>
         </tr>
     </table>
-    <i><%=getTran("web","colored_fields_are_obligate",sWebLanguage)%></i>
+    <i><%=getTran(request,"web","colored_fields_are_obligate",sWebLanguage)%></i>
     
     <div id="divMessage" style="padding-top:10px;"></div>
 </form>

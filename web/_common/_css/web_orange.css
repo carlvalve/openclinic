@@ -301,6 +301,18 @@ TD.admin {
  line-height:22px;
 }
 
+tr.adminng {
+ font-family:arial, sans-serif;
+ font-weight:bolder;
+ text-align:left;
+ text-indent:5px;
+ padding:1px;
+ color:#303030;
+ height:22px;
+ font-size:11px;
+ background-color: #FC9235;
+}
+
 td.admin2 {
  color:#303030;
  font-family:arial, sans-serif;

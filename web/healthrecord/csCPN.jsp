@@ -19,7 +19,7 @@
         <%-- DATE --%>
         <tr>
             <td class="admin" width="<%=sTDAdminWidth%>">
-                <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;<%=getTran("Web.Occup", "medwan.common.date", sWebLanguage)%>
+                <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;<%=getTran(request,"Web.Occup", "medwan.common.date", sWebLanguage)%>
             </td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" id="trandate" OnBlur="checkDate(this);">
@@ -28,23 +28,23 @@
         </tr>
         
         <tr>
-            <td class="admin"><%=getTran("cs.cpn", "type.de.visite", sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"cs.cpn", "type.de.visite", sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <select id="type_visite" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_CPN_TYPE_VISITE" property="itemId"/>]>.value">
                     <option/>
                     <%SessionContainerWO sessionContainerWO = (SessionContainerWO) SessionContainerFactory.getInstance().getSessionContainerWO(request, SessionContainerWO.class.getName());
                         String item = sessionContainerWO.getCurrentTransactionVO().getItem(sPREFIX + "ITEM_TYPE_CS_CPN_TYPE_VISITE").getValue();%>
-                    <option value="nouvelle.inscription" <%=(item.equals("nouvelle.inscription") ? "selected" : "")%>><%=getTran("cs.cpn.type.visite", "nouvelle.inscription", sWebLanguage)%>
+                    <option value="nouvelle.inscription" <%=(item.equals("nouvelle.inscription") ? "selected" : "")%>><%=getTran(request,"cs.cpn.type.visite", "nouvelle.inscription", sWebLanguage)%>
                     </option>
-                    <option value="premier.trimestre" <%=(item.equals("premier.trimestre") ? "selected" : "")%>><%=getTran("cs.cpn.type.visite", "premier.trimestre", sWebLanguage)%>
+                    <option value="premier.trimestre" <%=(item.equals("premier.trimestre") ? "selected" : "")%>><%=getTran(request,"cs.cpn.type.visite", "premier.trimestre", sWebLanguage)%>
                     </option>
-                    <option value="deuxieme.trimestre" <%=(item.equals("deuxieme.trimestre") ? "selected" : "")%>><%=getTran("cs.cpn.type.visite", "deuxieme.trimestre", sWebLanguage)%>
+                    <option value="deuxieme.trimestre" <%=(item.equals("deuxieme.trimestre") ? "selected" : "")%>><%=getTran(request,"cs.cpn.type.visite", "deuxieme.trimestre", sWebLanguage)%>
                     </option>
-                    <option value="7.8.mois" <%=(item.equals("7.8.mois") ? "selected" : "")%>><%=getTran("cs.cpn.type.visite", "7.8.mois", sWebLanguage)%>
+                    <option value="7.8.mois" <%=(item.equals("7.8.mois") ? "selected" : "")%>><%=getTran(request,"cs.cpn.type.visite", "7.8.mois", sWebLanguage)%>
                     </option>
-                    <option value="9.mois" <%=(item.equals("9.mois") ? "selected" : "")%>><%=getTran("cs.cpn.type.visite", "9.mois", sWebLanguage)%>
+                    <option value="9.mois" <%=(item.equals("9.mois") ? "selected" : "")%>><%=getTran(request,"cs.cpn.type.visite", "9.mois", sWebLanguage)%>
                     </option>
-                    <option value="autre" <%=(item.equals("autre") ? "selected" : "")%>><%=getTran("cs.cpn.type.visite", "autre", sWebLanguage)%>
+                    <option value="autre" <%=(item.equals("autre") ? "selected" : "")%>><%=getTran(request,"cs.cpn.type.visite", "autre", sWebLanguage)%>
                     </option>
                 </select>
             </td>
@@ -55,7 +55,7 @@
                 <mxs:propertyAccessorI18N name="transaction.items" scope="page"
                                           compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_CPN_GROSSESSE_RISQUE;value=true"
                                           property="value"
-                                          outputString="checked"/>><%=getLabel("cs.cpn", "grossesse.risque", sWebLanguage, "grossesse_risque")%>
+                                          outputString="checked"/>><%=getLabel(request,"cs.cpn", "grossesse.risque", sWebLanguage, "grossesse_risque")%>
             </td>
         </tr>
         <tr>
@@ -109,7 +109,7 @@
                 <mxs:propertyAccessorI18N name="transaction.items" scope="page"
                                           compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_CPN_FER_ACIDE_FOLIQUE;value=true"
                                           property="value"
-                                          outputString="checked"/>><%=getLabel("cs.cpn", "fer.acide.folique", sWebLanguage, "fer")%>
+                                          outputString="checked"/>><%=getLabel(request,"cs.cpn", "fer.acide.folique", sWebLanguage, "fer")%>
             </td>
         </tr>
         <tr>
@@ -119,11 +119,11 @@
                 <mxs:propertyAccessorI18N name="transaction.items" scope="page"
                                           compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_CPN_MOUSTIQUAIRE_IMPREGNEE;value=true"
                                           property="value"
-                                          outputString="checked"/>><%=getLabel("cs.cpn", "moustiquaire.impregnee", sWebLanguage, "moustiquaire")%>
+                                          outputString="checked"/>><%=getLabel(request,"cs.cpn", "moustiquaire.impregnee", sWebLanguage, "moustiquaire")%>
             </td>
         </tr>
          <tr>
-            <td class="admin"><%=getTran("web", "comment", sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web", "comment", sWebLanguage)%></td>
             <td colspan="3" class="admin2">
                 <textarea id="comment" rows="1" onKeyup="resizeTextarea(this,10);" class="text" cols="75" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_CPN_COMMENTAIRE_0" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_CPN_COMMENTAIRE_0" property="value"/><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_CPN_COMMENTAIRE_1" property="value"/><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_CPN_COMMENTAIRE_2" property="value"/><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_CPN_COMMENTAIRE_2" property="value"/><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_CPN_COMMENTAIRE_3" property="value"/><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_CPN_COMMENTAIRE_4" property="value"/></textarea>
                 <input type="hidden" id="comment_1" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_CPN_COMMENTAIRE_1" property="itemId"/>]>.value">

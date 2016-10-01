@@ -15,9 +15,9 @@
         // get names
         String sSourceFullName      = ScreenHelper.getFullPersonName(sourceId+""),
                sDestinationFullName = ScreenHelper.getFullPersonName(destinationId+""),
-               sRelationType        = getTran("admin.familyrelation",relationType,sWebLanguage);
+               sRelationType        = getTran(null,"admin.familyrelation",relationType,sWebLanguage);
 
-        String detailsTran = getTran("web","showdetails",sWebLanguage);
+        String detailsTran = getTran(null,"web","showdetails",sWebLanguage);
         StringBuffer buf = new StringBuffer();
         buf.append("<tr id='rowFR"+iTotal+"' class='"+sClass+"'>")
             .append("<td align='center'>");
@@ -74,9 +74,9 @@
                 <%-- HEADER --%>
                 <tr class="admin">
                     <td width="25" nowrap/>
-                    <td width="20%"><%=getTran("web.admin","sourceperson",sWebLanguage)%></td>
-                    <td width="20%"><%=getTran("web.admin","destinationperson",sWebLanguage)%></td>
-                    <td width="60%"><%=getTran("web.admin","relationtype",sWebLanguage)%></td>
+                    <td width="20%"><%=getTran(request,"web.admin","sourceperson",sWebLanguage)%></td>
+                    <td width="20%"><%=getTran(request,"web.admin","destinationperson",sWebLanguage)%></td>
+                    <td width="60%"><%=getTran(request,"web.admin","relationtype",sWebLanguage)%></td>
                 </tr>
                 <%-- chosen relations --%>
                 <%=sDivFR%>
@@ -89,7 +89,7 @@
                     <%
                 }
                 else{
-                    %><div id="msg"><%=getTran("web","nofamilyrelationsfound",sWebLanguage)%></div><%
+                    %><div id="msg"><%=getTran(request,"web","nofamilyrelationsfound",sWebLanguage)%></div><%
                 }
             %>
             <br>
@@ -98,7 +98,7 @@
             <table width="100%" cellspacing="1" class="list">
                 <%-- HEADER --%>
                 <tr class="admin">
-                    <td colspan="2">&nbsp;<%=getTran("web.admin","addfamilyrelation",sWebLanguage)%></td>
+                    <td colspan="2">&nbsp;<%=getTran(request,"web.admin","addfamilyrelation",sWebLanguage)%></td>
                 </tr>
                 
                 <%-- source id --%>
@@ -106,7 +106,7 @@
                 
                 <%-- destination id --%>
                 <tr>
-                    <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web.admin","destinationperson",sWebLanguage)%>&nbsp;</td>
+                    <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web.admin","destinationperson",sWebLanguage)%>&nbsp;</td>
                     <td class="admin2">
                         <input type="hidden" name="RDestinationId" value="">
                         <input class="text" type="text" name="RDestinationFullName" readonly size="<%=sTextWidth%>" value="">
@@ -118,11 +118,11 @@
                 
                 <%-- relation type --%>
                 <tr>
-                    <td class="admin"><%=getTran("Web.admin","relationType",sWebLanguage)%>&nbsp;*&nbsp;</td>
+                    <td class="admin"><%=getTran(request,"Web.admin","relationType",sWebLanguage)%>&nbsp;*&nbsp;</td>
                     <td class="admin2">
                         <select class="text" name="RRelationType">
                             <option><%=getTranNoLink("web","choose",sWebLanguage)%></option>
-                            <%=ScreenHelper.writeSelect("admin.familyrelation","",sWebLanguage)%>
+                            <%=ScreenHelper.writeSelect(request,"admin.familyrelation","",sWebLanguage)%>
                         </select>
                     </td>
                 </tr>
@@ -139,7 +139,7 @@
             
             <input type="hidden" name="familyRelations" value="">
             
-            <i><%=getTran("web","familyRelationInfo",sWebLanguage)%></i>
+            <i><%=getTran(request,"web","familyRelationInfo",sWebLanguage)%></i>
             
             <script>
               var iIndexFR = <%=iTotal%>;
@@ -207,13 +207,13 @@
 
                       <%-- translate gender --%>
                       if(relationType == "childparent"){
-                        row.cells[3].innerHTML = "<%=getTran("admin.familyrelation","childparent",sWebLanguage)%>";
+                        row.cells[3].innerHTML = "<%=getTran(null,"admin.familyrelation","childparent",sWebLanguage)%>";
                       }
                       else if(relationType == "brothersister"){
-                        row.cells[3].innerHTML = "<%=getTran("admin.familyrelation","brothersister",sWebLanguage)%>";
+                        row.cells[3].innerHTML = "<%=getTran(null,"admin.familyrelation","brothersister",sWebLanguage)%>";
                       }
                       else if(relationType == "husbandwife"){
-                        row.cells[3].innerHTML = "<%=getTran("admin.familyrelation","husbandwife",sWebLanguage)%>";
+                        row.cells[3].innerHTML = "<%=getTran(null,"admin.familyrelation","husbandwife",sWebLanguage)%>";
                       }
                       else{
                         row.cells[3].innerHTML = "";

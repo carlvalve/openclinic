@@ -45,10 +45,10 @@
     <table class="menu" width="100%" cellpadding="0" cellspacing="1">
         <%-- PERIOD --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","period",sWebLanguage)%>&nbsp;</td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","period",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
-                <%=getTran("web","from",sWebLanguage)%>&nbsp;<%=writeDateField("begin","serviceIncome",sBegin,sWebLanguage)%>&nbsp;
-                <%=getTran("web","to",sWebLanguage)%>&nbsp;<%=writeDateField("end","serviceIncome",sEnd,sWebLanguage)%>&nbsp;
+                <%=getTran(request,"web","from",sWebLanguage)%>&nbsp;<%=writeDateField("begin","serviceIncome",sBegin,sWebLanguage)%>&nbsp;
+                <%=getTran(request,"web","to",sWebLanguage)%>&nbsp;<%=writeDateField("end","serviceIncome",sEnd,sWebLanguage)%>&nbsp;
                 
                 <%-- BUTTONS --%>
                 <input type="submit" class="button" name="find" value="<%=getTranNoLink("web","find",sWebLanguage)%>"/>&nbsp;
@@ -58,7 +58,7 @@
         
         <%-- SERVICE --%>
         <tr>
-        	<td class="admin"><%=getTran("Web","service",sWebLanguage)%></td>
+        	<td class="admin"><%=getTran(request,"Web","service",sWebLanguage)%></td>
         	<td class="admin2" colspan='2'>
         	    <input type='hidden' name='serviceid' id='serviceid' value='<%=serviceId%>'>
         		<input class='text' type='text' name='servicename' id='servicename' readonly size='60' value='<%=serviceName %>'>
@@ -152,11 +152,11 @@
                 
                 activeservice = serviceuid;
                 out.print("<tr class='admin'>"+
-                           "<td>"+(activeservice.length()==0?"?":activeservice+": "+getTran("service",activeservice,sWebLanguage))+"</td>"+
+                           "<td>"+(activeservice.length()==0?"?":activeservice+": "+getTran(request,"service",activeservice,sWebLanguage))+"</td>"+
                            "<td>#</td>"+
-                		   "<td>"+getTran("web","total",sWebLanguage)+"</td>"+
-                           "<td>"+getTran("web","patient",sWebLanguage)+"</td>"+
-                		   "<td>"+getTran("web","insurar",sWebLanguage)+"</td>"+
+                		   "<td>"+getTran(request,"web","total",sWebLanguage)+"</td>"+
+                           "<td>"+getTran(request,"web","patient",sWebLanguage)+"</td>"+
+                		   "<td>"+getTran(request,"web","insurar",sWebLanguage)+"</td>"+
                           "</tr>");
                 totalpatientincome+= totalservicepatientincome;
                 totalinsurarincome+= totalserviceinsurarincome;
@@ -175,7 +175,7 @@
             
             out.print("<tr>"+
                        "<td class='admin'>"+rs.getString("oc_prestation_code")+": "+rs.getString("oc_prestation_description")+"</td>"+
-                       "<td>"+rs.getInt("quantity")+" ("+rs.getInt("number")+" "+getTran("web","invoices",sWebLanguage)+")</td>"+
+                       "<td>"+rs.getInt("quantity")+" ("+rs.getInt("number")+" "+getTran(request,"web","invoices",sWebLanguage)+")</td>"+
                        "<td>"+(patientincome+insurarincome)+"</td>"+
                        "<td>"+patientincome+"</td>"+
                        "<td>"+insurarincome+"</td>"+
@@ -195,7 +195,7 @@
             totalinsurarincome+= totalserviceinsurarincome;
             
             out.print("<tr class='admin'>"+
-                       "<td>"+getTran("web","allservices",sWebLanguage)+"</td>"+
+                       "<td>"+getTran(request,"web","allservices",sWebLanguage)+"</td>"+
             		   "<td/>"+
                        "<td><b>"+(totalinsurarincome+totalpatientincome)+"</b></td>"+
             		   "<td><b>"+totalpatientincome+"</b></td>"+
@@ -207,12 +207,12 @@
         conn.close();
         
         if(recordCount==0){
-        	%><%=getTran("web","noRecordsFound",sWebLanguage)%><%
+        	%><%=getTran(request,"web","noRecordsFound",sWebLanguage)%><%
         }
         else{
         	%>
                 </table>
-        	    <%=recordCount%> <%=getTran("web","recordsFound",sWebLanguage)%>
+        	    <%=recordCount%> <%=getTran(request,"web","recordsFound",sWebLanguage)%>
         	<%
         }
     }

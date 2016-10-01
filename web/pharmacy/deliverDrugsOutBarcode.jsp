@@ -30,6 +30,7 @@
 		operation.setProductStockUid(rs.getString("OC_LIST_PRODUCTSTOCKUID"));
 		operation.setSourceDestination(new ObjectReference("patient",activePatient.personid));
 		operation.setUnitsChanged(rs.getInt("OC_LIST_QUANTITY"));
+		operation.setComment(checkString(rs.getString("OC_LIST_COMMENT")));
 		operation.setUpdateDateTime(new java.util.Date());
 		operation.setUpdateUser(activeUser.userid);
 		operation.setVersion(1);

@@ -58,7 +58,7 @@
         </tr>
         <tr>
             <td class="admin" width="<%=sTDAdminWidth%>">
-                <%=getTran("Web.Manage","ServerID",sWebLanguage)%>
+                <%=getTran(request,"Web.Manage","ServerID",sWebLanguage)%>
             </td>
             <td class="admin2">
                 <input class="text" type="text" name="FindServerId" value="<%=MedwanQuery.getInstance().getConfigString("serverId")%>" size="<%=sTextWidth%>">

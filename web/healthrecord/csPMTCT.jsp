@@ -19,7 +19,7 @@
         <%-- DATE --%>
         <tr>
             <td class="admin" width="<%=sTDAdminWidth%>">
-                <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;<%=getTran("Web.Occup", "medwan.common.date", sWebLanguage)%>
+                <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;<%=getTran(request,"Web.Occup", "medwan.common.date", sWebLanguage)%>
             </td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" id="trandate" OnBlur="checkDate(this);">
@@ -27,38 +27,38 @@
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("cs.pvv", "actions", sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"cs.pvv", "actions", sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input onclick="setCouncelingClick();" type="checkbox" id="action_1" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PMTCT_COUNSELLING" property="itemId"/>]>.value" value="true"
                 <mxs:propertyAccessorI18N name="transaction.items" scope="page"
                                           compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PMTCT_COUNSELLING;value=true"
                                           property="value"
-                                          outputString="checked"/>><%=getLabel("cs.pmtct", "counselling", sWebLanguage, "action_1")%>
+                                          outputString="checked"/>><%=getLabel(request,"cs.pmtct", "counselling", sWebLanguage, "action_1")%>
                 <div style="visibility:hidden;display:inline;" id="action_2_div">
                     <input type="checkbox" id="action_2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PMTCT_AVEC_PARTENAIRE" property="itemId"/>]>.value" value="true"
                     <mxs:propertyAccessorI18N name="transaction.items" scope="page"
                                               compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PMTCT_AVEC_PARTENAIRE;value=true"
                                               property="value"
-                                              outputString="checked"/>><%=getLabel("cs.pmtct", "avec.partenaire", sWebLanguage, "action_2")%>
+                                              outputString="checked"/>><%=getLabel(request,"cs.pmtct", "avec.partenaire", sWebLanguage, "action_2")%>
                 </div>
                 <br/>
                 <input type="checkbox" id="action_3" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PMTCT_TESTE_VIH" property="itemId"/>]>.value" value="true"
                 <mxs:propertyAccessorI18N name="transaction.items" scope="page"
                                           compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PMTCT_TESTE_VIH;value=true"
                                           property="value"
-                                          outputString="checked"/>><%=getLabel("cs.pmtct", "teste.vih", sWebLanguage, "action_3")%>
+                                          outputString="checked"/>><%=getLabel(request,"cs.pmtct", "teste.vih", sWebLanguage, "action_3")%>
                 <br/>
                 <input type="checkbox" id="action_4" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PMTCT_TESTE_RPR" property="itemId"/>]>.value" value="true"
                 <mxs:propertyAccessorI18N name="transaction.items" scope="page"
                                           compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PMTCT_TESTE_RPR;value=true"
                                           property="value"
-                                          outputString="checked"/>><%=getLabel("cs.pmtct", "teste.rpr", sWebLanguage, "action_4")%>
+                                          outputString="checked"/>><%=getLabel(request,"cs.pmtct", "teste.rpr", sWebLanguage, "action_4")%>
                 <br/>
                 <input type="checkbox" id="action_5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PMTCT_RECUPERATION_RESULTATS" property="itemId"/>]>.value" value="true"
                 <mxs:propertyAccessorI18N name="transaction.items" scope="page"
                                           compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PMTCT_RECUPERATION_RESULTATS;value=true"
                                           property="value"
-                                          outputString="checked"/>><%=getLabel("cs.pmtct", "recuperation.resultats", sWebLanguage, "action_5")%>
+                                          outputString="checked"/>><%=getLabel(request,"cs.pmtct", "recuperation.resultats", sWebLanguage, "action_5")%>
                 <br/>
             </td>
         </tr>
@@ -79,13 +79,13 @@
                     <mxs:propertyAccessorI18N name="transaction.items" scope="page"
                                               compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PMTCT_ELIGIBLE_ARV;value=true"
                                               property="value"
-                                              outputString="checked"/>><%=getLabel("cs.pmtct", "eligible.arv", sWebLanguage, "vih3")%>
+                                              outputString="checked"/>><%=getLabel(request,"cs.pmtct", "eligible.arv", sWebLanguage, "vih3")%>
                     <br/>
                     <input type="checkbox" id="vih4" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PMTCT_ELIGIBLE_PROPHYLAXIE" property="itemId"/>]>.value" value="true"
                     <mxs:propertyAccessorI18N name="transaction.items" scope="page"
                                               compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PMTCT_ELIGIBLE_PROPHYLAXIE;value=true"
                                               property="value"
-                                              outputString="checked"/>><%=getLabel("cs.pmtct", "eligible.prophylaxie", sWebLanguage, "vih4")%>
+                                              outputString="checked"/>><%=getLabel(request,"cs.pmtct", "eligible.prophylaxie", sWebLanguage, "vih4")%>
                     <br/>
                 </div>
             </td>
@@ -106,7 +106,7 @@
         
         <%-- COMMENT --%>
         <tr>
-            <td class="admin"><%=getTran("web", "comment", sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web", "comment", sWebLanguage)%></td>
             <td colspan="3" class="admin2">
                 <textarea id="comment" rows="1" onKeyup="resizeTextarea(this,10);" class="text" cols="75" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PMTCT_COMMENTAIRE_0" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PMTCT_COMMENTAIRE_0" property="value"/><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PMTCT_COMMENTAIRE_1" property="value"/><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PMTCT_COMMENTAIRE_2" property="value"/><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PMTCT_COMMENTAIRE_2" property="value"/><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PMTCT_COMMENTAIRE_3" property="value"/><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PMTCT_COMMENTAIRE_4" property="value"/></textarea>
                 <input type="hidden" id="comment_1" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_PMTCT_COMMENTAIRE_1" property="itemId"/>]>.value" />

@@ -38,10 +38,10 @@
     <table width="100%" class="list" cellpadding="0" cellspacing="1">
         <tr>
             <td class="admin2">
-                <%=getTran("web","begin",sWebLanguage)%>&nbsp;
+                <%=getTran(request,"web","begin",sWebLanguage)%>&nbsp;
                 <%=writeDateField("begin","diagnosisList",sBegin,sWebLanguage)%>&nbsp;
                 
-                <%=getTran("web","end",sWebLanguage)%>&nbsp;
+                <%=getTran(request,"web","end",sWebLanguage)%>&nbsp;
                 <%=writeDateField("end","diagnosisList",sEnd,sWebLanguage)%>&nbsp;
                 
                 <%-- BUTTONS --%>
@@ -59,9 +59,9 @@
 	    %>
 	        <table width="100%" class="list" cellpadding="0" cellspacing="1">
 			    <tr class="gray">
-			        <td><%=getTran("web","patient",sWebLanguage)%></td>
-			        <td><%=getTran("web","service",sWebLanguage)%></td>
-			        <td colspan="3"><%=getTran("web","diagnoses",sWebLanguage)%></td>
+			        <td><%=getTran(request,"web","patient",sWebLanguage)%></td>
+			        <td><%=getTran(request,"web","service",sWebLanguage)%></td>
+			        <td colspan="3"><%=getTran(request,"web","diagnoses",sWebLanguage)%></td>
 			    </tr>
 	    <%
 
@@ -140,10 +140,10 @@
         // total
         %>
 			    <tr>
-			        <td class="admin2"><%=getTran("web","total.patients",sWebLanguage)%></td>
+			        <td class="admin2"><%=getTran(request,"web","total.patients",sWebLanguage)%></td>
 			        <td class="admin2"><b><%=patientcounter%></b></td>
 			        <td class="admin2">&nbsp;</td>
-			        <td class="admin2"><%=getTran("web","total.diagnosis",sWebLanguage)%></td>
+			        <td class="admin2"><%=getTran(request,"web","total.diagnosis",sWebLanguage)%></td>
 			        <td class="admin2"><b><%=diagnosiscounter%></b></td>
 			    </tr>
 		    </table>

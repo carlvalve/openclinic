@@ -45,7 +45,7 @@
             ResultSet rs2=ps2.executeQuery();
             String sType="";
             if(rs2.next()){
-                sType=getTran("Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-"+rs2.getString("value"),sWebLanguage);
+                sType=getTran(request,"Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-"+rs2.getString("value"),sWebLanguage);
             }
             rs2.close();
             ps2.close();
@@ -74,7 +74,7 @@
         ResultSet rs=ps.executeQuery();
         while(rs.next()){
             TransactionVO tran = MedwanQuery.getInstance().loadTransaction(rs.getInt("serverid"),rs.getInt("transactionid"));
-            sResult+="<tr class='list'  onmouseover=\"this.style.cursor='hand';this.className='list_select';\" onmouseout=\"this.style.cursor='default';this.className='list';\" onclick='selectTran(\""+rs.getInt("serverid")+"\",\""+rs.getInt("transactionId")+"\")'><td width='10%'>"+ScreenHelper.stdDateFormat.format(rs.getDate("updateTime"))+"</td><td width='10%'>"+(tran.getItem("be.mxs.common.model.vo.healthrecord.IConstants.item_type_mir2_type")!=null?getTran("Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-"+checkString(tran.getItem("be.mxs.common.model.vo.healthrecord.IConstants.item_type_mir2_type").getValue()),sWebLanguage):"")+"</td><td width='10%'>"+tran.getUser().getPersonVO().getFirstname()+" "+tran.getUser().getPersonVO().getLastname()+"</td><td>"+(tran.getItem("be.mxs.common.model.vo.healthrecord.IConstants.item_type_mir2_protocol")!=null?checkString(tran.getItem("be.mxs.common.model.vo.healthrecord.IConstants.item_type_mir2_protocol").getValue()):"")+"</td></tr>";
+            sResult+="<tr class='list'  onmouseover=\"this.style.cursor='hand';this.className='list_select';\" onmouseout=\"this.style.cursor='default';this.className='list';\" onclick='selectTran(\""+rs.getInt("serverid")+"\",\""+rs.getInt("transactionId")+"\")'><td width='10%'>"+ScreenHelper.stdDateFormat.format(rs.getDate("updateTime"))+"</td><td width='10%'>"+(tran.getItem("be.mxs.common.model.vo.healthrecord.IConstants.item_type_mir2_type")!=null?getTran(request,"Web.Occup","medwan.occupational-medicine.medical-imaging-request.type-"+checkString(tran.getItem("be.mxs.common.model.vo.healthrecord.IConstants.item_type_mir2_type").getValue()),sWebLanguage):"")+"</td><td width='10%'>"+tran.getUser().getPersonVO().getFirstname()+" "+tran.getUser().getPersonVO().getLastname()+"</td><td>"+(tran.getItem("be.mxs.common.model.vo.healthrecord.IConstants.item_type_mir2_protocol")!=null?checkString(tran.getItem("be.mxs.common.model.vo.healthrecord.IConstants.item_type_mir2_protocol").getValue()):"")+"</td></tr>";
         }
         rs.close();
         ps.close();
@@ -86,12 +86,12 @@
 <%-- search table --%>
 <table width="100%" class="menu" cellspacing="0" cellpadding="1">
     <tr class="admin">
-        <td colspan="4"><%=getTran("web","radiology",sWebLanguage)%></td>
+        <td colspan="4"><%=getTran(request,"web","radiology",sWebLanguage)%></td>
     </tr>
     <tr>
         <td class="admin2" colspan="2" height="22">
             <%-- RESULT DATE --%>
-            &nbsp;<%=getTran("Web.manage","labanalysis.cols.resultdate",sWebLanguage)%>&nbsp;
+            &nbsp;<%=getTran(request,"Web.manage","labanalysis.cols.resultdate",sWebLanguage)%>&nbsp;
             <%=writeDateField("FindResultDate","transactionForm",sFindResultDate,sWebLanguage)%>&nbsp;
 
             <%-- buttons --%>
@@ -104,10 +104,10 @@
 </form>
 <table width="100%">
     <tr class="admin">
-        <td><%=getTran("web","date",sWebLanguage)%></td>
-        <td><%=getTran("web","examinationtype",sWebLanguage)%></td>
-        <td><%=getTran("web","user",sWebLanguage)%></td>
-        <td><%=getTran("web","protocol",sWebLanguage)%></td>
+        <td><%=getTran(request,"web","date",sWebLanguage)%></td>
+        <td><%=getTran(request,"web","examinationtype",sWebLanguage)%></td>
+        <td><%=getTran(request,"web","user",sWebLanguage)%></td>
+        <td><%=getTran(request,"web","protocol",sWebLanguage)%></td>
     </tr>
     <%=sResult%>
 </table>

@@ -73,7 +73,7 @@
             outFDF.SetValue("p.natreg",activePatient.getID("natreg")+"");
             outFDF.SetValue("p.lang",activePatient.language+"");
 
-            outFDF.SetValue("p.title",getTran("web.userprofile",(activePatient.gender.equalsIgnoreCase("m")?"male_title":"female_title"),(request.getParameter("file").substring(5).startsWith("N")?"N":"F")));
+            outFDF.SetValue("p.title",getTran(request,"web.userprofile",(activePatient.gender.equalsIgnoreCase("m")?"male_title":"female_title"),(request.getParameter("file").substring(5).startsWith("N")?"N":"F")));
 
             // date of birth
             if (activePatient.dateOfBirth!=null && activePatient.dateOfBirth.length()>0){

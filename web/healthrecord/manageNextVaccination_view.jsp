@@ -32,7 +32,7 @@
     <%=writeTableHeader("Web.Occup","be.mxs.healthrecord.vaccination.Vaccination",sWebLanguage,"showWelcomePage.do?ts="+getTs())%>
     <table border='0' width='100%' class='list' cellspacing="1">
         <tr>
-            <td class='admin' width="30%"><%=getTran("Web.Occup","medwan.common.type",sWebLanguage)%>&nbsp;</td>
+            <td class='admin' width="30%"><%=getTran(request,"Web.Occup","medwan.common.type",sWebLanguage)%>&nbsp;</td>
             <td class='admin2'><input type="text" readonly class='text' size='20' name="item-type" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VACCINATION_TYPE" property="value"/>" onblur="limitLength(this);"/></td>
         </tr>
         <tr id="vaccination-name" style="display:none">
@@ -40,15 +40,15 @@
             <td class='admin2'><input type="text" class='text' size='20' name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VACCINATION_NAME" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VACCINATION_NAME" property="value"/>" onblur="limitLength(this);"/></td>
         </tr>
         <tr>
-            <td class='admin'><%=getTran("Web.Occup","be.mxs.healthrecord.vaccination.current-status",sWebLanguage)%>&nbsp;</td>
+            <td class='admin'><%=getTran(request,"Web.Occup","be.mxs.healthrecord.vaccination.current-status",sWebLanguage)%>&nbsp;</td>
             <td class='admin2'><input type="text" readonly class="text" size="20" name="old-status" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VACCINATION_STATUS" property="value"/>" onblur="limitLength(this);"/></td>
         </tr>
         <tr>
-            <td class='admin'><%=getTran("Web.Occup","medwan.common.comment",sWebLanguage)%>&nbsp;</td>
+            <td class='admin'><%=getTran(request,"Web.Occup","medwan.common.comment",sWebLanguage)%>&nbsp;</td>
             <td class='admin2'><logic:present name="vaccinationInfo" property="comment"><mxs:propertyAccessorI18N name="vaccinationInfo" scope="page" property="comment"/></logic:present></td>
         </tr>
         <tr>
-            <td class='admin'><%=getTran("Web.Occup","be.mxs.healthrecord.vaccination.new-status",sWebLanguage)%>&nbsp;</td>
+            <td class='admin'><%=getTran(request,"Web.Occup","be.mxs.healthrecord.vaccination.new-status",sWebLanguage)%>&nbsp;</td>
             <td class='admin2'>
                 <select name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VACCINATION_STATUS" property="itemId"/>]>.value" class="text">
                     <logic:iterate id="vaccinationStatus" scope="session" name="be.mxs.webapp.wl.session.SessionContainerFactory.WO_SESSION_CONTAINER" property="currentVaccinationInfoVO.valueList">
@@ -58,31 +58,31 @@
             </td>
         </tr>
         <tr>
-            <td class='admin'><%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>&nbsp;</td>
+            <td class='admin'><%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>&nbsp;</td>
             <td class='admin2'><input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VACCINATION_DATE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VACCINATION_DATE" property="value" formatType="date"/>" id="trandate" OnBlur='checkDate(this)'/><script>writeTranDate();</script></td>
         </tr>
         <tr>
-            <td class='admin'><%=getTran("Web.Occup","be.mxs.healthrecord.vaccination.next-date",sWebLanguage)%>&nbsp;</td>
+            <td class='admin'><%=getTran(request,"Web.Occup","be.mxs.healthrecord.vaccination.next-date",sWebLanguage)%>&nbsp;</td>
             <td class='admin2'>
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VACCINATION_NEXT_DATE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VACCINATION_NEXT_DATE" property="value" formatType="date"/>" id="nextdate" onBlur='if(checkDate(this)){ checkBefore("trandate",this); }'/>
-                <script>writeMyDate("nextdate","<c:url value="/_img/calbtn.gif"/>","<%=getTran("Web","PutToday",sWebLanguage)%>");</script>
+                <script>writeMyDate("nextdate","<c:url value="/_img/calbtn.gif"/>","<%=getTran(null,"Web","PutToday",sWebLanguage)%>");</script>
                 <input type="button" class="button" name="calculate" value="<%=getTranNoLink("Web.Occup","Calculate",sWebLanguage)%>" onclick="calculateNextDate();">
             </td>
         </tr>
         <%-- REMARK --%>
         <tr id="vaccination-remark" style="display:none">
-            <td class='admin'><%=getTran("Web.Occup","medwan.common.remark",sWebLanguage)%>&nbsp;</td>
+            <td class='admin'><%=getTran(request,"Web.Occup","medwan.common.remark",sWebLanguage)%>&nbsp;</td>
             <td class='admin2'>
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" id="vaccination-remarktext" class="text" cols="110" rows="4" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_COMMENT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_COMMENT" property="value"/></textarea>
             </td>
         </tr>
         <%-- POS/NEG --%>
         <tr id="vaccination-positive-negative" style="display:none">
-            <td class='admin'><%=getTran("Web.Occup","medwan.common.remark",sWebLanguage)%>&nbsp;</td>
+            <td class='admin'><%=getTran(request,"Web.Occup","medwan.common.remark",sWebLanguage)%>&nbsp;</td>
             <td class='admin2'>
                 <select name="posneg" class="text">
-                    <option value="medwan.common.negative" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_COMMENT;value=medwan.common.negative" property="value" outputString="selected"/>><%=getTran("Web.Occup","medwan.common.negative",sWebLanguage)%>
-                    <option value="medwan.common.positive" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_COMMENT;value=medwan.common.positive" property="value" outputString="selected"/>><%=getTran("Web.Occup","medwan.common.positive",sWebLanguage)%>
+                    <option value="medwan.common.negative" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_COMMENT;value=medwan.common.negative" property="value" outputString="selected"/>><%=getTran(request,"Web.Occup","medwan.common.negative",sWebLanguage)%>
+                    <option value="medwan.common.positive" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_COMMENT;value=medwan.common.positive" property="value" outputString="selected"/>><%=getTran(request,"Web.Occup","medwan.common.positive",sWebLanguage)%>
                 </select>
             </td>
         </tr>

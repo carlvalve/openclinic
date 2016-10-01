@@ -16,6 +16,14 @@
         sProject = checkString((String)session.getAttribute("activeProjectTitle")).toLowerCase();
         PDFTicketGenerator pdfGenerator;
        	pdfGenerator = new PDFTicketGenerator(activeUser,activePatient,sProject,sPrintLanguage);
+       	if(sObjectid.equalsIgnoreCase("NEW")){
+       		be.openclinic.adt.Queue queue = new be.openclinic.adt.Queue();
+       		queue.setBegin(new java.util.Date());
+       		queue.setSubjecttype("patient");
+       		queue.setId(checkString(request.getParameter("queue")));
+       		queue.store();
+       		sObjectid=queue.getObjectid()+"";
+       	}
         baosPDF = pdfGenerator.generatePDFDocumentBytes(request,sObjectid);
 
         StringBuffer sbFilename = new StringBuffer();

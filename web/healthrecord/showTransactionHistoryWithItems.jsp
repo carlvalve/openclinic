@@ -195,7 +195,7 @@
 <body>
     <%-- page title --%>
     <table width="100%" cellspacing="0" cellpadding="0" class="list">
-        <tr class="admin" height="20"><td><%=getTran("web","transactionHistoryWithItems",sWebLanguage)%></td></tr>
+        <tr class="admin" height="20"><td><%=getTran(request,"web","transactionHistoryWithItems",sWebLanguage)%></td></tr>
     </table>
     
     <%-- SPACER --%>
@@ -206,7 +206,7 @@
     <%-------------------------------------------------------------------------------------------%>
     <table width="100%" cellspacing="0" cellpadding="0" class="list">
         <%-- title --%>
-        <tr class="admin" height="20"><td><%=getTran("web","examinationsAndDocuments",sWebLanguage)%></td></tr>
+        <tr class="admin" height="20"><td><%=getTran(request,"web","examinationsAndDocuments",sWebLanguage)%></td></tr>
 
         <tr>
             <td class="white" valign="top">
@@ -214,10 +214,10 @@
                     <%-- HEADER --%>
                     <tr height="20">
                         <td class="admin" width="20">&nbsp;</td>
-                        <td class="admin" width="90" style="padding-left:4px;"><desc><%=getTran("web","date",sWebLanguage)%></desc></td>
-                        <td class="admin" width="*" style="padding-left:4px;"><%=getTran("web.occup","medwan.common.contacttype",sWebLanguage)%></td>
-                        <td class="admin" width="150" style="padding-left:4px;"><%=getTran("web","user",sWebLanguage)%></td>
-                        <td class="admin" width="200" style="padding-left:4px;"><%=getTran("web","context",sWebLanguage)%></td>
+                        <td class="admin" width="90" style="padding-left:4px;"><desc><%=getTran(request,"web","date",sWebLanguage)%></desc></td>
+                        <td class="admin" width="*" style="padding-left:4px;"><%=getTran(request,"web.occup","medwan.common.contacttype",sWebLanguage)%></td>
+                        <td class="admin" width="150" style="padding-left:4px;"><%=getTran(request,"web","user",sWebLanguage)%></td>
+                        <td class="admin" width="200" style="padding-left:4px;"><%=getTran(request,"web","context",sWebLanguage)%></td>
                     </tr>
     <%
     
@@ -275,7 +275,7 @@
                        "&ts="+getTs();
             }
 
-            sTranName = getTran("web.occup",tran.getTransactionType(),sWebLanguage);
+            sTranName = getTran(request,"web.occup",tran.getTransactionType(),sWebLanguage);
             if(sTranName.length() > 52){
                 sTranNameShort = sTranName.substring(0,50)+"...";
             }
@@ -303,7 +303,7 @@
                     <td onclick="toggleTranItems(<%=tranCount%>);">&nbsp;<%=ScreenHelper.stdDateFormat.format(tran.getUpdateTime())%></td>
                     <td>&nbsp;<a href="javascript:void();" onClick="showExamination('<%=sUrl%>');"><%=sTranNameShort%></a></td>
                     <td onclick="toggleTranItems(<%=tranCount%>);">&nbsp;<%=sFullUserName%></td>
-                    <td onclick="toggleTranItems(<%=tranCount%>);">&nbsp;<%=getTran("web.occup",sContext,sWebLanguage)%></td>                  
+                    <td onclick="toggleTranItems(<%=tranCount%>);">&nbsp;<%=getTran(request,"web.occup",sContext,sWebLanguage)%></td>                  
                 </tr>                                   
 
                 <%-- HIDDEN TABLE --%>
@@ -347,7 +347,7 @@
 
                                         //--- LAB_RESULT --------------------------------------------------------------
                                         if(sTransactionType.indexOf("LAB_RESULT") > -1){
-                                            sItemLabel = getTran("TRANSACTION_TYPE_LAB_RESULT",sItemType,sWebLanguage);
+                                            sItemLabel = getTran(request,"TRANSACTION_TYPE_LAB_RESULT",sItemType,sWebLanguage);
                                             MessageReader messageReader = new MessageReaderMedidoc();
                                             messageReader.lastline = sItemValue;
                         
@@ -368,10 +368,10 @@
                                         if(sTransactionType.equals(ScreenHelper.ITEM_PREFIX+"TRANSACTION_TYPE_MIR") ||
                                            sTransactionType.equals(ScreenHelper.ITEM_PREFIX+"TRANSACTION_TYPE_MIR_MOBILE_UNIT")){    
                                             if(sItemType.equals(ScreenHelper.ITEM_PREFIX+"ITEM_TYPE_MIR_TYPE")){
-                                                sItemValue = getTran("web.occup","medwan.occupational-medicine.medical-imaging-request.type-"+sItemValue,sWebLanguage);
+                                                sItemValue = getTran(request,"web.occup","medwan.occupational-medicine.medical-imaging-request.type-"+sItemValue,sWebLanguage);
                                             }
                                             else{
-                                                sItemValue = getTran("web.occup",sItemValue,sWebLanguage);
+                                                sItemValue = getTran(request,"web.occup",sItemValue,sWebLanguage);
                                             }
                         
                                             if(sItemValue.length() > 0){
@@ -397,7 +397,7 @@
                                                     allAnalysis+= sItemValue;
                                                 }
                         
-                                                String analysisTran = getTran("web.occup","labanalysis.analysis",sWebLanguage);
+                                                String analysisTran = getTran(request,"web.occup","labanalysis.analysis",sWebLanguage);
                                                 String oneAnalysis, analysisCode, analysisComm;
                         
                                                 // split the total analysis-string into one analysis per row
@@ -423,7 +423,7 @@
                                                         <tr>
                                                             <td class="admin" width="<%=sTDAdminWidth%>"><%=analysisTran%> <%=analysisCode%></td>
                                                             <td class="admin2" width="*" nowrap>
-                                                                <%=getTran("labanalysis",analysisCode,sWebLanguage)%>
+                                                                <%=getTran(request,"labanalysis",analysisCode,sWebLanguage)%>
                                                                 <%
                                                                     // comment
                                                                     if(analysisComm.length() > 0){
@@ -488,7 +488,7 @@
                                     if(!itemValuesFound){
                                         %>
                                             <tr>
-                                                <td class="admin2"><%=getTran("web.occup","noItemValuesToShowFound",sWebLanguage)%></td>
+                                                <td class="admin2"><%=getTran(request,"web.occup","noItemValuesToShowFound",sWebLanguage)%></td>
                                             </tr>
                                         <%
                                     }
@@ -496,7 +496,7 @@
                                 else{    
                                     %>
                                         <tr>
-                                            <td class="admin2"><%=getTran("web.occup","noItemsToShowFound",sWebLanguage)%></td>
+                                            <td class="admin2"><%=getTran(request,"web.occup","noItemsToShowFound",sWebLanguage)%></td>
                                         </tr>
                                     <%
                                 }
@@ -516,8 +516,8 @@
         </tr>
     </table>
     
-    <a href="javascript:void();" onclick="expandAllTransactions();"><%=getTran("web","expand_all",sWebLanguage)%></a>&nbsp;
-    <a href="javascript:void();" onclick="collapseAllTransactions();"><%=getTran("web","close_all",sWebLanguage)%></a>
+    <a href="javascript:void();" onclick="expandAllTransactions();"><%=getTran(request,"web","expand_all",sWebLanguage)%></a>&nbsp;
+    <a href="javascript:void();" onclick="collapseAllTransactions();"><%=getTran(request,"web","close_all",sWebLanguage)%></a>
     
     <br><br>
 
@@ -525,7 +525,7 @@
     <%-- 2 : VACCINATIONS -----------------------------------------------------------------------%>
     <%-------------------------------------------------------------------------------------------%>
     <table width="100%" cellspacing="0" cellpadding="0" class="list">
-        <tr class="admin" height="20"><td><%=getTran("web.occup","vaccinations",sWebLanguage)%></td></tr>
+        <tr class="admin" height="20"><td><%=getTran(request,"web.occup","vaccinations",sWebLanguage)%></td></tr>
 
         <tr>
             <td class="white" valign="top">
@@ -533,9 +533,9 @@
                     <%-- HEADER --%>
                     <tr height="20">
                         <td class="admin" width="20">&nbsp;</td>
-                        <td class="admin" width="90" style="padding-left:4px;"><desc><%=getTran("web","date",sWebLanguage)%></desc></td>
-                        <td class="admin" width="*" style="padding-left:4px;"><%=getTran("web.occup","medwan.common.contacttype",sWebLanguage)%></td>
-                        <td class="admin" width="150" style="padding-left:4px;"><%=getTran("web","user",sWebLanguage)%></td>
+                        <td class="admin" width="90" style="padding-left:4px;"><desc><%=getTran(request,"web","date",sWebLanguage)%></desc></td>
+                        <td class="admin" width="*" style="padding-left:4px;"><%=getTran(request,"web.occup","medwan.common.contacttype",sWebLanguage)%></td>
+                        <td class="admin" width="150" style="padding-left:4px;"><%=getTran(request,"web","user",sWebLanguage)%></td>
                         <td class="admin" width="200">&nbsp;</td>
                         <td class="admin" width="90">&nbsp;</td>
                     </tr>
@@ -605,7 +605,7 @@
                         <img id="trVacc<%=vaccCount%>Min" src="<c:url value='/_img/themes/default/minus.jpg'/>" style="display:none;">
                     </td>
                     <td>&nbsp;<%=ScreenHelper.stdDateFormat.format(vacc.getUpdateTime())%></td>
-                    <td>&nbsp;<%=getTran("web.occup",sVaccType,sWebLanguage)+sStatus%></td>
+                    <td>&nbsp;<%=getTran(request,"web.occup",sVaccType,sWebLanguage)+sStatus%></td>
                     <td>&nbsp;<%=sFullUserName%></td>
                     <td>&nbsp;</td> 
                     <td>&nbsp;</td> 
@@ -678,7 +678,7 @@
                                     if(!itemValuesFound){
                                         %>
                                             <tr>
-                                                <td class="admin2"><%=getTran("web.occup","noItemValuesToShowFound",sWebLanguage)%></td>
+                                                <td class="admin2"><%=getTran(request,"web.occup","noItemValuesToShowFound",sWebLanguage)%></td>
                                             </tr>
                                         <%
                                     }
@@ -686,7 +686,7 @@
                                 else{
                                     %>
                                         <tr>
-                                            <td class="admin2"><%=getTran("web.occup","noItemsToShowFound",sWebLanguage)%></td>
+                                            <td class="admin2"><%=getTran(request,"web.occup","noItemsToShowFound",sWebLanguage)%></td>
                                         </tr>
                                     <%
                                 }
@@ -706,8 +706,8 @@
     </table>
 
 <%-- BUTTONS --%>
-<a href="javascript:void();" onclick="expandAllVaccinations();"><%=getTran("web","expand_all",sWebLanguage)%></a>&nbsp;
-<a href="javascript:void();" onclick="collapseAllVaccinations();"><%=getTran("web","close_all",sWebLanguage)%></a>
+<a href="javascript:void();" onclick="expandAllVaccinations();"><%=getTran(request,"web","expand_all",sWebLanguage)%></a>&nbsp;
+<a href="javascript:void();" onclick="collapseAllVaccinations();"><%=getTran(request,"web","close_all",sWebLanguage)%></a>
 
 <p align="center">
     <input class="button" type="button" name="closeButton" value="<%=getTranNoLink("web","close",sWebLanguage)%>" onClick="window.close();">

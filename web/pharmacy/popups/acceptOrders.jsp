@@ -2,7 +2,7 @@
 <%@include file="/_common/templateAddIns.jsp"%>
 <form name="transactionForm" method="post">
 	<table width="100%">
-		<tr class='admin'><td><%=getTran("web","receivedorders",sWebLanguage) %></td></tr>
+		<tr class='admin'><td><%=getTran(request,"web","receivedorders",sWebLanguage) %></td></tr>
 		<%
 			String sServiceStockUid=request.getParameter("ServiceStockUid");
 			Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
@@ -17,11 +17,15 @@
 			ps.setString(1, sServiceStockUid);
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()){
-				out.println("<tr><td class='admin'><a href='"+sCONTEXTPATH+"/popup.jsp?Page=/pharmacy/popups/acceptOrder.jsp&PopupWidth=700&PopuHeight=400&ServiceStockUid="+sServiceStockUid+"&RequestingServiceStockUid="+rs.getString("oc_stock_servicestockuid")+"'>"+rs.getString("oc_stock_name")+"</a> ("+rs.getInt("total")+" "+getTran("web","products",sWebLanguage)+")</td></tr>");
+				out.println("<tr><td class='admin'><a href='"+sCONTEXTPATH+"/popup.jsp?Page=/pharmacy/popups/acceptOrder.jsp&PopupWidth=700&PopuHeight=400&ServiceStockUid="+sServiceStockUid+"&RequestingServiceStockUid="+rs.getString("oc_stock_servicestockuid")+"'>"+rs.getString("oc_stock_name")+"</a> ("+rs.getInt("total")+" "+getTran(request,"web","products",sWebLanguage)+")</td></tr>");
 			}
 			rs.close();
 			ps.close();
 			conn.close();
 		%>
 	</table>
+	<center>
+		<p/>
+		<input type='button' class='button' name='closebutton' value='<%=getTran(request,"web","close",sWebLanguage) %>' onclick='window.close()'/>
+	</center>
 </form>

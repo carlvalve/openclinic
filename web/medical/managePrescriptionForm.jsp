@@ -24,7 +24,7 @@
                 <%-- A - CHRONIC --%>
                 <tr>
                     <td width="1%">
-                        <b><%=getTran("web","chronicmedication",sWebLanguage)%></b>
+                        <b><%=getTran(request,"web","chronicmedication",sWebLanguage)%></b>
                         <div class="searchResults" id="chronicproducts" style="width:340;height:50;border-style: solid;border-width: 1px;border-color: lightgray;">&nbsp;</div>
                     </td>
                 </tr>
@@ -32,7 +32,7 @@
                 <%-- B - ACTIVE --%>
                 <tr>
                     <td width="1%">
-                        <b><%=getTran("web","activeprescriptions",sWebLanguage)%></b>
+                        <b><%=getTran(request,"web","activeprescriptions",sWebLanguage)%></b>
                         <div class="searchResults" id="todaysproducts" style="width:340;height:50;border-style: solid;border-width: 1px;border-color: lightgray;">&nbsp;</div>
                     </td>
                 </tr>
@@ -57,7 +57,7 @@
                     <td>
                         <form name="printPrescriptionForm" method="post" action="<c:url value='/'/>medical/createPrescriptionPdf.jsp">
                             <textarea class="text" name="prescription" id="prescription" rows="22" cols="40" onkeyup="cleanRxNormCodes();"></textarea><br/>
-                            <%=getTran("web","date",sWebLanguage)%>
+                            <%=getTran(request,"web","date",sWebLanguage)%>
                             <input type="text" class="text" size="10" maxLength="10" name="prescriptiondate" value="<%=ScreenHelper.stdDateFormat.format(new java.util.Date())%>" id="prescriptiondate" OnBlur='checkDate(this)'>
                             <script>writeMyDate("prescriptiondate");</script>
                             <input type="hidden" name="personid" id="personid" value="<%=activePatient.personid%>"/>
@@ -70,7 +70,7 @@
                 	<td id='interactionswarning' style='display: none'>
                 		<a href='javascript:findInteractions();'>
                 		<img src="<c:url value='/_img/icons/icon_warning.gif'/>" title='<%=getTranNoLink("web","prescription_has_interactions",sWebLanguage)%>'/>
-                		<%=getTran("web","prescription_has_interactions",sWebLanguage)%>!</a>
+                		<%=getTran(request,"web","prescription_has_interactions",sWebLanguage)%>!</a>
                 	</td>
                 </tr>	
             </table>
@@ -211,7 +211,7 @@
   }
 
   function addcontent(){
-    if(yesnoDeleteDialog()){
+    if(yesnoDialogDirectText('<%=getTran(request,"web","areyousure",sWebLanguage)%>')){
       var url = "<c:url value=''/>medical/ajax/addPrescriptionProductContent.jsp";
       new Ajax.Request(url,{
         method: "POST",

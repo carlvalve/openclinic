@@ -37,7 +37,7 @@
     <table width="100%" cellspacing="1" cellpadding="1" class="menu">
         <%-- SERVICE --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","service",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","service",sWebLanguage)%></td>
             <td class="admin2">
                 <input class='text' type="text" name="serviceText" readonly size="49" title="<%=serviceText%>" VALUE="<%=serviceText%>" onkeydown="window.event.keyCode = '';return true;">
                 <%
@@ -52,7 +52,7 @@
         
         <%-- DATE --%>
         <tr> 
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","stardate",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","stardate",sWebLanguage)%></td>
             <td class="admin2">                
 	            <input type="text" class="text" size="12" maxLength="10" name="startdate" value="<%=checkString(request.getParameter("startdate")).length()>0?checkString(request.getParameter("startdate")):ScreenHelper.formatDate(new Date())%>" id="trandate" OnBlur='checkDate(this)'>
 	            <script>writeTranDate();</script>
@@ -73,7 +73,7 @@
         SortedMap requestList = new TreeMap();
         Vector r = LabRequest.findServiceValidatedRequestsSince(serviceId,date,sWebLanguage,25);
         if(r.size() > 20){
-            out.print("<script>alert('"+getTran("web","onlylast20resultsareshown",sWebLanguage)+"');</script>");
+            out.print("<script>alert('"+getTran(request,"web","onlylast20resultsareshown",sWebLanguage)+"');</script>");
         }
         
         for(int n=0; n<r.size(); n++){
@@ -102,7 +102,7 @@
     %>
     <table class="list" width="100%">
         <tr>
-            <td class="admin2"><%=getTran("web","analysis",sWebLanguage)%></td>
+            <td class="admin2"><%=getTran(request,"web","analysis",sWebLanguage)%></td>
 	        <%
 	            Iterator requestsIterator = requestList.keySet().iterator();
 	            while (requestsIterator.hasNext()) {

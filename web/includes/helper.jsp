@@ -293,10 +293,10 @@
 
                 if(transactionVO.getTransactionType().indexOf("_CUSTOMEXAMINATION") > -1){
                 	String sCustomExamType = transactionVO.getTransactionType().substring(transactionVO.getTransactionType().indexOf("_CUSTOMEXAMINATION")+"_CUSTOMEXAMINATION".length());
-                	result+= ScreenHelper.uppercaseFirstLetter(getTran("examination",sCustomExamType,language));
+                	result+= ScreenHelper.uppercaseFirstLetter(getTran(request,"examination",sCustomExamType,language));
                 }
                 else{
-                    result+= ScreenHelper.getTran("web.occup",transactionVO.getTransactionType(),language);
+                    result+= ScreenHelper.getTran(request,"web.occup",transactionVO.getTransactionType(),language);
                 }
 
                 // subtitle
@@ -335,14 +335,14 @@
                 if(service.code.equals(activeUser.activeService.code)){
                     result+= " selected";
                 }
-                result+= ">"+getTran("Service",service.code,language)+"</option>";
+                result+= ">"+getTran(request,"Service",service.code,language)+"</option>";
             }
             result+= "</select>&nbsp;";
             result+= "<input id='confirm' type='button' value='OK' name='confirm' class='button' onclick=\"show('content-details');hide('confirm');\"/>";
             
             // private data checkbox
             if(sessionContainerWO.getUserVO().userId.intValue()==transactionVO.getUser().userId.intValue()){
-            	result+= "<input id='privatetransaction' name='privatetransaction' class='hand' type='checkbox' value='1' "+(checkString(transactionVO.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PRIVATETRANSACTION")).equalsIgnoreCase("1")?"checked":"")+"/>"+getLabel("web","privatetransaction",language,"privatetransaction");
+            	result+= "<input id='privatetransaction' name='privatetransaction' class='hand' type='checkbox' value='1' "+(checkString(transactionVO.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PRIVATETRANSACTION")).equalsIgnoreCase("1")?"checked":"")+"/>"+getLabel(null,"web","privatetransaction",language,"privatetransaction");
             }
             else{
             	result+= "<input id='privatetransaction' name='privatetransaction' class='hand' type='hidden' value='"+checkString(transactionVO.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PRIVATETRANSACTION"))+"'/>";
@@ -382,12 +382,12 @@
     }
     
     //--- GET TRAN -------------------------------------------------------------------------------
-    public String getTran(String sType, String sID, String sWebLanguage){
-        return ScreenHelper.getTran(sType,sID,sWebLanguage);
+    public String getTran(HttpServletRequest request,String sType, String sID, String sWebLanguage){
+        return ScreenHelper.getTran(request,sType,sID,sWebLanguage);
     }
 
-    public String getTran(String sType, String sID, String sWebLanguage, boolean displaySimplePopup){
-        return ScreenHelper.getTran(sType,sID,sWebLanguage,displaySimplePopup);
+    public String getTran(HttpServletRequest request,String sType, String sID, String sWebLanguage, boolean displaySimplePopup){
+        return ScreenHelper.getTran(request,sType,sID,sWebLanguage,displaySimplePopup);
     }
 
     //--- GET TRAN NO LINK ------------------------------------------------------------------------
@@ -401,8 +401,8 @@
     }
 
     //--- GET LABEL -------------------------------------------------------------------------------
-    public String getLabel(String sType, String sID, String sLanguage, String sObject){
-        return "<label for='"+sObject+"' class='hand'>"+getTran(sType,sID,sLanguage)+"</label>";
+    public String getLabel(HttpServletRequest request,String sType, String sID, String sLanguage, String sObject){
+        return "<label for='"+sObject+"' class='hand'>"+getTran(request,sType,sID,sLanguage)+"</label>";
     }
 
     //--- SET ROW ---------------------------------------------------------------------------------
@@ -497,7 +497,7 @@
     }
 
     public String writeTableHeader(String sType, String sID, String sLanguage, String sPage){
-        return writeTableHeaderDirectText(getTran(sType,sID,sLanguage),sLanguage,sPage);    	
+        return writeTableHeaderDirectText(getTran(null,sType,sID,sLanguage),sLanguage,sPage);    	
     }
 
     public String writeTableHeaderDirectText(String sTitle, String sLanguage, String sPage){
@@ -571,7 +571,7 @@
         sJS+= "'window.status=\""+ScreenHelper.formatDate(new java.util.Date())+"  -  "+activeUser.person.firstname+" "+activeUser.person.lastname;
 
         // add medical centre to statusbar if medical center specified
-        sJS+= (checkString((String) (session.getAttribute("activeMedicalCenter"))).length()>0?" ("+getTran("Web.Occup","MedicalCenter",activeUser.person.language)+" = "+session.getAttribute("activeMedicalCenter")+")":"");
+        sJS+= (checkString((String) (session.getAttribute("activeMedicalCenter"))).length()>0?" ("+getTran(null,"Web.Occup","MedicalCenter",activeUser.person.language)+" = "+session.getAttribute("activeMedicalCenter")+")":"");
 
         // show remaining seconds till session expiration
         //sJS+= "  [\"+(Math.round((starttime-new Date().getTime())/1000))+\" seconds till session expiration]";
@@ -602,7 +602,7 @@
             	if(sWebLanguage==null || sWebLanguage.length()==0){
             		sWebLanguage=activeUser.person.language;
             	}
-                sReturn = "var answer = yesnoDialogDirectText('"+ScreenHelper.getTran("web.occup","do_you_take_over_contact",sWebLanguage)+"');"+
+                sReturn = "var answer = yesnoDialogDirectText('"+ScreenHelper.getTran(null,"web.occup","do_you_take_over_contact",sWebLanguage)+"');"+
                           "if(answer){"+
                            "openPopup('/_common/search/takeOverTransactionSave.jsp&ts="+getTs()+"');"+
                           "}"+sFunction;
@@ -801,7 +801,7 @@
     public String getButtonsHtml(HttpServletRequest req, User activeUser, AdminPerson activePatient,
                                  String sAccessRight, String sWebLanguage, boolean displayPrintButton){
     	if(req.getParameter("nobuttons")!=null){
-    		return "";
+    		return "<input type='button' class='button' name='closebutton' value='"+ScreenHelper.getTran(null,"web","close",sWebLanguage)+"' onclick='window.close();'/>";
     	}
         StringBuffer html = new StringBuffer();
         html.append("<div id='buttonsDiv' style='visibility:visible;width:100%;text-align:center'>");
@@ -811,10 +811,9 @@
         if(sPrintLanguage.length()==0 && activePatient!=null){
             sPrintLanguage = checkString(activePatient.language);
         }
-	
         if(sAccessRight.length()==0 || !sAccessRight.equalsIgnoreCase("readonly") && ((activeUser.getParameter("sa")!=null && activeUser.getParameter("sa").length() > 0) || activeUser.getAccessRight(sAccessRight+".add") || activeUser.getAccessRight(sAccessRight+".edit"))){
         	if(displayPrintButton){
-	            html.append(getTran("Web.Occup","PrintLanguage",sWebLanguage)).append("&nbsp;")
+	            html.append(getTran(null,"Web.Occup","PrintLanguage",sWebLanguage)).append("&nbsp;")
 	                .append("<select class='text' name='PrintLanguage'>");
 	
 	            // supported languages
@@ -835,16 +834,19 @@
 
             // print and save button
         	if(displayPrintButton){
-                html.append("<input class='button' type='button' name='saveAndPrintButton' id='saveAndPrintButton' value='").append(getTran("Web.Occup","medwan.common.record-and-print",sWebLanguage)).append("' onclick='doSave(true);'/>&nbsp;\n");	
+                html.append("<input class='button' type='button' name='saveAndPrintButton' id='saveAndPrintButton' value='").append(getTran(null,"Web.Occup","medwan.common.record-and-print",sWebLanguage)).append("' onclick='doSave(true);'/>&nbsp;\n");	
         	}
+        	html.append("<input type='button' class='button' name='saveButton' id='saveButton' onclick='submitForm();' value='").append(getTran(null,"accesskey","save",sWebLanguage)).append("'/>&nbsp;\n");
             
             // save button
-            html.append("<button accesskey='").append(ScreenHelper.getAccessKey(getTranNoLink("accesskey","save",sWebLanguage))).append("' class='buttoninvisible' onclick='submitForm();'></button>\n")
-                .append("<input type='button' class='button' name='saveButton' id='saveButton' onclick='submitForm();' value='").append(getTran("accesskey","save",sWebLanguage)).append("'/>&nbsp;\n");
+            html.append("<button accesskey='").append(ScreenHelper.getAccessKey(getTranNoLink("accesskey","save",sWebLanguage))).append("' class='buttoninvisible' onclick='submitForm();'></button>\n");
+            if(activeUser.getAccessRight("sendmedicaldossier.select")){
+                html.append("<input class='button' type='button' name='sendButton' id='sendButton' value='").append(getTran(null,"web","send",sWebLanguage)).append("' onclick='sendPdf(true);'/>&nbsp;\n");	
+            }
         }
 
         // back button
-        html.append("<input class='button' type='button' name='backButton' id='backButton' value='").append(getTran("Web","back",sWebLanguage)).append("' onclick='doBack();'>\n");
+        html.append("<input class='button' type='button' name='backButton' id='backButton' value='").append(getTran(null,"Web","back",sWebLanguage)).append("' onclick='doBack();'>\n");
 
         html.append("</div>");
         
@@ -867,15 +869,22 @@
         // CREATE PDF
        	if(displayPrintButton){
 	        html.append("function createPdf(printLang,tranSubType){")
-	             .append("var tranID = '").append(checkString(req.getParameter("be.mxs.healthrecord.transaction_id"))).append("';")
-	             .append("var serverID = '").append(checkString(req.getParameter("be.mxs.healthrecord.server_id"))).append("';")
-	             .append("window.location.href = '").append(sCONTEXTPATH).append("/healthrecord/createPdf.jsp?actionField=print&tranAndServerID_1='+tranID+'_'+serverID+'&PrintLanguage='+printLang+'&ts=").append(getTs()).append("';\n")
-	             .append("window.opener.document.transactionForm.saveButton.disabled = false;\n")
-	             .append("window.opener.document.transactionForm.saveAndPrintButton.disabled = false;\n")
-	             .append("window.opener.bSaveHasNotChanged = true;")
-	             //.append("window.opener.location.reload();")
-	             .append("window.opener.location.href = '").append(sCONTEXTPATH).append("/main.do?Page=curative/index.jsp&ts=").append(getTs()).append("';\n")
-	            .append("}");
+            .append("var tranID = '").append(checkString(req.getParameter("be.mxs.healthrecord.transaction_id"))).append("';")
+            .append("var serverID = '").append(checkString(req.getParameter("be.mxs.healthrecord.server_id"))).append("';")
+            .append("window.location.href = '").append(sCONTEXTPATH).append("/healthrecord/createPdf.jsp?actionField=print&tranAndServerID_1='+tranID+'_'+serverID+'&PrintLanguage='+printLang+'&ts=").append(getTs()).append("';\n")
+            .append("window.opener.document.transactionForm.saveButton.disabled = false;\n")
+            .append("window.opener.document.transactionForm.saveAndPrintButton.disabled = false;\n")
+            .append("window.opener.bSaveHasNotChanged = true;")
+            //.append("window.opener.location.reload();")
+            .append("window.opener.location.href = '").append(sCONTEXTPATH).append("/main.do?Page=curative/index.jsp&ts=").append(getTs()).append("';\n")
+           .append("}");
+	        html.append("function sendPdf(){")
+  	      	.append("document.getElementsByName('be.mxs.healthrecord.updateTransaction.actionForwardKey')[0].value = '/healthrecord/editTransaction.do?ForwardUpdateTransactionId=true&sendPDF=true&ts=").append(getTs()).append("';\n")
+            .append("var tranID = '").append(checkString(req.getParameter("be.mxs.healthrecord.transaction_id"))).append("';")
+            .append("var serverID = '").append(checkString(req.getParameter("be.mxs.healthrecord.server_id"))).append("';")
+            .append("openPopup('").append("healthrecord/sendTransactionSelect.jsp&transactionId='+tranID+'&serverId='+serverID+'&ts=").append(getTs()).append("',500,100);\n")
+  	      	.append("document.transactionForm.submit();\n")
+           .append("}");
        	}
         
         // DO BACK
@@ -974,6 +983,7 @@
     String sCSSDATACENTER    = "<link href='"+sCONTEXTPATH+"/_common/_css/datacenter.css' rel='stylesheet' type='text/css'>";
     String sCSSDATACENTERIE  = "<link href='"+sCONTEXTPATH+"/_common/_css/datacenterie.css' rel='stylesheet' type='text/css'>";
     String sCSSTREEMENU      = "<link href='"+sCONTEXTPATH+"/_common/_css/dhtmlxtree.css' rel='stylesheet' type='text/css'>";
+    String sCSSFIXEDTABLE    = "<link href='"+sCONTEXTPATH+"/_common/_css/fixed_table_rc.css' rel='stylesheet' type='text/css'>";
     
     // JS
     String sSHOWMODALDIALOG = "<script src='"+sCONTEXTPATH+"/_common/_script/showmodaldialog.js'></script>";
@@ -1032,7 +1042,8 @@
     String sJSCHARTJS  = "<script src='"+sCONTEXTPATH+"/_common/_script/chart.min.js'></script>";
     //String sJSEXCANVAS = "<!--[if IE]><script src='"+sCONTEXTPATH+"/_common/_script/excanvas.js'></script><![endif]-->";
     String sJSMORRIS   = "<script src='"+sCONTEXTPATH+"/_common/_script/morris.min.js'></script>";
-    String sJSJQUERY   = "<script src='"+sCONTEXTPATH+"/_common/_script/jquery-1.8.2.min.js'></script>";
+    String sJSJQUERY   = "<script src='"+sCONTEXTPATH+"/_common/_script/jquery-1.8.2.min.js'></script><script src='"+sCONTEXTPATH+"/_common/_script/fixed_table_rc.js'></script>";
+    String sJSFIXEDTABLE   = "<script src='"+sCONTEXTPATH+"/_common/_script/fixed_table_rc.js'></script>";
     String sJSRAPHAEL  = "<script src='"+sCONTEXTPATH+"/_common/_script/raphael-min.js'></script>";
     String sCANVAS  = "<script src='"+sCONTEXTPATH+"/_common/_script/canvas.js'></script>";
 

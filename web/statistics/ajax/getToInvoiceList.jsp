@@ -40,11 +40,11 @@
             	// header
                 %>
 	                <tr class='gray'>
-	                    <td width="100"><%=getTran("Web","prestations",sWebLanguage)%></td>
-	                    <td width="100"><%=getTran("Web","period",sWebLanguage)%></td>
-	                    <td width="80"><%=getTran("Web","amount",sWebLanguage)%></td>
-	                    <td width="100"><%=getTran("Web","id",sWebLanguage)%></td>
-	                    <td width="*"><%=getTran("Web","patient",sWebLanguage)%></td>
+	                    <td width="100"><%=getTran(request,"Web","prestations",sWebLanguage)%></td>
+	                    <td width="100"><%=getTran(request,"Web","period",sWebLanguage)%></td>
+	                    <td width="80"><%=getTran(request,"Web","amount",sWebLanguage)%></td>
+	                    <td width="100"><%=getTran(request,"Web","id",sWebLanguage)%></td>
+	                    <td width="*"><%=getTran(request,"Web","patient",sWebLanguage)%></td>
 	                 </tr>
 	             <%
             }
@@ -66,9 +66,9 @@
 
 <%
     if(recsFound > 0){
-        %><%=recsFound%> <%=HTMLEntities.htmlentities(getTran("web","recordsfound",sWebLanguage))%><%
+        %><%=recsFound%> <%=HTMLEntities.htmlentities(getTran(request,"web","recordsfound",sWebLanguage))%><%
     }
     else{
-        %><%=HTMLEntities.htmlentities(getTran("web","noRecordsfound",sWebLanguage))%><%
+        %><%=HTMLEntities.htmlentities(getTran(request,"web","noRecordsfound",sWebLanguage))%><%
     }
 %>

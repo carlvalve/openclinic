@@ -21,7 +21,7 @@
         <tr>
             <td class="admin" width="<%=sTDAdminWidth%>">
                 <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-                <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+                <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
             </td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" id="trandate" OnBlur='checkDate(this)'>
@@ -34,33 +34,33 @@
         	<td width="50%">
 	        	<table width='100%'>
 		        	<tr>
-			            <td class="admin"><%=getTran("ccbrt.eye","from",sWebLanguage)%>&nbsp;</td>
+			            <td class="admin"><%=getTran(request,"ccbrt.eye","from",sWebLanguage)%>&nbsp;</td>
 			            <td class="admin2" colspan="6">
 			                <select id="from" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_ORTHO_REGISTRY_FROM" property="itemId"/>]>.value">
 			                	<option/>
-				            	<%=ScreenHelper.writeSelect("ccbrt.eye.from",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_ORTHO_REGISTRY_FROM"),sWebLanguage,false,true) %>
+				            	<%=ScreenHelper.writeSelect(request,"ccbrt.eye.from",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_ORTHO_REGISTRY_FROM"),sWebLanguage,false,true) %>
 			                </select>
 			            </td>
 			        </tr>
 			        <tr>
 			            <td class="admin">
-			                <%=getTran("ccbrt.eye","attendencytype",sWebLanguage)%>
+			                <%=getTran(request,"ccbrt.eye","attendencytype",sWebLanguage)%>
 			            </td>
 			            <td class="admin2" colspan="6">
 			                <select id="attendencytype" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_ORTHO_REGISTRY_ATTENDENCYTYPE" property="itemId"/>]>.value">
 			                	<option/>
-				            	<%=ScreenHelper.writeSelect("ccbrt.attendencytype",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_ORTHO_REGISTRY_ATTENDENCYTYPE"),sWebLanguage,false,true) %>
+				            	<%=ScreenHelper.writeSelect(request,"ccbrt.attendencytype",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_ORTHO_REGISTRY_ATTENDENCYTYPE"),sWebLanguage,false,true) %>
 			                </select>
 			            </td>
 			        </tr>
 		        	<tr>
-			            <td class="admin"><%=getTran("ccbrt.ortho","remarks",sWebLanguage)%>&nbsp;</td>
+			            <td class="admin"><%=getTran(request,"ccbrt.ortho","remarks",sWebLanguage)%>&nbsp;</td>
 			            <td class="admin2" colspan="6">
 			                <textarea id="remarks" onKeyup="resizeTextarea(this,10);limitChars(this,512);" <%=setRightClick("ITEM_TYPE_CCBRT_ORTHO_REGISTRY_REMARKS")%> class="text" cols='60' rows='2' name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_ORTHO_REGISTRY_REMARKS" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_ORTHO_REGISTRY_REMARKS" property="value"/></textarea>
 			            </td>
 			        </tr>
 			        <tr>
-			            <td class="admin"><%=getTran("ccbrt.ortho","unit",sWebLanguage)%>&nbsp;</td>
+			            <td class="admin"><%=getTran(request,"ccbrt.ortho","unit",sWebLanguage)%>&nbsp;</td>
 			            <td class="admin2" colspan="6">
 							<%
 								String serviceid=((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_ORTHO_REGISTRY_UNIT");
@@ -78,7 +78,7 @@
 						</td>
 			        </tr>
 		        	<tr>
-			            <td class="admin"><%=getTran("ccbrt.ortho","examiner",sWebLanguage)%>&nbsp;</td>
+			            <td class="admin"><%=getTran(request,"ccbrt.ortho","examiner",sWebLanguage)%>&nbsp;</td>
 			            <td class="admin2" colspan="6">
 			            	<%
 			            		ItemVO item = ((TransactionVO)transaction).getItem("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_ORTHO_REGISTRY_USER");
@@ -91,12 +91,12 @@
 			                <input type="hidden" id="ccbrtuser" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_ORTHO_REGISTRY_USER" property="itemId"/>]>.value"/>
 			                <input type="hidden" name="diagnosisUser" id="diagnosisUser" value="<%=userid%>">
 			                <input class="text" type="text" name="diagnosisUserName" id="diagnosisUserName" readonly size="40" value="<%=User.getFullUserName(userid)%>">
-			                <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTran("web","select",sWebLanguage)%>" onclick="searchUser('diagnosisUser','diagnosisUserName');">
-			                <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran("web","clear",sWebLanguage)%>" onclick="document.getElementById('diagnosisUser').value='';document.getElementById('diagnosisUserName').value='';">
+			                <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTran(null,"web","select",sWebLanguage)%>" onclick="searchUser('diagnosisUser','diagnosisUserName');">
+			                <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran(null,"web","clear",sWebLanguage)%>" onclick="document.getElementById('diagnosisUser').value='';document.getElementById('diagnosisUserName').value='';">
 			            </td>
 			        </tr>
 		        	<tr>
-			            <td class="admin"><%=getTran("ccbrt.ortho","followup",sWebLanguage)%>&nbsp;</td>
+			            <td class="admin"><%=getTran(request,"ccbrt.ortho","followup",sWebLanguage)%>&nbsp;</td>
 			            <td class="admin2" colspan="4">
 			            	<select class='text' id='frequency' onchange='calculateNextDate()'>
 			            		<option/>
@@ -115,23 +115,23 @@
 			            	</select>
 			            	<select class='text' id='frequencytype' onchange='calculateNextDate()'>
 			            		<option/>
-			            		<option value='week'><%=getTran("web","weeks",sWebLanguage) %></option>
-			            		<option value='month'><%=getTran("web","months",sWebLanguage) %></option>
-			            		<option value='year'><%=getTran("web","year",sWebLanguage) %></option>
+			            		<option value='week'><%=getTran(request,"web","weeks",sWebLanguage) %></option>
+			            		<option value='month'><%=getTran(request,"web","months",sWebLanguage) %></option>
+			            		<option value='year'><%=getTran(request,"web","year",sWebLanguage) %></option>
 			            	</select>
 			                <input type="hidden" id="ccbrtdate" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_ORTHO_REGISTRY_FOLLOWUPDATE" property="itemId"/>]>.value"/>
 			            	<%=(ScreenHelper.writeDateField("followupdate", "transactionForm", ((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_ORTHO_REGISTRY_FOLLOWUPDATE"), false, true, sWebLanguage, sCONTEXTPATH))%>
 			            </td>
 			            <td class="admin2" colspan="2">
-			            	<a href="javascript:openPopup('planning/findPlanning.jsp&FindDate='+document.getElementById('followupdate').value+'&isPopup=1&FindUserUID='+document.getElementById('diagnosisUser').value,1024,600,'Agenda','toolbar=no,status=yes,scrollbars=no,resizable=yes,width=1024,height=600,menubar=no');void(0);"><%=getTran("web","findappointment",sWebLanguage) %></a>
+			            	<a href="javascript:openPopup('planning/findPlanning.jsp&FindDate='+document.getElementById('followupdate').value+'&isPopup=1&FindUserUID='+document.getElementById('diagnosisUser').value,1024,600,'Agenda','toolbar=no,status=yes,scrollbars=no,resizable=yes,width=1024,height=600,menubar=no');void(0);"><%=getTran(request,"web","findappointment",sWebLanguage) %></a>
 			            </td>
 			        </tr>
 		        	<tr>
-			            <td class="admin"><%=getTran("ccbrt.ortho","serviceclassification",sWebLanguage)%>&nbsp;</td>
+			            <td class="admin"><%=getTran(request,"ccbrt.ortho","serviceclassification",sWebLanguage)%>&nbsp;</td>
 			            <td class="admin2" colspan="6">
 			                <select id="serviceclassification" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_ORTHO_REGISTRY_SERVICECLASSIFICATION" property="itemId"/>]>.value">
 			                	<option/>
-				            	<%=ScreenHelper.writeSelect("ccbrt.va.serviceclassification",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_ORTHO_REGISTRY_SERVICECLASSIFICATION"),sWebLanguage,false,true) %>
+				            	<%=ScreenHelper.writeSelect(request,"ccbrt.va.serviceclassification",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CCBRT_ORTHO_REGISTRY_SERVICECLASSIFICATION"),sWebLanguage,false,true) %>
 			                </select>
 			            </td>
 			        </tr>
@@ -188,14 +188,19 @@ function searchEncounter(){
 	}
 
   function submitForm(){
-	  document.getElementById("ccbrtunit").value=document.getElementById("unit").value;
-	  document.getElementById("ccbrtuser").value=document.getElementById("diagnosisUser").value;
-	  document.getElementById("ccbrtdate").value=document.getElementById("followupdate").value;
-    transactionForm.saveButton.disabled = true;
-    <%
-        SessionContainerWO sessionContainerWO = (SessionContainerWO)SessionContainerFactory.getInstance().getSessionContainerWO(request,SessionContainerWO.class.getName());
-        out.print(takeOverTransaction(sessionContainerWO,activeUser,"document.transactionForm.submit();"));
-    %>
+	  if(document.getElementById('attendencytype').value.trim().length>0){
+		  document.getElementById("ccbrtunit").value=document.getElementById("unit").value;
+		  document.getElementById("ccbrtuser").value=document.getElementById("diagnosisUser").value;
+		  document.getElementById("ccbrtdate").value=document.getElementById("followupdate").value;
+	      transactionForm.saveButton.disabled = true;
+  		    <%
+	        SessionContainerWO sessionContainerWO = (SessionContainerWO)SessionContainerFactory.getInstance().getSessionContainerWO(request,SessionContainerWO.class.getName());
+	        out.print(takeOverTransaction(sessionContainerWO,activeUser,"document.transactionForm.submit();"));
+		    %>
+  	  }
+	  else {
+		  alert('"<%=getTran(null,"ccbrt.eye","attendencytype",sWebLanguage)%>" <%=getTran(null,"web","ismandatory",sWebLanguage)%>')
+	  }
   }
 </script>
     

@@ -166,11 +166,11 @@
         <%-- HEADER --%>
         <tr class="admin">
             <td width="25" nowrap>&nbsp;</td>
-            <td width="100" nowrap>Min <%=getTran("Web.Occup","medwan.recruitment.sce.age",sWebLanguage)%></td>
-            <td width="100" nowrap>Max <%=getTran("Web.Occup","medwan.recruitment.sce.age",sWebLanguage)%></td>
-            <td width="100" nowrap><%=getTran("Web","Gender",sWebLanguage)%></td>
-            <td width="100" nowrap><%=getTran("web","minimum",sWebLanguage)%></td>
-            <td width="100" nowrap><%=getTran("web","maximum",sWebLanguage)%></td>
+            <td width="100" nowrap>Min <%=getTran(request,"Web.Occup","medwan.recruitment.sce.age",sWebLanguage)%></td>
+            <td width="100" nowrap>Max <%=getTran(request,"Web.Occup","medwan.recruitment.sce.age",sWebLanguage)%></td>
+            <td width="100" nowrap><%=getTran(request,"Web","Gender",sWebLanguage)%></td>
+            <td width="100" nowrap><%=getTran(request,"web","minimum",sWebLanguage)%></td>
+            <td width="100" nowrap><%=getTran(request,"web","maximum",sWebLanguage)%></td>
             <td width="*">&nbsp;</td>
         </tr>
 
@@ -201,11 +201,11 @@
         <%-- HEADER --%>
         <tr class="admin">
             <td width="25" nowrap>&nbsp;</td>
-            <td width="100" nowrap>Min <%=getTran("Web.Occup","medwan.recruitment.sce.age",sWebLanguage)%></td>
-            <td width="100" nowrap>Max <%=getTran("Web.Occup","medwan.recruitment.sce.age",sWebLanguage)%></td>
-            <td width="100" nowrap><%=getTran("Web","Gender",sWebLanguage)%></td>
-            <td width="100" nowrap><%=getTran("web","minimum",sWebLanguage)%></td>
-            <td width="100" nowrap><%=getTran("web","maximum",sWebLanguage)%></td>
+            <td width="100" nowrap>Min <%=getTran(request,"Web.Occup","medwan.recruitment.sce.age",sWebLanguage)%></td>
+            <td width="100" nowrap>Max <%=getTran(request,"Web.Occup","medwan.recruitment.sce.age",sWebLanguage)%></td>
+            <td width="100" nowrap><%=getTran(request,"Web","Gender",sWebLanguage)%></td>
+            <td width="100" nowrap><%=getTran(request,"web","minimum",sWebLanguage)%></td>
+            <td width="100" nowrap><%=getTran(request,"web","maximum",sWebLanguage)%></td>
             <td width="*">&nbsp;</td>
         </tr>
 
@@ -234,10 +234,10 @@
                                 <%
                                     String sGender = checkString(Occuprs.getString("gender"));
                                     if(sGender.equalsIgnoreCase("m")){
-                                        %><%=getTran("Web.occup","Male",sWebLanguage)%><%
+                                        %><%=getTran(request,"Web.occup","Male",sWebLanguage)%><%
                                     }
                                     else if(sGender.equalsIgnoreCase("f")){
-                                        %><%=getTran("Web.occup","Female",sWebLanguage)%><%
+                                        %><%=getTran(request,"Web.occup","Female",sWebLanguage)%><%
                                     }
                                     else{
                                         %><%=sGender%><%

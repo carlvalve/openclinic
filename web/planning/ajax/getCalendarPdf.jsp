@@ -6,7 +6,7 @@
 <%@ page import="org.dom4j.DocumentException" %>
 <%@ page import="java.io.PrintWriter" %>
 <%@ page import="java.io.ByteArrayOutputStream,be.mxs.common.util.pdf.general.*" %>
-<%@ page import="be.mxs.common.util.pdf.calendar.PDFCalendarGenerator" %>
+<%@ page import="be.mxs.common.util.pdf.calendar.*" %>
 <%@include file="/includes/validateUser.jsp" %>
 <%=checkPermission("planning.user", "select", activeUser)%>
 

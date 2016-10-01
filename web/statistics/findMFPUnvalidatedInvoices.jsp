@@ -3,10 +3,10 @@
 <%@include file="/includes/validateUser.jsp"%>
 <table width='100%'>
 <tr class='admin'>
-	<td><%=getTran("web","invoicenumber",sWebLanguage)%></td>
-	<td><%=getTran("web","date",sWebLanguage)%></td>
-	<td><%=getTran("web","patient",sWebLanguage)%></td>
-	<td><%=getTran("web","insurar",sWebLanguage)%></td>
+	<td><%=getTran(request,"web","invoicenumber",sWebLanguage)%></td>
+	<td><%=getTran(request,"web","date",sWebLanguage)%></td>
+	<td><%=getTran(request,"web","patient",sWebLanguage)%></td>
+	<td><%=getTran(request,"web","insurar",sWebLanguage)%></td>
 </tr>
 <%
 	String start = checkString(request.getParameter("start"));

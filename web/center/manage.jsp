@@ -19,7 +19,7 @@
     public String writeTab(String sId, String sFocusField, String sLanguage){
         return "<script>sTabs+= ',"+sId+"';</script>"+
                "<td class='tabs'>&nbsp;</td>"+
-               "<td class='tabunselected' width='1%' onclick='activateTab(\""+sId+"\")' id='tab"+sId+"' name='tab"+sId+"' nowrap><b>"+getTran("centerinfo",sId,sLanguage)+"</b></td>";
+               "<td class='tabunselected' width='1%' onclick='activateTab(\""+sId+"\")' id='tab"+sId+"' name='tab"+sId+"' nowrap><b>"+getTran(null,"centerinfo",sId,sLanguage)+"</b></td>";
     }
 
     //--- WRITE TAB BEGIN -------------------------------------------------------------------------
@@ -159,29 +159,29 @@
         <%=writeTabBegin("identification")%>
         <table width="100%" class="list" style="border-top:none;" cellspacing="1" onkeydown="if(enterEvent(event,13)){centerForm.submit();}">
             <tr>
-                <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("centerinfo","denomination",sWebLanguage)%>
+                <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"centerinfo","denomination",sWebLanguage)%>
                 </td>
                 <td class="admin2">
                     <input class="text" type="text" name="name" value="<%=checkString(center.getName())%>"/><br/>
                 </td>
             </tr>
             <tr>
-                <td class="admin"><%=getTran("centerinfo","numero.identification",sWebLanguage)%></td>
+                <td class="admin"><%=getTran(request,"centerinfo","numero.identification",sWebLanguage)%></td>
                 <td class="admin2">
                     <input class="text" type="text" name="NumeroUid" value="<%=checkString(center.getNumeroUid())%>"/><br/>
                 </td>
             </tr>
             <tr>
-                <td class="admin"><%=getTran("web","province",sWebLanguage)%></td>
+                <td class="admin"><%=getTran(request,"web","province",sWebLanguage)%></td>
                 <td class="admin2">
                     <select class='text' name='province' id='Province'>
                         <option/>
-                        <%=ScreenHelper.writeSelect("province",checkString(center.getProvince()),sWebLanguage,false,true)%>
+                        <%=ScreenHelper.writeSelect(request,"province",checkString(center.getProvince()),sWebLanguage,false,true)%>
                     </select>
                 </td>
             </tr>
             <tr>
-                <td class="admin"><%=getTran("web","district",sWebLanguage)%></td>
+                <td class="admin"><%=getTran(request,"web","district",sWebLanguage)%></td>
                 <td class="admin2">
                     <%
                         String sDistricts = "<select class='text' id='PDistrict' name='district' onchange='changeDistrict();'><option/>";
@@ -204,13 +204,13 @@
                 </td>
             </tr>
             <tr>
-                <td class="admin"><%=getTran("centerinfo","zone.rayonnement",sWebLanguage)%></td>
+                <td class="admin"><%=getTran(request,"centerinfo","zone.rayonnement",sWebLanguage)%></td>
                 <td class="admin2">
                     <input class="text" type="text" name="zone" value="<%=checkString(center.getZone())%>"/><br/>
                 </td>
             </tr>
             <tr>
-                <td class="admin"><%=getTran("web","sector",sWebLanguage)%></td>
+                <td class="admin"><%=getTran(request,"web","sector",sWebLanguage)%></td>
                 <td class="admin2">
                     <%
                         String sCities = "<select class='text' id='PSector' name='sector'>"+
@@ -232,25 +232,25 @@
                 </td>
             </tr>
             <tr>
-                <td class="admin"><%=getTran("centerinfo","nom.fosa",sWebLanguage)%></td>
+                <td class="admin"><%=getTran(request,"centerinfo","nom.fosa",sWebLanguage)%></td>
                 <td class="admin2">
                     <input class="text" type="text" name="fosa" value="<%=checkString(center.getFosa())%>"/><br/>
                 </td>
             </tr>
             <tr>
-                <td class="admin"><%=getTran("centerinfo","cellule",sWebLanguage)%></td>
+                <td class="admin"><%=getTran(request,"centerinfo","cellule",sWebLanguage)%></td>
                 <td class="admin2">
                     <input class="text" type="text" name="cell" value="<%=checkString(center.getCell())%>"/><br/>
                 </td>
             </tr>
             <tr>
-                <td class="admin"><%=getTran("centerinfo","nom.responsable",sWebLanguage)%></td>
+                <td class="admin"><%=getTran(request,"centerinfo","nom.responsable",sWebLanguage)%></td>
                 <td class="admin2">
                     <input class="text" type="text" name="contactName" value="<%=checkString(center.getContactName())%>"/><br/>
                 </td>
             </tr>
             <tr>
-                <td class="admin"><%=getTran("centerinfo","qualification.responsable",sWebLanguage)%></td>
+                <td class="admin"><%=getTran(request,"centerinfo","qualification.responsable",sWebLanguage)%></td>
                 <td class="admin2">
                     <input class="text" type="text" name="contactFunction" value="<%=checkString(center.getContactFunction())%>"/><br/>
                 </td>
@@ -262,49 +262,49 @@
         <%=writeTabBegin("remarques")%>        
         <table width="100%" class="list" style="border-top:none;" cellspacing="1">
             <tr>
-                <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("centerinfo","epidemiologie",sWebLanguage)%></td>
+                <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"centerinfo","epidemiologie",sWebLanguage)%></td>
                 <td class="admin2">
                     <textarea id="remEpidemiology" class="text" name="remEpidemiology" cols="75" onkeyup="resizeTextarea(this,10);" rows="1"><%=checkString(center.getRemEpidemiology())%></textarea>
                 </td>
             </tr>
             <tr>
-                <td class="admin"><%=getTran("centerinfo","medicaments.consommables",sWebLanguage)%></td>
+                <td class="admin"><%=getTran(request,"centerinfo","medicaments.consommables",sWebLanguage)%></td>
                 <td class="admin2">
                     <textarea id="remDrugs" class="text" name="remDrugs" cols="75" onkeyup="resizeTextarea(this,10);" rows="1"><%=checkString(center.getRemDrugs())%></textarea>
                 </td>
             </tr>
             <tr>
-                <td class="admin"><%=getTran("centerinfo","vaccins.chaine.froid",sWebLanguage)%></td>
+                <td class="admin"><%=getTran(request,"centerinfo","vaccins.chaine.froid",sWebLanguage)%></td>
                 <td class="admin2">
                     <textarea id="remVaccinations" class="text" name="remVaccinations" cols="75" onkeyup="resizeTextarea(this,10);" rows="1"><%=checkString(center.getRemVaccinations())%></textarea>
                 </td>
             </tr>
             <tr>
-                <td class="admin"><%=getTran("centerinfo","equipements",sWebLanguage)%></td>
+                <td class="admin"><%=getTran(request,"centerinfo","equipements",sWebLanguage)%></td>
                 <td class="admin2">
                     <textarea id="remEquipment" class="text" name="remEquipment" cols="75" onkeyup="resizeTextarea(this,10);" rows="1"><%=checkString(center.getRemEquipment())%></textarea>
                 </td>
             </tr>
             <tr>
-                <td class="admin"><%=getTran("centerinfo","batiment",sWebLanguage)%></td>
+                <td class="admin"><%=getTran(request,"centerinfo","batiment",sWebLanguage)%></td>
                 <td class="admin2">
                     <textarea id="remBuilding" class="text" name="remBuilding" cols="75" onkeyup="resizeTextarea(this,10);" rows="1"><%=checkString(center.getRemBuilding())%></textarea>
                 </td>
             </tr>
             <tr>
-                <td class="admin"><%=getTran("centerinfo","moyens.locomotion",sWebLanguage)%></td>
+                <td class="admin"><%=getTran(request,"centerinfo","moyens.locomotion",sWebLanguage)%></td>
                 <td class="admin2">
                     <textarea id="remTransport" class="text" name="remTransport" cols="75" onkeyup="resizeTextarea(this,10);" rows="1"><%=checkString(center.getRemTransport())%></textarea>
                 </td>
             </tr>
             <tr>
-                <td class="admin"><%=getTran("centerinfo","personnel",sWebLanguage)%></td>
+                <td class="admin"><%=getTran(request,"centerinfo","personnel",sWebLanguage)%></td>
                 <td class="admin2">
                     <textarea id="remPersonnel" class="text" name="remPersonnel" cols="75" onkeyup="resizeTextarea(this,10);" rows="1"><%=checkString(center.getRemPersonnel())%></textarea>
                 </td>
             </tr>
             <tr>
-                <td class="admin"><%=getTran("web","other",sWebLanguage)%></td>
+                <td class="admin"><%=getTran(request,"web","other",sWebLanguage)%></td>
                 <td class="admin2">
                     <textarea id="remOther" class="text" name="remOther" cols="75" onkeyup="resizeTextarea(this,10);" rows="1"><%=checkString(center.getRemOther())%></textarea>
                 </td>
@@ -317,56 +317,56 @@
         <table width="100%" class="list" style="border-top:none;" cellspacing="1" onkeydown="if(enterEvent(event,13)){centerForm.submit();}">
             <%-- service --%>
             <tr>
-                <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("centerinfo","population.totale.zone.rayonnement",sWebLanguage)%>
+                <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"centerinfo","population.totale.zone.rayonnement",sWebLanguage)%>
                 </td>
                 <td class="admin2">
                     <input class="text" onblur="isNumber(this);" type="text" name="populationTotal" value="<%=center.getPopulationTotal()%>"/><br/>
                 </td>
             </tr>
             <tr>
-                <td class="admin"><%=getTran("centerinfo", "moins.30.jours", sWebLanguage)%></td>
+                <td class="admin"><%=getTran(request,"centerinfo", "moins.30.jours", sWebLanguage)%></td>
                 <td class="admin2">
                     <input class="text" onblur="isNumber(this);" type="text" name="populationLt1m" value="<%=center.getPopulationLt1m()%>"/> %<br/>
                 </td>
             </tr>
             <tr>
-                <td class="admin">1-11 <%=getTran("web", "months", sWebLanguage)%></td>
+                <td class="admin">1-11 <%=getTran(request,"web", "months", sWebLanguage)%></td>
                 <td class="admin2">
                     <input class="text" onblur="isNumber(this);" type="text" name="populationLt1y" value="<%=center.getPopulationLt1y()%>"/> %<br/>
                 </td>
             </tr>
             <tr>
-                <td class="admin">12-59 <%=getTran("web", "months", sWebLanguage)%></td>
+                <td class="admin">12-59 <%=getTran(request,"web", "months", sWebLanguage)%></td>
                 <td class="admin2">
                     <input class="text" onblur="isNumber(this);" type="text" name="populationLt5y" value="<%=center.getPopulationLt5y()%>"/> %<br/>
                 </td>
             </tr>
             <tr>
-                <td class="admin">5-14 <%=getTran("web", "years", sWebLanguage)%></td>
+                <td class="admin">5-14 <%=getTran(request,"web", "years", sWebLanguage)%></td>
                 <td class="admin2">
                     <input class="text" onblur="isNumber(this);" type="text" name="populationLt25y" value="<%=center.getPopulationLt25y()%>"/> %<br/>
                 </td>
             </tr>
             <tr>
-                <td class="admin">25-49 <%=getTran("web", "years", sWebLanguage)%></td>
+                <td class="admin">25-49 <%=getTran(request,"web", "years", sWebLanguage)%></td>
                 <td class="admin2">
                     <input class="text" onblur="isNumber(this);" type="text" name="populationLt50y" value="<%=center.getPopulationLt50y()%>"/> %<br/>
                 </td>
             </tr>
             <tr>
-                <td class="admin">+50 <%=getTran("web", "years", sWebLanguage)%></td>
+                <td class="admin">+50 <%=getTran(request,"web", "years", sWebLanguage)%></td>
                 <td class="admin2">
                     <input class="text" onblur="isNumber(this);" type="text" name="populationMt50y" value="<%=center.getPopulationMt50y()%>"/> %<br/>
                 </td>
             </tr>
             <tr>
-                <td class="admin"><%=getTran("centerinfo", "femmes.enceintes", sWebLanguage)%></td>
+                <td class="admin"><%=getTran(request,"centerinfo", "femmes.enceintes", sWebLanguage)%></td>
                 <td class="admin2">
                     <input class="text" onblur="isNumber(this);" type="text" name="populationPreg" value="<%=center.getPopulationPreg()%>"/><br/>
                 </td>
             </tr>
             <tr>
-                <td class="admin"><%=getTran("centerinfo", "population.mutuelles", sWebLanguage)%></td>
+                <td class="admin"><%=getTran(request,"centerinfo", "population.mutuelles", sWebLanguage)%></td>
                 <td class="admin2">
                     <input class="text" onblur="isNumber(this);" type="text" name="populationMut" value="<%=center.getPopulationMut()%>"/> %<br/>
                 </td>
@@ -379,13 +379,13 @@
         <table width="100%" class="list" style="border-top:none;" cellspacing="1" onkeydown="if(enterEvent(event,13)){centerForm.submit();}">
             <%-- service --%>
             <tr>
-                <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("centerinfo", "nombre.lits", sWebLanguage)%></td>
+                <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"centerinfo", "nombre.lits", sWebLanguage)%></td>
                 <td class="admin2">
                     <input class="text" onblur="isNumber(this);" type="text" name="beds" value="<%=center.getBeds()%>"/><br/>
                 </td>
             </tr>
             <tr>
-                <td class="admin"><%=getTran("web", "active", sWebLanguage)%></td>
+                <td class="admin"><%=getTran(request,"web", "active", sWebLanguage)%></td>
                 <td class="admin2">
                     <input class="text" onblur="isNumber(this);" type="text" name="active" value="<%=center.getActive()%>"/><br/>
                 </td>
@@ -398,7 +398,7 @@
     <%
         if(activeUser.getAccessRight("patient.administration.edit")){
             %>
-	          <div id="saveMsg"><%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%></div>
+	          <div id="saveMsg"><%=getTran(request,"Web","colored_fields_are_obligate",sWebLanguage)%></div>
 	          
 	          <%=ScreenHelper.alignButtonsStart()%>
 	              <input <%=(!actual?"type='hidden'":"type='button'")%> class="button" name="saveButton" value="<%=getTranNoLink("web","save",sWebLanguage)%>" onclick="doSave();">&nbsp;

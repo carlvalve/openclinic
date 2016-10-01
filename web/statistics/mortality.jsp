@@ -64,7 +64,7 @@
         
         String s1 = "<tr class='admin'>", s2 = "<tr>";
         for(int n=1; n<13; n++){
-            s1+= ("<td width='8%'>"+getTran("web","month"+n,sWebLanguage)+"</td>");
+            s1+= ("<td width='8%'>"+getTran(request,"web","month"+n,sWebLanguage)+"</td>");
             s2+= ("<td class='admin2' width='8%'><a href='javascript:showDeceased("+n+","+request.getParameter("year")+")'>"+(months.get(n+"")==null?"0":months.get(n+""))+"</a></td>");
         }
         s1+= "</tr>";
@@ -73,7 +73,7 @@
         
         // total
         out.print("<tr>"+
-                   "<td class='admin'>"+getTran("web","total",sWebLanguage)+"</td>"+
+                   "<td class='admin'>"+getTran(request,"web","total",sWebLanguage)+"</td>"+
                    "<td class='admin2' colspan='11'><b>"+total+"</b></td>"+
                   "</tr>");
     }

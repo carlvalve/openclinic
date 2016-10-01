@@ -66,7 +66,7 @@
                       "<td class='hand' style='padding-left:5px'>"+checkString(plan.name)+"</td>"+
                       "<td class='hand' style='padding-left:5px'>"+getAssetCode(plan.assetUID)+"</td>"+
                       "<td class='hand' style='padding-left:5px'>"+(plan.startDate!=null?ScreenHelper.stdDateFormat.format(plan.startDate):"")+"</td>"+
-                      "<td class='hand' style='padding-left:5px'>"+plan.frequency+"&nbsp;"+getTran("web","days",sWebLanguage)+"</td>"+
+                      "<td class='hand' style='padding-left:5px'>"+plan.frequency+"&nbsp;"+getTran(request,"web","days",sWebLanguage)+"</td>"+
                       "<td class='hand' style='padding-left:5px'>"+checkString(plan.operator)+"</td>"+
                      "</tr>");
         }
@@ -85,7 +85,7 @@
         }
     }
     else{
-        sReturn = "<td colspan='6'>"+getTran("web","noRecordsFound",sWebLanguage)+"</td>";
+        sReturn = "<td colspan='6'>"+getTran(request,"web","noRecordsFound",sWebLanguage)+"</td>";
     }
 %>
 
@@ -95,17 +95,17 @@
 <table width="100%" class="sortable" id="searchresults" cellspacing="1" style="border:none;">
     <%-- header --%>
     <tr class="admin" style="padding-left:1px;">    
-        <td width="25%" nowrap><%=HTMLEntities.htmlentities(getTran("web.assets","name",sWebLanguage))%></td>
-        <td width="10%" nowrap><asc><%=HTMLEntities.htmlentities(getTran("web.assets","asset",sWebLanguage))%></asc></td>
-        <td width="7%" nowrap><%=HTMLEntities.htmlentities(getTran("web.assets","startDate",sWebLanguage))%></td>
-        <td width="7%" nowrap><%=HTMLEntities.htmlentities(getTran("web.assets","frequency",sWebLanguage))%></td>
-        <td width="*" nowrap><%=HTMLEntities.htmlentities(getTran("web.assets","operator",sWebLanguage))%></td>
+        <td width="25%" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.assets","name",sWebLanguage))%></td>
+        <td width="10%" nowrap><asc><%=HTMLEntities.htmlentities(getTran(request,"web.assets","asset",sWebLanguage))%></asc></td>
+        <td width="7%" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.assets","startDate",sWebLanguage))%></td>
+        <td width="7%" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.assets","frequency",sWebLanguage))%></td>
+        <td width="*" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.assets","operator",sWebLanguage))%></td>
     </tr>
     
     <tbody class="hand"><%=sReturn%></tbody>
 </table> 
 
-&nbsp;<i><%=plans.size()+" "+getTran("web","recordsFound",sWebLanguage)%></i>
+&nbsp;<i><%=plans.size()+" "+getTran(request,"web","recordsFound",sWebLanguage)%></i>
         <%
     }
     else{

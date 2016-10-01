@@ -15,13 +15,13 @@
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
             <td class="tabs">&nbsp;</td>
-            <td class="tabunselected" width="1%" onclick="activateTab('Admin')" id="td0" nowrap>&nbsp;<b><%=getTran("Web","actualpersonaldata",sWebLanguage)%></b>&nbsp;</td>
+            <td class="tabunselected" width="1%" onclick="activateTab('Admin')" id="td0" nowrap>&nbsp;<b><%=getTran(request,"Web","actualpersonaldata",sWebLanguage)%></b>&nbsp;</td>
             <td class="tabs">&nbsp;</td>
-            <td class="tabunselected" width="1%" onclick="activateTab('AdminPrivate')" id="td1" nowrap>&nbsp;<b><%=getTran("Web","private",sWebLanguage)%></b>&nbsp;</td>
+            <td class="tabunselected" width="1%" onclick="activateTab('AdminPrivate')" id="td1" nowrap>&nbsp;<b><%=getTran(request,"Web","private",sWebLanguage)%></b>&nbsp;</td>
             <td class="tabs">&nbsp;</td>
-            <td class="tabunselected" width="1%" onclick="activateTab('AdminFamilyRelation')" id="td3" nowrap>&nbsp;<b><%=getTran("Web","AdminFamilyRelation",sWebLanguage)%></b>&nbsp;</td>
+            <td class="tabunselected" width="1%" onclick="activateTab('AdminFamilyRelation')" id="td3" nowrap>&nbsp;<b><%=getTran(request,"Web","AdminFamilyRelation",sWebLanguage)%></b>&nbsp;</td>
             <td class="tabs">&nbsp;</td>
-            <td class="tabunselected" width="1%" onclick="activateTab('AdminResource')" id="td4" nowrap>&nbsp;<b><%=getTran("Web","AdminResource",sWebLanguage)%></b>&nbsp;</td>
+            <td class="tabunselected" width="1%" onclick="activateTab('AdminResource')" id="td4" nowrap>&nbsp;<b><%=getTran(request,"Web","AdminResource",sWebLanguage)%></b>&nbsp;</td>
             <td class="tabs" width="100%">&nbsp;</td>
         </tr>
     </table>
@@ -46,7 +46,7 @@
     <%
         if (activeUser.getAccessRight("patient.administration.edit")||activeUser.getAccessRight("patient.administration.add")){
             %>
-                <div id="saveMsg"><%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%></div>
+                <div id="saveMsg"><%=getTran(request,"Web","colored_fields_are_obligate",sWebLanguage)%></div>
                 <%=ScreenHelper.alignButtonsStart()%>
                     <input class="button" type="button" name="SavePatientEditForm" value="<%=getTranNoLink("Web","Save",sWebLanguage)%>" onclick="checkSubmit();">&nbsp;
                     <input class="button" type="button" name="cancel" value="<%=getTranNoLink("Web","back",sWebLanguage)%>" onClick='window.location.href="<c:url value='/patientdata.do'/>?ts=<%=getTs()%>";'>&nbsp;

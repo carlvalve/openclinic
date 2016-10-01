@@ -32,7 +32,7 @@
                     + "<td>" + insurarInvoice.getInvoiceUid() + "</td>"
                     + "<td style='text-align:right;'>" + priceFormat.format(insurarInvoice.getBalance()) + "&nbsp;</td>"
                     + "<td>" + HTMLEntities.htmlentities(sInsurar) + "</td>"
-                    + "<td>" + getTran("finance.patientinvoice.status", insurarInvoice.getStatus(), sWebLanguage) + "</td></tr>");
+                    + "<td>" + getTran(request,"finance.patientinvoice.status", insurarInvoice.getStatus(), sWebLanguage) + "</td></tr>");
         }
         if(i>MedwanQuery.getInstance().getConfigInt("limitNumberOpenInsurarInvoices",999999) || new java.util.Date().getTime()-insurarInvoice.getDate().getTime()>year){
         	bTooManyOpenInvoices=true;
@@ -61,11 +61,11 @@
 %>
 <table width="100%" cellspacing="0">
     <tr class="admin">
-        <td width="80" nowrap><%=HTMLEntities.htmlentities(getTran("web","date",sWebLanguage))%></td>
-        <td width="120" nowrap><%=HTMLEntities.htmlentities(getTran("web","invoicenumber",sWebLanguage))%></td>
-        <td width="150" nowrap style="text-align:right;"><%=HTMLEntities.htmlentities(getTran("web","balance",sWebLanguage))%>&nbsp;<%=sCurrency%></td>
-        <td><%=HTMLEntities.htmlentities(getTran("medical.accident","insurancecompany",sWebLanguage))%></td>
-        <td><%=HTMLEntities.htmlentities(getTran("Web.finance","patientinvoice.status",sWebLanguage))%></td>
+        <td width="80" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web","date",sWebLanguage))%></td>
+        <td width="120" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web","invoicenumber",sWebLanguage))%></td>
+        <td width="150" nowrap style="text-align:right;"><%=HTMLEntities.htmlentities(getTran(request,"web","balance",sWebLanguage))%>&nbsp;<%=sCurrency%></td>
+        <td><%=HTMLEntities.htmlentities(getTran(request,"medical.accident","insurancecompany",sWebLanguage))%></td>
+        <td><%=HTMLEntities.htmlentities(getTran(request,"Web.finance","patientinvoice.status",sWebLanguage))%></td>
     </tr>
     <tbody class="hand">
         <%=sReturn.toString()%>

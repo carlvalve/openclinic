@@ -67,16 +67,16 @@
             <table width="100%" class="menu" cellspacing="0" cellpadding="0">
                 <%-- CHOOSE A QUERY --%>
                 <tr>
-                    <td class="admin2" width="120">&nbsp;<%=getTran("web","searchon",sWebLanguage)%></td>
+                    <td class="admin2" width="120">&nbsp;<%=getTran(request,"web","searchon",sWebLanguage)%></td>
                     <td class="admin2" colspan="2">
                         <select class="text" name="selectedFields">
                             <option><%=getTranNoLink("web","choose",sWebLanguage)%></option>
-                            <option value="1" <%=(selectedFields==1?"selected":"")%>><%=getTran("Web","immatnew",sWebLanguage)%></option>
-                            <option value="2" <%=(selectedFields==2?"selected":"")%>><%=getTran("Web","name",sWebLanguage)%> + <%=getTran("Web","dateofbirth",sWebLanguage)%></option>
+                            <option value="1" <%=(selectedFields==1?"selected":"")%>><%=getTran(request,"Web","immatnew",sWebLanguage)%></option>
+                            <option value="2" <%=(selectedFields==2?"selected":"")%>><%=getTran(request,"Web","name",sWebLanguage)%> + <%=getTran(request,"Web","dateofbirth",sWebLanguage)%></option>
                         </select>
 
                         <%-- checkbox to indicate "automatic processing" --%>
-                        &nbsp;<input type="checkbox" name="automaticProcessing" id="autoProc" value="true" onClick="setSearchButton();" <%=(automaticProcessing?"checked":"")%>><%=getLabel("web.manage","automaticProcessing",sWebLanguage,"autoProc")%>
+                        &nbsp;<input type="checkbox" name="automaticProcessing" id="autoProc" value="true" onClick="setSearchButton();" <%=(automaticProcessing?"checked":"")%>><%=getLabel(request,"web.manage","automaticProcessing",sWebLanguage,"autoProc")%>
 
                         <%-- SEARCH BUTTON --%>
                         &nbsp;<span id="searchButtonSpan"></span>
@@ -102,7 +102,7 @@
             <table width="100%" class="menu" cellspacing="0" cellpadding="0">
                 <%-- CHOOSE PERSON A --%>
                 <tr>
-                    <td class="admin2" width="120">&nbsp;<%=getTran("web","person",sWebLanguage)%> A</td>
+                    <td class="admin2" width="120">&nbsp;<%=getTran(request,"web","person",sWebLanguage)%> A</td>
                     <td class="admin2" colspan="2">
                         <input type="text" class="text" name="personA" size="40" READONLY>
                         <input class="button" type="button" value="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="showSearchPatientPopup('pid1','personA');">&nbsp;
@@ -111,7 +111,7 @@
 
                 <%-- CHOOSE PERSON B --%>
                 <tr>
-                    <td class="admin2" width="80">&nbsp;<%=getTran("web","person",sWebLanguage)%> B</td>
+                    <td class="admin2" width="80">&nbsp;<%=getTran(request,"web","person",sWebLanguage)%> B</td>
                     <td class="admin2" width="300">
                         <input type="text" class="text" name="personB" size="40" READONLY>
                         <input class="button" type="button" value="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="showSearchPatientPopup('pid2','personB');">&nbsp;
@@ -174,7 +174,7 @@
 
               <%-- SHOW SEARCH PATIENT POPUP --%>
               function showSearchPatientPopup(pid,personName){
-                window.open("<c:url value="/popup.jsp"/>?Page=_common/search/searchPatient.jsp&ts=<%=getTs()%>&ReturnPersonID="+pid+"&ReturnName="+personName,"<%=getTran("Web","Find",sWebLanguage)%>","height=1, width=1, toolbar=no, status=no, scrollbars=no, resizable=no, menubar=no");
+                window.open("<c:url value="/popup.jsp"/>?Page=_common/search/searchPatient.jsp&ts=<%=getTs()%>&ReturnPersonID="+pid+"&ReturnName="+personName,"<%=getTran(null,"Web","Find",sWebLanguage)%>","height=1, width=1, toolbar=no, status=no, scrollbars=no, resizable=no, menubar=no");
               }
             </script>
         <%
@@ -283,7 +283,7 @@
                     processedDoublesCount++;
                 }
 
-        %><%=processedDoublesCount%> <%=getTran("web.manage","doublesProcessed",sWebLanguage)%><%
+        %><%=processedDoublesCount%> <%=getTran(request,"web.manage","doublesProcessed",sWebLanguage)%><%
     }
     // todo : MERGE DOUBLES
     //##############################################################################################
@@ -294,7 +294,7 @@
         String removePersonId = (keepPersonId.equals(pid1)?pid2:pid1);
         personMerger.merge(Integer.parseInt(keepPersonId),Integer.parseInt(removePersonId),true);
 
-        %><%=getTran("Web.manage","mergeCompleted",sWebLanguage)%><%
+        %><%=getTran(request,"Web.manage","mergeCompleted",sWebLanguage)%><%
     }
     // todo : SEARCH DOUBLES
     //##############################################################################################
@@ -332,10 +332,10 @@
             <table width="100%" class="list" cellspacing="1" cellpadding="0" border="0">
                 <%-- column headers --%>
                 <tr class="admin">
-                    <td><%=getTran("Web","name",sWebLanguage)%></td>
-                    <td width="170"><%=getTran("Web","dateofbirth",sWebLanguage)%></td>
-                    <td width="170"><%=getTran("Web","immatnew",sWebLanguage)%>&nbsp;<%=getTran("Web","person",sWebLanguage)%> 1</td>
-                    <td width="170"><%=getTran("Web","immatnew",sWebLanguage)%>&nbsp;<%=getTran("Web","person",sWebLanguage)%> 2</td>
+                    <td><%=getTran(request,"Web","name",sWebLanguage)%></td>
+                    <td width="170"><%=getTran(request,"Web","dateofbirth",sWebLanguage)%></td>
+                    <td width="170"><%=getTran(request,"Web","immatnew",sWebLanguage)%>&nbsp;<%=getTran(request,"Web","person",sWebLanguage)%> 1</td>
+                    <td width="170"><%=getTran(request,"Web","immatnew",sWebLanguage)%>&nbsp;<%=getTran(request,"Web","person",sWebLanguage)%> 2</td>
                 </tr>
 
                 <%-- admin records --%>
@@ -468,7 +468,7 @@
                     if(!doublesFound){
                         %>
                             <tr>
-                                <td><%=getTran("web.manage","no_double_records_found",sWebLanguage)%></td>
+                                <td><%=getTran(request,"web.manage","no_double_records_found",sWebLanguage)%></td>
                             </tr>
                         <%
                     }
@@ -479,8 +479,8 @@
             <%
                 if(doublesFound){
                     %>
-                        <%=getTran("Web.manage","clickToSeePersonsDetails",sWebLanguage)%><br>
-                        <%=(doubleCounter+" "+getTran("Web.manage","doublePersonsFound",sWebLanguage))%>
+                        <%=getTran(request,"Web.manage","clickToSeePersonsDetails",sWebLanguage)%><br>
+                        <%=(doubleCounter+" "+getTran(request,"Web.manage","doublePersonsFound",sWebLanguage))%>
                     <%
                 }
             %>
@@ -515,46 +515,46 @@
             //*** add admin attribute names to array ***************************************************
             String[] personColumns = new String[40];
 
-            personColumns[0] = getTran("web", "userid", sWebLanguage);
-            personColumns[1] = getTran("web", "personid", sWebLanguage);
-            personColumns[2] = getTran("web", "natreg", sWebLanguage);
-            personColumns[3] = getTran("web", "immatold", sWebLanguage);
-            personColumns[4] = getTran("web", "immatnew", sWebLanguage);
-            personColumns[5] = getTran("web", "candidate", sWebLanguage);
-            personColumns[6] = getTran("web", "lastname", sWebLanguage);
-            personColumns[7] = getTran("web", "firstname", sWebLanguage);
-            personColumns[8] = getTran("web", "gender", sWebLanguage);
-            personColumns[9] = getTran("web", "dateofbirth", sWebLanguage);
-            personColumns[10] = getTran("web", "comment", sWebLanguage);
-            personColumns[11] = getTran("web", "sourceid", sWebLanguage);
-            personColumns[12] = getTran("web", "language", sWebLanguage);
-            personColumns[13] = getTran("web", "engagement", sWebLanguage);
-            personColumns[14] = getTran("web", "pension", sWebLanguage);
-            personColumns[15] = getTran("web", "statute", sWebLanguage);
-            personColumns[16] = getTran("web", "claimant", sWebLanguage);
-            personColumns[17] = getTran("web", "updatetime", sWebLanguage);
-            personColumns[18] = getTran("web", "claimantexpiration", sWebLanguage);
-            personColumns[19] = getTran("web", "nativecountry", sWebLanguage);
-            personColumns[20] = getTran("web", "nativetown", sWebLanguage);
-            personColumns[21] = getTran("web", "motiveendofservice", sWebLanguage);
-            personColumns[22] = getTran("web", "startdateinactivity", sWebLanguage);
-            personColumns[23] = getTran("web", "enddateinactivity", sWebLanguage);
-            personColumns[24] = getTran("web", "codeinactivity", sWebLanguage);
-            personColumns[25] = getTran("web", "updatestatus", sWebLanguage);
-            personColumns[26] = getTran("web", "typeperson", sWebLanguage);
-            personColumns[27] = getTran("web", "situationendofservice", sWebLanguage);
-            personColumns[28] = getTran("web", "updateuserid", sWebLanguage);
-            personColumns[29] = getTran("web", "comment1", sWebLanguage);
-            personColumns[30] = getTran("web", "comment2", sWebLanguage);
-            personColumns[31] = getTran("web", "comment3", sWebLanguage);
-            personColumns[32] = getTran("web", "comment4", sWebLanguage);
-            personColumns[33] = getTran("web", "comment5", sWebLanguage);
-            personColumns[34] = getTran("web", "nativecountry", sWebLanguage);
-            personColumns[35] = getTran("web", "middlename", sWebLanguage);
-            personColumns[36] = getTran("web", "begindate", sWebLanguage);
-            personColumns[37] = getTran("web", "enddate", sWebLanguage);
-            personColumns[38] = getTran("web", "archivefilecode", sWebLanguage);
-            personColumns[39] = getTran("web", "lastcontact", sWebLanguage);
+            personColumns[0] = getTran(request,"web", "userid", sWebLanguage);
+            personColumns[1] = getTran(request,"web", "personid", sWebLanguage);
+            personColumns[2] = getTran(request,"web", "natreg", sWebLanguage);
+            personColumns[3] = getTran(request,"web", "immatold", sWebLanguage);
+            personColumns[4] = getTran(request,"web", "immatnew", sWebLanguage);
+            personColumns[5] = getTran(request,"web", "candidate", sWebLanguage);
+            personColumns[6] = getTran(request,"web", "lastname", sWebLanguage);
+            personColumns[7] = getTran(request,"web", "firstname", sWebLanguage);
+            personColumns[8] = getTran(request,"web", "gender", sWebLanguage);
+            personColumns[9] = getTran(request,"web", "dateofbirth", sWebLanguage);
+            personColumns[10] = getTran(request,"web", "comment", sWebLanguage);
+            personColumns[11] = getTran(request,"web", "sourceid", sWebLanguage);
+            personColumns[12] = getTran(request,"web", "language", sWebLanguage);
+            personColumns[13] = getTran(request,"web", "engagement", sWebLanguage);
+            personColumns[14] = getTran(request,"web", "pension", sWebLanguage);
+            personColumns[15] = getTran(request,"web", "statute", sWebLanguage);
+            personColumns[16] = getTran(request,"web", "claimant", sWebLanguage);
+            personColumns[17] = getTran(request,"web", "updatetime", sWebLanguage);
+            personColumns[18] = getTran(request,"web", "claimantexpiration", sWebLanguage);
+            personColumns[19] = getTran(request,"web", "nativecountry", sWebLanguage);
+            personColumns[20] = getTran(request,"web", "nativetown", sWebLanguage);
+            personColumns[21] = getTran(request,"web", "motiveendofservice", sWebLanguage);
+            personColumns[22] = getTran(request,"web", "startdateinactivity", sWebLanguage);
+            personColumns[23] = getTran(request,"web", "enddateinactivity", sWebLanguage);
+            personColumns[24] = getTran(request,"web", "codeinactivity", sWebLanguage);
+            personColumns[25] = getTran(request,"web", "updatestatus", sWebLanguage);
+            personColumns[26] = getTran(request,"web", "typeperson", sWebLanguage);
+            personColumns[27] = getTran(request,"web", "situationendofservice", sWebLanguage);
+            personColumns[28] = getTran(request,"web", "updateuserid", sWebLanguage);
+            personColumns[29] = getTran(request,"web", "comment1", sWebLanguage);
+            personColumns[30] = getTran(request,"web", "comment2", sWebLanguage);
+            personColumns[31] = getTran(request,"web", "comment3", sWebLanguage);
+            personColumns[32] = getTran(request,"web", "comment4", sWebLanguage);
+            personColumns[33] = getTran(request,"web", "comment5", sWebLanguage);
+            personColumns[34] = getTran(request,"web", "nativecountry", sWebLanguage);
+            personColumns[35] = getTran(request,"web", "middlename", sWebLanguage);
+            personColumns[36] = getTran(request,"web", "begindate", sWebLanguage);
+            personColumns[37] = getTran(request,"web", "enddate", sWebLanguage);
+            personColumns[38] = getTran(request,"web", "archivefilecode", sWebLanguage);
+            personColumns[39] = getTran(request,"web", "lastcontact", sWebLanguage);
 
             String[] person1Details = new String[personColumns.length];
             String[] person2Details = new String[personColumns.length];
@@ -656,21 +656,21 @@
             String value;
             String[] privateColumns = new String[15];
 
-            privateColumns[0] = getTran("web", "privateid", sWebLanguage);
-            privateColumns[1] = getTran("web", "start", sWebLanguage);
-            privateColumns[2] = getTran("web", "stop", sWebLanguage);
-            privateColumns[3] = getTran("web", "address", sWebLanguage);
-            privateColumns[4] = getTran("web", "city", sWebLanguage);
-            privateColumns[5] = getTran("web", "zipcode", sWebLanguage);
-            privateColumns[6] = getTran("web", "country", sWebLanguage);
-            privateColumns[7] = getTran("web", "telephone", sWebLanguage);
-            privateColumns[8] = getTran("web", "fax", sWebLanguage);
-            privateColumns[9] = getTran("web", "mobile", sWebLanguage);
-            privateColumns[10] = getTran("web", "email", sWebLanguage);
-            privateColumns[11] = getTran("web", "comment", sWebLanguage);
-            privateColumns[12] = getTran("web", "updatetime", sWebLanguage);
-            privateColumns[13] = getTran("web", "type", sWebLanguage);
-            privateColumns[14] = getTran("web", "district", sWebLanguage);
+            privateColumns[0] = getTran(request,"web", "privateid", sWebLanguage);
+            privateColumns[1] = getTran(request,"web", "start", sWebLanguage);
+            privateColumns[2] = getTran(request,"web", "stop", sWebLanguage);
+            privateColumns[3] = getTran(request,"web", "address", sWebLanguage);
+            privateColumns[4] = getTran(request,"web", "city", sWebLanguage);
+            privateColumns[5] = getTran(request,"web", "zipcode", sWebLanguage);
+            privateColumns[6] = getTran(request,"web", "country", sWebLanguage);
+            privateColumns[7] = getTran(request,"web", "telephone", sWebLanguage);
+            privateColumns[8] = getTran(request,"web", "fax", sWebLanguage);
+            privateColumns[9] = getTran(request,"web", "mobile", sWebLanguage);
+            privateColumns[10] = getTran(request,"web", "email", sWebLanguage);
+            privateColumns[11] = getTran(request,"web", "comment", sWebLanguage);
+            privateColumns[12] = getTran(request,"web", "updatetime", sWebLanguage);
+            privateColumns[13] = getTran(request,"web", "type", sWebLanguage);
+            privateColumns[14] = getTran(request,"web", "district", sWebLanguage);
 
             // prepare statement to get adminprivate details
             query = new StringBuffer();
@@ -739,17 +739,17 @@
 
                 <%-- ADMIN DETAILS -------------------------------------------------------------------%>
                 <tr class="admin">
-                    <td colspan="3" height="21"><%=getTran("web.manage","admindetails",sWebLanguage)%></td>
+                    <td colspan="3" height="21"><%=getTran(request,"web.manage","admindetails",sWebLanguage)%></td>
                 </tr>
 
                 <%-- SELECT PERSON TO KEEP --%>
                 <tr>
                     <td class="admin" width="<%=sTDAdminWidth%>">&nbsp;</td>
                     <td class="admin" id="person1Header">
-                        <input type="radio" name="keepPerson" id="r1" onDblClick="uncheckRadio(this);unsetSelectionColor();" value="<%=pid1%>" onClick="setSelectionColor('person1Header',this.id);"><%=getLabel("Web.manage","keepPerson",sWebLanguage,"r1")%>&nbsp;1
+                        <input type="radio" name="keepPerson" id="r1" onDblClick="uncheckRadio(this);unsetSelectionColor();" value="<%=pid1%>" onClick="setSelectionColor('person1Header',this.id);"><%=getLabel(request,"Web.manage","keepPerson",sWebLanguage,"r1")%>&nbsp;1
                     </td>
                     <td class="admin" id="person2Header">
-                        <input type="radio" name="keepPerson" id="r2" onDblClick="uncheckRadio(this);unsetSelectionColor();" value="<%=pid2%>" onClick="setSelectionColor('person2Header',this.id);"><%=getLabel("Web.manage","keepPerson",sWebLanguage,"r2")%>&nbsp;2
+                        <input type="radio" name="keepPerson" id="r2" onDblClick="uncheckRadio(this);unsetSelectionColor();" value="<%=pid2%>" onClick="setSelectionColor('person2Header',this.id);"><%=getLabel(request,"Web.manage","keepPerson",sWebLanguage,"r2")%>&nbsp;2
                     </td>
                 </tr>
 
@@ -785,7 +785,7 @@
 
                 <%-- ADMINPRIVATE DETAILS ------------------------------------------------------------%>
                 <tr class="admin">
-                    <td colspan="3" height="21"><%=getTran("web.manage","adminprivatedetails",sWebLanguage)%></td>
+                    <td colspan="3" height="21"><%=getTran(request,"web.manage","adminprivatedetails",sWebLanguage)%></td>
                 </tr>
 
                 <%-- private columns --%>
@@ -818,7 +818,7 @@
 
             </table>
 
-            <%=getTran("Web.manage","datainreddiffers",sWebLanguage)%>
+            <%=getTran(request,"Web.manage","datainreddiffers",sWebLanguage)%>
 
             <%-- BUTTONS AT BOTTOM --%>
             <p align="right">
@@ -856,7 +856,7 @@
 
                 if(radio1.checked || radio2.checked){
                   var keepName, delName, confirmMsg;
-                  confirmMsg = '<%=getTran("Web.manage","willoverwrite",sWebLanguage)%>';
+                  confirmMsg = '<%=getTran(null,"Web.manage","willoverwrite",sWebLanguage)%>';
 
                   if(radio1.checked){
                     keepName = '<%=person1Details[4]%>';

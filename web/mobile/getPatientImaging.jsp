@@ -1,7 +1,7 @@
 <%@include file="/mobile/_common/head.jsp"%>
 
 <table class="list" padding="0" cellspacing="1" width="<%=sTABLE_WIDTH%>">
-	<tr class="admin"><td colspan="4"><%=getTran("mobile","imagingdata",activeUser)%></td></tr>
+	<tr class="admin"><td colspan="4"><%=getTran(request,"mobile","imagingdata",activeUser)%></td></tr>
 	
 <%
 	String sMinDate = stdDateFormat.format(new java.util.Date().getTime()-dataFreshness);
@@ -13,8 +13,8 @@
         %>
         	<tr class="gray">
         		<td colspan="2"></td>
-        		<td><%=getTran("web","protocol",activeUser)%></td>
-        		<td><%=getTran("web","emergency",activeUser)%></td>
+        		<td><%=getTran(request,"web","protocol",activeUser)%></td>
+        		<td><%=getTran(request,"web","emergency",activeUser)%></td>
         	</tr>
         <%
 		
@@ -29,7 +29,7 @@
 			    // type
 				String sItemValue = transaction.getItemValue(ITEM_PREFIX+"ITEM_TYPE_MIR2_TYPE");
 				if(sItemValue.length() > 0){
-					type = getTran("mir_type",sItemValue,activeUser);
+					type = getTran(request,"mir_type",sItemValue,activeUser);
 					
 					// specification
 					sItemValue = transaction.getItemValue(ITEM_PREFIX+"ITEM_TYPE_MIR2_SPECIFICATION");
@@ -69,7 +69,7 @@
 		}
 	}
 	else{
-		out.print("<tr><td colspan='2'>&nbsp;<i>"+getTran("web","noData",activeUser)+"</i></td></tr>");
+		out.print("<tr><td colspan='2'>&nbsp;<i>"+getTran(request,"web","noData",activeUser)+"</i></td></tr>");
 	}
 %>
 </table>

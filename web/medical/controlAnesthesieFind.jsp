@@ -41,20 +41,20 @@
     <table width="100%" class="list" cellspacing="1" onkeydown="if(enterEvent(event,13)){doFind();}">
         <%-- BEGIN --%>
         <tr>
-            <td class="admin2" width="<%=sTDAdminWidth%>"><%=getTran("web","Begin",sWebLanguage)%></td>
+            <td class="admin2" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","Begin",sWebLanguage)%></td>
             <td class="admin2"><%=writeDateFieldWithDelete("FindBegin","searchForm",sFindBegin,sWebLanguage)%></td>
         </tr>
         
         <%-- END --%>
         <tr>
-            <td class="admin2"><%=getTran("web","End",sWebLanguage)%></td>
+            <td class="admin2"><%=getTran(request,"web","End",sWebLanguage)%></td>
             <td class="admin2"><%=writeDateFieldWithDelete("FindEnd","searchForm",sFindEnd,sWebLanguage)%></td>
         </tr>
         
         <%-- CHECKUP OK ? --%>
         <tr>
             <td class="admin2">&nbsp;</td>
-            <td class="admin2"><input type="checkbox" name="FindOK" id="cb_FindOK" class="hand" <%=(sFindOK.equals("on")?"checked":"")%>><%=getLabel("web","checkupMustBeOK",sWebLanguage,"cb_FindOK")%></td>
+            <td class="admin2"><input type="checkbox" name="FindOK" id="cb_FindOK" class="hand" <%=(sFindOK.equals("on")?"checked":"")%>><%=getLabel(request,"web","checkupMustBeOK",sWebLanguage,"cb_FindOK")%></td>
         </tr>
         
         <%-- BUTTONS --%>
@@ -71,7 +71,7 @@
 	<%
 	    if(sMsg.length() > 0){
 	    	if(sMsg.equalsIgnoreCase("saved")){
-	    		sMsg = getTran("web","dataIsSaved",sWebLanguage);
+	    		sMsg = getTran(request,"web","dataIsSaved",sWebLanguage);
 	    	}
 	    	%><%=sMsg%><br><br><%
 	    }
@@ -90,9 +90,9 @@
 		        <table cellspacing="0" width="100%" class="sortable" id="searchresults">
 		            <%-- header --%>
 		            <tr class="admin">
-		                <td width="100"><%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%></td>
-		                <td width="200"><%=getTran("openclinic.chuk","control_performed_by",sWebLanguage)%></td>
-		                <td width="*"><%=getTran("openclinic.chuk","ok",sWebLanguage)%></td>
+		                <td width="100"><%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%></td>
+		                <td width="200"><%=getTran(request,"openclinic.chuk","control_performed_by",sWebLanguage)%></td>
+		                <td width="*"><%=getTran(request,"openclinic.chuk","ok",sWebLanguage)%></td>
 		            </tr>
 		           
 		            <tbody class="hand">
@@ -136,9 +136,9 @@
 		            </tbody>
 		        </table>
 	        
-	            <%=foundRecords%> <%=getTran("web","recordsFound",sWebLanguage)%><%
+	            <%=foundRecords%> <%=getTran(request,"web","recordsFound",sWebLanguage)%><%
 	                if(foundRecords > shownRecords){
-	                    %>, <%=shownRecords%> <%=getTran("web","recordsShown",sWebLanguage)%><%
+	                    %>, <%=shownRecords%> <%=getTran(request,"web","recordsShown",sWebLanguage)%><%
                     }
                 %>
                 	        
@@ -158,7 +158,7 @@
             <%
         }
 		else{
-            %><%=getTran("web","noRecordsFound",sWebLanguage)%><%
+            %><%=getTran(request,"web","noRecordsFound",sWebLanguage)%><%
 		}	    
     }
 %>

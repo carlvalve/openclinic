@@ -68,7 +68,7 @@
 <table width="100%" cellspacing="0" class="list">
     <%-- GENERAL TITLE --%>
     <tr class="admin" height="20">
-        <td colspan="4">&nbsp;<%=getTran("Web.Occup","medwan.common.history",sWebLanguage)%></td>
+        <td colspan="4">&nbsp;<%=getTran(request,"Web.Occup","medwan.common.history",sWebLanguage)%></td>
     </tr>
 
     <%-- FULL RECORD --%>
@@ -81,9 +81,9 @@
 		        <%-- GENERAL HEADER --%>
 		        <tr class="list_select">
 		            <td width="15">&nbsp;</td>
-		            <td width="100"><%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%></td>
-		            <td width="50%"><%=getTran("Web.Occup","medwan.common.contacttype",sWebLanguage)%></td>
-		            <td width="35%"><%=getTran("Web.Occup","medwan.common.user",sWebLanguage)%></td>
+		            <td width="100"><%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%></td>
+		            <td width="50%"><%=getTran(request,"Web.Occup","medwan.common.contacttype",sWebLanguage)%></td>
+		            <td width="35%"><%=getTran(request,"Web.Occup","medwan.common.user",sWebLanguage)%></td>
 		        </tr>
             <%
              
@@ -251,7 +251,7 @@
                                     <tr>
                                         <td class="admin" width="<%=sTDAdminWidth%>"><%=analysisTran%> <%=analysisCode%></td>
                                         <td class="admin2" width="*">
-                                            <%=getTran("labanalysis",analysisCode,sWebLanguage)%>
+                                            <%=getTran(request,"labanalysis",analysisCode,sWebLanguage)%>
                                             <%
                                                 // comment
                                                 if(analysisComm.length() > 0){
@@ -327,10 +327,10 @@
     }
     else{
     	if(countItemViewList(sTransactionType)==0){
-            %><font color="red"><%=getTran("web","noItemsConfigured",sWebLanguage)%></font><%
+            %><font color="red"><%=getTran(request,"web","noItemsConfigured",sWebLanguage)%></font><%
     	}
     	else{
-            %><%=getTran("web","noHistoryFound",sWebLanguage)%><%	
+            %><%=getTran(request,"web","noHistoryFound",sWebLanguage)%><%	
     	}
     }
 %>

@@ -36,7 +36,7 @@
 
         if (sText.length()==0){
             sText+="<tr bgcolor='"+sColor+"'>"+
-                   "<td colspan='5'>"+getTran("web.occup","medwan.common.negative",user.language)+"</td>"+
+                   "<td colspan='5'>"+getTran(null,"web.occup","medwan.common.negative",user.language)+"</td>"+
                    "</tr>";
         }
 
@@ -72,19 +72,19 @@
     <table width="100%" class="list" cellspacing="1">
         <%-- MESSAGE TYPE --%>
         <tr>
-            <td class="admin"><%=getTran("Web.Result","message_type",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web.Result","message_type",sWebLanguage)%></td>
             <td class="admin2">
                 <select class="text" name="fileformat">
                     <option name="medidoc" value="MEDIDOC">MEDIDOC</option>
                 </select>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="checkbox" id="createUnknown" name="createUnknown"/><%=getLabel("Web.Result","create_unknown_patients",sWebLanguage,"createUnknown")%>
+                <input type="checkbox" id="createUnknown" name="createUnknown"/><%=getLabel(request,"Web.Result","create_unknown_patients",sWebLanguage,"createUnknown")%>
             </td>
             <td class="admin2"/>
         </tr>
         <%-- MESSAGE FILE --%>
         <tr>
-            <td class="admin"><%=getTran("Web.Result","message_file",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web.Result","message_file",sWebLanguage)%></td>
             <td class="admin2" colspan="2">
                 <input class="text" type="file" name="filename"/>
                 <input class="button" type="button" name="ButtonReadfile" value="<%=getTranNoLink("Web.Result","read_message",sWebLanguage)%>" onclick="doSubmit()"/>
@@ -241,15 +241,15 @@
                     //There was some data to be transmitted to the prescribing physician
                     //Transmit it now
                     try {
-                        String sMessage = getTran("Web.Occup","medwan.lab.reflab",sWebLanguage)+": "+messageReader.lab.name+"\n";
-                        sMessage += getTran("Web.result","date",sWebLanguage)+": "+stdDateFormat.format(messageReader.fileDate)+"\n";
-                        sMessage += getTran("Web.Occup","medwan.common.abnormal-in-attachment",sWebLanguage);
+                        String sMessage = getTran(request,"Web.Occup","medwan.lab.reflab",sWebLanguage)+": "+messageReader.lab.name+"\n";
+                        sMessage += getTran(request,"Web.result","date",sWebLanguage)+": "+stdDateFormat.format(messageReader.fileDate)+"\n";
+                        sMessage += getTran(request,"Web.Occup","medwan.common.abnormal-in-attachment",sWebLanguage);
 
                         if (MedwanQuery.getInstance().getConfigString("PatientEdit.MailServer").length() > 0 && MedwanQuery.getInstance().getConfigString("PatientEdit.MailSender").length() > 0 && messageReader.user.email!=null){
                             User user = new User();
                             user.initialize(messageReader.user.userid);
                             status(out,"Sending e-mail to "+messageReader.user.email+"...");
-                            Mail.sendMail(MedwanQuery.getInstance().getConfigString("PatientEdit.MailServer"),MedwanQuery.getInstance().getConfigString("PatientEdit.MailSender"),messageReader.user.email,getTran("Web.result","labresult",sWebLanguage),sMessage,sTempFileName,shortFileName);
+                            Mail.sendMail(MedwanQuery.getInstance().getConfigString("PatientEdit.MailServer"),MedwanQuery.getInstance().getConfigString("PatientEdit.MailSender"),messageReader.user.email,getTran(request,"Web.result","labresult",sWebLanguage),sMessage,sTempFileName,shortFileName);
                         }
 
                         File f = new File(sTempFileName);
@@ -266,24 +266,24 @@
             }
 
             //Print referring lab header
-            out.print("<tr><td class='menuItem'>"+getTran("Web.Result","referring_lab",sWebLanguage)+"</td><td class='text' colspan='3'>"+messageReader.lab.name+"</td></tr>");
+            out.print("<tr><td class='menuItem'>"+getTran(request,"Web.Result","referring_lab",sWebLanguage)+"</td><td class='text' colspan='3'>"+messageReader.lab.name+"</td></tr>");
 
             //Print message header
-            out.print("<tr><td class='menuItem'>"+getTran("Web.Result","message_date",sWebLanguage)+"</td><td class='text' colspan='3'>"+ScreenHelper.fullDateFormatSS.format(messageReader.fileDate)+"</td></tr>");
-            out.print("<tr><td class='menuItem'>"+getTran("Web.Result","message_file",sWebLanguage)+"</td><td class='text' colspan='3'>"+messageReader.fileName+"</td></tr>");
+            out.print("<tr><td class='menuItem'>"+getTran(request,"Web.Result","message_date",sWebLanguage)+"</td><td class='text' colspan='3'>"+ScreenHelper.fullDateFormatSS.format(messageReader.fileDate)+"</td></tr>");
+            out.print("<tr><td class='menuItem'>"+getTran(request,"Web.Result","message_file",sWebLanguage)+"</td><td class='text' colspan='3'>"+messageReader.fileName+"</td></tr>");
 
             //Print user header
             if (messageReader.user.userid==-1){
-                out.print("<tr id='idUser' class='red'><td class='menuItem'>"+getTran("Web.Result","user_id",sWebLanguage)+"</td><td>"+messageReader.user.firstname+" "+messageReader.user.lastname+"</td><td colspan='2'>"+messageReader.user.RIZIV+"</td>");
+                out.print("<tr id='idUser' class='red'><td class='menuItem'>"+getTran(request,"Web.Result","user_id",sWebLanguage)+"</td><td>"+messageReader.user.firstname+" "+messageReader.user.lastname+"</td><td colspan='2'>"+messageReader.user.RIZIV+"</td>");
                 out.print("<td><input type='hidden' name='user' onchange='setGreen(\"idUser\",bUser);'/>");
                 %>
                     <input class='button' type='button' name='bUser' value='<%=getTranNoLink("Web","Select",sWebLanguage)%>'
                     onclick='window.open("<c:url value="/popup.jsp"/>?Page=_common/search/searchPatient.jsp&ts=<%=getTs()%>&SetGreenField=idUser&ReturnPersonID=user&isUser=yes&FindFirstname=<%=messageReader.user.firstname%>&FindLastname=<%=messageReader.user.lastname%>"
-                    ,"<%=getTran("Web","Find",sWebLanguage)%>","toolbar=no, status=no, scrollbars=yes, resizable=yes, menubar=no");'>
+                    ,"<%=getTran(null,"Web","Find",sWebLanguage)%>","toolbar=no, status=no, scrollbars=yes, resizable=yes, menubar=no");'>
                 <%
             }
             else {
-                out.print("<tr id='idUser' class='green'><td class='menuItem'>"+getTran("Web.Result","user_id",sWebLanguage)+"</td><td>"+messageReader.user.firstname+" "+messageReader.user.lastname+"</td><td colspan='2'>"+messageReader.user.RIZIV+"</td>");
+                out.print("<tr id='idUser' class='green'><td class='menuItem'>"+getTran(request,"Web.Result","user_id",sWebLanguage)+"</td><td>"+messageReader.user.firstname+" "+messageReader.user.lastname+"</td><td colspan='2'>"+messageReader.user.RIZIV+"</td>");
                 out.print("<td>&nbsp;</td></tr>");
             }
             out.print("<tr><td colspan='5'><hr></td></tr>");
@@ -315,13 +315,13 @@
 
               	Connection ad_conn = MedwanQuery.getInstance().getAdminConnection();
                 if (patient.personid==-1){
-                    out.print("<tr id='idPatient"+n+"' class='red'><td class='menuItem'>"+getTran("Web.Result","patient_id",sWebLanguage)+"</td><td>"+patient.firstname+" "+patient.lastname+warning+"</td><td>"+stdDateFormat.format(patient.dateofbirth)+"</td><td>"+patient.gender+"</td>");
+                    out.print("<tr id='idPatient"+n+"' class='red'><td class='menuItem'>"+getTran(request,"Web.Result","patient_id",sWebLanguage)+"</td><td>"+patient.firstname+" "+patient.lastname+warning+"</td><td>"+stdDateFormat.format(patient.dateofbirth)+"</td><td>"+patient.gender+"</td>");
                     out.print("<td><input type='hidden' name='patient"+n+"' onchange='setGreen(\"idPatient"+n+"\",bPatient"+n+");'/>");
 
                     %>
                         <input class='button' type='button' name='bPatient<%=n%>' value='<%=getTranNoLink("Web","Select",sWebLanguage)%>'
                         onclick='window.open("<c:url value="/popup.jsp"/>?Page=_common/search/searchPatient.jsp&ts=<%=getTs()%>&SetGreenField=idPatient<%=n%>&ReturnPersonID=patient<%=n%>&FindFirstname=<%=patient.firstname%>&FindLastname=<%=patient.lastname%>"
-                        ,"<%=getTran("Web","Find",sWebLanguage)%>","toolbar=no, status=no, scrollbars=yes, resizable=yes, menubar=no");'>
+                        ,"<%=getTran(null,"Web","Find",sWebLanguage)%>","toolbar=no, status=no, scrollbars=yes, resizable=yes, menubar=no");'>
                     <%
 
                     for (int i=0;i<patient.alternatePatients.size();i++){
@@ -334,7 +334,7 @@
                 else {
                     alternatePerson = new AdminPerson();
                     alternatePerson.initialize(ad_conn, Integer.toString(patient.personid));
-                    out.print("<tr id='idPatient"+n+"' class='green'><td class='menuItem'>"+getTran("Web.Result","patient_id",sWebLanguage)+"</td><td>"+patient.firstname+" "+patient.lastname+" "+checkString(alternatePerson.getID("immatnew"))+" "+warning+"</td><td>"+stdDateFormat.format(patient.dateofbirth)+"</td><td>"+patient.gender+"</td>");
+                    out.print("<tr id='idPatient"+n+"' class='green'><td class='menuItem'>"+getTran(request,"Web.Result","patient_id",sWebLanguage)+"</td><td>"+patient.firstname+" "+patient.lastname+" "+checkString(alternatePerson.getID("immatnew"))+" "+warning+"</td><td>"+stdDateFormat.format(patient.dateofbirth)+"</td><td>"+patient.gender+"</td>");
                     out.print("<td>&nbsp;</td></tr>");
                 }
 				ad_conn.close();

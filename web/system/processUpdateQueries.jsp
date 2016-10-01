@@ -38,7 +38,7 @@
                     queryElem = (Element) queriesIter.next();
 
                     try {
-                        queryIsExecuted = (MedwanQuery.getInstance().getConfigString(queryElem.attribute("id").getValue()) != null);
+                        queryIsExecuted = checkString(MedwanQuery.getInstance().getConfigString(queryElem.attribute("id").getValue())).length()>0;
 
                         if (!queryIsExecuted) {
                             // Select the right connection
@@ -150,7 +150,7 @@
                     if(updateQueriesProcessedDate!=null){
                         SimpleDateFormat fullDateFormat = ScreenHelper.fullDateFormatSS;
 
-                        %><%=getTran("web.manage","updateQueriesLastProcessedAt",sWebLanguage)%> : <%=fullDateFormat.format(updateQueriesProcessedDate)%><%
+                        %><%=getTran(request,"web.manage","updateQueriesLastProcessedAt",sWebLanguage)%> : <%=fullDateFormat.format(updateQueriesProcessedDate)%><%
                     }
                 %>
             </td>

@@ -1,4 +1,4 @@
-<%@page import="net.admin.*,java.sql.*,be.mxs.common.util.db.*,be.mxs.common.util.system.*,org.apache.poi.xwpf.usermodel.*,org.apache.poi.openxml4j.opc.*,java.util.*,java.io.*,org.apache.xmlbeans.*,be.mxs.common.util.io.*"%>
+<%@page import="net.admin.*,java.sql.*,be.openclinic.adt.*,be.mxs.common.util.db.*,be.mxs.common.util.system.*,org.apache.poi.xwpf.usermodel.*,org.apache.poi.openxml4j.opc.*,java.util.*,java.io.*,org.apache.xmlbeans.*,be.mxs.common.util.io.*"%>
 <%
 	String docname = request.getParameter("name");
 	Connection conn = MedwanQuery.getInstance().getAdminConnection();
@@ -40,7 +40,7 @@
 		docx.replaceText("${patient_firstname}",patient.firstname);
 		docx.replaceText("${patient_dateofbirth}",patient.dateOfBirth);
 		docx.replaceText("${patient_age}",patient.getAge()+"");
-		docx.replaceText("${patient_age_ext}",patient.getAgeInMonths()/12+" "+ScreenHelper.getTran("web","years",language).toLowerCase()+ " "+ patient.getAgeInMonths()%12+" "+ScreenHelper.getTran("web","months",language).toLowerCase());
+		docx.replaceText("${patient_age_ext}",patient.getAgeInMonths()/12+" "+ScreenHelper.getTran(request,"web","years",language).toLowerCase()+ " "+ patient.getAgeInMonths()%12+" "+ScreenHelper.getTran(request,"web","months",language).toLowerCase());
 		docx.replaceText("${patient_gender}",patient.gender);
 		docx.replaceText("${patient_personid}",patient.personid);
 		docx.replaceText("${patient_immatnew}",patient.getID("immatnew"));

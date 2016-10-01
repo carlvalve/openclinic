@@ -11,7 +11,7 @@
 <%
 	HttpClient client = new HttpClient();
 	String language = request.getParameter("language");
-	String lookupUrl = getTran("professional.council.url",request.getParameter("council"),language);
+	String lookupUrl = getTran(request,"professional.council.url",request.getParameter("council"),language);
 	
 	PostMethod method = new PostMethod(lookupUrl);
 	method.setRequestHeader("Content-type","text/xml; charset=windows-1252");
@@ -38,7 +38,7 @@
 			root = document.getRootElement();
 			if(root.getName().equalsIgnoreCase("registration")){
 				out.print("<tr class='admin'>"+
-			               "<td colspan='2'>"+getTran("Web.UserProfile","organisationId",language)+"</td>"+
+			               "<td colspan='2'>"+getTran(request,"Web.UserProfile","organisationId",language)+"</td>"+
 				           "<td colspan='2'>"+root.attributeValue("id")+"</td>"+
 			              "</tr>");
 				
@@ -58,65 +58,65 @@
 					}
 					
 					if(element.attributeValue("id").equalsIgnoreCase("0")||element.attributeValue("id").equalsIgnoreCase("-2")){
-						out.print("<tr><td class='admin'>"+getTran("lookup","status",language)+"</td><td bgcolor='"+(element.attributeValue("id").equalsIgnoreCase("-2")?"red":"lightgreen")+"'>"+getTran("lookup","status."+element.attributeValue("id"),language)+"</td>");
-						out.print("<td class='admin'>"+getTran("web","nationality",language)+"</td><td class='admin2'>"+root.elementText("nationality").toUpperCase().replaceAll("COUNTRY.","")+"</td></tr>");
-						out.print("<tr><td class='admin'>"+getTran("web","lastname",language)+(root.elementText("lastname").equalsIgnoreCase(activePatient.lastname)?"":" <img src='"+sCONTEXTPATH+"/_img/icons/icon_warning.gif'>")+"</td><td "+(root.elementText("lastname").equalsIgnoreCase(activePatient.lastname)?"bgcolor='lightgreen'":"bgcolor='red'")+">"+root.elementText("lastname").toUpperCase()+"</td>");
-						out.print("<td class='admin'>"+getTran("web","firstname",language)+(root.elementText("firstname").equalsIgnoreCase(activePatient.firstname)?"":" <img src='"+sCONTEXTPATH+"/_img/icons/icon_warning.gif'>")+"</td><td "+(root.elementText("firstname").equalsIgnoreCase(activePatient.firstname)?"bgcolor='lightgreen'":"bgcolor='red'")+">"+root.elementText("firstname")+"</td></tr>");
-						out.print("<tr><td class='admin'>"+getTran("web","gender",language)+"</td><td class='admin2'>"+root.elementText("gender").toUpperCase()+"</td>");
-						out.print("<td class='admin'>"+getTran("web","dateofbirth",language)+"</td><td class='admin2'>"+root.elementText("dateofbirth")+"</td></tr>");
+						out.print("<tr><td class='admin'>"+getTran(request,"lookup","status",language)+"</td><td bgcolor='"+(element.attributeValue("id").equalsIgnoreCase("-2")?"red":"lightgreen")+"'>"+getTran(request,"lookup","status."+element.attributeValue("id"),language)+"</td>");
+						out.print("<td class='admin'>"+getTran(request,"web","nationality",language)+"</td><td class='admin2'>"+root.elementText("nationality").toUpperCase().replaceAll("COUNTRY.","")+"</td></tr>");
+						out.print("<tr><td class='admin'>"+getTran(request,"web","lastname",language)+(root.elementText("lastname").equalsIgnoreCase(activePatient.lastname)?"":" <img src='"+sCONTEXTPATH+"/_img/icons/icon_warning.gif'>")+"</td><td "+(root.elementText("lastname").equalsIgnoreCase(activePatient.lastname)?"bgcolor='lightgreen'":"bgcolor='red'")+">"+root.elementText("lastname").toUpperCase()+"</td>");
+						out.print("<td class='admin'>"+getTran(request,"web","firstname",language)+(root.elementText("firstname").equalsIgnoreCase(activePatient.firstname)?"":" <img src='"+sCONTEXTPATH+"/_img/icons/icon_warning.gif'>")+"</td><td "+(root.elementText("firstname").equalsIgnoreCase(activePatient.firstname)?"bgcolor='lightgreen'":"bgcolor='red'")+">"+root.elementText("firstname")+"</td></tr>");
+						out.print("<tr><td class='admin'>"+getTran(request,"web","gender",language)+"</td><td class='admin2'>"+root.elementText("gender").toUpperCase()+"</td>");
+						out.print("<td class='admin'>"+getTran(request,"web","dateofbirth",language)+"</td><td class='admin2'>"+root.elementText("dateofbirth")+"</td></tr>");
 						if(element.attributeValue("id").equalsIgnoreCase("0")){
 							element = root.element("contact");
 							if(element!=null){
-								out.print("<tr class='admin'><td colspan='4'>"+getTran("web","contact",language).toUpperCase()+"</td></tr>");
-								out.print("<tr><td class='admin'>"+getTran("web","address",language)+"</td><td class='admin2'>"+element.elementText("address")+"</td>");
-								out.print("<td class='admin'>"+getTran("web","pobox",language)+"</td><td class='admin2'>"+element.elementText("pobox")+"</td></tr>");
-								out.print("<tr><td class='admin'>"+getTran("web","district",language)+"</td><td class='admin2'>"+element.elementText("district")+"</td>");
-								out.print("<td class='admin'>"+getTran("web","province",language)+"</td><td class='admin2'>"+element.elementText("province")+"</td></tr>");
-								out.print("<tr><td class='admin'>"+getTran("web","country",language)+"</td><td class='admin2'>"+element.elementText("country")+"</td>");
-								out.print("<td class='admin'>"+getTran("web","email",language)+"</td><td class='admin2'>"+element.elementText("email")+"</td></tr>");
-								out.print("<tr><td class='admin'>"+getTran("web","phone",language)+"</td><td class='admin2'>"+element.elementText("phone")+"</td>");
-								out.print("<td class='admin'>"+getTran("web","cellphone",language)+"</td><td class='admin2'>"+element.elementText("cellphone")+"</td></tr>");
+								out.print("<tr class='admin'><td colspan='4'>"+getTran(request,"web","contact",language).toUpperCase()+"</td></tr>");
+								out.print("<tr><td class='admin'>"+getTran(request,"web","address",language)+"</td><td class='admin2'>"+element.elementText("address")+"</td>");
+								out.print("<td class='admin'>"+getTran(request,"web","pobox",language)+"</td><td class='admin2'>"+element.elementText("pobox")+"</td></tr>");
+								out.print("<tr><td class='admin'>"+getTran(request,"web","district",language)+"</td><td class='admin2'>"+element.elementText("district")+"</td>");
+								out.print("<td class='admin'>"+getTran(request,"web","province",language)+"</td><td class='admin2'>"+element.elementText("province")+"</td></tr>");
+								out.print("<tr><td class='admin'>"+getTran(request,"web","country",language)+"</td><td class='admin2'>"+element.elementText("country")+"</td>");
+								out.print("<td class='admin'>"+getTran(request,"web","email",language)+"</td><td class='admin2'>"+element.elementText("email")+"</td></tr>");
+								out.print("<tr><td class='admin'>"+getTran(request,"web","phone",language)+"</td><td class='admin2'>"+element.elementText("phone")+"</td>");
+								out.print("<td class='admin'>"+getTran(request,"web","cellphone",language)+"</td><td class='admin2'>"+element.elementText("cellphone")+"</td></tr>");
 							}
 							Iterator elements = root.elementIterator("work");
 							if(elements.hasNext()){
-								out.print("<tr class='admin'><td colspan='4'>"+getTran("lookup","work",language).toUpperCase()+"</td></tr>");
+								out.print("<tr class='admin'><td colspan='4'>"+getTran(request,"lookup","work",language).toUpperCase()+"</td></tr>");
 							}
 							
 							while(elements.hasNext()){
 								element = (Element)elements.next();
-								out.print("<tr class='admin'><td colspan='2'>"+getTran("web","period",language)+"</td><td colspan='2'>"+element.attributeValue("start")+" - "+checkString(element.attributeValue("end"))+"</td></tr>");
-								out.print("<tr><td class='admin'> "+getTran("web","specialty",language)+"</td><td class='admin2'>"+element.elementText("specialty")+"</td>");
-								out.print("<td class='admin'>"+getTran("web","function",language)+"</td><td class='admin2'>"+element.elementText("function")+"</td></tr>");
-								out.print("<tr><td class='admin'> "+getTran("web","healthfacility",language)+"</td><td class='admin2'>"+element.elementText("healthfacility").toUpperCase()+"</td>");
-								out.print("<td class='admin'> "+getTran("web","category",language)+"</td><td class='admin2'>"+element.elementText("category")+"</td></tr>");
+								out.print("<tr class='admin'><td colspan='2'>"+getTran(request,"web","period",language)+"</td><td colspan='2'>"+element.attributeValue("start")+" - "+checkString(element.attributeValue("end"))+"</td></tr>");
+								out.print("<tr><td class='admin'> "+getTran(request,"web","specialty",language)+"</td><td class='admin2'>"+element.elementText("specialty")+"</td>");
+								out.print("<td class='admin'>"+getTran(request,"web","function",language)+"</td><td class='admin2'>"+element.elementText("function")+"</td></tr>");
+								out.print("<tr><td class='admin'> "+getTran(request,"web","healthfacility",language)+"</td><td class='admin2'>"+element.elementText("healthfacility").toUpperCase()+"</td>");
+								out.print("<td class='admin'> "+getTran(request,"web","category",language)+"</td><td class='admin2'>"+element.elementText("category")+"</td></tr>");
 							}
 							
 							elements = root.elementIterator("training");
 							if(elements.hasNext()){
 								out.print("<tr class='admin'>"+
-							               "<td colspan='4'>"+getTran("lookup","training",language).toUpperCase()+"</td>"+
+							               "<td colspan='4'>"+getTran(request,"lookup","training",language).toUpperCase()+"</td>"+
 								          "</tr>");
 							}
 							while(elements.hasNext()){
 								element = (Element)elements.next();
 								out.print("<tr class='admin'>"+
-								           "<td colspan='2'> "+getTran("web","period",language)+"</td>"+
+								           "<td colspan='2'> "+getTran(request,"web","period",language)+"</td>"+
 								           "<td colspan='2'>"+element.attributeValue("start")+" - "+checkString(element.attributeValue("end"))+"</td>"+
 								          "</tr>");
 								out.print("<tr>"+
-								           "<td class='admin'> "+getTran("lookup","center",language)+"</td>"+
+								           "<td class='admin'> "+getTran(request,"lookup","center",language)+"</td>"+
 								           "<td class='admin2'>"+element.elementText("center")+"</td>"+
-								           "<td class='admin'>"+getTran("web","address",language)+"</td>"+
+								           "<td class='admin'>"+getTran(request,"web","address",language)+"</td>"+
 								           "<td class='admin2'>"+element.elementText("address")+"</td>"+
 								          "</tr>");
 								out.print("<tr>"+
-								           "<td class='admin'> "+getTran("web","country",language)+"</td>"+
+								           "<td class='admin'> "+getTran(request,"web","country",language)+"</td>"+
 								           "<td class='admin2' colspan='3'>"+element.elementText("country").toUpperCase().replaceAll("COUNTRY.","")+"</td>"+
 								          "</tr>");
 								out.print("<tr>"+
-								           "<td class='admin'> "+getTran("web","diploma",language)+"</td>"+
+								           "<td class='admin'> "+getTran(request,"web","diploma",language)+"</td>"+
 								           "<td class='admin2'>"+element.elementText("diploma")+"</td>"+
-								           "<td class='admin'>"+getTran("web","diplomadate",language)+"</td>"+
+								           "<td class='admin'>"+getTran(request,"web","diplomadate",language)+"</td>"+
 								           "<td class='admin2'>"+element.elementText("diplomadate")+"</td>"+
 								          "</tr>");
 							}
@@ -124,16 +124,16 @@
 							elements = root.elementIterator("cpd");
 							if(elements.hasNext()){
 								out.print("<tr class='admin'>"+
-							               "<td colspan='4'>"+getTran("lookup","cpd",language).toUpperCase()+"</td>"+
+							               "<td colspan='4'>"+getTran(request,"lookup","cpd",language).toUpperCase()+"</td>"+
 								          "</tr>");
 							}
 							
 							while(elements.hasNext()){
 								element = (Element)elements.next();
 								out.print("<tr>"+
-								           "<td class='admin'>"+getTran("web","year.and.category",language)+"</td>"+
+								           "<td class='admin'>"+getTran(request,"web","year.and.category",language)+"</td>"+
 								           "<td class='admin2'>"+element.attributeValue("year")+" / "+element.attributeValue("category")+"</td>"+
-								           "<td class='admin'>"+getTran("web","credits",language)+"</td>"+
+								           "<td class='admin'>"+getTran(request,"web","credits",language)+"</td>"+
 								           "<td class='admin2'>"+element.attributeValue("credits")+"</td>"+
 								          "</tr>");
 							}
@@ -141,8 +141,8 @@
 					}
 					else{
 						out.print("<tr>"+
-					               "<td class='admin'>"+getTran("lookup","status",language)+"</td>"+
-						           "<td colspan='3' bgcolor='red'>"+getTran("lookup","status."+element.attributeValue("id"),language)+"</td>"+
+					               "<td class='admin'>"+getTran(request,"lookup","status",language)+"</td>"+
+						           "<td colspan='3' bgcolor='red'>"+getTran(request,"lookup","status."+element.attributeValue("id"),language)+"</td>"+
 					              "</tr>");
 					}
 				}

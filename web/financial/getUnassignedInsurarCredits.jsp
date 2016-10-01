@@ -126,13 +126,13 @@
         %>
         <table width="100%" class="list" cellspacing="0" style="border:none;">
             <tr class="admin">
-                <td width="80"><%=HTMLEntities.htmlentities(getTran("web","date",sWebLanguage))%></td>
-                <td width="100" align="right"><%=HTMLEntities.htmlentities(getTran("web","amount",sWebLanguage))%>&nbsp;&nbsp;</td>
-                <td><%=HTMLEntities.htmlentities(getTran("web","insurar",sWebLanguage))%></td>
-                <td width="200"><%=HTMLEntities.htmlentities(getTran("web","type",sWebLanguage))%></td>
-                <td><%=HTMLEntities.htmlentities(getTran("web","invoice",sWebLanguage))%></td>
-                <td><%=HTMLEntities.htmlentities(getTran("web","description",sWebLanguage))%></td>
-                <td width="*"><%=HTMLEntities.htmlentities(getTran("web","wicket",sWebLanguage))%></td>
+                <td width="80"><%=HTMLEntities.htmlentities(getTranNoLink("web","date",sWebLanguage))%></td>
+                <td width="100" align="right"><%=HTMLEntities.htmlentities(getTranNoLink("web","amount",sWebLanguage))%>&nbsp;&nbsp;</td>
+                <td><%=HTMLEntities.htmlentities(getTranNoLink("web","insurar",sWebLanguage))%></td>
+                <td width="200"><%=HTMLEntities.htmlentities(getTranNoLink("web","type",sWebLanguage))%></td>
+                <td><%=HTMLEntities.htmlentities(getTranNoLink("web","invoice",sWebLanguage))%></td>
+                <td><%=HTMLEntities.htmlentities(getTranNoLink("web","description",sWebLanguage))%></td>
+                <td width="*"><%=HTMLEntities.htmlentities(getTranNoLink("web","wicket",sWebLanguage))%></td>
             </tr>
             <tbody class="hand">
                 <%=addUnassignedCredits(vCredits,sWebLanguage)%>

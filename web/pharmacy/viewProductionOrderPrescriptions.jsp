@@ -4,9 +4,9 @@
 <%@include file="/includes/validateUser.jsp"%>
 <table width="100%">
 	<tr class='admin'>
-		<td><%=getTran("web","date",sWebLanguage) %></td>
-		<td><%=getTran("web","prescription",sWebLanguage) %></td>
-		<td><%=getTran("web","user",sWebLanguage) %></td>
+		<td><%=getTran(request,"web","date",sWebLanguage) %></td>
+		<td><%=getTran(request,"web","prescription",sWebLanguage) %></td>
+		<td><%=getTran(request,"web","user",sWebLanguage) %></td>
 	</tr>
 	<%
 		String examinationid = request.getParameter("examinationid");
@@ -17,7 +17,7 @@
 			%>
 				<tr>
 					<td class='admin'><%=ScreenHelper.formatDate(transaction.getUpdateTime()) %></td>
-					<td class='admin'><a href="javascript:openPrescription(<%=transaction.getServerId()%>,<%=transaction.getTransactionId()%>);"><%=getTran("examination",examinationid,sWebLanguage) %></a></td>
+					<td class='admin'><a href="javascript:openPrescription(<%=transaction.getServerId()%>,<%=transaction.getTransactionId()%>);"><%=getTran(request,"examination",examinationid,sWebLanguage) %></a></td>
 					<td class='admin'><%=User.getFullUserName(""+transaction.getUser().userId) %></td>
 				</tr>
 			<%
@@ -27,6 +27,6 @@
 
 <script>
 	function openPrescription(serverid,transactionid){
-		 openPopup("/healthrecord/showPopupTransaction.jsp&be.mxs.healthrecord.transaction_id="+transactionid+"&be.mxs.healthrecord.server_id="+serverid+"&PopupHeight=600&PopupWidth=800");
+		 openPopup("/healthrecord/showPopupTransaction.jsp&be.mxs.healthrecord.transaction_id="+transactionid+"&be.mxs.healthrecord.server_id="+serverid+"&PopupHeight=600&PopupWidth=800&nobuttons=1");
 	}
 </script>

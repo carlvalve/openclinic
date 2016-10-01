@@ -73,7 +73,7 @@
         	// services
         	EncounterService encServ = (EncounterService)tranHist.elementAt(n);
             if(checkString(encServ.serviceUID).length() > 0){
-                sServices+=(sServices.length()>0?"<BR/>":"")+(n+1)+": "+getTran("service",encServ.serviceUID,sWebLanguage)+" ("+ScreenHelper.stdDateFormat.format(encServ.begin)+")";
+                sServices+=(sServices.length()>0?"<BR/>":"")+(n+1)+": "+getTran(request,"service",encServ.serviceUID,sWebLanguage)+" ("+ScreenHelper.stdDateFormat.format(encServ.begin)+")";
             }
             else{
                 sServices+=(sServices.length()>0?"<BR/>":"")+(n+1)+": "+"-";
@@ -124,7 +124,7 @@
         sbResults.append("<tr id='"+(bFinished?"finished":"")+"' class='list"+sInactive+sClass+"'")
                  .append("onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\">")
                   .append("<td id='"+tmpEnc.getUid()+"' width='20px' onclick=\"deleteEncounter('"+tmpEnc.getUid()+"');\"><img class='hand' src='/openclinic/_img/icons/icon_delete.gif' alt='"+getTranNoLink("Web.Occup","medwan.common.delete",sWebLanguage)+"' border='0'></td>")
-                  .append("<td height='20' onclick=\"doSelect('"+tmpEnc.getUid()+"');\" >"+getTran("web",checkString(tmpEnc.getType()),sWebLanguage)+"</td>")
+                  .append("<td height='20' onclick=\"doSelect('"+tmpEnc.getUid()+"');\" >"+getTran(request,"web",checkString(tmpEnc.getType()),sWebLanguage)+"</td>")
                   .append("<td onclick=\"doSelect('"+tmpEnc.getUid()+"');\">"+tmpEnc.getUid()+"</td>")
                   .append("<td onclick=\"doSelect('"+tmpEnc.getUid()+"');\">"+sBegin+"</td>")
                   .append("<td onclick=\"doSelect('"+tmpEnc.getUid()+"');\">"+sEnd+"</td>")
@@ -139,8 +139,8 @@
         sbResults.append("</tr>");
     }
 
-    String sTitle1 = getTran("web","begindate",sWebLanguage),
-           sTitle2 = getTran("web","enddate",sWebLanguage);
+    String sTitle1 = getTran(request,"web","begindate",sWebLanguage),
+           sTitle2 = getTran(request,"web","enddate",sWebLanguage);
 
     if(sFindSortColumn.length() > 0){
         sTitle1 = "<i>"+sTitle1+"</i>";
@@ -160,17 +160,17 @@
 			    <%-- HEADER --%>
 			    <tr class="gray">
 			        <td width="20px"></td>
-			        <td><%=getTran("web","type",sWebLanguage)%>&nbsp;</td>
-			        <td><%=getTran("web","id",sWebLanguage)%>&nbsp;</td>
+			        <td><%=getTran(request,"web","type",sWebLanguage)%>&nbsp;</td>
+			        <td><%=getTran(request,"web","id",sWebLanguage)%>&nbsp;</td>
 			        <td><%=sTitle1%>&nbsp;</td>
 			        <td><%=sTitle2%>&nbsp;</td>
-			        <td><%=getTran("web","manager",sWebLanguage)%>&nbsp;</td>
-			        <td><%=getTran("web","service",sWebLanguage)%>&nbsp;</td>
-			        <td><%=getTran("web","bed",sWebLanguage)%>&nbsp;</td>
-			        <td><%=getTran("web","updatedby",sWebLanguage)%>&nbsp;</td>
+			        <td><%=getTran(request,"web","manager",sWebLanguage)%>&nbsp;</td>
+			        <td><%=getTran(request,"web","service",sWebLanguage)%>&nbsp;</td>
+			        <td><%=getTran(request,"web","bed",sWebLanguage)%>&nbsp;</td>
+			        <td><%=getTran(request,"web","updatedby",sWebLanguage)%>&nbsp;</td>
 			        <%
 			            if(activeUser.getAccessRight("problemlist.select")){
-					        %><td><%=getTran("openclinic.chuk","rfe",sWebLanguage)%>&nbsp;</td><%
+					        %><td><%=getTran(request,"openclinic.chuk","rfe",sWebLanguage)%>&nbsp;</td><%
 			            }
 			        %>
 			    </tr>
@@ -180,7 +180,7 @@
         <%
     }
     else{
-    	%><div style="padding:3px;"><%=getTran("web","noRecordsFound",sWebLanguage)%></div><%
+    	%><div style="padding:3px;"><%=getTran(request,"web","noRecordsFound",sWebLanguage)%></div><%
     }
 %>
 

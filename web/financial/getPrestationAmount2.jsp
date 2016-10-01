@@ -12,6 +12,7 @@
 	}
 	catch(Exception e){}
 	String sPrestationUID = checkString(request.getParameter("PrestationUID"));
+	String sEncounterUID = checkString(request.getParameter("EditEncounterUID"));
 	String sEditDebetUID = checkString(request.getParameter("EditDebetUID"));
 	String sPrestationGroupUID = checkString(request.getParameter("PrestationGroupUID"));
     String sInsuranceUID = checkString(request.getParameter("EditInsuranceUID"));
@@ -30,14 +31,16 @@
     Insurance bestInsurance = null;
     double baseInsurar=0;
     Debet debet=null;
-    Encounter encounter=Encounter.getActiveEncounter(activePatient.personid);
-   	if(sEditDebetUID.length()>0){
-    	debet = Debet.get(sEditDebetUID);
-    	if(debet!=null && debet.getEncounter()!=null){
-    		encounter=debet.getEncounter();
-    	}
+    Encounter encounter = Encounter.get(sEncounterUID);
+    if(encounter==null || !encounter.hasValidUid()){
+	    encounter=Encounter.getActiveEncounter(activePatient.personid);
+	   	if(sEditDebetUID.length()>0){
+	    	debet = Debet.get(sEditDebetUID);
+	    	if(debet!=null && debet.getEncounter()!=null){
+	    		encounter=debet.getEncounter();
+	    	}
+	    }
     }
-   	
 
     if(sPrestationUIDs.length()>0){
         String type="";
@@ -50,11 +53,11 @@
         }
 		String[] prestations = sPrestationUIDs.split(";");
         prestationcontent ="<table width='100%'>";
-        prestationcontent+="<tr><td><b>"+getTran("web","prestation",sWebLanguage)+"</b></td>"+
-        "<td><b>"+getTran("web.finance","amount.patient",sWebLanguage)+"</b></td>"+
-        "<td><b>"+getTran("web.finance","amount.insurar",sWebLanguage)+"</b></td>";
+        prestationcontent+="<tr><td><b>"+getTranNoLink("web","prestation",sWebLanguage)+"</b></td>"+
+        "<td><b>"+getTranNoLink("web.finance","amount.patient",sWebLanguage)+"</b></td>"+
+        "<td><b>"+getTranNoLink("web.finance","amount.insurar",sWebLanguage)+"</b></td>";
 		if(MedwanQuery.getInstance().getConfigInt("enableMFP",0)==1 && MedwanQuery.getInstance().getConfigString("MFP","0").equalsIgnoreCase(insurance.getInsurarUid())){
-			prestationcontent+="<td><b>"+getTran("web.finance","base.insurar",sWebLanguage)+"</b></td>";
+			prestationcontent+="<td><b>"+getTranNoLink("web.finance","base.insurar",sWebLanguage)+"</b></td>";
 		}
 		prestationcontent+="<td><b>"+getTranNoLink("web.finance","amount.complementaryinsurar",sWebLanguage)+"</b></td>"+
         "<td><b>"+getTranNoLink("web","service",sWebLanguage)+"</b></td>"+
@@ -62,7 +65,7 @@
         "</tr>";
 		for(int n=0;n<prestations.length;n++){
 	        Prestation prestation = Prestation.get(prestations[n].split("=")[0],dDebetDate);
-	        if(insurance!=null && insurance.getInsurar()!=null && prestation.isVisibleFor(insurance.getInsurar())){
+	        if(insurance!=null && insurance.getInsurar()!=null && prestation.isVisibleFor(insurance.getInsurar(),encounter.getService())){
 		        quantity=Integer.parseInt(prestations[n].split("=")[1]);
 		        if (insurance != null) {
 		            bestInsurance=insurance;
@@ -156,7 +159,7 @@
 			        prestationcontent+="<td "+(sCoverageInsurance2.length()>0?"class='strikeonly'":"")+"><input type='hidden' name='PPP_"+prestation.getUid()+"' id='PPP_"+prestation.getUid()+"' value='"+pa+"'/><span id='TPPP_"+prestation.getUid()+"'>"+pa+"</span> "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>";
 			        String sNegociate="";
 			        if(activeUser.getAccessRight("financial.negotiate.tariff.select") && insurance.getInsurar().getAllowTariffNegociations()==1){
-			        	sNegociate=" <img src='"+sCONTEXTPATH+"/_img/icons/icon_interactions.png' onclick='negotiate("+prestation.getUid()+")'/>";
+			        	sNegociate=" <img src='"+sCONTEXTPATH+"/_img/icons/icon_interactions.png' onclick='negotiate(\\\""+prestation.getUid()+"\\\")'/>";
 			        }
 			        prestationcontent+="<td><input type='hidden' name='PPI_"+prestation.getUid()+"' id='PPI_"+prestation.getUid()+"' value='"+pi+"'/><span id='TPPI_"+prestation.getUid()+"'>"+pi+"</span> "+MedwanQuery.getInstance().getConfigParam("currency","€")+"<span id='TPPC_"+prestation.getUid()+"'>"+coveragePct+"</span>"+sNegociate+"</td>";
 					if(MedwanQuery.getInstance().getConfigInt("enableMFP",0)==1 && MedwanQuery.getInstance().getConfigString("MFP","0").equalsIgnoreCase(insurance.getInsurarUid())){
@@ -166,7 +169,7 @@
 					if(sCoverageInsurance.length()>0){
 						Insurar extraInsurar = Insurar.get(sCoverageInsurance);
 				        if(activeUser.getAccessRight("financial.negotiate.tariff.select") && extraInsurar!=null && extraInsurar.getAllowTariffNegociations()==1){
-				        	sNegociate=" <img src='"+sCONTEXTPATH+"/_img/icons/icon_interactions.png' onclick='negotiate2("+prestation.getUid()+")'/>";
+				        	sNegociate=" <img src='"+sCONTEXTPATH+"/_img/icons/icon_interactions.png' onclick='negotiate2(\\\""+prestation.getUid()+"\\\")'/>";
 				        }
 					}
 			        prestationcontent+="<td><input type='hidden' name='PPE_"+prestation.getUid()+"' id='PPE_"+prestation.getUid()+"' value='"+pc1+"'/><span id='TPPE_"+prestation.getUid()+"'>"+pc1+"</span> "+MedwanQuery.getInstance().getConfigParam("currency","€")+sNegociate+"</td>";
@@ -312,7 +315,7 @@
 						prestationcontent+="<td><font color='red'><b>"+pbi+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</font></td>";
 					}
 			        prestationcontent+="<td><font color='red'><b>"+pc1+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</font></td>";
-			        prestationcontent+="<td><font color='red'><b>"+getTran("web","wouldexceedmaximumnumberofprestations",sWebLanguage)+": "+rule.getQuantity()+" "+getTran("web","period_in",sWebLanguage)+" "+rule.getDays()+" "+getTran("web","days",sWebLanguage)+"</b></font></td>";
+			        prestationcontent+="<td><font color='red'><b>"+getTranNoLink("web","wouldexceedmaximumnumberofprestations",sWebLanguage)+": "+rule.getQuantity()+" "+getTranNoLink("web","period_in",sWebLanguage)+" "+rule.getDays()+" "+getTranNoLink("web","days",sWebLanguage)+"</b></font></td>";
 			        prestationcontent+="</tr>";
 				}
 	        }
@@ -329,7 +332,7 @@
             insurance = Insurance.get(sInsuranceUID);
         }
         Prestation prestation = Prestation.get(sPrestationUID,dDebetDate);
-        if(insurance==null || insurance.getInsurar()==null || !prestation.isVisibleFor(insurance.getInsurar())){
+        if(insurance==null || insurance.getInsurar()==null || !prestation.isVisibleFor(insurance.getInsurar(),encounter.getService())){
         	prestationcontent+="<table></table>";
         }
         else {
@@ -430,11 +433,11 @@
 	      	prestationcontent ="<table width='100%' id='mytable'>";
 			InsuranceRule rule = insurance==null?null:Prestation.getInsuranceRule(sPrestationUID, insurance.getInsurarUid());
 			if(!Prestation.checkMaximumReached(activePatient.personid, rule, quantity)){
-		        prestationcontent+="<tr><td><b>"+getTran("web","prestation",sWebLanguage)+"</b></td>"+
-		        "<td><b>"+getTran("web.finance","amount.patient",sWebLanguage)+"</b></td>"+
-		        "<td><b>"+getTran("web.finance","amount.insurar",sWebLanguage)+"</b></td>";
+		        prestationcontent+="<tr><td><b>"+getTranNoLink("web","prestation",sWebLanguage)+"</b></td>"+
+		        "<td><b>"+getTranNoLink("web.finance","amount.patient",sWebLanguage)+"</b></td>"+
+		        "<td><b>"+getTranNoLink("web.finance","amount.insurar",sWebLanguage)+"</b></td>";
 				if(MedwanQuery.getInstance().getConfigInt("enableMFP",0)==1 && MedwanQuery.getInstance().getConfigString("MFP","0").equalsIgnoreCase(insurance.getInsurarUid())){
-					prestationcontent+="<td><b>"+getTran("web.finance","base.insurar",sWebLanguage)+"</b></td>";
+					prestationcontent+="<td><b>"+getTranNoLink("web.finance","base.insurar",sWebLanguage)+"</b></td>";
 				}
 				prestationcontent+="<td><b>"+getTranNoLink("web.finance","amount.complementaryinsurar",sWebLanguage)+"</b></td>"+
 		        "<td><b>"+getTranNoLink("web","service",sWebLanguage)+"</b></td>"+
@@ -444,7 +447,7 @@
 		        prestationcontent+="<td "+(sCoverageInsurance2.length()>0?"class='strikeonly'":"")+"><input type='hidden' name='PPP_"+prestation.getUid()+"' id='PPP_"+prestation.getUid()+"' value='"+pa+"'/><span id='TPPP_"+prestation.getUid()+"'>"+pa+"</span> "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>";
 				String sNegociate="";
 		        if(activeUser.getAccessRight("financial.negotiate.tariff.select") && insurance.getInsurar().getAllowTariffNegociations()==1){
-		        	sNegociate=" <img src='"+sCONTEXTPATH+"/_img/icons/icon_interactions.png' onclick='negotiate("+prestation.getUid()+")'/>";
+		        	sNegociate=" <img src='"+sCONTEXTPATH+"/_img/icons/icon_interactions.png' onclick='negotiate(\\\""+prestation.getUid()+"\\\")'/>";
 		        }
 		        prestationcontent+="<td><input type='hidden' name='PPI_"+prestation.getUid()+"' id='PPI_"+prestation.getUid()+"' value='"+pi+"'/><span id='TPPI_"+prestation.getUid()+"'>"+pi+"</span> "+MedwanQuery.getInstance().getConfigParam("currency","€")+"<span id='TPPC_"+prestation.getUid()+"'>"+coveragePct+"</span>"+sNegociate+"</td>";
 		        if(MedwanQuery.getInstance().getConfigInt("enableMFP",0)==1 && MedwanQuery.getInstance().getConfigString("MFP","0").equalsIgnoreCase(insurance.getInsurarUid())){
@@ -454,7 +457,7 @@
 				if(sCoverageInsurance.length()>0){
 					Insurar extraInsurar = Insurar.get(sCoverageInsurance);
 			        if(activeUser.getAccessRight("financial.negotiate.tariff.select") && extraInsurar!=null && extraInsurar.getAllowTariffNegociations()==1){
-			        	sNegociate=" <img src='"+sCONTEXTPATH+"/_img/icons/icon_interactions.png' onclick='negotiate2("+prestation.getUid()+")'/>";
+			        	sNegociate=" <img src='"+sCONTEXTPATH+"/_img/icons/icon_interactions.png' onclick='negotiate2(\\\""+prestation.getUid()+"\\\")'/>";
 			        }
 				}
 		        prestationcontent+="<td><input type='hidden' name='PPE_"+prestation.getUid()+"' id='PPE_"+prestation.getUid()+"' value='"+pc1+"'/><span id='TPPE_"+prestation.getUid()+"'>"+pc1+"</span> "+MedwanQuery.getInstance().getConfigParam("currency","€")+sNegociate+"</td>";
@@ -591,7 +594,7 @@
 					prestationcontent+="<td><font color='red'><b>"+pbi+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</font></td>";
 				}
 		        prestationcontent+="<td><font color='red'><b>"+pc1+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</font></td>";
-		        prestationcontent+="<td><font color='red'><b>"+getTran("web","wouldexceedmaximumnumberofprestations",sWebLanguage)+": "+rule.getQuantity()+" "+getTran("web","period_in",sWebLanguage)+" "+rule.getDays()+" "+getTran("web","days",sWebLanguage)+"</b></font></td>";
+		        prestationcontent+="<td><font color='red'><b>"+getTranNoLink("web","wouldexceedmaximumnumberofprestations",sWebLanguage)+": "+rule.getQuantity()+" "+getTranNoLink("web","period_in",sWebLanguage)+" "+rule.getDays()+" "+getTranNoLink("web","days",sWebLanguage)+"</b></font></td>";
 		        prestationcontent+="</tr>";
 			}
 		
@@ -613,11 +616,11 @@
 		ps.setString(1,sPrestationGroupUID);
 		ResultSet rs = ps.executeQuery();
         prestationcontent ="<table width='100%'>";
-        prestationcontent+="<tr><td><b>"+getTran("web","prestation",sWebLanguage)+"</b></td>"+
-        "<td><b>"+getTran("web.finance","amount.patient",sWebLanguage)+"</b></td>"+
-        "<td><b>"+getTran("web.finance","amount.insurar",sWebLanguage)+"</b></td>";
+        prestationcontent+="<tr><td><b>"+getTranNoLink("web","prestation",sWebLanguage)+"</b></td>"+
+        "<td><b>"+getTranNoLink("web.finance","amount.patient",sWebLanguage)+"</b></td>"+
+        "<td><b>"+getTranNoLink("web.finance","amount.insurar",sWebLanguage)+"</b></td>";
 		if(MedwanQuery.getInstance().getConfigInt("enableMFP",0)==1 && MedwanQuery.getInstance().getConfigString("MFP","0").equalsIgnoreCase(insurance.getInsurarUid())){
-			prestationcontent+="<td><b>"+getTran("web.finance","base.insurar",sWebLanguage)+"</b></td>";
+			prestationcontent+="<td><b>"+getTranNoLink("web.finance","base.insurar",sWebLanguage)+"</b></td>";
 		}
 		prestationcontent+="<td><b>"+getTranNoLink("web.finance","amount.complementaryinsurar",sWebLanguage)+"</b></td>"+
         "<td><b>"+getTranNoLink("web","service",sWebLanguage)+"</b></td>"+
@@ -625,7 +628,7 @@
         "</tr>";
 		while(rs.next()){
 	        Prestation prestation = Prestation.get(rs.getString("oc_prestationgroup_prestationuid"),dDebetDate);
-	        if(insurance!=null && insurance.getInsurar()!=null && prestation.isVisibleFor(insurance.getInsurar())){
+	        if(insurance!=null && insurance.getInsurar()!=null && prestation.isVisibleFor(insurance.getInsurar(),encounter.getService())){
 		        if (insurance != null) {
 		            bestInsurance=insurance;
 		            type = insurance.getType();
@@ -716,7 +719,7 @@
 			        prestationcontent+="<td "+(sCoverageInsurance2.length()>0?"class='strikeonly'":"")+"><input type='hidden' name='PPP_"+prestation.getUid()+"' id='PPP_"+prestation.getUid()+"' value='"+pa+"'/><span id='TPPP_"+prestation.getUid()+"'>"+pa+"</span> "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>";
 			        String sNegociate="";
 			        if(activeUser.getAccessRight("financial.negotiate.tariff.select") && insurance.getInsurar().getAllowTariffNegociations()==1){
-			        	sNegociate=" <img src='"+sCONTEXTPATH+"/_img/icons/icon_interactions.png' onclick='negotiate("+prestation.getUid()+")'/>";
+			        	sNegociate=" <img src='"+sCONTEXTPATH+"/_img/icons/icon_interactions.png' onclick='negotiate(\\\""+prestation.getUid()+"\\\")'/>";
 			        }
 			        prestationcontent+="<td><input type='hidden' name='PPI_"+prestation.getUid()+"' id='PPI_"+prestation.getUid()+"' value='"+pi+"'/><span id='TPPI_"+prestation.getUid()+"'>"+pi+"</span> "+MedwanQuery.getInstance().getConfigParam("currency","€")+"<span id='TPPC_"+prestation.getUid()+"'>"+coveragePct+"</span>"+sNegociate+"</td>";
 					if(MedwanQuery.getInstance().getConfigInt("enableMFP",0)==1 && MedwanQuery.getInstance().getConfigString("MFP","0").equalsIgnoreCase(insurance.getInsurarUid())){
@@ -726,7 +729,7 @@
 					if(sCoverageInsurance.length()>0){
 						Insurar extraInsurar = Insurar.get(sCoverageInsurance);
 				        if(activeUser.getAccessRight("financial.negotiate.tariff.select") && extraInsurar!=null && extraInsurar.getAllowTariffNegociations()==1){
-				        	sNegociate=" <img src='"+sCONTEXTPATH+"/_img/icons/icon_interactions.png' onclick='negotiate2("+prestation.getUid()+")'/>";
+				        	sNegociate=" <img src='"+sCONTEXTPATH+"/_img/icons/icon_interactions.png' onclick='negotiate2(\\\""+prestation.getUid()+"\\\")'/>";
 				        }
 					}
 			        prestationcontent+="<td><input type='hidden' name='PPE_"+prestation.getUid()+"' id='PPE_"+prestation.getUid()+"' value='"+pc1+"'/><span id='TPPE_"+prestation.getUid()+"'>"+pc1+"</span> "+MedwanQuery.getInstance().getConfigParam("currency","€")+sNegociate+"</td>";
@@ -869,7 +872,7 @@
 						prestationcontent+="<td><font color='red'><b>"+pbi+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</font></td>";
 					}
 			        prestationcontent+="<td><font color='red'><b>"+pc1+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</font></td>";
-			        prestationcontent+="<td><font color='red'><b>"+getTran("web","wouldexceedmaximumnumberofprestations",sWebLanguage)+": "+rule.getQuantity()+" "+getTran("web","period_in",sWebLanguage)+" "+rule.getDays()+" "+getTran("web","days",sWebLanguage)+"</b></font></td>";
+			        prestationcontent+="<td><font color='red'><b>"+getTranNoLink("web","wouldexceedmaximumnumberofprestations",sWebLanguage)+": "+rule.getQuantity()+" "+getTranNoLink("web","period_in",sWebLanguage)+" "+rule.getDays()+" "+getTranNoLink("web","days",sWebLanguage)+"</b></font></td>";
 			        prestationcontent+="</tr>";
 				}
 	        }

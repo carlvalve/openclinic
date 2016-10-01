@@ -113,16 +113,16 @@
             Service company = Service.getService(sSupplierUid);
             String warning ="";
             if(company==null){
-            	warning=" <font color='red'>"+getTran("web","unknownsupplier",sWebLanguage)+"</font>";
+            	warning=" <font color='red'>"+getTran(null,"web","unknownsupplier",sWebLanguage)+"</font>";
             }
 
             // Supplier sub-title
             html.append("<tr id='headerOfSupplier_" + i + "' title='" + showOrdersTran + "'>")
                     .append(" <td class='titleadmin' width='22' onClick=\"toggleOrdersDiv('" + i + "');\" style='text-align:center;'>&nbsp;<img id='img_" + i + "' src='" + sCONTEXTPATH + "/_img/themes/default/plus.jpg' class='link'></td>")
-                    .append(" <td class='titleadmin' width='80%' onClick=\"toggleOrdersDiv('" + i + "');\">&nbsp;&nbsp;" + getTran("service", sSupplierUid, sWebLanguage) + " (" + ordersOfOneSupplier.size() + " " + ordersTran + ")"+warning+"</td>")
+                    .append(" <td class='titleadmin' width='80%' onClick=\"toggleOrdersDiv('" + i + "');\">&nbsp;&nbsp;" + getTran(null,"service", sSupplierUid, sWebLanguage) + " (" + ordersOfOneSupplier.size() + " " + ordersTran + ")"+warning+"</td>")
                     .append(" <td class='titleadmin' width='20%' onClick='' style='font-weight:normal;'>")
-                    .append("   <a href=\"javascript:checkAll('" + sSupplierUid + "',true);\">" + getTran("web.manage.checkdb", "CheckAll", sWebLanguage) + "</a>")
-                    .append("   <a href=\"javascript:checkAll('" + sSupplierUid + "',false);\">" + getTran("web.manage.checkdb", "UncheckAll", sWebLanguage) + "</a>")
+                    .append("   <a href=\"javascript:checkAll('" + sSupplierUid + "',true);\">" + getTran(null,"web.manage.checkdb", "CheckAll", sWebLanguage) + "</a>")
+                    .append("   <a href=\"javascript:checkAll('" + sSupplierUid + "',false);\">" + getTran(null,"web.manage.checkdb", "UncheckAll", sWebLanguage) + "</a>")
                     .append(" </td>")
                     .append("</tr>");
 
@@ -134,13 +134,13 @@
             // header
             html.append("<tr class='admin'>")
                     .append(" <td nowrap>&nbsp;</td>")
-                    .append(" <td><a href='#' class='underlined' title='" + sortTran + "' onClick=\"doSort('OC_ORDER_DESCRIPTION');\">" + (sSortCol.equalsIgnoreCase("OC_ORDER_DESCRIPTION") ? "<" + sSortDir + ">" : "") + getTran("Web", "description", sWebLanguage) + (sSortCol.equalsIgnoreCase("OC_ORDER_DESCRIPTION") ? "<" + sSortDir + ">" : "") + "</a></td>")
-                    .append(" <td>" + getTran("Web", "servicestock", sWebLanguage) + "</td>")
-                    .append(" <td>" + getTran("Web", "product", sWebLanguage) + "</td>")
-                    .append(" <td><a href='#' class='underlined' title='" + sortTran + "' onClick=\"doSort('OC_ORDER_PACKAGESORDERED');\">" + (sSortCol.equalsIgnoreCase("OC_ORDER_PACKAGESORDERED") ? "<" + sSortDir + ">" : "") + getTran("Web", "packagesordered", sWebLanguage) + (sSortCol.equalsIgnoreCase("OC_ORDER_PACKAGESORDERED") ? "<" + sSortDir + ">" : "") + "</a></td>")
-                    .append(" <td><a href='#' class='underlined' title='" + sortTran + "' onClick=\"doSort('OC_ORDER_PACKAGESDELIVERED');\">" + (sSortCol.equalsIgnoreCase("OC_ORDER_PACKAGESDELIVERED") ? "<" + sSortDir + ">" : "") + getTran("Web", "packagesdelivered", sWebLanguage) + (sSortCol.equalsIgnoreCase("OC_ORDER_PACKAGESDELIVERED") ? "<" + sSortDir + ">" : "") + "</a></td>")
-                    .append(" <td><a href='#' class='underlined' title='" + sortTran + "' onClick=\"doSort('OC_ORDER_DATEORDERED');\">" + (sSortCol.equalsIgnoreCase("OC_ORDER_DATEORDERED") ? "<" + sSortDir + ">" : "") + getTran("Web", "dateordered", sWebLanguage) + (sSortCol.equalsIgnoreCase("OC_ORDER_DATEORDERED") ? "<" + sSortDir + ">" : "") + "</a></td>")
-                    .append(" <td><a href='#' class='underlined' title='" + sortTran + "' onClick=\"doSort('OC_ORDER_DATEDELIVERYDUE');\">" + (sSortCol.equalsIgnoreCase("OC_ORDER_DATEDELIVERYDUE") ? "<" + sSortDir + ">" : "") + getTran("Web", "dateDeliveryDue", sWebLanguage) + (sSortCol.equalsIgnoreCase("OC_ORDER_DATEDELIVERYDUE") ? "<" + sSortDir + ">" : "") + "</a></td>")
+                    .append(" <td><a href='#' class='underlined' title='" + sortTran + "' onClick=\"doSort('OC_ORDER_DESCRIPTION');\">" + (sSortCol.equalsIgnoreCase("OC_ORDER_DESCRIPTION") ? "<" + sSortDir + ">" : "") + getTran(null,"Web", "description", sWebLanguage) + (sSortCol.equalsIgnoreCase("OC_ORDER_DESCRIPTION") ? "<" + sSortDir + ">" : "") + "</a></td>")
+                    .append(" <td>" + getTranNoLink("Web", "servicestock", sWebLanguage) + "</td>")
+                    .append(" <td>" + getTranNoLink("Web", "product", sWebLanguage) + "</td>")
+                    .append(" <td><a href='#' class='underlined' title='" + sortTran + "' onClick=\"doSort('OC_ORDER_PACKAGESORDERED');\">" + (sSortCol.equalsIgnoreCase("OC_ORDER_PACKAGESORDERED") ? "<" + sSortDir + ">" : "") + getTran(null,"Web", "packagesordered", sWebLanguage) + (sSortCol.equalsIgnoreCase("OC_ORDER_PACKAGESORDERED") ? "<" + sSortDir + ">" : "") + "</a></td>")
+                    .append(" <td><a href='#' class='underlined' title='" + sortTran + "' onClick=\"doSort('OC_ORDER_PACKAGESDELIVERED');\">" + (sSortCol.equalsIgnoreCase("OC_ORDER_PACKAGESDELIVERED") ? "<" + sSortDir + ">" : "") + getTran(null,"Web", "packagesdelivered", sWebLanguage) + (sSortCol.equalsIgnoreCase("OC_ORDER_PACKAGESDELIVERED") ? "<" + sSortDir + ">" : "") + "</a></td>")
+                    .append(" <td><a href='#' class='underlined' title='" + sortTran + "' onClick=\"doSort('OC_ORDER_DATEORDERED');\">" + (sSortCol.equalsIgnoreCase("OC_ORDER_DATEORDERED") ? "<" + sSortDir + ">" : "") + getTran(null,"Web", "dateordered", sWebLanguage) + (sSortCol.equalsIgnoreCase("OC_ORDER_DATEORDERED") ? "<" + sSortDir + ">" : "") + "</a></td>")
+                    .append(" <td><a href='#' class='underlined' title='" + sortTran + "' onClick=\"doSort('OC_ORDER_DATEDELIVERYDUE');\">" + (sSortCol.equalsIgnoreCase("OC_ORDER_DATEDELIVERYDUE") ? "<" + sSortDir + ">" : "") + getTran(null,"Web", "dateDeliveryDue", sWebLanguage) + (sSortCol.equalsIgnoreCase("OC_ORDER_DATEDELIVERYDUE") ? "<" + sSortDir + ">" : "") + "</a></td>")
                     .append("</tr>");
 
             // run thru orders of this Supplier
@@ -286,14 +286,14 @@
                 <table width="100%" class="list" cellspacing="1" onClick="transactionForm.onkeydown='if(enterEvent(event,13)){doSearch(\'<%=sDefaultSortCol%>\');}';" onKeyDown="if(enterEvent(event,13)){doSearch('<%=sDefaultSortCol%>');}">
                     <%-- description --%>
                     <tr>
-                        <td class="admin2" width="<%=sTDAdminWidth%>"><%=getTran("Web","description",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","description",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <input type="text" class="text" name="FindDescription" value="<%=sFindDescription%>" size="<%=sTextWidth%>" maxLength="255">
                         </td>
                     </tr>
                     <%-- Supplier --%>
                     <tr>
-                        <td class="admin2"><%=getTran("Web","supplier",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2"><%=getTran(request,"Web","supplier",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <input type="hidden" name="FindSupplierUid" value="<%=sFindSupplierUid%>">
                             <input class="text" type="text" name="FindSupplierName" readonly size="<%=sTextWidth%>" value="<%=sFindSupplierName%>">
@@ -303,7 +303,7 @@
                     </tr>
                     <%-- Service --%>
                     <tr>
-                        <td class="admin2"><%=getTran("Web","Service",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2"><%=getTran(request,"Web","Service",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <input type="hidden" name="FindServiceUid" value="<%=sFindServiceUid%>">
                             <input class="text" type="text" name="FindServiceName" readonly size="<%=sTextWidth%>" value="<%=sFindServiceName%>">
@@ -313,7 +313,7 @@
                     </tr>
                     <%-- ServiceStock --%>
                     <tr>
-                        <td class="admin2"><%=getTran("Web","ServiceStock",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2"><%=getTran(request,"Web","ServiceStock",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <input type="hidden" name="FindServiceStockUid" value="<%=sFindServiceStockUid%>">
                             <input class="text" type="text" name="FindServiceStockName" readonly size="<%=sTextWidth%>" value="<%=sFindServiceStockName%>">
@@ -323,7 +323,7 @@
                     </tr>
                     <%-- ProductStock --%>
                     <tr>
-                        <td class="admin2"><%=getTran("Web","ProductStock",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2"><%=getTran(request,"Web","ProductStock",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <input type="hidden" name="FindProductStockUid" value="<%=sFindProductStockUid%>">
                             <input class="text" type="text" name="FindProductName" readonly size="<%=sTextWidth%>" value="<%=sFindProductName%>">
@@ -333,19 +333,19 @@
                     </tr>
                     <%-- PackagesOrdered --%>
                     <tr>
-                        <td class="admin2"><%=getTran("Web","PackagesOrdered",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2"><%=getTran(request,"Web","PackagesOrdered",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <input type="text" class="text" name="FindPackagesOrdered" value="<%=sFindPackagesOrdered%>" size="5" maxLength="5" onKeyUp="isNumber(this);">
                         </td>
                     </tr>
                     <%-- DateOrdered --%>
                     <tr>
-                        <td class="admin2"><%=getTran("Web","DateOrdered",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2"><%=getTran(request,"Web","DateOrdered",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2"><%=writeDateField("FindDateOrdered","transactionForm",sFindDateOrdered,sWebLanguage)%></td>
                     </tr>
                     <%-- DateDeliveryDue --%>
                     <tr>
-                        <td class="admin2"><%=getTran("Web","DateDeliveryDue",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2"><%=getTran(request,"Web","DateDeliveryDue",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2"><%=writeDateField("FindDateDeliveryDue","transactionForm",sFindDateDeliveryDue,sWebLanguage)%></td>
                     </tr>
                     <%-- SEARCH BUTTONS --%>
@@ -370,19 +370,19 @@
                     <table width="100%" cellspacing="0" cellpadding="0" class="list">
                         <%-- header --%>
                         <tr class="admin">
-                            <td colspan="3"><%=getTran("Web.manage","orderspersupplier",sWebLanguage)%></td>
+                            <td colspan="3"><%=getTran(request,"Web.manage","orderspersupplier",sWebLanguage)%></td>
                         </tr>
                         <tbody onmouseover='this.style.cursor="hand"' onmouseout='this.style.cursor="default"'>
                             <%=ordersHtml%>
                         </tbody>
                     </table>
                     <%-- CHECK ALL --%>
-                    <a href="javascript:checkAllOrders(true);"><%=getTran("web.manage.checkdb","CheckAll",sWebLanguage)%></a>
-                    <a href="javascript:checkAllOrders(false);"><%=getTran("web.manage.checkdb","UncheckAll",sWebLanguage)%></a>
+                    <a href="javascript:checkAllOrders(true);"><%=getTran(request,"web.manage.checkdb","CheckAll",sWebLanguage)%></a>
+                    <a href="javascript:checkAllOrders(false);"><%=getTran(request,"web.manage.checkdb","UncheckAll",sWebLanguage)%></a>
                     <br>
                     <%-- number of records found --%>
                     <span style="width:49%;text-align:left;">
-                        <%=foundOrderCount%> <%=getTran("web","recordsfound",sWebLanguage)%>
+                        <%=foundOrderCount%> <%=getTran(request,"web","recordsfound",sWebLanguage)%>
                     </span>
                     <%
                         if(foundOrderCount > 20){
@@ -406,7 +406,7 @@
             else{
                 // no records found
                 %>
-                <%=getTran("web","norecordsfound",sWebLanguage)%>
+                <%=getTran(request,"web","norecordsfound",sWebLanguage)%>
                 <br><br>
                 <%
             }
@@ -602,7 +602,7 @@
 
   <%-- DO BACK TO OVERVIEW --%>
   function doBackToOverview(){
-    if(checkSaveButton('<%=sCONTEXTPATH%>','<%=getTran("Web","areyousuretodiscard",sWebLanguage)%>')){
+    if(checkSaveButton('<%=sCONTEXTPATH%>','<%=getTran(null,"Web","areyousuretodiscard",sWebLanguage)%>')){
       transactionForm.Action.value = "find";
       transactionForm.DisplaySearchFields.value = "true";
       transactionForm.submit();

@@ -10,10 +10,10 @@
 <table width="100%" cellpadding="0" cellspacing="0" class="list">
     <tr class="admin">
         <td width="200">
-            <%=getTran("financial","financial.status",sWebLanguage)%>
+            <%=getTran(request,"financial","financial.status",sWebLanguage)%>
         </td>
         <td <%=balance<0?" class='letterred'":""%>>
-            <%=getTran("balance","balance",sWebLanguage)%>:&nbsp;<%=new DecimalFormat("#0.00").format(balance)+" "+sCurrency%>
+            <%=getTran(request,"balance","balance",sWebLanguage)%>:&nbsp;<%=new DecimalFormat("#0.00").format(balance)+" "+sCurrency%>
         </td>
     </tr>
 </table>

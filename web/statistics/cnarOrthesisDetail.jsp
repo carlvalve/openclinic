@@ -47,7 +47,7 @@
 	rs = ps.executeQuery();
 	%>
 	<table width="100%">
-		<tr class='admin'><td colspan='2'><%=getTran("cnar","statistics.ortho.equipment.detail",sWebLanguage)%></td></tr>
+		<tr class='admin'><td colspan='2'><%=getTran(request,"cnar","statistics.ortho.equipment.detail",sWebLanguage)%></td></tr>
 		<%
 			String activegroup="";
 			while(rs.next()){
@@ -55,7 +55,7 @@
 				String description = rs.getString("oc_prestation_description");
 				prestationobjectid=rs.getInt("oc_prestation_objectid");
 				if(!group.equalsIgnoreCase(activegroup)){
-					out.println("<tr class='admin'><td>"+getTran("cnar.equipmentgroup",group,sWebLanguage)+"</td><td>"+(groups.get(group)!=null?groups.get(group):0)+"</td></tr>");
+					out.println("<tr class='admin'><td>"+getTran(request,"cnar.equipmentgroup",group,sWebLanguage)+"</td><td>"+(groups.get(group)!=null?groups.get(group):0)+"</td></tr>");
 					activegroup=group;
 				}
 				out.println("<tr><td  class='admin'>"+description+"</td><td  class='admin'>"+(prestations.get(prestationobjectid)==null?"0":prestations.get(prestationobjectid))+"</td></tr>");

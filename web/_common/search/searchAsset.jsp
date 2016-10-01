@@ -65,7 +65,7 @@
             <table class="list" border="0" width="100%" cellspacing="1">
                 <%-- search CODE --%>
                 <tr>
-                    <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","code",sWebLanguage)%></td>
+                    <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","code",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="text" class="text" id="searchCode" name="searchCode" size="20" maxLength="50" value="<%=sCode%>">
                     </td>
@@ -73,7 +73,7 @@
                            
                 <%-- search DESCRIPTION --%>                
                 <tr>
-                    <td class="admin"><%=getTran("web","description",sWebLanguage)%></td>
+                    <td class="admin"><%=getTran(request,"web","description",sWebLanguage)%></td>
                     <td class="admin2">
                         <textarea class="text" name="searchDescription" id="searchDescription" cols="80" rows="4" onKeyup="resizeTextarea(this,8);"><%=sDescription%></textarea>
                     </td>
@@ -81,7 +81,7 @@
                 
                 <%-- search SERIAL NUMBER --%>
                 <tr>
-                    <td class="admin"><%=getTran("web.assets","serialnumber",sWebLanguage)%></td>
+                    <td class="admin"><%=getTran(request,"web.assets","serialnumber",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="text" class="text" id="searchSerialnumber" name="searchSerialnumber" size="20" maxLength="50" value="<%=sSerialnumber%>">
                     </td>
@@ -89,18 +89,18 @@
         
                 <%-- search ASSET TYPE --%>
                 <tr>
-                    <td class="admin"><%=getTran("web.assets","assetType",sWebLanguage)%></td>
+                    <td class="admin"><%=getTran(request,"web.assets","assetType",sWebLanguage)%></td>
                     <td class="admin2">
                         <select class="text" id="searchAssetType" name="searchAssetType">
                             <option/>
-                            <%=ScreenHelper.writeSelect("assets.type",sAssetType,sWebLanguage)%>
+                            <%=ScreenHelper.writeSelect(request,"assets.type",sAssetType,sWebLanguage)%>
                         </select>
                     </td>
                 </tr>   
                 
                 <%-- search SUPPLIER --%>
                 <tr>
-                    <td class="admin"><%=getTran("web.assets","supplier",sWebLanguage)%></td>
+                    <td class="admin"><%=getTran(request,"web.assets","supplier",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="hidden" name="searchSupplierUid" id="searchSupplierUid" value="<%=sSupplierUid%>">
                         <input type="text" class="text" name="searchSupplierName" id="searchSupplierName" readonly size="30" value="<%=sSupplierName%>">
@@ -113,9 +113,9 @@
                 
                 <%-- search PURCHASE PERIOD --%>
                 <tr>
-                    <td class="admin"><%=getTran("web.assets","purchasePeriod",sWebLanguage)%>&nbsp;(<%=getTran("web.assets","begin",sWebLanguage)%> - <%=getTran("web.assets","end",sWebLanguage)%>)</td>
+                    <td class="admin"><%=getTran(request,"web.assets","purchasePeriod",sWebLanguage)%>&nbsp;(<%=getTran(request,"web.assets","begin",sWebLanguage)%> - <%=getTran(request,"web.assets","end",sWebLanguage)%>)</td>
                     <td class="admin2">
-                        <%=writeDateField("searchPeriodBegin","SearchForm",sPurchasePeriodBegin,sWebLanguage)%>&nbsp;&nbsp;<%=getTran("web","until",sWebLanguage)%>&nbsp;&nbsp; 
+                        <%=writeDateField("searchPeriodBegin","SearchForm",sPurchasePeriodBegin,sWebLanguage)%>&nbsp;&nbsp;<%=getTran(request,"web","until",sWebLanguage)%>&nbsp;&nbsp; 
                         <%=writeDateField("searchPeriodEnd","SearchForm",sPurchasePeriodEnd,sWebLanguage)%>            
                     </td>                        
                 </tr>
@@ -158,10 +158,10 @@
 		            <table id="searchresults" cellpadding="0" cellspacing="0" width="100%" class="sortable">
 		                <%-- header --%>
 		                <tr class="admin">
-		                    <td class="admin" style="padding-left:0;" width="15%" nowrap><%=getTran("web","code",sWebLanguage)%></td>
-		                    <td class="admin" style="padding-left:0;" width="50%" nowrap><%=getTran("web","description",sWebLanguage)%></td>
-		                    <td class="admin" style="padding-left:0;" width="20%" nowrap><%=getTran("web","type",sWebLanguage)%></td>
-		                    <td class="admin" style="padding-left:0;" width="15%" nowrap><%=getTran("web.assets","purchaseDate",sWebLanguage)%></td>
+		                    <td class="admin" style="padding-left:0;" width="15%" nowrap><%=getTran(request,"web","code",sWebLanguage)%></td>
+		                    <td class="admin" style="padding-left:0;" width="50%" nowrap><%=getTran(request,"web","description",sWebLanguage)%></td>
+		                    <td class="admin" style="padding-left:0;" width="20%" nowrap><%=getTran(request,"web","type",sWebLanguage)%></td>
+		                    <td class="admin" style="padding-left:0;" width="15%" nowrap><%=getTran(request,"web.assets","purchaseDate",sWebLanguage)%></td>
 		                </tr>
 		                
 		                <tbody>
@@ -198,10 +198,10 @@
 	    
 	    // number of found records
 	    if(foundAssets.size() > 0){
-	        %><%=foundAssets.size()%> <%=getTran("web","recordsFound",sWebLanguage)%><%
+	        %><%=foundAssets.size()%> <%=getTran(request,"web","recordsFound",sWebLanguage)%><%
 	    }
 	    else{
-	        %><%=getTran("web","noRecordsFound",sWebLanguage)%><%
+	        %><%=getTran(request,"web","noRecordsFound",sWebLanguage)%><%
 	    }
     }
     

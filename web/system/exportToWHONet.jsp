@@ -73,7 +73,7 @@
 		}
 		catch(Exception e){
 			e.printStackTrace();
-			message = ScreenHelper.getTran("web","wrong.datetime.format",sWebLanguage)+"! ("+request.getParameter("exportdate")+" "+request.getParameter("exporttime")+")";
+			message = ScreenHelper.getTran(request,"web","wrong.datetime.format",sWebLanguage)+"! ("+request.getParameter("exportdate")+" "+request.getParameter("exporttime")+")";
 		}
 	}
 %>
@@ -84,7 +84,7 @@
 	<table class="list" width="100%" cellpadding="0" cellspacing="1">		
 		<%-- DATES --%>
 		<tr>
-			<td class='admin' width="<%=sTDAdminWidth%>"><%=getTran("web","export.modifications.after",sWebLanguage)%></td>
+			<td class='admin' width="<%=sTDAdminWidth%>"><%=getTran(request,"web","export.modifications.after",sWebLanguage)%></td>
 			<td class='admin2'>
 			    <%=ScreenHelper.writeDateField("exportdate","transactionForm",sExportDate,true,false,sWebLanguage,request.getRequestURI().replaceAll(request.getServletPath(),""))%>&nbsp;
 		        <input class='text' type='text' width='10' size='10' name='exporttime' id='exporttime' value='<%=sExportTime%>'/></td>
@@ -93,28 +93,28 @@
 		
 		<%-- DESTINATION --%>
 		<tr>
-			<td class='admin'><%=getTran("web","destination",sWebLanguage)%>&nbsp;*&nbsp;</td>
+			<td class='admin'><%=getTran(request,"web","destination",sWebLanguage)%>&nbsp;*&nbsp;</td>
 			<td class='admin2'>
 				<table><tr><td>
-                <input type='radio' name='destination' id='destination1' value='download' <%=(sDestination.equals("download")?"checked":"")%>/><%=getLabel("web","download.file",sWebLanguage,"destination1")%></td></tr>
+                <input type='radio' name='destination' id='destination1' value='download' <%=(sDestination.equals("download")?"checked":"")%>/><%=getLabel(request,"web","download.file",sWebLanguage,"destination1")%></td></tr>
 
 				<%
 				    // DESTINATION:FTP
 					String ftpserver = MedwanQuery.getInstance().getConfigString("WHONetDestinationFtpServer","");
 					if(ftpserver.split("@").length > 1){
-						%><tr><td><input type='radio' name='destination' id='destination2' value='ftp' <%=(sDestination.equals("ftp")?"checked":"")%>/><%=getLabel("web","send.to.ftpserver",sWebLanguage,"destination2")+" "+getTran("web","towards",sWebLanguage)+" ["+ftpserver.split("@")[1]+"]"%></td></tr><%
+						%><tr><td><input type='radio' name='destination' id='destination2' value='ftp' <%=(sDestination.equals("ftp")?"checked":"")%>/><%=getLabel(request,"web","send.to.ftpserver",sWebLanguage,"destination2")+" "+getTran(request,"web","towards",sWebLanguage)+" ["+ftpserver.split("@")[1]+"]"%></td></tr><%
 					} 
 	
 				    // DESTINATION:SMTP
 					String smtpserver = MedwanQuery.getInstance().getConfigString("WHONetDestinationSmtpServer","");
 					if(smtpserver.split("@").length > 1){
-						%><tr><td><input type='radio' name='destination' id='destination3' value='smtp' <%=(sDestination.equals("smtp")?"checked":"")%>/><%=getLabel("web","send.to.smtpserver",sWebLanguage,"destination3")+" "+getTran("web","towards",sWebLanguage)+" ["+smtpserver+"]"%></td></tr><%
+						%><tr><td><input type='radio' name='destination' id='destination3' value='smtp' <%=(sDestination.equals("smtp")?"checked":"")%>/><%=getLabel(request,"web","send.to.smtpserver",sWebLanguage,"destination3")+" "+getTran(request,"web","towards",sWebLanguage)+" ["+smtpserver+"]"%></td></tr><%
 					} 
 		
 				    // DESTINATION:DIRECTORY
 					String directory = MedwanQuery.getInstance().getConfigString("WHONetDestinationDirectory","");
 					if(directory.length() > 1){
-						%><tr><td><input type='radio' name='destination' id='destination4' value='directory' <%=(sDestination.equals("directory")?"checked":"")%>/><%=getLabel("web","send.to.directory",sWebLanguage,"destination4")+" "+getTran("web","towards",sWebLanguage)+" ["+directory+"]"%></td></tr><%
+						%><tr><td><input type='radio' name='destination' id='destination4' value='directory' <%=(sDestination.equals("directory")?"checked":"")%>/><%=getLabel(request,"web","send.to.directory",sWebLanguage,"destination4")+" "+getTran(request,"web","towards",sWebLanguage)+" ["+directory+"]"%></td></tr><%
 					} 
 				%>
 				</table>

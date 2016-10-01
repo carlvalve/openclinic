@@ -2,10 +2,11 @@
 <%@include file="/includes/validateUser.jsp"%>
 
 <%
+	boolean bReceived=false;
 	Enumeration params = request.getParameterNames();
+	String sComment=checkString(request.getParameter("comment"));
 	while(params.hasMoreElements()){
 		String param = (String)params.nextElement();
-		
 		if(param.startsWith("receive.") && checkString(request.getParameter("check"+param)).equalsIgnoreCase("1")){
 			String deliveryOperationUid = param.split("\\.")[1]+"."+param.split("\\.")[2];
 			
@@ -32,9 +33,9 @@
 				//Create receipt operation
 				ProductStockOperation receiptOperation = new ProductStockOperation();
 				receiptOperation.setUid("-1");
+				receiptOperation.setBatchUid(deliveryOperation.getBatchUid());
 				receiptOperation.setBatchEnd(deliveryOperation.getBatchEnd());
 				receiptOperation.setBatchNumber(deliveryOperation.getBatchNumber());
-				receiptOperation.setBatchUid(deliveryOperation.getBatchUid());
 				receiptOperation.setDate(new java.util.Date());
 				receiptOperation.setDescription("medicationreceipt.1");
 				receiptOperation.setProductStockUid(productStock.getUid());
@@ -43,12 +44,36 @@
 				receiptOperation.setUpdateDateTime(new java.util.Date());
 				receiptOperation.setUpdateUser(activeUser.userid);
 				receiptOperation.setVersion(1);
+				receiptOperation.setOrderUID(deliveryOperation.getOrderUID());
+				receiptOperation.setComment(sComment);
 				receiptOperation.store();
 				
 				//Update delivery operation
 				deliveryOperation.setUnitsReceived(deliveryOperation.getUnitsReceived()+Integer.parseInt(request.getParameter(param)));
 				deliveryOperation.setReceiveProductStockUid(productStock.getUid());
 				deliveryOperation.store();
+				bReceived=true;
+				if(request.getParameter("return")!=null){
+					//The received product has to be returned to the sender
+					ProductStockOperation returnOperation = new ProductStockOperation();
+					returnOperation.setUid("-1");
+					returnOperation.setBatchEnd(deliveryOperation.getBatchEnd());
+					returnOperation.setBatchNumber(deliveryOperation.getBatchNumber());
+					Batch batch = Batch.getByBatchNumber(productStock.getUid(), deliveryOperation.getBatchNumber());
+					returnOperation.setBatchUid(batch==null?null:batch.getUid());
+					returnOperation.setDate(new java.util.Date());
+					returnOperation.setDescription("medicationdelivery.2");
+					returnOperation.setProductStockUid(productStock.getUid());
+					returnOperation.setSourceDestination(new ObjectReference("servicestock",deliveryOperation.getProductStock().getServiceStockUid()));
+					returnOperation.setUnitsChanged(Integer.parseInt(request.getParameter(param)));
+					returnOperation.setUpdateDateTime(new java.util.Date());
+					returnOperation.setUpdateUser(activeUser.userid);
+					returnOperation.setVersion(1);
+					returnOperation.setOrderUID(deliveryOperation.getOrderUID());
+					returnOperation.setComment(ScreenHelper.getTran("web","refused",sWebLanguage)+": "+sComment);
+					returnOperation.store();
+					System.out.println("Batch UID return-operation = "+returnOperation.getBatchUid());
+				}
 			}
 		}
 	}
@@ -60,24 +85,29 @@
 	<table width="100%" class="list" cellpadding="0" cellspacing="1">
 	    <%-- TITLE --%>
 	    <tr class="admin">
-	       <td colspan="9"><%=getTran("web","bulkReceive",sWebLanguage)%></td>
+	       <td colspan="10"><%=getTran(request,"web","bulkReceive",sWebLanguage)%></td>
 	    </tr>
 	       
 	<%
-		Vector operations = ProductStockOperation.getOpenServiceStockDeliveries(request.getParameter("ServiceStockUid"));	    
+		Vector operations = new Vector();
+		ServiceStock serviceStock = ServiceStock.get(checkString(request.getParameter("ServiceStockUid")));
+		if(serviceStock!=null){
+			operations=ProductStockOperation.getOpenServiceStockDeliveries(request.getParameter("ServiceStockUid"));	    
+		}
 	    if(operations.size() > 0){
 	    	%>
 	    		<%-- header --%>
 				<tr class='admin'>
 					<td>&nbsp;</td>
 					<td>ID</td>
-					<td><%=getTran("web","date",sWebLanguage)%></td>
-					<td><%=getTran("web","source",sWebLanguage)%></td>
-					<td><%=getTran("web","product",sWebLanguage)%></td>
-					<td><%=getTran("web","sent",sWebLanguage)%></td>
-					<td><%=getTran("web","received",sWebLanguage)%></td>
-					<td><%=getTran("web","batch",sWebLanguage)%></td>
-					<td><%=getTran("web","remains",sWebLanguage)%></td>
+					<td><%=getTran(request,"web","date",sWebLanguage)%></td>
+					<td><%=getTran(request,"web","source",sWebLanguage)%></td>
+					<td><%=getTran(request,"web","product",sWebLanguage)%></td>
+					<td><%=getTran(request,"web","sent",sWebLanguage)%></td>
+					<td><%=getTran(request,"web","received",sWebLanguage)%></td>
+					<td><%=getTran(request,"web","batch",sWebLanguage)%></td>
+					<td><%=getTran(request,"web","expires",sWebLanguage)%></td>
+					<td><%=getTran(request,"web","remains",sWebLanguage)%></td>
 			    </tr>
 	    	<%
 	    }
@@ -85,12 +115,18 @@
 	    // list operations
 		for(int n=0; n<operations.size(); n++){
 			ProductStockOperation operation = (ProductStockOperation)operations.elementAt(n);
-			String servicename="?",productname="?";
+			String servicename="?",productname="?",comment="";
 			if(operation.getProductStock()!=null && operation.getProductStock().getServiceStock()!=null){
 				servicename=operation.getProductStock().getServiceStock().getName();
 			}
 			if(operation.getProductStock()!=null && operation.getProductStock().getProduct()!=null){
 				productname=operation.getProductStock().getProduct().getName();
+			}
+			if(checkString(operation.getProductionOrderUid()).length()>0){
+				comment+=" ["+getTran(request,"web","PO",sWebLanguage)+" #"+operation.getProductionOrderUid()+"]";
+			}
+			if(checkString(operation.getComment()).length()>0){
+				comment+=" <img src='"+sCONTEXTPATH+"/_img/icons/icon_warning.gif' title='"+operation.getComment().replaceAll("'","´").replaceAll("\"", "´")+"'/>";
 			}
 			
 			out.print("<tr class='admin2'>");
@@ -98,10 +134,11 @@
 			 out.print("<td>"+operation.getUid()+"</td>");
 			 out.print("<td>"+ScreenHelper.formatDate(operation.getDate())+"</td>");
 			 out.print("<td>"+servicename+"</td>");
-			 out.print("<td>"+productname+"</td>");
+			 out.print("<td>"+productname+comment+"</td>");
 			 out.print("<td>"+operation.getUnitsChanged()+"</td>");
 			 out.print("<td>"+operation.getUnitsReceived()+"</td>");
 			 out.print("<td>"+(operation.getBatchNumber()!=null?operation.getBatchNumber():"")+"</td>");
+			 out.print("<td>"+(operation.getBatchEnd()!=null?operation.getBatchEnd():"")+"</td>");
 			 out.print("<td><input type='text' class='text' size='5' onchange='validatemax("+(operation.getUnitsChanged()-operation.getUnitsReceived())+",this.value);' name='receive."+operation.getUid()+"' value='"+(operation.getUnitsChanged()-operation.getUnitsReceived())+"'><input type='checkbox' name='checkreceive."+operation.getUid()+"' value='1'/></td>");
 			out.print("</tr>");
 		}
@@ -111,13 +148,20 @@
     	<%
 	    
 	    if(operations.size() > 0){
-	        %><input type="submit" name="submit" class="button" value="<%=getTranNoLink("web","save",sWebLanguage)%>"/><%
+	        %>
+			<br/>
+			<%=getTran(request,"web","comment",sWebLanguage) %>: <textarea class='text' name='comment' id='comment' cols='80' rows='2'></textarea>
+	        <br/><br/>
+	        <input type="submit" name="submit" class="button" value="<%=getTranNoLink("web","receiveproducts",sWebLanguage)%>"/>
+	        <input type="submit" name="return" class="button" value="<%=getTranNoLink("web","returnproducts",sWebLanguage)%>"/>
+	        <%
 		}
 		else{
             %>
-		        <label class="text"><%=getTran("web","noRecordsFound",sWebLanguage)%></label>
+		        <label class="text"><%=getTran(request,"web","noRecordsFound",sWebLanguage)%></label>
+		    <%if(bReceived){ %>
 				<script>window.opener.location.reload();</script>
-			<%
+			<%}
 		}
 	%>	
 </form>
@@ -130,7 +174,7 @@
   <%-- VALIDATE MAX --%>
   function validatemax(maxval,thisval){
     if(maxval*1 < thisval*1){
-      alertDialogDirectText('<%=getTran("web","value.must.be",sWebLanguage)%> <= '+maxval);
+      alertDialogDirectText('<%=getTran(null,"web","value.must.be",sWebLanguage)%> <= '+maxval);
       return false;
     }
   }

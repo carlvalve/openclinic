@@ -574,7 +574,7 @@
         
         saveDocumentToXML(itemsDocument,sAppName);
         	
-        sMsg = "<font color='green'>"+getTran("web","dataIsSaved",sWebLanguage)+"</font>";
+        sMsg = "<font color='green'>"+getTran(request,"web","dataIsSaved",sWebLanguage)+"</font>";
         sAction = "displayItems";
     }
 %>
@@ -589,7 +589,7 @@
     <%-- TRAN TYPE SELECT --%>
     <table width="100%" cellspacing="1" cellpadding="0" class="list">
         <tr height="20">
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","examinationType",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","examinationType",sWebLanguage)%></td>
             <td class="admin2">
                 <select name="TranType" class="text" onChange="displayHistItems();">
                     <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>
@@ -730,18 +730,18 @@
 	                             		
                 // header
                 %>  
-                    <%=historyItemCount%>/<%=defaultTranItems.size()%> <%=getTran("web","itemsSelected",sWebLanguage)%><br><br>
+                    <%=historyItemCount%>/<%=defaultTranItems.size()%> <%=getTran(request,"web","itemsSelected",sWebLanguage)%><br><br>
                     
                     <table class="sortable" id="searchresults" width="100%" cellspacing="1" cellpadding="0" style="border:1px solid #ccc;">
                         <%-- HEADER --%>
                         <tr>
                             <td class="admin" width="14"></td>
-                            <td class="admin" width="320"><%=getTran("web","itemType",sWebLanguage)%></td>
-                            <td class="admin" width="55"><SORTTYPE:NUM><%=HTMLEntities.htmlentities(getTran("web","savedOrder",sWebLanguage))%></SORTTYPE:NUM></td>
-                            <td class="admin" width="55"><NOSORT><%=HTMLEntities.htmlentities(getTran("web","newOrder",sWebLanguage))%></NOSORT></td>
-                            <td class="admin" width="95"><NOSORT><%=HTMLEntities.htmlentities(getTran("web","labeltype",sWebLanguage))%></NOSORT></td>
-                            <td class="admin" width="240"><NOSORT><%=HTMLEntities.htmlentities(getTran("web","labelid",sWebLanguage))%></NOSORT></td>
-                            <td class="admin" width="240"><NOSORT><%=HTMLEntities.htmlentities(getTran("web","existinglabel",sWebLanguage))%></NOSORT></td>
+                            <td class="admin" width="320"><%=getTran(request,"web","itemType",sWebLanguage)%></td>
+                            <td class="admin" width="55"><SORTTYPE:NUM><%=HTMLEntities.htmlentities(getTran(request,"web","savedOrder",sWebLanguage))%></SORTTYPE:NUM></td>
+                            <td class="admin" width="55"><NOSORT><%=HTMLEntities.htmlentities(getTran(request,"web","newOrder",sWebLanguage))%></NOSORT></td>
+                            <td class="admin" width="95"><NOSORT><%=HTMLEntities.htmlentities(getTran(request,"web","labeltype",sWebLanguage))%></NOSORT></td>
+                            <td class="admin" width="240"><NOSORT><%=HTMLEntities.htmlentities(getTran(request,"web","labelid",sWebLanguage))%></NOSORT></td>
+                            <td class="admin" width="240"><NOSORT><%=HTMLEntities.htmlentities(getTran(request,"web","existinglabel",sWebLanguage))%></NOSORT></td>
                         </tr>
                 <%
                 
@@ -764,7 +764,7 @@
                     sChecked = "";
                     int order = 0;
                     sAddFunction = "";
-                    sImg = "uncheck.gif";
+                    sImg = "themes/default/uncheck.gif";
                     
                     if(xmlItem!=null){
                     	sLabelType = xmlItem.labelType;
@@ -806,8 +806,8 @@
                     if(defaultTranItems.size() > 0){
                         %>
 			                <%-- INSTRUCTIONS --%>
-			                <%=getTran("web.manage","historyItemsManageInstructions",sWebLanguage)%><br>
-			                <%=getTran("web.manage","historyItemsManageInstructions2",sWebLanguage)%>
+			                <%=getTran(request,"web.manage","historyItemsManageInstructions",sWebLanguage)%><br>
+			                <%=getTran(request,"web.manage","historyItemsManageInstructions2",sWebLanguage)%>
 			            <%
 			        }
 			    %>
@@ -822,8 +822,8 @@
                     <table width="100%" cellspacing="0" cellpadding="0">
                         <tr>
                             <td>
-                                <a href="javascript:checkAll(true);"><%=getTran("web.manage","checkAll",sWebLanguage)%></a>
-                                <a href="javascript:checkAll(false);"><%=getTran("web.manage","uncheckAll",sWebLanguage)%></a>
+                                <a href="javascript:checkAll(true);"><%=getTran(request,"web.manage","checkAll",sWebLanguage)%></a>
+                                <a href="javascript:checkAll(false);"><%=getTran(request,"web.manage","uncheckAll",sWebLanguage)%></a>
                             </td>
                             
                             <%
@@ -840,7 +840,7 @@
                 <%
             }
             else{
-                %>&nbsp;<%=getTran("web","noItemsToSelectFound",sWebLanguage)%><%
+                %>&nbsp;<%=getTran(request,"web","noItemsToSelectFound",sWebLanguage)%><%
             }
         }
     %>

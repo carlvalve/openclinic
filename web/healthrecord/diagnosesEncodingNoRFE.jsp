@@ -36,12 +36,12 @@
     	Vector debets = Debet.getPatientDebetPrestations(MedwanQuery.getInstance().getConfigString("showRecentEchographies",""),activePatient.personid, sDateBegin, "", "", "");
 		if(debets.size()>0){
 	    	for(int n=0;n<debets.size();n++){
-	    		sEchographies+=(String)debets.elementAt(n)+", ";
+	    		sEchographies+=((String)debets.elementAt(n)).split(";")[0]+", ";
 	    	}
 			%>
 				<table class="list" width="100%" cellspacing="1">
 			      <tr class="admin">
-				    <td align="center"><%=getTran("openclinic.chuk","echographies.in.last",sWebLanguage)+" "+MedwanQuery.getInstance().getConfigInt("showRecentEchographiesPeriodInDays",270)+" "+getTran("web","days",sWebLanguage)%></td>
+				    <td align="center"><%=getTran(request,"openclinic.chuk","echographies.in.last",sWebLanguage)+" "+MedwanQuery.getInstance().getConfigInt("showRecentEchographiesPeriodInDays",270)+" "+getTran(request,"web","days",sWebLanguage)%></td>
 				  </tr>
 				  <tr>
 				    <td id="echographies"><%=sEchographies%></td>
@@ -55,7 +55,7 @@
 
 <table class="list" width="100%" cellspacing="1">
   <tr class="admin">
-    <td align="center"><a href="javascript:openPopup('healthrecord/findICPC.jsp&AuthorUID='+(document.getElementById('diagnosisUser')?document.getElementById('diagnosisUser').value:'')+'&PopupWidth=700&PopupHeight=400&ts=<%=getTs()%>&patientuid=<%=activePatient.personid %>');void(0);"><%=getTran("openclinic.chuk","diagnostic.document",sWebLanguage)%> <%=getTran("Web.Occup","ICPC-2",sWebLanguage)%>/<%=getTran("Web.Occup","ICD-10",sWebLanguage)%></a></td>
+    <td align="center"><a href="javascript:openPopup('healthrecord/findICPC.jsp&AuthorUID='+(document.getElementById('diagnosisUser')?document.getElementById('diagnosisUser').value:'')+'&PopupWidth=700&PopupHeight=400&ts=<%=getTs()%>&patientuid=<%=activePatient.personid %>');void(0);"><%=getTran(request,"openclinic.chuk","diagnostic.document",sWebLanguage)%> <%=getTran(request,"Web.Occup","ICPC-2",sWebLanguage)%>/<%=getTran(request,"Web.Occup","ICD-10",sWebLanguage)%></a></td>
   </tr>
   <tr>
     <td id='icpccodes'>
@@ -87,7 +87,7 @@
 			             flags = (String)hDiagnosisInfo.get("Flags");
 			             userid = (String)hDiagnosisInfo.get("User");
 	                     if(!userid.equalsIgnoreCase(activeUser.userid)){
-	                    	 userwarning=" <img src='"+sCONTEXTPATH+"/_img/icons/icon_warning.gif' title='"+getTran("web","author",sWebLanguage)+": "+User.getFullUserName(userid)+"'/>("+User.getFullUserName(userid)+")";
+	                    	 userwarning=" <img src='"+sCONTEXTPATH+"/_img/icons/icon_warning.gif' title='"+getTran(null,"web","author",sWebLanguage)+": "+User.getFullUserName(userid)+"'/>("+User.getFullUserName(userid)+")";
 	                     }
 			          }
 			          else{
@@ -135,7 +135,7 @@
 			              flags = (String)hDiagnosisInfo.get("Flags");
 			              userid = (String)hDiagnosisInfo.get("User");
 	                     if(!userid.equalsIgnoreCase(activeUser.userid)){
-	                    	 userwarning=" <img src='"+sCONTEXTPATH+"/_img/icons/icon_warning.gif' title='"+getTran("web","author",sWebLanguage)+": "+User.getFullUserName(userid)+"'/>("+User.getFullUserName(userid)+")";
+	                    	 userwarning=" <img src='"+sCONTEXTPATH+"/_img/icons/icon_warning.gif' title='"+getTran(null,"web","author",sWebLanguage)+": "+User.getFullUserName(userid)+"'/>("+User.getFullUserName(userid)+")";
 	                     }
 			          } 
 			          else{
@@ -180,7 +180,7 @@
 
 <table class="list" width="100%" cellspacing="1">
   <tr class="admin">
-    <td align="center"><%=getTran("openclinic.chuk","contact.diagnoses",sWebLanguage)%> <%=getTran("Web.Occup","ICPC-2",sWebLanguage)%>/<%=getTran("Web.Occup","ICD-10",sWebLanguage)%></td>
+    <td align="center"><%=getTran(request,"openclinic.chuk","contact.diagnoses",sWebLanguage)%> <%=getTran(request,"Web.Occup","ICPC-2",sWebLanguage)%>/<%=getTran(request,"Web.Occup","ICD-10",sWebLanguage)%></td>
   </tr>
   <tr>
     <td>

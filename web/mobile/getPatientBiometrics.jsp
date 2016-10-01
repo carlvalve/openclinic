@@ -9,10 +9,10 @@
 	// freq + rythm
 	String sFreq = MedwanQuery.getInstance().getLastItemValue(Integer.parseInt(activePatient.personid),ITEM_PREFIX+"ITEM_TYPE_CARDIAL_CLINICAL_EXAMINATION_HEARTH_FREQUENCY");
 	if(sFreq.length() > 0){
-		sFreq+= " "+getTran("web","bpm",activeUser);
+		sFreq+= " "+getTran(request,"web","bpm",activeUser);
 	}
 	
-	String sRythm = getTran("web.occup",MedwanQuery.getInstance().getLastItemValue(Integer.parseInt(activePatient.personid),ITEM_PREFIX+"ITEM_TYPE_CARDIAL_CLINICAL_EXAMINATION_HEARTH_RYTMH"),activeUser);
+	String sRythm = getTran(request,"web.occup",MedwanQuery.getInstance().getLastItemValue(Integer.parseInt(activePatient.personid),ITEM_PREFIX+"ITEM_TYPE_CARDIAL_CLINICAL_EXAMINATION_HEARTH_RYTMH"),activeUser);
 	
 	String pulse = "";
 	if(sFreq.length() > 0 && sRythm.length() > 0){
@@ -40,14 +40,14 @@
 %>
 
 <table class="list" padding="0" cellspacing="1" width="<%=sTABLE_WIDTH%>">
-	<tr class="admin"><td colspan="2"><%=getTran("mobile","biometrics",activeUser)%></td></tr>
+	<tr class="admin"><td colspan="2"><%=getTran(request,"mobile","biometrics",activeUser)%></td></tr>
 	
-	<tr><td class="admin" width="100" nowrap><%=getTran("openclinic.chuk","bloodpressure",activeUser)%></td><td><%=bloodpressure%></td></tr>
-	<tr><td class="admin" nowrap><%=getTran("openclinic.chuk","tracnet.admission.form.hr",activeUser)%></td><td><%=pulse%></td></tr>
-	<tr><td class="admin" nowrap><%=getTran("web","heightincentimeter",activeUser)%></td><td><%=height%></td></tr>
-	<tr><td class="admin" nowrap><%=getTran("web","weightinkilo",activeUser)%></td><td><%=weight%></td></tr>
-	<tr><td class="admin" nowrap><%=getTran("web.occup","medwan.healthrecord.biometry.bmi",activeUser)%></td><td><%=BMI%></td></tr>
-	<tr><td class="admin" nowrap><%=getTran("openclinic.chuk","temperature",activeUser)%></td><td><%=temp%></td></tr>
+	<tr><td class="admin" width="100" nowrap><%=getTran(request,"openclinic.chuk","bloodpressure",activeUser)%></td><td><%=bloodpressure%></td></tr>
+	<tr><td class="admin" nowrap><%=getTran(request,"openclinic.chuk","tracnet.admission.form.hr",activeUser)%></td><td><%=pulse%></td></tr>
+	<tr><td class="admin" nowrap><%=getTran(request,"web","heightincentimeter",activeUser)%></td><td><%=height%></td></tr>
+	<tr><td class="admin" nowrap><%=getTran(request,"web","weightinkilo",activeUser)%></td><td><%=weight%></td></tr>
+	<tr><td class="admin" nowrap><%=getTran(request,"web.occup","medwan.healthrecord.biometry.bmi",activeUser)%></td><td><%=BMI%></td></tr>
+	<tr><td class="admin" nowrap><%=getTran(request,"openclinic.chuk","temperature",activeUser)%></td><td><%=temp%></td></tr>
 </table>
 			
 <%-- BUTTONS --%>

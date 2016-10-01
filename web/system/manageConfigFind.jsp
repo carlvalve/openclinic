@@ -45,17 +45,17 @@
         <table width="100%" align="center" cellspacing="0" class="list">
           <tr class="admin">
               <td width="250">Key</td>
-              <td width="50%"><%=HTMLEntities.htmlentities(getTran("Web","value",sWebLanguage))%></td>
-              <td width="150"><%=HTMLEntities.htmlentities(getTran("Web","updatetime",sWebLanguage))%></td>
+              <td width="50%"><%=HTMLEntities.htmlentities(getTran(request,"Web","value",sWebLanguage))%></td>
+              <td width="150"><%=HTMLEntities.htmlentities(getTran(request,"Web","updatetime",sWebLanguage))%></td>
           </tr>
           <tbody class="hand">
               <%=sOut%>
           </tbody>
         </table>
-        <%=HTMLEntities.htmlentities(getTran("Web","deletedItemsInRed",sWebLanguage))%>
+        <%=HTMLEntities.htmlentities(getTran(request,"Web","deletedItemsInRed",sWebLanguage))%>
         <%
     }
     else{
-        out.print(HTMLEntities.htmlentities(getTran("web","nodataavailable",sWebLanguage)));
+        out.print(HTMLEntities.htmlentities(getTran(request,"web","nodataavailable",sWebLanguage)));
     }
 %>

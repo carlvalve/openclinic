@@ -116,7 +116,7 @@
         sOutLogins.append("<tr class='list" + sClass + "'>")
                 .append("<td>")
                 .append("<a href=\"javascript:doDelete('" + sIntruderID + "');\">")
-                .append("<img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran("Web", "delete", sWebLanguage) + "' border='0'>")
+                .append("<img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran(request,"Web", "delete", sWebLanguage) + "' border='0'>")
                 .append("</a>")
                 .append("</td>")
                 .append("<td>" + sIntruderID + "</td>")
@@ -173,7 +173,7 @@
         sOutIPs.append("<tr class='list" + sClass + "'>")
                 .append("<td>")
                 .append("<a href=\"javascript:doDelete('" + sIntruderID + "');\">")
-                .append("<img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran("Web", "delete", sWebLanguage) + "' border='0'>")
+                .append("<img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran(request,"Web", "delete", sWebLanguage) + "' border='0'>")
                 .append("</a>")
                 .append("</td>")
                 .append("<td>" + sIntruderID + "</td>")
@@ -199,12 +199,12 @@
         <%-- LOGINS-HEADER --%>
         <tr height="18">
             <td class="titleadmin" width="27">&nbsp;</td>
-            <td class="titleadmin" nowrap>&nbsp;<%=getTran("web.manage","loginIntrusion",sWebLanguage)%></td>
-            <td class="titleadmin" nowrap>&nbsp;<%=getTran("web","name",sWebLanguage)%></td>
-            <td class="titleadmin" nowrap>&nbsp;<%=getTran("web.manage","intrusionCount",sWebLanguage)%></td>
-            <td class="titleadmin" nowrap>&nbsp;<%=getTran("web.manage","permanentlyBlocked",sWebLanguage)%></td>
-            <td class="titleadmin" nowrap>&nbsp;<%=getTran("web.manage","releasetime",sWebLanguage)%></td>
-            <td class="titleadmin" >&nbsp;<%=getTran("web.manage","remainingBlockTime",sWebLanguage)%></td>
+            <td class="titleadmin" nowrap>&nbsp;<%=getTran(request,"web.manage","loginIntrusion",sWebLanguage)%></td>
+            <td class="titleadmin" nowrap>&nbsp;<%=getTran(request,"web","name",sWebLanguage)%></td>
+            <td class="titleadmin" nowrap>&nbsp;<%=getTran(request,"web.manage","intrusionCount",sWebLanguage)%></td>
+            <td class="titleadmin" nowrap>&nbsp;<%=getTran(request,"web.manage","permanentlyBlocked",sWebLanguage)%></td>
+            <td class="titleadmin" nowrap>&nbsp;<%=getTran(request,"web.manage","releasetime",sWebLanguage)%></td>
+            <td class="titleadmin" >&nbsp;<%=getTran(request,"web.manage","remainingBlockTime",sWebLanguage)%></td>
         </tr>
         <%
             if(sOutLogins.length() > 0){
@@ -214,7 +214,7 @@
                 // no records found
                 %>
                     <tr>
-                        <td>&nbsp;<%=getTran("web","norecordsfound",sWebLanguage)%></td>
+                        <td>&nbsp;<%=getTran(request,"web","norecordsfound",sWebLanguage)%></td>
                     </tr>
                 <%
             }
@@ -225,11 +225,11 @@
         <%-- IPs-HEADER --%>
         <tr height="18">
             <td class="titleadmin" width="27">&nbsp;</td>
-            <td class="titleadmin" width="150" nowrap>&nbsp;<%=getTran("web.manage","ipIntrusion",sWebLanguage)%></td>
-            <td class="titleadmin" width="100" nowrap>&nbsp;<%=getTran("web.manage","intrusionCount",sWebLanguage)%></td>
-            <td class="titleadmin" width="150" nowrap>&nbsp;<%=getTran("web.manage","permanentlyBlocked",sWebLanguage)%></td>
-            <td class="titleadmin" width="150" nowrap>&nbsp;<%=getTran("web.manage","releasetime",sWebLanguage)%></td>
-            <td class="titleadmin" width="500">&nbsp;<%=getTran("web.manage","remainingBlockTime",sWebLanguage)%></td>
+            <td class="titleadmin" width="150" nowrap>&nbsp;<%=getTran(request,"web.manage","ipIntrusion",sWebLanguage)%></td>
+            <td class="titleadmin" width="100" nowrap>&nbsp;<%=getTran(request,"web.manage","intrusionCount",sWebLanguage)%></td>
+            <td class="titleadmin" width="150" nowrap>&nbsp;<%=getTran(request,"web.manage","permanentlyBlocked",sWebLanguage)%></td>
+            <td class="titleadmin" width="150" nowrap>&nbsp;<%=getTran(request,"web.manage","releasetime",sWebLanguage)%></td>
+            <td class="titleadmin" width="500">&nbsp;<%=getTran(request,"web.manage","remainingBlockTime",sWebLanguage)%></td>
         </tr>
         <%
             if(sOutIPs.length() > 0){
@@ -239,7 +239,7 @@
                 // no records found
                 %>
                     <tr>
-                        <td>&nbsp;<%=getTran("web","norecordsfound",sWebLanguage)%></td>
+                        <td>&nbsp;<%=getTran(request,"web","norecordsfound",sWebLanguage)%></td>
                     </tr>
                 <%
             }
@@ -250,14 +250,14 @@
     <table width='100%' class="list" cellspacing="1" cellpadding="0">
         <%-- REQUEST ID --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web.manage","unblockrequestid",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web.manage","unblockrequestid",sWebLanguage)%></td>
             <td class="admin2">
                 <input class='text' type='text' name='requestId' size='20' maxLength='9' value='<%=requestId%>' onBlur="isNumber(this);"/>
             </td>
         </tr>
         <%-- UNBLOCK CODE --%>
         <tr>
-            <td class="admin"><%=getTran("Web.manage","unblockcode",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web.manage","unblockcode",sWebLanguage)%></td>
             <td class="admin2">
                 <input class='text' type='text' name='unblockCode' size='20' maxLength='4' value='<%=unblockCode%>' READONLY/>
             </td>

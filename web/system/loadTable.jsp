@@ -40,6 +40,7 @@
 </jsp:useBean>
 <%
 	int lines=0;
+	String message="";
 	String sFileName = "";
 	MultipartFormDataRequest mrequest;
 	if (MultipartFormDataRequest.isMultipartFormData(request)) {
@@ -140,7 +141,7 @@
 						reader.close();
 						reloadSingleton(session);
 		                f.delete();
-						out.println("<h3>"+lines+" " +getTran("web","records.loaded",sWebLanguage)+"</h3>");
+						message="<h3>"+lines+" " +getTran(request,"web","records.loaded",sWebLanguage)+"</h3>";
 					}
 					else if(mrequest.getParameter("filetype").equalsIgnoreCase("servicescsv")){
 						if(mrequest.getParameter("erase")!=null){
@@ -197,7 +198,7 @@
 						reader.close();
 						reloadSingleton(session);
 		                f.delete();
-						out.println("<h3>"+lines+" " +getTran("web","records.loaded",sWebLanguage)+"</h3>");
+						message="<h3>"+lines+" " +getTran(request,"web","records.loaded",sWebLanguage)+"</h3>";
 					}
 					else if(mrequest.getParameter("filetype").equalsIgnoreCase("labelscsv")){
 						String type,id,language,label;
@@ -222,7 +223,174 @@
 						reader.close();
 						reloadSingleton(session);
 		                f.delete();
-						out.println("<h3>"+lines+" " +getTran("web","records.loaded",sWebLanguage)+"</h3>");
+						message="<h3>"+lines+" " +getTran(request,"web","records.loaded",sWebLanguage)+"</h3>";
+					}
+					else if(mrequest.getParameter("filetype").equalsIgnoreCase("pharmacyloadcsv")){
+						//Imports can only be done to the central warehouse in OpenClinic
+						if(MedwanQuery.getInstance().getConfigString("PEXOpenClinicServiceStock","").length()==0){
+							message="<h3>The parameter PEXOpenClinicServiceStock must be defined and must point to a valid OpenClinic warehouse UID</h3>";
+						}
+						else {
+							ServiceStock serviceStock = ServiceStock.get(MedwanQuery.getInstance().getConfigString("PEXOpenClinicServiceStock",""));
+							if(serviceStock==null || !serviceStock.hasValidUid()){
+								message="<h3>The parameter PEXOpenClinicServiceStock does not point to a valid OpenClinic warehouse UID</h3>";
+							}
+							else{
+								String pex_uid,pex_date,pex_code,pex_name,pex_quantity,pex_price,pex_supplier,pex_batch,pex_expires,pex_comment ;
+								//Read file as a pharmacy delivery csv file
+				                File f = new File(upBean.getFolderstore()+"/"+sFileName);
+								BufferedReader reader = new BufferedReader(new FileReader(f));
+								lines=0;
+								Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+								while(reader.ready()){
+									String[] line = reader.readLine().split(";");
+									if(line.length<10){
+										break;
+									}
+									else{
+										pex_uid=line[0].trim();
+										pex_date=line[1].trim();
+										pex_code=line[2].trim();
+										pex_name=line[3].trim();
+										pex_quantity=line[4].trim();
+										pex_price=line[5].trim();
+										pex_supplier=line[6].trim();
+										pex_batch=line[7].trim();
+										pex_expires=line[8].trim();
+										pex_comment=line[9].trim();
+										try{
+											java.util.Date d = new SimpleDateFormat("yyyyMMdd").parse(pex_date);
+										}
+										catch(Exception e){
+											pex_date=new SimpleDateFormat("yyyyMMdd").format(new java.util.Date());
+										}
+										try{
+											int n= Integer.parseInt(pex_quantity);
+										}
+										catch(Exception e){
+											pex_quantity="0";
+										}
+										try{
+											double n= Double.parseDouble(pex_price);
+										}
+										catch(Exception e){
+											pex_price="0";
+										}
+										lines++;
+										//Before importing the data, we first check if there already exists
+										//an import transaction for this pex_uid/pex_code combination
+										String receiveUid="PEX."+pex_uid+"."+pex_code;
+										PreparedStatement ps = conn.prepareStatement("select * from oc_productstockoperations where oc_operation_receivecomment=?");
+										ps.setString(1,receiveUid);
+										ResultSet rs = ps.executeQuery();
+										if(rs.next()){
+											System.out.println(receiveUid+": The product has already been received. Will not process again");
+										}
+										else{
+											//The product has not been received yet. Process now
+											//First verify if the product exists
+											Product product = null;
+											Vector products = Product.findWithCode(pex_code, "", "", "", "", "", "", "", "", "OC_PRODUCT_OBJECTID", "ASC");
+											for(int n=0; n<products.size();n++){
+												Product candidateProduct = (Product)products.elementAt(n);
+												if(candidateProduct.getCode().equalsIgnoreCase(pex_code)){
+													product=candidateProduct;
+													break;
+												}
+											}
+											if(product==null){
+												//The product doesn't exist yet, create a new one
+												product = new Product();
+												product.setUid("-1");
+												product.setCode(pex_code);
+												product.setName(pex_name);
+												product.setUnit("");
+												product.setCreateDateTime(new SimpleDateFormat("yyyyMMdd").parse(pex_date));
+												product.setUpdateDateTime(new java.util.Date());
+												product.setUpdateUser(activeUser.userid);
+												product.store();
+											}
+											ProductStock productStock = null;
+											//Now verify if the productstock exists
+											Vector productStocks = ProductStock.find(serviceStock.getUid(), product.getUid(), "", "", "", "", "", "", "", "", "", "OC_STOCK_OBJECTID", "ASC");
+											if(productStocks.size()>0){
+												productStock = (ProductStock)productStocks.elementAt(0);
+											}
+											else{
+												//The product stock doesn't exist yet, create a new one
+												productStock = new ProductStock();
+												productStock.setUid("-1");
+												productStock.setBegin(new SimpleDateFormat("yyyyMMdd").parse(pex_date));
+												productStock.setCreateDateTime(new SimpleDateFormat("yyyyMMdd").parse(pex_date));
+												productStock.setLevel(0);
+												productStock.setOrderLevel(0);
+												productStock.setMaximumLevel(0);
+												productStock.setMinimumLevel(0);
+												productStock.setProductUid(product.getUid());
+												productStock.setServiceStockUid(serviceStock.getUid());
+												productStock.setUpdateDateTime(new java.util.Date());
+												productStock.setUpdateUser(activeUser.userid);
+												productStock.setVersion(1);
+												productStock.setDefaultImportance("0");
+												productStock.setSupplierUid("");
+												productStock.store();
+											}
+											//Now we are sure that the product stock exists. Let's check if the batch exists
+											if(pex_batch.length()>0){
+												Batch batch = Batch.getByBatchNumber(productStock.getUid(), pex_batch);
+												if(batch==null || !batch.hasValidUid()){
+													batch= new Batch();
+													batch.setUid("-1");
+													batch.setBatchNumber(pex_batch);
+													batch.setCreateDateTime(new SimpleDateFormat("yyyyMMdd").parse(pex_date));
+													try{
+														batch.setEnd(new SimpleDateFormat("yyyyMMdd").parse(pex_expires));
+													}
+													catch(Exception e){}
+													batch.setLevel(0);
+													batch.setProductStockUid(productStock.getUid());
+													batch.setUpdateDateTime(new java.util.Date());
+													batch.setUpdateUser(activeUser.userid);
+													batch.setVersion(1);
+													batch.setComment("");
+													batch.store();
+												}
+											}
+											//We can now create an incoming transaction for this product stock
+											ProductStockOperation receiptOperation = new ProductStockOperation();
+											receiptOperation.setUid("-1");
+											try{
+												receiptOperation.setBatchEnd(new SimpleDateFormat("yyyyMMdd").parse(pex_expires));
+											}
+											catch(Exception e){}
+											receiptOperation.setBatchNumber(pex_batch);
+											receiptOperation.setDate(new SimpleDateFormat("yyyyMMdd").parse(pex_date));
+											receiptOperation.setDescription("medicationreceipt.4");
+											receiptOperation.setProductStockUid(productStock.getUid());
+											receiptOperation.setSourceDestination(new ObjectReference("supplier",pex_supplier));
+											receiptOperation.setUnitsChanged(Integer.parseInt(pex_quantity));
+											receiptOperation.setUpdateDateTime(new java.util.Date());
+											receiptOperation.setUpdateUser(activeUser.userid);
+											receiptOperation.setVersion(1);
+											receiptOperation.setReceiveComment(receiveUid);
+											receiptOperation.setComment(pex_comment);
+											receiptOperation.store();
+											if(Double.parseDouble(pex_price)>0){
+							            		Pointer.deletePointers("drugprice."+productStock.getProduct().getUid()+"."+receiptOperation.getUid());
+							            		Pointer.storePointer("drugprice."+productStock.getProduct().getUid()+"."+receiptOperation.getUid(),pex_quantity+";"+pex_price);
+											}
+										}
+										rs.close();
+										ps.close();
+									}
+								}
+								reader.close();
+								reloadSingleton(session);
+				                f.delete();
+				                conn.close();
+				                message="<h3>"+lines+" " +getTran(request,"web","records.loaded",sWebLanguage)+"</h3>";
+							}
+						}
 					}
 					else if(mrequest.getParameter("filetype").equalsIgnoreCase("labxml")){
 						if(mrequest.getParameter("erase")!=null){
@@ -333,7 +501,7 @@
 						br.close();
 						reloadSingleton(session);
 		                f.delete();
-						out.println("<h3>"+lines+" " +getTran("web","records.loaded",sWebLanguage)+"</h3>");
+		                message="<h3>"+lines+" " +getTran(request,"web","records.loaded",sWebLanguage)+"</h3>";
 					}					
 					else if(mrequest.getParameter("filetype").equalsIgnoreCase("drugsxml")){
 						if(mrequest.getParameter("erase")!=null){
@@ -443,7 +611,7 @@
 						br.close();
 						reloadSingleton(session);
 		                f.delete();
-						out.println("<h3>"+lines+" " +getTran("web","records.loaded",sWebLanguage)+"</h3>");
+		                message="<h3>"+lines+" " +getTran(request,"web","records.loaded",sWebLanguage)+"</h3>";
 					}
 	            }
 	        }
@@ -459,28 +627,35 @@
 	<table>
 		<tr>
 			<td class='admin'>
-				<%=getTran("web","filetype",sWebLanguage)%>
+				<%=getTran(request,"web","filetype",sWebLanguage)%>
 				<select name="filetype" id="filetype" class="text" onchange="showstructure();">
-					<option value="prestationscsv"><%=getTran("web","prestations.csv",sWebLanguage)%></option>
-					<option value="servicescsv"><%=getTran("web","services.csv",sWebLanguage)%></option>
-					<option value="labelscsv"><%=getTran("web","labels.csv",sWebLanguage)%></option>
-					<option value="labxml"><%=getTran("web","lab.xml",sWebLanguage)%></option>
-					<option value="drugsxml"><%=getTran("web","drugs.xml",sWebLanguage)%></option>
+					<%if(!checkString(request.getParameter("pharmacyloadonly")).equalsIgnoreCase("1")){ %>
+						<option value="prestationscsv"><%=getTran(request,"web","prestations.csv",sWebLanguage)%></option>
+						<option value="servicescsv"><%=getTran(request,"web","services.csv",sWebLanguage)%></option>
+						<option value="labelscsv"><%=getTran(request,"web","labels.csv",sWebLanguage)%></option>
+						<option value="labxml"><%=getTran(request,"web","lab.xml",sWebLanguage)%></option>
+						<option value="drugsxml"><%=getTran(request,"web","drugs.xml",sWebLanguage)%></option>
+					<%} %>
+					<option value="pharmacyloadcsv"><%=getTran(request,"web","pharmacyload.csv",sWebLanguage)%></option>
 				</select>
 			</td>
-			<td class='admin2'><input class="hand" type="checkbox" name="erase" value="1"/> <%=getTran("web","delete.table.before.load",sWebLanguage)%></td>
+			<td class='admin2'><input class="hand" type="checkbox" name="erase" value="1"/> <%=getTran(request,"web","delete.table.before.load",sWebLanguage)%></td>
 			<td class='admin2'><input class="hand" type="file" name="filename"/> <input class="button" type="submit" name="ButtonReadfile" value="<%=getTranNoLink("web","load",sWebLanguage)%>"/></td>
 		</tr>
 		<tr>
 			<td colspan="2"><div id="structure"/></td>
 		</tr>
     </table>
+    <font color='red'><%=message %></font>
 </form>
 
 <script>
 	function showstructure(){
 		if(document.getElementById("filetype").value=="prestationscsv"){
 			document.getElementById("structure").innerHTML="Required structure (* are mandatory):<br/><b>Code* (#=auto); Name* ; Price* ; Category ; Class; AMO % ; AMO Admission %</b>";
+		}
+		else if(document.getElementById("filetype").value=="pharmacyloadcsv"){
+			document.getElementById("structure").innerHTML="Required structure (* are mandatory):<br/><b>PEX_UID* ; PEX_DATE* ; PEX_CODE* ; PEX_NAME ; PEX_QUANTITY* ; PEX_PRICE ; PEX_SUPPLIER ; PEX_BATCH ; PEX_EXPIRES ; PEX_COMMENT</b>";
 		}
 		else if(document.getElementById("filetype").value=="servicescsv"){
 			document.getElementById("structure").innerHTML="Required structure (* are mandatory):<br/><b>Code* ; Name* ; Language* ; Beds ; Visits ; ParentCode</b>";

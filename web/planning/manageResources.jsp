@@ -36,7 +36,7 @@
 			<td>
 				<select name='resource' id='resource' onchange='loadResourceReservations()'>	
 					<option/>
-					<%=ScreenHelper.writeSelect("planningresource", "", sWebLanguage) %>
+					<%=ScreenHelper.writeSelect(request,"planningresource", "", sWebLanguage) %>
 				</select>
            		<%
            			String authorizedresources = Reservation.getAccessibleResources(activeUser.userid);
@@ -50,11 +50,11 @@
            			}
            		</script>
 			</td>
-			<td><%=getTran("web","from",sWebLanguage) %><%=ScreenHelper.writeDateTimeField("begin", "transactionForm", begindate, sWebLanguage, sCONTEXTPATH,"loadResourceReservations()' onkeyup='loadResourceReservations()") %></td>
-			<td><%=getTran("web","till",sWebLanguage) %><%=ScreenHelper.writeDateTimeField("end", "transactionForm", enddate, sWebLanguage, sCONTEXTPATH,"loadResourceReservations()' onkeyup='loadResourceReservations()") %></td>
+			<td><%=getTran(request,"web","from",sWebLanguage) %><%=ScreenHelper.writeDateTimeField("begin", "transactionForm", begindate, sWebLanguage, sCONTEXTPATH,"loadResourceReservations()' onkeyup='loadResourceReservations()") %></td>
+			<td><%=getTran(request,"web","till",sWebLanguage) %><%=ScreenHelper.writeDateTimeField("end", "transactionForm", enddate, sWebLanguage, sCONTEXTPATH,"loadResourceReservations()' onkeyup='loadResourceReservations()") %></td>
 			<td>
-				<input type='button' class='button' name='addButton' id='addButton' value='<%=getTran("web","add",sWebLanguage) %>' onclick='saveReservation()'/>
-				<input type='button' class='button' name='exitButton' id='exitButton' value='<%=getTran("web","close",sWebLanguage) %>' onclick='window.close();'/>
+				<input type='button' class='button' name='addButton' id='addButton' value='<%=getTran(null,"web","add",sWebLanguage) %>' onclick='saveReservation()'/>
+				<input type='button' class='button' name='exitButton' id='exitButton' value='<%=getTran(null,"web","close",sWebLanguage) %>' onclick='window.close();'/>
 			</td>
 		</tr>
 	</table>

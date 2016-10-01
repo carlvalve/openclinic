@@ -16,25 +16,25 @@
 <%=sJSPROTOTYPE %>
 <form name='transactionForm' method='post'>
 	<table width='400px'>
-		<tr class='admin'><td colspan='2'><%=getTran("web","setexchangerate",sWebLanguage) %></td></tr>
+		<tr class='admin'><td colspan='2'><%=getTran(request,"web","setexchangerate",sWebLanguage) %></td></tr>
 		<tr>
-			<td class='admin'><%=getTran("web","date",sWebLanguage) %></td>
+			<td class='admin'><%=getTran(request,"web","date",sWebLanguage) %></td>
 			<td class='admin2'><%=ScreenHelper.writeDateField("erdate", "transactionForm", sDate, true, false, sWebLanguage, sCONTEXTPATH,"checkrate();") %></td>
 		</tr>
 		<tr>
-			<td class='admin'><%=getTran("web","currency",sWebLanguage) %></td>
+			<td class='admin'><%=getTran(request,"web","currency",sWebLanguage) %></td>
 			<td class='admin2'>
 				<select class='text' name='ercurrency' onchange='checkrate();'>
-					<%=ScreenHelper.writeSelect("currency", sCurrency, sWebLanguage) %>
+					<%=ScreenHelper.writeSelect(request,"currency", sCurrency, sWebLanguage) %>
 				</select>
 			</td>
 		</tr>
 		<tr>
-			<td class='admin'><%=getTran("web","exchangerate",sWebLanguage) %></td>
+			<td class='admin'><%=getTran(request,"web","exchangerate",sWebLanguage) %></td>
 			<td class='admin2'><input type='text' class='text' name='errate' id='errate' size='15' value='<%=sRate%>'/><%=MedwanQuery.getInstance().getConfigString("currency","") %> <span id='existingrate'></span></td>
 		</tr>
 	</table>
-	<input type='submit' name='submit' value='<%=getTran("web","save",sWebLanguage) %>'/>
+	<input type='submit' name='submit' value='<%=getTran(null,"web","save",sWebLanguage) %>'/>
 </form>
 
 <script>

@@ -7,14 +7,14 @@
     <%-- RISKPROFILE HEADER ----------------------------------------------------------------------%>
     <tr class="admin">
         <td width="50%">
-            <%=getTran("Web.Occup","medwan.occupational-medicine.risk-profile",sWebLanguage)%>
-            <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>&nbsp;<mxs:propertyAccessorI18N name="riskProfileb" scope="page" property="dateBegin" formatType="date"/>
+            <%=getTran(request,"Web.Occup","medwan.occupational-medicine.risk-profile",sWebLanguage)%>
+            <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>&nbsp;<mxs:propertyAccessorI18N name="riskProfileb" scope="page" property="dateBegin" formatType="date"/>
         </td>
         <td align="right" style="vertical-align:top;">
             <%
                 if(activeUser.getAccessRight("occup.riskprofile.add") || activeUser.getAccessRight("occup.riskprofile.edit")){
                     %>
-                        <a href="<c:url value='/healthrecord/manageRiskProfileContext.do'/>?ts=<%=getTs()%>&webLanguage=<%=sWebLanguage%>" class="underlined" title="<%=getTranNoLink("Web.Occup","medwan.common.update",sWebLanguage)%>"><%=getTran("Web.Occup","medwan.common.update",sWebLanguage)%></a>
+                        <a href="<c:url value='/healthrecord/manageRiskProfileContext.do'/>?ts=<%=getTs()%>&webLanguage=<%=sWebLanguage%>" class="underlined" title="<%=getTranNoLink("Web.Occup","medwan.common.update",sWebLanguage)%>"><%=getTran(request,"Web.Occup","medwan.common.update",sWebLanguage)%></a>
                     <%
                 }
             %>
@@ -27,9 +27,9 @@
             <table class="menu" width="100%" cellspacing="0">
                 <%-- HEADER --%>
                 <tr class="label2">
-                    <td width="33%"><%=getTran("Web.Occup","medwan.occupational-medicine.risk-profile.workplace",sWebLanguage)%></td>
-                    <td width="33%"><%=getTran("Web.Occup","medwan.occupational-medicine.risk-profile.funtion-categories",sWebLanguage)%></td>
-                    <td width="*"><%=getTran("Web.Occup","medwan.occupational-medicine.risk-profile.funtion-groups",sWebLanguage)%></td>
+                    <td width="33%"><%=getTran(request,"Web.Occup","medwan.occupational-medicine.risk-profile.workplace",sWebLanguage)%></td>
+                    <td width="33%"><%=getTran(request,"Web.Occup","medwan.occupational-medicine.risk-profile.funtion-categories",sWebLanguage)%></td>
+                    <td width="*"><%=getTran(request,"Web.Occup","medwan.occupational-medicine.risk-profile.funtion-groups",sWebLanguage)%></td>
                 </tr>
 
                 <tr>
@@ -93,12 +93,12 @@
     <tr><td>&nbsp;</td></tr>
     <%-- EMPLOYEE RISK LIST HEADER ---------------------------------------------------------------%>
     <tr class="admin">
-        <td width="30%"><%=getTran("Web.Occup","medwan.occupational-medicine.risk-profile.risk-list-for-the-employee",sWebLanguage)%></td>
+        <td width="30%"><%=getTran(request,"Web.Occup","medwan.occupational-medicine.risk-profile.risk-list-for-the-employee",sWebLanguage)%></td>
         <td align="right" style="vertical-align:top;">
             <%
                 if (activeUser.getAccessRight("occup.riskprofile.add") || activeUser.getAccessRight("occup.riskprofile.edit")){
                     %>
-                        <a href="<c:url value='/healthrecord/manageRiskProfileRisks.do?ts='/><%=getTs()%>" class="underlined" title="<%=getTranNoLink("Web.Occup","medwan.common.update",sWebLanguage)%>"><%=getTran("Web.Occup","medwan.common.update",sWebLanguage)%></a>
+                        <a href="<c:url value='/healthrecord/manageRiskProfileRisks.do?ts='/><%=getTs()%>" class="underlined" title="<%=getTranNoLink("Web.Occup","medwan.common.update",sWebLanguage)%>"><%=getTran(request,"Web.Occup","medwan.common.update",sWebLanguage)%></a>
                     <%
                 }
             %>
@@ -110,10 +110,10 @@
             <table class="list" width="100%" cellspacing="0">
                 <%-- HEADER --%>
                 <tr class="label2">
-                    <td width="*"><%=getTran("Web.Occup","medwan.occupational-medicine.risk-profile.name",sWebLanguage)%></td>
-                    <td width="10%"><%=getTran("Web.Occup","medwan.occupational-medicine.risk-profile.code",sWebLanguage)%></td>
-                    <td width="10%"><%=getTran("Web.Occup","medwan.occupational-medicine.risk-profile.type",sWebLanguage)%></td>
-                    <td width="10%"><%=getTran("Web.Occup","medwan.occupational-medicine.risk-profile.status",sWebLanguage)%></td>
+                    <td width="*"><%=getTran(request,"Web.Occup","medwan.occupational-medicine.risk-profile.name",sWebLanguage)%></td>
+                    <td width="10%"><%=getTran(request,"Web.Occup","medwan.occupational-medicine.risk-profile.code",sWebLanguage)%></td>
+                    <td width="10%"><%=getTran(request,"Web.Occup","medwan.occupational-medicine.risk-profile.type",sWebLanguage)%></td>
+                    <td width="10%"><%=getTran(request,"Web.Occup","medwan.occupational-medicine.risk-profile.status",sWebLanguage)%></td>
                 </tr>
 
                 <%-- RISKS --%>
@@ -133,12 +133,12 @@
     <tr><td>&nbsp;</td></tr>
     <%-- EMPLOYEE EXAMINATION LIST HEADER --------------------------------------------------------%>
     <tr class="admin">
-        <td width="30%"><%=getTran("Web.Occup","medwan.occupational-medicine.risk-profile.examination-list-for-the-employee",sWebLanguage)%></td>
+        <td width="30%"><%=getTran(request,"Web.Occup","medwan.occupational-medicine.risk-profile.examination-list-for-the-employee",sWebLanguage)%></td>
         <td align="right" style="vertical-align:top;">
             <%
                 if (activeUser.getAccessRight("occup.riskprofile.add") || activeUser.getAccessRight("occup.riskprofile.edit")){
                     %>
-                        <a href="<c:url value='/healthrecord/manageRiskProfileExaminations.do?ts='/><%=getTs()%>" class="underlined" title="<%=getTranNoLink("Web.Occup","medwan.common.update",sWebLanguage)%>"><%=getTran("Web.Occup","medwan.common.update",sWebLanguage)%></a>
+                        <a href="<c:url value='/healthrecord/manageRiskProfileExaminations.do?ts='/><%=getTs()%>" class="underlined" title="<%=getTranNoLink("Web.Occup","medwan.common.update",sWebLanguage)%>"><%=getTran(request,"Web.Occup","medwan.common.update",sWebLanguage)%></a>
                     <%
                 }
             %>
@@ -150,19 +150,19 @@
             <table class="list" width="100%" cellspacing="0">
                 <%-- HEADER --%>
                 <tr class="label2">
-                    <td width="*"><%=getTran("Web.Occup","medwan.occupational-medicine.risk-profile.name",sWebLanguage)%></td>
-                    <td colspan="2" width="10%"><%=getTran("Web.Occup","medwan.occupational-medicine.risk-profile.frequency",sWebLanguage)%></td>
-                    <td colspan="2" width="10%"><%=getTran("Web.Occup","medwan.occupational-medicine.risk-profile.tolerance",sWebLanguage)%></td>
-                    <td width="10%"><%=getTran("Web.Occup","medwan.occupational-medicine.risk-profile.type",sWebLanguage)%></td>
-                    <td width="10%"><%=getTran("Web.Occup","medwan.occupational-medicine.risk-profile.status",sWebLanguage)%></td>
+                    <td width="*"><%=getTran(request,"Web.Occup","medwan.occupational-medicine.risk-profile.name",sWebLanguage)%></td>
+                    <td colspan="2" width="10%"><%=getTran(request,"Web.Occup","medwan.occupational-medicine.risk-profile.frequency",sWebLanguage)%></td>
+                    <td colspan="2" width="10%"><%=getTran(request,"Web.Occup","medwan.occupational-medicine.risk-profile.tolerance",sWebLanguage)%></td>
+                    <td width="10%"><%=getTran(request,"Web.Occup","medwan.occupational-medicine.risk-profile.type",sWebLanguage)%></td>
+                    <td width="10%"><%=getTran(request,"Web.Occup","medwan.occupational-medicine.risk-profile.status",sWebLanguage)%></td>
                 </tr>
                 <%-- SUB HEADER --%>
                 <tr>
                     <td>&nbsp;</td>
-                    <td class="admin2" style="text-align:center"><%=getTran("Web.Occup","medwan.occupational-medicine.risk-profile.syst",sWebLanguage)%></td>
-                    <td class="admin2" style="text-align:center"><%=getTran("Web.Occup","medwan.occupational-medicine.risk-profile.pers",sWebLanguage)%></td>
-                    <td class="admin2" style="text-align:center"><%=getTran("Web.Occup","medwan.occupational-medicine.risk-profile.syst",sWebLanguage)%></td>
-                    <td class="admin2" style="text-align:center"><%=getTran("Web.Occup","medwan.occupational-medicine.risk-profile.pers",sWebLanguage)%></td>
+                    <td class="admin2" style="text-align:center"><%=getTran(request,"Web.Occup","medwan.occupational-medicine.risk-profile.syst",sWebLanguage)%></td>
+                    <td class="admin2" style="text-align:center"><%=getTran(request,"Web.Occup","medwan.occupational-medicine.risk-profile.pers",sWebLanguage)%></td>
+                    <td class="admin2" style="text-align:center"><%=getTran(request,"Web.Occup","medwan.occupational-medicine.risk-profile.syst",sWebLanguage)%></td>
+                    <td class="admin2" style="text-align:center"><%=getTran(request,"Web.Occup","medwan.occupational-medicine.risk-profile.pers",sWebLanguage)%></td>
                 </tr>
                 <%-- EXAMINATIONS --%>
                 <logic:present name="be.mxs.webapp.wl.session.SessionContainerFactory.WO_SESSION_CONTAINER" property="riskProfileVO">
@@ -186,13 +186,13 @@
         <td colspan="3">
             <br>
             <img src='<c:url value="/_img/themes/default/pijl.gif"/>'>
-            <a href="<c:url value='/managePeriodicExaminations.do?ts='/><%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran("Web.Occup","medwan.healthrecord.periodic-examinations",sWebLanguage)%></a>
+            <a href="<c:url value='/managePeriodicExaminations.do?ts='/><%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran(request,"Web.Occup","medwan.healthrecord.periodic-examinations",sWebLanguage)%></a>
         </td>
     </tr>
     <tr>
         <td colspan="3">
             <img src='<c:url value="/_img/themes/default/pijl.gif"/>'>
-            <a href="<c:url value='/main.jsp'/>?Page=curative/index.jsp&ts=<%=getTs()%>"  onMouseOver="window.status='';return true;"><%=getTran("Web.Occup","medwan.recruitment.view-recruitment-examinations-summary",sWebLanguage)%></a>
+            <a href="<c:url value='/main.jsp'/>?Page=curative/index.jsp&ts=<%=getTs()%>"  onMouseOver="window.status='';return true;"><%=getTran(request,"Web.Occup","medwan.recruitment.view-recruitment-examinations-summary",sWebLanguage)%></a>
         </td>
     </tr>
 </table>

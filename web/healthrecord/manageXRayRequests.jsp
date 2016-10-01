@@ -4,10 +4,10 @@
 
 <table class='list' width='100%' cellspacing="1" cellpadding="0">
     <tr class='admin'>
-        <td><%=getTran("web","date",sWebLanguage)%></td>
-        <td><%=getTran("web","id",sWebLanguage)%></td>
-        <td><%=getTran("web","type",sWebLanguage)%></td>
-        <td><%=getTran("web","protocol",sWebLanguage)%></td>
+        <td><%=getTran(request,"web","date",sWebLanguage)%></td>
+        <td><%=getTran(request,"web","id",sWebLanguage)%></td>
+        <td><%=getTran(request,"web","type",sWebLanguage)%></td>
+        <td><%=getTran(request,"web","protocol",sWebLanguage)%></td>
     </tr>
     
 	<%
@@ -31,8 +31,8 @@
 	        out.print("<tr><td class='admin2'><a href='javascript:selectTran("+transactionVO.getServerId()+","+transactionVO.getTransactionId()+")'><b>"
 	                +ScreenHelper.stdDateFormat.format(transactionVO.getUpdateTime())+"</b></a></td>" +
 	                "<td class='admin2'>"+(id!=null?id.getValue():"?")+"</td>" +
-	                "<td class='admin2'><b>"+(type!=null && !type.getValue().equalsIgnoreCase("0") && !type.getValue().equalsIgnoreCase("")?getTran("mir_type",type.getValue(),sWebLanguage):"?")+"</b></td>" +
-	                "<td class='admin2'>"+(protocol!=null?getTran("web","yes",sWebLanguage):getTran("web","no",sWebLanguage))+"</td></tr>");
+	                "<td class='admin2'><b>"+(type!=null && !type.getValue().equalsIgnoreCase("0") && !type.getValue().equalsIgnoreCase("")?getTran(request,"mir_type",type.getValue(),sWebLanguage):"?")+"</b></td>" +
+	                "<td class='admin2'>"+(protocol!=null?getTran(request,"web","yes",sWebLanguage):getTran(request,"web","no",sWebLanguage))+"</td></tr>");
 	    }
 	    rs.close();
 	    ps.close();

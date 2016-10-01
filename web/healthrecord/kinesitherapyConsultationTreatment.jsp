@@ -13,15 +13,15 @@
         StringBuffer sTmp = new StringBuffer();
 
         if(sTreatment1.length() > 0){
-            sTreatment1 = getTran("physiotherapy.act",sTreatment1,sWebLanguage);
+            sTreatment1 = getTran(null,"physiotherapy.act",sTreatment1,sWebLanguage);
         }
 
         if(sTreatment2.length() > 0){
-            sTreatment2 = getTran("physiotherapy.act",sTreatment2,sWebLanguage);
+            sTreatment2 = getTran(null,"physiotherapy.act",sTreatment2,sWebLanguage);
         }
 
         if(sTreatment3.length() > 0){
-            sTreatment3 = getTran("physiotherapy.act",sTreatment3,sWebLanguage);
+            sTreatment3 = getTran(null,"physiotherapy.act",sTreatment3,sWebLanguage);
         }
 
         // alternate row-style
@@ -139,7 +139,7 @@
         <tr>
             <td class="admin" width="<%=sTDAdminWidth%>">
                 <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-                <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+                <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
             </td>
             <td class="admin2" colspan="5">
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" id="trandate" OnBlur='checkDate(this)'>
@@ -149,18 +149,18 @@
 
         <%-- CONTEXT --%>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","context",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","context",sWebLanguage)%></td>
             <td class="admin2">
                 <input id="rbcontextconsultation" <%=setRightClick("ITEM_TYPE_KINESITHERAPY_CONSULTATION_TREATMENT_CONTEXT")%>  onDblClick="uncheckRadio(this);"type="radio" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_KINESITHERAPY_CONSULTATION_TREATMENT_CONTEXT" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_KINESITHERAPY_CONSULTATION_TREATMENT_CONTEXT;value=kine.treatment.consultation" property="value" outputString="checked"/> value="kine.treatment.consultation"/>
-                &nbsp;<%=getLabel("web.occup","kine.treatment.consultation",sWebLanguage,"rbcontextconsultation")%>
+                &nbsp;<%=getLabel(request,"web.occup","kine.treatment.consultation",sWebLanguage,"rbcontextconsultation")%>
                 &nbsp;<input id="rbcontexthospitalized" <%=setRightClick("ITEM_TYPE_KINESITHERAPY_CONSULTATION_TREATMENT_CONTEXT")%>  onDblClick="uncheckRadio(this);"type="radio" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_KINESITHERAPY_CONSULTATION_TREATMENT_CONTEXT" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_KINESITHERAPY_CONSULTATION_TREATMENT_CONTEXT;value=kine.treatment.hospitalized" property="value" outputString="checked"/> value="kine.treatment.hospitalized"/>
-                &nbsp;<%=getLabel("web.occup","kine.treatment.hospitalized",sWebLanguage,"rbcontexthospitalized")%>
+                &nbsp;<%=getLabel(request,"web.occup","kine.treatment.hospitalized",sWebLanguage,"rbcontexthospitalized")%>
             </td>
         </tr>
 
         <%-- MEDICAL HISTORY --%>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","medical.history",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","medical.history",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_KINESITHERAPY_CONSULTATION_TREATMENT_MEDICAL_HISTORY")%> class="text" cols="50" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_KINESITHERAPY_CONSULTATION_TREATMENT_MEDICAL_HISTORY" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_KINESITHERAPY_CONSULTATION_TREATMENT_MEDICAL_HISTORY" property="value"/></textarea>
             </td>
@@ -168,7 +168,7 @@
 
         <%-- PHYSIO THERAPY --%>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","physio.therapy",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","physio.therapy",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_KINESITHERAPY_CONSULTATION_TREATMENT_PHYSIO_THERAPY")%> class="text" cols="50" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_KINESITHERAPY_CONSULTATION_TREATMENT_PHYSIO_THERAPY" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_KINESITHERAPY_CONSULTATION_TREATMENT_PHYSIO_THERAPY" property="value"/></textarea>
             </td>
@@ -176,7 +176,7 @@
 
         <%-- ICPC / ICD10 --%>
         <tr>
-            <td class="admin"><a href="javascript:openPopup('healthrecord/findICPC.jsp&ts=<%=getTs()%>&patientuid=<%=activePatient.personid %>');void(0);"><%=getTran("openclinic.chuk","diagnostic",sWebLanguage)%> <%=getTran("Web.Occup","ICPC-2",sWebLanguage)%>/<%=getTran("Web.Occup","ICD-10",sWebLanguage)%></a></td>
+            <td class="admin"><a href="javascript:openPopup('healthrecord/findICPC.jsp&ts=<%=getTs()%>&patientuid=<%=activePatient.personid %>');void(0);"><%=getTran(request,"openclinic.chuk","diagnostic",sWebLanguage)%> <%=getTran(request,"Web.Occup","ICPC-2",sWebLanguage)%>/<%=getTran(request,"Web.Occup","ICD-10",sWebLanguage)%></a></td>
             <td id='icpccodes' class="admin2">
                 <%
                     SessionContainerWO sessionContainerWO = (SessionContainerWO) SessionContainerFactory.getInstance().getSessionContainerWO(request, SessionContainerWO.class.getName());
@@ -233,7 +233,7 @@
 
         <%-- NUMBER OF MEETINGS --%>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","nr.of.meetings",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","nr.of.meetings",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" <%=setRightClick("ITEM_TYPE_KINESITHERAPY_CONSULTATION_TREATMENT_NR_OF_MEETINGS")%> name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_KINESITHERAPY_CONSULTATION_TREATMENT_NR_OF_MEETINGS" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_KINESITHERAPY_CONSULTATION_TREATMENT_NR_OF_MEETINGS" property="value"/>" onBlur="isNumber(this);" size="5"/>
             </td>
@@ -241,7 +241,7 @@
 
         <%-- START DATE --%>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","startdate",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","startdate",sWebLanguage)%></td>
             <td class="admin2">
                 <input <%=setRightClick("ITEM_TYPE_KINESITHERAPY_CONSULTATION_TREATMENT_STARTDATE")%> type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_KINESITHERAPY_CONSULTATION_TREATMENT_STARTDATE" property="itemId"/>]>.value" value="<%=sStartDate%>" id="startdate" OnBlur='checkDate(this)'>
                 <script>writeMyDate("startdate");</script>
@@ -250,17 +250,17 @@
 
         <%-- SEANCES SCEME --%>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","date.seances",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","date.seances",sWebLanguage)%></td>
             <td class="admin2">                
                 <table id="searchresults" width="100%" class="sortable" cellspacing="0" headerrowcount="2">
                     <%-- HEADER --%>
                     <tr class="admin">
                         <td width="38">&nbsp;</td>
-                        <td width="140"><%=getTran("Web.occup","medwan.common.date",sWebLanguage)%></td>
-                        <td width="55"><%=getTran("Web.occup","medwan.common.hour",sWebLanguage)%></td>
-                        <td><%=getTran("openclinic.chuk","treatment",sWebLanguage)%></td>
-                        <td><%=getTran("openclinic.chuk","treatment",sWebLanguage)%></td>
-                        <td><%=getTran("openclinic.chuk","treatment",sWebLanguage)%></td>
+                        <td width="140"><%=getTran(request,"Web.occup","medwan.common.date",sWebLanguage)%></td>
+                        <td width="55"><%=getTran(request,"Web.occup","medwan.common.hour",sWebLanguage)%></td>
+                        <td><%=getTran(request,"openclinic.chuk","treatment",sWebLanguage)%></td>
+                        <td><%=getTran(request,"openclinic.chuk","treatment",sWebLanguage)%></td>
+                        <td><%=getTran(request,"openclinic.chuk","treatment",sWebLanguage)%></td>
                         <td></td>
                     </tr>
 
@@ -277,19 +277,19 @@
                         <td class="admin">
                             <select class="text" name="seancetreatment1">
                                 <option/>
-                                <%=ScreenHelper.writeSelect("physiotherapy.act","",sWebLanguage)%>
+                                <%=ScreenHelper.writeSelect(request,"physiotherapy.act","",sWebLanguage)%>
                             </select>
                         </td>
                         <td class="admin">
                             <select class="text" name="seancetreatment2">
                                 <option/>
-                                <%=ScreenHelper.writeSelect("physiotherapy.act","",sWebLanguage)%>
+                                <%=ScreenHelper.writeSelect(request,"physiotherapy.act","",sWebLanguage)%>
                             </select>
                         </td>
                         <td class="admin">
                             <select class="text" name="seancetreatment3">
                                 <option/>
-                                <%=ScreenHelper.writeSelect("physiotherapy.act","",sWebLanguage)%>
+                                <%=ScreenHelper.writeSelect(request,"physiotherapy.act","",sWebLanguage)%>
                             </select>
                         </td>
 
@@ -314,7 +314,7 @@
 
         <%-- END DATE --%>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","enddate",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","enddate",sWebLanguage)%></td>
             <td class="admin2">
                 <input <%=setRightClick("ITEM_TYPE_KINESITHERAPY_CONSULTATION_TREATMENT_ENDDATE")%> type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_KINESITHERAPY_CONSULTATION_TREATMENT_ENDDATE" property="itemId"/>]>.value" value="<%=sEndDate%>" id="enddate" OnBlur='checkDate(this)'>
                 <script>writeMyDate("enddate");</script>
@@ -323,7 +323,7 @@
 
         <%-- CONCLUSION --%>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","conclusion",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","conclusion",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_KINESITHERAPY_CONSULTATION_TREATMENT_CONCLUSION")%> class="text" cols="50" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_KINESITHERAPY_CONSULTATION_TREATMENT_CONCLUSION" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_KINESITHERAPY_CONSULTATION_TREATMENT_CONCLUSION" property="value"/></textarea>
             </td>
@@ -331,18 +331,18 @@
 
         <%-- REFERENCE --%>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","reference",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","reference",sWebLanguage)%></td>
             <td class="admin2">
                 <input id="rbrefyes" <%=setRightClick("ITEM_TYPE_KINESITHERAPY_CONSULTATION_TREATMENT_REFERENCE")%>  onDblClick="uncheckRadio(this);" type="radio" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_KINESITHERAPY_CONSULTATION_TREATMENT_REFERENCE" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_KINESITHERAPY_CONSULTATION_TREATMENT_REFERENCE;value=medwan.common.yes" property="value" outputString="checked"/> value="medwan.common.yes"/>
-                &nbsp;<%=getLabel("web.occup","medwan.common.yes",sWebLanguage,"rbrefyes")%>
+                &nbsp;<%=getLabel(request,"web.occup","medwan.common.yes",sWebLanguage,"rbrefyes")%>
                 &nbsp;<input id="rbrefno" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_KINESITHERAPY_CONSULTATION_TREATMENT_REFERENCE" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_KINESITHERAPY_CONSULTATION_TREATMENT_REFERENCE;value=medwan.common.no" property="value" outputString="checked"/> value="medwan.common.no"/>
-                &nbsp;<%=getLabel("web.occup","medwan.common.no",sWebLanguage,"rbrefno")%>
+                &nbsp;<%=getLabel(request,"web.occup","medwan.common.no",sWebLanguage,"rbrefno")%>
             </td>
         </tr>
 
         <%-- DATE --%>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","remarks",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","remarks",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_KINESITHERAPY_CONSULTATION_TREATMENT_REMARKS")%> class="text" cols="50" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_KINESITHERAPY_CONSULTATION_TREATMENT_REMARKS" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_KINESITHERAPY_CONSULTATION_TREATMENT_REMARKS" property="value"/></textarea>
             </td>

@@ -113,19 +113,19 @@
 				
 				<table width="100%" class="list" cellpadding="1" cellspacing="1">
 					<tr class="admin">
-						<td colspan="2"><%=getTran("web","findoperationdocuments",sWebLanguage)%>&nbsp;</td>
+						<td colspan="2"><%=getTran(request,"web","findoperationdocuments",sWebLanguage)%>&nbsp;</td>
 					</tr>
 					<tr>
-						<td class="admin" width="1%" nowrap><%=getTran("web","type",sWebLanguage)%>&nbsp;</td>
+						<td class="admin" width="1%" nowrap><%=getTran(request,"web","type",sWebLanguage)%>&nbsp;</td>
 						<td class="admin2">
 							<select name="finddocumenttype" id="finddocumenttype" class="text">
 								<option value=""></option>
-								<%=ScreenHelper.writeSelect("operationdocumenttypes",sFindType,sWebLanguage)%>
+								<%=ScreenHelper.writeSelect(request,"operationdocumenttypes",sFindType,sWebLanguage)%>
 							</select>
 						</td>
 					</tr>
 					<tr>
-						<td class="admin" width="1%" nowrap><%=getTran("web","source",sWebLanguage)%>&nbsp;</td>
+						<td class="admin" width="1%" nowrap><%=getTran(request,"web","source",sWebLanguage)%>&nbsp;</td>
 						<td class="admin2">
 			                <input class='text' TYPE="text" name="finddocumentsourcetext" id="finddocumentsourcetext" readonly size="50" TITLE="" VALUE="<%=sFindSourceText %>" onchange="">
 			                <img src='/openclinic/_img/icons/icon_search.gif' id='buttonUnit' class='link' alt='Choisir' onclick='findsearchsource("finddocumentsource","finddocumentsourcetext");'>&nbsp;<img src='/openclinic/_img/icons/icon_delete.gif' class='link' alt='Vider' onclick="document.getElementsByName('finddocumentsource')[0].value='';document.getElementsByName('finddocumentsourcetext')[0].value='';">
@@ -133,7 +133,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td class="admin" width="1%" nowrap><%=getTran("web","destination",sWebLanguage)%>&nbsp;</td>
+						<td class="admin" width="1%" nowrap><%=getTran(request,"web","destination",sWebLanguage)%>&nbsp;</td>
 						<td class="admin2">
 			                <input class='text' TYPE="text" name="finddocumentdestinationtext" id="finddocumentdestinationtext" readonly size="50" TITLE="" VALUE="<%=sFindDestinationText %>" onchange="">
 			                <img src='/openclinic/_img/icons/icon_search.gif' id='buttonUnit' class='link' alt='Choisir'onclick='openPopup("/_common/search/searchServiceStock.jsp&ts=<%=getTs()%>&ReturnServiceStockUidField=finddocumentdestination&ReturnServiceStockNameField=finddocumentdestinationtext");'>&nbsp;<img src='/openclinic/_img/icons/icon_delete.gif' class='link' alt='Vider' onclick="document.getElementsByName('finddocumentdestination')[0].value='';document.getElementsByName('finddocumentdestinationtext')[0].value='';">
@@ -141,11 +141,11 @@
 						</td>
 					</tr>
 					<tr>
-						<td class="admin" width="1%" nowrap><%=getTran("web","period",sWebLanguage)%>&nbsp;</td>
-						<td class="admin2"><%=getTran("web", "from", sWebLanguage)%> <%=writeDateField("finddocumentmindate","searchForm",sFindMinDate,sWebLanguage)%> <%=getTran("web", "to", sWebLanguage)%> <%=writeDateField("finddocumentmaxdate","searchForm",sFindMaxDate,sWebLanguage)%></td>
+						<td class="admin" width="1%" nowrap><%=getTran(request,"web","period",sWebLanguage)%>&nbsp;</td>
+						<td class="admin2"><%=getTran(request,"web", "from", sWebLanguage)%> <%=writeDateField("finddocumentmindate","searchForm",sFindMinDate,sWebLanguage)%> <%=getTran(request,"web", "to", sWebLanguage)%> <%=writeDateField("finddocumentmaxdate","searchForm",sFindMaxDate,sWebLanguage)%></td>
 					</tr>
 					<tr>
-						<td class="admin" width="1%" nowrap><%=getTran("web","documentreference",sWebLanguage)%>&nbsp;</td>
+						<td class="admin" width="1%" nowrap><%=getTran(request,"web","documentreference",sWebLanguage)%>&nbsp;</td>
 						<td class="admin2"><input type="text" class="text" name="finddocumentreference" id="finddocumentreference" value="<%=sFindReference%>" size="50"/></td>
 					</tr>
 					<%-- BUTTONS --%>
@@ -169,12 +169,12 @@
 					if(documents.size()>0){
 						%>
 						<tr class='admin'>
-							<td><%=getTran("web","ID",sWebLanguage)%>&nbsp;</td>
-							<td><%=getTran("web","date",sWebLanguage)%>&nbsp;</td>
-							<td><%=getTran("web","type",sWebLanguage)%>&nbsp;</td>
-							<td><%=getTran("web","source",sWebLanguage)%>&nbsp;</td>
-							<td><%=getTran("web","destination",sWebLanguage)%>&nbsp;</td>
-							<td><%=getTran("web","documentreference",sWebLanguage)%>&nbsp;</td>
+							<td><%=getTran(request,"web","documentid",sWebLanguage)%>&nbsp;</td>
+							<td><%=getTran(request,"web","date",sWebLanguage)%>&nbsp;</td>
+							<td><%=getTran(request,"web","type",sWebLanguage)%>&nbsp;</td>
+							<td><%=getTran(request,"web","source",sWebLanguage)%>&nbsp;</td>
+							<td><%=getTran(request,"web","destination",sWebLanguage)%>&nbsp;</td>
+							<td><%=getTran(request,"web","documentreference",sWebLanguage)%>&nbsp;</td>
 						</tr>
 						<%
 					}
@@ -210,7 +210,7 @@
 						out.print("<tr class='listText'>"+
 						           "<td>"+document.getUid()+"</td>"+
 								   "<td><a href='javascript:editDocument(\""+document.getUid()+"\");'>"+sDate+"</a></td>"+
-						           "<td>"+getTran("operationdocumenttypes",sType,sWebLanguage)+"</td>"+
+						           "<td>"+getTran(request,"operationdocumenttypes",sType,sWebLanguage)+"</td>"+
 								   "<td>"+sSource+"</td><td>"+sDestination+"</td>"+
 						           "<td>"+sReference+"</td>"+
 						          "</tr>");
@@ -232,18 +232,18 @@
 			
 			<table width="100%" class="list" cellpadding="1" cellspacing="1" width="100%">
 				<tr class="admin">
-					<td colspan="2"><%=getTran("web","editoperationdocument",sWebLanguage)%></td>
+					<td colspan="2"><%=getTran(request,"web","editoperationdocument",sWebLanguage)%></td>
 				</tr>
 				<tr>
-					<td class="admin"><%=getTran("web","type",sWebLanguage)%> *</td>
+					<td class="admin"><%=getTran(request,"web","type",sWebLanguage)%> *</td>
 					<td class="admin2">
 						<select name="documenttype" id="documenttype" class="text">
-							<%=ScreenHelper.writeSelect("operationdocumenttypes", operationDocument.getType(), sWebLanguage)%>
+							<%=ScreenHelper.writeSelect(request,"operationdocumenttypes", operationDocument.getType(), sWebLanguage)%>
 						</select>
 					</td>
 				</tr>
 				<tr>
-					<td class="admin"><%=getTran("web","source",sWebLanguage)%> *</td>
+					<td class="admin"><%=getTran(request,"web","source",sWebLanguage)%> *</td>
 					<td class="admin2">
 		                <input class="text" type="text" name="documentsourcetext" readonly size="50" title="" value="<%=operationDocument.getSourceuid()!=null && operationDocument.getSourceuid().length()>0 && operationDocument.getSource()!=null?operationDocument.getSourceName(sWebLanguage):"" %>" onchange="">
 		                <img src='/openclinic/_img/icons/icon_search.gif' id='buttonUnit' class='link' alt='Choisir'onclick='findsource("documentsource","documentsourcetext");'>&nbsp;<img src='/openclinic/_img/icons/icon_delete.gif' class='link' alt='Vider' onclick="document.getElementsByName('documentsource')[0].value='';document.getElementsByName('documentsourcetext')[0].value='';">
@@ -251,7 +251,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td class="admin"><%=getTran("web","destination",sWebLanguage)%> *</td>
+					<td class="admin"><%=getTran(request,"web","destination",sWebLanguage)%> *</td>
 					<td class="admin2">
 		                <input class="text" type="text" name="documentdestinationtext" readonly size="50" title="" value="<%=operationDocument.getDestinationuid()!=null && operationDocument.getDestinationuid().length()>0 && operationDocument.getDestination()!=null?operationDocument.getDestination().getName():"" %>" onchange="">
 		                <img src='/openclinic/_img/icons/icon_search.gif' id='buttonUnit' class='link' alt='Choisir'onclick='openPopup("/_common/search/searchServiceStock.jsp&ts=<%=getTs()%>&ReturnServiceStockUidField=documentdestination&ReturnServiceStockNameField=documentdestinationtext");'>&nbsp;<img src='/openclinic/_img/icons/icon_delete.gif' class='link' alt='Vider' onclick="document.getElementsByName('documentdestination')[0].value='';document.getElementsByName('documentdestinationtext')[0].value='';">
@@ -259,17 +259,17 @@
 					</td>
 				</tr>
 				<tr>
-					<td class="admin"><%=getTran("web","date",sWebLanguage)%> *</td>
+					<td class="admin"><%=getTran(request,"web","date",sWebLanguage)%> *</td>
 					<td class="admin2"><%=writeDateField("documentdate","editForm",operationDocument.getDate()!=null?ScreenHelper.formatDate(operationDocument.getDate()):"",sWebLanguage)%></td>
 				</tr>
 				<tr>
-					<td class="admin"><%=getTran("web","documentcomment",sWebLanguage)%></td>
+					<td class="admin"><%=getTran(request,"web","documentcomment",sWebLanguage)%></td>
 					<td class="admin2">
 					    <textarea class="text" name="documentcomment" id="documentcomment" cols="80"><%=operationDocument.getComment()%></textarea>
 					</td>
 				</tr>
 				<tr>
-					<td class="admin"><%=getTran("web","documentreference",sWebLanguage)%></td>
+					<td class="admin"><%=getTran(request,"web","documentreference",sWebLanguage)%></td>
 					<td class="admin2">
 					    <input type="text" class="text" name="documentreference" id="documentreference" value="<%=operationDocument.getReference()%>" size="50"/>
 					</td>
@@ -296,11 +296,11 @@
 					%>
 						<tr><td colspan="5"><hr/></td></tr>
 						<tr class='admin'>
-							<td><%=getTran("web","ID",sWebLanguage)%></td>
-							<td><%=getTran("web","date",sWebLanguage)%></td>
-							<td><%=getTran("web","description",sWebLanguage)%></td>
-							<td><%=getTran("web","product",sWebLanguage)%></td>
-							<td><%=getTran("web","quantity",sWebLanguage)%></td>
+							<td><%=getTran(request,"web","ID",sWebLanguage)%></td>
+							<td><%=getTran(request,"web","date",sWebLanguage)%></td>
+							<td><%=getTran(request,"web","description",sWebLanguage)%></td>
+							<td><%=getTran(request,"web","product",sWebLanguage)%></td>
+							<td><%=getTran(request,"web","quantity",sWebLanguage)%></td>
 						</tr>
 					<%
 				}
@@ -310,9 +310,9 @@
 					operation = (ProductStockOperation)operations.elementAt(n);
 					
 					out.print("<tr>"+
-					           "<td><img src='"+sCONTEXTPATH+"_img/icons/icon_delete.gif' class='link' onclick='javascript:deleteOperation(\""+operation.getUid()+"\");' title='"+getTranNoLink("web","delete",sWebLanguage)+"'>"+operation.getUid()+"</td>"+
-                               "<td>"+ScreenHelper.formatDate(operation.getDate())+"</td>"+
-					           "<td>"+getTran("productstockoperation.medicationdelivery",operation.getDescription(),sWebLanguage)+"</td>"+
+					           "<td><img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.gif' class='link' onclick='javascript:deleteOperation(\""+operation.getUid()+"\");' title='"+getTranNoLink("web","delete",sWebLanguage)+"'>"+operation.getUid()+"</td>"+
+                               "<td><a href='javascript:editOperation(\""+operation.getUid()+"\")'>"+ScreenHelper.formatDate(operation.getDate())+"</a></td>"+
+					           "<td>"+getTran(request,"productstockoperation.medicationdelivery",operation.getDescription(),sWebLanguage)+"</td>"+
                                "<td>"+operation.getProductStock().getProduct().getName()+"</td>"+
 					           "<td>"+operation.getUnitsChanged()+" ("+operation.getProductStock().getLevel()+")</td>"+
                               "</tr>");
@@ -344,9 +344,13 @@
   }
 	
   function editDocument(uid){
-	window.location.href='<c:url value="/main.jsp"/>?Page=pharmacy/manageProductStockDocuments.jsp&ts=<%=getTs()%>&doaction=edit&documentuid='+uid;	
-  }
-	
+		window.location.href='<c:url value="/main.jsp"/>?Page=pharmacy/manageProductStockDocuments.jsp&ts=<%=getTs()%>&doaction=edit&documentuid='+uid;	
+	  }
+		
+  function editOperation(uid){
+		window.location.href='<c:url value="/main.jsp"/>?Page=pharmacy/manageProductStockOperations.jsp&ts=<%=getTs()%>&Action=showDetails&EditOperationUid='+uid;	
+	  }
+		
   function findDocument(uid){
 	window.location.href='<c:url value="/main.jsp"/>?Page=pharmacy/manageProductStockDocuments.jsp&ts=<%=getTs()%>&doaction=find&documentuid='+uid;	
   }

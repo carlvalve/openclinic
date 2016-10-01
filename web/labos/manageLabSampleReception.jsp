@@ -14,10 +14,10 @@
         while(parameters.hasMoreElements()){
             String name = (String)parameters.nextElement();
             String fields[] = name.split("\\.");
-            if(fields[0].equalsIgnoreCase("receive") && fields.length == 4){
+            if(fields[0].equalsIgnoreCase("receive") && fields.length >= 4){
                 serverid = Integer.parseInt(fields[1]);
                 transactionid = Integer.parseInt(fields[2]);
-                LabRequest.setSampleReceived(serverid,transactionid,fields[3]);
+                LabRequest.setSampleReceived(serverid,transactionid,name.replaceAll(fields[0]+"."+fields[1]+"."+fields[2]+".", ""));
                 labrequestid = "";
             }
             else if(fields[0].equalsIgnoreCase("receive") && fields.length == 3){
@@ -34,7 +34,7 @@
     <input type='hidden' id='find' name='find'/>
     <table width="100%" class="menu" cellspacing="1" cellpadding="0">
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","labrequestid",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTranNoLink("web","labrequestid",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" size="16" class="text" id="labrequestid" name="labrequestid" value="<%=labrequestid%>"/>
                 <input type="submit" class="button" name="find" value="<%=getTranNoLink("web","find",sWebLanguage)%>"/>

@@ -2,7 +2,7 @@
 <%
     // prepare response
     response.setHeader("Cache-Control", "max-age=30");
-    response.setContentType("application/x-java-jnlp-file");
+    response.setContentType("application/x-java-jnlp-file JNLP");
     response.setHeader("Content-disposition", "inline; filename="+MedwanQuery.getInstance().getConfigString("weasisJnlpFile","Weasis.jnlp"));
     String server=(request.getProtocol().toLowerCase().startsWith("https")?"https":"http")+"://"+ request.getServerName()+":"+request.getServerPort();
 %>

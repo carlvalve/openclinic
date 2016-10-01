@@ -6,6 +6,7 @@
 
 try{
     String sEditDate = checkString(request.getParameter("EditDate"));
+    String sEditDeliveryDate = checkString(request.getParameter("EditDeliveryDate"));
     String sEditPatientInvoiceUID = checkString(request.getParameter("EditPatientInvoiceUID"));
     String sEditInvoiceUID = checkString(request.getParameter("EditInvoiceUID"));
     String sEditStatus = checkString(request.getParameter("EditStatus"));
@@ -32,6 +33,7 @@ try{
     if(Debug.enabled){
         Debug.println("\n****************** patientInvoiceSave.jsp **************");
         Debug.println("sEditDate            : "+sEditDate);
+        Debug.println("sEditDeliveryDate    : "+sEditDeliveryDate);
         Debug.println("sEditPatientInvUID   : "+sEditPatientInvoiceUID);
         Debug.println("sEditInvoiceUID      : "+sEditInvoiceUID);
         Debug.println("sEditStatus          : "+sEditStatus);
@@ -96,6 +98,7 @@ try{
     }
 
     patientinvoice.setStatus(sEditStatus);
+    patientinvoice.setEstimatedDeliveryDate(sEditDeliveryDate);
     patientinvoice.setPatientUid(invoicePatient.personid);
     patientinvoice.setInvoiceUid(sEditInvoiceUID);
     patientinvoice.setDate(ScreenHelper.getSQLDate(sEditDate));
@@ -244,7 +247,8 @@ try{
 		}
 		
 	    if (patientinvoice.store()) {
-	        if(MedwanQuery.getInstance().getConfigInt("invoiceInsurerReferenceMustBeUnique",0)==1 && sEditInsurarReference.length()>0){
+			patientinvoice.createProductionOrders();
+	    	if(MedwanQuery.getInstance().getConfigInt("invoiceInsurerReferenceMustBeUnique",0)==1 && sEditInsurarReference.length()>0){
 	        	Pointer.deletePointers("INV.REF."+sEditInsurarReference);
 	        	Pointer.storePointer("INV.REF."+sEditInsurarReference,patientinvoice.getUid());
 	        }
@@ -264,8 +268,13 @@ try{
 		    	//Bereken de korting
 		    	double reduction = Double.parseDouble(sEditReduction);
 		    	if(reduction>0){
+					Encounter encounter = Encounter.getActiveEncounter(invoicePatient.personid);
+					if(encounter==null){
+						encounter = Encounter.getLastEncounter(invoicePatient.personid);
+					}
 			    	PatientCredit credit = new PatientCredit();
 			    	credit.setAmount(reduction*patientinvoice.getPatientAmount()/100);
+			        credit.setEncounterUid(encounter==null?"":encounter.getUid());
 			    	credit.setDate(new java.util.Date());
 			    	credit.setInvoiceUid(patientinvoice.getUid());
 			    	credit.setPatientUid(patientinvoice.getPatientUid());
@@ -276,10 +285,10 @@ try{
 			    	credit.store();
 		    	}
 	    	}
-	        sMessage = getTran("web", "dataissaved", sWebLanguage);
+	        sMessage = getTran(request,"web", "dataissaved", sWebLanguage);
 	    } 
 	    else {
-	        sMessage = getTran("web.control", "dberror", sWebLanguage);
+	        sMessage = getTran(request,"web.control", "dberror", sWebLanguage);
 	    }
     }
 %>

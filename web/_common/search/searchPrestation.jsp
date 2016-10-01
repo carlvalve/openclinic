@@ -21,6 +21,7 @@
 
     String sCurrency = MedwanQuery.getInstance().getConfigParam("currency","€");
     String sCheckInsurance = checkString(request.getParameter("checkInsurance"));
+    String sEncounterUid = checkString(request.getParameter("encounteruid"));
     if(sCheckInsurance.length()>0){
     	Insurance insurance = null;
     	if(sCheckInsurance.split("\\.").length==2){
@@ -61,15 +62,16 @@
     <input type="hidden" name="ReturnFieldType" value="<%=sReturnFieldType%>">
     <input type="hidden" name="ReturnFieldPrice" value="<%=sReturnFieldPrice%>">
     <input type="hidden" name="CheckInsurance" value="<%=sCheckInsurance%>">
+    <input type="hidden" name="encounteruid" value="<%=sEncounterUid%>">
 
     <%=writeTableHeader("web","searchprestation",sWebLanguage," window.close();")%>
     <table width="100%" cellspacing="1" cellpadding="0" class="menu">
         <%
-            if(!"no".equalsIgnoreCase(request.getParameter("header"))){
+            if(!"no".equalsIgnoreCase(checkString(request.getParameter("header")))){
         %>
         <%-- CODE --%>
         <tr>
-            <td class="admin2" width="120" nowrap><%=getTran("web","code",sWebLanguage)%></td>
+            <td class="admin2" width="120" nowrap><%=getTran(request,"web","code",sWebLanguage)%></td>
             <td class="admin2" width="380" nowrap>
                 <input type="text" class="text" name="FindPrestationCode" size="20" maxlength="20" value="<%=sFindPrestationCode%>">
             </td>
@@ -77,7 +79,7 @@
         
         <%-- DESCRIPTION --%>
         <tr>
-            <td class="admin2"><%=getTran("web","description",sWebLanguage)%></td>
+            <td class="admin2"><%=getTran(request,"web","description",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" name="FindPrestationDescr" size="60" maxlength="60" value="<%=sFindPrestationDescr%>">
             </td>
@@ -85,18 +87,18 @@
         
         <%-- TYPE --%>
         <tr>
-            <td class="admin2"><%=getTran("web","type",sWebLanguage)%></td>
+            <td class="admin2"><%=getTran(request,"web","type",sWebLanguage)%></td>
             <td class="admin2">
                 <select class="text" name="FindPrestationType">
                     <option value=""></option>
-                    <%=ScreenHelper.writeSelect("prestation.type",sFindPrestationType,sWebLanguage)%>
+                    <%=ScreenHelper.writeSelect(request,"prestation.type",sFindPrestationType,sWebLanguage)%>
                 </select>
             </td>
         </tr>
         
         <%-- PRICE --%>
         <tr>
-            <td class="admin2"><%=getTran("web","price",sWebLanguage)%></td>
+            <td class="admin2"><%=getTran(request,"web","price",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" name="FindPrestationPrice" size="10" maxlength="8" onKeyUp="if(!isNumber(this)){this.value='';}" value="<%=sFindPrestationPrice%>">&nbsp;<%=sCurrency%>
             </td>
@@ -104,13 +106,13 @@
         
         <%-- SORT --%>
         <tr>
-            <td class="admin2"><%=getTran("web","sort",sWebLanguage)%></td>
+            <td class="admin2"><%=getTran(request,"web","sort",sWebLanguage)%></td>
             <td class="admin2">
                 <select class="text" name="FindPrestationSort">
                     <option value="">
-                    <option value="OC_PRESTATION_DESCRIPTION"><%=getTran("web","description",sWebLanguage)%></option>
-                    <option value="OC_PRESTATION_CODE"><%=getTran("web","code",sWebLanguage)%></option>
-                    <option value="OC_PRESTATION_PRICE"><%=getTran("web","price",sWebLanguage)%></option>
+                    <option value="OC_PRESTATION_DESCRIPTION"><%=getTran(request,"web","description",sWebLanguage)%></option>
+                    <option value="OC_PRESTATION_CODE"><%=getTran(request,"web","code",sWebLanguage)%></option>
+                    <option value="OC_PRESTATION_PRICE"><%=getTran(request,"web","price",sWebLanguage)%></option>
                 </select>
             </td>
         </tr>
@@ -190,7 +192,7 @@
   
   <%-- SET PRESTATION VARIABLE --%>
   function setPrestationVariable(uid,code,descr,type,price){
-  	price = prompt("<%=getTran("web","enterprice",sWebLanguage)%>",price);
+  	price = prompt("<%=getTran(null,"web","enterprice",sWebLanguage)%>",price);
     if("<%=sReturnFieldUid%>".length > 0){
       window.opener.document.getElementsByName("<%=sReturnFieldUid%>")[0].value = uid;
     }

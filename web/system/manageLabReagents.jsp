@@ -50,13 +50,13 @@
     	
     	sEditLabReagentUid = reagent.getUid();
     	
-        msg = getTran("web","dataIsSaved",sWebLanguage);
+        msg = getTran(request,"web","dataIsSaved",sWebLanguage);
         sAction = "search";
     }
 	//*** DELETE ******************************************
     else if(sAction.equals("delete")){
         Reagent.delete(sEditLabReagentUid);
-        msg = getTran("web","dataIsDeleted",sWebLanguage);
+        msg = getTran(request,"web","dataIsDeleted",sWebLanguage);
     }
     
 %>
@@ -70,7 +70,7 @@
     <%-- SEARCH FIELDS --%>
     <table width="100%" class="menu" cellspacing="0">
         <tr>
-            <td width="<%=sTDAdminWidth%>"><%=getTran("web","name",sWebLanguage)%></td>
+            <td width="<%=sTDAdminWidth%>"><%=getTran(request,"web","name",sWebLanguage)%></td>
             <td>
                 <input type="text" class="text" name="FindReagentName" id="FindReagentName" size="20" maxlength="50" value="<%=sFindReagentName%>" onkeyup="searchReagent();">
             </td>
@@ -112,28 +112,28 @@
         </tr>
         <%-- NAME --%>
         <tr>
-            <td class="admin"><%=getTran("web","name",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web","name",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" name="EditLabReagentName" id="EditLabReagentName" size="80" maxlength="255" value="<%=checkString(reagent.getName())%>">
             </td>
         </tr>
         <%-- UNIT --%>
         <tr>
-            <td class="admin"><%=getTran("web","unit",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web","unit",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" name="EditLabReagentUnit" id="EditLabReagentUnit" size="10" maxlength="10" value="<%=checkString(reagent.getUnit())%>">
             </td>
         </tr>
         <%-- PROVIDER --%>
         <tr>
-            <td class="admin"><%=getTran("web","provider",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","provider",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" name="EditLabReagentProvider" id="EditLabReagentProvider" size="80" maxlength="255" value="<%=checkString(reagent.getProvider())%>">
             </td>
         </tr>
         <%-- PRODUCT --%>
         <tr>
-            <td class="admin"><%=getTran("web","product",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","product",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="greytext" readonly size="8" name="EditLabReagentProductUid" id="EditLabReagentProductUid" value="<%=checkString(reagent.getProductUid())%>">
                 <input type="text" class="greytext" name="productName" id="productName" readonly size="80" value="<%=reagent.getProduct()!=null?reagent.getProduct().getName():""%>">

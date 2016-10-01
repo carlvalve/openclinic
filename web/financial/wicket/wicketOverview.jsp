@@ -66,10 +66,10 @@
 
         // get credits for specified wicket
         Vector vCredits = Wicket.getCredits(wicket.getUid(),sFindWicketFromDate,sFindWicketToDate);
-        WicketCredit credit;
+  		WicketCredit credit;
         for(int i=0; i<vCredits.size(); i++){
             credit = (WicketCredit)vCredits.elementAt(i);
-            hCredits.put(ScreenHelper.fullDateFormatSS.format(credit.getUpdateDateTime())+"."+credit.getUid(),credit);
+            hCredits.put(ScreenHelper.fullDateFormatSS.format(credit.getOperationDate())+"."+credit.getUid(),credit);
         }
 
         //*** DISPLAY RESULTS *************************************************************************
@@ -119,7 +119,7 @@
             
             String sModify="";
             if(credit.getUserUID()!=Integer.parseInt(credit.getUpdateUser())){
-            	sModify=" ! "+getTran("web","modified.by",sWebLanguage)+" "+ScreenHelper.getFullUserName(credit.getUpdateUser())+" "+getTran("web","on",sWebLanguage)+" "+ScreenHelper.fullDateFormat.format(credit.getUpdateDateTime());
+            	sModify=" ! "+getTran(request,"web","modified.by",sWebLanguage)+" "+ScreenHelper.getFullUserName(credit.getUpdateUser())+" "+getTran(request,"web","on",sWebLanguage)+" "+ScreenHelper.fullDateFormat.format(credit.getUpdateDateTime());
             }
 
             sCreditsHtml.append("<tr class='list"+sClass+"'>")
@@ -149,7 +149,7 @@
     <table class="list" width="100%" cellspacing="1">
         <%-- WICKET --%>
         <tr>
-            <td class="admin"><%=getTran("wicket","wicket",sWebLanguage)%>&nbsp;*</td>
+            <td class="admin"><%=getTran(request,"wicket","wicket",sWebLanguage)%>&nbsp;*</td>
             <td class="admin2">
                 <select class="text" name="FindWicketUid">
                     <option><%=getTranNoLink("web","choose",sWebLanguage)%></option>
@@ -163,7 +163,7 @@
 
                             %>
                             <option value="<%=tmpWicket.getUid()%>" <%=sFindWicketUid.equals(tmpWicket.getUid())?" selected":""%>>
-                                <%=tmpWicket.getUid()%>&nbsp;<%=getTran("service",tmpWicket.getServiceUID(),sWebLanguage)%>
+                                <%=tmpWicket.getUid()%>&nbsp;<%=getTran(request,"service",tmpWicket.getServiceUID(),sWebLanguage)%>
                             </option>
                             <%
                         }
@@ -175,11 +175,11 @@
         <%-- DATE RANGE --%>
         <tr>
             <td class="admin" width="<%=sTDAdminWidth%>">
-                <%=getTran("medical.diagnosis","period",sWebLanguage)%>
+                <%=getTran(request,"medical.diagnosis","period",sWebLanguage)%>
             </td>
             <td class="admin2">
                 <%-- FROM --%>
-                <%=getTran("web","from",sWebLanguage)%>&nbsp;
+                <%=getTran(request,"web","from",sWebLanguage)%>&nbsp;
                 <%
                     String sFromDate = "";
                     if(sFindWicketFromDate.length() > 0){
@@ -192,7 +192,7 @@
                 %>&nbsp;
 
                 <%-- TO --%>
-                <%=getTran("web","to",sWebLanguage)%>&nbsp;
+                <%=getTran(request,"web","to",sWebLanguage)%>&nbsp;
                 <%
                     String sToDate = "";
                     if(sFindWicketToDate.length() > 0){
@@ -226,7 +226,7 @@
             <%-- DEBETS -------------------------------------------------------------------------%>
             <table width="100%" class="list" cellpadding="0" cellspacing="0">
                 <tr>
-                    <td colspan="5" class="admin"><%=getTran("web.financial","out",sWebLanguage)%></td>
+                    <td colspan="5" class="admin"><%=getTran(request,"web.financial","out",sWebLanguage)%></td>
                 </tr>
                 <tr>
                     <td colspan="5">
@@ -267,7 +267,7 @@
                                     <div style="padding-left:2px;">
                                         <table cellpadding="0" cellspacing="0">
                                             <tr>
-                                                <td width="120" style="text-align:right;height:20px;"><%=getTran("web","total",sWebLanguage)%>&nbsp;</td>
+                                                <td width="120" style="text-align:right;height:20px;"><%=getTran(request,"web","total",sWebLanguage)%>&nbsp;</td>
                                                 <td width="150" style="text-align:right;height:20px;border-top:1px solid black;"><%=sWicketDebetTotal%>&nbsp;</td>
                                                 <td width="150" style="height:20px;">&nbsp;<%=MedwanQuery.getInstance().getConfigParam("currency","€")%></td>
                                              </tr>
@@ -285,7 +285,7 @@
             <%-- CREDITS ------------------------------------------------------------------------%>
             <table width="100%" class="list" cellpadding="0" cellspacing="0">
                 <tr>
-                    <td colspan="5" class="admin"><%=getTran("web.financial","in",sWebLanguage)%></td>
+                    <td colspan="5" class="admin"><%=getTran(request,"web.financial","in",sWebLanguage)%></td>
                 </tr>
                 <tr>
                     <td colspan="5">
@@ -326,7 +326,7 @@
                                     <div style="padding-left:2px;">
                                         <table cellpadding="0" cellspacing="0">
                                             <tr>
-                                                <td width="120" style="text-align:right;height:20px;"><%=getTran("web","total",sWebLanguage)%>&nbsp;</td>
+                                                <td width="120" style="text-align:right;height:20px;"><%=getTran(request,"web","total",sWebLanguage)%>&nbsp;</td>
                                                 <td width="150" style="text-align:right;height:20px;border-top:1px solid black;"><%=sWicketCreditTotal%>&nbsp;</td>
                                                 <td width="150" style="height:20px;">&nbsp;<%=MedwanQuery.getInstance().getConfigParam("currency","€")%></td>
                                              </tr>
@@ -353,19 +353,19 @@
 
                         <table width="100%" class="list" cellpadding="0" cellspacing="0">
                             <tr>
-                                <td class="admin2" style="text-align:right;width:120px;height:20px;"><%=getTran("web.financial","out",sWebLanguage)%>&nbsp;</td>
+                                <td class="admin2" style="text-align:right;width:120px;height:20px;"><%=getTran(request,"web.financial","out",sWebLanguage)%>&nbsp;</td>
                                 <td class="admin2" style="text-align:right;width:150px;height:20px;"><%=sWicketDebetTotal%>&nbsp;</td>
                                 <td class="admin2" style="height:20px;" width="40"></td>
                                 <td class="admin2">&nbsp;</td>
                             </tr>
                             <tr>
-                                <td class="admin2" style="text-align:right;width:120px;height:20px;"><%=getTran("web.financial","in",sWebLanguage)%>&nbsp;</td>
+                                <td class="admin2" style="text-align:right;width:120px;height:20px;"><%=getTran(request,"web.financial","in",sWebLanguage)%>&nbsp;</td>
                                 <td class="admin2" style="text-align:right;width:150px;height:20px;"><%=sWicketCreditTotal%>&nbsp;</td>
                                 <td class="admin2" style="height:20px;" width="40"></td>
                                 <td class="admin2">&nbsp;</td>
                             </tr>
                             <tr>
-                                <td class="admin" style="text-align:right;width:120px;height:20px;"><%=getTran("web.financial","saldo",sWebLanguage).toUpperCase()%>&nbsp;</td>
+                                <td class="admin" style="text-align:right;width:120px;height:20px;"><%=getTran(request,"web.financial","saldo",sWebLanguage).toUpperCase()%>&nbsp;</td>
                                 <td class="admin" style="text-align:right;width:150px;height:20px;border-top:1px solid black;"><%=sWicketBalance%>&nbsp;</td>
                                 <td class="admin" style="height:20px;" width="40"><%=MedwanQuery.getInstance().getConfigParam("currency","€")%></td>
                                 <td class="admin">&nbsp;</td>
@@ -399,19 +399,19 @@
 
             <table width="100%" class="list" cellpadding="0" cellspacing="0">
                 <tr>
-                    <td class="admin2" style="text-align:right;width:120px;height:20px;"><%=getTran("web.financial","beginSituation",sWebLanguage)%>&nbsp;</td>
+                    <td class="admin2" style="text-align:right;width:120px;height:20px;"><%=getTran(request,"web.financial","beginSituation",sWebLanguage)%>&nbsp;</td>
                     <td class="admin2" style="text-align:right;width:150px;height:20px;"><%=sBeginBalance%>&nbsp;</td>
                     <td class="admin2" style="height:20px;" width="50"></td>
                     <td class="admin2">&nbsp;</td>
                 </tr>
                 <tr>
-                    <td class="admin2" style="text-align:right;width:120px;height:20px;"><%=getTran("web.financial","saldo",sWebLanguage)%>&nbsp;</td>
+                    <td class="admin2" style="text-align:right;width:120px;height:20px;"><%=getTran(request,"web.financial","saldo",sWebLanguage)%>&nbsp;</td>
                     <td class="admin2" style="text-align:right;width:150px;height:20px;"><%=sWicketBalance%>&nbsp;</td>
                     <td class="admin2" style="height:20px;" width="50"></td>
                     <td class="admin2">&nbsp;</td>
                 </tr>
                 <tr>
-                    <td class="admin" style="text-align:right;width:120px;height:20px;"><%=getTran("web.financial","endSituation",sWebLanguage).toUpperCase()%>&nbsp;</td>
+                    <td class="admin" style="text-align:right;width:120px;height:20px;"><%=getTran(request,"web.financial","endSituation",sWebLanguage).toUpperCase()%>&nbsp;</td>
                     <td class="admin" style="text-align:right;width:150px;height:20px;border-top:1px solid black;"><%=sEndBalance%>&nbsp;</td>
                     <td class="admin" style="height:20px;" width="50"><%=MedwanQuery.getInstance().getConfigParam("currency","€")%></td>
                     <td class="admin">&nbsp;</td>
@@ -437,7 +437,7 @@
   <%-- SHOW OVERVIEW --%>
   function showOverview(){
     if(SearchForm.FindWicketUid.value.length==0){
-                window.showModalDialog?alertDialog("web.manage","dataMissing"):alertDialogDirectText('<%=getTran("web.manage","dataMissing",sWebLanguage)%>');
+                window.showModalDialog?alertDialog("web.manage","dataMissing"):alertDialogDirectText('<%=getTran(null,"web.manage","dataMissing",sWebLanguage)%>');
       SearchForm.FindWicketUid.focus();
     }
     else{

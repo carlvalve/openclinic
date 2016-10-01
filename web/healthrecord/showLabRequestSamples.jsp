@@ -16,9 +16,9 @@
 %>
     <table width="100%" class="list">
         <tr class="admin">
-            <td><%=getTran("web","date",sWebLanguage)%></td>
-            <td width='20%'><%=getTran("web","patient",sWebLanguage)%></td>
-            <td><%=getTran("web","samples",sWebLanguage)%></td>
+            <td><%=getTran(request,"web","date",sWebLanguage)%></td>
+            <td width='20%'><%=getTran(request,"web","patient",sWebLanguage)%></td>
+            <td><%=getTran(request,"web","samples",sWebLanguage)%></td>
         </tr>
     <%
         LabRequest labRequest = LabRequest.getUnsampledRequest(Integer.parseInt(serverid),Integer.parseInt(transactionid),sWebLanguage);

@@ -13,7 +13,7 @@
         <tr>
             <td bgcolor="#dddddd" style="text-align:center;padding:20px;">
                 <img src="<img src='<%=sCONTEXTPATH%>/_img/themes/<%=sUserTheme%>/ajax-loader.gif'/>"><br><br>
-                <%=getTran("web","searchInProgress",sWebLanguage)%>
+                <%=getTran(request,"web","searchInProgress",sWebLanguage)%>
             </td>
         </tr>
     </table>
@@ -61,6 +61,7 @@
     	   sEditInsurarIncludeAllPatientInvoiceDebets  = checkString(request.getParameter("EditInsurarIncludeAllPatientInvoiceDebets")),
     	   sEditInsurarAllowTariffNegociations  = checkString(request.getParameter("EditInsurarAllowTariffNegociations")),
     	   sEditInsurarCanPrintProforma  = checkString(request.getParameter("EditInsurarCanPrintProforma")),
+    	   sEditInsurarNeedsApproval  = checkString(request.getParameter("EditInsurarNeedsApproval")),
 	   	   sEditInsurarReferenceNumberMandatory  = checkString(request.getParameter("EditInsurarReferenceNumberMandatory")),
 	   	   sEditInsurarInvoiceCommentMandatory  = checkString(request.getParameter("EditInsurarInvoiceCommentMandatory")),
     	   sEditInsurarUseLimitedPrestationsList  = checkString(request.getParameter("EditInsurarUseLimitedPrestationsList")),
@@ -149,11 +150,11 @@
         	insurar.setAllowTariffNegociations(0);
         }
         
-        if(sEditInsurarCanPrintProforma.equalsIgnoreCase("1")){
-        	insurar.setCanPrintProforma(1);
+        if(sEditInsurarNeedsApproval.equalsIgnoreCase("1")){
+        	insurar.setNeedsApproval(1);
         }
         else {
-        	insurar.setCanPrintProforma(0);
+        	insurar.setNeedsApproval(0);
         }
         
         if(sEditInsurarReferenceNumberMandatory.equalsIgnoreCase("1")){
@@ -260,7 +261,7 @@
 
         insurar.store(Integer.parseInt(activeUser.userid));
         sEditInsurarId = insurar.getUid();
-        msg = getTran("web","dataIsSaved",sWebLanguage);
+        msg = getTran(request,"web","dataIsSaved",sWebLanguage);
         sFindInsurarName=insurar.getName();
         sAction = "search";
         
@@ -310,7 +311,7 @@
     //--- DELETE ----------------------------------------------------------------------------------
     else if(sAction.equals("delete")){
         Insurar.delete(sEditInsurarId);
-        msg = getTran("web","dataIsDeleted",sWebLanguage);
+        msg = getTran(request,"web","dataIsDeleted",sWebLanguage);
     }
 %>
 <script>
@@ -337,7 +338,7 @@
     <table width="100%" class="menu" cellspacing="0" cellpadding="0">
         <tr height="22">
             <td class="admin2">
-                &nbsp;<%=getTran("web","insurar",sWebLanguage)%>&nbsp;&nbsp;<input type="text" class="text" name="FindInsurarName" size="30" maxChars="255" value="<%=sFindInsurarName%>">
+                &nbsp;<%=getTran(request,"web","insurar",sWebLanguage)%>&nbsp;&nbsp;<input type="text" class="text" name="FindInsurarName" size="30" maxChars="255" value="<%=sFindInsurarName%>">
 
                 <%-- BUTTONS --%>
                 <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="clearSearchFields();">&nbsp;
@@ -367,15 +368,15 @@
                         <%-- header --%>
                         <tr class="admin">
                             <td width="25">&nbsp;</td>
-                            <td width="150"><%=getTran("system.manage","insurarName",sWebLanguage)%></td>
-                            <td width="200"><%=getTran("system.manage","insurarOfficialName",sWebLanguage)%></td>
-                            <td width="*"><%=getTran("system.manage","insurarContact",sWebLanguage)%></td>
-                            <td width="100"><%=getTran("system.manage","insurarLanguage",sWebLanguage)%></td>
+                            <td width="150"><%=getTran(request,"system.manage","insurarName",sWebLanguage)%></td>
+                            <td width="200"><%=getTran(request,"system.manage","insurarOfficialName",sWebLanguage)%></td>
+                            <td width="*"><%=getTran(request,"system.manage","insurarContact",sWebLanguage)%></td>
+                            <td width="100"><%=getTran(request,"system.manage","insurarLanguage",sWebLanguage)%></td>
                         </tr>
 
                         <tbody>
                             <%
-                                String sTranDelete = getTran("Web","delete",sWebLanguage);
+                                String sTranDelete = getTran(request,"Web","delete",sWebLanguage);
                                 String sClass = "1", sContact, sLanguage;
                                 Insurar insurar;
 
@@ -389,7 +390,7 @@
                                     // language
                                     sLanguage = checkString(insurar.getLanguage());
                                     if(sLanguage.length() > 0){
-                                        sLanguage = getTran("web.language",sLanguage,sWebLanguage);
+                                        sLanguage = getTran(request,"web.language",sLanguage,sWebLanguage);
                                     }
 
                                     // alternate row-style
@@ -419,13 +420,13 @@
 
             // number of found records
             if(insurarCount > 50){
-                %>&gt;50 <%=getTran("web","recordsFound",sWebLanguage)%><%
+                %>&gt;50 <%=getTran(request,"web","recordsFound",sWebLanguage)%><%
             }
             else if(insurarCount > 0){
-                %><%=insurarCount%> <%=getTran("web","recordsFound",sWebLanguage)%><%
+                %><%=insurarCount%> <%=getTran(request,"web","recordsFound",sWebLanguage)%><%
             }
             else{
-                %><br><%=getTran("web","noRecordsFound",sWebLanguage)%><%
+                %><br><%=getTran(request,"web","noRecordsFound",sWebLanguage)%><%
             }
 
             // display message
@@ -465,34 +466,34 @@
                 <table width="100%" cellspacing="1" cellpadding="0" class="list">
                     <%-- INSURAR NAME --%>
                     <tr>
-                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","id",sWebLanguage)%></td>
+                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","id",sWebLanguage)%></td>
                         <td class="admin2">
                             <%=insurar.getUid()%>
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("system.manage","insurarname",sWebLanguage)%>&nbsp;*&nbsp;</td>
+                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"system.manage","insurarname",sWebLanguage)%>&nbsp;*&nbsp;</td>
                         <td class="admin2">
                             <input type="text" class="text" name="EditInsurarName" size="50" maxChars="255" value="<%=checkString(insurar.getName())%>">
                         </td>
                     </tr>
                     <%-- INSURAR OFFICIAL NAME --%>
                     <tr>
-                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("system.manage","insurarOfficialName",sWebLanguage)%>&nbsp;*&nbsp;</td>
+                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"system.manage","insurarOfficialName",sWebLanguage)%>&nbsp;*&nbsp;</td>
                         <td class="admin2">
                             <input type="text" class="text" name="EditInsurarOfficialName" size="50" maxChars="255" value="<%=checkString(insurar.getOfficialName())%>">
                         </td>
                     </tr>
                     <%-- INSURAR CONTACT --%>
                     <tr>
-                        <td class="admin"><%=getTran("system.manage","insurarContact",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"system.manage","insurarContact",sWebLanguage)%></td>
                         <td class="admin2">
                             <textArea class="text" name="EditInsurarContact" cols="50" rows="5" onKeyup="limitChars(this,255);"><%=checkString(insurar.getContact())%></textArea>
                         </td>
                     </tr>
                     <%-- INSURAR LANGUAGE --%>
                     <tr>
-                        <td class="admin"><%=getTran("system.manage","insurarLanguage",sWebLanguage)%>&nbsp;*&nbsp;</td>
+                        <td class="admin"><%=getTran(request,"system.manage","insurarLanguage",sWebLanguage)%>&nbsp;*&nbsp;</td>
                         <td class="admin2">
                             <%
                                 String sEditInsurarLanguage = checkString(insurar.getLanguage());
@@ -506,7 +507,7 @@
                                     while (tokenizer.hasMoreTokens()) {
                                         tmpLang = tokenizer.nextToken();
 
-                                        %><option value="<%=tmpLang%>" <%=(tmpLang.equalsIgnoreCase(sEditInsurarLanguage)?"selected":"")%>><%=getTran("web.language",tmpLang,sWebLanguage)%></option><%
+                                        %><option value="<%=tmpLang%>" <%=(tmpLang.equalsIgnoreCase(sEditInsurarLanguage)?"selected":"")%>><%=getTran(request,"web.language",tmpLang,sWebLanguage)%></option><%
                                     }
                                 %>
                             </select>
@@ -514,24 +515,24 @@
                     </tr>
                     <%-- INSURAR TYPE --%>
                     <tr>
-                        <td class="admin"><%=getTran("web","tariff",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"web","tariff",sWebLanguage)%></td>
                         <td class="admin2">
                             <select class="text" name="EditInsurarType">
                                 <option value=""></option>
-                                <%=ScreenHelper.writeSelect("insurance.types",checkString(insurar.getType()),sWebLanguage)%>
+                                <%=ScreenHelper.writeSelect(request,"insurance.types",checkString(insurar.getType()),sWebLanguage)%>
                             </select>
                         </td>
                     </tr>
                     <%-- INSURAR CONTACT PERSON --%>
                     <tr>
-                        <td class="admin"><%=getTran("system.manage","insurarContactPerson",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"system.manage","insurarContactPerson",sWebLanguage)%></td>
                         <td class="admin2">
                             <textArea class="text" name="EditInsurarContactPerson" cols="50" rows="5" onKeyup="limitChars(this,255);"><%=checkString(insurar.getContactPerson())%></textArea>
                         </td>
                     </tr>
                     <%-- INSURAR EXTRA COVERAGE --%>
                     <tr>
-                        <td class="admin"><%=getTran("system.manage","insurarDefaultPatientInvoiceModel",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"system.manage","insurarDefaultPatientInvoiceModel",sWebLanguage)%></td>
                         <td class="admin2">
                             <select name='EditInsurarDefaultPatientInvoiceModel' id='EditInsurarDefaultPatientInvoiceModel'>
                             	<option value='default' <%=checkString(insurar.getDefaultPatientInvoiceModel()).equalsIgnoreCase("default")?"selected":""%>><%=getTranNoLink("web","defaultmodel",sWebLanguage)%></option>
@@ -543,7 +544,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin"><%=getTran("system.manage","insurarDefaultInsurarInvoiceModel",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"system.manage","insurarDefaultInsurarInvoiceModel",sWebLanguage)%></td>
                         <td class="admin2">
                             <select name='EditInsurarDefaultInsurarInvoiceModel' id='EditInsurarDefaultInsurarInvoiceModel'>
                             <option value="default" <%=checkString(insurar.getDefaultInsurarInvoiceModel()).equalsIgnoreCase("default")?"selected":""%>><%=getTranNoLink("web","defaultmodel",sWebLanguage)%></option>
@@ -572,13 +573,13 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("system.manage","allowedreductions",sWebLanguage)%></td>
+                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"system.manage","allowedreductions",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="text" class="text" name="EditInsurarAllowedReductions" size="50" maxChars="255" value="<%=checkString(insurar.getAllowedReductions())%>">%
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin"><%=getTran("web","complementarycoverage",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"web","complementarycoverage",sWebLanguage)%></td>
                         <%
                         	String sExtraInsurar = "";
                         	if(!sEditInsurarId.equalsIgnoreCase(getTranNoLink("patientsharecoverageinsurance",sEditInsurarId,sWebLanguage))){
@@ -590,7 +591,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin"><%=getTran("web","complementarycoverage2",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"web","complementarycoverage2",sWebLanguage)%></td>
                         <%
                         	String sExtraInsurar2 = "";
                         	if(!sEditInsurarId.equalsIgnoreCase(getTranNoLink("patientsharecoverageinsurance2",sEditInsurarId,sWebLanguage))){
@@ -602,96 +603,102 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin"><%=getTran("web","nosupplements",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"web","nosupplements",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="checkbox" name="EditNoSupplements" <%=insurar.getNoSupplements()==1?"checked":""%> value="1"/>
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin"><%=getTran("web","coversupplements",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"web","coversupplements",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="checkbox" name="EditCoverSupplements" <%=insurar.getCoverSupplements()==1?"checked":""%> value="1"/>
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin"><%=getTran("web","requireaffiliateid",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"web","requireaffiliateid",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="checkbox" name="EditInsurarRequiresAffiliateID" <%=insurar.getRequireAffiliateID()==1?"checked":""%> value="1"/>
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin"><%=getTran("web","authorizationneeded",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"web","authorizationneeded",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="checkbox" name="EditAuthorizationNeeded" <%=MedwanQuery.getInstance().getConfigString("InsuranceAgentAuthorizationNeededFor","").indexOf("*"+insurar.getUid()+"*")>-1?"checked":""%> value="1"/>
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin"><%=getTran("web","acceptationneeded",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"web","acceptationneeded",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="checkbox" name="EditAcceptationNeeded" <%=MedwanQuery.getInstance().getConfigString("InsuranceAgentAcceptationNeededFor","").indexOf("*"+insurar.getUid()+"*")>-1?"checked":""%> value="1"/>
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin"><%=getTran("web","requirevalidation",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"web","requirevalidation",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="checkbox" name="EditInsurarRequiresValidation" <%=insurar.getRequireValidation()==1?"checked":""%> value="1"/>
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin"><%=getTran("web","includeallpatientinvoicedebets",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"web","includeallpatientinvoicedebets",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="checkbox" name="EditInsurarIncludeAllPatientInvoiceDebets" <%=insurar.getIncludeAllPatientInvoiceDebets()==1?"checked":""%> value="1"/>
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin"><%=getTran("web","allowtariffnegociations",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"web","allowtariffnegociations",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="checkbox" name="EditInsurarAllowTariffNegociations" <%=insurar.getAllowTariffNegociations()==1?"checked":""%> value="1"/>
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin"><%=getTran("web","referencenumbermandatory",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"web","referencenumbermandatory",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="checkbox" name="EditInsurarReferenceNumberMandatory" <%=insurar.getInsuranceReferenceNumberMandatory()==1?"checked":""%> value="1"/>
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin"><%=getTran("web","invoicecommentmandatory",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"web","invoicecommentmandatory",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="checkbox" name="EditInsurarInvoiceCommentMandatory" <%=insurar.getInvoiceCommentMandatory()==1?"checked":""%> value="1"/>
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin"><%=getTran("web","canprintproforma",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"web","canprintproforma",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="checkbox" name="EditInsurarCanPrintProforma" <%=insurar.getCanPrintProforma()==1?"checked":""%> value="1"/>
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin"><%=getTran("web","uselimitedprestationslist",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"web","needsapprovalrights",sWebLanguage)%></td>
+                        <td class="admin2">
+                            <input type="checkbox" name="EditInsurarNeedsApproval" <%=insurar.getNeedsApproval()==1?"checked":""%> value="1"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="admin"><%=getTran(request,"web","uselimitedprestationslist",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="checkbox" name="EditInsurarUseLimitedPrestationsList" <%=insurar.getUseLimitedPrestationsList()==1?"checked":""%> value="1"/>
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","accountingcode",sWebLanguage)%></td>
+                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","accountingcode",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="text" class="text" name="EditInsurarAccountingCode" size="50" maxChars="255" value="<%=checkString(insurar.getAccountingCode())%>">
                         </td>
                     </tr>
                     <%-- SELECTED CATEGORIES --%>
                     <tr>
-                        <td class="admin"><%=getTran("web.manage","selectedinsurarcategories",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"web.manage","selectedinsurarcategories",sWebLanguage)%></td>
                         <td class="admin2" style="padding:5px;">
                             <table id="tblCategories" width="750" cellspacing="1" cellpadding="0" class="list" onkeydown="if(enterEvent(event,13)){addCategory();}">
                                 <%-- HEADER --%>
                                 <tr class="admin">
                                     <td width="40">&nbsp;</td>
-                                    <td nowrap><%=getTran("system.manage","category",sWebLanguage)%></td>
-                                    <td nowrap><%=getTran("system.manage","categoryName",sWebLanguage)%></td>
-                                    <td nowrap><%=getTran("system.manage","categoryPatientShare",sWebLanguage)%></td>
-                                    <td nowrap><%=getTran("system.manage","categoryInsurarShare",sWebLanguage)%></td>
-                                    <td nowrap><%=getTran("system.manage","patientsPerCategory",sWebLanguage)%></td>
+                                    <td nowrap><%=getTran(request,"system.manage","category",sWebLanguage)%></td>
+                                    <td nowrap><%=getTran(request,"system.manage","categoryName",sWebLanguage)%></td>
+                                    <td nowrap><%=getTran(request,"system.manage","categoryPatientShare",sWebLanguage)%></td>
+                                    <td nowrap><%=getTran(request,"system.manage","categoryInsurarShare",sWebLanguage)%></td>
+                                    <td nowrap><%=getTran(request,"system.manage","patientsPerCategory",sWebLanguage)%></td>
                                     <td width="80">&nbsp;</td>
                                 </tr>
                                 <%-- ADD ROW --%>
@@ -734,7 +741,7 @@
                                 <%
                                     if(catCount > 0){
                                         %>
-                                            <%=catCount%> <%=getTran("web.manage","insurarCategoriesFound",sWebLanguage)%>
+                                            <%=catCount%> <%=getTran(request,"web.manage","insurarCategoriesFound",sWebLanguage)%>
                                         <%
 
                                         if(catCount > 20){
@@ -747,14 +754,14 @@
                                         }
                                     }
                                     else{
-                                        %><%=getTran("web.manage","noInsurarCategoriesFound",sWebLanguage)%><%
+                                        %><%=getTran(request,"web.manage","noInsurarCategoriesFound",sWebLanguage)%><%
                                     }
                                 %>
                             </span>
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin"><%=getTran("web","inactive",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"web","inactive",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="checkbox" name="EditInactive" <%=insurar.getInactive()==1?"checked":""%> value="1"/>
                         </td>
@@ -897,7 +904,7 @@
       else if(catLabel.length==0){ transactionForm.EditCategoryLabel.focus(); }
       else if(catShare.length==0){ transactionForm.EditPatientShare.focus(); }
 
-      alertDialogDirectText('<%=getTran("web.manage","dataMissing",sWebLanguage)%>');
+      alertDialogDirectText('<%=getTran(null,"web.manage","dataMissing",sWebLanguage)%>');
     }
   }
 

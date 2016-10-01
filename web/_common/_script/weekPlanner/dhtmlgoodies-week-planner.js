@@ -121,10 +121,14 @@ function parseItemsFromServer(ajaxIndex){
                 topPos = getYPositionFromTime(itemsToBeCreated[no]['eventStartDate'].getHours(), itemsToBeCreated[no]['eventStartDate'].getMinutes());
                 var elHeight = (itemsToBeCreated[no]['eventEndDate'].getTime() - itemsToBeCreated[no]['eventStartDate'].getTime()) / (60 * 60 * 1000);
                 elHeight = Math.round((elHeight * (itemRowHeight+1)) - 2);
-                currentAppointmentDiv = createNewAppointmentDiv((el_x - appointmentsOffsetLeft), topPos, (newAppointmentWidth - (appointmentMarginSize * 2)), itemsToBeCreated[no]['description'], elHeight);
+                currentAppointmentDiv = createNewAppointmentDiv((el_x - appointmentsOffsetLeft), topPos, (newAppointmentWidth - (appointmentMarginSize * 2)), itemsToBeCreated[no]['description'], elHeight, itemsToBeCreated[no]['color']);
                 if(itemsToBeCreated[no]['effective'].length>0){
-                   currentAppointmentDiv.className +=" effective";
-                  currentAppointmentDiv.firstChild.className +=" effectiveHeader";
+                    currentAppointmentDiv.className +=" effective";
+                   currentAppointmentDiv.firstChild.className +=" effectiveHeader";
+                }
+                if(itemsToBeCreated[no]['noshow']==1){
+                    currentAppointmentDiv.className +=" effective";
+                   currentAppointmentDiv.firstChild.className +=" effectiveHeader";
                 }
                 currentAppointmentDiv.id = itemsToBeCreated[no]['id'];
                 currentZIndex = currentZIndex+1;
@@ -346,7 +350,7 @@ function timerNewAppointment()
         } else {
             var topPos = (el_y - appointmentsOffsetTop);
         }
-        currentAppointmentDiv = createNewAppointmentDiv((el_x - appointmentsOffsetLeft), topPos, (elWidth - (appointmentMarginSize * 2)), '');
+        currentAppointmentDiv = createNewAppointmentDiv((el_x - appointmentsOffsetLeft), topPos, (elWidth - (appointmentMarginSize * 2)), '', '');
         currentAppointmentDiv.id = 'new_'+startIdOfNewItems;
         appointmentProperties[currentAppointmentDiv.id] = new Array();
         appointmentProperties[currentAppointmentDiv.id]['description'] = "";
@@ -608,10 +612,15 @@ function bringToFront(obj){
     obj.style.zIndex = currentZIndex;
     getMarginForElement(obj);
 }
-function createNewAppointmentDiv(leftPos, topPos, width, contentHTML, height){
+function createNewAppointmentDiv(leftPos, topPos, width, contentHTML, height, altColor){
     var div = document.createElement('DIV');
     div.ondblclick = editEventWindow;
-    div.className = 'weekScheduler_anAppointment';
+    if(altColor && altColor.length>0){
+    	div.className = altColor;
+    }
+    else {
+    	div.className = 'weekScheduler_anAppointment';
+    }
     div.style.left = leftPos+'px';
     div.style.top = topPos+'px';
     div.style.width = width+'px';
@@ -671,7 +680,7 @@ function schedulerMouseUp()
             var dateStart = new Date(appointment.eventStartDate.toGMTString().replace('UTC', 'GMT'));
             var dateEnd = new Date(appointment.eventEndDate.toGMTString().replace('UTC', 'GMT'));
             if(dateStart < dateEnd){
-                var saveString = "&Action=new&FindUserUID="+$('FindUserUID').value+"&FindServiceUID="+$('FindServiceUID').value+"AppointmentID=-1&inputId="+currentAppointmentDiv.id
+                var saveString = "&Action=new&FindUserUID="+$('FindUserUID').value+"&FindServiceUID="+$('FindServiceUID').value+"&AppointmentID=-1&inputId="+currentAppointmentDiv.id
                        +'&appointmentDateDay='+dateStart.getDate()+"/"+(Number(dateStart.getMonth()+1))+"/"+dateStart.getFullYear()
                        +'&appointmentDateHour='+dateStart.getHours()
                        +'&appointmentDateMinutes='+dateStart.getMinutes()
@@ -891,7 +900,7 @@ function updateHeaderDates(beginweek){
     var endweek = new Date();
     endweek.setDate(beginweek.getDate()+7);
     var today = new Date();
-    if((today >= beginweek && today < endweek) && (today.getDate() == tmpDate2.getDate() - 1)){
+    if((today >= beginweek && today < endweek) && (today.getMonth()==tmpDate2.getMonth() && today.getDate() == tmpDate2.getDate() - 1)){
       subDivs[no].className = "today";
       var div = $("weekScheduler_appointments").getElementsByClassName("weekScheduler_appointments_day")[no].addClassName("today");
     } else {
@@ -924,7 +933,7 @@ function updateCountedHeaderDates(beginweek,userid){
         var endweek = new Date();
         endweek.setDate(beginweek.getDate()+7);
         var today = new Date();
-        if((today >= beginweek && today < endweek) && (today.getDate() == tmpDate2.getDate() - 1)){
+        if((today >= beginweek && today < endweek) && (today.getMonth()==tmpDate2.getMonth() && today.getDate() == tmpDate2.getDate() - 1)){
             subDivs[no].className = "today";
             var div = $("weekScheduler_appointments").getElementsByClassName("weekScheduler_appointments_day")[no].addClassName("today");
         } else {

@@ -101,13 +101,13 @@
 
                 // show saved data
                 sAction = "showDetailsNoOrderButton";
-                msg = getTran("web.manage","orderplaced",sWebLanguage);
+                msg = getTran(request,"web.manage","orderplaced",sWebLanguage);
             }
             //***** reject new addition *****
             else{
                 // show rejected data
                 sAction = "showDetailsAfterAddReject";
-                msg = "<font color='red'>"+getTran("web.manage","orderexists",sWebLanguage)+"</font>";
+                msg = "<font color='red'>"+getTran(request,"web.manage","orderexists",sWebLanguage)+"</font>";
             }
         }
 		out.println("<script>window.opener.location.reload();window.close();</script>");
@@ -176,13 +176,13 @@
                 <table class="list" width="100%" cellspacing="1">
                     <%-- Product --%>
                     <tr>
-                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","product",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","product",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2"><%=sSelectedProductName%></td>
                     </tr>
 
                     <%-- description --%>
                     <tr>
-                        <td class="admin"><%=getTran("Web","description",sWebLanguage)%> *</td>
+                        <td class="admin"><%=getTran(request,"Web","description",sWebLanguage)%> *</td>
                         <td class="admin2">
                             <input type="text" class="text" name="EditDescription" value="<%=sSelectedDescription%>" size="60" maxLength="255">
                         </td>
@@ -194,7 +194,7 @@
 
                     <%-- PackagesOrdered --%>
                     <tr>
-                        <td class="admin"><%=getTran("Web","quantity",sWebLanguage)%> *</td>
+                        <td class="admin"><%=getTran(request,"Web","quantity",sWebLanguage)%> *</td>
                         <td class="admin2">
                             <input type="text" class="text" name="EditPackagesOrdered" value="<%=sSelectedPackagesOrdered%>" size="5" maxLength="5" onKeyUp="if(!isNumberLimited(this,1,99999)){this.value='';}">
                         </td>
@@ -202,7 +202,7 @@
 
                     <%-- DateOrdered --%>
                     <tr>
-                        <td class="admin"><%=getTran("Web","Date",sWebLanguage)%> *</td>
+                        <td class="admin"><%=getTran(request,"Web","Date",sWebLanguage)%> *</td>
                         <td class="admin2"><%=writeDateField("EditDateOrdered","transactionForm",sSelectedDateOrdered,sWebLanguage)%></td>
                         <%
                             // if new order : set today as default value for dateOrdered
@@ -214,16 +214,23 @@
 
                     <%-- supplier --%>
                     <tr>
-                        <td class="admin"><%=getTran("Web","orderfrom",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"Web","orderfrom",sWebLanguage)%></td>
                         <td class="admin2">
                         	<select class='text' name='EditFrom' id='EditFrom'>
                         		<option value=''/>
                         		<%
                         			try{
+                        				String thisServiceUid = "";
+                        				ProductStock productStock = ProductStock.get(sEditProductStockUid);
+                        				if(productStock!=null){
+                        					thisServiceUid=productStock.getServiceStockUid();
+                        				}
 	                        			Vector servicestocks = ServiceStock.findAll();
 	                        			for(int n=0;n<servicestocks.size();n++){
 	                        				ServiceStock stock = (ServiceStock)servicestocks.elementAt(n);
-	                        				out.println("<option value='"+stock.getUid()+"' "+(sEditFrom.equalsIgnoreCase(stock.getUid())?"selected":"")+">"+stock.getName()+"</option>");
+	                        				if(stock!=null && !stock.getUid().equalsIgnoreCase(thisServiceUid)){
+	                        					out.println("<option value='"+stock.getUid()+"' "+(sEditFrom.equalsIgnoreCase(stock.getUid())?"selected":"")+">"+stock.getName()+"</option>");
+	                        				}
 	                        			}
                         			}
                         			catch(Exception r){
@@ -236,22 +243,22 @@
 
                     <%-- DateDeliveryDue --%>
                     <tr>
-                        <td class="admin"><%=getTran("Web","DateDeliveryDue",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"Web","DateDeliveryDue",sWebLanguage)%></td>
                         <td class="admin2"><%=writeDateField("EditDateDeliveryDue","transactionForm",sSelectedDateDeliveryDue,sWebLanguage)%></td>
                     </tr>
 
                     <%-- importance (dropdown : native|high|low) --%>
                     <tr>
-                        <td class="admin"><%=getTran("Web","Importance",sWebLanguage)%> *</td>
+                        <td class="admin"><%=getTran(request,"Web","Importance",sWebLanguage)%> *</td>
                         <td class="admin2">
                             <select class="text" name="EditImportance">
                                 <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>
-                                <%=ScreenHelper.writeSelectUnsorted("productorder.importance",sSelectedImportance,sWebLanguage)%>
+                                <%=ScreenHelper.writeSelectUnsorted(request,"productorder.importance",sSelectedImportance,sWebLanguage)%>
                             </select>
                         </td>
                     </tr>
                 </table>
-                <%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%>
+                <%=getTran(request,"Web","colored_fields_are_obligate",sWebLanguage)%>
 
                 <%-- display message --%>
                 <br><span id="msgArea"><%=msg%></span>

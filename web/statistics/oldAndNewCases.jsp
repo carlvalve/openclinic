@@ -35,18 +35,18 @@
 %>
 
 <table width="100%" class="list" cellspacing="1" cellpadding="0">
-	<tr class='admin'><td colspan='2'><%=getTran("web","statistics.oldandnewcases",sWebLanguage)%></td></tr>
+	<tr class='admin'><td colspan='2'><%=getTran(request,"web","statistics.oldandnewcases",sWebLanguage)%></td></tr>
 	
 	<tr class='admin2'>
-		<td class='admin'><%=getTran("web","period",sWebLanguage)%></td>
+		<td class='admin'><%=getTran(request,"web","period",sWebLanguage)%></td>
 		<td class='admin2'><%=begin%> - <%=end%></td>
 	</tr>
 	<tr>
-		<td class='admin'><%=getTran("web","statistics.oldcases",sWebLanguage)%></td>
+		<td class='admin'><%=getTran(request,"web","statistics.oldcases",sWebLanguage)%></td>
 		<td class='admin2'><%=oldcases.size()%></td>
 	</tr>
 	<tr class='admin2'>
-		<td class='admin'><%=getTran("web","statistics.newcases",sWebLanguage)%></td>
+		<td class='admin'><%=getTran(request,"web","statistics.newcases",sWebLanguage)%></td>
 		<td class='admin2'><%=newcases.size()%></td>
 	</tr>
 </table>

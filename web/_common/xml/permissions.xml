@@ -68,6 +68,7 @@
         <permission type="Web.Occup" id="cs.pvv">cs.pvv</permission>
         <permission type="Web.Occup" id="cs.pmtct">cs.pmtct</permission>
         <permission type="Web.Occup" id="cs.pvv">cs.pvv</permission>
+        <permission type="Web.Occup" id="spectacleprescription">occup.spectacleprescription</permission>
         <permission type="web" id="emg">occup.emg</permission>
         <permission type="web" id="eeg">occup.eeg</permission>
         <permission type="web" id="ep">occup.ep</permission>
@@ -77,6 +78,7 @@
         <permission type="web" id="neuropsyphysiotherapyreport">occup.neuropsyphysiotherapyreport</permission>
         <permission type="web" id="neuropsyinpatientsummary">occup.neuropsyinpatientsummary</permission>
         <permission type="web" id="neuropsyoutpatientsummary">occup.neuropsyoutpatientsummary</permission>
+        <permission type="examination" id="1061">occup.pediatry.consultation</permission>
         <permission type="examination" id="1108">occup.outpatientfile</permission>
         <permission type="examination" id="1089">occup.cnar.consultation</permission>
         <permission type="examination" id="1095">occup.cnar.orthoprosthesis</permission>
@@ -88,6 +90,22 @@
         <permission type="examination" id="1116">occup.patientcreditrequest</permission>
         <permission type="examination" id="1117">occup.cnts.bloodgift</permission>
         <permission type="examination" id="1118">occup.cntslab</permission>
+        <permission type="examination" id="1119">occup.ccbrt.vvfrecord</permission>
+        <permission type="examination" id="1120">occup.spectacleprescription</permission>
+        <permission type="examination" id="1121">occup.hprcadmission</permission>
+        <permission type="examination" id="1122">occup.hprcadmissionfollowup</permission>
+        <permission type="examination" id="1123">occup.hprcdischarge</permission>
+        <permission type="examination" id="1124">msas.registry.consultations</permission>
+        <permission type="examination" id="1125">msas.registry.healthychildren</permission>
+        <permission type="examination" id="1126">msas.registry.postnatal</permission>
+        <permission type="examination" id="1127">msas.registry.deliveries</permission>
+        <permission type="examination" id="1128">msas.registry.prenatal</permission>
+        <permission type="examination" id="1129">msas.registry.deceased</permission>
+        <permission type="examination" id="1130">msas.registry.abortion</permission>
+        <permission type="examination" id="1131">msas.registry.sickchildren</permission>
+        <permission type="examination" id="1132">msas.registry.admission</permission>
+        <permission type="examination" id="1133">occup.ccbrt.vvfscreening</permission>
+        <permission type="examination" id="1134">occup.ccbrt.vvf6monthsurvey</permission>
     </application>
     <application type="Web" id="newexaminations">
         <permission type="web" id="globalexaminations">examinations.global</permission>
@@ -122,6 +140,7 @@
         <permission type="web" id="planning">planning</permission>
         <permission type="planning" id="user">planning.user</permission>
         <permission type="planning" id="patient">planning.patient</permission>
+        <permission type="web" id="managePlanningResourceLocks">planning.manageresourcelocks</permission>
     </application>
     <application type="Web" id="anesthesie">
         <permission type="web" id="anesthesie">medical.anesthesie</permission>
@@ -151,6 +170,8 @@
         <permission type="web" id="encounterHistory">adt.encounterHistory</permission>
         <permission type="web" id="urgencybedoverview">adt.urgencybedoverview</permission>
         <permission type="web" id="queues">adt.queues</permission>
+        <permission type="web" id="filetracking">adt.filetracking</permission>
+        <permission type="web" id="generateanonymousticket">adt.generateanonymousticket</permission>
     </application>
     <application type="Web" id="nursing">
         <permission type="web" id="nursing">nursing</permission>
@@ -167,9 +188,14 @@
         <permission type="web" id="medicationschema">medication.medicationschema</permission>
     </application>
     <application type="Web" id="financial">
+        <permission type="web" id="financial.closeantedatedinvoice">financial.closeantedatedinvoice</permission>
+        <permission type="web" id="needsapprovalrights">financial.insurerapproval</permission>
+        <permission type="web" id="noshowinvoicecredit">financial.invoicenoshow</permission>
+        <permission type="web" id="financial.entervariableprice">financial.entervariableprice</permission>
         <permission type="web" id="financial.setexchangerate">financial.setexchangerate</permission>
         <permission type="web" id="occup.transferinvoiceinsurer">occup.transferinvoiceinsurer</permission>
         <permission type="web" id="occup.signinvoices">occup.signinvoices</permission>
+        <permission type="web" id="correctinvoice">occup.correctinvoice</permission>
         <permission type="balance" id="financial">financial</permission>
         <permission type="balance" id="manageBalances">financial.balance</permission>
         <permission type="balance" id="balancehistory">financial.balancehistory</permission>
@@ -180,6 +206,7 @@
         <permission type="web" id="insurarCreditEdit">financial.insurarcreditedit</permission>
         <permission type="web" id="debeteedit">financial.debet</permission>
         <permission type="web" id="patientInvoiceEdit">financial.patientinvoice</permission>
+        <permission type="web" id="consolidatedPatientInvoiceEdit">financial.consolidatedpatientinvoice</permission>
         <permission type="web" id="insuranceInvoiceEdit">financial.insuranceinvoice</permission>
         <permission type="web" id="insurance">financial.insurance</permission>
         <permission type="web" id="updateInvoice">financial.invoiceupdate</permission>
@@ -198,6 +225,8 @@
         <permission type="web" id="financial.modifyinvoicestatus">financial.modifyinvoicestatus</permission>
         <permission type="web" id="financial.negotiate.tariff">financial.negotiate.tariff</permission>
         <permission type="web" id="financial.authorizeanyinsurance">financial.authorizeanyinsurance</permission>
+        <permission type="web" id="financial.invoicereduction">financial.invoicereduction</permission>
+        <permission type="web" id="waivehealthservice">financial.waivehealthservice</permission>
     </application>
     <application type="Web" id="executive">
         <permission type="web" id="bedoccupation">occup.bedoccupation</permission>
@@ -242,6 +271,7 @@
         <permission type="web.manage" id="managetranslations">system.managetranslations</permission>
         <permission type="web" id="printlabel">system.printlabel</permission>
         <permission type="web" id="printrecord">system.printrecord</permission>
+        <permission type="web" id="sendmedicaldossier">system.sendrecord</permission>
         <permission type="web" id="managealerts">occup.managealerts</permission>
         <permission type="web.UserProfile" id="usersPerProfile">permissions.usersPerProfile</permission>
         <permission type="web" id="insurance">system.insurance</permission>
@@ -252,8 +282,10 @@
         <permission type="mergepersons" id="mergepersons">system.mergepersons</permission>
         <permission type="web" id="permissions">system.permissions</permission>
         <permission type="web" id="exporttomaster">system.exporttomaster</permission>
+        <permission type="web" id="devices">system.devices</permission>
     </application>
     <application type="Web" id="pharmacy">
+    	<permission type="web" id="pharmacy.overridelinkedmaterialsrequirement">pharmacy.overridelinkedmaterialsrequirement</permission>
         <permission type="web" id="patient.copypharmacystocks">patient.copypharmacystocks</permission>
         <permission type="web" id="patient.modifypharmacydelivery">patient.modifypharmacydelivery</permission>
         <permission type="web" id="pharmacy">pharmacy</permission>
@@ -274,5 +306,15 @@
         <permission type="Web.manage" id="viewOrderTickets">pharmacy.viewordertickets</permission>
         <permission type="Web.manage" id="viewProductStockFiches">pharmacy.viewproductstockfiches</permission>
         <permission type="Web.manage" id="pharmacy.modifybatch">pharmacy.modifybatch</permission>
+        <permission type="web" id="drugsoutbarcode">pharmacy.fastdispensing</permission>
+        <permission type="web" id="synchronization">pharmacy.synchronization</permission>
+        <permission type="web" id="loadfile">pharmacy.loadfile</permission>
+        <permission type="web" id="pharmacy.reopenproductionorder">pharmacy.reopenproductionorder</permission>
+    </application>
+    <application type="web" id="registers">
+    	<permission type="web" id="registers">registers</permission>
+    	<permission type="web" id="msas.registry.report.consultations">msas.registry.report.consultations</permission>
+    	<permission type="web" id="msas.registry.report.healthychildren">msas.registry.report.healthychildren</permission>
+    	<permission type="web" id="msas.registry.report.postnatal">msas.registry.report.postnatal</permission>
     </application>
 </permissions>

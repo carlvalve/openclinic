@@ -43,11 +43,11 @@
                   "</td>"+
                   "<td>"+sHeader+"</td>"+
                   "<td>Permission</td>"+
-                "<td width='8%'>&nbsp;<a href='javascript:selectPermissions("+headerIdx+");'>"+getTran("web","all",sWebLanguage)+"</a></td>"+
-                "<td width='8%'>&nbsp;"+getTran("web","view",sWebLanguage)+"</td>"+
-                "<td width='8%'>&nbsp;"+getTran("web","add",sWebLanguage)+"</td>"+
-                "<td width='8%'>&nbsp;"+getTran("web","edit",sWebLanguage)+"</td>"+
-                "<td width='8%'>&nbsp;"+getTran("web","delete",sWebLanguage)+"</td>"+
+                "<td width='8%'>&nbsp;<a href='javascript:selectPermissions("+headerIdx+");'>"+getTran(null,"web","all",sWebLanguage)+"</a></td>"+
+                "<td width='8%'>&nbsp;"+getTran(null,"web","view",sWebLanguage)+"</td>"+
+                "<td width='8%'>&nbsp;"+getTran(null,"web","add",sWebLanguage)+"</td>"+
+                "<td width='8%'>&nbsp;"+getTran(null,"web","edit",sWebLanguage)+"</td>"+
+                "<td width='8%'>&nbsp;"+getTran(null,"web","delete",sWebLanguage)+"</td>"+
                 "<td align='right'><a href=\"#topp\" class=\"topbutton\">&nbsp;</a></td>"+
                "</tr>"+
                "<tbody id='Input_"+headerIdx+"' name='Input_"+headerIdx+"'>";
@@ -258,7 +258,7 @@
     <table width="100%" class="menu" cellpadding="1" cellspacing="0">
         <%-- PROFILE SELECTOR --%>
         <tr>
-            <td width="328">&nbsp;<%=getTran("Web","Select",sWebLanguage)%> <%=getTran("Web.UserProfile","UserProfile",sWebLanguage)%></td>
+            <td width="328">&nbsp;<%=getTran(request,"Web","Select",sWebLanguage)%> <%=getTran(request,"Web.UserProfile","UserProfile",sWebLanguage)%></td>
             <td align="left">
                 <select name="SearchUserprofile" class="text" onChange="profileForm.submit();">
                     <option/>
@@ -276,7 +276,7 @@
     <div id="printtable">
         <table class="list" width="100%" cellpadding="0" cellspacing="0" style="border-bottom:none;">
             <tr class="gray">
-                <td width="320"><%=getTran("Web.UserProfile","UserProfile",sWebLanguage)%></td>
+                <td width="320"><%=getTran(request,"Web.UserProfile","UserProfile",sWebLanguage)%></td>
                 <td>
                     <input type="text" class="text" name="UserProfileName" value="<%=sUserProfileName%>" size="50" maxLength="70">
                     <input type="button" class="button" value="<%=getTranNoLink("Web.Manage.CheckDb","CheckAll",sWebLanguage)%>" onClick="checkAll(true);">
@@ -312,7 +312,7 @@
                                         sApplicationId = checkString(eApplication.attributeValue("id"));
                                         sApplicationDisplaySection = checkString(eApplication.attributeValue("displaysection"));
 
-                                        title = getTran(sApplicationType,sApplicationId,sWebLanguage);
+                                        title = getTran(request,sApplicationType,sApplicationId,sWebLanguage);
                                         perms = new Hashtable();
 
                                         Iterator permissions = eApplication.elementIterator("permission");
@@ -323,7 +323,7 @@
                                             sPermissionId = checkString(ePermission.attributeValue("id"));
                                             sPermission = checkString(ePermission.getText());
 
-                                            perms.put(getTran(sPermissionType,sPermissionId,sWebLanguage),sPermission);
+                                            perms.put(getTran(request,sPermissionType,sPermissionId,sWebLanguage),sPermission);
                                         }
 
                                         bDisplaySection = !sApplicationDisplaySection.equalsIgnoreCase("false");

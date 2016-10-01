@@ -30,7 +30,7 @@
             sProductUid = product.getUid();
 
             // translate unit
-            sUnit = getTran("product.unit",product.getUnit(),sWebLanguage);
+            sUnit = getTran(null,"product.unit",product.getUnit(),sWebLanguage);
 
             // line unit price out
             sUnitPrice = deci.format(product.getUnitPrice());
@@ -59,6 +59,7 @@
             //*** display product in one row ***
             html.append("<tr class='list"+sClass+"' onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\" title='"+detailsTran+"'>")
                  .append("<td><img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.gif' class='link' title='"+deleteTran+"' onclick=\"doDeleteProduct('"+sProductUid+"');\">")
+                 .append("<td onclick=\"doShowDetails('"+sProductUid+"');\">"+product.getCode()+"</td>")
                  .append("<td onclick=\"doShowDetails('"+sProductUid+"');\">"+product.getName()+"</td>")
                  .append(MedwanQuery.getInstance().getConfigInt("enableRxNorm",0)==0?"":"<td onclick=\"doShowDetails('"+sProductUid+"');\">"+checkString(product.getRxnormcode())+"</td>")
                  .append("<td onclick=\"doShowDetails('"+sProductUid+"');\">"+sUnit+"</td>")
@@ -85,6 +86,7 @@
     // retreive form data
     String sEditProductUid       = checkString(request.getParameter("EditProductUid")),
            sEditProductName      = checkString(request.getParameter("EditProductName")),
+           sEditProductCode      = checkString(request.getParameter("EditProductCode")),
            sEditUnit             = checkString(request.getParameter("EditUnit")),
            sEditUnitPrice        = checkString(request.getParameter("EditUnitPrice")),
            sEditPackageUnits     = checkString(request.getParameter("EditPackageUnits")),
@@ -142,9 +144,9 @@
 
     String sEditSupplierName = checkString(request.getParameter("EditSupplierName"));
 
-    String msg = "", sFindProductName, sFindUnit, sFindUnitPriceMin,
+    String msg = "", sFindProductName, sFindProductCode, sFindUnit, sFindUnitPriceMin,
            sFindProductGroup, sFindUnitPriceMax, sFindPackageUnits, sFindMinOrderPackages = "",
-           sFindSupplierUid, sSelectedProductName = "", sSelectedUnit = "", sSelectedUnitPrice = "",
+           sFindSupplierUid, sSelectedProductName = "", sSelectedProductCode = "", sSelectedUnit = "", sSelectedUnitPrice = "",
            sSelectedPackageUnits = "", sSelectedMinOrderPackages = "", sSelectedSupplierUid = "",
            sSelectedTimeUnit = "", sFindSupplierName, sSelectedTimeUnitCount = "", sAverageUnitPrice="0",
            sSelectedUnitsPerTimeUnit = "", sSelectedSupplierName = "", sSelectedProductGroup = "",
@@ -154,6 +156,7 @@
 
     // get data from form
     sFindProductName  = checkString(request.getParameter("FindProductName"));
+    sFindProductCode  = checkString(request.getParameter("FindProductCode"));
     sFindUnit         = checkString(request.getParameter("FindUnit"));
     sFindUnitPriceMin = checkString(request.getParameter("FindUnitPriceMin"));
     sFindUnitPriceMax = checkString(request.getParameter("FindUnitPriceMax"));
@@ -169,6 +172,7 @@
         Debug.println("sAction               : "+sAction);
         Debug.println("sEditProductUid       : "+sEditProductUid);
         Debug.println("sEditProductName      : "+sEditProductName);
+        Debug.println("sEditProductCode      : "+sEditProductCode);
         Debug.println("sEditUnit             : "+sEditUnit);
         Debug.println("sEditUnitPrice        : "+sEditUnitPrice);
         Debug.println("sEditPackageUnits     : "+sEditPackageUnits);
@@ -209,6 +213,7 @@
         Product product = new Product();
         
         product.setUid(sEditProductUid);
+        product.setCode(sEditProductCode);
         product.setName(sEditProductName);
         product.setUnit(sEditUnit);
         product.setSupplierUid(sEditSupplierUid);
@@ -247,47 +252,26 @@
 
                 // show saved data
                 sAction = "findShowOverview"; // showDetails
-                msg = getTran("web","dataissaved",sWebLanguage);
+                msg = getTran(request,"web","dataissaved",sWebLanguage);
             }
             //***** reject new addition thru update *****
             else{
                 // show rejected data
                 sAction = "showDetailsAfterAddReject";
-                msg = "<font color='red'>"+getTran("web.manage","productexists",sWebLanguage)+"</font>";
+                msg = "<font color='red'>"+getTran(request,"web.manage","productexists",sWebLanguage)+"</font>";
             }
         }
         else{
             //***** update existing product *****
-            if(!productExists){
-                product.store(false);
+            product.store(false);
 
-                // save schema
-                productSchema.setProductuid(product.getUid());
-                productSchema.store();
+            // save schema
+            productSchema.setProductuid(product.getUid());
+            productSchema.store();
 
-                // show saved data
-                sAction = "findShowOverview"; // showDetails
-                msg = getTran("web","dataissaved",sWebLanguage);
-            }
-            //***** reject double record thru update *****
-            else{
-                if(sEditProductUid.equals(existingProductUid)){
-                    // save schema
-                    productSchema.setProductuid(product.getUid());
-                    productSchema.store();
-
-                    product.store(false);
-                    msg = getTran("web","dataissaved",sWebLanguage);
-
-                    sAction = "findShowOverview"; // showDetails
-                }
-                else{
-                    // tried to update one product with exact the same data as an other product
-                    // show rejected data
-                    sAction = "showDetailsAfterUpdateReject";
-                    msg = "<font color='red'>"+getTran("web.manage","productexists",sWebLanguage)+"</font>";
-                }
-            }
+            // show saved data
+            sAction = "findShowOverview"; // showDetails
+            msg = getTran(request,"web","dataissaved",sWebLanguage);
         }
 
         sEditProductUid = product.getUid();
@@ -315,7 +299,7 @@
         ProductSchema productSchemaToDelete = ProductSchema.getSingleProductSchema(sEditProductUid);
         productSchemaToDelete.delete();
 
-        msg = getTran("web","dataisdeleted",sWebLanguage);
+        msg = getTran(request,"web","dataisdeleted",sWebLanguage);
         sAction = "findShowOverview"; // display overview even if only one record remains
     }
 
@@ -337,13 +321,14 @@
             sFindProductGroup = "";
         }
 
-        Vector products = Product.find(sFindProductName,sFindUnit,sFindUnitPriceMin,sFindUnitPriceMax,sFindPackageUnits,
+        Vector products = Product.findWithCode(sFindProductCode,sFindProductName,sFindUnit,sFindUnitPriceMin,sFindUnitPriceMax,sFindPackageUnits,
                                        sFindMinOrderPackages,sFindSupplierUid,sFindProductGroup,"OC_PRODUCT_NAME","ASC");
         productsHtml = objectsToHtml(products,sWebLanguage);
         foundProductCount = products.size();
 
         // do not get data from DB, but show data that were allready in the search-form
         sSelectedProductName = sFindProductName;
+        sSelectedProductCode = sFindProductCode;
         sSelectedUnit = sFindUnit;
         sSelectedUnitPrice = "";
         sSelectedPackageUnits = sFindPackageUnits;
@@ -377,6 +362,7 @@
 
             if(product!=null){
                 sSelectedProductName = checkString(product.getName());
+                sSelectedProductCode = checkString(product.getCode());
                 sSelectedUnit = checkString(product.getUnit());
                 sSelectedUnitPrice = (product.getUnitPrice() < 0 ? "" : product.getUnitPrice()+"");
                 sSelectedPackageUnits = (product.getPackageUnits() <= 0 ? "" : product.getPackageUnits()+"");
@@ -406,6 +392,7 @@
         else if(sAction.equals("showDetailsAfterAddReject")){
             // do not get data from DB, but show data that were allready on form
             sSelectedProductName = sEditProductName;
+            sSelectedProductCode = sEditProductCode;
             sSelectedUnit = sEditUnit;
             sSelectedUnitPrice = sEditUnitPrice;
             sSelectedPackageUnits = sEditPackageUnits;
@@ -430,6 +417,7 @@
         else{
             // do not get data from DB, but show data that were allready in the search-form
             sSelectedProductName = sFindProductName;
+            sSelectedProductCode = sFindProductCode;
             sSelectedUnit = sFindUnit;
             sSelectedUnitPrice = "";
             sSelectedPackageUnits = sFindPackageUnits;
@@ -476,7 +464,14 @@
                 <table width="100%" class="list" cellspacing="1" onClick="transactionForm.onkeydown='if(enterEvent(event,13)){doSearchProduct();}';" onKeyDown="if(enterEvent(event,13)){doSearchProduct();}">
                     <%-- product name --%>
                     <tr>
-                        <td class="admin2" width="<%=sTDAdminWidth%>" nowrap><%=getTran("Web","productName",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2" width="<%=sTDAdminWidth%>" nowrap><%=getTran(request,"Web","productCode",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2">
+                            <input class="text" type="text" name="FindProductCode" size="<%=sTextWidth%>" maxLength="255" value="<%=sFindProductCode%>">
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td class="admin2" width="<%=sTDAdminWidth%>" nowrap><%=getTran(request,"Web","productName",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <input class="text" type="text" name="FindProductName" size="<%=sTextWidth%>" maxLength="255" value="<%=sFindProductName%>">
                         </td>
@@ -484,28 +479,28 @@
                     
                     <%-- unit --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","unit",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","unit",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <select class="text" name="FindUnit"  >
                                 <option value=""></option>
-                                <%=ScreenHelper.writeSelect("product.unit",sFindUnit,sWebLanguage)%>
+                                <%=ScreenHelper.writeSelect(request,"product.unit",sFindUnit,sWebLanguage)%>
                             </select>
                         </td>
                     </tr>
                     
                     <%-- UnitPrice --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","UnitPrice",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","UnitPrice",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
-                            <%=getTran("web","from",sWebLanguage)%>&nbsp;<input class="text" type="text" name="FindUnitPriceMin" size="15" maxLength="15" value="<%=sFindUnitPriceMin%>" onKeyUp="isNumber(this);">
-                            <%=getTran("web","till",sWebLanguage)%>&nbsp;<input class="text" type="text" name="FindUnitPriceMax" size="15" maxLength="15" value="<%=sFindUnitPriceMax%>" onKeyUp="isNumber(this);">
+                            <%=getTran(request,"web","from",sWebLanguage)%>&nbsp;<input class="text" type="text" name="FindUnitPriceMin" size="15" maxLength="15" value="<%=sFindUnitPriceMin%>" onKeyUp="isNumber(this);">
+                            <%=getTran(request,"web","till",sWebLanguage)%>&nbsp;<input class="text" type="text" name="FindUnitPriceMax" size="15" maxLength="15" value="<%=sFindUnitPriceMax%>" onKeyUp="isNumber(this);">
                             <%=MedwanQuery.getInstance().getConfigParam("currency","€")%>
                         </td>
                     </tr>
                     
                     <%-- PackageUnits --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","PackageUnits",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","PackageUnits",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <input class="text" type="text" name="FindPackageUnits" size="5" maxLength="5" value="<%=sFindPackageUnits%>" onKeyUp="isNumber(this);">
                         </td>
@@ -513,7 +508,7 @@
                     
                     <%-- MinOrderPackages (long translation, so force widths) --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","MinOrderPackages",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","MinOrderPackages",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2" width="100%">
                             <input class="text" type="text" name="FindMinOrderPackages" size="5" maxLength="5" value="<%=sFindMinOrderPackages%>" onKeyUp="isNumber(this);">
                         </td>
@@ -521,7 +516,7 @@
 
                     <%-- supplier --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","supplier",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","supplier",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <input type="hidden" name="FindSupplierUid" value="<%=sFindSupplierUid%>">
                             <input class="text" type="text" name="FindSupplierName" readonly size="<%=sTextWidth%>" value="<%=sFindSupplierName%>">
@@ -533,11 +528,11 @@
                     
                     <%-- productGroup --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","productgroup",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","productgroup",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <select class="text" name="FindProductGroup">
                                 <option value=""></option>
-                                <%=ScreenHelper.writeSelect("product.productgroup",sSelectedProductGroup,sWebLanguage)%>
+                                <%=ScreenHelper.writeSelect(request,"product.productgroup",sSelectedProductGroup,sWebLanguage)%>
                             </select>
                         </td>
                     </tr>
@@ -562,6 +557,7 @@
             //*** search fields as hidden fields to be able to revert to the overview ***
             %>
                 <input type="hidden" name="FindProductName" value="<%=sFindProductName%>">
+                <input type="hidden" name="FindProductCode" value="<%=sFindProductCode%>">
                 <input type="hidden" name="FindUnit" value="<%=sFindUnit%>">
                 <input type="hidden" name="FindUnitPriceMin" value="<%=sFindUnitPriceMin%>">
                 <input type="hidden" name="FindUnitPriceMax" value="<%=sFindUnitPriceMax%>">
@@ -581,23 +577,24 @@
                         <%-- header --%>
                         <tr class="admin">
                             <td width="20">&nbsp;</td>
-                            <td width="250"><%=getTran("Web","productName",sWebLanguage)%></td>
+                            <td><%=getTran(request,"Web","productCode",sWebLanguage)%></td>
+                            <td><%=getTran(request,"Web","productName",sWebLanguage)%></td>
                             <%
                             	if(MedwanQuery.getInstance().getConfigInt("enableRxNorm",0)==1){
                             %>
-	                            <td width="250"><%=getTran("Web","rxnormcode",sWebLanguage)%></td>
+	                            <td><%=getTran(request,"Web","rxnormcode",sWebLanguage)%></td>
                             <%
                             	}
                             %>
-                            <td width="120"><%=getTran("Web","Unit",sWebLanguage)%></td>
-                            <td width="80" align="right"><%=getTran("Web","unitprice",sWebLanguage)%></td>
-                            <td width="*"><%=getTran("Web","supplier",sWebLanguage)%></td>
+                            <td><%=getTran(request,"Web","Unit",sWebLanguage)%></td>
+                            <td align="right"><%=getTran(request,"Web","unitprice",sWebLanguage)%></td>
+                            <td><%=getTran(request,"Web","supplier",sWebLanguage)%></td>
                             <%
                             	if(MedwanQuery.getInstance().getConfigInt("showProductGroup",1)==1){
-                                    %><td><%=getTran("Web","productGroup",sWebLanguage)%></td><%
+                                    %><td><%=getTran(request,"Web","productGroup",sWebLanguage)%></td><%
                             	}
 	                            if(MedwanQuery.getInstance().getConfigInt("showProductCategory",1)==1){
-                                    %><td><%=getTran("Web","productSubGroup",sWebLanguage)%></td><%
+                                    %><td><%=getTran(request,"Web","productSubGroup",sWebLanguage)%></td><%
 	                            }
                             %>
                         </tr>
@@ -606,7 +603,7 @@
                     
                     <%-- number of records found --%>
                     <span style="width:49%;text-align:left;">
-                        <%=foundProductCount%> <%=getTran("web","recordsfound",sWebLanguage)%>
+                        <%=foundProductCount%> <%=getTran(request,"web","recordsfound",sWebLanguage)%>
                     </span>
                 <%
                 
@@ -622,7 +619,7 @@
             }
             else{
                 // no records found
-                %><%=getTran("web","norecordsfound",sWebLanguage)%><%
+                %><%=getTran(request,"web","norecordsfound",sWebLanguage)%><%
             }
         }
 
@@ -634,15 +631,23 @@
                 <table class="list" width="100%" cellspacing="1">
                     <%-- UnitPrice --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","code",sWebLanguage)%> *</td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","id",sWebLanguage)%> *</td>
                         <td class="admin2">
                             <input disabled class="greytext" type="text" name="Code" size="15" maxLength="15" value="<%=sEditProductUid%>"/>
                         </td>
                     </tr>
                     
+                    <%-- product code --%>
+                    <tr>
+                        <td class="admin" width="<%=sTDAdminWidth%>" nowrap><%=getTran(request,"Web","productCode",sWebLanguage)%> *</td>
+                        <td class="admin2">
+                            <input class="text" type="text" name="EditProductCode" id="EditProductCode" size="<%=sTextWidth%>" maxLength="255" value="<%=sSelectedProductCode%>">
+                        </td>
+                    </tr>
+                    
                     <%-- product name --%>
                     <tr>
-                        <td class="admin" width="<%=sTDAdminWidth%>" nowrap><%=getTran("Web","productName",sWebLanguage)%> *</td>
+                        <td class="admin" width="<%=sTDAdminWidth%>" nowrap><%=getTran(request,"Web","productName",sWebLanguage)%> *</td>
                         <td class="admin2">
                             <input class="text" type="text" name="EditProductName" id="EditProductName" size="<%=sTextWidth%>" maxLength="255" value="<%=sSelectedProductName%>">
                         </td>
@@ -650,18 +655,18 @@
                     
                     <%-- unit --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","unit",sWebLanguage)%> *</td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","unit",sWebLanguage)%> *</td>
                         <td class="admin2">
                             <select class="text" name="EditUnit" onChange="setEditUnitsPerTimeUnitLabel();">
                                 <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>
-                                <%=ScreenHelper.writeSelect("product.unit",sSelectedUnit,sWebLanguage)%>
+                                <%=ScreenHelper.writeSelect(request,"product.unit",sSelectedUnit,sWebLanguage)%>
                             </select>
                         </td>
                     </tr>
                     
                     <%-- UnitPrice --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","UnitPrice",sWebLanguage)%></td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","UnitPrice",sWebLanguage)%></td>
                         <td class="admin2">
                             <input class="text" type="text" name="EditUnitPrice" size="15" maxLength="15" value="<%=sSelectedUnitPrice%>" onKeyUp="isNumber(this);">&nbsp;<%=MedwanQuery.getInstance().getConfigParam("currency","€")%>
                         </td>
@@ -669,7 +674,7 @@
                     
                     <%-- AverageUnitPrice --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","lastyearsaverageprice",sWebLanguage)%></td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","lastyearsaverageprice",sWebLanguage)%></td>
                         <td class="admin2">
                             <input disabled class="greytext" type="text" name="AverageUnitPrice" size="15" maxLength="15" value="<%=ScreenHelper.getPriceFormat(Double.parseDouble(sAverageUnitPrice))%>" onKeyUp="isNumber(this);">&nbsp;<%=MedwanQuery.getInstance().getConfigParam("currency","€")%>
                         </td>
@@ -677,16 +682,16 @@
                     
                     <%-- Last Year Average Price --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","reinitialize.lastyearsaverageprice",sWebLanguage)%></td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","reinitialize.lastyearsaverageprice",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="text" name="pump.price" size="15" maxLength="15" value="" onKeyUp="isNumber(this);">&nbsp;<%=MedwanQuery.getInstance().getConfigParam("currency","€")%>
-                            &nbsp, <%=getTran("Web","quantity",sWebLanguage)%>: <input type="text" name="pump.quantity" size="15" maxLength="15" value="" onKeyUp="isNumber(this);">
+                            &nbsp, <%=getTran(request,"Web","quantity",sWebLanguage)%>: <input type="text" name="pump.quantity" size="15" maxLength="15" value="" onKeyUp="isNumber(this);">
                         </td>
                     </tr>
                     
                     <%-- PackageUnits --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","PackageUnits",sWebLanguage)%> *</td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","PackageUnits",sWebLanguage)%> *</td>
                         <td class="admin2">
                             <input class="text" type="text" name="EditPackageUnits" size="5" maxLength="5" value="<%=sSelectedPackageUnits%>" onKeyUp="isNumber(this);">
                         </td>
@@ -694,7 +699,7 @@
                     
                     <%-- MinOrderPackages (long translation, so force widths) --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","MinOrderPackages",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","MinOrderPackages",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2" width="100%">
                             <input class="text" type="text" name="EditMinOrderPackages" size="5" maxLength="5" value="<%=sSelectedMinOrderPackages%>" onKeyUp="isNumber(this);">
                         </td>
@@ -702,7 +707,7 @@
                     
                     <%-- supplier --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","supplier",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","supplier",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <input type="hidden" name="EditSupplierUid" value="<%=sSelectedSupplierUid%>">
                             <input class="text" type="text" name="EditSupplierName" readonly size="<%=sTextWidth%>" value="<%=sSelectedSupplierName%>">
@@ -717,11 +722,11 @@
                     %>
                     <%-- productGroup --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","productGroup",sWebLanguage)%></td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","productGroup",sWebLanguage)%></td>
                         <td class="admin2">
                             <select class="text" name="EditProductGroup" id="EditProductGroup">
                                 <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>
-                                <%=ScreenHelper.writeSelect("product.productgroup",sSelectedProductGroup,sWebLanguage)%>
+                                <%=ScreenHelper.writeSelect(request,"product.productgroup",sSelectedProductGroup,sWebLanguage)%>
                             </select>
                         </td>
                     </tr>
@@ -737,7 +742,7 @@
 	                    }
                     %>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","productSubGroup",sWebLanguage)%></td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","productSubGroup",sWebLanguage)%></td>
                         <td class="admin2">
 		                    <input type="text" readonly class="text" name="EditProductSubGroupText" value="<%=sEditProductSubGroup+" "+sEditProductSubGroupDescr%>" size="120">
 		                 
@@ -753,25 +758,25 @@
                     
                     <%-- prescription-rule --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","prescriptionrule",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","prescriptionrule",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <%-- Units Per Time Unit --%>
                             <input type="text" class="text" style="vertical-align:-1px;" name="EditUnitsPerTimeUnit" value="<%=(sSelectedUnitsPerTimeUnit.length()>0?(doubleFormat.format(Double.parseDouble(sSelectedUnitsPerTimeUnit))).replaceAll(",","."):"")%>" size="5" maxLength="5" onKeyUp="isNumber(this);">
                             <span id="EditUnitsPerTimeUnitLabel"></span>
                             <%-- Time Unit Count --%>
-                            &nbsp;<%=getTran("web","per",sWebLanguage)%>
+                            &nbsp;<%=getTran(request,"web","per",sWebLanguage)%>
                             <input type="text" class="text" style="vertical-align:-1px;" name="EditTimeUnitCount" value="<%=sSelectedTimeUnitCount%>" size="5" maxLength="5" onKeyUp="isInteger(this);"/>
                             <%-- Time Unit (dropdown : Hour|Day|Week|Month) --%>
                             <select class="text" name="EditTimeUnit" onChange="setEditUnitsPerTimeUnitLabel();setEditTimeUnitCount();" style="vertical-align:-3px;">
                                 <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>
-                                <%=ScreenHelper.writeSelectUnsorted("prescription.timeunit",sSelectedTimeUnit,sWebLanguage)%>
+                                <%=ScreenHelper.writeSelectUnsorted(request,"prescription.timeunit",sSelectedTimeUnit,sWebLanguage)%>
                             </select>
                             <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" style="vertical-align:-4px;" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="clearDescriptionRule();">
                         </td>
                     </tr>
                     <%-- Default units --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","defaultunits",sWebLanguage)%></td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","defaultunits",sWebLanguage)%></td>
                         <td class="admin2">
                             <input class="text" type="text" name="EditTotalUnits" size="15" maxLength="15" value="<%=(sSelectedTotalUnits.length()>0?(doubleFormat.format(Double.parseDouble(sSelectedTotalUnits))).replaceAll(",","."):"")%>" onKeyUp="isNumber(this);">
                         </td>
@@ -780,16 +785,16 @@
                     
                     <%-- schema --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","schema",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","schema",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <table>
                                 <tr>
-                                    <td><input class="text" type="text" name="time1" value="<%=productSchema.getTimeQuantity(0).getKey()%>" size="2"><%=getTran("web","abbreviation.hour",sWebLanguage)%></td>
-                                    <td><input class="text" type="text" name="time2" value="<%=productSchema.getTimeQuantity(1).getKey()%>" size="2"><%=getTran("web","abbreviation.hour",sWebLanguage)%></td>
-                                    <td><input class="text" type="text" name="time3" value="<%=productSchema.getTimeQuantity(2).getKey()%>" size="2"><%=getTran("web","abbreviation.hour",sWebLanguage)%></td>
-                                    <td><input class="text" type="text" name="time4" value="<%=productSchema.getTimeQuantity(3).getKey()%>" size="2"><%=getTran("web","abbreviation.hour",sWebLanguage)%></td>
-                                    <td><input class="text" type="text" name="time5" value="<%=productSchema.getTimeQuantity(4).getKey()%>" size="2"><%=getTran("web","abbreviation.hour",sWebLanguage)%></td>
-                                    <td><input class="text" type="text" name="time6" value="<%=productSchema.getTimeQuantity(5).getKey()%>" size="2"><%=getTran("web","abbreviation.hour",sWebLanguage)%></td>
+                                    <td><input class="text" type="text" name="time1" value="<%=productSchema.getTimeQuantity(0).getKey()%>" size="2"><%=getTran(request,"web","abbreviation.hour",sWebLanguage)%></td>
+                                    <td><input class="text" type="text" name="time2" value="<%=productSchema.getTimeQuantity(1).getKey()%>" size="2"><%=getTran(request,"web","abbreviation.hour",sWebLanguage)%></td>
+                                    <td><input class="text" type="text" name="time3" value="<%=productSchema.getTimeQuantity(2).getKey()%>" size="2"><%=getTran(request,"web","abbreviation.hour",sWebLanguage)%></td>
+                                    <td><input class="text" type="text" name="time4" value="<%=productSchema.getTimeQuantity(3).getKey()%>" size="2"><%=getTran(request,"web","abbreviation.hour",sWebLanguage)%></td>
+                                    <td><input class="text" type="text" name="time5" value="<%=productSchema.getTimeQuantity(4).getKey()%>" size="2"><%=getTran(request,"web","abbreviation.hour",sWebLanguage)%></td>
+                                    <td><input class="text" type="text" name="time6" value="<%=productSchema.getTimeQuantity(5).getKey()%>" size="2"><%=getTran(request,"web","abbreviation.hour",sWebLanguage)%></td>
                                 </tr>
                                 <tr>
                                     <td><input class="text" type="text" name="quantity1" value="<%=productSchema.getTimeQuantity(0).getValue()%>" size="2">#</td>
@@ -805,7 +810,7 @@
                     
                     <%-- Barcode --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","barcode",sWebLanguage)%></td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","barcode",sWebLanguage)%></td>
                         <td class="admin2">
                             <input class="text" type="text" name="EditBarcode" size="50" maxLength="50" value="<%=sSelectedBarcode%>" >
                         </td>
@@ -814,11 +819,11 @@
                     <%if(MedwanQuery.getInstance().getConfigString("edition").equalsIgnoreCase("bloodbank")){ %>
                     <%-- Bloodgroup --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","bloodgroup",sWebLanguage)%></td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","bloodgroup",sWebLanguage)%></td>
                         <td class="admin2">
                             <select class="text" name="EditAtccode" id="EditAtccode">
                             	<option/>
-                            	<%=ScreenHelper.writeSelect("abobloodgroup", sSelectedAtccode, sWebLanguage) %>
+                            	<%=ScreenHelper.writeSelect(request,"abobloodgroup", sSelectedAtccode, sWebLanguage) %>
                             </select>
                         </td>
                     </tr>
@@ -827,7 +832,7 @@
                     %>
                     <%-- ATCcode --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","atccode",sWebLanguage)%></td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","atccode",sWebLanguage)%></td>
                         <td class="admin2">
                             <input class="text" type="text" name="EditAtccode" id="EditAtccode" size="50" maxLength="50" value="<%=sSelectedAtccode%>" >
                             <img src='<c:url value="_img/icons/icon_search.gif"/>' onclick='findAtcCodes()'/>
@@ -839,7 +844,7 @@
                     	if(MedwanQuery.getInstance().getConfigInt("enableRxNorm",0)==1){
                     %>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","rxnormcode",sWebLanguage)%></td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","rxnormcode",sWebLanguage)%></td>
                         <td class="admin2">
                             <input class="text" type="text" name="EditRxnormcode" id="EditRxnormcode" size="50" maxLength="50" value="<%=sSelectedRxnormcode%>" >
                             <img src='<c:url value="_img/icons/icon_search.gif"/>' title='<%=getTranNoLink("web","find_rxnorm_codes",sWebLanguage) %>' onclick='findRxNormCodes()'/>
@@ -857,7 +862,7 @@
                     %>
                     <%-- PrestationCode --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","prestation",sWebLanguage)%></td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","prestation",sWebLanguage)%></td>
                         <td class="admin2">
                             <input class="text" type="text" name="EditPrestationCode" id="EditPrestationCode" size="10" maxLength="50" value="<%=sSelectedPrestationCode%>" ><img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchPrestation();"> x <input class="text" type="text" name="EditPrestationQuantity" size="3" maxLength="10" value="<%=sSelectedPrestationQuantity%>" >
                             <%
@@ -873,19 +878,19 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","automatic.invoicing",sWebLanguage)%></td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","automatic.invoicing",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="checkbox" class="hand" name="EditAutomaticInvoicing" value="1" <%=sSelectedAutomaticInvoicing.equalsIgnoreCase("1")?"checked":"" %>>
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","margin",sWebLanguage)%></td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","margin",sWebLanguage)%></td>
                         <td class="admin2">
-                            <input class="text" type="text" name="EditMargin" size="15" maxLength="15" value="<%=sSelectedMargin%>" onKeyUp="isNumber(this);">% <%=getTran("web","zero.is.nocalculation",sWebLanguage)%>
+                            <input class="text" type="text" name="EditMargin" size="15" maxLength="15" value="<%=sSelectedMargin%>" onKeyUp="isNumber(this);">% <%=getTran(request,"web","zero.is.nocalculation",sWebLanguage)%>
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","apply.lower.prices",sWebLanguage)%></td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","apply.lower.prices",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="checkbox" class="hand" name="EditApplyLowerPrices" value="1" <%=sSelectedApplyLowerPrices.equalsIgnoreCase("1")?"checked":"" %>>
                         </td>
@@ -933,7 +938,7 @@
                           Vector unitTypes = ScreenHelper.getProductUnitTypes(sWebLanguage);
                           for(int i=0; i<unitTypes.size(); i++){
                               %>
-                                  var unitTran<%=(i+1)%> = "<%=getTran("product.units",(String)unitTypes.get(i),sWebLanguage).toLowerCase()%>"
+                                  var unitTran<%=(i+1)%> = "<%=getTran(null,"product.units",(String)unitTypes.get(i),sWebLanguage).toLowerCase()%>"
                                   if(transactionForm.EditUnit.value=="<%=unitTypes.get(i)%>") unitTran = unitTran<%=(i+1)%>;
                               <%
                           }
@@ -961,7 +966,7 @@
                 </script>
 
                 <%-- indication of obligated fields --%>
-                <%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%>
+                <%=getTran(request,"Web","colored_fields_are_obligate",sWebLanguage)%>
             <%
         }
     %>
@@ -1127,6 +1132,7 @@
 
   <%-- CLEAR SEARCH FIELDS --%>
   function clearSearchFields(){
+    transactionForm.FindProductCode.value = "";
     transactionForm.FindProductName.value = "";
     transactionForm.FindUnit.value = "";
     transactionForm.FindUnitPriceMin.value = "";
@@ -1174,6 +1180,7 @@
   <%-- CLEAR EDIT FIELDS --%>
   function clearEditFields(){
     transactionForm.EditProductName.value = "";
+    transactionForm.EditProductCode.value = "";
     transactionForm.EditUnit.value = "";
     transactionForm.EditUnitPrice.value = "";
     transactionForm.EditPackageUnits.value = "";
@@ -1192,6 +1199,7 @@
   <%-- DO SEARCH PRODUCT --%>
   function doSearchProduct(){
     if(transactionForm.FindProductName.value.length>0 ||
+       transactionForm.FindProductCode.value.length>0 ||
        transactionForm.FindUnit.value.length>0 ||
        transactionForm.FindUnitPriceMin.value.length>0 ||
        transactionForm.FindUnitPriceMax.value.length>0 ||

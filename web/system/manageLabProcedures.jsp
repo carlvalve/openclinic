@@ -61,12 +61,12 @@
     	procedure.setReagents(procedurereagents);
     	procedure.store();
     	sEditLabProcedureUid=procedure.getUid();
-        msg = getTran("web","dataIsSaved",sWebLanguage);
+        msg = getTran(request,"web","dataIsSaved",sWebLanguage);
         sAction = "search";
     }
     if(sAction.equals("delete")){
         LabProcedure.delete(sEditLabProcedureUid);
-        msg = getTran("web","dataIsDeleted",sWebLanguage);
+        msg = getTran(request,"web","dataIsDeleted",sWebLanguage);
     }
     
 %>
@@ -80,7 +80,7 @@
     <%-- SEARCH FIELDS --%>
     <table width="100%" class="menu" cellspacing="0">
         <tr>
-            <td width="<%=sTDAdminWidth%>"><%=getTran("web","name",sWebLanguage)%></td>
+            <td width="<%=sTDAdminWidth%>"><%=getTran(request,"web","name",sWebLanguage)%></td>
             <td>
                 <input type="text" class="text" name="FindLabProcedureName" size="20" maxlength="50" value="<%=sFindLabProcedureName%>">
             </td>
@@ -117,31 +117,31 @@
             <td class="admin2"><label id='idlabel'><%=checkString(procedure.getUid())%></label></td>
         </tr>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","name",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","name",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" name="EditLabProcedureName" id="EditLabProcedureName" size="80" maxlength="255" value="<%=checkString(procedure.getName())%>">
             </td>
         </tr>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","minbatchsize",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","minbatchsize",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" name="EditMinBatchSize" id="EditMinBatchSize" size="10" maxlength="10" value="<%=procedure.getMinBatchSize()%>">
             </td>
         </tr>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","maxbatchsize",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","maxbatchsize",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" name="EditMaxBatchSize" id="EditMaxBatchSize" size="10" maxlength="10" value="<%=procedure.getMaxBatchSize()%>">
             </td>
         </tr>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","maxdelayindays",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","maxdelayindays",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" name="EditMaxDelayInDays" id="EditMaxDelayInDays" size="10" maxlength="10" value="<%=procedure.getMaxDelayInDays()%>">
             </td>
         </tr>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","reagents",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","reagents",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
             	<%
             		String sReagentsString="";
@@ -154,21 +154,21 @@
             		}
             	%>
             	<input type="hidden" name="EditReagents" id="EditReagents" value="<%=sReagentsString%>"/>
-		        <%=getTran("web","reagent",sWebLanguage)%>: <input class="greytext" type="text" disabled name="EditReagentUid" id="EditReagentUid" size="10" readonly value="" >
+		        <%=getTran(request,"web","reagent",sWebLanguage)%>: <input class="greytext" type="text" disabled name="EditReagentUid" id="EditReagentUid" size="10" readonly value="" >
 		        <input class="greytext" readonly disabled type="text" name="EditReagentName" id="EditReagentName" value="" size="50"/>
 		        <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchReagent('EditReagentUid','EditReagentName','EditReagentUnit');">
 		        <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt='Vider' onclick="document.getElementById('EditReagentUid').value='';document.getElementById('EditReagentName').value='';"> 
-				<%=getTran("web","quantity",sWebLanguage)%>: <input type="text" class="text" size="10" name="EditQuantity" id="EditQuantity"/>   
+				<%=getTran(request,"web","quantity",sWebLanguage)%>: <input type="text" class="text" size="10" name="EditQuantity" id="EditQuantity"/>   
             	<input type="text" class="greytext" size="10" readonly disabled name="EditReagentUnit" id="EditReagentUnit" value=""/>
             	<select class="text" name="EditConsumptionType" id="EditConsumptionType">
-            		<%=ScreenHelper.writeSelect("labprocedure.consumptiontype", "", sWebLanguage)%>
+            		<%=ScreenHelper.writeSelect(request,"labprocedure.consumptiontype", "", sWebLanguage)%>
             	</select>
 				<input type="button" class="button" name="AddReagent" value="<%=getTranNoLink("web","add",sWebLanguage)%>" onclick="addReagent();"/>         	
             	<table width="100%"  cellspacing="1">
             		<tr class='admin'>
             			<td width="10%">ID</td>
-            			<td width="60%"><%=getTran("web","reagent",sWebLanguage)%></td>
-            			<td width="30%"><%=getTran("web","quantity",sWebLanguage)%></td>
+            			<td width="60%"><%=getTran(request,"web","reagent",sWebLanguage)%></td>
+            			<td width="30%"><%=getTran(request,"web","quantity",sWebLanguage)%></td>
             		</tr>
             	</table>
             	<table width="100%" class="sortable" name="EditReagentsTable" id="EditReagentsTable" cellspacing="1" headerRowCount="2"> 

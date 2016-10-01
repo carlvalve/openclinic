@@ -6,9 +6,9 @@
 %>
 <form name='reportForm' method='post'>
 	<table width='100%'>
-		<tr class='admin'><td colspan='2'><%=getTran("web.manage","managereports",sWebLanguage) %></td></tr>
+		<tr class='admin'><td colspan='2'><%=getTran(request,"web.manage","managereports",sWebLanguage) %></td></tr>
 		<tr class='admin'>
-			<td width='10%' nowrap><%=getTran("web","report",sWebLanguage) %></td>
+			<td width='10%' nowrap><%=getTran(request,"web","report",sWebLanguage) %></td>
 			<td>
 				<select class='text' name='selectedreport' id='selectedreport' onchange='reportForm.submit();'>
 					<option value=''></option>
@@ -27,7 +27,7 @@
 				<input type='radio' name='reportformat' value='xls'/>XLS
 				<input type='radio' name='reportformat' value='html'/>HTML
 				<input type='radio' name='reportformat' value='rtf'/>RTF&nbsp;&nbsp;&nbsp;
-				<input type='button' name='executebutton' value='<%=getTran("web","execute",sWebLanguage) %>' onclick='executeReport();'/>
+				<input type='button' name='executebutton' value='<%=getTran(null,"web","execute",sWebLanguage) %>' onclick='executeReport();'/>
 			</td>
 				
 		</tr>
@@ -51,7 +51,7 @@
 								out.println("<td class='admin2'>"+ScreenHelper.writeDateField("fieldname_"+field.elementText("name"), "reportForm", "", true, true, sWebLanguage, sCONTEXTPATH)+"</td>");
 							}
 							else if(field.elementText("type").equalsIgnoreCase("select")){
-								out.println("<td class='admin2'><select class='text' name='fieldname_"+field.elementText("name")+"'>"+ScreenHelper.writeSelect(field.elementText("modifier"), "", sWebLanguage)+"</select></td>");
+								out.println("<td class='admin2'><select class='text' name='fieldname_"+field.elementText("name")+"'>"+ScreenHelper.writeSelect(request,field.elementText("modifier"), "", sWebLanguage)+"</select></td>");
 							}
 							else if(field.elementText("type").equalsIgnoreCase("service")){
 			                    out.println("<td class='admin2'><input type='hidden' name='fieldname_"+field.elementText("name")+"'>");

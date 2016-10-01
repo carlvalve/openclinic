@@ -1,114 +1,41 @@
 <%@ page import="be.openclinic.adt.Queue" %>
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
-<%
-	if(request.getParameter("showWaitingQueuePatientName")!=null){
-		session.setAttribute("showWaitingQueuePatientName", "1");
-	}
-	else if (request.getParameter("wasloaded")!=null){
-		session.setAttribute("showWaitingQueuePatientName", "0");
-	}
-%>
-<head>
-    <%=sCSSNORMAL%>
-    <%=sJSCHAR%>
-    <%=sJSDATE%>
-    <%=sJSPOPUPSEARCH%>
-    <%=sJSDROPDOWNMENU%>
-    <%=sJSPROTOTYPE%>
-    <%=sJSNUMBER%>
-    <%=sJSTOGGLE%>
-</head>
-<form name="transactionForm" method="post">
-	<input type='hidden' name='wasloaded' value='1'/>
-	<table width='100%'>
-		<tr class='admin'>
-			<td colspan='2'>
-				<select class='text' name='queue' id='queue' onchange='loadtickets();'>
-					<%=ScreenHelper.writeSelect("queue", checkString((String)session.getAttribute("activequeue")), sWebLanguage) %>
-				</select>
-				<input type='checkbox' name='showWaitingQueuePatientName' value='1' onchange="transactionForm.submit();" <%="1".equals(((String)session.getAttribute("showWaitingQueuePatientName")))?"checked":"" %>/>
-				<%= getTran("web","showpatientnames",sWebLanguage) %>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<div id='tickets'></div>
-			<td>
-		</tr>
-	</table>
+<form name='transactionForm' method='post'>
+	<%
+	if(checkString(request.getParameter("numberOfFrames")).equalsIgnoreCase("4")){
+	%>
+	<frameset name="queues" rows="5%,95%">
+		<frame name='menu' src='<c:url value="/util/waitingQueueMenu.jsp?verticalFrames=2"/>'/>
+		<frameset cols ="50%,50%" rows="50%,50%">
+			<frame name='topleft' src='<c:url value="/util/manageQueue.jsp?verticalFrames=2"/>'/>
+			<frame name='topright' src='<c:url value="/util/manageQueue.jsp?verticalFrames=2"/>'/>
+			<frame name='bottomleft' src='<c:url value="/util/manageQueue.jsp?verticalFrames=2"/>'/>
+			<frame name='bottomright' src='<c:url value="/util/manageQueue.jsp?verticalFrames=2"/>'/>
+		</frameset>
+	</frameset>
+	<%
+		}
+		else if(checkString(request.getParameter("numberOfFrames")).equalsIgnoreCase("2")){
+	%>
+	<frameset rows="5%,95%">
+		<frame name='menu' src='<c:url value="/util/waitingQueueMenu.jsp"/>'/>
+		<frameset cols ="50%,50%">
+			<frame name='topleft' src='<c:url value="/util/manageQueue.jsp"/>'/>
+			<frame name='topright' src='<c:url value="/util/manageQueue.jsp"/>'/>
+		</frameset>
+	</frameset>
+	<%
+		}
+		else{
+	%>
+	<frameset name="queues" rows="5%,95%">
+		<frame name='menu' src='<c:url value="/util/waitingQueueMenu.jsp"/>'/>
+		<frameset cols ="100%">
+			<frame name='topleft' src='<c:url value="/util/manageQueue.jsp"/>'/>
+		</frameset>
+	</frameset>
+	<%
+		}
+	%>
 </form>
-<script>
-	loadtickets();
-	window.setInterval("loadtickets();",5000);
-	activeresponse="";
-	
-	function loadtickets(){
-	    var params = 'queueid=' + document.getElementById("queue").value;
-	    var today = new Date();
-	    var url= '<c:url value="/util/getQueueTickets.jsp"/>?ts='+today;
-		new Ajax.Request(url,{
-		  method: "GET",
-	      parameters: params,
-	      onSuccess: function(resp){
-	    	var txt = resp.responseText;
-	    	if(txt!=activeresponse){
-	    		$('tickets').innerHTML=txt;
-	    		activeresponse=txt;
-	    	}
-	      }
-		});
-	}
-	
-	function loadparent(personid){
-		window.opener.location.href='<c:url value="/main.do"/>?Page=curative/index.jsp&PersonID='+personid;
-		window.close();
-	}
-
-	function registerseen(ticketobjectid,ticketnumber){
-        if(yesnoDialogDirectText('<%=getTranNoLink("web","registerticket",sWebLanguage)%> '+ticketnumber+' <%=getTranNoLink("web","as",sWebLanguage)%> ´<%=getTranNoLink("queueendreason",MedwanQuery.getInstance().getConfigString("queueSeenValue","1"),sWebLanguage).toUpperCase()%>´')){
-		    var params = 'queueid=' + document.getElementById("queue").value;
-		    var today = new Date();
-		    var url= '<c:url value="/util/closeTicket.jsp"/>?objectid='+ticketobjectid+'&reason=<%=MedwanQuery.getInstance().getConfigInt("queueSeenValue",1)%>';
-			new Ajax.Request(url,{
-			  method: "GET",
-		      parameters: params,
-		      onSuccess: function(resp){
-		    	loadtickets();
-		      }
-			});
-        }
-	}
-
-	function registeraway(ticketobjectid,ticketnumber){
-        if(yesnoDialogDirectText('<%=getTranNoLink("web","registerticket",sWebLanguage)%> '+ticketnumber+' <%=getTranNoLink("web","as",sWebLanguage)%> ´<%=getTranNoLink("queueendreason",MedwanQuery.getInstance().getConfigString("queueAwayValue","2"),sWebLanguage).toUpperCase()%>´')){
-		    var params = 'queueid=' + document.getElementById("queue").value;
-		    var today = new Date();
-		    var url= '<c:url value="/util/closeTicket.jsp"/>?objectid='+ticketobjectid+'&reason=<%=MedwanQuery.getInstance().getConfigInt("queueAwayValue",2)%>';
-			new Ajax.Request(url,{
-			  method: "GET",
-		      parameters: params,
-		      onSuccess: function(resp){
-		    	loadtickets();
-		      }
-			});
-        }
-	}
-
-	  <%-- YESNO DIALOG DIRECT TEXT --%>
-	  function yesnoDialogDirectText(labelText){
-	    var answer = "";
-	    
-	    if(window.showModalDialog){
-	      var popupUrl = "<c:url value='/_common/search/yesnoPopup.jsp'/>?ts="+new Date().getTime()+"&labelValue="+labelText;
-	      var modalities = "dialogWidth:266px;dialogHeight:163px;center:yes;scrollbars:no;resizable:no;status:no;location:no;";
-	      answer = window.showModalDialog(popupUrl,"",modalities);
-	    }
-	    else{
-	      answer = window.confirm(labelText);          
-	    }
-	    
-	    return answer; // FF
-	  }
-
-</script>

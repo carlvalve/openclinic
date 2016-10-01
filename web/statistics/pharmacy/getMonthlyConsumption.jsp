@@ -12,14 +12,14 @@
 	<table width='100%'>
 		<tr>
 			<td class='admin2'>
-				<%=getTran("web","date",sWebLanguage)%> <%=writeDateField("FindDate", "transactionForm",ScreenHelper.formatDate(new java.util.Date()),sWebLanguage)%>
+				<%=getTran(request,"web","date",sWebLanguage)%> <%=writeDateField("FindDate", "transactionForm",ScreenHelper.formatDate(new java.util.Date()),sWebLanguage)%>
 			</td>
 		</tr>
 		<tr>
 			<td class='admin2'>
-				<input name='includePatients' id='includePatients' class='text' type='checkbox'/><%=getTran("web","includepatients",sWebLanguage)%> 
-				<input name='includeStocks' id='includeStocks' class='text' type='checkbox'/><%=getTran("web","includeservicestocks",sWebLanguage)%> 
-				<input name='includeOther' id='includeOther' class='text' type='checkbox'/><%=getTran("web","includeother",sWebLanguage)%> 
+				<input name='includePatients' id='includePatients' class='text' type='checkbox'/><%=getTran(request,"web","includepatients",sWebLanguage)%> 
+				<input name='includeStocks' id='includeStocks' class='text' type='checkbox'/><%=getTran(request,"web","includeservicestocks",sWebLanguage)%> 
+				<input name='includeOther' id='includeOther' class='text' type='checkbox'/><%=getTran(request,"web","includeother",sWebLanguage)%> 
 			</td>
 		</tr>
 		<tr>

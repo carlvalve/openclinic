@@ -53,7 +53,7 @@ public double getLastYearsAveragePrice(Product product){
                 sServiceStockName = serviceStock.getName();
             }
             else{
-                sServiceStockName = "<font color='red'>"+getTran("web","nonexistingserviceStock",sWebLanguage)+"</font>";
+                sServiceStockName = "<font color='red'>"+getTran(null,"web","nonexistingserviceStock",sWebLanguage)+"</font>";
             }
 
             // get product name
@@ -62,7 +62,7 @@ public double getLastYearsAveragePrice(Product product){
                 sProductName = product.getName();
             }
             else{
-                sProductName = "<font color='red'>"+getTran("web","nonexistingproduct",sWebLanguage)+"</font>";
+                sProductName = "<font color='red'>"+getTran(null,"web","nonexistingproduct",sWebLanguage)+"</font>";
             }
 
             // format begin date
@@ -144,7 +144,7 @@ public double getLastYearsAveragePrice(Product product){
                 sProductUid = productStock.getProductUid();
             } 
             else{
-                sProductName = "<font color='red'>"+getTran("web","nonexistingproduct",sWebLanguage)+"</font>";
+                sProductName = "<font color='red'>"+getTran(null,"web","nonexistingproduct",sWebLanguage)+"</font>";
             }
 
             // format begin date
@@ -174,7 +174,7 @@ public double getLastYearsAveragePrice(Product product){
 
             // non-existing productname in red
             if(sProductName.length() == 0) {
-                html.append("<td onclick=\"doShowDetails('"+sStockUid+"');\"><font color='red'>"+getTran("web","nonexistingproduct",sWebLanguage)+"</font></td>");
+                html.append("<td onclick=\"doShowDetails('"+sStockUid+"');\"><font color='red'>"+getTran(null,"web","nonexistingproduct",sWebLanguage)+"</font></td>");
             } 
             else {
                 html.append("<td onclick=\"doShowDetails('"+sStockUid+"');\">"+sProductName+"</td>");
@@ -197,6 +197,9 @@ public double getLastYearsAveragePrice(Product product){
                 else if(stockLevel <= orderLevel){
                     html.append("<td align='right' onclick=\"doShowDetails('"+sStockUid+"');\"><font color='orange'>"+stockLevel+"</font>&nbsp;&nbsp;</td>");
                 } 
+                else if(stockLevel > productStock.getMaximumLevel()){
+                    html.append("<td align='right' onclick=\"doShowDetails('"+sStockUid+"');\"><font style='background-color: black; color: white'>"+stockLevel+"</font>&nbsp;&nbsp;</td>");
+                } 
                 else{
                     html.append("<td align='right' onclick=\"doShowDetails('"+sStockUid+"');\">"+stockLevel+"&nbsp;&nbsp;</td>");
                 }
@@ -217,7 +220,7 @@ public double getLastYearsAveragePrice(Product product){
 
             // no buttons for unexisting product
             if(productnames.get(productStock.getProductUid()) != null){
-                if(productStock.getLevel() > 0){
+                if(productStock.getLevel() > 0 && productStock.getServiceStock().isDispensingUser(activeUser.userid)){
                 	//Verify if products are to expire
                 	if(productStock.hasExpiringProducts(MedwanQuery.getInstance().getConfigInt("pharmacyExpiryWarningInDays",90))){
                         html.append("<img src='"+sCONTEXTPATH+"/_img/icons/icon_warning.gif'>&nbsp;");
@@ -384,13 +387,13 @@ public double getLastYearsAveragePrice(Product product){
 
                 // show saved data
                 sAction = "findShowOverview"; // showDetails
-                msg = getTran("web","dataissaved",sWebLanguage);
+                msg = getTran(request,"web","dataissaved",sWebLanguage);
             }
             //***** reject new addition thru update *****
             else{
                 // show rejected data
                 sAction = "showDetailsAfterAddReject";
-                msg = "<font color='red'>"+getTran("web.manage","stockexists",sWebLanguage)+"</font>";
+                msg = "<font color='red'>"+getTran(request,"web.manage","stockexists",sWebLanguage)+"</font>";
             }
         }
         else{
@@ -400,7 +403,7 @@ public double getLastYearsAveragePrice(Product product){
 
                 // show saved data
                 sAction = "findShowOverview"; // showDetails
-                msg = getTran("web","dataissaved",sWebLanguage);
+                msg = getTran(request,"web","dataissaved",sWebLanguage);
             }
             //***** reject double record thru update *****
             else{
@@ -408,7 +411,7 @@ public double getLastYearsAveragePrice(Product product){
                     // nothing : just updating a record with its own data
                     if(stock.changed()){
                         stock.store();
-                        msg = getTran("web","dataissaved",sWebLanguage);
+                        msg = getTran(request,"web","dataissaved",sWebLanguage);
                     }
                     sAction = "findShowOverview"; // showDetails
                 }
@@ -416,7 +419,7 @@ public double getLastYearsAveragePrice(Product product){
                     // tried to update one stock with exact the same data as an other stock
                     // show rejected data
                     sAction = "showDetailsAfterUpdateReject";
-                    msg = "<font color='red'>"+getTran("web.manage","stockexists",sWebLanguage)+"</font>";
+                    msg = "<font color='red'>"+getTran(request,"web.manage","stockexists",sWebLanguage)+"</font>";
                 }
             }
         }
@@ -426,7 +429,7 @@ public double getLastYearsAveragePrice(Product product){
     //--- DELETE ----------------------------------------------------------------------------------
     else if(sAction.equals("delete") && sEditStockUid.length()>0){
         ProductStock.delete(sEditStockUid);
-        msg = getTran("web","dataisdeleted",sWebLanguage);
+        msg = getTran(request,"web","dataisdeleted",sWebLanguage);
         sAction = "findShowOverview"; // display overview even if only one record remains
     }
 
@@ -449,7 +452,7 @@ public double getLastYearsAveragePrice(Product product){
         sFindSupplierUid       = checkString(request.getParameter("FindSupplierUid"));
 
         // get supplier name
-        if(sFindSupplierUid.length() > 0) sFindSupplierName = getTran("service",sFindSupplierUid,sWebLanguage);
+        if(sFindSupplierUid.length() > 0) sFindSupplierName = getTran(request,"service",sFindSupplierUid,sWebLanguage);
         else                              sFindSupplierName = "";
 
         // search all products for a specified productStock
@@ -581,13 +584,13 @@ public double getLastYearsAveragePrice(Product product){
                     <%
                         // Servicename
                         if(sServiceId.length() > 0){
-                            sServiceName = getTran("Service",sServiceId,sWebLanguage);
+                            sServiceName = getTran(request,"Service",sServiceId,sWebLanguage);
                         }
 
                         if(sServiceName.length() > 0){
 	                        %>
 		                        <tr>
-		                            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","service",sWebLanguage)%>&nbsp;</td>
+		                            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","service",sWebLanguage)%>&nbsp;</td>
 		                            <td class="admin2" colspan='2'><%=sServiceName%></td>
 		                        </tr>
 	                        <%
@@ -601,7 +604,7 @@ public double getLastYearsAveragePrice(Product product){
                         if(sServiceStockName.length() > 0){
 	                        %>
 		                        <tr>
-		                            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","servicestock",sWebLanguage)%>&nbsp;</td>
+		                            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","servicestock",sWebLanguage)%>&nbsp;</td>
 		                            <td class="admin2" colspan='2'><%=sServiceStockName%> (<%=serviceStock.getUid() %>)</td>
 		                        </tr>
 	                        <%
@@ -609,7 +612,7 @@ public double getLastYearsAveragePrice(Product product){
                     %>
                     
                     <tr id="filtersection">
-                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","productstock",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","productstock",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2"><input type='text' class='text' name='filter' id='filter' onkeyup='showSearchResults(this.value)' value='' size='10'/></td>
                         <td class="admin2"><input class="button" type="button" name="returnButton0" value='<%=getTranNoLink("Web.manage","manageservicestocks",sWebLanguage)%>' onclick="doBackToPrevModule();"></td>
                     </tr>
@@ -645,7 +648,7 @@ public double getLastYearsAveragePrice(Product product){
                 <table width="100%" class="list" cellspacing="1" onClick="transactionForm.onkeydown='if(enterEvent(event,13)){doSearch();}';" onKeyDown="if(enterEvent(event,13)){doSearch();}">
                     <%-- Service Stock --%>
                     <tr>
-                        <td class="admin2" width="<%=sTDAdminWidth%>" nowrap><%=getTran("Web","servicestock",sWebLanguage)%></td>
+                        <td class="admin2" width="<%=sTDAdminWidth%>" nowrap><%=getTran(request,"Web","servicestock",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="hidden" name="FindServiceStockUid" value="<%=sFindServiceStockUid%>">
                             <input class="text" type="text" name="FindServiceStockName" readonly size="<%=sTextWidth%>" value="<%=sFindServiceStockName%>">
@@ -656,7 +659,7 @@ public double getLastYearsAveragePrice(Product product){
                     </tr>
                     <%-- Product --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","product",sWebLanguage)%></td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","product",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="hidden" name="FindProductUid" value="<%=sFindProductUid%>">
                             <input class="text" type="text" name="FindProductName" readonly size="<%=sTextWidth%>" value="<%=sFindProductName%>">
@@ -667,55 +670,55 @@ public double getLastYearsAveragePrice(Product product){
                     </tr>
                     <%-- Level --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","Level",sWebLanguage)%></td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","Level",sWebLanguage)%></td>
                         <td class="admin2">
                             <input class="text" type="text" name="FindLevel" size="5" maxLength="5" value="<%=sFindLevel%>" onKeyUp="isNumber(this);">
                         </td>
                     </tr>
                     <%-- MinimumLevel --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","MinimumLevel",sWebLanguage)%></td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","MinimumLevel",sWebLanguage)%></td>
                         <td class="admin2">
                             <input class="text" type="text" name="FindMinimumLevel" size="5" maxLength="5" value="<%=sFindMinimumLevel%>" onKeyUp="isNumber(this);">
                         </td>
                     </tr>
                     <%-- MaximumLevel --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","MaximumLevel",sWebLanguage)%></td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","MaximumLevel",sWebLanguage)%></td>
                         <td class="admin2">
                             <input class="text" type="text" name="FindMaximumLevel" size="5" maxLength="5" value="<%=sFindMaximumLevel%>" onKeyUp="isNumber(this);">
                         </td>
                     </tr>
                     <%-- OrderLevel --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","OrderLevel",sWebLanguage)%></td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","OrderLevel",sWebLanguage)%></td>
                         <td class="admin2">
                             <input class="text" type="text" name="FindOrderLevel" size="5" maxLength="5" value="<%=sFindOrderLevel%>" onKeyUp="isNumber(this);">
                         </td>
                     </tr>
                     <%-- Begin --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","begindate",sWebLanguage)%></td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","begindate",sWebLanguage)%></td>
                         <td class="admin2"><%=writeDateField("FindBegin","transactionForm",sFindBegin,sWebLanguage)%></td>
                     </tr>
                     <%-- End --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","enddate",sWebLanguage)%></td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","enddate",sWebLanguage)%></td>
                         <td class="admin2"><%=writeDateField("FindEnd","transactionForm",sFindEnd,sWebLanguage)%></td>
                     </tr>
                     <%-- DefaultImportance (dropdown : native|low|high) --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","DefaultImportance",sWebLanguage)%></td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","DefaultImportance",sWebLanguage)%></td>
                         <td class="admin2">
                             <select class="text" name="FindDefaultImportance">
                                 <option value=""></option>
-                                <%=ScreenHelper.writeSelectUnsorted("productstock.defaultimportance",sFindDefaultImportance,sWebLanguage)%>
+                                <%=ScreenHelper.writeSelectUnsorted(request,"productstock.defaultimportance",sFindDefaultImportance,sWebLanguage)%>
                             </select>
                         </td>
                     </tr>
                     <%-- supplier --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","supplier",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","supplier",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                         	<select class='text' name='FindSupplierUid' id='FindSupplierUid'>
                         		<option value=''/>
@@ -760,18 +763,18 @@ public double getLastYearsAveragePrice(Product product){
                         <%-- header --%>
                         <tr class="admin">
                             <td/>
-                            <td><%=getTran("Web","servicestock",sWebLanguage)%></td>
-                            <td><%=getTran("Web","productName",sWebLanguage)%></td>
-                            <td align="right"><%=getTran("Web","level",sWebLanguage)%>&nbsp;&nbsp;</td>
-                            <td align="right"><%=getTran("Web","orderlevel",sWebLanguage)%>&nbsp;&nbsp;</td>
-                            <td><SORTTYPE:DATE><%=getTran("Web","begindate",sWebLanguage)%></SORTTYPE:DATE></td>
+                            <td><%=getTran(request,"Web","servicestock",sWebLanguage)%></td>
+                            <td><%=getTran(request,"Web","productName",sWebLanguage)%></td>
+                            <td align="right"><%=getTran(request,"Web","level",sWebLanguage)%>&nbsp;&nbsp;</td>
+                            <td align="right"><%=getTran(request,"Web","orderlevel",sWebLanguage)%>&nbsp;&nbsp;</td>
+                            <td><SORTTYPE:DATE><%=getTran(request,"Web","begindate",sWebLanguage)%></SORTTYPE:DATE></td>
                         </tr>
                         <tbody class="hand"><%=stocksHtml%></tbody>
                     </table>
                     
                     <%-- number of records found --%>
                     <span style="width:49%;text-align:left;">
-                        <%=foundStockCount%> <%=getTran("web","recordsfound",sWebLanguage)%>
+                        <%=foundStockCount%> <%=getTran(request,"web","recordsfound",sWebLanguage)%>
                     </span>
                     
                     <%
@@ -790,7 +793,7 @@ public double getLastYearsAveragePrice(Product product){
             }
             else{
 	            // no records found
-	            %><%=getTran("web","norecordsfound",sWebLanguage)%><br><br><%
+	            %><%=getTran(request,"web","norecordsfound",sWebLanguage)%><br><br><%
             }
         }
 
@@ -805,14 +808,14 @@ public double getLastYearsAveragePrice(Product product){
                             <td/>
                             <td/>
                             <td/>
-                            <td><%=getTran("Web","productName",sWebLanguage)%></td>
-                            <td style="text-align:right"><%=getTran("Web","level",sWebLanguage)%>&nbsp;&nbsp;</td>
-                            <td style="text-align:right"><%=getTran("Web","openorders",sWebLanguage)%>&nbsp;&nbsp;</td>
-                            <td style="text-align:right"><%=getTran("Web","minimumlevel",sWebLanguage)%>&nbsp;&nbsp;</td>
-                            <td style="text-align:right"><%=getTran("Web","maximumlevel",sWebLanguage)%>&nbsp;&nbsp;</td>
-                            <td style="text-align:right"><%=getTran("Web","orderlevel",sWebLanguage)%>&nbsp;&nbsp;</td>
-                            <td><SORTTYPE:DATE><%=getTran("Web","begindate",sWebLanguage)%></SORTTYPE:DATE></td>
-                            <td><%=getTran("Web.manage","PUMP",sWebLanguage)%></td>
+                            <td><%=getTran(request,"Web","productName",sWebLanguage)%></td>
+                            <td style="text-align:right"><%=getTran(request,"Web","level",sWebLanguage)%>&nbsp;&nbsp;</td>
+                            <td style="text-align:right"><%=getTran(request,"Web","openorders",sWebLanguage)%>&nbsp;&nbsp;</td>
+                            <td style="text-align:right"><%=getTran(request,"Web","minimumlevel",sWebLanguage)%>&nbsp;&nbsp;</td>
+                            <td style="text-align:right"><%=getTran(request,"Web","maximumlevel",sWebLanguage)%>&nbsp;&nbsp;</td>
+                            <td style="text-align:right"><%=getTran(request,"Web","orderlevel",sWebLanguage)%>&nbsp;&nbsp;</td>
+                            <td><SORTTYPE:DATE><%=getTran(request,"Web","begindate",sWebLanguage)%></SORTTYPE:DATE></td>
+                            <td><%=getTran(request,"Web.manage","PUMP",sWebLanguage)%></td>
                             <td/>
                         </tr>
                         <tbody class="hand"><%=stocksHtml%></tbody>
@@ -820,7 +823,7 @@ public double getLastYearsAveragePrice(Product product){
                     
                     <%-- number of records found --%>
                     <span style="width:49%;text-align:left;">
-                        <%=foundStockCount%> <%=getTran("web","recordsfound",sWebLanguage)%>
+                        <%=foundStockCount%> <%=getTran(request,"web","recordsfound",sWebLanguage)%>
                     </span>
                     
                     <%
@@ -846,7 +849,7 @@ public double getLastYearsAveragePrice(Product product){
             else{
                 // no records found
                 %>
-                    <%=getTran("web.manage","noproductsfound",sWebLanguage)%>
+                    <%=getTran(request,"web.manage","noproductsfound",sWebLanguage)%>
                     
                     <%-- BUTTONS --%>
                     <%=ScreenHelper.alignButtonsStart()%>
@@ -881,7 +884,7 @@ public double getLastYearsAveragePrice(Product product){
 	                        %>
 	                        <%-- Service Stock --%>
 	                        <tr>
-	                            <td class="admin" nowrap><%=getTran("Web","servicestock",sWebLanguage)%> *</td>
+	                            <td class="admin" nowrap><%=getTran(request,"Web","servicestock",sWebLanguage)%> *</td>
 	                            <td class="admin2">
 	                                <input class="text" type="text" name="EditServiceStockName" readonly size="<%=sTextWidth%>" value="<%=sSelectedServiceStockName%>">
 	
@@ -898,10 +901,10 @@ public double getLastYearsAveragePrice(Product product){
                     
                     <%-- Product --%>
 	                <tr class="gray">
-                        <td colspan="2">&nbsp;<%=getTran("Web","productstockid",sWebLanguage)%>: <%=sEditStockUid %></td>
+                        <td colspan="2">&nbsp;<%=getTran(request,"Web","productstockid",sWebLanguage)%>: <%=sEditStockUid %></td>
                     </tr>
                     <tr>
-                        <td class="admin" width="<%=sTDAdminWidth%>" nowrap><%=getTran("Web","product",sWebLanguage)%> *</td>
+                        <td class="admin" width="<%=sTDAdminWidth%>" nowrap><%=getTran(request,"Web","product",sWebLanguage)%> *</td>
                         <td class="admin2">
                             <input type="hidden" name="EditProductUid" id="EditProductUid" value="<%=sSelectedProductUid%>">
                             <input class="text" type="text" name="EditProductName" id="EditProductName" readonly size="<%=sTextWidth%>" value="<%=sSelectedProductName%>">
@@ -913,7 +916,7 @@ public double getLastYearsAveragePrice(Product product){
                     
                     <%-- Level (required) --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","Level",sWebLanguage)%> *</td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","Level",sWebLanguage)%> *</td>
                         <td class="admin2">
                             <input class="text" type="text" <%=(sAction.equals("showDetailsNew")?"":"style='color:#999;'")%> name="EditLevel" <%=(sAction.equals("showDetailsNew")?"":"readonly")%> size="10" maxLength="10" value="<%=sSelectedLevel%>" <%=(sAction.equals("showDetailsNew")?"onKeyUp='isNumber(this);'":"")%>>
                         </td>
@@ -921,7 +924,7 @@ public double getLastYearsAveragePrice(Product product){
                     
                     <%-- MinimumLevel (required) --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","MinimumLevel",sWebLanguage)%> *</td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","MinimumLevel",sWebLanguage)%> *</td>
                         <td class="admin2">
                             <input class="text" type="text" name="EditMinimumLevel" size="10" maxLength="10" value="<%=sSelectedMinimumLevel%>" onKeyUp="isNumber(this);">
                         </td>
@@ -929,7 +932,7 @@ public double getLastYearsAveragePrice(Product product){
                     
                     <%-- MaximumLevel (implied) --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","MaximumLevel",sWebLanguage)%></td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","MaximumLevel",sWebLanguage)%></td>
                         <td class="admin2">
                             <input class="text" type="text" name="EditMaximumLevel" size="10" maxLength="10" value="<%=sSelectedMaximumLevel%>" onKeyUp="isNumber(this);">
                         </td>
@@ -937,7 +940,7 @@ public double getLastYearsAveragePrice(Product product){
                     
                     <%-- OrderLevel (required) --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","OrderLevel",sWebLanguage)%>&nbsp;*</td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","OrderLevel",sWebLanguage)%>&nbsp;*</td>
                         <td class="admin2">
                             <input class="text" type="text" name="EditOrderLevel" size="10" maxLength="10" value="<%=sSelectedOrderLevel%>" onKeyUp="isNumber(this);">
                         </td>
@@ -945,7 +948,7 @@ public double getLastYearsAveragePrice(Product product){
                     
                     <%-- Begin --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","begindate",sWebLanguage)%>&nbsp;*</td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","begindate",sWebLanguage)%>&nbsp;*</td>
                         <td class="admin2"><%=writeDateField("EditBegin","transactionForm",sSelectedBegin,sWebLanguage)%>
                             <%
                                 // if new productstock : set today as default value for begindate
@@ -958,24 +961,24 @@ public double getLastYearsAveragePrice(Product product){
                     
                     <%-- End --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","enddate",sWebLanguage)%></td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","enddate",sWebLanguage)%></td>
                         <td class="admin2"><%=writeDateField("EditEnd","transactionForm",sSelectedEnd,sWebLanguage)%></td>
                     </tr>
                     
                     <%-- DefaultImportance (dropdown : native|low|high) --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","DefaultImportance",sWebLanguage)%> *</td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","DefaultImportance",sWebLanguage)%> *</td>
                         <td class="admin2">
                             <select class="text" name="EditDefaultImportance">
                                 <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>
-                                <%=ScreenHelper.writeSelectUnsorted("productstock.defaultimportance",sSelectedDefaultImportance,sWebLanguage)%>
+                                <%=ScreenHelper.writeSelectUnsorted(request,"productstock.defaultimportance",sSelectedDefaultImportance,sWebLanguage)%>
                             </select>
                         </td>
                     </tr>
                     
                     <%-- supplier --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","supplier",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","supplier",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                         	<select class='text' name='EditSupplierUid' id='EditSupplierUid'>
                         		<option value=''/>
@@ -984,7 +987,9 @@ public double getLastYearsAveragePrice(Product product){
 	                        			Vector servicestocks = ServiceStock.findAll();
 	                        			for(int n=0;n<servicestocks.size();n++){
 	                        				ServiceStock stock = (ServiceStock)servicestocks.elementAt(n);
-	                        				out.println("<option value='"+stock.getUid()+"' "+(sSelectedSupplierUid.equalsIgnoreCase(stock.getUid())?"selected":"")+">"+stock.getName()+"</option>");
+	                        				if(stock!=null && !stock.getUid().equalsIgnoreCase(sEditServiceStockUid)){
+	                        					out.println("<option value='"+stock.getUid()+"' "+(sSelectedSupplierUid.equalsIgnoreCase(stock.getUid())?"selected":"")+">"+stock.getName()+"</option>");
+	                        				}
 	                        			}
                         			}
                         			catch(Exception r){
@@ -997,7 +1002,7 @@ public double getLastYearsAveragePrice(Product product){
                     
                     <%-- location --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","location",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","location",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <input class="text" type="text" name="EditLocation" id="EditLocation" size="<%=sTextWidth%>" value="<%=sSelectedLocation%>">
                         </td>
@@ -1031,13 +1036,13 @@ public double getLastYearsAveragePrice(Product product){
                 </table>
                 
                 <%-- indication of obligated fields --%>
-                <%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%>
+                <%=getTran(request,"Web","colored_fields_are_obligate",sWebLanguage)%>
                 <br><br>
                 
                 <table>
                 	<tr>
-                		<td class='text'><a href="javascript:printFiche('<%=sEditStockUid %>','<%=sSelectedProductName %>')"><%=getTran("web","productstockfile.interactive",sWebLanguage)%></a></td>
-                		<td class='text'><a href="javascript:printPDFFiche('<%=sEditStockUid %>')"><%=getTran("web","productstockfile.pdf",sWebLanguage)%></a></td>
+                		<td class='text'><a href="javascript:printFiche('<%=sEditStockUid %>','<%=sSelectedProductName %>')"><%=getTran(request,"web","productstockfile.interactive",sWebLanguage)%></a></td>
+                		<td class='text'><a href="javascript:printPDFFiche('<%=sEditStockUid %>')"><%=getTran(request,"web","productstockfile.pdf",sWebLanguage)%></a></td>
                 	</tr>
                 </table>
             <%
