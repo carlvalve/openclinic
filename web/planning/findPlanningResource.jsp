@@ -12,10 +12,10 @@
 	<tr class='admin'>
 		<td>
 			<select name='resource' id='resource' onchange='loadResourceReservations()'>
-				<%=ScreenHelper.writeSelect("planningresource", "", sWebLanguage) %>
+				<%=ScreenHelper.writeSelect(request,"planningresource", "", sWebLanguage) %>
 			</select>
 		</td>
-		<td><%=getTran("web","from",sWebLanguage) %><%=ScreenHelper.writeDateField("begin", "resourceForm", ScreenHelper.getSQLDate(new java.util.Date()),true,true, sWebLanguage, sCONTEXTPATH,"loadResourceReservations()") %></td>
+		<td><%=getTran(request,"web","from",sWebLanguage) %><%=ScreenHelper.writeDateField("begin", "resourceForm", ScreenHelper.getSQLDate(new java.util.Date()),true,true, sWebLanguage, sCONTEXTPATH,"loadResourceReservations()") %></td>
 	</tr>
 </table>
 <span id='resourcereservations'></span>
@@ -26,7 +26,7 @@
 	    if(id) actualAppointmentId = id;
 	    var url = "<c:url value='/planning/ajax/editPlanning.jsp'/>" +
 	              "?readonly=true&FindPlanningUID="+actualAppointmentId+"&ts="+new Date().getTime();
-	    Modalbox.show(url,{title:'<%=getTran("web","planning",sWebLanguage)%>',height:500,width:650,afterHide:function(){}},{evalScripts:true});
+	    Modalbox.show(url,{title:'<%=getTran(null,"web","planning",sWebLanguage)%>',height:500,width:650,afterHide:function(){}},{evalScripts:true});
 	}
 
 	function loadResourceReservations(){

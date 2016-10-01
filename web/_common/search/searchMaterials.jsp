@@ -58,8 +58,8 @@
 <form name='transactionForm' method='post'>
 	<table width='100%'>
 		<tr class='admin'>
-			<td colspan='4'><%=getTran("web","findmaterials",sWebLanguage) %></td>
-			<td><input type='submit' name='submitButton' value='<%=getTran("web","save",sWebLanguage)%>'/></td>
+			<td colspan='4'><%=getTran(request,"web","findmaterials",sWebLanguage) %></td>
+			<td><input type='submit' name='submitButton' value='<%=getTran(null,"web","save",sWebLanguage)%>'/></td>
 		</tr>
 		<%
 			Vector materials = ProductStock.findMaterials();
@@ -67,11 +67,11 @@
 				//Print header
 				%>
 				<tr>
-					<td class='admin'><%=getTran("web","productname",sWebLanguage) %></td>
-					<td class='admin'><%=getTran("web","servicestock",sWebLanguage) %></td>
-					<td class='admin'><%=getTran("web","unit",sWebLanguage) %></td>
-					<td class='admin'><%=getTran("web","level",sWebLanguage) %></td>
-					<td class='admin'><%=getTran("web","quantity",sWebLanguage) %></td>
+					<td class='admin'><%=getTran(request,"web","productname",sWebLanguage) %></td>
+					<td class='admin'><%=getTran(request,"web","servicestock",sWebLanguage) %></td>
+					<td class='admin'><%=getTran(request,"web","unit",sWebLanguage) %></td>
+					<td class='admin'><%=getTran(request,"web","level",sWebLanguage) %></td>
+					<td class='admin'><%=getTran(request,"web","quantity",sWebLanguage) %></td>
 				</tr>
 				<%
 			}
@@ -83,7 +83,7 @@
 					out.println("<tr>");
 					out.println("<td>"+product.getName()+"</td>");
 					out.println("<td>"+serviceStock.getName()+"</td>");
-					out.println("<td>"+getTran("product.unit",product.getUnit(),sWebLanguage)+"</td>");
+					out.println("<td>"+getTran(request,"product.unit",product.getUnit(),sWebLanguage)+"</td>");
 					out.println("<td>"+productStock.getLevel()+"</td>");
 					out.println("<td><input type='text' class='text' name='material."+productStock.getUid()+"' size='5' value='0'/></td>");
 					out.println("</tr>");

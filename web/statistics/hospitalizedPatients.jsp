@@ -25,7 +25,7 @@
     <table class="menu" width="100%" cellspacing="1" cellpadding="0">
         <%-- SERVICE --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","service",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","service",sWebLanguage)%></td>
             <td class="admin2">
                 <input class="text" type="text" name="FindServiceText" READONLY size="<%=sTextWidth%>" title="<%=sFindServiceText%>" value="<%=sFindServiceText%>">
                 <%=ScreenHelper.writeServiceButton("ButtonService","FindServiceCode","FindServiceText",sWebLanguage,sCONTEXTPATH)%>
@@ -33,11 +33,11 @@
             </td>
         </tr>
          <tr>
-            <td class="admin"><%=getTran("Web","begin",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin"><%=getTran(request,"Web","begin",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2"><%=writeDateField("FindBegin","transactionForm",sFindBegin,sWebLanguage)%></td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("Web","end",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web","end",sWebLanguage)%></td>
             <td class="admin2"><%=writeDateField("FindEnd","transactionForm",sFindEnd,sWebLanguage)%></td>
         </tr>
         
@@ -62,7 +62,7 @@
         Enumeration servEnum = hServices.keys();
         while(servEnum.hasMoreElements()){
             sServiceId = (String)servEnum.nextElement();
-            hSortedServices.put(getTran("service",sServiceId,sWebLanguage).toLowerCase(),sServiceId);
+            hSortedServices.put(getTran(request,"service",sServiceId,sWebLanguage).toLowerCase(),sServiceId);
         }
 
         Vector v = new Vector(hSortedServices.keySet());
@@ -114,15 +114,15 @@
             </span>
 
             <table class="list" width="100%" cellspacing="1" cellpadding="0">
-                <tr class="admin"><td colspan="<%=hOutcomes.size()+5%>"><%=sServiceId%> - <%=getTran("service",sServiceId,sWebLanguage)%></td></tr>
+                <tr class="admin"><td colspan="<%=hOutcomes.size()+5%>"><%=sServiceId%> - <%=getTran(request,"service",sServiceId,sWebLanguage)%></td></tr>
                 
                 <%-- HEADING 1 --%>
                 <tr>
-                    <td class="admin" rowspan="2" width="60"><center><%=getTran("web","date",sWebLanguage)%>&nbsp;</center></td>
-                    <td class="admin" rowspan="2"><center><%=getTran("web.statistics","brought.forward",sWebLanguage)%>&nbsp;</center></td>
-                    <td class="admin" rowspan="2"><center><%=getTran("web.statistics","new.patients",sWebLanguage)%>&nbsp;</center></td>
-                    <td class="admin" colspan="<%=hOutcomes.size()+1%>"><center><%=getTran("web.statistics","departures",sWebLanguage)%>&nbsp;</center></td>
-                    <td class="admin" rowspan="2"><center><%=getTran("web","carried.forward",sWebLanguage)%>&nbsp;</center></td>
+                    <td class="admin" rowspan="2" width="60"><center><%=getTran(request,"web","date",sWebLanguage)%>&nbsp;</center></td>
+                    <td class="admin" rowspan="2"><center><%=getTran(request,"web.statistics","brought.forward",sWebLanguage)%>&nbsp;</center></td>
+                    <td class="admin" rowspan="2"><center><%=getTran(request,"web.statistics","new.patients",sWebLanguage)%>&nbsp;</center></td>
+                    <td class="admin" colspan="<%=hOutcomes.size()+1%>"><center><%=getTran(request,"web.statistics","departures",sWebLanguage)%>&nbsp;</center></td>
+                    <td class="admin" rowspan="2"><center><%=getTran(request,"web","carried.forward",sWebLanguage)%>&nbsp;</center></td>
                 </tr>
                 
                 <%-- HEADING 2 --%>
@@ -135,7 +135,7 @@
 	                        %><td class="admin2" width="90"><b><center><%=sLabelValue%></center></b></td><%
 	                    }
                     %>
-                    <td class="admin" width="100"><center><%=getTran("web.statistics","subtotal",sWebLanguage)%></center></td>
+                    <td class="admin" width="100"><center><%=getTran(request,"web.statistics","subtotal",sWebLanguage)%></center></td>
                 </tr>
             <%
             
@@ -215,7 +215,7 @@
         }            
 
         if(hServices.size()==0){
-            out.print(getTran("web","norecordsfound",sWebLanguage));
+            out.print(getTran(request,"web","norecordsfound",sWebLanguage));
         }
         else{
             // link to top of page

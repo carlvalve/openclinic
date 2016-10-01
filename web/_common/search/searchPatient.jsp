@@ -37,12 +37,12 @@
     <table width="100%" cellspacing="0" cellpadding="0" class="menu">
         <%-- search fields row 1 --%>
         <tr height="25">
-            <td class="admin2" nowrap>&nbsp;<%=getTran("Web","name",sWebLanguage)%>&nbsp;&nbsp;</td>
+            <td class="admin2" nowrap>&nbsp;<%=getTran(request,"Web","name",sWebLanguage)%>&nbsp;&nbsp;</td>
             <td class="admin2" nowrap>
                 <input type="text" name="FindLastname" class="text" value="<%=sFindLastname%>" onblur="limitLength(this);">
             </td>
             
-            <td class="admin2" nowrap>&nbsp;<%=getTran("Web","firstname",sWebLanguage)%>&nbsp;&nbsp;</td>
+            <td class="admin2" nowrap>&nbsp;<%=getTran(request,"Web","firstname",sWebLanguage)%>&nbsp;&nbsp;</td>
             <td class="admin2" nowrap>
                 <input type="text" name="FindFirstname" class="text" value="<%=sFindFirstname%>" onblur="limitLength(this);">
             </td>
@@ -52,12 +52,12 @@
         %>
         <%-- search fields row 2 --%>
         <tr>
-            <td class="admin2" height="25" nowrap>&nbsp;<%=getTran("Web","dateofbirth",sWebLanguage)%>&nbsp;&nbsp;</td>
+            <td class="admin2" height="25" nowrap>&nbsp;<%=getTran(request,"Web","dateofbirth",sWebLanguage)%>&nbsp;&nbsp;</td>
             <td class="admin2" nowrap>
                 <input type="text" name="FindDOB" class="text" value="<%=sFindDOB%>" onblur="checkDate(this);">
             </td>
             
-            <td class="admin2" nowrap>&nbsp;<%=getTran("Web","gender",sWebLanguage)%>&nbsp;&nbsp;</td>
+            <td class="admin2" nowrap>&nbsp;<%=getTran(request,"Web","gender",sWebLanguage)%>&nbsp;&nbsp;</td>
             <td class="admin2" nowrap>
                 <select class="text" name="FindGender">
                     <option/>
@@ -69,12 +69,12 @@
         
         <%-- search fields row 3 --%>
         <tr>
-            <td class="admin2" class="admin2" height="25" nowrap>&nbsp;<%=getTran("Web", "personid", sWebLanguage)%>&nbsp;&nbsp;</td>
+            <td class="admin2" class="admin2" height="25" nowrap>&nbsp;<%=getTran(request,"Web", "personid", sWebLanguage)%>&nbsp;&nbsp;</td>
             <td class="admin2" class="admin2" nowrap>
                 <input type="text" name="PersonID" class="text" value="<%=sPersonID%>"/>
             </td>
             <%if(MedwanQuery.getInstance().getConfigString("edition").equalsIgnoreCase("bloodbank")){ %>
-	            <td class="admin2" class="admin2" height="25" nowrap>&nbsp;<%=getTran("Web", "giftid", sWebLanguage)%>&nbsp;&nbsp;</td>
+	            <td class="admin2" class="admin2" height="25" nowrap>&nbsp;<%=getTran(request,"Web", "giftid", sWebLanguage)%>&nbsp;&nbsp;</td>
 	            <td class="admin2" class="admin2" nowrap>
 	                <input type="text" name="giftid" id="giftid" class="text" value="<%=sPersonID%>"/>
 	            </td>

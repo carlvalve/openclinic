@@ -8,15 +8,15 @@
     private StringBuffer addImagesInformation(int iTotal, String sTmpInfo, String sNomenclature,
                                               String sResultsRx, String sWebLanguage){
         if(sTmpInfo.length()>0){
-            sTmpInfo = getTran("web.occup",sTmpInfo,sWebLanguage);
+            sTmpInfo = getTran(null,"web.occup",sTmpInfo,sWebLanguage);
         }
 
         StringBuffer sTmp = new StringBuffer();
         sTmp.append(
             "<tr id='rowImagesInformation"+iTotal+"'>" +
             "<td class='admin2'>" +
-            " <a href='javascript:deleteImagesInformation(rowImagesInformation"+iTotal+")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran("Web.Occup","medwan.common.delete",sWebLanguage) + "' border='0'></a> "+
-            " <a href='javascript:editImagesInformation(rowImagesInformation"+iTotal+")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_edit.gif' alt='" + getTran("Web.Occup","medwan.common.edit",sWebLanguage) + "' border='0'></a>" +
+            " <a href='javascript:deleteImagesInformation(rowImagesInformation"+iTotal+")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran(null,"Web.Occup","medwan.common.delete",sWebLanguage) + "' border='0'></a> "+
+            " <a href='javascript:editImagesInformation(rowImagesInformation"+iTotal+")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_edit.gif' alt='" + getTran(null,"Web.Occup","medwan.common.edit",sWebLanguage) + "' border='0'></a>" +
             "</td>" +
             "<td class='admin2'>&nbsp;" + sTmpInfo + "</td>" +
             "<td class='admin2'>&nbsp;" + sNomenclature + "</td>" +
@@ -92,7 +92,7 @@
         <tr>
             <td class="admin" width="<%=sTDAdminWidth%>">
                 <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-                <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+                <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
             </td>
             <td class="admin2" colspan="3">
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" id="trandate" OnBlur='checkDate(this)'>
@@ -109,8 +109,8 @@
                     <tr>
                         <td class="admin" width="40px"/>
                         <td class="admin" width="40px"/>
-                        <td class="admin" width="50px"><%=getTran("openclinic.chuk","nomenclatue",sWebLanguage)%></td>
-                        <td class="admin" width="250px"><%=getTran("openclinic.chuk","results_rx",sWebLanguage)%></td>
+                        <td class="admin" width="50px"><%=getTran(request,"openclinic.chuk","nomenclatue",sWebLanguage)%></td>
+                        <td class="admin" width="250px"><%=getTran(request,"openclinic.chuk","results_rx",sWebLanguage)%></td>
                         <td class="admin" width="*"/>
                     </tr>
 
@@ -119,10 +119,10 @@
                         <td class="admin2"/>
                         <td class="admin2">
                             <input id="rbinfocliche" onDblClick="uncheckRadio(this);"type="radio" name="rbinfo" value="image.information.cliche"/>
-                            <%=getLabel("web.occup","image.information.cliche",sWebLanguage,"rbinfocliche")%>
+                            <%=getLabel(request,"web.occup","image.information.cliche",sWebLanguage,"rbinfocliche")%>
 
                             <input id="rbinfopano" onDblClick="uncheckRadio(this);"type="radio" name="rbinfo" value="image.information.pano"/>
-                            <%=getLabel("web.occup","image.information.pano",sWebLanguage,"rbinfopano")%>
+                            <%=getLabel(request,"web.occup","image.information.pano",sWebLanguage,"rbinfopano")%>
                         </td>
                         <td class="admin2" style="vertical-align:top;">
                             <textarea onkeyup="resizeTextarea(this,10);limitChars(this,255);" class="text" cols="30" rows="2" name="nomenclature"></textarea>
@@ -150,7 +150,7 @@
 
         <%-- conclusion --%>
         <tr>
-            <td class="admin" style="vertical-align:top;"><%=getTran("openclinic.chuk","conclusion",sWebLanguage)%></td>
+            <td class="admin" style="vertical-align:top;"><%=getTran(request,"openclinic.chuk","conclusion",sWebLanguage)%></td>
             <td class="admin2" style="vertical-align:top;">
                 <textarea onkeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_PROTOCOL_IMAGES_STOMATOLOGY_CONCLUSION")%> class="text" cols="60" rows="2"  name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROTOCOL_IMAGES_STOMATOLOGY_CONCLUSION" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROTOCOL_IMAGES_STOMATOLOGY_CONCLUSION" property="value"/></textarea>
             </td>
@@ -180,11 +180,11 @@ function addImagesInformation(){
       var sInfo = "";
       var sTmpInfo = "";
       if(document.getElementById("rbinfocliche").checked){
-          sInfo = "<%=getTran("web.occup","image.information.cliche",sWebLanguage)%>";
+          sInfo = "<%=getTran(null,"web.occup","image.information.cliche",sWebLanguage)%>";
           sTmpInfo = "image.information.cliche";
       }
       else if(document.getElementById("rbinfopano").checked){
-          sInfo = "<%=getTran("web.occup","image.information.pano",sWebLanguage)%>";
+          sInfo = "<%=getTran(null,"web.occup","image.information.pano",sWebLanguage)%>";
           sTmpInfo = "image.information.pano";
       }
 
@@ -231,11 +231,11 @@ function updateImagesInformation(){
     var sInfo = "";
     var sTmpInfo = "";
     if(document.getElementById("rbinfocliche").checked){
-      sInfo = "<%=getTran("web.occup","image.information.cliche",sWebLanguage)%>";
+      sInfo = "<%=getTran(null,"web.occup","image.information.cliche",sWebLanguage)%>";
       sTmpInfo = "image.information.cliche";
     }
     else if(document.getElementById("rbinfopano").checked){
-      sInfo = "<%=getTran("web.occup","image.information.pano",sWebLanguage)%>";
+      sInfo = "<%=getTran(null,"web.occup","image.information.pano",sWebLanguage)%>";
       sTmpInfo = "image.information.pano";
     }
 

@@ -8,7 +8,7 @@
     private String getParent(String sCode, String sWebLanguage){
         String sReturn = "";
         if(sCode!=null && sCode.trim().length()>0){
-            String sLabel = getTran("drug.category",sCode,sWebLanguage);
+            String sLabel = getTran(null,"drug.category",sCode,sWebLanguage);
 
             Vector vParentIDs = DrugCategory.getParentIds(sCode);
             Iterator iter = vParentIDs.iterator();
@@ -35,7 +35,7 @@
     //--- WRITE MY ROW ----------------------------------------------------------------------------
     private String writeMyRow(String sType, String sID, String sWebLanguage, String sIcon){
         String row = "";
-        String sLabel = getTran(sType,sID,sWebLanguage);
+        String sLabel = getTran(null,sType,sID,sWebLanguage);
         DrugCategory category=DrugCategory.getCategory(sID);
 
         if(category!=null){
@@ -141,7 +141,7 @@
             if(iTotal==0){
                 sViewCode = sFindCode;
             }
-            String sLabel = HTMLEntities.htmlentities(getTran("drug.category", sViewCode, sWebLanguage));
+            String sLabel = HTMLEntities.htmlentities(getTran(request,"drug.category", sViewCode, sWebLanguage));
             DrugCategory category = DrugCategory.getCategory(sViewCode);
 
             if(category!=null){
@@ -177,7 +177,7 @@
 		    else{
 			    %>
 			    <tr>
-			        <td colspan="3"><%=HTMLEntities.htmlentities(getTran("web","norecordsfound",sWebLanguage))%></td>
+			        <td colspan="3"><%=HTMLEntities.htmlentities(getTran(request,"web","norecordsfound",sWebLanguage))%></td>
 			    </tr>
 			    <%
 		    }

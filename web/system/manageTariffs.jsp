@@ -28,7 +28,7 @@
 <form name='EditForm' id="EditForm" method='POST' action='<c:url value="/main.do?Page=system/manageTariffs.jsp"/>'>
 	<table class='list' border='0' width='100%' cellspacing='1'>
 	        <tr>
-	            <td class='admin'><%=getTran("web","prestation",sWebLanguage)%></td>
+	            <td class='admin'><%=getTran(request,"web","prestation",sWebLanguage)%></td>
 	            <td class='admin2'>
 	                <input type="hidden" name="tmpPrestationUID" id="tmpPrestationUID" value="<%=sPrestUid %>">
 	                <input type="hidden" name="tmpPrestationName">
@@ -62,7 +62,7 @@
 	            </td>
 	        </tr>
 	        <tr>
-		        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("medical.accident", "insurancecompany", sWebLanguage)%>
+		        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"medical.accident", "insurancecompany", sWebLanguage)%>
 		        </td>
 		        <td class="admin2">
 		            <input type="hidden" name="EditInsurarUID" value="<%=sInsurarUid %>">
@@ -72,7 +72,7 @@
 		        </td>
 		    </tr>
 		    <tr>
-		        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web.manage","selectedinsurarcategories",sWebLanguage)%>
+		        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web.manage","selectedinsurarcategories",sWebLanguage)%>
 		        </td>
 		        <td class="admin2">
                     <select name="EditCategoryName" class="text">
@@ -87,7 +87,7 @@
 		        </td>
 		    </tr>
 		    <tr>
-		        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","price",sWebLanguage)%>
+		        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","price",sWebLanguage)%>
 		        </td>
 		        <td class="admin2">
                             <input type="text" class="text" name="EditPrestationPrice" size="10" maxlength="8" value="<%=sPrice%>" onKeyup="if(!isNumber(this)){this.value='';}">&nbsp;<%=sCurrency%>
@@ -98,7 +98,7 @@
                 <td class="admin2">
                     <input type='submit' class="button" name="saveButton" value="<%=getTranNoLink("accesskey","save",sWebLanguage)%>"/>
                     <input type='submit' class="button" name="findButton" value="<%=getTranNoLink("web","find",sWebLanguage)%>"/>
-                    <input type='checkbox' name='ShowOld' id='ShowOld' value='1' <%=sShowOld.length()>0?"checked":"" %>/><%=getTran("web","showinactive",sWebLanguage)%>
+                    <input type='checkbox' name='ShowOld' id='ShowOld' value='1' <%=sShowOld.length()>0?"checked":"" %>/><%=getTran(request,"web","showinactive",sWebLanguage)%>
                 </td>
             </tr>
 	        

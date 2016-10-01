@@ -237,7 +237,7 @@
 <table class="list" width="100%" border="0" cellspacing="1">
     <%-- COMMENT --%>
     <tr>
-        <td class="admin"><%=getTran("Web.Occup","medwan.common.remark",sWebLanguage)%></td>
+        <td class="admin"><%=getTran(request,"Web.Occup","medwan.common.remark",sWebLanguage)%></td>
         <td class="admin2">
             <textarea onKeyup="resizeTextarea(this,10);" class="text" name="PersoonlijkComment" rows="2" cols="75"><%=sComment%></textarea>
             <%-- hidden fields --%>
@@ -257,16 +257,16 @@
             <table width="100%" cellspacing="0" cellpadding="0" class="list">
                 <%-- MEDICAL ANTECEDENTS --%>
                 <tr class="admin">
-                    <td colspan="2"><%=getTran("Web.Occup","Medical_Antecedents",sWebLanguage)%></td>
+                    <td colspan="2"><%=getTran(request,"Web.Occup","Medical_Antecedents",sWebLanguage)%></td>
                 </tr>
                 <tr>
                     <td colspan="2">
                         <table width="100%" cellspacing="1" id="tblChirurgie">
                             <tr>
                                 <td class="admin" width="36">&nbsp;</td>
-                                <td class="admin" width="150"><%=getTran("Web.Occup","medwan.common.date-begin",sWebLanguage)%></td>
-                                <td class="admin" width="150"><%=getTran("Web.Occup","medwan.common.date-end",sWebLanguage)%></td>
-                                <td class="admin" width="250"><%=getTran("Web.Occup","medwan.common.description",sWebLanguage)%></td>
+                                <td class="admin" width="150"><%=getTran(request,"Web.Occup","medwan.common.date-begin",sWebLanguage)%></td>
+                                <td class="admin" width="150"><%=getTran(request,"Web.Occup","medwan.common.date-end",sWebLanguage)%></td>
+                                <td class="admin" width="250"><%=getTran(request,"Web.Occup","medwan.common.description",sWebLanguage)%></td>
                                 <td class="admin">&nbsp;</td>
                             </tr>
                             <tr>
@@ -297,16 +297,16 @@
             <table width="100%" cellspacing="0" cellpadding="0" class="list">
     <%-- HEELKUNDIGE ANTECEDENTEN --%>
                 <tr class="admin">
-                    <td colspan="2"><%=getTran("Web.Occup","Heelkundige_antecedenten",sWebLanguage)%></td>
+                    <td colspan="2"><%=getTran(request,"Web.Occup","Heelkundige_antecedenten",sWebLanguage)%></td>
                 </tr>
                 <tr>
                     <td colspan="2">
                         <table width="100%" cellspacing="1" id="tblHeelkunde">
                             <tr>
                                 <td class="admin" width="36">&nbsp;</td>
-                                <td class="admin" width="150"><%=getTran("Web.Occup","medwan.common.date-begin",sWebLanguage)%></td>
-                                <td class="admin" width="150"><%=getTran("Web.Occup","medwan.common.date-end",sWebLanguage)%></td>
-                                <td class="admin" width="250"><%=getTran("Web.Occup","medwan.common.description",sWebLanguage)%></td>
+                                <td class="admin" width="150"><%=getTran(request,"Web.Occup","medwan.common.date-begin",sWebLanguage)%></td>
+                                <td class="admin" width="150"><%=getTran(request,"Web.Occup","medwan.common.date-end",sWebLanguage)%></td>
+                                <td class="admin" width="250"><%=getTran(request,"Web.Occup","medwan.common.description",sWebLanguage)%></td>
                                 <td class="admin">&nbsp;</td>
                             </tr>
                             <tr>
@@ -337,16 +337,16 @@
             <table width="100%" cellspacing="0" cellpadding="0" class="list">
     <%-- LETSELS --%>
                 <tr class="admin">
-                    <td colspan="2"><%=getTran("Web.Occup","Lesions_with_%_PI",sWebLanguage)%></td>
+                    <td colspan="2"><%=getTran(request,"Web.Occup","Lesions_with_%_PI",sWebLanguage)%></td>
                 </tr>
                 <tr>
                     <td colspan="2">
                         <table width="100%" cellspacing="1" id="tblLetsels">
                             <tr>
                                 <td class="admin" width="36">&nbsp;</td>
-                                <td class="admin" width="150"><%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%></td>
-                                <td class="admin" width="250"><%=getTran("Web.Occup","medwan.common.description",sWebLanguage)%></td>
-                                <td class="admin" width="70">%<%=getTran("Web.Occup","PI",sWebLanguage)%></td>
+                                <td class="admin" width="150"><%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%></td>
+                                <td class="admin" width="250"><%=getTran(request,"Web.Occup","medwan.common.description",sWebLanguage)%></td>
+                                <td class="admin" width="70">%<%=getTran(request,"Web.Occup","PI",sWebLanguage)%></td>
                                 <td class="admin">&nbsp;</td>
                             </tr>
                             <tr>

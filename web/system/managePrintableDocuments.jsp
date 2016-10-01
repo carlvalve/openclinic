@@ -35,7 +35,7 @@
             }
         }
         
-        return "<input type='checkbox' name='" + document.documentName + "'" + sChecked + " id='cb_" + document.documentName + "'>&nbsp;" + getLabel("documents", document.documentLabelId, sWebLanguage, "cb_"+document.documentName) + "<br>";
+        return "<input type='checkbox' name='" + document.documentName + "'" + sChecked + " id='cb_" + document.documentName + "'>&nbsp;" + getLabel(null,"documents", document.documentLabelId, sWebLanguage, "cb_"+document.documentName) + "<br>";
     }
 
     //--- IS DICUMENT CHECKED IN DB ---------------------------------------------------------------
@@ -261,11 +261,11 @@
                     }
                 }
                 else{
-                    System.out.println("WARNING : configvalue 'DocumentsFolder' with value '"+sDocumentsFolder+"' is not an existing directory.");
+                    Debug.println("WARNING : configvalue 'DocumentsFolder' with value '"+sDocumentsFolder+"' is not an existing directory.");
                 }
 
                 if(documentCount==0){
-                    %>&nbsp;<%=getTran("web","noDocumentsFound",sWebLanguage)%><%
+                    %>&nbsp;<%=getTran(request,"web","noDocumentsFound",sWebLanguage)%><%
                 }
             %>
             </td>
@@ -277,10 +277,10 @@
         if(documentCount > 0){
             %>
                 <%-- UN/CHECK ALL --%>
-                <a href="javascript:checkAll('documents',true);"><%=getTran("Web.Manage.CheckDb","CheckAll",sWebLanguage)%></a>
-                <a href="javascript:checkAll('documents',false);"><%=getTran("Web.Manage.CheckDb","UncheckAll",sWebLanguage)%></a><br>
+                <a href="javascript:checkAll('documents',true);"><%=getTran(request,"Web.Manage.CheckDb","CheckAll",sWebLanguage)%></a>
+                <a href="javascript:checkAll('documents',false);"><%=getTran(request,"Web.Manage.CheckDb","UncheckAll",sWebLanguage)%></a><br>
 
-                <%=documentCount%> <%=getTran("web","documentsFound",sWebLanguage)%><br>
+                <%=documentCount%> <%=getTran(request,"web","documentsFound",sWebLanguage)%><br>
             <%
         }
     %>

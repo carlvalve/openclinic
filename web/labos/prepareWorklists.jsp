@@ -1,3 +1,4 @@
+<%@page import="java.io.PrintWriter"%>
 <%@page import="be.openclinic.medical.ResultsProfile,
                 java.util.*,
                 be.openclinic.medical.LabRequest,
@@ -8,6 +9,8 @@
     String activeProfile = checkString(request.getParameter("activeProfile"));
 
     if(request.getParameter("save")!=null){
+    	String sExportToIM="";
+    	boolean bExportToIM = MedwanQuery.getInstance().getConfigInt("enableExportToIM",0)==1;
         // Save the data
         Enumeration parameters = request.getParameterNames();
         while(parameters.hasMoreElements()){
@@ -15,8 +18,38 @@
             String fields[] = name.split("\\.");
             if(fields[0].equalsIgnoreCase("store")){
                 if(fields[3].equalsIgnoreCase("worklisted")){
+                    if(bExportToIM){
+                    	//Add the lab analyses that have been put on the worklist to export file
+				        Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+                        try{
+                            String sQuery="select * from RequestedLabAnalyses r,adminview a where r.patientid=a.personid and serverid=? and transactionid=? and analysiscode in ("+request.getParameter("worklistAnalyses")+") and worklisteddatetime is null";
+                            PreparedStatement ps = oc_conn.prepareStatement(sQuery);
+                            ps.setInt(1,Integer.parseInt(fields[1]));
+                            ps.setInt(2,Integer.parseInt(fields[2]));
+                            ResultSet rs = ps.executeQuery();
+                            while(rs.next()){
+                            	sExportToIM+=fields[2]+";";
+                            	sExportToIM+=new SimpleDateFormat("yyyyMMddHHmmss").format(rs.getTimestamp("requestdatetime"))+";";
+                            	sExportToIM+=rs.getString("patientid")+";";
+                            	sExportToIM+=rs.getString("gender")+";";
+                            	sExportToIM+=new SimpleDateFormat("yyyyMMdd").format(rs.getDate("dateofbirth"))+";";
+                            	sExportToIM+=rs.getString("analysiscode")+";\r\n";
+                            }
+                            rs.close();
+                            ps.close();
+                        }
+                        catch(Exception e){
+                            e.printStackTrace();
+                        }
+               			oc_conn.close();
+                    }	
                     RequestedLabAnalysis.setWorklisted(Integer.parseInt(fields[1]),Integer.parseInt(fields[2]),request.getParameter("worklistAnalyses"));
                 }
+            }
+            if(bExportToIM && sExportToIM.length()>0){
+            	//Now write the file for IM to a shared directory
+            	String sFilename=MedwanQuery.getInstance().getConfigString("OC2IMDirectory","c:/temp")+"/"+new SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date())+".oc2im";
+            	org.apache.commons.io.FileUtils.writeStringToFile(new java.io.File(sFilename), sExportToIM);
             }
         }
     }
@@ -27,7 +60,7 @@
     
     <table width="100%" cellspacing="1" cellpadding="1" class="menu">
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","worklist",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","worklist",sWebLanguage)%></td>
             <td class="admin2">            
                 <select class="text" name="activeProfile">
                     <%
@@ -55,8 +88,8 @@
         <br>
         <table width="100%" cellspacing="1" cellpadding="0">
             <tr class="admin">
-                <th><%=getTran("web","ID",sWebLanguage)%><br/><%=getTran("web","date",sWebLanguage)%></th>
-                <th><%=getTran("web","patient",sWebLanguage)%><br/><%=getTran("web","service",sWebLanguage)%></th>
+                <th><%=getTran(request,"web","ID",sWebLanguage)%><br/><%=getTran(request,"web","date",sWebLanguage)%></th>
+                <th><%=getTran(request,"web","patient",sWebLanguage)%><br/><%=getTran(request,"web","service",sWebLanguage)%></th>
         <%
             // Show the selected worklist
             // Find all  analysis that are part of the active profile
@@ -72,8 +105,8 @@
                 }
                 worklistAnalyses+= "'"+analysis.get("labcode")+"'";
             }
-            out.print("<th>"+getTran("web","lab.setworklist",sWebLanguage)+"</th>");
-            out.print("<th>"+getTran("web","comment",sWebLanguage)+"</th></tr>");
+            out.print("<th>"+getTran(request,"web","lab.setworklist",sWebLanguage)+"</th>");
+            out.print("<th>"+getTran(request,"web","comment",sWebLanguage)+"</th></tr>");
 
             // Find all lab requests for this worklist
             Vector results = new Vector();

@@ -45,10 +45,10 @@
                 sPreviousCareUid = sCareUid;
 
                 if(sCareUid!=null) {
-                    sCareDescr = getTran("care_type",sCareUid,sWebLanguage);
+                    sCareDescr = getTran(null,"care_type",sCareUid,sWebLanguage);
                 }
                 else{
-                    sCareDescr = "<font color='red'>"+getTran("web","nonexistingcare",sWebLanguage)+"</font>";
+                    sCareDescr = "<font color='red'>"+getTran(null,"web","nonexistingcare",sWebLanguage)+"</font>";
                 }
             }
 
@@ -87,17 +87,17 @@
         CarePrescriptionSchema prescriptionSchemaToDelete = CarePrescriptionSchema.getCarePrescriptionSchema(sEditPrescrUid);
         prescriptionSchemaToDelete.delete();
 
-        msg = getTran("web","dataisdeleted",sWebLanguage);
+        msg = getTran(request,"web","dataisdeleted",sWebLanguage);
     }
     
-    String sTitle = getTran("Web.manage","ManagePatientCarePrescriptions",sWebLanguage)+"&nbsp;"+activePatient.lastname+" "+activePatient.firstname;
+    String sTitle = getTran(request,"Web.manage","ManagePatientCarePrescriptions",sWebLanguage)+"&nbsp;"+activePatient.lastname+" "+activePatient.firstname;
 %>
 <form name="transactionForm" id="transactionForm" method="post" onClick='setSaveButton(event);clearMessage();' onKeyUp='setSaveButton(event);'>
     <%=writeTableHeaderDirectText(sTitle,sWebLanguage," window.close();")%>
     <%
         if(activePatient==null){
             // display message
-            %><%=getTran("web","firstselectaperson",sWebLanguage)%><%
+            %><%=getTran(request,"web","firstselectaperson",sWebLanguage)%><%
         }
         else{
             //--- DISPLAY ACTIVE PRESCRIPTIONS (for activePatient) --------------------------------
@@ -112,16 +112,16 @@
                     <%-- header --%>
                     <tr class="gray">
                         <td width="20" nowrap>&nbsp;</td>
-                        <td><%=getTran("Web","care_type",sWebLanguage)%></td>
-                        <td width="120"><%=getTran("Web","prescriber",sWebLanguage)%></td>
-                        <td width="80"><SORTTYPE:DATE><%=getTran("Web","begindate",sWebLanguage)%></SORTTYPE:DATE></td>
-                        <td width="80"><SORTTYPE:DATE><%=getTran("Web","enddate",sWebLanguage)%></SORTTYPE:DATE></td>
+                        <td><%=getTran(request,"Web","care_type",sWebLanguage)%></td>
+                        <td width="120"><%=getTran(request,"Web","prescriber",sWebLanguage)%></td>
+                        <td width="80"><SORTTYPE:DATE><%=getTran(request,"Web","begindate",sWebLanguage)%></SORTTYPE:DATE></td>
+                        <td width="80"><SORTTYPE:DATE><%=getTran(request,"Web","enddate",sWebLanguage)%></SORTTYPE:DATE></td>
                     </tr>
                     <tbody class="hand"><%=prescriptionsHtml%></tbody>
                 </table>
                 
                 <%-- number of records found --%>
-                <span style="width:49%;text-align:left;">&nbsp;<%=foundPrescrCount%> <%=getTran("web","activecareprescriptionsfound",sWebLanguage)%></span>
+                <span style="width:49%;text-align:left;">&nbsp;<%=foundPrescrCount%> <%=getTran(request,"web","activecareprescriptionsfound",sWebLanguage)%></span>
                 <%
                     if(foundPrescrCount > 20){
                         // link to top of page

@@ -202,47 +202,47 @@
 
 <table width="100%" class="list" cellspacing="1" cellpadding="0">
 <tr>
-	<td class='admin2' width='25%'><center><%=getTran("web","total_patients",sWebLanguage)%>: <b><%=deci.format(totalpatients)%></b></center></td>
-	<td class='admin2' width='25%'><center><%=getTran("web","total_visits",sWebLanguage)%>: <b><%=deci.format(totalvisits)%></b></center></td>
-	<td class='admin2' width='25%'><center><%=getTran("web","total_admissions",sWebLanguage)%>: <b><%=deci.format(totaladmissions)%></b></center></td>
-	<td class='admin2' width='25%'><center><%=getTran("web","total_encounters",sWebLanguage)%>: <b><%=deci.format(totalvisits+totaladmissions)%></b></center></td>
+	<td class='admin2' width='25%'><center><%=getTran(request,"web","total_patients",sWebLanguage)%>: <b><%=deci.format(totalpatients)%></b></center></td>
+	<td class='admin2' width='25%'><center><%=getTran(request,"web","total_visits",sWebLanguage)%>: <b><%=deci.format(totalvisits)%></b></center></td>
+	<td class='admin2' width='25%'><center><%=getTran(request,"web","total_admissions",sWebLanguage)%>: <b><%=deci.format(totaladmissions)%></b></center></td>
+	<td class='admin2' width='25%'><center><%=getTran(request,"web","total_encounters",sWebLanguage)%>: <b><%=deci.format(totalvisits+totaladmissions)%></b></center></td>
 </tr>
 <tr>
 	<td colspan='10'><hr/></td>
 </tr>
 <tr>
-	<td class='admin2' width='25%'><center><%=getTran("web","total_debets",sWebLanguage)%>: <b><%=deci.format(totaldebets)%></b></center></td>
-	<td class='admin2' width='25%'><center><%=getTran("web","total_patientinvoices",sWebLanguage)%>: <b><%=deci.format(totalpatientinvoices)%></b></center></td>
-	<td class='admin2' width='25%'><center><%=getTran("web","total_insurarinvoices",sWebLanguage)%>: <b><%=deci.format(totalinsurarinvoices)%></b></center></td>
-	<td class='admin2' width='25%'><center><%=getTran("web","total_extrainsurarinvoices",sWebLanguage)%>: <b><%=deci.format(totalextrainsurarinvoices)%></b></center></td>
+	<td class='admin2' width='25%'><center><%=getTran(request,"web","total_debets",sWebLanguage)%>: <b><%=deci.format(totaldebets)%></b></center></td>
+	<td class='admin2' width='25%'><center><%=getTran(request,"web","total_patientinvoices",sWebLanguage)%>: <b><%=deci.format(totalpatientinvoices)%></b></center></td>
+	<td class='admin2' width='25%'><center><%=getTran(request,"web","total_insurarinvoices",sWebLanguage)%>: <b><%=deci.format(totalinsurarinvoices)%></b></center></td>
+	<td class='admin2' width='25%'><center><%=getTran(request,"web","total_extrainsurarinvoices",sWebLanguage)%>: <b><%=deci.format(totalextrainsurarinvoices)%></b></center></td>
 </tr>
 <tr>
-	<td class='admin2' width='25%'><center><%=getTran("web","total_prestations",sWebLanguage)%>: <b><%=deci.format(totalprestations)%></b></center></td>
-	<td class='admin2' width='25%'><center><%=getTran("web","total_patientamount",sWebLanguage)%>: <b><%=deci.format(totalpatientamount)%></b></center></td>
-	<td class='admin2' width='25%'><center><%=getTran("web","total_insuraramount",sWebLanguage)%>: <b><%=deci.format(totalinsuraramount)%></b></center></td>
-	<td class='admin2' width='25%'><center><%=getTran("web","total_extrainsuraramount",sWebLanguage)%>: <b><%=deci.format(totalextrainsuraramount)%></b></center></td>
-</tr>
-<tr>
-	<td colspan='10'><hr/></td>
-</tr>
-<tr>
-	<td class='admin2' width='25%'><center><%=getTran("web","total_diagnoses",sWebLanguage)%>: <b><%=deci.format(totaldiagnoses)%></b></center></td>
-	<td class='admin2' width='25%'><center><%=getTran("web","total_fre",sWebLanguage)%>: <b><%=deci.format(totalrfe)%></b></center></td>
-	<td class='admin2' width='25%'><center><%=getTran("web","total_transactions",sWebLanguage)%>: <b><%=deci.format(totaltransactions)%></b></center></td>
-	<td class='admin2' width='25%'><center><%=getTran("web","total_items",sWebLanguage)%>: <b><%=deci.format(totalitems)%></b></center></td>
-</tr>
-<tr>
-	<td class='admin2' width='25%'><center><%=getTran("web","total_requestedlabanalyses",sWebLanguage)%>: <b><%=deci.format(totalrequestedlabanalyses)%></b></center></td>
-	<td class='admin2' colspan="3"><center><%=getTran("web","total_antibiograms",sWebLanguage)%>: <b><%=deci.format(totalantibiograms)%></b></center></td>
+	<td class='admin2' width='25%'><center><%=getTran(request,"web","total_prestations",sWebLanguage)%>: <b><%=deci.format(totalprestations)%></b></center></td>
+	<td class='admin2' width='25%'><center><%=getTran(request,"web","total_patientamount",sWebLanguage)%>: <b><%=deci.format(totalpatientamount)%></b></center></td>
+	<td class='admin2' width='25%'><center><%=getTran(request,"web","total_insuraramount",sWebLanguage)%>: <b><%=deci.format(totalinsuraramount)%></b></center></td>
+	<td class='admin2' width='25%'><center><%=getTran(request,"web","total_extrainsuraramount",sWebLanguage)%>: <b><%=deci.format(totalextrainsuraramount)%></b></center></td>
 </tr>
 <tr>
 	<td colspan='10'><hr/></td>
 </tr>
 <tr>
-	<td class='admin2' width='25%'><center><%=getTran("web","total_insurars",sWebLanguage)%>: <b><%=deci.format(totalinsurars)%></b></center></td>
-	<td class='admin2' width='25%'><center><%=getTran("web","total_users",sWebLanguage)%>: <b><%=deci.format(totalusers)%></b></center></td>
-	<td class='admin2' width='25%'><center><%=getTran("web","total_services",sWebLanguage)%>: <b><%=deci.format(totalservices)%></b></center></td>
-	<td class='admin2' width='25%'><center><%=getTran("web","total_beds",sWebLanguage)%>: <b><%=deci.format(totalbeds)%></b></center></td>
+	<td class='admin2' width='25%'><center><%=getTran(request,"web","total_diagnoses",sWebLanguage)%>: <b><%=deci.format(totaldiagnoses)%></b></center></td>
+	<td class='admin2' width='25%'><center><%=getTran(request,"web","total_fre",sWebLanguage)%>: <b><%=deci.format(totalrfe)%></b></center></td>
+	<td class='admin2' width='25%'><center><%=getTran(request,"web","total_transactions",sWebLanguage)%>: <b><%=deci.format(totaltransactions)%></b></center></td>
+	<td class='admin2' width='25%'><center><%=getTran(request,"web","total_items",sWebLanguage)%>: <b><%=deci.format(totalitems)%></b></center></td>
+</tr>
+<tr>
+	<td class='admin2' width='25%'><center><%=getTran(request,"web","total_requestedlabanalyses",sWebLanguage)%>: <b><%=deci.format(totalrequestedlabanalyses)%></b></center></td>
+	<td class='admin2' colspan="3"><center><%=getTran(request,"web","total_antibiograms",sWebLanguage)%>: <b><%=deci.format(totalantibiograms)%></b></center></td>
+</tr>
+<tr>
+	<td colspan='10'><hr/></td>
+</tr>
+<tr>
+	<td class='admin2' width='25%'><center><%=getTran(request,"web","total_insurars",sWebLanguage)%>: <b><%=deci.format(totalinsurars)%></b></center></td>
+	<td class='admin2' width='25%'><center><%=getTran(request,"web","total_users",sWebLanguage)%>: <b><%=deci.format(totalusers)%></b></center></td>
+	<td class='admin2' width='25%'><center><%=getTran(request,"web","total_services",sWebLanguage)%>: <b><%=deci.format(totalservices)%></b></center></td>
+	<td class='admin2' width='25%'><center><%=getTran(request,"web","total_beds",sWebLanguage)%>: <b><%=deci.format(totalbeds)%></b></center></td>
 </tr>
 </table>
 	

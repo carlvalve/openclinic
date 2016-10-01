@@ -12,8 +12,8 @@
     private String addChirurgie(int iTotal, String sTmpChirurgieDateBegin, String sTmpChirurgieDateEnd, String sTmpChirurgieDescr, String sWebLanguage) {
         return "<tr id='rowChirurgie" + iTotal + "'>"
                 + "<td width='36'>"
-                + " <a href='javascript:deleteChirurgie(rowChirurgie" + iTotal + ")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran("Web.Occup", "medwan.common.delete", sWebLanguage) + "' border='0'></a> "
-                + " <a href='javascript:editChirurgie(rowChirurgie" + iTotal + ")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_edit.gif' alt='" + getTran("Web.Occup", "medwan.common.edit", sWebLanguage) + "' border='0'></a>"
+                + " <a href='javascript:deleteChirurgie(rowChirurgie" + iTotal + ")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran(null,"Web.Occup", "medwan.common.delete", sWebLanguage) + "' border='0'></a> "
+                + " <a href='javascript:editChirurgie(rowChirurgie" + iTotal + ")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_edit.gif' alt='" + getTran(null,"Web.Occup", "medwan.common.edit", sWebLanguage) + "' border='0'></a>"
                 + "</td>"
                 + "<td>&nbsp;" + sTmpChirurgieDateBegin + "</td>"
                 + "<td>&nbsp;" + sTmpChirurgieDateEnd + "</td>"
@@ -25,8 +25,8 @@
     private String addHeelkunde(int iTotal, String sTmpHeelkundeDateBegin, String sTmpHeelkundeDateEnd, String sTmpHeelkundeDescr, String sWebLanguage) {
         return "<tr id='rowHeelkunde" + iTotal + "'>"
                 + "<td width='36'>"
-                + " <a href='javascript:deleteHeelkunde(rowHeelkunde" + iTotal + ")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran("Web.Occup", "medwan.common.delete", sWebLanguage) + "' border='0'></a> "
-                + " <a href='javascript:editHeelkunde(rowHeelkunde" + iTotal + ")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_edit.gif' alt='" + getTran("Web.Occup", "medwan.common.edit", sWebLanguage) + "' border='0'></a>"
+                + " <a href='javascript:deleteHeelkunde(rowHeelkunde" + iTotal + ")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran(null,"Web.Occup", "medwan.common.delete", sWebLanguage) + "' border='0'></a> "
+                + " <a href='javascript:editHeelkunde(rowHeelkunde" + iTotal + ")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_edit.gif' alt='" + getTran(null,"Web.Occup", "medwan.common.edit", sWebLanguage) + "' border='0'></a>"
                 + "</td>"
                 + "<td>&nbsp;" + sTmpHeelkundeDateBegin + "</td>"
                 + "<td>&nbsp;" + sTmpHeelkundeDateEnd + "</td>"
@@ -38,8 +38,8 @@
     private String addLetsel(int iTotal, String sTmpLetselsDate, String sTmpLetselsDescr, String sTmpLetselsBI, String sWebLanguage) {
         return "<tr id='rowLetsels" + iTotal + "'>"
                 + "<td>"
-                + " <a href='javascript:deleteLetsels(rowLetsels" + iTotal + ")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran("Web.Occup", "medwan.common.delete", sWebLanguage) + "' border='0'></a> "
-                + " <a href='javascript:editLetsels(rowLetsels" + iTotal + ")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_edit.gif' alt='" + getTran("Web.Occup", "medwan.common.edit", sWebLanguage) + "' border='0'></a>"
+                + " <a href='javascript:deleteLetsels(rowLetsels" + iTotal + ")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran(null,"Web.Occup", "medwan.common.delete", sWebLanguage) + "' border='0'></a> "
+                + " <a href='javascript:editLetsels(rowLetsels" + iTotal + ")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_edit.gif' alt='" + getTran(null,"Web.Occup", "medwan.common.edit", sWebLanguage) + "' border='0'></a>"
                 + "</td>"
                 + "<td>&nbsp;" + sTmpLetselsDate + "</td>"
                 + "<td>&nbsp;" + sTmpLetselsDescr + "</td>"
@@ -239,7 +239,7 @@
 <table class="list" width="100%" border="0" cellspacing="1">
     <%-- COMMENT --%>
     <tr>
-        <td class="admin"><%=getTran("Web.Occup","medwan.common.remark",sWebLanguage)%></td>
+        <td class="admin"><%=getTran(request,"Web.Occup","medwan.common.remark",sWebLanguage)%></td>
         <td class="admin2">
             <textarea onKeyup="resizeTextarea(this,10);" class="text" name="PersoonlijkComment" rows="2" cols="75"><%=sComment%></textarea>
             <%-- hidden fields --%>
@@ -259,16 +259,16 @@
             <table width="100%" cellspacing="0" cellpadding="0" class="list">
                 <%-- MEDICAL ANTECEDENTS --%>
                 <tr class="admin">
-                    <td colspan="2"><%=getTran("Web.Occup","Medical_Antecedents",sWebLanguage)%></td>
+                    <td colspan="2"><%=getTran(request,"Web.Occup","Medical_Antecedents",sWebLanguage)%></td>
                 </tr>
                 <tr>
                     <td colspan="2">
                         <table width="100%" cellspacing="1" id="tblChirurgie">
                             <tr>
                                 <td class="admin" width="36">&nbsp;</td>
-                                <td class="admin" width="150"><%=getTran("Web.Occup","medwan.common.date-begin",sWebLanguage)%></td>
-                                <td class="admin" width="150"><%=getTran("Web.Occup","medwan.common.date-end",sWebLanguage)%></td>
-                                <td class="admin" width="250"><%=getTran("Web.Occup","medwan.common.description",sWebLanguage)%></td>
+                                <td class="admin" width="150"><%=getTran(request,"Web.Occup","medwan.common.date-begin",sWebLanguage)%></td>
+                                <td class="admin" width="150"><%=getTran(request,"Web.Occup","medwan.common.date-end",sWebLanguage)%></td>
+                                <td class="admin" width="250"><%=getTran(request,"Web.Occup","medwan.common.description",sWebLanguage)%></td>
                                 <td class="admin">&nbsp;</td>
                             </tr>
                             <tr>
@@ -299,16 +299,16 @@
             <table width="100%" cellspacing="0" cellpadding="0" class="list">
     <%-- HEELKUNDIGE ANTECEDENTEN --%>
                 <tr class="admin">
-                    <td colspan="2"><%=getTran("Web.Occup","Heelkundige_antecedenten",sWebLanguage)%></td>
+                    <td colspan="2"><%=getTran(request,"Web.Occup","Heelkundige_antecedenten",sWebLanguage)%></td>
                 </tr>
                 <tr>
                     <td colspan="2">
                         <table width="100%" cellspacing="1" id="tblHeelkunde">
                             <tr>
                                 <td class="admin" width="36">&nbsp;</td>
-                                <td class="admin" width="150"><%=getTran("Web.Occup","medwan.common.date-begin",sWebLanguage)%></td>
-                                <td class="admin" width="150"><%=getTran("Web.Occup","medwan.common.date-end",sWebLanguage)%></td>
-                                <td class="admin" width="250"><%=getTran("Web.Occup","medwan.common.description",sWebLanguage)%></td>
+                                <td class="admin" width="150"><%=getTran(request,"Web.Occup","medwan.common.date-begin",sWebLanguage)%></td>
+                                <td class="admin" width="150"><%=getTran(request,"Web.Occup","medwan.common.date-end",sWebLanguage)%></td>
+                                <td class="admin" width="250"><%=getTran(request,"Web.Occup","medwan.common.description",sWebLanguage)%></td>
                                 <td class="admin">&nbsp;</td>
                             </tr>
                             <tr>
@@ -339,16 +339,16 @@
             <table width="100%" cellspacing="0" cellpadding="0" class="list">
     <%-- LETSELS --%>
                 <tr class="admin">
-                    <td colspan="2"><%=getTran("Web.Occup","Lesions_with_%_PI",sWebLanguage)%></td>
+                    <td colspan="2"><%=getTran(request,"Web.Occup","Lesions_with_%_PI",sWebLanguage)%></td>
                 </tr>
                 <tr>
                     <td colspan="2">
                         <table width="100%" cellspacing="1" id="tblLetsels">
                             <tr>
                                 <td class="admin" width="36">&nbsp;</td>
-                                <td class="admin" width="150"><%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%></td>
-                                <td class="admin" width="250"><%=getTran("Web.Occup","medwan.common.description",sWebLanguage)%></td>
-                                <td class="admin" width="70">%<%=getTran("Web.Occup","PI",sWebLanguage)%></td>
+                                <td class="admin" width="150"><%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%></td>
+                                <td class="admin" width="250"><%=getTran(request,"Web.Occup","medwan.common.description",sWebLanguage)%></td>
+                                <td class="admin" width="70">%<%=getTran(request,"Web.Occup","PI",sWebLanguage)%></td>
                                 <td class="admin">&nbsp;</td>
                             </tr>
                             <tr>
@@ -402,7 +402,7 @@ function addChirurgie(){
       if(window.showModalDialog){
           window.showModalDialog(popupUrl,'',modalitiesIE);
       }else{
-          window.confirm("<%=getTran("Web.occup","endMustComeAfterBegin",sWebLanguage)%>");
+          window.confirm("<%=getTran(null,"Web.occup","endMustComeAfterBegin",sWebLanguage)%>");
       }
       document.getElementById("transactionForm").ChirurgieDateEnd.select();
       return false;
@@ -508,7 +508,7 @@ function addHeelkunde(){
       if(window.showModalDialog){
           window.showModalDialog(popupUrl,'',modalitiesIE);
       }else{
-          window.confirm("<%=getTran("Web.Occup","endMustComeAfterBegin",sWebLanguage)%>");
+          window.confirm("<%=getTran(null,"Web.Occup","endMustComeAfterBegin",sWebLanguage)%>");
       }
       document.getElementById("transactionForm").HeelkundeDateEnd.select();
       return false;

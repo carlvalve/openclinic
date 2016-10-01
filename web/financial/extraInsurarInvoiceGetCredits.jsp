@@ -33,7 +33,7 @@
                         sReturn+= "<tr class='list"+sClass+"'>"+
                                    "<td><input type='checkbox' name='cbInsurarInvoice"+insurarcredit.getUid()+"="+insurarcredit.getAmount()+"' onclick='doBalance(this, false)'"+sChecked+"></td>"+
                                    "<td>"+ScreenHelper.getSQLDate(insurarcredit.getDate())+"</td>"+
-                                   "<td>"+HTMLEntities.htmlentities(getTran("credit.type", checkString(insurarcredit.getType()), sWebLanguage))+"</td>"+
+                                   "<td>"+HTMLEntities.htmlentities(getTran(null,"credit.type", checkString(insurarcredit.getType()), sWebLanguage))+"</td>"+
                                    "<td>"+insurarcredit.getAmount()+"</td>"+
                                   "</tr>";
                     }
@@ -47,9 +47,9 @@
 <table width="100%" cellspacing="1" cellpadding="0">
     <tr class="gray">
         <td width="20"/>
-        <td width="80"><%=HTMLEntities.htmlentities(getTran("web","date",sWebLanguage))%></td>
-        <td width="50%"><%=HTMLEntities.htmlentities(getTran("web","type",sWebLanguage))%></td>
-        <td><%=HTMLEntities.htmlentities(getTran("web","amount",sWebLanguage))%></td>
+        <td width="80"><%=HTMLEntities.htmlentities(getTran(request,"web","date",sWebLanguage))%></td>
+        <td width="50%"><%=HTMLEntities.htmlentities(getTran(request,"web","type",sWebLanguage))%></td>
+        <td><%=HTMLEntities.htmlentities(getTran(request,"web","amount",sWebLanguage))%></td>
     </tr>
 <%
     String sEditInsurarInvoiceUID = checkString(request.getParameter("EditInsurarInvoiceUID"));

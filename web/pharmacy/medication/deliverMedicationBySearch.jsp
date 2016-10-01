@@ -30,7 +30,7 @@
     <table class="list" width="100%" cellspacing="1">
                        <%-- description --%>
        <tr>
-           <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","Stock",sWebLanguage)%> *</td>
+           <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","Stock",sWebLanguage)%> *</td>
            <td class="admin2">
                <select class="text" name="FindStockId" style="vertical-align:-2px;">
                    <%=getStocks(activeUser.userid,session)%>
@@ -38,7 +38,7 @@
            </td>
        </tr>
          <tr>
-           <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","Name",sWebLanguage)%></td>
+           <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","Name",sWebLanguage)%></td>
            <td class="admin2">
                <input type="text" class="text" name="FindProductName" size="<%=sTextWidth%>" maxLength="255" >
 

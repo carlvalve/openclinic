@@ -174,7 +174,7 @@
             <table width="100%" class="menu" cellspacing="0" cellpadding="0">
                 <tr height="22">
                     <td class="admin2">
-                        &nbsp;<%=getTran("admin","category",sWebLanguage)%>
+                        &nbsp;<%=getTran(request,"admin","category",sWebLanguage)%>
                         <input class="text" type="text" name="FindCategoryText" READONLY size="<%=sTextWidth%>" title="<%=sFindCategoryText%>" value="<%=sFindCategoryText%>">
                         <input type="hidden" name="FindCategoryCode" value="<%=sFindCategoryCode%>">
                          
@@ -257,7 +257,7 @@
         if(category!=null){
             // translate
             if(category.parentcode.trim().length()>0){
-                sCategoryParentCodeText = getTran("drug.category",category.parentcode,sWebLanguage);
+                sCategoryParentCodeText = getTran(request,"drug.category",category.parentcode,sWebLanguage);
             }
 
             StringTokenizer tokenizer = new StringTokenizer(supportedLanguages,",");
@@ -282,7 +282,7 @@
             <table width="100%" class="list" cellspacing="1" cellpadding="0">
                 <%-- Category --%>
                 <tr>
-                    <td class="admin" width="<%=sTDAdminWidth%>"> <%=getTran("Web.Manage.Category","ID",sWebLanguage)%> *</td>
+                    <td class="admin" width="<%=sTDAdminWidth%>"> <%=getTran(request,"Web.Manage.Category","ID",sWebLanguage)%> *</td>
                     <td class="admin2">
                         <input type="text" class="text" name="EditCategoryCode" value="<%=category.code%>" size="<%=sTextWidth%>">
                     </td>
@@ -290,7 +290,7 @@
                 
                 <%-- ParentID --%>
                 <tr>
-                    <td class="admin"> <%=getTran("Web.Manage.Category","ParentID",sWebLanguage)%></td>
+                    <td class="admin"> <%=getTran(request,"Web.Manage.Category","ParentID",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="text" readonly class="text" name="EditCategoryParentText" value="<%=category.parentcode+" "+sCategoryParentCodeText%>" size="<%=sTextWidth%>">
                         <input type="hidden" name="EditCategoryParentCode" value="<%=category.parentcode%>">
@@ -308,7 +308,7 @@
 
                         %>
                             <tr>
-                                <td class="admin"> <%=getTran("web","description",sWebLanguage)%> <%=tmpLang%> *</td>
+                                <td class="admin"> <%=getTran(request,"web","description",sWebLanguage)%> <%=tmpLang%> *</td>
                                 <td class="admin2">
                                     <input type="text" class="text" name="EditLabelValue<%=tmpLang%>" value="<%=checkString((String)labelValues.get(tmpLang))%>" size="<%=sTextWidth%>">
                                 </td>
@@ -319,7 +319,7 @@
             </table>
             
             <%-- indication of obligated fields --%>
-            <%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%>
+            <%=getTran(request,"Web","colored_fields_are_obligate",sWebLanguage)%>
             
             <%-- EDIT BUTTONS --%>
             <%=ScreenHelper.alignButtonsStart()%>

@@ -92,9 +92,9 @@
 	                <%-- HEADER --%>
 	                <tr class="gray">
 	                    <td width="20"></td>  
-	                    <td width="200"><%=getTran("web","name",sWebLanguage)%></td>
-	                    <td width="*"><%=getTran("web","value",sWebLanguage)%></td>
-	                    <td width="100"><%=getTran("web","updateTime",sWebLanguage)%></td>
+	                    <td width="200"><%=getTran(request,"web","name",sWebLanguage)%></td>
+	                    <td width="*"><%=getTran(request,"web","value",sWebLanguage)%></td>
+	                    <td width="100"><%=getTran(request,"web","updateTime",sWebLanguage)%></td>
 	                </tr>
                 <%
                 
@@ -112,7 +112,7 @@
                 // try to translate item-name (field-name)
                 if(activeUser.isAdmin()){
                     // show link when admin
-                    sItemTran = getTran("web.occup",sItemType,sWebLanguage);
+                    sItemTran = getTran(request,"web.occup",sItemType,sWebLanguage);
                 }
                 else{
                     sItemTran = getTranNoLink("web.occup",sItemType,sWebLanguage);                  	
@@ -172,11 +172,11 @@
         if(counter > 0){            
             %>
 	            </table>
-	            <%=counter%> <%=getTran("web","recordsFound",sWebLanguage)%>
+	            <%=counter%> <%=getTran(request,"web","recordsFound",sWebLanguage)%>
             <%
         }
         else{
-          %><%=getTran("web","noRecordsFound",sWebLanguage)%><%
+          %><%=getTran(request,"web","noRecordsFound",sWebLanguage)%><%
         }
 
         // action message

@@ -311,6 +311,23 @@ public class Insurar extends OC_Object {
 		setModifier(11,n+"");
 	}
 	
+	public int getNeedsApproval(){
+		int n=0;
+		if(getModifiers()!=null){
+			try{
+				n=Integer.parseInt(getModifiers().split(";")[12]);
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return n;
+	}
+
+	public void setNeedsApproval(int n){
+		setModifier(12,n+"");
+	}
+	
 	public void setModifier(int index,String value){
 		if(getModifiers()==null){
 			setModifiers("");

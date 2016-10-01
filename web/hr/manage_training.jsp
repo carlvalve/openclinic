@@ -28,7 +28,7 @@
     <table class="list" border="0" width="100%" cellspacing="1">
         <%-- begin (*) --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web.hr","begin",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web.hr","begin",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2" nowrap> 
                 <%=writeDateField("begin","EditForm","",sWebLanguage)%>            
             </td>                        
@@ -36,7 +36,7 @@
         
         <%-- end --%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","end",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web.hr","end",sWebLanguage)%></td>
             <td class="admin2" nowrap> 
                 <%=writeDateField("end","EditForm","",sWebLanguage)%>            
             </td>                        
@@ -44,7 +44,7 @@
         
         <%-- institute --%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","trainingInstitute",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.hr","trainingInstitute",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="institute" name="institute" size="50" maxLength="255" value="">
             </td>
@@ -52,7 +52,7 @@
         
         <%-- type --%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","trainingType",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web.hr","trainingType",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" id="type" name="type" size="50" maxLength="50" value="">
             </td>
@@ -60,18 +60,18 @@
          
         <%-- level (*) --%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","trainingLevel",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.hr","trainingLevel",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <select class="text" id="level" name="level">
                     <option/>
-                    <%=ScreenHelper.writeSelect("hr.training.level","",sWebLanguage)%>
+                    <%=ScreenHelper.writeSelect(request,"hr.training.level","",sWebLanguage)%>
                 </select>
             </td>
         </tr>
             
         <%-- diploma --%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","titleOrDiploma",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.hr","titleOrDiploma",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2"> 
                 <input type="text" class="text" id="diploma" name="diploma" size="80" maxLength="255" value="">
             </td>
@@ -79,7 +79,7 @@
         
         <%-- diplomaDate (*) --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web.hr","diplomaDate",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web.hr","diplomaDate",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2" nowrap> 
                 <%=writeDateField("diplomaDate","EditForm","",sWebLanguage)%>            
             </td>                        
@@ -91,11 +91,11 @@
                 if(MedwanQuery.getInstance().getConfigString("enableDiplomaCode"+i).equals("1")){
                     %>                    
                         <tr>
-                            <td class="admin"><%=getTran("web.hr","diplomaCode",sWebLanguage)%> <%=i%></td>
+                            <td class="admin"><%=getTran(request,"web.hr","diplomaCode",sWebLanguage)%> <%=i%></td>
                             <td class="admin2">                                                    
                                 <select class="text" id="diplomaCode<%=i%>" name="diplomaCode<%=i%>">
                                     <option/>
-                                    <%=ScreenHelper.writeSelect("hr.training.diplomacode"+i,"",sWebLanguage)%>
+                                    <%=ScreenHelper.writeSelect(request,"hr.training.diplomacode"+i,"",sWebLanguage)%>
                                 </select>
                             </td>
                         </tr>
@@ -107,7 +107,7 @@
         
         <%-- comment --%>                    
         <tr>
-            <td class="admin"><%=getTran("web.hr","comment",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web.hr","comment",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea class="text" name="comment" id="comment" cols="80" rows="4" onKeyup="resizeTextarea(this,8);"></textarea>
             </td>
@@ -123,7 +123,7 @@
             </td>
         </tr>
     </table>
-    <i><%=getTran("web","colored_fields_are_obligate",sWebLanguage)%></i>
+    <i><%=getTran(request,"web","colored_fields_are_obligate",sWebLanguage)%></i>
     
     <div id="divMessage" style="padding-top:10px;"></div>
 </form>

@@ -49,16 +49,18 @@ if(request.getParameter("modifyquantityoperation")!=null){
 }
 
     // expiry date
-	long n3months = 1000*3600;
-	n3months = n3months*24*92;
+	long hour = 1000*3600;
+	long n3months = hour*24*92;
 	
 	String sExpiryDate = ScreenHelper.formatDate(new java.util.Date(new java.util.Date().getTime()-n3months));
+	String sBeforeDate = ScreenHelper.formatDate(new java.util.Date(new java.util.Date().getTime()));
 	Encounter er = Encounter.getActiveEncounter(activePatient.personid);
 	if(er!=null && er.getBegin()!=null){
-		sExpiryDate = ScreenHelper.formatDate(er.getBegin());
+		sExpiryDate = ScreenHelper.formatDate(new java.util.Date(er.getBegin().getTime()-(24*hour)));
 	}
 	if(request.getParameter("search")!=null){
 		sExpiryDate = request.getParameter("expirydate");
+		sBeforeDate = request.getParameter("beforedate");
 	}
 	
 	/// DEBUG /////////////////////////////////////////////////////////////////////////////////////
@@ -76,8 +78,10 @@ if(request.getParameter("modifyquantityoperation")!=null){
 	    </tr>
 	    
 		<tr>
-		    <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","deliveries.after",sWebLanguage)%></td>
-		    <td class="admin2"><%=writeDateField("expirydate","transactionForm",sExpiryDate,sWebLanguage)%></td>
+		    <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","deliveries.between",sWebLanguage)%></td>
+		    <td class="admin2"><%=writeDateField("expirydate","transactionForm",sExpiryDate,sWebLanguage)%>
+		    &nbsp;&nbsp;<%=getTran(request,"web","and",sWebLanguage) %>&nbsp;&nbsp;
+		    <%=writeDateField("beforedate","transactionForm",sBeforeDate,sWebLanguage)%></td>
 		</tr>
 		
 		<%-- BUTTONS --%>
@@ -93,13 +97,16 @@ if(request.getParameter("modifyquantityoperation")!=null){
 	
 <%
     int recCount = 0;
+	long day = 24*3600*1000;
 
 	try{
 		java.util.Date dDate = ScreenHelper.parseDate(sExpiryDate);
+		java.util.Date dDate2 = ScreenHelper.parseDate(sBeforeDate);
 		String sQuery = " select oc_stock_productuid,sum(quantity) quantity from ("+
 						" select oc_operation_objectid,c.oc_stock_name,oc_stock_productuid,oc_operation_unitschanged quantity from oc_productstockoperations a,oc_productstocks b,oc_servicestocks c"+
 		                " where oc_operation_srcdesttype='patient'"+
 		                "  and oc_operation_date>?"+
+		                "  and oc_operation_date<=?"+
 		                "  and oc_operation_description like '%delivery%'"+
 		                "  and oc_operation_srcdestuid=?"+
 		                "  and b.oc_stock_objectid=replace(a.oc_operation_productstockuid,'"+MedwanQuery.getInstance().getConfigInt("serverId")+".','')"+
@@ -108,6 +115,7 @@ if(request.getParameter("modifyquantityoperation")!=null){
 		                " select oc_operation_objectid,c.oc_stock_name,oc_stock_productuid,-oc_operation_unitschanged quantity from oc_productstockoperations a,oc_productstocks b,oc_servicestocks c"+
 		                " where oc_operation_srcdesttype='patient'"+
 		                "  and oc_operation_date>?"+
+		                "  and oc_operation_date<=?"+
 		                "  and oc_operation_description like '%receipt%'"+
 		                "  and oc_operation_srcdestuid=?"+
 		                "  and b.oc_stock_objectid=replace(a.oc_operation_productstockuid,'"+MedwanQuery.getInstance().getConfigInt("serverId")+".','')"+
@@ -116,18 +124,20 @@ if(request.getParameter("modifyquantityoperation")!=null){
 		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
 		PreparedStatement ps = conn.prepareStatement(sQuery);
 		ps.setDate(1,new java.sql.Date(dDate.getTime()));
-		ps.setString(2,activePatient.personid);
-		ps.setDate(3,new java.sql.Date(dDate.getTime()));
-		ps.setString(4,activePatient.personid);
+		ps.setTimestamp(2,new java.sql.Timestamp(dDate2.getTime()+day-1));
+		ps.setString(3,activePatient.personid);
+		ps.setDate(4,new java.sql.Date(dDate.getTime()));
+		ps.setTimestamp(5,new java.sql.Timestamp(dDate2.getTime()+day-1));
+		ps.setString(6,activePatient.personid);
 		
 		ResultSet rs = ps.executeQuery();
 		%>			
 			<table width="100%" class="sortable" id="searchresultssummary" cellpadding="0" cellspacing="1">    
 			    <%-- HEADER --%>
 				<tr class='admin'>
-					<td width="150"><%=getTran("web","productstock",sWebLanguage)%></td>
-					<td width="100"><%=getTran("web","quantity",sWebLanguage)%></td>
-					<td width="100"><%=getTran("web","packageunits",sWebLanguage)%></td>
+					<td width="150"><%=getTran(request,"web","productstock",sWebLanguage)%></td>
+					<td width="100"><%=getTran(request,"web","quantity",sWebLanguage)%></td>
+					<td width="100"><%=getTran(request,"web","packageunits",sWebLanguage)%></td>
 				</tr>
         <%
 
@@ -144,7 +154,7 @@ if(request.getParameter("modifyquantityoperation")!=null){
 				out.print("<tr class='list"+sClass+"'>"+
 			               "<td>"+product.getName()+"</td>"+
 			               "<td>"+rs.getInt("quantity")+"</td>"+
-			               "<td>"+product.getPackageUnits()+" "+getTran("product.unit",product.getUnit(),sWebLanguage)+"</td>"+
+			               "<td>"+product.getPackageUnits()+" "+getTran(request,"product.unit",product.getUnit(),sWebLanguage)+"</td>"+
 			              "</tr>");
 				
 				recCount++;
@@ -164,10 +174,10 @@ if(request.getParameter("modifyquantityoperation")!=null){
 	}
 	
     if(recCount > 0){
-        %><%=recCount%> <%=getTran("web","recordsFound",sWebLanguage)%><%
+        %><%=recCount%> <%=getTran(request,"web","recordsFound",sWebLanguage)%><%
     }
     else{
-    	%><%=getTran("web","noRecordsFound",sWebLanguage)%><%
+    	%><%=getTran(request,"web","noRecordsFound",sWebLanguage)%><%
     }
 %>
 <%
@@ -175,15 +185,18 @@ if(request.getParameter("modifyquantityoperation")!=null){
 
 	try{
 		java.util.Date dDate = ScreenHelper.parseDate(sExpiryDate);
+		java.util.Date dDate2 = ScreenHelper.parseDate(sBeforeDate);
 		String sQuery = "select * from oc_productstockoperations"+
 		                " where oc_operation_srcdesttype='patient'"+
 		                "  and oc_operation_date>?"+
+		                "  and oc_operation_date<=?"+
 		                "  and oc_operation_srcdestuid=?"+
 		                " order by oc_operation_date desc";
 		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
 		PreparedStatement ps = conn.prepareStatement(sQuery);
 		ps.setDate(1,new java.sql.Date(dDate.getTime()));
-		ps.setString(2,activePatient.personid);
+		ps.setTimestamp(2,new java.sql.Timestamp(dDate2.getTime()+day-1));
+		ps.setString(3,activePatient.personid);
 		
 		ResultSet rs = ps.executeQuery();
 		%>			
@@ -191,13 +204,14 @@ if(request.getParameter("modifyquantityoperation")!=null){
 			    <%-- HEADER --%>
 				<tr class='admin'>
 				    <td width="25">&nbsp;</td>
-					<td><%=getTran("web","date",sWebLanguage)%></td>
-					<td><%=getTran("web","servicestock",sWebLanguage)%></td>
-					<td><%=getTran("web","productstock",sWebLanguage)%></td>
-					<td><%=getTran("web","quantity",sWebLanguage)%></td>
-					<td><%=getTran("web","packageunits",sWebLanguage)%></td>
-					<td><%=getTran("web","batch.number",sWebLanguage)%></td>
-					<td><%=getTran("web","batch.expiration",sWebLanguage)%></td>
+					<td><%=getTran(request,"web","date",sWebLanguage)%></td>
+					<td><%=getTran(request,"web","servicestock",sWebLanguage)%></td>
+					<td><%=getTran(request,"web","productstock",sWebLanguage)%></td>
+					<td><%=getTran(request,"web","quantity",sWebLanguage)%></td>
+					<td><%=getTran(request,"web","packageunits",sWebLanguage)%></td>
+					<td><%=getTran(request,"web","batch.number",sWebLanguage)%></td>
+					<td><%=getTran(request,"web","batch.expiration",sWebLanguage)%></td>
+					<td><%=getTran(request,"web","comment",sWebLanguage)%></td>
 				    <td>&nbsp;</td>
 				</tr>
         <%
@@ -224,10 +238,11 @@ if(request.getParameter("modifyquantityoperation")!=null){
 			            		   "<td><a href=\"javascript:modifyquantity('"+operation.getUid()+"',"+operation.getUnitsChanged()+")\">"+(operation.getDescription().indexOf("delivery")==-1?"-":"")+operation.getUnitsChanged()+"</a></td>"
 			            		   :"<td>"+(operation.getDescription().indexOf("delivery")==-1?"-":"")+operation.getUnitsChanged()+"</td>"
 			               )+
-			               "<td>"+operation.getProductStock().getProduct().getPackageUnits()+" "+getTran("product.unit",operation.getProductStock().getProduct().getUnit(),sWebLanguage)+"</td>"+
+			               "<td>"+operation.getProductStock().getProduct().getPackageUnits()+" "+getTran(request,"product.unit",operation.getProductStock().getProduct().getUnit(),sWebLanguage)+"</td>"+
 			               "<td>"+(operation.getBatchNumber()!=null?operation.getBatchNumber():"?")+"</td>"+
 			               "<td>"+(operation.getBatchEnd()!=null?ScreenHelper.formatDate(operation.getBatchEnd()):"?")+"</td>"+
 			               (operation.getDescription().equalsIgnoreCase("medicationdelivery.1")?
+			               "<td>"+checkString(operation.getComment())+"</td>"+
 			               "<td><input type='button' class='button' value='"+getTranNoLink("web","returnproduct",sWebLanguage)+"' onclick='returnProduct(\""+operation.getUid()+"\");'/></td>":"<td/>")+
 			              "</tr>");
 				
@@ -247,10 +262,10 @@ if(request.getParameter("modifyquantityoperation")!=null){
 	}
 	
     if(recCount > 0){
-        %><%=recCount%> <%=getTran("web","recordsFound",sWebLanguage)%><%
+        %><%=recCount%> <%=getTran(request,"web","recordsFound",sWebLanguage)%><%
     }
     else{
-    	%><%=getTran("web","noRecordsFound",sWebLanguage)%><%
+    	%><%=getTran(request,"web","noRecordsFound",sWebLanguage)%><%
     }
 %>
 
@@ -272,14 +287,14 @@ if(request.getParameter("modifyquantityoperation")!=null){
   }
   
   function modifydate(uid,date){
-	  var d = prompt("<%=getTran("web","date",sWebLanguage)%>",date);
+	  var d = prompt("<%=getTran(null,"web","date",sWebLanguage)%>",date);
 	  document.getElementById('modifydateoperation').value=uid+";"+d;
 	  if(date!=d){
 	  	transactionForm.submit();
 	  }
   }
   function modifyquantity(uid,quantity){
-	  var d = prompt("<%=getTran("web","quantity",sWebLanguage)%>",quantity);
+	  var d = prompt("<%=getTran(null,"web","quantity",sWebLanguage)%>",quantity);
 	  document.getElementById('modifyquantityoperation').value=uid+";"+d;
 	  if(quantity!=d){
 		  transactionForm.submit();

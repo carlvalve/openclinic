@@ -12,17 +12,17 @@
                 // translate country code
                 String sCountry = service.country;
                 if (sCountry.length() > 0) {
-                    sCountry = getTran("Country", sCountry, sWebLanguage);
+                    sCountry = getTran(request,"Country", sCountry, sWebLanguage);
                 }
 
                 // header with service ans its parents
-                String sServiceLabel = getTran("Service", sServiceID, sWebLanguage);
+                String sServiceLabel = getTran(request,"Service", sServiceID, sWebLanguage);
                 Vector serviceParents = Service.getParentIds(sServiceID);
                 String sParentServiceID;
                 String arrow = "<img src='" + sCONTEXTPATH + "/_img/themes/default/pijl.gif'/>&nbsp;";
                 for (int i = serviceParents.size() - 1; i >= 0; i--) {
                     sParentServiceID = (String) serviceParents.get(i);
-                    sServiceLabel = getTran("Service", sParentServiceID, sWebLanguage) + "&nbsp;" + arrow + sServiceLabel;
+                    sServiceLabel = getTran(request,"Service", sParentServiceID, sWebLanguage) + "&nbsp;" + arrow + sServiceLabel;
                 }
 
     %>

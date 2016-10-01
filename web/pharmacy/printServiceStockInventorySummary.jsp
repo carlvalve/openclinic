@@ -4,12 +4,16 @@
 <%
 	String sDate = checkString(request.getParameter("FindDate"));
 	String sServiceStockId=checkString(request.getParameter("ServiceStockUid"));
+	String sProductGroup=checkString(request.getParameter("ProductGroup"));
+	String sProductSubGroup=checkString(request.getParameter("ProductSubGroup"));
     sProject = checkString((String)session.getAttribute("activeProjectTitle")).toLowerCase();
 	PDFPharmacyReportGenerator pdfGenerator = new PDFPharmacyReportGenerator(activeUser,sProject);
     ByteArrayOutputStream baosPDF = null;
     try {
         Hashtable parameters = new Hashtable();
         parameters.put("serviceStockUID",sServiceStockId);
+        parameters.put("productGroup",sProductGroup);
+        parameters.put("productSubGroup",sProductSubGroup);
         parameters.put("date",sDate);
     	baosPDF = pdfGenerator.generatePDFDocumentBytes(request,"serviceStockInventorySummary",parameters);
         StringBuffer sbFilename = new StringBuffer();

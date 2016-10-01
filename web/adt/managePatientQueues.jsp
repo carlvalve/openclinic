@@ -15,7 +15,7 @@
 				queue.store();
 			}
 			else {
-				out.println("<script>alert('"+getTranNoLink("web","activepatientqueueexistsfor",sWebLanguage)+" ["+getTran("queue",request.getParameter("queue"),sWebLanguage)+"]')</script>");
+				out.println("<script>alert('"+getTranNoLink("web","activepatientqueueexistsfor",sWebLanguage)+" ["+getTran(request,"queue",request.getParameter("queue"),sWebLanguage)+"]')</script>");
 			}
 		}
 		Enumeration pars = request.getParameterNames();
@@ -36,20 +36,20 @@
 <form name='transactionForm' method='post'>
 	<table width='100%'>
 		<tr class='admin'>
-			<td colspan='2'><%=getTran("web","activequeues",sWebLanguage) %></td>
+			<td colspan='2'><%=getTran(request,"web","activequeues",sWebLanguage) %></td>
 			<td colspan='3'>
 				<select class='text' name='queue' id='queue'>
-					<%=ScreenHelper.writeSelect("queue", checkString((String)session.getAttribute("activequeue")), sWebLanguage) %>
+					<%=ScreenHelper.writeSelect(request,"queue", checkString((String)session.getAttribute("activequeue")), sWebLanguage) %>
 				</select>
-				<input class='button' type='submit' name='addqueue' value='<%=getTran("web","add",sWebLanguage) %>'/>
+				<input class='button' type='submit' name='addqueue' value='<%=getTran(null,"web","add",sWebLanguage) %>'/>
 			</td>
 		</tr>
 		<tr>
-			<td class='admin'><%=getTran("web","name",sWebLanguage) %></td>
-			<td class='admin'><%=getTran("web","number",sWebLanguage) %></td>
-			<td class='admin'><%=getTran("web","since",sWebLanguage) %></td>
-			<td class='admin'><%=getTran("web","username",sWebLanguage) %></td>
-			<td class='admin'><%=getTran("web","action",sWebLanguage) %></td>
+			<td class='admin'><%=getTran(request,"web","name",sWebLanguage) %></td>
+			<td class='admin'><%=getTran(request,"web","number",sWebLanguage) %></td>
+			<td class='admin'><%=getTran(request,"web","since",sWebLanguage) %></td>
+			<td class='admin'><%=getTran(request,"web","username",sWebLanguage) %></td>
+			<td class='admin'><%=getTran(request,"web","action",sWebLanguage) %></td>
 		</tr>
 		<%
 			Vector queues = Queue.getActivePatientQueues(activePatient.personid);
@@ -57,13 +57,13 @@
 				Queue queue =(Queue)queues.elementAt(n);
 				%>
 				<tr height='20px'>
-					<td class='menuItemGreen'><%=getTran("queue",queue.getId(),sWebLanguage)%></td>
+					<td class='menuItemGreen'><%=getTran(request,"queue",queue.getId(),sWebLanguage)%></td>
 					<td class='admin2'><%=queue.getTicketnumber()%></td>
 					<td class='admin2'><%=ScreenHelper.formatDate(queue.getBegin(),new SimpleDateFormat("dd/MM/yyyy HH:mm"))%></td>
 					<td class='admin2'><%=User.getFullUserName(queue.getBeginuid())%></td>
 					<td class='admin2'>
 						<select name='queueendreason.<%=queue.getObjectid()%>'>
-							<%=ScreenHelper.writeSelect("queueendreason",MedwanQuery.getInstance().getConfigString("defaultQueueEndReason","1"),sWebLanguage) %>
+							<%=ScreenHelper.writeSelect(request,"queueendreason",MedwanQuery.getInstance().getConfigString("defaultQueueEndReason","1"),sWebLanguage) %>
 						</select>
 						<input class='button' type='submit' name='queueendbutton.<%=queue.getObjectid()%>' value='<%=getTranNoLink("web","close",sWebLanguage) %>'/>
 						<input class='button' type='button' value='<%=getTranNoLink("web","print",sWebLanguage) %>' onclick='printticket(<%=queue.getObjectid()%>)'/>
@@ -72,17 +72,17 @@
 				<%
 			}
 			if(queues.size()==0){
-				out.println("<tr><td colspan='5'>"+getTran("web","none",sWebLanguage)+"</td></tr>");
+				out.println("<tr><td colspan='5'>"+getTran(request,"web","none",sWebLanguage)+"</td></tr>");
 			}
-			out.println("<tr ><td colspan='5'><input type='checkbox' "+(request.getParameter("showpassive")==null?"":"checked")+" class='text' name='showpassive' onchange='transactionForm.submit();'>"+getTran("web","showclosedtickets",sWebLanguage)+"</td></tr>");
+			out.println("<tr ><td colspan='5'><input type='checkbox' "+(request.getParameter("showpassive")==null?"":"checked")+" class='text' name='showpassive' onchange='transactionForm.submit();'>"+getTran(request,"web","showclosedtickets",sWebLanguage)+"</td></tr>");
 			if(request.getParameter("showpassive")!=null){
 				%>
 				<tr>
-					<td class='admin'><%=getTran("web","name",sWebLanguage) %></td>
-					<td class='admin'><%=getTran("web","begin",sWebLanguage) %></td>
-					<td class='admin'><%=getTran("web","end",sWebLanguage) %></td>
-					<td class='admin'><%=getTran("web","waitingduration",sWebLanguage) %></td>
-					<td class='admin'><%=getTran("web","action",sWebLanguage) %></td>
+					<td class='admin'><%=getTran(request,"web","name",sWebLanguage) %></td>
+					<td class='admin'><%=getTran(request,"web","begin",sWebLanguage) %></td>
+					<td class='admin'><%=getTran(request,"web","end",sWebLanguage) %></td>
+					<td class='admin'><%=getTran(request,"web","waitingduration",sWebLanguage) %></td>
+					<td class='admin'><%=getTran(request,"web","action",sWebLanguage) %></td>
 				</tr>
 				<%
 				queues = Queue.getPassivePatientQueues(activePatient.personid);
@@ -95,13 +95,13 @@
 					String time = String.format("%02d:%02d:%02d", hour, minute, second);
 					%>
 					<tr height='20px'>
-						<td class='admin2'><%=getTran("queue",queue.getId(),sWebLanguage)%></td>
+						<td class='admin2'><%=getTran(request,"queue",queue.getId(),sWebLanguage)%></td>
 						<td class='admin2'><%=ScreenHelper.formatDate(queue.getBegin(),new SimpleDateFormat("dd/MM/yyyy HH:mm"))%></td>
 						<td class='admin2'><%=ScreenHelper.formatDate(queue.getEnd(),new SimpleDateFormat("dd/MM/yyyy HH:mm"))%></td>
 						<td class='admin2'>
 							<%=time%>
 						</td>
-						<td class='admin2'><%=getTran("queueendreason",queue.getEndreason(),sWebLanguage) %></td>
+						<td class='admin2'><%=getTran(request,"queueendreason",queue.getEndreason(),sWebLanguage) %></td>
 					</tr>
 					<%
 				}

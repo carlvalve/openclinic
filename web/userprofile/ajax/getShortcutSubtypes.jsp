@@ -62,11 +62,11 @@
     }
     */
 
-    System.out.println("--> shortcutSubTypes : "+shortcutSubtypes.size());
+    Debug.println("--> shortcutSubTypes : "+shortcutSubtypes.size());
     if(shortcutSubtypes.size() > 0){
     	%>	            
 		    <select id="ShortcutSubtype" class="text">
-		        <option value="-1"><%=HTMLEntities.htmlentities(getTran("web","choose",sWebLanguage))%></option>
+		        <option value="-1"><%=HTMLEntities.htmlentities(getTran(request,"web","choose",sWebLanguage))%></option>
                 <%
                     Vector sortedLabels = new Vector(shortcutSubtypes.keySet());
                     Collections.sort(sortedLabels);

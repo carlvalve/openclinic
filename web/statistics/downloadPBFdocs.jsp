@@ -8,16 +8,16 @@
 %>
 <table width='100%'>
 	<tr>
-		<td class='admin'><%=getTran("web","physician",sWebLanguage) %></td>
+		<td class='admin'><%=getTran(request,"web","physician",sWebLanguage) %></td>
 		<td class='admin2'>
                 <input type="hidden" name="doctor" id='doctor' value="">
                 <input class="text" type="text" name="doctorname" id="doctorname" readonly size="40" value="">
-                <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTran("web","select",sWebLanguage)%>" onclick="searchManager('doctor','doctorname');">
-                <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran("web","clear",sWebLanguage)%>" onclick="document.getElementById('doctor').value='';document.getElementById('doctorname').value='';">
+                <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTran(null,"web","select",sWebLanguage)%>" onclick="searchManager('doctor','doctorname');">
+                <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran(null,"web","clear",sWebLanguage)%>" onclick="document.getElementById('doctor').value='';document.getElementById('doctorname').value='';">
 		</td>
 	</tr>
 	<tr>
-		<td class='admin'><%=getTran("web","service",sWebLanguage) %></td>
+		<td class='admin'><%=getTran(request,"web","service",sWebLanguage) %></td>
 		<td class='admin2'>
              <input type='hidden' name='service' id='service' value=''>
              <input class='text' type='text' name='servicename' id='servicename' readonly size='40' value=''>&nbsp;
@@ -27,22 +27,22 @@
 	</tr>
 <% 	if(checkString(request.getParameter("query")).equalsIgnoreCase("pbf.burundi.consultationslist")){%>
 	<tr>
-		<td class='admin'><%=getTran("web","include",sWebLanguage) %></td>
+		<td class='admin'><%=getTran(request,"web","include",sWebLanguage) %></td>
 		<td class='admin2'>
 			<table>
-				<tr><td><input type="checkbox" name="includevisits" id="includevisits" checked value="1"/><%=getTran("web","visits",sWebLanguage) %></td></tr>
-				<tr><td><input type="checkbox" name="includeadmissions" id="includeadmissions" value="1"/><%=getTran("web","admissions",sWebLanguage) %></td></tr>
+				<tr><td><input type="checkbox" name="includevisits" id="includevisits" checked value="1"/><%=getTran(request,"web","visits",sWebLanguage) %></td></tr>
+				<tr><td><input type="checkbox" name="includeadmissions" id="includeadmissions" value="1"/><%=getTran(request,"web","admissions",sWebLanguage) %></td></tr>
 				<tr><td><hr/></td></tr>
-				<tr><td><input type="checkbox" name="diagsicd10" id="diagsicd10" checked value="1"/><%=getTran("web","icd10diagnoses",sWebLanguage) %></td></tr>
-				<tr><td><input type="checkbox" name="diagsrfe" id="diagsrfe" value="1"/><%=getTran("web","rfes",sWebLanguage) %></td></tr>
-				<tr><td><input type="checkbox" name="diagsfreetext" id="diagsfreetext" value="1"/><%=getTran("web","freetextdiagnoses",sWebLanguage) %></td></tr>
+				<tr><td><input type="checkbox" name="diagsicd10" id="diagsicd10" checked value="1"/><%=getTran(request,"web","icd10diagnoses",sWebLanguage) %></td></tr>
+				<tr><td><input type="checkbox" name="diagsrfe" id="diagsrfe" value="1"/><%=getTran(request,"web","rfes",sWebLanguage) %></td></tr>
+				<tr><td><input type="checkbox" name="diagsfreetext" id="diagsfreetext" value="1"/><%=getTran(request,"web","freetextdiagnoses",sWebLanguage) %></td></tr>
 			</table>
 		</td>
 	</tr>
 
 <%	} %>
 	<tr>
-		<td colspan='2'><input type='button' name='find' value='<%=getTran("web","find",sWebLanguage) %>' onclick='findinvoices();'/></td>
+		<td colspan='2'><input type='button' name='find' value='<%=getTran(null,"web","find",sWebLanguage) %>' onclick='findinvoices();'/></td>
 	</tr>
 </table>
 

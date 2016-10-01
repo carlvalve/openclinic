@@ -24,16 +24,16 @@
     if(sNoUsers.length()==0){
 %>
 <tr>
-	<td class='admin'><%=getTran("web","firstconnection",sWebLanguage)%></td>
-	<td class='admin'><%=getTran("web","lastconnection",sWebLanguage)%></td>
-	<td class='admin'><%=getTran("web","duration",sWebLanguage)%></td>
-	<td class='admin'><%=getTran("web","inactif",sWebLanguage)%></td>
-	<td class='admin'><%=getTran("web","ipaddress",sWebLanguage)%></td>
-	<td class='admin'><%=getTran("web","browser",sWebLanguage)%></td>
-	<td class='admin'><%=getTran("web","userid",sWebLanguage)%></td>
-	<td class='admin'><%=getTran("web","user",sWebLanguage)%></td>
-	<td class='admin'><%=getTran("web","profile",sWebLanguage)%></td>
-	<td class='admin'><%=getTran("web","patient",sWebLanguage)%></td>
+	<td class='admin'><%=getTran(request,"web","firstconnection",sWebLanguage)%></td>
+	<td class='admin'><%=getTran(request,"web","lastconnection",sWebLanguage)%></td>
+	<td class='admin'><%=getTran(request,"web","duration",sWebLanguage)%></td>
+	<td class='admin'><%=getTran(request,"web","inactif",sWebLanguage)%></td>
+	<td class='admin'><%=getTran(request,"web","ipaddress",sWebLanguage)%></td>
+	<td class='admin'><%=getTran(request,"web","browser",sWebLanguage)%></td>
+	<td class='admin'><%=getTran(request,"web","userid",sWebLanguage)%></td>
+	<td class='admin'><%=getTran(request,"web","user",sWebLanguage)%></td>
+	<td class='admin'><%=getTran(request,"web","profile",sWebLanguage)%></td>
+	<td class='admin'><%=getTran(request,"web","patient",sWebLanguage)%></td>
 </tr>
 
 <%
@@ -151,9 +151,9 @@
 
 <table width='100%' class="list" cellpadding="0" cellspacing="0">
 <tr>
-	<td class='admin2' width='33%'><center><%=getTran("web","total_active_sessions",sWebLanguage)%>: <%=counter%></center></td>
-	<td class='admin2' width='33%'><center><%=getTran("web","total_expiring_users",sWebLanguage)%>: <%=expiring%></center></td>
-	<td class='admin2' width='34%'><center><%=getTran("web","total_active_logins",sWebLanguage)%>: <%=users.size()%></center></td>
+	<td class='admin2' width='33%'><center><%=getTran(request,"web","total_active_sessions",sWebLanguage)%>: <%=counter%></center></td>
+	<td class='admin2' width='33%'><center><%=getTran(request,"web","total_expiring_users",sWebLanguage)%>: <%=expiring%></center></td>
+	<td class='admin2' width='34%'><center><%=getTran(request,"web","total_active_logins",sWebLanguage)%>: <%=users.size()%></center></td>
 </tr>
 </table>
 <div style="padding-top:5px;"></div>
@@ -162,10 +162,10 @@
 %>
 <table width='100%' class="list" cellpadding="0" cellspacing="0">
 <tr>
-	<td class='admin2' width='25%'><center><%=getTran("web","total_server_memory",sWebLanguage)%>: <%=deci.format(Runtime.getRuntime().totalMemory()/1048576)%> Mb</center></td>
-	<td class='admin2' width='25%'><center><%=getTran("web","free_server_memory",sWebLanguage)%>: <%=deci.format(Runtime.getRuntime().freeMemory()/1048576)%> Mb</center></td>
-	<td class='admin2' width='25%'><center><%=getTran("web","max_server_memory",sWebLanguage)%>: <%=deci.format(Runtime.getRuntime().maxMemory()/1048576)%> Mb</center></td>
-	<td class='admin2' width='25%'><center><%=getTran("web","available_processors",sWebLanguage)%>: <%=Runtime.getRuntime().availableProcessors()%></center></td>
+	<td class='admin2' width='25%'><center><%=getTran(request,"web","total_server_memory",sWebLanguage)%>: <%=deci.format(Runtime.getRuntime().totalMemory()/1048576)%> Mb</center></td>
+	<td class='admin2' width='25%'><center><%=getTran(request,"web","free_server_memory",sWebLanguage)%>: <%=deci.format(Runtime.getRuntime().freeMemory()/1048576)%> Mb</center></td>
+	<td class='admin2' width='25%'><center><%=getTran(request,"web","max_server_memory",sWebLanguage)%>: <%=deci.format(Runtime.getRuntime().maxMemory()/1048576)%> Mb</center></td>
+	<td class='admin2' width='25%'><center><%=getTran(request,"web","available_processors",sWebLanguage)%>: <%=Runtime.getRuntime().availableProcessors()%></center></td>
 </tr>
 </table>
 <div style="padding-top:5px;"></div>
@@ -212,24 +212,71 @@
 		ps.close();
 		conn.close();
 %>
-<table width='100%' class="list" cellpadding="0" cellspacing="1">
-<tr>
-	<td class='admin2' width='25%'><center><%=getTran("web","total_patients",sWebLanguage)%>: <%=deci.format(totalpatients)%></center></td>
-	<td class='admin2' width='25%'><center><%=getTran("web","total_encounters",sWebLanguage)%>: <%=deci.format(totalencounters)%></center></td>
-	<td class='admin2' width='25%'><center><%=getTran("web","total_patientinvoices",sWebLanguage)%>: <%=deci.format(totalpatientinvoices)%></center></td>
-	<td class='admin2' width='25%'><center><%=getTran("web","total_debets",sWebLanguage)%>: <%=deci.format(totaldebets)%></center></td>
-</tr>
-<tr>
-	<td class='admin2' width='25%'><center><%=getTran("web","total_archived_patients",sWebLanguage)%>: <%=deci.format(totalarchivedpatients)%></center></td>
-	<td class='admin2' colspan='3'></td>
-</tr>
-<%
-	}
-%>
-</table>
+<form name='stats'>
+	<table width='100%' class="list" cellpadding="0" cellspacing="1">
+		<tr>
+			<td class='admin2' width='25%'><center><%=getTran(request,"web","total_patients",sWebLanguage)%>: <%=deci.format(totalpatients)%></center></td>
+			<td class='admin2' width='25%'><center><%=getTran(request,"web","total_encounters",sWebLanguage)%>: <%=deci.format(totalencounters)%></center></td>
+			<td class='admin2' width='25%'><center><%=getTran(request,"web","total_patientinvoices",sWebLanguage)%>: <%=deci.format(totalpatientinvoices)%></center></td>
+			<td class='admin2' width='25%'><center><%=getTran(request,"web","total_debets",sWebLanguage)%>: <%=deci.format(totaldebets)%></center></td>
+		</tr>
+		<tr>
+			<td class='admin2' width='25%'><center><%=getTran(request,"web","total_archived_patients",sWebLanguage)%>: <%=deci.format(totalarchivedpatients)%></center></td>
+			<td class='admin2' colspan='3'></td>
+		</tr>
+		<%
+				String service = activeUser.activeService.code;
+				String serviceName = activeUser.activeService.getLabel(sWebLanguage);
+				
+				String today = ScreenHelper.formatDate(new java.util.Date()); // now
+				
+				//*** 5b - TREATED PATIENTS ****************************
+				out.print("<tr><td colspan='4'><br/><hr/><br/></td></tr>");
+				out.print(ScreenHelper.writeTblHeader(getTran(request,"Web","statistics.treatedpatients",sWebLanguage),sCONTEXTPATH));
+				out.print("<tr>"+
+				           "<td class='admin2' colspan='2'>"+
+				            getTran(request,"web","from",sWebLanguage)+"&nbsp;"+writeDateField("begin3b","stats",today,sWebLanguage)+"&nbsp;&nbsp;"+
+				            getTran(request,"web","to",sWebLanguage)+"&nbsp;"+writeDateField("end3b","stats",today,sWebLanguage)+
+				           "</td>"+
+				          "</tr>");
+				
+				out.print("<tr>"+
+				           "<td class='admin2' colspan='2'>"+getTran(request,"Web","service",sWebLanguage)+" "+
+				            "<input type='hidden' name='statserviceid' id='statserviceid' value='"+service+"'>"+
+				            "<input class='text' type='text' name='statservicename' id='statservicename' readonly size='"+sTextWidth+"' value='"+serviceName+"'>&nbsp;"+
+				            "<img src='_img/icons/icon_search.gif' class='link' alt='"+getTranNoLink("Web","select",sWebLanguage)+"' onclick='searchService(\"statserviceid\",\"statservicename\");'>&nbsp;"+
+				            "<img src='_img/icons/icon_delete.gif' class='link' alt='"+getTranNoLink("Web","clear",sWebLanguage)+"' onclick='statserviceid.value=\"\";statservicename.value=\"\";'>"+
+				           "</td>"+
+				          "</tr>"+
+				          writeTblChildWithCode("javascript:patientslistvisits()",getTran(request,"Web","statistics.patientslist.visits",sWebLanguage))+
+				          writeTblChildWithCode("javascript:patientslistadmissions()",getTran(request,"Web","statistics.patientslist.admissions",sWebLanguage))+
+				          writeTblChildWithCode("javascript:patientslistsummary()",getTran(request,"Web","statistics.patientslist.summary",sWebLanguage)));
+				out.print(ScreenHelper.writeTblFooter()+"<br>");
+		
+			}
+		%>
+	</table>
+</form>
 
 <script>
-function opensession(id){
-  openPopup("system/getSessionAttributes.jsp&ts=<%=getTs()%>&sessionid="+id,400,300);
-}
+	function searchService(serviceUidField,serviceNameField){
+	    openPopup("_common/search/searchService.jsp&ts=<%=getTs()%>&showinactive=1&VarCode="+serviceUidField+"&VarText="+serviceNameField);
+	    document.getElementsByName(serviceNameField)[0].focus();
+	}
+	
+	function patientslistvisits(){
+	  	var URL = "statistics/patientslistvisits.jsp&start="+document.getElementById('begin3b').value+"&end="+document.getElementById('end3b').value+"&statserviceid="+document.getElementById('statserviceid').value+"&ts=<%=getTs()%>";
+	   	openPopup(URL,800,600,"OpenClinic");
+	}
+	function patientslistadmissions(){
+		var URL = "statistics/patientslistadmissions.jsp&start="+document.getElementById('begin3b').value+"&end="+document.getElementById('end3b').value+"&statserviceid="+document.getElementById('statserviceid').value+"&ts=<%=getTs()%>";
+		openPopup(URL,800,600,"OpenClinic");
+	}
+	function patientslistsummary(){
+		var URL = "statistics/patientslistsummary.jsp&start="+document.getElementById('begin3b').value+"&end="+document.getElementById('end3b').value+"&statserviceid="+document.getElementById('statserviceid').value+"&ts=<%=getTs()%>";
+		openPopup(URL,1024,600,"OpenClinic");
+	}
+	function opensession(id){
+	  openPopup("system/getSessionAttributes.jsp&ts=<%=getTs()%>&sessionid="+id,400,300);
+	}
 </script>

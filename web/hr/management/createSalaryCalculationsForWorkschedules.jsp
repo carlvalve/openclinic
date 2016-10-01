@@ -87,7 +87,7 @@
     <table border="0" width="100%" cellspacing="1">      
         <%-- beginDate --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web.hr","beginDate",sWebLanguage)%>&nbsp;</td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web.hr","beginDate",sWebLanguage)%>&nbsp;</td>
             <td class="admin2" nowrap>
                 <%=writeDateField("beginDate","EditForm",sPeriodBegin,sWebLanguage)%>          
             </td>                        
@@ -95,7 +95,7 @@
         
         <%-- endDate --%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","endDate",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.hr","endDate",sWebLanguage)%>&nbsp;</td>
             <td class="admin2" nowrap>
                 <%=writeDateField("endDate","EditForm",sPeriodEnd,sWebLanguage)%>          
             </td>                        
@@ -103,7 +103,7 @@
         
         <%-- employees --%>
         <tr>
-            <td class="admin" style="vertical-align:top;"><%=getTran("web.hr","employees",sWebLanguage)%>&nbsp;</td>
+            <td class="admin" style="vertical-align:top;"><%=getTran(request,"web.hr","employees",sWebLanguage)%>&nbsp;</td>
             <td class="admin2" nowrap>
                 <%
                     Vector employeeNames = new Vector(SalaryCalculationManager.getEmployeePersonIds().values()); 
@@ -143,14 +143,14 @@
         if(activePatient!=null && activePatient.personid.length() > 0){
             %>
                 <img src="<c:url value='/_img/themes/default/pijl.gif'/>">
-                <a href="<c:url value='/main.do'/>?Page=hr/manage_workschedule.jsp?ts=<%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran("web","workschedulesForActivePatient",sWebLanguage)%></a><br>
+                <a href="<c:url value='/main.do'/>?Page=hr/manage_workschedule.jsp?ts=<%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran(request,"web","workschedulesForActivePatient",sWebLanguage)%></a><br>
             <%
         }
     %>     
     
     <%-- link to createSalaryCalculationsForLeaves --%>
     <img src="<c:url value='/_img/themes/default/pijl.gif'/>">
-    <a href="<c:url value='/main.do'/>?Page=hr/management/createSalaryCalculationsForLeaves.jsp?ts=<%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran("web.manage","createSalaryCalculationsForLeaves",sWebLanguage)%></a>&nbsp;
+    <a href="<c:url value='/main.do'/>?Page=hr/management/createSalaryCalculationsForLeaves.jsp?ts=<%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran(request,"web.manage","createSalaryCalculationsForLeaves",sWebLanguage)%></a>&nbsp;
 </form>  
     
 <script>  

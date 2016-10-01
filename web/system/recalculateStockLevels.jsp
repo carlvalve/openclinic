@@ -17,5 +17,5 @@
 	rs.close();
 	ps.close();
 	conn.close();
-	out.println(getTran("web","stocklevels.successfully.updated",sWebLanguage));
+	out.println(getTran(request,"web","stocklevels.successfully.updated",sWebLanguage));
 %>

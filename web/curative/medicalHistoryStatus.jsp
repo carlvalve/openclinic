@@ -23,7 +23,7 @@ try{
         <%-- PAGE TITLE --%>
         <tr class="admin">
             <td>
-                <%=getTran("curative","medicalhistory.status.title",sWebLanguage)%>&nbsp;
+                <%=getTran(request,"curative","medicalhistory.status.title",sWebLanguage)%>&nbsp;
                 <a href="javascript:newExamination();"><img src="<c:url value='/_img/icons/icon_new.gif'/>" class="link" alt="<%=getTranNoLink("web","manageExaminations",sWebLanguage)%>" style="vertical-align:-4px;"></a>
 				<%if(MedwanQuery.getInstance().getConfigString("quickTransaction1."+activeUser.userid,"").length()>0){ %>
                     <a href="javascript:newFastTransaction('<%=MedwanQuery.getInstance().getConfigString("quickTransaction1."+activeUser.userid)%>');"><img src="<c:url value='/_img/icons/icon_new1.gif'/>" class="link" title="<%=getTranNoLink("web.occup",MedwanQuery.getInstance().getConfigString("quickTransaction1."+activeUser.userid).split("\\&")[0],sWebLanguage)%>" style="vertical-align:-4px;"></a>
@@ -59,9 +59,9 @@ try{
                                     <%-- HEADER --%>
                                     <tr class='gray'>
                                         <td width='1%'>&nbsp;</td>
-                                        <td align="center" width='100'><%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%></td>
-                                        <td align="center" width='42%'><%=getTran("Web.Occup","medwan.common.contacttype",sWebLanguage)%></td>
-                                        <td align="center" width='20%'><%=getTran("Web.Occup","medwan.common.user",sWebLanguage)%></td>
+                                        <td align="center" width='100'><%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%></td>
+                                        <td align="center" width='42%'><%=getTran(request,"Web.Occup","medwan.common.contacttype",sWebLanguage)%></td>
+                                        <td align="center" width='20%'><%=getTran(request,"Web.Occup","medwan.common.user",sWebLanguage)%></td>
                                         <td align="center" width='*'>
                                             <select class="text" name="contextSelector" id="contextSelector" onchange="transactionForm.submit();">
                                                 <%
@@ -152,7 +152,7 @@ try{
                                                                     if(transactionType.equalsIgnoreCase("be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_DOCUMENT")){
                                                                         %>
                                                                             <a target="refdocument" href="<c:url value='/healthrecord/editTransaction.do'/>?be.mxs.healthrecord.createTransaction.transactionType=<%=transactionType%>&be.mxs.healthrecord.transaction_id=<%=transactionVO.getTransactionId()%>&be.mxs.healthrecord.server_id=<%=transactionVO.getServerId()%>&ts=<%=getTs()%>" onMouseOver="window.status='';return true;">
-                                                                                <%=getTran("web.occup",transactionType,sWebLanguage)%>
+                                                                                <%=getTran(request,"web.occup",transactionType,sWebLanguage)%>
                                                                                 <%
 
                                                                                     docType = "ERROR";
@@ -170,14 +170,14 @@ try{
                                                                                     }
 
                                                                                 %>
-                                                                                (<%=getTran("web.documents",docType,sWebLanguage)%>)
+                                                                                (<%=getTran(request,"web.documents",docType,sWebLanguage)%>)
                                                                             </a>
                                                                         <%
                                                                     }
                                                                     else if(transactionType.equalsIgnoreCase("be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_EXTERNAL_DOCUMENT")){
                                                                         %>
                                                                             <a href="<c:url value='/healthrecord/editTransaction.do'/>?be.mxs.healthrecord.createTransaction.transactionType=<%=transactionType%>&be.mxs.healthrecord.transaction_id=<%=transactionVO.getTransactionId()%>&be.mxs.healthrecord.server_id=<%=transactionVO.getServerId()%>&ts=<%=getTs()%>" onMouseOver="window.status='';return true;">
-                                                                                <%=getTran("web.occup",transactionType,sWebLanguage)%>
+                                                                                <%=getTran(request,"web.occup",transactionType,sWebLanguage)%>
                                                                                 <%
                                                                                     item = MedwanQuery.getInstance().getItem(transactionVO.getServerId(),transactionVO.getTransactionId().intValue(),"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_EXTERNAL_DOCUMENT_TITLE");
                                                                                     String sDocumentTitle = "";
@@ -196,7 +196,7 @@ try{
                                                                     	transactionVO.preload();
                                                                         %>
                                                                             <a href="<c:url value='/healthrecord/editTransaction.do'/>?be.mxs.healthrecord.createTransaction.transactionType=<%=transactionType%>&be.mxs.healthrecord.transaction_id=<%=transactionVO.getTransactionId()%>&be.mxs.healthrecord.server_id=<%=transactionVO.getServerId()%>&ts=<%=getTs()%>" onMouseOver="window.status='';return true;">
-                                                                                <%=getTran("web.occup",transactionType,sWebLanguage)%>
+                                                                                <%=getTran(request,"web.occup",transactionType,sWebLanguage)%>
                                                                                 <%
 	                                                                                String sReference = transactionVO.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DOC_UDI");
 	                                                                                if(sReference.length() > 0){
@@ -215,7 +215,7 @@ try{
                                                                     	transactionVO.preload();
                                                                         %>
                                                                             <a href="<c:url value='/healthrecord/editTransaction.do'/>?be.mxs.healthrecord.createTransaction.transactionType=<%=transactionType%>&be.mxs.healthrecord.transaction_id=<%=transactionVO.getTransactionId()%>&be.mxs.healthrecord.server_id=<%=transactionVO.getServerId()%>&ts=<%=getTs()%>" onMouseOver="window.status='';return true;">
-                                                                                <%=getTran("web.occup",transactionType,sWebLanguage)%>
+                                                                                <%=getTran(request,"web.occup",transactionType,sWebLanguage)%>
                                                                                 <%
 	                                                                                String sSeriesID = transactionVO.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_SERIESID");
 	                                                                                String sDescription = transactionVO.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYDESCRIPTION");
@@ -228,14 +228,14 @@ try{
                                                                     else{
                                                                         %>
                                                                             <a href="<c:url value='/healthrecord/editTransaction.do'/>?be.mxs.healthrecord.createTransaction.transactionType=<%=transactionType%>&be.mxs.healthrecord.transaction_id=<%=transactionVO.getTransactionId()%>&be.mxs.healthrecord.server_id=<%=transactionVO.getServerId()%>&ts=<%=getTs()%>" onMouseOver="window.status='';return true;">
-                                                                                <%=ScreenHelper.uppercaseFirstLetter(getTranNoLink("web.occup",transactionType,sWebLanguage))%>
+                                                                                <%=ScreenHelper.uppercaseFirstLetter(getTran(request,"web.occup",transactionType,sWebLanguage))%>
                                                                         <%
 
                                                                         // add vaccination type
                                                                         if(transactionType.equalsIgnoreCase("be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_VACCINATION")){
                                                                             ItemVO vItem = transactionVO.getItem("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VACCINATION_TYPE");
                                                                             if(vItem!=null){
-                                                                                %> (<%=getTran("web.occup",vItem.getValue(),sWebLanguage)%>)<%
+                                                                                %> (<%=getTran(request,"web.occup",vItem.getValue(),sWebLanguage)%>)<%
                                                                             }
                                                                         }
 
@@ -250,7 +250,7 @@ try{
                                                             %>
                                                         </td>
                                                         <td align="center"><%=transactionVO.getUser()!=null?transactionVO.getUser().getPersonVO().getFirstname():""%>,&nbsp;<%=transactionVO.getUser()!=null?transactionVO.getUser().getPersonVO().getLastname():""%></td>
-                                                        <td align="center"><%=servicecode.length()>0?servicecode+": "+getTran("service",servicecode,sWebLanguage):getTran("service",contextItem!=null?contextItem.getValue():"",sWebLanguage)%></td>
+                                                        <td align="center"><%=servicecode.length()>0?servicecode+": "+getTran(request,"service",servicecode,sWebLanguage):getTran(request,"service",contextItem!=null?contextItem.getValue():"",sWebLanguage)%></td>
                                                     </tr>
                                                 <%
                                             }
@@ -271,14 +271,14 @@ try{
                                 if(!"1".equalsIgnoreCase(request.getParameter("showAll")) && totalTransactions > numberOfTransToList){
                                     %>
                                         <img src='<c:url value="/_img/themes/default/pijl.gif"/>'>
-                                        <a href="<c:url value='/main.do?Page=/curative/index.jsp'/>&showAll=1&ts=<%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran("Web.Occup","medwan.common.all",sWebLanguage)%></a>
+                                        <a href="<c:url value='/main.do?Page=/curative/index.jsp'/>&showAll=1&ts=<%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran(request,"Web.Occup","medwan.common.all",sWebLanguage)%></a>
                                     <%
                                 }
 
                                 if("1".equalsIgnoreCase(request.getParameter("showAll"))){
                                     %>
                                         <img src='<c:url value="/_img/themes/default/pijl.gif"/>'>
-                                        <a href="<c:url value='/main.do?Page=/curative/index.jsp'/>&showAll=0&ts=<%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran("Web.Occup","medwan.common.summary",sWebLanguage)%></a>
+                                        <a href="<c:url value='/main.do?Page=/curative/index.jsp'/>&showAll=0&ts=<%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran(request,"Web.Occup","medwan.common.summary",sWebLanguage)%></a>
                                     <%
                                 }
                             }
@@ -335,7 +335,7 @@ function checkArchiveDocument(){
     var modalities = "dialogWidth:266px;dialogHeight:143px;center:yes;scrollbars:no;resizable:no;status:no;location:no;";
 
     if(userId!=<%=activeUser.userid%>){
-      if(window.prompt('<%=getTran("web.occup","medwan.transaction.delete.question",sWebLanguage)%>')=="deleteit"){
+      if(window.prompt('<%=getTran(null,"web.occup","medwan.transaction.delete.question",sWebLanguage)%>')=="deleteit"){
         window.location.href = "<c:url value='/healthrecord/manageDeleteTransaction.do'/>?transactionId="+transactionId+"&serverId="+serverId+"&ts=<%=getTs()%>&be.mxs.healthrecord.updateTransaction.actionForwardKey=/main.do?Page=curative/index.jsp&ts=<%=getTs()%>";
       }
       else{

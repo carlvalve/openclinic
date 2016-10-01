@@ -17,7 +17,7 @@
         <%-- DESTINATION ITEM --%>
         <tr>
 
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web.manage", "TypeItemsSearch", sWebLanguage)%>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web.manage", "TypeItemsSearch", sWebLanguage)%>
             </td>
 
             <td class="admin2">
@@ -29,7 +29,7 @@
             </td>
         </tr>
         <tr>
-            <td class="admin" nowrap><%=getTran("Web", "AutocompletionTypeItems", sWebLanguage)%>&nbsp;</td>
+            <td class="admin" nowrap><%=getTran(request,"Web", "AutocompletionTypeItems", sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <div id="allItemsTypes">
                 </div>

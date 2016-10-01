@@ -19,7 +19,7 @@
     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="menu">
         <tr>
             <td width="100%" height="25">
-                &nbsp;<%=getTran("Web", "Find", sWebLanguage)%>&nbsp;&nbsp;
+                &nbsp;<%=getTran(request,"Web", "Find", sWebLanguage)%>&nbsp;&nbsp;
                 <input type="text" name="FindText" class="text" value="<%=sFindText%>" size="40">
 
                 <%-- buttons --%>

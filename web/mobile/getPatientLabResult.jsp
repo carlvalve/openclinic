@@ -1,7 +1,7 @@
 <%@include file="/mobile/_common/head.jsp"%>
 
 <table class="list" padding="0" cellspacing="1" width="<%=sTABLE_WIDTH%>">
-	<tr class="admin"><td colspan="5"><%=getTran("mobile","labdata",activeUser)%></td></tr>
+	<tr class="admin"><td colspan="5"><%=getTran(request,"mobile","labdata",activeUser)%></td></tr>
 	<%
 		TransactionVO transaction = MedwanQuery.getInstance().loadTransaction(Integer.parseInt(request.getParameter("serverid")),
 				                                                              Integer.parseInt(request.getParameter("transactionid")));

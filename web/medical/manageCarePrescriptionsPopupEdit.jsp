@@ -106,13 +106,13 @@
                 prescriptionSchema.setCarePrescriptionUid(prescr.getUid());
                 prescriptionSchema.store();
 
-                msg = getTran("web", "dataissaved", sWebLanguage);
+                msg = getTran(request,"web", "dataissaved", sWebLanguage);
             }
             //***** reject new addition *****
             else{
                 // show rejected data
                 sAction = "showDetailsAfterAddReject";
-                msg = "<font color='red'>"+getTran("web.manage", "prescriptionexists", sWebLanguage)+"</font>";
+                msg = "<font color='red'>"+getTran(request,"web.manage", "prescriptionexists", sWebLanguage)+"</font>";
             }
         }
         else{
@@ -122,14 +122,14 @@
                 prescriptionSchema.setCarePrescriptionUid(prescr.getUid());
                 prescriptionSchema.store();
 
-                msg = getTran("web", "dataissaved", sWebLanguage);
+                msg = getTran(request,"web", "dataissaved", sWebLanguage);
             }
             //***** reject double record thru update *****
             else{
                 if(sEditPrescrUid.equals(existingPrescrUid)){
                     // nothing : just updating a record with its own data
                     prescr.store(false);
-                    msg = getTran("web", "dataissaved", sWebLanguage);
+                    msg = getTran(request,"web", "dataissaved", sWebLanguage);
                    
                     prescriptionSchema.setCarePrescriptionUid(prescr.getUid());
                     prescriptionSchema.store();
@@ -138,7 +138,7 @@
                     // tried to update one prescription with exact the same data as an other prescription
                     // show rejected data
                     sAction = "showDetailsAfterUpdateReject";
-                    msg = "<font color='red'>"+getTran("web.manage", "prescriptionexists", sWebLanguage)+"</font>";
+                    msg = "<font color='red'>"+getTran(request,"web.manage", "prescriptionexists", sWebLanguage)+"</font>";
                 }
             }
         }
@@ -170,7 +170,7 @@
         CarePrescriptionSchema prescriptionSchemaToDelete = CarePrescriptionSchema.getCarePrescriptionSchema(sEditPrescrUid);
         prescriptionSchemaToDelete.delete();
 
-        msg = getTran("web", "dataisdeleted", sWebLanguage);
+        msg = getTran(request,"web", "dataisdeleted", sWebLanguage);
     }
 
     // get specified record
@@ -223,7 +223,7 @@
     Debug.println("--> editableByPrescriber : "+editableByPrescriber);
     
     
-    String sTitle = getTran("Web.manage","ManagePatientCarePrescriptions",sWebLanguage)+"&nbsp;"+activePatient.lastname+" "+activePatient.firstname;
+    String sTitle = getTran(request,"Web.manage","ManagePatientCarePrescriptions",sWebLanguage)+"&nbsp;"+activePatient.lastname+" "+activePatient.firstname;
     
     String sCloseAction = "window.close();";
     if(sAction.length()==0 || sAction.startsWith("showDetails")){
@@ -235,7 +235,7 @@
     <%
         if(activePatient==null){
             // display message
-            %><%=getTran("web","firstSelectAPerson",sWebLanguage)%><%
+            %><%=getTran(request,"web","firstSelectAPerson",sWebLanguage)%><%
         }
         else{
             //*************************************************************************************
@@ -245,30 +245,30 @@
             %>
             <table class="list" width="100%" cellspacing="1">
                 <tr>
-                    <td class="admin"><%=getTran("Web","care_type",sWebLanguage)%>&nbsp;*&nbsp;</td>
+                    <td class="admin"><%=getTran(request,"Web","care_type",sWebLanguage)%>&nbsp;*&nbsp;</td>
                     <td class="admin2">
                         <select class="text" name="EditCareUid" onchange="doChangeCareUID()">
                             <option/>
-                            <%=ScreenHelper.writeSelect("care_type",sSelectedCareUid,sWebLanguage,false,true)%>
+                            <%=ScreenHelper.writeSelect(request,"care_type",sSelectedCareUid,sWebLanguage,false,true)%>
                         </select>
                     </td>
                 </tr>
                 <%-- ***** prescription-rule ***** --%>
                 <tr>
-                    <td class="admin"><%=getTran("Web","frequency",sWebLanguage)%>&nbsp;*&nbsp;</td>
+                    <td class="admin"><%=getTran(request,"Web","frequency",sWebLanguage)%>&nbsp;*&nbsp;</td>
                     <td class="admin2">
                         <%-- Units Per Time Unit --%>
                         <input type="text" class="text" name="EditUnitsPerTimeUnit" value="<%=(sSelectedUnitsPerTimeUnit.length()>0?(doubleFormat.format(Double.parseDouble(sSelectedUnitsPerTimeUnit))).replaceAll(",","."):"")%>" size="5" maxLength="5" onKeyUp="isNumber(this);">
-                        <%=getTran("web","times",sWebLanguage).toLowerCase()%>
+                        <%=getTran(request,"web","times",sWebLanguage).toLowerCase()%>
 
                         <%-- Time Unit Count --%>
-                        &nbsp;<%=getTran("web","per",sWebLanguage)%>
+                        &nbsp;<%=getTran(request,"web","per",sWebLanguage)%>
                         <input type="text" class="text" name="EditTimeUnitCount" value="<%=sSelectedTimeUnitCount%>" size="5" maxLength="5">
 
                         <%-- Time Unit (dropdown : Hour|Day|Week|Month) --%>
                         <select class="text" name="EditTimeUnit" onChange="setEditTimeUnitCount();">
                             <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>
-                            <%=ScreenHelper.writeSelectUnsorted("prescription.timeunit",sSelectedTimeUnit,sWebLanguage)%>
+                            <%=ScreenHelper.writeSelectUnsorted(request,"prescription.timeunit",sSelectedTimeUnit,sWebLanguage)%>
                         </select>
 
                         <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="clearDescriptionRule();">
@@ -276,7 +276,7 @@
                 </tr>
                 <%-- date begin --%>
                 <tr>
-                    <td class="admin"><%=getTran("Web","begindate",sWebLanguage)%>&nbsp;*&nbsp;</td>
+                    <td class="admin"><%=getTran(request,"Web","begindate",sWebLanguage)%>&nbsp;*&nbsp;</td>
                     <td class="admin2">
                         <input type="text" maxlength="10" class="text" id="EditDateBegin" name="EditDateBegin" value="<%=sSelectedDateBegin%>" size="12" onblur="if(!checkDate(this)){alert('Web.Occup','date.error');this.value='';}">
                         <img name="popcal" class="link" src="<%=sCONTEXTPATH%>/_img/icons/icon_agenda.gif" alt="<%=getTranNoLink("Web","Select",sWebLanguage)%>" onclick="gfPop1.fPopCalendar(document.getElementById('EditDateBegin'));return false;">
@@ -286,7 +286,7 @@
                 </tr>
                 <%-- date end --%>
                 <tr>
-                    <td class="admin"><%=getTran("Web","enddate",sWebLanguage)%>&nbsp;*&nbsp;</td>
+                    <td class="admin"><%=getTran(request,"Web","enddate",sWebLanguage)%>&nbsp;*&nbsp;</td>
                     <td class="admin2">
                         <input type="text" maxlength="10" class="text" id="EditDateEnd" name="EditDateEnd" value="<%=sSelectedDateEnd%>" size="12" onblur="if(!checkDate(this)){alert('Web.Occup','date.error');this.value='';}">
                         <img name="popcal" class="link" src="<%=sCONTEXTPATH%>/_img/icons/icon_agenda.gif" alt="<%=getTranNoLink("Web","Select",sWebLanguage)%>" onclick="gfPop1.fPopCalendar(document.getElementById('EditDateEnd'));return false;">
@@ -296,7 +296,7 @@
                 </tr>
                 <%-- prescriber --%>
                 <tr>
-                    <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","prescriber",sWebLanguage)%>&nbsp;*&nbsp;</td>
+                    <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","prescriber",sWebLanguage)%>&nbsp;*&nbsp;</td>
                     <td class="admin2">
                         <input type="hidden" name="EditPrescriberUid" value="<%=sSelectedPrescriberUid%>">
                         <input class="text" type="text" name="EditPrescriberFullName" readonly size="<%=sTextWidth%>" value="<%=sSelectedPrescriberFullName%>">
@@ -307,16 +307,16 @@
                 </tr>
                 <%-- schema --%>
                 <tr>
-                    <td class="admin" nowrap><%=getTran("Web","schema",sWebLanguage)%>&nbsp;</td>
+                    <td class="admin" nowrap><%=getTran(request,"Web","schema",sWebLanguage)%>&nbsp;</td>
                     <td class="admin2">
                         <table>
                             <tr>
-                                <td><input class="text" type="text" name="time1" value="<%=prescriptionSchema.getTimeQuantity(0).getKey()%>" size="2"><%=getTran("web","abbreviation.hour",sWebLanguage)%></td>
-                                <td><input class="text" type="text" name="time2" value="<%=prescriptionSchema.getTimeQuantity(1).getKey()%>" size="2"><%=getTran("web","abbreviation.hour",sWebLanguage)%></td>
-                                <td><input class="text" type="text" name="time3" value="<%=prescriptionSchema.getTimeQuantity(2).getKey()%>" size="2"><%=getTran("web","abbreviation.hour",sWebLanguage)%></td>
-                                <td><input class="text" type="text" name="time4" value="<%=prescriptionSchema.getTimeQuantity(3).getKey()%>" size="2"><%=getTran("web","abbreviation.hour",sWebLanguage)%></td>
-                                <td><input class="text" type="text" name="time5" value="<%=prescriptionSchema.getTimeQuantity(4).getKey()%>" size="2"><%=getTran("web","abbreviation.hour",sWebLanguage)%></td>
-                                <td><input class="text" type="text" name="time6" value="<%=prescriptionSchema.getTimeQuantity(5).getKey()%>" size="2"><%=getTran("web","abbreviation.hour",sWebLanguage)%></td>
+                                <td><input class="text" type="text" name="time1" value="<%=prescriptionSchema.getTimeQuantity(0).getKey()%>" size="2"><%=getTran(request,"web","abbreviation.hour",sWebLanguage)%></td>
+                                <td><input class="text" type="text" name="time2" value="<%=prescriptionSchema.getTimeQuantity(1).getKey()%>" size="2"><%=getTran(request,"web","abbreviation.hour",sWebLanguage)%></td>
+                                <td><input class="text" type="text" name="time3" value="<%=prescriptionSchema.getTimeQuantity(2).getKey()%>" size="2"><%=getTran(request,"web","abbreviation.hour",sWebLanguage)%></td>
+                                <td><input class="text" type="text" name="time4" value="<%=prescriptionSchema.getTimeQuantity(3).getKey()%>" size="2"><%=getTran(request,"web","abbreviation.hour",sWebLanguage)%></td>
+                                <td><input class="text" type="text" name="time5" value="<%=prescriptionSchema.getTimeQuantity(4).getKey()%>" size="2"><%=getTran(request,"web","abbreviation.hour",sWebLanguage)%></td>
+                                <td><input class="text" type="text" name="time6" value="<%=prescriptionSchema.getTimeQuantity(5).getKey()%>" size="2"><%=getTran(request,"web","abbreviation.hour",sWebLanguage)%></td>
                             </tr>
                             <tr>
                                 <td><input class="text" type="text" name="quantity1" value="<%=(prescriptionSchema.getTimeQuantity(0).getValue().equals("-1")?"":prescriptionSchema.getTimeQuantity(0).getValue())%>" size="2">#</td>
@@ -343,7 +343,7 @@
 		                        }
                             }
                             else{
-                            	%><font color="red"><%=getTran("web.occup","onlyEditableByPrescriber",sWebLanguage)%></font><%
+                            	%><font color="red"><%=getTran(request,"web.occup","onlyEditableByPrescriber",sWebLanguage)%></font><%
                             }
                         %>
                         <input class="button" type="button" name="returnButton" value='<%=getTranNoLink("Web","backtooverview",sWebLanguage)%>' onclick="doBack();">
@@ -352,7 +352,7 @@
             </table>
             
             <%-- indication of obligated fields --%>
-            <%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%>
+            <%=getTran(request,"Web","colored_fields_are_obligate",sWebLanguage)%>
             <%-- display message --%>
             <br><span id="msgArea">&nbsp;<%=msg%></span>
     <%

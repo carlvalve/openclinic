@@ -10,7 +10,7 @@
     if(labelValue.length() == 0){
         labelType = ScreenHelper.checkDbString(request.getParameter("labelType")).toLowerCase();
         labelID   = ScreenHelper.checkDbString(request.getParameter("labelID")).toLowerCase();
-        questionTran = getTran(labelType,labelID,sWebLanguage);
+        questionTran = getTran(request,labelType,labelID,sWebLanguage);
     }
     else{
         questionTran = labelValue;

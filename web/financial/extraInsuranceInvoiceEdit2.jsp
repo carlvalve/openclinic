@@ -35,7 +35,7 @@
     
     <table class="menu" width="100%" cellpadding="0" cellspacing="1">
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web.finance","invoiceid",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web.finance","invoiceid",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" name="FindInsurarInvoiceUID" id="FindInsurarInvoiceUID" onblur="isNumber(this)" value="<%=sFindInsurarInvoiceUID%>">
                 <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchInsurarInvoice();">
@@ -78,7 +78,7 @@
 <form name='EditForm' id="EditForm" method='POST'>
 <table class='list' border='0' width='100%' cellspacing='1' cellpadding="0">
     <tr>
-        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("medical.accident","insurancecompany",sWebLanguage)%></td>
+        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"medical.accident","insurancecompany",sWebLanguage)%></td>
         <td class="admin2">
             <input type="hidden" name="EditNumber" value="<%=checkString(insurarInvoice.getNumber())%>">
             <input type="hidden" name="EditInsurarUID" value="<%=checkString(insurarInvoice.getInsurarUid())%>">
@@ -96,7 +96,7 @@
     
     <tbody id="invoicedetails" style="visibility:hidden">
         <tr>
-            <td class="admin"><%=getTran("web.finance", "invoiceid", sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web.finance", "invoiceid", sWebLanguage)%></td>
             <td class="admin2"><input type="text" class="text" readonly name="EditInvoiceUID" id="EditInvoiceUID" value="<%=checkString(insurarInvoice.getInvoiceUid())%>">
 				<%
 	            	if(checkString(insurarInvoice.getNumber()).length()>0 && !insurarInvoice.getInvoiceUid().equalsIgnoreCase(insurarInvoice.getInvoiceNumber())){
@@ -108,7 +108,7 @@
             
         <%-- DATE --%>
         <tr>
-            <td class='admin'><%=getTran("Web","date",sWebLanguage)%> *</td>
+            <td class='admin'><%=getTran(request,"Web","date",sWebLanguage)%> *</td>
             <%
                 Date activeDate = insurarInvoice.getDate();
                 if(activeDate==null){
@@ -120,7 +120,7 @@
             
         <%-- STATUS --%>
         <tr>
-            <td class='admin'><%=getTran("Web.finance","patientinvoice.status",sWebLanguage)%> *</td>
+            <td class='admin'><%=getTran(request,"Web.finance","patientinvoice.status",sWebLanguage)%> *</td>
             <td class='admin2'>
                 <select class="text" id="EditStatus" name="EditStatus" onchange="doStatus()" <%=insurarInvoice.getStatus()!=null && (insurarInvoice.getStatus().equalsIgnoreCase("closed") || insurarInvoice.getStatus().equalsIgnoreCase("canceled"))?"disabled":""%>>
                     <option/>
@@ -130,20 +130,20 @@
                             activeStatus = "open";
                         }
                     %>
-                    <%=ScreenHelper.writeSelect("finance.patientinvoice.status",activeStatus,sWebLanguage)%>
+                    <%=ScreenHelper.writeSelect(request,"finance.patientinvoice.status",activeStatus,sWebLanguage)%>
                 </select>
             </td>
         </tr>
         
         <%-- PERIOD --%>
         <tr id="period" style="visibility: hidden">
-            <td class='admin'><%=getTran("web","period",sWebLanguage)%></td>
+            <td class='admin'><%=getTran(request,"web","period",sWebLanguage)%></td>
             <td class="admin2">
                 <%
                     Date previousmonth = new Date(new Date().getTime()-30*24*3600*1000l);
                 %>
                 <%=writeDateField("EditBegin","EditForm",new SimpleDateFormat("01/MM/yyyy").format(previousmonth),sWebLanguage)%>
-                <%=getTran("web","to",sWebLanguage)%>
+                <%=getTran(request,"web","to",sWebLanguage)%>
                 <%=writeDateField("EditEnd","EditForm",ScreenHelper.stdDateFormat.format(ScreenHelper.parseDate(new SimpleDateFormat("01/MM/yyyy").format(new Date())).getTime()-1), sWebLanguage)%>
                 <input type="hidden" name="EditInvoiceService" id="EditInvoiceService" value="">
                 <% if(insurarInvoice==null || insurarInvoice.getStatus()==null || insurarInvoice.getStatus().equalsIgnoreCase("open")){ %>
@@ -157,7 +157,7 @@
             
         <%-- BALANCE --%>
         <tr>
-            <td class='admin'><%=getTran("web.finance","balance",sWebLanguage)%></td>
+            <td class='admin'><%=getTran(request,"web.finance","balance",sWebLanguage)%></td>
             <td class='admin2'>
                 <input class='text' readonly type='text' id='EditBalance' name='EditBalance' value='<%=new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat", "#,##0.00")).format(insurarInvoice.getBalance())%>' size='20'> <%=MedwanQuery.getInstance().getConfigParam("currency", "€")%>
             </td>
@@ -165,7 +165,7 @@
             
         <%-- DEBETS/PRESTATIONS --%>
         <tr>
-            <td class='admin'><%=getTran("web.finance","prestations",sWebLanguage)%></td>
+            <td class='admin'><%=getTran(request,"web.finance","prestations",sWebLanguage)%></td>
             <td class='admin2'>
                 <div id="divPrestations" style="height:120px;width:100%" class="searchResults"></div>
               
@@ -178,7 +178,7 @@
             
         <%-- CREDITS/PAYMENTS --%>
         <tr>
-            <td class='admin'><%=getTran("web.finance","credits",sWebLanguage)%></td>
+            <td class='admin'><%=getTran(request,"web.finance","credits",sWebLanguage)%></td>
             <td class='admin2'>
                 <div id="divCredits" style="height:120px;width:100%" class="searchResults"></div>
                 
@@ -200,7 +200,7 @@
 
                     // pdf print button for existing invoices
                     if(checkString(insurarInvoice.getUid()).length() > 0){
-                        %><%=getTran("Web.Occup","PrintLanguage",sWebLanguage)%>&nbsp;<%
+                        %><%=getTran(request,"Web.Occup","PrintLanguage",sWebLanguage)%>&nbsp;<%
                         		
                         String sPrintLanguage = activeUser.person.language;
                         if(sPrintLanguage.length()==0){
@@ -258,7 +258,7 @@
         </tr>
     </tbody>
 </table>
-<%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%>
+<%=getTran(request,"Web","colored_fields_are_obligate",sWebLanguage)%>
 
 <div id="divMessage"></div>
 
@@ -306,7 +306,7 @@ function doSave(){
     });
   }
   else{
-              window.showModalDialog?alertDialog("web.manage","dataMissing"):alertDialogDirectText('<%=getTran("web.manage","dataMissing",sWebLanguage)%>');
+              window.showModalDialog?alertDialog("web.manage","dataMissing"):alertDialogDirectText('<%=getTran(null,"web.manage","dataMissing",sWebLanguage)%>');
   }
 }
 

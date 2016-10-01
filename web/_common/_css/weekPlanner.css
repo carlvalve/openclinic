@@ -119,10 +119,31 @@ div.today {
   position: absolute;
   z-index: 1000;
   overflow: hidden;
-  border: none;
   -moz-border-radius: 4px;
   border-radius: 4px;
-  background-color: #DDEDFF;
+  background-color: C6DBFF;
+  border: 1px dashed #4D7BAF;
+}
+
+.weekScheduler_anAppointmentPrivate {
+/* A new appointment */
+  position: absolute;
+  z-index: 1000;
+  overflow: hidden;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  background-color: FFFFCC;
+  border: 1px solid #4D7BAF;
+}
+
+.weekScheduler_anAppointmentStandard {
+/* A new appointment */
+  position: absolute;
+  z-index: 1000;
+  overflow: hidden;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  background-color: ECF5FF;
   border: 1px solid #4D7BAF;
 }
 
@@ -329,6 +350,9 @@ div.weekScheduler_appointment_info {
 }
 #weekScheduler_popup ul li.person a {
   background-position:left -186px;
+}
+#weekScheduler_popup ul li.print a {
+  background-position:left -270px;
 }
 #weekScheduler_popup span {
 /* Appointment header row */

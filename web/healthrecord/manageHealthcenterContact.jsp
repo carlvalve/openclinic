@@ -15,7 +15,7 @@
 			
 			for(int n=0; n<ids.length; n++){
 				if(ids[n].split("\\$").length==2){
-					keyword = getTran(ids[n].split("\\$")[0],ids[n].split("\\$")[1] , language);
+					keyword = getTran(null,ids[n].split("\\$")[0],ids[n].split("\\$")[1] , language);
 					
 					sHTML.append("<a href='javascript:deleteKeyword(\"").append(idsField).append("\",\"").append(textField).append("\",\"").append(ids[n]).append("\");'>")
 					      .append("<img width='8' src='"+sCONTEXTPATH+"/_img/themes/default/erase.png' class='link' style='vertical-align:-1px'/>")
@@ -62,7 +62,7 @@
         <tr>
             <td class="admin" width="10%" nowrap>
                 <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-                <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>&nbsp;
+                <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>&nbsp;
             </td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" id="trandate" OnBlur='checkDate(this)'>
@@ -77,24 +77,24 @@
     <table class="list" width='100%' cellpadding="1" cellspacing="1"> 
      	<%-- title --%>
      	<tr class="gray">
-            <td>&nbsp;<b><%=getTran("web","biometrics",sWebLanguage)%></b></td>
+            <td>&nbsp;<b><%=getTran(request,"web","biometrics",sWebLanguage)%></b></td>
         </tr>    
         <tr>
          	<td class="admin2" width='100%' style="padding:0px;">
          	    <table width="100%" cellpadding="1" cellspacing="1">
          			<tr>
-         				<td class='admin'><%=getTran("Web.Occup","medwan.healthrecord.cardial.pression-arterielle",sWebLanguage)%></td>
+         				<td class='admin'><%=getTran(request,"Web.Occup","medwan.healthrecord.cardial.pression-arterielle",sWebLanguage)%></td>
          				<td class='admin2'>
-         					<%=getTran("Web.Occup","medwan.healthrecord.cardial.bras-droit",sWebLanguage)%> 
+         					<%=getTran(request,"Web.Occup","medwan.healthrecord.cardial.bras-droit",sWebLanguage)%> 
          					<input id="sbpr" <%=setRightClick("ITEM_TYPE_CARDIAL_CLINICAL_EXAMINATION_SYSTOLIC_PRESSURE_RIGHT")%> type="text" class="text" size="3" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIAL_CLINICAL_EXAMINATION_SYSTOLIC_PRESSURE_RIGHT" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIAL_CLINICAL_EXAMINATION_SYSTOLIC_PRESSURE_RIGHT" property="value"/>" onblur="setBP(this,'sbpr','dbpr');"> /
                         	<input id="dbpr" <%=setRightClick("ITEM_TYPE_CARDIAL_CLINICAL_EXAMINATION_DIASTOLIC_PRESSURE_RIGHT")%> type="text" class="text" size="3" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIAL_CLINICAL_EXAMINATION_DIASTOLIC_PRESSURE_RIGHT" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIAL_CLINICAL_EXAMINATION_DIASTOLIC_PRESSURE_RIGHT" property="value"/>" onblur="setBP(this,'sbpr','dbpr');"> mmHg
                         </td>
                         <td class='admin2' colspan='2'>
-	                        <%=getTran("Web.Occup","medwan.healthrecord.cardial.bras-gauche",sWebLanguage)%>
+	                        <%=getTran(request,"Web.Occup","medwan.healthrecord.cardial.bras-gauche",sWebLanguage)%>
 	                        <input id="sbpl" <%=setRightClick("ITEM_TYPE_CARDIAL_CLINICAL_EXAMINATION_SYSTOLIC_PRESSURE_LEFT")%> type="text" class="text" size="3" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIAL_CLINICAL_EXAMINATION_SYSTOLIC_PRESSURE_LEFT" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIAL_CLINICAL_EXAMINATION_SYSTOLIC_PRESSURE_LEFT" property="value"/>" onblur="setBP(this,'sbpl','dbpl');"> /
 	                        <input id="dbpl" <%=setRightClick("ITEM_TYPE_CARDIAL_CLINICAL_EXAMINATION_DIASTOLIC_PRESSURE_LEFT")%> type="text" class="text" size="3" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIAL_CLINICAL_EXAMINATION_DIASTOLIC_PRESSURE_LEFT" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIAL_CLINICAL_EXAMINATION_DIASTOLIC_PRESSURE_LEFT" property="value"/>" onblur="setBP(this,'sbpl','dbpl');"> mmHg
                         </td>
-			            <td class='admin' colspan="2"><%=getTran("Web.Occup","medwan.healthrecord.biometry.weight",sWebLanguage)%>&nbsp;</td>
+			            <td class='admin' colspan="2"><%=getTran(request,"Web.Occup","medwan.healthrecord.biometry.weight",sWebLanguage)%>&nbsp;</td>
 			            <td class='admin2'>
 			                <input <%=setRightClickMini("ITEM_TYPE_BIOMETRY_WEIGHT")%> id="weight" class="text" type="text" size="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BIOMETRY_WEIGHT" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BIOMETRY_WEIGHT" property="value"/>"/>
 			            </td>
@@ -102,15 +102,15 @@
          			</tr>
          			
          			<tr>
-         				<td class='admin'><%=getTran("openclinic.chuk","temperature",sWebLanguage)%></td>
+         				<td class='admin'><%=getTran(request,"openclinic.chuk","temperature",sWebLanguage)%></td>
          				<td class='admin2'>
                         	<input id="temperature" <%=setRightClick("ITEM_TYPE_BIOMETRY_TEMPERATURE")%> type="text" class="text" size="3" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BIOMETRY_TEMPERATURE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BIOMETRY_TEMPERATURE" property="value"/>"> °C
                         </td>
-         				<td class='admin'><%=getTran("openclinic.chuk","height",sWebLanguage)%></td>
+         				<td class='admin'><%=getTran(request,"openclinic.chuk","height",sWebLanguage)%></td>
          				<td class='admin2'>
                         	<input id="height" <%=setRightClick("ITEM_TYPE_BIOMETRY_HEIGHT")%> type="text" class="text" size="3" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BIOMETRY_HEIGHT" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BIOMETRY_HEIGHT" property="value"/>"> cm
                         </td>
-         				<td class='admin' colspan="2"><%=getTran("openclinic.chuk","heartfrequency",sWebLanguage)%></td>
+         				<td class='admin' colspan="2"><%=getTran(request,"openclinic.chuk","heartfrequency",sWebLanguage)%></td>
          				<td class='admin2'>
                             <input id="hearthfreq" <%=setRightClick("ITEM_TYPE_BIOMETRY_HEARTFREQUENCY")%> type="text" class="text" size="3" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BIOMETRY_HEARTFREQUENCY" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BIOMETRY_HEARTFREQUENCY" property="value"/>">/min
                         </td>
@@ -126,7 +126,7 @@
     <table class="list" width='100%' cellpadding="1" cellspacing="1">
      	<%-- title --%>
      	<tr class="gray">
-            <td colspan="5">&nbsp;<b><%=getTran("web","keywords",sWebLanguage)%></b></td>
+            <td colspan="5">&nbsp;<b><%=getTran(request,"web","keywords",sWebLanguage)%></b></td>
         </tr>             
         <tr> 
          	<td class="admin2" colspan='3' width='70%' style="vertical-align:top;padding:0px;">
@@ -134,7 +134,7 @@
          			<%-- Functional signs --%>
          			<tr height="40">
          				<td class='admin' width='20%'>
-         					<div id="title1"><%=getTran("web","functional.signs",sWebLanguage)%></div>
+         					<div id="title1"><%=getTran(request,"web","functional.signs",sWebLanguage)%></div>
          				</td>
          				<td>
          					<table width='100%'>
@@ -157,7 +157,7 @@
          			<%-- Inspection --%>
          			<tr height="40">
          				<td class='admin' width='20%'>
-         					<div id="title2"><%=getTran("web","inspection",sWebLanguage)%></div>
+         					<div id="title2"><%=getTran(request,"web","inspection",sWebLanguage)%></div>
          				</td>
          				<td>
          					<table width='100%'>
@@ -180,7 +180,7 @@
          			<%-- Palpation --%>
          			<tr height="40">
          				<td class='admin' width='20%'>
-         					<div id="title3"><%=getTran("web","palpation",sWebLanguage)%></div>
+         					<div id="title3"><%=getTran(request,"web","palpation",sWebLanguage)%></div>
          				</td>
          				<td>
          					<table width='100%'>
@@ -203,7 +203,7 @@
          			<%-- Heart ausculation --%>
          			<tr height="40">
          				<td class='admin' width='20%'>
-         					<div id="title4"><%=getTran("web","heart.auscultation",sWebLanguage)%></div>
+         					<div id="title4"><%=getTran(request,"web","heart.auscultation",sWebLanguage)%></div>
          				</td>
          				<td>
          					<table width='100%'>
@@ -226,7 +226,7 @@
          			<%-- Lung ausculation --%>
          			<tr height="40">
          				<td class='admin' width='20%'>
-         					<div id="title5"><%=getTran("web","lung.auscultation",sWebLanguage)%></div>
+         					<div id="title5"><%=getTran(request,"web","lung.auscultation",sWebLanguage)%></div>
          				</td>
          				<td>
          					<table width='100%'>
@@ -249,7 +249,7 @@
          			<%-- Reference --%>
          			<tr height="40">
          				<td class='admin' width='20%'>
-         					<div id="title6"><%=getTran("web","reference",sWebLanguage)%></div>
+         					<div id="title6"><%=getTran(request,"web","reference",sWebLanguage)%></div>
          				</td>
          				<td>
          					<table width='100%'>
@@ -272,7 +272,7 @@
          			<%-- Evacuation --%>
          			<tr height="40">
          				<td class='admin' width='20%'>
-         					<div id="title7"><%=getTran("web","evacuation",sWebLanguage)%></div>
+         					<div id="title7"><%=getTran(request,"web","evacuation",sWebLanguage)%></div>
          				</td>
          				<td>
          					<table width='100%'>

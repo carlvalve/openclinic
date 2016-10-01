@@ -18,23 +18,23 @@
 %>
 <table width="100%" class="list" cellspacing="1">
     <tr>
-        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","name",sWebLanguage)%></td>
+        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","name",sWebLanguage)%></td>
         <td class="admin2"><%=checkString(activeHistoryPatient.lastname)%></td>
     </tr>
     <tr>
-        <td class="admin"><%=getTran("web","firstname",sWebLanguage)%></td>
+        <td class="admin"><%=getTran(request,"web","firstname",sWebLanguage)%></td>
         <td class="admin2"><%=checkString(activeHistoryPatient.firstname)%></td>
     </tr>
     <tr>
-        <td class="admin"><%=getTran("web","immatnew",sWebLanguage)%></td>
+        <td class="admin"><%=getTran(request,"web","immatnew",sWebLanguage)%></td>
         <td class="admin2"><%=checkString(activeHistoryPatient.getID("immatnew"))%></td>
     </tr>
     <tr>
-        <td class="admin"><%=getTran("web","ImmatOld",sWebLanguage)%></td>
+        <td class="admin"><%=getTran(request,"web","ImmatOld",sWebLanguage)%></td>
         <td class="admin2"><%=checkString(activeHistoryPatient.getID("immatold"))%></td>
     </tr>
     <tr>
-        <td class="admin"><%=getTran("web","NatReg",sWebLanguage)%></td>
+        <td class="admin"><%=getTran(request,"web","NatReg",sWebLanguage)%></td>
         <td class="admin2"><%=checkString(activeHistoryPatient.getID("natreg"))%></td>
     </tr>
 </table>
@@ -43,7 +43,7 @@
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
             <td class='tabs' width='5'>&nbsp;</td>
-            <td class='tabunselected' width="1%" onclick="activateTab('Admin')" id="td0" nowrap>&nbsp;<b><%=getTran("Web","personaldata",sWebLanguage)%></b>&nbsp;</td>
+            <td class='tabunselected' width="1%" onclick="activateTab('Admin')" id="td0" nowrap>&nbsp;<b><%=getTran(request,"Web","personaldata",sWebLanguage)%></b>&nbsp;</td>
         </tr>
     </table>
     <%-- ONE TAB -------------------------------------------------------------------------------------%>

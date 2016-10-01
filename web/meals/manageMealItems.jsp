@@ -17,7 +17,7 @@
     <form name="manageMealsItemsTable" id="manageMealsItemsTable" method="post">
         <%-- ITEM NAME --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("meals","name",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"meals","name",sWebLanguage)%></td>
             <td class="admin2" style="padding-left:5px;">
                 <input type="text" class="text" id="FindMealItemName" name="FindMealItemName" size="50" maxLength="100">
             </td>
@@ -25,7 +25,7 @@
         
         <%-- DESCRIPTION --%>
         <tr>
-            <td class="admin"><%=getTran("meals","description",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"meals","description",sWebLanguage)%></td>
             <td class="admin2" style="padding-left:5px;">
                 <input type="text" class="text" id="FindMealItemDescription" name="FindMealItemDescription" size="50" maxLength="100">&nbsp;&nbsp;
                 
@@ -82,7 +82,7 @@
   function openMealItem(id){
     var params = "mealItemId="+id;
     var url = "<c:url value='/meals/ajax/getMealItem.jsp'/>?ts="+new Date().getTime();
-    Modalbox.show(url,{title:"<%=getTran("meals","mealItem",sWebLanguage)%>",params:params,width:530});
+    Modalbox.show(url,{title:"<%=getTran(null,"meals","mealItem",sWebLanguage)%>",params:params,width:530});
   }
 
   <%-- SET MEAL ITEM --%>

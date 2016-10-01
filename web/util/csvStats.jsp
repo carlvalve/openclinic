@@ -343,7 +343,7 @@
     }
 	//*** 4 - USERS ******************************************************
     else if("user.list".equalsIgnoreCase(sQueryType)){
-        query = "select userid as CODE, firstname as FIRSTNAME, lastname as LASTNAME"+
+        query = "select userid as CODE, firstname as FIRSTNAME, lastname as LASTNAME, a.start as START, a.stop as STOP"+
                 " from Users a, Admin b"+
                 "  where a.personid = b.personid"+
                 "   order by userid";
@@ -453,7 +453,6 @@
 					sResult.append((invoice.getPatientUid()==null?"":invoice.getPatientUid())+";");
 					sResult.append((invoice.getPatient()==null?"":invoice.getPatient().getFullName())+";");
 					sResult.append((invoice.getPatient()==null || invoice.getPatient().dateOfBirth==null?"":invoice.getPatient().dateOfBirth)+";");
-			        System.out.println(new SimpleDateFormat("HH:mm:ss SSS").format(new java.util.Date())+" *3*");
 				
 					String age = "";
 					try{
@@ -994,7 +993,6 @@
         		"   and b.oc_label_id = oc_wicket_credit_type"+
         		"   and b.oc_label_language = '"+sWebLanguage+"'"+
         		" order by DATE";
-        		System.out.println(query);
     }
 	//*** 12 - DIAGNOSES *************************************************
     else if("diagnosis.list".equalsIgnoreCase(sQueryType)){

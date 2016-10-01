@@ -35,7 +35,7 @@
 
             // no records found
             if(sLabel.length()==0){
-                %><tr><td><%=getTran("web","norecordsfound",sWebLanguage)%></td></tr><%
+                %><tr><td><%=getTran(request,"web","norecordsfound",sWebLanguage)%></td></tr><%
             }
         %>
     </table>

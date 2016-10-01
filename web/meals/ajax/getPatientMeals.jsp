@@ -23,9 +23,9 @@
 		    <%-- HEADER --%>
 		    <tr class="gray">
 		        <td width="30">&nbsp;</td>
-		        <td width="80"><%=HTMLEntities.htmlentities(getTran("meals","mealTaken",sWebLanguage))%></td>
-		        <td width="80"><%=HTMLEntities.htmlentities(getTran("meals","mealTime",sWebLanguage))%></td>
-		        <td width="*"><%=HTMLEntities.htmlentities(getTran("meals","mealName",sWebLanguage))%></td>
+		        <td width="80"><%=HTMLEntities.htmlentities(getTran(request,"meals","mealTaken",sWebLanguage))%></td>
+		        <td width="80"><%=HTMLEntities.htmlentities(getTran(request,"meals","mealTime",sWebLanguage))%></td>
+		        <td width="*"><%=HTMLEntities.htmlentities(getTran(request,"meals","mealName",sWebLanguage))%></td>
 		    </tr>
 		        
 		    <%
@@ -38,15 +38,15 @@
 		            
 		            out.write("<tr id='patientmeal_"+item.getUid()+"' class='list"+(i%2==0?"":"1")+"' style='cursor:hand;'>");
 		             out.write("<td>"+
-		                        "<img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.png' class='link' title='"+(HTMLEntities.htmlentities(getTran("web","delete",sWebLanguage)))+"' onclick=\"deleteMealFromPatient('"+item.patientMealUid+"');\">"+
+		                        "<img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.png' class='link' title='"+(HTMLEntities.htmlentities(getTran(request,"web","delete",sWebLanguage)))+"' onclick=\"deleteMealFromPatient('"+item.patientMealUid+"');\">"+
 		                       "</td>");
 		             
 		            out.write("<td>");        		            
 		            if(item.taken){
-		                out.write("<img src='"+sCONTEXTPATH+"/_img/themes/default/check.gif' class='link' title='"+(HTMLEntities.htmlentities(getTran("meals","mealTaken",sWebLanguage)))+"' onclick=\"setMealTaken('"+item.patientMealUid+"','');\">");
+		                out.write("<img src='"+sCONTEXTPATH+"/_img/themes/default/check.gif' class='link' title='"+(HTMLEntities.htmlentities(getTran(request,"meals","mealTaken",sWebLanguage)))+"' onclick=\"setMealTaken('"+item.patientMealUid+"','');\">");
 		            }
 		            else{
-		                out.write("<img src='"+sCONTEXTPATH+"/_img/themes/default/uncheck.gif' class='link' title='"+(HTMLEntities.htmlentities(getTran("meals","mealNotTaken",sWebLanguage)))+"' onclick=\"setMealTaken('"+item.patientMealUid+"','ok');\">");
+		                out.write("<img src='"+sCONTEXTPATH+"/_img/themes/default/uncheck.gif' class='link' title='"+(HTMLEntities.htmlentities(getTran(request,"meals","mealNotTaken",sWebLanguage)))+"' onclick=\"setMealTaken('"+item.patientMealUid+"','ok');\">");
 		            }
 		            out.write("</td>");
 		            
@@ -64,10 +64,10 @@
     if(lMeals.size() > 0){
     	%><script>ts_makeSortable(document.getElementById("patientmeals"));</script><%
     	%><script>$("mealNutricientsButton").disabled = false;</script><%
-    	%><%=lMeals.size()%> <%=HTMLEntities.htmlentities(getTran("web","recordsFound",sWebLanguage))%><%
+    	%><%=lMeals.size()%> <%=HTMLEntities.htmlentities(getTran(request,"web","recordsFound",sWebLanguage))%><%
     }
     else{
     	%><script>$("mealNutricientsButton").disabled = true;</script><%
-    	%><%=HTMLEntities.htmlentities(getTran("web","noRecordsFound",sWebLanguage))%><%
+    	%><%=HTMLEntities.htmlentities(getTran(request,"web","noRecordsFound",sWebLanguage))%><%
     }
 %>

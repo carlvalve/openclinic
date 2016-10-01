@@ -21,7 +21,7 @@
 <form name='transactionForm' method='post'>
 <table cellspadding="1" cellspacing="0" class="list" width="100%">
 	<tr>
-		<td class='admin' width="50"><%=getTran("web","year",sWebLanguage)%>&nbsp;</td>
+		<td class='admin' width="50"><%=getTran(request,"web","year",sWebLanguage)%>&nbsp;</td>
 		<td class='admin2' width="70">
 			<select name='year' id='year'>
 				<%
@@ -32,7 +32,7 @@
 				%>
 			</select>
 		</td>
-		<td class='admin' width="50"><%=getTran("web","month",sWebLanguage)%>&nbsp;</td>
+		<td class='admin' width="50"><%=getTran(request,"web","month",sWebLanguage)%>&nbsp;</td>
 		<td class='admin2' width="70">
 			<select name='month' id='month'>
 				<%
@@ -48,20 +48,20 @@
 </form>
 <table width='100%'>
 	<tr class='admin'>
-		<td><%=getTran("web","productstock",sWebLanguage)%></td>
-		<td><center><%=getTran("web","packageunits",sWebLanguage)%></center></td>
-		<td><center><%=getTran("web","startstock",sWebLanguage)%></center></td>
-		<td><center><%=getTran("web","outvisits",sWebLanguage)%></center></td>
-		<td><center><%=getTran("web","outadmissions",sWebLanguage)%></center></td>
-		<td><center><%=getTran("web","outother",sWebLanguage)%></center></td>
-		<td><center><%=getTran("web","outtotal",sWebLanguage)%></center></td>
-		<td><center><%=getTran("web","in",sWebLanguage)%></center></td>
-		<td><center><%=getTran("web","endstock",sWebLanguage)%></center></td>
-		<td><center><%=getTran("web","cost",sWebLanguage)%></center></td>
-		<td><center><%=getTran("web","sellingprice",sWebLanguage)%></center></td>
-		<td><center><%=getTran("web","sold.value",sWebLanguage)%></center></td>
-		<td><center><%=getTran("web","stock.value.cost",sWebLanguage)%></center></td>
-		<td><center><%=getTran("web","stock.value.sell",sWebLanguage)%></center></td>
+		<td><%=getTran(request,"web","productstock",sWebLanguage)%></td>
+		<td><center><%=getTran(request,"web","packageunits",sWebLanguage)%></center></td>
+		<td><center><%=getTran(request,"web","startstock",sWebLanguage)%></center></td>
+		<td><center><%=getTran(request,"web","outvisits",sWebLanguage)%></center></td>
+		<td><center><%=getTran(request,"web","outadmissions",sWebLanguage)%></center></td>
+		<td><center><%=getTran(request,"web","outother",sWebLanguage)%></center></td>
+		<td><center><%=getTran(request,"web","outtotal",sWebLanguage)%></center></td>
+		<td><center><%=getTran(request,"web","in",sWebLanguage)%></center></td>
+		<td><center><%=getTran(request,"web","endstock",sWebLanguage)%></center></td>
+		<td><center><%=getTran(request,"web","cost",sWebLanguage)%></center></td>
+		<td><center><%=getTran(request,"web","sellingprice",sWebLanguage)%></center></td>
+		<td><center><%=getTran(request,"web","sold.value",sWebLanguage)%></center></td>
+		<td><center><%=getTran(request,"web","stock.value.cost",sWebLanguage)%></center></td>
+		<td><center><%=getTran(request,"web","stock.value.sell",sWebLanguage)%></center></td>
 	</tr>
 <%
 	String sFindServiceStockUid=request.getParameter("FindServiceStockUid");
@@ -85,7 +85,7 @@
 				}
 			}
 			DecimalFormat priceformat=new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#"));
-			out.println("<tr><td class='admin' nowrap>"+productStock.getProduct().getName()+"</td><td class='admin2'><center>"+productStock.getProduct().getPackageUnits()+" "+getTran("product.unit",productStock.getProduct().getUnit(),sWebLanguage)+"</center></td><td class='admin2'><center><b>"+start+"</b></center></td><td class='admin2'><center>-"+outgoingvisits+"</center></td><td class='admin2'><center>-"+outgoingadmissions+"</td><td class='admin2'>-"+(outgoing-outgoingvisits-outgoingadmissions)+"</center></td><td class='admin2'><b><center>-"+outgoing+"</center></b></td><td class='admin2'><b><center>"+incoming+"</center></b></td><td class='admin2'><b><center>"+(start+incoming-outgoing)+"</center></b></td><td class='admin2'><center>"+priceformat.format(buyingprice)+"</center></td><td class='admin2'><center>"+priceformat.format(sellingprice)+"</center></td><td class='admin2'><center>"+priceformat.format(buyingprice*outgoing)+"</center></td><td class='admin2'><center>"+priceformat.format((start+incoming-outgoing)*buyingprice)+"</center></td><td class='admin2'><center>"+priceformat.format((start+incoming-outgoing)*sellingprice)+"</center></td></tr>");
+			out.println("<tr><td class='admin' nowrap>"+productStock.getProduct().getName()+"</td><td class='admin2'><center>"+productStock.getProduct().getPackageUnits()+" "+getTran(request,"product.unit",productStock.getProduct().getUnit(),sWebLanguage)+"</center></td><td class='admin2'><center><b>"+start+"</b></center></td><td class='admin2'><center>-"+outgoingvisits+"</center></td><td class='admin2'><center>-"+outgoingadmissions+"</td><td class='admin2'>-"+(outgoing-outgoingvisits-outgoingadmissions)+"</center></td><td class='admin2'><b><center>-"+outgoing+"</center></b></td><td class='admin2'><b><center>"+incoming+"</center></b></td><td class='admin2'><b><center>"+(start+incoming-outgoing)+"</center></b></td><td class='admin2'><center>"+priceformat.format(buyingprice)+"</center></td><td class='admin2'><center>"+priceformat.format(sellingprice)+"</center></td><td class='admin2'><center>"+priceformat.format(buyingprice*outgoing)+"</center></td><td class='admin2'><center>"+priceformat.format((start+incoming-outgoing)*buyingprice)+"</center></td><td class='admin2'><center>"+priceformat.format((start+incoming-outgoing)*sellingprice)+"</center></td></tr>");
 		}
 	}
 	

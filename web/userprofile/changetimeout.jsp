@@ -29,10 +29,10 @@
                     <%-- TIMEOUT --%>
                     <% String sTimeout = checkString(activeUser.getParameter("Timeout")); %>
                     <tr>
-                        <td class="admin" width='<%=sTDAdminWidth%>'><%=getTran("Web.UserProfile","Change",sWebLanguage)%> <%=getTran("Web.UserProfile","Timeout",sWebLanguage)%></td>
+                        <td class="admin" width='<%=sTDAdminWidth%>'><%=getTran(request,"Web.UserProfile","Change",sWebLanguage)%> <%=getTran(request,"Web.UserProfile","Timeout",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="text" class="text" name="EditTimeout" size="5" value="<%=sTimeout%>" onblur="checkTimeOut();">
-                            <%=getTran("Web.UserProfile","Seconds",sWebLanguage)%>
+                            <%=getTran(request,"Web.UserProfile","Seconds",sWebLanguage)%>
                         </td>
                     </tr>
                     <%-- BUTTONS --%>

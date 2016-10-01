@@ -19,10 +19,10 @@
         // M/F
         sOut.append("<td>&nbsp;");
         if(sTmpKinderenGeslacht.equalsIgnoreCase("M")){
-            sOut.append(getTran("Web.Occup", "Male", sWebLanguage));
+            sOut.append(getTran(null,"Web.Occup", "Male", sWebLanguage));
         }
         else if(sTmpKinderenGeslacht.equalsIgnoreCase("F")){
-            sOut.append(getTran("Web.Occup", "Female", sWebLanguage));
+            sOut.append(getTran(null,"Web.Occup", "Female", sWebLanguage));
         }
         sOut.append("</td>");
 
@@ -191,18 +191,18 @@
 <table class="list" width="100%" border="0" cellspacing="1">
     <%-- STATUS ---------------------------------------------------------------------------------%>
     <tr>
-        <td class="admin" ><%=getTran("Web.Occup","medwan.occupational-medicine.risk-profile.status",sWebLanguage)%></td>
+        <td class="admin" ><%=getTran(request,"Web.Occup","medwan.occupational-medicine.risk-profile.status",sWebLanguage)%></td>
         <td class="admin2">
             <select id="EditStatus" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CE_STATUS" property="itemId"/>]>.value" class="text">
                 <option/>
-                <%=ScreenHelper.writeSelect("clinicalexamination.familialstatus","",sWebLanguage)%>
+                <%=ScreenHelper.writeSelect(request,"clinicalexamination.familialstatus","",sWebLanguage)%>
             </select>
         </td>
     </tr>
 
     <%-- COMMENT --------------------------------------------------------------------------------%>
     <tr>
-        <td class="admin"><%=getTran("Web","Comment",sWebLanguage)%></td>
+        <td class="admin"><%=getTran(request,"Web","Comment",sWebLanguage)%></td>
         <td class="admin2">
             <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_CE_STATUS_COMMENT")%> class="text" cols="80" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CE_STATUS_COMMENT" property="itemId"/>]>.value"><%=sStatusComment%></textarea>
         </td>
@@ -213,16 +213,16 @@
             <table width="100%" cellspacing="0" cellpadding="0" class="list">
             <%-- CHILDREN -------------------------------------------------------------------------------%>
                 <tr class="admin">
-                    <td colspan="2"><%=getTran("Web.Occup","Children",sWebLanguage)%></td>
+                    <td colspan="2"><%=getTran(request,"Web.Occup","Children",sWebLanguage)%></td>
                 </tr>
                 <tr>
                     <td colspan="2">
                         <table width="100%" cellspacing="1" id="tblKinderen">
                             <tr>
                                 <td class="admin" width="36">&nbsp;</td>
-                                <td class="admin" width="150"><%=getTran("Web.Occup","Birth_Year",sWebLanguage)%></td>
-                                <td class="admin" width="250"><%=getTran("Web.Occup","cbmt.occup.individual.gender",sWebLanguage)%></td>
-                                <td class="admin" width="250"><%=getTran("Web","firstname",sWebLanguage)%></td>
+                                <td class="admin" width="150"><%=getTran(request,"Web.Occup","Birth_Year",sWebLanguage)%></td>
+                                <td class="admin" width="250"><%=getTran(request,"Web.Occup","cbmt.occup.individual.gender",sWebLanguage)%></td>
+                                <td class="admin" width="250"><%=getTran(request,"Web","firstname",sWebLanguage)%></td>
                                 <td class="admin">&nbsp;</td>
                             </tr>
 
@@ -232,8 +232,8 @@
                                 <td class="admin2">
                                     <select name="KinderenGeslacht" class="text">
                                         <option/>
-                                        <option value="M"><%=getTran("Web.Occup","Male",sWebLanguage)%></option>
-                                        <option value="F"><%=getTran("Web.Occup","Female",sWebLanguage)%></option>
+                                        <option value="M"><%=getTran(request,"Web.Occup","Male",sWebLanguage)%></option>
+                                        <option value="F"><%=getTran(request,"Web.Occup","Female",sWebLanguage)%></option>
                                     </select>
                                 </td>
                                 <td class="admin2">
@@ -260,16 +260,16 @@
             <table width="100%" cellspacing="0" cellpadding="0" class="list">
                 <%-- Familial Antecedents -------------------------------------------------------------------%>
                 <tr class="admin">
-                    <td colspan="2"><%=getTran("Web.Occup","Familial_Antecedents",sWebLanguage)%></td>
+                    <td colspan="2"><%=getTran(request,"Web.Occup","Familial_Antecedents",sWebLanguage)%></td>
                 </tr>
                 <tr>
                     <td colspan="2">
                         <table width="100%" cellspacing="1" id="tblFami">
                             <tr>
                                 <td class="admin" width="36">&nbsp;</td>
-                                <td class="admin" width="150"><%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%></td>
-                                <td class="admin" width="250"><%=getTran("Web.Occup","medwan.common.description",sWebLanguage)%></td>
-                                <td class="admin" width="250"><%=getTran("Web.Occup","verwantschap",sWebLanguage)%></td>
+                                <td class="admin" width="150"><%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%></td>
+                                <td class="admin" width="250"><%=getTran(request,"Web.Occup","medwan.common.description",sWebLanguage)%></td>
+                                <td class="admin" width="250"><%=getTran(request,"Web.Occup","verwantschap",sWebLanguage)%></td>
                                 <td class="admin">&nbsp;</td>
                             </tr>
 
@@ -300,7 +300,7 @@
 
     <%-- COMMENT --------------------------------------------------------------------------------%>
     <tr>
-        <td class="admin"><%=getTran("Web","Comment",sWebLanguage)%></td>
+        <td class="admin"><%=getTran(request,"Web","Comment",sWebLanguage)%></td>
         <td class="admin2">
             <textarea onKeyup="resizeTextarea(this,10);" <%=setRightClick("ITEM_TYPE_CE_FAMILIAAL_COMMENT")%> class="text" cols="80" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CE_FAMILIAAL_COMMENT" property="itemId"/>]>.value"><%=sFamiliaalComment%></textarea>
 
@@ -375,10 +375,10 @@ function addKinderen(){
 
       td = tr.insertCell(2);
       if(document.getElementById("transactionForm").KinderenGeslacht.value == "M"){
-        td.innerHTML = "&nbsp;<%=getTran("Web.Occup","male",sWebLanguage)%>";
+        td.innerHTML = "&nbsp;<%=getTran(request,"Web.Occup","male",sWebLanguage)%>";
       }
       else if(document.getElementById("transactionForm").KinderenGeslacht.value == "F"){
-        td.innerHTML = "&nbsp;<%=getTran("Web.Occup","female",sWebLanguage)%>";
+        td.innerHTML = "&nbsp;<%=getTran(request,"Web.Occup","female",sWebLanguage)%>";
       }
       tr.appendChild(td);
 
@@ -445,10 +445,10 @@ function updateKinderen(){
 
     <%-- translate gender --%>
     if(document.getElementById("transactionForm").KinderenGeslacht.value == "M"){
-      row.cells[2].innerHTML = "&nbsp;<%=getTran("Web.Occup","male",sWebLanguage)%>";
+      row.cells[2].innerHTML = "&nbsp;<%=getTran(request,"Web.Occup","male",sWebLanguage)%>";
     }
     else if(document.getElementById("transactionForm").KinderenGeslacht.value == "F"){
-      row.cells[2].innerHTML = "&nbsp;<%=getTran("Web.Occup","female",sWebLanguage)%>";
+      row.cells[2].innerHTML = "&nbsp;<%=getTran(request,"Web.Occup","female",sWebLanguage)%>";
     }
 
     row.cells[3].innerHTML = "&nbsp;"+document.getElementById("transactionForm").KinderenFirstname.value;

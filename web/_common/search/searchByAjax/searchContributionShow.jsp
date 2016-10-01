@@ -76,7 +76,7 @@
 
                 // type
                 sType = checkString(prestation.getType());
-                sTypeTran = getTran("prestation.type",sType,sWebLanguage);
+                sTypeTran = getTran(request,"prestation.type",sType,sWebLanguage);
 
                 // price
                 double price = prestation.getPrice();
@@ -103,24 +103,24 @@
 	        <table id="searchresults" class="sortable" width="100%" cellpadding="1" cellspacing="0" style="border:1px solid #ccc;">
 		        <%-- header --%>
 		        <tr class="admin">
-		            <td><%=HTMLEntities.htmlentities(getTran("web","id",sWebLanguage))%></td>
-		            <td><%=HTMLEntities.htmlentities(getTran("web","code",sWebLanguage))%></td>
-		            <td><%=HTMLEntities.htmlentities(getTran("web","description",sWebLanguage))%></td>
-		            <td><%=HTMLEntities.htmlentities(getTran("web","type",sWebLanguage))%></td>
-		            <td><%=HTMLEntities.htmlentities(getTran("web","price",sWebLanguage))%> <%=HTMLEntities.htmlentities(sCurrency)%></td>
-		            <td><%=HTMLEntities.htmlentities(getTran("web","categories",sWebLanguage))%></td>
+		            <td><%=HTMLEntities.htmlentities(getTran(request,"web","id",sWebLanguage))%></td>
+		            <td><%=HTMLEntities.htmlentities(getTran(request,"web","code",sWebLanguage))%></td>
+		            <td><%=HTMLEntities.htmlentities(getTran(request,"web","description",sWebLanguage))%></td>
+		            <td><%=HTMLEntities.htmlentities(getTran(request,"web","type",sWebLanguage))%></td>
+		            <td><%=HTMLEntities.htmlentities(getTran(request,"web","price",sWebLanguage))%> <%=HTMLEntities.htmlentities(sCurrency)%></td>
+		            <td><%=HTMLEntities.htmlentities(getTran(request,"web","categories",sWebLanguage))%></td>
 		        </tr>
 		
 		        <tbody class="hand"><%=HTMLEntities.htmlentities(sHtml.toString())%></tbody>
 	        </table>
             
-            <%=recCount%> <%=HTMLEntities.htmlentities(getTran("web","recordsfound",sWebLanguage))%>
+            <%=recCount%> <%=HTMLEntities.htmlentities(getTran(request,"web","recordsfound",sWebLanguage))%>
 		    
 		    <script>sortables_init();</script>
 	        <%
 	    } 
 	    else{
-            %><%=HTMLEntities.htmlentities(getTran("web","norecordsfound",sWebLanguage))%><%
+            %><%=HTMLEntities.htmlentities(getTran(request,"web","norecordsfound",sWebLanguage))%><%
         }
     }
 %>

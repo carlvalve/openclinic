@@ -15,7 +15,7 @@
     <table class="list" width="100%" cellspacing="1">
         <%-- DESTINATION ITEM --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","user",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","user",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="hidden" name="userID" value="">
                 <input TYPE='TEXT' NAME='userName' size='35px' class="text" onchange='setUserItemsValues();'>
@@ -26,7 +26,7 @@
         
         <%-- All AVAILABLE TYPE ITEMS --%>
         <tr>
-            <td class="admin"><%=getTran("Web.manage","ItemTypes",sWebLanguage)%>
+            <td class="admin"><%=getTran(request,"Web.manage","ItemTypes",sWebLanguage)%>
             </td>
 
             <td class="admin2">
@@ -49,13 +49,13 @@
                         <img src='<%=sCONTEXTPATH%>/_img/icons/icon_add.gif'
                              alt='<%=getTranNoLink("Web","add",sWebLanguage)%>'
                             class='link'>
-                        <%=getTran("Web.manage","addthisTypeinUser",sWebLanguage)%>
+                        <%=getTran(request,"Web.manage","addthisTypeinUser",sWebLanguage)%>
                     </a><br>
                     <a href='#' onclick="addItem('',transactionForm.userID.value);">
                         <img src='<%=sCONTEXTPATH%>/_img/icons/icon_add.gif'
                              alt='<%=getTranNoLink("Web","add",sWebLanguage)%>'
                             class='link'>
-                        <%=getTran("Web.manage","addAllTypesinUser",sWebLanguage)%>
+                        <%=getTran(request,"Web.manage","addAllTypesinUser",sWebLanguage)%>
                     </a>
                 </div>
                 <br/>
@@ -64,20 +64,20 @@
 
         <%-- SELECTED TYPE ITEMS --%>
         <tr id="SELECTEDTYPEITEMS" style="visibility:hidden;">
-            <td class="admin"><%=getTran("Web.manage","selectedItems",sWebLanguage)%>
+            <td class="admin"><%=getTran(request,"Web.manage","selectedItems",sWebLanguage)%>
             </td>
 
             <td class="admin2">
                 <div id="selectedItemsTypes"></div>
                 <a href='#' onclick="delValue(transactionForm.itemTypeSelect.value,'',transactionForm.userID.value);">
-                    <img src='<%=sCONTEXTPATH%>/_img/icons/icon_delete.gif' alt='<%=getTranNoLink("Web","delete",sWebLanguage)%>' class='link'><%=getTran("Web.manage","deletethisTypeFromUser",sWebLanguage)%>
+                    <img src='<%=sCONTEXTPATH%>/_img/icons/icon_delete.gif' alt='<%=getTranNoLink("Web","delete",sWebLanguage)%>' class='link'><%=getTran(request,"Web.manage","deletethisTypeFromUser",sWebLanguage)%>
                 </a>
                 <br/>
             </td>
         </tr>
 
         <tr id="VALUES" style="visibility:hidden;">
-            <td class="admin"><%=getTran("Web.manage","itemValues",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web.manage","itemValues",sWebLanguage)%></td>
             <td class="admin2">
                 <div id="ItemsValuesByType"></div>
             </td>

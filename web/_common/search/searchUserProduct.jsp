@@ -61,7 +61,7 @@
             // translate unit
             sUnit = checkString(product.getUnit());
             if(sUnit.length() > 0){
-                sUnit = getTran("product.unit",sUnit,sWebLanguage);
+                sUnit = getTran(null,"product.unit",sUnit,sWebLanguage);
             }
 
             // line unit price out
@@ -79,17 +79,17 @@
                 sSupplierUid = checkString(product.getSupplierUid());
 
                 if(sSupplierUid.length() > 0){
-                    sSupplierName = getTran("service",sSupplierUid,sWebLanguage);
+                    sSupplierName = getTran(null,"service",sSupplierUid,sWebLanguage);
                 } 
                 else{
                     sSupplierUid = checkString(product.getSupplierUid());
                     if(sSupplierUid.length() > 0){
-                        sSupplierName = getTran("service",sSupplierUid,sWebLanguage);
+                        sSupplierName = getTran(null,"service",sSupplierUid,sWebLanguage);
                     } 
                     else{
                         sSupplierUid = checkString(productStock.getServiceStock().getDefaultSupplierUid());
                         if(sSupplierUid.length() > 0){
-                            sSupplierName = getTran("service",sSupplierUid,sWebLanguage);
+                            sSupplierName = getTran(null,"service",sSupplierUid,sWebLanguage);
                         }
                         else{
                             sSupplierName = "";
@@ -103,7 +103,7 @@
 
                 sSupplierUid = checkString(product.getSupplierUid());
                 if(sSupplierUid.length() > 0){
-                    sSupplierName = getTran("service",sSupplierUid,sWebLanguage);
+                    sSupplierName = getTran(null,"service",sSupplierUid,sWebLanguage);
                 } 
                 else{
                     sSupplierName = "";
@@ -113,7 +113,7 @@
             // productGroup
             sProductGroup = checkString(product.getProductGroup());
             if(sProductGroup.length() > 0){
-                sProductGroup = getTran("product.productgroup",sProductGroup,sWebLanguage);
+                sProductGroup = getTran(null,"product.productgroup",sProductGroup,sWebLanguage);
             }
 
             // units per time unit
@@ -177,7 +177,7 @@
 
     // central pharmacy
     String centralPharmacyCode = MedwanQuery.getInstance().getConfigString("centralPharmacyCode"),
-           centralPharmacyName = getTran("Service", centralPharmacyCode, sWebLanguage);
+           centralPharmacyName = getTran(request,"Service", centralPharmacyCode, sWebLanguage);
 
     /// DEBUG /////////////////////////////////////////////////////////////////////////////////////
     if(Debug.enabled){
@@ -207,13 +207,13 @@
         <%-- SEARCH FIELDS --%>
         <tr height="25">
             <%-- productname --%>
-            <td nowrap class="admin2"><%=getTran("Web","product",sWebLanguage)%>&nbsp;</td>
+            <td nowrap class="admin2"><%=getTran(request,"Web","product",sWebLanguage)%>&nbsp;</td>
             <td nowrap class="admin2">
                 <input type="text" name="SearchProductName" class="text" value="<%=sSearchProductName%>" size="30">&nbsp;
             </td>
 
             <%-- supplier
-            <td class="admin2"><%=getTran("Web","supplier",sWebLanguage)%>&nbsp;</td>
+            <td class="admin2"><%=getTran(request,"Web","supplier",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="hidden" name="SearchSupplierUid" value="<%=sSearchSupplierUid%>">
                 <input type="text" name="SearchSupplierName" class="text" value="<%=sSearchSupplierName%>" size="50" READONLY>
@@ -224,11 +224,11 @@
             --%>
 
             <%-- productgroup --%>
-            <td nowrap class="admin2"><%=getTran("Web","productgroup",sWebLanguage)%>&nbsp;</td>
+            <td nowrap class="admin2"><%=getTran(request,"Web","productgroup",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <select class="text" name="SearchProductGroup">
                     <option value=""></option>
-                    <%=ScreenHelper.writeSelectUnsorted("product.productgroup",sSearchProductGroup,sWebLanguage)%>
+                    <%=ScreenHelper.writeSelectUnsorted(request,"product.productgroup",sSearchProductGroup,sWebLanguage)%>
                 </select>
             </td>
 
@@ -246,7 +246,7 @@
 
     <%-- link to searchProduct popup --%>
     <div>
-        <a href="javascript:searchProduct('<%=sReturnProductUidField%>','<%=sReturnProductNameField%>','<%=sReturnProductUnitField%>','<%=sReturnUnitsPerTimeUnitField%>','<%=sReturnUnitsPerPackageField%>');"><%=getTran("web.manage", "searchInProductCatalog", sWebLanguage)%></a>
+        <a href="javascript:searchProduct('<%=sReturnProductUidField%>','<%=sReturnProductNameField%>','<%=sReturnProductUnitField%>','<%=sReturnUnitsPerTimeUnitField%>','<%=sReturnUnitsPerPackageField%>');"><%=getTran(request,"web.manage", "searchInProductCatalog", sWebLanguage)%></a>
     </div>
     <br>
 

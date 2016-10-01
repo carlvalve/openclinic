@@ -64,7 +64,7 @@
             <table class="list" border="0" width="100%" cellspacing="1">
                 <%-- search NAME --%>
 		        <tr>
-		            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","name",sWebLanguage)%>&nbsp;</td>
+		            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","name",sWebLanguage)%>&nbsp;</td>
 		            <td class="admin2">
 		                <input type="text" class="text" id="searchName" name="searchName" size="40" maxLength="50" value="<%=sName%>">
 		            </td>
@@ -72,7 +72,7 @@
 		        
 		        <%-- search ASSET --%>    
 		        <tr>
-		            <td class="admin"><%=getTran("web.assets","asset",sWebLanguage)%>&nbsp;</td>
+		            <td class="admin"><%=getTran(request,"web.assets","asset",sWebLanguage)%>&nbsp;</td>
 		            <td class="admin2">
 		                <input type="hidden" name="searchAssetUID" id="searchAssetUID" value="<%=sAssetUID%>">
 		                <input type="text" class="text" id="searchAssetCode" name="searchAssetCode" size="20" readonly value="<%=sSearchAssetCode%>">
@@ -85,7 +85,7 @@
 		        
 		        <%-- search OPERATOR (person) --%>
 		        <tr>
-		            <td class="admin"><%=getTran("web","operator",sWebLanguage)%>&nbsp;</td>
+		            <td class="admin"><%=getTran(request,"web","operator",sWebLanguage)%>&nbsp;</td>
 		            <td class="admin2">
 		                <input type="text" class="text" id="searchOperator" name="searchOperator" size="40" maxLength="50" value="<%=sOperator%>">
 		            </td>
@@ -118,9 +118,9 @@
 		            <table id="searchresults" cellpadding="0" cellspacing="0" width="100%" class="sortable">
 		                <%-- header --%>
 		                <tr class="admin">
-		                    <td class="admin" style="padding-left:0;" width="20%" nowrap><%=getTran("web.assets","name",sWebLanguage)%></td>
-		                    <td class="admin" style="padding-left:0;" width="7%" nowrap><%=getTran("web.assets","asset",sWebLanguage)%></td>
-		                    <td class="admin" style="padding-left:0;" width="20%" nowrap><%=getTran("web.assets","operator",sWebLanguage)%></td>
+		                    <td class="admin" style="padding-left:0;" width="20%" nowrap><%=getTran(request,"web.assets","name",sWebLanguage)%></td>
+		                    <td class="admin" style="padding-left:0;" width="7%" nowrap><%=getTran(request,"web.assets","asset",sWebLanguage)%></td>
+		                    <td class="admin" style="padding-left:0;" width="20%" nowrap><%=getTran(request,"web.assets","operator",sWebLanguage)%></td>
 		                </tr>
 		                
 		                <tbody>
@@ -152,10 +152,10 @@
 	    
 	    // number of found records
 	    if(foundPlans.size() > 0){
-	        %><%=foundPlans.size()%> <%=getTran("web","recordsFound",sWebLanguage)%><%
+	        %><%=foundPlans.size()%> <%=getTran(request,"web","recordsFound",sWebLanguage)%><%
 	    }
 	    else{
-	        %><%=getTran("web","noRecordsFound",sWebLanguage)%><%
+	        %><%=getTran(request,"web","noRecordsFound",sWebLanguage)%><%
 	    }
     }
     

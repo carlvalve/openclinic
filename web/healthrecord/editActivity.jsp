@@ -4,7 +4,7 @@
 <%
     String action = checkString(request.getParameter("action")).trim();
     String activityCode = checkString(request.getParameter("activityCode"));
-    String labelTran = getTran("web.translations","label",sWebLanguage);
+    String labelTran = getTran(request,"web.translations","label",sWebLanguage);
     String labelnl = "", labelfr = "", labelen = "";
 
     //--- NO ACTION -------------------------------------------------------------------------------
@@ -67,12 +67,12 @@
     <table width='100%' border='0' cellspacing='1' cellpadding='0'>
         <%-- PAGE TITLE --%>
         <tr class="admin">
-            <td colspan="2"><%=getTran("web.manage","editActivity",sWebLanguage)%></td>
+            <td colspan="2"><%=getTran(request,"web.manage","editActivity",sWebLanguage)%></td>
         </tr>
 
         <%-- INPUTFIELDS --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web.manage","labanalysis.cols.code",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web.manage","labanalysis.cols.code",sWebLanguage)%></td>
             <td class="admin2"><input class="text" type="text" name="activityCode" value="<%=activityCode%>" size="10" READONLY/></td>
         </tr>
 

@@ -45,6 +45,7 @@
                 sPlanningDateEndMinutes = defaultEndMin+"";
                 bRefresh = true;
             }
+
             if((Integer.parseInt(sPlanningDateHour)==defaultBeginHour)&& Integer.parseInt(sPlanningDateMinutes)<defaultBeginMin){
                 sPlanningDateMinutes = defaultBeginMin+"";
                 bRefresh = true;
@@ -131,8 +132,15 @@
 	            String sEditDescription = checkString(request.getParameter("EditDescription"));
 	            String sEditComment = checkString(request.getParameter("EditComment"));
 	            String sEditContext = checkString(request.getParameter("EditContext"));
+	            String sEditServiceUID = checkString(request.getParameter("EditServiceUID"));
 	            String tempplanninguid = checkString(request.getParameter("tempplanninguid"));
 	            String sEditRepeatUntil = checkString(request.getParameter("appointmentRepeatUntil"));
+	            String sEditPreparationDate = checkString(request.getParameter("EditPreparationDate"));
+	            String sEditAdmissionDate = checkString(request.getParameter("EditAdmissionDate"));
+	            String sEditOperationDate = checkString(request.getParameter("EditOperationDate"));
+	            String sEditReportingPlace = checkString(request.getParameter("EditReportingPlace"));
+	            String sEditSurgeon = checkString(request.getParameter("EditSurgeon"));
+	            String sEditNoshow=checkString(request.getParameter("EditNoshow"));
 	            java.util.Date dRepeatUntil = null;
 	            try{
 	            	if(sEditRepeatUntil.length()>0){
@@ -142,8 +150,12 @@
 	            catch(Exception e){
 	            	e.printStackTrace();
 	            }
-	
-	            planning = new Planning();
+	            if(sEditPlanningUID.length()>0 && sEditPlanningUID.split("\\.").length==2){
+	            	planning=Planning.get(sEditPlanningUID);
+	            }
+	            else{
+		            planning = new Planning();
+	            }
 	            planning.setUid(sEditPlanningUID);
 	            planning.setEstimatedtime(sEditEstimatedtime);
 				try{
@@ -158,9 +170,8 @@
 		            planning.setConfirmationDate(ScreenHelper.parseDate(sEditConfirmationDate));
 				}
 				catch(Exception e){};
-				System.out.println(1);
 	            planning.setUserUID(sEditUserUID);
-	
+				planning.setUpdateUser(activeUser.userid);
 	            planning.setPatientUID(sEditPatientUID);
 	            planning.setTransactionUID(sEditTransactionUID);
 	            planning.setContextID(sEditContext);
@@ -172,16 +183,24 @@
 	            planning.setDescription(sEditDescription);
 	            planning.setComment(sEditComment);
 	            planning.setTempPlanningUid(tempplanninguid);
-	            planning.setServiceUid(sFindServiceUID);
-				System.out.println(2);
+            	planning.setServiceUid(sEditServiceUID);
+            	planning.setPreparationDate(sEditPreparationDate);
+            	planning.setAdmissionDate(sEditAdmissionDate);
+            	planning.setOperationDate(sEditOperationDate);
+            	planning.setReportingPlace(sEditReportingPlace);
+            	planning.setSurgeon(sEditSurgeon);
+            	if(sEditNoshow.equalsIgnoreCase("true")){
+            		planning.setNoshow("1");
+            	}
+            	else{
+            		planning.setNoshow("0");
+            	}
 	            boolean bError=false;
 	            if(dRepeatUntil!=null && dRepeatUntil.after(planning.getPlannedDate())){
 	            	//Repeatedly store this planning for each day in the period
 	            	while(!ScreenHelper.parseDate(ScreenHelper.formatDate(planning.getPlannedDate())).after(dRepeatUntil)){
 	            		planning.setUid(null);
-	    				System.out.println(3);
 	            		bError=!planning.store();
-	    				System.out.println(4);
 	            		if(bError){
 	            			break;
 	            		}
@@ -191,9 +210,7 @@
 	            	}
 	            }
 	            else{
-					System.out.println(5);
 	            	bError=!planning.store();
-					System.out.println(6);
 	            }
 	            if(!bError){
 	            	//Also 
@@ -221,7 +238,7 @@
 	        }
     	}
     	else{
-    		out.println("<script>alert('"+getTran("web","overlapnotallowed",sWebLanguage)+"');</script>");
+    		out.println("<script>alert('"+getTran(request,"web","overlapnotallowed",sWebLanguage)+"');</script>");
     	}
     } 
     else if (sAction.equalsIgnoreCase("delete")){
@@ -256,7 +273,7 @@
 	        }
     	}
     	else{
-    		out.println("<script>alert('"+getTran("web","overlapnotallowed",sWebLanguage)+"');refreshAppointments();</script>");
+    		out.println("<script>alert('"+getTran(request,"web","overlapnotallowed",sWebLanguage)+"');refreshAppointments();</script>");
     	}
     } 
     else if (sAction.equalsIgnoreCase("new")){
@@ -273,6 +290,7 @@
 		if(bAllowed){
 	        //####################### IF NEW APPOINTMENT ###################################//
 	        planning = new Planning();
+	        planning.setServiceUid(sFindServiceUID);
 	        if(activePatient!=null){
 	            planning.setPatientUID(activePatient.personid);
 	            planning.setPatient(activePatient);
@@ -342,284 +360,373 @@
     if (show){
 %>
 
-<table class='list' border='0' width='630' cellspacing='1'>
+<%-- TABS ---------------------------------------------------------------------------%>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
     <tr>
-        <td width="<%=sTDAdminWidth%>" class="admin"><%=HTMLEntities.htmlentities(getTran("planning", "planneddate", sWebLanguage))%>*</td>
-        <td class="admin2">
-            <%-- hour --%> <select id="appointmentDateHour" name="appointmentDateHour" class="text" onchange="updateSelect();">
-            <%
-                for (int n = startHourOfWeekPlanner; n <= endHourOfWeekPlanner; n++){
-                out.print("<option value='"+(n < 10 ? "0"+n : ""+n)+"' ");
-                if (appointmentDateHour.length() > 0 && n == Integer.parseInt(appointmentDateHour)){
-                    out.print("selected");
-                }
-                out.print(">"+(n < 10 ? "0"+n : ""+n)+"</option>");
-            }%>
-        </select> <%-- minutes --%>
-         <select id="appointmentDateMinutes" name="appointmentDateMinutes" class="text">
-            <%for (int n = 0; n < 60; n=n+5){
-                out.print("<option value='"+(n < 10 ? "0"+n : ""+n)+"' ");
-                if (appointmentDateMinutes.length() > 0 && n == Integer.parseInt(appointmentDateMinutes)){
-                    out.print("selected");
-                }
-                out.print(">"+(n < 10 ? "0"+n : ""+n)+"</option>");
-            }%>
-        </select><%=getTran("Web.occup", "medwan.common.hour", sWebLanguage)%>&nbsp;<%=ScreenHelper.planningDateTimeField("appointmentDateDay", appointmentDateEndDay, sWebLanguage, sCONTEXTPATH)%>
-        </td>
+        <td class='tabs' width='5'>&nbsp;</td>
+        <td class='tabunselected' width="1%" onclick="activateTab2('Main')" id="td0_1" nowrap>&nbsp;<b><%=getTran(request,"Web","main",sWebLanguage)%></b>&nbsp;</td>
+        <td class='tabs' width='5'>&nbsp;</td>
+        <td class='tabunselected' width="1%" onclick="activateTab2('Extended')" id="td1_1" nowrap>&nbsp;<b><%=getTran(request,"Web","extended",sWebLanguage)%></b>&nbsp;</td>
+        <td width="*" class='tabs'>&nbsp;</td>
     </tr>
-   <tr>
-        <td class="admin"><%=HTMLEntities.htmlentities(getTran("web.hrm", "until", sWebLanguage))%>
-        </td>
-        <td class="admin2">
-            <%-- hour --%> <select id="appointmentDateEndHour" name="appointmentDateEndHour" class="text" onchange="updateSelect();">
-            <%for (int n = startHourOfWeekPlanner; n <= endHourOfWeekPlanner; n++){
-                out.print("<option value='"+(n < 10 ? "0"+n : ""+n)+"' ");
-                if (appointmentDateEndHour.length() > 0 && n == Integer.parseInt(appointmentDateEndHour)){
-                    out.print("selected");
-                }
-                out.print(">"+(n < 10 ? "0"+n : ""+n)+"</option>");
-            }%>
-        </select> <%-- minutes --%>
-            <select id="appointmentDateEndMinutes" name="appointmentDateEndMinutes" class="text">
-                <%for (int n = 0; n < 60; n=n+5){
-                    out.print("<option value='"+(n < 10 ? "0"+n : ""+n)+"' ");
-                    if (appointmentDateEndMinutes.length() > 0 && n == Integer.parseInt(appointmentDateEndMinutes)){
-                        out.print("selected");
-                    }
-                    out.print(">"+(n < 10 ? "0"+n : ""+n)+"</option>");
-                }%>
-            </select><%=HTMLEntities.htmlentities(getTran("Web.occup", "medwan.common.hour", sWebLanguage))%>&nbsp;
+</table>
 
-        </td>
-    </tr>
-    <tr>
-        <td class="admin"><%=HTMLEntities.htmlentities(getTran("planning", "effectivedate", sWebLanguage))%>
-        </td>
-        <td class="admin2"><%=ScreenHelper.newWriteDateTimeField("EditEffectiveDate", planning.getEffectiveDate(), sWebLanguage, sCONTEXTPATH)%>
-        </td>
-    </tr>
-    <tr>
-        <td class="admin"><%=HTMLEntities.htmlentities(getTran("planning", "cancelationdate", sWebLanguage))%>
-        </td>
-        <td class="admin2"><%=ScreenHelper.newWriteDateTimeField("EditCancelationDate", planning.getCancelationDate(), sWebLanguage, sCONTEXTPATH)%>
-        </td>
-    </tr>
-    <tr>
-        <td class="admin"><%=HTMLEntities.htmlentities(getTran("planning", "provisionalbooking", sWebLanguage))%></td>
-        <td class="admin2">
-        	<%=ScreenHelper.newWriteDateField("EditConfirmationDate", planning.getConfirmationDate(), sWebLanguage, sCONTEXTPATH,"document.getElementById(\"checkConfirmationDate\").checked=false")%>
-        	<input type='checkbox' id='checkConfirmationDate' <%=ScreenHelper.formatDate(planning.getConfirmationDate()).length()==0?"checked":""%> onclick='if(this.checked){document.getElementById("EditConfirmationDate").value=""}'/> <%=HTMLEntities.htmlentities(getTran("planning", "planningconfirmed", sWebLanguage))%>
-        </td>
-    </tr>
-    <tr>
-        <td class='admin'><%=HTMLEntities.htmlentities(getTran("planning", "user", sWebLanguage))%>*</td>
-        <td class='admin2'>
-            <input type="hidden" id="EditUserUID" name="EditUserUID" value="<%=planning.getUserUID()%>">
-            <input class="text" type="text" id="EditUserName" name="EditUserName" readonly size="<%=sTextWidth%>" value="<%=HTMLEntities.htmlentities(ScreenHelper.getFullUserName(planning.getUserUID()))%>">
-            <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchUser('EditUserUID','EditUserName');">
-            <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="$('EditUserUID').clear();$('EditUserName').clear();">
-        </td>
-    </tr>
-    <tr>
-        <td class='admin'><%=HTMLEntities.htmlentities(getTran("planning", "patient", sWebLanguage))%>*</td>
-        <td class='admin2'>
-            <input type="hidden" id="EditPatientUID" name="EditPatientUID" value="<%=(planning.getPatientUID()==null)?"":planning.getPatientUID()%>">
-            <input class="text" id="EditPatientName" type="text" name="EditPatientName" readonly size="<%=sTextWidth%>" value="<%=HTMLEntities.htmlentities(ScreenHelper.getFullPersonName(planning.getPatientUID()))%>">
-            <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchMyPatient('EditPatientUID','EditPatientName');">
-            <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="$('EditPatientUID').clear();$('EditPatientName').clear();">
-        </td>
-    </tr>
-    <%
-        if(checkString(planning.getTransactionUID()).length() > 0){
-            TransactionVO transaction = planning.getTransaction();
-            String sTransactionType = "";
-            if(transaction!=null){
-                sTransactionType = getTran("web.occup",transaction.getTransactionType(),sWebLanguage);
-            }
-    %>
-    <tr>
-        <td class='admin'><%=getTran("planning","transaction",sWebLanguage)%></td>
-        <td class='admin2'>
-            <input type="text" id="EditTransactionUID" name="EditTransactionUID" value="<%=planning.getTransactionUID()%>"/>
-            <input class="text" type="text" readonly size="<%=sTextWidth%>" value="<%=ScreenHelper.formatDate(transaction.getUpdateTime())+": "+sTransactionType%>"/>
-        </td>
-    </tr>
-    <%}%>
-    <tr>
-        <td class='admin'><%=getTran("web","prestation",sWebLanguage)%></td>
-		<% 	if(MedwanQuery.getInstance().getConfigInt("enableCCBRT",0)==1){ %>
-        <td class='admin2'>
-            <%
-                ObjectReference orContact = planning.getContact();
-                if(orContact==null){
-                    orContact = new ObjectReference();
-                }
-            %>
-            <input type='hidden' name='EditContactType' id='ContactPrestation' value='prestation'/>
-            <input type="hidden" id="EditEffectiveDateTime" value="" />
-            <input type="hidden" id="EditCancelationDateTime" value="" />
-            <input type="hidden" id="EditContactName" name="EditContactName" value="" />
-            <select class='text' id="EditContactUID" name="EditContactUID">
-            	<option/>
-            	<%
-            		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
-            		PreparedStatement ps = conn.prepareStatement("select * from OC_PRESTATIONS where OC_PRESTATION_INVOICEGROUP in ('"+MedwanQuery.getInstance().getConfigString("ccbrtProcedureGroup","sl 001 003")+"') ORDER BY OC_PRESTATION_CODE");
-            		ResultSet rs = ps.executeQuery();
-            		while(rs.next()){
-						String uid=rs.getString("OC_PRESTATION_SERVERID")+"."+rs.getString("OC_PRESTATION_OBJECTID");
-						String descr=checkString(rs.getString("OC_PRESTATION_DESCRIPTION")).toUpperCase();
-						if(descr.length()>40){
-							descr=descr.substring(0,40);
+<table style="vertical-align:top;" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr id="tr0_1-view" style="display:none">
+    	<td>
+			<!-- TAB 1: Main screen -->
+			<table class='list' border='0' width='630' cellspacing='1'>
+			    <tr>
+			        <td width="<%=sTDAdminWidth%>" class="admin"><%=HTMLEntities.htmlentities(getTran(request,"planning", "planneddate", sWebLanguage))%>*</td>
+			        <td class="admin2">
+			            <%-- hour --%> <select id="appointmentDateHour" name="appointmentDateHour" class="text" onchange="updateSelect();">
+			            <%
+			                for (int n = startHourOfWeekPlanner; n <= endHourOfWeekPlanner; n++){
+			                out.print("<option value='"+(n < 10 ? "0"+n : ""+n)+"' ");
+			                if (appointmentDateHour.length() > 0 && n == Integer.parseInt(appointmentDateHour)){
+			                    out.print("selected");
+			                }
+			                out.print(">"+(n < 10 ? "0"+n : ""+n)+"</option>");
+			            }%>
+			        </select> <%-- minutes --%>
+			         <select id="appointmentDateMinutes" name="appointmentDateMinutes" class="text">
+			            <%for (int n = 0; n < 60; n=n+5){
+			                out.print("<option value='"+(n < 10 ? "0"+n : ""+n)+"' ");
+			                if (appointmentDateMinutes.length() > 0 && n == Integer.parseInt(appointmentDateMinutes)){
+			                    out.print("selected");
+			                }
+			                out.print(">"+(n < 10 ? "0"+n : ""+n)+"</option>");
+			            }%>
+			        </select><%=getTran(request,"Web.occup", "medwan.common.hour", sWebLanguage)%>&nbsp;<%=ScreenHelper.planningDateTimeField("appointmentDateDay", appointmentDateEndDay, sWebLanguage, sCONTEXTPATH)%>
+			        </td>
+			    </tr>
+			   <tr>
+			        <td class="admin"><%=HTMLEntities.htmlentities(getTran(request,"web.hrm", "until", sWebLanguage))%>
+			        </td>
+			        <td class="admin2">
+			            <%-- hour --%> <select id="appointmentDateEndHour" name="appointmentDateEndHour" class="text" onchange="updateSelect();">
+			            <%for (int n = startHourOfWeekPlanner; n <= endHourOfWeekPlanner; n++){
+			                out.print("<option value='"+(n < 10 ? "0"+n : ""+n)+"' ");
+			                if (appointmentDateEndHour.length() > 0 && n == Integer.parseInt(appointmentDateEndHour)){
+			                    out.print("selected");
+			                }
+			                out.print(">"+(n < 10 ? "0"+n : ""+n)+"</option>");
+			            }%>
+			        </select> <%-- minutes --%>
+			            <select id="appointmentDateEndMinutes" name="appointmentDateEndMinutes" class="text">
+			                <%for (int n = 0; n < 60; n=n+5){
+			                    out.print("<option value='"+(n < 10 ? "0"+n : ""+n)+"' ");
+			                    if (appointmentDateEndMinutes.length() > 0 && n == Integer.parseInt(appointmentDateEndMinutes)){
+			                        out.print("selected");
+			                    }
+			                    out.print(">"+(n < 10 ? "0"+n : ""+n)+"</option>");
+			                }%>
+			            </select><%=HTMLEntities.htmlentities(getTran(request,"Web.occup", "medwan.common.hour", sWebLanguage))%>&nbsp;
+			
+			        </td>
+			    </tr>
+			    <tr>
+			        <td class="admin"><%=HTMLEntities.htmlentities(getTran(request,"planning", "effectivedate", sWebLanguage))%>
+			        </td>
+			        <td class="admin2">
+			        	<%=ScreenHelper.newWriteDateTimeField("EditEffectiveDate", planning.getEffectiveDate(), sWebLanguage, sCONTEXTPATH)%>
+			        	<input type='checkbox' name='EditNoshow' id='EditNoshow' <%=checkString(planning.getNoshow()).equalsIgnoreCase("1")?"checked":""%> onclick='validateNoShow();'/>
+			        	<%=getTran(request,"web","noshow",sWebLanguage) %>
+			        </td>
+			    </tr>
+			    <tr>
+			        <td class="admin"><%=HTMLEntities.htmlentities(getTran(request,"planning", "cancelationdate", sWebLanguage))%>
+			        </td>
+			        <td class="admin2"><%=ScreenHelper.newWriteDateTimeField("EditCancelationDate", planning.getCancelationDate(), sWebLanguage, sCONTEXTPATH)%>
+			        </td>
+			    </tr>
+			    <tr>
+			        <td class="admin"><%=HTMLEntities.htmlentities(getTran(request,"planning", "provisionalbooking", sWebLanguage))%></td>
+			        <td class="admin2">
+			        	<%=ScreenHelper.newWriteDateField("EditConfirmationDate", planning.getConfirmationDate(), sWebLanguage, sCONTEXTPATH,"document.getElementById(\"checkConfirmationDate\").checked=false")%>
+			        	<input type='checkbox' id='checkConfirmationDate' <%=ScreenHelper.formatDate(planning.getConfirmationDate()).length()==0?"checked":""%> onclick='if(this.checked){document.getElementById("EditConfirmationDate").value=""}'/> <%=HTMLEntities.htmlentities(getTran(request,"planning", "planningconfirmed", sWebLanguage))%>
+			        </td>
+			    </tr>
+			    <tr>
+			        <td class='admin'><%=HTMLEntities.htmlentities(getTran(request,"web", "service", sWebLanguage))%>*</td>
+			        <td class='admin2'>
+			            <input type="hidden" id="EditServiceUID" name="EditServiceUID" value="<%=planning.getServiceUid()%>">
+			            <input class="text" type="text" id="EditServiceName" name="EditServiceName" readonly size="60" value="<%=getTranNoLink("service",planning.getServiceUid(),sWebLanguage)%>">
+			            <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchService('EditServiceUID','EditServiceName');">
+			            <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="$('EditServiceUID').clear();$('EditServiceName').clear();">
+			        </td>
+			    </tr>
+			    <tr>
+			        <td class='admin'><%=HTMLEntities.htmlentities(getTran(request,"planning", "user", sWebLanguage))%>*</td>
+			        <td class='admin2'>
+			            <input type="hidden" id="EditUserUID" name="EditUserUID" value="<%=planning.getUserUID()%>">
+			            <input class="text" type="text" id="EditUserName" name="EditUserName" readonly size="60" value="<%=HTMLEntities.htmlentities(ScreenHelper.getFullUserName(planning.getUserUID()))%>">
+			            <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchUser('EditUserUID','EditUserName');">
+			            <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="$('EditUserUID').clear();$('EditUserName').clear();">
+			        </td>
+			    </tr>
+			    <tr>
+			        <td class='admin'><%=HTMLEntities.htmlentities(getTran(request,"planning", "patient", sWebLanguage))%>*</td>
+			        <td class='admin2'>
+			            <input type="hidden" id="EditPatientUID" name="EditPatientUID" value="<%=(planning.getPatientUID()==null)?"":planning.getPatientUID()%>">
+			            <input class="text" id="EditPatientName" type="text" name="EditPatientName" readonly size="60" value="<%=HTMLEntities.htmlentities(ScreenHelper.getFullPersonName(planning.getPatientUID()))%>">
+			            <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchMyPatient('EditPatientUID','EditPatientName');">
+			            <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="$('EditPatientUID').clear();$('EditPatientName').clear();">
+			        </td>
+			    </tr>
+			    <%
+			        if(checkString(planning.getTransactionUID()).length() > 0){
+			            TransactionVO transaction = planning.getTransaction();
+			            String sTransactionType = "";
+			            if(transaction!=null){
+			                sTransactionType = getTran(request,"web.occup",transaction.getTransactionType(),sWebLanguage);
+			            }
+			    %>
+			    <tr>
+			        <td class='admin'><%=getTran(request,"planning","transaction",sWebLanguage)%></td>
+			        <td class='admin2'>
+			            <input type="text" id="EditTransactionUID" name="EditTransactionUID" value="<%=planning.getTransactionUID()%>"/>
+			            <input class="text" type="text" readonly size="<%=sTextWidth%>" value="<%=ScreenHelper.formatDate(transaction.getUpdateTime())+": "+sTransactionType%>"/>
+			        </td>
+			    </tr>
+			    <%}%>
+			    <tr>
+			        <td class='admin'><%=getTran(request,"web","prestation",sWebLanguage)%></td>
+					<% 	if(MedwanQuery.getInstance().getConfigInt("enableCCBRT",0)==1){ %>
+			        <td class='admin2'>
+			            <%
+			                ObjectReference orContact = planning.getContact();
+			                if(orContact==null){
+			                    orContact = new ObjectReference();
+			                }
+			            %>
+			            <input type='hidden' name='EditContactType' id='ContactPrestation' value='prestation'/>
+			            <input type="hidden" id="EditEffectiveDateTime" value="" />
+			            <input type="hidden" id="EditCancelationDateTime" value="" />
+			            <input type="hidden" id="EditContactName" name="EditContactName" value="" />
+			            <select class='text' id="EditContactUID" name="EditContactUID" onchange='selectTimeSlot();'>
+			            	<option/>
+			            	<%
+			            		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+			            		PreparedStatement ps = conn.prepareStatement("select * from OC_PRESTATIONS where OC_PRESTATION_INVOICEGROUP in ('"+MedwanQuery.getInstance().getConfigString("ccbrtProcedureGroup","sl 001 003")+"') AND"+
+			            				" (OC_PRESTATION_INACTIVE is null OR OC_PRESTATION_INACTIVE=0) AND"+
+			            				" OC_PRESTATION_MODIFIERS like ?"+
+			            				" ORDER BY OC_PRESTATION_CODE");
+			            		String clinic = "%";
+			            		Encounter encounter = Encounter.getActiveEncounter(activePatient.personid);
+			            		if(encounter!=null && encounter.getService()!=null && encounter.getService().code3!=null){
+			            			clinic=encounter.getService().code3;
+			            		}
+			            		System.out.println("clinic="+clinic);
+			            		ps.setString(1,"%;%;%;%;%;%;%;"+clinic+";%");
+			            		ResultSet rs = ps.executeQuery();
+			            		while(rs.next()){
+									String uid=rs.getString("OC_PRESTATION_SERVERID")+"."+rs.getString("OC_PRESTATION_OBJECTID");
+									String descr=checkString(rs.getString("OC_PRESTATION_DESCRIPTION")).toUpperCase();
+									if(descr.length()>40){
+										descr=descr.substring(0,40);
+									}
+									out.println("<option value='"+uid+"' "+(uid.equalsIgnoreCase(orContact.getObjectUid())?"selected":"")+">"+(checkString(rs.getString("OC_PRESTATION_CODE"))+" -          ").substring(0,10)+""+descr+"</option>");
+			            		}
+			            		rs.close();
+			            		ps.close();
+			            		conn.close();
+							%>
+			            </select>
+			        </td>
+					<%
 						}
-						out.println("<option value='"+uid+"' "+(uid.equalsIgnoreCase(orContact.getObjectUid())?"selected":"")+">"+(checkString(rs.getString("OC_PRESTATION_CODE"))+" -          ").substring(0,10)+""+descr+"</option>");
-            		}
-            		rs.close();
-            		ps.close();
-            		conn.close();
-				%>
-            </select>
-        </td>
-		<%
-			}
-			else {
-		%>
-        <td class='admin2'>
-            <%
-                String sEditCheckProduct = "", sEditCheckExamination = "", sEditContactName = "";
-                ObjectReference orContact = planning.getContact();
-                if(orContact!=null){
-                    if(orContact.getObjectType().equalsIgnoreCase("examination")){
-                        sEditCheckExamination = " checked";
-
-                        ExaminationVO examination = MedwanQuery.getInstance().getExamination(orContact.getObjectUid(), sWebLanguage);
-                        if(examination!=null){
-                            sEditContactName = HTMLEntities.htmlentities(getTran("web.occup", examination.getTransactionType(), sWebLanguage));
-                        }
-                    } 
-                    else if(orContact.getObjectType().equalsIgnoreCase("product")){
-                        Product p = Product.get(orContact.getObjectUid());
-                        if(p!=null){
-                            sEditContactName = p.getName();
-                        }
-                        sEditCheckProduct = " checked";
-                    }
-                } 
-                else{
-                    orContact = new ObjectReference();
-                }
-            %>
-            <input type='radio' name='EditContactType' id='ContactProduct' value='Product' onclick='changeContactType();' onDblClick="uncheckRadio(this);" <%=sEditCheckProduct%>>
-            <label for='ContactProduct'><%=getTran("planning", "product", sWebLanguage)%></label>
-            <input type='radio' name='EditContactType' id='ContactExamination' value='Examination' onclick='changeContactType();' onDblClick="uncheckRadio(this);" <%=sEditCheckExamination%>>
-            <label for='ContactExamination'><%=getTran("planning", "examination", sWebLanguage)%></label><br>
-            <input type="hidden" id="EditEffectiveDateTime" value="" />
-            <input type="hidden" id="EditCancelationDateTime" value="" />
-            <input type="hidden" id="EditContactUID" name="EditContactUID" value="<%=orContact.getObjectUid()%>">
-            <input class="text" type="text" id="EditContactName" name="EditContactName" readonly size="<%=sTextWidth%>" value="<%=sEditContactName%>">
-            <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchPrestation('EditContactUID','EditContactName');">
-            <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="$('EditContactUID').clear();$('EditContactName').clear();">
-        </td>
-        <%
-			}
-        %>
-    </tr>
-    <tr>
-        <td class='admin'><%=getTran("planning","resource",sWebLanguage)%></td>
-        <td class='admin2'>
-        <% if(!checkString(request.getParameter("readonly")).equalsIgnoreCase("true")){ %>
-        	<a href="javascript:openPopup('/planning/manageResources.jsp&planninguid=<%=sFindPlanningUID%>&tempplanninguid='+document.getElementById('tempplanninguid').value+'&date='+document.getElementById('appointmentDateDay').value+'&begin='+(document.getElementById('appointmentDateHour').value*60+document.getElementById('appointmentDateMinutes').value*1)*60000+'&end='+(document.getElementById('appointmentDateEndHour').value*60+document.getElementById('appointmentDateEndMinutes').value*1)*60000+'&PopupWidth=800&PopupHeight=600&ts=<%=getTs()%>&patientuid='+document.getElementById('EditPatientUID').value);void(0);"><%=getTran("web","edit.resources",sWebLanguage) %></a>
-        <%} %>
-            <span id='resources'></span>
-            <input type='hidden' name='tempplanninguid' id='tempplanninguid'/>
-        </td>
-    </tr>
-    <div id="trContext">
-        <tr>
-            <td class='admin'><%=getTran("web","context",sWebLanguage)%></td>
-            <td class='admin2'>
-                <select class="text" name="EditContext" id="EditContext">
-                    <option value=""/>
-                    <%
-                        // list possible contexts from XML-file
-                        String sDoc = MedwanQuery.getInstance().getConfigString("templateSource")+"contexts.xml";
-                        if(sDoc.length() > 0){
-                            SAXReader reader = new SAXReader(false);
-                            Document document = reader.read(new URL(sDoc));
-                            Iterator elements = document.getRootElement().elementIterator("context");
-
-                            // put context-elements in hash
-                            Element contextElement;
-                            String contextName;
-                            Hashtable contexts = new Hashtable();
-                            while(elements.hasNext()){
-                                contextElement = (Element)elements.next();
-                                contextName = getTran("Web.Occup",contextElement.attribute("id").getValue(),sWebLanguage);
-                                contexts.put(contextName,contextElement);
-                            }
-
-                            // sort hash on context-name
-                            Vector contextNames = new Vector(contexts.keySet());
-                            Collections.sort(contextNames);
-                            Iterator contextIter = contextNames.iterator();
-                            while(contextIter.hasNext()){
-                                contextName = (String)contextIter.next();
-                                contextElement = (Element)contexts.get(contextName);
-                                out.print("<option value='"+contextElement.attribute("id").getValue()+"' "+(contextElement.attribute("id").getValue().equalsIgnoreCase(planning.getContextID()) ? "selected" : "")+">"+HTMLEntities.htmlentities(contextName)+"</option>");
-                            }
-                        }
-                    %>
-                </select>
-            </td>
-        </tr>
-    </div>
-    <tr>
-        <td class='admin'><%=HTMLEntities.htmlentities(getTran("planning","description",sWebLanguage))%></td>
-        <td class='admin2'><%=writeTextarea("EditDescription","","","",HTMLEntities.htmlentities(checkString(planning.getDescription())))%></td>
-    </tr>
-    <tr>
-        <td class='admin'><%=HTMLEntities.htmlentities(getTran("planning","remark",sWebLanguage))%></td>
-        <td class='admin2'><%=writeTextarea("EditComment","","","",HTMLEntities.htmlentities(checkString(planning.getComment())))%></td>
-    </tr>
-    <%
-    	if(sFindPlanningUID.length()==0){
-    %>
-	    <tr>
-	        <td class="admin"><%=HTMLEntities.htmlentities(getTran("web", "repeatuntil", sWebLanguage))%>
-	        </td>
-	        <td class="admin2"><%=ScreenHelper.planningDateTimeField("appointmentRepeatUntil", "", sWebLanguage, sCONTEXTPATH)%>
-	        </td>
-	    </tr>
-    <%
-    	}
-    	else{
-    %>
-    	<input type="hidden" id="appointmentRepeatUntil" name="appointmentRepeatUntil" value="" />
-    <%
-    	}
-    %>
-    <tr>
-        <td class="admin"/>
-        <td class="admin2">
-            <input type="hidden" id="EditPage" value="<%=sPage%>" />
-            <%-- Buttons --%>
-            <%if(!checkString(request.getParameter("readonly")).equalsIgnoreCase("true") &&(activeUser.getAccessRight("planning.add") || activeUser.getAccessRight("planning.edit"))){%>
-            <input class='button' type="button" name="buttonSave" id="buttonSaveEditPlanning" value='<%=getTranNoLink("Web","save",sWebLanguage)%>' onclick="saveAppointment();">&nbsp;
-            <%}
-            if(!checkString(request.getParameter("readonly")).equalsIgnoreCase("true") && ((sFindPlanningUID.length() > 0) && (activeUser.getAccessRight("planning.delete")))){%>
-            <input class='button' type="button" name="buttonDelete" value='<%=getTranNoLink("Web","delete",sWebLanguage)%>' onclick="deleteAppointment2();">&nbsp;<%}%>
-            <input class='button' type="button" name="buttonBack" value='<%=getTranNoLink("Web","Back",sWebLanguage)%>' onclick="doClose();">
-        </td>
-    </tr>
-    <tr>
-        <td class="admin"/>
-        <td class="admin2">
-            <%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%> <input type="hidden" name="Action"/>
-        </td>
-    </tr>
+						else {
+					%>
+			        <td class='admin2'>
+			            <%
+			                String sEditCheckProduct = "", sEditCheckExamination = "", sEditContactName = "";
+			                ObjectReference orContact = planning.getContact();
+			                if(orContact!=null){
+			                    if(orContact.getObjectType().equalsIgnoreCase("examination")){
+			                        sEditCheckExamination = " checked";
+			
+			                        ExaminationVO examination = MedwanQuery.getInstance().getExamination(orContact.getObjectUid(), sWebLanguage);
+			                        if(examination!=null){
+			                            sEditContactName = HTMLEntities.htmlentities(getTran(request,"web.occup", examination.getTransactionType(), sWebLanguage));
+			                        }
+			                    } 
+			                    else if(orContact.getObjectType().equalsIgnoreCase("product")){
+			                        Product p = Product.get(orContact.getObjectUid());
+			                        if(p!=null){
+			                            sEditContactName = p.getName();
+			                        }
+			                        sEditCheckProduct = " checked";
+			                    }
+			                } 
+			                else{
+			                    orContact = new ObjectReference();
+			                }
+			            %>
+			            <input type='radio' name='EditContactType' id='ContactProduct' value='Product' onclick='changeContactType();' onDblClick="uncheckRadio(this);" <%=sEditCheckProduct%>>
+			            <label for='ContactProduct'><%=getTran(request,"planning", "product", sWebLanguage)%></label>
+			            <input type='radio' name='EditContactType' id='ContactExamination' value='Examination' onclick='changeContactType();' onDblClick="uncheckRadio(this);" <%=sEditCheckExamination%>>
+			            <label for='ContactExamination'><%=getTran(request,"planning", "examination", sWebLanguage)%></label><br>
+			            <input type="hidden" id="EditEffectiveDateTime" value="" />
+			            <input type="hidden" id="EditCancelationDateTime" value="" />
+			            <input type="hidden" id="EditContactUID" name="EditContactUID" value="<%=orContact.getObjectUid()%>">
+			            <input class="text" type="text" id="EditContactName" name="EditContactName" readonly size="<%=sTextWidth%>" value="<%=sEditContactName%>">
+			            <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchPrestation('EditContactUID','EditContactName');">
+			            <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="$('EditContactUID').clear();$('EditContactName').clear();">
+			        </td>
+			        <%
+						}
+			        %>
+			    </tr>
+			    <tr>
+			        <td class='admin'><%=getTran(request,"planning","resource",sWebLanguage)%></td>
+			        <td class='admin2'>
+			        <% if(!checkString(request.getParameter("readonly")).equalsIgnoreCase("true")){ %>
+			        	<a href="javascript:openPopup('/planning/manageResources.jsp&planninguid=<%=sFindPlanningUID%>&tempplanninguid='+document.getElementById('tempplanninguid').value+'&date='+document.getElementById('appointmentDateDay').value+'&begin='+(document.getElementById('appointmentDateHour').value*60+document.getElementById('appointmentDateMinutes').value*1)*60000+'&end='+(document.getElementById('appointmentDateEndHour').value*60+document.getElementById('appointmentDateEndMinutes').value*1)*60000+'&PopupWidth=800&PopupHeight=600&ts=<%=getTs()%>&patientuid='+document.getElementById('EditPatientUID').value);void(0);"><%=getTran(request,"web","edit.resources",sWebLanguage) %></a>
+			        <%} %>
+			            <span id='resources'></span>
+			            <input type='hidden' name='tempplanninguid' id='tempplanninguid'/>
+			        </td>
+			    </tr>
+			    <div id="trContext">
+			        <tr>
+			            <td class='admin'><%=getTran(request,"web","context",sWebLanguage)%></td>
+			            <td class='admin2'>
+			                <select class="text" name="EditContext" id="EditContext">
+			                    <option value=""/>
+			                    <%
+			                        // list possible contexts from XML-file
+			                        String sDoc = MedwanQuery.getInstance().getConfigString("templateSource")+"contexts.xml";
+			                        if(sDoc.length() > 0){
+			                            SAXReader reader = new SAXReader(false);
+			                            Document document = reader.read(new URL(sDoc));
+			                            Iterator elements = document.getRootElement().elementIterator("context");
+			
+			                            // put context-elements in hash
+			                            Element contextElement;
+			                            String contextName;
+			                            Hashtable contexts = new Hashtable();
+			                            while(elements.hasNext()){
+			                                contextElement = (Element)elements.next();
+			                                contextName = getTran(request,"Web.Occup",contextElement.attribute("id").getValue(),sWebLanguage);
+			                                contexts.put(contextName,contextElement);
+			                            }
+			
+			                            // sort hash on context-name
+			                            Vector contextNames = new Vector(contexts.keySet());
+			                            Collections.sort(contextNames);
+			                            Iterator contextIter = contextNames.iterator();
+			                            while(contextIter.hasNext()){
+			                                contextName = (String)contextIter.next();
+			                                contextElement = (Element)contexts.get(contextName);
+			                                out.print("<option value='"+contextElement.attribute("id").getValue()+"' "+(contextElement.attribute("id").getValue().equalsIgnoreCase(planning.getContextID()) ? "selected" : "")+">"+HTMLEntities.htmlentities(contextName)+"</option>");
+			                            }
+			                        }
+			                    %>
+			                </select>
+			            </td>
+			        </tr>
+			    </div>
+			    <tr>
+			        <td class='admin'><%=HTMLEntities.htmlentities(getTran(request,"planning","description",sWebLanguage))%></td>
+			        <td class='admin2'><%=writeTextarea("EditDescription","60","","",HTMLEntities.htmlentities(checkString(planning.getDescription())))%></td>
+			    </tr>
+			    <tr>
+			        <td class='admin'><%=HTMLEntities.htmlentities(getTran(request,"planning","remark",sWebLanguage))%></td>
+			        <td class='admin2'><%=writeTextarea("EditComment","60","","",HTMLEntities.htmlentities(checkString(planning.getComment())))%></td>
+			    </tr>
+			    <%
+			    	if(planning!=null && planning.hasValidUid()){ 
+			    %>
+			    <tr>
+			        <td class='admin'><%=HTMLEntities.htmlentities(getTran(request,"web","lastmodifiedby",sWebLanguage))%></td>
+			        <td class='admin2'><%=User.getFullUserName(planning.getUpdateUser())+" "+getTran(request,"web","on",sWebLanguage)+" "+new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(planning.getUpdateDateTime()) %></td>
+			    </tr>
+			    <tr>
+			        <td class='admin'><%=HTMLEntities.htmlentities(getTran(request,"web","createdby",sWebLanguage))%></td>
+			        <td class='admin2'><%=User.getFullUserName(planning.getCreateUser())+" "+getTran(request,"web","on",sWebLanguage)+" "+new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(planning.getCreateDateTime()) %></td>
+			    </tr>
+			    <%
+			    }
+			    	if(sFindPlanningUID.length()==0){
+			    %>
+				    <tr>
+				        <td class="admin"><%=HTMLEntities.htmlentities(getTran(request,"web", "repeatuntil", sWebLanguage))%>
+				        </td>
+				        <td class="admin2"><%=ScreenHelper.planningDateTimeField("appointmentRepeatUntil", "", sWebLanguage, sCONTEXTPATH)%>
+				        </td>
+				    </tr>
+			    <%
+			    	}
+			    	else{
+			    %>
+			    	<input type="hidden" id="appointmentRepeatUntil" name="appointmentRepeatUntil" value="" />
+			    <%
+			    	}
+			    %>
+			</table>
+		</td>
+	</tr>
+	<tr id="tr1_1-view" style="display:none">
+		<td>
+			<!-- TAB 2: Extended screen -->
+			<table class='list' border='0' width='630' cellspacing='1'>
+			    <tr>
+			        <td class="admin" width="<%=sTDAdminWidth%>"><%=HTMLEntities.htmlentities(getTran(request,"planning", "preparationdate", sWebLanguage))%></td>
+			        <td class="admin2"><%=ScreenHelper.newWriteDateTimeField("EditPreparationDate", ScreenHelper.parseDate(planning.getPreparationDate()), sWebLanguage, sCONTEXTPATH)%></td>
+			    </tr>
+			    <tr>
+			        <td class="admin"><%=HTMLEntities.htmlentities(getTran(request,"planning", "admissiondate", sWebLanguage))%></td>
+			        <td class="admin2"><%=ScreenHelper.newWriteDateTimeField("EditAdmissionDate", ScreenHelper.parseDate(planning.getAdmissionDate()), sWebLanguage, sCONTEXTPATH)%></td>
+			    </tr>
+			    <tr>
+			        <td class="admin"><%=HTMLEntities.htmlentities(getTran(request,"planning", "operationdate", sWebLanguage))%></td>
+			        <td class="admin2"><%=ScreenHelper.newWriteDateTimeField("EditOperationDate", ScreenHelper.parseDate(planning.getOperationDate()), sWebLanguage, sCONTEXTPATH)%></td>
+			    </tr>
+			    <tr>
+			        <td class='admin'><%=HTMLEntities.htmlentities(getTran(request,"planning","reportingplace",sWebLanguage))%></td>
+			        <td class='admin2'><%=writeTextarea("EditReportingPlace","60","","",HTMLEntities.htmlentities(checkString(planning.getReportingPlace())))%></td>
+			    </tr>
+			    <tr>
+			        <td class='admin'><%=HTMLEntities.htmlentities(getTran(request,"planning","surgeon",sWebLanguage))%></td>
+			        <td class='admin2'><%=writeTextarea("EditSurgeon","60","","",HTMLEntities.htmlentities(checkString(planning.getSurgeon())))%></td>
+			    </tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<table class='list' border='0' width='630' cellspacing='1'>
+			    <tr>
+			        <td class="admin" width="<%=sTDAdminWidth%>"/>
+			        <td class="admin2">
+			            <input type="hidden" id="EditPage" value="<%=sPage%>" />
+			            <%-- Buttons --%>
+			            <%if(!checkString(request.getParameter("readonly")).equalsIgnoreCase("true") &&(activeUser.getAccessRight("planning.add") || activeUser.getAccessRight("planning.edit"))){%>
+			            <input class='button' type="button" name="buttonSave" id="buttonSaveEditPlanning" value='<%=getTranNoLink("Web","save",sWebLanguage)%>' onclick="saveAppointment();">&nbsp;
+			            <%}
+			            if(!checkString(request.getParameter("readonly")).equalsIgnoreCase("true") && ((sFindPlanningUID.length() > 0) && (activeUser.getAccessRight("planning.delete")))){%>
+			            <input class='button' type="button" name="buttonDelete" value='<%=getTranNoLink("Web","delete",sWebLanguage)%>' onclick="deleteAppointment2();">&nbsp;<%}%>
+			            <input class='button' type="button" name="buttonBack" value='<%=getTranNoLink("Web","Back",sWebLanguage)%>' onclick="doClose();">
+			            <input class='button' type="button" name="buttonPrint" value='<%=getTranNoLink("Web","print",sWebLanguage)%>' onclick="printAppointment();">
+			        </td>
+			    </tr>
+			    <tr>
+			        <td class="admin"/>
+			        <td class="admin2">
+			            <%=getTran(request,"Web","colored_fields_are_obligate",sWebLanguage)%> <input type="hidden" name="Action"/>
+			        </td>
+			    </tr>
+			</table>
+		</td>
+	</tr>
 </table>
 <div>
 <script>
-	function findResources(){
+
+	activateTab2('Main');
+
+  	function findResources(){
 		var today = new Date();
 		var url= '<c:url value="/planning/ajax/getResourcesForPlanning.jsp"/>?planninguid=<%=sFindPlanningUID%>&tempplanninguid='+document.getElementById('tempplanninguid').value+'&language=<%=sWebLanguage%>&ts='+today;
 		new Ajax.Request(url,{
@@ -643,7 +750,6 @@
   function updateSelect(){
     setCorrectAppointmentDate(<%=startHourOfWeekPlanner+","+startMinOfWeekPlanner+","+endHourOfWeekPlanner+","+endMinOfWeekPlanner%>);
   }
-  
   
   updateSelect();
 </script>

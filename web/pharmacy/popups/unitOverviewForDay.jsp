@@ -25,17 +25,17 @@
 <table width="100%" cellspacing="1" cellpadding="0" class="list">    
     <%-- DAY --%>
     <tr>
-        <td class="admin" width="<%=sTDAdminWidth%>">&nbsp;<%=getTran("web","day",sWebLanguage)%></td>
+        <td class="admin" width="<%=sTDAdminWidth%>">&nbsp;<%=getTran(request,"web","day",sWebLanguage)%></td>
         <td class="admin2"><%=date%></td>
     </tr>
     <%-- SERVICE STOCK --%>
     <tr>
-        <td class="admin">&nbsp;<%=getTran("web","serviceStock",sWebLanguage)%></td>
+        <td class="admin">&nbsp;<%=getTran(request,"web","serviceStock",sWebLanguage)%></td>
         <td class="admin2"><%=productStock.getServiceStock().getName()%></td>
     </tr>
     <%-- PRODUCT STOCK --%>
     <tr>
-        <td class="admin">&nbsp;<%=getTran("web","productStock",sWebLanguage)%></td>
+        <td class="admin">&nbsp;<%=getTran(request,"web","productStock",sWebLanguage)%></td>
         <td class="admin2"><%=productStock.getProduct().getName()%></td>
     </tr>
 </table>
@@ -45,10 +45,10 @@
 <table width="100%" cellspacing="1" cellpadding="0" class="list">
     <%-- HEADER --%>
     <tr class='admin'>
-        <td><%=getTran("web","type",sWebLanguage)%></td>
-        <td><%=getTran("web","quantity",sWebLanguage)%></td>
-        <td><%=getTran("web","source",sWebLanguage)%>/<%=getTran("web","destination",sWebLanguage)%></td>
-        <td><%=getTran("web","user",sWebLanguage)%></td>
+        <td><%=getTran(request,"web","type",sWebLanguage)%></td>
+        <td><%=getTran(request,"web","quantity",sWebLanguage)%></td>
+        <td><%=getTran(request,"web","source",sWebLanguage)%>/<%=getTran(request,"web","destination",sWebLanguage)%></td>
+        <td><%=getTran(request,"web","user",sWebLanguage)%></td>
     </tr>
     
 <%
@@ -66,9 +66,6 @@
             if(sourceDestination.getObjectType().equalsIgnoreCase("patient")){
                 AdminPerson patient = AdminPerson.getAdminPerson(sourceDestination.getObjectUid());
                 sd = patient.personid+": "+patient.firstname+" "+patient.lastname;
-                if(checkString(operation.getReceiveComment()).length()>0){
-                	sd+= " ("+operation.getReceiveComment()+")";
-                }
             }
             else if(sourceDestination.getObjectType().equalsIgnoreCase("servicestock") ||
             		sourceDestination.getObjectType().equalsIgnoreCase("service")){
@@ -87,7 +84,7 @@
 	            }
 	        }
             else if(sourceDestination.getObjectType().equalsIgnoreCase("production")){
-	            sd = getTran("web","productionorder",sWebLanguage)+" #"+sourceDestination.getObjectUid();
+	            sd = getTran(request,"web","productionorder",sWebLanguage)+" #"+sourceDestination.getObjectUid();
 	        }
         }
 
@@ -98,12 +95,18 @@
             if(operation.getDescription().indexOf("receipt") > -1){
                 movement = "+";
                 sClass = "list";
-                sOperation = getTran("productstockoperation.medicationreceipt",operation.getDescription(),sWebLanguage);
+                sOperation = getTran(request,"productstockoperation.medicationreceipt",operation.getDescription(),sWebLanguage);
+                if(checkString(operation.getReceiveComment()).length()>0 || checkString(operation.getComment()).length()>0){
+                	sOperation+= " ("+(checkString(operation.getReceiveComment())+" "+checkString(operation.getComment())).trim()+")";
+                }
             }
             else if(operation.getDescription().indexOf("delivery") > -1){
                 movement = "-";
                 sClass = "list1";
-                sOperation = getTran("productstockoperation.medicationdelivery",operation.getDescription(),sWebLanguage);
+                sOperation = getTran(request,"productstockoperation.medicationdelivery",operation.getDescription(),sWebLanguage);
+                if(checkString(operation.getReceiveComment()).length()>0 || checkString(operation.getComment()).length()>0){
+                	sOperation+= " ("+(checkString(operation.getReceiveComment())+" "+checkString(operation.getComment())).trim()+")";
+                }
             }
         } 
         //*** service stock ***
@@ -111,12 +114,18 @@
             if(operation.getDescription().indexOf("receipt") > -1 || operation.getDescription().indexOf("correctionin") > -1){
                 movement = "+";
                 sClass = "list";
-                sOperation=getTran("productstockoperation.medicationreceipt", operation.getDescription(), sWebLanguage);
+                sOperation=getTran(request,"productstockoperation.medicationreceipt", operation.getDescription(), sWebLanguage);
+                if(checkString(operation.getReceiveComment()).length()>0 || checkString(operation.getComment()).length()>0){
+                	sOperation+= " ("+(checkString(operation.getReceiveComment())+" "+checkString(operation.getComment())).trim()+")";
+                }
             } 
             else if(operation.getDescription().indexOf("delivery") > -1 || operation.getDescription().indexOf("correctionout") > -1){
                 movement = "-";
                 sClass = "list1";
-                sOperation = getTran("productstockoperation.medicationdelivery", operation.getDescription(),sWebLanguage);
+                sOperation = getTran(request,"productstockoperation.medicationdelivery", operation.getDescription(),sWebLanguage);
+                if(checkString(operation.getReceiveComment()).length()>0 || checkString(operation.getComment()).length()>0){
+                	sOperation+= " ("+(checkString(operation.getReceiveComment())+" "+checkString(operation.getComment())).trim()+")";
+                }
             }
         }
         //*** correction in ***
@@ -124,12 +133,18 @@
             if(operation.getDescription().indexOf("receipt") > -1 || operation.getDescription().indexOf("correctionin") > -1){
                 movement = "+";
                 sClass = "list";
-                sOperation = getTran("productstockoperation.medicationreceipt",operation.getDescription(),sWebLanguage);
+                sOperation = getTran(request,"productstockoperation.medicationreceipt",operation.getDescription(),sWebLanguage);
+                if(checkString(operation.getReceiveComment()).length()>0 || checkString(operation.getComment()).length()>0){
+                	sOperation+= " ("+(checkString(operation.getReceiveComment())+" "+checkString(operation.getComment())).trim()+")";
+                }
             }
             else if(operation.getDescription().indexOf("delivery") > -1 || operation.getDescription().indexOf("correctionout") > -1){
                 movement = "-";
                 sClass = "list1";
-                sOperation = getTran("productstockoperation.medicationdelivery",operation.getDescription(),sWebLanguage);
+                sOperation = getTran(request,"productstockoperation.medicationdelivery",operation.getDescription(),sWebLanguage);
+                if(checkString(operation.getReceiveComment()).length()>0 || checkString(operation.getComment()).length()>0){
+                	sOperation+= " ("+(checkString(operation.getReceiveComment())+" "+checkString(operation.getComment())).trim()+")";
+                }
             }
         }
         

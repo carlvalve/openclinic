@@ -15,7 +15,7 @@
        %>
 <script>
     Modalbox.show("<div id=\"executionQuestion\" class=\"question\" style=\"width:300px;height:50px;text-align:center;margin-left:140px;\">"+
-            "<b><%=HTMLEntities.htmlentities(getTran("planning","wantYouSetExecutionDateToNow",sWebLanguage))%></b>"+
+            "<b><%=HTMLEntities.htmlentities(getTran(request,"planning","wantYouSetExecutionDateToNow",sWebLanguage))%></b>"+
             "<br /><br /><div >"+
             "<input class=\"button large\" type=\"button\" name=\"buttonDelete\" value=\"<%=HTMLEntities.htmlentities(getTranNoLink("openclinic.chuk","ok",sWebLanguage))%>\" onclick=\"openDossier('<%=sFindPlanningUID%>',1)\">&nbsp;"+
              "<input class=\"button large\" type=\"button\" name=\"buttonBack\" value=\"<%=getTranNoLink("openclinic.chuk","no",sWebLanguage)%>\" onclick=\"Modalbox.hide();redirectToDossier('<%=patientUid%>')\">"+

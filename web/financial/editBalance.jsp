@@ -66,21 +66,21 @@
     <table class="list" width="100%" cellspacing="1">
         <%-- maxbalance --%>
         <tr>
-            <td class='admin' width="<%=sTDAdminWidth%>"><%=getTran("balance","maxbalance",sWebLanguage)%></td>
+            <td class='admin' width="<%=sTDAdminWidth%>"><%=getTran(request,"balance","maxbalance",sWebLanguage)%></td>
             <td class='admin2'>
                 <input class='text' type='text' name='EditBalanceMax' value='<%=tmpBalance.getMaximumBalance()%>' size="10" onblur="isNumber(this)"> <%=sCurrency%>
             </td>
         </tr>
         <%-- minbalance --%>
         <tr>
-            <td class='admin'><%=getTran("balance","minbalance",sWebLanguage)%></td>
+            <td class='admin'><%=getTran(request,"balance","minbalance",sWebLanguage)%></td>
             <td class='admin2'>
                 <input class='text' type='text' name='EditBalanceMin' value='<%=tmpBalance.getMinimumBalance()%>' size="10" onblur="isNumber(this)"> <%=sCurrency%>
             </td>
         </tr>
         <%-- remarks --%>
         <tr>
-            <td class='admin'><%=getTran("web","comment",sWebLanguage)%></td>
+            <td class='admin'><%=getTran(request,"web","comment",sWebLanguage)%></td>
             <td class='admin2'><%=writeTextarea("EditBalanceRemarks","","","",checkString(tmpBalance.getRemarks()))%></td>
         </tr>
 

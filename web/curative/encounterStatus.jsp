@@ -28,7 +28,7 @@
             <table width="100%" class="list" cellspacing="0" cellpadding="0" style="border-bottom:none;">
                 <tr class="admin">
                     <td width="300">
-                        <%=getTran("curative","encounter.status.title",sWebLanguage)%>&nbsp;
+                        <%=getTran(request,"curative","encounter.status.title",sWebLanguage)%>&nbsp;
                         <a href="<c:url value='/main.do'/>?Page=adt/historyEncounter.jsp&ts=<%=getTs()%>"><img src="<c:url value='/_img/icons/icon_history2.gif'/>" class="link" alt="<%=getTranNoLink("web","historyencounters",sWebLanguage)%>" style="vertical-align:-4px;"></a>
                         <a href="javascript:newEncounter();"><img src="<c:url value='/_img/icons/icon_new.gif'/>" class="link" alt="<%=getTranNoLink("web","newencounter",sWebLanguage)%>" style="vertical-align:-4px;"></a>
 						<%if(MedwanQuery.getInstance().getConfigString("quickConsult1."+activeUser.userid,"").length()>0){ %>
@@ -47,14 +47,14 @@
 	                        <a href="javascript:newFastEncounter('<%=MedwanQuery.getInstance().getConfigString("quickConsult5."+activeUser.userid)%>');"><img src="<c:url value='/_img/icons/icon_new5.gif'/>" class="link" title="<%=getTranNoLink("web",MedwanQuery.getInstance().getConfigString("quickConsult5."+activeUser.userid).split(";")[0],sWebLanguage)+" "+getTranNoLink("service",MedwanQuery.getInstance().getConfigString("quickConsult5."+activeUser.userid).split(";")[2],sWebLanguage)%>" style="vertical-align:-4px;"></a>
 	                    <%} %>
                     </td>
-                    <td width="250"><i><%=getTran("curative","encounter.last.hospitalisation",sWebLanguage)%>:
+                    <td width="250"><i><%=getTran(request,"curative","encounter.last.hospitalisation",sWebLanguage)%>:
                         <%
                             if(dLastAdmission != null){
                                 out.print("<a href='javascript:goRead(\""+lastAdmissionEncounter.getUid()+"\");'>"+ScreenHelper.stdDateFormat.format(dLastAdmission)+"</a>");
                             }
                         %></i>
                     </td>
-                    <td><i><%=getTran("curative","encounter.last.visit",sWebLanguage)%>:
+                    <td><i><%=getTran(request,"curative","encounter.last.visit",sWebLanguage)%>:
                         <%
                             if(dLastVisit != null){
                                 out.print("<a href='javascript:goRead(\""+lastVisitEncounter.getUid()+"\");'>"+ScreenHelper.stdDateFormat.format(dLastVisit)+"</a>");
@@ -69,22 +69,22 @@
             <table width='100%' cellspacing='0' cellpadding="0" class='sortable' id="sortable">
                 <tr class='gray'>
                     <td>
-                        <%=getTran("web","contactid",sWebLanguage)%>
+                        <%=getTran(request,"web","contactid",sWebLanguage)%>
                         <%
 	                        if(checkString(activeEncounter.getType()).equalsIgnoreCase("visit") && activeEncounter.getEnd()==null && activeUser.getAccessRight("adt.encounter.edit")){
-	                            %>&nbsp;<img class="link" src="<c:url value='/_img/themes/default/keywords.jpg'/>" onclick="closeEncounter('<%=activeEncounter.getUid() %>')" alt="<%=getTranNoLink("web","close",sWebLanguage)%>"  title="<%=getTran("web","close",sWebLanguage)%>" style="vertical-align:-4px;"/><% 
+	                            %>&nbsp;<img class="link" src="<c:url value='/_img/themes/default/keywords.jpg'/>" onclick="closeEncounter('<%=activeEncounter.getUid() %>')" alt="<%=getTranNoLink("web","close",sWebLanguage)%>"  title="<%=getTran(null,"web","close",sWebLanguage)%>" style="vertical-align:-4px;"/><% 
 	                        }
                        	%>
                     </td>
-                    <td><%=getTran("web","type",sWebLanguage)%></td>
-                    <td><%=getTran("web","begindate",sWebLanguage)%></td>
-                    <td><%=getTran("web","service",sWebLanguage)%></td>
+                    <td><%=getTran(request,"web","type",sWebLanguage)%></td>
+                    <td><%=getTran(request,"web","begindate",sWebLanguage)%></td>
+                    <td><%=getTran(request,"web","service",sWebLanguage)%></td>
                     <%
                         if(!checkString(activeEncounter.getType()).equalsIgnoreCase("visit")){
-                            %><td><%=getTran("web","bed",sWebLanguage)%></td><%
+                            %><td><%=getTran(request,"web","bed",sWebLanguage)%></td><%
                         }
                     %>
-                    <td><%=getTran("web","careprovider",sWebLanguage)%></td>
+                    <td><%=getTran(request,"web","careprovider",sWebLanguage)%></td>
                 </tr>
                 <tr class='<%=activeEncounter.getEnd()==null?"list":"listDisabled"%>' onmouseover="this.style.cursor='hand';" onmouseout="this.style.cursor='default';" onclick="goEdit('<%=activeEncounter.getUid()%>');">
                     <td>
@@ -99,7 +99,7 @@
                         %>
                     </td>
                     <td>
-                        <b><%=getTran("web",checkString(activeEncounter.getType()),sWebLanguage)%></b>
+                        <b><%=getTran(request,"web",checkString(activeEncounter.getType()),sWebLanguage)%></b>
                     </td>
                     <td>
                     <%
@@ -111,7 +111,7 @@
                     <%
                         String sService = "";
                         if(activeEncounter.getService()!=null){
-                            sService = "<i>"+activeEncounter.getService().code+": </i><b>"+getTran("Service",activeEncounter.getService().code,sWebLanguage)+"</b>";
+                            sService = "<i>"+activeEncounter.getService().code+": </i><b>"+getTran(request,"Service",activeEncounter.getService().code,sWebLanguage)+"</b>";
                         }
                     %>
                     <td><%=sService%>
@@ -161,6 +161,6 @@
 <%
     }
     else{
-        out.print(getTran("web","nopatientselected",sWebLanguage));
+        out.print(getTran(request,"web","nopatientselected",sWebLanguage));
     }
 %>

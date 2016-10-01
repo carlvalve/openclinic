@@ -35,7 +35,7 @@
                 // translate unit
                 sUnit = checkString(product.getUnit());
                 if(sUnit.length() > 0){
-                    sUnit = getTran("product.unit",sUnit,sWebLanguage);
+                    sUnit = getTran(null,"product.unit",sUnit,sWebLanguage);
                 }
 
                 // line unit price out
@@ -52,17 +52,17 @@
                     // processing product from product-catalog, productStock available
                     sSupplierUid = checkString(product.getSupplierUid());
                     if(sSupplierUid.length() > 0){
-                        sSupplierName = getTran("service",sSupplierUid,sWebLanguage);
+                        sSupplierName = getTran(null,"service",sSupplierUid,sWebLanguage);
                     }
                     else{
                         sSupplierUid = checkString(product.getSupplierUid());
                         if(sSupplierUid.length() > 0){
-                            sSupplierName = getTran("service",sSupplierUid,sWebLanguage);
+                            sSupplierName = getTran(null,"service",sSupplierUid,sWebLanguage);
                         }
                         else{
                             sSupplierUid = checkString(userProduct.getProductStock().getServiceStock().getDefaultSupplierUid());
                             if(sSupplierUid.length() > 0){
-                                sSupplierName = getTran("service",sSupplierUid,sWebLanguage);
+                                sSupplierName = getTran(null,"service",sSupplierUid,sWebLanguage);
                             }
                             else{
                                 sSupplierName = "";
@@ -74,7 +74,7 @@
                     // processing product from product-catalog, NO productStock available
                     sSupplierUid = checkString(product.getSupplierUid());
                     if(sSupplierUid.length() > 0){
-                        sSupplierName = getTran("service",sSupplierUid,sWebLanguage);
+                        sSupplierName = getTran(null,"service",sSupplierUid,sWebLanguage);
                     }
                     else{
                         sSupplierName = "";
@@ -84,11 +84,11 @@
                 // product group
                 sProductGroup = checkString(product.getProductGroup());
                 if(sProductGroup.length() > 0){
-                    sProductGroup = getTran("product.productgroup",sProductGroup,sWebLanguage);
+                    sProductGroup = getTran(null,"product.productgroup",sProductGroup,sWebLanguage);
                 }
             }
             else{
-                sProductName = "<font color='red'>"+getTran("web.manage","unexistingproduct",sWebLanguage)+"</font>";
+                sProductName = "<font color='red'>"+getTran(null,"web.manage","unexistingproduct",sWebLanguage)+"</font>";
             }
 
             // alternate row-style
@@ -158,7 +158,7 @@
 
             // show saved data
             sAction = "findShowOverview";
-            saveMsg = getTran("web","dataissaved",sWebLanguage);
+            saveMsg = getTran(request,"web","dataissaved",sWebLanguage);
         }
         else {
             // store anyway, to update productStockUid that might not be saved yet.
@@ -166,7 +166,7 @@
 
             // display product exists-message
             sAction = "findShowOverview";
-            saveMsg = getTran("web.manage","productexists",sWebLanguage);
+            saveMsg = getTran(request,"web.manage","productexists",sWebLanguage);
 
             sSelectedProductUid = sEditProductUid;
             sSelectedProductName = sEditProductName;
@@ -177,7 +177,7 @@
     else if(sAction.equals("delete") && sEditProductUid.length() > 0){
         UserProduct.delete(activeUser.userid,sEditProductUid);
 
-        saveMsg = getTran("web","dataisdeleted",sWebLanguage);
+        saveMsg = getTran(request,"web","dataisdeleted",sWebLanguage);
         sAction = "findShowOverview"; // display overview even if only one record remains
     }
 
@@ -205,19 +205,19 @@
                     <%-- header --%>
                     <tr class="admin">
                         <td width="30"/>
-                        <td width="25%"><%=getTran("Web","productName",sWebLanguage)%></td>
-                        <td width="10%"><%=getTran("Web","Unit",sWebLanguage)%></td>
-                        <td width="10%" style="text-align:right;"><%=getTran("Web","unitprice",sWebLanguage)%>&nbsp;</td>
-                        <td width="20%"><%=getTran("Web","supplier",sWebLanguage)%></td>
-                        <td width="20%"><%=getTran("Web","ServiceStock",sWebLanguage)%></td>
-                        <td width="15%"><%=getTran("Web","productGroup",sWebLanguage)%></td>
+                        <td width="25%"><%=getTran(request,"Web","productName",sWebLanguage)%></td>
+                        <td width="10%"><%=getTran(request,"Web","Unit",sWebLanguage)%></td>
+                        <td width="10%" style="text-align:right;"><%=getTran(request,"Web","unitprice",sWebLanguage)%>&nbsp;</td>
+                        <td width="20%"><%=getTran(request,"Web","supplier",sWebLanguage)%></td>
+                        <td width="20%"><%=getTran(request,"Web","ServiceStock",sWebLanguage)%></td>
+                        <td width="15%"><%=getTran(request,"Web","productGroup",sWebLanguage)%></td>
                     </tr>
                     <%=userProductsHtml%>
                 </table>
                 
                 <%-- number of records found --%>
                 <span style="width:49%;text-align:left;">
-                    <%=foundProductCount%> <%=getTran("web","recordsfound",sWebLanguage)%>
+                    <%=foundProductCount%> <%=getTran(request,"web","recordsfound",sWebLanguage)%>
                 </span>
                 
                 <%
@@ -236,7 +236,7 @@
         }
         else{
             // no records found
-            %><%=getTran("web","norecordsfound",sWebLanguage)%><br><br><%
+            %><%=getTran(request,"web","norecordsfound",sWebLanguage)%><br><br><%
         }
     %>
     
@@ -244,12 +244,12 @@
     <table class="list" width="100%" cellspacing="1">
         <%-- sub-title --%>
         <tr class="admin">
-            <td colspan="2">&nbsp;&nbsp;<%=getTran("web.manage","AddUserProducts",sWebLanguage)%></td>
+            <td colspan="2">&nbsp;&nbsp;<%=getTran(request,"web.manage","AddUserProducts",sWebLanguage)%></td>
         </tr>
         
         <%-- product --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","product",sWebLanguage)%>&nbsp;</td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","product",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="hidden" name="EditProductUid" value="<%=sSelectedProductUid%>">
                 <input type="hidden" name="EditProductStockUid" value="<%=sSelectedProductStockUid%>">

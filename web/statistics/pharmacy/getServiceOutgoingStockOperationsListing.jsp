@@ -31,13 +31,13 @@
 	    <%-- PERIOD --%>
 		<tr>
 			<td class='admin2'>
-				<%=getTran("web","from",sWebLanguage)%> <%=writeDateField("FindBeginDate","transactionForm",sBegin,sWebLanguage)%>
-				<%=getTran("web","to",sWebLanguage)%> <%=writeDateField("FindEndDate","transactionForm",sEnd,sWebLanguage)%>
+				<%=getTran(request,"web","from",sWebLanguage)%> <%=writeDateField("FindBeginDate","transactionForm",sBegin,sWebLanguage)%>
+				<%=getTran(request,"web","to",sWebLanguage)%> <%=writeDateField("FindEndDate","transactionForm",sEnd,sWebLanguage)%>
 			</td>
 		</tr>
 		<tr>
 			<td class='admin2'>
-				<%=getTran("web","user",sWebLanguage)%>: 
+				<%=getTran(request,"web","user",sWebLanguage)%>: 
 				<select name='userid' id='userid' class='text'>
 					<option value=""></option>
 					<%

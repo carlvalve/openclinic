@@ -81,7 +81,7 @@
                 <table width="100%" class="list" cellspacing="1" onClick="transactionForm.onkeydown='if(enterEvent(event,13)){doSearch();}';" onKeyDown="if(enterEvent(event,13)){doSearch();}">
                     <%-- PRODUCT STOCK --%>
                     <tr>
-                        <td class="admin2" width="<%=sTDAdminWidth%>" nowrap><%=getTran("Web","productstock",sWebLanguage)%></td>
+                        <td class="admin2" width="<%=sTDAdminWidth%>" nowrap><%=getTran(request,"Web","productstock",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="hidden" name="FindProductStockUid" value="<%=sFindProductStockUid%>">
                             <input class="text" type="text" name="FindProductStockName" readonly size="<%=sTextWidth%>" value="<%=sFindProductStockName%>">
@@ -92,14 +92,14 @@
                     </tr>
                     <%-- SERVICE STOCK (automatic) --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","servicestock",sWebLanguage)%></td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","servicestock",sWebLanguage)%></td>
                         <td class="admin2">
                             <input class="text" type="text" name="FindServiceStockName" readonly size="<%=sTextWidth%>" value="<%=sFindServiceStockName%>">
                         </td>
                     </tr>
                     <%-- YEAR --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","year",sWebLanguage)%></td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","year",sWebLanguage)%></td>
                         <td class="admin2">
                             <select class="text" name="FindYear">
                                 <%
@@ -134,10 +134,10 @@
                     <%-- HEADER --%>
                     <tr class="admin">
                         <td width="100"/>
-                        <td width="100" style="text-align:right;"><%=getTran("web","in",sWebLanguage)%>&nbsp;</td>
-                        <td width="100" style="text-align:right;"><%=getTran("web","out",sWebLanguage)%>&nbsp;</td>
-                        <td width="100" style="text-align:right;"><%=getTran("web","netto",sWebLanguage)%>&nbsp;</td>
-                        <td width="100" style="text-align:right;"><%=getTran("web","level",sWebLanguage)%>&nbsp;</td>
+                        <td width="100" style="text-align:right;"><%=getTran(request,"web","in",sWebLanguage)%>&nbsp;</td>
+                        <td width="100" style="text-align:right;"><%=getTran(request,"web","out",sWebLanguage)%>&nbsp;</td>
+                        <td width="100" style="text-align:right;"><%=getTran(request,"web","netto",sWebLanguage)%>&nbsp;</td>
+                        <td width="100" style="text-align:right;"><%=getTran(request,"web","level",sWebLanguage)%>&nbsp;</td>
                         <td width="*"/>
                     </tr>
                     
@@ -147,7 +147,7 @@
                             Calendar calendar = new GregorianCalendar();
                             calendar.set(Integer.parseInt(sFindYear),0,0,0,0,0);
 
-                            String detailsTran = getTran("web","showdetails",sWebLanguage);
+                            String detailsTran = getTran(request,"web","showdetails",sWebLanguage);
                             
                             String sClass = "1";
                             int unitsIn, unitsOut, unitsDiff;
@@ -165,7 +165,7 @@
 
                                 %>
                                 <tr class="list<%=sClass%>" title="<%=detailsTran%>" onClick="showUnitsForMonth(<%=i%>,'<%=calendar.get(Calendar.YEAR)%>','<%=productStock.getServiceStockUid()%>','<%=productStock.getUid()%>');">
-                                    <td>&nbsp;<%=i+1%>&nbsp;<%=getTran("web","month"+(i+1),sWebLanguage)%></td>
+                                    <td>&nbsp;<%=i+1%>&nbsp;<%=getTran(request,"web","month"+(i+1),sWebLanguage)%></td>
                                     <td style="text-align:right;"><%=unitsIn%>&nbsp;</td>
                                     <td style="text-align:right;"><%=unitsOut%>&nbsp;</td>
                                     <td style="text-align:right;"><%=(unitsDiff<0?""+unitsDiff:(unitsDiff==0?unitsDiff+"":"+"+unitsDiff))%>&nbsp;</td>
@@ -187,7 +187,7 @@
                         unitsDiff = unitsIn - unitsOut;
                     %>
                     <tr class="admin">
-                        <td width="100">&nbsp;<%=getTran("web","total",sWebLanguage)%></td>
+                        <td width="100">&nbsp;<%=getTran(request,"web","total",sWebLanguage)%></td>
                         <td width="100" style="text-align:right;"><%=unitsIn%>&nbsp;</td>
                         <td width="100" style="text-align:right;"><%=unitsOut%>&nbsp;</td>
                         <td width="100" style="text-align:right;"><%=(unitsDiff<0?unitsDiff+"":(unitsDiff==0?unitsDiff+"":"+"+unitsDiff))%>&nbsp;</td>
@@ -199,8 +199,8 @@
                 <%-- PRINT BUTTON --%>
                 <%=ScreenHelper.alignButtonsStart()%>
                     <button accesskey="<%=ScreenHelper.getAccessKey(getTranNoLink("accesskey","print",sWebLanguage))%>" class="buttoninvisible" onclick="doPrint();"></button>
-                    <button class="button" name="printButton" onclick="doPrint();"><%=getTran("accesskey","print",sWebLanguage)%></button>&nbsp;
-                    <button class="button" name="closeButton" onclick="window.close();"><%=getTran("web","close",sWebLanguage)%></button>
+                    <button class="button" name="printButton" onclick="doPrint();"><%=getTran(request,"accesskey","print",sWebLanguage)%></button>&nbsp;
+                    <button class="button" name="closeButton" onclick="window.close();"><%=getTran(request,"web","close",sWebLanguage)%></button>
                 <%=ScreenHelper.alignButtonsStop()%>
                 <br>
             <%

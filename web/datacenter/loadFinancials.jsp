@@ -21,30 +21,30 @@
 <table width='100%'>
 	<tr>
 		<td/>
-		<td class='admin'><%=getTran("web","total",sWebLanguage)%></td>
-		<td class='admin'><%=getTran("web","admissions",sWebLanguage)%></td>
-		<td class='admin'><%=getTran("web","visits",sWebLanguage)%></td>
+		<td class='admin'><%=getTran(request,"web","total",sWebLanguage)%></td>
+		<td class='admin'><%=getTran(request,"web","admissions",sWebLanguage)%></td>
+		<td class='admin'><%=getTran(request,"web","visits",sWebLanguage)%></td>
 	</tr>
 	<tr>
-		<td class='admin'><%=getTran("datacenter","patients.revenue",sWebLanguage)%></td>
+		<td class='admin'><%=getTran(request,"datacenter","patients.revenue",sWebLanguage)%></td>
 		<td class='admin2'><%=format(serverid,sFormat,"financial.1",period)+" "+sCurrency %></td>
 		<td class='admin2'><%=format(serverid,sFormat,"financial.1.1",period)+" "+sCurrency %></td>
 		<td class='admin2'><%=format(serverid,sFormat,"financial.1.2",period)+" "+sCurrency %></td>
 	</tr>
 	<tr>
-		<td class='admin'><%=getTran("datacenter","insurers.revenue",sWebLanguage)%></td>
+		<td class='admin'><%=getTran(request,"datacenter","insurers.revenue",sWebLanguage)%></td>
 		<td class='admin2'><%=format(serverid,sFormat,"financial.2",period)+" "+sCurrency %></td>
 		<td class='admin2'><%=format(serverid,sFormat,"financial.2.1",period)+" "+sCurrency %></td>
 		<td class='admin2'><%=format(serverid,sFormat,"financial.2.2",period)+" "+sCurrency %></td>
 	</tr>
 	<tr>
-		<td class='admin'><%=getTran("datacenter","extrainsurers.revenue",sWebLanguage)%></td>
+		<td class='admin'><%=getTran(request,"datacenter","extrainsurers.revenue",sWebLanguage)%></td>
 		<td class='admin2'><%=format(serverid,sFormat,"financial.3",period)+" "+sCurrency %></td>
 		<td class='admin2'><%=format(serverid,sFormat,"financial.3.1",period)+" "+sCurrency %></td>
 		<td class='admin2'><%=format(serverid,sFormat,"financial.3.2",period)+" "+sCurrency %></td>
 	</tr>
 	<tr>
-		<td><%=getTran("datacenter","total.revenue",sWebLanguage)%></td>
+		<td><%=getTran(request,"datacenter","total.revenue",sWebLanguage)%></td>
 		<td class='admin2'><%=format(serverid,sFormat,"financial.0",period)+" "+sCurrency %></td>
 		<td class='admin2'><%=format(serverid,sFormat,"financial.0.1",period)+" "+sCurrency %></td>
 		<td class='admin2'><%=format(serverid,sFormat,"financial.0.2",period)+" "+sCurrency %></td>

@@ -122,13 +122,13 @@
         }
 
         // translate labtype
-        if (type.equals("1")) type = getTran("Web.occup", "labanalysis.type.blood", sWebLanguage);
-        else if (type.equals("2")) type = getTran("Web.occup", "labanalysis.type.urine", sWebLanguage);
-        else if (type.equals("3")) type = getTran("Web.occup", "labanalysis.type.other", sWebLanguage);
-        else if (type.equals("4")) type = getTran("Web.occup", "labanalysis.type.stool", sWebLanguage);
-        else if (type.equals("5")) type = getTran("Web.occup", "labanalysis.type.sputum", sWebLanguage);
-        else if (type.equals("6")) type = getTran("Web.occup", "labanalysis.type.smear", sWebLanguage);
-        else if (type.equals("7")) type = getTran("Web.occup", "labanalysis.type.liquid", sWebLanguage);
+        if (type.equals("1")) type = getTran(request,"Web.occup", "labanalysis.type.blood", sWebLanguage);
+        else if (type.equals("2")) type = getTran(request,"Web.occup", "labanalysis.type.urine", sWebLanguage);
+        else if (type.equals("3")) type = getTran(request,"Web.occup", "labanalysis.type.other", sWebLanguage);
+        else if (type.equals("4")) type = getTran(request,"Web.occup", "labanalysis.type.stool", sWebLanguage);
+        else if (type.equals("5")) type = getTran(request,"Web.occup", "labanalysis.type.sputum", sWebLanguage);
+        else if (type.equals("6")) type = getTran(request,"Web.occup", "labanalysis.type.smear", sWebLanguage);
+        else if (type.equals("7")) type = getTran(request,"Web.occup", "labanalysis.type.liquid", sWebLanguage);
 
         // add labanalysis to the table in the opener
 %>

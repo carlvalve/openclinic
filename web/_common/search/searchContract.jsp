@@ -35,11 +35,11 @@
             <table id="searchresults" cellpadding="0" cellspacing="0" width="100%" class="sortable" style="border:1px solid #ccc;">
                 <%-- header --%>
                 <tr class="admin">
-                    <td class="admin" style="padding-left:0;" width="13%" nowrap><%=getTran("web.hr","contractId",sWebLanguage)%></td>
-                    <td class="admin" style="padding-left:0;" width="13%" nowrap><%=getTran("web.hr","beginDate",sWebLanguage)%></td>
-                    <td class="admin" style="padding-left:0;" width="13%" nowrap><%=getTran("web.hr","endDate",sWebLanguage)%></td>
-                    <td class="admin" style="padding-left:0;" width="20%" nowrap><%=getTran("web.hr","functionCode",sWebLanguage)%></td>
-                    <td class="admin" style="padding-left:0;" width="*" nowrap><%=getTran("web.hr","functionTitle",sWebLanguage)%></td>
+                    <td class="admin" style="padding-left:0;" width="13%" nowrap><%=getTran(request,"web.hr","contractId",sWebLanguage)%></td>
+                    <td class="admin" style="padding-left:0;" width="13%" nowrap><%=getTran(request,"web.hr","beginDate",sWebLanguage)%></td>
+                    <td class="admin" style="padding-left:0;" width="13%" nowrap><%=getTran(request,"web.hr","endDate",sWebLanguage)%></td>
+                    <td class="admin" style="padding-left:0;" width="20%" nowrap><%=getTran(request,"web.hr","functionCode",sWebLanguage)%></td>
+                    <td class="admin" style="padding-left:0;" width="*" nowrap><%=getTran(request,"web.hr","functionTitle",sWebLanguage)%></td>
                 </tr>
                 
                 <tbody>
@@ -72,10 +72,10 @@
 	
     // number of found records
     if(foundContracts.size() > 0){
-        %><%=foundContracts.size()%> <%=getTran("web","recordsFound",sWebLanguage)%><%
+        %><%=foundContracts.size()%> <%=getTran(request,"web","recordsFound",sWebLanguage)%><%
     }
     else{
-        %><br><%=getTran("web","noRecordsFound",sWebLanguage)%><%
+        %><br><%=getTran(request,"web","noRecordsFound",sWebLanguage)%><%
     }
 
     // display message

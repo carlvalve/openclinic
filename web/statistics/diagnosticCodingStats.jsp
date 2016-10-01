@@ -40,11 +40,11 @@
     
     <table class="menu" width="100%" cellspacing="1" cellpadding="0">
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","Begin",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","Begin",sWebLanguage)%></td>
             <td class="admin2" width="*"><%=writeDateField("FindBegin","transactionForm",sFindBegin,sWebLanguage)%></td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("Web","End",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web","End",sWebLanguage)%></td>
             <td class="admin2"><%=writeDateField("FindEnd","transactionForm",sFindEnd,sWebLanguage)%></td>
         </tr>
         
@@ -66,9 +66,9 @@
     	    <table width="100%" class="sortable" id="searchresults" cellspacing="1" cellpadding="0">
     	        <%-- HEADER --%>
     	        <tr class="gray">
-    	           <td width="250"><%=getTran("web","user",sWebLanguage)%></td>
-    	           <td width="120"><%=getTran("web","diagnoses",sWebLanguage)%></td>
-    	           <td width="*"><%=getTran("web","encounters",sWebLanguage)%></td>
+    	           <td width="250"><%=getTran(request,"web","user",sWebLanguage)%></td>
+    	           <td width="120"><%=getTran(request,"web","diagnoses",sWebLanguage)%></td>
+    	           <td width="*"><%=getTran(request,"web","encounters",sWebLanguage)%></td>
     	        </tr>
     	<%
     	
@@ -141,11 +141,11 @@
     }
 
     if(lines.size()==0){
-    	%><%=getTran("web","noRecordsFound",sWebLanguage)%><%
+    	%><%=getTran(request,"web","noRecordsFound",sWebLanguage)%><%
     }
     else{
         %>
-            <%=lines.size()%> <%=getTran("web","recordsFound",sWebLanguage)%>
+            <%=lines.size()%> <%=getTran(request,"web","recordsFound",sWebLanguage)%>
         
 			<%=ScreenHelper.alignButtonsStart()%>
 			    <input type="button" class="button" name="backButton" value="<%=getTranNoLink("web","back",sWebLanguage)%>" onClick="doBack();"/>

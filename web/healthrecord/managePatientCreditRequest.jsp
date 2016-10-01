@@ -39,7 +39,7 @@
         <tr>
             <td class="admin" width="<%=sTDAdminWidth%>">
                 <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-                <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+                <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
             </td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" id="trandate" OnBlur='checkDate(this)'>
@@ -52,7 +52,7 @@
         	<td colspan="2">
 	        	<table width='100%'>
 		        	<tr>
-			            <td class="admin"><%=getTran("web","criteria",sWebLanguage)%>&nbsp;</td>
+			            <td class="admin"><%=getTran(request,"web","criteria",sWebLanguage)%>&nbsp;</td>
 			            <td class="admin2" colspan="6"><table width='100%'>
 			            	<%
 			            		String activecriteria=((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PATIENTCREDITREQUEST_CRITERIA");
@@ -64,7 +64,7 @@
 				            			Enumeration e = values.keys();
 				            			while(e.hasMoreElements()){
 				            				String id = (String)e.nextElement();
-				            				out.println("<tr><td><input name='criteria."+id+"' type='checkbox' "+(("*"+activecriteria+"*").indexOf("*"+id+"*")>-1?"checked":"")+"/>"+getTran("patientcreditcriteria",id,sWebLanguage)+"</td></tr>");
+				            				out.println("<tr><td><input name='criteria."+id+"' type='checkbox' "+(("*"+activecriteria+"*").indexOf("*"+id+"*")>-1?"checked":"")+"/>"+getTran(request,"patientcreditcriteria",id,sWebLanguage)+"</td></tr>");
 				            			}
 				            		}
 			            		}
@@ -74,19 +74,19 @@
 			            </td>
 			        </tr>
 		        	<tr>
-			            <td class="admin"><%=getTran("web","required.credit.amount",sWebLanguage)%>*&nbsp;</td>
+			            <td class="admin"><%=getTran(request,"web","required.credit.amount",sWebLanguage)%>*&nbsp;</td>
 			            <td class="admin2" colspan="6">
 			                <input class="text" type="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PATIENTCREDITREQUEST_AMOUNT" property="itemId"/>]>.value" size="10" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PATIENTCREDITREQUEST_AMOUNT" property="value"/>"/>
 			            </td>
 			        </tr>
 		        	<tr>
-			            <td class="admin"><%=getTran("web","comment",sWebLanguage)%>*&nbsp;</td>
+			            <td class="admin"><%=getTran(request,"web","comment",sWebLanguage)%>*&nbsp;</td>
 			            <td class="admin2" colspan="6">
 			               <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_PATIENTCREDITREQUEST_COMMENT")%> class="text" cols="50" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PATIENTCREDITREQUEST_COMMENT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PATIENTCREDITREQUEST_COMMENT" property="value"/></textarea>
 			            </td>
 			        </tr>
 		        	<tr>
-			            <td class="admin"><%=getTran("web","sendmailto",sWebLanguage)%>*&nbsp;</td>
+			            <td class="admin"><%=getTran(request,"web","sendmailto",sWebLanguage)%>*&nbsp;</td>
 			            <td class="admin2" colspan="6">
 							<%=sMailTo %>
 			            </td>

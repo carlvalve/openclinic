@@ -73,8 +73,8 @@
                     %>
                         <tbody class="hand">
                             <tr class="admin">
-                                <td nowrap><%=HTMLEntities.htmlentities(getTran("Web","name",sWebLanguage))%></td>
-                                <td nowrap><%=HTMLEntities.htmlentities(getTran("Web","category",sWebLanguage))%></td>
+                                <td nowrap><%=HTMLEntities.htmlentities(getTran(request,"Web","name",sWebLanguage))%></td>
+                                <td nowrap><%=HTMLEntities.htmlentities(getTran(request,"Web","category",sWebLanguage))%></td>
                             </tr>
 
                             <%=HTMLEntities.htmlentities(results.toString())%>
@@ -85,7 +85,7 @@
                     // display 'no results' message
                     %>
                         <tr>
-                            <td colspan='3'><%=HTMLEntities.htmlentities(getTran("web","norecordsfound",sWebLanguage))%></td>
+                            <td colspan='3'><%=HTMLEntities.htmlentities(getTran(request,"web","norecordsfound",sWebLanguage))%></td>
                         </tr>
                     <%
                 }

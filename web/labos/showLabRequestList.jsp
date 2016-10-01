@@ -28,12 +28,12 @@
             </table>
    
             <div style="padding:3px"></div>
-            <input type="submit" class="button" name="submit" value="<%=getTranNoLink("web","show",sWebLanguage)%>"/>
+            <input accesskey="S" type="submit" class="button" name="submit" value="<%=getTranNoLink("web","show",sWebLanguage)%>"/>
         </form>
         <%
     }
     else{
-        out.print(getTran("web","noDataAvailable",sWebLanguage));
+        out.print(getTran(request,"web","noDataAvailable",sWebLanguage));
     }
 %>
 

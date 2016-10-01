@@ -85,7 +85,7 @@
 
         %>
         <tr>
-            <td class="admin" width="300"><%=getTran("Web.Occup","medwan.common.workuntil",tmpLang)%></td>
+            <td class="admin" width="300"><%=getTran(request,"Web.Occup","medwan.common.workuntil",tmpLang)%></td>
             <td class="admin2">
                 <input type="text" size="<%=sTextWidth%>" maxLength="255" name="EditLabel
                 Value<%=tmpLang%>" value="<%=checkString((String)labelValues.get(tmpLang))%>" class="text">

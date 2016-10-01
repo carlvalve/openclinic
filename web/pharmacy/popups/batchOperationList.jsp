@@ -9,22 +9,23 @@
 <%@ include file="/includes/validateUser.jsp" %>
 <table width=100%>
 <tr class="admin">
-	<td><%=getTran("web","operation",sWebLanguage)%></td>
-	<td><%=getTran("web","date",sWebLanguage)%></td>
-	<td><%=getTran("web","thirdpartytype",sWebLanguage)%></td>
-	<td><%=getTran("web","thirdpartyname",sWebLanguage)%></td>
-	<td><%=getTran("web","beginlevel",sWebLanguage)%></td>
-	<td><%=getTran("web","modification",sWebLanguage)%></td>
-	<td><%=getTran("web","endlevel",sWebLanguage)%></td>
-	<td><%=getTran("web","user",sWebLanguage)%></td>
-	<td><%=getTran("web","prescription",sWebLanguage)%></td>
+	<td><%=getTran(request,"web","operation",sWebLanguage)%></td>
+	<td><%=getTran(request,"web","date",sWebLanguage)%></td>
+	<td><%=getTran(request,"web","thirdpartytype",sWebLanguage)%></td>
+	<td><%=getTran(request,"web","thirdpartyname",sWebLanguage)%></td>
+	<td><%=getTran(request,"web","beginlevel",sWebLanguage)%></td>
+	<td><%=getTran(request,"web","modification",sWebLanguage)%></td>
+	<td><%=getTran(request,"web","endlevel",sWebLanguage)%></td>
+	<td><%=getTran(request,"web","user",sWebLanguage)%></td>
+	<td><%=getTran(request,"web","prescription",sWebLanguage)%></td>
+	<td><%=getTran(request,"web","comment",sWebLanguage)%></td>
 </tr>
 <%
 String batchUid=checkString(request.getParameter("batchUid"));
 String productStockUid=checkString(request.getParameter("productStockUid"));
 	Batch batch = Batch.get(batchUid);
 	int endLevel = batch.getLevel();
-	Vector operations = Batch.getBatchOperations(batchUid,productStockUid);
+	Vector operations = Batch.getBatchOperations(batchUid,productStockUid,sWebLanguage);
 	for(int n=0;n<operations.size();n++){
 		BatchOperation operation = (BatchOperation)operations.elementAt(n);
 		int unitsChanged=operation.getQuantity();
@@ -33,9 +34,9 @@ String productStockUid=checkString(request.getParameter("productStockUid"));
 		if(productStockOperation!=null && productStockOperation.getUpdateUser()!=null && User.getFirstUserName(productStockOperation.getUpdateUser())!=null){
 			user = User.getFirstUserName(productStockOperation.getUpdateUser()).toUpperCase();
 		}
-		String prescription=getTran("web","no",sWebLanguage);
+		String prescription=getTran(request,"web","no",sWebLanguage);
 		if(productStockOperation!=null && checkString(productStockOperation.getPrescriptionUid()).length()>0){
-			prescription=getTran("web","yes",sWebLanguage);;
+			prescription=getTran(request,"web","yes",sWebLanguage);;
 		}
 		String date=ScreenHelper.formatDate(operation.getDate());
 		String thirdparty=checkString(operation.getThirdParty());
@@ -68,7 +69,8 @@ String productStockUid=checkString(request.getParameter("productStockUid"));
 					out.println("<td class='admin2'>+"+unitsChanged+"</td>");
 					out.println("<td class='admin2'>"+endLevel+"</td>");
 					out.println("<td class='admin2'>"+user+"</td>");
-					out.println("<td class='admin2'></td></tr>");
+					out.println("<td class='admin2'></td>");
+					out.println("<td class='admin2'>"+checkString(productStockOperation.getComment())+"</td></tr>");
 					endLevel-=unitsChanged;			
 				}
 			}
@@ -105,7 +107,8 @@ String productStockUid=checkString(request.getParameter("productStockUid"));
 					out.println("<td class='admin2'>"+(-unitsChanged)+"</td>");
 					out.println("<td class='admin2'>"+endLevel+"</td>");
 					out.println("<td class='admin2'>"+user+"</td>");
-					out.println("<td class='admin2'>"+(productStockOperation.getSourceDestination().getObjectType().equalsIgnoreCase("patient")?prescription:"")+"</td></tr>");
+					out.println("<td class='admin2'>"+(productStockOperation.getSourceDestination().getObjectType().equalsIgnoreCase("patient")?prescription:"")+"</td>");
+					out.println("<td class='admin2'>"+checkString(productStockOperation.getComment())+"</td></tr>");
 					endLevel+=unitsChanged;			
 				}
 			}

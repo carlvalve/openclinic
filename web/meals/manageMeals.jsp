@@ -15,7 +15,7 @@
 <table class="list" width="100%" cellspacing="1" onKeyDown="if(enterEvent(event,13)){searchMeals();return false;}">
     <%-- MEAL NAME --%>
     <tr>
-        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("meals","name",sWebLanguage)%>&nbsp;</td>
+        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"meals","name",sWebLanguage)%>&nbsp;</td>
         <td class="admin2" style="padding-left:5px;">
             <input type="text" class="text" name="FindMealName" id="FindMealName" size="50" maxLength="100">&nbsp;&nbsp;
             
@@ -61,7 +61,7 @@
   function openMeal(id){
     var params = "mealId="+id;
     var url = "<c:url value='meals/ajax/getMeal.jsp'/>?ts="+new Date().getTime();
-    Modalbox.show(url,{title:"<%=getTran("meals","meal",sWebLanguage)%>",params:params,evalScripts:true,width:530});
+    Modalbox.show(url,{title:"<%=getTran(null,"meals","meal",sWebLanguage)%>",params:params,evalScripts:true,width:530});
   }
 
   <%-- SET MEAL --%>

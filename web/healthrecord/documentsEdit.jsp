@@ -24,7 +24,7 @@
         <tr>
             <td class="admin" width="<%=sTDAdminWidth%>">
                 <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-                <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+                <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
             </td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" id="trandate" OnBlur="checkDate(this);">
@@ -34,7 +34,7 @@
         
         <%-- TITLE --%>
         <tr>
-            <td class="admin"><%=getTran("web","title",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","title",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" size="60" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_EXTERNAL_DOCUMENT_TITLE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_EXTERNAL_DOCUMENT_TITLE" property="value"/>">
             </td>
@@ -42,7 +42,7 @@
         
         <%-- DOCUMENTS --%>
         <tr>
-            <td class="admin"><%=getTran("web","documents",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","documents",sWebLanguage)%></td>
             <td class="admin2">
                 <div id="divDocuments">
 	                <%
@@ -80,7 +80,7 @@
         </tr>
     </table>
     
-    <%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%>
+    <%=getTran(request,"Web","colored_fields_are_obligate",sWebLanguage)%>
     
     <input type="hidden" id="EditDocument" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_EXTERNAL_DOCUMENT_DOCUMENTS" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_EXTERNAL_DOCUMENT_DOCUMENTS" property="value"/>">
     <%=ScreenHelper.contextFooter(request)%>
@@ -92,7 +92,7 @@
     
     <table class="list" width="100%" cellspacing="1">
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","doc_upload",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","doc_upload",sWebLanguage)%></td>
             <td class="admin2">
                 <input class="text" name="filename" type="file" title="" size="80" onchange="uploadFile();"/>
             </td>

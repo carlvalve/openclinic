@@ -13,13 +13,13 @@
       <table class="list" width="100%" cellspacing="0">
         <%--- header ---%>
         <tr class="gray">
-          <td width="5%"><%=getTran("Web.Occup","be.mxs.healthrecord.vaccination.administer",sWebLanguage)%>&nbsp;</td>
-          <td width="*"><%=getTran("Web.Occup","be.mxs.healthrecord.vaccination.Vaccination",sWebLanguage)%>&nbsp;</td>
-          <td width="15%"><%=getTran("Web.Occup","be.mxs.healthrecord.vaccination.status",sWebLanguage)%>&nbsp;</td>
-          <td width="5%"><%=getTran("Web","info",sWebLanguage)%>&nbsp;</td>
-          <td width="15%"><%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>&nbsp;</td>
-          <td width="15%"><%=getTran("Web.Occup","be.mxs.healthrecord.vaccination.next-status",sWebLanguage)%>&nbsp;</td>
-          <td width="15%"><%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>&nbsp;</td>
+          <td width="5%"><%=getTran(request,"Web.Occup","be.mxs.healthrecord.vaccination.administer",sWebLanguage)%>&nbsp;</td>
+          <td width="*"><%=getTran(request,"Web.Occup","be.mxs.healthrecord.vaccination.Vaccination",sWebLanguage)%>&nbsp;</td>
+          <td width="15%"><%=getTran(request,"Web.Occup","be.mxs.healthrecord.vaccination.status",sWebLanguage)%>&nbsp;</td>
+          <td width="5%"><%=getTran(request,"Web","info",sWebLanguage)%>&nbsp;</td>
+          <td width="15%"><%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>&nbsp;</td>
+          <td width="15%"><%=getTran(request,"Web.Occup","be.mxs.healthrecord.vaccination.next-status",sWebLanguage)%>&nbsp;</td>
+          <td width="15%"><%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>&nbsp;</td>
         </tr>
         
         <%--- RUN THRU VACCINATIONS IN SESSION ---%>
@@ -122,8 +122,8 @@
       <table class="list" width="100%" cellspacing="0">
         <%-- header --%>
         <tr class="gray">
-          <td width="5%"><%=getTran("Web.Occup","be.mxs.healthrecord.vaccination.administer",sWebLanguage)%>&nbsp;</td>
-          <td width="*"><%=getTran("Web.Occup","be.mxs.healthrecord.vaccination.Vaccination",sWebLanguage)%>&nbsp;</td>
+          <td width="5%"><%=getTran(request,"Web.Occup","be.mxs.healthrecord.vaccination.administer",sWebLanguage)%>&nbsp;</td>
+          <td width="*"><%=getTran(request,"Web.Occup","be.mxs.healthrecord.vaccination.Vaccination",sWebLanguage)%>&nbsp;</td>
         </tr>
         <logic:present name="be.mxs.webapp.wl.session.SessionContainerFactory.WO_SESSION_CONTAINER" property="personalVaccinationsInfoVO">
           <logic:iterate id="examinationVO" scope="session" name="be.mxs.webapp.wl.session.SessionContainerFactory.WO_SESSION_CONTAINER" property="personalVaccinationsInfoVO.otherVaccinations">
@@ -147,13 +147,13 @@
     <bean:define id="flags" name="be.mxs.webapp.wl.session.SessionContainerFactory.WO_SESSION_CONTAINER" property="flags"/>
     <td>
       <img src="<c:url value='/_img/themes/default/pijl.gif'/>">
-      <a href="<c:url value='/healthrecord/managePeriodicExaminations.do?be.medwan.context.department=context.department.occup&be.medwan.context.context='/><mxs:propertyAccessorI18N name="flags" scope="page" translate="false" property="context"/>&ts=<%=getTs()%>"  onMouseOver="window.status='';return true;"><%=getTran("Web.Occup","medwan.healthrecord.periodic-examinations",sWebLanguage)%></a>
+      <a href="<c:url value='/healthrecord/managePeriodicExaminations.do?be.medwan.context.department=context.department.occup&be.medwan.context.context='/><mxs:propertyAccessorI18N name="flags" scope="page" translate="false" property="context"/>&ts=<%=getTs()%>"  onMouseOver="window.status='';return true;"><%=getTran(request,"Web.Occup","medwan.healthrecord.periodic-examinations",sWebLanguage)%></a>
     </td>
   </tr>
   <tr>
     <td>
       <img src="<c:url value='/_img/themes/default/pijl.gif'/>">
-      <a href="<c:url value='/main.jsp'/>?Page=curative/index.jsp&ts=<%=getTs()%>"  onMouseOver="window.status='';return true;"><%=getTran("Web.Occup","medwan.recruitment.view-recruitment-examinations-summary",sWebLanguage)%></a>
+      <a href="<c:url value='/main.jsp'/>?Page=curative/index.jsp&ts=<%=getTs()%>"  onMouseOver="window.status='';return true;"><%=getTran(request,"Web.Occup","medwan.recruitment.view-recruitment-examinations-summary",sWebLanguage)%></a>
     </td>
   </tr>
 </table>

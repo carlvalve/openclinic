@@ -107,13 +107,13 @@
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
             <td class='tabs' width='5'>&nbsp;</td>
-            <td class='tabunselected' width="1%" onclick="activateTab(1)" id="td1" onmouseover='this.style.cursor="hand"' onmouseout='this.style.cursor="default"' nowrap>&nbsp;<b><%=getTran("openclinic.chuk","tracnet.admission.form.tab1",sWebLanguage)%></b>&nbsp;</td>
+            <td class='tabunselected' width="1%" onclick="activateTab(1)" id="td1" onmouseover='this.style.cursor="hand"' onmouseout='this.style.cursor="default"' nowrap>&nbsp;<b><%=getTran(request,"openclinic.chuk","tracnet.admission.form.tab1",sWebLanguage)%></b>&nbsp;</td>
             <td class='tabs' width='5'>&nbsp;</td>
-            <td class='tabunselected' width="1%" onclick="activateTab(2)" id="td2" onmouseover='this.style.cursor="hand"' onmouseout='this.style.cursor="default"' nowrap>&nbsp;<b><%=getTran("openclinic.chuk","tracnet.admission.form.tab2",sWebLanguage)%></b>&nbsp;</td>
+            <td class='tabunselected' width="1%" onclick="activateTab(2)" id="td2" onmouseover='this.style.cursor="hand"' onmouseout='this.style.cursor="default"' nowrap>&nbsp;<b><%=getTran(request,"openclinic.chuk","tracnet.admission.form.tab2",sWebLanguage)%></b>&nbsp;</td>
             <td class='tabs' width='5'>&nbsp;</td>
-            <td class='tabunselected' width="1%" onclick="activateTab(3)" id="td3" onmouseover='this.style.cursor="hand"' onmouseout='this.style.cursor="default"' nowrap>&nbsp;<b><%=getTran("openclinic.chuk","tracnet.admission.form.tab3",sWebLanguage)%></b>&nbsp;</td>
+            <td class='tabunselected' width="1%" onclick="activateTab(3)" id="td3" onmouseover='this.style.cursor="hand"' onmouseout='this.style.cursor="default"' nowrap>&nbsp;<b><%=getTran(request,"openclinic.chuk","tracnet.admission.form.tab3",sWebLanguage)%></b>&nbsp;</td>
             <td class='tabs' width='5'>&nbsp;</td>
-            <td class='tabunselected' width="1%" onclick="activateTab(4)" id="td4" onmouseover='this.style.cursor="hand"' onmouseout='this.style.cursor="default"' nowrap>&nbsp;<b><%=getTran("openclinic.chuk","tracnet.admission.form.tab4",sWebLanguage)%></b>&nbsp;</td>
+            <td class='tabunselected' width="1%" onclick="activateTab(4)" id="td4" onmouseover='this.style.cursor="hand"' onmouseout='this.style.cursor="default"' nowrap>&nbsp;<b><%=getTran(request,"openclinic.chuk","tracnet.admission.form.tab4",sWebLanguage)%></b>&nbsp;</td>
             <td width="*" class='tabs'>&nbsp;</td>
         </tr>
     </table>

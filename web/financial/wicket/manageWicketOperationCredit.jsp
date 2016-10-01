@@ -67,10 +67,13 @@
 	        version = wicketOp.getVersion();
         }
         else{
-        	sMsg = getTran("web","noRecordsFound",sWebLanguage);
+        	sMsg = getTran(request,"web","noRecordsFound",sWebLanguage);
         }
     }
 
+    if(sEditWicketOperationWicket.length()==0){
+        sEditWicketOperationWicket = activeUser.getParameter("defaultwicket");
+    }
     if(sEditWicketOperationWicket.length()==0){
         sEditWicketOperationWicket = checkString((String)session.getAttribute("defaultwicket"));
     }
@@ -106,7 +109,7 @@
     <table class='list' border='0' width='100%' cellspacing='1' cellpadding='0'>
         <%-- wicket --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("wicket","wicket",sWebLanguage)%>&nbsp;*</td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"wicket","wicket",sWebLanguage)%>&nbsp;*</td>
             <td class='admin2'>
                 <select class="text" name="EditWicketOperationWicket" id="EditWicketOperationWicket" onchange='loadWaitingTransfers();loadTodayCredits()'>
                     <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>
@@ -135,7 +138,7 @@
 			if(sEditWicketOperationSourceType.equalsIgnoreCase("WicketTransfer")){
 		%>
 	        <tr>
-	            <td class="admin"><%=getTran("web","from",sWebLanguage)%></td>
+	            <td class="admin"><%=getTran(request,"web","from",sWebLanguage)%></td>
 	            <td class="admin2" id='sourcetd'>
 	                <%
 	                	WicketDebet wo = WicketDebet.get(sEditWicketOperationSource);
@@ -150,7 +153,7 @@
         %>
         <%-- DATE --%>
         <tr>
-            <td class="admin" ><%=getTran("Web","date",sWebLanguage)%>&nbsp;*</td>
+            <td class="admin" ><%=getTran(request,"Web","date",sWebLanguage)%>&nbsp;*</td>
             <td class="admin2"><%=writeDateField("EditWicketOperationDate","EditForm",sEditWicketOperationDate,sWebLanguage)%>
             <%
                 if(version > 1){
@@ -162,18 +165,18 @@
         
         <%-- OPERATION TYPE --%>
         <tr>
-            <td class="admin"><%=getTran("wicket","operation_type",sWebLanguage)%>&nbsp;*</td>
+            <td class="admin"><%=getTran(request,"wicket","operation_type",sWebLanguage)%>&nbsp;*</td>
             <td class="admin2">
            	<%
            		if(sEditWicketOperationType.equalsIgnoreCase("patient.payment")){
-           			out.println(getTran("credit.type","patient.payment",sWebLanguage));
+           			out.println(getTran(request,"credit.type","patient.payment",sWebLanguage));
            			out.print("<input type='hidden' name='EditWicketOperationType' id='EditWicketOperationType' value='"+sEditWicketOperationType+"'/>");
            		}
            		else{
 	            	%>
 		                <select class="text" name='EditWicketOperationType' id='EditWicketOperationType'>
 		                <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>
-		                    <%=ScreenHelper.writeSelect("wicketcredit.type",sEditWicketOperationType,sWebLanguage)%>
+		                    <%=ScreenHelper.writeSelect(request,"wicketcredit.type",sEditWicketOperationType,sWebLanguage)%>
 		                </select>
 	                <%
            		}
@@ -183,7 +186,7 @@
         
         <%-- AMOUNT --%>
         <tr>
-            <td class="admin"><%=getTran("web","amount",sWebLanguage)%>&nbsp;*</td>
+            <td class="admin"><%=getTran(request,"web","amount",sWebLanguage)%>&nbsp;*</td>
             <td class="admin2">
                 <input class="text" type="text" name="EditWicketOperationAmount" id="EditWicketOperationAmount" value="<%=sEditWicketOperationAmount%>" onblur="isNumberNegAndPos(this)"/> <%=MedwanQuery.getInstance().getConfigParam("currency","€")%>
             </td>
@@ -191,7 +194,7 @@
         
         <%-- COMMENT --%>
         <tr>
-            <td class="admin"><%=getTran("web","comment",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","comment",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea class="text" name="EditWicketOperationComment" id="EditWicketOperationComment" cols="55" rows="4"><%=sEditWicketOperationComment%></textarea>
             </td>
@@ -272,19 +275,19 @@
   <%-- DO SAVE --%>
   function doSave(){
     if(EditForm.EditWicketOperationWicket.value==""){
-                window.showModalDialog?alertDialog("web.manage","dataMissing"):alertDialogDirectText('<%=getTran("web.manage","dataMissing",sWebLanguage)%>');
+                window.showModalDialog?alertDialog("web.manage","dataMissing"):alertDialogDirectText('<%=getTran(null,"web.manage","dataMissing",sWebLanguage)%>');
       EditForm.EditWicketOperationWicket.focus();
     }
     else if(EditForm.EditWicketOperationDate.value==""){
-                window.showModalDialog?alertDialog("web.manage","dataMissing"):alertDialogDirectText('<%=getTran("web.manage","dataMissing",sWebLanguage)%>');
+                window.showModalDialog?alertDialog("web.manage","dataMissing"):alertDialogDirectText('<%=getTran(null,"web.manage","dataMissing",sWebLanguage)%>');
       EditForm.EditWicketOperationDate.focus();
     }
     else if(EditForm.EditWicketOperationType.value==""){
-                window.showModalDialog?alertDialog("web.manage","dataMissing"):alertDialogDirectText('<%=getTran("web.manage","dataMissing",sWebLanguage)%>');
+                window.showModalDialog?alertDialog("web.manage","dataMissing"):alertDialogDirectText('<%=getTran(null,"web.manage","dataMissing",sWebLanguage)%>');
       EditForm.EditWicketOperationType.focus();
     }
     else if(EditForm.EditWicketOperationAmount.value==""){
-                window.showModalDialog?alertDialog("web.manage","dataMissing"):alertDialogDirectText('<%=getTran("web.manage","dataMissing",sWebLanguage)%>');
+                window.showModalDialog?alertDialog("web.manage","dataMissing"):alertDialogDirectText('<%=getTran(null,"web.manage","dataMissing",sWebLanguage)%>');
       EditForm.EditWicketOperationAmount.focus();
     }
     else{

@@ -10,7 +10,7 @@
         <%-- HEADER --%>
         <tr class="gray">
             <td width="25">&nbsp;</td>
-            <td width="100%"><%=getTran("web","examination",sWebLanguage)%></td>
+            <td width="100%"><%=getTran(request,"web","examination",sWebLanguage)%></td>
         </tr>
 
         <%
@@ -56,7 +56,7 @@
 
             while(iter.hasNext()){
                 hResults = (Hashtable)iter.next();
-                hTransactions.put(getTran("web.occup", (String)hResults.get("transactionType"), sWebLanguage).toLowerCase(), hResults.get("id"));
+                hTransactions.put(getTran(request,"web.occup", (String)hResults.get("transactionType"), sWebLanguage).toLowerCase(), hResults.get("id"));
             }
 
             Vector v = new Vector(hTransactions.keySet());

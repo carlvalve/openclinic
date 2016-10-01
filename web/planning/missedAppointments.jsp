@@ -50,12 +50,12 @@ if (activePatient!=null){
             <table class="list" width="100%" cellspacing="0" cellpadding="0">
                 <tr class="admin">
                     <td width="20">&nbsp;</td>
-                    <td width="80"><%=getTran("web.occup","medwan.common.date",sWebLanguage)%></td>
-                    <td width="50"><%=getTran("web","from",sWebLanguage)%></td>
-                    <td width="50"><%=getTran("web","to",sWebLanguage)%></td>
-                    <td width="200"><%=getTran("planning","user",sWebLanguage)%></td>
-                    <td width="250"><%=getTran("web","prestation",sWebLanguage)%></td>
-                    <td><%=getTran("web","description",sWebLanguage)%></td>
+                    <td width="80"><%=getTran(request,"web.occup","medwan.common.date",sWebLanguage)%></td>
+                    <td width="50"><%=getTran(request,"web","from",sWebLanguage)%></td>
+                    <td width="50"><%=getTran(request,"web","to",sWebLanguage)%></td>
+                    <td width="200"><%=getTran(request,"planning","user",sWebLanguage)%></td>
+                    <td width="250"><%=getTran(request,"web","prestation",sWebLanguage)%></td>
+                    <td><%=getTran(request,"web","description",sWebLanguage)%></td>
                 </tr>
 
                 <%
@@ -65,7 +65,7 @@ if (activePatient!=null){
                     ObjectReference orContact;
                     ExaminationVO examination;
                     
-                    String sTextAdd = getTran("web","add",sWebLanguage);
+                    String sTextAdd = getTranNoLink("web","add",sWebLanguage);
                     SimpleDateFormat fullDateFormat = ScreenHelper.fullDateFormat;
 
                     Iterator iter = vPatientMissedPlannings.iterator();
@@ -118,12 +118,12 @@ if (activePatient!=null){
                                                 if(examination!=null && examination.getTransactionType()!=null){
 	                                                if(checkString(planning.getTransactionUID()).length()==0){
 	                                                    out.print("<img src='_img/icons/icon_add.gif' onclick='doExamination(\""+planning.getUid()+"\",\"" + planning.getPatientUID() + "\",\"" + examination.getTransactionType() + "\")' alt='" + sTextAdd + "' class='link'/> "
-	                                                        + getTran("examination", examination.getId().toString(), sWebLanguage));
+	                                                        + getTran(request,"examination", examination.getId().toString(), sWebLanguage));
 	                                                }
 	                                                else{
-	                                                    String sTextFind = getTran("web", "find", sWebLanguage);
+	                                                    String sTextFind = getTran(request,"web", "find", sWebLanguage);
 	                                                    out.print("<img src='_img/icons/icon_search.gif' onclick='openExamination(\""+planning.getTransactionUID().split("\\.")[0]+"\",\""+planning.getTransactionUID().split("\\.")[1]+"\",\"" + planning.getPatientUID() + "\",\"" + examination.getTransactionType() + "\")' alt='" + sTextFind + "' class='link'/> "
-	                                                        + getTran("examination", examination.getId().toString(), sWebLanguage));
+	                                                        + getTran(request,"examination", examination.getId().toString(), sWebLanguage));
 	                                                }
                                                 }
                                             }
@@ -136,7 +136,175 @@ if (activePatient!=null){
                     }
                 %>
             </table>
-            <%=vPatientMissedPlannings.size()%> <%=getTran("web","recordsFound",sWebLanguage)%>
+            <%=vPatientMissedPlannings.size()%> <%=getTran(request,"web","recordsFound",sWebLanguage)%>
+            <br>
+        <%
+    }
+%>
+            <br/>
+			<hr/>
+            <br/>
+<%=writeTableHeader("planning","canceledAppointments",sWebLanguage," doBack();")%>
+<%
+
+    Vector vPatientCanceledPlannings = Planning.getPatientCanceledPlannings(activePatient.personid);
+
+    if (vPatientCanceledPlannings.size()>0){
+        %>
+            <table class="list" width="100%" cellspacing="0" cellpadding="0">
+                <tr class="admin">
+                    <td width="20">&nbsp;</td>
+                    <td width="80"><%=getTran(request,"web.occup","medwan.common.date",sWebLanguage)%></td>
+                    <td width="50"><%=getTran(request,"web","from",sWebLanguage)%></td>
+                    <td width="50"><%=getTran(request,"web","to",sWebLanguage)%></td>
+                    <td width="200"><%=getTran(request,"planning","user",sWebLanguage)%></td>
+                    <td width="250"><%=getTran(request,"web","cancelationdate",sWebLanguage)%></td>
+                    <td><%=getTran(request,"web","description",sWebLanguage)%></td>
+                </tr>
+
+                <%
+                    Planning planning;
+                    String[] aHour;
+                    Calendar calPlanningStop;
+                    ObjectReference orContact;
+                    ExaminationVO examination;
+                    
+                    String sTextAdd = getTranNoLink("web","add",sWebLanguage);
+                    SimpleDateFormat fullDateFormat = ScreenHelper.fullDateFormat;
+
+                    Iterator iter = vPatientCanceledPlannings.iterator();
+                    while(iter.hasNext()){
+                        planning = (Planning)iter.next();
+
+                        calPlanningStop = Calendar.getInstance();
+                        calPlanningStop.setTime(planning.getPlannedDate());
+                        calPlanningStop.set(Calendar.SECOND, 00);
+                        calPlanningStop.set(Calendar.MILLISECOND, 00);
+
+                        if(checkString(planning.getEstimatedtime()).length() > 0){
+                            try{
+                                aHour = planning.getEstimatedtime().split(":");
+                                calPlanningStop.setTime(planning.getPlannedDate());
+                                calPlanningStop.add(Calendar.HOUR,Integer.parseInt(aHour[0]));
+                                calPlanningStop.add(Calendar.MINUTE,Integer.parseInt(aHour[1]));
+                            }
+                            catch(Exception e1){
+                                calPlanningStop.setTime(planning.getPlannedDate());
+                            }
+                        }
+
+                        // alternate row-style
+                        if(sClass.equals("")) sClass = "1";
+                        else                  sClass = "";
+
+                        %>
+                            <tr class="list<%=sClass%>" >
+                                <td></td>
+                                <td><%=ScreenHelper.getSQLDate(planning.getPlannedDate())%></td>
+                                <td><%=hhmmDateFormat.format(planning.getPlannedDate())%></td>
+                                <td><%=hhmmDateFormat.format(calPlanningStop.getTime())%></td>
+                                <td>
+                                    <%
+                                        if(planning.getUserUID().equals(activeUser.userid)){
+                                            out.print("<b>"+ScreenHelper.getFullUserName(planning.getUserUID())+"</b>");
+                                        }
+                                        else{
+                                            out.print(ScreenHelper.getFullUserName(planning.getUserUID()));
+                                        }
+                                    %>
+                                </td>
+                                <td><%=ScreenHelper.getSQLDate(planning.getCancelationDate())%></td>
+                                <td><%=planning.getDescription()%></td>
+                            </tr>
+                        <%
+                    }
+                %>
+            </table>
+            <%=vPatientCanceledPlannings.size()%> <%=getTran(request,"web","recordsFound",sWebLanguage)%>
+            <br>
+        <%
+    }
+%>
+            <br/>
+			<hr/>
+            <br/>
+<%=writeTableHeader("planning","noshows",sWebLanguage," doBack();")%>
+<%
+    Vector vPatientPlannings = Planning.getPatientPlannings(activePatient.personid, "", null, null);
+
+    if (vPatientPlannings.size()>0){
+        %>
+            <table class="list" width="100%" cellspacing="0" cellpadding="0">
+                <tr class="admin">
+                    <td width="20">&nbsp;</td>
+                    <td width="80"><%=getTran(request,"web.occup","medwan.common.date",sWebLanguage)%></td>
+                    <td width="50"><%=getTran(request,"web","from",sWebLanguage)%></td>
+                    <td width="50"><%=getTran(request,"web","to",sWebLanguage)%></td>
+                    <td width="200"><%=getTran(request,"planning","user",sWebLanguage)%></td>
+                    <td><%=getTran(request,"web","description",sWebLanguage)%></td>
+                </tr>
+
+                <%
+                    Planning planning;
+                    String[] aHour;
+                    Calendar calPlanningStop;
+                    ObjectReference orContact;
+                    ExaminationVO examination;
+                    
+                    String sTextAdd = getTranNoLink("web","add",sWebLanguage);
+                    SimpleDateFormat fullDateFormat = ScreenHelper.fullDateFormat;
+
+                    Iterator iter = vPatientPlannings.iterator();
+                    while(iter.hasNext()){
+                        planning = (Planning)iter.next();
+                        if(!checkString(planning.getNoshow()).equalsIgnoreCase("1")){
+                        	continue;
+                        }
+
+                        calPlanningStop = Calendar.getInstance();
+                        calPlanningStop.setTime(planning.getPlannedDate());
+                        calPlanningStop.set(Calendar.SECOND, 00);
+                        calPlanningStop.set(Calendar.MILLISECOND, 00);
+
+                        if(checkString(planning.getEstimatedtime()).length() > 0){
+                            try{
+                                aHour = planning.getEstimatedtime().split(":");
+                                calPlanningStop.setTime(planning.getPlannedDate());
+                                calPlanningStop.add(Calendar.HOUR,Integer.parseInt(aHour[0]));
+                                calPlanningStop.add(Calendar.MINUTE,Integer.parseInt(aHour[1]));
+                            }
+                            catch(Exception e1){
+                                calPlanningStop.setTime(planning.getPlannedDate());
+                            }
+                        }
+
+                        // alternate row-style
+                        if(sClass.equals("")) sClass = "1";
+                        else                  sClass = "";
+
+                        %>
+                            <tr class="list<%=sClass%>" >
+                                <td></td>
+                                <td><%=ScreenHelper.getSQLDate(planning.getPlannedDate())%></td>
+                                <td><%=hhmmDateFormat.format(planning.getPlannedDate())%></td>
+                                <td><%=hhmmDateFormat.format(calPlanningStop.getTime())%></td>
+                                <td>
+                                    <%
+                                        if(checkString(planning.getUserUID()).equals(activeUser.userid)){
+                                            out.print("<b>"+ScreenHelper.getFullUserName(planning.getUserUID())+"</b>");
+                                        }
+                                        else{
+                                            out.print(ScreenHelper.getFullUserName(planning.getUserUID()));
+                                        }
+                                    %>
+                                </td>
+                                <td><%=planning.getDescription()%></td>
+                            </tr>
+                        <%
+                    }
+                %>
+            </table>
+            <%=vPatientPlannings.size()%> <%=getTran(request,"web","recordsFound",sWebLanguage)%>
             <br>
         <%
     }
@@ -148,6 +316,6 @@ if (activePatient!=null){
 <%
 }
 else{
-    out.print(getTran("web","noactivepatient",sWebLanguage));
+    out.print(getTran(request,"web","noactivepatient",sWebLanguage));
 }
 %>

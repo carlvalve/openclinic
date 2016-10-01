@@ -4,21 +4,30 @@
 <%@include file="/includes/validateUser.jsp"%>
 <ul id="autocompletion">
     <%
-        String sDrugName      = checkString(request.getParameter("findMaterialName"));
+    String sDrugName      = checkString(request.getParameter("findMaterialName"));
 
         int iMaxRows = MedwanQuery.getInstance().getConfigInt("MaxSearchFieldsRows",30);
         List lResults = ProductStock.findMaterials(sDrugName);
         int level=0;
+        String main="";
+		if(MedwanQuery.getInstance().getConfigInt("enableCCBRTProductionOrderMecanism",0)==1){
+			main=MedwanQuery.getInstance().getConfigString("mainProductionWarehouseUID","");;
+		}
+		int counter=0;
         if(lResults.size() > 0){
             Iterator it = lResults.iterator();
             ProductStock productStock;
             
-            while(it.hasNext()){
+            while(it.hasNext() && counter<=iMaxRows){
             	productStock = (ProductStock)it.next();
                 String name="?";
                 if(productStock!=null && productStock.getProduct()!=null){
+                	if(main.length()>0 && main.equalsIgnoreCase(productStock.getServiceStockUid())){
+                		continue;
+                	}
                 	name=productStock.getProduct().getName();
                 }
+                counter++;
                 out.write("<li>");
                 level=productStock.getLevel();
                 if(level==0){

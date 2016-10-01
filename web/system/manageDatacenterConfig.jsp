@@ -19,7 +19,7 @@
 <form name="transactionForm" method="post" action="<c:url value="/main.do?Page=/system/manageDatacenterConfig.jsp"/>">
 	<table>
 		<tr class="admin">
-			<td colspan="2"><%=getTran("Web.Manage", "manageDatacenterConfig", sWebLanguage)%></td>
+			<td colspan="2"><%=getTran(request,"Web.Manage", "manageDatacenterConfig", sWebLanguage)%></td>
 		</tr>
 		<tr>
 			<td class="admin">datacenterEnabled</td>

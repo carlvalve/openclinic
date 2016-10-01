@@ -160,15 +160,15 @@
     for (int n=0;n<headerVector.size();n++){
         sGroup = (String)headerVector.get(n);
         groupVector=(Vector)headers.get("Vector."+sGroup);
-        out.print("<tr><td class='admin' colspan='"+(2+transactions.size())+"'>"+getTran("TRANSACTION_TYPE_LAB_RESULT",sGroup,sWebLanguage)+"</td>");
+        out.print("<tr><td class='admin' colspan='"+(2+transactions.size())+"'>"+getTran(request,"TRANSACTION_TYPE_LAB_RESULT",sGroup,sWebLanguage)+"</td>");
         for (int i=0;i<groupVector.size();i++){
             labItem = (Item)groupVector.get(i);
-            out.print("<tr><td class='menuItem'>"+getTran("TRANSACTION_TYPE_LAB_RESULT",labItem.id,sWebLanguage)+"</td>");
+            out.print("<tr><td class='menuItem'>"+getTran(request,"TRANSACTION_TYPE_LAB_RESULT",labItem.id,sWebLanguage)+"</td>");
             if (labItem.id.indexOf("MEDIDOC")>-1){
                 format="MEDIDOC_";
             }
             if (labItem.unit.length()>0){
-                out.print("<td class='text'>"+getTran("TRANSACTION_TYPE_LAB_RESULT","be.mxs.common.model.vo.healthrecord.IConstants.EXT_"+format+"UNIT_"+labItem.unit,sWebLanguage)+"</td>");
+                out.print("<td class='text'>"+getTran(request,"TRANSACTION_TYPE_LAB_RESULT","be.mxs.common.model.vo.healthrecord.IConstants.EXT_"+format+"UNIT_"+labItem.unit,sWebLanguage)+"</td>");
             }
             else {
                 out.print("<td/>");

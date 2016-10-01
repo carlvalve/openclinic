@@ -61,7 +61,7 @@
 		ServiceStock serviceStock = ServiceStock.get(sServiceStockUid);
 		
 		if(serviceStock!=null){
-			out.print(writeTableHeaderDirectText(serviceStock.getUid()+" "+serviceStock.getName()+" <a href='javascript:checkAll(true)'>"+getTran("web", "selectall", sWebLanguage)+"</a> / <a href='javascript:checkAll(false)'>"+getTran("web", "unselectall", sWebLanguage)+"</a>",sWebLanguage," window.close();"));
+			out.print(writeTableHeaderDirectText(serviceStock.getUid()+" "+serviceStock.getName()+" <a href='javascript:checkAll(true)'>"+getTran(request,"web", "selectall", sWebLanguage)+"</a> / <a href='javascript:checkAll(false)'>"+getTran(request,"web", "unselectall", sWebLanguage)+"</a>",sWebLanguage," window.close();"));
 			out.print("<table width='100%' class='sortable' cellpadding='0' cellspacing='1' id='searchresults'>");
 			
        		Vector servicestocks = ServiceStock.findAll();
@@ -80,15 +80,15 @@
 					
 					if(recCount==1){
 						// header
-						out.print("<tr class='gray'>"+
-					               "<td>"+getTran("web","productname",sWebLanguage)+"</td>"+
-						           "<td>"+getTran("web","level",sWebLanguage)+"</td>"+
-					               "<td>"+getTran("web","orderlevel",sWebLanguage)+"</td>"+
-						           "<td>"+getTran("web","maximumlevel",sWebLanguage)+"</td>"+
-					               "<td>"+getTran("web","openorders",sWebLanguage)+"</td>"+
-						           "<td>"+getTran("web","order",sWebLanguage)+"</td>"+
-						           "<td>"+getTran("web","orderfrom",sWebLanguage)+"</td>"+
-					              "</tr>");
+						out.print("<thead><tr class='gray'>"+
+					               "<th width='190px'>"+getTran(request,"web","productname",sWebLanguage)+"</th>"+
+						           "<th width='50px'>"+getTran(request,"web","level",sWebLanguage)+"</th>"+
+					               "<th width='50px'>"+getTran(request,"web","orderlevel",sWebLanguage)+"</th>"+
+						           "<th width='50px'>"+getTran(request,"web","maximum",sWebLanguage)+"</th>"+
+					               "<th width='50px'>"+getTran(request,"web","openorders",sWebLanguage)+"</th>"+
+						           "<th width='50px'>"+getTran(request,"web","order",sWebLanguage)+"</th>"+
+						           "<th width='183px'>"+getTran(request,"web","orderfrom",sWebLanguage)+"</th>"+
+					              "</tr></thead></table><div id='tableDiv2' style='overflow-y:scroll; overflow-x:hidden; height:350px;'><table width='100%' class='sortable' cellpadding='0' cellspacing='1'>");
 					}
 					String sEditFrom=checkString(productStock.getSupplierUid());
 					if(sEditFrom.length()==0){
@@ -102,23 +102,23 @@
 
 					// For every product to be ordered, add a line 
 					out.print("<tr>"+
-					           "<td class='admin'><input type='checkbox' name='productstock."+productStock.getUid()+"' checked id='prod"+n+"'/><label for='prod"+n+"' class='hand'>"+productStock.getProduct().getName()+"</label></td>"+
-					           "<td class='admin2'>"+productStock.getLevel()+"</td>"+
-					           "<td class='admin2'>"+productStock.getOrderLevel()+"</td>"+
-					           "<td class='admin2'>"+productStock.getMaximumLevel()+"</td>"+
-					           "<td class='admin2'>"+ProductOrder.getOpenOrderedQuantity(productStock.getUid())+"</td>"+
-					           "<td class='admin2'><input size='4' type='text' class='text' name='quantity."+productStock.getUid()+"' value='"+quantity+"'/></td>"+
-					           "<td class='admin2'><select class='text' name='from."+productStock.getUid()+"' id='from."+productStock.getUid()+"'>"+sStockSelect+"</select></td>"+
+					           "<td width='192px' class='admin'><input type='checkbox' name='productstock."+productStock.getUid()+"' checked id='prod"+n+"'/><label for='prod"+n+"' class='hand'>"+productStock.getProduct().getName()+"</label></td>"+
+					           "<td width='50px' class='admin2'>"+productStock.getLevel()+"</td>"+
+					           "<td width='49px' class='admin2'>"+productStock.getOrderLevel()+"</td>"+
+					           "<td width='49px' class='admin2'>"+productStock.getMaximumLevel()+"</td>"+
+					           "<td width='50px' class='admin2'>"+ProductOrder.getOpenOrderedQuantity(productStock.getUid())+"</td>"+
+					           "<td width='50px' class='admin2'><input style='width: 30px' size='4' type='text' class='text' name='quantity."+productStock.getUid()+"' value='"+quantity+"'/></td>"+
+					           "<td width='170px' class='admin2'><select class='text' name='from."+productStock.getUid()+"' id='from."+productStock.getUid()+"'>"+sStockSelect+"</select></td>"+
 					          "</tr>");
 				}
 			}
-			out.print("</table>");
+			out.print("</tbody></table></div>");
 			
 		    if(recCount > 0){
-			    out.print(recCount+" "+getTran("web","recordsFound",sWebLanguage));
+			    out.print(recCount+" "+getTran(request,"web","recordsFound",sWebLanguage));
 		    }
 		    else{
-			    out.print(getTran("web","noRecordsFound",sWebLanguage));
+			    out.print(getTran(request,"web","noRecordsFound",sWebLanguage));
 		    }
 					        		
 			// BUTTONS

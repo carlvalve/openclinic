@@ -42,11 +42,11 @@
 	<input type='hidden' name='sourceStockUid' id='sourceStockUid' value='<%=sourceStockUid%>'/>
 	<table width='100%'>
 		<tr>
-			<td class='admin'><%=getTran("web","source",sWebLanguage) %></td>
+			<td class='admin'><%=getTran(request,"web","source",sWebLanguage) %></td>
 			<td class='admin2'><%=sourceStock.getName() %></td>
 		</tr>
 		<tr>
-			<td class='admin'><%=getTran("web","destination",sWebLanguage) %></td>
+			<td class='admin'><%=getTran(request,"web","destination",sWebLanguage) %></td>
 			<td class='admin2'>
 				<select name='DestinationStockUid' id='DestinationStockUid'>
 				<%

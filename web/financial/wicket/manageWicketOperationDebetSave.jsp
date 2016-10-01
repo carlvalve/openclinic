@@ -56,7 +56,7 @@
     Wicket wicket = Wicket.get(sEditWicketOperationWicket);
     wicket.recalculateBalance();
 
-    String sMessage = HTMLEntities.htmlentities(getTran("web","dataissaved",sWebLanguage));
+    String sMessage = HTMLEntities.htmlentities(getTran(request,"web","dataissaved",sWebLanguage));
 %>
 {
 "Message":"<%=sMessage%>"

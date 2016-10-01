@@ -85,7 +85,7 @@
                 <tr>
                     <td class="admin" width="210">
                         <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-                        <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+                        <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
                     </td>
                     <td class="admin2">
                         <input type="text" class="text" size="12" maxLength="10" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" id="trandate" OnBlur='checkDate(this)'>
@@ -104,23 +104,23 @@
                     String sGlycemyUnit = MedwanQuery.getInstance().getConfigString("glycemyUnit","mg / dl");
                 %>
                 <tr class="admin">
-                    <td colspan="6"><%=getTran("web.occup","glycemy",sWebLanguage)%></td>
+                    <td colspan="6"><%=getTran(request,"web.occup","glycemy",sWebLanguage)%></td>
                 </tr>
                 <tr class="gray">
-                    <td colspan="6"><%=getTran("diabetes","glucometer",sWebLanguage)%></td>
+                    <td colspan="6"><%=getTran(request,"diabetes","glucometer",sWebLanguage)%></td>
                 </tr>
 
                 <%-- GLYCEMY MORNING --%>
                 <tr>
-                    <td class="admin" width="210"><%=getTran("diabetes","morning_sober",sWebLanguage)%>&nbsp;</td>
+                    <td class="admin" width="210"><%=getTran(request,"diabetes","morning_sober",sWebLanguage)%>&nbsp;</td>
                     <td class="admin2" width="150">
                         <input id="focusField" <%=setRightClick("ITEM_TYPE_DIABETES_FOLLOWUP_GLYCEMY_SHOT_MORNING")%> type="text" class="text" size="5" maxLength="5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_GLYCEMY_SHOT_MORNING" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_GLYCEMY_SHOT_MORNING" property="value"/>" onBlur="setDecimalLength(this,2);if(isNumber(this)){validateGlycemy(this);}"> <%=sGlycemyUnit%>
                     </td>
-                    <td class="admin" width="200"><%=getTran("Web","noon",sWebLanguage)%>&nbsp;</td>
+                    <td class="admin" width="200"><%=getTran(request,"Web","noon",sWebLanguage)%>&nbsp;</td>
                     <td class="admin2" width="150">
                         <input <%=setRightClick("ITEM_TYPE_DIABETES_FOLLOWUP_GLYCEMY_SHOT_NOON")%> type="text" class="text" size="5" maxLength="5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_GLYCEMY_SHOT_NOON" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_GLYCEMY_SHOT_NOON" property="value"/>" onBlur="setDecimalLength(this,2);if(isNumber(this)){validateGlycemy(this);}"> <%=sGlycemyUnit%>
                     </td>
-                    <td class="admin" width="200"><%=getTran("diabetes","2hours_after_morning",sWebLanguage)%>&nbsp;</td>
+                    <td class="admin" width="200"><%=getTran(request,"diabetes","2hours_after_morning",sWebLanguage)%>&nbsp;</td>
                     <td class="admin2">
                         <input <%=setRightClick("ITEM_TYPE_DIABETES_FOLLOWUP_GLYCEMY_SHOT_2_HOURS_AFTER_BREAKFAST")%> type="text" class="text" size="5" maxLength="5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_GLYCEMY_SHOT_2_HOURS_AFTER_BREAKFAST" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_GLYCEMY_SHOT_2_HOURS_AFTER_BREAKFAST" property="value"/>" onBlur="setDecimalLength(this,2);if(isNumber(this)){validateGlycemy(this);}"> <%=sGlycemyUnit%>
                     </td>
@@ -128,22 +128,22 @@
 
                 <%-- GLYCEMY EVENING --%>
                 <tr>
-                    <td class="admin"><%=getTran("Web","evening",sWebLanguage)%>&nbsp;</td>
+                    <td class="admin"><%=getTran(request,"Web","evening",sWebLanguage)%>&nbsp;</td>
                     <td class="admin2">
                         <input <%=setRightClick("ITEM_TYPE_DIABETES_FOLLOWUP_GLYCEMY_SHOT_EVENING")%> type="text" class="text" size="5" maxLength="5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_GLYCEMY_SHOT_EVENING" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_GLYCEMY_SHOT_EVENING" property="value"/>" onBlur="setDecimalLength(this,2);if(isNumber(this)){validateGlycemy(this);}"> <%=sGlycemyUnit%>
                     </td>
-                    <td class="admin"><%=getTran("Web","remark",sWebLanguage)%>&nbsp;</td>
+                    <td class="admin"><%=getTran(request,"Web","remark",sWebLanguage)%>&nbsp;</td>
                     <td class="admin2" colspan="3">
                         <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_DIABETES_FOLLOWUP_GLYCEMY_REMARK")%> class="text" cols="80" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_GLYCEMY_REMARK" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_GLYCEMY_REMARK" property="value"/></textarea>
                     </td>
                 </tr>
                 <tr class="gray">
-                    <td colspan="6"><%=getTran("diabetes","glucosurie",sWebLanguage)%></td>
+                    <td colspan="6"><%=getTran(request,"diabetes","glucosurie",sWebLanguage)%></td>
                 </tr>
 
                 <%-- glucosurie MORNING --%>
                 <tr>
-                    <td class="admin"><%=getTran("diabetes","morning_sober",sWebLanguage)%>&nbsp;</td>
+                    <td class="admin"><%=getTran(request,"diabetes","morning_sober",sWebLanguage)%>&nbsp;</td>
                     <td class="admin2">
                         <select <%=setRightClick("ITEM_TYPE_DIABETES_FOLLOWUP_GLYCOSERIE_MORNING")%> id="slglmorning" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_GLYCOSERIE_MORNING" property="itemId"/>]>.value" class="text">
                             <option/>
@@ -154,7 +154,7 @@
                             <option value="++++">++++</option>
                         </select>
                     </td>
-                    <td class="admin"><%=getTran("Web","noon",sWebLanguage)%>&nbsp;</td>
+                    <td class="admin"><%=getTran(request,"Web","noon",sWebLanguage)%>&nbsp;</td>
                     <td class="admin2">
                         <select <%=setRightClick("ITEM_TYPE_DIABETES_FOLLOWUP_GLYCOSERIE_NOON")%> id="slglnoon" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_GLYCOSERIE_NOON" property="itemId"/>]>.value" class="text">
                             <option/>
@@ -165,7 +165,7 @@
                             <option value="++++">++++</option>
                         </select>
                     </td>
-                    <td class="admin"><%=getTran("Web","evening",sWebLanguage)%>&nbsp;</td>
+                    <td class="admin"><%=getTran(request,"Web","evening",sWebLanguage)%>&nbsp;</td>
                     <td class="admin2">
                         <select <%=setRightClick("ITEM_TYPE_DIABETES_FOLLOWUP_GLYCOSERIE_EVENING")%> id="slglevening" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_GLYCOSERIE_EVENING" property="itemId"/>]>.value" class="text">
                             <option/>
@@ -178,7 +178,7 @@
                     </td>
                 </tr>
                 <tr class="gray">
-                    <td colspan="6"><%=getTran("diabetes","labo",sWebLanguage)%></td>
+                    <td colspan="6"><%=getTran(request,"diabetes","labo",sWebLanguage)%></td>
                 </tr>
             </table>
         </td>
@@ -192,53 +192,53 @@
                     String sInsulineUnit = MedwanQuery.getInstance().getConfigString("insulineUnit","lU");
                 %>
                 <tr class="admin">
-                    <td colspan="7"><%=getTran("web.occup","insuline",sWebLanguage)%></td>
+                    <td colspan="7"><%=getTran(request,"web.occup","insuline",sWebLanguage)%></td>
                 </tr>
 
                 <%-- INSULINE RAPID MORNING --%>
                 <tr>
-                    <td class="admin" width="100"><%=getTran("web","morning",sWebLanguage)%>&nbsp;</td>
-                    <td class="admin" width="100"><%=getTran("Web","rapide",sWebLanguage)%>&nbsp;</td>
+                    <td class="admin" width="100"><%=getTran(request,"web","morning",sWebLanguage)%>&nbsp;</td>
+                    <td class="admin" width="100"><%=getTran(request,"Web","rapide",sWebLanguage)%>&nbsp;</td>
                     <td class="admin2" width="150">
                         <input <%=setRightClick("ITEM_TYPE_DIABETES_FOLLOWUP_INSULINE_SHOT_MORNING_FAST")%> type="text" class="text" size="5" maxLength="5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_INSULINE_SHOT_MORNING_FAST" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_INSULINE_SHOT_MORNING_FAST" property="value"/>" onBlur="setDecimalLength(this,2);if(isNumber(this)){validateInsuline(this);}"> <%=sInsulineUnit%>
                     </td>
-                    <td class="admin" width="200"><%=getTran("diabetes","intermediair",sWebLanguage)%>&nbsp;</td>
+                    <td class="admin" width="200"><%=getTran(request,"diabetes","intermediair",sWebLanguage)%>&nbsp;</td>
                     <td class="admin2" width="150">
                         <input <%=setRightClick("ITEM_TYPE_DIABETES_FOLLOWUP_INSULINE_SHOT_MORNING_INTERMEDIAIR")%> type="text" class="text" size="5" maxLength="5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_INSULINE_SHOT_MORNING_INTERMEDIAIR" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_INSULINE_SHOT_MORNING_INTERMEDIAIR" property="value"/>" onBlur="setDecimalLength(this,2);if(isNumber(this)){validateInsuline(this);}"> <%=sInsulineUnit%>
                     </td>
-                    <td class="admin" width="200"><%=getTran("diabetes","mixte",sWebLanguage)%>&nbsp;</td>
+                    <td class="admin" width="200"><%=getTran(request,"diabetes","mixte",sWebLanguage)%>&nbsp;</td>
                     <td class="admin2">
                         <input <%=setRightClick("ITEM_TYPE_DIABETES_FOLLOWUP_INSULINE_SHOT_MORNING_MIXTE")%> type="text" class="text" size="5" maxLength="5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_INSULINE_SHOT_MORNING_MIXTE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_INSULINE_SHOT_MORNING_MIXTE" property="value"/>" onBlur="setDecimalLength(this,2);if(isNumber(this)){validateInsuline(this);}"> <%=sInsulineUnit%>
                     </td>
                 </tr>
                 <%-- INSULINE RAPID NOON --%>
                 <tr>
-                    <td class="admin"><%=getTran("web","noon",sWebLanguage)%>&nbsp;</td>
-                    <td class="admin"><%=getTran("Web","rapide",sWebLanguage)%>&nbsp;</td>
+                    <td class="admin"><%=getTran(request,"web","noon",sWebLanguage)%>&nbsp;</td>
+                    <td class="admin"><%=getTran(request,"Web","rapide",sWebLanguage)%>&nbsp;</td>
                     <td class="admin2">
                         <input <%=setRightClick("ITEM_TYPE_DIABETES_FOLLOWUP_INSULINE_SHOT_NOON_FAST")%> type="text" class="text" size="5" maxLength="5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_INSULINE_SHOT_NOON_FAST" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_INSULINE_SHOT_NOON_FAST" property="value"/>" onBlur="setDecimalLength(this,2);if(isNumber(this)){validateInsuline(this);}"> <%=sInsulineUnit%>
                     </td>
-                    <td class="admin"><%=getTran("diabetes","intermediair",sWebLanguage)%>&nbsp;</td>
+                    <td class="admin"><%=getTran(request,"diabetes","intermediair",sWebLanguage)%>&nbsp;</td>
                     <td class="admin2">
                         <input <%=setRightClick("ITEM_TYPE_DIABETES_FOLLOWUP_INSULINE_SHOT_NOON_INTERMEDIAIR")%> type="text" class="text" size="5" maxLength="5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_INSULINE_SHOT_NOON_INTERMEDIAIR" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_INSULINE_SHOT_NOON_INTERMEDIAIR" property="value"/>" onBlur="setDecimalLength(this,2);if(isNumber(this)){validateInsuline(this);}"> <%=sInsulineUnit%>
                     </td>
-                    <td class="admin"><%=getTran("diabetes","mixte",sWebLanguage)%>&nbsp;</td>
+                    <td class="admin"><%=getTran(request,"diabetes","mixte",sWebLanguage)%>&nbsp;</td>
                     <td class="admin2">
                         <input <%=setRightClick("ITEM_TYPE_DIABETES_FOLLOWUP_INSULINE_SHOT_NOON_MIXTE")%> type="text" class="text" size="5" maxLength="5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_INSULINE_SHOT_NOON_MIXTE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_INSULINE_SHOT_NOON_MIXTE" property="value"/>" onBlur="setDecimalLength(this,2);if(isNumber(this)){validateInsuline(this);}"> <%=sInsulineUnit%>
                     </td>
                 </tr>
                 <%-- INSULINE RAPID EVENING --%>
                 <tr>
-                    <td class="admin"><%=getTran("web","evening",sWebLanguage)%>&nbsp;</td>
-                    <td class="admin"><%=getTran("Web","rapide",sWebLanguage)%>&nbsp;</td>
+                    <td class="admin"><%=getTran(request,"web","evening",sWebLanguage)%>&nbsp;</td>
+                    <td class="admin"><%=getTran(request,"Web","rapide",sWebLanguage)%>&nbsp;</td>
                     <td class="admin2">
                         <input <%=setRightClick("ITEM_TYPE_DIABETES_FOLLOWUP_INSULINE_SHOT_EVENING_FAST")%> type="text" class="text" size="5" maxLength="5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_INSULINE_SHOT_EVENING_FAST" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_INSULINE_SHOT_EVENING_FAST" property="value"/>" onBlur="setDecimalLength(this,2);if(isNumber(this)){validateInsuline(this);}"> <%=sInsulineUnit%>
                     </td>
-                    <td class="admin"><%=getTran("diabetes","intermediair",sWebLanguage)%>&nbsp;</td>
+                    <td class="admin"><%=getTran(request,"diabetes","intermediair",sWebLanguage)%>&nbsp;</td>
                     <td class="admin2">
                         <input <%=setRightClick("ITEM_TYPE_DIABETES_FOLLOWUP_INSULINE_SHOT_EVENING_INTERMEDIAIR")%> type="text" class="text" size="5" maxLength="5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_INSULINE_SHOT_EVENING_INTERMEDIAIR" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_INSULINE_SHOT_EVENING_INTERMEDIAIR" property="value"/>" onBlur="setDecimalLength(this,2);if(isNumber(this)){validateInsuline(this);}"> <%=sInsulineUnit%>
                     </td>
-                    <td class="admin"><%=getTran("diabetes","mixte",sWebLanguage)%>&nbsp;</td>
+                    <td class="admin"><%=getTran(request,"diabetes","mixte",sWebLanguage)%>&nbsp;</td>
                     <td class="admin2">
                         <input <%=setRightClick("ITEM_TYPE_DIABETES_FOLLOWUP_INSULINE_SHOT_EVENING_MIXTE")%> type="text" class="text" size="5" maxLength="5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_INSULINE_SHOT_EVENING_MIXTE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_INSULINE_SHOT_EVENING_MIXTE" property="value"/>" onBlur="setDecimalLength(this,2);if(isNumber(this)){validateInsuline(this);}"> <%=sInsulineUnit%>
                     </td>
@@ -251,45 +251,45 @@
         <td>
             <table width="100%" cellspacing="1" class="list">
                 <tr class="admin">
-                    <td colspan="7"><%=getTran("diabetes","diet",sWebLanguage)%></td>
+                    <td colspan="7"><%=getTran(request,"diabetes","diet",sWebLanguage)%></td>
                 </tr>
                 <tr>
                     <td class="admin" width="100">07h00</td>
-                    <td class="admin" width="100"><%=getTran("diabetes","repas",sWebLanguage)%></td>
+                    <td class="admin" width="100"><%=getTran(request,"diabetes","repas",sWebLanguage)%></td>
                     <td class="admin2">
                         <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" cols="80" rows="2" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_DIET_07" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_DIET_07" property="value"/></textarea>
                     </td>
                 </tr>
                 <tr>
                     <td class="admin">10h00</td>
-                    <td class="admin"><%=getTran("diabetes","collation",sWebLanguage)%></td>
+                    <td class="admin"><%=getTran(request,"diabetes","collation",sWebLanguage)%></td>
                     <td class="admin2">
                         <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" cols="80" rows="2" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_DIET_10" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_DIET_10" property="value"/></textarea>
                     </td>
                 </tr>
                 <tr>
                     <td class="admin">12h00</td>
-                    <td class="admin"><%=getTran("diabetes","repas",sWebLanguage)%></td>
+                    <td class="admin"><%=getTran(request,"diabetes","repas",sWebLanguage)%></td>
                     <td class="admin2">
                         <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" cols="80" rows="2" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_DIET_12" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_DIET_12" property="value"/></textarea>
                     </td>
                 </tr>
                 <tr>
                     <td class="admin">15h00</td>
-                    <td class="admin"><%=getTran("diabetes","collation",sWebLanguage)%></td>
+                    <td class="admin"><%=getTran(request,"diabetes","collation",sWebLanguage)%></td>
                     <td class="admin2">
                         <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" cols="80" rows="2" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_DIET_15" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_DIET_15" property="value"/></textarea>
                     </td>
                 </tr>
                 <tr>
                     <td class="admin">17h00</td>
-                    <td class="admin"><%=getTran("diabetes","repas",sWebLanguage)%></td>
+                    <td class="admin"><%=getTran(request,"diabetes","repas",sWebLanguage)%></td>
                     <td class="admin2">
                         <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" cols="80" rows="2" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_DIET_17" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_DIET_17" property="value"/></textarea>
                     </td>
                 </tr>
                 <tr>
-                    <td class="admin" colspan="2"><%=getTran("openclinic.chuk","other",sWebLanguage)%></td>
+                    <td class="admin" colspan="2"><%=getTran(request,"openclinic.chuk","other",sWebLanguage)%></td>
                     <td class="admin2">
                         <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" cols="80" rows="2" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_DIET_OTHER" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DIABETES_FOLLOWUP_DIET_OTHER" property="value"/></textarea>
                     </td>
@@ -356,7 +356,7 @@
 <%--################################################## GRAPHS ######################################################--%>
 <table class="list" width="100%" cellspacing="0">
     <tr class="admin">
-        <td colspan="3"><%=getTran("web","graphs",sWebLanguage)%></td>
+        <td colspan="3"><%=getTran(request,"web","graphs",sWebLanguage)%></td>
     </tr>
 
     <%-- FROM-DATE-SELECTOR (applicable on the 3 insuline graphs) --%>
@@ -371,7 +371,7 @@
     %>
     <tr>
         <td class="admin" width="210">
-            <%=getTran("Web","begindate",sWebLanguage)%>
+            <%=getTran(request,"Web","begindate",sWebLanguage)%>
         </td>
         <td class="admin2">
             <input type="text" class="text" size="12" maxLength="10" value="<%=sBeginDate%>" name="beginDateInsulineGraphs" onBlur="checkDate(this);">
@@ -443,7 +443,7 @@
         <td class="admin" width="20" align="center" onClick="toggleGraph('glycemyGraph');">
             <img id="img_glycemyGraph" src="<%=sCONTEXTPATH%>/_img/icons/icon_plus.png" class="link">
         </td>
-        <td class="admin" width="99%" onClick="toggleGraph('glycemyGraph');"><%=getTran("web.occup","glycemy",sWebLanguage)%></td>
+        <td class="admin" width="99%" onClick="toggleGraph('glycemyGraph');"><%=getTran(request,"web.occup","glycemy",sWebLanguage)%></td>
         <td class="admin" align="right" width ="1%" style="vertical-align:bottom;">
             <a href="#topp" class="topbutton">&nbsp;</a>
         </td>
@@ -594,7 +594,7 @@
         <td class="admin" width="20" align="center" onClick="toggleGraph('insulineRapidGraph');">
             <img id="img_insulineRapidGraph" src="<%=sCONTEXTPATH%>/_img/icons/icon_plus.png" class="link">
         </td>
-        <td class="admin" width="99%" onClick="toggleGraph('insulineRapidGraph');"><%=getTran("web.occup","insuline",sWebLanguage)%>&nbsp;<%=getTran("web","rapid",sWebLanguage)%></td>
+        <td class="admin" width="99%" onClick="toggleGraph('insulineRapidGraph');"><%=getTran(request,"web.occup","insuline",sWebLanguage)%>&nbsp;<%=getTran(request,"web","rapid",sWebLanguage)%></td>
         <td class="admin" align="right" width ="1%" style="vertical-align:bottom;">
             <a href="#topp" class="topbutton">&nbsp;</a>
         </td>
@@ -690,7 +690,7 @@
                     <%
                 }
                 else{
-                    %><%=getTran("web","nodataavailable",sWebLanguage)%>
+                    %><%=getTran(request,"web","nodataavailable",sWebLanguage)%>
                     <script>
                         document.getElementById("insulineRapidGraph").style.height=30;
                     </script>
@@ -744,7 +744,7 @@
         <td class="admin" width="20" align="center" onClick="toggleGraph('insulineSemiRapidGraph');">
             <img id="img_insulineSemiRapidGraph" src="<%=sCONTEXTPATH%>/_img/icons/icon_plus.png" class="link">
         </td>
-        <td class="admin" width="99%" onClick="toggleGraph('insulineSemiRapidGraph');"><%=getTran("web.occup","insuline",sWebLanguage)%>&nbsp;<%=getTran("web","semirapid",sWebLanguage)%></td>
+        <td class="admin" width="99%" onClick="toggleGraph('insulineSemiRapidGraph');"><%=getTran(request,"web.occup","insuline",sWebLanguage)%>&nbsp;<%=getTran(request,"web","semirapid",sWebLanguage)%></td>
         <td class="admin" align="right" width ="1%" style="vertical-align:bottom;">
             <a href="#topp" class="topbutton">&nbsp;</a>
         </td>
@@ -840,7 +840,7 @@
                     <%
                 }
                 else{
-                    %><%=getTran("web","nodataavailable",sWebLanguage)%>
+                    %><%=getTran(request,"web","nodataavailable",sWebLanguage)%>
                 <script>
                     document.getElementById("insulineSemiRapidGraph").style.height=30;
                 </script>
@@ -894,7 +894,7 @@
         <td class="admin" width="20" align="center" onClick="toggleGraph('insulineSlowGraph');">
             <img id="img_insulineSlowGraph" src="<%=sCONTEXTPATH%>/_img/icons/icon_plus.png" class="link">
         </td>
-        <td class="admin" width="99%" onClick="toggleGraph('insulineSlowGraph');"><%=getTran("web.occup","insuline",sWebLanguage)%>&nbsp;<%=getTran("web","slow",sWebLanguage)%></td>
+        <td class="admin" width="99%" onClick="toggleGraph('insulineSlowGraph');"><%=getTran(request,"web.occup","insuline",sWebLanguage)%>&nbsp;<%=getTran(request,"web","slow",sWebLanguage)%></td>
         <td class="admin" align="right" width ="1%" style="vertical-align:bottom;">
             <a href="#topp" class="topbutton">&nbsp;</a>
         </td>
@@ -990,7 +990,7 @@
                     <%
                 }
                 else{
-                    %><%=getTran("web","nodataavailable",sWebLanguage)%>
+                    %><%=getTran(request,"web","nodataavailable",sWebLanguage)%>
                 <script>
                     document.getElementById("insulineSlowGraph").style.height=30;
                 </script>
@@ -1003,15 +1003,15 @@
 
     <%-- LEGEND ------------------------------------------------------------------------------------------------------%>
     <tr>
-        <td class="admin" colspan="2"><%=getTran("web","legend",sWebLanguage)%>&nbsp;</td>
+        <td class="admin" colspan="2"><%=getTran(request,"web","legend",sWebLanguage)%>&nbsp;</td>
         <td class="admin" align="right" width ="1%" style="vertical-align:bottom;">
             <a href="#topp" class="topbutton">&nbsp;</a>
         </td>
     </tr>
 
-    <tr><td class="admin2" colspan="3">&nbsp;<font color="#0000FF">08h00 <%=getTran("Web","morning",sWebLanguage)%></font>
-        &nbsp;<font color="#00AA00">12h00 <%=getTran("Web","noon",sWebLanguage)%></font>
-        &nbsp;<font color="#FF0000">17h00 <%=getTran("Web","evening",sWebLanguage)%></font></td></tr>
+    <tr><td class="admin2" colspan="3">&nbsp;<font color="#0000FF">08h00 <%=getTran(request,"Web","morning",sWebLanguage)%></font>
+        &nbsp;<font color="#00AA00">12h00 <%=getTran(request,"Web","noon",sWebLanguage)%></font>
+        &nbsp;<font color="#FF0000">17h00 <%=getTran(request,"Web","evening",sWebLanguage)%></font></td></tr>
 </table>
     <%
         }

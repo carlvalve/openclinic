@@ -278,6 +278,18 @@ tr.admin {
  background:url(../../_img/themes/grey/tradmin_bg.gif) repeat-x;
 }
 
+tr.adminng {
+ font-family:arial, sans-serif;
+ font-weight:bolder;
+ text-align:left;
+ text-indent:5px;
+ padding:1px;
+ color:#303030;
+ height:22px;
+ font-size:11px;
+ background-color: lightgrey;
+}
+
 tr.admin a {
  color:#303030;
 }

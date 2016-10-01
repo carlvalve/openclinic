@@ -33,12 +33,12 @@
     <table>
         <tr>
             <td class="admin">
-                <%=getTran("web","from",sWebLanguage)%>&nbsp;</td><td class="admin2"><%=writeDateField("begin","statForm",sBegin,sWebLanguage)%>&nbsp;<%=getTran("web","to",sWebLanguage)%>&nbsp;<%=writeDateField("end","statForm",sEnd,sWebLanguage)%>&nbsp;
+                <%=getTran(request,"web","from",sWebLanguage)%>&nbsp;</td><td class="admin2"><%=writeDateField("begin","statForm",sBegin,sWebLanguage)%>&nbsp;<%=getTran(request,"web","to",sWebLanguage)%>&nbsp;<%=writeDateField("end","statForm",sEnd,sWebLanguage)%>&nbsp;
             </td>
         </tr>
         <tr>
             <td class="admin">
-                <%=getTran("web","diagnosis",sWebLanguage)%>&nbsp;</td><td class="admin2">
+                <%=getTran(request,"web","diagnosis",sWebLanguage)%>&nbsp;</td><td class="admin2">
                 <select name="codetype" class="text">
                     <option value="icpc" <%="icpc".equalsIgnoreCase(request.getParameter("codetype"))?" selected":""%>><%=getTranNoLink("web","icpc",sWebLanguage)%></option>
                     <option value="icd10" <%="icd10".equalsIgnoreCase(request.getParameter("codetype"))?" selected":""%>><%=getTranNoLink("web","icd10",sWebLanguage)%></option>
@@ -49,10 +49,10 @@
             </td>
         </tr>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","situation",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","situation",sWebLanguage)%></td>
             <td class="admin2">
                 <select class="text" name="situation" style="vertical-align:top;">
-                    <%=ScreenHelper.writeSelectUnsorted("encounter.situation","",sWebLanguage)%>
+                    <%=ScreenHelper.writeSelectUnsorted(request,"encounter.situation","",sWebLanguage)%>
                 </select>
             </td>
         </tr>

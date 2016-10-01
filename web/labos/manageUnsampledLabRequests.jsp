@@ -10,7 +10,7 @@
     <table width="100%" cellspacing="1" cellpadding="1" class="menu">
         <%-- SERVICE --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","service",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","service",sWebLanguage)%></td>
             <td class="admin2">
                 <input class='text' TYPE="text" NAME="serviceText" readonly size="49" TITLE="<%=serviceText%>" VALUE="<%=serviceText%>" onkeydown="window.event.keyCode = '';return true;">
                 <%
@@ -76,9 +76,9 @@
     <br>
     <table width="100%" class="list" cellspacing="1" cellpadding="0">
         <tr class="admin">
-            <td><%=getTran("web","date",sWebLanguage)%></td>
-            <td width='20%'><%=getTran("web","patient",sWebLanguage)%></td>
-            <td><%=getTran("web","samples",sWebLanguage)%></td>
+            <td><%=getTran(request,"web","date",sWebLanguage)%></td>
+            <td width='20%'><%=getTran(request,"web","patient",sWebLanguage)%></td>
+            <td><%=getTran(request,"web","samples",sWebLanguage)%></td>
         </tr>
     <%
         Vector unsampledRequests = LabRequest.findUnsampledRequests(serviceId, sWebLanguage);

@@ -56,7 +56,7 @@
                 csvWriter.close();
 
                 reloadSingleton(session);
-                processMsg = getTran("web.translations", "functions_and_services_uppercased", sWebLanguage) + "<br>";
+                processMsg = getTran(request,"web.translations", "functions_and_services_uppercased", sWebLanguage) + "<br>";
             }
             catch (Exception e) {
                 processMsg += "<font color='red'>" + e.getMessage() + "</font><br>";
@@ -70,7 +70,7 @@
             String lcaseLabelLang = MedwanQuery.getInstance().getConfigParam("lowerCompare", "OC_LABEL_LANGUAGE");
 
             Label.UpdateNonServiceFunctionLabels(lcaseLabelType,lcaseLabelID,lcaseLabelLang,lcaseLabelType);
-            processMsg += getTran("web.translations", "TranslationsAreLowercased", sWebLanguage) + "<br>";
+            processMsg += getTran(request,"web.translations", "TranslationsAreLowercased", sWebLanguage) + "<br>";
         }
 
         //*** FUNCTIONS & SERVICES ****************************************************************
@@ -79,7 +79,7 @@
             Label.UpdateLabelTypeByType("function","Function");
             // update Services
             Label.UpdateLabelTypeByType("service","Service");
-            processMsg += getTran("web.translations", "TranslationsAreLowercased", sWebLanguage) + "<br>";
+            processMsg += getTran(request,"web.translations", "TranslationsAreLowercased", sWebLanguage) + "<br>";
         }
     } else {
         // default values for checkboxes
@@ -96,14 +96,14 @@
         <tr>
             <td>
                 <input type="checkbox" name="processDB" id="cbDB" <%=(processDB?"checked":"")%>>
-                <%=getLabel("Web.manage","lowercaselabelsindatabase",sWebLanguage,"cbDB")%>
+                <%=getLabel(request,"Web.manage","lowercaselabelsindatabase",sWebLanguage,"cbDB")%>
             </td>
         </tr>
         <%-- INI checkbox + LABEL LANGUAGE --%>
         <tr>
             <td>
                 <input type="checkbox" name="processINI" id="cbINI" <%=(processINI?"checked":"")%>>
-                <%=getLabel("Web.manage","lowercaselabelsininifiles",sWebLanguage,"cbINI")%>&nbsp;
+                <%=getLabel(request,"Web.manage","lowercaselabelsininifiles",sWebLanguage,"cbINI")%>&nbsp;
                 <select name="FindLabelLang" class="text">
                     <%
                         String tmpLang;
@@ -122,7 +122,7 @@
         <tr>
             <td>
                 <input type="checkbox" name="processFS" id="cbFS" <%=(processFS?"checked":"")%>>
-                <%=getLabel("Web.manage","uppercase_func_serv_in_database",sWebLanguage,"cbFS")%>
+                <%=getLabel(request,"Web.manage","uppercase_func_serv_in_database",sWebLanguage,"cbFS")%>
             </td>
         </tr>
     </table>

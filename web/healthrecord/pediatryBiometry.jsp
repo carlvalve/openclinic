@@ -10,7 +10,7 @@
                                 String sArm, String sFood, String sWebLanguage){
         StringBuffer sTmp = new StringBuffer();
         if(sFood.length() > 0){
-            sFood = getTran("biometry_food",sFood,sWebLanguage);
+            sFood = getTran(null,"biometry_food",sFood,sWebLanguage);
         }
 
         sTmp.append(
@@ -134,7 +134,7 @@
     <tr>
         <td class="admin">
             <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-            <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+            <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
         </td>
         <td class="admin2">
             <input type="text" class="text" size="12" maxLength="10" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" id="trandate" OnBlur="checkDate(this);"> <script>writeTranDate();</script>
@@ -151,12 +151,12 @@
                 <%-- HEADER --%>
                 <tr>
                     <td class="admin" width="40"/>
-                    <td class="admin" width="120"><%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%></td>
-                    <td class="admin" width="80"><%=getTran("Web.Occup","medwan.healthrecord.biometry.weight",sWebLanguage)%></td>
-                    <td class="admin" width="80"><%=getTran("Web.Occup","medwan.healthrecord.biometry.length",sWebLanguage)%></td>
-                    <td class="admin" width="120"><%=getTran("openclinic.chuk","skull",sWebLanguage)%></td>
-                    <td class="admin" width="120"><%=getTran("openclinic.chuk","arm.circumference",sWebLanguage)%></td>
-                    <td class="admin" width="250"><%=getTran("openclinic.chuk","food",sWebLanguage)%></td>
+                    <td class="admin" width="120"><%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%></td>
+                    <td class="admin" width="80"><%=getTran(request,"Web.Occup","medwan.healthrecord.biometry.weight",sWebLanguage)%></td>
+                    <td class="admin" width="80"><%=getTran(request,"Web.Occup","medwan.healthrecord.biometry.length",sWebLanguage)%></td>
+                    <td class="admin" width="120"><%=getTran(request,"openclinic.chuk","skull",sWebLanguage)%></td>
+                    <td class="admin" width="120"><%=getTran(request,"openclinic.chuk","arm.circumference",sWebLanguage)%></td>
+                    <td class="admin" width="250"><%=getTran(request,"openclinic.chuk","food",sWebLanguage)%></td>
                     <td class="admin"/>
                 </tr>
 
@@ -331,7 +331,7 @@
       int minWeight = 0;
       int maxWeight = 160;
 
-      String weightMsg = getTran("Web.Occup","medwan.healthrecord.biometry.weight.validationerror",sWebLanguage);
+      String weightMsg = getTran(request,"Web.Occup","medwan.healthrecord.biometry.weight.validationerror",sWebLanguage);
       weightMsg = weightMsg.replaceAll("#min#",minWeight+"");
       weightMsg = weightMsg.replaceAll("#max#",maxWeight+"");
   %>
@@ -354,7 +354,7 @@
       int minHeight = 0;
       int maxHeight = 220;
 
-      String heightMsg = getTran("Web.Occup","medwan.healthrecord.biometry.height.validationerror",sWebLanguage);
+      String heightMsg = getTran(request,"Web.Occup","medwan.healthrecord.biometry.height.validationerror",sWebLanguage);
       heightMsg = heightMsg.replaceAll("#min#",minHeight+"");
       heightMsg = heightMsg.replaceAll("#max#",maxHeight+"");
   %>

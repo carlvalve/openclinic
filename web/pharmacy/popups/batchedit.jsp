@@ -19,18 +19,18 @@
 <form name='transactionForm' method='post'>
 	<table width='100%'>
 		<tr>
-			<td class='admin'><%=getTran("web","batchnumber",sWebLanguage) %></td>
+			<td class='admin'><%=getTran(request,"web","batchnumber",sWebLanguage) %></td>
 			<td class='admin2'><input type='text' class='text' name='batchnumber' value='<%=batch.getBatchNumber() %>'/></td>
 		</tr>
 		<tr>
-			<td class='admin'><%=getTran("web","expires",sWebLanguage) %></td>
+			<td class='admin'><%=getTran(request,"web","expires",sWebLanguage) %></td>
 			<td class='admin2'>
 				<%=writeDateField("expires","transactionForm",batch.getEnd()==null?"":ScreenHelper.formatDate(batch.getEnd()),sWebLanguage)%>
 			</td>
 		</tr>
 		<tr>
 			<td colspan='2' class='admin2'>
-				<input type='submit' name='submit' value='<%=getTran("web","save",sWebLanguage) %>'/>
+				<input type='submit' name='submit' value='<%=getTran(null,"web","save",sWebLanguage) %>'/>
 			</td>
 		</tr>
 	</table>

@@ -8,19 +8,30 @@
 			<Series>
 				<%
 					//assemble filelist
-				    StringBuffer filelist=new StringBuffer();
-					Connection conn=MedwanQuery.getInstance().getOpenclinicConnection();
-					PreparedStatement ps =conn.prepareStatement("select * from OC_PACS where OC_PACS_STUDYUID=? and OC_PACS_SERIES=? order by OC_PACS_SEQUENCE*1");
-					ps.setString(1, ScreenHelper.checkString(request.getParameter("studyuid")));
-					ps.setString(2, ScreenHelper.checkString(request.getParameter("seriesid")));
-					ResultSet rs =ps.executeQuery();
-					int counter=0;
-					while(rs.next()){
-						out.println("<Instance SOPInstanceUID='"+(counter++)+"' DirectDownloadFile='"+rs.getString("OC_PACS_FILENAME")+"'/>");
+					try{
+					    StringBuffer filelist=new StringBuffer();
+						Connection conn=MedwanQuery.getInstance().getOpenclinicConnection();
+						String sQuery="select * from OC_PACS where OC_PACS_STUDYUID=? and OC_PACS_SERIES=? order by OC_PACS_SEQUENCE";
+						if(ScreenHelper.checkString(request.getParameter("seriesid")).length()==0){
+							sQuery="select * from OC_PACS where OC_PACS_STUDYUID=? order by OC_PACS_SEQUENCE";
+						}
+						PreparedStatement ps =conn.prepareStatement(sQuery);
+						ps.setString(1, ScreenHelper.checkString(request.getParameter("studyuid")));
+						if(ScreenHelper.checkString(request.getParameter("seriesid")).length()>0){
+							ps.setString(2, ScreenHelper.checkString(request.getParameter("seriesid")));
+						}
+						ResultSet rs =ps.executeQuery();
+						int counter=0;
+						while(rs.next()){
+							out.println("<Instance SOPInstanceUID='"+(counter++)+"' DirectDownloadFile='"+rs.getString("OC_PACS_FILENAME")+"'/>");
+						}
+						rs.close();
+						ps.close();
+						conn.close();
 					}
-					rs.close();
-					ps.close();
-					conn.close();
+					catch(Exception e){
+						e.printStackTrace();
+					}
 				%>
 			</Series>
 		</Study>

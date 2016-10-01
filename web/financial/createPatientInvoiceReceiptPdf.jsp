@@ -17,6 +17,18 @@
         sProject = checkString((String)session.getAttribute("activeProjectTitle")).toLowerCase();
         PDFInvoiceGenerator pdfGenerator;
         if(MedwanQuery.getInstance().getConfigInt("enablePatientInvoiceReceiptCPLR",0)==1){
+        	com.itextpdf.text.Image image = null;
+        	
+            // Try to find the image in the config cache
+            String imageSource = MedwanQuery.getInstance().getConfigString("PDFIMG.JavaPOSImage1.gif."+sProject);
+            if(imageSource!=null && imageSource.length()>0){
+                try {
+                	Debug.println("(config cache) imageSource : "+imageSource);
+                }
+                catch (Exception e){
+                	e.printStackTrace();
+                }
+            }
         	pdfGenerator = new PDFPatientInvoiceReceiptGeneratorCPLR(activeUser,invoice.getPatient(),sProject,sPrintLanguage);
         }
         else{

@@ -15,14 +15,14 @@ boolean bHasConflicts=false;
 %>
 <table width='100%'>
 	<tr class='admin'>
-		<td colspan='6'><%=ScreenHelper.getTran("web","reservationlocks.for",sWebLanguage) %>: <%=ScreenHelper.getTran("planningresource", resourceuid, sWebLanguage)%></td>
+		<td colspan='6'><%=ScreenHelper.getTran(request,"web","reservationlocks.for",sWebLanguage) %>: <%=ScreenHelper.getTran(request,"planningresource", resourceuid, sWebLanguage)%></td>
 	</tr>
 	<tr>
 		<td class='admin'/>
-		<td class='admin'><%=ScreenHelper.getTran("web","begin",sWebLanguage) %></td>
-		<td class='admin'><%=ScreenHelper.getTran("web","end",sWebLanguage) %></td>
-		<td class='admin'><%=ScreenHelper.getTran("web","duration",sWebLanguage) %></td>
-		<td class='admin'><%=ScreenHelper.getTran("web","service",sWebLanguage) %></td>
+		<td class='admin'><%=ScreenHelper.getTran(request,"web","begin",sWebLanguage) %></td>
+		<td class='admin'><%=ScreenHelper.getTran(request,"web","end",sWebLanguage) %></td>
+		<td class='admin'><%=ScreenHelper.getTran(request,"web","duration",sWebLanguage) %></td>
+		<td class='admin'><%=ScreenHelper.getTran(request,"web","service",sWebLanguage) %></td>
 	</tr>
 <%
 		Vector reservations = Reservation.getReservationLocksForResourceUid(resourceuid,ScreenHelper.getSQLTime(begin+" 00:00", "dd/MM/yyyy HH:mm"),ScreenHelper.getSQLTime(end+" 23:59", "dd/MM/yyyy HH:mm"));
@@ -36,10 +36,10 @@ boolean bHasConflicts=false;
 					String reservationservice = reservation.split(";")[3];
 					try{
 						if((reservationbegin.before(dbegin) && !reservationend.after(dbegin))||(!reservationbegin.before(dend) && reservationend.after(dend))){
-							out.println("<tr><td class='admin2'><img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.gif' onclick='deleteResourceLock("+reservationlockuid+");'/></td><td class='admin2'>"+new SimpleDateFormat("dd/MM/yyyy HH:mm").format(reservationbegin)+"</td><td class='admin2'>"+new SimpleDateFormat("dd/MM/yyyy HH:mm").format(reservationend)+"</td><td class='admin2'>"+ScreenHelper.getDuration(reservationbegin,reservationend)+"</td><td class='admin2'>"+ScreenHelper.getTran("service",reservationservice,sWebLanguage)+"</td></tr>");
+							out.println("<tr><td class='admin2'><img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.gif' onclick='deleteResourceLock("+reservationlockuid+");'/></td><td class='admin2'>"+new SimpleDateFormat("dd/MM/yyyy HH:mm").format(reservationbegin)+"</td><td class='admin2'>"+new SimpleDateFormat("dd/MM/yyyy HH:mm").format(reservationend)+"</td><td class='admin2'>"+ScreenHelper.getDuration(reservationbegin,reservationend)+"</td><td class='admin2'>"+ScreenHelper.getTran(request,"service",reservationservice,sWebLanguage)+"</td></tr>");
 						}
 						else {
-							out.println("<tr><td class='red'><img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.gif' onclick='deleteResourceLock("+reservationlockuid+");'/></td><td class='red'>"+new SimpleDateFormat("dd/MM/yyyy HH:mm").format(reservationbegin)+"</td><td class='red'>"+new SimpleDateFormat("dd/MM/yyyy HH:mm").format(reservationend)+"</td><td class='red'>"+ScreenHelper.getDuration(reservationbegin,reservationend)+"</td><td class='red'>"+ScreenHelper.getTran("service",reservationservice,sWebLanguage)+"</td></tr>");
+							out.println("<tr><td class='red'><img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.gif' onclick='deleteResourceLock("+reservationlockuid+");'/></td><td class='red'>"+new SimpleDateFormat("dd/MM/yyyy HH:mm").format(reservationbegin)+"</td><td class='red'>"+new SimpleDateFormat("dd/MM/yyyy HH:mm").format(reservationend)+"</td><td class='red'>"+ScreenHelper.getDuration(reservationbegin,reservationend)+"</td><td class='red'>"+ScreenHelper.getTran(request,"service",reservationservice,sWebLanguage)+"</td></tr>");
 							bHasConflicts=true;
 						}
 					}

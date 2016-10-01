@@ -9,17 +9,77 @@
 <div id="patientmedicationsummary"/>
 <table width="100%" class="list" height="100%" cellspacing="0" cellpadding="0">
     <tr class="admin">
-    	<td colspan="1"><%=getTran("curative","medication.status.title",sWebLanguage)%></td>
+    	<td colspan="1"><%=getTran(request,"curative","pharmacy.status.title",sWebLanguage)%></td>
     	<td colspan="3"><span id="interactionswarning">&nbsp;</span></td>
     </tr>
     <tr style="vertical-align:top;">
     <%
+        Vector productionOrders = ProductionOrder.getProductionOrders(Integer.parseInt(activePatient.personid));
+		//--- Open Production Orders ---//
+    	Vector openOrders = new Vector();
+    	for(int n=0;n<productionOrders.size();n++){
+    		ProductionOrder order = (ProductionOrder)productionOrders.elementAt(n);
+    		if(order.getCloseDateTime()==null){
+    			openOrders.add(order);
+    		}
+    	}
+    	if(openOrders.size()>0){
+            %>
+            <td class="admin2" style="border-bottom:1px solid #fff;"><b><%=getTran(request,"curative","medication.openproductionorders",sWebLanguage)%></b></td>
+            <td>
+                <table>
+        <%
+    	}
+		for(int n=0;n<openOrders.size();n++){
+			ProductionOrder productionOrder = (ProductionOrder)openOrders.elementAt(n);
+			String editTag="<td><a href='javascript:openProductionOrder("+productionOrder.getId()+")'><b>"+productionOrder.getProductStock().getProduct().getName()+"</b></a></td>";
+			String noEditTag="<td><b>"+productionOrder.getProductStock().getProduct().getName()+"</b></td>";
+			out.println("<tr><td>"+ScreenHelper.formatDate(productionOrder.getCreateDateTime())+"</td>"+(activeUser.getAccessRight("system.manageproductionorders.select")?editTag:noEditTag)+"</tr>");
+		}
+        if(openOrders.size() > 0){
+		    %>
+		            </table>
+		        </td></tr><tr style="vertical-align:top;">
+		    <%
+        }
+        //--- Closed undelivered orders ---//
+    	Vector undeliveredOrders = new Vector();
+    	for(int n=0;n<productionOrders.size();n++){
+    		ProductionOrder order = (ProductionOrder)productionOrders.elementAt(n);
+    		if(order.getCloseDateTime()!=null){
+    			//Now we check if this order has already been delivered
+    			Vector deliveries = ProductStockOperation.getDeliveries(order.getProductStock().getUid(), activePatient.personid, order.getUpdateDateTime(), null, "OC_OPERATION_OBJECTID", "ASC");
+    			if(deliveries.size()==0){
+    				undeliveredOrders.add(order);
+    			}
+    		}
+    	}
+    	if(undeliveredOrders.size()>0){
+            %>
+            <td class="admin2" style="border-bottom:1px solid #fff;"><b><%=getTran(request,"curative","medication.undeliveredproductionorders",sWebLanguage)%></b></td>
+            <td>
+                <table>
+        <%
+    	}
+		for(int n=0;n<undeliveredOrders.size();n++){
+			ProductionOrder productionOrder = (ProductionOrder)undeliveredOrders.elementAt(n);
+			String deliverTag="<td onmouseover='this.style.cursor=\"hand\"' onmouseout='this.style.cursor=\"default\"'><img onclick='deliverOrder(\""+productionOrder.getProductStock().getUid()+"\",\""+productionOrder.getProductStock().getProduct().getName()+"\");' src='"+sCONTEXTPATH+"/_img/icons/icon_person.png"+"'/></td>";
+			String editTag="<td><a href='javascript:openProductionOrder("+productionOrder.getId()+")'><b>"+productionOrder.getProductStock().getProduct().getName()+"</b></a></td>";
+			String noEditTag="<td><b>"+productionOrder.getProductStock().getProduct().getName()+"</b></td>";
+			out.println("<tr>"+(productionOrder.getProductStock().getServiceStock().isDispensingUser(activeUser.userid)?deliverTag:"")+"<td>"+ScreenHelper.formatDate(productionOrder.getCreateDateTime())+"</td>"+(activeUser.getAccessRight("system.manageproductionorders.select")?editTag:noEditTag)+"</tr>");
+		}
+        if(undeliveredOrders.size() > 0){
+		    %>
+		            </table>
+		        </td></tr><tr style="vertical-align:top;">
+		    <%
+        }
         //--- 1:CHRONIC ---------------------------------------------------------------------------
         String sProductUnit, timeUnitTran, sPrescrRule;
         Vector chronicMedications = ChronicMedication.find(activePatient.personid,"","","","OC_CHRONICMED_BEGIN","ASC");
         if(chronicMedications.size()>0){
             %>
-                <td class="admin2" style="border-bottom:1px solid #fff;"><b><%=getTran("curative","medication.chronic",sWebLanguage)%></b></td>
+                <td class="admin2" style="border-bottom:1px solid #fff;"><b><%=getTran(request,"curative","medication.chronic",sWebLanguage)%></b></td>
                 <td>
                     <table>
             <%
@@ -29,26 +89,26 @@
         for(int n=0; n<chronicMedications.size(); n++){
             chronicMedication = (ChronicMedication)chronicMedications.elementAt(n);
             
-            sPrescrRule = getTran("web.prescriptions","prescriptionrule",sWebLanguage);
+            sPrescrRule = getTran(request,"web.prescriptions","prescriptionrule",sWebLanguage);
             sPrescrRule = sPrescrRule.replaceAll("#unitspertimeunit#",chronicMedication.getUnitsPerTimeUnit()+"");
 
             // productunits
             if(chronicMedication.getUnitsPerTimeUnit()==1){
-                sProductUnit = getTran("product.unit",chronicMedication.getProduct().getUnit(),sWebLanguage);
+                sProductUnit = getTran(request,"product.unit",chronicMedication.getProduct().getUnit(),sWebLanguage);
             }
             else{
-                sProductUnit = getTran("product.unit",chronicMedication.getProduct().getUnit(),sWebLanguage);
+                sProductUnit = getTran(request,"product.unit",chronicMedication.getProduct().getUnit(),sWebLanguage);
             }
             sPrescrRule = sPrescrRule.replaceAll("#productunit#",sProductUnit.toLowerCase());
 
             // timeunits
             if(chronicMedication.getTimeUnitCount()==1){
                 sPrescrRule = sPrescrRule.replaceAll("#timeunitcount#","");
-                timeUnitTran = getTran("prescription.timeunit",chronicMedication.getTimeUnit(),sWebLanguage);
+                timeUnitTran = getTran(request,"prescription.timeunit",chronicMedication.getTimeUnit(),sWebLanguage);
             }
             else{
                 sPrescrRule = sPrescrRule.replaceAll("#timeunitcount#",chronicMedication.getTimeUnitCount()+"");
-                timeUnitTran = getTran("prescription.timeunits",chronicMedication.getTimeUnit(),sWebLanguage);
+                timeUnitTran = getTran(request,"prescription.timeunits",chronicMedication.getTimeUnit(),sWebLanguage);
             }
             
             sPrescrRule = sPrescrRule.replaceAll("#timeunit#",timeUnitTran.toLowerCase());
@@ -70,7 +130,7 @@
         	Timestamp ts = new Timestamp(ScreenHelper.parseDate(ScreenHelper.stdDateFormat.format(new java.util.Date())).getTime()-latencydays);
 
 		    %>
-		        <td class="admin2" nowrap style="border-bottom:1px solid #fff;"><b><%=getTran("curative","medication.prescription",sWebLanguage)%><br>(<%=getTran("web","after",sWebLanguage)+" "+ScreenHelper.stdDateFormat.format(ts) %>)</b></td>
+		        <td class="admin2" nowrap style="border-bottom:1px solid #fff;"><b><%=getTran(request,"curative","medication.prescription",sWebLanguage)%><br>(<%=getTran(request,"web","after",sWebLanguage)+" "+ScreenHelper.stdDateFormat.format(ts) %>)</b></td>
 		        <td>
 		            <table>
 		    <%
@@ -80,37 +140,37 @@
 	            prescription = (Prescription)activePrescriptions.elementAt(n);
 	            
 	            if(prescription!=null && prescription.getProduct()!=null){
-	                sPrescrRule = getTran("web.prescriptions","prescriptionrule",sWebLanguage);
+	                sPrescrRule = getTran(request,"web.prescriptions","prescriptionrule",sWebLanguage);
 	                sPrescrRule = sPrescrRule.replaceAll("#unitspertimeunit#",prescription.getUnitsPerTimeUnit()+"");
 	
 	                // productunits
 	                if(prescription.getUnitsPerTimeUnit()==1){
-	                    sProductUnit = getTran("product.unit",prescription.getProduct().getUnit(),sWebLanguage);
+	                    sProductUnit = getTran(request,"product.unit",prescription.getProduct().getUnit(),sWebLanguage);
 	                }
 	                else{
-	                    sProductUnit = getTran("product.unit",prescription.getProduct().getUnit(),sWebLanguage);
+	                    sProductUnit = getTran(request,"product.unit",prescription.getProduct().getUnit(),sWebLanguage);
 	                }
 	                sPrescrRule = sPrescrRule.replaceAll("#productunit#",sProductUnit.toLowerCase());
 	
 	                // timeunits
 	                if(prescription.getTimeUnitCount()==1){
 	                    sPrescrRule = sPrescrRule.replaceAll("#timeunitcount#","");
-	                    timeUnitTran = getTran("prescription.timeunit",prescription.getTimeUnit(),sWebLanguage);
+	                    timeUnitTran = getTran(request,"prescription.timeunit",prescription.getTimeUnit(),sWebLanguage);
 	                }
 	                else{
 	                    sPrescrRule = sPrescrRule.replaceAll("#timeunitcount#",prescription.getTimeUnitCount()+"");
-	                    timeUnitTran = getTran("prescription.timeunits",prescription.getTimeUnit(),sWebLanguage);
+	                    timeUnitTran = getTran(request,"prescription.timeunits",prescription.getTimeUnit(),sWebLanguage);
 	                }
 	                
 	                sPrescrRule = sPrescrRule.replaceAll("#timeunit#",timeUnitTran.toLowerCase());
 	                if(!prescription.getEnd().before(new java.util.Date())){
 		                out.print("<tr>"+
-		                           "<td title='"+getTran("web","active",sWebLanguage)+"'><b><a href='javascript:showPrescription(\""+prescription.getUid()+"\");'>"+prescription.getProduct().getName()+"</a></b><i> ("+sPrescrRule+")</i></td>"+
+		                           "<td title='"+getTran(null,"web","active",sWebLanguage)+"'><b><a href='javascript:showPrescription(\""+prescription.getUid()+"\");'>"+prescription.getProduct().getName()+"</a></b><i> ("+sPrescrRule+")</i></td>"+
 		                          "</tr>");
 	                }
 	                else {
 		                out.print("<tr>"+
-		                           "<td title='"+getTran("web","inactive",sWebLanguage)+"'><font color='lightgray'><a style='color: gray' href='javascript:showPrescription(\""+prescription.getUid()+"\");'>"+prescription.getProduct().getName()+"</a><i> ("+sPrescrRule+")</i></font></td>"+
+		                           "<td title='"+getTran(null,"web","inactive",sWebLanguage)+"'><font color='lightgray'><a style='color: gray' href='javascript:showPrescription(\""+prescription.getUid()+"\");'>"+prescription.getProduct().getName()+"</a><i> ("+sPrescrRule+")</i></font></td>"+
 		                          "</tr>");
 	                }
 	            }
@@ -132,7 +192,7 @@
     if(paperprescriptions.size() > 0){
         %>
         <tr>
-            <td class="admin2" style="vertical-align:top;border-bottom:1px solid #fff;"><b><%=getTran("curative","medication.paperprescriptions",sWebLanguage)%><br/> &lt;3 <%=getTran("web","months",sWebLanguage).toLowerCase()%></b></td>
+            <td class="admin2" style="vertical-align:top;border-bottom:1px solid #fff;"><b><%=getTran(request,"curative","medication.paperprescriptions",sWebLanguage)%><br/> &lt;3 <%=getTran(request,"web","months",sWebLanguage).toLowerCase()%></b></td>
             <td colspan="3">
                 <table width="100%">
                     <%
@@ -197,7 +257,7 @@
 	if(medicationHistory.size() > 0){
 		%>
         <tr>
-            <td class="admin2" style="vertical-align:top;border-bottom:1px solid #fff;"><b><%=getTran("curative","medication.deliveries",sWebLanguage)%><br/> &lt;<%= MedwanQuery.getInstance().getConfigInt("patientMedicationDeliveryHistoryDuration",14)%> <%=getTran("web","days",sWebLanguage).toLowerCase()%></b></td>
+            <td class="admin2" style="vertical-align:top;border-bottom:1px solid #fff;"><b><%=getTran(request,"curative","product.deliveries",sWebLanguage)%><br/> &lt;<%= MedwanQuery.getInstance().getConfigInt("patientMedicationDeliveryHistoryDuration",14)%> <%=getTran(request,"web","days",sWebLanguage).toLowerCase()%></b></td>
             <td colspan="3">
                 <table width="100%">
                     <% 
@@ -208,6 +268,9 @@
 							String product = "";
 							if(operation.getProductStock()!=null && operation.getProductStock().getProduct()!=null){
 								product = operation.getProductStock().getProduct().getName();
+				                if(checkString(operation.getReceiveComment()).length()>0 || checkString(operation.getComment()).length()>0){
+				                	product+= " ("+(checkString(operation.getReceiveComment())+" "+checkString(operation.getComment())).trim()+")";
+				                }
 							}
 							if(operation.getUnitsChanged()!=0){
 								out.print("<tr><td>"+ScreenHelper.stdDateFormat.format(operation.getDate())+"</td><td>"+operation.getUnitsChanged()+" X "+product+"</td></tr>");		                    
@@ -253,7 +316,7 @@
 	      onSuccess: function(resp){
 	        var interactions =  eval('('+resp.responseText+')');
 	        if(interactions.interactionsexist=='1'){
-	        	document.getElementById("interactionswarning").innerHTML="<a href='javascript:findInteractions();'><img src='<c:url value='/_img/icons/icon_warning.gif'/>' title='<%=getTranNoLink("web","prescription_has_interactions",sWebLanguage)%>'/><%=getTran("web","prescription_has_interactions",sWebLanguage)%>!</a>";
+	        	document.getElementById("interactionswarning").innerHTML="<a href='javascript:findInteractions();'><img src='<c:url value='/_img/icons/icon_warning.gif'/>' title='<%=getTranNoLink("web","prescription_has_interactions",sWebLanguage)%>'/><%=getTranNoLink("web","prescription_has_interactions",sWebLanguage)%>!</a>";
 	        }
 	        else {
 	        	document.getElementById("interactionswarning").innerHTML='&nbsp';
@@ -275,6 +338,14 @@
   
   function findInteractions(){
 	    openPopup("/pharmacy/popups/findRxNormDrugDrugInteractions.jsp&ts=<%=getTs()%>",800,600);
+	}
+
+	function openProductionOrder(uid){
+		window.location.href="<c:url value="main.do?Page=pharmacy/manageProductionOrder.jsp"/>&productionOrderUid="+uid;
+	}
+	
+	function deliverOrder(productstockuid,productname){
+	    openPopup("/pharmacy/medication/popups/deliverMedicationPopup.jsp&reloadParent=1&EditProductStockUid="+productstockuid+"&EditProductName="+productname+"&EditOperationDescr=medicationdelivery.1&ts=<%=getTs()%>",800,450);
 	}
 
 </script>

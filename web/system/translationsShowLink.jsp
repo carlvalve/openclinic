@@ -12,20 +12,20 @@
         if(sButtonShowLink!=null){
             // disable showLink
             MedwanQuery.getInstance().setConfigString("showLinkNoTranslation","off");
-            sText = getTran("Web.Translations","HideLink",sWebLanguage);
+            sText = getTran(request,"Web.Translations","HideLink",sWebLanguage);
         }
         else {
-            sText = getTran("Web.Translations","ShowLink",sWebLanguage);
+            sText = getTran(request,"Web.Translations","ShowLink",sWebLanguage);
         }
     }
     else{
         if(sButtonShowLink.length() > 0){
             // enable showLink
             MedwanQuery.getInstance().setConfigString("showLinkNoTranslation","on");
-            sText = getTran("Web.Translations","ShowLink",sWebLanguage);
+            sText = getTran(request,"Web.Translations","ShowLink",sWebLanguage);
         }
         else{
-            sText = getTran("Web.Translations","HideLink",sWebLanguage);
+            sText = getTran(request,"Web.Translations","HideLink",sWebLanguage);
         }
     }
 %>

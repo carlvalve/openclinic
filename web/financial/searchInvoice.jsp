@@ -35,36 +35,36 @@
     <table class="menu" width="100%" cellspacing="1" cellpadding="0">
          <%-- DATES --%>
          <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","date",sWebLanguage)%></td>
-            <td class="admin2" width="70"><%=getTran("Web","Begin",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","date",sWebLanguage)%></td>
+            <td class="admin2" width="70"><%=getTran(request,"Web","Begin",sWebLanguage)%></td>
             <td class="admin2" width="130"><%=writeDateField("FindDateBegin","FindForm",sFindDateBegin,sWebLanguage)%></td>
-            <td class="admin2" width="110"><%=getTran("Web","End",sWebLanguage)%></td>
+            <td class="admin2" width="110"><%=getTran(request,"Web","End",sWebLanguage)%></td>
             <td class="admin2"><%=writeDateField("FindDateEnd","FindForm",sFindDateEnd,sWebLanguage)%></td>
         </tr>
         
         <%-- AMOUNT --%>
         <tr>
-            <td class="admin"><%=getTran("Web","amount",sWebLanguage)%></td>
-            <td class="admin2"><%=getTran("Web","min",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web","amount",sWebLanguage)%></td>
+            <td class="admin2"><%=getTran(request,"Web","min",sWebLanguage)%></td>
             <td class="admin2"><input type="text" class="text" size="10" name="FindAmountMin" id="FindAmountMin" value="<%=sFindAmountMin%>" onblur="isNumber(this)"> <%=MedwanQuery.getInstance().getConfigParam("currency", "€")%></td>
-            <td class="admin2"><%=getTran("Web","max",sWebLanguage)%></td>
+            <td class="admin2"><%=getTran(request,"Web","max",sWebLanguage)%></td>
             <td class="admin2"><input type="text" class="text" size="10" name="FindAmountMax" id="FindAmountMax" value="<%=sFindAmountMax%>" onblur="isNumber(this)"> <%=MedwanQuery.getInstance().getConfigParam("currency", "€")%></td>
         </tr>
         
         <%-- INVOICE ID --%>
         <tr>
-            <td class="admin"><%=getTran("web.finance","invoiceid",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web.finance","invoiceid",sWebLanguage)%></td>
             <td class="admin2" colspan="4"><input type="text" class="text" size="10" name="FindInvoiceId" id="FindInvoiceId" value="<%=sFindInvoiceId%>" onblur="isNumber(this)"></td>
         </tr>
         
         <%-- TYPE --%>
         <tr>
-            <td class="admin"><%=getTran("web.finance","invoicetype",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web.finance","invoicetype",sWebLanguage)%></td>
             <td class="admin2" colspan="4">
-                <input type="radio" onDblClick="uncheckRadio(this);" id="FindType1" name="FindInvoiceType" value="patient" <%if(sFindInvoiceType.equalsIgnoreCase("patient")){out.print("checked");}%>><%=getLabel("web","patient",sWebLanguage,"FindType1")%>
-                <input type="radio" onDblClick="uncheckRadio(this);" id="FindType2" name="FindInvoiceType" value="insurar" <%if(sFindInvoiceType.equalsIgnoreCase("insurar") || sFindInvoiceType.equalsIgnoreCase("")){out.print("checked");}%>><%=getLabel("web","insurar",sWebLanguage,"FindType2")%>
-                <input type="radio" onDblClick="uncheckRadio(this);" id="FindType3" name="FindInvoiceType" value="extrainsurar" <%if(sFindInvoiceType.equalsIgnoreCase("extrainsurar")){out.print("checked");}%>><%=getLabel("web","extrainsurar",sWebLanguage,"FindType3")%>
-                <input type="radio" onDblClick="uncheckRadio(this);" id="FindType4" name="FindInvoiceType" value="extrainsurar2" <%if(sFindInvoiceType.equalsIgnoreCase("extrainsurar2")){out.print("checked");}%>><%=getLabel("web","complementarycoverage2",sWebLanguage,"FindType4")%>
+                <input type="radio" onDblClick="uncheckRadio(this);" id="FindType1" name="FindInvoiceType" value="patient" <%if(sFindInvoiceType.equalsIgnoreCase("patient")){out.print("checked");}%>><%=getLabel(request,"web","patient",sWebLanguage,"FindType1")%>
+                <input type="radio" onDblClick="uncheckRadio(this);" id="FindType2" name="FindInvoiceType" value="insurar" <%if(sFindInvoiceType.equalsIgnoreCase("insurar") || sFindInvoiceType.equalsIgnoreCase("")){out.print("checked");}%>><%=getLabel(request,"web","insurar",sWebLanguage,"FindType2")%>
+                <input type="radio" onDblClick="uncheckRadio(this);" id="FindType3" name="FindInvoiceType" value="extrainsurar" <%if(sFindInvoiceType.equalsIgnoreCase("extrainsurar")){out.print("checked");}%>><%=getLabel(request,"web","extrainsurar",sWebLanguage,"FindType3")%>
+                <input type="radio" onDblClick="uncheckRadio(this);" id="FindType4" name="FindInvoiceType" value="extrainsurar2" <%if(sFindInvoiceType.equalsIgnoreCase("extrainsurar2")){out.print("checked");}%>><%=getLabel(request,"web","complementarycoverage2",sWebLanguage,"FindType4")%>
             </td>
         </tr>
         
@@ -141,13 +141,13 @@
         <table width="100%" cellspacing="0" cellpadding="0" class="sortable" id="searchresults">
             <%-- header --%>
             <tr class="admin">
-                <td width="90"><%=getTran("web.finance","invoiceid",sWebLanguage)%></td>
-                <td width="110"><SORTTYPE:DATE><%=getTran("web","date",sWebLanguage)%></SORTTYPE:DATE></td>
-                <td width="200"><%=getTran("web","destination",sWebLanguage)%></td>
-                <td width="150"><%=getTran("web.finance","invoicetype",sWebLanguage)%></td>
-                <td width="90"><%=getTran("Web","amount",sWebLanguage)+" "+MedwanQuery.getInstance().getConfigParam("currency","€")%></td>
-                <td width="80"><%=getTran("Web.finance","payed",sWebLanguage)%></td>
-                <td width="*"><%=getTran("web.finance","patientinvoice.status",sWebLanguage)%></td>
+                <td width="90"><%=getTran(request,"web.finance","invoiceid",sWebLanguage)%></td>
+                <td width="110"><SORTTYPE:DATE><%=getTran(request,"web","date",sWebLanguage)%></SORTTYPE:DATE></td>
+                <td width="200"><%=getTran(request,"web","destination",sWebLanguage)%></td>
+                <td width="150"><%=getTran(request,"web.finance","invoicetype",sWebLanguage)%></td>
+                <td width="90"><%=getTran(request,"Web","amount",sWebLanguage)+" "+MedwanQuery.getInstance().getConfigParam("currency","€")%></td>
+                <td width="80"><%=getTran(request,"Web.finance","payed",sWebLanguage)%></td>
+                <td width="*"><%=getTran(request,"web.finance","patientinvoice.status",sWebLanguage)%></td>
             </tr>
             
             <tbody class="hand">
@@ -172,7 +172,7 @@
 	                        sRowDestination = patientInvoice.getPatient().lastname+", "+patientInvoice.getPatient().firstname;
 	                        sRowAmount = new DecimalFormat("#0.00").format(patientInvoice.getBalance());
 	                        sRowStatus = patientInvoice.getStatus();
-	                        sRowType = getTran("web","patient",sWebLanguage);
+	                        sRowType = getTran(request,"web","patient",sWebLanguage);
 	                    }
 	                    else if(object.getClass().getName().equals("be.openclinic.finance.InsurarInvoice")){
 	                        insurarInvoice = (InsurarInvoice) object;
@@ -181,7 +181,7 @@
 	                        sRowDestination = insurarInvoice.getInsurar().getName();
 	                        sRowAmount = new DecimalFormat("#0.00").format(insurarInvoice.getBalance());
 	                        sRowStatus = insurarInvoice.getStatus();
-	                        sRowType = getTran("web","insurar",sWebLanguage);
+	                        sRowType = getTran(request,"web","insurar",sWebLanguage);
 	                    }
 	                    else if(object.getClass().getName().equals("be.openclinic.finance.ExtraInsurarInvoice")){
 	                        extrainsurarInvoice = (ExtraInsurarInvoice) object;
@@ -190,7 +190,7 @@
 	                        sRowDestination = extrainsurarInvoice.getInsurar().getName();
 	                        sRowAmount = new DecimalFormat("#0.00").format(extrainsurarInvoice.getBalance());
 	                        sRowStatus = extrainsurarInvoice.getStatus();
-	                        sRowType = getTran("web","extrainsurar",sWebLanguage);
+	                        sRowType = getTran(request,"web","extrainsurar",sWebLanguage);
 	                    }
 	                    else if(object.getClass().getName().equals("be.openclinic.finance.ExtraInsurarInvoice2")){
 	                        extrainsurarInvoice2 = (ExtraInsurarInvoice2) object;
@@ -199,7 +199,7 @@
 	                        sRowDestination = extrainsurarInvoice2.getInsurar().getName();
 	                        sRowAmount = new DecimalFormat("#0.00").format(extrainsurarInvoice2.getBalance());
 	                        sRowStatus = extrainsurarInvoice2.getStatus();
-	                        sRowType = getTran("web","complementarycoverage2",sWebLanguage);
+	                        sRowType = getTran(request,"web","complementarycoverage2",sWebLanguage);
 	                    }
 	
 	                    if(sRowStatus.equalsIgnoreCase("closed")||sRowStatus.equalsIgnoreCase("canceled")){
@@ -222,7 +222,7 @@
                         <td><%=sRowType%></td>
                         <td><%=sRowAmount%></td>
                         <td><%=sRowPayed%></td>
-                        <td><%=getTran("finance.patientinvoice.status",sRowStatus,sWebLanguage)%></td>
+                        <td><%=getTran(request,"finance.patientinvoice.status",sRowStatus,sWebLanguage)%></td>
                     </tr>
                     <%
                  }
@@ -232,10 +232,10 @@
         <%
         
         if(hInvoices.size() > 0){
-            %><%=hInvoices.size()%> <%=getTran("web","recordsFound",sWebLanguage)%><% 
+            %><%=hInvoices.size()%> <%=getTran(request,"web","recordsFound",sWebLanguage)%><% 
         }
         else{
-        	%><%=getTran("web","noRecordsFound",sWebLanguage)%><%
+        	%><%=getTran(request,"web","noRecordsFound",sWebLanguage)%><%
         }
     }
 %>
@@ -251,7 +251,7 @@
       FindForm.submit();
     }
     else{
-                window.showModalDialog?alertDialog("web.manage","dataMissing"):alertDialogDirectText('<%=getTran("web.manage","dataMissing",sWebLanguage)%>');
+                window.showModalDialog?alertDialog("web.manage","dataMissing"):alertDialogDirectText('<%=getTran(null,"web.manage","dataMissing",sWebLanguage)%>');
     }
   }
 

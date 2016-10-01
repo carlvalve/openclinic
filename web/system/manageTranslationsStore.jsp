@@ -43,7 +43,7 @@
     
     boolean invalidCharFound;
     boolean bExists = false;
-    String msg = getTran("web.manage", "labelsaved", sWebLanguage);
+    String msg = getTran(request,"web.manage", "labelsaved", sWebLanguage);
 
     //*** SAVE ************************************************************************************
     if(sAction.equals("Save")){
@@ -55,7 +55,7 @@
         for(int i = 0; i < invalidLabelKeyChars.length(); i++){
             if((editLabelType+editLabelID).indexOf(invalidLabelKeyChars.charAt(i)) > -1){
                 invalidCharFound = true;
-                msg = getTran("Web.manage","invalidcharsfound",sWebLanguage)+" '"+invalidLabelKeyChars+"'";
+                msg = getTran(request,"Web.manage","invalidcharsfound",sWebLanguage)+" '"+invalidLabelKeyChars+"'";
                 break;
             }
         }
@@ -95,7 +95,7 @@
             }
             reloadSingleton(session);
 
-            msg = "'"+editLabelType+"$"+editLabelID+"$"+checkString((String)hTranslations.get(sWebLanguage.toUpperCase()))+"' "+getTran("Web","saved",sWebLanguage);
+            msg = "'"+editLabelType+"$"+editLabelID+"$"+checkString((String)hTranslations.get(sWebLanguage.toUpperCase()))+"' "+getTran(request,"Web","saved",sWebLanguage);
         }
     }
 
@@ -112,7 +112,7 @@
         for(int i = 0; i < invalidLabelKeyChars.length(); i++){
             if((editLabelType+editLabelID).indexOf(invalidLabelKeyChars.charAt(i)) > -1){
                 invalidCharFound = true;
-                msg = getTran("Web.manage","invalidcharsfound",sWebLanguage)+" '"+invalidLabelKeyChars+"'";
+                msg = getTran(request,"Web.manage","invalidcharsfound",sWebLanguage)+" '"+invalidLabelKeyChars+"'";
                 break;
             }
         }
@@ -140,11 +140,11 @@
                     // INSERT
                     if(!labelExists){
                         label.saveToDB();
-                        msg = "'"+editLabelType+"$"+editLabelID+"$"+checkString((String)hTranslations.get(sWebLanguage.toUpperCase()))+"' "+getTran("Web", "added", sWebLanguage);
+                        msg = "'"+editLabelType+"$"+editLabelID+"$"+checkString((String)hTranslations.get(sWebLanguage.toUpperCase()))+"' "+getTran(request,"Web", "added", sWebLanguage);
                     }
                     else{
                         // a label with the given ids allready exists
-                        msg = getTran("Web.Manage","labelExists",sWebLanguage);
+                        msg = getTran(request,"Web.Manage","labelExists",sWebLanguage);
                     }
                 }
             }
@@ -161,7 +161,7 @@
             tmpLang = tokenizer.nextToken();
             Label.delete(editLabelType,editLabelID,tmpLang);
         }
-        msg = "'"+editLabelType+"$"+editLabelID+"$"+checkString((String)hTranslations.get(sWebLanguage.toUpperCase()))+"' "+getTran("Web","deleted", sWebLanguage);
+        msg = "'"+editLabelType+"$"+editLabelID+"$"+checkString((String)hTranslations.get(sWebLanguage.toUpperCase()))+"' "+getTran(request,"Web","deleted", sWebLanguage);
     }
 
     out.print(HTMLEntities.htmlentities(msg));

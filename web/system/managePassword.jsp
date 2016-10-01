@@ -60,28 +60,28 @@
     <table width="100%" cellspacing="1" cellpadding="0" class="list">
         <%-- Availability --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web.Manage.Password","availability",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web.Manage.Password","availability",sWebLanguage)%></td>
             <td class="admin2">
-                <input type="text" class="text" size="5" maxLength="4" name="EditAvailability" value="<%=MedwanQuery.getInstance().getConfigString("PasswordAvailability")%>" onblur="isNumber(this)"> <%=getTran("Web","days",sWebLanguage)%>
+                <input type="text" class="text" size="5" maxLength="4" name="EditAvailability" value="<%=MedwanQuery.getInstance().getConfigString("PasswordAvailability")%>" onblur="isNumber(this)"> <%=getTran(request,"Web","days",sWebLanguage)%>
             </td>
         </tr>
         <%-- NoticeTime --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web.Manage.Password","noticeTime",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web.Manage.Password","noticeTime",sWebLanguage)%></td>
             <td class="admin2">
-                <input type="text" class="text" size="5" maxLength="4" name="EditNoticeTime" value="<%=MedwanQuery.getInstance().getConfigString("PasswordNoticeTime")%>" onblur="isNumber(this);isLessThanAvailability(this)"> <%=getTran("Web","days",sWebLanguage)%>
+                <input type="text" class="text" size="5" maxLength="4" name="EditNoticeTime" value="<%=MedwanQuery.getInstance().getConfigString("PasswordNoticeTime")%>" onblur="isNumber(this);isLessThanAvailability(this)"> <%=getTran(request,"Web","days",sWebLanguage)%>
             </td>
         </tr>
         <%-- MinimumCharacters --%>
         <tr>
-            <td class="admin"><%=getTran("Web.Manage.Password","minimumCharacters",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web.Manage.Password","minimumCharacters",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" size="5" maxLength="4" name="EditMinimumCharacters" value="<%=MedwanQuery.getInstance().getConfigString("PasswordMinimumCharacters")%>" onblur="isNumber(this)">
             </td>
         </tr>
         <%-- NotReusablePasswords --%>
         <tr>
-            <td class="admin"><%=getTran("Web.Manage.Password","notReusablePasswords",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web.Manage.Password","notReusablePasswords",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" size="5" maxLength="4" name="EditNotReusablePasswords" value="<%=MedwanQuery.getInstance().getConfigString("PasswordNotReusablePasswords")%>" onblur="isNumber(this)">
             </td>
@@ -89,35 +89,35 @@
         
         <%-- ObligedLetters --%>
         <tr>
-            <td class="admin"><%=getTran("Web.Manage.Password","obligedLetters",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web.Manage.Password","obligedLetters",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="checkbox" name="EditObligedLetters"<%=(MedwanQuery.getInstance().getConfigString("PasswordObligedLetters").equals("on")?" checked":"")%>>
             </td>
         </tr>
         <%-- ObligedUppercase --%>
         <tr>
-            <td class="admin"><%=getTran("Web.Manage.Password","obligedUppercase",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web.Manage.Password","obligedUppercase",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="checkbox" name="EditObligedUppercase"<%=(MedwanQuery.getInstance().getConfigString("PasswordObligedUppercase").equals("on")?" checked":"")%>>
             </td>
         </tr>
         <%-- ObligedLowerCase --%>
         <tr>
-            <td class="admin"><%=getTran("Web.Manage.Password","obligedLowerCase",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web.Manage.Password","obligedLowerCase",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="checkbox" name="EditObligedLowerCase"<%=(MedwanQuery.getInstance().getConfigString("PasswordObligedLowerCase").equals("on")?" checked":"")%>>
             </td>
         </tr>
         <%-- ObligedNumbers --%>
         <tr>
-            <td class="admin"><%=getTran("Web.Manage.Password","obligedNumbers",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web.Manage.Password","obligedNumbers",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="checkbox" name="EditObligedNumbers"<%=(MedwanQuery.getInstance().getConfigString("PasswordObligedNumbers").equals("on")?" checked":"")%>>
             </td>
         </tr>
         <%-- ObligedAlfanumerics --%>
         <tr>
-            <td class="admin"><%=getTran("Web.Manage.Password","obligedAlfanumerics",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web.Manage.Password","obligedAlfanumerics",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="checkbox" name="EditObligedAlfanumerics"<%=(MedwanQuery.getInstance().getConfigString("PasswordObligedAlfanumerics").equals("on")?" checked":"")%>>
             </td>

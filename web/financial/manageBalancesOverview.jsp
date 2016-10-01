@@ -47,17 +47,17 @@
                 if(sType.equalsIgnoreCase("person")){
                     sName = ScreenHelper.getFullUserName(or.getObjectUid());
                 }else if(sType.equalsIgnoreCase("service")){
-                    sName = getTran("Service",or.getObjectUid(),sWebLanguage);
+                    sName = getTran(request,"Service",or.getObjectUid(),sWebLanguage);
                 }
             }
         %>
         <tr>
-            <td><%=getTran("web","owner",sWebLanguage)%></td>
+            <td><%=getTran(request,"web","owner",sWebLanguage)%></td>
             <td><%=sName%></td>
         </tr>
         <%-- balance --%>
         <tr>
-            <td><%=getTran("web","balance",sWebLanguage)%></td>
+            <td><%=getTran(request,"web","balance",sWebLanguage)%></td>
             <td><%=checkString(Double.toString(balance.getBalance()))%></td>
         </tr>
         <%
@@ -68,22 +68,22 @@
         %>
         <%-- date --%>
         <tr>
-            <td width="<%=sTDAdminWidth%>"><%=getTran("web","date",sWebLanguage)%></td>
+            <td width="<%=sTDAdminWidth%>"><%=getTran(request,"web","date",sWebLanguage)%></td>
             <td><%=sDate%></td>
         </tr>
         <%-- max balance --%>
         <tr>
-            <td><%=getTran("web","maxbalance",sWebLanguage)%></td>
+            <td><%=getTran(request,"web","maxbalance",sWebLanguage)%></td>
             <td><%=balance.getMaximumBalance()%></td>
         </tr>
         <%-- min balance --%>
         <tr>
-            <td><%=getTran("web","minbalance",sWebLanguage)%></td>
+            <td><%=getTran(request,"web","minbalance",sWebLanguage)%></td>
             <td><%=balance.getMinimumBalance()%></td>
         </tr>
         <%-- remarks --%>
         <tr>
-            <td><%=getTran("web","comment",sWebLanguage)%></td>
+            <td><%=getTran(request,"web","comment",sWebLanguage)%></td>
             <td><%=checkString(balance.getRemarks())%></td>
         </tr>
     </table>
@@ -198,10 +198,10 @@
 </p>
 <table class='list'  cellspacing="0" cellpadding="0" width='100%'>
     <tr class='admin'>
-        <td width='<%=sTDAdminWidth%>'><%=getTran("web","type",sWebLanguage)%></td>
-        <td><%=getTran("web","date",sWebLanguage)%></td>
-        <td><%=getTran("web","description",sWebLanguage)%></td>
-        <td><%=getTran("web","amount",sWebLanguage)%></td>
+        <td width='<%=sTDAdminWidth%>'><%=getTran(request,"web","type",sWebLanguage)%></td>
+        <td><%=getTran(request,"web","date",sWebLanguage)%></td>
+        <td><%=getTran(request,"web","description",sWebLanguage)%></td>
+        <td><%=getTran(request,"web","amount",sWebLanguage)%></td>
     </tr>
     <%=sbResults%>
 </table>

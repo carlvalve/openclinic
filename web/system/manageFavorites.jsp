@@ -175,10 +175,10 @@
     <%-- SELECT FAVORITE ------------------------------------------------------------------------%>
     <table width="100%" cellspacing="1" cellpadding="0" class="list">
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","Favorite",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","Favorite",sWebLanguage)%></td>
             <td class="admin2">
                 <select name="EditOldFavoriteId" class="text" onchange="doShow();">
-                    <option value="-1"><%=getTran("Web","new",sWebLanguage)%></option>
+                    <option value="-1"><%=getTran(request,"Web","new",sWebLanguage)%></option>
                     <%=sSavedFavorites%>
                 </select>
             </td>
@@ -197,7 +197,7 @@
 
                 %>
                     <tr>
-                        <td class="admin" width="<%=sTDAdminWidth%>"> <%=getTran("Web","Description",sWebLanguage)%> <%=tmpLang%> *</td>
+                        <td class="admin" width="<%=sTDAdminWidth%>"> <%=getTran(request,"Web","Description",sWebLanguage)%> <%=tmpLang%> *</td>
                         <td class="admin2">
                             <input type="text" class="text" name="EditLabelValue<%=tmpLang%>" value="<%=label.value%>" size="80">
                         </td>
@@ -235,7 +235,7 @@
         <%=ScreenHelper.setFormButtonsStop()%>
     </table>
     <%-- indication of obligated fields --%>
-    <%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%>
+    <%=getTran(request,"Web","colored_fields_are_obligate",sWebLanguage)%>
 </form>
 <script>
   <%-- DO DELETE --%>

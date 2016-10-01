@@ -27,9 +27,9 @@
 	ps.close();
 %>
 	<table width="100%">
-		<tr class='admin'><td colspan='2'><%=getTran("cnar","statistics.case.management.title1.bis",sWebLanguage)%></td></tr>
+		<tr class='admin'><td colspan='2'><%=getTran(request,"cnar","statistics.case.management.title1.bis",sWebLanguage)%></td></tr>
 		<tr>
-			<td class='admin'><%= getTran("web","total",sWebLanguage)%></td>
+			<td class='admin'><%= getTran(request,"web","total",sWebLanguage)%></td>
 			<td class='admin'><%= total %></td>
 		</tr>
 	</table>
@@ -89,15 +89,15 @@ ps.close();
 %>
 	<br/><hr/><br/>
 <table width="100%">
-	<tr class='admin'><td colspan='5'><%=getTran("cnar","statistics.case.management.title2.bis",sWebLanguage)%></td></tr>
+	<tr class='admin'><td colspan='5'><%=getTran(request,"cnar","statistics.case.management.title2.bis",sWebLanguage)%></td></tr>
 	<tr class='admin'>
-		<td rowspan="2"><%=getTran("cnar","statistics.agecategory",sWebLanguage)%></td>
-		<td colspan="4"><%=getTran("web","total",sWebLanguage)%></td>
+		<td rowspan="2"><%=getTran(request,"cnar","statistics.agecategory",sWebLanguage)%></td>
+		<td colspan="4"><%=getTran(request,"web","total",sWebLanguage)%></td>
 	</tr>
 	<tr class='admin'>
-		<td><%=getTran("web","male",sWebLanguage)%></td>
+		<td><%=getTran(request,"web","male",sWebLanguage)%></td>
 		<td>%</td>
-		<td><%=getTran("web","female",sWebLanguage)%></td>
+		<td><%=getTran(request,"web","female",sWebLanguage)%></td>
 		<td>%</td>
 	</tr>
 	<%
@@ -112,7 +112,7 @@ ps.close();
 		int female = f0+f5+f15;
 	%>
 	<tr>
-		<td class='admin' >0 - 5  (<%=getTran("web","firstcontact.at.age.of",sWebLanguage) %> <%=minagescount==0?"?":new DecimalFormat("0.00").format(minages/(minagescount*365)) %> <%=getTran("web","cnar.year",sWebLanguage) %>)</td>
+		<td class='admin' >0 - 5  (<%=getTran(request,"web","firstcontact.at.age.of",sWebLanguage) %> <%=minagescount==0?"?":new DecimalFormat("0.00").format(minages/(minagescount*365)) %> <%=getTran(request,"web","cnar.year",sWebLanguage) %>)</td>
 		<td class='admin2'><%=m0 %></td>
 		<td class='admin2'><%=total>0?m0*100/(total):0 %>%</td>
 		<td class='admin2'><%=f0 %></td>
@@ -133,7 +133,7 @@ ps.close();
 		<td class='admin2'><%=total>0?f15*100/(total):0 %>%</td>
 	</tr>
 	<tr class='admin'>
-		<td><%=getTran("web","total",sWebLanguage)%></td>
+		<td><%=getTran(request,"web","total",sWebLanguage)%></td>
 		<td><%=male %></td>
 		<td><%=total>0?male*100/(total):0 %>%</td>
 		<td><%=female %></td>

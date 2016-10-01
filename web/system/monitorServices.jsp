@@ -12,7 +12,7 @@
     <table width="100%" class="menu" cellspacing="1" onkeydown="if(enterEvent(event,13)){transactionForm.submit();}">
 <%-- default context (departement) --%>
         <tr>
-            <td width="<%=sTDAdminWidth%>"><%=getTran("Web.UserProfile","DefaultContext",sWebLanguage)%></td>
+            <td width="<%=sTDAdminWidth%>"><%=getTran(request,"Web.UserProfile","DefaultContext",sWebLanguage)%></td>
             <td>
                 <select name='FindContext' class='text'>
                     <%
@@ -27,7 +27,7 @@
 
                             while (elements.hasNext()){
                                 element = (Element)elements.next();
-                                hServices.put(getTran("Web.Occup",element.attribute("id").getValue(),sWebLanguage),element.attribute("id").getValue());
+                                hServices.put(getTran(request,"Web.Occup",element.attribute("id").getValue(),sWebLanguage),element.attribute("id").getValue());
                             }
                             Vector keys = new Vector(hServices.keySet());
                             Collections.sort(keys);
@@ -44,11 +44,11 @@
             </td>
         </tr>
         <tr>
-            <td><%=getTran("Web","Begin",sWebLanguage)%></td>
+            <td><%=getTran(request,"Web","Begin",sWebLanguage)%></td>
             <td><%=writeDateField("FindBegin","transactionForm",sFindBegin,sWebLanguage)%></td>
         </tr>
         <tr>
-            <td><%=getTran("Web","End",sWebLanguage)%></td>
+            <td><%=getTran(request,"Web","End",sWebLanguage)%></td>
             <td><%=writeDateField("FindEnd","transactionForm",sFindEnd,sWebLanguage)%></td>
         </tr>
         <tr>
@@ -114,10 +114,10 @@
             }
         %>
         <table class="list" cellspacing="0" width="100%">
-            <tr><td class="titleadmin" colspan="3"><%=getTran("Web.Manage","MonitorAccess",sWebLanguage)%></td></tr>
+            <tr><td class="titleadmin" colspan="3"><%=getTran(request,"Web.Manage","MonitorAccess",sWebLanguage)%></td></tr>
             <tr class="admin">
-                <td width="100"><%=getTran("Web","date",sWebLanguage)%></td>
-                <td width="100" align="right"><%=getTran("Web","total",sWebLanguage)%></td>
+                <td width="100"><%=getTran(request,"Web","date",sWebLanguage)%></td>
+                <td width="100" align="right"><%=getTran(request,"Web","total",sWebLanguage)%></td>
                 <td/>
             </tr>
             <%
@@ -142,7 +142,7 @@
                 }
             %>
         </table>
-        <%=getTran("Web.Occup","total-number",sWebLanguage)%>: <%=iCounter%>
+        <%=getTran(request,"Web.Occup","total-number",sWebLanguage)%>: <%=iCounter%>
         <%
         iCounter = 0;
         hAccess = new Hashtable();
@@ -166,10 +166,10 @@
         %>
         <br/><br/>
         <table class="list" cellspacing="0" width="100%">
-            <tr><td class="titleadmin" colspan="3"><%=getTran("Web.Manage","updatedpatients",sWebLanguage)%></td></tr>
+            <tr><td class="titleadmin" colspan="3"><%=getTran(request,"Web.Manage","updatedpatients",sWebLanguage)%></td></tr>
             <tr class="admin">
-                <td width="100"><%=getTran("Web","date",sWebLanguage)%></td>
-                <td width="100" align="right"><%=getTran("Web","total",sWebLanguage)%></td>
+                <td width="100"><%=getTran(request,"Web","date",sWebLanguage)%></td>
+                <td width="100" align="right"><%=getTran(request,"Web","total",sWebLanguage)%></td>
                 <td/>
             </tr>
             <%
@@ -193,7 +193,7 @@
                 }
             %>
         </table>
-        <%=getTran("Web.Occup","total-number",sWebLanguage)%>: <%=iCounter%>
+        <%=getTran(request,"Web.Occup","total-number",sWebLanguage)%>: <%=iCounter%>
         <%
             iCounter = 0;
             hAccess = new Hashtable();
@@ -215,10 +215,10 @@
         %>
         <br/><br/>
         <table class="list" cellspacing="0" width="100%">
-            <tr><td class="titleadmin" colspan="3"><%=getTran("Web.Manage","updatedconsultations",sWebLanguage)%></td></tr>
+            <tr><td class="titleadmin" colspan="3"><%=getTran(request,"Web.Manage","updatedconsultations",sWebLanguage)%></td></tr>
             <tr class="admin">
-                <td width="100"><%=getTran("Web","date",sWebLanguage)%></td>
-                <td width="100" align="right"><%=getTran("Web","total",sWebLanguage)%></td>
+                <td width="100"><%=getTran(request,"Web","date",sWebLanguage)%></td>
+                <td width="100" align="right"><%=getTran(request,"Web","total",sWebLanguage)%></td>
                 <td/>
             </tr>
             <%
@@ -242,7 +242,7 @@
                 }
             %>
         </table>
-        <%=getTran("Web.Occup","total-number",sWebLanguage)%>: <%=iCounter%>
+        <%=getTran(request,"Web.Occup","total-number",sWebLanguage)%>: <%=iCounter%>
 <%
     }
 %>

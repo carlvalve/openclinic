@@ -30,9 +30,9 @@
 <form name="diagnosisList" method="POST">
     <table width="100%" border="0">
         <tr class="admin">
-            <td><%=getTran("web","begin",sWebLanguage)%>&nbsp;
+            <td><%=getTran(request,"web","begin",sWebLanguage)%>&nbsp;
                 <%=writeDateField("begin","diagnosisList",sBegin,sWebLanguage)%>&nbsp;
-                <%=getTran("web","end",sWebLanguage)%>&nbsp;
+                <%=getTran(request,"web","end",sWebLanguage)%>&nbsp;
                 <%=writeDateField("end","diagnosisList",sEnd,sWebLanguage)%>&nbsp;
                 <input class="button" type="submit" name="submit" value="<%=getTranNoLink("web","find",sWebLanguage)%>"/>
             </td>
@@ -43,7 +43,7 @@
     <%
         if(request.getParameter("submit")!=null){
     %>
-    <tr class="gray"><td><%=getTran("web","patient",sWebLanguage)%></td><td><%=getTran("web","service",sWebLanguage)%></td><td colspan="4"><%=getTran("web","diagnoses",sWebLanguage)%></td></tr>
+    <tr class="gray"><td><%=getTran(request,"web","patient",sWebLanguage)%></td><td><%=getTran(request,"web","service",sWebLanguage)%></td><td colspan="4"><%=getTran(request,"web","diagnoses",sWebLanguage)%></td></tr>
 <%
     }
     int patientcounter=0,diagnosiscounter=0;
@@ -108,7 +108,7 @@
     if(request.getParameter("submit")!=null){
 %>
 <table>
-<tr class="admin2"><td><%=getTran("web","total.patients",sWebLanguage)%></td><td><b><%=patientcounter%></b></td><td>&nbsp;</td><td><%=getTran("web","total.diagnosis",sWebLanguage)%></td><td><b><%=diagnosiscounter%></b></td></tr>
+<tr class="admin2"><td><%=getTran(request,"web","total.patients",sWebLanguage)%></td><td><b><%=patientcounter%></b></td><td>&nbsp;</td><td><%=getTran(request,"web","total.diagnosis",sWebLanguage)%></td><td><b><%=diagnosiscounter%></b></td></tr>
 </table>
 <%
     }

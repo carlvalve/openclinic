@@ -4,48 +4,48 @@
 	<table width='100%'>
 		<tr>
 			<td class='admin'>
-				<input type='radio' name='tabletype' value="singlelanguage"/><%=getTran("web","singlelanguage",sWebLanguage)%>
+				<input type='radio' name='tabletype' value="singlelanguage"/><%=getTran(request,"web","singlelanguage",sWebLanguage)%>
 			</td>
 			<td class='admin2'>
 				<%
 					String[] supportedLanguages = MedwanQuery.getInstance().getConfigString("supportedLanguages").split(",");
 					
-					out.println(getTran("web","language",sWebLanguage)+": ");
+					out.println(getTran(request,"web","language",sWebLanguage)+": ");
 					for(int n=0;n<supportedLanguages.length;n++){
-						out.println("<input type='radio' name='singlelanguage_language' value='"+supportedLanguages[n]+"'/>"+getTran("web.language",supportedLanguages[n],sWebLanguage));
+						out.println("<input type='radio' name='singlelanguage_language' value='"+supportedLanguages[n]+"'/>"+getTran(request,"web.language",supportedLanguages[n],sWebLanguage));
 					}
 				%>
 			</td>
 		</tr>
 		<tr>
 			<td class='admin'>
-				<input type='radio' name='tabletype' value="multilanguage"/><%=getTran("web","multilanguage",sWebLanguage)%>
+				<input type='radio' name='tabletype' value="multilanguage"/><%=getTran(request,"web","multilanguage",sWebLanguage)%>
 			</td>
 			<td class='admin2'>
 				<%
-					out.println(getTran("web","languages",sWebLanguage)+": ");
+					out.println(getTran(request,"web","languages",sWebLanguage)+": ");
 					for(int n=0;n<supportedLanguages.length;n++){
-						out.println("<input type='checkbox' name='singlelanguage_language_"+supportedLanguages[n]+"' value='"+supportedLanguages[n]+"'/>"+getTran("web.language",supportedLanguages[n],sWebLanguage));
+						out.println("<input type='checkbox' name='singlelanguage_language_"+supportedLanguages[n]+"' value='"+supportedLanguages[n]+"'/>"+getTran(request,"web.language",supportedLanguages[n],sWebLanguage));
 					}
 				%>
 			</td>
 		</tr>
 		<tr>
 			<td class='admin'>
-				<input type='radio' name='tabletype' value="missinglabels"/><%=getTran("web","missinglabels",sWebLanguage)%>
+				<input type='radio' name='tabletype' value="missinglabels"/><%=getTran(request,"web","missinglabels",sWebLanguage)%>
 			</td>
 			<td class='admin2'>
 				<%
-					out.println(getTran("web","targetlanguage",sWebLanguage)+": ");
+					out.println(getTran(request,"web","targetlanguage",sWebLanguage)+": ");
 					for(int n=0;n<supportedLanguages.length;n++){
-						out.println("<input type='radio' name='targetlanguage_language' value='"+supportedLanguages[n]+"'/>"+getTran("web.language",supportedLanguages[n],sWebLanguage));
+						out.println("<input type='radio' name='targetlanguage_language' value='"+supportedLanguages[n]+"'/>"+getTran(request,"web.language",supportedLanguages[n],sWebLanguage));
 					}
 				%>
 				<BR/>
 				<%
-					out.println(getTran("web","sourcelanguages",sWebLanguage)+": ");
+					out.println(getTran(request,"web","sourcelanguages",sWebLanguage)+": ");
 					for(int n=0;n<supportedLanguages.length;n++){
-						out.println("<input type='checkbox' name='sourcelanguage_language_"+supportedLanguages[n]+"' value='"+supportedLanguages[n]+"'/>"+getTran("web.language",supportedLanguages[n],sWebLanguage));
+						out.println("<input type='checkbox' name='sourcelanguage_language_"+supportedLanguages[n]+"' value='"+supportedLanguages[n]+"'/>"+getTran(request,"web.language",supportedLanguages[n],sWebLanguage));
 					}
 				%>
 			</td>

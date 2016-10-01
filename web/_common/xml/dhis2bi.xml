@@ -1,7 +1,7 @@
 <dhis2>
 	<config>
 		<uri>https://vpn.snis.bi</uri>
-		<api>/hopitalprod/api</api>
+		<api>/dhisbao/api</api>
 		<port>443</port>
 		<user>fverbeke</user>
 		<password>FVerbeke2015</password>

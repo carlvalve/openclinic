@@ -3,7 +3,7 @@
                 java.util.StringTokenizer"%>
 <%@include file="/_common/patient/patienteditHelper.jsp"%>
 <%
-    String sReturn = "<font color=red>"+getTran("Web.PatientEdit", "DBError", sWebLanguage)+"</font><br><br>";
+    String sReturn = "<font color=red>"+getTran(request,"Web.PatientEdit", "DBError", sWebLanguage)+"</font><br><br>";
     boolean bReturn = true;
 
     String tab = checkString(request.getParameter("Tab"));

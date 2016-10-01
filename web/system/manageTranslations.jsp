@@ -57,7 +57,7 @@
 <table width="100%" cellspacing="1" class="menu" onkeydown="if(enterEvent(event,13)){doFind();}">
     <%-- LABEL TYPE --%>
     <tr>
-      <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","type",sWebLanguage)%></td>
+      <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(null,"Web","type",sWebLanguage)%></td>
       <td class="admin2" id="FindLabelTypeDiv">
           <select id="FindLabelType" class="text">
               <option></option>
@@ -77,7 +77,7 @@
   
   <%-- LABEL ID --%>
   <tr>
-      <td class="admin"><%=getTran("Web.Translations","labelid",sWebLanguage)%></td>
+      <td class="admin"><%=getTran(null,"Web.Translations","labelid",sWebLanguage)%></td>
       <td class="admin2">
           <input type="text" class="text" id="FindLabelID" value="<%=findLabelID%>" size="50">
       </td>
@@ -85,7 +85,7 @@
   
   <%-- LABEL LANGUAGE --%>
   <tr>
-      <td class="admin"><%=getTran("Web","Language",sWebLanguage)%></td>
+      <td class="admin"><%=getTran(null,"Web","Language",sWebLanguage)%></td>
       <td class="admin2">
           <select id="FindLabelLang" class="text">
               <option value=""></option>
@@ -94,7 +94,7 @@
                   StringTokenizer tokenizer = new StringTokenizer(supportedLanguages,",");
                   while(tokenizer.hasMoreTokens()){
                       tmpLang = tokenizer.nextToken();
-                      %><option value="<%=tmpLang%>" <%=(findLabelLang.equals(tmpLang)?"selected":"")%>><%=getTran("Web.language",tmpLang,sWebLanguage)%></option><%
+                      %><option value="<%=tmpLang%>" <%=(findLabelLang.equals(tmpLang)?"selected":"")%>><%=getTran(null,"Web.language",tmpLang,sWebLanguage)%></option><%
                   }
               %>
           </select>
@@ -103,7 +103,7 @@
   
   <%-- LABEL VALUE --%>
   <tr>
-      <td class="admin"><%=getTran("Web.Translations","label",sWebLanguage)%></td>
+      <td class="admin"><%=getTran(null,"Web.Translations","label",sWebLanguage)%></td>
       <td class="admin2">
           <input type="text" class="text" id="FindLabelValue" value="<%=findLabelValue%>" size="50">
       </td>
@@ -111,10 +111,10 @@
   
   <%-- EXCLUSIONS --%>
   <tr>
-      <td class="admin"><%=getTran("Web.Translations","exclusion",sWebLanguage)%></td>
+      <td class="admin"><%=getTran(null,"Web.Translations","exclusion",sWebLanguage)%></td>
       <td class="admin2">
-          <input type="checkbox" name="excludeFunctions" id="excludeFunctionsCB" value="true" <%=(excludeFunctions?" CHECKED":"")%>><%=getLabel("web","functions",sWebLanguage,"excludeFunctionsCB")%>&nbsp;
-          <input type="checkbox" name="excludeServices" id="excludeServicesCB" value="true" <%=(excludeServices?" CHECKED":"")%>><%=getLabel("web","services",sWebLanguage,"excludeServicesCB")%>
+          <input type="checkbox" name="excludeFunctions" id="excludeFunctionsCB" value="true" <%=(excludeFunctions?" CHECKED":"")%>><%=getLabel(null,"web","functions",sWebLanguage,"excludeFunctionsCB")%>&nbsp;
+          <input type="checkbox" name="excludeServices" id="excludeServicesCB" value="true" <%=(excludeServices?" CHECKED":"")%>><%=getLabel(null,"web","services",sWebLanguage,"excludeServicesCB")%>
       </td>
   </tr>
   
@@ -224,15 +224,15 @@
 <table class="list" width="100%" cellspacing="1">
   <%-- type --%>
   <tr>
-      <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web.Translations","LabelType",sWebLanguage)%></td>
+      <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(null,"Web.Translations","LabelType",sWebLanguage)%></td>
       <td class="admin2">
-          <input type="text" class="normal" name="EditLabelType" id="EditLabelType" value="<%=editLabelType%>" size="80">
+          <input type="text" class="normal" name="EditLabelType" id="EditLabelType" value="<%=editLabelType.length()>0?editLabelType:findLabelType%>" size="80">
       </td>
   </tr>
   
   <%-- id --%>
   <tr>
-      <td class="admin"><%=getTran("Web.Translations","LabelID",sWebLanguage)%></td>
+      <td class="admin"><%=getTran(null,"Web.Translations","LabelID",sWebLanguage)%></td>
       <td class="admin2">
           <input type="text" class="normal" name="EditLabelID" id="EditLabelID" value="<%=editLabelID%>" size="80">
       </td>
@@ -245,7 +245,7 @@
           tmpLang = tokenizer.nextToken();
           %>
 		  <tr>
-		      <td class="admin"><%=getTran("Web.Translations","Label",sWebLanguage)+" "+tmpLang.toUpperCase()%></td>
+		      <td class="admin"><%=getTran(null,"Web.Translations","Label",sWebLanguage)+" "+tmpLang.toUpperCase()%></td>
 		      <td class="admin2">
 		          <textarea name="EditLabelValue<%=tmpLang.toUpperCase()%>" class="normal" rows="4" cols="80" onKeyDown="textCounter(this,document.transactionForm.remLen<%=tmpLang.toUpperCase()%>,250)" onKeyUp="textCounter(this,document.transactionForm.remLen<%=tmpLang.toUpperCase()%>,250);resizeTextarea(this,10);"><%=getTranNoLink(editLabelType,editLabelID,tmpLang)%></textarea>
 		          <input readonly type="text" class="text" name="remLen<%=tmpLang.toUpperCase()%>" size="3" value="250">
@@ -257,11 +257,11 @@
 
   <%-- show link --%>
   <tr>
-      <td class="admin"><%=getTran("Web.Translations","ShowLink",sWebLanguage)%></td>
+      <td class="admin"><%=getTran(null,"Web.Translations","ShowLink",sWebLanguage)%></td>
       <td class="admin2">
           <select name="EditShowLink" class="text">
-              <option value="1"<%=(editShowLink.equals("1")?" selected":"")%>><%=getTran("Web","Yes",sWebLanguage)%></option>
-              <option value="0"<%=(editShowLink.equals("0")?" selected":"")%>><%=getTran("Web","No",sWebLanguage)%></option>
+              <option value="1"<%=(editShowLink.equals("1")?" selected":"")%>><%=getTran(null,"Web","Yes",sWebLanguage)%></option>
+              <option value="0"<%=(editShowLink.equals("0")?" selected":"")%>><%=getTran(null,"Web","No",sWebLanguage)%></option>
           </select>
       </td>
   </tr>
@@ -279,7 +279,7 @@
 <%-- link to synchronise labels with ini --%>
 <%=ScreenHelper.alignButtonsStart()%>
     <img src="<c:url value="/_img/themes/default/pijl.gif"/>">
-    <a href="<c:url value='/main.do?Page=system/syncLabelsWithIni.jsp?ts='/><%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran("Web.manage","synchronizelabelswithini",sWebLanguage)%></a>&nbsp;
+    <a href="<c:url value='/main.do?Page=system/syncLabelsWithIni.jsp?ts='/><%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran(null,"Web.manage","synchronizelabelswithini",sWebLanguage)%></a>&nbsp;
 <%=ScreenHelper.alignButtonsStop()%>
 
 <%-- SCRIPTS ------------------------------------------------------------------------------------%>
@@ -439,6 +439,9 @@
 <input type="hidden" name="Action">
 
   <%
+  	  if("1".equalsIgnoreCase(request.getParameter("find"))){
+  		  out.println("<script>doFind();</script>");
+  	  }
       // alert message
       if(labelAllreadyExists || invalidCharFound){
           %><script>alertDialogDirectText("<%=msg%>");</script><%

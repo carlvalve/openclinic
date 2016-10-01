@@ -279,7 +279,7 @@
     <table class="list" border="0" width="100%" cellspacing="1">
         <%-- begin --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web.hr","begin",sWebLanguage)%>&nbsp;</td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web.hr","begin",sWebLanguage)%>&nbsp;</td>
             <td class="admin2" nowrap> 
                 <%=writeDateField("begin","EditForm","",sWebLanguage)%>            
             </td>                        
@@ -287,7 +287,7 @@
         
         <%-- end --%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","end",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.hr","end",sWebLanguage)%>&nbsp;</td>
             <td class="admin2" nowrap> 
                 <%=writeDateField("end","EditForm","",sWebLanguage)%>            
             </td>                        
@@ -295,22 +295,22 @@
                  
         <%-- FTE (full-time equivalent) (*) --%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","fte",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.hr","fte",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <select class="text" id="fte" name="fte">
                     <option/>
-                    <%=ScreenHelper.writeSelectUnsorted("hr.workschedule.fte","",sWebLanguage)%>
-                </select> <%=getTran("web","percent",sWebLanguage)%>
+                    <%=ScreenHelper.writeSelectUnsorted(request,"hr.workschedule.fte","",sWebLanguage)%>
+                </select> <%=getTran(request,"web","percent",sWebLanguage)%>
             </td>
         </tr>
         
         <%-- 3 types of schedules -----------------------------------------------------------%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","scheduleType",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.hr","scheduleType",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
-                <input type="radio" name="scheduleType" id="scheduleTypeDay" value="day" onDblClick="uncheckRadio(this);hideAllSchedules();" onClick="displayDaySchedule();"/><%=getLabel("web.hr","daySchedule",sWebLanguage,"scheduleTypeDay")%>&nbsp;
-                <input type="radio" name="scheduleType" id="scheduleTypeWeek" value="week" onDblClick="uncheckRadio(this);hideAllSchedules();" onClick="displayWeekSchedule();"/><%=getLabel("web.hr","weekSchedule",sWebLanguage,"scheduleTypeWeek")%>&nbsp;
-                <input type="radio" name="scheduleType" id="scheduleTypeMonth" value="month" onDblClick="uncheckRadio(this);hideAllSchedules();" onClick="displayMonthSchedule();"/><%=getLabel("web.hr","monthSchedule",sWebLanguage,"scheduleTypeMonth")%>&nbsp;
+                <input type="radio" name="scheduleType" id="scheduleTypeDay" value="day" onDblClick="uncheckRadio(this);hideAllSchedules();" onClick="displayDaySchedule();"/><%=getLabel(request,"web.hr","daySchedule",sWebLanguage,"scheduleTypeDay")%>&nbsp;
+                <input type="radio" name="scheduleType" id="scheduleTypeWeek" value="week" onDblClick="uncheckRadio(this);hideAllSchedules();" onClick="displayWeekSchedule();"/><%=getLabel(request,"web.hr","weekSchedule",sWebLanguage,"scheduleTypeWeek")%>&nbsp;
+                <input type="radio" name="scheduleType" id="scheduleTypeMonth" value="month" onDblClick="uncheckRadio(this);hideAllSchedules();" onClick="displayMonthSchedule();"/><%=getLabel(request,"web.hr","monthSchedule",sWebLanguage,"scheduleTypeMonth")%>&nbsp;
             </td>
         </tr>
         
@@ -321,7 +321,7 @@
                 <table width="100%" cellpadding="0" cellspacing="1" class="list">
                     <%-- startHour --%>
                     <tr>
-                        <td class="admin" width="150" nowrap><%=getTran("web.hr","startHour",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin" width="150" nowrap><%=getTran(request,"web.hr","startHour",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <input type="text" class="text" id="dayScheduleStart" name="dayScheduleStart" size="2" maxLength="5" value="" onKeypress="keypressTime(this);" onBlur="checkTime(this);calculateInterval('dayScheduleStart','dayScheduleEnd','dayScheduleHours');">
                         </td>
@@ -329,7 +329,7 @@
                     
                     <%-- endHour --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("web.hr","endHour",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin" nowrap><%=getTran(request,"web.hr","endHour",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <input type="text" class="text" id="dayScheduleEnd" name="dayScheduleEnd" size="2" maxLength="5" value="" onKeypress="keypressTime(this);" onBlur="checkTime(this);calculateInterval('dayScheduleStart','dayScheduleEnd','dayScheduleHours');">
                         </td>
@@ -337,9 +337,9 @@
                     
                     <%-- hours (*) --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("web.hr","hoursPerDay",sWebLanguage)%>&nbsp;*&nbsp;</td>
+                        <td class="admin" nowrap><%=getTran(request,"web.hr","hoursPerDay",sWebLanguage)%>&nbsp;*&nbsp;</td>
                         <td class="admin2">
-                            <input type="text" class="text" id="dayScheduleHours" name="dayScheduleHours" size="2" maxLength="5" onKeypress="keypressTime(this);" onBlur="decimalToTime(this);checkTime(this);" value="">&nbsp;<%=getTran("web","hours",sWebLanguage)%>
+                            <input type="text" class="text" id="dayScheduleHours" name="dayScheduleHours" size="2" maxLength="5" onKeypress="keypressTime(this);" onBlur="decimalToTime(this);checkTime(this);" value="">&nbsp;<%=getTran(request,"web","hours",sWebLanguage)%>
                         </td>
                     </tr>
                 </table>
@@ -353,7 +353,7 @@
                 <table width="100%" cellpadding="0" cellspacing="1" class="list">
                     <%-- weekScheduleType (predefined weekSchedule) --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("web.hr","weekScheduleType",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin" nowrap><%=getTran(request,"web.hr","weekScheduleType",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <select class="text" id="weekScheduleType" name="weekScheduleType" onChange="setTimeBlocksString(this.options[this.selectedIndex].value);">
                                 <option/>
@@ -364,7 +364,7 @@
                                     
                     <%-- weekSchedule/timeBlocks (multi-add) --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("web.hr","timeBlocks",sWebLanguage)%></td>
+                        <td class="admin" nowrap><%=getTran(request,"web.hr","timeBlocks",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="hidden" id="timeBlocks" name="timeBlocks" value="">
                                                  
@@ -375,19 +375,19 @@
                                     <td width="40" nowrap/>
                                     <%-- 1 - timeBlockDay --%>
                                     <td width="100" nowrap style="padding-left:0px;">
-                                        <%=getTran("web.hr","timeBlockDay",sWebLanguage)%>&nbsp;
+                                        <%=getTran(request,"web.hr","timeBlockDay",sWebLanguage)%>&nbsp;
                                     </td>
                                     <%-- 2 - timeBlockStart --%>
                                     <td width="70" nowrap style="padding-left:0px;">
-                                        <%=getTran("web.hr","timeBlockStart",sWebLanguage)%>&nbsp;
+                                        <%=getTran(request,"web.hr","timeBlockStart",sWebLanguage)%>&nbsp;
                                     </td>
                                     <%-- 3 - timeBlockEnd --%>
                                     <td width="70" nowrap style="padding-left:0px;">
-                                        <%=getTran("web.hr","timeBlockEnd",sWebLanguage)%>&nbsp;
+                                        <%=getTran(request,"web.hr","timeBlockEnd",sWebLanguage)%>&nbsp;
                                     </td>    
                                     <%-- 4 - timeBlockHours --%>
                                     <td width="80" nowrap style="padding-left:0px;">
-                                        <%=getTran("web.hr","timeBlockHours",sWebLanguage)%>&nbsp;*&nbsp;
+                                        <%=getTran(request,"web.hr","timeBlockHours",sWebLanguage)%>&nbsp;*&nbsp;
                                     </td>    
                                     <%-- 5 - empty --%>
                                     <td width="100" nowrap/>    
@@ -403,7 +403,7 @@
                                     <td class="admin"> 
                                         <select class="text" id="tbDayIdx" name="tbDayIdx">
                                             <option/>
-                                            <%=ScreenHelper.writeSelectUnsorted("hr.workschedule.days","",sWebLanguage)%>
+                                            <%=ScreenHelper.writeSelectUnsorted(request,"hr.workschedule.days","",sWebLanguage)%>
                                         </select>&nbsp;
                                     </td>
                                     <%-- 2 - tbBeginHour --%>
@@ -416,7 +416,7 @@
                                     </td>    
                                     <%-- 4 - tbDuration --%>
                                     <td class="admin" nowrap> 
-                                        <input type="text" class="text" id="tbDuration" name="tbDuration" size="2" maxLength="5" onKeypress="keypressTime(this);" onBlur="checkTime(this);" value="">&nbsp;<%=getTran("web","hours",sWebLanguage)%>&nbsp;
+                                        <input type="text" class="text" id="tbDuration" name="tbDuration" size="2" maxLength="5" onKeypress="keypressTime(this);" onBlur="checkTime(this);" value="">&nbsp;<%=getTran(request,"web","hours",sWebLanguage)%>&nbsp;
                                     </td>
                                     <%-- 5 - buttons --%>
                                     <td class="admin" nowrap>
@@ -438,20 +438,20 @@
                 <table width="40%" cellpadding="0" cellspacing="1" class="list">
                     <%-- monthScheduleType (predefines total hours per month) --%>
                     <tr>
-                        <td class="admin" width="150" nowrap><%=getTran("web.hr","monthScheduleType",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin" width="150" nowrap><%=getTran(request,"web.hr","monthScheduleType",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <select class="text" id="monthScheduleType" name="monthScheduleType" onChange="setMonthScheduleHours(this.options[this.selectedIndex].value);"> 
                                 <option/>
-                                <%=ScreenHelper.writeSelect("hr.workschedule.monthscheduletype","",sWebLanguage,true)%>
+                                <%=ScreenHelper.writeSelect(request,"hr.workschedule.monthscheduletype","",sWebLanguage,true)%>
                             </select>
                         </td>
                     </tr>    
                     
                     <%-- hours (*) --%>
                     <tr>
-                        <td class="admin"><%=getTran("web.hr","hoursPerMonth",sWebLanguage)%>&nbsp;*&nbsp;</td>
+                        <td class="admin"><%=getTran(request,"web.hr","hoursPerMonth",sWebLanguage)%>&nbsp;*&nbsp;</td>
                         <td class="admin2">
-                            <input type="text" class="text" id="monthScheduleHours" name="monthScheduleHours" size="2" maxLength="5" onKeypress="keypressTime(this);" onBlur="decimalToTime(this);checkTime(this);" value="">&nbsp;<%=getTran("web","hours",sWebLanguage)%>
+                            <input type="text" class="text" id="monthScheduleHours" name="monthScheduleHours" size="2" maxLength="5" onKeypress="keypressTime(this);" onBlur="decimalToTime(this);checkTime(this);" value="">&nbsp;<%=getTran(request,"web","hours",sWebLanguage)%>
                         </td>
                     </tr>
                 </table>
@@ -468,7 +468,7 @@
             </td>
         </tr>
     </table>
-    <i><%=getTran("web","colored_fields_are_obligate",sWebLanguage)%></i>
+    <i><%=getTran(request,"web","colored_fields_are_obligate",sWebLanguage)%></i>
     
     <div id="divMessage" style="padding-top:10px;"></div>
 </form>

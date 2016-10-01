@@ -31,9 +31,9 @@
 			if(nodata){
 				html.append("<tr class='admin'>"+
 			               "<td width='25'>&nbsp;</td>"+
-			               "<td width='120'>"+getTran("web","type",sWebLanguage)+"</td>"+
+			               "<td width='120'>"+getTran(request,"web","type",sWebLanguage)+"</td>"+
 			               "<td width='200'>&nbsp;</td>"+
-			               "<td width='*'>"+getTran("web","amount",sWebLanguage)+"</td>"+
+			               "<td width='*'>"+getTran(request,"web","amount",sWebLanguage)+"</td>"+
 						  "</tr>");
 			}
 			
@@ -49,7 +49,7 @@
 			if(type.equalsIgnoreCase("prestation")){
 				Prestation prestation = Prestation.get(rs.getString("OC_CAREPROVIDERFEE_ID"));
 				if(prestation!=null){
-					String aHref = "<a href='javascript:editline(\"prestation\",\""+prestation.getUid()+"\",\""+prestation.getDescription()+"\",\""+famount+"\");'>"+getTran("web","prestation",sWebLanguage)+"<a>";
+					String aHref = "<a href='javascript:editline(\"prestation\",\""+prestation.getUid()+"\",\""+prestation.getDescription()+"\",\""+famount+"\");'>"+getTran(request,"web","prestation",sWebLanguage)+"<a>";
 					html.append("<tr class='list"+sClass+"'>"+
 					             "<td><img src='_img/icons/icon_delete.png' class='link' onclick='deleteline(\"prestation\",\""+prestation.getUid()+"\",\""+userid+"\");'/></td>"+
 					             "<td>"+aHref+"</td>"+
@@ -61,18 +61,18 @@
 			}
 			// 2 - prestationtype
 			else if(type.equalsIgnoreCase("prestationtype")){
-				String aHref = "<a href='javascript:editline(\"prestationtype\",\""+id+"\",\"\",\""+famount+"\");'>"+getTran("web","type",sWebLanguage)+"<a>";
+				String aHref = "<a href='javascript:editline(\"prestationtype\",\""+id+"\",\"\",\""+famount+"\");'>"+getTran(request,"web","type",sWebLanguage)+"<a>";
 				html.append("<tr class='list"+sClass+"'>"+
 				             "<td><img src='_img/icons/icon_delete.png' class='link' onclick='deleteline(\"prestationtype\",\""+id+"\",\""+userid+"\");'/></td>"+
 				             "<td>"+aHref+"</td>"+
-				             "<td>"+getTran("prestation.type",id,sWebLanguage)+"</td>"+
+				             "<td>"+getTran(request,"prestation.type",id,sWebLanguage)+"</td>"+
 				             "<td>"+rs.getFloat("OC_CAREPROVIDERFEE_AMOUNT")+"%</td>"+
 				            "</tr>");
 				nodata = false;
 			}
 			// 3 - invoicegroup
 			else if(type.equalsIgnoreCase("invoicegroup")){
-				String aHref = "<a href='javascript:editline(\"invoicegroup\",\""+id+"\",\"\",\""+famount+"\");'>"+getTran("web","invoicegroup",sWebLanguage)+"<a>";
+				String aHref = "<a href='javascript:editline(\"invoicegroup\",\""+id+"\",\"\",\""+famount+"\");'>"+getTran(request,"web","invoicegroup",sWebLanguage)+"<a>";
 				html.append("<tr class='list"+sClass+"'>"+
 				             "<td><img src='_img/icons/icon_delete.png' class='link' onclick='deleteline(\"invoicegroup\",\""+id+"\",\""+userid+"\");'/></td>"+
 				             "<td>"+aHref+"</td>"+
@@ -83,7 +83,7 @@
 			}
 			// 4 - default
 			else if(type.equalsIgnoreCase("default")){
-				String aHref = "<a href='javascript:editline(\"default\",\"\",\"\",\""+famount+"\");'>"+getTran("web","default",sWebLanguage)+"<a>";
+				String aHref = "<a href='javascript:editline(\"default\",\"\",\"\",\""+famount+"\");'>"+getTran(request,"web","default",sWebLanguage)+"<a>";
 				html.append("<tr class='list"+sClass+"'>"+
 				             "<td><img src='_img/icons/icon_delete.png' onclick='deleteline(\"default\",\""+id+"\",\""+userid+"\");'/></td>"+
 				             "<td colspan='2'>"+aHref+"</td>"+
@@ -97,7 +97,7 @@
 		conn.close();
 		
 		if(nodata){
-			out.write(getTran("web","noRecordsFound",sWebLanguage));
+			out.write(getTran(request,"web","noRecordsFound",sWebLanguage));
 		}
 		else{
 			out.write("<table width='100%' class='list' cellpadding='0' cellspacing='1'>");			

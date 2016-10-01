@@ -27,7 +27,7 @@
     <table cellpadding="0" cellspacing="0">
         <%-- title --%>
         <tr class="admin">
-            <td colspan="2"><%=getTran("web.manage","examinations",sWebLanguage)%></td>
+            <td colspan="2"><%=getTran(request,"web.manage","examinations",sWebLanguage)%></td>
         </tr>
 
         <tr>
@@ -48,7 +48,7 @@
 
                                 while (iter.hasNext()) {
                                     hResults = (Hashtable) iter.next();
-                                    hExaminations.put(getTran("examination", (String) hResults.get("id"), sWebLanguage), hResults.get("id"));
+                                    hExaminations.put(getTran(request,"examination", (String) hResults.get("id"), sWebLanguage), hResults.get("id"));
                                 }
                             }
                             // user specific examinations
@@ -68,7 +68,7 @@
                                         sValue = Examination.searchExamination(Integer.parseInt(examId));
 
                                         if (sValue.length() > 0) {
-                                            hExaminations.put(getTran("examination", examId, sWebLanguage), examId);
+                                            hExaminations.put(getTran(request,"examination", examId, sWebLanguage), examId);
                                         }
                                     }
                                 }
@@ -92,7 +92,7 @@
                             // run thru examinations, leaving out the examinations that are indicated as selected
                             Iterator namesIter = examNames.iterator();
                             String sClass = "1", examName, examNameNoLink, excludedExamId;
-                            String sSelectTran = getTran("web", "select", sWebLanguage);
+                            String sSelectTran = getTran(request,"web", "select", sWebLanguage);
                             int displayedExamCounter = 0;
                             boolean displayExam;
                             while (namesIter.hasNext()) {
@@ -111,7 +111,7 @@
 
                                 if (displayExam) {
                                     displayedExamCounter++;
-                                    examName = getTran("examination", examId, sWebLanguage);
+                                    examName = getTran(request,"examination", examId, sWebLanguage);
                                     examNameNoLink = getTranNoLink("examination", examId, sWebLanguage);
 
                                     // alternate row-style
@@ -145,7 +145,7 @@
                                 // display 'no results' message
                                 %>
                                     <tr>
-                                        <td><%=getTran("web","noexaminationsfoundorallselected",sWebLanguage)%></td>
+                                        <td><%=getTran(request,"web","noexaminationsfoundorallselected",sWebLanguage)%></td>
                                     </tr>
                                 <%
                             }
@@ -179,17 +179,17 @@
         <tr>
             <%-- UN/CHECK ALL --%>
             <td>
-                <a href="javascript:checkAll(true);"><%=getTran("Web.Manage.CheckDb","CheckAll",sWebLanguage)%></a>
-                <a href="javascript:checkAll(false);"><%=getTran("Web.Manage.CheckDb","UncheckAll",sWebLanguage)%></a>
+                <a href="javascript:checkAll(true);"><%=getTran(request,"Web.Manage.CheckDb","CheckAll",sWebLanguage)%></a>
+                <a href="javascript:checkAll(false);"><%=getTran(request,"Web.Manage.CheckDb","UncheckAll",sWebLanguage)%></a>
             </td>
 
             <%
                 // show all examinations or just examinations of user
                 if(sAction.equalsIgnoreCase("showAllExaminations")){
-                    %><td align="right"><a href="javascript:showUserExaminations()"><%=getTran("web.manage","showonlyuserexaminations",sWebLanguage)%></a></td><%
+                    %><td align="right"><a href="javascript:showUserExaminations()"><%=getTran(request,"web.manage","showonlyuserexaminations",sWebLanguage)%></a></td><%
                 }
                 else{
-                    %><td align="right"><a href="javascript:showAllExaminations()"><%=getTran("web.manage","showallexaminations",sWebLanguage)%></a></td><%
+                    %><td align="right"><a href="javascript:showAllExaminations()"><%=getTran(request,"web.manage","showallexaminations",sWebLanguage)%></a></td><%
                 }
             %>
         </tr>

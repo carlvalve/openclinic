@@ -203,7 +203,7 @@
             <td>
                 <table cellspacing="1" border="0" width="100%">
                     <tr>
-                        <td class="admin2" width="<%=sTDAdminWidth%>"><%=getTran("Web.Manage.Counter","DB",sWebLanguage)%></td>
+                        <td class="admin2" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web.Manage.Counter","DB",sWebLanguage)%></td>
                         <td class="admin2">
                             <select name="FindDatabase" class="text" onchange="transactionForm.submit();">
                             <%
@@ -232,7 +232,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin2"><%=getTran("web.translations","table",sWebLanguage)%></td>
+                        <td class="admin2"><%=getTran(request,"web.translations","table",sWebLanguage)%></td>
                         <td class="admin2">
                             <select name="FindTable" class="text" onchange="doSubmit('SelectTable');">
                                 <option/>
@@ -309,7 +309,7 @@
                         }
                     %>
                     <tr>
-                        <td class="admin2" width="100" nowrap><%=getTran("web.manage.io","tofile",sWebLanguage)%>: <%=MedwanQuery.getInstance().getConfigString("templateDirectory")%></td>
+                        <td class="admin2" width="100" nowrap><%=getTran(request,"web.manage.io","tofile",sWebLanguage)%>: <%=MedwanQuery.getInstance().getConfigString("templateDirectory")%></td>
                         <td class="admin2">
                             <input type="text" class="normal" name="FindExportFile" size="50" value="<%=sFindExportFile%>">
                             &nbsp;

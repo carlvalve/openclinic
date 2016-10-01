@@ -11,7 +11,7 @@
         StringBuffer sTmp = new StringBuffer();
         sTmp.append("<tr id='rowCategory"+iTotal+"'>")
              .append("<td class=\"admin2\">")
-             .append("<a href='javascript:deleteCategory(rowCategory"+iTotal+")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran("Web.Occup","medwan.common.delete",sWebLanguage) + "' border='0'></a> ")
+             .append("<a href='javascript:deleteCategory(rowCategory"+iTotal+")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran(null,"Web.Occup","medwan.common.delete",sWebLanguage) + "' border='0'></a> ")
              .append("</td>")
              .append("<td class='admin2'>&nbsp;" + getTranNoLink("insurance.types",sCategoryName,sWebLanguage) + "</td>")
              .append("<td class='admin2'>&nbsp;" + sPrice + "</td>")
@@ -44,6 +44,8 @@
            sEditPrestationCategories  = checkString(request.getParameter("EditPrestationCategories")),
            sEditPrestationFamily  = checkString(request.getParameter("EditPrestationFamily")),
            sEditPrestationInvoiceGroup  = checkString(request.getParameter("EditPrestationInvoiceGroup")),
+           sEditPrestationTimeslot  = checkString(request.getParameter("EditPrestationTimeslot")),
+           sEditPrestationCostcenter  = checkString(request.getParameter("EditPrestationCostcenter")),
            sEditPrestationMfpPercentage  = checkString(request.getParameter("EditPrestationMfpPercentage")),
            sEditPrestationMfpAdmissionPercentage  = checkString(request.getParameter("EditPrestationMfpAdmissionPercentage")),
            sEditPrestationAnesthesiaPercentage  = checkString(request.getParameter("EditPrestationAnesthesiaPercentage")),
@@ -61,10 +63,19 @@
            sEditPrestationProductionOrder = checkString(request.getParameter("EditPrestationProductionOrder")),
            sEditPrestationProductionOrderPaymentLevel = checkString(request.getParameter("EditPrestationProductionOrderPaymentLevel")),
            sEditPrestationProductionOrderPrescription = checkString(request.getParameter("EditPrestationProductionOrderPrescription")),
-		   sEditCareProvider = checkString(request.getParameter("EditCareProvider"));
+		   sEditCareProvider = checkString(request.getParameter("EditCareProvider")),
+		   sEditReservedForServiceType = checkString(request.getParameter("EditReservedForServiceType"));
 		if(sEditPrestationVariablePrice.length()==0){
 			sEditPrestationVariablePrice="0";
 		}
+		
+	   try{
+		   String s =""+Double.parseDouble(sEditPrestationTimeslot);
+	   }
+	   catch(Exception e){
+		   sEditPrestationTimeslot="0";
+	   }
+
 	   try{
 		   sEditPrestationPrice =""+Double.parseDouble(sEditPrestationPrice);
 	   }
@@ -135,23 +146,23 @@
 	   }
 
     // DEBUG //////////////////////////////////////////////////////////////////
-    if(Debug.enabled){
-        System.out.println("\n### mngPrestations ############################");
-        System.out.println("# sAction              : "+sAction);
-        System.out.println("# sFindPrestationUid   : "+sFindPrestationUid);
-        System.out.println("# sFindPrestationCode  : "+sFindPrestationCode);
-        System.out.println("# sFindPrestationDescr : "+sFindPrestationDescr);
-        System.out.println("# sFindPrestationType  : "+sFindPrestationType);
-        System.out.println("# sFindPrestationPrice : "+sFindPrestationPrice+"\n");
-        System.out.println("# sEditPrestationUid   : "+sEditPrestationUid);
-        System.out.println("# sEditPrestationCode  : "+sEditPrestationCode);
-        System.out.println("# sEditPrestationDescr : "+sEditPrestationDescr);
-        System.out.println("# sEditPrestationType  : "+sEditPrestationType);
-        System.out.println("# sEditPrestationCategories  : "+sEditPrestationCategories);
-        System.out.println("# sEditPrestationFamily: "+sEditPrestationFamily);
-        System.out.println("# sEditPrestationInvoiceGroup: "+sEditPrestationInvoiceGroup);
-        System.out.println("# sEditPrestationPrice : "+sEditPrestationPrice+"\n");
-    }
+    Debug.println("\n### mngPrestations ############################");
+    Debug.println("# sAction              : "+sAction);
+    Debug.println("# sFindPrestationUid   : "+sFindPrestationUid);
+    Debug.println("# sFindPrestationCode  : "+sFindPrestationCode);
+    Debug.println("# sFindPrestationDescr : "+sFindPrestationDescr);
+    Debug.println("# sFindPrestationType  : "+sFindPrestationType);
+    Debug.println("# sFindPrestationPrice : "+sFindPrestationPrice+"\n");
+    Debug.println("# sEditPrestationUid   : "+sEditPrestationUid);
+    Debug.println("# sEditPrestationCode  : "+sEditPrestationCode);
+    Debug.println("# sEditPrestationDescr : "+sEditPrestationDescr);
+    Debug.println("# sEditPrestationType  : "+sEditPrestationType);
+    Debug.println("# sEditPrestationCategories  : "+sEditPrestationCategories);
+    Debug.println("# sEditPrestationFamily: "+sEditPrestationFamily);
+    Debug.println("# sEditPrestationInvoiceGroup: "+sEditPrestationInvoiceGroup);
+    Debug.println("# sEditPrestationCostcenter: "+sEditPrestationCostcenter);
+    Debug.println("# sEditPrestationTimeslot: "+sEditPrestationTimeslot);
+    Debug.println("# sEditPrestationPrice : "+sEditPrestationPrice+"\n");
     ///////////////////////////////////////////////////////////////////////////
 
 
@@ -191,24 +202,27 @@
         prestation.setPrestationClass(sEditPrestationClass);
         prestation.setServiceUid(sEditPrestationServiceUid);
         prestation.setNomenclature(sEditPrestationNomenclature);
+        prestation.setCostCenter(sEditPrestationCostcenter);
         prestation.setDhis2code(sEditPrestationDHIS2Code);
         prestation.setProductionOrder(sEditPrestationProductionOrder);
         prestation.setProductionOrderPaymentLevel(new Double(Double.parseDouble(sEditPrestationProductionOrderPaymentLevel)).intValue());
         prestation.setProductionOrderPrescription(new Double(Double.parseDouble(sEditPrestationProductionOrderPrescription)).intValue());
         prestation.setFlag1(sEditPrestationFlag1);
+        prestation.setReservedForServiceType(sEditReservedForServiceType);
+        prestation.setTimeslot(sEditPrestationTimeslot);
         try{
         	prestation.setUpdateDateTime(ScreenHelper.parseDate(sEditPrestationUpdatetime));
         }
         catch(Exception e){}
         prestation.store();
         sEditPrestationUid = prestation.getUid();
-        msg = getTran("web","dataIsSaved",sWebLanguage);
+        msg = getTran(request,"web","dataIsSaved",sWebLanguage);
         sAction = "search";
     }
     //--- DELETE ----------------------------------------------------------------------------------
     else if(sAction.equals("delete")){
         Prestation.delete(sEditPrestationUid);
-        msg = getTran("web","dataIsDeleted",sWebLanguage);
+        msg = getTran(request,"web","dataIsDeleted",sWebLanguage);
         sAction = "search";
     }
 
@@ -234,39 +248,39 @@
     <%-- SEARCH FIELDS --%>
     <table width="100%" class="menu" cellspacing="0">
         <tr>
-            <td width="<%=sTDAdminWidth%>"><%=getTran("web","code",sWebLanguage)%></td>
+            <td width="<%=sTDAdminWidth%>"><%=getTran(request,"web","code",sWebLanguage)%></td>
             <td>
                 <input type="text" class="text" name="FindPrestationCode" size="20" maxlength="50" value="<%=sFindPrestationCode%>">
             </td>
         </tr>
         <tr>
-            <td><%=getTran("web","description",sWebLanguage)%></td>
+            <td><%=getTran(request,"web","description",sWebLanguage)%></td>
             <td>
                 <input type="text" class="text" name="FindPrestationDescr" size="80" maxlength="80" value="<%=sFindPrestationDescr%>">
             </td>
         </tr>
         <tr>
-            <td><%=getTran("web","type",sWebLanguage)%></td>
+            <td><%=getTran(request,"web","type",sWebLanguage)%></td>
             <td>
                 <select class="text" name="FindPrestationType">
                     <option value=""></option>
-                    <%=ScreenHelper.writeSelect("prestation.type",sFindPrestationType,sWebLanguage)%>
+                    <%=ScreenHelper.writeSelect(request,"prestation.type",sFindPrestationType,sWebLanguage)%>
                 </select>
             </td>
         </tr>
         <tr>
-            <td><%=getTran("web","price",sWebLanguage)%></td>
+            <td><%=getTran(request,"web","price",sWebLanguage)%></td>
             <td>
                 <input type="text" class="text" name="FindPrestationPrice" size="10" maxlength="8" onKeyUp="if(!isNumber(this)){this.value='';}" value="<%=sFindPrestationPrice%>">&nbsp;<%=sCurrency%>
             </td>
         </tr>
         <tr>
-            <td><%=getTran("web","sort",sWebLanguage)%></td>
+            <td><%=getTran(request,"web","sort",sWebLanguage)%></td>
             <td>
                 <select class="text" name="FindPrestationSort">
-                    <option value="OC_PRESTATION_CODE"><%=getTran("web","code",sWebLanguage)%></option>
-                    <option value="OC_PRESTATION_DESCRIPTION"><%=getTran("web","description",sWebLanguage)%></option>
-                    <option value="OC_PRESTATION_PRICE"><%=getTran("web","price",sWebLanguage)%></option>
+                    <option value="OC_PRESTATION_CODE"><%=getTran(request,"web","code",sWebLanguage)%></option>
+                    <option value="OC_PRESTATION_DESCRIPTION"><%=getTran(request,"web","description",sWebLanguage)%></option>
+                    <option value="OC_PRESTATION_PRICE"><%=getTran(request,"web","price",sWebLanguage)%></option>
                 </select>
             </td>
         </tr>
@@ -340,37 +354,37 @@
                         <td class="admin2"><%=checkString(prestation.getUid())%></td>
                     </tr>
                     <tr>
-                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","validfrom",sWebLanguage)%>&nbsp;*&nbsp;</td>
+                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","validfrom",sWebLanguage)%>&nbsp;*&nbsp;</td>
                         <td class="admin2">
                         	<%=writeDateField("EditPrestationUpdatetime","transactionForm",sEditPrestationUpdatetime,sWebLanguage)%>
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","code",sWebLanguage)%>&nbsp;*&nbsp;</td>
+                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","code",sWebLanguage)%>&nbsp;*&nbsp;</td>
                         <td class="admin2">
                             <input type="text" class="text" name="EditPrestationCode" size="20" maxlength="50" value="<%=checkString(prestation.getCode())%>">
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","code.alias",sWebLanguage)%></td>
+                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","code.alias",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="text" class="text" name="EditPrestationCodeAlias" size="80" maxlength="250" value="<%=prestation.getReferenceObject()==null?"":checkString(prestation.getReferenceObject().getObjectUid())%>">
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","code.nomenclature",sWebLanguage)%></td>
+                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","code.nomenclature",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="text" class="text" name="EditPrestationNomenclature" size="80" maxlength="250" value="<%=checkString(prestation.getNomenclature())%>">
                         </td>
                     </tr>
                        	<%	if(MedwanQuery.getInstance().getConfigInt("enableDHIS2",0)==1){ %>
 		                    <tr>
-		                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","dhis2code",sWebLanguage)%></td>
+		                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","dhis2code",sWebLanguage)%></td>
 		                        <td class="admin2">
 		                        	<%	if(MedwanQuery.getInstance().getConfigInt("enableBurundi",0)==1){ %>
 			                        	<select class="text" name="EditPrestationDHIS2Code">
 			                        		<option value=''></option>
-			                        		<%=ScreenHelper.writeSelect("dhis2nomenclature",checkString(prestation.getDhis2code()),sWebLanguage) %>
+			                        		<%=ScreenHelper.writeSelect(request,"dhis2nomenclature",checkString(prestation.getDhis2code()),sWebLanguage) %>
 			                        	</select>
 			                        <%	}
 		                        		else {
@@ -385,7 +399,7 @@
                        			<td colspan='2' style='border:solid #000 1px;border-color: grey;'>
 		                       		<table width='100%' cellspacing="1" cellpadding="0" class="list">
 					                    <tr>
-					                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","generateproductionitem",sWebLanguage)%></td>
+					                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","generateproductionitem",sWebLanguage)%></td>
 					                        <td class="admin2">
 					                            <input type="hidden" name="EditPrestationProductionOrder" value="<%=checkString(prestation.getProductionOrder())%>">
 					                            <input type="text" size="80" class="text" name="EditPrestationProductOrderProductName" id="EditPrestationProductOrderProductName" value="<%=prestation.getProductionOrderProductName() %>"/>
@@ -394,13 +408,13 @@
 					                        </td>
 					                    </tr>
 					                    <tr>
-					                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","productionorderpaymentlevel",sWebLanguage)%></td>
+					                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","productionorderpaymentlevel",sWebLanguage)%></td>
 					                        <td class="admin2">
 					                            <input type="text" size="5" class="text" name="EditPrestationProductionOrderPaymentLevel" id="EditPrestationProductionOrderPaymentLevel" value="<%=prestation.getProductionOrderPaymentLevel() %>"/>%
 					                        </td>
 					                    </tr>
 					                    <tr>
-					                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","productionorderprescription",sWebLanguage)%></td>
+					                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","productionorderprescription",sWebLanguage)%></td>
 					                        <td class="admin2">
 					                        	<select class='text' name='EditPrestationProductionOrderPrescription' id='EditPrestationProductionOrderPrescription'>
 					                        		<option/>
@@ -409,12 +423,12 @@
 					                        			SortedMap vExams = new TreeMap();
 					                        			for(int n=0;n<vResults.size();n++){
 					                        				Hashtable h = (Hashtable)vResults.elementAt(n);
-					                        				vExams.put(getTran("examination",(String)h.get("id"),sWebLanguage)+"."+h.get("id"),h.get("id"));
+					                        				vExams.put(getTran(request,"examination",(String)h.get("id"),sWebLanguage)+"."+h.get("id"),h.get("id"));
 					                        			}
 					                        			Iterator iExams = vExams.keySet().iterator();
 					                        			while(iExams.hasNext()){
 					                        				String id = (String)vExams.get((String)iExams.next());
-					                        				out.println("<option value='"+id+"' "+(id.equalsIgnoreCase(""+prestation.getProductionOrderPrescription())?"selected":"")+">"+getTran("examination",id,sWebLanguage)+"</option>");
+					                        				out.println("<option value='"+id+"' "+(id.equalsIgnoreCase(""+prestation.getProductionOrderPrescription())?"selected":"")+">"+getTran(request,"examination",id,sWebLanguage)+"</option>");
 					                        			}
 					                        		%>
 					                        	</select>
@@ -425,17 +439,17 @@
 					        </tr>
 		                <%	} %>
                     <tr>
-                        <td class="admin"><%=getTran("web","description",sWebLanguage)%>&nbsp;*&nbsp;</td>
+                        <td class="admin"><%=getTran(request,"web","description",sWebLanguage)%>&nbsp;*&nbsp;</td>
                         <td class="admin2">
                             <input type="text" class="text" name="EditPrestationDescr" size="80" maxlength="80" value="<%=checkString(prestation.getDescription())%>">
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin"><%=getTran("web","type",sWebLanguage)%>&nbsp;*&nbsp;</td>
+                        <td class="admin"><%=getTran(request,"web","type",sWebLanguage)%>&nbsp;*&nbsp;</td>
                         <td class="admin2">
                             <select class="text" name="EditPrestationType">
                                 <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>
-                                <%=ScreenHelper.writeSelect("prestation.type",checkString(prestation.getType()),sWebLanguage)%>
+                                <%=ScreenHelper.writeSelect(request,"prestation.type",checkString(prestation.getType()),sWebLanguage)%>
                             </select>
                         </td>
                     </tr>
@@ -448,36 +462,53 @@
                         }
                     %>
                     <tr>
-                        <td class="admin"><%=getTran("web","family",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"web","family",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="text" class="text" name="EditPrestationFamily" size="<%=MedwanQuery.getInstance().getConfigInt("maxprestationfamilysize",10) %>" maxlength="<%=MedwanQuery.getInstance().getConfigInt("maxprestationfamilysize",10)-2 %>" value="<%=prestation.getReferenceObject()==null?"":prestation.getReferenceObject().getObjectType()%>">
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin"><%=getTran("web","invoicegroup",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"web","invoicegroup",sWebLanguage)%></td>
                         <td class="admin2">
                         	<%
                         		if(MedwanQuery.getInstance().getConfigInt("enableSAP",0)==1){
                         	%>
 	                            <select class="text" name="EditPrestationInvoiceGroup">
-	                                <%=ScreenHelper.writeSelect("prestation.invoicegroup",checkString(prestation.getInvoicegroup()),sWebLanguage,false,true)%>
+	                                <%=ScreenHelper.writeSelect(request,"prestation.invoicegroup",checkString(prestation.getInvoicegroup()),sWebLanguage,false,true)%>
 	                            </select>
                         	<%
                         		}
                         		else {
                         	%>
-                            	<input type="text" class="text" name="EditPrestationInvoiceGroup" size="10" maxlength="8" value="<%=prestation.getInvoiceGroup()==null?"":prestation.getInvoiceGroup()%>">
+                            	<input type="text" class="text" name="EditPrestationInvoiceGroup" size="10" maxlength="50" value="<%=prestation.getInvoiceGroup()==null?"":prestation.getInvoiceGroup()%>">
                             <%
                         		}
                             %>
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin"><%=getTran("web","class",sWebLanguage)+(MedwanQuery.getInstance().getConfigInt("cnarEnabled",0)==1?" *":"")%></td>
+                        <td class="admin"><%=getTran(request,"web","timeslot",sWebLanguage)%></td>
+                        <td class="admin2">
+                            <select class="text" name="EditPrestationTimeslot">
+                            	<option/>
+                                <%=ScreenHelper.writeSelect(request,"timeslot",checkString(prestation.getTimeslot()),sWebLanguage,false,true)%>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="admin"><%=getTran(request,"web","costcenter",sWebLanguage)%></td>
+                        <td class="admin2">
+                            <select class="text" name="EditPrestationCostcenter">
+                                <%=ScreenHelper.writeSelect(request,"costcenter",checkString(prestation.getCostCenter()),sWebLanguage,false,true)%>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="admin"><%=getTran(request,"web","class",sWebLanguage)+(MedwanQuery.getInstance().getConfigInt("cnarEnabled",0)==1?" *":"")%></td>
                         <td class="admin2">
                             <select class="text" name="EditPrestationClass">
                                 <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>
-                                <%=ScreenHelper.writeSelect("prestation.class",checkString(prestation.getPrestationClass()),sWebLanguage)%>
+                                <%=ScreenHelper.writeSelect(request,"prestation.class",checkString(prestation.getPrestationClass()),sWebLanguage)%>
                             </select>
                         </td>
                     </tr>
@@ -485,11 +516,11 @@
                     	if(MedwanQuery.getInstance().getConfigInt("cnarEnabled",0)==1){
                     %>
 	                    <tr>
-	                        <td class="admin"><%=getTran("web","cnarclass",sWebLanguage)%> *</td>
+	                        <td class="admin"><%=getTran(request,"web","cnarclass",sWebLanguage)%> *</td>
 	                        <td class="admin2">
 	                            <select class="text" name="EditPrestationFlag1">
 	                                <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>
-	                                <%=ScreenHelper.writeSelect("prestation.cnarclass",prestation.getFlag1(),sWebLanguage)%>
+	                                <%=ScreenHelper.writeSelect(request,"prestation.cnarclass",prestation.getFlag1(),sWebLanguage)%>
 	                            </select>
 	                        </td>
 	                    </tr>
@@ -497,11 +528,11 @@
                     	}
 	                %>
                     <tr>
-                        <td class="admin"><%=getTran("web","defaultprice",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"web","defaultprice",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="text" class="text" name="EditPrestationPrice" size="10" maxlength="10" value="<%=sPrice%>" onKeyup="if(!isNumber(this)){this.value='';}">&nbsp;<%=sCurrency%>
 							<%if(MedwanQuery.getInstance().getConfigInt("allowVariablePrestationPrices",0)==1){ %>
-                            	&nbsp;<%=getTran("web","variable",sWebLanguage)%> <input type="checkbox" value="1" name="EditPrestationVariablePrice" id="EditPrestationVariablePrice" <%=prestation!=null && prestation.getVariablePrice()==1?"checked":"" %>/>
+                            	&nbsp;<%=getTran(request,"web","variable",sWebLanguage)%> <input type="checkbox" value="1" name="EditPrestationVariablePrice" id="EditPrestationVariablePrice" <%=prestation!=null && prestation.getVariablePrice()==1?"checked":"" %>/>
                             <%} %>
                         </td>
                     </tr>
@@ -509,7 +540,7 @@
                     	if(MedwanQuery.getInstance().getConfigInt("enableMFP",0)==1){
                     %>
 	                    <tr>
-	                        <td class="admin"><%=getTran("web","mfppercentage",sWebLanguage)%></td>
+	                        <td class="admin"><%=getTran(request,"web","mfppercentage",sWebLanguage)%></td>
 	                        <td class="admin2">
 	                            <input type="text" class="text" name="EditPrestationMfpPercentage" size="4" maxlength="3" value="<%=prestation.getMfpPercentage()%>" onKeyup="if(!isNumber(this)){this.value='';}">%
 	                        </td>
@@ -518,7 +549,7 @@
                     		if(MedwanQuery.getInstance().getConfigInt("enableMFPAdmission",0)==1){
                     %>
 		                    <tr>
-		                        <td class="admin"><%=getTran("web","mfpadmissionpercentage",sWebLanguage)%></td>
+		                        <td class="admin"><%=getTran(request,"web","mfpadmissionpercentage",sWebLanguage)%></td>
 		                        <td class="admin2">
 		                            <input type="text" class="text" name="EditPrestationMfpAdmissionPercentage" size="4" maxlength="3" value="<%=prestation.getMfpAdmissionPercentage()%>" onKeyup="if(!isNumber(this)){this.value='';}">%
 		                        </td>
@@ -531,13 +562,13 @@
                     	if(MedwanQuery.getInstance().getConfigString("anesthesiaPrestationUid","").length()>0){
                     %>
                     <tr>
-                        <td class="admin"><%=getTran("web","anesthesiapercentage",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"web","anesthesiapercentage",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="text" class="text" name="EditPrestationAnesthesiaPercentage" size="4" maxlength="3" value="<%=prestation.getAnesthesiaPercentage()%>" onKeyup="if(!isNumber(this)){this.value='';}">%
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin"><%=getTran("web","anesthesiasupplementpercentage",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"web","anesthesiasupplementpercentage",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="text" class="text" name="EditPrestationAnesthesiaSupplementPercentage" size="4" maxlength="3" value="<%=prestation.getAnesthesiaSupplementPercentage()%>" onKeyup="if(!isNumber(this)){this.value='';}">%
                         </td>
@@ -546,13 +577,13 @@
                     	}
                     %>
                     <tr>
-                        <td class="admin"><%=getTran("web","supplement",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"web","supplement",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="text" class="text" name="EditPrestationSupplement" size="10" maxlength="10" value="<%=prestation.getSupplement()%>" onKeyup="if(!isNumber(this)){this.value='';}">&nbsp;<%=sCurrency%>
                         </td>
                     </tr>
                     <tr>
-			            <td class='admin'><%=getTran("web","invoicingcareprovider",sWebLanguage)%></td>
+			            <td class='admin'><%=getTran(request,"web","invoicingcareprovider",sWebLanguage)%></td>
 			            <td class='admin2'>
 			            	<select class='text' name='EditCareProvider' id='EditCareProvider'>
 			            		<option value=''></option>
@@ -574,7 +605,7 @@
 			            </td>
 			        </tr>
 			       <tr id="Service">
-			           <td class="admin"><%=getTran("Web","linked.service",sWebLanguage)%></td>
+			           <td class="admin"><%=getTran(request,"Web","linked.service",sWebLanguage)%></td>
 			           <td class='admin2'>
 			               <input type="hidden" name="EditPrestationServiceUid" id="EditPrestationServiceUid" value="<%=sEditPrestationServiceUid%>">
 			               <input class="text" type="text" name="EditPrestationServiceName" id="EditPrestationServiceName" readonly size="<%=sTextWidth%>" value="<%=sEditPrestationServiceName%>" >
@@ -582,21 +613,30 @@
 			               <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="document.getElementById('EditPrestationServiceUid').value='';document.getElementById('EditPrestationServiceName').value='';">
 			           </td>
 			       </tr>
+                <tr>
+                    <td class="admin"> <%=getTran(request,"Web","reservedforservicetype",sWebLanguage)%></td>
+                    <td class="admin2">
+		                <select class="text" name="EditReservedForServiceType" style="vertical-align:top;">
+		                	<option/>
+		                	<%=ScreenHelper.writeSelect(request,"servicetypes", prestation.getReservedForServiceType(), sWebLanguage) %>
+		                </select>
+                    </td>
+                </tr>
                     
                     <tr>
-                        <td class="admin"><%=getTran("web","inactive",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"web","inactive",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="checkbox" name="EditPrestationInactive" value="1" <%=prestation.getInactive()==1?"checked":"" %>/>
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin"><%=getTran("web","hidefromdefaultlist",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"web","hidefromdefaultlist",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="checkbox" name="EditPrestationHideFromDefaultList" <%=prestation.getHideFromDefaultList()==1?"checked":""%> value="1"/>
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin"><%=getTran("web","categories",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"web","categories",sWebLanguage)%></td>
                         <td class="admin2">
                             <%
                                 prestation.getCategories();
@@ -605,15 +645,15 @@
                                 <%-- HEADER --%>
                                 <tr class="admin">
                                     <td width="40"/>
-                                    <td><%=getTran("system.manage","category",sWebLanguage)%></td>
-                                    <td><%=getTran("web","price",sWebLanguage)%></td>
+                                    <td><%=getTran(request,"system.manage","category",sWebLanguage)%></td>
+                                    <td><%=getTran(request,"web","price",sWebLanguage)%></td>
                                     <td/>
                                 </tr>
                                 <tr>
                                     <td class="admin"/>
                                     <td class="admin">
                                         <select name="EditCategoryName" class="text">
-                                            <%=ScreenHelper.writeSelect("insurance.types","",sWebLanguage)%>
+                                            <%=ScreenHelper.writeSelect(request,"insurance.types","",sWebLanguage)%>
                                         </select>
                                     </td>
                                     <td class="admin">

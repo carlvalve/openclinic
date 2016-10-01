@@ -18,7 +18,7 @@
     ///////////////////////////////////////////////////////////////////////////////////////////////
     
     DecimalFormat deci = new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#"));
-    String sTitle = getTran("web","statistics.issuedinsurerinvoices",sWebLanguage)+"&nbsp;&nbsp;&nbsp;<i>["+sStart+" - "+sEnd+"]</i>";
+    String sTitle = getTran(request,"web","statistics.issuedinsurerinvoices",sWebLanguage)+"&nbsp;&nbsp;&nbsp;<i>["+sStart+" - "+sEnd+"]</i>";
 %>
 
 <%=writeTableHeaderDirectText(sTitle,sWebLanguage," closeWindow()")%>
@@ -27,10 +27,10 @@
 <table width="100%" cellpadding="0" cellspacing="1" class="list">
     <%-- HEADER --%>
 	<tr class="admin">
-		<td width="90"><%=getTran("web","date",sWebLanguage)%></td>
-		<td width="120"><%=getTran("web","invoicenumber",sWebLanguage)%></td>
-		<td width="250"><%=getTran("web","insurar",sWebLanguage)%></td>
-		<td width="*"><%=getTran("web","amount",sWebLanguage)%></td>
+		<td width="90"><%=getTran(request,"web","date",sWebLanguage)%></td>
+		<td width="120"><%=getTran(request,"web","invoicenumber",sWebLanguage)%></td>
+		<td width="250"><%=getTran(request,"web","insurar",sWebLanguage)%></td>
+		<td width="*"><%=getTran(request,"web","amount",sWebLanguage)%></td>
 	</tr>
 	
 <%
@@ -56,7 +56,7 @@
 %>
 </table>
 
-<%=getTran("web","invoices",sWebLanguage)%>: <%=invoices.size()%><br>
+<%=getTran(request,"web","invoices",sWebLanguage)%>: <%=invoices.size()%><br>
 
 <%=ScreenHelper.alignButtonsStart()%>
     <input type="button" class="button" name="closeButton" value="<%=getTranNoLink("web","close",sWebLanguage)%>" onclick="closeWindow();">

@@ -68,12 +68,12 @@
 	output.append("<input type='hidden' name='PopupHeight' value='"+checkString(request.getParameter("PopupHeight"))+"'/>");
 	output.append("<input type='hidden' name='returnField' value='"+checkString(request.getParameter("returnField"))+"'/>");
 	output.append("<input type='text' class='text' size='80' name='key' value='"+key+"'/>");
-	output.append("<input type='submit' name='submit' value='"+getTran("web","find",sWebLanguage)+"'/>");
+	output.append("<input type='submit' name='submit' value='"+getTran(request,"web","find",sWebLanguage)+"'/>");
 	
 	output.append("<table width='100%'>");
 	output.append("<tr class='admin'>");
-	output.append("<td>"+getTran("web","drugname",sWebLanguage)+"</td>");
-	output.append("<td>"+getTran("web","rxnormcode",sWebLanguage)+"</td>");
+	output.append("<td>"+getTran(request,"web","drugname",sWebLanguage)+"</td>");
+	output.append("<td>"+getTran(request,"web","rxnormcode",sWebLanguage)+"</td>");
 	output.append("</tr>");
 		SortedSet codes=getRxNormCodes(key);
 		Iterator i = codes.iterator();

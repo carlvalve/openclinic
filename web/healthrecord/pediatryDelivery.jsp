@@ -34,6 +34,6 @@
 
     }
     else {
-        out.print(getTran("web","nodataavailable",sWebLanguage));
+        out.print(getTran(request,"web","nodataavailable",sWebLanguage));
     }
 %>

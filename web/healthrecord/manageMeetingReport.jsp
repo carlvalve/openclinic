@@ -19,7 +19,7 @@
         <tr>
             <td class="admin" width="<%=sTDAdminWidth%>">
                 <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-                <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+                <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
             </td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" id="trandate" OnBlur='checkDate(this)'>
@@ -33,14 +33,14 @@
 	    	</td>
 	    </tr>
         <tr>
-            <td class="admin"><%=getTran("web","meeting",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","meeting",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,10000);" <%=setRightClick("ITEM_TYPE_MEETINGREPORT_MEETING")%> class="text" cols="100" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MEETINGREPORT_MEETING" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MEETINGREPORT_MEETING" property="value"/></textarea>
             </td>
         </tr>
         
          <tr>
-            <td class="admin"><%=getTran("web","conclusion",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","conclusion",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,10000);" <%=setRightClick("ITEM_TYPE_MEETINGREPORT_CONCLUSION")%> class="text" cols="100" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MEETINGREPORT_CONCLUSION" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MEETINGREPORT_CONCLUSION" property="value"/></textarea>
             </td>

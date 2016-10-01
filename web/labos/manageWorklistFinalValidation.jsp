@@ -86,7 +86,7 @@
     <%=writeTableHeader("Web","workListFinalValidation",sWebLanguage," doBack();")%>
     <table width="100%" cellspacing="0" cellpadding="1" class="menu">
         <tr>
-            <td class="admin" width=<%=sTDAdminWidth%>"><%=getTran("web","worklist",sWebLanguage)%></td>
+            <td class="admin" width=<%=sTDAdminWidth%>"><%=getTran(request,"web","worklist",sWebLanguage)%></td>
             <td class="admin2">
                 <select class="text" name="activeProfile">
                     <%
@@ -119,8 +119,8 @@
         <br>
         <table width="100%" class="list" cellspacing="1" cellpadding="0">
             <tr class="admin">
-                <th><%=getTran("web","ID",sWebLanguage)%><br/><%=getTran("web","date",sWebLanguage)%></th>
-                <th><%=getTran("web","patient",sWebLanguage)%><br/><%=getTran("web","service",sWebLanguage)%></th>
+                <th><%=getTran(request,"web","ID",sWebLanguage)%><br/><%=getTran(request,"web","date",sWebLanguage)%></th>
+                <th><%=getTran(request,"web","patient",sWebLanguage)%><br/><%=getTran(request,"web","service",sWebLanguage)%></th>
         <%
             // Show the selected worklist
             // find all the analysis that are part of the active profile
@@ -135,8 +135,8 @@
                 }
                 worklistAnalyses+= "'"+analysis.get("labcode")+"'";
             }
-            out.print("<th>"+getTran("web","lab.validated",sWebLanguage)+"</th>");
-            out.print("<th>"+getTran("web","comment",sWebLanguage)+"</th></tr>");
+            out.print("<th>"+getTran(request,"web","lab.validated",sWebLanguage)+"</th>");
+            out.print("<th>"+getTran(request,"web","comment",sWebLanguage)+"</th></tr>");
 
             // find all lab requests for this worklist
             Vector results = new Vector();
@@ -328,7 +328,7 @@
                 out.print("</tr>");
             }
             out.print("<tr><td colspan='" + (profileAnalysis.size() + 4) + "'><hr/></td></tr>");
-            out.print("<tr><td colspan='2'><input readonly style='background: yellow' class='text' type='text' size='5'/> = " + MedwanQuery.getInstance().getLabel("web", "notechnicalvalidation", sWebLanguage)+"<br/><input readonly style='background: #ff9999' class='text' type='text' size='5'/> = "+MedwanQuery.getInstance().getLabel("web","higherthanalertvalue",sWebLanguage)+"</td><td><input class='button' type='submit' name='save' value='" + getTran("web", "save", sWebLanguage) + "'/></tr>");
+            out.print("<tr><td colspan='2'><input readonly style='background: yellow' class='text' type='text' size='5'/> = " + MedwanQuery.getInstance().getLabel("web", "notechnicalvalidation", sWebLanguage)+"<br/><input readonly style='background: #ff9999' class='text' type='text' size='5'/> = "+MedwanQuery.getInstance().getLabel("web","higherthanalertvalue",sWebLanguage)+"</td><td><input class='button' type='submit' name='save' value='" + getTran(request,"web", "save", sWebLanguage) + "'/></tr>");
         %>
         </table>
         <input type="hidden" name="worklistAnalyses" value="<%=worklistAnalyses%>"/>

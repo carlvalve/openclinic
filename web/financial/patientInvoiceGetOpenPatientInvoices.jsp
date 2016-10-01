@@ -26,7 +26,7 @@
                  +"<td class='hand'>&nbsp;"+ScreenHelper.getSQLDate(patientinvoice.getDate())+"</td>"
                  +"<td class='hand'>&nbsp;"+patientinvoice.getUid().split("\\.")[1]+"</td>"
                  +"<td class='hand' style='text-align:right;'>"+patientinvoice.getBalance()+"&nbsp;</td>"
-                 +"<td class='hand'>&nbsp;"+getTran("finance.patientinvoice.status",patientinvoice.getStatus(),sWebLanguage)+"</td></tr>");
+                 +"<td class='hand'>&nbsp;"+getTran(request,"finance.patientinvoice.status",patientinvoice.getStatus(),sWebLanguage)+"</td></tr>");
         }
     }
 
@@ -44,10 +44,10 @@
 %>
 <table id="searchresults" width="100%" cellspacing="0">
     <tr class="admin">
-        <td width="100" nowrap><%=HTMLEntities.htmlentities(getTran("web","date",sWebLanguage))%></td>
-        <td width="120" nowrap><%=HTMLEntities.htmlentities(getTran("web", "invoicenumber", sWebLanguage))%></td>
-        <td width="150" nowrap style="text-align:right;"><%=HTMLEntities.htmlentities(getTran("web","balance",sWebLanguage))%>&nbsp;<%=sCurrency%></td>
-        <td><%=HTMLEntities.htmlentities(getTran("Web.finance","patientinvoice.status",sWebLanguage))%></td>
+        <td width="100" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web","date",sWebLanguage))%></td>
+        <td width="120" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web", "invoicenumber", sWebLanguage))%></td>
+        <td width="150" nowrap style="text-align:right;"><%=HTMLEntities.htmlentities(getTran(request,"web","balance",sWebLanguage))%>&nbsp;<%=sCurrency%></td>
+        <td><%=HTMLEntities.htmlentities(getTran(request,"Web.finance","patientinvoice.status",sWebLanguage))%></td>
     </tr>
     <tbody class="hand">
         <%=sReturn%>

@@ -28,16 +28,16 @@
     <table class="list" border="0" width="100%" cellspacing="1">
         <%-- period (begin & end date) --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web.hr","period",sWebLanguage)%>&nbsp;(<%=getTran("web.hr","begin",sWebLanguage)%>* - <%=getTran("web.hr","end",sWebLanguage)%>)</td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web.hr","period",sWebLanguage)%>&nbsp;(<%=getTran(request,"web.hr","begin",sWebLanguage)%>* - <%=getTran(request,"web.hr","end",sWebLanguage)%>)</td>
             <td class="admin2">
-                <%=writeDateField("careerBegin","EditForm","",sWebLanguage)%>&nbsp;&nbsp;<%=getTran("web","until",sWebLanguage)%>&nbsp;&nbsp; 
+                <%=writeDateField("careerBegin","EditForm","",sWebLanguage)%>&nbsp;&nbsp;<%=getTran(request,"web","until",sWebLanguage)%>&nbsp;&nbsp; 
                 <%=writeDateField("careerEnd","EditForm","",sWebLanguage)%>            
             </td>                        
         </tr>
         
         <%-- contract --%>  
         <tr>
-            <td class="admin"><%=getTran("web.hr","contract",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.hr","contract",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <input type="hidden" name="contract" id="contract" value="">
                 <input type="text" class="text" name="contractName" id="contractName" readonly size="20" value="">
@@ -50,7 +50,7 @@
         
         <%-- position --%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","position",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.hr","position",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="position" name="position" size="50" maxLength="255" value="">
             </td>
@@ -58,7 +58,7 @@
                                 
         <%-- department (service) --%>
         <tr>
-            <td class="admin"><%=getTran("web","department",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web","department",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <input type="hidden" name="service" id="service" value="">
                 <input type="text" class="text" name="serviceName" id="serviceName" readonly size="<%=sTextWidth%>" value="">
@@ -71,29 +71,29 @@
         
         <%-- grade --%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","grade",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web.hr","grade",sWebLanguage)%></td>
             <td class="admin2">
                 <select class="text" id="grade" name="grade">
                     <option/>
-                    <%=ScreenHelper.writeSelect("hr.career.grade","",sWebLanguage)%>
+                    <%=ScreenHelper.writeSelect(request,"hr.career.grade","",sWebLanguage)%>
                 </select>
             </td>
         </tr>
             
         <%-- status --%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","status",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web.hr","status",sWebLanguage)%></td>
             <td class="admin2">
                 <select class="text" id="status" name="status"> 
                     <option/>
-                    <%=ScreenHelper.writeSelect("hr.career.status","",sWebLanguage)%>
+                    <%=ScreenHelper.writeSelect(request,"hr.career.status","",sWebLanguage)%>
                 </select>
             </td>
         </tr>
         
         <%-- comment --%>                    
         <tr>
-            <td class="admin"><%=getTran("web.hr","comment",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web.hr","comment",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea class="text" name="comment" id="comment" cols="80" rows="4" onKeyup="resizeTextarea(this,8);"></textarea>
             </td>
@@ -109,7 +109,7 @@
             </td>
         </tr>
     </table>
-    <i><%=getTran("web","colored_fields_are_obligate",sWebLanguage)%></i>
+    <i><%=getTran(request,"web","colored_fields_are_obligate",sWebLanguage)%></i>
     
     <div id="divMessage" style="padding-top:10px;"></div>
 </form>

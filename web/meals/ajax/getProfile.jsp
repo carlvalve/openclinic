@@ -9,7 +9,7 @@
 <%!
     //--- GET HOURS FIELD -------------------------------------------------------------------------
     public String getHoursField(String id, Date date, String sWebLanguage){
-	    String sOut = getTran("meals","at",sWebLanguage)+"&nbsp;";
+	    String sOut = getTran(null,"meals","at",sWebLanguage)+"&nbsp;";
 	    
 	    // hours
 	    sOut+= "<select id='mealHour_"+id+"' style='width:40px' class='text'>";
@@ -51,7 +51,7 @@
     <table class="list" cellspacing="1" cellpadding="1" width="100%" onKeyDown="if(enterEvent(event,13)){setProfile();return false;}">
         <%-- PROFILE NAME --%>
         <tr>
-            <td class="admin" width="100"><%=HTMLEntities.htmlentities(getTran("meals","name",sWebLanguage))%>&nbsp;*&nbsp;</td>
+            <td class="admin" width="100"><%=HTMLEntities.htmlentities(getTran(request,"meals","name",sWebLanguage))%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <input class="text" style="width:200px" type="text" name="profileName" id="profileName" value="<%=checkString(HTMLEntities.htmlentities(profile.name))%>"/>
             </td>
@@ -59,9 +59,9 @@
         
         <%-- PROFILE ITEMS (MEALS) --%>
         <tr>
-            <td class="admin"><%=HTMLEntities.htmlentities(getTran("meals","profileItems",sWebLanguage))%></td>
+            <td class="admin"><%=HTMLEntities.htmlentities(getTran(request,"meals","profileItems",sWebLanguage))%></td>
             <td class="admin2">
-                <a href="javascript:void(0)" class="link add" onclick="searchMeal();"><%=HTMLEntities.htmlentities(getTran("web","add",sWebLanguage)+" "+getTranNoLink("meals","meal",sWebLanguage))%></a>
+                <a href="javascript:void(0)" class="link add" onclick="searchMeal();"><%=HTMLEntities.htmlentities(getTran(request,"web","add",sWebLanguage)+" "+getTranNoLink("meals","meal",sWebLanguage))%></a>
                 <br>
                 
                 <ul id="profileItemList" class="items" style="width:380px">
@@ -84,7 +84,7 @@
         
         <%-- PROFILE NUTRICIENTS --%>
         <tr>
-            <td class="admin"><%=HTMLEntities.htmlentities(getTran("meals","nutricients",sWebLanguage))%></td>
+            <td class="admin"><%=HTMLEntities.htmlentities(getTran(request,"meals","nutricients",sWebLanguage))%></td>
             <td class="admin2">
                 <a href="javascript:void(0)" id="profileNutricientsButton" class="link down" onclick="getNutricientsInProfile(true);"><%=getTranNoLink("meals","seeNutricients",sWebLanguage)%></a>&nbsp;&nbsp;&nbsp;
                 <ul id="profileNutricientsList" class="items" style="display:none;width:380px"></ul>

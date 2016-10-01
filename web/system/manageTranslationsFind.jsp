@@ -54,7 +54,7 @@
         foundLabels.append("<tr class='list"+sClass+"'>")
                     .append("<td class='hand' onclick=\"setLabel('"+sLabelType+"','"+sLabelID+"');\">"+sLabelType+"</td>")
                     .append("<td class='hand' onclick=\"setLabel('"+sLabelType+"','"+sLabelID+"');\">"+HTMLEntities.htmlentities(sLabelID)+"</td>")
-                    .append("<td class='hand' onclick=\"setLabel('"+sLabelType+"','"+sLabelID+"');\">"+HTMLEntities.htmlentities(getTran("web.language",sLabelLang,sWebLanguage))+"</td>")
+                    .append("<td class='hand' onclick=\"setLabel('"+sLabelType+"','"+sLabelID+"');\">"+HTMLEntities.htmlentities(getTran(null,"web.language",sLabelLang,sWebLanguage))+"</td>")
                     .append("<td class='hand' onclick=\"setLabel('"+sLabelType+"','"+sLabelID+"');\">"+HTMLEntities.htmlentities(sLabelValue)+"</td>")
                    .append("</tr>");
 
@@ -66,10 +66,10 @@
 	    <table width="100%" cellspacing="0" cellpadding="0" class="list">
 	      <%-- HEADER --%>
 	      <tr class="admin">
-	        <td width="20%"><%=getTran("Web.Translations","LabelType",sWebLanguage)%></td>
-	        <td width="38%"><%=getTran("Web.Translations","LabelID",sWebLanguage)%></td>
-	        <td width="10%"><%=getTran("Web","Language",sWebLanguage)%></td>
-	        <td width="30%"><%=getTran("Web","Value",sWebLanguage)%></td>
+	        <td width="20%"><%=getTran(null,"Web.Translations","LabelType",sWebLanguage)%></td>
+	        <td width="38%"><%=getTran(null,"Web.Translations","LabelID",sWebLanguage)%></td>
+	        <td width="10%"><%=getTran(null,"Web","Language",sWebLanguage)%></td>
+	        <td width="30%"><%=getTran(null,"Web","Value",sWebLanguage)%></td>
 	      </tr>
 	      <%-- FOUND LABELS --%>
 	      <tbody id="Input_Hist" class="hand">

@@ -85,7 +85,7 @@
 	String service = checkString(request.getParameter("ServiceID"));
 	String serviceName = "";
 	if(service.length() > 0){
-	    serviceName = getTran("service",service,sWebLanguage);
+	    serviceName = getTran(request,"service",service,sWebLanguage);
 	}
 	
 	/// DEBUG /////////////////////////////////////////////////////////////////////////////////////
@@ -110,17 +110,17 @@
 		    <table width="100%" class="menu" cellspacing="1" cellpadding="0">
 		        <%-- PERIOD --%>
 		        <tr>
-		            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","period",sWebLanguage)%>&nbsp;</td>
+		            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","period",sWebLanguage)%>&nbsp;</td>
 		            <td class="admin2">
 		                <%=writeDateField("begin","diagstats",begin,sWebLanguage)%>&nbsp;
-		                <%=getTran("web","to",sWebLanguage)%>&nbsp;
+		                <%=getTran(request,"web","to",sWebLanguage)%>&nbsp;
 		                <%=writeDateField("end","diagstats",end,sWebLanguage)%>&nbsp;
 		            </td>
 		        </tr>
 		        
 		        <%-- SERVICE --%>
 		        <tr>
-		            <td class="admin"><%=getTran("Web","service",sWebLanguage)%></td>
+		            <td class="admin"><%=getTran(request,"Web","service",sWebLanguage)%></td>
 		            <td class="admin2" colspan='2'>
 		                <input type="hidden" name="ServiceID" value="<%=service%>">
 		                <input class="text" type="text" name="ServiceName" readonly size="<%=sTextWidth%>" value="<%=serviceName%>" >
@@ -163,7 +163,7 @@
         // header
         out.print("<table width='100%' class='list' cellpadding='0' cellspacing='1'>"+
                    "<tr>"+
-        		    "<td class='admin'><center>"+getTran("web","statistics.for",sWebLanguage)+" "+(myservice!=null?myservice.getLabel(sWebLanguage):getTran("web","hospitalname",sWebLanguage))+" "+getTran("web","between",sWebLanguage)+" "+ ScreenHelper.stdDateFormat.format(serviceStats.getBegin())+" "+getTran("web","and",sWebLanguage)+" "+ ScreenHelper.stdDateFormat.format(serviceStats.getEnd())+"<center></td>"+
+        		    "<td class='admin'><center>"+getTran(request,"web","statistics.for",sWebLanguage)+" "+(myservice!=null?myservice.getLabel(sWebLanguage):getTran(request,"web","hospitalname",sWebLanguage))+" "+getTran(request,"web","between",sWebLanguage)+" "+ ScreenHelper.stdDateFormat.format(serviceStats.getBegin())+" "+getTran(request,"web","and",sWebLanguage)+" "+ ScreenHelper.stdDateFormat.format(serviceStats.getEnd())+"<center></td>"+
                    "</tr>"+
         		  "</table>");
         
@@ -188,7 +188,7 @@
             while(transactionTypes.hasMoreElements()){
                 String transactionType = (String)transactionTypes.nextElement();
                 double[] values = serviceStats.getPeriodTransactions(transactionType);
-                drawGraph(values,n,out,sWebLanguage,getTran("web","examinations",sWebLanguage),getTran("web","weekly.evolution.of",sWebLanguage)+" # <b>"+getTran("web.occup",transactionType,sWebLanguage)+"</b>",n,0,correlation.estimateY(serviceStats.getX(),values,0),correlation.estimateY(serviceStats.getX(),values,serviceStats.getX().length));
+                drawGraph(values,n,out,sWebLanguage,getTran(request,"web","examinations",sWebLanguage),getTran(request,"web","weekly.evolution.of",sWebLanguage)+" # <b>"+getTran(request,"web.occup",transactionType,sWebLanguage)+"</b>",n,0,correlation.estimateY(serviceStats.getX(),values,0),correlation.estimateY(serviceStats.getX(),values,serviceStats.getX().length));
                 n++;
                 
                 Examination examination = new Examination(transactionType);
@@ -206,11 +206,11 @@
                 sComments+= "<center>"+
                             "<table class='menu' width='100%'>"+
                              "<tr>"+
-                              "<td>"+getTran("web","mean.value",sWebLanguage)+": <b>"+deciComma.format(correlation.mean(values))+"</b></td>\n"+
-                              "<td>"+getTran("web","pearsson",sWebLanguage)+": <b>"+deciComma.format(correlation.pearsonCorrelationCoefficient(serviceStats.getX(),values))+"</b></td>\n"+
-                              "<td colspan=\"2\">"+getTran("web","linear.regression",sWebLanguage)+": <b>"+getTran("web","examinations",sWebLanguage)+" = "+deciComma.format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),values)[0])+" x "+getTran("web","weeks",sWebLanguage)+"+ "+deciComma.format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),values)[1])+"</b></td>"+
-                              "<td>"+getTran("web","unit.cost",sWebLanguage)+": <b>"+examination.getCost()+"</b></td>"+
-                              "<td>"+getTran("web","period.cost",sWebLanguage)+": <b>"+deciLong.format(examination.getCost()*sumValues(values))+"</b></td>"+
+                              "<td>"+getTran(request,"web","mean.value",sWebLanguage)+": <b>"+deciComma.format(correlation.mean(values))+"</b></td>\n"+
+                              "<td>"+getTran(request,"web","pearsson",sWebLanguage)+": <b>"+deciComma.format(correlation.pearsonCorrelationCoefficient(serviceStats.getX(),values))+"</b></td>\n"+
+                              "<td colspan=\"2\">"+getTran(request,"web","linear.regression",sWebLanguage)+": <b>"+getTran(request,"web","examinations",sWebLanguage)+" = "+deciComma.format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),values)[0])+" x "+getTran(request,"web","weeks",sWebLanguage)+"+ "+deciComma.format(correlation.leastSquaresRegressionLineY(serviceStats.getX(),values)[1])+"</b></td>"+
+                              "<td>"+getTran(request,"web","unit.cost",sWebLanguage)+": <b>"+examination.getCost()+"</b></td>"+
+                              "<td>"+getTran(request,"web","period.cost",sWebLanguage)+": <b>"+deciLong.format(examination.getCost()*sumValues(values))+"</b></td>"+
                              "</tr>"+
                              "<tr>"+
                               "<td>+Y1: <b>"+deciComma.format(correlation.estimateY(serviceStats.getX(),values,serviceStats.getX().length+52))+" ("+deciLong.format(correlation.estimateY(serviceStats.getX(),values,serviceStats.getX().length+52)*examination.getCost()*serviceStats.getX().length)+")</b></td>"+
@@ -232,9 +232,9 @@
         sComments+= "<p/>"+
                     "<center>"+
                      "<table class=\"menu\" width=\"100%\">"+
-                      "<tr><td colspan='7'><b>"+getTran("web","costtotals",sWebLanguage).toUpperCase()+"</b></td></tr>"+
+                      "<tr><td colspan='7'><b>"+getTran(request,"web","costtotals",sWebLanguage).toUpperCase()+"</b></td></tr>"+
                       "<tr>"+
-                       "<td>"+getTran("web","period",sWebLanguage)+": <b>"+deciLong.format(_periodCost)+"</b></td>"+
+                       "<td>"+getTran(request,"web","period",sWebLanguage)+": <b>"+deciLong.format(_periodCost)+"</b></td>"+
                        "<td>+Y1: <b>"+deciLong.format(_costY1)+"</b></td>"+
                        "<td>+Y2: <b>"+deciLong.format(_costY2)+"</b></td>"+
                        "<td>+Y3: <b>"+deciLong.format(_costY3)+"</b></td>"+

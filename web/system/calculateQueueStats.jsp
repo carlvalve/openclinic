@@ -11,8 +11,8 @@
 		while(iStats.hasNext()){
 			String queueid=(String)iStats.next();
 			if(!bInit){
-				out.println("<tr class='admin'><td colspan='2'>"+getTran("web.manage","calculatequeuestats",sWebLanguage)+"</td></tr>");
-				out.println("<tr class='admin'><td>"+getTran("web","waitingqueue",sWebLanguage)+"</td><td>"+getTran("web","median",sWebLanguage)+"</td></tr>");
+				out.println("<tr class='admin'><td colspan='2'>"+getTran(request,"web.manage","calculatequeuestats",sWebLanguage)+"</td></tr>");
+				out.println("<tr class='admin'><td>"+getTran(request,"web","waitingqueue",sWebLanguage)+"</td><td>"+getTran(request,"web","median",sWebLanguage)+"</td></tr>");
 				bInit=true;
 			}
 			long millis=(Long)stats.get(queueid);
@@ -20,7 +20,7 @@
 			long minute = (millis / (1000 * 60)) % 60;
 			long hour = (millis / (1000 * 60 * 60)) % 24;
 			String time = String.format("%02d:%02d:%02d", hour, minute, second);
-			out.println("<tr><td  class='admin'>"+getTran("queue",queueid,sWebLanguage)+"</td><td class='admin2'>"+time+"</td></tr>");
+			out.println("<tr><td  class='admin'>"+getTran(request,"queue",queueid,sWebLanguage)+"</td><td class='admin2'>"+time+"</td></tr>");
 		}
 	}
 %>

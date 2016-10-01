@@ -95,18 +95,31 @@
             sToDisplay += "<li><span class='info person'>" + HTMLEntities.htmlentities(appointment.getDescription()) + "</li>";
         }
         if(appointment.getContextID().length()>0){
-            sToDisplay+="<li><span class='info'>"+getTran("Web.Occup", appointment.getContextID(), sWebLanguage)+"</li>";
+            sToDisplay+="<li><span class='info'>"+getTran(request,"Web.Occup", appointment.getContextID(), sWebLanguage)+"</li>";
         }
         sToDisplay+="</ul>";
         // appointment info
         sHtml.append("\n\n<item>");
         sHtml.append("\n<id>" + appointment.getUid() + "</id>");
+        if(MedwanQuery.getInstance().getConfigInt("enableCalendarServiceTypeColors",0)==1){
+			Service service = Service.getService(appointment.getServiceUid());
+			if(service!=null && service.code3!=null && service.code3.length()>0){
+				sHtml.append("\n<color>" + MedwanQuery.getInstance().getConfigString("serviceTypeColor."+service.code3,"") + "</color>");
+			}
+			else{
+				sHtml.append("\n<color></color>");
+			}
+        }
+		else{
+			sHtml.append("\n<color></color>");
+		}
         sHtml.append("\n<description>" + sToDisplay + "</description>");
         sHtml.append("\n<eventStartDate>" + new SimpleDateFormat("MMM dd, yyyy HH:mm:ss",new java.util.Locale("en","US")).format(appointment.getPlannedDate()) + "</eventStartDate>");
         sHtml.append("\n<eventEndDate>" + new SimpleDateFormat("MMM dd, yyyy HH:mm:ss",new java.util.Locale("en","US")).format(appointment.getPlannedEndDate()) + "</eventEndDate>");
         sHtml.append("\n<marginleft>" + testItemMargin(userAppointments, appointment) + "</marginleft>");
         sHtml.append("\n<hidden>" + hidden + "</hidden>");
         sHtml.append("\n<effective>" + ((appointment.getEffectiveDate()!=null)?"1":"") + "</effective>");
+        sHtml.append("\n<noshow>" + checkString(appointment.getNoshow()) + "</noshow>");
         sHtml.append("\n</item>");
     }
     out.print(sHtml);%>

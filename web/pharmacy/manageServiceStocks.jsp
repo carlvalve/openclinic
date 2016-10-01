@@ -1,4 +1,4 @@
-<%@page import="be.openclinic.pharmacy.ServiceStock,
+<%@page import="be.openclinic.pharmacy.*,be.openclinic.medical.*,
                 java.util.StringTokenizer,
                 java.util.Vector"%>
 <%@include file="/includes/validateUser.jsp"%>
@@ -7,22 +7,50 @@
 <%=sJSSORTTABLE%>
 
 <%!
-    //--- ADD AUTHORIZED USER ---------------------------------------------------------------------
-    private String addAuthorizedUser(int userIdx, String userName, String sWebLanguage){
-        StringBuffer html = new StringBuffer();
+//--- ADD AUTHORIZED USER ---------------------------------------------------------------------
+private String addAuthorizedUser(int userIdx, String userName, String sWebLanguage){
+    StringBuffer html = new StringBuffer();
 
-        html.append("<tr id='rowAuthorizedUsers"+userIdx+"'>")
-             .append("<td width='18'>")
-              .append("<img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.gif' onclick='deleteAuthorizedUser(rowAuthorizedUsers"+userIdx+");' class='link' alt='"+getTranNoLink("web","delete",sWebLanguage)+"'>")
-             .append("</td>")
-             .append("<td>"+userName+"</td>")
-            .append("</tr>");
+    html.append("<tr id='rowAuthorizedUsers"+userIdx+"'>")
+         .append("<td width='18'>")
+          .append("<img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.gif' onclick='deleteAuthorizedUser(rowAuthorizedUsers"+userIdx+");' class='link' alt='"+getTranNoLink("web","delete",sWebLanguage)+"'>")
+         .append("</td>")
+         .append("<td>"+userName+"</td>")
+        .append("</tr>");
 
-        return html.toString();
-    }
+    return html.toString();
+}
+
+//--- ADD DISPENSING USER ---------------------------------------------------------------------
+private String addDispensingUser(int userIdx, String userName, String sWebLanguage){
+  StringBuffer html = new StringBuffer();
+
+  html.append("<tr id='rowDispensingUsers"+userIdx+"'>")
+       .append("<td width='18'>")
+        .append("<img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.gif' onclick='deleteDispensingUser(rowDispensingUsers"+userIdx+");' class='link' alt='"+getTranNoLink("web","delete",sWebLanguage)+"'>")
+       .append("</td>")
+       .append("<td>"+userName+"</td>")
+      .append("</tr>");
+
+  return html.toString();
+}
+
+//--- ADD DISPENSING USER ---------------------------------------------------------------------
+private String addValidationUser(int userIdx, String userName, String sWebLanguage){
+  StringBuffer html = new StringBuffer();
+
+  html.append("<tr id='rowValidationUsers"+userIdx+"'>")
+       .append("<td width='18'>")
+        .append("<img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.gif' onclick='deleteValidationUser(rowValidationUsers"+userIdx+");' class='link' alt='"+getTranNoLink("web","delete",sWebLanguage)+"'>")
+       .append("</td>")
+       .append("<td>"+userName+"</td>")
+      .append("</tr>");
+
+  return html.toString();
+}
 
     //--- OBJECTS TO HTML -------------------------------------------------------------------------
-    private StringBuffer objectsToHtml(Vector objects, String sWebLanguage, User activeUser,String showHidden){
+    private StringBuffer objectsToHtml(Vector objects, String sWebLanguage, User activeUser,String showHidden,boolean bActivePatientPrescription,String showUnauthorized){
         StringBuffer html = new StringBuffer();
         Vector authorizedUserIds;
         String sClass = "1", sServiceStockUid = "", sServiceUid = "", sServiceName = "", sAuthorizedUserIds,
@@ -39,6 +67,9 @@
         ServiceStock serviceStock;
         for(int i=0; i<objects.size(); i++){
             serviceStock = (ServiceStock) objects.get(i);
+            if(showUnauthorized==null && !serviceStock.isAuthorizedUser(activeUser.userid)){
+            	continue;
+            }
             if(serviceStock.getHidden()<1 || showHidden!=null){
 	            sServiceStockUid = serviceStock.getUid();
 	
@@ -80,17 +111,24 @@
 	            if(serviceStock.hasOpenOrders()){
 	                html.append("&nbsp;<img src='"+sCONTEXTPATH+"/_img/icons/icon_order.gif' class='link' alt='"+getTranNoLink("web","orders",sWebLanguage)+"'' onclick='javascript:acceptOrders(\""+serviceStock.getUid()+"\");'/></a>");
 	            }
+	            if(serviceStock.isValidationUser(activeUser.userid) && serviceStock.hasUnvalidatedDeliveries(activeUser.userid)){
+	                html.append("&nbsp;<img src='"+sCONTEXTPATH+"/_img/icons/icon_validate.png' class='link' alt='"+getTranNoLink("web","validate",sWebLanguage)+"'' onclick='javascript:validateDeliveries(\""+serviceStock.getUid()+"\");'/></a>");
+	            }
 	            html.append("</td>");
 	            
-	            html.append("<td onclick=\"doShowDetails('"+sServiceStockUid+"');\">"+serviceStock.getName()+"</td>")
+	            html.append("<td onclick=\"doShowDetails('"+sServiceStockUid+"');\">"+serviceStock.getUid()+" "+serviceStock.getName()+"</td>")
 	                .append("<td onclick=\"doShowDetails('"+sServiceStockUid+"');\">"+sServiceName+"</td>")
 	                .append("<td onclick=\"doShowDetails('"+sServiceStockUid+"');\">"+sManagerName+"</td>")
 	                .append("<td onclick=\"doShowDetails('"+sServiceStockUid+"');\">"+productCount+"</td>");
 	
 	            // display "manage product stocks"-button when user is authorized
 	            if(serviceStock.isAuthorizedUser(activeUser.userid)){
-	                html.append("<td>")
-	                     .append("<input type='button' class='button' value='"+calculateOrderTran+"' onclick=\"doCalculateOrder('"+sServiceStockUid+"','"+sServiceName+"');\">&nbsp;")
+	                html.append("<td>");
+	                //If the patient has outstanding prescriptions, show the 'patient' button
+	                if(bActivePatientPrescription){
+		                html.append("<input type='button' class='button' value='"+getTran(null,"web","patient",sWebLanguage)+"' onclick=\"doPatientPrescription('"+sServiceStockUid+"');\">&nbsp;");
+	                }
+	                html.append("<input type='button' class='button' value='"+calculateOrderTran+"' onclick=\"doCalculateOrder('"+sServiceStockUid+"','"+sServiceName+"');\">&nbsp;")
 	                     .append("<input type='button' class='button' value='"+productStockTran+"' onclick=\"displayProductStockManagement('"+sServiceStockUid+"','"+sServiceUid+"');\">&nbsp;")
 	                     .append(activeUser.getAccessRight("patient.copypharmacystocks.select")?"<input type='button' class='button' value='"+getTranNoLink("web","copy",sWebLanguage)+"' onclick=\"copyProducts('"+sServiceStockUid+"');\">&nbsp;":"")
 	                    .append("</td>");
@@ -109,6 +147,10 @@
 
 <%
     String centralPharmacyCode = MedwanQuery.getInstance().getConfigString("centralPharmacyCode");
+	long day = 24*3600*1000;
+	long prescriptionvalidity=MedwanQuery.getInstance().getConfigInt("activePrescriptionValidityPeriodInDays",30);
+	java.util.Date dStart = new java.util.Date(new java.util.Date().getTime()-prescriptionvalidity*day);
+	boolean bHasActivePrescriptions = activePatient==null?false:Prescription.findUndelivered(activePatient.personid,ScreenHelper.formatDate(dStart)).size()>0;
 
     String sAction = checkString(request.getParameter("Action"));
     if(sAction.length()==0){
@@ -125,6 +167,7 @@
            sEditDefaultSupplierUid = checkString(request.getParameter("EditDefaultSupplierUid")),
            sEditOrderPeriod        = checkString(request.getParameter("EditOrderPeriodInMonths")),
            sEditHidden        	   = checkString(request.getParameter("EditHidden")),
+           sEditValidateOutgoing   = checkString(request.getParameter("EditValidateOutgoing")),
     	   sEditNosync        	   = checkString(request.getParameter("EditNosync"));
     
 	   if(sEditNosync.equalsIgnoreCase("")){
@@ -133,6 +176,10 @@
 
 	   if(sEditHidden.equalsIgnoreCase("")){
 		   sEditHidden = "0";
+	   }
+
+	   if(sEditValidateOutgoing.equalsIgnoreCase("")){
+		   sEditValidateOutgoing = "0";
 	   }
 
     // afgeleide data
@@ -154,6 +201,7 @@
         Debug.println("sEditServiceName     : "+sEditServiceName);
         Debug.println("sEditManagerName     : "+sEditManagerName);
         Debug.println("sEditHidden          : "+sEditHidden);
+        Debug.println("sEditValidateOutgoing: "+sEditValidateOutgoing);
         Debug.println("sEditDefSupplierName : "+sEditDefaultSupplierName+"\n");
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -161,16 +209,24 @@
     String msg = "", sFindStockName = "", sFindServiceUid = "", sFindServiceName = "",
            sFindBegin = "", sFindEnd = "", sFindManagerUid = "", sSelectedStockName = "",
            sSelectedServiceUid = "", sSelectedBegin = "", sSelectedEnd = "", sSelectedManagerUid = "",
-           sSelectedServiceName = "", sSelectedManagerName = "", authorizedUserId = "",
-           authorizedUserName = "", sFindDefaultSupplierUid = "", sFindDefaultSupplierName = "",
+           sSelectedServiceName = "", sSelectedManagerName = "", authorizedUserId = "", dispensingUserId = "", validationUserId="",
+           authorizedUserName = "", dispensingUserName = "", validationUserName="", sFindDefaultSupplierUid = "", sFindDefaultSupplierName = "",
            sSelectedDefaultSupplierUid = "", sSelectedDefaultSupplierName = "", sSelectedOrderPeriod = "",
-           sSelectedNosync="",sSelectedHidden="";
+           sSelectedNosync="",sSelectedHidden="",sSelectedValidateOutgoing="";
 
     StringBuffer stocksHtml = null;
-    int foundStockCount = 0, authorisedUsersIdx = 1;
+    int foundStockCount = 0, authorisedUsersIdx = 1, dispensingUsersIdx = 1, validationUsersIdx=1;
     StringBuffer authorizedUsersHTML = new StringBuffer(),
-                 authorizedUsersJS = new StringBuffer(),
-                 authorizedUsersDB = new StringBuffer();
+            authorizedUsersJS = new StringBuffer(),
+            authorizedUsersDB = new StringBuffer();
+
+    StringBuffer dispensingUsersHTML = new StringBuffer(),
+    		dispensingUsersJS = new StringBuffer(),
+    		dispensingUsersDB = new StringBuffer();
+
+    StringBuffer validationUsersHTML = new StringBuffer(),
+    		validationUsersJS = new StringBuffer(),
+    				validationUsersDB = new StringBuffer();
 
     // display options
     boolean displayEditFields = false, displayFoundRecords = false;
@@ -201,6 +257,7 @@
         if(sEditOrderPeriod.length() > 0) stock.setOrderPeriodInMonths(Integer.parseInt(sEditOrderPeriod));
         if(sEditNosync.length() > 0) stock.setNosync(Integer.parseInt(sEditNosync));
         if(sEditHidden.length() > 0) stock.setHidden(Integer.parseInt(sEditHidden));
+        if(sEditValidateOutgoing.length() > 0) stock.setValidateoutgoingtransactions(Integer.parseInt(sEditValidateOutgoing));
         stock.setStockManagerUid(sEditManagerUid);
         stock.setDefaultSupplierUid(sEditDefaultSupplierUid);
 
@@ -217,6 +274,32 @@
             }
         }
 
+        // dispensing users
+        User dispensingUserObj;
+        String dispensingUserIds = checkString(request.getParameter("EditDispensingUsers"));
+        if(dispensingUserIds.length() > 0){
+        	dispensingUsersIdx = 1;
+            StringTokenizer idTokenizer = new StringTokenizer(dispensingUserIds,"$");
+            while(idTokenizer.hasMoreTokens()){
+            	dispensingUserId = idTokenizer.nextToken();
+            	dispensingUserObj = User.get(Integer.parseInt(dispensingUserId));
+                stock.addDispensingUser(dispensingUserObj);
+            }
+        }
+
+        // validation users
+        User validationUserObj;
+        String validationUserIds = checkString(request.getParameter("EditValidationUsers"));
+        if(validationUserIds.length() > 0){
+        	validationUsersIdx = 1;
+            StringTokenizer idTokenizer = new StringTokenizer(validationUserIds,"$");
+            while(idTokenizer.hasMoreTokens()){
+            	validationUserId = idTokenizer.nextToken();
+            	validationUserObj = User.get(Integer.parseInt(validationUserId));
+                stock.addValidationUser(validationUserObj);
+            }
+        }
+
         stock.setUpdateUser(activeUser.userid);
 
         // does stock exist ?
@@ -230,13 +313,13 @@
 
                 // show saved data
                 sAction = "findShowOverview"; // showDetails
-                msg = " | "+getTran("web","dataissaved",sWebLanguage);
+                msg = " | "+getTran(request,"web","dataissaved",sWebLanguage);
             }
             //***** reject new addition thru update *****
             else{
                 // show rejected data
                 sAction = "showDetailsAfterAddReject";
-                msg = " | <font color='red'>"+getTran("web.manage","stockexists",sWebLanguage)+"</font>";
+                msg = " | <font color='red'>"+getTran(request,"web.manage","stockexists",sWebLanguage)+"</font>";
             }
         }
         else{
@@ -246,7 +329,7 @@
 
                 // show saved data
                 sAction = "findShowOverview"; // showDetails
-                msg = " | "+getTran("web","dataissaved",sWebLanguage);
+                msg = " | "+getTran(request,"web","dataissaved",sWebLanguage);
             }
             //***** reject double record thru update *****
             else{
@@ -254,7 +337,7 @@
                     // nothing : just updating a record with its own data
                     if(stock.changed()){
                         stock.store();
-                        msg = " | "+getTran("web","dataissaved",sWebLanguage);
+                        msg = " | "+getTran(request,"web","dataissaved",sWebLanguage);
                     }
                     sAction = "findShowOverview"; // showDetails
                 }
@@ -262,7 +345,7 @@
                     // tried to update one stock with exact the same data as an other stock
                     // show rejected data
                     sAction = "showDetailsAfterUpdateReject";
-                    msg = " | "+"<font color='red'>"+getTran("web.manage","stockexists",sWebLanguage)+"</font>";
+                    msg = " | "+"<font color='red'>"+getTran(request,"web.manage","stockexists",sWebLanguage)+"</font>";
                 }
             }
         }
@@ -273,7 +356,7 @@
     else if(sAction.equals("delete") && sEditStockUid.length()>0){
         ServiceStock.deleteProductStocks(sEditStockUid);
         ServiceStock.delete(sEditStockUid);
-        msg = " | "+getTran("web","dataisdeleted",sWebLanguage);
+        msg = " | "+getTran(request,"web","dataisdeleted",sWebLanguage);
         sAction = "findShowOverview"; // display overview even if only one record remains
     }
 
@@ -296,8 +379,8 @@
         sFindDefaultSupplierUid = checkString(request.getParameter("FindDefaultSupplierUid"));
 
         Vector serviceStocks = ServiceStock.find(sFindStockName,sFindServiceUid,sFindBegin,sFindEnd,
-                                                 sFindManagerUid,sFindDefaultSupplierUid,"OC_STOCK_NAME","DESC");
-        stocksHtml = objectsToHtml(serviceStocks,sWebLanguage,activeUser,request.getParameter("showhidden"));
+                                                 sFindManagerUid,sFindDefaultSupplierUid,"OC_STOCK_NAME","ASC");
+        stocksHtml = objectsToHtml(serviceStocks,sWebLanguage,activeUser,request.getParameter("showhidden"),bHasActivePrescriptions,request.getParameter("showunauthorized"));
         foundStockCount = serviceStocks.size();
     }
 
@@ -318,6 +401,7 @@
                 sSelectedOrderPeriod        = (serviceStock.getOrderPeriodInMonths()<0?"":serviceStock.getOrderPeriodInMonths()+"");
 				sSelectedNosync				= serviceStock.getNosync()+"";
 				sSelectedHidden				= serviceStock.getHidden()+"";
+				sSelectedValidateOutgoing   = serviceStock.getValidateoutgoingtransactions()+"";
 
                 // format dates
                 java.util.Date tmpDate = serviceStock.getBegin();
@@ -339,6 +423,38 @@
                         authorizedUsersJS.append("rowAuthorizedUsers"+authorisedUsersIdx+"="+authorizedUserId+"£"+authorizedUserName+"$");
                         authorizedUsersHTML.append(addAuthorizedUser(authorisedUsersIdx,authorizedUserName,sWebLanguage));
                         authorizedUsersDB.append(authorizedUserId+"$");
+                    }
+                }
+
+                // dispensing users
+                String dispensingUserIds = checkString(serviceStock.getDispensingUserIds());
+                if(dispensingUserIds.length() > 0){
+                	dispensingUsersIdx = 1;
+                    StringTokenizer idTokenizer = new StringTokenizer(dispensingUserIds,"$");
+                    while(idTokenizer.hasMoreTokens()){
+                    	dispensingUserId = idTokenizer.nextToken();
+                    	dispensingUserName = ScreenHelper.getFullUserName(dispensingUserId);
+                    	dispensingUsersIdx++;
+
+                    	dispensingUsersJS.append("rowDispensingUsers"+dispensingUsersIdx+"="+dispensingUserId+"£"+dispensingUserName+"$");
+                    	dispensingUsersHTML.append(addDispensingUser(dispensingUsersIdx,dispensingUserName,sWebLanguage));
+                    	dispensingUsersDB.append(dispensingUserId+"$");
+                    }
+                }
+
+                // validation users
+                String validationUserIds = checkString(serviceStock.getValidationUserIds());
+                if(validationUserIds.length() > 0){
+                	validationUsersIdx = 1;
+                    StringTokenizer idTokenizer = new StringTokenizer(validationUserIds,"$");
+                    while(idTokenizer.hasMoreTokens()){
+                    	validationUserId = idTokenizer.nextToken();
+                    	validationUserName = ScreenHelper.getFullUserName(validationUserId);
+                    	validationUsersIdx++;
+
+                    	validationUsersJS.append("rowValidationUsers"+validationUsersIdx+"="+validationUserId+"£"+validationUserName+"$");
+                    	validationUsersHTML.append(addValidationUser(validationUsersIdx,validationUserName,sWebLanguage));
+                    	validationUsersDB.append(validationUserId+"$");
                     }
                 }
 
@@ -366,6 +482,7 @@
             sSelectedOrderPeriod        = sEditOrderPeriod;
             sSelectedNosync				= sEditNosync;
             sSelectedHidden				= sEditHidden;
+            sSelectedValidateOutgoing	= sEditValidateOutgoing;
 
             // afgeleide data
             sSelectedServiceName         = sEditServiceName;
@@ -382,6 +499,7 @@
             // default Nosync
             if(sEditNosync.length()==0) sEditNosync = "1"; // todo : needed ?
             if(sEditHidden.length()==0) sEditHidden = "0"; // todo : needed ?
+            if(sEditValidateOutgoing.length()==0) sEditValidateOutgoing = "0"; // todo : needed ?
 
             // active user service as default service
             sSelectedServiceUid = activeUser.activeService.code;
@@ -433,14 +551,14 @@
                 <table width="100%" class="list" cellspacing="1" onClick="transactionForm.onkeydown='if(enterEvent(event,13)){doSearch();}';" onKeyDown="if(enterEvent(event,13)){doSearch();}">
                     <%-- Stock Name --%>
                     <tr>
-                        <td class="admin2" width="<%=sTDAdminWidth%>" nowrap><%=getTran("Web","Name",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2" width="<%=sTDAdminWidth%>" nowrap><%=getTran(request,"Web","Name",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <input type="text" class="text" name="FindStockName" size="<%=sTextWidth%>" maxLength="255" value="<%=sFindStockName%>">
                         </td>
                     </tr>
                     <%-- Service --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","service",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","service",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <input type="hidden" name="FindServiceUid" value="<%=sFindServiceUid%>">
                             <input class="text" type="text" name="FindServiceName" readonly size="<%=sTextWidth%>" value="<%=sFindServiceName%>">
@@ -450,17 +568,17 @@
                     </tr>
                     <%-- Begin --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","begindate",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","begindate",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2"><%=writeDateField("FindBegin","transactionForm",sFindBegin,sWebLanguage)%></td>
                     </tr>
                     <%-- End --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","enddate",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","enddate",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2"><%=writeDateField("FindEnd","transactionForm",sFindEnd,sWebLanguage)%></td>
                     </tr>
                     <%-- Manager --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","manager",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","stockmanager",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <input type="hidden" name="FindManagerUid" value="<%=sFindManagerUid%>">
                             <input class="text" type="text" name="FindManagerName" readonly size="<%=sTextWidth%>" value="<%=sFindManagerName%>">
@@ -470,7 +588,7 @@
                     </tr>
                     <%-- default supplier --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","defaultsupplier",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","defaultsupplier",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                         	<select class='text' name='FindDefaultSupplierUid' id='FindDefaultSupplierUid'>
                         		<option value=''/>
@@ -501,7 +619,8 @@
                                     %><input type="button" class="button" name="newButton" value="<%=getTranNoLink("Web","new",sWebLanguage)%>" onclick="doNew();"><%
                                 }
                             %>
-                            <input type="checkbox" name="showhidden" id="showhidden" <%=request.getParameter("showhidden")!=null?"checked":"" %> onclick="doSearch();"/><%=getTran("web","hidden",sWebLanguage) %>
+                            <input type="checkbox" name="showhidden" id="showhidden" <%=request.getParameter("showhidden")!=null?"checked":"" %> onclick="doSearch();"/><%=getTran(request,"web","hidden",sWebLanguage) %>
+                            <input type="checkbox" name="showunauthorized" id="showunauthorized" <%=request.getParameter("showunauthorized")!=null?"checked":"" %> onclick="doSearch();"/><%=getTran(request,"web","unauthorized",sWebLanguage) %>
                             <%-- display message --%>
                             <span id="msgArea"><%=msg%></span>
                         </td>
@@ -542,10 +661,10 @@
                         <%-- header --%>
                         <tr class="admin">
                             <td width="90" nowrap>&nbsp;</td>
-                            <td><%=getTran("Web","name",sWebLanguage)%></td>
-                            <td><%=getTran("Web","service",sWebLanguage)%></td>
-                            <td><%=getTran("Web","manager",sWebLanguage)%></td>
-                            <td><%=getTran("Web.manage","productstockcount",sWebLanguage)%></td>
+                            <td><%=getTran(request,"Web","name",sWebLanguage)%></td>
+                            <td><%=getTran(request,"Web","service",sWebLanguage)%></td>
+                            <td><%=getTran(request,"Web","manager",sWebLanguage)%></td>
+                            <td><%=getTran(request,"Web.manage","productstockcount",sWebLanguage)%></td>
                             <td/>
                         </tr>
                         <tbody class="hand"><%=stocksHtml%></tbody>
@@ -553,7 +672,7 @@
                     
                     <%-- number of records found --%>
                     <span style="width:49%;text-align:left;">
-                        <%=foundStockCount%> <%=getTran("web","recordsfound",sWebLanguage)%>
+                        <%=foundStockCount%> <%=getTran(request,"web","recordsfound",sWebLanguage)%>
                     </span>
                     
                     <%
@@ -571,7 +690,7 @@
             }
             else{
                 // no records found
-                %><%=getTran("web","norecordsfound",sWebLanguage)%><br><br><%
+                %><%=getTran(request,"web","norecordsfound",sWebLanguage)%><br><br><%
             }
         }
 
@@ -581,11 +700,11 @@
                 <table class="list" width="100%" cellspacing="1">
                     <%-- Stock Name --%>
                     <tr>
-                        <td class="admin" width="<%=sTDAdminWidth%>" nowrap><%=getTran("Web","ID",sWebLanguage)%></td>
+                        <td class="admin" width="<%=sTDAdminWidth%>" nowrap><%=getTran(request,"Web","ID",sWebLanguage)%></td>
                         <td class="admin2"><%=sEditStockUid%></td>
                     </tr>
                     <tr>
-                        <td class="admin" width="<%=sTDAdminWidth%>" nowrap><%=getTran("Web","Name",sWebLanguage)%>&nbsp;*</td>
+                        <td class="admin" width="<%=sTDAdminWidth%>" nowrap><%=getTran(request,"Web","Name",sWebLanguage)%>&nbsp;*</td>
                         <td class="admin2">
                             <input class="text" type="text" name="EditStockName" size="<%=sTextWidth%>" maxLength="255" value="<%=sSelectedStockName%>">
                         </td>
@@ -593,7 +712,7 @@
                     
                     <%-- Service --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","service",sWebLanguage)%>&nbsp;*</td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","service",sWebLanguage)%>&nbsp;*</td>
                         <td class="admin2">
                             <input type="hidden" name="EditServiceUid" value="<%=sSelectedServiceUid%>">
                             <input class="text" type="text" name="EditServiceName" readonly size="<%=sTextWidth%>" value="<%=sSelectedServiceName%>">
@@ -605,7 +724,7 @@
                     
                     <%-- Begin date --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","begindate",sWebLanguage)%>&nbsp;*</td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","begindate",sWebLanguage)%>&nbsp;*</td>
                         <td class="admin2"><%=writeDateField("EditBegin","transactionForm",sSelectedBegin,sWebLanguage)%>
                             <%
                                 // if new order : set today as default value for begindate
@@ -618,13 +737,13 @@
                     
                     <%-- End date --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","enddate",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","enddate",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2"><%=writeDateField("EditEnd","transactionForm",sSelectedEnd,sWebLanguage)%></td>
                     </tr>
                     
                     <%-- Manager --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","manager",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","stockmanager",sWebLanguage)%> *</td>
                         <td class="admin2">
                             <input type="hidden" name="EditManagerUid" value="<%=sSelectedManagerUid%>">
                             <input class="text" type="text" name="EditManagerName" readonly size="<%=sTextWidth%>" value="<%=sSelectedManagerName%>">
@@ -636,7 +755,7 @@
                     
                     <%-- Authorized users --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","Authorizedusers",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","Authorizedusers",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <%-- add row --%>
                             <input type="hidden" name="AuthorizedUserIdAdd" value="">
@@ -652,9 +771,45 @@
                         </td>
                     </tr>
 
+                    <%-- Dispensing users --%>
+                    <tr>
+                        <td class="admin" nowrap><%=getTran(request,"Web","dispensingusers",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2">
+                            <%-- add row --%>
+                            <input type="hidden" name="DispensingUserIdAdd" value="">
+                            <input class="text" type="text" name="DispensingUserNameAdd" size="<%=sTextWidth%>" value="" readonly>
+                           
+                            <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchDispensingUser('DispensingUserIdAdd','DispensingUserNameAdd');">
+                            <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="transactionForm.DispensingUserIdAdd.value='';transactionForm.DispensingUserNameAdd.value='';">
+                            <img src="<c:url value="/_img/icons/icon_add.gif"/>" class="link" alt="<%=getTranNoLink("Web","add",sWebLanguage)%>" onclick="addDispensingUser();">
+                            <table width="100%" cellspacing="1" id="tblDispensingUsers">
+                                <%=dispensingUsersHTML%>
+                            </table>
+                            <input type="hidden" name="EditDispensingUsers" value="<%=dispensingUsersDB%>">
+                        </td>
+                    </tr>
+
+                    <%-- Validation users --%>
+                    <tr>
+                        <td class="admin" nowrap><%=getTran(request,"Web","validationusers",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2">
+                            <%-- add row --%>
+                            <input type="hidden" name="ValidationUserIdAdd" value="">
+                            <input class="text" type="text" name="ValidationUserNameAdd" size="<%=sTextWidth%>" value="" readonly>
+                           
+                            <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchValidationUser('ValidationUserIdAdd','ValidationUserNameAdd');">
+                            <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="transactionForm.ValidationUserIdAdd.value='';transactionForm.ValidationUserNameAdd.value='';">
+                            <img src="<c:url value="/_img/icons/icon_add.gif"/>" class="link" alt="<%=getTranNoLink("Web","add",sWebLanguage)%>" onclick="addValidationUser();">
+                            <table width="100%" cellspacing="1" id="tblValidationUsers">
+                                <%=validationUsersHTML%>
+                            </table>
+                            <input type="hidden" name="EditValidationUsers" value="<%=validationUsersDB%>">
+                        </td>
+                    </tr>
+
                     <%-- default supplier --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","defaultsupplier",sWebLanguage)%>&nbsp;*&nbsp;</td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","defaultsupplier",sWebLanguage)%></td>
                         <td class="admin2">
                         	<select class='text' name='EditDefaultSupplierUid' id='EditDefaultSupplierUid'>
                         		<option value=''/>
@@ -676,7 +831,7 @@
                     
                     <%-- orderPeriodInMonths --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web.manage","orderPeriodInMonths",sWebLanguage)%> *</td>
+                        <td class="admin" nowrap><%=getTran(request,"Web.manage","orderPeriodInMonths",sWebLanguage)%> *</td>
                         <td class="admin2">
                             <input class="text" type="text" name="EditOrderPeriodInMonths" size="5" maxLength="5" value="<%=sSelectedOrderPeriod%>" onKeyUp="isInteger(this);">
                         </td>
@@ -684,7 +839,7 @@
                     
                     <%-- Nosync --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web.manage","nosync",sWebLanguage)%> *</td>
+                        <td class="admin" nowrap><%=getTran(request,"Web.manage","nosync",sWebLanguage)%> *</td>
                         <td class="admin2">
                             <input type="checkbox" name="EditNosync" class="hand" <%=sSelectedNosync!=null && sSelectedNosync.equalsIgnoreCase("1")?"checked":""%> value="1" onKeyUp="isInteger(this);">
                         </td>
@@ -692,9 +847,17 @@
                     
                     <%-- Hidden --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web.manage","hidden",sWebLanguage)%> *</td>
+                        <td class="admin" nowrap><%=getTran(request,"Web.manage","hidden",sWebLanguage)%> *</td>
                         <td class="admin2">
                             <input type="checkbox" name="EditHidden" class="hand" <%=sSelectedHidden!=null && sSelectedHidden.equalsIgnoreCase("1")?"checked":""%> value="1" onKeyUp="isInteger(this);">
+                        </td>
+                    </tr>
+                    
+                    <%-- ValidateOutgoing --%>
+                    <tr>
+                        <td class="admin" nowrap><%=getTran(request,"Web.manage","validateoutgoing",sWebLanguage)%> *</td>
+                        <td class="admin2">
+                            <input type="checkbox" name="EditValidateOutgoing" class="hand" <%=sSelectedValidateOutgoing!=null && sSelectedValidateOutgoing.equalsIgnoreCase("1")?"checked":""%> value="1" onKeyUp="isInteger(this);">
                         </td>
                     </tr>
                     
@@ -732,31 +895,55 @@
             </table>
             
             <%-- indication of obligated fields --%>
-            <%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%>
+            <%=getTran(request,"Web","colored_fields_are_obligate",sWebLanguage)%>
             <br><br>
             
             <table width='100%'>
             	<tr>
-            		<td class='text'><a href="javascript:printInventory('<%=sEditStockUid %>')"><%=getTran("web","servicestockinventory.pdf",sWebLanguage)%></a></td>
-            		<td class='text'><a href="javascript:printInventorySummary('<%=sEditStockUid %>')"><%=getTran("web","servicestockinventorysummary.pdf",sWebLanguage)%></a></td>
-            		<td class='text'><a href="javascript:printStockOperations('<%=sEditStockUid %>')"><%=getTran("web","servicestockoperations.pdf",sWebLanguage)%></a></td>
-            		<td class='text'><a href="javascript:printOutgoingStockOperations('<%=sEditStockUid %>')"><%=getTran("web","serviceoutgoingstockoperations.pdf",sWebLanguage)%></a></td>
-            		<td class='text'><a href="javascript:printOutgoingStockOperationsListing('<%=sEditStockUid %>')"><%=getTran("web","serviceoutgoingstockoperationslisting.pdf",sWebLanguage)%></a></td>
+            		<td class='text'><a href="javascript:printInventory('<%=sEditStockUid %>')"><%=getTran(request,"web","servicestockinventory.pdf",sWebLanguage)%></a></td>
+            		<td class='text'><a href="javascript:printInventorySummary('<%=sEditStockUid %>')"><%=getTran(request,"web","servicestockinventorysummary.pdf",sWebLanguage)%></a></td>
+            		<td class='text'><a href="javascript:printStockOperations('<%=sEditStockUid %>')"><%=getTran(request,"web","servicestockoperations.pdf",sWebLanguage)%></a></td>
+            		<td class='text'><a href="javascript:printOutgoingStockOperations('<%=sEditStockUid %>')"><%=getTran(request,"web","serviceoutgoingstockoperations.pdf",sWebLanguage)%></a></td>
+            		<td class='text'><a href="javascript:printOutgoingStockOperationsListing('<%=sEditStockUid %>')"><%=getTran(request,"web","serviceoutgoingstockoperationslisting.pdf",sWebLanguage)%></a></td>
 				</tr>
 				<tr>
-            		<td class='text'><a href="javascript:printOutgoingStockOperationsListingPerService('<%=sEditStockUid %>')"><%=getTran("web","serviceoutgoingstockoperationslistingperservice.pdf",sWebLanguage)%></a></td>
-            		<td class='text'><a href="javascript:printMonthlyConsumption('<%=sEditStockUid %>')"><%=getTran("web","monthlyconsumption.pdf",sWebLanguage)%></a></td>
-            		<td class='text'><a href="javascript:printExpiration('<%=sEditStockUid %>')"><%=getTran("web","expiration.pdf",sWebLanguage)%></a></td>
-            		<td class='text'><a href="javascript:printStockOut('<%=sEditStockUid %>')"><%=getTran("web","stockout.pdf",sWebLanguage)%></a></td>
-            		<td class='text'><a href="javascript:printIncomingStockOperations('<%=sEditStockUid %>')"><%=getTran("web","serviceincomingstockoperations.pdf",sWebLanguage)%></a></td>
+            		<td class='text'><a href="javascript:printOutgoingStockOperationsListingPerService('<%=sEditStockUid %>')"><%=getTran(request,"web","serviceoutgoingstockoperationslistingperservice.pdf",sWebLanguage)%></a></td>
+            		<td class='text'><a href="javascript:printMonthlyConsumption('<%=sEditStockUid %>')"><%=getTran(request,"web","monthlyconsumption.pdf",sWebLanguage)%></a></td>
+            		<td class='text'><a href="javascript:printExpiration('<%=sEditStockUid %>')"><%=getTran(request,"web","expiration.pdf",sWebLanguage)%></a></td>
+            		<td class='text'><a href="javascript:printStockOut('<%=sEditStockUid %>')"><%=getTran(request,"web","stockout.pdf",sWebLanguage)%></a></td>
+            		<td class='text'><a href="javascript:printIncomingStockOperations('<%=sEditStockUid %>')"><%=getTran(request,"web","serviceincomingstockoperations.pdf",sWebLanguage)%></a></td>
             	</tr>
 				<tr>
-            		<td class='text'><a href="javascript:printIncomingStockOperationsPerOrder('<%=sEditStockUid %>')"><%=getTran("web","serviceincomingstockoperationsperorder.pdf",sWebLanguage)%></a></td>
-            		<td class='text'><a href="javascript:printIncomingStockOperationsPerItem('<%=sEditStockUid %>')"><%=getTran("web","serviceincomingstockoperationsperitem.pdf",sWebLanguage)%></a></td>
-            		<td class='text'><a href="javascript:printIncomingStockOperationsPerProvider('<%=sEditStockUid %>')"><%=getTran("web","serviceincomingstockoperationsperprovider.pdf",sWebLanguage)%></a></td>
-            		<td class='text'><a href="javascript:printIncomingStockOperationsPerCategoryItem('<%=sEditStockUid %>')"><%=getTran("web","serviceincomingstockoperationspercategoryitem.pdf",sWebLanguage)%></a></td>
-            		<td class='text'><a href="javascript:printOutgoingStockOperationsPerService('<%=sEditStockUid %>')"><%=getTran("web","serviceoutgoingstockoperationsperservice.pdf",sWebLanguage)%></a></td>
+            		<td class='text'><a href="javascript:printIncomingStockOperationsPerOrder('<%=sEditStockUid %>')"><%=getTran(request,"web","serviceincomingstockoperationsperorder.pdf",sWebLanguage)%></a></td>
+            		<td class='text'><a href="javascript:printIncomingStockOperationsPerItem('<%=sEditStockUid %>')"><%=getTran(request,"web","serviceincomingstockoperationsperitem.pdf",sWebLanguage)%></a></td>
+            		<td class='text'><a href="javascript:printIncomingStockOperationsPerProvider('<%=sEditStockUid %>')"><%=getTran(request,"web","serviceincomingstockoperationsperprovider.pdf",sWebLanguage)%></a></td>
+            		<td class='text'><a href="javascript:printIncomingStockOperationsPerCategoryItem('<%=sEditStockUid %>')"><%=getTran(request,"web","serviceincomingstockoperationspercategoryitem.pdf",sWebLanguage)%></a></td>
+            		<td class='text'><a href="javascript:printOutgoingStockOperationsPerService('<%=sEditStockUid %>')"><%=getTran(request,"web","serviceoutgoingstockoperationsperservice.pdf",sWebLanguage)%></a></td>
             	</tr>
+            	
+            <%
+            	if(MedwanQuery.getInstance().getConfigInt("enablePharmacyProductionReports",0)==1){
+            %>
+            	<tr>
+            		<td colspan="5"><br/></td>
+            	</tr>
+            	<tr>
+            		<td colspan="5" class='admin'><%=getTran(request,"web","productionreports",sWebLanguage) %><hr/></td>
+            	</tr>
+				<tr>
+            		<td class='text'><a href="javascript:printProductionReport('inventoryAnalysisReport','<%=sEditStockUid %>')"><%=getTran(request,"web","production.inventoryAnalysisReport.csv",sWebLanguage)%></a></td>
+            		<td class='text'><a href="javascript:printProductionReportPeriod('specialOrderReport','<%=sEditStockUid %>')"><%=getTran(request,"web","production.specialOrderReport.csv",sWebLanguage)%></a></td>
+            		<td class='text'><a href="javascript:printProductionReportPeriod('productionReport','<%=sEditStockUid %>')"><%=getTran(request,"web","production.productionReport.csv",sWebLanguage)%></a></td>
+            		<td class='text'><a href="javascript:printProductionReportPeriod('salesOrderReport','<%=sEditStockUid %>')"><%=getTran(request,"web","production.salesOrderReport.csv",sWebLanguage)%></a></td>
+            		<td class='text'><a href="javascript:printProductionReportPeriod('deliveryReport','<%=sEditStockUid %>')"><%=getTran(request,"web","production.deliveryReport.csv",sWebLanguage)%></a></td>
+            	</tr>
+				<tr>
+            		<td class='text'><a href="javascript:printProductionReportPeriod('insuranceReport','<%=sEditStockUid %>')"><%=getTran(request,"web","production.insuranceReport.csv",sWebLanguage)%></a></td>
+            		<td class='text'><a href="javascript:printProductionReportPeriod('salesAnalysisReport','<%=sEditStockUid %>')"><%=getTran(request,"web","production.salesAnalysisReport.csv",sWebLanguage)%></a></td>
+            	</tr>
+            <%
+            	}
+            %>
             </table>
             <%
         }
@@ -768,7 +955,7 @@
             sFindServiceName = getTranNoLink("service",sFindServiceUid,sWebLanguage);
 
             Vector serviceStocks = Service.getActiveServiceStocks(sFindServiceUid);
-            stocksHtml = objectsToHtml(serviceStocks,sWebLanguage,activeUser,request.getParameter("showhidden"));
+            stocksHtml = objectsToHtml(serviceStocks,sWebLanguage,activeUser,request.getParameter("showhidden"),bHasActivePrescriptions,request.getParameter("showunauthorized"));
             foundStockCount = serviceStocks.size();
 
             //*** display found records ***
@@ -777,7 +964,7 @@
                     <%-- title --%>
                     <table width="100%" cellspacing="0">
                         <tr>
-                            <td class="titleadmin">&nbsp;<%=getTran("Web.manage","ActiveServiceStocks",sWebLanguage)%>&nbsp;(<%=sFindServiceName%>)</td>
+                            <td class="titleadmin">&nbsp;<%=getTran(request,"Web.manage","ActiveServiceStocks",sWebLanguage)%>&nbsp;(<%=sFindServiceName%>)</td>
                         </tr>
                     </table>
                     
@@ -785,10 +972,10 @@
                         <%-- header --%>
                         <tr class="admin">
                             <td width="22"/>
-                            <td width="20%"><%=getTran("Web","name",sWebLanguage)%></td>
-                            <td width="35%"><%=getTran("Web","service",sWebLanguage)%></td>
-                            <td width="25%"><%=getTran("Web","manager",sWebLanguage)%></td>
-                            <td width="15%"><%=getTran("Web.manage","productstockcount",sWebLanguage)%></td>
+                            <td width="20%"><%=getTran(request,"Web","name",sWebLanguage)%></td>
+                            <td width="35%"><%=getTran(request,"Web","service",sWebLanguage)%></td>
+                            <td width="25%"><%=getTran(request,"Web","manager",sWebLanguage)%></td>
+                            <td width="15%"><%=getTran(request,"Web.manage","productstockcount",sWebLanguage)%></td>
                             <td/>
                         </tr>
                         <tbody class="hand"><%=stocksHtml%></tbody>
@@ -796,7 +983,7 @@
                     
                     <%-- number of records found --%>
                     <span style="width:49%;text-align:left;">
-                        <%=foundStockCount%> <%=getTran("web","recordsfound",sWebLanguage)%>
+                        <%=foundStockCount%> <%=getTran(request,"web","recordsfound",sWebLanguage)%>
                     </span>
                     
                     <%
@@ -819,11 +1006,11 @@
                     <%-- sub title --%>
                     <table width='100%' cellspacing='0'>
                         <tr class='admin'>
-                            <td><%=getTran("Web.manage","ActiveServiceStocks",sWebLanguage)%>&nbsp;(<%=sFindServiceName%>)</td>
+                            <td><%=getTran(request,"Web.manage","ActiveServiceStocks",sWebLanguage)%>&nbsp;(<%=sFindServiceName%>)</td>
                         </tr>
                     </table>
                     
-                    <%=getTran("web.manage","noservicestocksfoundinactiveservice",sWebLanguage)%>
+                    <%=getTran(request,"web.manage","noservicestocksfoundinactiveservice",sWebLanguage)%>
                     <br><br>
                 <%
             }
@@ -854,6 +1041,112 @@
   var iAuthorizedUsersIdx = <%=authorisedUsersIdx%>;
   var sAuthorizedUsers = "<%=authorizedUsersJS%>";
  
+  var iDispensingUsersIdx = <%=dispensingUsersIdx%>;
+  var sDispensingUsers = "<%=dispensingUsersJS%>";
+ 
+  var iValidationUsersIdx = <%=validationUsersIdx%>;
+  var sValidationUsers = "<%=validationUsersJS%>";
+ 
+  <%-- ADD VALIDATION USER --%>
+  function addValidationUser(){
+    if(transactionForm.ValidationUserIdAdd.value.length > 0){
+      iValidationUsersIdx++;
+
+      sValidationUsers+= "rowValidationUsers"+iValidationUsersIdx+"£"+
+                         transactionForm.ValidationUserIdAdd.value+"£"+
+                         transactionForm.ValidationUserNameAdd.value+"$";
+      var tr = tblValidationUsers.insertRow(tblValidationUsers);
+      tr.id = "rowValidationUsers"+iValidationUsersIdx;
+
+      var td = tr.insertCell(0);
+      td.width = 16;
+      td.innerHTML = "<a href='javascript:deleteValidationUser(rowValidationUsers"+iValidationUsersIdx+")'><img src='<%=sCONTEXTPATH%>/_img/icons/icon_delete.gif' alt='<%=getTranNoLink("Web","delete",sWebLanguage)%>' border='0'></a>";
+      tr.appendChild(td);
+
+      td = tr.insertCell(1);
+      td.innerHTML = transactionForm.ValidationUserNameAdd.value;
+      tr.appendChild(td);
+
+      <%-- update the hidden field containing just the userids --%>
+      transactionForm.EditValidationUsers.value = transactionForm.EditValidationUsers.value+transactionForm.ValidationUserIdAdd.value+"$";
+
+      clearValidationUserFields();
+    }
+    else{
+        alertDialog("web","firstselectaperson");
+        transactionForm.ValidationUserNameAdd.focus();
+    }
+  }
+
+  <%-- CLEAR VALIDATION USER FIELDS --%>
+  function clearValidationUserFields(){
+    transactionForm.ValidationUserIdAdd.value = "";
+    transactionForm.ValidationUserNameAdd.value = "";
+  }
+
+  <%-- DELETE VALIDATION USER --%>
+  function deleteValidationUser(rowid){
+      if(yesnoDeleteDialog()){
+      sValidationUsers = deleteRowFromArrayString(sValidationUsers,rowid.id);
+
+      <%-- update the hidden field containing just the userids --%>
+      transactionForm.EditValidationUsers.value = extractUserIds(sValidationUsers);
+
+      tblValidationUsers.deleteRow(rowid.rowIndex);
+      clearValidationUserFields();
+    }
+  }
+
+  <%-- ADD DISPENSING USER --%>
+  function addDispensingUser(){
+    if(transactionForm.DispensingUserIdAdd.value.length > 0){
+      iDispensingUsersIdx++;
+
+      sDispensingUsers+= "rowDispensingUsers"+iDispensingUsersIdx+"£"+
+                         transactionForm.DispensingUserIdAdd.value+"£"+
+                         transactionForm.DispensingUserNameAdd.value+"$";
+      var tr = tblDispensingUsers.insertRow(tblDispensingUsers);
+      tr.id = "rowDispensingUsers"+iDispensingUsersIdx;
+
+      var td = tr.insertCell(0);
+      td.width = 16;
+      td.innerHTML = "<a href='javascript:deleteDispensingUser(rowDispensingUsers"+iDispensingUsersIdx+")'><img src='<%=sCONTEXTPATH%>/_img/icons/icon_delete.gif' alt='<%=getTranNoLink("Web","delete",sWebLanguage)%>' border='0'></a>";
+      tr.appendChild(td);
+
+      td = tr.insertCell(1);
+      td.innerHTML = transactionForm.DispensingUserNameAdd.value;
+      tr.appendChild(td);
+
+      <%-- update the hidden field containing just the userids --%>
+      transactionForm.EditDispensingUsers.value = transactionForm.EditDispensingUsers.value+transactionForm.DispensingUserIdAdd.value+"$";
+
+      clearDispensingUserFields();
+    }
+    else{
+        alertDialog("web","firstselectaperson");
+        transactionForm.DispensingUserNameAdd.focus();
+    }
+  }
+
+  <%-- CLEAR DISPENSING USER FIELDS --%>
+  function clearDispensingUserFields(){
+    transactionForm.DispensingUserIdAdd.value = "";
+    transactionForm.DispensingUserNameAdd.value = "";
+  }
+
+  <%-- DELETE DISPENSING USER --%>
+  function deleteDispensingUser(rowid){
+      if(yesnoDeleteDialog()){
+      sDispensingUsers = deleteRowFromArrayString(sDispensingUsers,rowid.id);
+
+      <%-- update the hidden field containing just the userids --%>
+      transactionForm.EditDispensingUsers.value = extractUserIds(sDispensingUsers);
+
+      tblDispensingUsers.deleteRow(rowid.rowIndex);
+      clearDispensingUserFields();
+    }
+  }
+
   <%-- ADD AUTHORIZED USER --%>
   function addAuthorizedUser(){
     if(transactionForm.AuthorizedUserIdAdd.value.length > 0){
@@ -878,7 +1171,7 @@
       transactionForm.EditAuthorizedUsers.value = transactionForm.EditAuthorizedUsers.value+transactionForm.AuthorizedUserIdAdd.value+"$";
 
       clearAuthorizedUserFields();
-    }
+ }
     else{
         alertDialog("web","firstselectaperson");
         transactionForm.AuthorizedUserNameAdd.focus();
@@ -933,7 +1226,13 @@
   <%-- DO SAVE SERVICE STOCK --%>
   function doSave(){
     if(transactionForm.AuthorizedUserIdAdd.value.length > 0){
-      addAuthorizedUser();
+        addAuthorizedUser();
+    }
+    if(transactionForm.DispensingUserIdAdd.value.length > 0){
+        addDispensingUser();
+    }
+    if(transactionForm.ValidationUserIdAdd.value.length > 0){
+        addValidationUser();
     }
 
     if(checkStockFields()){
@@ -951,29 +1250,28 @@
       else if(transactionForm.EditDefaultSupplierName.value.length==0){
         transactionForm.EditDefaultSupplierName.focus();
       }
-      else if(transactionForm.EditDefaultSupplierUid.value.length==0){
-        transactionForm.EditDefaultSupplierUid.focus();
-      }
+      else if(transactionForm.EditManagerUid.value.length==0){
+          transactionForm.EditManagerUid.focus();
+        }
       else if(transactionForm.EditBegin.value.length==0){
-        transactionForm.EditBegin.focus();
-      }
+          transactionForm.EditBegin.focus();
+        }
       else if(transactionForm.EditOrderPeriodInMonths.value.length==0){
         transactionForm.EditOrderPeriodInMonths.focus();
       }
     }
   }
-
+  
   <%-- CHECK STOCK FIELDS --%>
   function checkStockFields(){
     var maySubmit = true;
 
     <%-- required fields --%>
     if(!transactionForm.EditStockName.value.length>0 || !transactionForm.EditServiceUid.value.length>0 ||
-       !transactionForm.EditDefaultSupplierUid.value.length>0 || !transactionForm.EditBegin.value.length>0 ||
+       !transactionForm.EditBegin.value.length>0 || !transactionForm.EditManagerUid.value.length>0 ||
        !transactionForm.EditOrderPeriodInMonths.value.length>0){
       maySubmit = false;
-
-      alertDialog("web","datamissing");
+      alertDialog("web","somedataismissing");
     }
     else{
       <%-- check dates --%>
@@ -1096,6 +1394,16 @@
     openPopup("/_common/search/searchUser.jsp&ts=<%=getTs()%>&ReturnUserID="+userUidField+"&ReturnName="+userNameField+"&displayImmatNew=no");
   }
 
+  <%-- popup : search dispensing user --%>
+  function searchDispensingUser(userUidField,userNameField){
+    openPopup("/_common/search/searchUser.jsp&ts=<%=getTs()%>&ReturnUserID="+userUidField+"&ReturnName="+userNameField+"&displayImmatNew=no");
+  }
+
+  <%-- popup : search validation user --%>
+  function searchValidationUser(userUidField,userNameField){
+    openPopup("/_common/search/searchUser.jsp&ts=<%=getTs()%>&ReturnUserID="+userUidField+"&ReturnName="+userNameField+"&displayImmatNew=no");
+  }
+
   <%-- DISPLAY PRODUCT STOCK MANAGEMENT --%>
   function displayProductStockManagement(serviceStockUid,serviceId){
     window.location.href = "<%=sCONTEXTPATH%>/main.do?Page=pharmacy/manageProductStocks.jsp&Action=findShowOverview&EditServiceStockUid="+serviceStockUid+"&DisplaySearchFields=false&ServiceId="+serviceId+"&ts=<%=getTs()%>";
@@ -1152,7 +1460,7 @@
   }
 
   function printInventorySummary(serviceStockUid){
-	openPopup("statistics/pharmacy/getServiceStockInventorySummary.jsp&ts=<%=getTs()%>&ServiceStockUid="+serviceStockUid,200,200);
+	openPopup("statistics/pharmacy/getServiceStockInventorySummary.jsp&ts=<%=getTs()%>&ServiceStockUid="+serviceStockUid,700,100);
   }
 
   function printStockOperations(serviceStockUid){
@@ -1208,8 +1516,16 @@
   }
 
   function printStockOut(serviceStockUid){
-	window.open("pharmacy/printStockOut.jsp?ts=<%=getTs()%>&ServiceStockUid="+serviceStockUid);
-  }
+		window.open("pharmacy/printStockOut.jsp?ts=<%=getTs()%>&ServiceStockUid="+serviceStockUid);
+	  }
+
+  function printProductionReport(report,serviceStockUid){
+	  openPopup("pharmacy/manageProductionReports.jsp?ts=<%=getTs()%>&report="+report+"&ServiceStockUid="+serviceStockUid,400,200);
+	  }
+
+  function printProductionReportPeriod(report,serviceStockUid){
+	  openPopup("pharmacy/manageProductionReportsPeriod.jsp?ts=<%=getTs()%>&report="+report+"&ServiceStockUid="+serviceStockUid,400,200);
+	  }
 
   <%-- DO BACK --%>
   function doBack(){
@@ -1220,10 +1536,16 @@
 	    openPopup("pharmacy/popups/bulkReceive.jsp&ServiceStockUid="+serviceStockUid+"&ts=<%=getTs()%>",700,400);
 	}
 
+  function validateDeliveries(serviceStockUid){
+	    openPopup("pharmacy/popups/validateDeliveries.jsp&ServiceStockUid="+serviceStockUid+"&ts=<%=getTs()%>",700,400);
+	}
+
   function acceptOrders(serviceStockUid){
 	    openPopup("pharmacy/popups/acceptOrders.jsp&ServiceStockUid="+serviceStockUid+"&ts=<%=getTs()%>",700,400);
 	}
-
+  function doPatientPrescription(serviceStockUid){
+		openPopup("pharmacy/viewUndeliveredPrescriptions.jsp&ts=<%=getTs()%>&FindServiceStockUid="+serviceStockUid,800,300);
+  }
   function printFiche(serviceStockUid,serviceStockName){
 	openPopup("pharmacy/viewServiceStockFiches.jsp&ts=<%=getTs()%>&Action=find&FindServiceStockUid="+serviceStockUid+"&GetYear=<%=new SimpleDateFormat("yyyy").format(new java.util.Date())%>&FindServiceStockName="+serviceStockName,800,500);
   }

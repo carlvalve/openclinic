@@ -18,7 +18,7 @@
 		if(receiptid>=MedwanQuery.getInstance().getConfigInt("maximumNumberOfReceipts",10000)){
 			MedwanQuery.getInstance().setOpenclinicCounter("RECEIPT",0);
 		}
-		content+=printer.CENTER+receiptid+" - "+printer.BOLD+getTran("web","receiptforinvoice",sWebLanguage).toUpperCase()+" #"+invoice.getInvoiceNumber()+" - "+ScreenHelper.stdDateFormat.format(invoice.getDate())+printer.NOTBOLD+printer.LF;
+		content+=printer.CENTER+receiptid+" - "+printer.BOLD+getTran(request,"web","receiptforinvoice",sWebLanguage).toUpperCase()+" #"+invoice.getInvoiceNumber()+" - "+ScreenHelper.stdDateFormat.format(invoice.getDate())+printer.NOTBOLD+printer.LF;
         double totalCredit=0;
         for(int n=0;n<invoice.getCredits().size();n++){
             PatientCredit credit = PatientCredit.get((String)invoice.getCredits().elementAt(n));
@@ -49,7 +49,7 @@
         }
         //Patientgegevens
         content+=printer.LF;
-		content+=printer.LEFT+(getTran("web","patient",sWebLanguage)+":              ").substring(0,15)+" "+printer.BOLD+invoice.getPatient().lastname.toUpperCase()+", "+invoice.getPatient().firstname+printer.NOTBOLD+printer.LF;
+		content+=printer.LEFT+(getTran(request,"web","patient",sWebLanguage)+":              ").substring(0,15)+" "+printer.BOLD+invoice.getPatient().lastname.toUpperCase()+", "+invoice.getPatient().firstname+printer.NOTBOLD+printer.LF;
 		content+=printer.LEFT+"                "+printer.BOLD+invoice.getPatient().personid+printer.NOTBOLD+printer.LF;
 		content+=printer.LEFT+"                "+printer.BOLD+invoice.getPatient().dateOfBirth+"   "+invoice.getPatient().gender.toUpperCase()+printer.NOTBOLD+printer.LF;
         //Verzekeringsgegevens
@@ -64,9 +64,9 @@
         	insurance = (String)ins.nextElement();
         	insurancedata+=" "+insurance;
         }
-		content+=printer.LEFT+(getTran("web","insurance",sWebLanguage)+":              ").substring(0,15)+printer.BOLD+insurancedata+printer.NOTBOLD+printer.LF;
+		content+=printer.LEFT+(getTran(request,"web","insurance",sWebLanguage)+":              ").substring(0,15)+printer.BOLD+insurancedata+printer.NOTBOLD+printer.LF;
 		//Afrdukken van de diensten
-		content+=printer.LEFT+(getTran("web","service",sWebLanguage)+":              ").substring(0,15)+printer.BOLD;
+		content+=printer.LEFT+(getTran(request,"web","service",sWebLanguage)+":              ").substring(0,15)+printer.BOLD;
         Enumeration es = services.keys();
         nLines=0;
         while (es.hasMoreElements()){
@@ -80,7 +80,7 @@
         content+=printer.NOTBOLD+printer.LF;
         content+=printer.LF;
 		//Afdrukken van prestaties
-		content+=printer.LEFT+printer.UNDERLINE+getTran("web","prestations",sWebLanguage)+printer.NOTUNDERLINE+printer.LF;
+		content+=printer.LEFT+printer.UNDERLINE+getTran(request,"web","prestations",sWebLanguage)+printer.NOTUNDERLINE+printer.LF;
         for(int n=0;n<invoice.getDebets().size();n++){
             Debet debet = (Debet)invoice.getDebets().elementAt(n);
             String extraInsurar="";
@@ -97,11 +97,11 @@
         }
 		//Totale kost en betalingen
 		content+=printer.LEFT+printer.UNDERLINE+"                                                                              ".substring(0,48)+printer.NOTUNDERLINE+printer.LF;
-		content+=printer.LEFT+printer.BOLD+(getTran("web","total",sWebLanguage)+": "+priceFormat.format(totalDebet)+" "+sCurrency+"                         ").substring(0,25);
-		content+=printer.LEFT+getTran("web","payments",sWebLanguage)+": "+priceFormat.format(totalCredit)+" "+sCurrency+printer.LF;
+		content+=printer.LEFT+printer.BOLD+(getTran(request,"web","total",sWebLanguage)+": "+priceFormat.format(totalDebet)+" "+sCurrency+"                         ").substring(0,25);
+		content+=printer.LEFT+getTran(request,"web","payments",sWebLanguage)+": "+priceFormat.format(totalCredit)+" "+sCurrency+printer.LF;
 		content+=printer.LEFT+printer.BOLD+"                         ";
-		content+=printer.LEFT+printer.ITALIC+getTran("web","insurar",sWebLanguage)+": "+priceFormat.format(totalinsurardebet)+" "+sCurrency+printer.NOTITALIC+printer.LF;
-		content+=printer.LEFT+printer.DOUBLE+getTran("web.finance","balance",sWebLanguage)+": "+priceFormat.format(invoice.getBalance())+" "+sCurrency+printer.NOTBOLD+printer.REGULAR+printer.LF;
+		content+=printer.LEFT+printer.ITALIC+getTran(request,"web","insurar",sWebLanguage)+": "+priceFormat.format(totalinsurardebet)+" "+sCurrency+printer.NOTITALIC+printer.LF;
+		content+=printer.LEFT+printer.DOUBLE+getTran(request,"web.finance","balance",sWebLanguage)+": "+priceFormat.format(invoice.getBalance())+" "+sCurrency+printer.NOTBOLD+printer.REGULAR+printer.LF;
 		out.print("{\"message\":\""+printer.printReceipt(activeUser.project, sWebLanguage,content,"7"+invoicenumber)+"\"}");
 	}
 	else {

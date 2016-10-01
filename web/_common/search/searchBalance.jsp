@@ -23,7 +23,7 @@
             <%-- search fields row 1 --%>
             <tr height='25'>
                 <td nowrap>
-                    &nbsp;<%=getTran("web","owner",sWebLanguage)%>
+                    &nbsp;<%=getTran(request,"web","owner",sWebLanguage)%>
                 </td>
                 <td nowrap>
                     <input type="hidden" name="FindBalanceOwner" value="<%=sFindBalanceOwner%>">
@@ -83,8 +83,8 @@
                             %>
                                             <tbody class="hand">
                                                 <tr class="admin">
-                                                    <td width='*' nowrap><%=getTran("Web","name",sWebLanguage)%></td>
-                                                    <td width='50' nowrap><%=getTran("Web","date",sWebLanguage)%></td>
+                                                    <td width='*' nowrap><%=getTran(request,"Web","name",sWebLanguage)%></td>
+                                                    <td width='50' nowrap><%=getTran(request,"Web","date",sWebLanguage)%></td>
                                                 </tr>
 
                                                 <%=results%>
@@ -95,7 +95,7 @@
                                         // display 'no results' message
                                         %>
                                             <tr>
-                                                <td colspan='3'><%=getTran("web","norecordsfound",sWebLanguage)%></td>
+                                                <td colspan='3'><%=getTran(request,"web","norecordsfound",sWebLanguage)%></td>
                                             </tr>
                                         <%
                                     }

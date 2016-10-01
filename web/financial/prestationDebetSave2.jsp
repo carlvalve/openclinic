@@ -60,9 +60,9 @@
         }
         String sMessage;
         if (bSuccess) {
-            sMessage = getTran("web", "dataissaved", sWebLanguage);
+            sMessage = getTran(request,"web", "dataissaved", sWebLanguage);
         } else {
-            sMessage = getTran("web.control","dberror",sWebLanguage);
+            sMessage = getTran(request,"web.control","dberror",sWebLanguage);
         }
 %>
 {

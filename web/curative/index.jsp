@@ -55,7 +55,7 @@
 	String sDiscontinued="";
 	Encounter activeEncounter= Encounter.getActiveEncounter(activePatient.personid);
 	if(MedwanQuery.getInstance().getConfigInt("enableEncounterStatusWarning",0)==1 && activeEncounter!=null){
-		sDiscontinued="<img border='0' src='"+sCONTEXTPATH+"/_img/icons/icon_warning.gif'/> <font style='font-size:15px' color='red'>"+getTran("web","discontinuedaccident",sWebLanguage)+"</font>";
+		sDiscontinued="<img border='0' src='"+sCONTEXTPATH+"/_img/icons/icon_warning.gif'/> <font style='font-size:15px' color='red'>"+getTran(request,"web","discontinuedaccident",sWebLanguage)+"</font>";
 	}
 %>
 <script>
@@ -66,7 +66,7 @@
 <table width="100%" class="list" cellpadding="1" cellspacing="0">
     <tr>
         <td colspan="10" class="titleadmin">
-            <div style="float:left;vertical-align:middle"><%=getTran("web","administrative.data",sWebLanguage)+" "+sVip+" "+sDiscontinued%></div>
+            <div style="float:left;vertical-align:middle"><%=getTran(request,"web","administrative.data",sWebLanguage)+" "+sVip+" "+sDiscontinued%></div>
             <%=getLastAccess("A."+activePatient.personid,sWebLanguage,request)%>
         </td>
     </tr>
@@ -119,7 +119,7 @@
 <%-- 2 : MEDICAL DATA --%>
 <% if(activeUser.getAccessRight("curative.select")){%>
     <table width="100%" class="list" cellpadding="1" cellspacing="0">
-        <tr><td colspan="6" class="titleadmin"><%=getTran("web","medical.data",sWebLanguage)%></td></tr>
+        <tr><td colspan="6" class="titleadmin"><%=getTran(request,"web","medical.data",sWebLanguage)%></td></tr>
         <tr>
         	<%
         		if(activeUser.getAccessRight("medication.medicationschema.select")){

@@ -29,15 +29,15 @@
     <table class="list" border="0" width="100%" cellspacing="1">            
         <%-- contractId (read-only) --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web.hr","contractId",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web.hr","contractId",sWebLanguage)%></td>
             <td class="admin2">
-                <div id="contractId"><%=getTran("web.hr","newContract",sWebLanguage)%></div>                              
+                <div id="contractId"><%=getTran(request,"web.hr","newContract",sWebLanguage)%></div>                              
             </td>                        
         </tr>   
                
         <%-- beginDate --%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","beginDate",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.hr","beginDate",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2" nowrap>
                 <%=writeDateField("beginDate","EditForm","",sWebLanguage)%>          
             </td>                        
@@ -45,7 +45,7 @@
         
         <%-- endDate --%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","endDate",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web.hr","endDate",sWebLanguage)%></td>
             <td class="admin2" nowrap>
                 <%=writeDateField("endDate","EditForm","",sWebLanguage)%>          
             </td>                        
@@ -53,18 +53,18 @@
         
         <%-- functionCode --%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","functionCode",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web.hr","functionCode",sWebLanguage)%></td>
             <td class="admin2">
                 <select class="text" id="functionCode" name="functionCode">
                     <option/>
-                    <%=ScreenHelper.writeSelect("hr.contract.functioncode","",sWebLanguage)%>
+                    <%=ScreenHelper.writeSelect(request,"hr.contract.functioncode","",sWebLanguage)%>
                 </select>
             </td>
         </tr>
         
         <%-- functionTitle --%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","functionTitle",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.hr","functionTitle",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="functionTitle" name="functionTitle" size="80" maxLength="255" value="">
             </td>
@@ -72,7 +72,7 @@
                                 
         <%-- functionDescription --%>
         <tr>
-            <td class="admin"><%=getTran("web.hr","functionDescription",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.hr","functionDescription",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <textarea class="text" name="functionDescription" id="functionDescription" cols="80" rows="4" onKeyup="resizeTextarea(this,8);"></textarea>
             </td>
@@ -84,7 +84,7 @@
                 if(MedwanQuery.getInstance().getConfigString("enableLegalReferenceCode"+i).equals("1")){
                     %>                    
                         <tr>
-                            <td class="admin"><%=getTran("web.hr","legalReferenceCode."+i,sWebLanguage)%></td>
+                            <td class="admin"><%=getTran(request,"web.hr","legalReferenceCode."+i,sWebLanguage)%></td>
                             <td class="admin2">
                                 <input type="text" class="text" id="ref<%=i%>" name="ref<%=i%>" size="30" maxLength="50" value="">
                             </td>
@@ -104,7 +104,7 @@
             </td>
         </tr>
     </table>
-    <i><%=getTran("web","colored_fields_are_obligate",sWebLanguage)%></i>
+    <i><%=getTran(request,"web","colored_fields_are_obligate",sWebLanguage)%></i>
     
     <div id="divMessage" style="padding-top:10px;"></div>
 </form>
@@ -272,7 +272,7 @@
     document.getElementById("buttonNew").style.visibility = "hidden";
 
     $("EditContractUid").value = "-1";
-    $("contractId").innerHTML = "<%=getTran("web.hr","newContract",sWebLanguage)%>";   
+    $("contractId").innerHTML = "<%=getTran(null,"web.hr","newContract",sWebLanguage)%>";   
     $("beginDate").value = "";
     $("endDate").value = "";
     $("functionCode").value = "";

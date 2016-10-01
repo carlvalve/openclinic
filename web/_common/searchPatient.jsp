@@ -54,10 +54,10 @@
     // unitid and unitname
     if(checkString(sUnit).trim().length() > 0){
         if(MedwanQuery.getInstance().getConfigString("showUnitID").equals("1")){
-            sUnitText = sUnit+" "+getTran("service",sUnit,sWebLanguage);
+            sUnitText = sUnit+" "+getTran(request,"service",sUnit,sWebLanguage);
         } 
         else{
-            sUnitText = getTran("service",sUnit,sWebLanguage);
+            sUnitText = getTran(request,"service",sUnit,sWebLanguage);
         }
     }
 %>
@@ -70,18 +70,18 @@
         
         <%-- row 1 --%>
         <tr>
-            <td align="right" nowrap width="55"><%=getTran("Web","Name",sWebLanguage)%>&nbsp;</td>
+            <td align="right" nowrap width="55"><%=getTran(request,"Web","Name",sWebLanguage)%>&nbsp;</td>
             <td>
                 <input id="ac2" autocomplete="off" class='<%=setFocus("Name",sDefaultFocus)%>' type='text' style='text-transform:uppercase' name='findName' value="<%=sName%>" size='25' onblur='limitLength(this);'>
                 <div id="ac2update" class="autocompletiondiv" style="display:none;"></div>
             </td>
                         
-            <td align="right" nowrap><%=getTran("Web", "Firstname", sWebLanguage)%>&nbsp;
+            <td align="right" nowrap><%=getTran(request,"Web", "Firstname", sWebLanguage)%>&nbsp;
                 <input id="ac1" autocomplete="off" class='<%=setFocus("Name",sDefaultFocus)%>' type='text' style='text-transform:uppercase' name='findFirstname' value="<%=sFirstname%>" size='20' onblur='limitLength(this);'>
                 <div id="ac1update" class="autocompletiondiv" style="display:none;"></div>
             </td>
 
-            <td align="right" nowrap><%=getTran("Web","DateOfBirth", sWebLanguage)%>&nbsp;
+            <td align="right" nowrap><%=getTran(request,"Web","DateOfBirth", sWebLanguage)%>&nbsp;
                 <input class='<%=setFocus("DateOfBirth",sDefaultFocus)%>' type='text' name='findDateOfBirth' value="<%=sDateOfBirth%>" size='17' OnBlur='checkDate(this)' maxlength='10'>
             </td>
             <td width="1%" nowrap>
@@ -89,10 +89,10 @@
             	if(activePatient!=null && activePatient.personid!=null && activePatient.personid.length()>0){
 	            	java.util.Date death=activePatient.isDead();	
 	            	if(death!=null){
-						out.print("<img src='_img/icons/icon_warning.gif'/> <font style='font-size:12px;font-weight:bold;vertical-align:2px;}'>"+getTran("web","died",sWebLanguage)+" "+ScreenHelper.stdDateFormat.format(death)+"</font>");
+						out.print("<img src='_img/icons/icon_warning.gif'/> <font style='font-size:12px;font-weight:bold;vertical-align:2px;}'>"+getTran(request,"web","died",sWebLanguage)+" "+ScreenHelper.stdDateFormat.format(death)+"</font>");
 	            	}
 	            	else{
-	            		out.print(" ("+(activePatient.gender.equalsIgnoreCase("M")?getTran("web.occup","male",sWebLanguage):getTran("web.occup","female",sWebLanguage))+" - "+ activePatient.getAgeInMonths()/12+" "+getTran("web","years",sWebLanguage).toLowerCase()+ " "+ activePatient.getAgeInMonths()%12+" "+getTran("web","months",sWebLanguage).toLowerCase()+")");
+	            		out.print(" ("+(activePatient.gender.equalsIgnoreCase("M")?getTran(request,"web.occup","male",sWebLanguage):getTran(request,"web.occup","female",sWebLanguage))+" - "+ activePatient.getAgeInMonths()/12+" "+getTran(request,"web","years",sWebLanguage).toLowerCase()+ " "+ activePatient.getAgeInMonths()%12+" "+getTran(request,"web","months",sWebLanguage).toLowerCase()+")");
 	            	}
             	}
             %>
@@ -102,17 +102,17 @@
         
         <%-- row 2 --%>
         <tr>
-            <td align="right" nowrap><%=getTran("Web", "natreg.short", sWebLanguage)%>&nbsp;
+            <td align="right" nowrap><%=getTran(request,"Web", "natreg.short", sWebLanguage)%>&nbsp;
             </td>
             <td>
                 <input class='<%=setFocus("natreg",sDefaultFocus)%>' TYPE='TEXT' NAME='findnatreg' VALUE="<%=sNatreg%>" size='25' onblur='limitLength(this);'>
             </td>
-            <td align="right" nowrap><%=getTran("Web", "immatnew", sWebLanguage)%>&nbsp;<input class='<%=setFocus("immatnew",sDefaultFocus)%>' type='TEXT' style='text-transform:uppercase' name='findimmatnew' id='findimmatnew' value="<%=sNewimmat%>" size='20' onblur='limitLength(this);'></td>
+            <td align="right" nowrap><%=getTran(request,"Web", "immatnew", sWebLanguage)%>&nbsp;<input class='<%=setFocus("immatnew",sDefaultFocus)%>' type='TEXT' style='text-transform:uppercase' name='findimmatnew' id='findimmatnew' value="<%=sNewimmat%>" size='20' onblur='limitLength(this);'></td>
             <%
                 if(activePatient!=null && activePatient.getID("archiveFileCode").length() > 0){
             %>
             <td align="right" nowrap>
-                <a href="javascript:showArchiveCode();"><%=getTran("Web","archiveFileCode",sWebLanguage)%></a>
+                <a href="javascript:showArchiveCode();"><%=getTran(request,"Web","archiveFileCode",sWebLanguage)%></a>
                 &nbsp;<input class='<%=setFocus("archiveFileCode",sDefaultFocus)%>' type='TEXT' style='text-transform:uppercase' name='findArchiveFileCode' value="<%=sArchiveFileCode%>" size='17' onblur='limitLength(this);'>
             </td>
             <%
@@ -120,19 +120,19 @@
 	            else{
             %>
             <td align="right" nowrap>
-                <%=getTran("Web","archiveFileCode",sWebLanguage)%>
+                <%=getTran(request,"Web","archiveFileCode",sWebLanguage)%>
                 &nbsp;<input class='<%=setFocus("archiveFileCode",sDefaultFocus)%>' type='text' style='<%=activePatient!=null?"background-color: #ff9999;":""%>text-transform:uppercase' name='findArchiveFileCode' value="<%=sArchiveFileCode%>" size='17' onblur='limitLength(this);'>
             </td>
             <%
                 }
             %>
-            <td align="right" nowrap><%=getTran("Web", "personid", sWebLanguage)%>&nbsp;
+            <td align="right" nowrap><%=getTran(request,"Web", "personid", sWebLanguage)%>&nbsp;
                 <input class='<%=setFocus("personid",sDefaultFocus)%>' type='text' style='text-transform:uppercase' name='findPersonID' value="<%=sPersonID%>" size='17' onblur='limitLength(this);'>
             </td>
         </tr>
         <%-- row 3 --%>
         <tr>
-            <td align="right" nowrap><%=getTran("Web","service",sWebLanguage)%>&nbsp;</td>
+            <td align="right" nowrap><%=getTran(request,"Web","service",sWebLanguage)%>&nbsp;</td>
             <td colspan='2' nowrap>
                 <input class='text' type="text" name="findUnitText" readonly size="49" title="<%=sUnitText%>" value="<%=sUnitText%>" onkeydown="enterEvent(event,13)? window.event.keyCode='' : (window.which='');return true;">
                 <%
@@ -145,7 +145,7 @@
                 <input type="hidden" name="findUnit" value="<%=sUnit%>">
             </td>
             <%-- BUTTONS --%>
-            <td align="right" nowrap><%=getTran("Web", "district", sWebLanguage)%>&nbsp;
+            <td align="right" nowrap><%=getTran(request,"Web", "district", sWebLanguage)%>&nbsp;
             <%
                 String sDistricts = "<select class='text' name='findDistrict'><option/>";
                 Vector vDistricts = Zipcode.getDistricts(MedwanQuery.getInstance().getConfigString("zipcodetable","RwandaZipcodes"));
@@ -170,7 +170,7 @@
             </td>
             <td align="right">
                 <input class='button' type="button" name="findSearchPatient" id="findSearchPatient" onclick='doSPatient();' value='<%=getTranNoLink("Web","Find",sWebLanguage)%>'>&nbsp;
-                <button accesskey="<%=ScreenHelper.getAccessKey(getTran("AccessKey","Clear",sWebLanguage))%>" class='button' name="clearButton" onClick='clearPatient();return false;'><%=getTran("AccessKey", "Clear", sWebLanguage)%></button>
+                <button accesskey="<%=ScreenHelper.getAccessKey(getTran(request,"AccessKey","Clear",sWebLanguage))%>" class='button' name="clearButton" onClick='clearPatient();return false;'><%=getTran(request,"AccessKey", "Clear", sWebLanguage)%></button>
             </td>
         </tr>
     </form>

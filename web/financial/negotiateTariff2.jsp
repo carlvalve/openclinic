@@ -6,19 +6,19 @@
 %>
 <table width='100%'>
 	<tr class='admin'>
-		<td colspan='2'><%=getTran("web","negociatedtariffs",sWebLanguage) %></td>
+		<td colspan='2'><%=getTran(request,"web","negociatedtariffs",sWebLanguage) %></td>
 	</tr>
 	<tr>
-		<td class='admin'><%=getTran("web.finance","amount.patient",sWebLanguage) %></td>
+		<td class='admin'><%=getTran(request,"web.finance","amount.patient",sWebLanguage) %></td>
 		<td class='admin2' nowrap><input type='text' name='patientvalue' id='patientvalue' onkeyup='validatePatientValue()'/><%=MedwanQuery.getInstance().getConfigString("currency","RWF") %></td>
 	</tr>
 	<tr>
-		<td class='admin'><%=getTran("web.finance","amount.complementaryinsurar",sWebLanguage) %></td>
+		<td class='admin'><%=getTran(request,"web.finance","amount.complementaryinsurar",sWebLanguage) %></td>
 		<td class='admin2' nowrap><input type='text' name='insurervalue' id='insurervalue' onkeyup='validateInsurerValue()'/><%=MedwanQuery.getInstance().getConfigString("currency","RWF") %></td>
 	</tr>
 </table>
 <p>
-<center><input type='button' class='button' onclick='updateDebet()' value='<%=getTran("web","update",sWebLanguage) %>'/></center>
+<center><input type='button' class='button' onclick='updateDebet()' value='<%=getTran(null,"web","update",sWebLanguage) %>'/></center>
 </p>
 <script>
 	document.getElementById('patientvalue').value=Math.round(100*(window.opener.document.getElementById('PPP_<%=prestationuid%>').value.replace(',','.').replace(' ','')))/100;

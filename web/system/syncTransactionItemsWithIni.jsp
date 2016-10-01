@@ -145,7 +145,7 @@
         }
     %>
       <br>
-      <%=getTran("Web","DataIsSaved",sWebLanguage)%>
+      <%=getTran(request,"Web","DataIsSaved",sWebLanguage)%>
     <%
     }
     //####################################################################################################################
@@ -210,7 +210,7 @@
         }
     %>
       <br>
-      <%=getTran("Web","DataIsDeleted",sWebLanguage)%>
+      <%=getTran(request,"Web","DataIsDeleted",sWebLanguage)%>
     <%
   }
   //####################################################################################################################
@@ -224,8 +224,8 @@
     <table width="100%" cellspacing="1">
       <tr>
         <td>
-          <a href="javascript:checkAll(true);"><%=getTran("Web.Manage.CheckDb","CheckAll",sWebLanguage)%></a>
-          <a href="javascript:checkAll(false);"><%=getTran("Web.Manage.CheckDb","UncheckAll",sWebLanguage)%></a>
+          <a href="javascript:checkAll(true);"><%=getTran(request,"Web.Manage.CheckDb","CheckAll",sWebLanguage)%></a>
+          <a href="javascript:checkAll(false);"><%=getTran(request,"Web.Manage.CheckDb","UncheckAll",sWebLanguage)%></a>
         </td>
         <td align="right">
           <a href='#bottom'><img src='<c:url value='/_img/themes/default/bottom.gif'/>' class='link' border="0"></a>
@@ -335,8 +335,8 @@
     <table width="100%" cellspacing="1">
       <tr>
         <td>
-          <a href="javascript:checkAll(true);"><%=getTran("Web.Manage.CheckDb","CheckAll",sWebLanguage)%></a>
-          <a href="javascript:checkAll(false);"><%=getTran("Web.Manage.CheckDb","UncheckAll",sWebLanguage)%></a>
+          <a href="javascript:checkAll(true);"><%=getTran(request,"Web.Manage.CheckDb","CheckAll",sWebLanguage)%></a>
+          <a href="javascript:checkAll(false);"><%=getTran(request,"Web.Manage.CheckDb","UncheckAll",sWebLanguage)%></a>
         </td>
         <td align="right">
           <a href='#top'><img src='<c:url value='/_img/themes/default/top.gif'/>' class='link' border="0"></a>
@@ -362,7 +362,7 @@
 <%-- link to manage transactionItems --%>
 <%=ScreenHelper.alignButtonsStart()%>
   <img src='<c:url value="/_img/themes/default/pijl.gif"/>'>
-  <a  href="<c:url value='/main.do'/>?Page=system/manageTransactionItems.jsp?ts=<%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran("Web","managetransactionitems",sWebLanguage)%></a>&nbsp;
+  <a  href="<c:url value='/main.do'/>?Page=system/manageTransactionItems.jsp?ts=<%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran(request,"Web","managetransactionitems",sWebLanguage)%></a>&nbsp;
 <%=ScreenHelper.alignButtonsStop()%>
 
 <a name="bottom">&nbsp;<a/>

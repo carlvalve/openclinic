@@ -23,7 +23,7 @@
     <table width="100%" cellspacing="1" cellpadding="0" class="list">
         <%-- saved rows --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","chooseScreen",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","chooseScreen",sWebLanguage)%></td>
             <td class="admin2">
                 <span id="savedScreensDiv"><%-- Ajax --%></span>&nbsp;
                 
@@ -38,7 +38,7 @@
     <table width="100%" id="screenTable" cellspacing="1" cellpadding="0" class="list" style="display:none">
         <%-- widthInCells --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","numberOfColumns",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","numberOfColumns",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <select class="text" name="ScreenWidth" value="" onChange="drawScreen();">
                     <option value="-1"><%=getTranNoLink("web","choose",sWebLanguage)%></option>
@@ -53,7 +53,7 @@
         
         <%-- heightInRows --%>
         <tr>
-            <td class="admin"><%=getTran("web","numberOfRows",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web","numberOfRows",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <select class="text" name="ScreenHeight" value="" onChange="drawScreen();">
                     <option value="-1"><%=getTranNoLink("web","choose",sWebLanguage)%></option>
@@ -68,7 +68,7 @@
         
         <%-- labels for screen name (per supported language) --%>
         <tr>
-            <td class="admin"><%=getTran("web","screenName",sWebLanguage)%>&nbsp;*&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web","screenName",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2" id="labelsDiv" style="padding:5px;vertical-align:top;">
                 <%-- Ajax --%>
             </td>
@@ -76,7 +76,7 @@
                 
         <%-- layout --%>
         <tr>
-            <td class="admin" style="vertical-align:top;padding-top:3px;"><%=getTran("web","layout",sWebLanguage)%></td>
+            <td class="admin" style="vertical-align:top;padding-top:3px;"><%=getTran(request,"web","layout",sWebLanguage)%></td>
             <td id="layoutDiv" style="padding:5px;vertical-align:top;">
                 <%-- Ajax --%>
             </td>
@@ -94,7 +94,7 @@
     <%-- link to manageServiceExaminations --%>
     <div id="linkDiv" style="width:100%;height:22px;display:none;padding-top:10px">
 	    <img src="<c:url value='/_img/themes/default/pijl.gif'/>">
-	    <a href="<c:url value='/main.do'/>?Page=system/manageServiceExaminations.jsp?ts=<%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran("web.manage","manageServiceExaminations",sWebLanguage)%></a>&nbsp;
+	    <a href="<c:url value='/main.do'/>?Page=system/manageServiceExaminations.jsp?ts=<%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran(request,"web.manage","manageServiceExaminations",sWebLanguage)%></a>&nbsp;
     </div>
 </form>
 
@@ -203,7 +203,7 @@
     }
     else{
       if(sFormInitialStatus.length>0 && sFormInitialStatus!=serializeForm(editForm)){
-        okToSwitchScreens = yesnoDialogDirectText('<%=getTran("web.occup","medwan.common.buttonquestion",sWebLanguage)%>');
+        okToSwitchScreens = yesnoDialogDirectText('<%=getTran(null,"web.occup","medwan.common.buttonquestion",sWebLanguage)%>');
       }
     }
     
@@ -511,7 +511,7 @@
 
     if(checkState==true){
       if(sFormInitialStatus!=serializeForm(cellForm)){
-        if(yesnoDialogDirectText('<%=getTran("web.occup","medwan.common.buttonquestion",sWebLanguage)%>')){
+        if(yesnoDialogDirectText('<%=getTran(null,"web.occup","medwan.common.buttonquestion",sWebLanguage)%>')){
           if(Modalbox.initialized){
             Modalbox.hide();
           }

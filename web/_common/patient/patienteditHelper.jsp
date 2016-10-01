@@ -61,9 +61,9 @@
         else if (sTypeContent.toUpperCase().equals("B")) {
             sReturn+=("<input class='text' type='text' name='"+sFieldName+"' id='"+sFieldName+"' value=\""+sValue.trim()+"\" size='12' onblur='checkBegin(this, \""+sValue.trim()+"\")'>"
                 +"&nbsp;<img name='popcal' class='link' src='"+sCONTEXTPATH+"/_img/icons/icon_agenda.gif' border='0' ALT='"
-                +getTran("Web","Select",sWebLanguage)+"' onclick='gfPop.fPopCalendar(document.getElementsByName(\""+sFieldName+"\")[0]);return false;'>"
+                +getTran(null,"Web","Select",sWebLanguage)+"' onclick='gfPop.fPopCalendar(document.getElementsByName(\""+sFieldName+"\")[0]);return false;'>"
                 +"&nbsp;<img class='link' src='"+sCONTEXTPATH+"/_img/compose.gif' ALT='"
-                +getTran("Web","PutToday",sWebLanguage)+"' onclick=\"getToday("+sFieldName+");\">");
+                +getTran(null,"Web","PutToday",sWebLanguage)+"' onclick=\"getToday("+sFieldName+");\">");
         }
 
         return sReturn;
@@ -76,7 +76,7 @@
         if(sObligatoryFields.toLowerCase().indexOf(sFieldName.toLowerCase()+",")>-1){
             drawAsterix = true;
         }
-        return "<tr><td class='admin'>"+getTran(sLabelType,sLabelID,sWebLanguage)+(drawAsterix?" *":"")+"</td><td class='admin2'>";
+        return "<tr><td class='admin'>"+getTran(null,sLabelType,sLabelID,sWebLanguage)+(drawAsterix?" *":"")+"</td><td class='admin2'>";
     }
 
     //--- WRITE COUNTRY ---------------------------------------------------------------------------

@@ -93,7 +93,7 @@
 
         // no documents found
         if(documentCount==0){
-            %><tr><td>&nbsp;<%=getTran("web","noDocumentsFound",sWebLanguage)%></td></tr><%
+            %><tr><td>&nbsp;<%=getTran(request,"web","noDocumentsFound",sWebLanguage)%></td></tr><%
         }
     %>
 </table>
@@ -101,7 +101,7 @@
 <%-- number of documents found --%>
 <%
     if(documentCount > 0){
-        %><%=documentCount%> <%=getTran("web","documentsFound",sWebLanguage)%><%
+        %><%=documentCount%> <%=getTran(request,"web","documentsFound",sWebLanguage)%><%
     }
 %>
 

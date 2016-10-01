@@ -11,7 +11,7 @@
 %>
 <table width="100%">
     <tr class="admin">
-        <td colspan="5"><%=getTran("healthnet","bedutilization",sWebLanguage)%></td>
+        <td colspan="5"><%=getTran(request,"healthnet","bedutilization",sWebLanguage)%></td>
     </tr>
     <%
         String sQuery = "select hn_beds,hn_id,hn_source,hn_label" + sWebLanguage.toLowerCase() + " as label from HealthNetServices where 1=1 "+where+" order by hn_source,hn_id";
@@ -57,7 +57,7 @@
                 }
                 rs2.close();
                 ps2.close();
-                out.println("<tr><td class='admin' colspan='2'>" + getTran("healthnet.site", source, sWebLanguage) + (maxDate!=null?" ("+ScreenHelper.fullDateFormat.format(maxDate)+")":"")+ "</td><td class='admin'>" + getTran("web", "total", sWebLanguage) +"<br/>"+total+ "</td><td class='admin'>" + getTran("web", "occupied", sWebLanguage) + "<br/>"+occupied + (total>0?" (" + occupied*100/total+"%)":"")+ "</td><td class='admin'>" + getTran("web", "available", sWebLanguage) +"<br/>"+(occupied>=total?"0":"<b>"+(total-occupied)+"</b>") + (total>0?" (" + (occupied>total?0:total-occupied)*100/total+"%)":"")+ "</td></tr>");
+                out.println("<tr><td class='admin' colspan='2'>" + getTran(request,"healthnet.site", source, sWebLanguage) + (maxDate!=null?" ("+ScreenHelper.fullDateFormat.format(maxDate)+")":"")+ "</td><td class='admin'>" + getTran(request,"web", "total", sWebLanguage) +"<br/>"+total+ "</td><td class='admin'>" + getTran(request,"web", "occupied", sWebLanguage) + "<br/>"+occupied + (total>0?" (" + occupied*100/total+"%)":"")+ "</td><td class='admin'>" + getTran(request,"web", "available", sWebLanguage) +"<br/>"+(occupied>=total?"0":"<b>"+(total-occupied)+"</b>") + (total>0?" (" + (occupied>total?0:total-occupied)*100/total+"%)":"")+ "</td></tr>");
             }
             String sQuery2 = "select count(*) total from HealthNetEncounters where hn_source=? and hn_serviceid=? and hn_end is null";
             PreparedStatement ps2 = oc_conn.prepareStatement(sQuery2);

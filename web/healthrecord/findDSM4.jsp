@@ -20,7 +20,7 @@ String sPatientUid=request.getParameter("patientuid");
     <table border="0" width="250" cellspacing="0" cellpadding="5" style="border:1px solid #aaa">
         <tr>
             <td bgcolor="#dddddd" style="text-align:center">
-              <%=getTran("web","searchInProgress",sWebLanguage)%>
+              <%=getTran(request,"web","searchInProgress",sWebLanguage)%>
             </td>
         </tr>
     </table>
@@ -29,7 +29,7 @@ String sPatientUid=request.getParameter("patientuid");
 <form name="dsm4Form" method="post" onSubmit="doFind();">
     <table class='menu' width='100%' cellspacing="0">
         <tr>
-            <td nowrap><%=HTMLEntities.htmlentities(getTran("Web","Keyword",sWebLanguage))%>&nbsp;&nbsp;</td>
+            <td nowrap><%=HTMLEntities.htmlentities(getTran(request,"Web","Keyword",sWebLanguage))%>&nbsp;&nbsp;</td>
             <td colspan='2'>
                 <input type='text' class='text' name='keywords' size='40' value="<%=request.getParameter("keywords")!=null?request.getParameter("keywords"):""%>" onblur="limitLength(this);" onKeyDown='if(enterEvent(event,13)){doFind();}'/>
                 <input class='button' type='button' name='findButton' onclick='doFind();' value='<%=getTranNoLink("Web","Find",sWebLanguage)%>'/>
@@ -49,7 +49,7 @@ String sPatientUid=request.getParameter("patientuid");
 
                 // header
                 if (codes.size() > 0) {
-                    out.print("<tr class='admin'><td colspan='2'>" + getTran("Web.Occup", "DSM4", sWebLanguage) + " (<a href='javascript:addnewlocalcode(\""+keywords+"\")'>"+getTran("web","managelocalcodes",sWebLanguage)+"</a>)</td><td colspan='1'><a href='javascript:addnewkeyword()'>"+getTran("web","addDSM4code",sWebLanguage)+"</a></td></tr>");
+                    out.print("<tr class='admin'><td colspan='2'>" + getTran(request,"Web.Occup", "DSM4", sWebLanguage) + " (<a href='javascript:addnewlocalcode(\""+keywords+"\")'>"+getTran(request,"web","managelocalcodes",sWebLanguage)+"</a>)</td><td colspan='1'><a href='javascript:addnewkeyword()'>"+getTran(request,"web","addDSM4code",sWebLanguage)+"</a></td></tr>");
                 }
 
         %><tbody class="hand"><%
@@ -81,7 +81,7 @@ String sPatientUid=request.getParameter("patientuid");
 
                     // header
                     if(codes.size() > 0){
-                        out.print("<tr class='admin'><td colspan='3'>"+getTran("Web.Occup","ICD-10",sWebLanguage)+"</td></tr>");
+                        out.print("<tr class='admin'><td colspan='3'>"+getTran(request,"Web.Occup","ICD-10",sWebLanguage)+"</td></tr>");
                     }
 
                     for (int n=0; n<codes.size(); n++){
@@ -118,7 +118,7 @@ String sPatientUid=request.getParameter("patientuid");
             	Vector diagnoses=UserDiagnosis.selectUserDiagnoses(activeUser.userid,"","","OC_USERDIAGNOSIS_CODETYPE,OC_USERDIAGNOSIS_CODE");
                 String oldcodelabel="";
                 if (diagnoses.size() > 0) {
-                    out.print("<tr class='admin'><td colspan='3'>" + getTran("Web", "manageuserdiagnoses", sWebLanguage) + "</td></tr>");
+                    out.print("<tr class='admin'><td colspan='3'>" + getTran(request,"Web", "manageuserdiagnoses", sWebLanguage) + "</td></tr>");
                 }
                 %><tbody class="hand"><%
             	for(int n=0;n<diagnoses.size();n++){
@@ -163,7 +163,7 @@ String sPatientUid=request.getParameter("patientuid");
             	}
             	diagnoses=ServiceDiagnosis.selectServiceDiagnoses(activeUser.activeService.code,"","","OC_SERVICEDIAGNOSIS_CODETYPE,OC_SERVICEDIAGNOSIS_CODE");
                 if (diagnoses.size() > 0) {
-                    out.print("<tr class='admin'><td colspan='3'>" + getTran("Web", "manageserverdiagnoses", sWebLanguage) + "</td></tr>");
+                    out.print("<tr class='admin'><td colspan='3'>" + getTran(request,"Web", "manageserverdiagnoses", sWebLanguage) + "</td></tr>");
                 }
             	for(int n=0;n<diagnoses.size();n++){
             		ServiceDiagnosis d = (ServiceDiagnosis)diagnoses.elementAt(n);
@@ -209,8 +209,8 @@ String sPatientUid=request.getParameter("patientuid");
                 // display 'no results' message
                 %>
                     <tr class="label2">
-                                <td colspan='3'><%=getTran("web","norecordsfound",sWebLanguage)%> (<a href='javascript:addnewlocalcode("<%=keywords%>")'><%=getTran("web","managelocalcodes",sWebLanguage)%></a>)</td>
-                                <td colspan='3'><a href='javascript:addnewkeyword()'><%=getTran("web","addDSM4code",sWebLanguage)%></a></td>
+                                <td colspan='3'><%=getTran(request,"web","norecordsfound",sWebLanguage)%> (<a href='javascript:addnewlocalcode("<%=keywords%>")'><%=getTran(request,"web","managelocalcodes",sWebLanguage)%></a>)</td>
+                                <td colspan='3'><a href='javascript:addnewkeyword()'><%=getTran(request,"web","addDSM4code",sWebLanguage)%></a></td>
                     </tr>
                 <%
             }

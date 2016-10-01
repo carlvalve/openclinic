@@ -67,7 +67,7 @@
                       " onclick=\"displayAsset('"+asset.getUid()+"');\">"+
                       "<td class='hand' style='padding-left:5px'>"+asset.code+"</td>"+
                       "<td class='hand' style='padding-left:5px'>"+sDescription+"</td>"+
-                      "<td class='hand' style='padding-left:5px'>"+getTran("assets.type",asset.assetType,sWebLanguage)+"</td>"+
+                      "<td class='hand' style='padding-left:5px'>"+getTran(request,"assets.type",asset.assetType,sWebLanguage)+"</td>"+
                       "<td class='hand' style='padding-left:5px'>"+ScreenHelper.getSQLDate(asset.purchaseDate)+"</td>"+
                      "</tr>");
         }
@@ -86,7 +86,7 @@
         }
     }
     else{
-        sReturn = "<td colspan='4'>"+getTran("web","noRecordsFound",sWebLanguage)+"</td>";
+        sReturn = "<td colspan='4'>"+getTran(request,"web","noRecordsFound",sWebLanguage)+"</td>";
     }
 %>
 
@@ -96,10 +96,10 @@
 <table width="100%" class="sortable" id="searchresults" cellspacing="1" style="border:none;">
     <%-- header --%>
     <tr class="admin" style="padding-left:1px;">    
-        <td width="10%" nowrap><asc><%=HTMLEntities.htmlentities(getTran("web","code",sWebLanguage))%></asc></td>
-        <td width="35%" nowrap><%=HTMLEntities.htmlentities(getTran("web","description",sWebLanguage))%></td>
-        <td width="15%" nowrap><%=HTMLEntities.htmlentities(getTran("web","type",sWebLanguage))%></td>
-        <td width="*" nowrap><%=HTMLEntities.htmlentities(getTran("web.assets","purchaseDate",sWebLanguage))%></td>
+        <td width="10%" nowrap><asc><%=HTMLEntities.htmlentities(getTran(request,"web","code",sWebLanguage))%></asc></td>
+        <td width="35%" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web","description",sWebLanguage))%></td>
+        <td width="15%" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web","type",sWebLanguage))%></td>
+        <td width="*" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.assets","purchaseDate",sWebLanguage))%></td>
     </tr>
     
     <tbody class="hand">
@@ -107,7 +107,7 @@
     </tbody>
 </table> 
 
-&nbsp;<i><%=assets.size()+" "+getTran("web","recordsFound",sWebLanguage)%></i>
+&nbsp;<i><%=assets.size()+" "+getTran(request,"web","recordsFound",sWebLanguage)%></i>
         <%
     }
     else{

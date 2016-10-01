@@ -44,7 +44,7 @@
                 <table width="100%" style="border:1px solid #ccc;" cellpadding="1" cellspacing="1">
                     <%-- PAGE TITLE --%>
                     <tr class="admin" height="22">
-                        <td colspan="4">&nbsp;<%=getTran("web.occup","RiskOfCoronaryHeartDisease",sWebLanguage)%></td>
+                        <td colspan="4">&nbsp;<%=getTran(request,"web.occup","RiskOfCoronaryHeartDisease",sWebLanguage)%></td>
                     </tr>
 
                     <%-- PATIENT NAME & INFO --%>
@@ -210,7 +210,7 @@
                                                     <table width="220" cellspacing="1" cellpadding="0">
                                                         <tr>
                                                             <td align="center" class="admin2"><center>SYST mmHg</center></td>
-                                                            <td colspan="5"><b><%=getTran("web.occup","healthrecord.ce.not_smoker",sWebLanguage)%></b></td>
+                                                            <td colspan="5"><b><%=getTran(request,"web.occup","healthrecord.ce.not_smoker",sWebLanguage)%></b></td>
                                                         </tr>
 
                                                         <%
@@ -329,8 +329,8 @@
 
                                 <%-- AGE ROW 1 --%>
                                 <tr>
-                                    <td class="admin"><%=getTran("web.occup","medwan.recruitment.sce.age",sWebLanguage)%></td>
-                                    <td class="admin" colspan="3"><%=age%> <%=getTran("web","years",sWebLanguage)%></td>
+                                    <td class="admin"><%=getTran(request,"web.occup","medwan.recruitment.sce.age",sWebLanguage)%></td>
+                                    <td class="admin" colspan="3"><%=age%> <%=getTran(request,"web","years",sWebLanguage)%></td>
                                 </tr>
 
                                 <%-- TODO : here starts row 2 --%>
@@ -464,7 +464,7 @@
                                                     <table width="220" cellspacing="1" cellpadding="0">
                                                         <tr>
                                                             <td align="center" class="admin2"><center>SYST mmHg</center></td>
-                                                            <td colspan="5"><b><%=getTran("web.occup","healthrecord.ce.not_smoker",sWebLanguage)%></b></td>
+                                                            <td colspan="5"><b><%=getTran(request,"web.occup","healthrecord.ce.not_smoker",sWebLanguage)%></b></td>
                                                         </tr>
 
                                                         <%
@@ -578,30 +578,30 @@
 
                                 <%-- AGE ROW 2 --%>
                                 <tr>
-                                    <td class="admin"><%=getTran("web.occup","medwan.recruitment.sce.age",sWebLanguage)%></td>
-                                    <td class="admin" colspan="3"><%=age%> <%=getTran("web","years",sWebLanguage)%></td>
+                                    <td class="admin"><%=getTran(request,"web.occup","medwan.recruitment.sce.age",sWebLanguage)%></td>
+                                    <td class="admin" colspan="3"><%=age%> <%=getTran(request,"web","years",sWebLanguage)%></td>
                                 </tr>
 
                                 <%-- TODO : here ends row 2 --%>
 
                                 <%-- PATIENT DATA --%>
                                 <tr>
-                                    <td class="admin"><%=getTran("web.occup","medwan.common.gender",sWebLanguage)%></td>
-                                    <td class="admin" colspan="3"><%=getTran("web.occup",(activePatient.gender.equalsIgnoreCase("M")?"male":"female"),sWebLanguage)%></td>
+                                    <td class="admin"><%=getTran(request,"web.occup","medwan.common.gender",sWebLanguage)%></td>
+                                    <td class="admin" colspan="3"><%=getTran(request,"web.occup",(activePatient.gender.equalsIgnoreCase("M")?"male":"female"),sWebLanguage)%></td>
                                 </tr>
 
                                 <tr>
-                                    <td class="admin"><%=getTran("web.occup","healthrecord.ce.smoker",sWebLanguage)%></td>
-                                    <td class="admin" colspan="3"><%=smoker?getTran("web.occup","medwan.common.true",sWebLanguage):getTran("web.occup","medwan.common.false",sWebLanguage)%></td>
+                                    <td class="admin"><%=getTran(request,"web.occup","healthrecord.ce.smoker",sWebLanguage)%></td>
+                                    <td class="admin" colspan="3"><%=smoker?getTran(request,"web.occup","medwan.common.true",sWebLanguage):getTran(request,"web.occup","medwan.common.false",sWebLanguage)%></td>
                                 </tr>
 
                                 <tr>
-                                    <td class="admin"><%=getTran("web.occup","be.mxs.common.model.vo.healthrecord.iconstants.item_type_recruitment_sce_sbp",sWebLanguage)%></td>
+                                    <td class="admin"><%=getTran(request,"web.occup","be.mxs.common.model.vo.healthrecord.iconstants.item_type_recruitment_sce_sbp",sWebLanguage)%></td>
                                     <td class="admin" colspan="3"><%=(isSyst?syst+"":"?")%> mmHg</td>
                                 </tr>
 
                                 <tr>
-                                    <td class="admin"><%=getTran("web.occup","medwan.healthrecord.laboratory-examinations.blood.totale-cholesterol",sWebLanguage)%></td>
+                                    <td class="admin"><%=getTran(request,"web.occup","medwan.healthrecord.laboratory-examinations.blood.totale-cholesterol",sWebLanguage)%></td>
                                     <td class="admin" colspan="3"><%=(isChol?chol+"":"?")%> mg/dl</td>
                                 </tr>
 
@@ -625,22 +625,22 @@
                                 <table cellpadding="0" cellspacing="0" width="100%">
                                     <tr height="20">
                                         <td class="admin">
-                                            <%=getTran("web.occup","medwan.cardiorisk.warning1",sWebLanguage)%>
+                                            <%=getTran(request,"web.occup","medwan.cardiorisk.warning1",sWebLanguage)%>
                                         </td>
                                     </tr>
 
                                     <tr height="20">
                                         <td class="admin">
-                                            <%=getTran("web.occup","medwan.cardiorisk.warning3",sWebLanguage)%><br>
-                                            <%=getTran("web.occup","medwan.cardiorisk.warning4",sWebLanguage)%><br>
-                                            <%=getTran("web.occup","medwan.cardiorisk.warning5",sWebLanguage)%><br>
-                                            <%=getTran("web.occup","medwan.cardiorisk.warning6",sWebLanguage)%>
+                                            <%=getTran(request,"web.occup","medwan.cardiorisk.warning3",sWebLanguage)%><br>
+                                            <%=getTran(request,"web.occup","medwan.cardiorisk.warning4",sWebLanguage)%><br>
+                                            <%=getTran(request,"web.occup","medwan.cardiorisk.warning5",sWebLanguage)%><br>
+                                            <%=getTran(request,"web.occup","medwan.cardiorisk.warning6",sWebLanguage)%>
                                         </td>
                                     </tr>
 
                                     <tr height="20">
                                         <td class="admin">
-                                            <%=getTran("web.occup","medwan.cardiorisk.ref",sWebLanguage)%>
+                                            <%=getTran(request,"web.occup","medwan.cardiorisk.ref",sWebLanguage)%>
                                         </td>
                                     </tr>
 
@@ -699,8 +699,8 @@
                 <table width="100%" class="menu" cellspacing="0">
                     <tr>
                         <td style="padding:6px;">
-                            <%=getTran("web.occup","medwan.cardiorisk.pathology1",sWebLanguage)%>
-                            <%=getTran("web.occup","medwan.cardiorisk.pathology2",sWebLanguage)%>
+                            <%=getTran(request,"web.occup","medwan.cardiorisk.pathology1",sWebLanguage)%>
+                            <%=getTran(request,"web.occup","medwan.cardiorisk.pathology2",sWebLanguage)%>
                         </td>
                     </tr>
                 </table>

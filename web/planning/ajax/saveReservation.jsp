@@ -8,7 +8,6 @@
 		String end = ScreenHelper.checkString(request.getParameter("end"));
 		String endtime = ScreenHelper.checkString(request.getParameter("endtime"));
 		String userid = ScreenHelper.checkString(request.getParameter("userid"));
-		
 		java.util.Date dbegin = null;
 		try{
 			dbegin = ScreenHelper.getSQLTime(begin+" "+begintime,"dd/MM/yyyy HH:mm");
@@ -24,14 +23,16 @@
 			e1.printStackTrace();
 		}
 		Reservation reservation = new Reservation();
+		if(planninguid!=null && planninguid.split("\\.").length==2){
+			reservation=Reservation.get(planninguid);
+		}
 		reservation.setPlanningUid(planninguid);
 		reservation.setResourceUid(resourceuid);
 		reservation.setBegin(dbegin);
 		reservation.setEnd(dend);
-		reservation.setCreateDateTime(new java.util.Date());
 		reservation.setUpdateUser(userid);
 		reservation.setUpdateDateTime(new java.util.Date());
-		reservation.setVersion(1);
+		reservation.setCreateDateTime(new java.util.Date());
 		reservation.store();
 	}
 	catch(Exception e){

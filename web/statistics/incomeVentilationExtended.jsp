@@ -26,7 +26,7 @@
 	}
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
-	String sTitle = getTranNoLink("Web","statistics.incomeVentilationPerCategoryAndService",sWebLanguage)+": <i>"+sStart+" "+getTran("web","to",sWebLanguage)+" "+sEnd+"</i>";
+	String sTitle = getTranNoLink("Web","statistics.incomeVentilationPerCategoryAndService",sWebLanguage)+": <i>"+sStart+" "+getTran(request,"web","to",sWebLanguage)+" "+sEnd+"</i>";
 %>
 
 <%=writeTableHeaderDirectText(sTitle,sWebLanguage," window.close()")%>
@@ -34,11 +34,11 @@
 <table width="100%" class="sortable" id="searchresults" cellspacing="1" bottomRowCount="1" cellpadding="0">
 	<%-- HEADER --%>
 	<tr class="gray">
-		<td width="100"><%=getTran("web","invoice.category",sWebLanguage)%></td>
-		<td width="100"><%=getTran("web","total.amount",sWebLanguage)%></td>
-		<td width="100"><%=getTran("web","patient.amount",sWebLanguage)%></td>
-		<td width="100"><%=getTran("web","insurar.amount",sWebLanguage)%></td>
-		<td width="*"><%=getTran("web","extrainsurar.amount",sWebLanguage)%></td>
+		<td width="100"><%=getTran(request,"web","invoice.category",sWebLanguage)%></td>
+		<td width="100"><%=getTran(request,"web","total.amount",sWebLanguage)%></td>
+		<td width="100"><%=getTran(request,"web","patient.amount",sWebLanguage)%></td>
+		<td width="100"><%=getTran(request,"web","insurar.amount",sWebLanguage)%></td>
+		<td width="*"><%=getTran(request,"web","extrainsurar.amount",sWebLanguage)%></td>
 	</tr>
 	
 <%
@@ -131,7 +131,7 @@
 	
 	// total
 	out.print("<tr class='admin'>"+
-	           "<td>"+getTran("Web","total",sWebLanguage)+"</td>"+
+	           "<td>"+getTran(request,"Web","total",sWebLanguage)+"</td>"+
 	           "<td>"+deci.format(totalpatient+totalinsurar+totalextrainsurar)+currency+"</td>"+
 	           "<td>"+deci.format(totalpatient)+currency+"</td>"+
 	           "<td>"+deci.format(totalinsurar)+currency+"</td>"+
@@ -142,10 +142,10 @@
     
 <%
 	if(recordCount > 0){
-		%><%=recordCount%> <%=getTran("web","recordsFound",sWebLanguage)%><%
+		%><%=recordCount%> <%=getTran(request,"web","recordsFound",sWebLanguage)%><%
 	}
 	else{
-		%><%=getTran("web","noRecordsFound",sWebLanguage)%><%
+		%><%=getTran(request,"web","noRecordsFound",sWebLanguage)%><%
     }
 %>
 

@@ -38,9 +38,9 @@
 <%=sJSSORTTABLE%>
 <form name='SearchForm' method='post'>
 	<table width='100%'>
-		<tr class='admin'><td colspan='5'><%=getTran("web.manage","manageInsurerPrestations",sWebLanguage) %></td></tr>
+		<tr class='admin'><td colspan='5'><%=getTran(request,"web.manage","manageInsurerPrestations",sWebLanguage) %></td></tr>
 		<tr>
-            <td class="admin"><%=getTran("web","company",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","company",sWebLanguage)%></td>
             <td class="admin2" colspan='4'>
                 <input type="hidden" name="EditInsurarUID" id="EditInsurarUID" value="<%=sEditInsurarUid%>"/>
                 <input class="text" type="text" readonly name="EditInsurarName" value="<%=sEditInsurarName%>" size="<%=sTextWidth%>"/>
@@ -54,7 +54,7 @@
 				<div id='divFindRecords'></div>
 			</td>
 		</tr>
-		<tr><td colspan='5'><center><input class='button' type='submit' name='submit' value='<%=getTran("web","save",sWebLanguage)%>'/></center></td></tr>
+		<tr><td colspan='5'><center><input class='button' type='submit' name='submit' value='<%=getTran(null,"web","save",sWebLanguage)%>'/></center></td></tr>
 	</table>
 </form>
 

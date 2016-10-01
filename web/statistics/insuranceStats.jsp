@@ -29,12 +29,12 @@
 <%-- 1 - INPATIENTS (admissions) ----------------------------------------------------------------%>               
 <table width="100%" class="list" cellspacing="1" cellpadding="0">
 	<tr class="admin">
-		<td colspan="3"><%=getTran("hospital.statistics","inpatients",sWebLanguage)%></td>
+		<td colspan="3"><%=getTran(request,"hospital.statistics","inpatients",sWebLanguage)%></td>
 	</tr>
 	<tr class="gray">
-		<td><%=getTran("hospital.statistics","insurar",sWebLanguage)%></td>
-		<td># <%=getTran("hospital.statistics","admissions",sWebLanguage)%></td>
-		<td>% <%=getTran("hospital.statistics","total.admissions",sWebLanguage)%></td>
+		<td><%=getTran(request,"hospital.statistics","insurar",sWebLanguage)%></td>
+		<td># <%=getTran(request,"hospital.statistics","admissions",sWebLanguage)%></td>
+		<td>% <%=getTran(request,"hospital.statistics","total.admissions",sWebLanguage)%></td>
 	</tr>
 
 <%
@@ -57,10 +57,10 @@
     %></table><%
     
 	if(kv.length > 0){
-		%><%=kv.length%> <%=getTran("web","recordsFound",sWebLanguage)%><%
+		%><%=kv.length%> <%=getTran(request,"web","recordsFound",sWebLanguage)%><%
 	}
 	else{
-		%><%=getTran("web","noRecordsFound",sWebLanguage)%><%
+		%><%=getTran(request,"web","noRecordsFound",sWebLanguage)%><%
     }
 %>
 <div style="padding-top:5px;"/>
@@ -68,12 +68,12 @@
 <%-- 2 - OUTPATIENTS (visit) --------------------------------------------------------------------%>
 <table width="100%" class="list" cellspacing="1" cellpadding="0">
 	<tr class="admin">
-		<td colspan="3"><%=getTran("hospital.statistics","outpatients",sWebLanguage)%></td>
+		<td colspan="3"><%=getTran(request,"hospital.statistics","outpatients",sWebLanguage)%></td>
 	</tr>
 	<tr class="gray">
-		<td><%=getTran("hospital.statistics","insurar",sWebLanguage)%></td>
-		<td># <%=getTran("hospital.statistics","visits",sWebLanguage)%></td>
-		<td>% <%=getTran("hospital.statistics","total.visits",sWebLanguage)%></td>
+		<td><%=getTran(request,"hospital.statistics","insurar",sWebLanguage)%></td>
+		<td># <%=getTran(request,"hospital.statistics","visits",sWebLanguage)%></td>
+		<td>% <%=getTran(request,"hospital.statistics","total.visits",sWebLanguage)%></td>
 	</tr>
 
 <%
@@ -95,10 +95,10 @@
     %></table><%
     
 	if(kv.length > 0){
-		%><%=kv.length%> <%=getTran("web","recordsFound",sWebLanguage)%><%
+		%><%=kv.length%> <%=getTran(request,"web","recordsFound",sWebLanguage)%><%
 	}
 	else{
-		%><%=getTran("web","noRecordsFound",sWebLanguage)%><%
+		%><%=getTran(request,"web","noRecordsFound",sWebLanguage)%><%
     }
 %>
 

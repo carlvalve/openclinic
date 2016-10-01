@@ -69,17 +69,17 @@
     <table class="list" width="100%" cellspacing="1">
         <%-- product name --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>" nowrap><%=getTran("Web","productName",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>" nowrap><%=getTran(request,"Web","productName",sWebLanguage)%></td>
             <td class="admin2"><%=product.getName()%></td>
         </tr>
 
         <%-- unit --%>
         <tr>
-            <td class="admin" nowrap><%=getTran("Web","unit",sWebLanguage)%> *</td>
+            <td class="admin" nowrap><%=getTran(request,"Web","unit",sWebLanguage)%> *</td>
             <td class="admin2">
                 <select class="text" name="EditUnit">
                     <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>
-                    <%=ScreenHelper.writeSelectUnsorted("product.unit",checkString(product.getUnit()),sWebLanguage)%>
+                    <%=ScreenHelper.writeSelectUnsorted(request,"product.unit",checkString(product.getUnit()),sWebLanguage)%>
                 </select>
             </td>
         </tr>
@@ -89,7 +89,7 @@
             String sPackageUnits = (product.getPackageUnits()<=0?"":product.getPackageUnits()+"");
         %>
         <tr>
-            <td class="admin" nowrap><%=getTran("Web","PackageUnits",sWebLanguage)%></td>
+            <td class="admin" nowrap><%=getTran(request,"Web","PackageUnits",sWebLanguage)%></td>
             <td class="admin2">
                 <input class="text" type="text" name="EditPackageUnits" size="5" maxLength="5" value="<%=sPackageUnits%>" onKeyUp="isNumber(this);">
             </td>
@@ -98,7 +98,7 @@
     </table>
 
     <%-- indication of obligated fields --%>
-    <%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%>
+    <%=getTran(request,"Web","colored_fields_are_obligate",sWebLanguage)%>
 
     <%-- display message --%>
     <span id="msgArea"><br><%=msg%></span>

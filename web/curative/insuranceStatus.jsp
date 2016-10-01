@@ -14,7 +14,7 @@
 <table class="list" width="100%" cellspacing="0">
     <tr class="admin">
         <td>
-            <%=getTran("curative","insurance.status.title",sWebLanguage)%>&nbsp;
+            <%=getTran(request,"curative","insurance.status.title",sWebLanguage)%>&nbsp;
             <a href="<c:url value='/main.jsp'/>?Page=financial/insurance/historyInsurances.jsp&ts=<%=getTs()%>"><img src="<c:url value='/_img/icons/icon_history2.gif'/>" class="link" alt="<%=getTranNoLink("web","historyinsurances",sWebLanguage)%>" style="vertical-align:-4px;"></a>
             <a href="<c:url value='/main.jsp'/>?Page=financial/insurance/editInsurance.jsp&ts=<%=getTs()%>"><img src="<c:url value='/_img/icons/icon_new.gif'/>" class="link" alt="<%=getTranNoLink("web","newinsurance",sWebLanguage)%>" style="vertical-align:-4px;"></a>
         </td>
@@ -26,10 +26,10 @@
         <td style="padding:0;">
             <table width="100%" class="sortable" cellpadding="0" cellspacing="0" id="searchresultsInsurance" style="border:0;">
                 <tr class="gray">
-                    <td><%=getTran("insurance","insurancenr",sWebLanguage)%></td>
-                    <td><%=getTran("web","company",sWebLanguage)%></td>
-                    <td><%=getTran("web","tariff",sWebLanguage)%></td>
-                    <td><%=getTran("web","start",sWebLanguage)%></td>
+                    <td><%=getTran(request,"insurance","insurancenr",sWebLanguage)%></td>
+                    <td><%=getTran(request,"web","company",sWebLanguage)%></td>
+                    <td><%=getTran(request,"web","tariff",sWebLanguage)%></td>
+                    <td><%=getTran(request,"web","start",sWebLanguage)%></td>
                 </tr>
     <%
             String sClass ="";
@@ -52,7 +52,7 @@
                     %>
                     <%=ScreenHelper.checkString(currentInsurance.getInsuranceNr())%></td>
                     <td <%=!bAuth?"style='text-decoration: line-through'":""%>><%=ScreenHelper.checkString(currentInsurance.getInsuranceCategoryLetter()).length()>0 && currentInsurance.getInsuranceCategory().getLabel().length()>0?ScreenHelper.checkString(currentInsurance.getInsuranceCategory().getInsurar().getName())+ " ("+currentInsurance.getInsuranceCategory().getCategory()+": "+currentInsurance.getInsuranceCategory().getPatientShare()+"/"+(100-Integer.parseInt(currentInsurance.getInsuranceCategory().getPatientShare()))+")":""%></td>
-                    <td <%=!bAuth?"style='text-decoration: line-through'":""%>><%=ScreenHelper.checkString(getTran("insurance.types",currentInsurance.getType(),sWebLanguage))%></td>
+                    <td <%=!bAuth?"style='text-decoration: line-through'":""%>><%=ScreenHelper.checkString(getTran(request,"insurance.types",currentInsurance.getType(),sWebLanguage))%></td>
                     <td <%=!bAuth?"style='text-decoration: line-through'":""%>><%=ScreenHelper.checkString(currentInsurance.getStart()!=null?ScreenHelper.stdDateFormat.format(currentInsurance.getStart()):"")%></td>
                 </tr>
                 <%

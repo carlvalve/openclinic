@@ -83,8 +83,8 @@
         );
     }
 
-    String sTitle1 = getTran("Web", "begindate", sWebLanguage);
-    String sTitle2 = getTran("Web", "enddate", sWebLanguage);
+    String sTitle1 = getTran(request,"Web", "begindate", sWebLanguage);
+    String sTitle2 = getTran(request,"Web", "enddate", sWebLanguage);
 
     if (sFindSortColumn.length() > 0) {
         sTitle1 = "<i>" + sTitle1 + "</i>";
@@ -100,10 +100,10 @@
         <tr class="gray">
             <td width="10%"><a href="#" class="underlined" onClick="doSearch('OC_INSURANCE_START');"><%=sTitle1%></a></td>
             <td width="10%"><a href="#" class="underlined" onClick="doSearch('OC_INSURANCE_STOP');"><%=sTitle2%></a></td>
-            <td width='20%'><%=getTran("insurance","insurancenr",sWebLanguage)%></td>
-            <td width='20%'><%=getTran("Web","type",sWebLanguage)%></td>
-            <td width='15%'><%=getTran("Web","company",sWebLanguage)%></td>
-            <td width='25%'><%=getTran("Web","comment",sWebLanguage)%></td>
+            <td width='20%'><%=getTran(request,"insurance","insurancenr",sWebLanguage)%></td>
+            <td width='20%'><%=getTran(request,"Web","type",sWebLanguage)%></td>
+            <td width='15%'><%=getTran(request,"Web","company",sWebLanguage)%></td>
+            <td width='25%'><%=getTran(request,"Web","comment",sWebLanguage)%></td>
         </tr>
         <%=sbResults%>
     </table>

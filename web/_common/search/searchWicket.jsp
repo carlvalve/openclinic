@@ -17,7 +17,7 @@
             <%-- search fields row 1 --%>
             <%-- service --%>
             <tr>
-                <td><%=getTran("Web","service",sWebLanguage)%></td>
+                <td><%=getTran(request,"Web","service",sWebLanguage)%></td>
                 <td>
                     <input type="hidden" name="FindWicketService" value="<%=sFindWicketService%>">
                     <input class="text" type="text" name="FindWicketServiceName" readonly size="<%=sTextWidth%>" value="<%=sFindWicketServiceName%>">
@@ -71,7 +71,7 @@
 
                                         results.append("<tr class='list" + sClass + "' onclick=\"setWicket(" + sWicketUID + ", '" + sWicketName.toUpperCase() + "');\">")
                                                 .append("<td>" + sWicketName.toUpperCase() + "</td>")
-                                                .append("<td>" + checkString(getTran("Service", objWicket.getServiceUID(), sWebLanguage)) + "</td>")
+                                                .append("<td>" + checkString(getTran(request,"Service", objWicket.getServiceUID(), sWebLanguage)) + "</td>")
                                                 .append("<td>" + sCreatedate + "</td>")
                                                 .append("</tr>");
                                     }
@@ -80,9 +80,9 @@
                             %>
                                             <tbody class="hand">
                                                 <tr class="admin">
-                                                    <td width='33%' nowrap><%=getTran("Web","name",sWebLanguage)%></td>
-                                                    <td width='*' nowrap><%=getTran("Web","service",sWebLanguage)%></td>
-                                                    <td width='15%' nowrap><%=getTran("Web","created",sWebLanguage)%></td>
+                                                    <td width='33%' nowrap><%=getTran(request,"Web","name",sWebLanguage)%></td>
+                                                    <td width='*' nowrap><%=getTran(request,"Web","service",sWebLanguage)%></td>
+                                                    <td width='15%' nowrap><%=getTran(request,"Web","created",sWebLanguage)%></td>
                                                 </tr>
 
                                                 <%=results%>
@@ -93,7 +93,7 @@
                                         // display 'no results' message
                                         %>
                                             <tr>
-                                                <td colspan='3'><%=getTran("web","norecordsfound",sWebLanguage)%></td>
+                                                <td colspan='3'><%=getTran(request,"web","norecordsfound",sWebLanguage)%></td>
                                             </tr>
                                         <%
                                     }

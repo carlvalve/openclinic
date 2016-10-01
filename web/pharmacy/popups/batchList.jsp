@@ -48,34 +48,34 @@
 			}
 		}
 		if(totalActive>0){
-			out.println(getTran("web","active.batches",sWebLanguage)+":");
-			out.println("<table width='100%'><tr class='admin'><th>"+getTran("web","batchnumber",sWebLanguage)+"</th><th>"+getTran("web","level",sWebLanguage)+"</th><th>"+
-					getTran("web","expires",sWebLanguage)+"</th><th>"+getTran("web","comment",sWebLanguage)+"</th></tr>");
+			out.println(getTran(request,"web","active.batches",sWebLanguage)+":");
+			out.println("<table width='100%'><tr class='admin'><th>"+getTran(request,"web","batchnumber",sWebLanguage)+"</th><th>"+getTran(request,"web","level",sWebLanguage)+"</th><th>"+
+					getTran(request,"web","expires",sWebLanguage)+"</th><th>"+getTran(request,"web","comment",sWebLanguage)+"</th></tr>");
 			out.println(sActiveBatches.toString());
 			out.println("<tr><td class='admin2'><i>?</i></td><td class='admin2right'><i>"+totalStock+"</i></td></tr>");
-			out.println("<tr><td>"+getTran("web","total",sWebLanguage)+"</td><td class='admin2right'><b>"+(totalActive+totalStock)+"</b></td></tr>");
+			out.println("<tr><td>"+getTran(request,"web","total",sWebLanguage)+"</td><td class='admin2right'><b>"+(totalActive+totalStock)+"</b></td></tr>");
 			out.println("</table><hr/>");
 		}
 		if(sExpiredBatches.length()>0){
-			out.println(getTran("web","expired.batches",sWebLanguage)+":");
-			out.println("<table width='100%'><tr class='admin'><th>"+getTran("web","batchnumber",sWebLanguage)+"</th><th>"+getTran("web","level",sWebLanguage)+"</th><th>"+
-					getTran("web","expires",sWebLanguage)+"</th><th>"+getTran("web","comment",sWebLanguage)+"</th></tr>");
+			out.println(getTran(request,"web","expired.batches",sWebLanguage)+":");
+			out.println("<table width='100%'><tr class='admin'><th>"+getTran(request,"web","batchnumber",sWebLanguage)+"</th><th>"+getTran(request,"web","level",sWebLanguage)+"</th><th>"+
+					getTran(request,"web","expires",sWebLanguage)+"</th><th>"+getTran(request,"web","comment",sWebLanguage)+"</th></tr>");
 			out.println(sExpiredBatches.toString());
-			out.println("<tr><td>"+getTran("web","total",sWebLanguage)+"</td><td class='admin2right'><b>"+totalExpired+"</b></td></tr>");
+			out.println("<tr><td>"+getTran(request,"web","total",sWebLanguage)+"</td><td class='admin2right'><b>"+totalExpired+"</b></td></tr>");
 			out.println("</table><hr/>");
 		}
 		if(request.getParameter("showused")!=null && sUsedBatches.length()>0){
-			out.println(getTran("web","used.batches",sWebLanguage)+":");
-			out.println("<table width='100%'><tr class='admin'><th>"+getTran("web","batchnumber",sWebLanguage)+"</th><th>"+getTran("web","level",sWebLanguage)+"</th><th>"+
-					getTran("web","expires",sWebLanguage)+"</th><th>"+getTran("web","comment",sWebLanguage)+"</th></tr>");
+			out.println(getTran(request,"web","used.batches",sWebLanguage)+":");
+			out.println("<table width='100%'><tr class='admin'><th>"+getTran(request,"web","batchnumber",sWebLanguage)+"</th><th>"+getTran(request,"web","level",sWebLanguage)+"</th><th>"+
+					getTran(request,"web","expires",sWebLanguage)+"</th><th>"+getTran(request,"web","comment",sWebLanguage)+"</th></tr>");
 			out.println(sUsedBatches.toString());
 			if(totalUsed!=0){
-				out.println("<tr><td>"+getTran("web","total",sWebLanguage)+"</td><td class='admin2right'><b>"+totalUsed+"</b></td></tr>");
+				out.println("<tr><td>"+getTran(request,"web","total",sWebLanguage)+"</td><td class='admin2right'><b>"+totalUsed+"</b></td></tr>");
 			}
 			out.println("</table><hr/>");
 		}
 		else if (sUsedBatches.length()>0){
-			out.println("<a href='javascript:showUsedBatches();'/>"+getTran("web","show.used",sWebLanguage)+"</a>");
+			out.println("<a href='javascript:showUsedBatches();'/>"+getTran(request,"web","show.used",sWebLanguage)+"</a>");
 		}
 	%>
 	<input type='hidden' name='showused' id='showused' value=''/>	

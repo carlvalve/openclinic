@@ -71,7 +71,7 @@
 	    }
     }
 	else{
-		%><div style="height:25px;padding-top:10px;"><i><%=HTMLEntities.htmlentities(getTran("web","noRecordsfound",sWebLanguage))%></i></div><%
+		%><div style="height:25px;padding-top:10px;"><i><%=HTMLEntities.htmlentities(getTran(request,"web","noRecordsfound",sWebLanguage))%></i></div><%
 	}
     
     if(resizeModalbox){

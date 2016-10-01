@@ -36,11 +36,11 @@
                 
 				<table class="list" cellpadding="0" cellspacing="1">
 					<tr class="admin">
-						<td><%=getTran("web","prestation",sWebLanguage)%>&nbsp;</td>
-						<td><%=getTran("web","oldprice",sWebLanguage)%>&nbsp;</td>
-						<td><%=getTran("web","newprice",sWebLanguage)%>&nbsp;</td>
-						<td><%=getTran("web","result",sWebLanguage)%>&nbsp;</td>
-						<td><%=getTran("web","difference",sWebLanguage)%>&nbsp;</td>
+						<td><%=getTran(request,"web","prestation",sWebLanguage)%>&nbsp;</td>
+						<td><%=getTran(request,"web","oldprice",sWebLanguage)%>&nbsp;</td>
+						<td><%=getTran(request,"web","newprice",sWebLanguage)%>&nbsp;</td>
+						<td><%=getTran(request,"web","result",sWebLanguage)%>&nbsp;</td>
+						<td><%=getTran(request,"web","difference",sWebLanguage)%>&nbsp;</td>
 					</tr>
 			<%
 							

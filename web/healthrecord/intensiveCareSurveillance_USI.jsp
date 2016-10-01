@@ -213,7 +213,7 @@
         <tr>
             <td class="admin" width="<%=sTDAdminWidth%>">
                 <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-                <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+                <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
             </td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" id="trandate" OnBlur='checkDate(this)' <%if(usi_data_holders.size() > 0) out.print("readonly");%>>
@@ -234,7 +234,7 @@
 
             iterA = usi_data_holders.iterator();
             out.print("<tr>" +
-                       "<td width='200px' align='center' valign='middle'>" + getTran("openclinic.chuk","usi_add_surveillance",sWebLanguage) +
+                       "<td width='200px' align='center' valign='middle'>" + getTran(request,"openclinic.chuk","usi_add_surveillance",sWebLanguage) +
                         " &nbsp;<img src='" + sCONTEXTPATH + "/_img/icons/icon_new.gif' alt='" + getTranNoLink("web","new",sWebLanguage) + "' style='vertical-align:-3px;' onmouseout='this.style.cursor = \"default\";' onmouseover='this.style.cursor = \"pointer\";' onclick='addSurveillance();'>" +
                        "</td>"
                       );
@@ -249,7 +249,7 @@
                              "</td>" +
                             "</tr>" +
                             "<tr>" +
-                             "<td align='center'>" + getTran("openclinic.chuk","edited_by",sWebLanguage) + ": " + usiData.getUpdateUser() + "</td>" +
+                             "<td align='center'>" + getTran(request,"openclinic.chuk","edited_by",sWebLanguage) + ": " + usiData.getUpdateUser() + "</td>" +
                             "</tr>" +
                            "</table>" +
                           "</td>"
@@ -261,14 +261,14 @@
                 sKeyValue = checkString((String)hListing.get(Integer.toString(x)));
                 
                 if(hShowValues.get(sKeyValue)!=null && ((Boolean)hShowValues.get(sKeyValue)).booleanValue()){
-                    out.print("<tr><td class='admin' width='200' nowrap>" + getTran("openclinic.chuk",sKeyValue.toLowerCase(),sWebLanguage) + "</td>");
+                    out.print("<tr><td class='admin' width='200' nowrap>" + getTran(request,"openclinic.chuk",sKeyValue.toLowerCase(),sWebLanguage) + "</td>");
                     
                     iterA = usi_data_holders.iterator();
                     while(iterA.hasNext()){
                         usiData =(USI_DataHolder)iterA.next();
                         sValue = checkString((String)usiData.getItem(sKeyValue));
                         if(sValue.startsWith("usi.surveillance.") || sValue.startsWith("medwan.common.")){
-                            sValue = getTran("web.occup",sValue,sWebLanguage);
+                            sValue = getTran(request,"web.occup",sValue,sWebLanguage);
                         }
                         if(sValue.equals(""))sValue = "&nbsp;";
                         out.print("<td class='admin2' width='250px'>" + sValue + "</td>");
@@ -293,7 +293,7 @@
                 }
                 else{
             	    %>
-	            	    <%=getTran("Web.Occup","PrintLanguage",sWebLanguage)%>&nbsp;
+	            	    <%=getTran(request,"Web.Occup","PrintLanguage",sWebLanguage)%>&nbsp;
 	            	    
 	                    <select class="text" name="PrintLanguage">
 	            	        <%

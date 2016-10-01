@@ -10,13 +10,13 @@
         }
 
         // translate labtype
-             if(sType.equals("1")) sType = getTran("Web.occup","labanalysis.type.blood",sWebLanguage);
-        else if(sType.equals("2")) sType = getTran("Web.occup","labanalysis.type.urine",sWebLanguage);
-        else if(sType.equals("3")) sType = getTran("Web.occup","labanalysis.type.other",sWebLanguage);
-        else if (sType.equals("4")) sType = getTran("Web.occup", "labanalysis.type.stool", sWebLanguage);
-        else if (sType.equals("5")) sType = getTran("Web.occup", "labanalysis.type.sputum", sWebLanguage);
-        else if (sType.equals("6")) sType = getTran("Web.occup", "labanalysis.type.smear", sWebLanguage);
-        else if (sType.equals("7")) sType = getTran("Web.occup", "labanalysis.type.liquid", sWebLanguage);
+             if(sType.equals("1")) sType = getTran(null,"Web.occup","labanalysis.type.blood",sWebLanguage);
+        else if(sType.equals("2")) sType = getTran(null,"Web.occup","labanalysis.type.urine",sWebLanguage);
+        else if(sType.equals("3")) sType = getTran(null,"Web.occup","labanalysis.type.other",sWebLanguage);
+        else if (sType.equals("4")) sType = getTran(null,"Web.occup", "labanalysis.type.stool", sWebLanguage);
+        else if (sType.equals("5")) sType = getTran(null,"Web.occup", "labanalysis.type.sputum", sWebLanguage);
+        else if (sType.equals("6")) sType = getTran(null,"Web.occup", "labanalysis.type.smear", sWebLanguage);
+        else if (sType.equals("7")) sType = getTran(null,"Web.occup", "labanalysis.type.liquid", sWebLanguage);
 
         return "<tr>"+
                " <td class='admin' width='60'><a href='javascript:selectLabAnalysis(\""+sID+"\",\""+sType+"\",\""+sCode+"\",\""+sLabel+"\")' title='"+getTranNoLink("web","select",sWebLanguage)+"'>"+sCode+"</a></td>"+
@@ -70,7 +70,7 @@
             sLabType = objLabAnalysis.getLabtype();
             sLabCode = objLabAnalysis.getLabcode();
             sCodeOther = objLabAnalysis.getLabcodeother();
-            sLabel = getTran("labanalysis",objLabAnalysis.getLabId()+"",sWebLanguage);
+            sLabel = getTran(request,"labanalysis",objLabAnalysis.getLabId()+"",sWebLanguage);
 
             sOut.append(writeRow(sLabID, sLabType, sLabCode, sLabel, sWebLanguage));
         }
@@ -119,7 +119,7 @@
                 sLabType = objLabAnalysis.getLabtype();
                 sLabCode = objLabAnalysis.getLabcode();
                 sCodeOther = objLabAnalysis.getLabcodeother();
-                sLabel = getTran("labanalysis",objLabAnalysis.getLabId()+"",sWebLanguage);
+                sLabel = getTran(request,"labanalysis",objLabAnalysis.getLabId()+"",sWebLanguage);
 
                 sOut.append(writeRow(sLabID, sLabType, sLabCode, sLabel, sWebLanguage));
             }
@@ -133,8 +133,8 @@
     <%-- SEARCH INPUTS --%>
     <tr>
       <td width='100%' height='25'>
-        &nbsp;<%=getTran("web.manage","labanalysis.cols.code",sWebLanguage)%>&nbsp;<input class="text" type="text" name="FindCode" value="<%=sSearchCode%>" size="16">
-        &nbsp;<%=getTran("web.manage","labanalysis.cols.name",sWebLanguage)%>&nbsp;<input class="text" type="text" name="FindText" value="<%=sFindText%>" size="32">
+        &nbsp;<%=getTran(request,"web.manage","labanalysis.cols.code",sWebLanguage)%>&nbsp;<input class="text" type="text" name="FindCode" value="<%=sSearchCode%>" size="16">
+        &nbsp;<%=getTran(request,"web.manage","labanalysis.cols.name",sWebLanguage)%>&nbsp;<input class="text" type="text" name="FindText" value="<%=sFindText%>" size="32">
 
         <%-- BUTTONS --%>
         &nbsp;<input class="button" type="button" name="FindButton"  value="<%=getTranNoLink("Web","find",sWebLanguage)%>" onClick="doFind();">
@@ -165,16 +165,16 @@
           <table width="100%" cellspacing="1" cellpadding="0">
             <%-- HEADER --%>
             <tr class="admin">
-              <td width="60"><a class="underlined" href="#" onClick="searchForm.SortCol.value='labcode';searchForm.submit();"><%=getTran("web.manage","labanalysis.cols.code",sWebLanguage)%></a></td>
-              <td width="70"><a class="underlined" href="#" onClick="searchForm.SortCol.value='labtype';searchForm.submit();"><%=getTran("web.manage","labanalysis.cols.type",sWebLanguage)%></a></td>
-              <td width="180"><a class="underlined" href="#" onClick="searchForm.SortCol.value='name';searchForm.submit();"><%=getTran("web.manage","labanalysis.cols.name",sWebLanguage)%></a></td>
+              <td width="60"><a class="underlined" href="#" onClick="searchForm.SortCol.value='labcode';searchForm.submit();"><%=getTran(request,"web.manage","labanalysis.cols.code",sWebLanguage)%></a></td>
+              <td width="70"><a class="underlined" href="#" onClick="searchForm.SortCol.value='labtype';searchForm.submit();"><%=getTran(request,"web.manage","labanalysis.cols.type",sWebLanguage)%></a></td>
+              <td width="180"><a class="underlined" href="#" onClick="searchForm.SortCol.value='name';searchForm.submit();"><%=getTran(request,"web.manage","labanalysis.cols.name",sWebLanguage)%></a></td>
             </tr>
 
             <%=sOut%>
 
             <%
               if(showMsg){
-                out.print("<tr><td colspan='3'><br>"+iTotal+" "+getTran("web","recordsfound",sWebLanguage)+"</td></tr>");
+                out.print("<tr><td colspan='3'><br>"+iTotal+" "+getTran(request,"web","recordsfound",sWebLanguage)+"</td></tr>");
               }
             %>
           </table>

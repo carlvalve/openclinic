@@ -256,16 +256,16 @@ if (activePatient!=null){
 
         if (labItem.type.equalsIgnoreCase("T") || labItem.type.equalsIgnoreCase("C")){
             if (labItem.comment.trim().length()==0){
-                out.print("<tr><td class='admin' colspan='7'>"+getTran("TRANSACTION_TYPE_LAB_RESULT",item.getType(),sWebLanguage)+"</td>");
+                out.print("<tr><td class='admin' colspan='7'>"+getTran(request,"TRANSACTION_TYPE_LAB_RESULT",item.getType(),sWebLanguage)+"</td>");
             }
             else {
-                out.print("<tr><td class='admin2'>"+getTran("TRANSACTION_TYPE_LAB_RESULT",item.getType(),sWebLanguage)+"</td>");
+                out.print("<tr><td class='admin2'>"+getTran(request,"TRANSACTION_TYPE_LAB_RESULT",item.getType(),sWebLanguage)+"</td>");
                 out.print("<td class='text' colspan='6'>"+labItem.comment+"</td></tr>");
             }
         }
         else if (labItem.type.equalsIgnoreCase("N")||labItem.type.equalsIgnoreCase("D")||labItem.type.equalsIgnoreCase("H")||labItem.type.equalsIgnoreCase("M")||labItem.type.equalsIgnoreCase("S")){
             out.print("<tr>");
-            out.print("<td class='admin2'>"+getTran("TRANSACTION_TYPE_LAB_RESULT",item.getType(),sWebLanguage)+"</td>");
+            out.print("<td class='admin2'>"+getTran(request,"TRANSACTION_TYPE_LAB_RESULT",item.getType(),sWebLanguage)+"</td>");
             out.print("<td class='text' width='1%'>"+labItem.modifier+"</td>");
             out.print("<td class='");
 
@@ -277,7 +277,7 @@ if (activePatient!=null){
             }
 
             out.print("' width='1%'><div "+setRightClick(labItem.id)+">"+labItem.result.trim()+"</div></td>");
-            out.print("<td class='text' width='10%'>"+getTran("TRANSACTION_TYPE_LAB_RESULT","be.mxs.common.model.vo.healthrecord.IConstants.EXT_"+format+"UNIT_"+labItem.unit,sWebLanguage)+"</td>");
+            out.print("<td class='text' width='10%'>"+getTran(request,"TRANSACTION_TYPE_LAB_RESULT","be.mxs.common.model.vo.healthrecord.IConstants.EXT_"+format+"UNIT_"+labItem.unit,sWebLanguage)+"</td>");
             out.print("<td class='text' width='1%'>"+labItem.normal+"</td>");
             out.print("<td class='text' width='1%'>"+labItem.time+"</td>");
             out.print("<td class='text'>"+sValue+"</td></tr></div>");

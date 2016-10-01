@@ -44,7 +44,7 @@
         <%-- SEARCH FIELDS --%>
         <tr>
             <td height="25" class="admin2">
-                <%=getTran("Web","Find",sWebLanguage)%>&nbsp;&nbsp;
+                <%=getTran(request,"Web","Find",sWebLanguage)%>&nbsp;&nbsp;
                 <input type="text" name="FindText" class="text" value="<%=sFindText%>" size="40">
 
                 <%-- buttons --%>

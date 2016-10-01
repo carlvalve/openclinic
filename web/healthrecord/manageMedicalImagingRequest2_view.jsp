@@ -91,7 +91,7 @@
         <tr height="20">
             <td class="admin2">
                 <a href="javascript:forward('/main.do?be.mxs.healthrecord.transaction_id=currentTransaction&Page=healthrecord/manageMedicalImagingRequestFixedUnit.jsp&type=0&ts=<%=getTs()%>');">
-                    <%=getTran("Web.Occup","medwan.healthrecord.medical-imaging.fixed-unit",sWebLanguage)%>
+                    <%=getTran(request,"Web.Occup","medwan.healthrecord.medical-imaging.fixed-unit",sWebLanguage)%>
                 </a>
             </td>
         </tr>
@@ -100,7 +100,7 @@
         <tr height="20">
             <td class="admin2">
                 <a href="javascript:forward('/main.do?be.mxs.healthrecord.transaction_id=currentTransaction&Page=healthrecord/manageMedicalImagingRequestMobileUnit.jsp&type=1&ts=<%=getTs()%>');">
-                    <%=getTran("Web.Occup","medwan.healthrecord.medical-imaging.mobile-unit",sWebLanguage)%>
+                    <%=getTran(request,"Web.Occup","medwan.healthrecord.medical-imaging.mobile-unit",sWebLanguage)%>
                 </a>
             </td>
         </tr>

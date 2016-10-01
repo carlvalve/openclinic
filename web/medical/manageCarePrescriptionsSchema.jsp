@@ -58,7 +58,7 @@
             out.print("<tr><td/>");
             for (int d = 0; d < adminDays; d++) {
                 for (int i = 0; i < line.getTimeQuantities().size(); i++) {
-                    out.print("<td class='admin'><center>" + ((KeyValue) line.getTimeQuantities().elementAt(i)).getKey() + getTran("web", "abbreviation.hour", sWebLanguage) + "</center></td>");
+                    out.print("<td class='admin'><center>" + ((KeyValue) line.getTimeQuantities().elementAt(i)).getKey() + getTran(request,"web", "abbreviation.hour", sWebLanguage) + "</center></td>");
                 }
             }
             out.print("</tr>");
@@ -73,7 +73,7 @@
             line = (CarePrescriptionAdministrationSchema.AdministrationSchemaLine) schema.getCarePrescriptionSchemas().elementAt(n);
 
             out.print("<tr bgcolor='lightgrey'>");
-            out.print(" <td><b>" + (line.getCarePrescription().getCareUid()!=null?getTran("care_type",line.getCarePrescription().getCareUid(),sWebLanguage):"Unknown care type") + "</b></td>");
+            out.print(" <td><b>" + (line.getCarePrescription().getCareUid()!=null?getTran(request,"care_type",line.getCarePrescription().getCareUid(),sWebLanguage):"Unknown care type") + "</b></td>");
 
             for (int d = 0; d < adminDays; d++) {
                 day = new Date(dStart.getTime() + d * 24 * 3600 * 1000);

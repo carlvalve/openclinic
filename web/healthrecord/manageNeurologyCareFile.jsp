@@ -26,7 +26,7 @@
 				    <tr>
 				        <td class="admin">
 				            <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-				            <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+				            <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
 				        </td>
 				        <td class="admin2">
 				            <input type="text" class="text" size="12" maxLength="10" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" id="trandate" OnBlur='checkDate(this)'> <script>writeTranDate();</script>
@@ -35,7 +35,7 @@
 				    
 				    <%--  FAMILIAL SITUATION AND LIVING CONDITIONS --%>
 				    <tr>
-				        <td class="admin" width="<%=sTDAdminWidth%>" nowrap><%=getTran("Web.occup","neurology_carefile_familialsituation_and_livingconditions",sWebLanguage)%>&nbsp;</td>
+				        <td class="admin" width="<%=sTDAdminWidth%>" nowrap><%=getTran(request,"Web.occup","neurology_carefile_familialsituation_and_livingconditions",sWebLanguage)%>&nbsp;</td>
 				        <td class="admin2" width="100%">
 				            <textarea id="focusField" onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_NEUROLOGY_CAREFILE_FAMILIALSITUATION_AND_LIVINGCONDITIONS")%> class="text" cols="70" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEUROLOGY_CAREFILE_FAMILIALSITUATION_AND_LIVINGCONDITIONS" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEUROLOGY_CAREFILE_FAMILIALSITUATION_AND_LIVINGCONDITIONS" property="value"/></textarea>
 				        </td>
@@ -43,7 +43,7 @@
 				    
 				    <%--  ACTUAL PROBLEM AND ILLNESS HISTORY --%>
 				    <tr>
-				        <td class="admin"><%=getTran("Web.occup","neurology_carefile_actualproblem_and_illnesshistory",sWebLanguage)%>&nbsp;</td>
+				        <td class="admin"><%=getTran(request,"Web.occup","neurology_carefile_actualproblem_and_illnesshistory",sWebLanguage)%>&nbsp;</td>
 				        <td class="admin2">
 				            <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_NEUROLOGY_CAREFILE_ACTUALPROBLEM_AND_ILLNESSHISTORY")%> class="text" cols="70" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEUROLOGY_CAREFILE_ACTUALPROBLEM_AND_ILLNESSHISTORY" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEUROLOGY_CAREFILE_ACTUALPROBLEM_AND_ILLNESSHISTORY" property="value"/></textarea>
 				        </td>
@@ -51,7 +51,7 @@
 				    
 				    <%-- PROBLEM CONTEXT --%>
 				    <tr>
-				        <td class="admin"><%=getTran("Web.occup","neurology_carefile_problemcontext",sWebLanguage)%>&nbsp;</td>
+				        <td class="admin"><%=getTran(request,"Web.occup","neurology_carefile_problemcontext",sWebLanguage)%>&nbsp;</td>
 				        <td class="admin2">
 				            <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_NEUROLOGY_CAREFILE_PROBLEMCONTEXT")%> class="text" cols="70" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEUROLOGY_CAREFILE_PROBLEMCONTEXT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEUROLOGY_CAREFILE_PROBLEMCONTEXT" property="value"/></textarea>
 				        </td>
@@ -59,7 +59,7 @@
 				    
 				    <%--  FAMILIAL HISTORY SHORT --%>
 				    <tr>
-				        <td class="admin"><%=getTran("Web.occup","neurology_carefile_familialhistoryshort",sWebLanguage)%>&nbsp;</td>
+				        <td class="admin"><%=getTran(request,"Web.occup","neurology_carefile_familialhistoryshort",sWebLanguage)%>&nbsp;</td>
 				        <td class="admin2">
 				            <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_NEUROLOGY_CAREFILE_FAMILIALHISTORY_SHORT")%> class="text" cols="70" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEUROLOGY_CAREFILE_FAMILIALHISTORY_SHORT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEUROLOGY_CAREFILE_FAMILIALHISTORY_SHORT" property="value"/></textarea>
 				        </td>
@@ -67,7 +67,7 @@
 				    
 				    <%--  PERSONAL HISTORY SHORT --%>
 				    <tr>
-				        <td class="admin"><%=getTran("Web.occup","neurology_carefile_personalhistoryshort",sWebLanguage)%>&nbsp;</td>
+				        <td class="admin"><%=getTran(request,"Web.occup","neurology_carefile_personalhistoryshort",sWebLanguage)%>&nbsp;</td>
 				        <td class="admin2">
 				            <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_NEUROLOGY_CAREFILE_PERSONALHISTORY_SHORT")%> class="text" cols="70" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEUROLOGY_CAREFILE_PERSONALHISTORY_SHORT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEUROLOGY_CAREFILE_PERSONALHISTORY_SHORT" property="value"/></textarea>
 				        </td>
@@ -75,7 +75,7 @@
 				    
 				    <%--  SOMATIC STATUS --%>
 				    <tr>
-				        <td class="admin"><%=getTran("Web.occup","neurology_carefile_somaticstatus",sWebLanguage)%>&nbsp;</td>
+				        <td class="admin"><%=getTran(request,"Web.occup","neurology_carefile_somaticstatus",sWebLanguage)%>&nbsp;</td>
 				        <td class="admin2">
 				            <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_NEUROLOGY_CAREFILE_SOMATICSTATUS")%> class="text" cols="70" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEUROLOGY_CAREFILE_SOMATICSTATUS" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEUROLOGY_CAREFILE_SOMATICSTATUS" property="value"/></textarea>
 				        </td>
@@ -83,7 +83,7 @@
 				    
 				    <%--  NEUROLOGICAL STATUS AND OBJECTIVES --%>
 				    <tr>
-				        <td class="admin"><%=getTran("Web.occup","neurology_carefile_neurologicalstatus_and_objectives",sWebLanguage)%>&nbsp;</td>
+				        <td class="admin"><%=getTran(request,"Web.occup","neurology_carefile_neurologicalstatus_and_objectives",sWebLanguage)%>&nbsp;</td>
 				        <td class="admin2">
 				            <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_NEUROLOGY_CAREFILE_NEUROLOGICALSTATUS_AND_OBJECTIVES")%> class="text" cols="70" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEUROLOGY_CAREFILE_NEUROLOGICALSTATUS_AND_OBJECTIVES" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEUROLOGY_CAREFILE_NEUROLOGICALSTATUS_AND_OBJECTIVES" property="value"/></textarea>
 				        </td>
@@ -91,7 +91,7 @@
 				    
 				    <%--  PROBLEM HYPOTHESIS --%>
 				    <tr>
-				        <td class="admin"><%=getTran("Web.occup","neurology_carefile_problemhypothesis",sWebLanguage)%>&nbsp;</td>
+				        <td class="admin"><%=getTran(request,"Web.occup","neurology_carefile_problemhypothesis",sWebLanguage)%>&nbsp;</td>
 				        <td class="admin2">
 				            <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_NEUROLOGY_CAREFILE_PROBLEMHYPOTHESIS")%> class="text" cols="70" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEUROLOGY_CAREFILE_PROBLEMHYPOTHESIS" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEUROLOGY_CAREFILE_PROBLEMHYPOTHESIS" property="value"/></textarea>
 				        </td>
@@ -99,7 +99,7 @@
 				    
 				    <%--  DIAGNOSTIC IMPRESSION --%>
 				    <tr>
-				        <td class="admin"><%=getTran("Web.occup","neurology_carefile_diagnosticimpression",sWebLanguage)%>&nbsp;</td>
+				        <td class="admin"><%=getTran(request,"Web.occup","neurology_carefile_diagnosticimpression",sWebLanguage)%>&nbsp;</td>
 				        <td class="admin2">
 				            <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_NEUROLOGY_CAREFILE_DIAGNOSTICIMPRESSION")%> class="text" cols="70" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEUROLOGY_CAREFILE_DIAGNOSTICIMPRESSION" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEUROLOGY_CAREFILE_DIAGNOSTICIMPRESSION" property="value"/></textarea>
 				        </td>
@@ -107,7 +107,7 @@
 				    
 				    <%-- THERAPEUTICAL PROJECT --%>
 				    <tr>
-				        <td class="admin"><%=getTran("Web.occup","neurology_carefile_therapeuticalproject",sWebLanguage)%>&nbsp;</td>
+				        <td class="admin"><%=getTran(request,"Web.occup","neurology_carefile_therapeuticalproject",sWebLanguage)%>&nbsp;</td>
 				        <td class="admin2">
 				            <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_NEUROLOGY_CAREFILE_THERAPEUTICALPROJECT")%> class="text" cols="70" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEUROLOGY_CAREFILE_THERAPEUTICALPROJECT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEUROLOGY_CAREFILE_THERAPEUTICALPROJECT" property="value"/></textarea>
 				        </td>

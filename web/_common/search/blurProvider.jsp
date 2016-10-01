@@ -24,7 +24,7 @@
         %>
           <script>
             var msgField = window.opener.document.getElementById('<%=sMsgVar%>');
-            msgField.innerHTML = '<%=getTran("web.manage","providernotfound",sWebLanguage)%>';
+            msgField.innerHTML = '<%=getTran(null,"web.manage","providernotfound",sWebLanguage)%>';
             msgField.style.color = 'red';
 
             var srcField = window.opener.document.getElementById('<%=sSourceVar%>');

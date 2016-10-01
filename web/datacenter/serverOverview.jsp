@@ -3,7 +3,7 @@
 <%@include file="/includes/validateUser.jsp"%>
 <%!
     public String getBack(String language){
-        return "<a href=\""+sCONTEXTPATH+"/datacenter/datacenterHome.jsp?ts="+getTs()+"\" class=\"button\"><span class=\"title\">"+getTran("web","homepage",language)+"</span></a>";
+        return "<a href=\""+sCONTEXTPATH+"/datacenter/datacenterHome.jsp?ts="+getTs()+"\" class=\"button\"><span class=\"title\">"+getTran(null,"web","homepage",language)+"</span></a>";
     }
 %>
 <%

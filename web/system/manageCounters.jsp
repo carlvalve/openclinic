@@ -19,7 +19,7 @@
     <table border="0" width='100%' cellspacing="0" cellpadding="1" class="menu">
         <%-- DATABASE SELECT --%>
         <tr>
-            <td width="<%=sTDAdminWidth%>">&nbsp;<%=getTran("Web.Manage.Counter","DB",sWebLanguage)%></td>
+            <td width="<%=sTDAdminWidth%>">&nbsp;<%=getTran(request,"Web.Manage.Counter","DB",sWebLanguage)%></td>
             <td>
                 <select name="FindDatabase" class="text" onchange="transactionForm.submit();">
                 	<option <%=sFindDatabase.equals("admin")?"selected":"" %> value="admin">admin</option>
@@ -33,7 +33,7 @@
     <%-- SEARCH RESULTS --%>
     <table border="0" width='100%' cellspacing="1" cellpadding="1" class="list">
         <tr class="admin">
-            <td colspan="2">&nbsp;<%=getTran("Web.Manage.Counter","counters",sWebLanguage)%></td>
+            <td colspan="2">&nbsp;<%=getTran(request,"Web.Manage.Counter","counters",sWebLanguage)%></td>
         </tr>
         
         <%
@@ -76,7 +76,7 @@
             if(recCounter==0){
                 %>
                     <tr>
-                        <td colspan="2"><%=getTran("web","norecordsfound",sWebLanguage)%></td>
+                        <td colspan="2"><%=getTran(request,"web","norecordsfound",sWebLanguage)%></td>
                     </tr>
                 <%
             }

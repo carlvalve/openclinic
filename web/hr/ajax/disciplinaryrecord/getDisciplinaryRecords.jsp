@@ -56,7 +56,7 @@
                       " onclick=\"displayDisrec('"+disRec.getUid()+"');\">"+
                       "<td class='hand' style='padding-left:5px'>"+ScreenHelper.getSQLDate(disRec.date)+"</td>"+
                       "<td class='hand' style='padding-left:5px'>"+checkString(disRec.title)+"</td>"+
-                      "<td class='hand' style='padding-left:5px'>"+getTran("hr.disrec.decision",disRec.decision,sWebLanguage)+"</td>"+
+                      "<td class='hand' style='padding-left:5px'>"+getTran(request,"hr.disrec.decision",disRec.decision,sWebLanguage)+"</td>"+
                       //"<td class='hand' style='padding-left:5px'>"+checkString(disRec.decisionBy)+"</td>"+
                      "</tr>");
         }
@@ -76,7 +76,7 @@
         }
     }
     else{
-        sReturn = "<td colspan='3'>"+getTran("web","noRecordsFound",sWebLanguage)+"</td>";
+        sReturn = "<td colspan='3'>"+getTran(request,"web","noRecordsFound",sWebLanguage)+"</td>";
     }
 %>
 
@@ -86,10 +86,10 @@
 <table width="100%" class="sortable" id="searchresults" cellspacing="1" style="border:none;">
     <%-- header --%>
     <tr class="admin" style="padding-left:1px;">
-        <td width="10%" nowrap><asc><%=HTMLEntities.htmlentities(getTran("web.hr","date",sWebLanguage))%></asc></td>
-        <td width="30%" nowrap><%=HTMLEntities.htmlentities(getTran("web.hr","title",sWebLanguage))%></td>
-        <td width="60%" nowrap><%=HTMLEntities.htmlentities(getTran("web.hr","decision",sWebLanguage))%></td>
-        <%--<td width="40%" nowrap><%=HTMLEntities.htmlentities(getTran("web.hr","decisionBy",sWebLanguage))%></td> --%>
+        <td width="10%" nowrap><asc><%=HTMLEntities.htmlentities(getTran(request,"web.hr","date",sWebLanguage))%></asc></td>
+        <td width="30%" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.hr","title",sWebLanguage))%></td>
+        <td width="60%" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.hr","decision",sWebLanguage))%></td>
+        <%--<td width="40%" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.hr","decisionBy",sWebLanguage))%></td> --%>
     </tr>
     
     <tbody class="hand">
@@ -97,7 +97,7 @@
     </tbody>
 </table>
 
-&nbsp;<i><%=disRecs.size()+" "+getTran("web","recordsFound",sWebLanguage)%></i>
+&nbsp;<i><%=disRecs.size()+" "+getTran(request,"web","recordsFound",sWebLanguage)%></i>
         <%
     }
     else{

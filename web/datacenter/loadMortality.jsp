@@ -6,7 +6,7 @@
         String serverid=request.getParameter("serverid");
         String period=request.getParameter("period");
         //First provide the total mortality rate for the period
-        out.println("<tr><td class='admin' colspan='2'><b>"+getTran("web","total.mortality.for.period",sWebLanguage)+"</b></td><td class='admin'><b>"+DatacenterHelper.getTotalMortalities(Integer.parseInt(serverid),period)+"</td></tr>");
+        out.println("<tr><td class='admin' colspan='2'><b>"+getTran(request,"web","total.mortality.for.period",sWebLanguage)+"</b></td><td class='admin'><b>"+DatacenterHelper.getTotalMortalities(Integer.parseInt(serverid),period)+"</td></tr>");
         //Then provide diagnosis-specific mortality rates
         Vector mortalities=DatacenterHelper.getMortalities(Integer.parseInt(serverid),period,"KPGS");
         for(int n=0;n<mortalities.size();n++){

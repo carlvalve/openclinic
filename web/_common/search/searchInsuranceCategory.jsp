@@ -46,7 +46,7 @@
             if(!"false".equalsIgnoreCase(request.getParameter("header"))){
         %>
         <tr>
-            <td class="admin2"><%=getTran("Web","insurar",sWebLanguage)%></td>
+            <td class="admin2"><%=getTran(request,"Web","insurar",sWebLanguage)%></td>
             <td class="admin2">
                 <input class="text" type="text" name="FindInsurarName" name="FindInsurarName" size="<%=sTextWidth%>" value="<%=sFindInsurarName%>">
             </td>

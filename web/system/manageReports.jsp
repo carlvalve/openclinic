@@ -146,9 +146,9 @@ Element getElement(Element element, String elementname, String attributename,Str
 	<input type='hidden' name='action' id='action' value=''/>
 	<input type='hidden' name='reportinputxml' id='reportinputxml' value='<%=checkString(report.getInputxml()).replaceAll("<fields>","").replaceAll("</fields>","")%>'/>
 	<table width='100%'>
-		<tr class='admin'><td colspan='4'><%=getTran("web.manage","managereports",sWebLanguage) %></td></tr>
+		<tr class='admin'><td colspan='4'><%=getTran(request,"web.manage","managereports",sWebLanguage) %></td></tr>
 		<tr>
-			<td class='admin' width='10%' nowrap><%=getTran("web","report",sWebLanguage) %></td>
+			<td class='admin' width='10%' nowrap><%=getTran(request,"web","report",sWebLanguage) %></td>
 			<td class='admin2' colspan='3'>
 				<select class='text' name='selectedreport' id='selectedreport' onchange='document.getElementById("action").value="edit";transactionForm.submit();'>
 					<option value=''></option>
@@ -160,20 +160,20 @@ Element getElement(Element element, String elementname, String attributename,Str
 						}
 					%>
 				</select>
-				<input type='button' name='newbutton' value='<%=getTran("web","new",sWebLanguage) %>' onclick='document.getElementById("action").value="new";transactionForm.submit();'/>
-				<input type='button' name='savebutton' value='<%=getTran("web","save",sWebLanguage) %>' onclick='document.getElementById("action").value="save";transactionForm.submit();'/>
-				<input type='button' name='deletebutton' value='<%=getTran("web","delete",sWebLanguage) %>' onclick='document.getElementById("action").value="delete";transactionForm.submit();'/>
+				<input type='button' name='newbutton' value='<%=getTran(null,"web","new",sWebLanguage) %>' onclick='document.getElementById("action").value="new";transactionForm.submit();'/>
+				<input type='button' name='savebutton' value='<%=getTran(null,"web","save",sWebLanguage) %>' onclick='document.getElementById("action").value="save";transactionForm.submit();'/>
+				<input type='button' name='deletebutton' value='<%=getTran(null,"web","delete",sWebLanguage) %>' onclick='document.getElementById("action").value="delete";transactionForm.submit();'/>
 			</td>
 		</tr>
 		<%
 			if(sAction.equals("new") || sAction.equalsIgnoreCase("edit") || sAction.equalsIgnoreCase("save")){
 		%>
 		<tr>
-			<td class='admin'><%=getTran("web","reportname",sWebLanguage) %></td>
+			<td class='admin'><%=getTran(request,"web","reportname",sWebLanguage) %></td>
 			<td class='admin2' colspan='2'><input type='text' class='text' name='reportname' id='reportname' size='100' value='<%=checkString(report.getName())%>'/></td>
 			<td class='admin2'>
 				<table width='100%'>
-				<tr><td><%=getTran("web","reportfile",sWebLanguage) %>: <input class='button' type='file' name='reportfile'/></td></tr>
+				<tr><td><%=getTran(request,"web","reportfile",sWebLanguage) %>: <input class='button' type='file' name='reportfile'/></td></tr>
 					<%
 						boolean bMakeExcelCorrection = false;
 						if(report!=null && report.getReportxml()!=null && report.getReportxml().length()>0){
@@ -182,7 +182,7 @@ Element getElement(Element element, String elementname, String attributename,Str
 							Document document = reader.read(br);
 							Element root = document.getRootElement();
 							if(root.getName().equalsIgnoreCase("jasperreport")){
-								out.println("<tr><td>"+getTran("web","loadedreport",sWebLanguage)+": <a href='javascript:viewJasperReport(\""+report.getUid()+"\")'><b>"+root.attributeValue("name")+"</b></a></td></tr>");
+								out.println("<tr><td>"+getTran(request,"web","loadedreport",sWebLanguage)+": <a href='javascript:viewJasperReport(\""+report.getUid()+"\")'><b>"+root.attributeValue("name")+"</b></a>&nbsp;&nbsp;&nbsp;<a href='javascript:downloadJasperReport(\""+report.getUid()+"\")'>"+getTran(request,"web","download",sWebLanguage)+"</a></td></tr>");
 								Element e = getElement(root, "property", "name","net.sf.jasperreports.export.xls.exclude.origin.keep.first.band.1");
 								if(e!=null){
 									bMakeExcelCorrection=true;
@@ -190,23 +190,23 @@ Element getElement(Element element, String elementname, String attributename,Str
 							}
 						}
 					%>
-					<tr><td><input value='1' type='checkbox' class='text' name='reportmakeexcelcorrection' <%=bMakeExcelCorrection?"checked":"" %>/><%=getTran("web","makeexcelcorrection",sWebLanguage)%></td></tr>
+					<tr><td><input value='1' type='checkbox' class='text' name='reportmakeexcelcorrection' <%=bMakeExcelCorrection?"checked":"" %>/><%=getTran(request,"web","makeexcelcorrection",sWebLanguage)%></td></tr>
 				</table>
 			</td>
 		</tr>
 		<tr>
-			<td class='admin'><%=getTran("web","reportgroup",sWebLanguage) %></td>
+			<td class='admin'><%=getTran(request,"web","reportgroup",sWebLanguage) %></td>
 			<td class='admin2' colspan='2' valign='top'>
 				<table width='100%'>
 					<tr>
 						<td>
 							<select class='text' name='reportgroup' id='reportgroup' onchange="showaccessrights()">
 								<option/>
-								<%=ScreenHelper.writeSelect("report.groups", report!=null && report.getGroup()!=null?report.getGroup():"", sWebLanguage) %>
+								<%=ScreenHelper.writeSelect(request,"report.groups", report!=null && report.getGroup()!=null?report.getGroup():"", sWebLanguage) %>
 							</select>
 						</td>
 						<td>
-							<input id='showrights' class='text' type='checkbox' onchange='showaccessrights()'/><%=getTran("web","modifyaccessrights",sWebLanguage) %>
+							<input id='showrights' class='text' type='checkbox' onchange='showaccessrights()'/><%=getTran(request,"web","modifyaccessrights",sWebLanguage) %>
 						</td>
 					</tr>
 				</table>
@@ -217,17 +217,17 @@ Element getElement(Element element, String elementname, String attributename,Str
 		</tr>
 		<tr><td colspan='4'><hr/></td></tr>
 		<tr>
-			<td class='admin'><%=getTran("web","parameters",sWebLanguage) %></td>
+			<td class='admin'><%=getTran(request,"web","parameters",sWebLanguage) %></td>
 			<td class='admin2'>
-				<%=getTran("web","name",sWebLanguage) %>: <input type='text' class='text' name='parametername' id='parametername' size='25' value=''/>
-				</td><td class='admin2'><%=getTran("web","type",sWebLanguage) %>: 
+				<%=getTran(request,"web","name",sWebLanguage) %>: <input type='text' class='text' name='parametername' id='parametername' size='25' value=''/>
+				</td><td class='admin2'><%=getTran(request,"web","type",sWebLanguage) %>: 
 				<select type='text' class='text' name='parametertype' id='parametertype'>
-					<%=ScreenHelper.writeSelect("reportparametertypes","",sWebLanguage) %>
+					<%=ScreenHelper.writeSelect(request,"reportparametertypes","",sWebLanguage) %>
 				</select>
-				<%=getTran("web","modifier",sWebLanguage) %>: <input type='text' class='text' name='parametermodifier' id='parametermodifier' size='25' value=''/>
+				<%=getTran(request,"web","modifier",sWebLanguage) %>: <input type='text' class='text' name='parametermodifier' id='parametermodifier' size='25' value=''/>
 			</td>
 			<td class='admin2'>
-				<input type='button' name='addfieldbutton' value='<%=getTran("web","add",sWebLanguage) %>' onclick='addField();'/>
+				<input type='button' name='addfieldbutton' value='<%=getTran(null,"web","add",sWebLanguage) %>' onclick='addField();'/>
 			</td>
 		</tr>
 		<tbody name='fieldlistdiv' id='fieldlistdiv'></tbody>
@@ -241,7 +241,7 @@ Element getElement(Element element, String elementname, String attributename,Str
 	function showaccessrights(){
 		if(document.getElementById('showrights').checked && document.getElementById('reportgroup').value.length>0){
 		    var today = new Date();
-		    var url= '<c:url value="/system/ajax/modifyReportAccessRights.jsp"/>?reportgroup='+document.getElementById('reportgroup').value+'&title=<%=getTran("web","accesstoreportgroup",sWebLanguage)%>';
+		    var url= '<c:url value="/system/ajax/modifyReportAccessRights.jsp"/>?reportgroup='+document.getElementById('reportgroup').value+'&title=<%=getTran(request,"web","accesstoreportgroup",sWebLanguage)%>';
 			new Ajax.Request(url,{
 			  method: "POST",
 		      parameters: "",
@@ -256,6 +256,9 @@ Element getElement(Element element, String elementname, String attributename,Str
 	}
 	function viewJasperReport(uid){
 	    openPopup("/system/viewJasperReport.jsp&ts=<%=getTs()%>&uid="+uid,800,600);
+	}
+	function downloadJasperReport(uid){
+	    window.open("<c:url value="/"/>system/downloadJasperReport.jsp?ts=<%=getTs()%>&uid="+uid);
 	}
 	function addField(){
 		if(document.getElementById("reportinputxml").value.indexOf("<name>"+document.getElementById("parametername").value+"</name>")<0){

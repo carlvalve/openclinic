@@ -100,23 +100,23 @@
 		    <table id="searchresults" class="sortable" width="100%" cellpadding="1" cellspacing="0" style="border:1px solid #ccc;">
 		        <%-- header --%>
 		        <tr class="admin">
-		            <td width="200" nowrap><%=HTMLEntities.htmlentities(getTran("medical.accident","insurancecompany",sWebLanguage))%></td>
-		            <td width="100" nowrap><%=HTMLEntities.htmlentities(getTran("web","date",sWebLanguage))%></td>
-		            <td width="110" nowrap><%=HTMLEntities.htmlentities(getTran("web","invoicenumber",sWebLanguage))%></td>
-		            <td width="130" nowrap style="text-align:right;"><%=HTMLEntities.htmlentities(getTran("web","balance",sWebLanguage))%>&nbsp;<%=HTMLEntities.htmlentities((sCurrency))%></td>
-		            <td width="120" nowrap><%=HTMLEntities.htmlentities(getTran("web.finance","patientinvoice.status",sWebLanguage))%></td>
+		            <td width="200" nowrap><%=HTMLEntities.htmlentities(getTran(request,"medical.accident","insurancecompany",sWebLanguage))%></td>
+		            <td width="100" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web","date",sWebLanguage))%></td>
+		            <td width="110" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web","invoicenumber",sWebLanguage))%></td>
+		            <td width="130" nowrap style="text-align:right;"><%=HTMLEntities.htmlentities(getTran(request,"web","balance",sWebLanguage))%>&nbsp;<%=HTMLEntities.htmlentities((sCurrency))%></td>
+		            <td width="120" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.finance","patientinvoice.status",sWebLanguage))%></td>
 		        </tr>
 		
 		        <tbody class="hand"><%=HTMLEntities.htmlentities(sHtml.toString())%></tbody>
 		    </table>
 		    
-            <%=recCount%> <%=HTMLEntities.htmlentities(getTran("web","recordsfound",sWebLanguage))%>
+            <%=recCount%> <%=HTMLEntities.htmlentities(getTran(request,"web","recordsfound",sWebLanguage))%>
 		    <script>sortables_init();</script>
 		    <%
 	    }
 	    else{
 	        // display 'no results' message
-	        %><%=HTMLEntities.htmlentities(getTran("web","norecordsfound",sWebLanguage))%><%
+	        %><%=HTMLEntities.htmlentities(getTran(request,"web","norecordsfound",sWebLanguage))%><%
 	    }
 	}
 %>

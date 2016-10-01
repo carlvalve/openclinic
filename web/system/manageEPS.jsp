@@ -102,10 +102,10 @@
 
         <%-- EPS selector --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web.Admin","external_prevention_service",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web.Admin","external_prevention_service",sWebLanguage)%></td>
             <td class="admin2">
                 <select name="FindEPS" class="text" onchange="transactionForm.submit();">
-                    <option value="-1"><%=getTran("Web.Occup","medwan.common.create-new",sWebLanguage)%></option>
+                    <option value="-1"><%=getTran(request,"Web.Occup","medwan.common.create-new",sWebLanguage)%></option>
                     <%=sEPSOptions%>
                 </select>
             </td>
@@ -118,7 +118,7 @@
     <table class="list" width="100%" cellspacing="1">
         <%-- EPS name --%>
         <tr>
-            <td class="admin"><%=getTran("Web.Admin","external_prevention_service",sWebLanguage)%> *</td>
+            <td class="admin"><%=getTran(request,"Web.Admin","external_prevention_service",sWebLanguage)%> *</td>
             <td class="admin2">
                 <input class="text" type="text" name="EditEPSName" value="<%=sName%>" size="50">
             </td>
@@ -132,7 +132,7 @@
 
         <%-- Physician Lastname --%>
         <tr>
-            <td class="admin"><%=getTran("Web.Admin","physician",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web.Admin","physician",sWebLanguage)%></td>
             <td class="admin2">
                 <input class="text" type="text" name="EditEPSPhysicianLastname" value="<%=sPhysicianLastname%>" size="50">
             </td>
@@ -140,7 +140,7 @@
 
         <%-- Physician Firstname --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","firstname",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","firstname",sWebLanguage)%></td>
             <td class="admin2">
                 <input class="text" type="text" name="EditEPSPhysicianFirstname" value="<%=sPhysicianFirstname%>" size="50">
             </td>
@@ -170,7 +170,7 @@
     </table>
 
     <%-- indication of obligated fields --%>
-    <%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%>
+    <%=getTran(request,"Web","colored_fields_are_obligate",sWebLanguage)%>
 
     <script>
       transactionForm.EditEPSName.focus();
@@ -194,7 +194,7 @@
         else{
           var popupUrl = "<%=sCONTEXTPATH%>/_common/search/template.jsp?Page=okPopup.jsp&ts=<%=getTs()%>&labelType=web.manage&labelID=datamissing";
           var modalities = "dialogWidth:266px;dialogHeight:143px;center:yes;scrollbars:no;resizable:no;status:no;location:no;";
-          window.showModalDialog?window.showModalDialog(popupUrl,'',modalities):alert('<%=getTran("web.manage","datamissing",sWebLanguage)%>');
+          window.showModalDialog?window.showModalDialog(popupUrl,'',modalities):alert('<%=getTran(null,"web.manage","datamissing",sWebLanguage)%>');
 
           if(transactionForm.EditEPSName.value.length==0){
              transactionForm.EditEPSName.focus();

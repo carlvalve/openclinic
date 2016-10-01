@@ -146,7 +146,7 @@
         </tr>
     </table>
 
-    <%=getTran("Web.Occup","total-number",sWebLanguage)%>: <%=iTotal%>
+    <%=getTran(request,"Web.Occup","total-number",sWebLanguage)%>: <%=iTotal%>
 
     <%-- BUTTONS --%>
     <%=ScreenHelper.alignButtonsStart()%>

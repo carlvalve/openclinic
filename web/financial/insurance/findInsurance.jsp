@@ -27,30 +27,30 @@
     <table class="list" width="100%" cellspacing="1">
         <%-- period --%>
         <tr>
-            <td class="admin2" width="<%=sTDAdminWidth%>"><%=getTran("web","period",sWebLanguage)%></td>
+            <td class="admin2" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","period",sWebLanguage)%></td>
             <td class="admin2">
-                <%=getTran("web","from",sWebLanguage)%>
+                <%=getTran(request,"web","from",sWebLanguage)%>
                 <%=writeDateField("FindInsuranceStart","FindInsuranceForm",sFindInsuranceStart,sWebLanguage)%>
                 
-                <%=getTran("web","to",sWebLanguage)%>
+                <%=getTran(request,"web","to",sWebLanguage)%>
                 <%=writeDateField("FindInsuranceStop","FindInsuranceForm",sFindInsuranceStop,sWebLanguage)%>
             </td>
         </tr>
         
         <%-- type --%>
         <tr>
-            <td class="admin2"><%=getTran("web","type",sWebLanguage)%></td>
+            <td class="admin2"><%=getTran(request,"web","type",sWebLanguage)%></td>
             <td class="admin2">
                 <select class="text" name="FindInsuranceType">
                     <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>
-                    <%=ScreenHelper.writeSelect("insurance.types",sFindInsuranceType,sWebLanguage)%>
+                    <%=ScreenHelper.writeSelect(request,"insurance.types",sFindInsuranceType,sWebLanguage)%>
                 </select>
             </td>
         </tr>
         
         <%-- insurancenr --%>
         <tr>
-            <td class="admin2"><%=getTran("insurance","insurancenr",sWebLanguage)%></td>
+            <td class="admin2"><%=getTran(request,"insurance","insurancenr",sWebLanguage)%></td>
             <td class="admin2">
                 <input class="text" type="text" name="FindInsuranceNr" value="<%=sFindInsuranceNr%>"/>
             </td>
@@ -123,7 +123,7 @@
 	    <%
     }
     else{
-        %><%=getTran("web","norecordsfound",sWebLanguage)%><br><br><%
+        %><%=getTran(request,"web","norecordsfound",sWebLanguage)%><br><br><%
     }
 %>
 

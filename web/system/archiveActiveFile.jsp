@@ -8,10 +8,10 @@
     // message
     String msg;
     if(activePatient==null){
-        msg = getTran("Web","noactivepatient",sWebLanguage);
+        msg = getTran(request,"Web","noactivepatient",sWebLanguage);
     }
     else{
-        msg = getTran("Web.manage","clicktoarchiveactivefile",sWebLanguage);
+        msg = getTran(request,"Web.manage","clicktoarchiveactivefile",sWebLanguage);
     }
 
     //#############################################################################################
@@ -21,7 +21,7 @@
         boolean isFound = AdminPerson.copyActiveToHistory(activePatient.personid);
 
         if(isFound){
-            msg = getTran("Web.manage","activefilearchived",sWebLanguage);
+            msg = getTran(request,"Web.manage","activefilearchived",sWebLanguage);
             // disable archive-button
             out.print("<script defer>archiveForm.archiveButton.disabled = true;</script>");
             out.flush();
@@ -45,7 +45,7 @@
         <br><br>
         <%-- link to reactivate archived file --%>
         <img src='<c:url value="/_img/themes/default/pijl.gif"/>'>
-        <a  href="<c:url value='/main.do?Page=system/reactivateArchivedFile.jsp?ts='/><%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran("Web.manage","reactivatearchivedfile",sWebLanguage)%></a>&nbsp;
+        <a  href="<c:url value='/main.do?Page=system/reactivateArchivedFile.jsp?ts='/><%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran(request,"Web.manage","reactivatearchivedfile",sWebLanguage)%></a>&nbsp;
     <%=ScreenHelper.alignButtonsStop()%>
 </form>
 <script>
@@ -56,7 +56,7 @@
   %>
 
   function doArchive(){
-      if(window.showModalDialog?yesnoDialog("web.manage","areyousuretoarchiveactivefile"):yesnoDialogDirectText('<%=getTran("web.manage","areyousuretoarchiveactivefile",sWebLanguage)%>')){
+      if(window.showModalDialog?yesnoDialog("web.manage","areyousuretoarchiveactivefile"):yesnoDialogDirectText('<%=getTran(null,"web.manage","areyousuretoarchiveactivefile",sWebLanguage)%>')){
       archiveForm.Action.value = 'Archive';
       archiveForm.archiveButton.disabled = true;
       archiveForm.submit();

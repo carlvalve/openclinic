@@ -22,7 +22,7 @@
             else            sClass = "list";
         }
 
-        String detailsTran = getTran("web","showDetails",sWebLanguage);
+        String detailsTran = getTran(null,"web","showDetails",sWebLanguage);
         StringBuffer buf = new StringBuffer();
         buf.append("<tr id='rowLA"+iTotal+"' class='"+sClass+"' title='"+detailsTran+"' >")
            .append("<td>&nbsp;"+sCode+"</td>")
@@ -31,7 +31,7 @@
            .append("<td>&nbsp;"+sComment+"</td>")
            .append("<td>&nbsp;"+sMonster+"</td>")
            .append("<td>&nbsp;"+sResultValue+"</td>")
-           .append("<td>&nbsp;"+(sResultModifier.length()>0?getTran("labanalysis.resultmodifier",sResultModifier,sWebLanguage):"")+"</td>")
+           .append("<td>&nbsp;"+(sResultModifier.length()>0?getTran(null,"labanalysis.resultmodifier",sResultModifier,sWebLanguage):"")+"</td>")
            .append("</tr>");
 
         return buf.toString();
@@ -87,7 +87,7 @@
 
             // get default-data from DB
 
-            Hashtable hLabRequestData = Labo.getLabRequestDefaultData(sTmpCode);
+            Hashtable hLabRequestData = Labo.getLabRequestDefaultData(sTmpCode,sWebLanguage);
 
             if(hLabRequestData!=null){
                 sTmpType = (String)hLabRequestData.get("labtype");
@@ -96,13 +96,13 @@
             }
 
             // translate labtype
-            if (sTmpType.equals("1")) sTmpType = getTran("Web.occup", "labanalysis.type.blood", sWebLanguage);
-            else if (sTmpType.equals("2")) sTmpType = getTran("Web.occup", "labanalysis.type.urine", sWebLanguage);
-            else if (sTmpType.equals("3")) sTmpType = getTran("Web.occup", "labanalysis.type.other", sWebLanguage);
-            else if (sTmpType.equals("4")) sTmpType = getTran("Web.occup", "labanalysis.type.stool", sWebLanguage);
-            else if (sTmpType.equals("5")) sTmpType = getTran("Web.occup", "labanalysis.type.sputum", sWebLanguage);
-            else if (sTmpType.equals("6")) sTmpType = getTran("Web.occup", "labanalysis.type.smear", sWebLanguage);
-            else if (sTmpType.equals("7")) sTmpType = getTran("Web.occup", "labanalysis.type.liquid", sWebLanguage);
+            if (sTmpType.equals("1")) sTmpType = getTran(request,"Web.occup", "labanalysis.type.blood", sWebLanguage);
+            else if (sTmpType.equals("2")) sTmpType = getTran(request,"Web.occup", "labanalysis.type.urine", sWebLanguage);
+            else if (sTmpType.equals("3")) sTmpType = getTran(request,"Web.occup", "labanalysis.type.other", sWebLanguage);
+            else if (sTmpType.equals("4")) sTmpType = getTran(request,"Web.occup", "labanalysis.type.stool", sWebLanguage);
+            else if (sTmpType.equals("5")) sTmpType = getTran(request,"Web.occup", "labanalysis.type.sputum", sWebLanguage);
+            else if (sTmpType.equals("6")) sTmpType = getTran(request,"Web.occup", "labanalysis.type.smear", sWebLanguage);
+            else if (sTmpType.equals("7")) sTmpType = getTran(request,"Web.occup", "labanalysis.type.liquid", sWebLanguage);
 
             sDivLA += addLA(iTotal, sTmpCode, sTmpType, sTmpLabel, sTmpComment, sTmpMonster, sTmpResult, sTmpModifier, sWebLanguage);
             sScriptsToExecute.append("addToMonsterList('" + sTmpMonster + "');");
@@ -118,7 +118,7 @@
         <tr>
             <td class="admin" width="<%=sTDAdminWidth%>">
                 <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-                <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+                <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
             </td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" id="trandate" READONLY>
@@ -133,15 +133,15 @@
         <%-- HEADER --%>
         <tr class="admin">
             <%-- default data --%>
-            <td width="80"><%=getTran("Web.manage","labanalysis.cols.code",sWebLanguage)%></td>
-            <td width="80"><%=getTran("Web.manage","labanalysis.cols.type",sWebLanguage)%></td>
-            <td width="200"><%=getTran("Web.manage","labanalysis.cols.name",sWebLanguage)%></td>
-            <td width="150"><%=getTran("Web.manage","labanalysis.cols.comment",sWebLanguage)%></td>
-            <td width="200"><%=getTran("Web.manage","labanalysis.cols.monster",sWebLanguage)%></td>
+            <td width="80"><%=getTran(request,"Web.manage","labanalysis.cols.code",sWebLanguage)%></td>
+            <td width="80"><%=getTran(request,"Web.manage","labanalysis.cols.type",sWebLanguage)%></td>
+            <td width="200"><%=getTran(request,"Web.manage","labanalysis.cols.name",sWebLanguage)%></td>
+            <td width="150"><%=getTran(request,"Web.manage","labanalysis.cols.comment",sWebLanguage)%></td>
+            <td width="200"><%=getTran(request,"Web.manage","labanalysis.cols.monster",sWebLanguage)%></td>
 
             <%-- result data --%>
-            <td width="100"><%=getTran("Web.manage","labanalysis.cols.resultvalue",sWebLanguage)%></td>
-            <td width="100"><%=getTran("Web.manage","labanalysis.cols.resultmodifier",sWebLanguage)%></td>
+            <td width="100"><%=getTran(request,"Web.manage","labanalysis.cols.resultvalue",sWebLanguage)%></td>
+            <td width="100"><%=getTran(request,"Web.manage","labanalysis.cols.resultmodifier",sWebLanguage)%></td>
         </tr>
 
         <%-- chosen LabAnalysis --%>
@@ -153,7 +153,7 @@
     <table width="100%" class="list" cellspacing="1">
         <%-- MONSTERS --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web.Occup","labrequest.monsters",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web.Occup","labrequest.monsters",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" size="80" id="monsterList" READONLY>
             </td>
@@ -161,7 +161,7 @@
 
         <%-- MONSTER HOUR --%>
         <tr>
-            <td class="admin"><%=getTran("Web.Occup","labrequest.hour",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web.Occup","labrequest.hour",sWebLanguage)%></td>
             <td class="admin2">
                 <input id="hour" type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_LAB_HOUR" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_LAB_HOUR" property="value"/>" READONLY>
             </td>
@@ -169,7 +169,7 @@
 
         <%-- COMMENT --%>
         <tr>
-            <td class="admin"><%=getTran("Web","comment",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web","comment",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea id="remark" class="text" rows="2" cols="80" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_LAB_COMMENT" property="itemId"/>]>.value" READONLY><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_LAB_COMMENT" property="value"/></textarea>
             </td>
@@ -182,8 +182,8 @@
             if(item!=null) sUrgency = item.getValue();
         %>
         <tr>
-            <td class="admin"><%=getTran("Web.Occup","urgency",sWebLanguage)%></td>
-            <td class="admin2"><%=getTran("labrequest.urgency",sUrgency,sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web.Occup","urgency",sWebLanguage)%></td>
+            <td class="admin2"><%=getTran(request,"labrequest.urgency",sUrgency,sWebLanguage)%></td>
         </tr>
     </table>
 

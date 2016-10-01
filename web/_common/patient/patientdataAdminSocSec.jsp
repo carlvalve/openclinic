@@ -8,12 +8,12 @@
             String sCovered = "";
 
             if (checkString(socsec.covered).length()>0){
-                sCovered = getTran("web.occup",socsec.covered,sWebLanguage);
+                sCovered = getTran(request,"web.occup",socsec.covered,sWebLanguage);
             }
 
             String sAssuranceType = "";
             if (checkString(socsec.assurancetype).length()>0){
-                sAssuranceType = getTran("assurancetype",socsec.assurancetype,sWebLanguage);
+                sAssuranceType = getTran(request,"assurancetype",socsec.assurancetype,sWebLanguage);
             }
 
             %>

@@ -95,7 +95,7 @@
             tmpPerson.initialize(tmpBalance.getOwner().getObjectUid());
             sEditBalanceOwnerName = tmpPerson.lastname + " " + tmpPerson.firstname;
         }else if(tmpBalance.getOwner().getObjectType().equalsIgnoreCase("SERVICE")){
-            sEditBalanceOwnerName = getTran("Service",tmpBalance.getOwner().getObjectUid(),sWebLanguage);
+            sEditBalanceOwnerName = getTran(request,"Service",tmpBalance.getOwner().getObjectUid(),sWebLanguage);
         }
     }
 
@@ -106,13 +106,13 @@
     <table class='menu' border='0' width='100%' cellspacing='0'>
         <%-- date --%>
         <tr>
-            <td width="<%=sTDAdminWidth%>"><%=getTran("Web","date",sWebLanguage)%></td>
+            <td width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","date",sWebLanguage)%></td>
             <td><%=writeDateField("FindBalanceDate","FindBalanceForm",sFindBalanceDate,sWebLanguage)%></td>
         </tr>
         <%-- ownertype --%>
         <tr>
             <td>
-                <%=getTran("web","ownertype",sWebLanguage)%>
+                <%=getTran(request,"web","ownertype",sWebLanguage)%>
             </td>
             <td>
                 <%
@@ -124,8 +124,8 @@
                         sFindCheckService = " checked";
                     }
                 %>
-                <input type='radio' name='FindBalanceOwnerType' id='Findperson' value='Person' onclick='changeFindType();' <%=sFindCheckPerson%>><label for='Findperson'><%=getTran("web","person",sWebLanguage)%></label>
-                <input type='radio' name='FindBalanceOwnerType' id='Findservice' value='Service' onclick='changeFindType();' <%=sFindCheckService%>><label for='Findservice'><%=getTran("web","service",sWebLanguage)%></label>
+                <input type='radio' name='FindBalanceOwnerType' id='Findperson' value='Person' onclick='changeFindType();' <%=sFindCheckPerson%>><label for='Findperson'><%=getTran(request,"web","person",sWebLanguage)%></label>
+                <input type='radio' name='FindBalanceOwnerType' id='Findservice' value='Service' onclick='changeFindType();' <%=sFindCheckService%>><label for='Findservice'><%=getTran(request,"web","service",sWebLanguage)%></label>
             </td>
         </tr>
         <%-- owner --%>
@@ -162,11 +162,11 @@
     <tr class='admin'>
         <td/>
         <td/>
-        <td><%=getTran("web","owner",sWebLanguage)%></td>
-        <td><%=getTran("web","date",sWebLanguage)%></td>
-        <td><%=getTran("web","balance",sWebLanguage)%></td>
-        <td><%=getTran("web","maxbalance",sWebLanguage)%></td>
-        <td><%=getTran("web","minbalance",sWebLanguage)%></td>
+        <td><%=getTran(request,"web","owner",sWebLanguage)%></td>
+        <td><%=getTran(request,"web","date",sWebLanguage)%></td>
+        <td><%=getTran(request,"web","balance",sWebLanguage)%></td>
+        <td><%=getTran(request,"web","maxbalance",sWebLanguage)%></td>
+        <td><%=getTran(request,"web","minbalance",sWebLanguage)%></td>
     </tr>
     <%
         StringBuffer sbResults = new StringBuffer();
@@ -204,7 +204,7 @@
             if (sOwnerType.equalsIgnoreCase("PERSON")) {
                 sName = ScreenHelper.getFullPersonName(sOwnerUID);
             } else if (sOwnerType.equalsIgnoreCase("SERVICE")) {
-                sName = getTran("Service", sOwnerUID, sWebLanguage);
+                sName = getTran(request,"Service", sOwnerUID, sWebLanguage);
             }
 
             if (dDate != null) {
@@ -250,7 +250,7 @@
         <%-- balance
         <tr>
             <td class='admin' width='<%=sTDAdminWidth%>'>
-                <%=getTran("web","balance",sWebLanguage)%>
+                <%=getTran(request,"web","balance",sWebLanguage)%>
             </td>
             <td class='admin2'>
                 <input class='text' type='text' name='EditBalance' value='<%=sEditBalance%>' size="40">
@@ -259,7 +259,7 @@
         
         <%-- date
         <tr>
-            <td class='admin'><%=getTran("Web","date",sWebLanguage)%></td>
+            <td class='admin'><%=getTran(request,"Web","date",sWebLanguage)%></td>
             <td class='admin2'>
                 <input type="text" class="text" size="12" maxChars="12" value="<%=sEditBalanceDate%>" name="EditBalanceDate" id="EditDate" onBlur="checkDate(this);">
                 <script>writeMyDate("EditDate");</script>
@@ -268,7 +268,7 @@
         
         <%-- ownertype --%>
         <tr>
-            <td class='admin' ><%=getTran("web","ownertype",sWebLanguage)%></td>
+            <td class='admin' ><%=getTran(request,"web","ownertype",sWebLanguage)%></td>
             <td class='admin2'>
                 <%
                     String sEditCheckPerson  = "";
@@ -279,8 +279,8 @@
                         sEditCheckService = " checked";
                     }
                 %>
-                <input type='radio' name='EditBalanceOwnerType' id='Editperson'  value='Person'  onclick='changeEditType();' <%=sEditCheckPerson%>><label for='Editperson'><%=getTran("web","person",sWebLanguage)%></label>
-                <input type='radio' name='EditBalanceOwnerType' id='Editservice' value='Service' onclick='changeEditType();' <%=sEditCheckService%>><label for='Editservice'><%=getTran("web","service",sWebLanguage)%></label>
+                <input type='radio' name='EditBalanceOwnerType' id='Editperson'  value='Person'  onclick='changeEditType();' <%=sEditCheckPerson%>><label for='Editperson'><%=getTran(request,"web","person",sWebLanguage)%></label>
+                <input type='radio' name='EditBalanceOwnerType' id='Editservice' value='Service' onclick='changeEditType();' <%=sEditCheckService%>><label for='Editservice'><%=getTran(request,"web","service",sWebLanguage)%></label>
             </td>
         </tr>
         <%-- owner --%>
@@ -296,21 +296,21 @@
         </tr>
         <%-- maxbalance --%>
         <tr>
-            <td class='admin'><%=getTran("web","maxbalance",sWebLanguage)%></td>
+            <td class='admin'><%=getTran(request,"web","maxbalance",sWebLanguage)%></td>
             <td class='admin2'>
                 <input class='text' type='text' name='EditBalanceMax' value='<%=sEditBalanceMax%>' size="40">
             </td>
         </tr>
         <%-- minbalance --%>
         <tr>
-            <td class='admin'><%=getTran("web","minbalance",sWebLanguage)%></td>
+            <td class='admin'><%=getTran(request,"web","minbalance",sWebLanguage)%></td>
             <td class='admin2'>
                 <input class='text' type='text' name='EditBalanceMin' value='<%=sEditBalanceMin%>' size="40">
             </td>
         </tr>
         <%-- remarks --%>
         <tr>
-            <td class='admin'><%=getTran("web","comment",sWebLanguage)%></td>
+            <td class='admin'><%=getTran(request,"web","comment",sWebLanguage)%></td>
             <td class='admin2'><%=writeTextarea("EditBalanceRemarks","","","",sEditBalanceRemarks)%></td>
         </tr>
         <%-- UID,action --%>
@@ -368,10 +368,10 @@
 
   function changeFindType(){
     if(document.getElementById("Findperson").checked){
-      document.getElementById("FindTypeLabel").innerText = "<%=getTran("Web","person",sWebLanguage)%>";
+      document.getElementById("FindTypeLabel").innerText = "<%=getTran(null,"Web","person",sWebLanguage)%>";
     }
     else{
-      document.getElementById("FindTypeLabel").innerText = "<%=getTran("Web","service",sWebLanguage)%>";
+      document.getElementById("FindTypeLabel").innerText = "<%=getTran(null,"Web","service",sWebLanguage)%>";
     }
     FindBalanceForm.FindBalanceOwner.value = "";
     FindBalanceForm.FindBalanceOwnerName.value = "";
@@ -422,10 +422,10 @@
 
   function changeEditType(){
     if(document.getElementById("Editperson").checked){
-      document.getElementById("EditTypeLabel").innerText = "<%=getTran("Web","person",sWebLanguage)%>";
+      document.getElementById("EditTypeLabel").innerText = "<%=getTran(null,"Web","person",sWebLanguage)%>";
     }
     else{
-      document.getElementById("EditTypeLabel").innerText = "<%=getTran("Web","service",sWebLanguage)%>";
+      document.getElementById("EditTypeLabel").innerText = "<%=getTran(null,"Web","service",sWebLanguage)%>";
     }
     EditBalanceForm.EditBalanceOwner.value = "";
     EditBalanceForm.EditBalanceOwnerName.value = "";
@@ -435,14 +435,14 @@
 <%-- General --%>
   if(FindBalanceForm.FindBalanceOwnerName.value == ""){
     document.getElementById("Findperson").checked = true;
-    document.getElementById("FindTypeLabel").innerText = "<%=getTran("Web","person",sWebLanguage)%>";
+    document.getElementById("FindTypeLabel").innerText = "<%=getTran(null,"Web","person",sWebLanguage)%>";
   }
   else{
     if(document.getElementById("Findperson").checked){
-      document.getElementById("FindTypeLabel").innerText = "<%=getTran("Web","person",sWebLanguage)%>";
+      document.getElementById("FindTypeLabel").innerText = "<%=getTran(null,"Web","person",sWebLanguage)%>";
     }
     else{
-      document.getElementById("FindTypeLabel").innerText = "<%=getTran("Web","service",sWebLanguage)%>";
+      document.getElementById("FindTypeLabel").innerText = "<%=getTran(null,"Web","service",sWebLanguage)%>";
     }
   }
 
@@ -451,14 +451,14 @@
     %>
         if(EditBalanceForm.EditBalanceOwnerName.value == ""){
           document.getElementById("Editperson").checked = true;
-          document.getElementById("EditTypeLabel").innerText = "<%=getTran("Web","person",sWebLanguage)%>";
+          document.getElementById("EditTypeLabel").innerText = "<%=getTran(null,"Web","person",sWebLanguage)%>";
         }
         else{
           if(document.getElementById("Editperson").checked){
-            document.getElementById("EditTypeLabel").innerText = "<%=getTran("Web","person",sWebLanguage)%>";
+            document.getElementById("EditTypeLabel").innerText = "<%=getTran(null,"Web","person",sWebLanguage)%>";
           }
           else{
-            document.getElementById("EditTypeLabel").innerText = "<%=getTran("Web","service",sWebLanguage)%>";
+            document.getElementById("EditTypeLabel").innerText = "<%=getTran(null,"Web","service",sWebLanguage)%>";
           }
         }
     <%

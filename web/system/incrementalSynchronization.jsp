@@ -1433,9 +1433,9 @@
         out.print("<table width='100%'>");
 
         if (bSuccess) {
-            out.print("<tr><td class='admin'><b>" + getTran("Web.Occup", "medwan.common.synchronization-successfull", sWebLanguage) + "</b></td></tr>");
+            out.print("<tr><td class='admin'><b>" + getTran(request,"Web.Occup", "medwan.common.synchronization-successfull", sWebLanguage) + "</b></td></tr>");
         } else {
-            out.print("<tr><td class='admin'><b>" + getTran("Web.Occup", "medwan.common.synchronization-unsuccessfull", sWebLanguage) + "</b></td></tr>");
+            out.print("<tr><td class='admin'><b>" + getTran(request,"Web.Occup", "medwan.common.synchronization-unsuccessfull", sWebLanguage) + "</b></td></tr>");
             out.print("<tr><td class='text'>" + sErrors + "</td></tr>");
         }
     }

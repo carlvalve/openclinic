@@ -4,14 +4,14 @@
 
 <table width='100%'>
 	<tr class='admin'>
-		<td colspan="5"><%=getTran("web","activecollectionsforuser",sWebLanguage) %> <%=activeUser.person.getFullName() %></td>
+		<td colspan="5"><%=getTran(request,"web","activecollectionsforuser",sWebLanguage) %> <%=activeUser.person.getFullName() %></td>
 	</tr>
 	<tr>
-		<td class='admin'><%=getTran("web","giftid",sWebLanguage) %></td>
-		<td class='admin'><%=getTran("web","date",sWebLanguage) %></td>
-		<td class='admin'><%=getTran("web","patient",sWebLanguage) %></td>
-		<td class='admin'><%=getTran("web","dateofbirth",sWebLanguage) %></td>
-		<td class='admin'><%=getTran("web","telephone",sWebLanguage) %></td>
+		<td class='admin'><%=getTran(request,"web","giftid",sWebLanguage) %></td>
+		<td class='admin'><%=getTran(request,"web","date",sWebLanguage) %></td>
+		<td class='admin'><%=getTran(request,"web","patient",sWebLanguage) %></td>
+		<td class='admin'><%=getTran(request,"web","dateofbirth",sWebLanguage) %></td>
+		<td class='admin'><%=getTran(request,"web","telephone",sWebLanguage) %></td>
 	</tr>
 <%
 	String returnField = checkString(request.getParameter("ReturnField"));

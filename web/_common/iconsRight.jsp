@@ -22,7 +22,7 @@
            
         if(document!=null){
             Element root = document.getRootElement();
-            
+
             if(root!=null){
                 Iterator menuElems = root.elementIterator("Menu");
                 Element tmpMenuElem;
@@ -242,7 +242,7 @@
             }
         }
         
-        if(activePatient!=null && activePatient.personid!=null && activePatient.personid.length()>0 && MedwanQuery.getInstance().getConfigString("edition").equalsIgnoreCase("openpharmacy")){
+        if(activePatient!=null && activePatient.personid!=null && activePatient.personid.length()>0 && Encounter.getActiveEncounter(activePatient.personid)!=null && activeUser.getAccessRight("pharmacy.fastdispensing.select")){
             %><img class="link" onclick="showdrugsoutbarcode();"  border='0' src="<c:url value='/_img/icons/icon_pharma.png'/>" title="<%=getTranNoLink("web","drugsoutbarcode",sWebLanguage)%>"/><%
         }
         %>
@@ -278,7 +278,7 @@
                     %><img class="link" onclick="showPACS()" border='0' src="<c:url value='/_img/icons/icon_xray.png'/>" title="<%=getTranNoLink("web","imagestore",sWebLanguage)%>"/><%
 				}
 		        if(activeUser.getAccessRight("labos.patientlaboresults.select") && activePatient.hasLabRequests()){
-		            %><img class="link" onclick="clickMenuItem('javascript:searchLab();');" title="<%=getTranNoLink("Web","labresults",sWebLanguage)%>" src="<c:url value='/_img/icons/icon_labo.png'/>"/><%
+		            %><input type='button' accesskey=':' onclick="clickMenuItem('javascript:searchLab();');" style='display: none'/><img class="link" onclick="clickMenuItem('javascript:searchLab();');" title="<%=getTranNoLink("Web","labresults",sWebLanguage)%>" src="<c:url value='/_img/icons/icon_labo.png'/>"/><%
 		        }
 		        %><img class="link" onclick="clickMenuItem('<c:url value="/mobile/patientMenu.jsp"/>');" border='0' src="<c:url value='/_img/icons/icon_mobile.gif'/>" title="<%=getTranNoLink("web","mobile.interface",sWebLanguage)%>"/>&nbsp;<%
 			}

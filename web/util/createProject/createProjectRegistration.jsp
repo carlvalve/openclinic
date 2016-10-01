@@ -247,7 +247,7 @@
         <%=ScreenHelper.setFormButtonsStop()%>
     </form>
 </table>
-<%=getTran("web","colored_fields_are_obligate",sWebLanguage)%>
+<%=getTran(request,"web","colored_fields_are_obligate",sWebLanguage)%>
 <script>
   EditForm.projectName.focus();
 

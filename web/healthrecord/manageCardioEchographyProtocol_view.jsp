@@ -53,7 +53,7 @@
         <tr>
             <td class="admin" width="<%=sTDAdminWidth%>">
                 <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-                <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+                <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
             </td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" id="trandate" OnBlur='checkDate(this)'>
@@ -63,102 +63,102 @@
             <td class="admin2"/>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","motive",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","motive",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onkeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_MOTIVE")%> class="text" cols="50" rows="2"  name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_MOTIVE" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_MOTIVE" property="value"/></textarea>
             </td>
             <td class="admin">Mode</td>
             <td class="admin2">
-                <input <%=setRightClick("ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_TM")%> type="checkbox" id="tm"   name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_TM" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_TM;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><label for="tm"><%=getTran("openclinic.chuk","tm",sWebLanguage)%></label>
-                &nbsp;&nbsp;&nbsp;<input <%=setRightClick("ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_2D")%> type="checkbox" id="2d"   name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_2D" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_2D;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><label for="2d"><%=getTran("openclinic.chuk","2d",sWebLanguage)%></label>
+                <input <%=setRightClick("ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_TM")%> type="checkbox" id="tm"   name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_TM" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_TM;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><label for="tm"><%=getTran(request,"openclinic.chuk","tm",sWebLanguage)%></label>
+                &nbsp;&nbsp;&nbsp;<input <%=setRightClick("ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_2D")%> type="checkbox" id="2d"   name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_2D" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_2D;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><label for="2d"><%=getTran(request,"openclinic.chuk","2d",sWebLanguage)%></label>
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","ao",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","ao",sWebLanguage)%></td>
             <td class="admin2">
                 <input <%=setRightClick("ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_AO")%> type="text" class="text" size="50" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_AO" property="itemId"/>]>.value" value="<%=sAO%>">
             </td>
-            <td class="admin"><%=getTran("openclinic.chuk","septum",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","septum",sWebLanguage)%></td>
             <td class="admin2">
                 <input <%=setRightClick("ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_SEPTUM")%> type="text" class="text" size="50" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_SEPTUM" property="itemId"/>]>.value" value="<%=sSeptum%>">
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","og",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","og",sWebLanguage)%></td>
             <td class="admin2">
                 <input <%=setRightClick("ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_OG")%> type="text" class="text" size="50" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_OG" property="itemId"/>]>.value" value="<%=sOg%>">
             </td>
-            <td class="admin"><%=getTran("openclinic.chuk","paroi_post",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","paroi_post",sWebLanguage)%></td>
             <td class="admin2">
                 <input <%=setRightClick("ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_PAROI_POST")%> type="text" class="text" size="50" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_PAROI_POST" property="itemId"/>]>.value" value="<%=sParoiPost%>">
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","dtdvg",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","dtdvg",sWebLanguage)%></td>
             <td class="admin2">
                 <input <%=setRightClick("ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_DTDVGA")%> type="text" class="text" size="50" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_DTDVGA" property="itemId"/>]>.value" value="<%=sDtdvgA%>">
             </td>
-            <td class="admin"><%=getTran("openclinic.chuk","fe",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","fe",sWebLanguage)%></td>
             <td class="admin2">
                 <input <%=setRightClick("ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_FE")%> type="text" class="text" size="50" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_FE" property="itemId"/>]>.value" value="<%=sFe%>">
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","dtdvg",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","dtdvg",sWebLanguage)%></td>
             <td class="admin2">
                 <input <%=setRightClick("ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_DTDVGB")%> type="text" class="text" size="50" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_DTDVGB" property="itemId"/>]>.value" value="<%=sDtdvgB%>">
             </td>
-            <td class="admin">% <%=getTran("openclinic.chuk","raccouc",sWebLanguage)%></td>
+            <td class="admin">% <%=getTran(request,"openclinic.chuk","raccouc",sWebLanguage)%></td>
             <td class="admin2">
                 <input <%=setRightClick("ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_RACCOUC")%> type="text" class="text" size="50" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_RACCOUC" property="itemId"/>]>.value" value="<%=sRaccouc%>">
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","vd",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","vd",sWebLanguage)%></td>
             <td class="admin2">
                 <input <%=setRightClick("ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_VD")%> type="text" class="text" size="50" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_VD" property="itemId"/>]>.value" value="<%=sVd%>">
             </td>
-            <td class="admin"><%=getTran("openclinic.chuk","pericardium",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","pericardium",sWebLanguage)%></td>
             <td class="admin2">
                 <input <%=setRightClick("ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_PERICARDIUM")%> type="text" class="text" size="50" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_PERICARDIUM" property="itemId"/>]>.value" value="<%=sPericardium%>">
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","mitral_valve",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","mitral_valve",sWebLanguage)%></td>
             <td class="admin2">
                 <input <%=setRightClick("ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_MITRAL_VALVE")%> type="text" class="text" size="50" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_MITRAL_VALVE" property="itemId"/>]>.value" value="<%=sMitralValve%>">
             </td>
-            <td class="admin"><%=getTran("openclinic.chuk","valve_aort",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","valve_aort",sWebLanguage)%></td>
             <td class="admin2">
                 <input <%=setRightClick("ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_VALVE_AORT")%> type="text" class="text" size="50" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_VALVE_AORT" property="itemId"/>]>.value" value="<%=sValveAort%>">
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","valve_tric",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","valve_tric",sWebLanguage)%></td>
             <td class="admin2">
                 <input <%=setRightClick("ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_VALVE_TRIC")%> type="text" class="text" size="50" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_VALVE_TRIC" property="itemId"/>]>.value" value="<%=sValveTric%>">
             </td>
-            <td class="admin"><%=getTran("openclinic.chuk","valve_pulm",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","valve_pulm",sWebLanguage)%></td>
             <td class="admin2">
                 <input <%=setRightClick("ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_VALVE_PULM")%> type="text" class="text" size="50" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_VALVE_PULM" property="itemId"/>]>.value" value="<%=sValvePulm%>">
             </td>
         </tr>
          <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","other",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","other",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onkeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_OTHER")%> class="text" cols="50" rows="2"  name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_OTHER" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_OTHER" property="value"/></textarea>
             </td>
-            <td class="admin"><%=getTran("openclinic.chuk","doppler",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","doppler",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onkeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_DOPPLER")%> class="text" cols="50" rows="2"  name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_DOPPLER" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_DOPPLER" property="value"/></textarea>
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","conclusion",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","conclusion",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onkeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_CONCLUSION")%> class="text" cols="50" rows="2"  name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_CONCLUSION" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_CONCLUSION" property="value"/></textarea>
             </td>
-            <td class="admin"><%=getTran("openclinic.chuk","remarks",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","remarks",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onkeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_REMARKS")%> class="text" cols="50" rows="2"  name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_REMARKS" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIO_ECHOGRAPHY_PROTOCOL_REMARKS" property="value"/></textarea>
             </td>

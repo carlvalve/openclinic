@@ -222,6 +222,37 @@ public class ProductStock extends OC_Object implements Comparable {
         return level;
     }
     
+    public int getReceivedForProductionOrder(String productionOrderId){
+    	int netReceived=0;
+        Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+        try {
+            String sQuery = "select SUM(OC_operation_unitschanged) as total from OC_PRODUCTstockoperations" +
+                    " where" +
+                    " OC_operation_productionorderuid=? and" +
+                    " OC_operation_receiveproductstockuid=? and"
+                    + " oc_operation_description like 'medicationdelivery%'";
+            PreparedStatement ps = oc_conn.prepareStatement(sQuery);
+            ps.setString(1, productionOrderId);
+            ps.setString(2, getUid());
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                netReceived = rs.getInt("total");
+            }
+            rs.close();
+            ps.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+			oc_conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return netReceived;
+    }
+    
     public int getLevelIncludingOpenCommands() {
         int level = getLevel();
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
@@ -571,11 +602,11 @@ public class ProductStock extends OC_Object implements Comparable {
                 else ps.setNull(8, Types.TIMESTAMP);
 
                 // default importance
-                if (this.getDefaultImportance().length() > 0) ps.setString(9, this.getDefaultImportance());
+                if (this.getDefaultImportance()!=null && this.getDefaultImportance().length() > 0) ps.setString(9, this.getDefaultImportance());
                 else ps.setNull(9, Types.VARCHAR);
 
                 // supplier
-                if (this.getSupplierUid().length() > 0) ps.setString(10, this.getSupplierUid());
+                if (this.getSupplierUid()!=null && this.getSupplierUid().length() > 0) ps.setString(10, this.getSupplierUid());
                 else ps.setNull(10, Types.VARCHAR);
 
                 // OBJECT variables
@@ -845,10 +876,9 @@ public class ProductStock extends OC_Object implements Comparable {
         			+ " where"
         			+ " b.OC_PRODUCT_OBJECTID=replace(OC_STOCK_PRODUCTUID,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and"
         			+ (ScreenHelper.checkString(name).length()==0?"":" b.OC_PRODUCT_NAME like '%"+name+"%' and")
-        			+ " b.OC_PRODUCT_PRODUCTSUBGROUP in ?"
+        			+ " b.OC_PRODUCT_PRODUCTSUBGROUP in "+"('"+MedwanQuery.getInstance().getConfigString("ProductProductionMaterialSubGroup","MAT").replaceAll(",","','")+"')"
         			+ " order by OC_PRODUCT_NAME";
         	ps=conn.prepareStatement(sQuery);
-        	ps.setString(1, "('"+MedwanQuery.getInstance().getConfigString("ProductProductionMaterialSubGroup","MAT").replaceAll(",","','")+"')");
         	rs=ps.executeQuery();
         	while(rs.next()){
                 ProductStock stock = new ProductStock();
@@ -973,6 +1003,231 @@ public class ProductStock extends OC_Object implements Comparable {
             int questionMarkIdx = 1;
             if (sFindServiceStockUid.length() > 0) ps.setString(questionMarkIdx++, sFindServiceStockUid);
             if (sFindProductUid.length() > 0) ps.setString(questionMarkIdx++, sFindProductUid);
+            if (sFindLevel.length() > 0) ps.setInt(questionMarkIdx++, Integer.parseInt(sFindLevel));
+            if (sFindMinimumLevel.length() > 0) ps.setInt(questionMarkIdx++, Integer.parseInt(sFindMinimumLevel));
+            if (sFindMaximumLevel.length() > 0) ps.setInt(questionMarkIdx++, Integer.parseInt(sFindMaximumLevel));
+            if (sFindOrderLevel.length() > 0) ps.setInt(questionMarkIdx++, Integer.parseInt(sFindOrderLevel));
+            if (sFindBegin.length() > 0) ps.setDate(questionMarkIdx++, ScreenHelper.getSQLDate(sFindBegin));
+            if (sFindEnd.length() > 0) ps.setDate(questionMarkIdx++, ScreenHelper.getSQLDate(sFindEnd));
+            if (sFindDefaultImportance.length() > 0) ps.setString(questionMarkIdx++, sFindDefaultImportance);
+
+            // execute
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                foundObjects.add(get(rs.getString("OC_STOCK_SERVERID") + "." + rs.getString("OC_STOCK_OBJECTID")));
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                oc_conn.close();
+            }
+            catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+        return foundObjects;
+    }
+    //--- FIND ------------------------------------------------------------------------------------
+    public static Vector find(String sFindServiceStockUid, String sFindProductUid, String sFindProductName, String sFindLevel,
+                              String sFindMinimumLevel, String sFindMaximumLevel, String sFindOrderLevel,
+                              String sFindBegin, String sFindEnd, String sFindDefaultImportance,
+                              String sFindSupplierUid, String sFindServiceUid, String sSortCol, String sSortDir) {
+        Vector foundObjects = new Vector();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+        try {
+            String sSelect = "SELECT ps.OC_STOCK_SERVERID, ps.OC_STOCK_OBJECTID" +
+                    " FROM OC_PRODUCTSTOCKS ps, OC_PRODUCTS p ";
+            if (sFindServiceUid.length() > 0) {
+                sSelect += ", OC_SERVICESTOCKS ss ";
+            }
+            sSelect += "WHERE ";
+
+            // bind the serviceStock table
+            String convertServerId = MedwanQuery.getInstance().convert("varchar(16)", "p.OC_PRODUCT_SERVERID");
+            String convertObjectId = MedwanQuery.getInstance().convert("varchar(16)", "p.OC_PRODUCT_OBJECTID");
+            sSelect += " p.OC_PRODUCT_OBJECTID=replace(ps.OC_STOCK_PRODUCTUID,'" +  MedwanQuery.getInstance().getConfigInt("serverId") + ".','') ";
+
+            // match search criteria
+            if (sFindServiceStockUid.length() > 0 || sFindProductUid.length() > 0 || sFindProductName.length() > 0 || sFindLevel.length() > 0 ||
+                    sFindMinimumLevel.length() > 0 || sFindMaximumLevel.length() > 0 || sFindOrderLevel.length() > 0 ||
+                    sFindBegin.length() > 0 || sFindEnd.length() > 0 || sFindDefaultImportance.length() > 0 ||
+                    sFindSupplierUid.length() > 0 || sFindServiceUid.length() > 0) {
+                sSelect += "AND ";
+                if (sFindServiceUid.length() > 0) {
+                    // bind the serviceStock table
+                    convertServerId = MedwanQuery.getInstance().convert("varchar(16)", "ss.OC_STOCK_SERVERID");
+                    convertObjectId = MedwanQuery.getInstance().convert("varchar(16)", "ss.OC_STOCK_OBJECTID");
+                    sSelect += " ps.OC_STOCK_SERVICESTOCKUID = (" + convertServerId + MedwanQuery.getInstance().concatSign() + "'.'" + MedwanQuery.getInstance().concatSign() + convertObjectId + ") AND ";
+                }
+                if (sFindServiceUid.length() > 0) {
+                    // search all service and its child-services
+                    Vector childIds = Service.getChildIds(sFindServiceUid);
+                    childIds.add(sFindServiceUid);
+                    String sChildIds = ScreenHelper.tokenizeVector(childIds, ",", "'");
+                    if (sChildIds.length() > 0) {
+                        sSelect += " ss.OC_STOCK_SERVICEUID IN (" + sChildIds + ") AND ";
+                    } else {
+                        sSelect += " ss.OC_STOCK_SERVICEUID IN ('') AND ";
+                    }
+                }
+                if (sFindServiceStockUid.length() > 0) sSelect += "ps.OC_STOCK_SERVICESTOCKUID = ? AND ";
+                if (sFindProductUid.length() > 0) sSelect += "ps.OC_STOCK_PRODUCTUID = ? AND ";
+                if (sFindProductName.length() > 0) sSelect += "p.OC_PRODUCT_NAME like ? AND ";
+                if (sFindLevel.length() > 0) sSelect += "ps.OC_STOCK_LEVEL = ? AND ";
+                if (sFindMinimumLevel.length() > 0) sSelect += "ps.OC_STOCK_MINIMUMLEVEL = ? AND ";
+                if (sFindMaximumLevel.length() > 0) sSelect += "ps.OC_STOCK_MAXIMUMLEVEL = ? AND ";
+                if (sFindOrderLevel.length() > 0) sSelect += "ps.OC_STOCK_ORDERLEVEL = ? AND ";
+                if (sFindBegin.length() > 0) sSelect += "ps.OC_STOCK_BEGIN = ? AND ";
+                if (sFindEnd.length() > 0) sSelect += "ps.OC_STOCK_END = ? AND ";
+                if (sFindDefaultImportance.length() > 0) sSelect += "ps.OC_STOCK_DEFAULTIMPORTANCE = ? AND ";
+                if (sFindSupplierUid.length() > 0) {
+                    // search all service and its child-services
+                    Vector childIds = Service.getChildIds(sFindSupplierUid);
+                    String sChildIds = ScreenHelper.tokenizeVector(childIds, ",", "'");
+                    if (sChildIds.length() > 0) {
+                        sSelect += "ps.OC_STOCK_SUPPLIERUID IN (" + sChildIds + ") AND ";
+                    } else {
+                        sSelect += "ps.OC_STOCK_SUPPLIERUID IN ('') AND ";
+                    }
+                }
+
+                // remove last AND if any
+                if (sSelect.indexOf("AND ") > -1) {
+                    sSelect = sSelect.substring(0, sSelect.lastIndexOf("AND "));
+                }
+            }
+
+            // order by selected col or default col
+            sSelect += "ORDER BY " + sSortCol + " " + sSortDir;
+            
+            ps = oc_conn.prepareStatement(sSelect);
+
+            // set questionmark values
+            int questionMarkIdx = 1;
+            if (sFindServiceStockUid.length() > 0) ps.setString(questionMarkIdx++, sFindServiceStockUid);
+            if (sFindProductUid.length() > 0) ps.setString(questionMarkIdx++, sFindProductUid);
+            if (sFindProductName.length() > 0) ps.setString(questionMarkIdx++, "%"+sFindProductName+"%");
+            if (sFindLevel.length() > 0) ps.setInt(questionMarkIdx++, Integer.parseInt(sFindLevel));
+            if (sFindMinimumLevel.length() > 0) ps.setInt(questionMarkIdx++, Integer.parseInt(sFindMinimumLevel));
+            if (sFindMaximumLevel.length() > 0) ps.setInt(questionMarkIdx++, Integer.parseInt(sFindMaximumLevel));
+            if (sFindOrderLevel.length() > 0) ps.setInt(questionMarkIdx++, Integer.parseInt(sFindOrderLevel));
+            if (sFindBegin.length() > 0) ps.setDate(questionMarkIdx++, ScreenHelper.getSQLDate(sFindBegin));
+            if (sFindEnd.length() > 0) ps.setDate(questionMarkIdx++, ScreenHelper.getSQLDate(sFindEnd));
+            if (sFindDefaultImportance.length() > 0) ps.setString(questionMarkIdx++, sFindDefaultImportance);
+
+            // execute
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                foundObjects.add(get(rs.getString("OC_STOCK_SERVERID") + "." + rs.getString("OC_STOCK_OBJECTID")));
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                oc_conn.close();
+            }
+            catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+        return foundObjects;
+    }
+    //--- FIND ------------------------------------------------------------------------------------
+    public static Vector findNameAndCode(String sFindServiceStockUid, String sFindProductUid, String sFindProductName, String sFindLevel,
+                              String sFindMinimumLevel, String sFindMaximumLevel, String sFindOrderLevel,
+                              String sFindBegin, String sFindEnd, String sFindDefaultImportance,
+                              String sFindSupplierUid, String sFindServiceUid, String sSortCol, String sSortDir) {
+        Vector foundObjects = new Vector();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+        try {
+            String sSelect = "SELECT ps.OC_STOCK_SERVERID, ps.OC_STOCK_OBJECTID" +
+                    " FROM OC_PRODUCTSTOCKS ps, OC_PRODUCTS p ";
+            if (sFindServiceUid.length() > 0) {
+                sSelect += ", OC_SERVICESTOCKS ss ";
+            }
+            sSelect += "WHERE ";
+
+            // bind the serviceStock table
+            String convertServerId = MedwanQuery.getInstance().convert("varchar(16)", "p.OC_PRODUCT_SERVERID");
+            String convertObjectId = MedwanQuery.getInstance().convert("varchar(16)", "p.OC_PRODUCT_OBJECTID");
+            sSelect += " p.OC_PRODUCT_OBJECTID=replace(ps.OC_STOCK_PRODUCTUID,'" +  MedwanQuery.getInstance().getConfigInt("serverId") + ".','') ";
+
+            // match search criteria
+            if (sFindServiceStockUid.length() > 0 || sFindProductUid.length() > 0 || sFindProductName.length() > 0 || sFindLevel.length() > 0 ||
+                    sFindMinimumLevel.length() > 0 || sFindMaximumLevel.length() > 0 || sFindOrderLevel.length() > 0 ||
+                    sFindBegin.length() > 0 || sFindEnd.length() > 0 || sFindDefaultImportance.length() > 0 ||
+                    sFindSupplierUid.length() > 0 || sFindServiceUid.length() > 0) {
+                sSelect += "AND ";
+                if (sFindServiceUid.length() > 0) {
+                    // bind the serviceStock table
+                    convertServerId = MedwanQuery.getInstance().convert("varchar(16)", "ss.OC_STOCK_SERVERID");
+                    convertObjectId = MedwanQuery.getInstance().convert("varchar(16)", "ss.OC_STOCK_OBJECTID");
+                    sSelect += " ps.OC_STOCK_SERVICESTOCKUID = (" + convertServerId + MedwanQuery.getInstance().concatSign() + "'.'" + MedwanQuery.getInstance().concatSign() + convertObjectId + ") AND ";
+                }
+                if (sFindServiceUid.length() > 0) {
+                    // search all service and its child-services
+                    Vector childIds = Service.getChildIds(sFindServiceUid);
+                    childIds.add(sFindServiceUid);
+                    String sChildIds = ScreenHelper.tokenizeVector(childIds, ",", "'");
+                    if (sChildIds.length() > 0) {
+                        sSelect += " ss.OC_STOCK_SERVICEUID IN (" + sChildIds + ") AND ";
+                    } else {
+                        sSelect += " ss.OC_STOCK_SERVICEUID IN ('') AND ";
+                    }
+                }
+                if (sFindServiceStockUid.length() > 0) sSelect += "ps.OC_STOCK_SERVICESTOCKUID = ? AND ";
+                if (sFindProductUid.length() > 0) sSelect += "ps.OC_STOCK_PRODUCTUID = ? AND ";
+                if (sFindProductName.length() > 0) sSelect += "(p.OC_PRODUCT_NAME like ? OR p.OC_PRODUCT_CODE like ?) AND ";
+                if (sFindLevel.length() > 0) sSelect += "ps.OC_STOCK_LEVEL = ? AND ";
+                if (sFindMinimumLevel.length() > 0) sSelect += "ps.OC_STOCK_MINIMUMLEVEL = ? AND ";
+                if (sFindMaximumLevel.length() > 0) sSelect += "ps.OC_STOCK_MAXIMUMLEVEL = ? AND ";
+                if (sFindOrderLevel.length() > 0) sSelect += "ps.OC_STOCK_ORDERLEVEL = ? AND ";
+                if (sFindBegin.length() > 0) sSelect += "ps.OC_STOCK_BEGIN = ? AND ";
+                if (sFindEnd.length() > 0) sSelect += "ps.OC_STOCK_END = ? AND ";
+                if (sFindDefaultImportance.length() > 0) sSelect += "ps.OC_STOCK_DEFAULTIMPORTANCE = ? AND ";
+                if (sFindSupplierUid.length() > 0) {
+                    // search all service and its child-services
+                    Vector childIds = Service.getChildIds(sFindSupplierUid);
+                    String sChildIds = ScreenHelper.tokenizeVector(childIds, ",", "'");
+                    if (sChildIds.length() > 0) {
+                        sSelect += "ps.OC_STOCK_SUPPLIERUID IN (" + sChildIds + ") AND ";
+                    } else {
+                        sSelect += "ps.OC_STOCK_SUPPLIERUID IN ('') AND ";
+                    }
+                }
+
+                // remove last AND if any
+                if (sSelect.indexOf("AND ") > -1) {
+                    sSelect = sSelect.substring(0, sSelect.lastIndexOf("AND "));
+                }
+            }
+
+            // order by selected col or default col
+            sSelect += "ORDER BY " + sSortCol + " " + sSortDir;
+            
+            ps = oc_conn.prepareStatement(sSelect);
+
+            // set questionmark values
+            int questionMarkIdx = 1;
+            if (sFindServiceStockUid.length() > 0) ps.setString(questionMarkIdx++, sFindServiceStockUid);
+            if (sFindProductUid.length() > 0) ps.setString(questionMarkIdx++, sFindProductUid);
+            if (sFindProductName.length() > 0){
+            	ps.setString(questionMarkIdx++, "%"+sFindProductName+"%");
+            	ps.setString(questionMarkIdx++, "%"+sFindProductName+"%");
+            }
             if (sFindLevel.length() > 0) ps.setInt(questionMarkIdx++, Integer.parseInt(sFindLevel));
             if (sFindMinimumLevel.length() > 0) ps.setInt(questionMarkIdx++, Integer.parseInt(sFindMinimumLevel));
             if (sFindMaximumLevel.length() > 0) ps.setInt(questionMarkIdx++, Integer.parseInt(sFindMaximumLevel));

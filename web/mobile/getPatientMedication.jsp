@@ -2,7 +2,7 @@
 <%@include file="/mobile/_common/head.jsp"%>
 
 <table class="list" padding="0" cellspacing="1" width="<%=sTABLE_WIDTH%>" style="border-bottom:none;">
-	<tr class="admin"><td colspan="3"><%=getTran("mobile","activeMedication",activeUser)%></td></tr>
+	<tr class="admin"><td colspan="3"><%=getTran(request,"mobile","activeMedication",activeUser)%></td></tr>
 	
 	<%	
 	    Vector vPrescriptions = Prescription.getActivePrescriptions(activePatient.personid);
@@ -19,18 +19,18 @@
 		    	mapersonne = AdminPerson.getAdminPerson(conn,prescriPatient.getPrescriberUid());
 		    	
 		    	out.print("<table class='list' padding='0' cellspacing='1' width='"+sTABLE_WIDTH+"' style='border-bottom:none;'>"+
-		    	           "<tr><td width='80' class='admin'>"+getTran("Web","begin",activeUser)+"</td><td>"+stdDateFormat.format(prescriPatient.getBegin())+"</td></tr>"+
-	  			      	   "<tr><td class='admin'>"+getTran("Web","end",activeUser)+"</td><td>"+stdDateFormat.format(prescriPatient.getEnd())+"</td></tr>"+
-		    			   "<tr><td class='admin'>"+getTran("Web","name",activeUser)+"</td><td><b>"+Product.get(prescriPatient.getProductUid()).getName()+"</b></td></tr>"+
-		    			   "<tr><td class='admin'>"+getTran("Web","dose",activeUser)+"</td><td>"+prescriPatient.getUnitsPerTimeUnit()+"/"+getTran("prescription.timeunit",prescriPatient.getTimeUnit(),activeUser)+"</td></tr>"+
-		    	           "<tr><td class='admin'>"+getTran("mobile","prescriber",activeUser)+"</td><td>"+prescriPatient.getPrescriber().getFullName()+"</td></tr>"+
+		    	           "<tr><td width='80' class='admin'>"+getTran(request,"Web","begin",activeUser)+"</td><td>"+stdDateFormat.format(prescriPatient.getBegin())+"</td></tr>"+
+	  			      	   "<tr><td class='admin'>"+getTran(request,"Web","end",activeUser)+"</td><td>"+stdDateFormat.format(prescriPatient.getEnd())+"</td></tr>"+
+		    			   "<tr><td class='admin'>"+getTran(request,"Web","name",activeUser)+"</td><td><b>"+Product.get(prescriPatient.getProductUid()).getName()+"</b></td></tr>"+
+		    			   "<tr><td class='admin'>"+getTran(request,"Web","dose",activeUser)+"</td><td>"+prescriPatient.getUnitsPerTimeUnit()+"/"+getTran(request,"prescription.timeunit",prescriPatient.getTimeUnit(),activeUser)+"</td></tr>"+
+		    	           "<tr><td class='admin'>"+getTran(request,"mobile","prescriber",activeUser)+"</td><td>"+prescriPatient.getPrescriber().getFullName()+"</td></tr>"+
 		    			  "</table>");
 		    
 		    }
 		    conn.close();
 		}
 	    else{
-			out.print("<tr><td colspan='2'><i>"+getTran("web","noData",activeUser)+"</i></td></tr>");
+			out.print("<tr><td colspan='2'><i>"+getTran(request,"web","noData",activeUser)+"</i></td></tr>");
 	    }
     %>
 </table>

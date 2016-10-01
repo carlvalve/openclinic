@@ -12,14 +12,14 @@
                     <%-- HEADER --%>
                     <tr class="admin">
                         <td width="5" nowrap></td>
-                        <td width="20%"><%=getTran("web.admin","sourceperson",sWebLanguage)%></td>
-                        <td width="20%"><%=getTran("web.admin","destinationperson",sWebLanguage)%></td>
-                        <td width="60%"><%=getTran("web.admin","relationtype",sWebLanguage)%></td>
+                        <td width="20%"><%=getTran(request,"web.admin","sourceperson",sWebLanguage)%></td>
+                        <td width="20%"><%=getTran(request,"web.admin","destinationperson",sWebLanguage)%></td>
+                        <td width="60%"><%=getTran(request,"web.admin","relationtype",sWebLanguage)%></td>
                     </tr>
 
                     <%
                         String sClass = "1";
-                        String showDossierTran = getTran("web","showDossier",sWebLanguage);
+                        String showDossierTran = getTran(request,"web","showDossier",sWebLanguage);
                         for(int i=0; i<activePatient.familyRelations.size(); i++){
                             afr = (AdminFamilyRelation)activePatient.familyRelations.get(i);
 
@@ -33,7 +33,7 @@
                                 <%
                                 String sSourceFullName      = ScreenHelper.getFullPersonName(afr.sourceId+""),
                                           sDestinationFullName = ScreenHelper.getFullPersonName(afr.destinationId+""),
-                                          sRelationType        = getTran("admin.familyrelation",afr.relationType,sWebLanguage);
+                                          sRelationType        = getTran(request,"admin.familyrelation",afr.relationType,sWebLanguage);
 								if(activePatient.personid.equalsIgnoreCase(afr.sourceId)){
            		                %>
                    		            <tr class="list<%=sClass%>">
@@ -62,7 +62,7 @@
         }
         else{
             // no records found
-            %><div><%=getTran("web","nofamilyrelationsfound",sWebLanguage)%></div><%
+            %><div><%=getTran(request,"web","nofamilyrelationsfound",sWebLanguage)%></div><%
         }
     }
 %>

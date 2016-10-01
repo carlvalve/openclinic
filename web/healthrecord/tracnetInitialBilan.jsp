@@ -8,8 +8,8 @@
 
         sTmp.append("<tr id='rowOther"+iTotal+"'>")
              .append("<td class=\"admin2\">")
-              .append("<a href='javascript:deleteOther(rowOther"+iTotal+")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran("Web.Occup","medwan.common.delete",sWebLanguage) + "' border='0'></a> ")
-              .append("<a href='javascript:editOther(rowOther"+iTotal+")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_edit.gif' alt='" + getTran("Web.Occup","medwan.common.edit",sWebLanguage) + "' border='0'></a>")
+              .append("<a href='javascript:deleteOther(rowOther"+iTotal+")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran(null,"Web.Occup","medwan.common.delete",sWebLanguage) + "' border='0'></a> ")
+              .append("<a href='javascript:editOther(rowOther"+iTotal+")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_edit.gif' alt='" + getTran(null,"Web.Occup","medwan.common.edit",sWebLanguage) + "' border='0'></a>")
              .append("</td>")
              .append("<td class='admin2'>&nbsp;" + sName + "</td>")
              .append("<td class='admin2'>&nbsp;" +sValue + "</td>")
@@ -37,7 +37,7 @@
         <tr>
             <td class="admin" width="<%=sTDAdminWidth%>">
                 <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-                <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+                <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
             </td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" id="trandate" OnBlur='checkDate(this)'>
@@ -45,77 +45,77 @@
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","tracnet.initial.bilan.cd4",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","tracnet.initial.bilan.cd4",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" size="5" <%=setRightClick("ITEM_TYPE_TRACNET_INITIAL_BILAN_CD4")%> name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_INITIAL_BILAN_CD4" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_INITIAL_BILAN_CD4" property="value"/>" onblur="isNumber(this);"/>
-                <%=getTran("openclinic.chuk","tracnet.cellspermm3",sWebLanguage)%>
+                <%=getTran(request,"openclinic.chuk","tracnet.cellspermm3",sWebLanguage)%>
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","tracnet.initial.bilan.cv",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","tracnet.initial.bilan.cv",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" size="5" <%=setRightClick("ITEM_TYPE_TRACNET_INITIAL_BILAN_CV")%> name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_INITIAL_BILAN_CV" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_INITIAL_BILAN_CV" property="value"/>" onblur="isNumber(this);"/>
-                <%=getTran("openclinic.chuk","tracnet.cppermm3",sWebLanguage)%>
+                <%=getTran(request,"openclinic.chuk","tracnet.cppermm3",sWebLanguage)%>
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","tracnet.initial.bilan.hb",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","tracnet.initial.bilan.hb",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" size="5" <%=setRightClick("ITEM_TYPE_TRACNET_INITIAL_BILAN_HB")%> name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_INITIAL_BILAN_HB" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_INITIAL_BILAN_HB" property="value"/>" onblur="isNumber(this);"/>
-                <%=getTran("openclinic.chuk","tracnet.gperl",sWebLanguage)%>
+                <%=getTran(request,"openclinic.chuk","tracnet.gperl",sWebLanguage)%>
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","tracnet.initial.bilan.htc",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","tracnet.initial.bilan.htc",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" size="5" <%=setRightClick("ITEM_TYPE_TRACNET_INITIAL_BILAN_HTC")%> name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_INITIAL_BILAN_HTC" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_INITIAL_BILAN_HTC" property="value"/>" onblur="isNumber(this);"/>
                 %
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","tracnet.initial.bilan.gb",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","tracnet.initial.bilan.gb",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" size="5" <%=setRightClick("ITEM_TYPE_TRACNET_INITIAL_BILAN_GB")%> name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_INITIAL_BILAN_GB" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_INITIAL_BILAN_GB" property="value"/>" onblur="isNumber(this);"/>
-                <%=getTran("openclinic.chuk","tracnet.cellspermm3",sWebLanguage)%>
+                <%=getTran(request,"openclinic.chuk","tracnet.cellspermm3",sWebLanguage)%>
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","tracnet.initial.bilan.neutro",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","tracnet.initial.bilan.neutro",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" size="5" <%=setRightClick("ITEM_TYPE_TRACNET_INITIAL_BILAN_NEUTRO")%> name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_INITIAL_BILAN_NEUTRO" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_INITIAL_BILAN_NEUTRO" property="value"/>" onblur="isNumber(this);"/>
-                <%=getTran("openclinic.chuk","tracnet.cellspermm3",sWebLanguage)%>
+                <%=getTran(request,"openclinic.chuk","tracnet.cellspermm3",sWebLanguage)%>
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","tracnet.initial.bilan.lympho",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","tracnet.initial.bilan.lympho",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" size="5" <%=setRightClick("ITEM_TYPE_TRACNET_INITIAL_BILAN_LYMPHO")%> name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_INITIAL_BILAN_LYMPHO" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_INITIAL_BILAN_LYMPHO" property="value"/>" onblur="isNumber(this);"/>
-                <%=getTran("openclinic.chuk","tracnet.cellspermm3",sWebLanguage)%>
+                <%=getTran(request,"openclinic.chuk","tracnet.cellspermm3",sWebLanguage)%>
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","tracnet.initial.bilan.plaquettes",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","tracnet.initial.bilan.plaquettes",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" size="5" <%=setRightClick("ITEM_TYPE_TRACNET_INITIAL_BILAN_PLAQUETTES")%> name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_INITIAL_BILAN_PLAQUETTES" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_INITIAL_BILAN_PLAQUETTES" property="value"/>" onblur="isNumber(this);"/>
                 10E3/mm3
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","tracnet.initial.bilan.alat",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","tracnet.initial.bilan.alat",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" size="5" <%=setRightClick("ITEM_TYPE_TRACNET_INITIAL_BILAN_ALAT")%> name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_INITIAL_BILAN_ALAT" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_INITIAL_BILAN_ALAT" property="value"/>" onblur="isNumber(this);"/>
                 IU/l
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","tracnet.initial.bilan.other",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","tracnet.initial.bilan.other",sWebLanguage)%></td>
             <td class="admin2">
                 <table class="list" cellspacing="1" cellpadding="0" id="tblOther">
                     <tr>
                         <td class="admin" width="40"/>
-                        <td class="admin"><%=getTran("openclinic.chuk","tracnet.initial.bilan.other.name",sWebLanguage)%></td>
-                        <td class="admin"><%=getTran("openclinic.chuk","tracnet.initial.bilan.other.value",sWebLanguage)%></td>
-                        <td class="admin"><%=getTran("openclinic.chuk","tracnet.initial.bilan.other.unit",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"openclinic.chuk","tracnet.initial.bilan.other.name",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"openclinic.chuk","tracnet.initial.bilan.other.value",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"openclinic.chuk","tracnet.initial.bilan.other.unit",sWebLanguage)%></td>
                         <td class="admin"/>
                     </tr>
                     <tr>
@@ -187,7 +187,7 @@
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","tracnet.initial.bilan.other.examinations",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","tracnet.initial.bilan.other.examinations",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_TRACNET_INITIAL_BILAN_OTHER_EXAMINATIONS")%> class="text" cols="100" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_INITIAL_BILAN_OTHER_EXAMINATIONS" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_INITIAL_BILAN_OTHER_EXAMINATIONS" property="value"/></textarea>
             </td>

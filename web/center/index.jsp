@@ -10,16 +10,16 @@
 <form id="searchFormForm" name="searchFormForm">
     <table width="100%" class="menu" cellspacing="1" cellpadding="0">
         <tr class="admin">
-            <td colspan="2"><%=getTran("web","search",sWebLanguage)%></td>
+            <td colspan="2"><%=getTran(request,"web","search",sWebLanguage)%></td>
         </tr>
         
         <%-- DATES --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","Begin",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","Begin",sWebLanguage)%></td>
             <td class="admin2"><%=writeDateField("FindBegin","searchFormForm","",sWebLanguage)%></td>
         </tr>        
         <tr>
-            <td class="admin"><%=getTran("Web","End",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web","End",sWebLanguage)%></td>
             <td class="admin2"><%=writeDateField("FindEnd","searchFormForm","",sWebLanguage)%></td>
         </tr>
         

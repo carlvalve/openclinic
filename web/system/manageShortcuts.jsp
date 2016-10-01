@@ -6,7 +6,7 @@
 
     //--- SAVE ------------------------------------------------------------------------------------
 	if(request.getParameter("saveButton")!=null){
-		sMsg = "<font color='green'>"+getTran("web","dataIsSaved",sWebLanguage)+"</font>";
+		sMsg = "<font color='green'>"+getTran(request,"web","dataIsSaved",sWebLanguage)+"</font>";
 		
 		//*** 1 - encounters ***
 		for(int n=1;n<6;n++){
@@ -46,16 +46,16 @@
     <%-------------------------------------------------------------------------------------------%> 
 	<table class="list" cellpadding="0" cellspacing="1">
 		<tr class='admin'>
-			<td width="80"><%=getTran("web","shortcut",sWebLanguage)%></td>
-			<td><%=getTran("web","type",sWebLanguage)%></td>
-			<td><%=getTran("web","origin",sWebLanguage)%></td>
-			<td><%=getTran("web","service",sWebLanguage)%></td>
-			<td><%=getTran("web","manager",sWebLanguage)%></td>
+			<td width="80"><%=getTran(request,"web","shortcut",sWebLanguage)%></td>
+			<td><%=getTran(request,"web","type",sWebLanguage)%></td>
+			<td><%=getTran(request,"web","origin",sWebLanguage)%></td>
+			<td><%=getTran(request,"web","service",sWebLanguage)%></td>
+			<td><%=getTran(request,"web","manager",sWebLanguage)%></td>
 		</tr>
 		
 	    <%-- FAST ENCOUNTER 1 -------------------------------------------------------------------%>
 		<tr>
-			<td class='admin'><%=getTran("web","fastencounter",sWebLanguage)%> 1</td>
+			<td class='admin'><%=getTran(request,"web","fastencounter",sWebLanguage)%> 1</td>
 			<td class='admin2'>
 	            <select class='text' id='FastEncounterType.1' name='FastEncounterType.1' >
 	            	<option value=''></option>
@@ -68,7 +68,7 @@
 		                    if(fastencounter.split(";").length>0 && fastencounter.split(";")[0].equalsIgnoreCase(sOptions[i])){
 		                        out.print(" selected");
 		                    }
-		                    out.print(">"+getTran("web",sOptions[i],sWebLanguage)+"</option>");		                    
+		                    out.print(">"+getTran(request,"web",sOptions[i],sWebLanguage)+"</option>");		                    
 		                }
 		            %>
 		        </select>
@@ -76,7 +76,7 @@
 		    <td class='admin2'>
 	            <select class="text" name="FastEncounterOrigin.1">
 	                <option/>
-	                <%=ScreenHelper.writeSelect("urgency.origin",fastencounter.split(";").length>1?fastencounter.split(";")[1]:"",sWebLanguage)%>
+	                <%=ScreenHelper.writeSelect(request,"urgency.origin",fastencounter.split(";").length>1?fastencounter.split(";")[1]:"",sWebLanguage)%>
 	            </select>
 			</td>
 	        <td class='admin2'>
@@ -97,7 +97,7 @@
 		
 	    <%-- FAST ENCOUNTER 2 -------------------------------------------------------------------%>
 		<tr>
-			<td class='admin'><%=getTran("web","fastencounter",sWebLanguage)%> 2</td>
+			<td class='admin'><%=getTran(request,"web","fastencounter",sWebLanguage)%> 2</td>
 			<td class='admin2'>
 	            <select class='text' id='FastEncounterType.2' name='FastEncounterType.2' >
 	            	<option value=''></option>
@@ -108,7 +108,7 @@
 		                    if(fastencounter.split(";").length>0 && fastencounter.split(";")[0].equalsIgnoreCase(sOptions[i])){
 		                        out.print(" selected");
 		                    }
-		                    out.print(">"+getTran("web",sOptions[i],sWebLanguage)+"</option>");		                    
+		                    out.print(">"+getTran(request,"web",sOptions[i],sWebLanguage)+"</option>");		                    
 		                }
 		            %>
 		        </select>
@@ -116,7 +116,7 @@
 		    <td class='admin2'>
 	            <select class="text" name="FastEncounterOrigin.2">
 	                <option/>
-	                <%=ScreenHelper.writeSelect("urgency.origin",fastencounter.split(";").length>1?fastencounter.split(";")[1]:"",sWebLanguage)%>
+	                <%=ScreenHelper.writeSelect(request,"urgency.origin",fastencounter.split(";").length>1?fastencounter.split(";")[1]:"",sWebLanguage)%>
 	            </select>
 			</td>
 	        <td class='admin2'>
@@ -137,7 +137,7 @@
 	    
 	    <%-- FAST ENCOUNTER 3 -------------------------------------------------------------------%>
 		<tr>
-			<td class='admin'><%=getTran("web","fastencounter",sWebLanguage)%> 3</td>
+			<td class='admin'><%=getTran(request,"web","fastencounter",sWebLanguage)%> 3</td>
 			<td class='admin2'>
 	            <select class='text' id='FastEncounterType.3' name='FastEncounterType.3' >
 	            	<option value=''></option>
@@ -148,7 +148,7 @@
 		                    if(fastencounter.split(";").length>0 && fastencounter.split(";")[0].equalsIgnoreCase(sOptions[i])){
 		                        out.print(" selected");
 		                    }
-		                    out.print(">"+getTran("web",sOptions[i],sWebLanguage)+"</option>");
+		                    out.print(">"+getTran(request,"web",sOptions[i],sWebLanguage)+"</option>");
 		                    
 		                }
 		            %>
@@ -158,7 +158,7 @@
 	            <select class="text" name="FastEncounterOrigin.3">
 	                <option/>
 	                <%
-	                    out.print(ScreenHelper.writeSelect("urgency.origin",fastencounter.split(";").length>1?fastencounter.split(";")[1]:"",sWebLanguage));
+	                    out.print(ScreenHelper.writeSelect(request,"urgency.origin",fastencounter.split(";").length>1?fastencounter.split(";")[1]:"",sWebLanguage));
 	                %>
 	            </select>
 			</td>
@@ -180,7 +180,7 @@
 	    
 	    <%-- FAST ENCOUNTER 4 -------------------------------------------------------------------%>
 		<tr>
-			<td class='admin'><%=getTran("web","fastencounter",sWebLanguage)%> 4</td>
+			<td class='admin'><%=getTran(request,"web","fastencounter",sWebLanguage)%> 4</td>
 			<td class='admin2'>
 	            <select class='text' id='FastEncounterType.4' name='FastEncounterType.4' >
 	            	<option value=''></option>
@@ -191,7 +191,7 @@
 		                    if(fastencounter.split(";").length>0 && fastencounter.split(";")[0].equalsIgnoreCase(sOptions[i])){
 		                        out.print(" selected");
 		                    }
-		                    out.print(">"+getTran("web",sOptions[i],sWebLanguage)+"</option>");		                    
+		                    out.print(">"+getTran(request,"web",sOptions[i],sWebLanguage)+"</option>");		                    
 		                }
 		            %>
 		        </select>
@@ -199,7 +199,7 @@
 		    <td class='admin2'>
 	            <select class="text" name="FastEncounterOrigin.4">
 	                <option/>
-	                <%=ScreenHelper.writeSelect("urgency.origin",fastencounter.split(";").length>1?fastencounter.split(";")[1]:"",sWebLanguage)%>
+	                <%=ScreenHelper.writeSelect(request,"urgency.origin",fastencounter.split(";").length>1?fastencounter.split(";")[1]:"",sWebLanguage)%>
 	            </select>
 			</td>
 	        <td class='admin2'>
@@ -220,7 +220,7 @@
 	    
 	    <%-- FAST ENCOUNTER 5 -------------------------------------------------------------------%>
 		<tr>
-			<td class='admin'><%=getTran("web","fastencounter",sWebLanguage)%> 5</td>
+			<td class='admin'><%=getTran(request,"web","fastencounter",sWebLanguage)%> 5</td>
 			<td class='admin2'>
 	            <select class='text' id='FastEncounterType.5' name='FastEncounterType.5' >
 	            	<option value=''></option>
@@ -231,7 +231,7 @@
 	                    if(fastencounter.split(";").length>0 && fastencounter.split(";")[0].equalsIgnoreCase(sOptions[i])){
 	                        out.print(" selected");
 	                    }
-	                    out.print(">"+getTran("web",sOptions[i],sWebLanguage)+"</option>");	                    
+	                    out.print(">"+getTran(request,"web",sOptions[i],sWebLanguage)+"</option>");	                    
 	                }
 	            %>
 		        </select>
@@ -239,7 +239,7 @@
 		    <td class='admin2'>
 	            <select class="text" name="FastEncounterOrigin.5">
 	                <option/>
-	                <%=ScreenHelper.writeSelect("urgency.origin",fastencounter.split(";").length>1?fastencounter.split(";")[1]:"",sWebLanguage)%>
+	                <%=ScreenHelper.writeSelect(request,"urgency.origin",fastencounter.split(";").length>1?fastencounter.split(";")[1]:"",sWebLanguage)%>
 	            </select>
 			</td>
 	        <td class='admin2'>
@@ -266,8 +266,8 @@
 	<%-------------------------------------------------------------------------------------------%> 	 
 	<table class="list" cellpadding="0" cellspacing="1">       	    	    
 		<tr class='admin'>
-			<td width="80"><%=getTran("web","shortcut",sWebLanguage)%></td>
-			<td colspan=4><%=getTran("web","type",sWebLanguage)%></td>
+			<td width="80"><%=getTran(request,"web","shortcut",sWebLanguage)%></td>
+			<td colspan=4><%=getTran(request,"web","type",sWebLanguage)%></td>
 		</tr>
 		
 		<%
@@ -280,7 +280,7 @@
 	        // get examinations
 	        while (iter.hasNext()) {
 	            hResults = (Hashtable) iter.next();
-	            hExaminations.put(getTran("examination", (String) hResults.get("id"), sWebLanguage), hResults.get("id"));
+	            hExaminations.put(getTran(request,"examination", (String) hResults.get("id"), sWebLanguage), hResults.get("id"));
 	        }
 	
 	        // sort examinations
@@ -296,7 +296,7 @@
 		
         <%-- FAST TRANSACTION 1 -----------------------------------------------------------------%>
 		<tr>
-			<td class='admin'><%=getTran("web","fasttransaction",sWebLanguage)%> 1</td>
+			<td class='admin'><%=getTran(request,"web","fasttransaction",sWebLanguage)%> 1</td>
 			<td class='admin2' colspan='4'>
 				<select name="FastTransaction.1" class="text">
                     <option value=""></option>
@@ -306,7 +306,7 @@
                         while(it.hasNext()){
                             sKey = (String)it.next();
                             sID = (String)hExaminations.get(sKey);
-                            sKey = getTran("examination",sID,sWebLanguage);
+                            sKey = getTran(request,"examination",sID,sWebLanguage);
                             examination = Examination.get(sID);
                             sEditTranType = examination.getTransactionType();
 							sSelected = "";
@@ -327,7 +327,7 @@
         
         <%-- FAST TRANSACTION 2 -----------------------------------------------------------------%>
 		<tr>
-			<td class='admin'><%=getTran("web","fasttransaction",sWebLanguage)%> 2</td>
+			<td class='admin'><%=getTran(request,"web","fasttransaction",sWebLanguage)%> 2</td>
 			<td class='admin2' colspan='4'>
 				<select name="FastTransaction.2" class="text">
                     <option value=""></option>
@@ -337,7 +337,7 @@
                         while(it.hasNext()){
                             sKey = (String)it.next();
                             sID = (String)hExaminations.get(sKey);
-                            sKey = getTran("examination",sID,sWebLanguage);
+                            sKey = getTran(request,"examination",sID,sWebLanguage);
                             examination = Examination.get(sID);
                             sEditTranType = examination.getTransactionType();
 							sSelected = "";
@@ -358,7 +358,7 @@
 		
         <%-- FAST TRANSACTION 3 -----------------------------------------------------------------%>
 		<tr>
-			<td class='admin'><%=getTran("web","fasttransaction",sWebLanguage)%> 3</td>
+			<td class='admin'><%=getTran(request,"web","fasttransaction",sWebLanguage)%> 3</td>
 			<td class='admin2' colspan='4'>
 				<select name="FastTransaction.3" class="text">
                     <option value=""></option>
@@ -368,7 +368,7 @@
                         while(it.hasNext()){
                             sKey = (String)it.next();
                             sID = (String)hExaminations.get(sKey);
-                            sKey = getTran("examination",sID,sWebLanguage);
+                            sKey = getTran(request,"examination",sID,sWebLanguage);
                             examination = Examination.get(sID);
                             sEditTranType = examination.getTransactionType();
                             
@@ -390,7 +390,7 @@
 		
         <%-- FAST TRANSACTION 4 -----------------------------------------------------------------%>
 		<tr>
-			<td class='admin'><%=getTran("web","fasttransaction",sWebLanguage)%> 4</td>
+			<td class='admin'><%=getTran(request,"web","fasttransaction",sWebLanguage)%> 4</td>
 			<td class='admin2' colspan='4'>
 				<select name="FastTransaction.4" class="text">
                     <option value=""></option>
@@ -400,7 +400,7 @@
                         while(it.hasNext()){
                             sKey = (String)it.next();
                             sID = (String)hExaminations.get(sKey);
-                            sKey = getTran("examination",sID,sWebLanguage);
+                            sKey = getTran(request,"examination",sID,sWebLanguage);
                             examination = Examination.get(sID);
                             sEditTranType = examination.getTransactionType();
                             
@@ -422,7 +422,7 @@
 		
         <%-- FAST TRANSACTION 5 -----------------------------------------------------------------%>
 		<tr>
-			<td class='admin'><%=getTran("web","fasttransaction",sWebLanguage)%> 5</td>
+			<td class='admin'><%=getTran(request,"web","fasttransaction",sWebLanguage)%> 5</td>
 			<td class='admin2' colspan='4'>
 				<select name="FastTransaction.5" class="text">
                     <option value=""></option>
@@ -432,7 +432,7 @@
                         while(it.hasNext()){
                             sKey = (String)it.next();
                             sID = (String)hExaminations.get(sKey);
-                            sKey = getTran("examination",sID,sWebLanguage);
+                            sKey = getTran(request,"examination",sID,sWebLanguage);
                             examination = Examination.get(sID);
                             sEditTranType = examination.getTransactionType();
                             
@@ -453,7 +453,7 @@
 		</tr>
 	</table>
 	
-	<i><%=getTran("web","onlyPermittedTransactionsAreDisplayed",sWebLanguage)%></i><br><br>
+	<i><%=getTran(request,"web","onlyPermittedTransactionsAreDisplayed",sWebLanguage)%></i><br><br>
 	    	
 	<input type="submit" class="button" name="saveButton" value="<%=getTranNoLink("web","save",sWebLanguage)%>"/>
 </form>

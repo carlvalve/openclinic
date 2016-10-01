@@ -4,6 +4,7 @@
 <%
 	String sServiceStockUid=request.getParameter("ServiceStockUid");
 	String sRequestingServiceStockUid=request.getParameter("RequestingServiceStockUid");
+	String sComment=checkString(request.getParameter("comment"));
 	String serviceName="";
 	ServiceStock serviceStock = ServiceStock.get(sRequestingServiceStockUid);
 	if(serviceStock!=null){
@@ -13,6 +14,8 @@
 		ProductOrder order = ProductOrder.get(request.getParameter("action").replaceAll("close.", ""));
 		if(order!=null){
 			order.setStatus("closed");
+			order.setComment(sComment);
+			order.setDateDelivered(new java.util.Date());
 			order.setProcessed(1);
 			order.store();
 		}
@@ -20,13 +23,14 @@
 %>
 <form name="transactionForm" method="post">
 	<table width="100%">
-		<tr class='admin'><td colspan='5'><%=getTran("web","acceptorderfrom",sWebLanguage) %> [<%=serviceName %>]</td></tr>
+		<tr class='admin'><td colspan='6'><%=getTran(request,"web","acceptorderfrom",sWebLanguage) %> [<%=serviceName %>]</td></tr>
 		<tr class='admin'>
-			<td><%=getTran("web","product",sWebLanguage) %></td>
+			<td><%=getTran(request,"web","product",sWebLanguage) %></td>
 			<td></td>
-			<td><%=getTran("web","ordered",sWebLanguage) %></td>
-			<td><%=getTran("web","delivered",sWebLanguage) %></td>
-			<td><%=getTran("web","available",sWebLanguage) %></td>
+			<td><%=getTran(request,"web","ordered",sWebLanguage) %></td>
+			<td><%=getTran(request,"web","amc",sWebLanguage) %></td>
+			<td><%=getTran(request,"web","delivered",sWebLanguage) %></td>
+			<td><%=getTran(request,"web","available",sWebLanguage) %></td>
 		</tr>
 		<%
 			Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
@@ -45,6 +49,7 @@
 			while(rs.next()){
 				counter++;
 				//Must first find a matching productstock in servicestock
+				ProductStock remoteStock=ProductStock.get(rs.getString("oc_stock_serverid")+"."+rs.getString("oc_stock_objectid"));
 				Vector productstocks = ProductStock.find(sServiceStockUid, rs.getString("oc_stock_productuid"), "", "", "", "", "", "", "", "", "", "oc_stock_productuid", "");
 				String orderuid=rs.getInt("oc_order_serverid")+"."+rs.getInt("oc_order_objectid");
 				if(productstocks.size()>0 ){
@@ -52,15 +57,16 @@
 					if(localStock.getLevel()>0){
 						int ordered=rs.getInt("oc_order_packagesordered");
 						int delivered=rs.getInt("oc_order_packagesdelivered");
+						String productionorderuid = checkString(rs.getString("oc_order_productionorderuid"));
 						int quantity=ordered-delivered;
-						out.println("<tr><td class='admin'><a href='javascript:doOrder(\""+localStock.getUid()+"\","+quantity+",\""+orderuid+"\")'>"+rs.getString("oc_product_name")+"</a></td><td class='admin2'><input type='button' value='"+getTran("web","close",sWebLanguage)+"' onclick='closeOrder(\""+orderuid+"\")'</td><td class='admin2'>"+ordered+"</td><td class='admin2'>"+delivered+"</td><td class='admin2'>"+localStock.getLevel()+"</td></tr>");
+						out.println("<tr><td class='admin'><a href='javascript:doOrder(\""+localStock.getUid()+"\","+quantity+",\""+orderuid+"\",\""+productionorderuid+"\")'>"+rs.getString("oc_order_description")+"</a></td><td class='admin2'><img src='"+sCONTEXTPATH+"/_img/icons/icon_erase.gif' title='"+getTran(request,"web","refuse",sWebLanguage)+"' onclick='closeOrder(\""+orderuid+"\")'/></td><td class='admin2'>"+ordered+"</td><td class='admin2'>"+remoteStock.getAverageConsumption(12, true, false, false)+"</td><td class='admin2'>"+delivered+"</td><td class='admin2'>"+localStock.getLevel()+"</td></tr>");
 					}
 					else{
-						out.println("<tr><td class='admingrey'>"+rs.getString("oc_product_name")+"</td><td class='admin2'><input type='button' value='"+getTran("web","close",sWebLanguage)+"' onclick='closeOrder(\""+orderuid+"\")'</td><td class='admin2'>"+rs.getString("oc_order_packagesordered")+"</td><td class='admin2'>"+rs.getString("oc_order_packagesdelivered")+"</td><td class='admin2'/></tr>");
+						out.println("<tr><td class='admingrey'>"+rs.getString("oc_order_description")+"</td><td class='admin2'><img src='"+sCONTEXTPATH+"/_img/icons/icon_erase.gif' title='"+getTran(request,"web","refuse",sWebLanguage)+"' onclick='closeOrder(\""+orderuid+"\")'/></td><td class='admin2'>"+rs.getString("oc_order_packagesordered")+"</td><td class='admin2'>"+rs.getString("oc_order_packagesdelivered")+"</td><td class='admin2'/></tr>");
 					}
 				}
 				else{
-					out.println("<tr><td class='admingrey'>"+rs.getString("oc_product_name")+"</td><td class='admin2'><input type='button' value='"+getTran("web","close",sWebLanguage)+"' onclick='closeOrder(\""+orderuid+"\")'</td><td class='admin2'>"+rs.getString("oc_order_packagesordered")+"</td><td class='admin2'>"+rs.getString("oc_order_packagesdelivered")+"</td><td class='admin2'/></tr>");
+					out.println("<tr><td class='admingrey'>"+rs.getString("oc_order_description")+"</td><td class='admin2'><img src='"+sCONTEXTPATH+"/_img/icons/icon_erase.gif' title='"+getTran(request,"web","refuse",sWebLanguage)+"' onclick='closeOrder(\""+orderuid+"\")'/></td><td class='admin2'>"+rs.getString("oc_order_packagesordered")+"</td><td class='admin2'>"+rs.getString("oc_order_packagesdelivered")+"</td><td class='admin2'/></tr>");
 				}
 			}
 			rs.close();
@@ -77,13 +83,22 @@
 		%>
 	</table>
 	<input type='hidden' name='action' id='action'/>
+	<input type='hidden' name='comment' id='comment'/>
+	
+	<center>
+		<p/>
+		<input type='button' class='button' name='closebutton' value='<%=getTran(request,"web","close",sWebLanguage) %>' onclick='window.close()'/>
+	</center>
 </form>
 <script>
-	function doOrder(productstockuid,quantity,orderuid){
-		openPopup("pharmacy/medication/popups/deliverMedicationPopupAuto.jsp&EditOperationDescr=medicationdelivery.2&EditSrcDestType=servicestock&EditSrcDestUid=<%=sRequestingServiceStockUid%>&EditUnitsChanged="+quantity+"&EditSrcDestName=<%=serviceName%>&Action=deliverMedication&EditProductStockUid="+productstockuid+"&EditOrderUid="+orderuid,800,600);
+	function doOrder(productstockuid,quantity,orderuid,productionorderuid){
+		openPopup("pharmacy/medication/popups/deliverMedicationPopupAuto.jsp&EditOperationDescr=medicationdelivery.2&EditSrcDestType=servicestock&EditSrcDestUid=<%=sRequestingServiceStockUid%>&EditUnitsChanged="+quantity+"&EditSrcDestName=<%=serviceName%>&Action=deliverMedication&EditProductStockUid="+productstockuid+"&EditOrderUid="+orderuid+"&ProductionOrderUid="+productionorderuid,800,600);
 	}
 	function closeOrder(orderuid){
-		document.getElementById('action').value='close.'+orderuid;
-		transactionForm.submit();
+		if(window.confirm('<%=getTranNoLink("web","areyousuretodelete",sWebLanguage)%>')){
+			document.getElementById("comment").value=prompt("<%=getTranNoLink("web","comment",sWebLanguage)%>", "");
+			document.getElementById('action').value='close.'+orderuid;
+			transactionForm.submit();
+		}
 	}
 </script>

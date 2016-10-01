@@ -12,13 +12,13 @@
 	    }
 	
 	    // translate labtype
-	         if(sType.equals("1")) sType = getTran("Web.occup","labanalysis.type.blood",sWebLanguage);
-	    else if(sType.equals("2")) sType = getTran("Web.occup","labanalysis.type.urine",sWebLanguage);
-	    else if(sType.equals("3")) sType = getTran("Web.occup","labanalysis.type.other",sWebLanguage);
-	    else if(sType.equals("4")) sType = getTran("Web.occup","labanalysis.type.stool",sWebLanguage);
-	    else if(sType.equals("5")) sType = getTran("Web.occup","labanalysis.type.sputum",sWebLanguage);
-	    else if(sType.equals("6")) sType = getTran("Web.occup","labanalysis.type.smear",sWebLanguage);
-	    else if(sType.equals("7")) sType = getTran("Web.occup","labanalysis.type.liquid",sWebLanguage);
+	         if(sType.equals("1")) sType = getTran(null,"Web.occup","labanalysis.type.blood",sWebLanguage);
+	    else if(sType.equals("2")) sType = getTran(null,"Web.occup","labanalysis.type.urine",sWebLanguage);
+	    else if(sType.equals("3")) sType = getTran(null,"Web.occup","labanalysis.type.other",sWebLanguage);
+	    else if(sType.equals("4")) sType = getTran(null,"Web.occup","labanalysis.type.stool",sWebLanguage);
+	    else if(sType.equals("5")) sType = getTran(null,"Web.occup","labanalysis.type.sputum",sWebLanguage);
+	    else if(sType.equals("6")) sType = getTran(null,"Web.occup","labanalysis.type.smear",sWebLanguage);
+	    else if(sType.equals("7")) sType = getTran(null,"Web.occup","labanalysis.type.liquid",sWebLanguage);
 	
 	    return "<tr>"+
 	            "<td class='admin' width='60'><a href='javascript:selectLabAnalysis(\""+sID+"\",\""+sType+"\",\""+sCode+"\",\""+sLabel+"\")' title='"+getTranNoLink("web","select",sWebLanguage)+"'>"+sCode+"</a></td>"+
@@ -84,7 +84,7 @@
             sLabType = objLabAnalysis.getLabtype();
             sLabCode = objLabAnalysis.getLabcode();
             sCodeOther = objLabAnalysis.getLabcodeother();
-            sLabel = getTran("labanalysis",objLabAnalysis.getLabId()+"",sWebLanguage);
+            sLabel = getTran(request,"labanalysis",objLabAnalysis.getLabId()+"",sWebLanguage);
 
             sOut.append(writeRow(sLabID,sLabType,sLabCode,sLabel,sWebLanguage));
         }
@@ -128,7 +128,7 @@
                 sLabType = objLabAnalysis.getLabtype();
                 sLabCode = objLabAnalysis.getLabcode();
                 sCodeOther = objLabAnalysis.getLabcodeother();
-                sLabel = getTran("labanalysis",objLabAnalysis.getLabId()+"",sWebLanguage);
+                sLabel = getTran(request,"labanalysis",objLabAnalysis.getLabId()+"",sWebLanguage);
 
                 sOut.append(writeRow(sLabID,sLabType,sLabCode,sLabel,sWebLanguage));
             }
@@ -136,10 +136,10 @@
     }
     
     if(iTotal > 0){
-        sMsg1 = iTotal+" "+getTran("web","recordsFound",sWebLanguage);
+        sMsg1 = iTotal+" "+getTran(request,"web","recordsFound",sWebLanguage);
     }
     else{
-        sMsg1 = getTran("web","noRecordsFound",sWebLanguage);
+        sMsg1 = getTran(request,"web","noRecordsFound",sWebLanguage);
     }
     
     //*** 2 - GROUPS **********************************************************
@@ -155,14 +155,14 @@
     	LabProfile profile = (LabProfile)lp.get(key);
     	iTotal++;
     	
-    	sOut2.append(writeProfileRow(profile.getProfileID()+"",profile.getProfilecode(),getTran("labprofiles",profile.getProfileID()+"",sWebLanguage),sWebLanguage));
+    	sOut2.append(writeProfileRow(profile.getProfileID()+"",profile.getProfilecode(),getTran(request,"labprofiles",profile.getProfileID()+"",sWebLanguage),sWebLanguage));
     }
     
     if(iTotal > 0){
-        sMsg2 = iTotal+" "+getTran("web","recordsFound",sWebLanguage);
+        sMsg2 = iTotal+" "+getTran(request,"web","recordsFound",sWebLanguage);
     }
     else{
-        sMsg2 = getTran("web","noRecordsFound",sWebLanguage);
+        sMsg2 = getTran(request,"web","noRecordsFound",sWebLanguage);
     }
 %>
 
@@ -173,8 +173,8 @@
     <%-- SEARCH INPUTS --%>
     <tr>
       <td class="admin2" height='25'>
-        <%=getTran("web.manage","labanalysis.cols.code",sWebLanguage)%>&nbsp;<input class="text" type="text" name="FindCode" value="<%=sSearchCode%>" size="16">&nbsp;
-        <%=getTran("web.manage","labanalysis.cols.name",sWebLanguage)%>&nbsp;<input class="text" type="text" name="FindText" value="<%=sFindText%>" size="32">
+        <%=getTran(request,"web.manage","labanalysis.cols.code",sWebLanguage)%>&nbsp;<input class="text" type="text" name="FindCode" value="<%=sSearchCode%>" size="16">&nbsp;
+        <%=getTran(request,"web.manage","labanalysis.cols.name",sWebLanguage)%>&nbsp;<input class="text" type="text" name="FindText" value="<%=sFindText%>" size="32">
 
         <%-- BUTTONS --%>
         <input class="button" type="button" name="FindButton" value="<%=getTranNoLink("Web","find",sWebLanguage)%>" onClick="doFind();">
@@ -188,9 +188,9 @@
   <table width="100%" cellspacing="0" cellpadding="0" class="sortable" id="searchresults1">
     <%-- HEADER --%>
     <tr class="admin">
-      <td width="60"><%=getTran("web.manage","labanalysis.cols.code",sWebLanguage)%></a></td>
-      <td width="70"><%=getTran("web.manage","labanalysis.cols.type",sWebLanguage)%></a></td>
-      <td width="180"><%=getTran("web.manage","labanalysis.cols.name",sWebLanguage)%></a></td>
+      <td width="60"><%=getTran(request,"web.manage","labanalysis.cols.code",sWebLanguage)%></a></td>
+      <td width="70"><%=getTran(request,"web.manage","labanalysis.cols.type",sWebLanguage)%></a></td>
+      <td width="180"><%=getTran(request,"web.manage","labanalysis.cols.name",sWebLanguage)%></a></td>
     </tr>
     <%=sOut%>
   </table>
@@ -205,8 +205,8 @@
   <table width="100%" cellspacing="0" cellpadding="0" class="sortable" id="searchresults2">
     <%-- HEADER --%>
   	<tr class="admin">
- 	  <td width="60"><%=getTran("web","code",sWebLanguage)%></td>
-      <td width="250"><%=getTran("web.manage","labanalysis.cols.labgroup",sWebLanguage)%></td>
+ 	  <td width="60"><%=getTran(request,"web","code",sWebLanguage)%></td>
+      <td width="250"><%=getTran(request,"web.manage","labanalysis.cols.labgroup",sWebLanguage)%></td>
     </tr>
     <%=sOut2%>
   </table>

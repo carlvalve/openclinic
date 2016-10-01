@@ -57,21 +57,21 @@
                 %>
 	            <tbody class="hand">
 	                <tr class="admin">
-	                    <td nowrap><%=HTMLEntities.htmlentities(getTran("Web","name",sWebLanguage))%></td>
-	                    <td nowrap><%=HTMLEntities.htmlentities(getTran("Web","category",sWebLanguage))%></td>
+	                    <td nowrap><%=HTMLEntities.htmlentities(getTran(request,"Web","name",sWebLanguage))%></td>
+	                    <td nowrap><%=HTMLEntities.htmlentities(getTran(request,"Web","category",sWebLanguage))%></td>
 	                </tr>
 	
 	                <%=HTMLEntities.htmlentities(results.toString())%>
 	            </tbody>
 	            
-                <%=recCount%> <%=HTMLEntities.htmlentities(getTran("web","recordsfound",sWebLanguage))%>
+                <%=recCount%> <%=HTMLEntities.htmlentities(getTran(request,"web","recordsfound",sWebLanguage))%>
 	            <%
             }
             else{
                 // display 'no results' message
 		        %>
 		            <tr>
-		                <td colspan='3'><%=HTMLEntities.htmlentities(getTran("web","norecordsfound",sWebLanguage))%></td>
+		                <td colspan='3'><%=HTMLEntities.htmlentities(getTran(request,"web","norecordsfound",sWebLanguage))%></td>
 		            </tr>
 		        <%
             }

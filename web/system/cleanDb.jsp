@@ -72,9 +72,9 @@
 <form name='transactionForm' method='post'>
 	<table>
 		<tr class='admin'>
-			<td><%=getTran("web","database",sWebLanguage) %></td>
-			<td><%=getTran("web","objectname",sWebLanguage) %></td>
-			<td><%=getTran("web","dropobject",sWebLanguage) %></td>
+			<td><%=getTran(request,"web","database",sWebLanguage) %></td>
+			<td><%=getTran(request,"web","objectname",sWebLanguage) %></td>
+			<td><%=getTran(request,"web","dropobject",sWebLanguage) %></td>
 		</tr>
 	<%
 		HashSet indexes = new HashSet();
@@ -146,6 +146,6 @@
 		rs.close();
 	%>
 	</table>
-	<input type='submit' name='submit' value='<%=getTran("web","execute",sWebLanguage) %>'/>
-	<input type='submit' name='reload' value='<%=getTran("web","reload",sWebLanguage) %>'/>
+	<input type='submit' name='submit' value='<%=getTran(null,"web","execute",sWebLanguage) %>'/>
+	<input type='submit' name='reload' value='<%=getTran(null,"web","reload",sWebLanguage) %>'/>
 </form>

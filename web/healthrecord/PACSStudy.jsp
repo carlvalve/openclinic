@@ -21,7 +21,7 @@
         <%-- date --%>
         <tr>
             <td class="admin">
-                <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("web.occup","history",sWebLanguage)%>">...</a>&nbsp;<%=getTran("web.occup","medwan.common.date",sWebLanguage)%>&nbsp;*&nbsp;
+                <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("web.occup","history",sWebLanguage)%>">...</a>&nbsp;<%=getTran(request,"web.occup","medwan.common.date",sWebLanguage)%>&nbsp;*&nbsp;
             </td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" id="trandate" OnBlur="checkDate(this);">
@@ -31,7 +31,7 @@
         
         <%-- studyuid --%>
         <tr>
-            <td class="admin"><%=getTran("web","studyuid",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","studyuid",sWebLanguage)%></td>
             <td class="admin2">
                 <input readonly type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYUID" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYUID" property="value"/>" size="80">
             </td>
@@ -39,7 +39,7 @@
         
         <%-- seriesid --%>
         <tr>
-            <td class="admin"><%=getTran("web","seriesid",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","seriesid",sWebLanguage)%></td>
             <td class="admin2">
                 <input readonly type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_SERIESID" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_SERIESID" property="value"/>" size="80">
             </td>
@@ -47,7 +47,7 @@
         
         <%-- studydescription --%>
         <tr>
-            <td class="admin"><%=getTran("web","description",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","description",sWebLanguage)%></td>
             <td class="admin2">
                 <input readonly type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYDESCRIPTION" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYDESCRIPTION" property="value"/>" size="80">
             </td>
@@ -55,7 +55,7 @@
         
         <%-- studydate --%>
         <tr>
-            <td class="admin"><%=getTran("web","studydate",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","studydate",sWebLanguage)%></td>
             <td class="admin2">
                 <input readonly type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYDATE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYDATE" property="value"/>" size="10">
             </td>
@@ -63,7 +63,7 @@
         
         <%-- seriesdate --%>
         <tr>
-            <td class="admin"><%=getTran("web","seriesdate",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","seriesdate",sWebLanguage)%></td>
             <td class="admin2">
                 <input readonly type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_SERIESDATE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_SERIESDATE" property="value"/>" size="10">
             </td>
@@ -71,7 +71,7 @@
         
         <%-- modality --%>
         <tr>
-            <td class="admin"><%=getTran("web","modality",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","modality",sWebLanguage)%></td>
             <td class="admin2">
                 <input readonly type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_MODALITY" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_MODALITY" property="value"/>" size="80">
             </td>
@@ -79,7 +79,7 @@
         
         <%-- patientposition --%>
         <tr>
-            <td class="admin"><%=getTran("web","patientposition",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","patientposition",sWebLanguage)%></td>
             <td class="admin2">
                 <input readonly type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_PATIENTPOSITION" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_PATIENTPOSITION" property="value"/>" size="80">
             </td>
@@ -87,7 +87,7 @@
         
         <%-- referringphysician --%>
         <tr>
-            <td class="admin"><%=getTran("web","referringphysician",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","referringphysician",sWebLanguage)%></td>
             <td class="admin2">
                 <input readonly type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_REFMED" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_REFMED" property="value"/>" size="80">
             </td>
@@ -97,7 +97,7 @@
         <tr>
             <td class="admin"></td>
             <td class="admin2">
-                <input type='button' name='view' value='<%=getTran("web","view",sWebLanguage)%>' onclick="viewstudy()"/>
+                <input type='button' name='view' value='<%=getTran(null,"web","view",sWebLanguage)%>' onclick="viewstudy()"/>
             </td>
         </tr>
         

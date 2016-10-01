@@ -1,22 +1,22 @@
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
 <%
-    String sGender = "&nbsp;", sComment = "&nbsp;", sNativeCountry = "&nbsp;", sLanguage = "&nbsp;", sNatreg = "&nbsp;", sVip="0"
+    String sGender = "&nbsp;", sComment = "&nbsp;", sNativeCountry = "&nbsp;", sLanguage = "&nbsp;", sNatreg = "&nbsp;", sVip="0", sNativeTown=""
             , sCivilStatus = "&nbsp;", sTracnetID = "&nbsp;", sTreatingPhysician = "&nbsp;", sComment3="", sDeathCertificateTo="", sDeathCertificateOn="", sExport="0", sLastExport="0";
 
     // language
     sWebLanguage = activeUser.person.language;
     if ((activePatient.language!=null)&&(activePatient.language.trim().length()>0)) {
-        sLanguage = getTran("Web.language",activePatient.language,sWebLanguage);
+        sLanguage = getTran(request,"Web.language",activePatient.language,sWebLanguage);
     }
 
     // Gender
     if ((activePatient.gender!=null)&&(activePatient.gender.trim().length()>0)) {
         if (activePatient.gender.equalsIgnoreCase("m")){
-            sGender = getTran("web.occup","male",sWebLanguage);
+            sGender = getTran(request,"web.occup","male",sWebLanguage);
         }
         else if (activePatient.gender.equalsIgnoreCase("f")){
-            sGender = getTran("web.occup","female",sWebLanguage);
+            sGender = getTran(request,"web.occup","female",sWebLanguage);
         }
     }
     // sTracnetID
@@ -41,7 +41,7 @@
 
     // civilstatus
     if ((activePatient.comment2!=null)&&(activePatient.comment2.trim().length()>0)) {
-        sCivilStatus = getTran("civil.status",activePatient.comment2,sWebLanguage);
+        sCivilStatus = getTran(request,"civil.status",activePatient.comment2,sWebLanguage);
     }
 
     // comment
@@ -56,7 +56,12 @@
 
     // nativeCountry
     if ((activePatient.nativeCountry!=null)&&(activePatient.nativeCountry.trim().length()>0)) {
-        sNativeCountry = getTran("Country",activePatient.nativeCountry,sWebLanguage);
+        sNativeCountry = getTran(request,"Country",activePatient.nativeCountry,sWebLanguage);
+    }
+
+    // nativeCountry
+    if ((activePatient.nativeTown!=null)&&(activePatient.nativeTown.trim().length()>0)) {
+        sNativeTown = getTran(request,"NativeTown",activePatient.nativeTown,sWebLanguage);
     }
 
     // nat reg
@@ -97,9 +102,17 @@
             setRow("Web","natreg",sNatreg,sWebLanguage)
         )
         +(
-            MedwanQuery.getInstance().getConfigInt("showAdminTracnetID",1)==0?"":
-            setRow("Web","tracnetid",sTracnetID,sWebLanguage)
-        )
+                MedwanQuery.getInstance().getConfigInt("showAdminTracnetID",1)==0?"":
+                setRow("Web","tracnetid",sTracnetID,sWebLanguage)
+            )
+        +(
+                MedwanQuery.getInstance().getConfigInt("showAdminNativeCountry",1)==0?"":
+                setRow("Web","NativeCountry",sTracnetID,sWebLanguage)
+            )
+        +(
+                MedwanQuery.getInstance().getConfigInt("showAdminNativeTown",1)==0?"":
+                setRow("Web","NativeTown",sTracnetID,sWebLanguage)
+            )
         +(
             MedwanQuery.getInstance().getConfigInt("showAdminComment1",1)==0?"":
             setRow("Web","treating-physician",sTreatingPhysician,sWebLanguage)
@@ -109,15 +122,19 @@
             setRow("Web","civilstatus",sCivilStatus,sWebLanguage)
         )
         +(
-            MedwanQuery.getInstance().getConfigInt("showAdminComment3",1)==0?"":
-            setRow("Web","comment3",sComment3,sWebLanguage)
-        )
+                MedwanQuery.getInstance().getConfigInt("showAdminComment3",1)==0?"":
+                setRow("Web","comment3",sComment3,sWebLanguage)
+            )
+        +(
+                MedwanQuery.getInstance().getConfigInt("showAdminComment4",1)==0?"":
+                setRow("Web","comment4",activePatient.getReceiverPersonIdsToHtmlTable(sWebLanguage),sWebLanguage)
+            )
         +(
             MedwanQuery.getInstance().getConfigInt("showAdminComment",1)==0?"":
             setRow("Web","comment",sComment,sWebLanguage)
         )
-        +(MedwanQuery.getInstance().getConfigInt("enableVip",0)==1?setRow("Web","vip",getTran("vipstatus",sVip,sWebLanguage),sWebLanguage):"")
-        +(MedwanQuery.getInstance().getConfigInt("enableDatacenterPatientExport",0)==1?setRow("Web","datacenterpatientexport",getTran("datacenterpatientexport",sExport,sWebLanguage),sWebLanguage):"")
+        +(MedwanQuery.getInstance().getConfigInt("enableVip",0)==1?setRow("Web","vip",getTran(request,"vipstatus",sVip,sWebLanguage),sWebLanguage):"")
+        +(MedwanQuery.getInstance().getConfigInt("enableDatacenterPatientExport",0)==1?setRow("Web","datacenterpatientexport",getTran(request,"datacenterpatientexport",sExport,sWebLanguage),sWebLanguage):"")
         +(MedwanQuery.getInstance().getConfigInt("enableDatacenterPatientExport",0)==1?setRow("Web","lastdatacenterpatientexport",activePatient.getLastSentExportRequest(),sWebLanguage):"")
         +(activePatient.isDead()!=null?setRow("Web","deathcertificateon",sDeathCertificateOn,sWebLanguage)+setRow("Web","deathcertificateto",sDeathCertificateTo,sWebLanguage):"")
         )

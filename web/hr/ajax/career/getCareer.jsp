@@ -18,7 +18,7 @@
 
     String sServiceName = "";
     if(checkString(career.serviceUid).length() > 0){
-        sServiceName = getTran("service",career.serviceUid,sWebLanguage);    
+        sServiceName = getTran(request,"service",career.serviceUid,sWebLanguage);    
     }
     
     // contractName == contractId (not uid)

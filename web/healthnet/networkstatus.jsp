@@ -3,14 +3,14 @@
 
 <table width="100%">
     <tr class="admin">
-        <td colspan="2"><%=getTran("healthnet","networkstatus",sWebLanguage)%></td>
+        <td colspan="2"><%=getTran(request,"healthnet","networkstatus",sWebLanguage)%></td>
     </tr>
     <tr>
-        <td  style="vertical-align:top;" class="list" width="1%" nowrap><b><%=getTran("healthnet","todayactivity",sWebLanguage)%></b></td>
+        <td  style="vertical-align:top;" class="list" width="1%" nowrap><b><%=getTran(request,"healthnet","todayactivity",sWebLanguage)%></b></td>
         <td>
             <table width="100%">
                 <tr>
-                    <td class="titleadmin" width="1%" nowrap><%=getTran("healthnet","received messages",sWebLanguage)%>:</td>
+                    <td class="titleadmin" width="1%" nowrap><%=getTran(request,"healthnet","received messages",sWebLanguage)%>:</td>
                     <td class="titleadmin">
                     <%
                         String sQuery="select count(*) total from HealthNetIntegratedMessages where receivedDateTime>=?";
@@ -27,7 +27,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="titleadmin" width="1%" nowrap><%=getTran("healthnet","received.messages.per.type",sWebLanguage)%>:</td>
+                    <td class="titleadmin" width="1%" nowrap><%=getTran(request,"healthnet","received.messages.per.type",sWebLanguage)%>:</td>
                     <td class="titleadmin">
                     <%
                         sQuery="select count(*) total,type from HealthNetIntegratedMessages where receivedDateTime>=? group by type order by count(*) desc";
@@ -36,7 +36,7 @@
                         rs = ps.executeQuery();
                         while(rs.next()){
                             String type=rs.getString("type");
-                            out.println((type==null?"?":getTran("messagetype",type,sWebLanguage))+" = "+rs.getInt("total")+"<br/>");
+                            out.println((type==null?"?":getTran(request,"messagetype",type,sWebLanguage))+" = "+rs.getInt("total")+"<br/>");
                         }
                         rs.close();
                         ps.close();
@@ -44,7 +44,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="titleadmin" width="1%" nowrap><%=getTran("healthnet","active sites",sWebLanguage)%>:</td>
+                    <td class="titleadmin" width="1%" nowrap><%=getTran(request,"healthnet","active sites",sWebLanguage)%>:</td>
                     <td class="titleadmin">
                         <%
                             sQuery="select count(*) total,hn_source from HealthNetIntegratedMessages where receivedDateTime>=? group by hn_source order by count(*) desc";
@@ -52,7 +52,7 @@
                             ps.setTimestamp(1,new Timestamp(new java.util.Date().getTime()-24*3600*1000));
                             rs = ps.executeQuery();
                             while(rs.next()){
-                                out.println(getTran("healthnet.site",rs.getString("hn_source"),sWebLanguage)+" = "+rs.getInt("total")+"<br/>");
+                                out.println(getTran(request,"healthnet.site",rs.getString("hn_source"),sWebLanguage)+" = "+rs.getInt("total")+"<br/>");
                             }
                             rs.close();
                             ps.close();
@@ -63,11 +63,11 @@
         </td>
     </tr>
     <tr>
-        <td  style="vertical-align:top;" class="list" width="1%" nowrap><b><%=getTran("healthnet","weekactivity",sWebLanguage)%></b></td>
+        <td  style="vertical-align:top;" class="list" width="1%" nowrap><b><%=getTran(request,"healthnet","weekactivity",sWebLanguage)%></b></td>
         <td>
             <table width="100%">
                 <tr>
-                    <td class="titleadmin" width="1%" nowrap><%=getTran("healthnet","received messages",sWebLanguage)%>:</td>
+                    <td class="titleadmin" width="1%" nowrap><%=getTran(request,"healthnet","received messages",sWebLanguage)%>:</td>
                     <td class="titleadmin">
                     <%
                         sQuery="select count(*) total from HealthNetIntegratedMessages where receivedDateTime>=?";
@@ -83,7 +83,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="titleadmin" width="1%" nowrap><%=getTran("healthnet","received.messages.per.type",sWebLanguage)%>:</td>
+                    <td class="titleadmin" width="1%" nowrap><%=getTran(request,"healthnet","received.messages.per.type",sWebLanguage)%>:</td>
                     <td class="titleadmin">
                     <%
                         sQuery="select count(*) total,type from HealthNetIntegratedMessages where receivedDateTime>=? group by type order by count(*) desc";
@@ -92,7 +92,7 @@
                         rs = ps.executeQuery();
                         while(rs.next()){
                             String type=rs.getString("type");
-                            out.println((type==null?"?":getTran("messagetype",type,sWebLanguage))+" = "+rs.getInt("total")+"<br/>");
+                            out.println((type==null?"?":getTran(request,"messagetype",type,sWebLanguage))+" = "+rs.getInt("total")+"<br/>");
                         }
                         rs.close();
                         ps.close();
@@ -100,7 +100,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="titleadmin" width="1%" nowrap><%=getTran("healthnet","active sites",sWebLanguage)%>:</td>
+                    <td class="titleadmin" width="1%" nowrap><%=getTran(request,"healthnet","active sites",sWebLanguage)%>:</td>
                     <td class="titleadmin">
                         <%
                             sQuery="select count(*) total,hn_source from HealthNetIntegratedMessages where receivedDateTime>=? group by hn_source order by count(*) desc";
@@ -108,7 +108,7 @@
                             ps.setTimestamp(1,new Timestamp(new java.util.Date().getTime()-24*3600*1000));
                             rs = ps.executeQuery();
                             while(rs.next()){
-                                out.println(getTran("healthnet.site",rs.getString("hn_source"),sWebLanguage)+" = "+rs.getInt("total")+"<br/>");
+                                out.println(getTran(request,"healthnet.site",rs.getString("hn_source"),sWebLanguage)+" = "+rs.getInt("total")+"<br/>");
                             }
                             rs.close();
                             ps.close();
@@ -119,11 +119,11 @@
         </td>
     </tr>
     <tr>
-        <td  style="vertical-align:top;" class="list" width="1%" nowrap><b><%=getTran("healthnet","monthactivity",sWebLanguage)%></b></td>
+        <td  style="vertical-align:top;" class="list" width="1%" nowrap><b><%=getTran(request,"healthnet","monthactivity",sWebLanguage)%></b></td>
         <td>
             <table width="100%">
                 <tr>
-                    <td class="titleadmin" width="1%" nowrap><%=getTran("healthnet","received messages",sWebLanguage)%>:</td>
+                    <td class="titleadmin" width="1%" nowrap><%=getTran(request,"healthnet","received messages",sWebLanguage)%>:</td>
                     <td class="titleadmin">
                     <%
                         sQuery="select count(*) total from HealthNetIntegratedMessages where receivedDateTime>=?";
@@ -141,7 +141,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="titleadmin" width="1%" nowrap><%=getTran("healthnet","received.messages.per.type",sWebLanguage)%>:</td>
+                    <td class="titleadmin" width="1%" nowrap><%=getTran(request,"healthnet","received.messages.per.type",sWebLanguage)%>:</td>
                     <td class="titleadmin">
                     <%
                         sQuery="select count(*) total,type from HealthNetIntegratedMessages where receivedDateTime>=? group by type order by count(*) desc";
@@ -152,7 +152,7 @@
                         rs = ps.executeQuery();
                         while(rs.next()){
                             String type=rs.getString("type");
-                            out.println((type==null?"?":getTran("messagetype",type,sWebLanguage))+" = "+rs.getInt("total")+"<br/>");
+                            out.println((type==null?"?":getTran(request,"messagetype",type,sWebLanguage))+" = "+rs.getInt("total")+"<br/>");
                         }
                         rs.close();
                         ps.close();
@@ -160,7 +160,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="titleadmin" width="1%" nowrap><%=getTran("healthnet","active sites",sWebLanguage)%>:</td>
+                    <td class="titleadmin" width="1%" nowrap><%=getTran(request,"healthnet","active sites",sWebLanguage)%>:</td>
                     <td class="titleadmin">
                         <%
                             sQuery="select count(*) total,hn_source from HealthNetIntegratedMessages where receivedDateTime>=? group by hn_source order by count(*) desc";
@@ -168,7 +168,7 @@
                             ps.setTimestamp(1,new Timestamp(new java.util.Date().getTime()-24*3600*1000));
                             rs = ps.executeQuery();
                             while(rs.next()){
-                                out.println(getTran("healthnet.site",rs.getString("hn_source"),sWebLanguage)+" = "+rs.getInt("total")+"<br/>");
+                                out.println(getTran(request,"healthnet.site",rs.getString("hn_source"),sWebLanguage)+" = "+rs.getInt("total")+"<br/>");
                             }
                             rs.close();
                             ps.close();

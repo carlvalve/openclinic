@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!DOCTYPE model SYSTEM "openwork.dtd">
 <model name="OpenClinic" date="14/06/2015" version="4.120.3">
     <table name="Applications" db="openclinic" sync="NONE">
 		<columns>
@@ -17,7 +16,7 @@
     
     <table name="OC_PACS" db="openclinic" sync="NONE">
     	<columns>
-	    	<column name="OC_PACS_STUDYUID" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="OC_PACS_STUDYUID" dbtype="varchar" javatype="string" size="255"/>
 	    	<column name="OC_PACS_SERIES" dbtype="varchar" javatype="string" size="50"/>
 	    	<column name="OC_PACS_SEQUENCE" dbtype="varchar" javatype="string" size="50"/>
 	    	<column name="OC_PACS_FILENAME" dbtype="varchar" javatype="string" size="255"/>
@@ -63,6 +62,62 @@
 	    </indexes>
     </table>
     
+    <table name="OC_DHIS2DataSets" db="openclinic" sync="NONE">
+    	<columns>
+    		<column name="type" dbtype="varchar" javatype="string" size="50"/>
+    		<column name="label" dbtype="varchar" javatype="string" size="255"/>
+    		<column name="uid" dbtype="varchar" javatype="string" size="50"/>
+    		<column name="comment" dbtype="text" javatype="string"/>
+    	</columns>
+    </table>
+    
+    <table name="OC_DHIS2DataElements" db="openclinic" sync="NONE">
+    	<columns>
+    		<column name="type" dbtype="varchar" javatype="string" size="50"/>
+    		<column name="label" dbtype="varchar" javatype="string" size="255"/>
+    		<column name="uid" dbtype="varchar" javatype="string" size="50"/>
+    		<column name="minimum" dbtype="varchar" javatype="string" size="50"/>
+    		<column name="maximum" dbtype="varchar" javatype="string" size="50"/>
+    		<column name="equals" dbtype="varchar" javatype="string" size="50"/>
+    		<column name="modifiers" dbtype="text" javatype="string"/>
+    		<column name="comment" dbtype="text" javatype="string"/>
+    	</columns>
+    </table>
+    
+    <table name="OC_DHIS2CategoryComboOptions" db="openclinic" sync="NONE">
+    	<columns>
+    		<column name="type" dbtype="varchar" javatype="string" size="50"/>
+    		<column name="label" dbtype="varchar" javatype="string" size="255"/>
+    		<column name="uid" dbtype="varchar" javatype="string" size="50"/>
+    		<column name="minimum" dbtype="varchar" javatype="string" size="50"/>
+    		<column name="maximum" dbtype="varchar" javatype="string" size="50"/>
+    		<column name="equals" dbtype="varchar" javatype="string" size="50"/>
+    		<column name="comment" dbtype="text" javatype="string"/>
+    	</columns>
+    </table>
+    
+    <table name="OC_BENEFICIARIES" db="openclinic" sync="NONE">
+    	<columns>
+	    	<column name="OC_BENEFICIARY_ID" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="OC_BENEFICIARY_FIRSTNAME" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="OC_BENEFICIARY_LASTNAME" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="OC_BENEFICIARY_GENDER" dbtype="varchar" javatype="string" size="2"/>
+	    	<column name="OC_BENEFICIARY_DATEOFBIRTH" dbtype="varchar" javatype="string" size="10"/>
+	    	<column name="OC_BENEFICIARY_IDCARD" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="OC_BENEFICIARY_PICTURE" dbtype="varchar" javatype="string" size="255"/>
+	    	<column name="OC_BENEFICIARY_ADDRESS" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="OC_BENEFICIARY_REGION" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="OC_BENEFICIARY_DEPARTMENT" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="OC_BENEFICIARY_TOWN" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="OC_BENEFICIARY_TELEPHONE" dbtype="varchar" javatype="string" size="50"/>
+    	</columns>
+	    <indexes>
+	    	<index name="OC_BENEFICIARY_ID">
+	    		<indexcolumn order="ASC" name="OC_BENEFICIARY_ID"/>
+	    	</index>
+	    </indexes>
+    </table>
+    
     <table name="OC_EXCHANGERATES" db="openclinic" sync="NONE">
     	<columns>
 	        <column name="OC_EXCHANGERATE_DATE" dbtype="datetime" javatype="date"/>      
@@ -74,6 +129,47 @@
 	    		<indexcolumn order="ASC" name="OC_EXCHANGERATE_DATE"/>
 	    	</index>
 	    </indexes>
+    </table>
+    <table name="OC_SUMMARYINVOICES" db="openclinic" sync="NONE">
+    	<columns>
+    		<column name="OC_SUMMARYINVOICE_SERVERID" dbtype="int" javatype="integer"/>
+    		<column name="OC_SUMMARYINVOICE_OBJECTID" dbtype="int" javatype="integer"/>
+    		<column name="OC_SUMMARYINVOICE_DATE" dbtype="datetime" javatype="date"/>
+	        <column name="OC_SUMMARYINVOICE_PATIENTUID" dbtype="int" javatype="integer"/>      
+	        <column name="OC_SUMMARYINVOICE_STATUS" dbtype="varchar" javatype="string" size="50"/>      
+	        <column name="OC_SUMMARYINVOICE_VALIDATED" dbtype="varchar" javatype="string" size="50"/>      
+	        <column name="OC_SUMMARYINVOICE_COMMENT" dbtype="text" javatype="string"/>   
+	        <column name="OC_SUMMARYINVOICE_UPDATEUID" dbtype="varchar" javatype="string" size="50"/>      
+    		<column name="OC_SUMMARYINVOICE_UPDATEDATETIME" dbtype="datetime" javatype="date"/>
+    		<column name="OC_SUMMARYINVOICE_CREATEDATETIME" dbtype="datetime" javatype="date"/>
+	        <column name="OC_SUMMARYINVOICE_VERSION" dbtype="int" javatype="integer"/>      
+    	</columns>
+    	<indexes>
+    		<index name="OC_SUMMARYINVOICE_OBJECTID">
+    			<indexcolumn order="ASC" name="OC_SUMMARYINVOICE_OBJECTID"/>
+    		</index>
+    		<index name="OC_SUMMARYINVOICE_PATIENTUID">
+    			<indexcolumn order="ASC" name="OC_SUMMARYINVOICE_PATIENTUID"/>
+    		</index>
+    		<index name="OC_SUMMARYINVOICE_DATE">
+    			<indexcolumn order="ASC" name="OC_SUMMARYINVOICE_DATE"/>
+    		</index>
+    	</indexes>
+    </table>
+    
+    <table name="OC_SUMMARYINVOICEITEMS" db="openclinic" sync="NONE">
+    	<columns>
+    		<column name="OC_ITEM_SUMMARYINVOICEUID" dbtype="varchar" javatype="string" size="50"/>
+    		<column name="OC_ITEM_PATIENTINVOICEUID" dbtype="varchar" javatype="string" size="50"/>
+    	</columns>
+    	<indexes>
+    		<index name="OC_ITEM_SUMMARYINVOICEUID">
+    			<indexcolumn order="ASC" name="OC_ITEM_SUMMARYINVOICEUID"/>
+    		</index>
+    		<index name="OC_ITEM_PATIENTINVOICEUID">
+    			<indexcolumn order="ASC" name="OC_ITEM_PATIENTINVOICEUID"/>
+    		</index>
+    	</indexes>
     </table>
     
     <table name="OC_BLOODCOLLECTIONS" db="openclinic" sync="NONE">
@@ -153,16 +249,49 @@
 	    </indexes>
     </table>
     
-    <table name="OC_DRAWINGS" db="openclinic" sync="NONE">
+    <table name="OC_DRAWINGS" db="openclinic" sync="NONE" server="MySQL">
     	<columns>
 	    	<column name="OC_DRAWING_SERVERID" dbtype="int" javatype="integer"/>
 	    	<column name="OC_DRAWING_TRANSACTIONID" dbtype="int" javatype="integer"/>
 	    	<column name="OC_DRAWING_ITEMTYPE" dbtype="varchar" javatype="string" size="255"/>
 	  	    <column name="OC_DRAWING_DRAWING" dbtype="longblob" javatype="bytes"/>   
+	  	    <column name="OC_DRAWING_DATE" dbtype="datetime" javatype="date"/>   
     	</columns>
 	    <indexes>
 	    	<index name="OC_DRAWING_TRANSACTIONID">
 	    		<indexcolumn order="ASC" name="OC_DRAWING_TRANSACTIONID"/>
+	    	</index>
+	    </indexes>
+    </table>
+    
+    <table name="OC_DRAWINGS" db="openclinic" sync="NONE" server="SQLServer">
+    	<columns>
+	    	<column name="OC_DRAWING_SERVERID" dbtype="int" javatype="integer"/>
+	    	<column name="OC_DRAWING_TRANSACTIONID" dbtype="int" javatype="integer"/>
+	    	<column name="OC_DRAWING_ITEMTYPE" dbtype="varchar" javatype="string" size="255"/>
+	  	    <column name="OC_DRAWING_DRAWING" dbtype="varbinary" javatype="bytes"/>   
+	  	    <column name="OC_DRAWING_DATE" dbtype="datetime" javatype="date"/>   
+    	</columns>
+	    <indexes>
+	    	<index name="OC_DRAWING_TRANSACTIONID">
+	    		<indexcolumn order="ASC" name="OC_DRAWING_TRANSACTIONID"/>
+	    	</index>
+	    </indexes>
+    </table>
+    
+    <table name="OC_FILETRACKING" db="openclinic" sync="NONE">
+    	<columns>
+	    	<column name="OC_FILETRACKING_ID" dbtype="int" javatype="integer"/>
+	    	<column name="OC_FILETRACKING_PERSONID" dbtype="int" javatype="integer"/>
+	  	    <column name="OC_FILETRACKING_DATE" dbtype="datetime" javatype="date"/>   
+	    	<column name="OC_FILETRACKING_INOUT" dbtype="varchar" javatype="string" size="10"/>
+	    	<column name="OC_FILETRACKING_FROM" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="OC_FILETRACKING_TO" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="OC_FILETRACKING_USERID" dbtype="int" javatype="integer"/>
+    	</columns>
+	    <indexes>
+	    	<index name="OC_FILETRACKING_PERSONID">
+	    		<indexcolumn order="ASC" name="OC_FILETRACKING_PERSONID"/>
 	    	</index>
 	    </indexes>
     </table>
@@ -180,6 +309,7 @@
 	        <column name="OC_PRODUCTIONORDER_CLOSEDATETIME" dbtype="datetime" javatype="date"/>      
 	        <column name="OC_PRODUCTIONORDER_COMMENT" dbtype="varchar" javatype="string" size="255"/>      
 	    	<column name="OC_PRODUCTIONORDER_QUANTITY" dbtype="int" javatype="integer"/>
+	        <column name="OC_PRODUCTIONORDER_MODIFIERS" dbtype="varchar" javatype="string" size="255"/>      
     	</columns>
 	    <indexes>
 	    	<index name="OC_PRODUCTIONORDER_ID">
@@ -207,6 +337,7 @@
 	        <column name="OC_PRODUCTIONORDER_CLOSEDATETIME" dbtype="datetime" javatype="date"/>      
 	        <column name="OC_PRODUCTIONORDER_COMMENT" dbtype="varchar" javatype="string" size="255"/>      
 	    	<column name="OC_PRODUCTIONORDER_QUANTITY" dbtype="int" javatype="integer"/>
+	        <column name="OC_PRODUCTIONORDER_MODIFIERS" dbtype="varchar" javatype="string" size="255"/>      
     	</columns>
     </table>
     
@@ -897,6 +1028,9 @@
 	        <index name="ARCH_DOCUMENT_PERSONID">
 	            <indexcolumn order="ASC" name="ARCH_DOCUMENT_PERSONID"/>
 	        </index>
+	        <index name="ARCH_DOCUMENT_REFERENCE">
+	            <indexcolumn order="ASC" name="ARCH_DOCUMENT_REFERENCE"/>
+	        </index>
     	</indexes>
     </table>
 
@@ -993,6 +1127,24 @@
 	    <indexes>
 	    	<index name="OC_NOTIFIER_TRANSACTIONID">
 	    		<indexcolumn order="ASC" name="OC_NOTIFIER_TRANSACTIONID"/>
+	    	</index>
+	    </indexes>
+	</table>
+	<table name="OC_MESSAGES" db="openclinic" sync="NONE">
+		<columns>
+			<column name="OC_MESSAGE_MESSAGEID" dbtype="int" javatype="integer"/>
+			<column name="OC_MESSAGE_TYPE" dbtype="varchar" javatype="string" size="50"/>
+			<column name="OC_MESSAGE_LANGUAGE" dbtype="char" javatype="string" size="2"/>
+			<column name="OC_MESSAGE_TRANSPORT" dbtype="varchar" javatype="string" size="50"/>
+			<column name="OC_MESSAGE_DATA" dbtype="text" javatype="string"/>
+			<column name="OC_MESSAGE_CREATEDATETIME" dbtype="datetime" javatype="date"/>
+			<column name="OC_MESSAGE_SENTDATETIME" dbtype="datetime" javatype="date"/>
+			<column name="OC_MESSAGE_SENDAFTER" dbtype="datetime" javatype="date"/>
+			<column name="OC_MESSAGE_SENTTO" dbtype="varchar" javatype="string" size="255"/>
+	    </columns>
+	    <indexes>
+	    	<index name="OC_MESSAGE_MESSAGEID">
+	    		<indexcolumn order="ASC" name="OC_MESSAGE_MESSAGEID"/>
 	    	</index>
 	    </indexes>
 	</table>
@@ -2145,7 +2297,7 @@
 
     <table name="OC_PLANNING" db="openclinic" sync="NONE">
 		<columns>
-			<column name="OC_PLANNING_PATIENTID" dbtype="varchar" javatype="string" size="255"/>
+			<column name="OC_PLANNING_PATIENTUID" dbtype="varchar" javatype="string" size="255"/>
 			<column name="OC_PLANNING_USERUID" dbtype="varchar" javatype="string" size="255"/>
 			<column name="OC_PLANNING_PLANNEDDATE" dbtype="datetime" javatype="date"/>
 			<column name="OC_PLANNING_EFFECTIVEDATE" dbtype="datetime" javatype="date"/>
@@ -2155,22 +2307,24 @@
 			<column name="OC_PLANNING_DESCRIPTION" dbtype="text" javatype="string"/>
 			<column name="OC_PLANNING_SERVERID" dbtype="int" javatype="integer"/>
 			<column name="OC_PLANNING_TRANSACTIONUID" dbtype="varchar" javatype="string" size="255"/>
-			<column name="OC_PLANNING_CREATETIME" dbtype="datetime" javatype="date" nulls="0"/>
-			<column name="OC_PLANNING_UPDATETIME" dbtype="datetime" javatype="date" nulls="0"/>
-			<column name="OC_PLANNING_UPDATEUID" dbtype="varchar" javatype="string" size="255" nulls="0"/>
-			<column name="OC_PLANNING_VERSION" dbtype="int" javatype="integer" nulls="0"/>
+			<column name="OC_PLANNING_CREATETIME" dbtype="datetime" javatype="date"/>
+			<column name="OC_PLANNING_UPDATETIME" dbtype="datetime" javatype="date"/>
+			<column name="OC_PLANNING_UPDATEUID" dbtype="varchar" javatype="string" size="255"/>
+			<column name="OC_PLANNING_VERSION" dbtype="int" javatype="integer"/>
             <column name="OC_PLANNING_OBJECTID" dbtype="int" javatype="integer"/>
             <column name="OC_PLANNING_ESTIMATIONTIME" dbtype="varchar" javatype="string" size="255"/>
             <column name="OC_PLANNING_CONTEXTID" dbtype="varchar" javatype="string" size="255"/>
 			<column name="OC_PLANNING_SERVICEUID" dbtype="varchar" javatype="string" size="50"/>
 			<column name="OC_PLANNING_PLANNEDEND" dbtype="datetime" javatype="date"/>
 			<column name="OC_PLANNING_REMINDSENT" dbtype="datetime" javatype="date"/>
+			<column name="OC_PLANNING_CANCELLATIONWARNINGSENT" dbtype="datetime" javatype="date"/>
 			<column name="OC_PLANNING_COMMENT" dbtype="text" javatype="string"/>
 			<column name="OC_PLANNING_CONFIRMATIONDATE" dbtype="datetime" javatype="date"/>
+			<column name="OC_PLANNING_MODIFIERS" dbtype="text" javatype="string"/>
 		</columns>
 		<indexes>
-			<index name="OC_PLANNING_PATIENTID">
-				<indexcolumn order="ASC" name="OC_PLANNING_PATIENTID"/>
+			<index name="OC_PLANNING_PATIENTUID">
+				<indexcolumn order="ASC" name="OC_PLANNING_PATIENTUID"/>
 			</index>
 			<index name="OC_PLANNING_USERUID">
 				<indexcolumn order="ASC" name="OC_PLANNING_USERUID"/>
@@ -2186,6 +2340,40 @@
 			</index>
 			<index name="OC_PLANNING_SERVICEUID">
 				<indexcolumn order="ASC" name="OC_PLANNING_SERVICEUID"/>
+			</index>
+		</indexes>
+	</table>
+
+    <table name="OC_PLANNING_HISTORY" db="openclinic" sync="NONE">
+		<columns>
+			<column name="OC_PLANNING_PATIENTUID" dbtype="varchar" javatype="string" size="255"/>
+			<column name="OC_PLANNING_USERUID" dbtype="varchar" javatype="string" size="255"/>
+			<column name="OC_PLANNING_PLANNEDDATE" dbtype="datetime" javatype="date"/>
+			<column name="OC_PLANNING_EFFECTIVEDATE" dbtype="datetime" javatype="date"/>
+			<column name="OC_PLANNING_CANCELATIONDATE" dbtype="datetime" javatype="date"/>
+			<column name="OC_PLANNING_CONTACTTYPE" dbtype="varchar" javatype="string" size="255"/>
+			<column name="OC_PLANNING_CONTACTUID" dbtype="varchar" javatype="string" size="255"/>
+			<column name="OC_PLANNING_DESCRIPTION" dbtype="text" javatype="string"/>
+			<column name="OC_PLANNING_SERVERID" dbtype="int" javatype="integer"/>
+			<column name="OC_PLANNING_TRANSACTIONUID" dbtype="varchar" javatype="string" size="255"/>
+			<column name="OC_PLANNING_CREATETIME" dbtype="datetime" javatype="date"/>
+			<column name="OC_PLANNING_UPDATETIME" dbtype="datetime" javatype="date"/>
+			<column name="OC_PLANNING_UPDATEUID" dbtype="varchar" javatype="string" size="255"/>
+			<column name="OC_PLANNING_VERSION" dbtype="int" javatype="integer" />
+            <column name="OC_PLANNING_OBJECTID" dbtype="int" javatype="integer"/>
+            <column name="OC_PLANNING_ESTIMATIONTIME" dbtype="varchar" javatype="string" size="255"/>
+            <column name="OC_PLANNING_CONTEXTID" dbtype="varchar" javatype="string" size="255"/>
+			<column name="OC_PLANNING_SERVICEUID" dbtype="varchar" javatype="string" size="50"/>
+			<column name="OC_PLANNING_PLANNEDEND" dbtype="datetime" javatype="date"/>
+			<column name="OC_PLANNING_REMINDSENT" dbtype="datetime" javatype="date"/>
+			<column name="OC_PLANNING_CANCELLATIONWARNINGSENT" dbtype="datetime" javatype="date"/>
+			<column name="OC_PLANNING_COMMENT" dbtype="text" javatype="string"/>
+			<column name="OC_PLANNING_CONFIRMATIONDATE" dbtype="datetime" javatype="date"/>
+			<column name="OC_PLANNING_MODIFIERS" dbtype="text" javatype="string"/>
+		</columns>
+		<indexes>
+			<index name="OC_PLANNING_PATIENTUID">
+				<indexcolumn order="ASC" name="OC_PLANNING_PATIENTUID"/>
 			</index>
 		</indexes>
 	</table>
@@ -2221,6 +2409,7 @@
 			<column name="OC_PRESCR_UPDATETIME" dbtype="datetime" javatype="date" nulls="0"/>
 			<column name="OC_PRESCR_UPDATEUID" dbtype="varchar" javatype="string" size="255" nulls="0"/>
 			<column name="OC_PRESCR_VERSION" dbtype="int" javatype="integer" nulls="0"/>
+			<column name="OC_PRESCR_AUTHORIZATION" dbtype="varchar" javatype="string" size="255" nulls="0"/>
 		</columns>
 		<indexes>
 			<index name="OC_PRESCR_OBJECTID">
@@ -2354,6 +2543,7 @@
             <column name="OC_PRODUCT_ATCCODE" dbtype="varchar" javatype="string" size="50"/>
 			<column name="OC_PRODUCT_TOTALUNITS" dbtype="float" javatype="float"/>
             <column name="OC_PRODUCT_RXNORMCODE" dbtype="varchar" javatype="string" size="50"/>
+            <column name="OC_PRODUCT_CODE" dbtype="varchar" javatype="string" size="50"/>
 		</columns>
 		<indexes>
 			<index name="OC_PRODUCT_OBJECTID">
@@ -2422,6 +2612,7 @@
             <column name="OC_PRODUCT_ATCCODE" dbtype="varchar" javatype="string" size="50"/>
 			<column name="OC_PRODUCT_TOTALUNITS" dbtype="float" javatype="float"/>
             <column name="OC_PRODUCT_RXNORMCODE" dbtype="varchar" javatype="string" size="50"/>
+            <column name="OC_PRODUCT_CODE" dbtype="varchar" javatype="string" size="50"/>
 		</columns>
 	</table>
     <table name="OC_PRODUCTSTOCKS" db="openclinic" sync="NONE">
@@ -2487,6 +2678,7 @@
 			<column name="OC_LIST_PRODUCTSTOCKUID" dbtype="varchar" size="25" javatype="string"/>
 			<column name="OC_LIST_QUANTITY" dbtype="int" javatype="integer"/>
 			<column name="OC_LIST_BATCHUID" dbtype="varchar" size="25" javatype="string"/>
+			<column name="OC_LIST_COMMENT" dbtype="varchar" size="255" javatype="string"/>
 		</columns>
 		<indexes>
 			<index name="OC_LIST_PATIENTUID">
@@ -2512,11 +2704,14 @@
 			<column name="OC_OPERATION_BATCHUID" dbtype="varchar" javatype="string" size="50"/>
 			<column name="OC_OPERATION_UID" dbtype="varchar" javatype="string" size="50"/>
 			<column name="OC_OPERATION_UNITSRECEIVED" dbtype="int" javatype="integer"/>
+			<column name="OC_OPERATION_COMMENT" dbtype="varchar" javatype="string" size="255"/>
 			<column name="OC_OPERATION_RECEIVECOMMENT" dbtype="varchar" javatype="string" size="255"/>
 			<column name="OC_OPERATION_RECEIVEPRODUCTSTOCKUID" dbtype="varchar" javatype="string" size="255"/>
 			<column name="OC_OPERATION_DOCUMENTUID" dbtype="varchar" javatype="string" size="50"/>
 			<column name="OC_OPERATION_ENCOUNTERUID" dbtype="varchar" javatype="string" size="50"/>
 			<column name="OC_OPERATION_ORDERUID" dbtype="varchar" javatype="string" size="50"/>
+			<column name="OC_OPERATION_VALIDATED" dbtype="int" javatype="integer"/>
+			<column name="OC_OPERATION_PRODUCTIONORDERUID" dbtype="varchar" javatype="string" size="50"/>
 		</columns>
 		<indexes>
 			<index name="OC_OPERATION_OBJECTID">
@@ -2571,6 +2766,9 @@
 			<column name="OC_STOCK_UPDATEUID" dbtype="varchar" javatype="string" size="255" nulls="0"/>
 			<column name="OC_STOCK_VERSION" dbtype="int" javatype="integer" nulls="0"/>
 			<column name="OC_STOCK_HIDDEN" dbtype="int" javatype="integer" nulls="1"/>
+			<column name="OC_STOCK_DISPENSINGUSERS" dbtype="varchar" javatype="string" size="255"/>
+			<column name="OC_STOCK_VALIDATEOUTGOING" dbtype="int" javatype="integer"/>
+			<column name="OC_STOCK_VALIDATIONUSERS" dbtype="varchar" javatype="string" size="255"/>
 		</columns>
 		<indexes>
 			<index name="OC_S_STOCK_OBJECTID">
@@ -2661,6 +2859,8 @@
 			<column name="OC_ORDER_STATUS" dbtype="varchar" javatype="string" size="50" nulls="0"/>
 			<column name="OC_ORDER_FROM" dbtype="varchar" javatype="string" size="50"/>
 			<column name="OC_ORDER_PROCESSED" dbtype="int" javatype="integer"/>
+			<column name="OC_ORDER_COMMENT" dbtype="varchar" javatype="string" size="255"/>
+			<column name="OC_ORDER_PRODUCTIONORDERUID" dbtype="varchar" javatype="string" size="50"/>
 		</columns>
 		<indexes>
 			<index name="OC_ORDER_OBJECTID">
@@ -3034,6 +3234,9 @@
 			</index>
 			<index name="OC_PATIENTINVOICE_DATE">
 				<indexcolumn order="ASC" name="OC_PATIENTINVOICE_DATE"/>
+			</index>
+			<index name="OC_PATIENTINVOICE_UPDATETIME">
+				<indexcolumn order="ASC" name="OC_PATIENTINVOICE_UPDATETIME"/>
 			</index>
 			<index name="OC_PATIENTINVOICE_PATIENTUID">
 				<indexcolumn order="ASC" name="OC_PATIENTINVOICE_PATIENTUID"/>
@@ -3694,6 +3897,9 @@
             </index>
             <index name="index_accesscode">
                 <indexcolumn name="accesscode" order="ASC"/>
+            </index>
+            <index name="accesstime">
+                <indexcolumn name="accesstime" order="ASC"/>
             </index>
         </indexes>
     </table>

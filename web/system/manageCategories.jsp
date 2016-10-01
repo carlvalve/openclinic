@@ -174,7 +174,7 @@
             <table width="100%" class="menu" cellspacing="0">
                 <tr>
                     <td class="menu">
-                        &nbsp;<%=getTran("admin","category",sWebLanguage)%>
+                        &nbsp;<%=getTran(request,"admin","category",sWebLanguage)%>
                         <input class="text" type="text" name="FindCategoryText" READONLY size="<%=sTextWidth%>" title="<%=sFindCategoryText%>" value="<%=sFindCategoryText%>">
                         <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchCategory('FindCategoryCode','FindCategoryText');">
                         <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="transactionForm.FindCategoryCode.value='';transactionForm.FindCategoryText.value='';">
@@ -256,7 +256,7 @@
         if(category!=null){
             // translate
             if(category.parentcode.trim().length()>0) {
-                sCategoryParentCodeText = getTran("admin.category",category.parentcode,sWebLanguage);
+                sCategoryParentCodeText = getTran(request,"admin.category",category.parentcode,sWebLanguage);
             }
 
             StringTokenizer tokenizer = new StringTokenizer(supportedLanguages,",");
@@ -279,14 +279,14 @@
             <table width="100%" class="list" cellspacing="1">
                 <%-- Category --%>
                 <tr>
-                    <td class="admin" width="<%=sTDAdminWidth%>"> <%=getTran("Web.Manage.Category","ID",sWebLanguage)%> *</td>
+                    <td class="admin" width="<%=sTDAdminWidth%>"> <%=getTran(request,"Web.Manage.Category","ID",sWebLanguage)%> *</td>
                     <td class="admin2">
                         <input type="text" class="text" name="EditCategoryCode" value="<%=category.code%>" size="<%=sTextWidth%>">
                     </td>
                 </tr>
                 <%-- ParentID --%>
                 <tr>
-                    <td class="admin"> <%=getTran("Web.Manage.Category","ParentID",sWebLanguage)%></td>
+                    <td class="admin"> <%=getTran(request,"Web.Manage.Category","ParentID",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="text" readonly class="text" name="EditCategoryParentText" value="<%=sCategoryParentCodeText%>" size="<%=sTextWidth%>">
                         <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchCategory('EditCategoryParentCode','EditCategoryParentText');">
@@ -302,7 +302,7 @@
 
                         %>
                             <tr>
-                                <td class="admin"> <%=getTran("Web","Description",sWebLanguage)%> <%=tmpLang%> *</td>
+                                <td class="admin"> <%=getTran(request,"Web","Description",sWebLanguage)%> <%=tmpLang%> *</td>
                                 <td class="admin2">
                                     <input type="text" class="text" name="EditLabelValue<%=tmpLang%>" value="<%=checkString((String)labelValues.get(tmpLang))%>" size="<%=sTextWidth%>">
                                 </td>
@@ -313,7 +313,7 @@
             </table>
             
             <%-- indication of obligated fields --%>
-            <%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%>
+            <%=getTran(request,"Web","colored_fields_are_obligate",sWebLanguage)%>
             
             <%-- EDIT BUTTONS --%>
             <%=ScreenHelper.alignButtonsStart()%>

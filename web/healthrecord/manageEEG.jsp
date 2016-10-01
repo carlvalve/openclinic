@@ -24,7 +24,7 @@
 				    <tr>
 				        <td class="admin">
 				            <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-				            <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+				            <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
 				        </td>
 				        <td class="admin2">
 				            <input type="text" class="text" size="12" maxLength="10" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" id="trandate" OnBlur='checkDate(this)'> <script>writeTranDate();</script>
@@ -33,7 +33,7 @@
 				    
 				    <%--  DONNEES CLINIQUES --%>
 				    <tr>
-				        <td width ="<%=sTDAdminWidth%>" class='admin'><%=getTran("web","eeg.clinicaldata",sWebLanguage)%>&nbsp;</td>
+				        <td width ="<%=sTDAdminWidth%>" class='admin'><%=getTran(request,"web","eeg.clinicaldata",sWebLanguage)%>&nbsp;</td>
 				        <td class='admin2'>
 				            <textarea onKeyup="resizeTextarea(this,10);" <%=setRightClick("ITEM_TYPE_EEG_CLINICALDATA")%> class="text" cols="74" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_EEG_CLINICALDATA" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_EEG_CLINICALDATA" property="value"/></textarea>
 				        </td>
@@ -41,7 +41,7 @@
 				
 				    <%--  MODALITE D ETUDE --%>
 				    <tr>
-				        <td class='admin'><%=getTran("web","eeg.studymodality",sWebLanguage)%>&nbsp;</td>
+				        <td class='admin'><%=getTran(request,"web","eeg.studymodality",sWebLanguage)%>&nbsp;</td>
 				        <td class='admin2'>
 				            <textarea onKeyup="resizeTextarea(this,10);" <%=setRightClick("ITEM_TYPE_EEG_STUDYMODALITY")%> class="text" cols="74" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_EEG_STUDYMODALITY" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_EEG_STUDYMODALITY" property="value"/></textarea>
 				        </td>
@@ -49,10 +49,10 @@
 
 				    <%-- RESULTATS --%>
 				    <tr>
-				        <td class="admin" width="<%=sTDAdminWidth%>" nowrap><%=getTran("web","results",sWebLanguage)%>&nbsp;</td>
+				        <td class="admin" width="<%=sTDAdminWidth%>" nowrap><%=getTran(request,"web","results",sWebLanguage)%>&nbsp;</td>
 				        <td class="admin2" width="100%">
-					        <input <%=setRightClick("ITEM_TYPE_EEG_RESULTS")%> type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_EEG_RESULTS" property="itemId"/>]>.value" value="medwan.results.normal" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_EEG_RESULTS;value=medwan.results.normal" property="value" outputString="checked"/>><%=getTran("web","medwan.results.normal",sWebLanguage)%>
-					        <input <%=setRightClick("ITEM_TYPE_EEG_RESULTS")%> type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_EEG_RESULTS" property="itemId"/>]>.value" value="medwan.results.abnormal" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_EEG_RESULTS;value=medwan.results.abnormal" property="value" outputString="checked"/>><%=getTran("web","medwan.results.abnormal",sWebLanguage)%>
+					        <input <%=setRightClick("ITEM_TYPE_EEG_RESULTS")%> type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_EEG_RESULTS" property="itemId"/>]>.value" value="medwan.results.normal" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_EEG_RESULTS;value=medwan.results.normal" property="value" outputString="checked"/>><%=getTran(request,"web","medwan.results.normal",sWebLanguage)%>
+					        <input <%=setRightClick("ITEM_TYPE_EEG_RESULTS")%> type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_EEG_RESULTS" property="itemId"/>]>.value" value="medwan.results.abnormal" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_EEG_RESULTS;value=medwan.results.abnormal" property="value" outputString="checked"/>><%=getTran(request,"web","medwan.results.abnormal",sWebLanguage)%>
 				        </td>
 				    </tr>
 				</table>
@@ -62,12 +62,12 @@
 				<%-- DESCRIPTION ------------------------------------------------------------%>
                 <table width="100%" cellpadding="1" cellspacing="1">
 				    <tr class="admin">
-				        <td colspan="3"><%=getTran("Web.Occup","medwan.healthrecord.description",sWebLanguage)%></td>
+				        <td colspan="3"><%=getTran(request,"Web.Occup","medwan.healthrecord.description",sWebLanguage)%></td>
 				    </tr>
     
 				    <%-- RAPPORT TECHNIQUE --%>
 				    <tr>
-				        <td class='admin'><%=getTran("web","technical.report",sWebLanguage)%>&nbsp;</td>
+				        <td class='admin'><%=getTran(request,"web","technical.report",sWebLanguage)%>&nbsp;</td>
 				        <td class='admin2'>
 				            <textarea <%=setRightClick("ITEM_TYPE_EEG_TECHNICAL_REPORT")%> onKeyup="resizeTextarea(this,10);" class="text" cols="74" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_EEG_TECHNICAL_REPORT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_EEG_TECHNICAL_REPORT" property="value"/></textarea>
 				        </td>
@@ -75,7 +75,7 @@
 				
 				    <%-- RESULTATS --%>
 				    <tr>
-				        <td class='admin'><%=getTran("web","results",sWebLanguage)%>&nbsp;</td>
+				        <td class='admin'><%=getTran(request,"web","results",sWebLanguage)%>&nbsp;</td>
 				        <td class='admin2'>
 				            <textarea <%=setRightClick("ITEM_TYPE_EEG_RESULTS_DESCRIPTION")%> onKeyup="resizeTextarea(this,10);" class="text" cols="74" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_EEG_RESULTS_DESCRIPTION" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_EEG_RESULTS_DESCRIPTION" property="value"/></textarea>
 				        </td>
@@ -83,7 +83,7 @@
 
 				    <%-- CONCLUSION --%>
 				    <tr>
-				        <td class='admin'><%=getTran("web","conclusion",sWebLanguage)%>&nbsp;</td>
+				        <td class='admin'><%=getTran(request,"web","conclusion",sWebLanguage)%>&nbsp;</td>
 				        <td class='admin2'>
 				            <textarea <%=setRightClick("ITEM_TYPE_EEG_CONCLUSION")%> onKeyup="resizeTextarea(this,10);" class="text" cols="74" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_EEG_CONCLUSION" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_EEG_CONCLUSION" property="value"/></textarea>
 				        </td>

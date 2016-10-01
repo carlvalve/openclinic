@@ -56,7 +56,7 @@
     <table width="100%" cellspacing="1" cellpadding="0" class="menu">        
         <%-- INSURANCE COMPANY --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("medical.accident","insurancecompany",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"medical.accident","insurancecompany",sWebLanguage)%></td>
             <td class="admin2" width="500">
                 <input type="hidden" name="FindInvoiceInsurarUID" value="<%=sFindInvoiceInsurarUID%>">
                 <input type="text" class="text" readonly name="FindInvoiceInsurarText" value="<%=sFindInvoiceInsurarText%>" size="60">
@@ -68,13 +68,13 @@
         
         <%-- DATE --%>
         <tr>
-            <td class="admin"><%=getTran("Web","date",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"Web","date",sWebLanguage)%>&nbsp;</td>
             <td class="admin2"><%=writeDateField("FindInvoiceDate","SearchForm",sFindInvoiceDate,sWebLanguage)%></td>
         </tr>
         
         <%-- NUMBER --%>
         <tr>
-            <td class="admin"><%=getTran("web","number",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","number",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" name="FindInvoiceNr" size="12" maxlength="12" onKeyUp="if(!isNumber(this)){this.value='';}" value="<%=sFindInvoiceNr%>">
             </td>
@@ -82,23 +82,23 @@
         
         <%-- BALANCE --%>
         <tr>
-            <td class="admin"><%=getTran("web","balance",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","balance",sWebLanguage)%></td>
             <td class="admin2">
-                <%=getTran("web","min",sWebLanguage)%>:
+                <%=getTran(request,"web","min",sWebLanguage)%>:
                 <input type="text" class="text" name="FindInvoiceBalanceMin" size="10" maxlength="8" onKeyUp="if(!isNumberNegativeAllowed(this)){this.value='';}" value="<%=sFindInvoiceBalanceMin%>">&nbsp;<%=sCurrency%>
                 &nbsp;
-                <%=getTran("web","max",sWebLanguage)%>:
+                <%=getTran(request,"web","max",sWebLanguage)%>:
                 <input type="text" class="text" name="FindInvoiceBalanceMax" size="10" maxlength="8" onKeyUp="if(!isNumberNegativeAllowed(this)){this.value='';}" value="<%=sFindInvoiceBalanceMax%>">&nbsp;<%=sCurrency%>
             </td>
         </tr>
         
         <%-- STATUS --%>
         <tr>
-            <td class="admin"><%=getTran("web.finance","patientinvoice.status",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web.finance","patientinvoice.status",sWebLanguage)%></td>
             <td class="admin2">
                 <select class="text" name="FindInvoiceStatus">
                     <option value=""></option>
-                    <%=ScreenHelper.writeSelect("finance.patientinvoice.status",sFindInvoiceStatus,sWebLanguage)%>
+                    <%=ScreenHelper.writeSelect(request,"finance.patientinvoice.status",sFindInvoiceStatus,sWebLanguage)%>
                 </select>
             </td>
         </tr>

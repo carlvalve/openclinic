@@ -24,7 +24,7 @@
     	serverId = Integer.parseInt(request.getParameter("serverid"));
     	lValues = TimeGraph.getListValueGraph(beginDate,endDate,serverId,parameterId,sWebLanguage,activeUser.userid);
    
-        sTitle = HTMLEntities.htmlentities(getTran("datacenterserver", serverId + "", sWebLanguage)) + "<br />" + HTMLEntities.htmlentities(getTranNoLink("datacenterparameter", parameterId, sWebLanguage))+
+        sTitle = HTMLEntities.htmlentities(getTran(request,"datacenterserver", serverId + "", sWebLanguage)) + "<br />" + HTMLEntities.htmlentities(getTranNoLink("datacenterparameter", parameterId, sWebLanguage))+
                                           (request.getParameter("fullperiod")!=null?" <a href=\\\"javascript:simpleValueGraph('"+serverId+"','"+parameterId+"')\\\">("+ScreenHelper.getTranNoLink("web", "lastyear", sWebLanguage)+")</a>":" <a href=\\\"javascript:simpleValueGraphFull('"+serverId+"','"+parameterId+"')\\\">("+ScreenHelper.getTranNoLink("web", "fullperiod", sWebLanguage)+")</a>");
     }
 	// OR servergroupid specified
@@ -32,7 +32,7 @@
     	servergroupId = Integer.parseInt(request.getParameter("servergroupid"));    	
     	lValues = TimeGraph.getListValueGraphForServerGroup(beginDate,endDate,servergroupId,parameterId,sWebLanguage,activeUser.userid);
 
-        sTitle = HTMLEntities.htmlentities(getTran("datacenterServerGroup",servergroupId+"",sWebLanguage))+"<br />"+HTMLEntities.htmlentities(getTranNoLink("datacenterparameter", parameterId, sWebLanguage))+
+        sTitle = HTMLEntities.htmlentities(getTran(request,"datacenterServerGroup",servergroupId+"",sWebLanguage))+"<br />"+HTMLEntities.htmlentities(getTranNoLink("datacenterparameter", parameterId, sWebLanguage))+
                                           (request.getParameter("fullperiod")!=null?" <a href=\\\"javascript:simpleValueGraphForServerGroup('"+servergroupId+"','"+parameterId+"')\\\">("+ScreenHelper.getTranNoLink("web", "lastyear", sWebLanguage)+")</a>":" <a href=\\\"javascript:simpleValueGraphFullForServerGroup('"+servergroupId+"','"+parameterId+"')\\\">("+ScreenHelper.getTranNoLink("web", "fullperiod", sWebLanguage)+")</a>");
     }
 

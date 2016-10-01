@@ -6,25 +6,25 @@
 %>
 <table width='100%'>
 	<tr class='admin'>
-		<td colspan='2'><%=getTran("web","negociatedtariffs",sWebLanguage) %></td>
+		<td colspan='2'><%=getTran(request,"web","negociatedtariffs",sWebLanguage) %></td>
 	</tr>
 	<tr>
-		<td class='admin'><%=getTran("web.finance","amount.patient",sWebLanguage) %></td>
+		<td class='admin'><%=getTran(request,"web.finance","amount.patient",sWebLanguage) %></td>
 		<td class='admin2' nowrap><input type='text' name='patientvalue' id='patientvalue' onkeyup='validatePatientValue()'/><%=MedwanQuery.getInstance().getConfigString("currency","RWF") %></td>
 	</tr>
 	<tr>
-		<td class='admin'><%=getTran("web.finance","amount.insurar",sWebLanguage) %></td>
+		<td class='admin'><%=getTran(request,"web.finance","amount.insurar",sWebLanguage) %></td>
 		<td class='admin2' nowrap><input type='text' name='insurervalue' id='insurervalue' onkeyup='validateInsurerValue()'/><%=MedwanQuery.getInstance().getConfigString("currency","RWF") %></td>
 	</tr>
 	<tr>
-		<td class='admin'><%=getTran("web.finance","coverage.insurar",sWebLanguage) %></td>
+		<td class='admin'><%=getTran(request,"web.finance","coverage.insurar",sWebLanguage) %></td>
 		<td class='admin2' nowrap><input type='text' size='5' name='insurercoverage' id='insurercoverage' onkeyup='validateInsurerCoverage()'/>%</td>
 	</tr>
 	<%
 		if(extrainsurance.length()>0){
 	%>
 		<tr>
-			<td class='admin'><%=getTran("web.finance","move.patientshare.to.extrainsurer",sWebLanguage) %></td>
+			<td class='admin'><%=getTran(request,"web.finance","move.patientshare.to.extrainsurer",sWebLanguage) %></td>
 			<td class='admin2'><input type='checkbox' name='extrainsurercoverage' id='extrainsurercoverage'/></td>
 		</tr>
 	<%
@@ -32,7 +32,7 @@
 	%>
 </table>
 <p>
-<center><input type='button' class='button' onclick='updateDebet()' value='<%=getTran("web","update",sWebLanguage) %>'/></center>
+<center><input type='button' class='button' onclick='updateDebet()' value='<%=getTran(null,"web","update",sWebLanguage) %>'/></center>
 </p>
 <script>
 	document.getElementById('patientvalue').value=Math.round(100*(window.opener.document.getElementById('PPP_<%=prestationuid%>').value.replace(',','.').replace(' ','')))/100;

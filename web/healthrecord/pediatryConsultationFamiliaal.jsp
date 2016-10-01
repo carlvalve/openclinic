@@ -10,8 +10,8 @@
     private String addFami(int iTotal, String sTmpFamiDate, String sTmpFamiDescr, String sTmpFamiVerwantschap, String sWebLanguage) {
         return "<tr id='rowFami" + iTotal + "'>"
                 + "<td width='36'>"
-                + " <a href='javascript:deleteFami(rowFami" + iTotal + ")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran("Web.Occup", "medwan.common.delete", sWebLanguage) + "' border='0'></a> "
-                + " <a href='javascript:editFami(rowFami" + iTotal + ")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_edit.gif' alt='" + getTran("Web.Occup", "medwan.common.edit", sWebLanguage) + "' border='0'></a>"
+                + " <a href='javascript:deleteFami(rowFami" + iTotal + ")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran(null,"Web.Occup", "medwan.common.delete", sWebLanguage) + "' border='0'></a> "
+                + " <a href='javascript:editFami(rowFami" + iTotal + ")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_edit.gif' alt='" + getTran(null,"Web.Occup", "medwan.common.edit", sWebLanguage) + "' border='0'></a>"
                 + "</td>"
                 + "<td>&nbsp;" + sTmpFamiDate + "</td>"
                 + "<td>&nbsp;" + sTmpFamiDescr + "</td>"
@@ -101,16 +101,16 @@
             <table width="100%" cellspacing="0" cellpadding="0" class="list">
                 <%-- Familial Antecedents -------------------------------------------------------------------%>
                 <tr class="admin">
-                    <td colspan="2"><%=getTran("Web.Occup","Familial_Antecedents",sWebLanguage)%></td>
+                    <td colspan="2"><%=getTran(request,"Web.Occup","Familial_Antecedents",sWebLanguage)%></td>
                 </tr>
                 <tr>
                     <td colspan="2">
                         <table width="100%" cellspacing="1" id="tblFami">
                             <tr>
                                 <td class="admin" width="36">&nbsp;</td>
-                                <td class="admin" width="150"><%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%></td>
-                                <td class="admin" width="250"><%=getTran("Web.Occup","medwan.common.description",sWebLanguage)%></td>
-                                <td class="admin" width="250"><%=getTran("Web.Occup","verwantschap",sWebLanguage)%></td>
+                                <td class="admin" width="150"><%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%></td>
+                                <td class="admin" width="250"><%=getTran(request,"Web.Occup","medwan.common.description",sWebLanguage)%></td>
+                                <td class="admin" width="250"><%=getTran(request,"Web.Occup","verwantschap",sWebLanguage)%></td>
                                 <td class="admin">&nbsp;</td>
                             </tr>
 
@@ -140,7 +140,7 @@
     </tr>
     <%-- COMMENT --------------------------------------------------------------------------------%>
     <tr>
-        <td class="admin"><%=getTran("Web","Comment",sWebLanguage)%></td>
+        <td class="admin"><%=getTran(request,"Web","Comment",sWebLanguage)%></td>
         <td class="admin2">
             <textarea onKeyup="resizeTextarea(this,10);" <%=setRightClick("ITEM_TYPE_CE_FAMILIAAL_COMMENT")%> class="text" cols="80" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CE_FAMILIAAL_COMMENT" property="itemId"/>]>.value"><%=sFamiliaalComment%></textarea>
 

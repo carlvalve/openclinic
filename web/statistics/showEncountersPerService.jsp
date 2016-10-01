@@ -32,8 +32,8 @@
     <table width="100%" class="menu" cellspacing="0" cellpadding="0">
         <tr>
             <td class="admin2">
-                <%=getTran("web","from",sWebLanguage)%>&nbsp;<%=writeDateField("fromdate","diagstats",fromdate,sWebLanguage)%>&nbsp;
-                <%=getTran("web","to",sWebLanguage)%>&nbsp;<%=writeDateField("todate","diagstats",todate,sWebLanguage)%>&nbsp;
+                <%=getTran(request,"web","from",sWebLanguage)%>&nbsp;<%=writeDateField("fromdate","diagstats",fromdate,sWebLanguage)%>&nbsp;
+                <%=getTran(request,"web","to",sWebLanguage)%>&nbsp;<%=writeDateField("todate","diagstats",todate,sWebLanguage)%>&nbsp;
                 
                 <%-- BUTTONS --%>
                 <input type="submit" class="button" name="calculate" value="<%=getTranNoLink("web","calculate",sWebLanguage)%>"/>
@@ -92,18 +92,18 @@
                         out.print(" &gt; ");
                     }
                     label+= service.split("\\.")[n];
-                    out.print("<a href='javascript:openFullstats(\""+label+"\");'><b>"+getTran("service",label,sWebLanguage)+"</b></a>");
+                    out.print("<a href='javascript:openFullstats(\""+label+"\");'><b>"+getTran(request,"service",label,sWebLanguage)+"</b></a>");
                 }
                 out.print( "</td>"+
                           "</tr>");
                 
                 out.print("<tr>"+
                            "<td/>"+
-                		   "<td class='admin2'>"+getTran("web","type",sWebLanguage)+"</td>"+
+                		   "<td class='admin2'>"+getTran(request,"web","type",sWebLanguage)+"</td>"+
                            "<td class='admin2'>#</td>"+
-                           "<td class='admin2'>"+getTran("web","days",sWebLanguage)+"</td>"+
-                           "<td class='admin2'>"+getTran("web","daysperepisode",sWebLanguage)+"</td>"+
-                           "<td class='admin2'>"+getTran("web","bedoccupancy",sWebLanguage)+"</td>"+
+                           "<td class='admin2'>"+getTran(request,"web","days",sWebLanguage)+"</td>"+
+                           "<td class='admin2'>"+getTran(request,"web","daysperepisode",sWebLanguage)+"</td>"+
+                           "<td class='admin2'>"+getTran(request,"web","bedoccupancy",sWebLanguage)+"</td>"+
                           "</tr>");
             }
             String type = rs.getString("OC_ENCOUNTER_TYPE");
@@ -113,11 +113,11 @@
             hosptotalbeds+= totalbeds;
             out.print("<tr>"+
                         "<td width='20%'/>"+
-                        "<td class='admin2'><b>"+getTran("web",type,sWebLanguage)+"</b></td>"+
+                        "<td class='admin2'><b>"+getTran(request,"web",type,sWebLanguage)+"</b></td>"+
                         "<td class='admin2'><b>"+total+"</b></td>"+
                         (type.equalsIgnoreCase("visit")?"<td colspan='3'/>":"<td class='admin2'><b>"+duration+"</b></td>"+
                         "<td class='admin2'><b>"+deci.format(duration/total)+"</b></td>"+
-                        "<td class='admin2'><b>"+(totalbeds>0?deci.format(duration*100/(totalduration*totalbeds))+"% ("+totalbeds+" "+getTran("web","beds",sWebLanguage)+")":"")+"</b></td>") +
+                        "<td class='admin2'><b>"+(totalbeds>0?deci.format(duration*100/(totalduration*totalbeds))+"% ("+totalbeds+" "+getTran(request,"web","beds",sWebLanguage)+")":"")+"</b></td>") +
                        "</tr>");
             totals.put(type,"1");
         }
@@ -128,15 +128,15 @@
         
         //*** TOTAL ***
         out.print("<table class='list' cellpadding='0' cellspacing='1' width='100%'>"+
-                   "<tr class='admin'><td colspan='10'>"+getTran("web","total",sWebLanguage)+"</td></tr>");
+                   "<tr class='admin'><td colspan='10'>"+getTran(request,"web","total",sWebLanguage)+"</td></tr>");
         
         out.print("<tr>"+
                    "<td/>"+
-                   "<td class='admin2'>"+getTran("web","type",sWebLanguage)+"</td>"+
+                   "<td class='admin2'>"+getTran(request,"web","type",sWebLanguage)+"</td>"+
                    "<td class='admin2'>#</td>"+
-                   "<td class='admin2'>"+getTran("web","days",sWebLanguage)+"</td>"+
-                   "<td class='admin2'>"+getTran("web","daysperepisode",sWebLanguage)+"</td>"+
-                   "<td class='admin2'>"+getTran("web","bedoccupancy",sWebLanguage)+"</td>"+
+                   "<td class='admin2'>"+getTran(request,"web","days",sWebLanguage)+"</td>"+
+                   "<td class='admin2'>"+getTran(request,"web","daysperepisode",sWebLanguage)+"</td>"+
+                   "<td class='admin2'>"+getTran(request,"web","bedoccupancy",sWebLanguage)+"</td>"+
                   "</tr>");
         
         Enumeration types = totals.keys();
@@ -171,11 +171,11 @@
                 
                 out.print("<tr>"+
                            "<td width='20%'/>"+
-                           "<td class='admin2'><b>"+getTran("web",key,sWebLanguage)+"<b></td>"+
+                           "<td class='admin2'><b>"+getTran(request,"web",key,sWebLanguage)+"<b></td>"+
                            "<td class='admin2'><b>"+total+"</b></td>"+
                            (key.equalsIgnoreCase("visit")?"<td colspan='3'":"<td class='admin2'><b>"+duration+"</b></td>"+
                            "<td class='admin2'><b>"+deci.format(duration/total)+"</b></td>"+
-                           "<td class='admin2'><b>"+(hosptotalbeds>0?deci.format(duration*100/(totalduration*hosptotalbeds))+"% ("+hosptotalbeds+" "+getTran("web","beds",sWebLanguage)+")":"")+"</b></td>") +
+                           "<td class='admin2'><b>"+(hosptotalbeds>0?deci.format(duration*100/(totalduration*hosptotalbeds))+"% ("+hosptotalbeds+" "+getTran(request,"web","beds",sWebLanguage)+")":"")+"</b></td>") +
                           "</tr>");
             }
             rs.close();

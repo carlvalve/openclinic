@@ -21,11 +21,11 @@
 <form name="UserProfile" action="main.do?Page=_common/startChangeService.jsp?ts=<%=getTs()%>" method="post">
 <table border="0" width="100%" cellspacing="1" class="list">
     <tr class="admin">
-        <td colspan="2"><%=(getTran("Web.UserProfile","ChangeService",sWebLanguage))%>&nbsp;</td>
+        <td colspan="2"><%=(getTran(request,"Web.UserProfile","ChangeService",sWebLanguage))%>&nbsp;</td>
     </tr>
 
     <tr>
-        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web.UserProfile","SelectService",sWebLanguage)%></td>
+        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web.UserProfile","SelectService",sWebLanguage)%></td>
         <td class="admin2">
             <select name='EditDefaultService' class="text">
                 <%

@@ -145,10 +145,10 @@
 <form name='EditPatientForm' id='EditPatientForm' method='post' action="<c:url value='/'/>popup.jsp?Page=statistics/quickFile.jsp&PopupHeight=600&PopupWidth=800">
     <table class='list' border='0' width='100%' cellspacing='1'>
         <tr>
-            <td class="admin"><%=getTran("web","name",sWebLanguage)%></td><td class="admin2"><input type="bold" class="text" name="patientLastname" value="<%=sPatientLastname%>" size="25"/></td>
-            <td class="admin"><%=getTran("web","firstname",sWebLanguage)%></td><td class="admin2"><input type="text" class="text" name="patientFirstname" value="<%=sPatientFirstname%>" size="15"/></td>
-            <td class="admin"><%=getTran("web","dateofbirth",sWebLanguage)%></td><td class="admin2"><input type="text" class="text" name="patientDateOfBirth" value="<%=sPatientDateOfBirth%>" size="12" maxlength="10" OnBlur='checkDate(this)'/></td>
-            <td class="admin"><%=getTran("web","gender",sWebLanguage)%></td><td class="admin2">
+            <td class="admin"><%=getTran(request,"web","name",sWebLanguage)%></td><td class="admin2"><input type="bold" class="text" name="patientLastname" value="<%=sPatientLastname%>" size="25"/></td>
+            <td class="admin"><%=getTran(request,"web","firstname",sWebLanguage)%></td><td class="admin2"><input type="text" class="text" name="patientFirstname" value="<%=sPatientFirstname%>" size="15"/></td>
+            <td class="admin"><%=getTran(request,"web","dateofbirth",sWebLanguage)%></td><td class="admin2"><input type="text" class="text" name="patientDateOfBirth" value="<%=sPatientDateOfBirth%>" size="12" maxlength="10" OnBlur='checkDate(this)'/></td>
+            <td class="admin"><%=getTran(request,"web","gender",sWebLanguage)%></td><td class="admin2">
                 <select class="text" name="patientGender">
                     <option value="M" <%=sPatientGender.equalsIgnoreCase("M")?"selected":""%>>M</option>
                     <option value="F" <%=sPatientGender.equalsIgnoreCase("F")?"selected":""%>>F</option>
@@ -204,7 +204,7 @@
                         for(int n=0;n<encounters.size();n++){
                             Encounter encounter = (Encounter)encounters.elementAt(n);
                     %>
-                    <tr><td class="admin2"><b><a href="<c:url value='/'/>popup.jsp?Page=statistics/quickFile.jsp&PopupHeight=600&PopupWidth=800&EditEncounterUID=<%=encounter.getUid()%>&PatientUID=<%=activePerson.personid%>"/><%=ScreenHelper.stdDateFormat.format(encounter.getBegin())+" -> "+(encounter.getEnd()==null?"":ScreenHelper.stdDateFormat.format(encounter.getEnd()))%></b></td><td class="admin2"><b><%=encounter.getService().getLabel(sWebLanguage)+(encounter.getOutcome()==null?"":" ("+getTran("encounter.outcome",encounter.getOutcome(),sWebLanguage)+")")%></b></td></tr>
+                    <tr><td class="admin2"><b><a href="<c:url value='/'/>popup.jsp?Page=statistics/quickFile.jsp&PopupHeight=600&PopupWidth=800&EditEncounterUID=<%=encounter.getUid()%>&PatientUID=<%=activePerson.personid%>"/><%=ScreenHelper.stdDateFormat.format(encounter.getBegin())+" -> "+(encounter.getEnd()==null?"":ScreenHelper.stdDateFormat.format(encounter.getEnd()))%></b></td><td class="admin2"><b><%=encounter.getService().getLabel(sWebLanguage)+(encounter.getOutcome()==null?"":" ("+getTran(request,"encounter.outcome",encounter.getOutcome(),sWebLanguage)+")")%></b></td></tr>
                     <%
                         }
                     %>
@@ -226,7 +226,7 @@
                     <table class='list' border='0' width='100%' cellspacing='1'>
                         <%-- type --%>
                         <tr>
-                            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","type",sWebLanguage)%></td>
+                            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","type",sWebLanguage)%></td>
                             <td class='admin2'>
                                 <select class='text' name='EditEncounterType' onchange="checkEncounterType();">
                                     <%
@@ -237,7 +237,7 @@
                                             if(sEditEncounterType.equalsIgnoreCase(sOptions[i])){
                                                 out.print(" selected");
                                             }
-                                            out.print(">" + getTran("web",sOptions[i],sWebLanguage) + "</option>");
+                                            out.print(">" + getTran(request,"web",sOptions[i],sWebLanguage) + "</option>");
                                         }
 
                                     %>
@@ -247,7 +247,7 @@
                         </tr>
                         <%-- date begin --%>
                         <tr>
-                            <td class="admin"><%=getTran("Web","begindate",sWebLanguage)%></td>
+                            <td class="admin"><%=getTran(request,"Web","begindate",sWebLanguage)%></td>
                             <td class="admin2">
                                 <%=writeDateField("EditEncounterBegin","EditEncounterForm",sEditEncounterBegin+"' onchange='setTime(\"EditEncounterBeginHour\")",sWebLanguage)%>
                             </td>
@@ -255,14 +255,14 @@
 
                         <%-- date end --%>
                         <tr>
-                            <td class="admin"><%=getTran("Web","enddate",sWebLanguage)%></td>
+                            <td class="admin"><%=getTran(request,"Web","enddate",sWebLanguage)%></td>
                             <td class="admin2">
                                 <%=writeDateField("EditEncounterEnd","EditEncounterForm",sEditEncounterEnd+"' onchange='setTime(\"EditEncounterEndHour\")",sWebLanguage)%>
                             </td>
                         </tr>
                          <%-- service --%>
                         <tr id="Service">
-                            <td class="admin"><%=getTran("Web","service",sWebLanguage)%></td>
+                            <td class="admin"><%=getTran(request,"Web","service",sWebLanguage)%></td>
                             <td class='admin2'>
                                 <input type="hidden" name="EditEncounterService" value="<%=sEditEncounterService%>">
                                 <input class="text" type="text" name="EditEncounterServiceName" readonly size="<%=sTextWidth%>" value="<%=sEditEncounterServiceName%>" >
@@ -272,16 +272,16 @@
                         </tr>
                         <%-- outcome --%>
                         <tr>
-                            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","outcome",sWebLanguage)%></td>
+                            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","outcome",sWebLanguage)%></td>
                             <td class="admin2">
                                 <select class="text" name="EditEncounterOutcome" style="vertical-align:-2px;">
                                     <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>
-                                    <%=ScreenHelper.writeSelectUnsorted("encounter.outcome",sEditEncounterOutcome,sWebLanguage)%>
+                                    <%=ScreenHelper.writeSelectUnsorted(request,"encounter.outcome",sEditEncounterOutcome,sWebLanguage)%>
                                 </select>
                             </td>
                         </tr>
                             <tr class="admin">
-                                <td align="left" colspan="2"><a href="javascript:openPopup('healthrecord/findICPC.jsp&ts=<%=getTs()%>',700,400)"><%=getTran("openclinic.chuk","diagnostic",sWebLanguage)%> <%=getTran("Web.Occup","ICPC-2",sWebLanguage)%>/<%=getTran("Web.Occup","ICD-10",sWebLanguage)%></a></td>
+                                <td align="left" colspan="2"><a href="javascript:openPopup('healthrecord/findICPC.jsp&ts=<%=getTs()%>',700,400)"><%=getTran(request,"openclinic.chuk","diagnostic",sWebLanguage)%> <%=getTran(request,"Web.Occup","ICPC-2",sWebLanguage)%>/<%=getTran(request,"Web.Occup","ICD-10",sWebLanguage)%></a></td>
                             </tr>
                             <tr>
                                 <td id='icpccodes' colspan="2"/>

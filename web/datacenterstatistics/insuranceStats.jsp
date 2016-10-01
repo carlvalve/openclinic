@@ -10,12 +10,12 @@
 <%@ page import="java.util.Enumeration,java.text.SimpleDateFormat" %>
 <table width='100%'>
 <tr class='admin'>
-	<td colspan='3'><%=getTran("hospital.statistics","inpatients",sWebLanguage)%></td>
+	<td colspan='3'><%=getTran(request,"hospital.statistics","inpatients",sWebLanguage)%></td>
 </tr>
 <tr class='admin'>
-	<td><%=getTran("hospital.statistics","insurar",sWebLanguage)%></td>
-	<td># <%=getTran("hospital.statistics","admissions",sWebLanguage)%></td>
-	<td>% <%=getTran("hospital.statistics","total.admissions",sWebLanguage)%></td>
+	<td><%=getTran(request,"hospital.statistics","insurar",sWebLanguage)%></td>
+	<td># <%=getTran(request,"hospital.statistics","admissions",sWebLanguage)%></td>
+	<td>% <%=getTran(request,"hospital.statistics","total.admissions",sWebLanguage)%></td>
 </tr>
 
 <%
@@ -38,12 +38,12 @@
 	<td colspan='3' class='list'>&nbsp;</td>
 </tr>
 <tr class='admin'>
-	<td colspan='3'><%=getTran("hospital.statistics","outpatients",sWebLanguage)%></td>
+	<td colspan='3'><%=getTran(request,"hospital.statistics","outpatients",sWebLanguage)%></td>
 </tr>
 <tr class='admin'>
-	<td><%=getTran("hospital.statistics","insurar",sWebLanguage)%></td>
-	<td># <%=getTran("hospital.statistics","visits",sWebLanguage)%></td>
-	<td>% <%=getTran("hospital.statistics","total.visits",sWebLanguage)%></td>
+	<td><%=getTran(request,"hospital.statistics","insurar",sWebLanguage)%></td>
+	<td># <%=getTran(request,"hospital.statistics","visits",sWebLanguage)%></td>
+	<td>% <%=getTran(request,"hospital.statistics","total.visits",sWebLanguage)%></td>
 </tr>
 <%
 	kv = HospitalStats.getInsuranceCasesBasic(ScreenHelper.parseDate(request.getParameter("start")),ScreenHelper.parseDate(request.getParameter("end")),"visit");

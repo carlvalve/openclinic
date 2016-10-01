@@ -87,7 +87,7 @@
 	    	}
     	}
     	
-    	sMsg+= "<br>"+fileCount+" "+getTran("web.manage","filesRead",sWebLanguage);
+    	sMsg+= "<br>"+fileCount+" "+getTran(request,"web.manage","filesRead",sWebLanguage);
     }
     //--- DELETE ----------------------------------------------------------------------------------
     else if(sAction.equals("delete")){
@@ -119,7 +119,7 @@
     		}
     	}
     	
-    	sMsg = fileCount+" "+getTran("web.manage","filesDeleted",sWebLanguage);
+    	sMsg = fileCount+" "+getTran(request,"web.manage","filesDeleted",sWebLanguage);
     }
 %>
 
@@ -243,11 +243,11 @@
 			     	        <%-- HEADER --%>
 			     	        <tr class="admin">
 			     	            <td width="20">&nbsp;</td>
-			     	            <td width="120"><%=getTran("web","udi",sWebLanguage)%></td>
-			     	            <td width="280"><%=getTran("web","existingFile",sWebLanguage)%></td>
-			     	            <td width="180"><%=getTran("web","incomingFile",sWebLanguage)%></td>
-			     	            <td width="100"><SORTTYPE:DATE><%=getTran("web","date",sWebLanguage)%></SORTTYPE:DATE></td>
-			     	            <td width="*"><NOSORT><%=getTran("web","solution",sWebLanguage)%></NOSORT></td>
+			     	            <td width="120"><%=getTran(request,"web","udi",sWebLanguage)%></td>
+			     	            <td width="280"><%=getTran(request,"web","existingFile",sWebLanguage)%></td>
+			     	            <td width="180"><%=getTran(request,"web","incomingFile",sWebLanguage)%></td>
+			     	            <td width="100"><SORTTYPE:DATE><%=getTran(request,"web","date",sWebLanguage)%></SORTTYPE:DATE></td>
+			     	            <td width="*"><NOSORT><%=getTran(request,"web","solution",sWebLanguage)%></NOSORT></td>
 			     	        </tr> 
   
 				     		<%				     		
@@ -308,19 +308,19 @@
 						     	            <td>&nbsp;<%=sDoubleFileDate%></td>
 						     	            <td><font color="green"><%
 						     	                    if(dblFile.getName().startsWith("INVEXT_")){
-						     	                    	%><%=getTran("web.manage","solution_invalidExtension",sWebLanguage).replaceAll("#invalidExtensions#",EXCLUDED_EXTENSIONS)%><%
+						     	                    	%><%=getTran(request,"web.manage","solution_invalidExtension",sWebLanguage).replaceAll("#invalidExtensions#",EXCLUDED_EXTENSIONS)%><%
 						     	                    }
 						     	                    else if(dblFile.getName().startsWith("ORPHAN_")){
-						     	                    	%><%=getTran("web.manage","solution_orphanFile",sWebLanguage)%><%
+						     	                    	%><%=getTran(request,"web.manage","solution_orphanFile",sWebLanguage)%><%
 							     	                } 
 						     	                    else if(dblFile.getName().startsWith("INVPREFIX_")){
-						     	                    	%><%=getTran("web.manage","solution_invalidPrefix",sWebLanguage)%><%
+						     	                    	%><%=getTran(request,"web.manage","solution_invalidPrefix",sWebLanguage)%><%
 							     	                } 
 						     	                    else if(dblFile.getName().startsWith("DOUBLE_")){
-						     	                    	%><%=getTran("web.manage","solution_doubleFile",sWebLanguage)%><%
+						     	                    	%><%=getTran(request,"web.manage","solution_doubleFile",sWebLanguage)%><%
 							     	                }
 						     	                    else if(dblFile.getName().startsWith("INVUDI_")){
-					     	                    		%><%=getTran("web.manage","solution_invalidUDI",sWebLanguage)%><%
+					     	                    		%><%=getTran(request,"web.manage","solution_invalidUDI",sWebLanguage)%><%
 					     	                    	}
 						     	                %></font>
 						     	            </td>
@@ -346,7 +346,7 @@
 			     	<%
 		        }
 		     	else{
-		     		%><%=getTran("web","noFilesFound",sWebLanguage)%><%
+		     		%><%=getTran(request,"web","noFilesFound",sWebLanguage)%><%
 		     	}
 	    	}
 	    }
@@ -358,7 +358,7 @@
 
 <%-- link to config --%>
 <img src='<c:url value="/_img/themes/default/pijl.gif"/>'>
-<a  href="<c:url value='/main.do'/>?Page=system/manageConfig.jsp&ts=<%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran("web.manage","ManageConfiguration",sWebLanguage)%></a>&nbsp;
+<a  href="<c:url value='/main.do'/>?Page=system/manageConfig.jsp&ts=<%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran(request,"web.manage","ManageConfiguration",sWebLanguage)%></a>&nbsp;
   
 <%
     if(files!=null && files.length > 20){

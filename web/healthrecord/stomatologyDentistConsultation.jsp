@@ -26,7 +26,7 @@
              .append("<td class='admin2'>&nbsp;").append(sToothNr).append("</td>")
              .append("<td class='admin2'>").append(sDescription).append("</td>")
              .append("<td class='admin2'>").append(sTreatment).append("</td>")
-             .append("<td class='admin2'>&nbsp;").append(getTran("openclinic.chuk",sStatus,sWebLanguage)).append("</td>")
+             .append("<td class='admin2'>&nbsp;").append(getTran(null,"openclinic.chuk",sStatus,sWebLanguage)).append("</td>")
              .append("<td class='admin2'></td>")
             .append("</tr>");
 
@@ -123,37 +123,37 @@
             <td style="vertical-align:top;" size="20%">
                 <table cellspacing="1" cellpadding="0">
                     <tr>
-                        <td><div width="10" height="10" style="background-color: aqua;">&nbsp;&nbsp;</div></td><td>&nbsp;<%=getTran("openclinic.chuk","tooth.absent",sWebLanguage)%></td>
+                        <td><div width="10" height="10" style="background-color: aqua;">&nbsp;&nbsp;</div></td><td>&nbsp;<%=getTran(request,"openclinic.chuk","tooth.absent",sWebLanguage)%></td>
                     </tr>
                     <tr>
-                        <td><div width="10" height="10" style="background-color: blue;">&nbsp;&nbsp;</div></td><td>&nbsp;<%=getTran("openclinic.chuk","tooth.fill",sWebLanguage)%></td>
+                        <td><div width="10" height="10" style="background-color: blue;">&nbsp;&nbsp;</div></td><td>&nbsp;<%=getTran(request,"openclinic.chuk","tooth.fill",sWebLanguage)%></td>
                     </tr>
                     <tr>
-                        <td><div width="10" height="10" style="background-color: fuchsia;">&nbsp;&nbsp;</div></td><td>&nbsp;<%=getTran("openclinic.chuk","tooth.unnerve",sWebLanguage)%></td>
+                        <td><div width="10" height="10" style="background-color: fuchsia;">&nbsp;&nbsp;</div></td><td>&nbsp;<%=getTran(request,"openclinic.chuk","tooth.unnerve",sWebLanguage)%></td>
                     </tr>
                     <tr>
-                        <td><div width="10" height="10" style="background-color: gray;">&nbsp;&nbsp;</div></td><td>&nbsp;<%=getTran("openclinic.chuk","tooth.unnerve_fill",sWebLanguage)%></td>
+                        <td><div width="10" height="10" style="background-color: gray;">&nbsp;&nbsp;</div></td><td>&nbsp;<%=getTran(request,"openclinic.chuk","tooth.unnerve_fill",sWebLanguage)%></td>
                     </tr>
                     <tr>
-                        <td><div width="10" height="10" style="background-color: lime;">&nbsp;&nbsp;</div></td><td>&nbsp;<%=getTran("openclinic.chuk","tooth.fracturée",sWebLanguage)%></td>
+                        <td><div width="10" height="10" style="background-color: lime;">&nbsp;&nbsp;</div></td><td>&nbsp;<%=getTran(request,"openclinic.chuk","tooth.fracturée",sWebLanguage)%></td>
                     </tr>
                     <tr>
-                        <td><div width="10" height="10" style="background-color: maroon;">&nbsp;&nbsp;</div></td><td>&nbsp;<%=getTran("openclinic.chuk","tooth.impactée",sWebLanguage)%></td>
+                        <td><div width="10" height="10" style="background-color: maroon;">&nbsp;&nbsp;</div></td><td>&nbsp;<%=getTran(request,"openclinic.chuk","tooth.impactée",sWebLanguage)%></td>
                     </tr>
                     <tr>
-                        <td><div width="10" height="10" style="background-color: gold;">&nbsp;&nbsp;</div></td><td>&nbsp;<%=getTran("openclinic.chuk","tooth.incluse",sWebLanguage)%></td>
+                        <td><div width="10" height="10" style="background-color: gold;">&nbsp;&nbsp;</div></td><td>&nbsp;<%=getTran(request,"openclinic.chuk","tooth.incluse",sWebLanguage)%></td>
                     </tr>
                     <tr>
-                        <td><div width="10" height="10" style="background-color: red;">&nbsp;&nbsp;</div></td><td>&nbsp;<%=getTran("openclinic.chuk","tooth.ectopique",sWebLanguage)%></td>
+                        <td><div width="10" height="10" style="background-color: red;">&nbsp;&nbsp;</div></td><td>&nbsp;<%=getTran(request,"openclinic.chuk","tooth.ectopique",sWebLanguage)%></td>
                     </tr>
                     <tr>
-                        <td><div width="10" height="10" style="background-color: green;">&nbsp;&nbsp;</div></td><td>&nbsp;<%=getTran("openclinic.chuk","tooth.surnuméraire",sWebLanguage)%></td>
+                        <td><div width="10" height="10" style="background-color: green;">&nbsp;&nbsp;</div></td><td>&nbsp;<%=getTran(request,"openclinic.chuk","tooth.surnuméraire",sWebLanguage)%></td>
                     </tr>
                     <tr>
-                        <td><div width="10" height="10" style="background-color: black;">&nbsp;&nbsp;</div></td><td>&nbsp;<%=getTran("openclinic.chuk","tooth.caries",sWebLanguage)%></td>
+                        <td><div width="10" height="10" style="background-color: black;">&nbsp;&nbsp;</div></td><td>&nbsp;<%=getTran(request,"openclinic.chuk","tooth.caries",sWebLanguage)%></td>
                     </tr>
                     <tr>
-                        <td><div width="10" height="10" style="background-color: orange;">&nbsp;&nbsp;</div></td><td>&nbsp;<%=getTran("openclinic.chuk","tooth.other",sWebLanguage)%></td>
+                        <td><div width="10" height="10" style="background-color: orange;">&nbsp;&nbsp;</div></td><td>&nbsp;<%=getTran(request,"openclinic.chuk","tooth.other",sWebLanguage)%></td>
                     </tr>
                 </table>
             </td>
@@ -170,7 +170,7 @@
         <tr>
             <td class="admin">
                 <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-                <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+                <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
             </td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" value="<%=getDate()%>">
@@ -183,11 +183,11 @@
                     <%-- header --%>
                     <tr>
                         <td class="admin" width="40px"></td>
-                        <td class="admin" width="50px"><%=getTran("web.occup","medwan.common.date",sWebLanguage)%></td>
-                        <td class="admin" width="50px"><%=getTran("openclinic.chuk","tooth",sWebLanguage)%></td>
-                        <td class="admin" width="250px"><%=getTran("openclinic.chuk","problemdescription",sWebLanguage)%></td>
-                        <td class="admin" width="250px"><%=getTran("openclinic.chuk","treatment",sWebLanguage)%></td>
-                        <td class="admin" width="150px"><%=getTran("openclinic.chuk","status",sWebLanguage)%></td>
+                        <td class="admin" width="50px"><%=getTran(request,"web.occup","medwan.common.date",sWebLanguage)%></td>
+                        <td class="admin" width="50px"><%=getTran(request,"openclinic.chuk","tooth",sWebLanguage)%></td>
+                        <td class="admin" width="250px"><%=getTran(request,"openclinic.chuk","problemdescription",sWebLanguage)%></td>
+                        <td class="admin" width="250px"><%=getTran(request,"openclinic.chuk","treatment",sWebLanguage)%></td>
+                        <td class="admin" width="150px"><%=getTran(request,"openclinic.chuk","status",sWebLanguage)%></td>
                         <td class="admin" width="*"/>
                     </tr>
 
@@ -209,17 +209,17 @@
                         <td class="admin2" style="vertical-align:top;">
                             <select class="text" name="toothStatus">
                             	<option value=""></option>
-                                <option value="tooth.absent"><%=getTran("openclinic.chuk","tooth.absent",sWebLanguage)%></option>
-                                <option value="tooth.fill"><%=getTran("openclinic.chuk","tooth.fill",sWebLanguage)%></option>
-                                <option value="tooth.unnerve"><%=getTran("openclinic.chuk","tooth.unnerve",sWebLanguage)%></option>
-                                <option value="tooth.unnerve_fill"><%=getTran("openclinic.chuk","tooth.unnerve_fill",sWebLanguage)%></option>
-                                <option value="tooth.fracturée"><%=getTran("openclinic.chuk","tooth.fracturée",sWebLanguage)%></option>
-                                <option value="tooth.impactée"><%=getTran("openclinic.chuk","tooth.impactée",sWebLanguage)%></option>
-                                <option value="tooth.incluse"><%=getTran("openclinic.chuk","tooth.incluse",sWebLanguage)%></option>
-                                <option value="tooth.ectopique"><%=getTran("openclinic.chuk","tooth.ectopique",sWebLanguage)%></option>
-                                <option value="tooth.surnuméraire"><%=getTran("openclinic.chuk","tooth.surnuméraire",sWebLanguage)%></option>
-                                <option value="tooth.caries"><%=getTran("openclinic.chuk","tooth.caries",sWebLanguage)%></option>
-                                <option value="tooth.other"><%=getTran("openclinic.chuk","tooth.other",sWebLanguage)%></option>
+                                <option value="tooth.absent"><%=getTran(request,"openclinic.chuk","tooth.absent",sWebLanguage)%></option>
+                                <option value="tooth.fill"><%=getTran(request,"openclinic.chuk","tooth.fill",sWebLanguage)%></option>
+                                <option value="tooth.unnerve"><%=getTran(request,"openclinic.chuk","tooth.unnerve",sWebLanguage)%></option>
+                                <option value="tooth.unnerve_fill"><%=getTran(request,"openclinic.chuk","tooth.unnerve_fill",sWebLanguage)%></option>
+                                <option value="tooth.fracturée"><%=getTran(request,"openclinic.chuk","tooth.fracturée",sWebLanguage)%></option>
+                                <option value="tooth.impactée"><%=getTran(request,"openclinic.chuk","tooth.impactée",sWebLanguage)%></option>
+                                <option value="tooth.incluse"><%=getTran(request,"openclinic.chuk","tooth.incluse",sWebLanguage)%></option>
+                                <option value="tooth.ectopique"><%=getTran(request,"openclinic.chuk","tooth.ectopique",sWebLanguage)%></option>
+                                <option value="tooth.surnuméraire"><%=getTran(request,"openclinic.chuk","tooth.surnuméraire",sWebLanguage)%></option>
+                                <option value="tooth.caries"><%=getTran(request,"openclinic.chuk","tooth.caries",sWebLanguage)%></option>
+                                <option value="tooth.other"><%=getTran(request,"openclinic.chuk","tooth.other",sWebLanguage)%></option>
                             </select>
                         </td>
 
@@ -254,7 +254,7 @@
 
         <%-- STATE --%>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","state",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","state",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_STOMATOLOGY_DENTIST_STATE")%> class="text" cols="100" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_STOMATOLOGY_DENTIST_STATE" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_STOMATOLOGY_DENTIST_STATE" property="value"/></textarea>
             </td>
@@ -262,7 +262,7 @@
 
         <%-- COMMENT --%>
         <tr>
-            <td class="admin"><%=getTran("web","comment",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","comment",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_DENTIST_COMMENT")%> class="text" cols="100" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DENTIST_COMMENT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DENTIST_COMMENT" property="value"/></textarea>
             </td>

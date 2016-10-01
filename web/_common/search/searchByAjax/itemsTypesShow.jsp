@@ -73,7 +73,7 @@
         /******************** SHOW ITEMS VALUES BY TYPE AND USER ********************/
 
         out.write("\n<br /><ul id=\"autocompletion\">");
-        out.write("\n<li><a href='#' id='newTypeButton'> <img src='" + sCONTEXTPATH + "/_img/icons/icon_edit.gif' alt='" + getTranNoLink("Web", "edit", sWebLanguage) + "' border='0'></a>&nbsp;&nbsp;<span id='newItemField'>" + getTran("Web.manage", "addNewValue", sWebLanguage) + "</span> </li><br />");
+        out.write("\n<li><a href='#' id='newTypeButton'> <img src='" + sCONTEXTPATH + "/_img/icons/icon_edit.gif' alt='" + getTranNoLink("Web", "edit", sWebLanguage) + "' border='0'></a>&nbsp;&nbsp;<span id='newItemField'>" + getTran(request,"Web.manage", "addNewValue", sWebLanguage) + "</span> </li><br />");
         Vector itemsValues = medwanQuery.getValuesByTypeItemByUser(sItemTypeSelect, sUserId, "%");
         int i = 0;
         Iterator it = itemsValues.iterator();

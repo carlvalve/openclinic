@@ -55,7 +55,7 @@
             <table class="list" border="0" width="100%" cellspacing="1">
                 <%-- search CODE --%>
                 <tr>
-                    <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","code",sWebLanguage)%></td>
+                    <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","code",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="text" class="text" id="searchCode" name="searchCode" size="20" maxLength="50" value="<%=sCode%>">
                     </td>
@@ -63,7 +63,7 @@
                 
                 <%-- search NAME --%>                
                 <tr>
-                    <td class="admin"><%=getTran("web","name",sWebLanguage)%></td>
+                    <td class="admin"><%=getTran(request,"web","name",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="text" class="text" id="searchName" name="searchName" size="20" maxLength="50" value="<%=sName%>">
                     </td>
@@ -71,7 +71,7 @@
                 
                 <%-- search VAT NUMBER --%>
                 <tr>
-                    <td class="admin"><%=getTran("web","vatNumber",sWebLanguage)%></td>
+                    <td class="admin"><%=getTran(request,"web","vatNumber",sWebLanguage)%></td>
                     <td class="admin2">
                         <input type="text" class="text" id="searchVatNumber" name="searchVatNumber" size="20" maxLength="50" value="<%=sVatNumber%>">
                     </td>
@@ -104,9 +104,9 @@
 	                <table id="searchresults" cellpadding="0" cellspacing="0" width="100%" class="sortable">
 	                    <%-- header --%>
 	                    <tr class="admin">
-	                        <td class="admin" style="padding-left:0;" width="20%" nowrap><%=getTran("web","code",sWebLanguage)%></td>
-	                        <td class="admin" style="padding-left:0;" width="50%" nowrap><asc><%=getTran("web","name",sWebLanguage)%></asc></td>
-	                        <td class="admin" style="padding-left:0;" width="30%" nowrap><%=getTran("web","vatNumber",sWebLanguage)%></td>
+	                        <td class="admin" style="padding-left:0;" width="20%" nowrap><%=getTran(request,"web","code",sWebLanguage)%></td>
+	                        <td class="admin" style="padding-left:0;" width="50%" nowrap><asc><%=getTran(request,"web","name",sWebLanguage)%></asc></td>
+	                        <td class="admin" style="padding-left:0;" width="30%" nowrap><%=getTran(request,"web","vatNumber",sWebLanguage)%></td>
 	                    </tr>
 	                    
 	                    <tbody>
@@ -138,10 +138,10 @@
 	    
 	    // number of found records
 	    if(foundSuppliers.size() > 0){
-	        %><%=foundSuppliers.size()%> <%=getTran("web","recordsFound",sWebLanguage)%><%
+	        %><%=foundSuppliers.size()%> <%=getTran(request,"web","recordsFound",sWebLanguage)%><%
 	    }
 	    else{
-	        %><%=getTran("web","noRecordsFound",sWebLanguage)%><%
+	        %><%=getTran(request,"web","noRecordsFound",sWebLanguage)%><%
 	    }
     }
     

@@ -51,41 +51,41 @@
     <%=writeTableHeader("Web.manage","setinvoicecounters",sWebLanguage," doBack();")%>
 	<table>
 		<tr class='admin'>
-			<td><%=getTran("web","type",sWebLanguage) %></td>
-			<td><%=getTran("web","counter",sWebLanguage) %></td>
-			<td><%=getTran("web","begindate",sWebLanguage) %><br/><%=getTran("web","nodateisinactive",sWebLanguage) %></td>
-			<td><%=getTran("web","prefix",sWebLanguage) %></td>
-			<td><%=getTran("web","value",sWebLanguage) %></td>
+			<td><%=getTran(request,"web","type",sWebLanguage) %></td>
+			<td><%=getTran(request,"web","counter",sWebLanguage) %></td>
+			<td><%=getTran(request,"web","begindate",sWebLanguage) %><br/><%=getTran(request,"web","nodateisinactive",sWebLanguage) %></td>
+			<td><%=getTran(request,"web","prefix",sWebLanguage) %></td>
+			<td><%=getTran(request,"web","value",sWebLanguage) %></td>
 		</tr>
 		<tr>
-			<td class='admin'><%=getTran("web","patientinvoices",sWebLanguage) %></td>
+			<td class='admin'><%=getTran(request,"web","patientinvoices",sWebLanguage) %></td>
 			<td class='admin2'><input type='text' class='text' name='patientcounter' size='30' value='<%=MedwanQuery.getInstance().getConfigString("PatientInvoiceType","PatientInvoice") %>'/></td>
 			<td class='admin2'><%=ScreenHelper.writeDateField("patientbegindate", "transactionForm", MedwanQuery.getInstance().getConfigString(MedwanQuery.getInstance().getConfigString("PatientInvoiceType","PatientInvoice")+"ResetDate",""), true, true, sWebLanguage, sCONTEXTPATH) %></td>
 			<td class='admin2'><input type='checkbox' class='text' name='patientprefix' value='1' <%=MedwanQuery.getInstance().getConfigInt(MedwanQuery.getInstance().getConfigString("PatientInvoiceType","PatientInvoice")+"AddPrefix",1)==1?"checked":"" %>/></td>
 			<td class='admin2'><input readonly type='text' class='text' name='patientcountervalue' size='30' value='<%=Invoice.getInvoiceNumberCounterNoIncrement("PatientInvoice") %>'/></td>
 		</tr>
 		<tr>
-			<td class='admin'><%=getTran("web","insurarinvoices",sWebLanguage) %></td>
+			<td class='admin'><%=getTran(request,"web","insurarinvoices",sWebLanguage) %></td>
 			<td class='admin2'><input type='text' class='text' name='insurercounter' size='30' value='<%=MedwanQuery.getInstance().getConfigString("InsurerInvoiceType","InsurerInvoice") %>'/></td>
 			<td class='admin2'><%=ScreenHelper.writeDateField("insurerbegindate", "transactionForm", MedwanQuery.getInstance().getConfigString(MedwanQuery.getInstance().getConfigString("InsurerInvoiceType","InsurerInvoice")+"ResetDate",""), true, true, sWebLanguage, sCONTEXTPATH) %></td>
 			<td class='admin2'><input type='checkbox' class='text' name='insurerprefix' value='1' <%=MedwanQuery.getInstance().getConfigInt(MedwanQuery.getInstance().getConfigString("InsurerInvoiceType","InsurerInvoice")+"AddPrefix",1)==1?"checked":"" %>/></td>
 			<td class='admin2'><input readonly type='text' class='text' name='insurercountervalue' size='30' value='<%=Invoice.getInvoiceNumberCounterNoIncrement("InsurerInvoice") %>'/></td>
 		</tr>
 		<tr>
-			<td class='admin'><%=getTran("web","extrainsurarinvoices",sWebLanguage) %></td>
+			<td class='admin'><%=getTran(request,"web","extrainsurarinvoices",sWebLanguage) %></td>
 			<td class='admin2'><input type='text' class='text' name='extrainsurercounter' size='30' value='<%=MedwanQuery.getInstance().getConfigString("ExtraInsurerInvoiceType","ExtraInsurerInvoice") %>'/></td>
 			<td class='admin2'><%=ScreenHelper.writeDateField("extrainsurerbegindate", "transactionForm", MedwanQuery.getInstance().getConfigString(MedwanQuery.getInstance().getConfigString("ExtraInsurerInvoiceType","ExtraInsurerInvoice")+"ResetDate",""), true, true, sWebLanguage, sCONTEXTPATH) %></td>
 			<td class='admin2'><input type='checkbox' class='text' name='extrainsurerprefix' value='1' <%=MedwanQuery.getInstance().getConfigInt(MedwanQuery.getInstance().getConfigString("ExtraInsurerInvoiceType","ExtraInsurerInvoice")+"AddPrefix",1)==1?"checked":"" %>/></td>
 			<td class='admin2'><input readonly type='text' class='text' name='extrainsurercountervalue' size='30' value='<%=Invoice.getInvoiceNumberCounterNoIncrement("ExtraInsurerInvoice") %>'/></td>
 		</tr>
 		<tr>
-			<td class='admin'><%=getTran("web","extrainsurar2invoices",sWebLanguage) %></td>
+			<td class='admin'><%=getTran(request,"web","extrainsurar2invoices",sWebLanguage) %></td>
 			<td class='admin2'><input type='text' class='text' name='extrainsurer2counter' size='30' value='<%=MedwanQuery.getInstance().getConfigString("ExtraInsurer2InvoiceType","ExtraInsurer2Invoice") %>'/></td>
 			<td class='admin2'><%=ScreenHelper.writeDateField("extrainsurer2begindate", "transactionForm", MedwanQuery.getInstance().getConfigString(MedwanQuery.getInstance().getConfigString("ExtraInsurer2InvoiceType","ExtraInsurer2Invoice")+"ResetDate",""), true, true, sWebLanguage, sCONTEXTPATH) %></td>
 			<td class='admin2'><input type='checkbox' class='text' name='extrainsurer2prefix' value='1' <%=MedwanQuery.getInstance().getConfigInt(MedwanQuery.getInstance().getConfigString("ExtraInsurer2InvoiceType","ExtraInsurer2Invoice")+"AddPrefix",1)==1?"checked":"" %>/></td>
 			<td class='admin2'><input readonly type='text' class='text' name='extrainsurer2countervalue' size='30' value='<%=Invoice.getInvoiceNumberCounterNoIncrement("ExtraInsurer2Invoice") %>'/></td>
 		</tr>
-			<td class='admin' colspan='5'><input type='submit' class='button' name='submit' value='<%=getTran("web","save",sWebLanguage)%>'/></td>
+			<td class='admin' colspan='5'><input type='submit' class='button' name='submit' value='<%=getTran(null,"web","save",sWebLanguage)%>'/></td>
 		<tr>
 		</tr>
 	</table>

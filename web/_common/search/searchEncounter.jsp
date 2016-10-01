@@ -96,11 +96,11 @@
                 }
 
                 if(eTmp.getType().length() > 0){
-                    sType = getTran("encountertype",eTmp.getType(),sWebLanguage);
+                    sType = getTran(request,"encountertype",eTmp.getType(),sWebLanguage);
                 }
 
                 if(eTmp.getServiceUID().length() > 0){
-                    sService = getTran("service",eTmp.getServiceUID(),sWebLanguage);
+                    sService = getTran(request,"service",eTmp.getServiceUID(),sWebLanguage);
                 }
 
                 sStart = ScreenHelper.formatDate(eTmp.getBegin());
@@ -135,10 +135,10 @@
                     <%-- header --%>
                     <tr class="gray">
                         <td width="50">ID</td>
-                        <td width="80" nowrap><%=getTran("Web","start",sWebLanguage)%></td>
-                        <td width="80" nowrap><%=getTran("Web","end",sWebLanguage)%></td>
-                        <td width="280"><%=getTran("Web","service",sWebLanguage)%></td>
-                        <td width="100" nowrap><%=getTran("Web.encounter","type",sWebLanguage)%></td>
+                        <td width="80" nowrap><%=getTran(request,"Web","start",sWebLanguage)%></td>
+                        <td width="80" nowrap><%=getTran(request,"Web","end",sWebLanguage)%></td>
+                        <td width="280"><%=getTran(request,"Web","service",sWebLanguage)%></td>
+                        <td width="100" nowrap><%=getTran(request,"Web.encounter","type",sWebLanguage)%></td>
                     </tr>
 
                     <%=results%>
@@ -148,7 +148,7 @@
                 // display 'no results' message
                 %>
                     <tr>
-                        <td><%=getTran("web","norecordsfound",sWebLanguage)%></td>
+                        <td><%=getTran(request,"web","norecordsfound",sWebLanguage)%></td>
                     </tr>
                 <%
             }

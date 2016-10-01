@@ -35,7 +35,7 @@
 			<table class="list" width="100%" cellspacing="1" cellpadding="1" onKeyDown="if(enterEvent(event,13)){searchNutricientItemsWindow();return false;}">
                 <%-- NUTRIENT NAME --%>
 			    <tr>
-			        <td class="admin" width="100"><%=getTran("meals","nutricientName",sWebLanguage)%></td>
+			        <td class="admin" width="100"><%=getTran(request,"meals","nutricientName",sWebLanguage)%></td>
 			        <td class="admin2">
 			            <input type="text" class="text" id="FindNutricientNameWindow" name="FindNutricientNameWindow" value="<%=sFindNutricientNameWindow%>" size="30" maxLength="255">&nbsp;&nbsp;
 			            
@@ -59,8 +59,8 @@
 	      		<table width="100%" class="sortable" id="searchresultsNutrients" cellspacing="0" cellpadding="0">
 				    <%-- HEADER --%>
 				    <tr class="gray">
-				        <td width="150"><%=HTMLEntities.htmlentities(getTran("meals","name",sWebLanguage))%></td>
-				        <td width="*"><%=HTMLEntities.htmlentities(getTran("meals","unit",sWebLanguage))%></td>
+				        <td width="150"><%=HTMLEntities.htmlentities(getTran(request,"meals","name",sWebLanguage))%></td>
+				        <td width="*"><%=HTMLEntities.htmlentities(getTran(request,"meals","unit",sWebLanguage))%></td>
 				    </tr>
 				    
 				    <tbody class="hand">
@@ -82,12 +82,12 @@
 			        </tbody>
 				</table>
 		
-				<%=lNutricientItems.size()%> <%=HTMLEntities.htmlentities(getTran("web","recordsfound",sWebLanguage))%>
+				<%=lNutricientItems.size()%> <%=HTMLEntities.htmlentities(getTran(request,"web","recordsfound",sWebLanguage))%>
                 <script>ts_makeSortable(document.getElementById("searchresultsNutrients"));</script>	
 		        <%
 	        }
 	        else{
-        		%><%=HTMLEntities.htmlentities(getTran("web","noRecordsfound",sWebLanguage))%><%
+        		%><%=HTMLEntities.htmlentities(getTran(request,"web","noRecordsfound",sWebLanguage))%><%
 	        }
 	    }
         
@@ -111,8 +111,8 @@
 					    <%-- HEADER --%>
 					    <tr class="gray">
 					        <td width="25">&nbsp;</td>
-					        <td width="150"><%=HTMLEntities.htmlentities(getTran("meals","name",sWebLanguage))%></td>
-					        <td width="*"><%=HTMLEntities.htmlentities(getTran("meals","unit",sWebLanguage))%></td>
+					        <td width="150"><%=HTMLEntities.htmlentities(getTran(request,"meals","name",sWebLanguage))%></td>
+					        <td width="*"><%=HTMLEntities.htmlentities(getTran(request,"meals","unit",sWebLanguage))%></td>
 					    </tr>
 				    
 				        <tbody class="hand">
@@ -134,13 +134,13 @@
 					    </tbody>
 					</table>
 			
-					<%=lNutricientItems.size()%> <%=HTMLEntities.htmlentities(getTran("web","recordsfound",sWebLanguage))%>
+					<%=lNutricientItems.size()%> <%=HTMLEntities.htmlentities(getTran(request,"web","recordsfound",sWebLanguage))%>
                     <script>ts_makeSortable(document.getElementById("searchresultsNutrients"));</script>	
 				</div>
 				<%
         	}
         	else{
-        		%><%=HTMLEntities.htmlentities(getTran("web","noRecordsfound",sWebLanguage))%><%
+        		%><%=HTMLEntities.htmlentities(getTran(request,"web","noRecordsfound",sWebLanguage))%><%
         	}
         }
 	}

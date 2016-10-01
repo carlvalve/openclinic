@@ -13,7 +13,7 @@
 		// type
 		String sItemValue = transaction.getItemValue(ITEM_PREFIX+"ITEM_TYPE_MIR2_TYPE");
 		if(sItemValue.length() > 0){
-			exam = getTran("mir_type",sItemValue,activeUser);
+			exam = getTran(request,"mir_type",sItemValue,activeUser);
 			
 			// specification
 			sItemValue = transaction.getItemValue(ITEM_PREFIX+"ITEM_TYPE_MIR2_SPECIFICATION");
@@ -42,37 +42,37 @@
 	}
 %>
 <table class="list" padding="0" cellspacing="1" width="<%=sTABLE_WIDTH%>">
-	<tr class="admin"><td colspan="2"><%=getTran("mobile","imagingdata",activeUser)%></td></tr>
+	<tr class="admin"><td colspan="2"><%=getTran(request,"mobile","imagingdata",activeUser)%></td></tr>
 	
 	<tr>
-		<td class="admin" width="100"><%=getTran("web","date",activeUser)%></td>
+		<td class="admin" width="100"><%=getTran(request,"web","date",activeUser)%></td>
 		<td><b><%=orderdate %></b></td>
 	</tr>
 	<tr>
-		<td class="admin"><%=getTran("web","healthprofessional",activeUser)%></td>
+		<td class="admin"><%=getTran(request,"web","healthprofessional",activeUser)%></td>
 		<td><%=healthprofessional %></td>
 	</tr>
 	<tr>
-		<td class="admin"><%=getTran("web","examination",activeUser)%></td>
+		<td class="admin"><%=getTran(request,"web","examination",activeUser)%></td>
 		<td><%=exam %></td>
 	</tr>
 	<tr>
-		<td class="admin"><%=getTran("web","reason",activeUser)%></td>
+		<td class="admin"><%=getTran(request,"web","reason",activeUser)%></td>
 		<td><%=reason %></td>
 	</tr>
 	<%
 	    if(protocoldate.length()>0){
 	        %>
 	<tr>
-		<td class="admin"><%=getTran("web","protocoldate",activeUser)%></td>
+		<td class="admin"><%=getTran(request,"web","protocoldate",activeUser)%></td>
 		<td><%=protocoldate %></td>
 	</tr>
 	<tr>
-		<td class="admin"><%=getTran("web","radiologist",activeUser)%></td>
+		<td class="admin"><%=getTran(request,"web","radiologist",activeUser)%></td>
 		<td><%=radiologist %></td>
 	</tr>
 	<tr>
-		<td class="admin"><%=getTran("web","protocol",activeUser)%></td>
+		<td class="admin"><%=getTran(request,"web","protocol",activeUser)%></td>
 		<td><%=protocol %></td>
 	</tr>
 	        <%

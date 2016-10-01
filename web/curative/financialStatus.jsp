@@ -10,7 +10,7 @@
 <table width="100%" cellpadding="0" cellspacing="0" class="list">
     <tr class="admin" stile='vertical-align: middle;'>
         <td>
-            <%=getTran("curative","financial.status.title",sWebLanguage)%>&nbsp;
+            <%=getTran(request,"curative","financial.status.title",sWebLanguage)%>&nbsp;
             <a href="<c:url value='/main.do'/>?Page=financial/editBalance.jsp&ts=<%=getTs()%>"><img src="<c:url value='/_img/icons/icon_edit.gif'/>" class="link" title="<%=getTranNoLink("web","editBalance",sWebLanguage)%>" style="vertical-align:-4px;"></a>
             <a href="<c:url value='/main.do'/>?Page=financial/debetEdit.jsp&ts=<%=getTs()%>"><img src="<c:url value='/_img/icons/icon_money2.gif'/>" class="link" title="<%=getTranNoLink("web","debetEdit",sWebLanguage)%>" style="vertical-align:-4px;"></a>
             <a href="<c:url value='/main.do'/>?Page=financial/patientInvoiceEdit.jsp&ts=<%=getTs()%>"><img src="<c:url value='/_img/icons/icon_invoice.gif'/>" class="link" title="<%=getTranNoLink("web.finance","patientinvoice",sWebLanguage)%>" style="vertical-align:-4px;"></a>
@@ -25,7 +25,7 @@
 				          else if(saldo<balance.getMinimumBalance()){%>
 				        	<font style="color: #FF9A64">
 				        <%} %>
-				        <%=getTran("balance","balance",sWebLanguage)%>:
+				        <%=getTran(request,"balance","balance",sWebLanguage)%>:
 				        <%=new DecimalFormat("#0.00").format(saldo)+" "+sCurrency%>
 				        <%if(saldo<balance.getMinimumBalance()){%>
 				        	</font>
@@ -34,7 +34,7 @@
 			    </tr>
         	</table>
         </td>
-        <td><%=getTran("balance","out_of_balance_since",sWebLanguage)%>:
+        <td><%=getTran(request,"balance","out_of_balance_since",sWebLanguage)%>:
         <%=ScreenHelper.getSQLDate(balance.getCreateDateTime())%></td>
     </tr>
     
@@ -42,7 +42,7 @@
     	if(MedwanQuery.getInstance().getConfigInt("enableFinancialStatusPrestations",1)==1){
 		    %>
 			    <tr class="gray">
-			    	<td colspan="3"><b><%=getTran("web","deliveries.in.last.24.hours",sWebLanguage)%></b></td>
+			    	<td colspan="3"><b><%=getTran(request,"web","deliveries.in.last.24.hours",sWebLanguage)%></b></td>
 			    </tr>
 		   	<%
 
@@ -56,8 +56,20 @@
 	   				out.print("<tr>");
 	   			}
 	   			
-	   			String debet = (String)debets.elementAt(n);
-	   			out.print("<td>"+debet+"</td>");
+	   			String[] debet = ((String)debets.elementAt(n)).split(";");
+	   			String waive="";
+	   			if(activeUser.getAccessRight("financial.waivehealthservice.select")){
+		   			if(debet.length>1 && debet[1].length()>0 && MedwanQuery.getInstance().getConfigString("waivableInvoiceGroups","cons").toLowerCase().indexOf(debet[1].toLowerCase())>-1){
+		   				Debet debetObject = Debet.get(MedwanQuery.getInstance().getConfigString("serverId")+"."+debet[2]);
+		   				if(debetObject!=null && debetObject.getAmount()>0){
+		   					Encounter encounter = debetObject.getEncounter();
+		   					if(encounter!=null && encounter.getService()!=null && !encounter.getService().code3.equalsIgnoreCase(MedwanQuery.getInstance().getConfigString("privateServiceType","privateclinic"))){
+		   		   				waive="<img src='"+sCONTEXTPATH+"\\_img\\icons\\icon_free.gif' onclick='doWaive("+debet[2]+",\""+debet[0]+"\")'/>";
+		   					}
+		   				}
+		   			}
+	   			}
+	   			out.print("<td>"+waive+debet[0]+"</td>");
 	   		}
 	   		
 			if(n>0){
@@ -66,3 +78,9 @@
     	}
    	%>
 </table>
+
+<script>
+	function doWaive(debetObjectId,debetName){
+	    openPopup("/financial/waiveDebet.jsp&uid=<%=MedwanQuery.getInstance().getConfigString("serverId")%>."+debetObjectId+"&ts=<%=getTs()%>",300,300);
+	}
+</script>

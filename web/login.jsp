@@ -49,7 +49,6 @@
     	systemUpdate.updateSetup("os",MedwanQuery.getInstance().getConfigString("doInitialSetup",""),request);
     	MedwanQuery.getInstance().setConfigString("doInitialSetup","");
     }
-
     //*** retreive application version ***
     String version = "version unknown";
     try{
@@ -93,15 +92,34 @@
         // nothing
     }
     //close visits open at last midnight
-    if(MedwanQuery.getInstance().getConfigInt("autoCloseVisits", 0)==1 && !MedwanQuery.getInstance().getConfigString("lastAutoCloseVisits","").equals(new SimpleDateFormat("yyyyMMdd").format(new java.util.Date()))){
+    if(MedwanQuery.getInstance().getConfigInt("autoCloseVisits", 1)==1 && !MedwanQuery.getInstance().getConfigString("lastAutoCloseVisits","").equals(new SimpleDateFormat("yyyyMMdd").format(new java.util.Date()))){
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
-            String sSQL = "update oc_encounters set oc_encounter_enddate =oc_encounter_begindate where oc_encounter_type='visit' and oc_encounter_enddate is null and oc_encounter_begindate<"+MedwanQuery.getInstance().convert("date", MedwanQuery.getInstance().getConfigString("dateFunction"));
+            String sSQL = "update oc_encounters set oc_encounter_enddate =oc_encounter_begindate where oc_encounter_type='visit' and oc_encounter_enddate is null and oc_encounter_begindate<"+MedwanQuery.getInstance().getConfigString("dateFunction");
             PreparedStatement ps = oc_conn.prepareStatement(sSQL);
             ps.execute();
             ps.close();
+            if(MedwanQuery.getInstance().getConfigString("lengthFunction").equalsIgnoreCase("len")){
+            	//SQL Server
+	            sSQL = "update oc_encounter_services set oc_encounter_serviceenddate=oc_encounter_enddate"+
+	            		" from oc_encounter_services a, oc_encounters b"+
+	            		" where"+
+	            		" a.oc_encounter_objectid=b.oc_encounter_objectid and"+
+	            		" a.oc_encounter_serviceenddate is null and"+
+	            		" b.oc_encounter_enddate is not null";
+            }
+            else{
+	            //MySQL
+	            sSQL = "update oc_encounter_services a, oc_encounters b set oc_encounter_serviceenddate=oc_encounter_enddate"+
+	            		" where"+
+	            		" a.oc_encounter_objectid=b.oc_encounter_objectid and"+
+	            		" a.oc_encounter_serviceenddate is null and"+
+	            		" b.oc_encounter_enddate is not null";
+            }            
+            ps = oc_conn.prepareStatement(sSQL);
+            ps.execute();
+            ps.close();
             MedwanQuery.getInstance().setConfigString("lastAutoCloseVisits", new SimpleDateFormat("yyyyMMdd").format(new java.util.Date()));
-
         }
         catch(Exception e){
             e.printStackTrace();
@@ -120,18 +138,21 @@
     if(MedwanQuery.getInstance().getConfigInt("autoCloseAdmissions", 0)==1 && !MedwanQuery.getInstance().getConfigString("lastAutoCloseAdmissions","").equals(new SimpleDateFormat("yyyyMMdd").format(new java.util.Date()))){
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
-            String sSQL = MedwanQuery.getInstance().getConfigString("closeAdmisionServicesQuery","update oc_encounter_services,servicesview set oc_encounter_serviceenddate=date_add(oc_encounter_servicebegindate,INTERVAL (select max(serviceadmissionlimit) from servicesview where oc_encounter_serviceuid=serviceid) day) where OC_ENCOUNTER_SERVICEENDDATE is null and serviceadmissionlimit>0 and datediff(now(),OC_ENCOUNTER_SERVICEBEGINDATE)>serviceadmissionlimit and oc_encounter_serviceuid=serviceid and oc_encounter_serviceenddate is null");
+        	String sSQL=MedwanQuery.getInstance().getConfigString("closeAdmisionServicesQuery","update oc_encounter_services,servicesview set oc_encounter_serviceenddate=date_add(oc_encounter_servicebegindate,INTERVAL (select max(serviceadmissionlimit) from servicesview where oc_encounter_serviceuid=serviceid) day) where OC_ENCOUNTER_SERVICEENDDATE is null and serviceadmissionlimit>0 and datediff(now(),OC_ENCOUNTER_SERVICEBEGINDATE)>serviceadmissionlimit and oc_encounter_serviceuid=serviceid and oc_encounter_serviceenddate is null");;
+            if(MedwanQuery.getInstance().getConfigString("lengthFunction").equalsIgnoreCase("len")){
+            	//SQL Server
+	            sSQL = "update oc_encounter_services set oc_encounter_serviceenddate=dateadd(day,(select max(serviceadmissionlimit) from servicesview where oc_encounter_serviceuid=serviceid),oc_encounter_servicebegindate)"+
+	            		" from oc_encounter_services a, servicesview b"+
+	            		" where"+
+	            		" a.oc_encounter_serviceenddate is null and"+
+	            		" serviceadmissionlimit>0 and"+
+	            		" oc_encounter_serviceuid=serviceid and"+
+	            		" oc_encounter_serviceenddate is null";
+            }
             PreparedStatement ps = oc_conn.prepareStatement(sSQL);
             ps.execute();
             ps.close();
-            sSQL = "update oc_encounters set oc_encounter_enddate=(select max(oc_encounter_serviceenddate) from oc_encounter_services where oc_encounters.oc_encounter_objectid=oc_encounter_services.oc_encounter_objectid) "+
-            		" where oc_encounter_enddate is null and not exists (select * from oc_encounter_services where "+
-            		" oc_encounters.oc_encounter_objectid=oc_encounter_services.oc_encounter_objectid and oc_encounter_serviceenddate is null)";
-            ps = oc_conn.prepareStatement(sSQL);
-            ps.execute();
-            ps.close();
             MedwanQuery.getInstance().setConfigString("lastAutoCloseAdmissions", new SimpleDateFormat("yyyyMMdd").format(new java.util.Date()));
-
         }
         catch(Exception e){
             e.printStackTrace();

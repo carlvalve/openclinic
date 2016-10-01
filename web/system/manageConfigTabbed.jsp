@@ -25,9 +25,9 @@
         StringBuffer out = new StringBuffer();
 
         out.append("<tr class='admin'>")
-           .append("<td nowrap>"+getTran("web.manage.config","Key",sWebLanguage)+"</td>")
-           .append("<td>"+getTran("web","value",sWebLanguage)+"</td>")
-           .append("<td>"+getTran("web.manage.config","defaultvalue",sWebLanguage)+"</td>")
+           .append("<td nowrap>"+getTran(null,"web.manage.config","Key",sWebLanguage)+"</td>")
+           .append("<td>"+getTran(null,"web","value",sWebLanguage)+"</td>")
+           .append("<td>"+getTran(null,"web.manage.config","defaultvalue",sWebLanguage)+"</td>")
            .append("</tr>");
 
         return out.toString();
@@ -93,8 +93,8 @@
         out.append("<tr>")
            .append("<td class='admin'>"+keyName+"&nbsp;</td>")
            .append("<td class='admin2'>")
-           .append("<input type='radio' class='radio' name='value_"+keyName+"' id='"+keyName+"_on'  value='"+triggerValueOn+"' "+(values[0].equalsIgnoreCase(triggerValueOn)?"CHECKED":"")+">").append(getLabel("web","yes",sWebLanguage,keyName+"_on"))
-           .append("<input type='radio' class='radio' name='value_"+keyName+"' id='"+keyName+"_off' value='"+triggerValueOff+"' "+(values[0].equalsIgnoreCase(triggerValueOn)?"":"CHECKED")+">").append(getLabel("web","no",sWebLanguage,keyName+"_off"))
+           .append("<input type='radio' class='radio' name='value_"+keyName+"' id='"+keyName+"_on'  value='"+triggerValueOn+"' "+(values[0].equalsIgnoreCase(triggerValueOn)?"CHECKED":"")+">").append(getLabel(null,"web","yes",sWebLanguage,keyName+"_on"))
+           .append("<input type='radio' class='radio' name='value_"+keyName+"' id='"+keyName+"_off' value='"+triggerValueOff+"' "+(values[0].equalsIgnoreCase(triggerValueOn)?"":"CHECKED")+">").append(getLabel(null,"web","no",sWebLanguage,keyName+"_off"))
            .append("&nbsp;("+values[0]+")")
            .append("</td>")
            .append("<td class='admin2'>").append(values[1]).append("</td>")
@@ -166,19 +166,19 @@
         <table width="100%" cellspacing="0" cellpadding="0">
             <tr>
                 <td style='border-bottom:1px solid black;' width="1%">&nbsp;</td>
-                <td class='tabunselected' width="1%" onclick="activateTab('tab0')" id="tab0-selector" nowrap>&nbsp;<b><%=getTran("web.config","tab.miscelaneous",sWebLanguage)%></b>&nbsp;</td>
+                <td class='tabunselected' width="1%" onclick="activateTab('tab0')" id="tab0-selector" nowrap>&nbsp;<b><%=getTran(request,"web.config","tab.miscelaneous",sWebLanguage)%></b>&nbsp;</td>
                 <td style='border-bottom:1px solid black;' width="1%">&nbsp;</td>
-                <td class='tabunselected' width="1%" onclick="activateTab('tab1')" id="tab1-selector" nowrap>&nbsp;<b><%=getTran("web.config","tab.devices",sWebLanguage)%></b>&nbsp;</td>
+                <td class='tabunselected' width="1%" onclick="activateTab('tab1')" id="tab1-selector" nowrap>&nbsp;<b><%=getTran(request,"web.config","tab.devices",sWebLanguage)%></b>&nbsp;</td>
                 <td style='border-bottom:1px solid black;' width="1%">&nbsp;</td>
-                <td class='tabunselected' width="1%" onclick="activateTab('tab2')" id="tab2-selector" nowrap>&nbsp;<b><%=getTran("web.config","tab.email",sWebLanguage)%></b>&nbsp;</td>
+                <td class='tabunselected' width="1%" onclick="activateTab('tab2')" id="tab2-selector" nowrap>&nbsp;<b><%=getTran(request,"web.config","tab.email",sWebLanguage)%></b>&nbsp;</td>
                 <td style="border-bottom:1px solid black;" width="1%">&nbsp;</td>
-                <td class='tabunselected' width="1%" onclick="activateTab('tab3')" id="tab3-selector" nowrap>&nbsp;<b><%=getTran("web.config","tab.pwd",sWebLanguage)%></b>&nbsp;</td>
+                <td class='tabunselected' width="1%" onclick="activateTab('tab3')" id="tab3-selector" nowrap>&nbsp;<b><%=getTran(request,"web.config","tab.pwd",sWebLanguage)%></b>&nbsp;</td>
                 <td style="border-bottom:1px solid black;" width="1%">&nbsp;</td>
-                <td class='tabunselected' width="1%" onclick="activateTab('tab4')" id="tab4-selector" nowrap>&nbsp;<b><%=getTran("web.config","tab.fusion",sWebLanguage)%></b>&nbsp;</td>
+                <td class='tabunselected' width="1%" onclick="activateTab('tab4')" id="tab4-selector" nowrap>&nbsp;<b><%=getTran(request,"web.config","tab.fusion",sWebLanguage)%></b>&nbsp;</td>
                 <td style="border-bottom:1px solid black;" width="1%">&nbsp;</td>
-                <td class='tabunselected' width="1%" onclick="activateTab('tab5')" id="tab5-selector" nowrap>&nbsp;<b><%=getTran("web.config","tab.intrusion",sWebLanguage)%></b>&nbsp;</td>
+                <td class='tabunselected' width="1%" onclick="activateTab('tab5')" id="tab5-selector" nowrap>&nbsp;<b><%=getTran(request,"web.config","tab.intrusion",sWebLanguage)%></b>&nbsp;</td>
                 <td style="border-bottom:1px solid black;" width="1%">&nbsp;</td>
-                <td class='tabunselected' width="1%" onclick="activateTab('tab6')" id="tab6-selector" nowrap>&nbsp;<b><%=getTran("web.config","tab.notifier",sWebLanguage)%></b>&nbsp;</td>
+                <td class='tabunselected' width="1%" onclick="activateTab('tab6')" id="tab6-selector" nowrap>&nbsp;<b><%=getTran(request,"web.config","tab.notifier",sWebLanguage)%></b>&nbsp;</td>
                 <td style="border-bottom:1px solid black;" width="*">&nbsp;</td>
                 <% int numberOfTabs = 7; %>
             </tr>
@@ -421,6 +421,6 @@
     <%-- link to manageConfig --%>
     <%=ScreenHelper.alignButtonsStart()%>
         <img src='<c:url value="/_img/themes/default/pijl.gif"/>'>
-        <a  href="<c:url value='/main.do'/>?Page=system/manageConfig.jsp?ts=<%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran("Web.Manage","manageConfiguration",sWebLanguage)%></a>&nbsp;
+        <a  href="<c:url value='/main.do'/>?Page=system/manageConfig.jsp?ts=<%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran(request,"Web.Manage","manageConfiguration",sWebLanguage)%></a>&nbsp;
     <%=ScreenHelper.alignButtonsStop()%>
 </form>

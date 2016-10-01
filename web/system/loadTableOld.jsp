@@ -39,16 +39,16 @@
 	<table>
 		<tr>
 			<td class='admin'>
-				<%=getTran("web","filetype",sWebLanguage)%>
+				<%=getTran(request,"web","filetype",sWebLanguage)%>
 				<select name="filetype" id="filetype" class="text" onchange="showstructure();">
-					<option value="prestationscsv"><%=getTran("web","prestations.csv",sWebLanguage)%></option>
-					<option value="servicescsv"><%=getTran("web","services.csv",sWebLanguage)%></option>
-					<option value="labelscsv"><%=getTran("web","labels.csv",sWebLanguage)%></option>
-					<option value="labxml"><%=getTran("web","lab.xml",sWebLanguage)%></option>
-					<option value="drugsxml"><%=getTran("web","drugs.xml",sWebLanguage)%></option>
+					<option value="prestationscsv"><%=getTran(request,"web","prestations.csv",sWebLanguage)%></option>
+					<option value="servicescsv"><%=getTran(request,"web","services.csv",sWebLanguage)%></option>
+					<option value="labelscsv"><%=getTran(request,"web","labels.csv",sWebLanguage)%></option>
+					<option value="labxml"><%=getTran(request,"web","lab.xml",sWebLanguage)%></option>
+					<option value="drugsxml"><%=getTran(request,"web","drugs.xml",sWebLanguage)%></option>
 				</select>
 			</td>
-			<td class='admin2'><input class="text" type="checkbox" name="erase" value="1"/> <%=getTran("web","delete.table.before.load",sWebLanguage)%></td>
+			<td class='admin2'><input class="text" type="checkbox" name="erase" value="1"/> <%=getTran(request,"web","delete.table.before.load",sWebLanguage)%></td>
 			<td class='admin2'><input class="text" type="file" name="filename"/> <input class="button" type="submit" name="ButtonReadfile" value="<%=getTranNoLink("web","load",sWebLanguage)%>"/></td>
 		</tr>
 		<tr>
@@ -141,7 +141,7 @@
 						reader.close();
 						reloadSingleton(session);
 		                f.delete();
-						out.println("<h3>"+lines+" " +getTran("web","records.loaded",sWebLanguage)+"</h3>");
+						out.println("<h3>"+lines+" " +getTran(request,"web","records.loaded",sWebLanguage)+"</h3>");
 					}
 					else if(mrequest.getParameter("filetype").equalsIgnoreCase("servicescsv")){
 						if(mrequest.getParameter("erase")!=null){
@@ -198,7 +198,7 @@
 						reader.close();
 						reloadSingleton(session);
 		                f.delete();
-						out.println("<h3>"+lines+" " +getTran("web","records.loaded",sWebLanguage)+"</h3>");
+						out.println("<h3>"+lines+" " +getTran(request,"web","records.loaded",sWebLanguage)+"</h3>");
 					}
 					else if(mrequest.getParameter("filetype").equalsIgnoreCase("labelscsv")){
 						String type,id,language,label;
@@ -223,7 +223,7 @@
 						reader.close();
 						reloadSingleton(session);
 		                f.delete();
-						out.println("<h3>"+lines+" " +getTran("web","records.loaded",sWebLanguage)+"</h3>");
+						out.println("<h3>"+lines+" " +getTran(request,"web","records.loaded",sWebLanguage)+"</h3>");
 					}
 					else if(mrequest.getParameter("filetype").equalsIgnoreCase("labxml")){
 						if(mrequest.getParameter("erase")!=null){
@@ -334,7 +334,7 @@
 						br.close();
 						reloadSingleton(session);
 		                f.delete();
-						out.println("<h3>"+lines+" " +getTran("web","records.loaded",sWebLanguage)+"</h3>");
+						out.println("<h3>"+lines+" " +getTran(request,"web","records.loaded",sWebLanguage)+"</h3>");
 					}					
 					else if(mrequest.getParameter("filetype").equalsIgnoreCase("drugsxml")){
 						if(mrequest.getParameter("erase")!=null){
@@ -398,7 +398,7 @@
 						br.close();
 						reloadSingleton(session);
 		                f.delete();
-						out.println("<h3>"+lines+" " +getTran("web","records.loaded",sWebLanguage)+"</h3>");
+						out.println("<h3>"+lines+" " +getTran(request,"web","records.loaded",sWebLanguage)+"</h3>");
 					}
 	            }
 	        }

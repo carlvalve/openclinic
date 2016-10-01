@@ -33,19 +33,25 @@
 	    <%-- PERIOD --%>
 		<tr>
 			<td class='admin2' width="<%=sTDAdminWidth%>">
-				<%=getTran("web","from",sWebLanguage)%> <%=writeDateField("FindBeginDate","transactionForm",sBegin,sWebLanguage)%>
-				<%=getTran("web","to",sWebLanguage)%> <%=writeDateField("FindEndDate","transactionForm",sEnd,sWebLanguage)%>
+				<%=getTran(request,"web","from",sWebLanguage)%> <%=writeDateField("FindBeginDate","transactionForm",sBegin,sWebLanguage)%>
+				<%=getTran(request,"web","to",sWebLanguage)%> <%=writeDateField("FindEndDate","transactionForm",sEnd,sWebLanguage)%>
 			</td>
 		</tr>
 		<tr>
 			<td class='admin2'>
-				<%=getTran("web","provider",sWebLanguage)%>: 
+				<%=getTran(request,"web","provider",sWebLanguage)%>: 
 				<select name='providerUid' id='providerUid' class='text'>
 					<option value=""></option>
 					<%
 						Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
 						PreparedStatement ps = null;
-					  	if(MedwanQuery.getInstance().getConfigString("stockOperationDocumentServiceSources","").indexOf("4")<0){
+					  	if(MedwanQuery.getInstance().getConfigString("stockOperationDocumentServiceSources","all").indexOf("all")>=0){
+							ps=conn.prepareStatement("SELECT distinct oc_operation_srcdesttype,oc_operation_srcdestuid FROM oc_productstockoperations o where oc_operation_description like 'medicationreceipt%' and oc_operation_srcdesttype in ('supplier','servicestock')"+
+													" union"+
+													" select distinct 'servicestock' as oc_operation_srcdesttype,'"+MedwanQuery.getInstance().getConfigString("serverId")+".'"+MedwanQuery.getInstance().concatSign()+MedwanQuery.getInstance().convert("varchar", "OC_STOCK_OBJECTID")+" as oc_operation_srcdestuid from OC_SERVICESTOCKS"+
+													" order by oc_operation_srcdestuid");
+					  	}
+					  	else if(MedwanQuery.getInstance().getConfigString("stockOperationDocumentServiceSources","all").indexOf("4")<0){
 							ps=conn.prepareStatement("SELECT distinct oc_operation_srcdestuid FROM oc_productstockoperations o where oc_operation_description like 'medicationreceipt%' and oc_operation_srcdesttype ='supplier' order by oc_operation_srcdestuid");
 					  	}
 					  	else {
@@ -54,11 +60,24 @@
 						ResultSet rs = ps.executeQuery();
 						while(rs.next()){
 							String provider=rs.getString("oc_operation_srcdestuid");
-						  	if(MedwanQuery.getInstance().getConfigString("stockOperationDocumentServiceSources","").indexOf("4")<0){
+						  	if(MedwanQuery.getInstance().getConfigString("stockOperationDocumentServiceSources","all").indexOf("all")>=0){
+								String providertype=rs.getString("oc_operation_srcdesttype");
+								if(providertype.equalsIgnoreCase("servicestock")){
+									if(provider.equalsIgnoreCase(sServiceStockId)){
+										continue;
+									}
+									ServiceStock serviceStock = ServiceStock.get(provider);
+									if(serviceStock!=null){
+										provider=serviceStock.getName();
+									}
+								}
+						  		out.print("<option value='"+provider+"'>"+provider+"</option>");
+						  	}
+						  	else if(MedwanQuery.getInstance().getConfigString("stockOperationDocumentServiceSources","all").indexOf("4")<0){
 						  		out.print("<option value='"+provider+"'>"+provider+"</option>");
 						  	}
 						  	else {
-						  		String service=getTran("service",provider,sWebLanguage);
+						  		String service=getTran(request,"service",provider,sWebLanguage);
 						  		if(!service.equalsIgnoreCase(provider)){
 						  			out.print("<option value='"+service+"'>"+service+"</option>");
 						  		}

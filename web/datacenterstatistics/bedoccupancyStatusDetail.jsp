@@ -19,14 +19,14 @@
     <%=writeTableHeader("Web","executive.bedoccupancy",sWebLanguage,"")%>
     <table width="100%" class="menu" cellspacing="0" cellpadding="0">
         <tr class="admin">
-            <td colspan="2"><%=getTran("web","bed",sWebLanguage)+" "+sBedName%></td>
+            <td colspan="2"><%=getTran(request,"web","bed",sWebLanguage)+" "+sBedName%></td>
         </tr>
         <tr>
-            <td><%=getTran("Web","Begin",sWebLanguage)%></td>
+            <td><%=getTran(request,"Web","Begin",sWebLanguage)%></td>
             <td><%=writeDateField("FindBegin","transactionForm",sFindBegin,sWebLanguage)%></td>
         </tr>
         <tr>
-            <td><%=getTran("Web","End",sWebLanguage)%></td>
+            <td><%=getTran(request,"Web","End",sWebLanguage)%></td>
             <td><%=writeDateField("FindEnd","transactionForm",sFindEnd,sWebLanguage)%></td>
         </tr>
         <tr>
@@ -61,10 +61,10 @@
     if (sBedId.length() > 0) {
         out.print("<br/><table class='sortable' id='searchresults' width='100%' cellspacing='1' cellpadding='0'>"
             +"<tr class='admin'>"
-                +"<td>"+getTran("web","service",sWebLanguage)+"</td>"
-                +"<td>"+getTran("web","person",sWebLanguage)+"</td>"
-                +"<td width='80'>"+getTran("web","begin",sWebLanguage)+"</td>"
-                +"<td width='80'>"+getTran("web","end",sWebLanguage)+"</td>"
+                +"<td>"+getTran(request,"web","service",sWebLanguage)+"</td>"
+                +"<td>"+getTran(request,"web","person",sWebLanguage)+"</td>"
+                +"<td width='80'>"+getTran(request,"web","begin",sWebLanguage)+"</td>"
+                +"<td width='80'>"+getTran(request,"web","end",sWebLanguage)+"</td>"
             +"</tr>");
 
         String sSelect = " SELECT * FROM OC_ENCOUNTERS_VIEW " +
@@ -90,7 +90,7 @@
 
             sServiceID = checkString(rs.getString("OC_ENCOUNTER_SERVICEUID"));
             if(sServiceID.length()>0){
-                sServiceID = getTran("service",sServiceID,sWebLanguage);
+                sServiceID = getTran(request,"service",sServiceID,sWebLanguage);
             }
             sBeginDate = ScreenHelper.getSQLDate(rs.getDate("OC_ENCOUNTER_BEGINDATE"));
             sEndDate = ScreenHelper.getSQLDate(rs.getDate("OC_ENCOUNTER_ENDDATE"));
@@ -101,7 +101,7 @@
         rs.close();
         ps.close();
 		oc_conn.close();
-        out.print("</table>"+getTran("web","total",sWebLanguage)+": "+iTotal+"<br/><center><input type='button' class='button' value='"+getTranNoLink("web","close",sWebLanguage)+"' onclick='window.close()'/></center>");
+        out.print("</table>"+getTran(request,"web","total",sWebLanguage)+": "+iTotal+"<br/><center><input type='button' class='button' value='"+getTranNoLink("web","close",sWebLanguage)+"' onclick='window.close()'/></center>");
     }
 %>
 </form>

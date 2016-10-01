@@ -152,7 +152,7 @@
         <%-- 1 : administration personal --%>
         <tr>
             <td class="admin">
-                <input type="checkbox" name="section_1" id="section_1" value="on" class="hand" onClick="this.checked=true" <%=(sSection1.equals("on")?"CHECKED":"")%>><%=getLabel("web.occup","administrationPersonal",sWebLanguage,"section_1")%>
+                <input type="checkbox" name="section_1" id="section_1" value="on" class="hand" onClick="this.checked=true" <%=(sSection1.equals("on")?"CHECKED":"")%>><%=getLabel(request,"web.occup","administrationPersonal",sWebLanguage,"section_1")%>
             </td>
         </tr>
         
@@ -161,10 +161,10 @@
             <td class="admin">
 		        <%
 		            if(Picture.exists(Integer.parseInt(activePatient.personid))){
-		           	    %><input type="checkbox" name="section_2" id="section_2" value="on" class="hand" <%=(sSection2.equals("on")?"CHECKED":"")%>>&nbsp;<%=getLabel("pdf","photo",sWebLanguage,"section_2")%><%
+		           	    %><input type="checkbox" name="section_2" id="section_2" value="on" class="hand" <%=(sSection2.equals("on")?"CHECKED":"")%>>&nbsp;<%=getLabel(request,"pdf","photo",sWebLanguage,"section_2")%><%
 		            }
 		            else{
-		                %><input type="checkbox" name="section_2" id="section_2" value="off" DISABLED>&nbsp;<%=getLabel("pdf","photo",sWebLanguage,"section_2")%><%
+		                %><input type="checkbox" name="section_2" id="section_2" value="off" DISABLED>&nbsp;<%=getLabel(request,"pdf","photo",sWebLanguage,"section_2")%><%
 		            }
 		        %>        
             </td>
@@ -173,84 +173,84 @@
         <%-- 3 : administration private --%>
         <tr>
             <td class="admin">
-                <input type="checkbox" name="section_3" id="section_3" value="on" class="hand" <%=(sSection3.equals("on")?"CHECKED":"")%>>&nbsp;<%=getLabel("pdf","administrationPrivate",sWebLanguage,"section_3")%>
+                <input type="checkbox" name="section_3" id="section_3" value="on" class="hand" <%=(sSection3.equals("on")?"CHECKED":"")%>>&nbsp;<%=getLabel(request,"pdf","administrationPrivate",sWebLanguage,"section_3")%>
             </td>
         </tr>
                 
         <%-- 4 : administration family-relations --%>
         <tr>
             <td class="admin">
-                <input type="checkbox" name="section_4" id="section_4" value="on" class="hand" <%=(sSection4.equals("on")?"CHECKED":"")%>>&nbsp;<%=getLabel("pdf","administrationFamilyRelation",sWebLanguage,"section_4")%>
+                <input type="checkbox" name="section_4" id="section_4" value="on" class="hand" <%=(sSection4.equals("on")?"CHECKED":"")%>>&nbsp;<%=getLabel(request,"pdf","administrationFamilyRelation",sWebLanguage,"section_4")%>
             </td>
         </tr> 
          
         <%-- 5 : active insurance data --%>
         <tr>
             <td class="admin">
-                <input type="checkbox" name="section_5" id="section_5" value="on" class="hand" <%=(sSection5.equals("on")?"CHECKED":"")%>>&nbsp;<%=getLabel("pdf","activeInsuranceData",sWebLanguage,"section_5")%>
+                <input type="checkbox" name="section_5" id="section_5" value="on" class="hand" <%=(sSection5.equals("on")?"CHECKED":"")%>>&nbsp;<%=getLabel(request,"pdf","activeInsuranceData",sWebLanguage,"section_5")%>
             </td>
         </tr>
         
         <%-- 6 : historical insurance data--%>
         <tr>
             <td class="admin">
-                <input type="checkbox" name="section_6" id="section_6" value="on" class="hand" <%=(sSection6.equals("on")?"CHECKED":"")%>>&nbsp;<%=getLabel("pdf","historicalInsuranceData",sWebLanguage,"section_6")%>
+                <input type="checkbox" name="section_6" id="section_6" value="on" class="hand" <%=(sSection6.equals("on")?"CHECKED":"")%>>&nbsp;<%=getLabel(request,"pdf","historicalInsuranceData",sWebLanguage,"section_6")%>
             </td>
         </tr>
          
         <%-- 7 : active drug prescriptions --%>
         <tr>
             <td class="admin">
-                <input type="checkbox" name="section_7" id="section_7" value="on" class="hand" <%=(sSection7.equals("on")?"CHECKED":"")%>>&nbsp;<%=getLabel("pdf","activeDrugPrescriptions",sWebLanguage,"section_7")%>
+                <input type="checkbox" name="section_7" id="section_7" value="on" class="hand" <%=(sSection7.equals("on")?"CHECKED":"")%>>&nbsp;<%=getLabel(request,"pdf","activeDrugPrescriptions",sWebLanguage,"section_7")%>
             </td>
         </tr>
          
         <%-- 8 : active care prescriptions --%>
         <tr>
             <td class="admin">
-                <input type="checkbox" name="section_8" id="section_8" value="on" class="hand" <%=(sSection8.equals("on")?"CHECKED":"")%>>&nbsp;<%=getLabel("pdf","activeCarePrescriptions",sWebLanguage,"section_8")%>
+                <input type="checkbox" name="section_8" id="section_8" value="on" class="hand" <%=(sSection8.equals("on")?"CHECKED":"")%>>&nbsp;<%=getLabel(request,"pdf","activeCarePrescriptions",sWebLanguage,"section_8")%>
             </td>
         </tr>
          
         <%-- 9 : vaccinations --%>
         <tr>
             <td class="admin">
-                <input type="checkbox" name="section_9" id="section_9" value="on" class="hand" <%=(sSection9.equals("on")?"CHECKED":"")%>>&nbsp;<%=getLabel("pdf","vaccinations",sWebLanguage,"section_9")%>
+                <input type="checkbox" name="section_9" id="section_9" value="on" class="hand" <%=(sSection9.equals("on")?"CHECKED":"")%>>&nbsp;<%=getLabel(request,"pdf","vaccinations",sWebLanguage,"section_9")%>
             </td>
         </tr>
          
         <%-- 10 : problem list --%>
         <tr>
             <td class="admin">
-                <input type="checkbox" name="section_10" id="section_10" value="on" class="hand" <%=(sSection10.equals("on")?"CHECKED":"")%>>&nbsp;<%=getLabel("pdf","problemlist",sWebLanguage,"section_10")%>
+                <input type="checkbox" name="section_10" id="section_10" value="on" class="hand" <%=(sSection10.equals("on")?"CHECKED":"")%>>&nbsp;<%=getLabel(request,"pdf","problemlist",sWebLanguage,"section_10")%>
             </td>
         </tr>
          
         <%-- 11 : active diagnoses --%>
         <tr>
             <td class="admin">
-                <input type="checkbox" name="section_11" id="section_11" value="on" class="hand" <%=(sSection11.equals("on")?"CHECKED":"")%>>&nbsp;<%=getLabel("pdf","activeDiagnoses",sWebLanguage,"section_11")%>
+                <input type="checkbox" name="section_11" id="section_11" value="on" class="hand" <%=(sSection11.equals("on")?"CHECKED":"")%>>&nbsp;<%=getLabel(request,"pdf","activeDiagnoses",sWebLanguage,"section_11")%>
             </td>
         </tr>
          
         <%-- 12 : active appointments --%>
         <tr>
             <td class="admin">
-                <input type="checkbox" name="section_12" id="section_12" value="on" class="hand" <%=(sSection12.equals("on")?"CHECKED":"")%>>&nbsp;<%=getLabel("pdf","activeAppointments",sWebLanguage,"section_12")%>
+                <input type="checkbox" name="section_12" id="section_12" value="on" class="hand" <%=(sSection12.equals("on")?"CHECKED":"")%>>&nbsp;<%=getLabel(request,"pdf","activeAppointments",sWebLanguage,"section_12")%>
             </td>
         </tr>  
          
         <%-- 13 : active encounter --%>
         <tr>
             <td class="admin">
-                <input type="checkbox" name="section_13" id="section_13" value="on" class="hand" <%=(sSection13.equals("on")?"CHECKED":"")%>>&nbsp;<%=getLabel("pdf","activeEncounter",sWebLanguage,"section_13")%>
+                <input type="checkbox" name="section_13" id="section_13" value="on" class="hand" <%=(sSection13.equals("on")?"CHECKED":"")%>>&nbsp;<%=getLabel(request,"pdf","activeEncounter",sWebLanguage,"section_13")%>
             </td>
         </tr>  
          
         <%-- 14 : encounter history --%>
         <tr>
             <td class="admin">
-                <input type="checkbox" name="section_14" id="section_14" value="on" class="hand" <%=(sSection14.equals("on")?"CHECKED":"")%> onClick="toggleEncounterTable(this);">&nbsp;<%=getLabel("pdf","encounterHistroy",sWebLanguage,"section_14")%>
+                <input type="checkbox" name="section_14" id="section_14" value="on" class="hand" <%=(sSection14.equals("on")?"CHECKED":"")%> onClick="toggleEncounterTable(this);">&nbsp;<%=getLabel(request,"pdf","encounterHistroy",sWebLanguage,"section_14")%>
             </td>
         </tr>   
             
@@ -258,7 +258,7 @@
             //************************************************************************************
 	        //*** list all historical encounters as options **************************************	 
             //************************************************************************************    
-            StringBuffer sOutEnc1 = new StringBuffer(),
+           StringBuffer sOutEnc1 = new StringBuffer(),
             		     sOutEnc2 = new StringBuffer();    
             String sClass = "1";
             int cbCounter = 1;
@@ -269,18 +269,18 @@
 
 		        // subtitle		         
                 sOutEnc1.append("<tr class='admin'>")
-	                     .append("<td colspan='7'>&nbsp;&nbsp;"+getTran("web","visits",sWebLanguage)+"</td>")
+	                     .append("<td colspan='7'>&nbsp;&nbsp;"+getTran(request,"web","visits",sWebLanguage)+"</td>")
 	                    .append("</tr>");
 		        
 		        // header
                 sOutEnc1.append("<tr height='20'>")
                          .append("<td class='admin' width='30'>&nbsp;</td>")
-	                     .append("<td class='admin' width='10%'>"+getTran("web.occup","medwan.common.contacttype",sWebLanguage)+"&nbsp;</td>")
-	                     .append("<td class='admin' width='10%'>"+getTran("web","begin",sWebLanguage)+"&nbsp;</td>")
-	                     .append("<td class='admin' width='10%'>"+getTran("web","end",sWebLanguage)+"&nbsp;</td>")
-	                     .append("<td class='admin' width='10%'>"+getTran("openclinic.chuk","urgency.origin",sWebLanguage)+"&nbsp;</td>")
-	                     .append("<td class='admin' width='20%'>"+getTran("web","service",sWebLanguage)+"&nbsp;</td>")
-	                     .append("<td class='admin' width='*'>"+getTran("openclinic.chuk","rfe",sWebLanguage)+"&nbsp;</td>")
+	                     .append("<td class='admin' width='10%'>"+getTran(request,"web.occup","medwan.common.contacttype",sWebLanguage)+"&nbsp;</td>")
+	                     .append("<td class='admin' width='10%'>"+getTran(request,"web","begin",sWebLanguage)+"&nbsp;</td>")
+	                     .append("<td class='admin' width='10%'>"+getTran(request,"web","end",sWebLanguage)+"&nbsp;</td>")
+	                     .append("<td class='admin' width='10%'>"+getTran(request,"openclinic.chuk","urgency.origin",sWebLanguage)+"&nbsp;</td>")
+	                     .append("<td class='admin' width='20%'>"+getTran(request,"web","service",sWebLanguage)+"&nbsp;</td>")
+	                     .append("<td class='admin' width='*'>"+getTran(request,"openclinic.chuk","rfe",sWebLanguage)+"&nbsp;</td>")
                         .append("</tr>");
 
 		        Encounter encounter;
@@ -296,10 +296,10 @@
                              .append("<td align='center'>")
                               .append("<input type='checkbox' value='"+encounter.getUid()+"' name='visitUID_"+cbCounter+"'>")
                              .append("</td>")
-                             .append("<td onClick=\"clickCheckBox('visitUID_"+cbCounter+"')\">&nbsp;"+getTran("encountertype",encounter.getType(),sWebLanguage)+"</td>")
+                             .append("<td onClick=\"clickCheckBox('visitUID_"+cbCounter+"')\">&nbsp;"+getTran(request,"encountertype",encounter.getType(),sWebLanguage)+"</td>")
                              .append("<td onClick=\"clickCheckBox('visitUID_"+cbCounter+"')\">&nbsp;"+ScreenHelper.formatDate(encounter.getBegin())+"</td>")
                              .append("<td onClick=\"clickCheckBox('visitUID_"+cbCounter+"')\">&nbsp;"+ScreenHelper.formatDate(encounter.getEnd())+"</td>")
-                             .append("<td onClick=\"clickCheckBox('visitUID_"+cbCounter+"')\">&nbsp;"+getTran("urgency.origin",encounter.getOrigin(),sWebLanguage)+"</td>")
+                             .append("<td onClick=\"clickCheckBox('visitUID_"+cbCounter+"')\">&nbsp;"+getTran(request,"urgency.origin",encounter.getOrigin(),sWebLanguage)+"</td>")
                              .append("<td onClick=\"clickCheckBox('visitUID_"+cbCounter+"')\">&nbsp;"+(encounter.getService()==null?"":encounter.getService().getLabel(sWebLanguage))+"</td>")
                              .append("<td onClick=\"clickCheckBox('visitUID_"+cbCounter+"')\" style='padding-left:5px;'>"+ReasonForEncounter.getReasonsForEncounterAsText(encounter.getUid(),sWebLanguage).replaceAll("\n","<br>")+"</td>")
                             .append("</tr>");
@@ -318,24 +318,23 @@
 				 
 		        // subtitle		         
                 sOutEnc2.append("<tr class='admin'>")
-	                     .append("<td colspan='7'>&nbsp;&nbsp;"+getTran("web","admissions",sWebLanguage)+"</td>")
+	                     .append("<td colspan='7'>&nbsp;&nbsp;"+getTran(request,"web","admissions",sWebLanguage)+"</td>")
 	                    .append("</tr>");
 		        
 		        // header
                 sOutEnc2.append("<tr height='20'>")
                          .append("<td class='admin' width='30'>&nbsp;</td>")
- 	                     .append("<td class='admin' width='10%'>"+getTran("web.occup","medwan.common.contacttype",sWebLanguage)+"&nbsp;</td>")
-	                     .append("<td class='admin' width='10%'>"+getTran("web","begin",sWebLanguage)+"&nbsp;</td>")
-	                     .append("<td class='admin' width='10%'>"+getTran("web","end",sWebLanguage)+"&nbsp;</td>")
-	                     .append("<td class='admin' width='10%'>"+getTran("openclinic.chuk","urgency.origin",sWebLanguage)+"&nbsp;</td>")
-	                     .append("<td class='admin' width='20%'>"+getTran("web","service",sWebLanguage)+"&nbsp;</td>")
-	                     .append("<td class='admin' width='*'>"+getTran("openclinic.chuk","rfe",sWebLanguage)+"&nbsp;</td>")
+ 	                     .append("<td class='admin' width='10%'>"+getTran(request,"web.occup","medwan.common.contacttype",sWebLanguage)+"&nbsp;</td>")
+	                     .append("<td class='admin' width='10%'>"+getTran(request,"web","begin",sWebLanguage)+"&nbsp;</td>")
+	                     .append("<td class='admin' width='10%'>"+getTran(request,"web","end",sWebLanguage)+"&nbsp;</td>")
+	                     .append("<td class='admin' width='10%'>"+getTran(request,"openclinic.chuk","urgency.origin",sWebLanguage)+"&nbsp;</td>")
+	                     .append("<td class='admin' width='20%'>"+getTran(request,"web","service",sWebLanguage)+"&nbsp;</td>")
+	                     .append("<td class='admin' width='*'>"+getTran(request,"openclinic.chuk","rfe",sWebLanguage)+"&nbsp;</td>")
                         .append("</tr>");
 
 		        Encounter encounter;
 				for(int i=0; i<admissions.size(); i++){
 			        encounter = (Encounter)admissions.get(i);
-	
                     // alternate row-style
                     if(sClass.length()==0) sClass = "1";
                     else                   sClass = "";
@@ -345,11 +344,11 @@
                              .append("<td align='center'>")
                               .append("<input type='checkbox' value='"+encounter.getUid()+"' name='admissionUID_"+cbCounter+"'>")
                              .append("</td>")
-                             .append("<td onClick=\"clickCheckBox('admissionUID_"+cbCounter+"');\">&nbsp;"+getTran("encountertype",encounter.getType(),sWebLanguage)+"</td>")
-                             .append("<td onClick=\"clickCheckBox('admissionUID_"+cbCounter+"');\">&nbsp;"+ScreenHelper.formatDate(encounter.getBegin())+"</td>")
-                             .append("<td onClick=\"clickCheckBox('admissionUID_"+cbCounter+"');\">&nbsp;"+ScreenHelper.formatDate(encounter.getEnd())+"</td>")
-                             .append("<td onClick=\"clickCheckBox('admissionUID_"+cbCounter+"');\">&nbsp;"+getTran("urgency.origin",encounter.getOrigin(),sWebLanguage)+"</td>")
-                             .append("<td onClick=\"clickCheckBox('admissionUID_"+cbCounter+"');\">&nbsp;"+encounter.getService().getLabel(sWebLanguage)+"</td>")
+                             .append("<td onClick=\"clickCheckBox('admissionUID_"+cbCounter+"');\">&nbsp;"+getTran(request,"encountertype",encounter.getType(),sWebLanguage)+"</td>")
+                             .append("<td onClick=\"clickCheckBox('admissionUID_"+cbCounter+"');\">&nbsp;"+(encounter.getBegin()==null?"":ScreenHelper.formatDate(encounter.getBegin()))+"</td>")
+                             .append("<td onClick=\"clickCheckBox('admissionUID_"+cbCounter+"');\">&nbsp;"+(encounter.getEnd()==null?"":ScreenHelper.formatDate(encounter.getEnd()))+"</td>")
+                             .append("<td onClick=\"clickCheckBox('admissionUID_"+cbCounter+"');\">&nbsp;"+getTran(request,"urgency.origin",encounter.getOrigin(),sWebLanguage)+"</td>")
+                             .append("<td onClick=\"clickCheckBox('admissionUID_"+cbCounter+"');\">&nbsp;"+(encounter.getService()==null?"":encounter.getService().getLabel(sWebLanguage))+"</td>")
                              .append("<td onClick=\"clickCheckBox('admissionUID_"+cbCounter+"');\" style='padding-left:5px;'>"+ReasonForEncounter.getReasonsForEncounterAsText(encounter.getUid(),sWebLanguage).replaceAll("\n","<br>")+"</td>")
                             .append("</tr>");
 
@@ -362,7 +361,7 @@
 			if(visits.size()==0 && admissions.size()==0){
 		        // no records found		    	
                 sOutEnc2.append("<tr>")
-	                     .append("<td class='admin2' colspan='7'>"+getTran("web","noRecordsFound",sWebLanguage)+"</td>")
+	                     .append("<td class='admin2' colspan='7'>"+getTran(request,"web","noRecordsFound",sWebLanguage)+"</td>")
 	                    .append("</tr>");
 			}
         %>      
@@ -372,7 +371,7 @@
 		        <%-- ENCOUNTER HISTORY --%>
                 <table width="100%" cellspacing="1" cellpadding="0" class="list" style="border-bottom:none;">
 					<tr class="admin">
-					    <td><%=getTran("web","encounters",sWebLanguage)%></td>
+					    <td><%=getTran(request,"web","encounters",sWebLanguage)%></td>
 					</tr>     
                 </table>
                 
@@ -387,8 +386,8 @@
 						    <table width="100%" cellspacing="1">
 						        <tr>
 						            <td>
-						                <a href="javascript:checkAllVisits(true);"><%=getTran("web.manage","CheckAll",sWebLanguage)%></a>
-						                <a href="javascript:checkAllVisits(false);"><%=getTran("web.manage","UncheckAll",sWebLanguage)%></a>
+						                <a href="javascript:checkAllVisits(true);"><%=getTran(request,"web.manage","CheckAll",sWebLanguage)%></a>
+						                <a href="javascript:checkAllVisits(false);"><%=getTran(request,"web.manage","UncheckAll",sWebLanguage)%></a>
 						            </td>
 						            <td align="right">
 						                <a href="#top"><img src="<c:url value='/_img'/>/themes/default/top.gif" class="link"></a>
@@ -408,8 +407,8 @@
 						    <table width="100%" cellspacing="1">
 						        <tr>
 						            <td>
-						                <a href="javascript:checkAllAdmissions(true);"><%=getTran("web.manage","CheckAll",sWebLanguage)%></a>
-						                <a href="javascript:checkAllAdmissions(false);"><%=getTran("web.manage","UncheckAll",sWebLanguage)%></a>
+						                <a href="javascript:checkAllAdmissions(true);"><%=getTran(request,"web.manage","CheckAll",sWebLanguage)%></a>
+						                <a href="javascript:checkAllAdmissions(false);"><%=getTran(request,"web.manage","UncheckAll",sWebLanguage)%></a>
 						            </td>
 						            <td align="right">
 						                <a href="#top"><img src="<c:url value='/_img'/>/themes/default/top.gif" class="link"></a>
@@ -425,7 +424,7 @@
         <%-- 15 : warnings
         <tr>
             <td class="admin">
-                <input type="checkbox" name="section_15" id="section_15" value="on" <%=(sSection15.equals("on")?"CHECKED":"")%>>&nbsp;<%=getLabel("pdf","warnings",sWebLanguage,"section_15")%>
+                <input type="checkbox" name="section_15" id="section_15" value="on" <%=(sSection15.equals("on")?"CHECKED":"")%>>&nbsp;<%=getLabel(request,"pdf","warnings",sWebLanguage,"section_15")%>
             </td>
         </tr>
         --%> 
@@ -434,7 +433,7 @@
         <%-- 16 : examinations --%>
         <tr>
             <td class="admin">
-                <input type="checkbox" name="section_16" id="section_16" value="on" <%=(sSection16.equals("on")?"CHECKED":"")%> onClick="toggleTranTable(this);">&nbsp;<%=getLabel("pdf","examinations",sWebLanguage,"section_16")%>
+                <input type="checkbox" name="section_16" id="section_16" value="on" <%=(sSection16.equals("on")?"CHECKED":"")%> onClick="toggleTranTable(this);">&nbsp;<%=getLabel(request,"pdf","examinations",sWebLanguage,"section_16")%>
             </td>
         </tr>  
             
@@ -463,7 +462,7 @@
                 transaction = (TransactionVO)tranIter.next();
                 tranDate = new Timestamp(transaction.getUpdateTime().getTime());
 
-                sTransTranslation = getTran("web.occup",transaction.getTransactionType(),sWebLanguage);
+                sTransTranslation = getTran(request,"web.occup",transaction.getTransactionType(),sWebLanguage);
                 newTransaction = (TransactionVO)hTrans.get(sTransTranslation);
  
                 if(newTransaction==null){
@@ -479,8 +478,8 @@
                 // header
                 sOut.append("<tr height='20'>")
                      .append("<td class='admin' width='30'>&nbsp;</td>")
-                     .append("<td class='admin' width='400'>"+getTran("web.occup","medwan.common.contacttype",sWebLanguage)+"</td>")
-                     .append("<td class='admin' width='*'>"+getTran("web.occup","medwan.common.context",sWebLanguage)+"</td>")
+                     .append("<td class='admin' width='400'>"+getTran(request,"web.occup","medwan.common.contacttype",sWebLanguage)+"</td>")
+                     .append("<td class='admin' width='*'>"+getTran(request,"web.occup","medwan.common.context",sWebLanguage)+"</td>")
                     .append("</tr>");
                 
                 Iterator setIter = set.iterator();
@@ -520,8 +519,8 @@
                                      .append("<td align='center'>")
                                       .append("<input type='checkbox' value='"+tranType+"' name='tranType_"+cbCounter+"'>")
                                      .append("</td>")
-                                     .append("<td onClick=\"clickCheckBox('tranType_"+cbCounter+"')\">&nbsp;"+getTran("web.occup",tranType,sWebLanguage)+"</td>")
-                                     .append("<td onClick=\"clickCheckBox('tranType_"+cbCounter+"')\">&nbsp;"+getTran("web.occup",tranCtxt,sWebLanguage)+"</td>")
+                                     .append("<td onClick=\"clickCheckBox('tranType_"+cbCounter+"')\">&nbsp;"+getTran(request,"web.occup",tranType,sWebLanguage)+"</td>")
+                                     .append("<td onClick=\"clickCheckBox('tranType_"+cbCounter+"')\">&nbsp;"+getTran(request,"web.occup",tranCtxt,sWebLanguage)+"</td>")
                                     .append("</tr>");
  
                                 cbCounter++;
@@ -536,8 +535,8 @@
                                          .append("<td align='center'>")
                                           .append("<input type='checkbox' value='"+tranType+"' name='tranType_"+cbCounter+"'>")
                                          .append("</td>")
-                                         .append("<td onClick=\"clickCheckBox('tranType_"+cbCounter+"')\">&nbsp;"+getTran("web.occup",tranType,sWebLanguage)+"</td>")
-                                         .append("<td onClick=\"clickCheckBox('tranType_"+cbCounter+"')\">&nbsp;"+getTran("web.occup",tranCtxt,sWebLanguage)+"</td>")
+                                         .append("<td onClick=\"clickCheckBox('tranType_"+cbCounter+"')\">&nbsp;"+getTran(request,"web.occup",tranType,sWebLanguage)+"</td>")
+                                         .append("<td onClick=\"clickCheckBox('tranType_"+cbCounter+"')\">&nbsp;"+getTran(request,"web.occup",tranCtxt,sWebLanguage)+"</td>")
                                         .append("</tr>");
  
                                     cbCounter++;
@@ -552,8 +551,8 @@
                                      .append("<td align='center'>")
                                       .append("<input type='checkbox' value='"+tranType+"' name='tranType_"+cbCounter+"'>")
                                      .append("</td>")
-                                     .append("<td onClick=\"clickCheckBox('tranType_"+cbCounter+"');\">&nbsp;"+getTran("web.occup",tranType,sWebLanguage)+"</td>")
-                                     .append("<td onClick=\"clickCheckBox('tranType_"+cbCounter+"');\">&nbsp;"+getTran("web.occup",tranCtxt,sWebLanguage)+"</td>")
+                                     .append("<td onClick=\"clickCheckBox('tranType_"+cbCounter+"');\">&nbsp;"+getTran(request,"web.occup",tranType,sWebLanguage)+"</td>")
+                                     .append("<td onClick=\"clickCheckBox('tranType_"+cbCounter+"');\">&nbsp;"+getTran(request,"web.occup",tranCtxt,sWebLanguage)+"</td>")
                                     .append("</tr>");
 
                                 cbCounter++;
@@ -565,7 +564,7 @@
             else{
 		        // no records found		    	
                 sOut.append("<tr>")
-	                 .append("<td class='admin2' colspan='3'>"+getTran("web","noRecordsFound",sWebLanguage)+"</td>")
+	                 .append("<td class='admin2' colspan='3'>"+getTran(request,"web","noRecordsFound",sWebLanguage)+"</td>")
 	                .append("</tr>");
 	        }
         
@@ -577,7 +576,7 @@
 		        <%-- TRANSACTIONS --%>
                 <table width="100%" cellspacing="1" cellpadding="0" class="list" style="border-bottom:none;">
 					<tr class="admin">
-					    <td><%=getTran("web","examinationTypes",sWebLanguage)%></td>
+					    <td><%=getTran(request,"web","examinationTypes",sWebLanguage)%></td>
 					</tr>     
                 </table>
 	                
@@ -589,8 +588,8 @@
 			    <table width="100%" cellspacing="1">
 			        <tr>
 			            <td>
-			                <a href="javascript:checkAllExaminationTypes(true);"><%=getTran("web.manage","CheckAll",sWebLanguage)%></a>
-			                <a href="javascript:checkAllExaminationTypes(false);"><%=getTran("web.manage","UncheckAll",sWebLanguage)%></a>
+			                <a href="javascript:checkAllExaminationTypes(true);"><%=getTran(request,"web.manage","CheckAll",sWebLanguage)%></a>
+			                <a href="javascript:checkAllExaminationTypes(false);"><%=getTran(request,"web.manage","UncheckAll",sWebLanguage)%></a>
 			            </td>
 			            <td align="right">
 			                <a href="#top"><img src="<c:url value='/_img'/>/themes/default/top.gif" class="link"></a>
@@ -603,7 +602,7 @@
         <%-- 17 : signature
         <tr>
             <td class="admin">
-                <input type="checkbox" name="section_17" id="section_17" value="on" <%=(sSection17.equals("on")?"CHECKED":"")%>><%=getLabel("pdf","signature",sWebLanguage,"section_17")%>
+                <input type="checkbox" name="section_17" id="section_17" value="on" <%=(sSection17.equals("on")?"CHECKED":"")%>><%=getLabel(request,"pdf","signature",sWebLanguage,"section_17")%>
             </td>
         </tr>
         --%> 
@@ -614,8 +613,8 @@
     <table width="100%" cellspacing="1">
         <tr>
             <td>
-                <a href="javascript:checkAll(true);"><%=getTran("web.manage","CheckAll",sWebLanguage)%></a>
-                <a href="javascript:checkAll(false);"><%=getTran("web.manage","UncheckAll",sWebLanguage)%></a>
+                <a href="javascript:checkAll(true);"><%=getTran(request,"web.manage","CheckAll",sWebLanguage)%></a>
+                <a href="javascript:checkAll(false);"><%=getTran(request,"web.manage","UncheckAll",sWebLanguage)%></a>
             </td>
             <td align="right">
                 <a href="#top"><img src="<c:url value='/_img'/>/themes/default/top.gif" class="link"></a>
@@ -627,7 +626,7 @@
         <%-- LANGUAGE SELECTOR --%>
         <select class="text" name="PrintLanguage">
             <%
-                String sPrintLanguage = activePatient.language;
+               String sPrintLanguage = activePatient.language;
             
                 // supported languages
                 String supportedLanguages = MedwanQuery.getInstance().getConfigString("supportedLanguages");

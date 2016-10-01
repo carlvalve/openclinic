@@ -36,7 +36,7 @@
         java.util.Date cd = activePatient.getCreationDate();
         out.print(
     			(bCanModifyCore?inputRowOpen("Web","begindate","UpdateTime","Admin",ScreenHelper.formatDate(new java.util.Date()),"Dp",true,false,sWebLanguage)
-    					+(cd==null?"":"("+getTran("web","patientcreationdate",sWebLanguage)+": "+ScreenHelper.getSQLDate(cd)+")")+"</td></tr>":
+    					+(cd==null?"":"("+getTran(request,"web","patientcreationdate",sWebLanguage)+": "+ScreenHelper.getSQLDate(cd)+")")+"</td></tr>":
     	            inputRow("Web","begindate","UpdateTime","Admin",ScreenHelper.formatDate(new java.util.Date()),"T",bCanModifyCore,true,sWebLanguage)
     				)
         	//Lastname
@@ -68,7 +68,7 @@
         	//PersonId
             +(
            		MedwanQuery.getInstance().getConfigInt("showAdminPersonId",1)==0?"":
-            	"<tr><td class='admin'>"+getTran("web","personid",sWebLanguage)+"</td><td class='admin2'>"+activePatient.personid+"</td></tr>"
+            	"<tr><td class='admin'>"+getTran(request,"web","personid",sWebLanguage)+"</td><td class='admin2'>"+activePatient.personid+"</td></tr>"
              )
         	//Immatnew
             +(
@@ -77,7 +77,7 @@
              )
             +(
            		MedwanQuery.getInstance().getConfigInt("showAdminArchiveFileCode",1)==0?"<input type='hidden' name='archiveFileCode' value='"+checkString(activePatient.getID("archiveFileCode"))+"'/>":
-            	"<tr><td class='admin'>"+getTran("web","archiveFileCode",sWebLanguage)+"</td><td class='admin2'><input type='hidden' name='archiveFileCode' value='"+activePatient.getID("archiveFileCode")+"'/>"
+            	"<tr><td class='admin'>"+getTran(request,"web","archiveFileCode",sWebLanguage)+"</td><td class='admin2'><input type='hidden' name='archiveFileCode' value='"+activePatient.getID("archiveFileCode")+"'/>"
                 +activePatient.getID("archiveFileCode").toUpperCase()+"</td></tr>")
              );
 
@@ -94,7 +94,7 @@
 
         //language
         String sLanguage = "<select name='Language' select-one class='text'>";
-        sLanguage+="<option value='' SELECTED>"+getTran("web","choose",sWebLanguage)+"</option>";
+        sLanguage+="<option value='' SELECTED>"+getTran(request,"web","choose",sWebLanguage)+"</option>";
         String sPatientLanguages = MedwanQuery.getInstance().getConfigString("PatientLanguages");
         if(sPatientLanguages.length()==0){
             sPatientLanguages = MedwanQuery.getInstance().getConfigString("supportedLanguages","en,fr");
@@ -105,7 +105,7 @@
         }
         String[] aPatientLanguages = sPatientLanguages.split(",");
         for(int i=0;i<aPatientLanguages.length;i++){
-            sLanguage += "<option value='"+aPatientLanguages[i]+"'>"+getTran("Web.Language",aPatientLanguages[i],sWebLanguage)+"</option>";
+            sLanguage += "<option value='"+aPatientLanguages[i]+"'>"+getTran(request,"Web.Language",aPatientLanguages[i],sWebLanguage)+"</option>";
         }
         String sDefaultLanguage = MedwanQuery.getInstance().getConfigString("DefaultLanguage");
         if(sDefaultLanguage.length()==0){
@@ -120,14 +120,14 @@
 
       // gender
       String sGender = "<select name='Gender' select-one class='text'";
-      sGender+="><option value='' SELECTED>"+getTran("web","choose",sWebLanguage)+"</option>";
-      sGender+="<option value='M'>"+getTran("Web.Occup","Male",sWebLanguage)+"</option>"+
-               "<option value='F'>"+getTran("Web.Occup","Female",sWebLanguage)+"</option>";
+      sGender+="><option value='' SELECTED>"+getTran(request,"web","choose",sWebLanguage)+"</option>";
+      sGender+="<option value='M'>"+getTran(request,"Web.Occup","Male",sWebLanguage)+"</option>"+
+               "<option value='F'>"+getTran(request,"Web.Occup","Female",sWebLanguage)+"</option>";
       sGender = setOption(sGender,activePatient.gender.toUpperCase(),MedwanQuery.getInstance().getConfigString("defaultGender","F"),3);
 
       // status
       String sCivilStatus = "<select name='CivilStatus' select-one class='text'><option value=''/>"
-            +ScreenHelper.writeSelect("civil.status",activePatient.comment2,sWebLanguage)+"</select>";
+            +ScreenHelper.writeSelect(request,"civil.status",activePatient.comment2,sWebLanguage)+"</select>";
 
       out.print(
    	      // gender
@@ -172,11 +172,11 @@
 	    		inputRow("Web","comment","Comment","Admin",activePatient.comment,"N",true, false,sWebLanguage)
 	       )
 	      +(MedwanQuery.getInstance().getConfigInt("enableVip",0)==1 && activeUser.getAccessRight("vipaccess.select")?
-	      normalRow("Web","vip","Vip","Admin",sWebLanguage)+"<input type='radio' name='Vip' id='Vip' value='0' "+(!"1".equalsIgnoreCase((String)activePatient.adminextends.get("vip"))?"checked":"")+">"+getTran("vipstatus","0",sWebLanguage)+" <input type='radio' name='Vip' id='Vip' value='1' "+("1".equalsIgnoreCase((String)activePatient.adminextends.get("vip"))?"checked":"")+">"+getTran("vipstatus","1",sWebLanguage)+"</td></tr>":
+	      normalRow("Web","vip","Vip","Admin",sWebLanguage)+"<input type='radio' name='Vip' id='Vip' value='0' "+(!"1".equalsIgnoreCase((String)activePatient.adminextends.get("vip"))?"checked":"")+">"+getTran(request,"vipstatus","0",sWebLanguage)+" <input type='radio' name='Vip' id='Vip' value='1' "+("1".equalsIgnoreCase((String)activePatient.adminextends.get("vip"))?"checked":"")+">"+getTran(request,"vipstatus","1",sWebLanguage)+"</td></tr>":
 	      "<input type='hidden' name='Vip' id='Vip' value='"+checkString((String)activePatient.adminextends.get("vip"))+"'/>"	  
 	      )
 	      +(MedwanQuery.getInstance().getConfigInt("enableDatacenterPatientExport",0)==1 && activeUser.getAccessRight("datacenterpatientexport.select")?
-	      normalRow("Web","datacenterpatientexport","datacenterpatientexport","Admin",sWebLanguage)+"<input type='radio' name='datacenterpatientexport' id='datacenterpatientexport' value='0' "+(!activePatient.hasPendingExportRequest() && activePatient.personid!=null && activePatient.personid.trim().length()>0?"checked":"")+">"+getTran("datacenterpatientexport","0",sWebLanguage)+" <input type='radio' name='datacenterpatientexport' id='datacenterpatientexport' value='1' "+(activePatient.hasPendingExportRequest() || activePatient.personid==null || activePatient.personid.trim().length()==0?"checked":"")+">"+getTran("datacenterpatientexport","1",sWebLanguage)+"</td></tr>":
+	      normalRow("Web","datacenterpatientexport","datacenterpatientexport","Admin",sWebLanguage)+"<input type='radio' name='datacenterpatientexport' id='datacenterpatientexport' value='0' "+(!activePatient.hasPendingExportRequest() && activePatient.personid!=null && activePatient.personid.trim().length()>0?"checked":"")+">"+getTran(request,"datacenterpatientexport","0",sWebLanguage)+" <input type='radio' name='datacenterpatientexport' id='datacenterpatientexport' value='1' "+(activePatient.hasPendingExportRequest() || activePatient.personid==null || activePatient.personid.trim().length()==0?"checked":"")+">"+getTran(request,"datacenterpatientexport","1",sWebLanguage)+"</td></tr>":
 	      "<input type='hidden' name='datacenterpatientexport' id='datacenterpatientexport' value='"+(activePatient.hasPendingExportRequest()?"1":"0")+"'/>"	  
 	      )
 	    );

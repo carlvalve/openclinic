@@ -152,7 +152,7 @@
     
     <table width="100%" cellspacing="0" cellpadding="1" class="menu">
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","worklist",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","worklist",sWebLanguage)%></td>
             <td class="admin2">
                 <select class="text" name="activeProfile">
                     <%
@@ -168,8 +168,8 @@
                     %>
                 </select>
                 
-                <input type="radio" name="worklistType" value="incomplete" id="r_type1" <%=worklistType.equalsIgnoreCase("incomplete")?"checked":""%>><%=getLabel("web","incomplete",sWebLanguage,"r_type1")%>
-                <input type="radio" name="worklistType" value="today" id="r_type2" <%=worklistType.equalsIgnoreCase("today")?"checked":""%>><%=getLabel("web","today",sWebLanguage,"r_type2")%>&nbsp;
+                <input type="radio" name="worklistType" value="incomplete" id="r_type1" <%=worklistType.equalsIgnoreCase("incomplete")?"checked":""%>><%=getLabel(request,"web","incomplete",sWebLanguage,"r_type1")%>
+                <input type="radio" name="worklistType" value="today" id="r_type2" <%=worklistType.equalsIgnoreCase("today")?"checked":""%>><%=getLabel(request,"web","today",sWebLanguage,"r_type2")%>&nbsp;
                 
                 <input class="button" type="submit" name="submit" value="<%=getTranNoLink("web","find",sWebLanguage)%>"/>
             </td>
@@ -182,9 +182,9 @@
         %>
         <br>
         <table width="100%" cellspacing="1" cellpadding="0" class="list">
-            <tr class="admin">
-                <th><%=getTran("web","ID",sWebLanguage)%><br/><%=getTran("web","date",sWebLanguage)%></th>
-                <th><%=getTran("web","patient",sWebLanguage)%><br/><%=getTran("web","service",sWebLanguage)%></th>
+            <tr class="adminng">
+                <th><%=getTran(request,"web","ID",sWebLanguage)%><br/><%=getTran(request,"web","date",sWebLanguage)%></th>
+                <th><%=getTran(request,"web","patient",sWebLanguage)%><br/><%=getTran(request,"web","service",sWebLanguage)%></th>
         <%
             // Show the selected worklist
             // Find all the analysis that are part of the active profile
@@ -200,8 +200,8 @@
                 }
                 worklistAnalyses+= "'"+analysis.get("labcode")+"'";
             }
-            out.print("<th>"+getTran("web","lab.technicalvalidation",sWebLanguage)+"</th>");
-            out.print("<th>"+getTran("web","comment",sWebLanguage)+"</th></tr>");
+            out.print("<th>"+getTran(request,"web","lab.technicalvalidation",sWebLanguage)+"</th>");
+            out.print("<th>"+getTran(request,"web","comment",sWebLanguage)+"</th></tr>");
 
             //END OF WORKLIST HEADER
             //Now let's find all lab requests for this worklist
@@ -453,7 +453,7 @@
                 out.print("</tr>");
             }
             out.print("<tr><td colspan='"+(profileAnalysis.size()+4)+"'><hr/></td></tr>");
-            out.print("<tr><td colspan='2'><input readonly style='background: yellow' type='text' size='5'/> = "+MedwanQuery.getInstance().getLabel("web","notechnicalvalidation",sWebLanguage)+"<br/><input readonly style='background: #ff9999' type='text' size='5'/> = "+MedwanQuery.getInstance().getLabel("web","higherthanalertvalue",sWebLanguage)+"</td><td colspan='"+(allAnalysis.length+1)+"'><input class='button' type='submit' name='save' value='"+getTran("web","save",sWebLanguage)+"'/></tr>");
+            out.print("<tr><td colspan='2'><input readonly style='background: yellow' type='text' size='5'/> = "+MedwanQuery.getInstance().getLabel("web","notechnicalvalidation",sWebLanguage)+"<br/><input readonly style='background: #ff9999' type='text' size='5'/> = "+MedwanQuery.getInstance().getLabel("web","higherthanalertvalue",sWebLanguage)+"</td><td colspan='"+(allAnalysis.length+1)+"'><input class='button' type='submit' name='save' value='"+getTran(request,"web","save",sWebLanguage)+"'/></tr>");
         %>
         </table>
         

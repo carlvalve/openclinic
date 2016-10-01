@@ -118,13 +118,13 @@
     <table class="list" width="100%" border="0" cellspacing="1" cellpadding="0">
         <%-- DATE --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%></td>
             <td class="admin2" colspan="3"><%=writeDateField("EditDate","transactionForm",checkString(ScreenHelper.stdDateFormat.format(ac.getDate())),sWebLanguage)%></td>
         </tr>
         
         <%-- BEGIN HOUR --%>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","begin_hour",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","begin_hour",sWebLanguage)%></td>
             <td class="admin2" colspan="3">
                 <input type="text" class="text" id="abeginhour" name="EditBeginHour"onkeypress="keypressTime(this)" onblur="checkTime(this);calculateInterval('abeginhour','aendhour','aduration')" size="5" value="<%=ac.getBeginHour()%>">
                 
@@ -134,7 +134,7 @@
         
         <%-- END HOUR --%>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","end_hour",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","end_hour",sWebLanguage)%></td>
             <td class="admin2" colspan="3">
                 <input type="text" class="text" id="aendhour" name="EditEndHour"onkeypress="keypressTime(this)" onblur="checkTime(this);calculateInterval('abeginhour','aendhour','aduration');" size="5" value="<%=ac.getEndHour()%>">
                 
@@ -144,7 +144,7 @@
         
         <%-- DURATION --%>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","duration",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","duration",sWebLanguage)%></td>
             <td class="admin2" colspan="3">
                 <input readonly type='text' class='text' id="aduration" name="EditDuration" size='5' value="<%=ac.getDuration()%>">
             </td>
@@ -152,7 +152,7 @@
         
         <%-- CONTROL PERFORMED BY --%>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","control_performed_by",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","control_performed_by",sWebLanguage)%></td>
             <td class="admin2" colspan="3">
                 <input type="hidden" id="EditControlByID" name="EditControlByID" value="<%=ac.getControlPerformedById()%>">
                 <input class="text" type="text" name="EditControlByName" readonly size="<%=sTextWidth%>" value="<%=sControlByName%>">
@@ -168,42 +168,42 @@
     <table class="list" width="100%" border="0" cellspacing="1" cellpadding="0">
         <tr class="admin">
             <td/>
-            <td width="50"><%=getTran("openclinic.chuk","ok",sWebLanguage)%></td>
-            <td width="50"><%=getTran("openclinic.chuk","nok",sWebLanguage)%></td>
-            <td><%=getTran("openclinic.chuk","remark",sWebLanguage)%></td>
+            <td width="50"><%=getTran(request,"openclinic.chuk","ok",sWebLanguage)%></td>
+            <td width="50"><%=getTran(request,"openclinic.chuk","nok",sWebLanguage)%></td>
+            <td><%=getTran(request,"openclinic.chuk","remark",sWebLanguage)%></td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","equipment_anesthesie",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","equipment_anesthesie",sWebLanguage)%></td>
             <td class="admin2"><input type="radio" class="hand" onDblClick="uncheckRadio(this);" name="EditEquipmentAnesthesie" value="ok" <%=(ac.getEquipmentAnesthesie().equals("ok")?"checked":"")%>></td>
             <td class="admin2"><input type="radio" class="hand" onDblClick="uncheckRadio(this);" name="EditEquipmentAnesthesie" value="nok" <%=(ac.getEquipmentAnesthesie().equals("nok")?"checked":"")%>></td>
             <td class="admin2"><textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" class="text" cols="100" rows="2" name="EditEquipmentAnesthesieRemark"><%=ac.getEquipmentAnesthesieRemark()%></textarea></td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","equipment_monitor",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","equipment_monitor",sWebLanguage)%></td>
             <td class="admin2"><input type="radio" class="hand" onDblClick="uncheckRadio(this);" name="EditEquipmentMonitor" value="ok"<%if(ac.getEquipmentMonitor().equals("ok")){out.print(" checked");}%>></td>
             <td class="admin2"><input type="radio" class="hand" onDblClick="uncheckRadio(this);" name="EditEquipmentMonitor" value="nok"<%if(ac.getEquipmentMonitor().equals("nok")){out.print(" checked");}%>></td>
             <td class="admin2"><textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" class="text" cols="100" rows="2" name="EditEquipmentMonitorRemark"><%=ac.getEquipmentMonitorRemark()%></textarea></td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","manage_medicines",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","manage_medicines",sWebLanguage)%></td>
             <td class="admin2"><input type="radio" class="hand" onDblClick="uncheckRadio(this);" name="EditManageMedicines" value="ok"<%if(ac.getManageMedicines().equals("ok")){out.print(" checked");}%>></td>
             <td class="admin2"><input type="radio" class="hand" onDblClick="uncheckRadio(this);" name="EditManageMedicines" value="nok"<%if(ac.getManageMedicines().equals("nok")){out.print(" checked");}%>></td>
             <td class="admin2"><textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" class="text" cols="100" rows="2" name="EditManageMedicinesRemark"><%=ac.getManageMedicinesRemark()%></textarea></td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","vacuum_cleaner",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","vacuum_cleaner",sWebLanguage)%></td>
             <td class="admin2"><input type="radio" class="hand" onDblClick="uncheckRadio(this);" name="EditVacuumCleaner" value="ok"<%if(ac.getVacuumCleaner().equals("ok")){out.print(" checked");}%>></td>
             <td class="admin2"><input type="radio" class="hand" onDblClick="uncheckRadio(this);" name="EditVacuumCleaner" value="nok"<%if(ac.getVacuumCleaner().equals("nok")){out.print(" checked");}%>></td>
             <td class="admin2"><textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" class="text" cols="100" rows="2" name="EditVacuumCleanerRemark"><%=ac.getVacuumCleanerRemark()%></textarea></td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","oxygen",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","oxygen",sWebLanguage)%></td>
             <td class="admin2"><input type="radio" class="hand" onDblClick="uncheckRadio(this);" name="EditOxygen" value="ok"<%if(ac.getOxygen().equals("ok")){out.print(" checked");}%>></td>
             <td class="admin2"><input type="radio" class="hand" onDblClick="uncheckRadio(this);" name="EditOxygen" value="nok"<%if(ac.getOxygen().equals("nok")){out.print(" checked");}%>></td>
             <td class="admin2"><textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" class="text" cols="100" rows="2" name="EditOxygenRemark"><%=ac.getOxygenRemark()%></textarea></td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","other",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","other",sWebLanguage)%></td>
             <td class="admin2"><input type="radio" class="hand" onDblClick="uncheckRadio(this);" name="EditOther" value="ok"<%if(ac.getOther().equals("ok")){out.print(" checked");}%>></td>
             <td class="admin2"><input type="radio" class="hand" onDblClick="uncheckRadio(this);" name="EditOther" value="nok"<%if(ac.getOther().equals("nok")){out.print(" checked");}%>></td>
             <td class="admin2"><textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" class="text" cols="100" rows="2" name="EditOtherRemark"><%=ac.getOtherRemark()%></textarea></td>

@@ -12,13 +12,13 @@
         sTmp.append(
                     "<tr id='rowTooth"+iTotal+"'>" +
                         "<td class=\"admin2\">" +
-                        "   <a href='javascript:deleteTooth(rowTooth"+iTotal+");'><img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran("Web.Occup","medwan.common.delete",sWebLanguage) + "' border='0'></a> "+
-                        "   <a href='javascript:editTooth(rowTooth"+iTotal+");'><img src='" + sCONTEXTPATH + "/_img/icons/icon_edit.gif' alt='" + getTran("Web.Occup","medwan.common.edit",sWebLanguage) + "' border='0'></a>" +
+                        "   <a href='javascript:deleteTooth(rowTooth"+iTotal+");'><img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran(null,"Web.Occup","medwan.common.delete",sWebLanguage) + "' border='0'></a> "+
+                        "   <a href='javascript:editTooth(rowTooth"+iTotal+");'><img src='" + sCONTEXTPATH + "/_img/icons/icon_edit.gif' alt='" + getTran(null,"Web.Occup","medwan.common.edit",sWebLanguage) + "' border='0'></a>" +
                         "</td>" +
                         "<td class=\"admin2\">&nbsp;" + sToothNr + "</td>" +
                         "<td class=\"admin2\">&nbsp;" + sDescription + "</td>" +
                         "<td class=\"admin2\">&nbsp;" + sTreatment + "</td>" +
-                        "<td class=\"admin2\">&nbsp;" + getTran("openclinic.chuk",sStatus,sWebLanguage) + "</td>" +
+                        "<td class=\"admin2\">&nbsp;" + getTran(null,"openclinic.chuk",sStatus,sWebLanguage) + "</td>" +
                         "<td class=\"admin2\">" +
                         "</td>" +
                     "</tr>"
@@ -117,16 +117,16 @@
             <td style="vertical-align:top;">
                 <table cellspacing="1" cellpadding="0">
                     <tr>
-                        <td><div width="10" height="10" style="background-color: gray;">&nbsp;&nbsp;</div></td><td>&nbsp;<%=getTran("openclinic.chuk","tooth.absent",sWebLanguage)%></td>
+                        <td><div width="10" height="10" style="background-color: gray;">&nbsp;&nbsp;</div></td><td>&nbsp;<%=getTran(request,"openclinic.chuk","tooth.absent",sWebLanguage)%></td>
                     </tr>
                     <tr>
-                        <td><div width="10" height="10" style="background-color: red;">&nbsp;&nbsp;</div></td><td>&nbsp;<%=getTran("openclinic.chuk","tooth.fill",sWebLanguage)%></td>
+                        <td><div width="10" height="10" style="background-color: red;">&nbsp;&nbsp;</div></td><td>&nbsp;<%=getTran(request,"openclinic.chuk","tooth.fill",sWebLanguage)%></td>
                     </tr>
                     <tr>
-                        <td><div width="10" height="10" style="background-color: blue;">&nbsp;&nbsp;</div></td><td>&nbsp;<%=getTran("openclinic.chuk","tooth.unnerve",sWebLanguage)%></td>
+                        <td><div width="10" height="10" style="background-color: blue;">&nbsp;&nbsp;</div></td><td>&nbsp;<%=getTran(request,"openclinic.chuk","tooth.unnerve",sWebLanguage)%></td>
                     </tr>
                     <tr>
-                        <td><div width="10" height="10" style="background-color: green;">&nbsp;&nbsp;</div></td><td>&nbsp;<%=getTran("openclinic.chuk","tooth.unnerve_fill",sWebLanguage)%></td>
+                        <td><div width="10" height="10" style="background-color: green;">&nbsp;&nbsp;</div></td><td>&nbsp;<%=getTran(request,"openclinic.chuk","tooth.unnerve_fill",sWebLanguage)%></td>
                     </tr>
                 </table>
             </td>
@@ -138,7 +138,7 @@
         <tr>
             <td class="admin">
                 <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-                <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+                <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
             </td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" id="trandate" OnBlur='checkDate(this)'>
@@ -150,10 +150,10 @@
                 <table cellspacing="1" cellpadding="0" width="100%" id="tblTeeth">
                     <tr>
                         <td class="admin" width="40px"></td>
-                        <td class="admin" width="50px"><%=getTran("openclinic.chuk","tooth",sWebLanguage)%></td>
-                        <td class="admin" width="250px"><%=getTran("openclinic.chuk","problem description",sWebLanguage)%></td>
-                        <td class="admin" width="250px"><%=getTran("openclinic.chuk","treatment",sWebLanguage)%></td>
-                        <td class="admin" width="150px"><%=getTran("openclinic.chuk","status",sWebLanguage)%></td>
+                        <td class="admin" width="50px"><%=getTran(request,"openclinic.chuk","tooth",sWebLanguage)%></td>
+                        <td class="admin" width="250px"><%=getTran(request,"openclinic.chuk","problem description",sWebLanguage)%></td>
+                        <td class="admin" width="250px"><%=getTran(request,"openclinic.chuk","treatment",sWebLanguage)%></td>
+                        <td class="admin" width="150px"><%=getTran(request,"openclinic.chuk","status",sWebLanguage)%></td>
                         <td class="admin" width="*"/>
                     </tr>
                     <tr>
@@ -169,10 +169,10 @@
                         </td>
                         <td class="admin2" style="vertical-align:top;">
                             <select class="text" name="toothStatus">
-                                <option value="tooth.absent"><%=getTran("openclinic.chuk","tooth.absent",sWebLanguage)%></option>
-                                <option value="tooth.fill"><%=getTran("openclinic.chuk","tooth.fill",sWebLanguage)%></option>
-                                <option value="tooth.unnerve"><%=getTran("openclinic.chuk","tooth.unnerve",sWebLanguage)%></option>
-                                <option value="tooth.unnerve_fill"><%=getTran("openclinic.chuk","tooth.unnerve_fill",sWebLanguage)%></option>
+                                <option value="tooth.absent"><%=getTran(request,"openclinic.chuk","tooth.absent",sWebLanguage)%></option>
+                                <option value="tooth.fill"><%=getTran(request,"openclinic.chuk","tooth.fill",sWebLanguage)%></option>
+                                <option value="tooth.unnerve"><%=getTran(request,"openclinic.chuk","tooth.unnerve",sWebLanguage)%></option>
+                                <option value="tooth.unnerve_fill"><%=getTran(request,"openclinic.chuk","tooth.unnerve_fill",sWebLanguage)%></option>
                             </select>
                         </td>
                         <td class="admin2">

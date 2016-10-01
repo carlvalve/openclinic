@@ -56,7 +56,7 @@
 	<table width="100%" class="list" celllpadding="0" cellspacing="1">
 	    <%-- CARE PROVIDER --%>
 	    <tr>
-	        <td class='admin' width="<%=sTDAdminWidth%>" nowrap><%=getTran("web","invoicingCareprovider",sWebLanguage)%></td>
+	        <td class='admin' width="<%=sTDAdminWidth%>" nowrap><%=getTran(request,"web","invoicingCareprovider",sWebLanguage)%></td>
 	        <td class='admin2'>
 	        	<select class='text' name='EditCareProvider' id='EditCareProvider' onchange='listcareproviderfees()'>
 	        		  <option value=''></option>
@@ -85,7 +85,7 @@
 	<table width="100%" class="list" celllpadding="0" cellspacing="1">
 	    <%-- TYPE --%>
 	    <tr>
-	        <td class='admin' width="<%=sTDAdminWidth%>"><%=getTran("web","type",sWebLanguage)%></td>
+	        <td class='admin' width="<%=sTDAdminWidth%>"><%=getTran(request,"web","type",sWebLanguage)%></td>
 	        <td class='admin2'>
 	        	<select name="feetype" id="feetype" class="text" onchange="setfeeselection();">
 	        		<option value="prestation"><%=getTranNoLink("web","prestation",sWebLanguage)%></option>
@@ -102,7 +102,7 @@
 	    </tr>
 	    <%-- AMOUNT --%>
 	    <tr>
-	    	<td class='admin'><%=getTran("web","amount",sWebLanguage)%></td>
+	    	<td class='admin'><%=getTran(request,"web","amount",sWebLanguage)%></td>
 	    	<td class='admin2'>
 	    	    <table cellpadding="0" cellspacing="0">
 	    	        <tr>
@@ -145,7 +145,7 @@
 	}
 	else if(document.getElementById("feetype").selectedIndex==1){
 	  document.getElementById("typeselectionlabel").innerHTML = "<%=getTranNoLink("web","type",sWebLanguage)%>";
-	  document.getElementById("typeselection").innerHTML = "<select name='feeid' id='feeid' class='text'><%=ScreenHelper.writeSelectUnsorted("prestation.type",feetype,sWebLanguage)%></select>";
+	  document.getElementById("typeselection").innerHTML = "<select name='feeid' id='feeid' class='text'><%=ScreenHelper.writeSelectUnsorted(request,"prestation.type",feetype,sWebLanguage)%></select>";
 	  document.getElementById("feeamountmodifier").innerHTML = "%";
 	}
 	else if(document.getElementById("feetype").selectedIndex==2){

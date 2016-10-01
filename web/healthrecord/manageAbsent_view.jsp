@@ -35,7 +35,7 @@
         <tr>
             <td class="admin" width="30%">
                 <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-                <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+                <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
             </td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" id="trandate" OnBlur='checkDate(this)'>
@@ -45,7 +45,7 @@
 
         <%-- REASON --%>
         <tr>
-            <td class="admin"><%=getTran("Web.Occup","medwan.common.reason",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web.Occup","medwan.common.reason",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);" class="text" <%=setRightClick("ITEM_TYPE_ABSENT_REASON")%> cols="75" rows="2" id="absent_reason" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ABSENT_REASON" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ABSENT_REASON" property="value"/></textarea>
 
@@ -58,13 +58,13 @@
 
         <%-- EXUSED --%>
         <tr>
-            <td class="admin"><%=getTran("Web.Occup","absent.excused",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web.Occup","absent.excused",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="radio" onDblClick="uncheckRadio(this);" <%=setRightClickMini("ITEM_TYPE_ABSENT_EXCUSED")%> id="r1" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ABSENT_EXCUSED" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ABSENT_EXCUSED;value=medwan.common.yes" property="value" outputString="checked"/> value="medwan.common.yes" onclick="this.className='selected'">
-                <%=getLabel("Web.Occup","medwan.common.yes",sWebLanguage,"r1")%>
+                <%=getLabel(request,"Web.Occup","medwan.common.yes",sWebLanguage,"r1")%>
                 &nbsp;&nbsp;
                 <input type="radio" onDblClick="uncheckRadio(this);" <%=setRightClickMini("ITEM_TYPE_ABSENT_EXCUSED")%> id="r2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ABSENT_EXCUSED" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ABSENT_EXCUSED;value=medwan.common.no" property="value" outputString="checked"/> value="medwan.common.no" onclick="this.className='selected'">
-                <%=getLabel("Web.Occup","medwan.common.no",sWebLanguage,"r2")%>
+                <%=getLabel(request,"Web.Occup","medwan.common.no",sWebLanguage,"r2")%>
             </td>
         </tr>
     </table>

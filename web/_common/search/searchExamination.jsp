@@ -25,7 +25,7 @@
         <table cellpadding="0" cellspacing="0">
             <%-- title --%>
             <tr class="admin">
-                <td><%=getTran("web.manage","examinations",sWebLanguage)%></td>
+                <td><%=getTran(request,"web.manage","examinations",sWebLanguage)%></td>
             </tr>
 
             <tr>
@@ -48,7 +48,7 @@
 
                                     while (iter.hasNext()) {
                                         hResults = (Hashtable) iter.next();
-                                        hExaminations.put(getTran("examination", (String) hResults.get("id"), sWebLanguage), hResults.get("id"));
+                                        hExaminations.put(getTran(request,"examination", (String) hResults.get("id"), sWebLanguage), hResults.get("id"));
                                     }
                                 } else if (sAction.equalsIgnoreCase("showUserExaminations")) {
                                     Parameter parameter;
@@ -65,7 +65,7 @@
                                             sID = parameter.parameter.substring(16);
                                             sValue = Examination.searchExamination(Integer.parseInt(sID));
                                             if (sValue.length() > 0) {
-                                                hExaminations.put(getTran("examination", sID, sWebLanguage), sID);
+                                                hExaminations.put(getTran(request,"examination", sID, sWebLanguage), sID);
                                             }
                                         }
                                     }
@@ -77,12 +77,12 @@
 
                                 Iterator it = v.iterator();
                                 String sClass = "1";
-                                String sSelectTran = getTran("web", "select", sWebLanguage);
+                                String sSelectTran = getTran(request,"web", "select", sWebLanguage);
 
                                 while (it.hasNext()) {
                                     sKey = (String) it.next();
                                     sID = (String) hExaminations.get(sKey);
-                                    sKey = getTran("examination", sID, sWebLanguage);
+                                    sKey = getTran(request,"examination", sID, sWebLanguage);
 
                                     // alternate row-style
                                     if (sClass.equals("")) sClass = "1";
@@ -107,7 +107,7 @@
                                     // display 'no results' message
                                     %>
                                         <tr>
-                                            <td><%=getTran("web","norecordsfound",sWebLanguage)%></td>
+                                            <td><%=getTran(request,"web","norecordsfound",sWebLanguage)%></td>
                                         </tr>
                                     <%
                                 }
@@ -120,10 +120,10 @@
             <%
                 // show all or less examinations
                 if(sAction.equalsIgnoreCase("showAllExaminations")){
-                    %><tr><td><a href="javascript:showUserExaminations()"><%=getTran("web.manage","showonlyuserexaminations",sWebLanguage)%></a></td></tr><%
+                    %><tr><td><a href="javascript:showUserExaminations()"><%=getTran(request,"web.manage","showonlyuserexaminations",sWebLanguage)%></a></td></tr><%
                 }
                 else{
-                    %><tr><td><a href="javascript:showAllExaminations()"><%=getTran("web.manage","showallexaminations",sWebLanguage)%></a></td></tr><%
+                    %><tr><td><a href="javascript:showAllExaminations()"><%=getTran(request,"web.manage","showallexaminations",sWebLanguage)%></a></td></tr><%
                 }
             %>
         </table>

@@ -32,25 +32,25 @@
                     "<td colspan='2'>"+writeTableHeader("Web.manage","manageEncounters",sLanguage,"")+"</td>"+
                    "</tr>"+
                    "<tr>"+
-                    "<td class='admin'>"+getTran("Web","type",sLanguage)+"</td>"+
-                    "<td class='admin2'>"+getTran("Web",checkString(eTmp.getType()),sLanguage)+"</td>"+
+                    "<td class='admin'>"+getTran(null,"Web","type",sLanguage)+"</td>"+
+                    "<td class='admin2'>"+getTran(null,"Web",checkString(eTmp.getType()),sLanguage)+"</td>"+
                    "</tr>"+
                    "<tr>"+
-                    "<td class='admin'>"+getTran("Web","begindate",sLanguage)+"</td>"+
+                    "<td class='admin'>"+getTran(null,"Web","begindate",sLanguage)+"</td>"+
                     "<td class='admin2'>"+sBegin+"</td>"+
                    "</tr>"+
                    "<tr>"+
-                    "<td class='admin'>"+getTran("Web","enddate",sLanguage)+"</td>"+
+                    "<td class='admin'>"+getTran(null,"Web","enddate",sLanguage)+"</td>"+
                     "<td class='admin2'>"+sEnd+"</td>"+
                    "</tr>"+
                   "<tr>"+
-                   "<td class='admin'>"+getTran("Web","manager",sLanguage)+"</td>"+
+                   "<td class='admin'>"+getTran(null,"Web","manager",sLanguage)+"</td>"+
                    "<td class='admin2'>"+(checkString(eTmp.getManagerUID()).length()>0?ScreenHelper.getFullPersonName(""+MedwanQuery.getInstance().getPersonIdFromUserId(Integer.parseInt(eTmp.getManagerUID()))):"")+
                   "</td>"+
                  "</tr>"+
                  "<tr>"+
-                  "<td class='admin'>"+getTran("Web","service",sLanguage)+"</td>"+
-                  "<td class='admin2'>"+getTran("Service",checkString(eTmp.getServiceUID()),sLanguage)+"</td>"+
+                  "<td class='admin'>"+getTran(null,"Web","service",sLanguage)+"</td>"+
+                  "<td class='admin2'>"+getTran(null,"Service",checkString(eTmp.getServiceUID()),sLanguage)+"</td>"+
                  "</tr>"+
                 "</table>";
                 
@@ -162,9 +162,9 @@
 			    <tr class="admin">
 			        <td width="20"/>
 			        <td width="20"/>
-			        <td width="100"><%=HTMLEntities.htmlentities(getTran("web","bed",sWebLanguage))%></td>
-			        <td><%=HTMLEntities.htmlentities(getTran("Web","patient",sWebLanguage))%></td>
-			        <td><%=HTMLEntities.htmlentities(getTran("Web","comment",sWebLanguage))%></td>
+			        <td width="100"><%=HTMLEntities.htmlentities(getTran(request,"web","bed",sWebLanguage))%></td>
+			        <td><%=HTMLEntities.htmlentities(getTran(request,"Web","patient",sWebLanguage))%></td>
+			        <td><%=HTMLEntities.htmlentities(getTran(request,"Web","comment",sWebLanguage))%></td>
 			    </tr>
 			    
 			    <tbody class="hand"><%=HTMLEntities.htmlentities(results.toString())%></tbody>
@@ -176,6 +176,6 @@
 <%
     if(!recsFound){
         // display 'no results' message
-        %><div style='text-align:left;'><%=HTMLEntities.htmlentities(getTran("web","noRecordsFound",sWebLanguage))%></div><%
+        %><div style='text-align:left;'><%=HTMLEntities.htmlentities(getTran(request,"web","noRecordsFound",sWebLanguage))%></div><%
     }
 %>

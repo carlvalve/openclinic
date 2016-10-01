@@ -76,7 +76,7 @@
 
 
         if (foundRecordsICPC2 > 0) {
-            out.print("<tr class='admin'><td colspan='2'>" + HTMLEntities.htmlentities(getTran("Web.Occup", "ICPC-2", sWebLanguage)) + "</td></tr>");
+            out.print("<tr class='admin'><td colspan='2'>" + HTMLEntities.htmlentities(getTran(request,"Web.Occup", "ICPC-2", sWebLanguage)) + "</td></tr>");
         }
 %>
 <tbody class="hand">
@@ -86,7 +86,7 @@
 
     if (foundRecordsICD10 > 0) {
         out.print("</table><table class='menu' width='100%' cellspacing='0' border='0'>");
-        out.print("<tr class='admin'><td colspan='2'>" + HTMLEntities.htmlentities(getTran("Web.Occup", "ICD-10", sWebLanguage)) + "</td></tr>");
+        out.print("<tr class='admin'><td colspan='2'>" + HTMLEntities.htmlentities(getTran(request,"Web.Occup", "ICD-10", sWebLanguage)) + "</td></tr>");
     }
 %>
 <tbody class="hand"><%
@@ -99,7 +99,7 @@ if(foundRecordsICPC2==0 && foundRecordsICD10 == 0 && keywords.length() > 1){
 
 %>
     <tr class="label2">
-        <td colspan='3'><%=HTMLEntities.htmlentities(getTran("web", "norecordsfound", sWebLanguage))%>
+        <td colspan='3'><%=HTMLEntities.htmlentities(getTran(request,"web", "norecordsfound", sWebLanguage))%>
         </td>
     </tr>
 <%
@@ -125,7 +125,7 @@ if(foundRecordsICPC2==0 && foundRecordsICD10 == 0 && keywords.length() > 1){
 
         // header
         if (codes.size() > 0) {
-            out.print("<tr class='admin'><td colspan='2'>" + HTMLEntities.htmlentities(getTran("Web.Occup", "ICPC-2", sWebLanguage)) + "</td></tr>");
+            out.print("<tr class='admin'><td colspan='2'>" + HTMLEntities.htmlentities(getTran(request,"Web.Occup", "ICPC-2", sWebLanguage)) + "</td></tr>");
         }
 
 %>
@@ -160,7 +160,7 @@ if(foundRecordsICPC2==0 && foundRecordsICD10 == 0 && keywords.length() > 1){
 
         // header
         if (codes.size() > 0) {
-            out.print("<tr class='admin'><td colspan='2'>" + HTMLEntities.htmlentities(getTran("Web.Occup", "ICD-10", sWebLanguage)) + "</td></tr>");
+            out.print("<tr class='admin'><td colspan='2'>" + HTMLEntities.htmlentities(getTran(request,"Web.Occup", "ICD-10", sWebLanguage)) + "</td></tr>");
         }
 
         for (int n = 0; n < codes.size(); n++) {
@@ -186,7 +186,7 @@ if(foundRecordsICPC2==0 && foundRecordsICD10 == 0 && keywords.length() > 1){
         // display 'no results' message
 %>
 <tr class="label2">
-    <td colspan='2'><%=HTMLEntities.htmlentities(getTran("web", "norecordsfound", sWebLanguage))%>
+    <td colspan='2'><%=HTMLEntities.htmlentities(getTran(request,"web", "norecordsfound", sWebLanguage))%>
     </td>
 </tr>
 <%

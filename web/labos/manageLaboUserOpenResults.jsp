@@ -16,7 +16,7 @@
     SortedMap requestList = new TreeMap();
     Vector r = LabRequest.findMyUntreatedRequests(sWebLanguage,Integer.parseInt(activeUser.userid));
     if(r.size()>20){
-        out.print("<script>alert('"+getTran("web","onlylast20resultsareshown",sWebLanguage)+"');</script>");
+        out.print("<script>alert('"+getTran(request,"web","onlylast20resultsareshown",sWebLanguage)+"');</script>");
     }
     for(int n=0;n<r.size();n++){
         if(n>r.size()-20){
@@ -45,7 +45,7 @@
 <%=writeTableHeader("Web","openUserLaboResults",sWebLanguage," doBack();")%>
 <table class="list" width="100%">
     <tr>
-        <td><%=getTran("web","analysis",sWebLanguage)%></td>
+        <td><%=getTran(request,"web","analysis",sWebLanguage)%></td>
     <%
         Iterator requestsIterator = requestList.keySet().iterator();
         while (requestsIterator.hasNext()) {

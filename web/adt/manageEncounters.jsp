@@ -141,7 +141,7 @@
         sEditEncounterEnd = ScreenHelper.stdDateFormat.format(tmpEncounter.getEnd());
 
         sEditEncounterService = tmpEncounter.getService().code;
-        sEditEncounterServiceName = getTran("Service", tmpEncounter.getService().code, sWebLanguage);
+        sEditEncounterServiceName = getTran(request,"Service", tmpEncounter.getService().code, sWebLanguage);
 
         sEditEncounterBed = tmpEncounter.getBed().getUid();
         sEditEncounterBedName = tmpEncounter.getBed().getName();
@@ -165,23 +165,23 @@
             <td colspan="2"><%=writeTableHeader("Web.manage","manageEncounters",sWebLanguage," doBack();")%></td>
         </tr>
         <tr>
-            <td width="<%=sTDAdminWidth%>"><%=getTran("Web","type",sWebLanguage)%></td>
+            <td width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","type",sWebLanguage)%></td>
             <td><input class='text' name='FindEncounterType' value='<%=sFindEncounterType%>' size="40"></td>
         </tr>
         <%-- date begin --%>
         <tr>
-            <td><%=getTran("Web","begindate",sWebLanguage)%></td>
+            <td><%=getTran(request,"Web","begindate",sWebLanguage)%></td>
             <td><%=writeDateField("FindEncounterBegin","FindEncounterForm",sFindEncounterBegin,sWebLanguage)%></td>
         </tr>
 
         <%-- date end --%>
         <tr>
-            <td><%=getTran("Web","enddate",sWebLanguage)%></td>
+            <td><%=getTran(request,"Web","enddate",sWebLanguage)%></td>
             <td><%=writeDateField("FindEncounterEnd","FindEncounterForm",sFindEncounterEnd,sWebLanguage)%></td>
         </tr>
         <%-- patient --%>
         <tr>
-            <td><%=getTran("Web","patient",sWebLanguage)%></td>
+            <td><%=getTran(request,"Web","patient",sWebLanguage)%></td>
             <td>
                 <input type="hidden" name="FindEncounterPatient" value="<%=sFindEncounterPatient%>">
                 <input class="text" type="text" name="FindEncounterPatientName" readonly size="<%=sTextWidth%>" value="<%=sFindEncounterPatientName%>">
@@ -190,7 +190,7 @@
         </tr>
         <%-- manager --%>
         <tr>
-            <td><%=getTran("Web","manager",sWebLanguage)%></td>
+            <td><%=getTran(request,"Web","manager",sWebLanguage)%></td>
             <td>
                 <input type="hidden" name="FindEncounterManager" value="<%=sFindEncounterManager%>">
                 <input class="text" type="text" name="FindEncounterManagerName" readonly size="<%=sTextWidth%>" value="<%=sFindEncounterManagerName%>">
@@ -199,7 +199,7 @@
         </tr>
         <%-- bed --%>
         <tr>
-            <td><%=getTran("Web","bed",sWebLanguage)%></td>
+            <td><%=getTran(request,"Web","bed",sWebLanguage)%></td>
             <td>
                 <input type="hidden" name="FindEncounterBed" value="<%=sFindEncounterBed%>">
                 <input class="text" type="text" name="FindEncounterBedName" readonly size="<%=sTextWidth%>" value="<%=sFindEncounterBedName%>">
@@ -208,7 +208,7 @@
         </tr>
         <%-- service --%>
         <tr>
-            <td><%=getTran("Web","service",sWebLanguage)%></td>
+            <td><%=getTran(request,"Web","service",sWebLanguage)%></td>
             <td>
                 <input type="hidden" name="FindEncounterService" value="<%=sFindEncounterService%>">
                 <input class="text" type="text" name="FindEncounterServiceName" readonly size="<%=sTextWidth%>" value="<%=sFindEncounterServiceName%>">
@@ -303,7 +303,7 @@
                 sbResults.append("</td><td>");
                 sbResults.append(checkString(tmpEncounter.getBed().getName()));
                 sbResults.append("</td><td>");
-                sbResults.append(getTran("Service", sServiceUID, sWebLanguage));
+                sbResults.append(getTran(request,"Service", sServiceUID, sWebLanguage));
                 sbResults.append("</td></tr>");
             }
 
@@ -316,13 +316,13 @@
 %>
 <table width='100%' cellspacing="0" cellpadding="0" class="list">
     <tr class="admin">
-        <td width=''><%=getTran("Web","type",sWebLanguage)%></td>
-        <td width="10%"><a href="#" class="underlined" onClick="doSearch('OC_ENCOUNTER_BEGINDATE');"><%=getTran("Web","begindate",sWebLanguage)%></a></td>
-        <td width="10%"><a href="#" class="underlined" onClick="doSearch('OC_ENCOUNTER_ENDDATE');"><%=getTran("Web","enddate",sWebLanguage)%></a></td>
-        <td width=''><%=getTran("Web","patient",sWebLanguage)%></td>
-        <td width=''><%=getTran("Web","manager",sWebLanguage)%></td>
-        <td width=''><%=getTran("Web","bed",sWebLanguage)%></td>
-        <td width=''><%=getTran("Web","service",sWebLanguage)%></td>
+        <td width=''><%=getTran(request,"Web","type",sWebLanguage)%></td>
+        <td width="10%"><a href="#" class="underlined" onClick="doSearch('OC_ENCOUNTER_BEGINDATE');"><%=getTran(request,"Web","begindate",sWebLanguage)%></a></td>
+        <td width="10%"><a href="#" class="underlined" onClick="doSearch('OC_ENCOUNTER_ENDDATE');"><%=getTran(request,"Web","enddate",sWebLanguage)%></a></td>
+        <td width=''><%=getTran(request,"Web","patient",sWebLanguage)%></td>
+        <td width=''><%=getTran(request,"Web","manager",sWebLanguage)%></td>
+        <td width=''><%=getTran(request,"Web","bed",sWebLanguage)%></td>
+        <td width=''><%=getTran(request,"Web","service",sWebLanguage)%></td>
     </tr>
     <%=sbResults%>
 </table>
@@ -344,23 +344,23 @@
         </tr>
         <%-- type --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","type",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","type",sWebLanguage)%></td>
             <td class='admin2'><input class='text' name='EditEncounterType' value='<%=sEditEncounterType%>' size="40"></td>
         </tr>
         <%-- date begin --%>
         <tr>
-            <td class="admin"><%=getTran("Web","begindate",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web","begindate",sWebLanguage)%></td>
             <td class="admin2"><%=writeDateField("EditEncounterBegin","EditEncounterForm",sEditEncounterBegin,sWebLanguage)%></td>
         </tr>
 
         <%-- date end --%>
         <tr>
-            <td class="admin"><%=getTran("Web","enddate",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web","enddate",sWebLanguage)%></td>
             <td class="admin2"><%=writeDateField("EditEncounterEnd","EditEncounterForm",sEditEncounterEnd,sWebLanguage)%></td>
         </tr>
         <%-- patient --%>
         <tr>
-            <td class="admin"><%=getTran("Web","patient",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web","patient",sWebLanguage)%></td>
             <td class='admin2'>
                 <input type="hidden" name="EditEncounterPatient" value="<%=sEditEncounterPatient%>">
                 <input class="text" type="text" name="EditEncounterPatientName" readonly size="<%=sTextWidth%>" value="<%=sEditEncounterPatientName%>">
@@ -369,7 +369,7 @@
         </tr>
         <%-- manager --%>
         <tr>
-            <td class="admin"><%=getTran("Web","manager",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web","manager",sWebLanguage)%></td>
             <td class='admin2'>
                 <input type="hidden" name="EditEncounterManager" value="<%=sEditEncounterManager%>">
                 <input class="text" type="text" name="EditEncounterManagerName" readonly size="<%=sTextWidth%>" value="<%=sEditEncounterManagerName%>">
@@ -378,7 +378,7 @@
         </tr>
         <%-- bed --%>
         <tr>
-            <td class="admin"><%=getTran("Web","bed",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web","bed",sWebLanguage)%></td>
             <td class='admin2'>
                 <input type="hidden" name="EditEncounterBed" value="<%=sEditEncounterBed%>">
                 <input class="text" type="text" name="EditEncounterBedName" readonly size="<%=sTextWidth%>" value="<%=sEditEncounterBedName%>">
@@ -387,7 +387,7 @@
         </tr>
         <%-- service --%>
         <tr>
-            <td class="admin"><%=getTran("Web","service",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web","service",sWebLanguage)%></td>
             <td class='admin2'>
                 <input type="hidden" name="EditEncounterService" value="<%=sEditEncounterService%>">
                 <input class="text" type="text" name="EditEncounterServiceName" readonly size="<%=sTextWidth%>" value="<%=sEditEncounterServiceName%>">

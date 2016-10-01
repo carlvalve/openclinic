@@ -7,12 +7,12 @@
         if(apc!=null){
             String sCountry = "&nbsp;";
             if(checkString(apc.country).trim().length()>0){
-                sCountry = getTran("Country",apc.country,sWebLanguage);
+                sCountry = getTran(request,"Country",apc.country,sWebLanguage);
             }
 
             String sProvince = "&nbsp;";
             if(checkString(apc.province).trim().length()>0){
-                sProvince = getTran("province",apc.province,sWebLanguage);
+                sProvince = getTran(request,"province",apc.province,sWebLanguage);
             }
             
             %>
@@ -81,7 +81,7 @@
             <%
         }
         else{
-        	%><%=getTran("web","noRecordsFound",sWebLanguage)%><%
+        	%><%=getTran(request,"web","noRecordsFound",sWebLanguage)%><%
         }
     }
 %>

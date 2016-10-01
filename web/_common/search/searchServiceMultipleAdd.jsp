@@ -11,7 +11,7 @@
                 while (sCode.trim().length() < 5) {
                     sCode = "0" + sCode;
                 }
-                String sLabel = getTran("Service", sCode, sWebLanguage);
+                String sLabel = getTran(null,"Service", sCode, sWebLanguage);
 
                 Vector vParentIDs = Service.getParentIds(sCode);
                 Iterator iter = vParentIDs.iterator();
@@ -23,13 +23,13 @@
 
                         sReturn = getParent(sParentID, sWebLanguage)
                                 + "&nbsp;<img src='" + sCONTEXTPATH + "/_img/themes/default/pijl.gif'>&nbsp;"
-                                + "<a href='javascript:populateService(\"" + sCode + "\")' title='" + getTran("Web.Occup", "medwan.common.open", sWebLanguage) + "'>" + sLabel + "</a>";
+                                + "<a href='javascript:populateService(\"" + sCode + "\")' title='" + getTran(null,"Web.Occup", "medwan.common.open", sWebLanguage) + "'>" + sLabel + "</a>";
                     }
                 }
 
                 if (sReturn.trim().length() == 0) {
                     sReturn = sReturn + "&nbsp;<img src='" + sCONTEXTPATH + "/_img/themes/default/pijl.gif'>&nbsp;"
-                            + "<a href='javascript:populateService(\"" + sCode + "\")' title='" + getTran("Web.Occup", "medwan.common.open", sWebLanguage) + "'>" + sLabel + "</a>";
+                            + "<a href='javascript:populateService(\"" + sCode + "\")' title='" + getTran(null,"Web.Occup", "medwan.common.open", sWebLanguage) + "'>" + sLabel + "</a>";
                 }
             }
         }
@@ -47,7 +47,7 @@
         sReturn.append("<tr>")
                 .append("<td width='50'>")
                 .append("<input type='checkbox' name='cb_" + rowIdx + "'/>")
-                .append("&nbsp;<img src='" + sCONTEXTPATH + "/_img/icons/icon_view.gif' onmouseover='this.style.cursor=\"hand\"' onmouseout='this.style.cursor=\"default\"' alt='" + getTran("Web", "view", sWebLanguage) + "'" + " onclick='viewService(\"" + sID + "\")'>");
+                .append("&nbsp;<img src='" + sCONTEXTPATH + "/_img/icons/icon_view.gif' onmouseover='this.style.cursor=\"hand\"' onmouseout='this.style.cursor=\"default\"' alt='" + getTran(null,"Web", "view", sWebLanguage) + "'" + " onclick='viewService(\"" + sID + "\")'>");
 
         /*
         // add edit icon if user has the right permissions
@@ -58,7 +58,7 @@
 
         sReturn.append("</td>")
                 .append("<td>" + sID + "</td>")
-                .append("<td><a href='javascript:checkService(\"cb_" + rowIdx + "\");' title='" + getTran("Web", "select", sWebLanguage) + "'>" + sLabel + "</a></td>")
+                .append("<td><a href='javascript:checkService(\"cb_" + rowIdx + "\");' title='" + getTran(null,"Web", "select", sWebLanguage) + "'>" + sLabel + "</a></td>")
                 .append("</tr>");
 
         return sReturn.toString();
@@ -103,7 +103,7 @@
         while ((iter.hasNext()) && (iTotal < iMaxResultSet)) {
             sServiceID = (String) iter.next();
             set.add(sServiceID);
-            hLabels.put(sServiceID, getTran("Service", sServiceID, sWebLanguage));
+            hLabels.put(sServiceID, getTran(request,"Service", sServiceID, sWebLanguage));
             iTotal++;
         }
 
@@ -146,7 +146,7 @@
             while ((iter.hasNext()) && (iTotal < iMaxResultSet)) {
                 sServiceID = (String) iter.next();
                 set.add(sServiceID);
-                hLabels.put(sServiceID, getTran("Service", sServiceID, sWebLanguage));
+                hLabels.put(sServiceID, getTran(request,"Service", sServiceID, sWebLanguage));
                 iTotal++;
             }
         }
@@ -154,12 +154,12 @@
 
     String sNext = "", sPrevious = "";
     if (iParameterResultSet >= iMaxResultSet) {
-        sPrevious = "<input type='button' class='button' name='prevButton' value='" + getTran("Web", "Previous", sWebLanguage) + "'" +
+        sPrevious = "<input type='button' class='button' name='prevButton' value='" + getTran(request,"Web", "Previous", sWebLanguage) + "'" +
                 " onClick=\"doPrev(" + (iParameterResultSet - iMaxResultSet) + ");\">";
     }
 
     if (iTotal == iMaxResultSet) {
-        sNext = "<input type='button' class='button' name='nextButton' value='" + getTran("Web", "Next", sWebLanguage) + "'" +
+        sNext = "<input type='button' class='button' name='nextButton' value='" + getTran(request,"Web", "Next", sWebLanguage) + "'" +
                 " onClick=\"doNext(" + (iParameterResultSet + iMaxResultSet) + ");\">";
     }
 
@@ -194,7 +194,7 @@
         <table width="100%" cellspacing="0" cellpadding="0" class="menu">
             <tr>
                 <td width="100%" height="25">
-                    &nbsp;<%=getTran("Web","Find",sWebLanguage)%>&nbsp;&nbsp;
+                    &nbsp;<%=getTran(request,"Web","Find",sWebLanguage)%>&nbsp;&nbsp;
                     <input type="text" NAME="FindText" class="text" value="<%=sFindText%>" size="40" onblur="limitLength(this);">
 
                     <%-- BUTTONS --%>
@@ -222,13 +222,13 @@
                                         sViewCode = sFindCode;
                                     }
 
-                                    String sLabel = getTran("Service",sViewCode,sWebLanguage);
+                                    String sLabel = getTran(request,"Service",sViewCode,sWebLanguage);
                                     Service sService = Service.getService(sViewCode);
 
                                     if (sService!=null) {
                                         String sCountry = checkString(sService.country);
                                         if(sCountry.length() > 0){
-                                            sCountry = getTran("Country",sCountry,sWebLanguage);
+                                            sCountry = getTran(request,"Country",sCountry,sWebLanguage);
                                         }
 
                                         out.print(setRow("Web","Address", checkString(sService.address),sWebLanguage));
@@ -280,7 +280,7 @@
                                             // display 'no results' message
                                             %>
                                                 <tr>
-                                                    <td colspan="3"><%=getTran("web","norecordsfound",sWebLanguage)%></td>
+                                                    <td colspan="3"><%=getTran(request,"web","norecordsfound",sWebLanguage)%></td>
                                                 </tr>
                                             <%
                                         }
@@ -390,7 +390,7 @@
         else{
           var popupUrl = "<%=sCONTEXTPATH%>/_common/search/okPopup.jsp?ts=999999999&labelType=Web&labelID=selectanitem";
           var modalities = "dialogWidth:266px;dialogHeight:163px;center:yes;scrollbars:no;resizable:no;status:no;location:no;";
-          window.showModalDialog?window.showModalDialog(popupUrl,'',modalities):alert('<%=getTran("web","selectanitem",sWebLanguage)%>');
+          window.showModalDialog?window.showModalDialog(popupUrl,'',modalities):alert('<%=getTran(null,"web","selectanitem",sWebLanguage)%>');
         }
       }
 

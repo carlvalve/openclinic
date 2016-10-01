@@ -56,19 +56,19 @@
 	StringBuffer sOut = new StringBuffer();
 	sOut.append("<table width='100%' class='list' cellpadding='0' cellspacing='1'>")
 	     .append("<tr class='admin'>")
-	      .append("<td colspan='1'><b>").append(getTran("web","admissions",sWebLanguage)).append("</b></td>")
-	      .append("<td colspan='3'><b>").append(getTran("web","period",sWebLanguage)).append(": ").append(sBegin).append("- ").append(sEnd).append("</b></td>")
+	      .append("<td colspan='1'><b>").append(getTran(request,"web","admissions",sWebLanguage)).append("</b></td>")
+	      .append("<td colspan='3'><b>").append(getTran(request,"web","period",sWebLanguage)).append(": ").append(sBegin).append("- ").append(sEnd).append("</b></td>")
 	    .append("</tr>")
 	    .append("</table>");
 	
 	sOut.append("<table width='100%' border='0' class='sortable' id='searchresults'>")
          .append("<tr>")
-          .append("<td><a href='#' class='underlined'>"+getTran("web","encounterid",sWebLanguage)+"</a></td>")
-          .append("<td><a href='#' class='underlined'>"+getTran("web","name",sWebLanguage)+"</a></td>")
-          .append("<td><a href='#' class='underlined'>"+getTran("web","dateofbirth",sWebLanguage)+"</a></td>")
-          .append("<td><a href='#' class='underlined'>"+getTran("web","date",sWebLanguage)+"</a></td>")
-          .append("<td><a href='#' class='underlined'>"+getTran("web","service",sWebLanguage)+"</a></td>")
-          .append("<td><a href='#' class='underlined'>"+getTran("web","assureur",sWebLanguage)+"</a></td>")
+          .append("<td><a href='#' class='underlined'>"+getTran(request,"web","encounterid",sWebLanguage)+"</a></td>")
+          .append("<td><a href='#' class='underlined'>"+getTran(request,"web","name",sWebLanguage)+"</a></td>")
+          .append("<td><a href='#' class='underlined'>"+getTran(request,"web","dateofbirth",sWebLanguage)+"</a></td>")
+          .append("<td><a href='#' class='underlined'>"+getTran(request,"web","date",sWebLanguage)+"</a></td>")
+          .append("<td><a href='#' class='underlined'>"+getTran(request,"web","service",sWebLanguage)+"</a></td>")
+          .append("<td><a href='#' class='underlined'>"+getTran(request,"web","assureur",sWebLanguage)+"</a></td>")
          .append("</tr>");
 	
 	while(rs.next()){
@@ -108,7 +108,7 @@
 	// total
 	sOut.append("<table>")
 	     .append("<tr>")
-	      .append("<td colspan='6'><b>").append(getTran("web","totalpatients",sWebLanguage)).append(": ").append(counter).append("</b></td>")
+	      .append("<td colspan='6'><b>").append(getTran(request,"web","totalpatients",sWebLanguage)).append(": ").append(counter).append("</b></td>")
 	     .append("</tr>")
 	    .append("</table>");
 	

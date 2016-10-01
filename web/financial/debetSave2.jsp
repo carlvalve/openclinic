@@ -122,9 +122,9 @@
 	
         String sMessage;
         if (bSuccess) {
-            sMessage = getTran("web", "dataissaved", sWebLanguage);
+            sMessage = getTranNoLink("web", "dataissaved", sWebLanguage);
         } else {
-            sMessage = getTran("web.control","dberror",sWebLanguage);
+            sMessage = getTranNoLink("web.control","dberror",sWebLanguage);
         }
 %>
 {

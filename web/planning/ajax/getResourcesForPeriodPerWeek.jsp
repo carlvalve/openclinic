@@ -21,12 +21,12 @@
 					maxtime=Integer.parseInt(new SimpleDateFormat("HH").format(reservation.getEnd()))*12;
 				}
 				try{
-					String username=ScreenHelper.getTran("web","user",request.getParameter("language"))+": "+reservation.getPlanning().getUser().getFullName()+" | "+ScreenHelper.getTran("web","hour",request.getParameter("language"))+": "+ new SimpleDateFormat("HH:mm").format(reservation.getBegin())+"-"+new SimpleDateFormat("HH:mm").format(reservation.getEnd());
+					String username=ScreenHelper.getTran(request,"web","user",request.getParameter("language"))+": "+reservation.getPlanning().getUser().getFullName()+" | "+ScreenHelper.getTran(request,"web","hour",request.getParameter("language"))+": "+ new SimpleDateFormat("HH:mm").format(reservation.getBegin())+"-"+new SimpleDateFormat("HH:mm").format(reservation.getEnd());
 					if(reservation.getPlanning().getPatientUID()!=null && reservation.getPlanning().getPatientUID().length()>0){
-						username=ScreenHelper.getTran("web","patient",request.getParameter("language"))+": "+reservation.getPlanning().getPatient().getFullName()+" | "+username;
+						username=ScreenHelper.getTran(request,"web","patient",request.getParameter("language"))+": "+reservation.getPlanning().getPatient().getFullName()+" | "+username;
 					}
 					if( reservation.getPlanning().getDescription()!=null && reservation.getPlanning().getDescription().length()>0){
-						username=username+" | "+ScreenHelper.getTran("web","comment",request.getParameter("language"))+": "+reservation.getPlanning().getDescription();
+						username=username+" | "+ScreenHelper.getTran(request,"web","comment",request.getParameter("language"))+": "+reservation.getPlanning().getDescription();
 					}
 					username+=";"+reservation.getPlanningUid();
 					for(long i=reservation.getBegin().getTime();i<reservation.getEnd().getTime();i+=5*minute){
@@ -50,7 +50,7 @@
 					maxtime=Integer.parseInt(new SimpleDateFormat("HH").format(reservationend))*12;
 				}
 				try{
-					String servicename=ScreenHelper.getTran("web","lock",request.getParameter("language"))+": "+ScreenHelper.getTran("service",reservationservice,request.getParameter("language"))+" | "+ScreenHelper.getTran("web","hour",request.getParameter("language"))+": "+ new SimpleDateFormat("HH:mm").format(reservationbegin)+"-"+new SimpleDateFormat("HH:mm").format(reservationend);
+					String servicename=ScreenHelper.getTran(request,"web","lock",request.getParameter("language"))+": "+ScreenHelper.getTran(request,"service",reservationservice,request.getParameter("language"))+" | "+ScreenHelper.getTran(request,"web","hour",request.getParameter("language"))+": "+ new SimpleDateFormat("HH:mm").format(reservationbegin)+"-"+new SimpleDateFormat("HH:mm").format(reservationend);
 					servicename+=";0";
 					for(long i=reservationbegin.getTime();i<reservationend.getTime();i+=5*minute){
 						if(occupiedSegments.get(new SimpleDateFormat("yyyyMMddHHmm").format(new java.util.Date(i)))==null){
@@ -65,10 +65,10 @@
 %>
 		<table width='100%' style="border-spacing: 1px 0;">
 			<tr class='admin'>
-				<td colspan='8'><%=ScreenHelper.getTran("web","resourceavailability.for",request.getParameter("language")) %>: <%=ScreenHelper.getTran("planningresource", resourceuid, request.getParameter("language"))%></td>
+				<td colspan='8'><%=ScreenHelper.getTran(request,"web","resourceavailability.for",request.getParameter("language")) %>: <%=ScreenHelper.getTran(request,"planningresource", resourceuid, request.getParameter("language"))%></td>
 			</tr>
 			<tr>
-				<td class='admin' width='1%'><%=ScreenHelper.getTran("web","hour",request.getParameter("language")) %></td>
+				<td class='admin' width='1%'><%=ScreenHelper.getTran(request,"web","hour",request.getParameter("language")) %></td>
 				<% for(int n=0;n<7;n++){ %>
 				<td class='admin'><%=ScreenHelper.formatDate(new java.util.Date(dbegin.getTime()+n*day)) %></td>
 				<% } %>

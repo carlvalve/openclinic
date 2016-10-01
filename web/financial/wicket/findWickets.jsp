@@ -10,7 +10,7 @@
     <table class='list' border='0' width='100%' cellspacing='1'>
         <%-- wicket --%>
         <tr>
-            <td class="admin2" width="<%=sTDAdminWidth%>"><%=getTran("wicket","wicket",sWebLanguage)%></td>
+            <td class="admin2" width="<%=sTDAdminWidth%>"><%=getTran(request,"wicket","wicket",sWebLanguage)%></td>
             <td class='admin2'>
                 <select class="text" name="WicketUID">
                     <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>

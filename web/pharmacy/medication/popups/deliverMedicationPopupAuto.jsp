@@ -31,8 +31,9 @@
            sEditEncounterUid    = checkString(request.getParameter("EditEncounterUID")),
            sEditBatchUid        = checkString(request.getParameter("EditBatchUid")),
            sEditOrderUid        = checkString(request.getParameter("EditOrderUid")),
+           sProductionOrderUid  = checkString(request.getParameter("ProductionOrderUid")),
            sEditPrescriptionUid = checkString(request.getParameter("EditPrescriptionUid"));
-            
+    
      String sEditProductStockDocumentUidText = "",
             sEditServiceStockUid = "",
             sEditServiceStockName = "";
@@ -44,7 +45,6 @@
             iMaxQuantity = new Double(Double.parseDouble(sEditUnitsChanged)).intValue();
         }
     }
-    System.out.println("a");
     
     // lookup available productStocks if none provided
     if(sEditProductStockUid.length() == 0 && sEditPrescriptionUid.length() > 0){
@@ -104,6 +104,7 @@
         Debug.println("sEditEncounterUid    : "+sEditEncounterUid);
         Debug.println("sEditBatchUid        : "+sEditBatchUid);
         Debug.println("sEditOrderUid        : "+sEditOrderUid);
+        Debug.println("sProductionOrderUid  : "+sProductionOrderUid);
         Debug.println("sEditPrescriptionUid : "+sEditPrescriptionUid+"\n");
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -159,6 +160,8 @@
         operation.setBatchUid(sEditBatchUid);
         operation.setDocumentUID(sEditProductStockDocumentUid);
         operation.setEncounterUID(sEditEncounterUid);
+        operation.setOrderUID(sEditOrderUid);
+        operation.setProductionOrderUid(sProductionOrderUid);
 
         // sourceDestination
         ObjectReference sourceDestination = new ObjectReference();
@@ -180,7 +183,6 @@
         		session.setAttribute("activeServiceStockUid",productStock.getServiceStockUid());
         	}
         }
-
         String sResult=operation.store();
         if(sResult==null){
         	if(sEditOrderUid.length()>0){
@@ -190,6 +192,7 @@
         			order.setPackagesDelivered(order.getPackagesDelivered()+operation.getUnitsChanged());
         			if(order.getPackagesOrdered()<=order.getPackagesDelivered()){
         				order.setStatus("closed");
+        				order.setDateDelivered(new java.util.Date());
         				order.setProcessed(1);
         			}
         			order.store();
@@ -245,7 +248,7 @@
 								catch(Exception t){}
 								ps.setDate(8, date);
 								ps.setInt(9, operation.getUnitsChanged());
-								ps.setString(10, getTran("web","operation",sWebLanguage)+": "+operation.getUid());
+								ps.setString(10, getTran(request,"web","operation",sWebLanguage)+": "+operation.getUid());
 								ps.setInt(11, nBatchNumber);
 								ps.setInt(12, Integer.parseInt(activeUser.userid));
 								ps.setString(13,product.getName());
@@ -322,7 +325,7 @@
         	sEditProductStockDocumentUid = sPrevUsedDocument;
         }
         if(sEditProductStockDocumentUid.length() > 0){
-        	sEditProductStockDocumentUidText = getTran("operationdocumenttypes",OperationDocument.get(sEditProductStockDocumentUid).getType(),sWebLanguage);
+        	sEditProductStockDocumentUidText = getTran(request,"operationdocumenttypes",OperationDocument.get(sEditProductStockDocumentUid).getType(),sWebLanguage);
         }
 		*/
         // reuse srcdestName-value from session
@@ -360,7 +363,7 @@
 
 <form name="transactionForm" id="transactionForm" method="post" action='<c:url value="/template.jsp"/>?Page=pharmacy/medication/popups/deliverMedicationPopupAuto.jsp&ts=<%=getTs()%>' onKeyDown="if(enterEvent(event,13)){doDeliver();}" onClick="clearMessage();">
     <%=writeTableHeader("Web.manage","deliverproducts",sWebLanguage,"window.close();")%>
-    
+    <input type='hidden' name='ProductionOrderUid' id='ProductionOrderUid' value='<%=sProductionOrderUid %>'/>
     <%
         //*****************************************************************************************
         //*** process display options *************************************************************
@@ -372,7 +375,7 @@
                 <table class="list" width="100%" cellspacing="1">
                     <%-- PRODUCT --%>
                     <tr>
-                        <td class="admin"><%=getTran("Web","product",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin"><%=getTran(request,"Web","product",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <b><%=sSelectedProductName%></b>
                         </td>
@@ -380,7 +383,7 @@
                     
                     <%-- PHARMACY --%>
                     <tr>
-                        <td class="admin"><%=getTran("Web","pharmacy",sWebLanguage)%>&nbsp;*</td>
+                        <td class="admin"><%=getTran(request,"Web","pharmacy",sWebLanguage)%>&nbsp;*</td>
                         <td class="admin2"><table>
                             <%
 	                        	int expiredQuantity = 0;
@@ -461,7 +464,7 @@
                     
                     <%-- BATCH --%>
                     <tr>
-                        <td class="admin"><%=getTran("Web","batch",sWebLanguage)%>&nbsp;*
+                        <td class="admin"><%=getTran(request,"Web","batch",sWebLanguage)%>&nbsp;*
                         <%
                         	if(MedwanQuery.getInstance().getConfigString("edition").equalsIgnoreCase("bloodbank")){
                         %>
@@ -480,9 +483,9 @@
 							%>
 			                    <%-- DESCRIPTION --%>
 			                    <tr>
-			                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","description",sWebLanguage)%>&nbsp;*</td>
+			                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","description",sWebLanguage)%>&nbsp;*</td>
 			                        <td class="admin2">
-			                        	<%=getTran("productstockoperation.medicationdelivery",sSelectedOperationDescr,sWebLanguage) %>
+			                        	<%=getTran(request,"productstockoperation.medicationdelivery",sSelectedOperationDescr,sWebLanguage) %>
 			                            <input type='hidden' name="EditOperationDescr" id="EditOperationDescr" value="<%=sSelectedOperationDescr%>">
 			                        </td>
 			                    </tr>
@@ -491,12 +494,11 @@
 						else{
 	                		%><input type="hidden" name="EditOperationDescr" value="<%=sSelectedOperationDescr%>"><%
 						}
-				    System.out.println("f");
 	                %>
 	                
                     <%-- UNITS CHANGED --%>
                     <tr>
-                        <td class="admin"><%=getTran("Web","unitschanged",sWebLanguage)%>&nbsp;*</td>
+                        <td class="admin"><%=getTran(request,"Web","unitschanged",sWebLanguage)%>&nbsp;*</td>
                         <td class="admin2">
                             <input class="text" type="text" name="EditUnitsChanged" id="EditUnitsChanged" size="10" maxLength="10" value="<%=sSelectedUnitsChanged%>" onKeyUp="if(this.value=='0'){this.value='';}isNumber(this);setMaxQuantityValue(setMaxQuantity);" onblur="validateMaxFocus(this);" <%=(sAction.equals("showDetails")?"READONLY":"")%>><span id="maxquantity" name="maxquantity"/>
                         </td>
@@ -512,7 +514,7 @@
                                 <input type="hidden" name="EditOrderUid" id="EditOrderUid" value="<%=sEditOrderUid%>" >
 			                    <%-- SOURCE DESTINATION TYPE --%>
 			                    <tr height="23" id='destinationline'>
-			                        <td class="admin" id='id1'><%=getTran("web","deliveredto",sWebLanguage)%>&nbsp;*</td>
+			                        <td class="admin" id='id1'><%=getTran(request,"web","deliveredto",sWebLanguage)%>&nbsp;*</td>
 			                        <td class="admin2">
 			                        	<%
 			                        		ServiceStock stock = ServiceStock.get(sEditSrcDestUid);
@@ -530,13 +532,13 @@
 						        
 			                    <%-- OPERATION DATE --%>
 			                    <tr>
-			                        <td class="admin"><%=getTran("Web","date",sWebLanguage)%>&nbsp;*</td>
+			                        <td class="admin"><%=getTran(request,"Web","date",sWebLanguage)%>&nbsp;*</td>
 			                        <td class="admin2"><%=writeDateField("EditOperationDate","transactionForm",sSelectedOperationDate,sWebLanguage)%></td>
 			                    </tr>
 			                    
 			                    <%-- ENCOUNTER --%>
 						        <tr id='encounterline'>
-						            <td class='admin'><%=getTran("web","encounter",sWebLanguage)%>&nbsp;*</td>
+						            <td class='admin'><%=getTran(request,"web","encounter",sWebLanguage)%>&nbsp;*</td>
 						            <td class='admin2'>
 						                <input type="hidden" name="EditEncounterUID" id="EditEncounterUID" value="<%=sEditEncounterUid%>">
 						                <%
@@ -555,7 +557,7 @@
 			                    
 			                    <%-- PRESCRIPTION --%>
 			                    <tr id='prescriptionline'>
-			                        <td class="admin" width="20%"><%=getTran("Web","prescriptionid",sWebLanguage)%></td>
+			                        <td class="admin" width="20%"><%=getTran(request,"Web","prescriptionid",sWebLanguage)%></td>
 			                        <td class="admin2">
 			                            <input class="text" type="text" name="EditPrescriptionUid" size="60" maxLength="60" value="<%=sEditPrescriptionUid%>" <%=(sAction.equals("showDetails")?"READONLY":"")%>>
 			                        </td>
@@ -602,7 +604,7 @@
                   <%-- VALIDATE MAX FOCUS --%>
                   function validateMaxFocus(o){
                     if(o.value*1>setMaxQuantity){
-                      alertDialogDirectText('<%=getTran("web","maxvalueis",sWebLanguage)%> '+setMaxQuantity);
+                      alertDialogDirectText('<%=getTran(null,"web","maxvalueis",sWebLanguage)%> '+setMaxQuantity);
                       o.focus();
                       return false;
                     }
@@ -612,7 +614,7 @@
                   <%-- VALIDATE MAX --%>
                   function validateMax(o){
                     if(o.value*1>setMaxQuantity){
-                      alertDialogDirectText('<%=getTran("web","maxvalueis",sWebLanguage)%> '+setMaxQuantity);
+                      alertDialogDirectText('<%=getTran(null,"web","maxvalueis",sWebLanguage)%> '+setMaxQuantity);
                       return false;
                     }
                     return true;
@@ -772,7 +774,7 @@
                 </script>
                 
                 <%-- indication of obligated fields --%>
-                <%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%>
+                <%=getTran(request,"Web","colored_fields_are_obligate",sWebLanguage)%>
 
                 <%-- display message --%>
                 <br><span id="msgArea"><%=msg%></span>

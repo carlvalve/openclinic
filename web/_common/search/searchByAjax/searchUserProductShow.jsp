@@ -62,7 +62,7 @@
             // translate unit
             sUnit = checkString(product.getUnit());
             if(sUnit.length() > 0){
-                sUnit = getTran("product.unit",sUnit,sWebLanguage);
+                sUnit = getTran(null,"product.unit",sUnit,sWebLanguage);
             }
 
             // line unit price out
@@ -80,17 +80,17 @@
                 sSupplierUid = checkString(product.getSupplierUid());
 
                 if(sSupplierUid.length() > 0){
-                    sSupplierName = getTran("service",sSupplierUid,sWebLanguage);
+                    sSupplierName = getTran(null,"service",sSupplierUid,sWebLanguage);
                 } 
                 else{
                     sSupplierUid = checkString(product.getSupplierUid());
                     if(sSupplierUid.length() > 0){
-                        sSupplierName = getTran("service",sSupplierUid,sWebLanguage);
+                        sSupplierName = getTran(null,"service",sSupplierUid,sWebLanguage);
                     }
                     else{
                         sSupplierUid = checkString(productStock.getServiceStock().getDefaultSupplierUid());
                         if(sSupplierUid.length() > 0){
-                            sSupplierName = getTran("service",sSupplierUid,sWebLanguage);
+                            sSupplierName = getTran(null,"service",sSupplierUid,sWebLanguage);
                         } 
                         else{
                             sSupplierName = "";
@@ -104,7 +104,7 @@
 
                 sSupplierUid = checkString(product.getSupplierUid());
                 if(sSupplierUid.length() > 0){
-                    sSupplierName = getTran("service",sSupplierUid,sWebLanguage);
+                    sSupplierName = getTran(null,"service",sSupplierUid,sWebLanguage);
                 } 
                 else{
                     sSupplierName = "";
@@ -114,7 +114,7 @@
             // productGroup
             sProductGroup = checkString(product.getProductGroup());
             if(sProductGroup.length() > 0){
-                sProductGroup = getTran("product.productgroup",sProductGroup,sWebLanguage);
+                sProductGroup = getTran(null,"product.productgroup",sProductGroup,sWebLanguage);
             }
 
             // units per time unit
@@ -215,7 +215,7 @@
 
     // central pharmacy
     String centralPharmacyCode = MedwanQuery.getInstance().getConfigString("centralPharmacyCode"),
-           centralPharmacyName = getTran("Service",centralPharmacyCode,sWebLanguage);
+           centralPharmacyName = getTran(request,"Service",centralPharmacyCode,sWebLanguage);
 
     /// DEBUG /////////////////////////////////////////////////////////////////////////////////////
     if(Debug.enabled){
@@ -248,25 +248,25 @@
         foundProductCount = countProducts(userProducts,sSearchProductName,sSearchProductGroup);
         
         if(foundProductCount==0){
-            %><%=HTMLEntities.htmlentities(getTran("web","norecordsfound",sWebLanguage))%><%
+            %><%=HTMLEntities.htmlentities(getTran(request,"web","norecordsfound",sWebLanguage))%><%
         }
         else{
 		    %>
 			<table width="100%" class="sortable" id="searchresults" cellspacing="0" cellpadding="0">
 			    <%-- header --%>
 				<tr class="admin">
-				    <td><%=HTMLEntities.htmlentities(getTran("web","product",sWebLanguage))%></td>
-				    <td><%=HTMLEntities.htmlentities(getTran("web","unit",sWebLanguage))%></td>
-				    <td align="right"><%=HTMLEntities.htmlentities(getTran("web","unitprice",sWebLanguage))%></td>
-				    <td><%=HTMLEntities.htmlentities(getTran("web","supplier",sWebLanguage))%></td>
-				    <td><%=HTMLEntities.htmlentities(getTran("Web","ServiceStock",sWebLanguage))%></td>
-				    <td><%=HTMLEntities.htmlentities(getTran("web","productGroup",sWebLanguage))%></td>
+				    <td><%=HTMLEntities.htmlentities(getTran(request,"web","product",sWebLanguage))%></td>
+				    <td><%=HTMLEntities.htmlentities(getTran(request,"web","unit",sWebLanguage))%></td>
+				    <td align="right"><%=HTMLEntities.htmlentities(getTran(request,"web","unitprice",sWebLanguage))%></td>
+				    <td><%=HTMLEntities.htmlentities(getTran(request,"web","supplier",sWebLanguage))%></td>
+				    <td><%=HTMLEntities.htmlentities(getTran(request,"Web","ServiceStock",sWebLanguage))%></td>
+				    <td><%=HTMLEntities.htmlentities(getTran(request,"web","productGroup",sWebLanguage))%></td>
 				</tr>
 			
 				<tbody class="hand"><%=HTMLEntities.htmlentities(productsHtml.toString())%></tbody>
 			</table>
 			
-			<%=foundProductCount%> <%=getTran("web","recordsFound",sWebLanguage)%>
+			<%=foundProductCount%> <%=getTran(request,"web","recordsFound",sWebLanguage)%>
 			<%
         }
     }

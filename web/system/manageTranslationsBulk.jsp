@@ -62,7 +62,7 @@
     String[] aLanguages = sSupportedLanguages.split(",");
 %>
      <tr>
-        <td class="admin2" width="<%=sTDAdminWidth%>"><%=getTran("web.translations.bulk","sourcelanguage",sWebLanguage)%></td>
+        <td class="admin2" width="<%=sTDAdminWidth%>"><%=getTran(request,"web.translations.bulk","sourcelanguage",sWebLanguage)%></td>
         <td class="admin2">
             <select name="FindSourceLanguage" class="text">
                 <%
@@ -82,7 +82,7 @@
         </td>
     </tr>
     <tr>
-        <td class="admin2"><%=getTran("web.translations.bulk","destinationlanguage",sWebLanguage)%></td>
+        <td class="admin2"><%=getTran(request,"web.translations.bulk","destinationlanguage",sWebLanguage)%></td>
          <td class="admin2">
             <select name="FindDestinationLanguage" class="text">
                 <%
@@ -100,7 +100,7 @@
         </td>
     </tr>
     <tr>
-        <td class="admin2"><%=getTran("web.translations.bulk","show_only_empty_values",sWebLanguage)%></td>
+        <td class="admin2"><%=getTran(request,"web.translations.bulk","show_only_empty_values",sWebLanguage)%></td>
         <td class="admin2">
             <input type="checkbox" name="FindOnlyEmptyValues" value="ok"<%if(sFindOnlyEmptyValues.equals("ok")){out.print(" checked");}%>>
         </td>
@@ -135,8 +135,8 @@
             out.print("<table cellspacing='1' cellpadding='0' width='100%' class='list'>"
                     + "<tr class='admin'>"
                     + "<td>Key</td>"
-                    + "<td width='50%'>" + getTran("web.translations.bulk", "sourcelanguage", sWebLanguage) + ": " + sFindSourceLanguage + "</td>"
-                    + "<td>" + getTran("web.translations.bulk", "destinationlanguage", sWebLanguage) + ": " + sFindDestinationLanguage + "</td>"
+                    + "<td width='50%'>" + getTran(request,"web.translations.bulk", "sourcelanguage", sWebLanguage) + ": " + sFindSourceLanguage + "</td>"
+                    + "<td>" + getTran(request,"web.translations.bulk", "destinationlanguage", sWebLanguage) + ": " + sFindDestinationLanguage + "</td>"
                     + "</tr>"
             );
             Hashtable hLabels = MedwanQuery.getInstance().getLabels();
@@ -173,11 +173,11 @@
                                 sLabel = "";
                             }
                             if(iIndex>=iFrom && iIndex<=iUntil && sLabel.length()==0 && MedwanQuery.getInstance().getConfigInt("enableAutoTranslate",0)==1){
-                            	sLabel=Translate.translate(sFindSourceLanguage, sFindDestinationLanguage, getTran(label.type, label.id, label.language));
+                            	sLabel=Translate.translate(sFindSourceLanguage, sFindDestinationLanguage, getTran(request,label.type, label.id, label.language));
                             }
 
                             if ((sFindOnlyEmptyValues.length() == 0) || ((sFindOnlyEmptyValues.length() > 0) && (sLabel.length() == 0))) {
-                                hSorted.put(sKey, "<tr class='list' ><td>" + sKey + "</td><td>" + getTran(label.type, label.id, label.language) + "</td>"
+                                hSorted.put(sKey, "<tr class='list' ><td>" + sKey + "</td><td>" + getTran(request,label.type, label.id, label.language) + "</td>"
                                         + "<td><textarea class='normal' rows=\"2\" cols=\"80\" name='Edit" + sKey + "'>" + sLabel + "</textarea></td></tr>");
                             }
                         }

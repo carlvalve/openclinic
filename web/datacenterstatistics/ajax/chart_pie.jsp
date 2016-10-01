@@ -45,7 +45,7 @@
     } else if (sId.indexOf("IDFSA_") == 0) {
         String[] s = sId.split("_");
         chart = h.getIDFSAChart(s[1]);
-        sTopLegend = "<div class='topLegend'>"+s[1]+" "+getTran("service",s[1],sWebLanguage)+"</div>";                
+        sTopLegend = "<div class='topLegend'>"+s[1]+" "+getTran(request,"service",s[1],sWebLanguage)+"</div>";                
     } else if (sId.indexOf("T10IDDSA_") == 0) {
         String[] s = sId.split("_");
         chart = h.getT10IDDSAChart(s[1]);
@@ -53,7 +53,7 @@
     } else if (sId.indexOf("IDFSV_") == 0) {
         String[] s = sId.split("_");
         chart = h.getIDFSVChart(s[1]);
-        sTopLegend = "<div class='topLegend'>"+getTran("service",s[1],sWebLanguage)+"</div>";
+        sTopLegend = "<div class='topLegend'>"+getTran(request,"service",s[1],sWebLanguage)+"</div>";
     } else if (sId.indexOf("T10IDDSV_") == 0) {
         String[] s = sId.split("_");
         chart = h.getT10IDDSVChart(s[1]);
@@ -68,13 +68,13 @@
         String[] s = sId.split("_");
         kv = h.getT10DRV();
         chart = h.getT10DRADChart(kv[Integer.parseInt(s[1])].getKey());
-        sTopLegend = "<div class='topLegend'>"+getTran("web.statistics","clinical.condition",sWebLanguage)+ " "+s[1]+"</div>";
+        sTopLegend = "<div class='topLegend'>"+getTran(request,"web.statistics","clinical.condition",sWebLanguage)+ " "+s[1]+"</div>";
         sLabelscode = "prestation";
     } else if (sId.indexOf("T10DRVD_") == 0) {
         String[] s = sId.split("_");
         kv = h.getT10DRV();
         chart = h.getT10DRVDChart(kv[Integer.parseInt(s[1])].getKey());
-        sTopLegend = "<div class='topLegend'>"+getTran("web.statistics","clinical.condition",sWebLanguage)+ " "+s[1]+"</div>";
+        sTopLegend = "<div class='topLegend'>"+getTran(request,"web.statistics","clinical.condition",sWebLanguage)+ " "+s[1]+"</div>";
         sLabelscode = "prestation";
     }
 

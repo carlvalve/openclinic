@@ -54,7 +54,7 @@
     <%-- MAIN TITLE --%>
     <tr class="admin" height="22">
         <td colspan="4">
-            <%=ScreenHelper.writeTblHeader(getTran("Web.Occup","medwan.healthrecord.ophtalmology.ergovision",sWebLanguage),sCONTEXTPATH)%>
+            <%=ScreenHelper.writeTblHeader(getTran(request,"Web.Occup","medwan.healthrecord.ophtalmology.ergovision",sWebLanguage),sCONTEXTPATH)%>
         </td>
     </tr>
 
@@ -62,7 +62,7 @@
     <tr>
         <td class="admin">
             <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-            <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+            <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
         </td>
         <td class="admin2" colspan="3">
             <input type="text" class="text" size="12" maxLength="10" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" id="trandate" OnBlur="checkDate(this);">
@@ -75,7 +75,7 @@
     <tr class="label" height="18">
         <td colspan="3">
             <img id="img<%=sectionCount%>" src="<c:url value="/"/>/_img/themes/default/plus.jpg" onClick="toggleSection('section<%=sectionCount%>','img<%=sectionCount%>');" class="link">&nbsp;
-            <%=getTran("web","section",sWebLanguage)%> <%=sectionCount%>
+            <%=getTran(request,"web","section",sWebLanguage)%> <%=sectionCount%>
         </td>
     </tr>
     <tbody id="section<%=sectionCount%>" style="display:none;">
@@ -84,94 +84,94 @@
                 <table cellpadding="0" cellspacing="1" width="100%">        
                     <%-- VOORGESCHREVEN CORRECTIE -----------------------------------------------%>
                     <tr>
-                        <td class="admin" width="<%=(Integer.parseInt(sTDAdminWidth)-6)%>"><%=getTran("Web.Occup","healthrecord.ophtalmology.correction-prescribe",sWebLanguage)%></td>
+                        <td class="admin" width="<%=(Integer.parseInt(sTDAdminWidth)-6)%>"><%=getTran(request,"Web.Occup","healthrecord.ophtalmology.correction-prescribe",sWebLanguage)%></td>
                         <td colspan="2" rowspan="3" class="admin2" width="798">
                             <table cellpadding="1" cellspacing="0">
                                 <%-- ROW 1 --%>
                                 <tr>
                                     <td>
                                         <input <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_GLASSES")%> type="checkbox" id="mov_c1" tabindex="1" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_GLASSES" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_GLASSES;value=medwan.healthrecord.ophtalmology.acuite-visuelle.lunettes" property="value" outputString="checked"/> value="medwan.healthrecord.ophtalmology.acuite-visuelle.lunettes">
-                                        <%=getLabel("Web.Occup","medwan.healthrecord.ophtalmology.acuite-visuelle.lunettes",sWebLanguage,"mov_c1")%>
+                                        <%=getLabel(request,"Web.Occup","medwan.healthrecord.ophtalmology.acuite-visuelle.lunettes",sWebLanguage,"mov_c1")%>
                                     </td>
                                     <td>
                                         <input <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_CONTACT")%> type="checkbox" id="mov_c2" tabindex="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_CONTACT" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_CONTACT;value=medwan.healthrecord.ophtalmology.acuite-visuelle.verres-de-contact" property="value" outputString="checked"/> value="medwan.healthrecord.ophtalmology.acuite-visuelle.verres-de-contact">
-                                        <%=getLabel("Web.Occup","medwan.healthrecord.ophtalmology.acuite-visuelle.verres-de-contact",sWebLanguage,"mov_c2")%>
+                                        <%=getLabel(request,"Web.Occup","medwan.healthrecord.ophtalmology.acuite-visuelle.verres-de-contact",sWebLanguage,"mov_c2")%>
                                     </td>
                                     <td>
                                         <input <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_VISION_CLOSE")%> type="checkbox" id="mov_c3" tabindex="3" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_VISION_CLOSE" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_VISION_CLOSE;value=delhaize.healthrecord.ophtalmology.av.nabijzicht" property="value" outputString="checked"/> value="delhaize.healthrecord.ophtalmology.av.nabijzicht">
-                                        <%=getLabel("Web.Occup","delhaize.healthrecord.ophtalmology.av.nabijzicht",sWebLanguage,"mov_c3")%>
+                                        <%=getLabel(request,"Web.Occup","delhaize.healthrecord.ophtalmology.av.nabijzicht",sWebLanguage,"mov_c3")%>
                                     </td>
                                     <td>
                                         <input <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_VISION_FAR")%> type="checkbox" id="mov_c4" tabindex="4" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_VISION_FAR" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_VISION_FAR;value=delhaize.healthrecord.ophtalmology.av.vertezicht" property="value" outputString="checked"/> value="delhaize.healthrecord.ophtalmology.av.vertezicht">
-                                        <%=getLabel("Web.Occup","delhaize.healthrecord.ophtalmology.av.vertezicht",sWebLanguage,"mov_c4")%>
+                                        <%=getLabel(request,"Web.Occup","delhaize.healthrecord.ophtalmology.av.vertezicht",sWebLanguage,"mov_c4")%>
                                     </td>
                                 </tr>
                                 <%-- ROW 2 --%>
                                 <tr>
                                     <td>
                                         <input <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_PERMANENT")%> type="checkbox" id="mov_c5" tabindex="5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_PERMANENT" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_PERMANENT;value=healthrecord.ophtalmology.permanent" property="value" outputString="checked"/> value="healthrecord.ophtalmology.permanent">
-                                        <%=getLabel("Web.Occup","healthrecord.ophtalmology.permanent",sWebLanguage,"mov_c5")%>
+                                        <%=getLabel(request,"Web.Occup","healthrecord.ophtalmology.permanent",sWebLanguage,"mov_c5")%>
                                     </td>
                                     <td>
                                         <input <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_LECTURE")%> type="checkbox" id="mov_c6" tabindex="6" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_LECTURE" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_LECTURE;value=healthrecord.ophtalmology.lecture" property="value" outputString="checked"/> value="healthrecord.ophtalmology.lecture">
-                                        <%=getLabel("Web.Occup","healthrecord.ophtalmology.lecture",sWebLanguage,"mov_c6")%>
+                                        <%=getLabel(request,"Web.Occup","healthrecord.ophtalmology.lecture",sWebLanguage,"mov_c6")%>
                                     </td>
                                     <td>
                                         <input <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_SCREEN")%> type="checkbox" id="mov_c7" tabindex="7" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_SCREEN" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_SCREEN;value=healthrecord.ophtalmology.screen" property="value" outputString="checked"/> value="healthrecord.ophtalmology.screen">
-                                        <%=getLabel("Web.Occup","healthrecord.ophtalmology.screen",sWebLanguage,"mov_c7")%>
+                                        <%=getLabel(request,"Web.Occup","healthrecord.ophtalmology.screen",sWebLanguage,"mov_c7")%>
                                     </td>
                                     <td>
                                         <input <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_CAR_DRIVING")%> type="checkbox" id="mov_c8" tabindex="8" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_CAR_DRIVING" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_CAR_DRIVING;value=healthrecord.ophtalmology.car-driving" property="value" outputString="checked"/> value="healthrecord.ophtalmology.car-driving">
-                                        <%=getLabel("Web.Occup","healthrecord.ophtalmology.car-driving",sWebLanguage,"mov_c8")%>
+                                        <%=getLabel(request,"Web.Occup","healthrecord.ophtalmology.car-driving",sWebLanguage,"mov_c8")%>
                                     </td>
                                     <td>
                                         <input <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_OTHER")%> type="checkbox" id="mov_c9" tabindex="9" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_OTHER" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_OTHER;value=healthrecord.ophtalmology.other" property="value" outputString="checked"/> value="healthrecord.ophtalmology.other">
-                                        <%=getLabel("Web.Occup","healthrecord.ophtalmology.other",sWebLanguage,"mov_c9")%>
+                                        <%=getLabel(request,"Web.Occup","healthrecord.ophtalmology.other",sWebLanguage,"mov_c9")%>
                                     </td>
                                 </tr>
                                 <%-- ROW 3 --%>
                                 <tr>
                                     <td>
                                         <input <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_UNIFOCAL")%> type="checkbox" id="mov_c10" tabindex="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_UNIFOCAL" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_UNIFOCAL;value=healthrecord.ophtalmology.unifocal" property="value" outputString="checked"/> value="healthrecord.ophtalmology.unifocal">
-                                        <%=getLabel("Web.Occup","healthrecord.ophtalmology.unifocal",sWebLanguage,"mov_c10")%>
+                                        <%=getLabel(request,"Web.Occup","healthrecord.ophtalmology.unifocal",sWebLanguage,"mov_c10")%>
                                     </td>
                                     <td>
                                         <input <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_BIFOCAL")%> type="checkbox" id="mov_c11" tabindex="11" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_BIFOCAL" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_BIFOCAL;value=healthrecord.ophtalmology.bifocal" property="value" outputString="checked"/> value="healthrecord.ophtalmology.bifocal">
-                                        <%=getLabel("Web.Occup","healthrecord.ophtalmology.bifocal",sWebLanguage,"mov_c11")%>
+                                        <%=getLabel(request,"Web.Occup","healthrecord.ophtalmology.bifocal",sWebLanguage,"mov_c11")%>
                                     </td>
                                     <td>
                                         <input <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_TRIFOCAL")%> type="checkbox" id="mov_c12" tabindex="12" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_TRIFOCAL" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_TRIFOCAL;value=healthrecord.ophtalmology.trifocal" property="value" outputString="checked"/> value="healthrecord.ophtalmology.trifocal">
-                                        <%=getLabel("Web.Occup","healthrecord.ophtalmology.trifocal",sWebLanguage,"mov_c12")%>
+                                        <%=getLabel(request,"Web.Occup","healthrecord.ophtalmology.trifocal",sWebLanguage,"mov_c12")%>
                                     </td>
                                     <td>
                                         <input <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_HALF_MOONS")%> type="checkbox" id="mov_c13" tabindex="13" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_HALF_MOONS" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_HALF_MOONS;value=healthrecord.ophtalmology.half-moons" property="value" outputString="checked"/> value="healthrecord.ophtalmology.half-moons">
-                                        <%=getLabel("Web.Occup","healthrecord.ophtalmology.half-moons",sWebLanguage,"mov_c13")%>
+                                        <%=getLabel(request,"Web.Occup","healthrecord.ophtalmology.half-moons",sWebLanguage,"mov_c13")%>
                                     </td>
                                     <td>
                                         <input <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_PROGRESSIF")%> type="checkbox" id="mov_c14" tabindex="14" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_PROGRESSIF" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_PROGRESSIF;value=healthrecord.ophtalmology.progressif" property="value" outputString="checked"/> value="healthrecord.ophtalmology.progressif">
-                                        <%=getLabel("Web.Occup","healthrecord.ophtalmology.progressif",sWebLanguage,"mov_c14")%>
+                                        <%=getLabel(request,"Web.Occup","healthrecord.ophtalmology.progressif",sWebLanguage,"mov_c14")%>
                                     </td>
                                     <td>
                                         <input <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_LENSES")%> type="checkbox" id="mov_c15" tabindex="15" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_LENSES" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_LENSES;value=healthrecord.ophtalmology.lenses" property="value" outputString="checked"/> value="healthrecord.ophtalmology.lenses">
-                                        <%=getLabel("Web.Occup","healthrecord.ophtalmology.lenses",sWebLanguage,"mov_c15")%>
+                                        <%=getLabel(request,"Web.Occup","healthrecord.ophtalmology.lenses",sWebLanguage,"mov_c15")%>
                                     </td>
                                     <td>
                                         <input <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_KERATOTOMY")%> type="checkbox" id="mov_c16" tabindex="16" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_KERATOTOMY" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_KERATOTOMY;value=medwan.healthrecord.ophtalmology.acuite-visuelle.keratotomie" property="value" outputString="checked"/> value="medwan.healthrecord.ophtalmology.acuite-visuelle.keratotomie">
-                                        <%=getLabel("Web.Occup","medwan.healthrecord.ophtalmology.acuite-visuelle.keratotomie",sWebLanguage,"mov_c16")%>
+                                        <%=getLabel(request,"Web.Occup","medwan.healthrecord.ophtalmology.acuite-visuelle.keratotomie",sWebLanguage,"mov_c16")%>
                                     </td>
                                     <td>
                                         <input <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_LASIK")%> type="checkbox" id="mov_c17" tabindex="17" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_LASIK" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ERGOVISION_CORRECTION_LASIK;value=medwan.healthrecord.ophtalmology.acuite-visuelle.LASIK" property="value" outputString="checked"/> value="medwan.healthrecord.ophtalmology.acuite-visuelle.LASIK">
-                                        <%=getLabel("Web.Occup","medwan.healthrecord.ophtalmology.acuite-visuelle.LASIK",sWebLanguage,"mov_c17")%>
+                                        <%=getLabel(request,"Web.Occup","medwan.healthrecord.ophtalmology.acuite-visuelle.LASIK",sWebLanguage,"mov_c17")%>
                                     </td>
                                 </tr>
                             </table>
                         </td>
                     </tr>
                     <tr>
-                        <td class="admin"><%=getTran("Web.Occup","healthrecord.ophtalmology.correction-porter",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"Web.Occup","healthrecord.ophtalmology.correction-porter",sWebLanguage)%></td>
                     </tr>
                     <tr>
-                        <td class="admin"><%=getTran("Web.Occup","healthrecord.ophtalmology.correction-type",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"Web.Occup","healthrecord.ophtalmology.correction-type",sWebLanguage)%></td>
                     </tr>
                 </table>
             </td>
@@ -214,15 +214,15 @@
     <tr class="label" height="18">
         <td width="<%=sTDAdminWidth%>">
             <img id="img<%=sectionCount%>" src="<c:url value="/"/>/_img/themes/default/plus.jpg" onClick="toggleSection('section<%=sectionCount%>','img<%=sectionCount%>');" class="link">&nbsp;
-            <%=getTran("web","section",sWebLanguage)%> <%=sectionCount%>
+            <%=getTran(request,"web","section",sWebLanguage)%> <%=sectionCount%>
         </td>
-        <td width="400"><%=getTran("Web.Occup","medwan.healthrecord.ophtalmology.OD",sWebLanguage)%></td>
-        <td width="400"><%=getTran("Web.Occup","medwan.healthrecord.ophtalmology.OG",sWebLanguage)%></td>
+        <td width="400"><%=getTran(request,"Web.Occup","medwan.healthrecord.ophtalmology.OD",sWebLanguage)%></td>
+        <td width="400"><%=getTran(request,"Web.Occup","medwan.healthrecord.ophtalmology.OG",sWebLanguage)%></td>
     </tr>
     <tbody id="section<%=sectionCount%>" style="display:none;">
         <%-- ZICHT NABIJ ------------------------------------------------------------%>
         <tr>
-            <td class="admin" width="<%=(Integer.parseInt(sTDAdminWidth)-4)%>"><%=getTran("Web.Occup","medwan.healthrecord.ophtalmology.Acuite-VP",sWebLanguage)%></td>
+            <td class="admin" width="<%=(Integer.parseInt(sTDAdminWidth)-4)%>"><%=getTran(request,"Web.Occup","medwan.healthrecord.ophtalmology.Acuite-VP",sWebLanguage)%></td>
             <%-- left part (=right eye) --%>
             <td class="admin2" width="400">
                 <table cellspacing="1">
@@ -247,7 +247,7 @@
                         <td align="center"><input id="nearodno8" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OD_WITHOUT_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OD_WITHOUT_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OD_WITHOUT_GLASSES;value=8"   property="value" outputString="checked"/> value="8"></td>
                         <td align="center"><input id="nearodno10" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OD_WITHOUT_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OD_WITHOUT_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OD_WITHOUT_GLASSES;value=10"  property="value" outputString="checked"/> value="10"></td>
                         <td align="center"><input id="nearodno12" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OD_WITHOUT_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OD_WITHOUT_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OD_WITHOUT_GLASSES;value=12"  property="value" outputString="checked"/> value="12"></td>
-                        <td class="admin" nowrap><%=getTran("Web.Occup","medwan.common.without-correction",sWebLanguage)%></td>
+                        <td class="admin" nowrap><%=getTran(request,"Web.Occup","medwan.common.without-correction",sWebLanguage)%></td>
                     </tr>
                     <tr>
                         <td align="center"><input id="nearodyes0" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OD_WITH_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OD_WITH_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OD_WITH_GLASSES;value=0"   property="value" outputString="checked"/> value="0"></td>
@@ -259,7 +259,7 @@
                         <td align="center"><input id="nearodyes8" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OD_WITH_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OD_WITH_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OD_WITH_GLASSES;value=8"   property="value" outputString="checked"/> value="8"></td>
                         <td align="center"><input id="nearodyes10" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OD_WITH_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OD_WITH_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OD_WITH_GLASSES;value=10"  property="value" outputString="checked"/> value="10"></td>
                         <td align="center"><input id="nearodyes12" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OD_WITH_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OD_WITH_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OD_WITH_GLASSES;value=12"  property="value" outputString="checked"/> value="12"></td>
-                        <td class="admin" nowrap><%=getTran("Web.Occup","medwan.common.with-correction",sWebLanguage)%></td>
+                        <td class="admin" nowrap><%=getTran(request,"Web.Occup","medwan.common.with-correction",sWebLanguage)%></td>
                     </tr>
                 </table>
             </td>
@@ -287,7 +287,7 @@
                         <td align="center"><input id="nearogno8" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OG_WITHOUT_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OG_WITHOUT_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OG_WITHOUT_GLASSES;value=8"   property="value" outputString="checked"/> value="8"></td>
                         <td align="center"><input id="nearogno10" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OG_WITHOUT_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OG_WITHOUT_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OG_WITHOUT_GLASSES;value=10"  property="value" outputString="checked"/> value="10"></td>
                         <td align="center"><input id="nearogno12" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OG_WITHOUT_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OG_WITHOUT_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OG_WITHOUT_GLASSES;value=12"  property="value" outputString="checked"/> value="12"></td>
-                        <td class="admin" nowrap><%=getTran("Web.Occup","medwan.common.without-correction",sWebLanguage)%></td>
+                        <td class="admin" nowrap><%=getTran(request,"Web.Occup","medwan.common.without-correction",sWebLanguage)%></td>
                     </tr>
                     <tr>
                         <td align="center"><input id="nearogyes0" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OG_WITH_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OG_WITH_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OG_WITH_GLASSES;value=0"   property="value" outputString="checked"/> value="0"></td>
@@ -299,14 +299,14 @@
                         <td align="center"><input id="nearogyes8" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OG_WITH_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OG_WITH_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OG_WITH_GLASSES;value=8"   property="value" outputString="checked"/> value="8"></td>
                         <td align="center"><input id="nearogyes10" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OG_WITH_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OG_WITH_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OG_WITH_GLASSES;value=10"  property="value" outputString="checked"/> value="10"></td>
                         <td align="center"><input id="nearogyes12" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OG_WITH_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OG_WITH_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_CLOSE_OG_WITH_GLASSES;value=12"  property="value" outputString="checked"/> value="12"></td>
-                        <td class="admin" nowrap><%=getTran("Web.Occup","medwan.common.with-correction",sWebLanguage)%></td>
+                        <td class="admin" nowrap><%=getTran(request,"Web.Occup","medwan.common.with-correction",sWebLanguage)%></td>
                     </tr>
                 </table>
             </td>
         </tr>
         <%-- ZICHT TUSSENAFSTAND ----------------------------------------------------%>
         <tr>
-            <td class="admin" width="<%=(Integer.parseInt(sTDAdminWidth)-4)%>"><%=getTran("Web.Occup","medwan.healthrecord.ophtalmology.Acuite-VI",sWebLanguage)%></td>
+            <td class="admin" width="<%=(Integer.parseInt(sTDAdminWidth)-4)%>"><%=getTran(request,"Web.Occup","medwan.healthrecord.ophtalmology.Acuite-VI",sWebLanguage)%></td>
             <%-- left part (=right eye) --%>
             <td class="admin2" width="400">
                 <table cellspacing="1">
@@ -331,7 +331,7 @@
                         <td align="center"><input id="interodno8" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OD_WITHOUT_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OD_WITHOUT_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OD_WITHOUT_GLASSES;value=8"   property="value" outputString="checked"/> value="8"></td>
                         <td align="center"><input id="interodno10" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OD_WITHOUT_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OD_WITHOUT_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OD_WITHOUT_GLASSES;value=10"  property="value" outputString="checked"/> value="10"></td>
                         <td align="center"><input id="interodno12" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OD_WITHOUT_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OD_WITHOUT_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OD_WITHOUT_GLASSES;value=12"  property="value" outputString="checked"/> value="12"></td>
-                        <td class="admin" nowrap><%=getTran("Web.Occup","medwan.common.without-correction",sWebLanguage)%></td>
+                        <td class="admin" nowrap><%=getTran(request,"Web.Occup","medwan.common.without-correction",sWebLanguage)%></td>
                     </tr>
                     <tr>
                         <td align="center"><input id="interodyes0" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OD_WITH_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OD_WITH_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OD_WITH_GLASSES;value=0"   property="value" outputString="checked"/> value="0"></td>
@@ -343,7 +343,7 @@
                         <td align="center"><input id="interodyes8" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OD_WITH_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OD_WITH_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OD_WITH_GLASSES;value=8"   property="value" outputString="checked"/> value="8"></td>
                         <td align="center"><input id="interodyes10" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OD_WITH_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OD_WITH_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OD_WITH_GLASSES;value=10"  property="value" outputString="checked"/> value="10"></td>
                         <td align="center"><input id="interodyes12" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OD_WITH_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OD_WITH_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OD_WITH_GLASSES;value=12"  property="value" outputString="checked"/> value="12"></td>
-                        <td class="admin" nowrap><%=getTran("Web.Occup","medwan.common.with-correction",sWebLanguage)%></td>
+                        <td class="admin" nowrap><%=getTran(request,"Web.Occup","medwan.common.with-correction",sWebLanguage)%></td>
                     </tr>
                 </table>
             </td>
@@ -371,7 +371,7 @@
                         <td align="center"><input id="interogno8" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OG_WITHOUT_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OG_WITHOUT_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OG_WITHOUT_GLASSES;value=8"   property="value" outputString="checked"/> value="8"></td>
                         <td align="center"><input id="interogno10" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OG_WITHOUT_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OG_WITHOUT_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OG_WITHOUT_GLASSES;value=10"  property="value" outputString="checked"/> value="10"></td>
                         <td align="center"><input id="interogno12" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OG_WITHOUT_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OG_WITHOUT_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OG_WITHOUT_GLASSES;value=12"  property="value" outputString="checked"/> value="12"></td>
-                        <td class="admin" nowrap><%=getTran("Web.Occup","medwan.common.without-correction",sWebLanguage)%></td>
+                        <td class="admin" nowrap><%=getTran(request,"Web.Occup","medwan.common.without-correction",sWebLanguage)%></td>
                     </tr>
                     <tr>
                         <td align="center"><input id="interogyes0" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OG_WITH_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OG_WITH_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OG_WITH_GLASSES;value=0"   property="value" outputString="checked"/> value="0"></td>
@@ -383,14 +383,14 @@
                         <td align="center"><input id="interogyes8" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OG_WITH_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OG_WITH_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OG_WITH_GLASSES;value=8"   property="value" outputString="checked"/> value="8"></td>
                         <td align="center"><input id="interogyes10" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OG_WITH_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OG_WITH_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OG_WITH_GLASSES;value=10"  property="value" outputString="checked"/> value="10"></td>
                         <td align="center"><input id="interogyes12" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OG_WITH_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OG_WITH_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_INTER_OG_WITH_GLASSES;value=12"  property="value" outputString="checked"/> value="12"></td>
-                        <td class="admin" nowrap><%=getTran("Web.Occup","medwan.common.with-correction",sWebLanguage)%></td>
+                        <td class="admin" nowrap><%=getTran(request,"Web.Occup","medwan.common.with-correction",sWebLanguage)%></td>
                     </tr>
                 </table>
             </td>
         </tr>
         <%-- ZICHT VERAF ------------------------------------------------------------%>
         <tr>
-            <td class="admin" width="<%=(Integer.parseInt(sTDAdminWidth)-4)%>"><%=getTran("Web.Occup","medwan.healthrecord.ophtalmology.Acuite-VL",sWebLanguage)%></td>
+            <td class="admin" width="<%=(Integer.parseInt(sTDAdminWidth)-4)%>"><%=getTran(request,"Web.Occup","medwan.healthrecord.ophtalmology.Acuite-VL",sWebLanguage)%></td>
             <%-- left part (=right eye) --%>
             <td class="admin2" width="400">
                 <table cellspacing="1">
@@ -415,7 +415,7 @@
                         <td align="center"><input id="farodno8" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_OD_WITHOUT_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_OD_WITHOUT_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_OD_WITHOUT_GLASSES;value=8"   property="value" outputString="checked"/> value="8"></td>
                         <td align="center"><input id="farodno10" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_OD_WITHOUT_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_OD_WITHOUT_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_OD_WITHOUT_GLASSES;value=10"  property="value" outputString="checked"/> value="10"></td>
                         <td align="center"><input id="farodno12" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_OD_WITHOUT_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_OD_WITHOUT_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_OD_WITHOUT_GLASSES;value=12"  property="value" outputString="checked"/> value="12"></td>
-                        <td class="admin" nowrap><%=getTran("Web.Occup","medwan.common.without-correction",sWebLanguage)%></td>
+                        <td class="admin" nowrap><%=getTran(request,"Web.Occup","medwan.common.without-correction",sWebLanguage)%></td>
                     </tr>
                     <tr>
                         <td align="center"><input id="farodyes0" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_OD_WITH_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_OD_WITH_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_OD_WITH_GLASSES;value=0"   property="value" outputString="checked"/> value="0"></td>
@@ -427,7 +427,7 @@
                         <td align="center"><input id="farodyes8" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_OD_WITH_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_OD_WITH_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_OD_WITH_GLASSES;value=8"   property="value" outputString="checked"/> value="8"></td>
                         <td align="center"><input id="farodyes10" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_OD_WITH_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_OD_WITH_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_OD_WITH_GLASSES;value=10"  property="value" outputString="checked"/> value="10"></td>
                         <td align="center"><input id="farodyes12" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_OD_WITH_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_OD_WITH_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_OD_WITH_GLASSES;value=12"  property="value" outputString="checked"/> value="12"></td>
-                        <td class="admin" nowrap><%=getTran("Web.Occup","medwan.common.with-correction",sWebLanguage)%></td>
+                        <td class="admin" nowrap><%=getTran(request,"Web.Occup","medwan.common.with-correction",sWebLanguage)%></td>
                     </tr>
                 </table>
             </td>
@@ -455,7 +455,7 @@
                         <td align="center"><input id="farogno8" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_OG_WITHOUT_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_OG_WITHOUT_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_OG_WITHOUT_GLASSES;value=8"   property="value" outputString="checked"/> value="8"></td>
                         <td align="center"><input id="farogno10" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_OG_WITHOUT_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_OG_WITHOUT_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_OG_WITHOUT_GLASSES;value=10"  property="value" outputString="checked"/> value="10"></td>
                         <td align="center"><input id="farogno12" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_OG_WITHOUT_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_OG_WITHOUT_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_OG_WITHOUT_GLASSES;value=12"  property="value" outputString="checked"/> value="12"></td>
-                        <td class="admin" nowrap><%=getTran("Web.Occup","medwan.common.without-correction",sWebLanguage)%></td>
+                        <td class="admin" nowrap><%=getTran(request,"Web.Occup","medwan.common.without-correction",sWebLanguage)%></td>
                     </tr>
                     <tr>
                         <td align="center"><input id="farogyes0" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_OG_WITH_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_OG_WITH_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_OG_WITH_GLASSES;value=0"   property="value" outputString="checked"/> value="0"></td>
@@ -467,7 +467,7 @@
                         <td align="center"><input id="farogyes8" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_OG_WITH_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_OG_WITH_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_OG_WITH_GLASSES;value=8"   property="value" outputString="checked"/> value="8"></td>
                         <td align="center"><input id="farogyes10" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_OG_WITH_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_OG_WITH_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_OG_WITH_GLASSES;value=10"  property="value" outputString="checked"/> value="10"></td>
                         <td align="center"><input id="farogyes12" type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_OG_WITH_GLASSES" property="itemId"/>]>.value" <%=setRightClick("ITEM_TYPE_OPTHALMOLOGY_VISION_OG_WITH_GLASSES")%> <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_VISION_OG_WITH_GLASSES;value=12"  property="value" outputString="checked"/> value="12"></td>
-                        <td class="admin" nowrap><%=getTran("Web.Occup","medwan.common.with-correction",sWebLanguage)%></td>
+                        <td class="admin" nowrap><%=getTran(request,"Web.Occup","medwan.common.with-correction",sWebLanguage)%></td>
                     </tr>
                 </table>
             </td>
@@ -505,22 +505,22 @@
     <tr class="label" height="18">
         <td width="<%=sTDAdminWidth%>">
             <img id="img<%=sectionCount%>" src="<c:url value="/"/>/_img/themes/default/plus.jpg" onClick="toggleSection('section<%=sectionCount%>','img<%=sectionCount%>');" class="link">&nbsp;
-            <%=getTran("web","section",sWebLanguage)%> <%=sectionCount%>
+            <%=getTran(request,"web","section",sWebLanguage)%> <%=sectionCount%>
         </td>
-        <td width="400"><%=getTran("Web.Occup","medwan.healthrecord.ophtalmology.OD",sWebLanguage)%></td>
-        <td width="400"><%=getTran("Web.Occup","medwan.healthrecord.ophtalmology.OG",sWebLanguage)%></td>
+        <td width="400"><%=getTran(request,"Web.Occup","medwan.healthrecord.ophtalmology.OD",sWebLanguage)%></td>
+        <td width="400"><%=getTran(request,"Web.Occup","medwan.healthrecord.ophtalmology.OG",sWebLanguage)%></td>
     </tr>
     <tbody id="section<%=sectionCount%>" style="display:none;">
         <%-- BONETTE ----------------------------------------------------------------%>
         <tr>
-            <td class="admin" width="<%=(Integer.parseInt(sTDAdminWidth)-4)%>"><%=getTran("Web.Occup","medwan.healthrecord.ophtalmology.workers-on-screen-bonnette",sWebLanguage)%> </td>
+            <td class="admin" width="<%=(Integer.parseInt(sTDAdminWidth)-4)%>"><%=getTran(request,"Web.Occup","medwan.healthrecord.ophtalmology.workers-on-screen-bonnette",sWebLanguage)%> </td>
             <%-- left part (=right eye) --%>
             <td class="admin2" width="400">
                 <table>
                     <tr>
-                        <td width="45%" align="center"><%=getLabel("Web.Occup","medwan.healthrecord.ophtalmology.equal",sWebLanguage,"moe_c1")%></td>
+                        <td width="45%" align="center"><%=getLabel(request,"Web.Occup","medwan.healthrecord.ophtalmology.equal",sWebLanguage,"moe_c1")%></td>
                         <td width="10%">&nbsp;</td>
-                        <td width="45%" align="center"><%=getLabel("Web.Occup","medwan.healthrecord.ophtalmology.less-good",sWebLanguage,"moe_c2")%></td>
+                        <td width="45%" align="center"><%=getLabel(request,"Web.Occup","medwan.healthrecord.ophtalmology.less-good",sWebLanguage,"moe_c2")%></td>
                     </tr>
                     <tr>
                         <td align="center"><input type="checkbox" id="moe_c1" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_BONNETTE_OD_EQUAL" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_BONNETTE_OD_EQUAL;value=medwan.healthrecord.ophtalmology.equal" property="value" outputString="checked"/> value="medwan.healthrecord.ophtalmology.equal"></td>
@@ -533,9 +533,9 @@
             <td class="admin2" width="400">
                 <table>
                     <tr>
-                        <td width="45%" align="center"><%=getLabel("Web.Occup","medwan.healthrecord.ophtalmology.equal",sWebLanguage,"moe_c3")%></td>
+                        <td width="45%" align="center"><%=getLabel(request,"Web.Occup","medwan.healthrecord.ophtalmology.equal",sWebLanguage,"moe_c3")%></td>
                         <td width="10%">&nbsp;</td>
-                        <td width="45%" align="center"><%=getLabel("Web.Occup","medwan.healthrecord.ophtalmology.less-good",sWebLanguage,"moe_c4")%></td>
+                        <td width="45%" align="center"><%=getLabel(request,"Web.Occup","medwan.healthrecord.ophtalmology.less-good",sWebLanguage,"moe_c4")%></td>
                     </tr>
                     <tr>
                         <td align="center"><input type="checkbox" id="moe_c3" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_BONNETTE_OG_EQUAL" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_BONNETTE_OG_EQUAL;value=medwan.healthrecord.ophtalmology.equal" property="value" outputString="checked"/> value="medwan.healthrecord.ophtalmology.equal"></td>
@@ -547,12 +547,12 @@
         </tr>
         <%-- Rood/Groen test --------------------------------------------------------%>
         <tr>
-            <td class="admin"><%=getTran("Web.Occup","medwan.healthrecord.ophtalmology.workers-on-screen-RED-GREEN",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web.Occup","medwan.healthrecord.ophtalmology.workers-on-screen-RED-GREEN",sWebLanguage)%></td>
             <td class="admin2">
                 <table>
                     <tr>
                         <td width="33%">&nbsp;</td>
-                        <td width="33%" align="center"><%=getLabel("Web.Occup","medwan.healthrecord.ophtalmology.equal",sWebLanguage,"moe_c5")%></td>
+                        <td width="33%" align="center"><%=getLabel(request,"Web.Occup","medwan.healthrecord.ophtalmology.equal",sWebLanguage,"moe_c5")%></td>
                         <td width="33%">&nbsp;</td>
                     </tr>
                     <tr>
@@ -561,9 +561,9 @@
                         <td>&nbsp;</td>
                     </tr>
                     <tr>
-                        <td align="center"><%=getLabel("Web.Occup","medwan.healthrecord.ophtalmology.red",sWebLanguage,"moe_c6")%></td>
+                        <td align="center"><%=getLabel(request,"Web.Occup","medwan.healthrecord.ophtalmology.red",sWebLanguage,"moe_c6")%></td>
                         <td>&nbsp;</td>
-                        <td align="center"><%=getLabel("Web.Occup","medwan.healthrecord.ophtalmology.green",sWebLanguage,"moe_c7")%></td>
+                        <td align="center"><%=getLabel(request,"Web.Occup","medwan.healthrecord.ophtalmology.green",sWebLanguage,"moe_c7")%></td>
                     </tr>
                     <tr>
                         <td align="center"><input type="checkbox" id="moe_c6" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_VISION_RED_GREEN_OD_RED" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_VISION_RED_GREEN_OD_RED;value=medwan.healthrecord.ophtalmology.red" property="value" outputString="checked"/> value="medwan.healthrecord.ophtalmology.red"></td>
@@ -576,7 +576,7 @@
                 <table>
                     <tr>
                         <td width="33%">&nbsp;</td>
-                        <td width="33%" align="center"><%=getLabel("Web.Occup","medwan.healthrecord.ophtalmology.equal",sWebLanguage,"moe_c8")%></td>
+                        <td width="33%" align="center"><%=getLabel(request,"Web.Occup","medwan.healthrecord.ophtalmology.equal",sWebLanguage,"moe_c8")%></td>
                         <td width="33%">&nbsp;</td>
                     </tr>
                     <tr>
@@ -585,9 +585,9 @@
                         <td>&nbsp;</td>
                     </tr>
                     <tr>
-                        <td align="center"><%=getLabel("Web.Occup","medwan.healthrecord.ophtalmology.red",sWebLanguage,"moe_c9")%></td>
+                        <td align="center"><%=getLabel(request,"Web.Occup","medwan.healthrecord.ophtalmology.red",sWebLanguage,"moe_c9")%></td>
                         <td>&nbsp;</td>
-                        <td align="center"><%=getLabel("Web.Occup","medwan.healthrecord.ophtalmology.green",sWebLanguage,"moe_c10")%></td>
+                        <td align="center"><%=getLabel(request,"Web.Occup","medwan.healthrecord.ophtalmology.green",sWebLanguage,"moe_c10")%></td>
                     </tr>
                     <tr>
                         <td align="center"><input type="checkbox" id="moe_c9" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_VISION_RED_GREEN_OG_RED" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_VISION_RED_GREEN_OG_RED;value=medwan.healthrecord.ophtalmology.red" property="value" outputString="checked"/> value="medwan.healthrecord.ophtalmology.red"></td>
@@ -599,7 +599,7 @@
         </tr>
         <%-- Astigmatisme -----------------------------------------------------------%>
         <tr>
-            <td class="admin"><%=getTran("Web.Occup","medwan.healthrecord.ophtalmology.workers-on-screen-astigmatisme",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web.Occup","medwan.healthrecord.ophtalmology.workers-on-screen-astigmatisme",sWebLanguage)%></td>
             <td class="admin2">
                 <table background="<c:url value='/_img/lines.gif'/>">
                     <tr>
@@ -641,12 +641,12 @@
                         <td colspan="2" align="center"><input type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ASTIGMATISME_OD_7" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ASTIGMATISME_OD_7;value=7" property="value" outputString="checked"/> value="7">7</td>
                     </tr>
                     <tr>
-                        <td colspan="3" align="right"><%=getLabel("Web.Occup","medwan.healthrecord.ophtalmology.equal",sWebLanguage,"moe_c11")%></td>
+                        <td colspan="3" align="right"><%=getLabel(request,"Web.Occup","medwan.healthrecord.ophtalmology.equal",sWebLanguage,"moe_c11")%></td>
                         <td colspan="3" align="center">
                             <input type="checkbox" id="moe_c11" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ASTIGMATISME_OD_EQUAL" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ASTIGMATISME_OD_EQUAL;value=medwan.healthrecord.ophtalmology.equal" property="value" outputString="checked"/> value="medwan.healthrecord.ophtalmology.equal" onClick="document.getElementById('moe_c12').checked=false;">&nbsp;
                             <input type="checkbox" id="moe_c12" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ASTIGMATISME_OD_BLACK" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ASTIGMATISME_OD_BLACK;value=medwan.healthrecord.ophtalmology.workers-on-screen-more-black" property="value" outputString="checked"/> value="medwan.healthrecord.ophtalmology.workers-on-screen-more-black" onClick="document.getElementById('moe_c11').checked=false;">
                         </td>
-                        <td colspan="3" align="left"><%=getLabel("Web.Occup","medwan.healthrecord.ophtalmology.workers-on-screen-more-black",sWebLanguage,"moe_c12")%></td>
+                        <td colspan="3" align="left"><%=getLabel(request,"Web.Occup","medwan.healthrecord.ophtalmology.workers-on-screen-more-black",sWebLanguage,"moe_c12")%></td>
                     </tr>
                 </table>
             </td>
@@ -691,19 +691,19 @@
                         <td colspan="2" align="center"><input type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ASTIGMATISME_OG_7" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ASTIGMATISME_OG_7;value=7" property="value" outputString="checked"/> value="7">7</td>
                     </tr>
                     <tr>
-                        <td colspan="3" align="right"><%=getLabel("Web.Occup","medwan.healthrecord.ophtalmology.equal",sWebLanguage,"moe_c13")%></td>
+                        <td colspan="3" align="right"><%=getLabel(request,"Web.Occup","medwan.healthrecord.ophtalmology.equal",sWebLanguage,"moe_c13")%></td>
                         <td colspan="3" align="center">
                             <input type="checkbox" id="moe_c13" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ASTIGMATISME_OG_EQUAL" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ASTIGMATISME_OG_EQUAL;value=medwan.healthrecord.ophtalmology.equal" property="value" outputString="checked"/> value="medwan.healthrecord.ophtalmology.equal" onClick="document.getElementById('moe_c14').checked=false;">&nbsp;
                             <input type="checkbox" id="moe_c14" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ASTIGMATISME_OG_BLACK" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_SCREEN_ASTIGMATISME_OG_BLACK;value=medwan.healthrecord.ophtalmology.workers-on-screen-more-black" property="value" outputString="checked"/> value="medwan.healthrecord.ophtalmology.workers-on-screen-more-black" onClick="document.getElementById('moe_c13').checked=false;">
                         </td>
-                        <td colspan="3" align="left"><%=getLabel("Web.Occup","medwan.healthrecord.ophtalmology.workers-on-screen-more-black",sWebLanguage,"moe_c14")%></td>
+                        <td colspan="3" align="left"><%=getLabel(request,"Web.Occup","medwan.healthrecord.ophtalmology.workers-on-screen-more-black",sWebLanguage,"moe_c14")%></td>
                     </tr>
                 </table>
             </td>
         </tr>
         <%-- PHORIES VL -------------------------------------------------------------%>
         <tr>
-            <td class="admin"><%=getTran("Web.Occup","medwan.healthrecord.ophtalmology.phoriesvl",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web.Occup","medwan.healthrecord.ophtalmology.phoriesvl",sWebLanguage)%></td>
             <td class="admin2" colspan="2">
                 <table border="1" cellspacing="1">
                     <tr>
@@ -802,15 +802,15 @@
         </tr>
         <%-- MOVEMENT --%>
         <tr>
-            <td class="admin"><%=getTran("Web.Occup","medwan.healthrecord.ophtalmology.phories.movement",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web.Occup","medwan.healthrecord.ophtalmology.phories.movement",sWebLanguage)%></td>
             <td class="admin2" colspan="2">
                 <select class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_ERGOVISION_PHORIES_VL_MOVEMENT" property="itemId"/>]>.value">
                     <option/>
-                    <option value="medwan.healthrecord.ophtalmology.phories.movement.stable" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_ERGOVISION_PHORIES_VL_MOVEMENT;value=medwan.healthrecord.ophtalmology.phories.movement.stable" property="value" outputString="selected"/>><%=getTran("Web.Occup","medwan.healthrecord.ophtalmology.phories.movement.stable",sWebLanguage)%></option>
-                    <option value="medwan.healthrecord.ophtalmology.phories.movement.arise_left" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_ERGOVISION_PHORIES_VL_MOVEMENT;value=medwan.healthrecord.ophtalmology.phories.movement.arise_left" property="value" outputString="selected"/>><%=getTran("Web.Occup","medwan.healthrecord.ophtalmology.phories.movement.arise_left",sWebLanguage)%></option>
-                    <option value="medwan.healthrecord.ophtalmology.phories.movement.arise_right" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_ERGOVISION_PHORIES_VL_MOVEMENT;value=medwan.healthrecord.ophtalmology.phories.movement.arise_right" property="value" outputString="selected"/>><%=getTran("Web.Occup","medwan.healthrecord.ophtalmology.phories.movement.arise_right",sWebLanguage)%></option>
-                    <option value="medwan.healthrecord.ophtalmology.phories.movement.outside_grating_left" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_ERGOVISION_PHORIES_VL_MOVEMENT;value=medwan.healthrecord.ophtalmology.phories.movement.outside_grating_left" property="value" outputString="selected"/>><%=getTran("Web.Occup","medwan.healthrecord.ophtalmology.phories.movement.outside_grating_left",sWebLanguage)%></option>
-                    <option value="medwan.healthrecord.ophtalmology.phories.movement.outside_grating_right" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_ERGOVISION_PHORIES_VL_MOVEMENT;value=medwan.healthrecord.ophtalmology.phories.movement.outside_grating_right" property="value" outputString="selected"/>><%=getTran("Web.Occup","medwan.healthrecord.ophtalmology.phories.movement.outside_grating_right",sWebLanguage)%></option>
+                    <option value="medwan.healthrecord.ophtalmology.phories.movement.stable" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_ERGOVISION_PHORIES_VL_MOVEMENT;value=medwan.healthrecord.ophtalmology.phories.movement.stable" property="value" outputString="selected"/>><%=getTran(request,"Web.Occup","medwan.healthrecord.ophtalmology.phories.movement.stable",sWebLanguage)%></option>
+                    <option value="medwan.healthrecord.ophtalmology.phories.movement.arise_left" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_ERGOVISION_PHORIES_VL_MOVEMENT;value=medwan.healthrecord.ophtalmology.phories.movement.arise_left" property="value" outputString="selected"/>><%=getTran(request,"Web.Occup","medwan.healthrecord.ophtalmology.phories.movement.arise_left",sWebLanguage)%></option>
+                    <option value="medwan.healthrecord.ophtalmology.phories.movement.arise_right" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_ERGOVISION_PHORIES_VL_MOVEMENT;value=medwan.healthrecord.ophtalmology.phories.movement.arise_right" property="value" outputString="selected"/>><%=getTran(request,"Web.Occup","medwan.healthrecord.ophtalmology.phories.movement.arise_right",sWebLanguage)%></option>
+                    <option value="medwan.healthrecord.ophtalmology.phories.movement.outside_grating_left" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_ERGOVISION_PHORIES_VL_MOVEMENT;value=medwan.healthrecord.ophtalmology.phories.movement.outside_grating_left" property="value" outputString="selected"/>><%=getTran(request,"Web.Occup","medwan.healthrecord.ophtalmology.phories.movement.outside_grating_left",sWebLanguage)%></option>
+                    <option value="medwan.healthrecord.ophtalmology.phories.movement.outside_grating_right" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPTHALMOLOGY_ERGOVISION_PHORIES_VL_MOVEMENT;value=medwan.healthrecord.ophtalmology.phories.movement.outside_grating_right" property="value" outputString="selected"/>><%=getTran(request,"Web.Occup","medwan.healthrecord.ophtalmology.phories.movement.outside_grating_right",sWebLanguage)%></option>
                 </select>
             </td>
         </tr>
@@ -863,8 +863,8 @@
 </table> 
 
     <%-- SHOW/HIDE ALL SECTIONS --%>
-    <a href="javascript:expandAllSections(<%=sectionCount+4%>);"><%=getTran("web","expand_all",sWebLanguage)%></a>
-    <a href="javascript:collapseAllSections(<%=sectionCount+4%>);"><%=getTran("web","close_all",sWebLanguage)%></a>
+    <a href="javascript:expandAllSections(<%=sectionCount+4%>);"><%=getTran(request,"web","expand_all",sWebLanguage)%></a>
+    <a href="javascript:collapseAllSections(<%=sectionCount+4%>);"><%=getTran(request,"web","close_all",sWebLanguage)%></a>
         
 	<%-- BUTTONS --%>
 	<%=ScreenHelper.alignButtonsStart()%>

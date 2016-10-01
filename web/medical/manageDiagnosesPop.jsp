@@ -201,9 +201,9 @@
     <table class='list' width="100%" cellspacing="1" onKeyDown='if(enterEvent(event,13)){doFind();return false;}else{return true;}'>
         <%-- date --%>
         <tr>
-            <td class="admin2" width="<%=sTDAdminWidth%>"><%=getTran("medical.diagnosis","period",sWebLanguage)%></td>
+            <td class="admin2" width="<%=sTDAdminWidth%>"><%=getTran(request,"medical.diagnosis","period",sWebLanguage)%></td>
             <td class="admin2">
-                <%=getTran("web","from",sWebLanguage)%>&nbsp;
+                <%=getTran(request,"web","from",sWebLanguage)%>&nbsp;
                 <%
                     String sFromDate = "";
                     if(sFindDiagnosisFromDate.length() > 0){
@@ -211,7 +211,7 @@
                     }
                     out.print(writeDateField("FindDiagnosisFromDate","FindDiagnosisForm",sFromDate,sWebLanguage));
                 %>&nbsp;
-                <%=getTran("web","to",sWebLanguage)%>&nbsp;
+                <%=getTran(request,"web","to",sWebLanguage)%>&nbsp;
                 <%
                     String sToDate = "";
                     if(sFindDiagnosisToDate.length() > 0){
@@ -224,7 +224,7 @@
         
         <%-- code --%>
         <tr>
-            <td class="admin2"><%=getTran("medical.diagnosis","diagnosiscode",sWebLanguage)%></td>
+            <td class="admin2"><%=getTran(request,"medical.diagnosis","diagnosiscode",sWebLanguage)%></td>
             <td class="admin2">
                 <input class="text" type="text" name="FindDiagnosisCodeLabel" id="FindDiagnosisCodeLabel" value="<%=sFindDiagnosisCodeLabel%>" size="<%=sTextWidth%>">
                 
@@ -238,29 +238,29 @@
         
         <%-- certainty --%>
         <tr>
-            <td class="admin2"><%=getTran("medical.diagnosis","certainty",sWebLanguage)%></td>
+            <td class="admin2"><%=getTran(request,"medical.diagnosis","certainty",sWebLanguage)%></td>
             <td class="admin2">
-                <%=getTran("web","from",sWebLanguage)%>&nbsp;
+                <%=getTran(request,"web","from",sWebLanguage)%>&nbsp;
                 <%=writeSelectFromConfig("adt.diagnosis.certainty",sFindDiagnosisFromCertainty,"FindDiagnosisFromCertainty",sWebLanguage)%>
-                <%=getTran("web","to",sWebLanguage)%>&nbsp;
+                <%=getTran(request,"web","to",sWebLanguage)%>&nbsp;
                 <%=writeSelectFromConfig("adt.diagnosis.certainty",sFindDiagnosisToCertainty,"FindDiagnosisToCertainty",sWebLanguage)%>
             </td>
         </tr>
         
         <%-- gravity --%>
         <tr>
-            <td class="admin2"><%=getTran("medical.diagnosis","gravity",sWebLanguage)%></td>
+            <td class="admin2"><%=getTran(request,"medical.diagnosis","gravity",sWebLanguage)%></td>
             <td class="admin2">
-                <%=getTran("web","from",sWebLanguage)%>&nbsp;
+                <%=getTran(request,"web","from",sWebLanguage)%>&nbsp;
                 <%=writeSelectFromConfig("adt.diagnosis.gravity",sFindDiagnosisFromGravity,"FindDiagnosisFromGravity",sWebLanguage)%>
-                <%=getTran("web","to",sWebLanguage)%>&nbsp;
+                <%=getTran(request,"web","to",sWebLanguage)%>&nbsp;
                 <%=writeSelectFromConfig("adt.diagnosis.gravity",sFindDiagnosisToGravity,"FindDiagnosisToGravity",sWebLanguage)%>
             </td>
         </tr>
 
         <%-- encounter
         <tr>
-            <td class="admin2"><=getTran("web","encounter",sWebLanguage)></td>
+            <td class="admin2"><=getTran(request,"web","encounter",sWebLanguage)></td>
             <td class="admin2">
                 <input type="hidden" name="FindDiagnosisEncounter" value="<%--%=sFindDiagnosisEncounter%>">
                 <input class="text" type="text" name="FindDiagnosisEncounterName" readonly size="<%--%=sTextWidth%>" value="<%--%=sFindDiagnosisEncounterName%>">
@@ -273,7 +273,7 @@
         
         <%-- author --%>
         <tr>
-            <td class="admin2"><%=getTran("medical.diagnosis","author",sWebLanguage)%></td>
+            <td class="admin2"><%=getTran(request,"medical.diagnosis","author",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="hidden" name="FindDiagnosisAuthor" value="<%=sFindDiagnosisAuthor%>">
                 <input class="text" type="text" name="FindDiagnosisAuthorName" readonly size="<%=sTextWidth%>" value="<%=sFindDiagnosisAuthorName%>">
@@ -285,11 +285,11 @@
         
         <%-- outcome --%>
         <tr>
-            <td class="admin2"><%=getTran("Web","outcome",sWebLanguage)%></td>
+            <td class="admin2"><%=getTran(request,"Web","outcome",sWebLanguage)%></td>
             <td class="admin2">
                 <select class="text" name="FindEncounterOutcome" style="vertical-align:-2px;">
                     <option value="">
-                    <%=ScreenHelper.writeSelectUnsorted("encounter.outcome",checkString(sFindEncounterOutcome),sWebLanguage)%>
+                    <%=ScreenHelper.writeSelectUnsorted(request,"encounter.outcome",checkString(sFindEncounterOutcome),sWebLanguage)%>
                 </select>
             </td>
         </tr>
@@ -426,10 +426,10 @@
 	
 <%
 	    if(sbResults.length()==0){
-	        out.print(getTran("web","norecordsfound",sWebLanguage));
+	        out.print(getTran(request,"web","norecordsfound",sWebLanguage));
 	    }
 	    else{
-	        out.print(iCountResults+" "+getTran("web","recordsfound",sWebLanguage));
+	        out.print(iCountResults+" "+getTran(request,"web","recordsfound",sWebLanguage));
 	    }
 	%>
 
@@ -451,7 +451,7 @@
     <table class="list" width="100%" cellspacing="1">
         <%-- date --%>
         <tr>
-            <td class="admin" width='<%=sTDAdminWidth%>'><%=getTran("web","date",sWebLanguage)%> *</td>
+            <td class="admin" width='<%=sTDAdminWidth%>'><%=getTran(request,"web","date",sWebLanguage)%> *</td>
             <td class="admin2">
                 <%=writeDateField("EditDiagnosisDate","EditDiagnosisForm",sEditDiagnosisDate,sWebLanguage)%>
             </td>
@@ -459,7 +459,7 @@
         
         <%-- enddate --%>
         <tr>
-            <td class="admin" width='<%=sTDAdminWidth%>'><%=getTran("web","enddate",sWebLanguage)%> *</td>
+            <td class="admin" width='<%=sTDAdminWidth%>'><%=getTran(request,"web","enddate",sWebLanguage)%> *</td>
             <td class="admin2">
                 <%=writeDateField("EditDiagnosisEndDate","EditDiagnosisForm",sEditDiagnosisEndDate,sWebLanguage)%>
             </td>
@@ -467,7 +467,7 @@
         
         <%-- code --%>
         <tr>
-            <td class="admin"><%=getTran("medical.diagnosis","diagnosiscode",sWebLanguage)%> *</td>
+            <td class="admin"><%=getTran(request,"medical.diagnosis","diagnosiscode",sWebLanguage)%> *</td>
             <td class="admin2">
                 <input class="text" type="text" name="EditDiagnosisCodeLabel" value="<%=sEditDiagnosisCodeLabel%>" readonly size="<%=sTextWidth%>">
              
@@ -481,7 +481,7 @@
         
         <%-- certainty --%>
         <tr>
-            <td class="admin"><%=getTran("medical.diagnosis","certainty",sWebLanguage)%> *</td>
+            <td class="admin"><%=getTran(request,"medical.diagnosis","certainty",sWebLanguage)%> *</td>
             <td class="admin2">
                 <%
                     out.print(writeSelectFromConfig("adt.diagnosis.certainty",sEditDiagnosisCertainty,"EditDiagnosisCertainty",sWebLanguage));
@@ -491,7 +491,7 @@
         
         <%-- gravity --%>
         <tr>
-            <td class="admin"><%=getTran("medical.diagnosis","gravity",sWebLanguage)%> *</td>
+            <td class="admin"><%=getTran(request,"medical.diagnosis","gravity",sWebLanguage)%> *</td>
             <td class="admin2">
                 <%=writeSelectFromConfig("adt.diagnosis.gravity",sEditDiagnosisGravity,"EditDiagnosisGravity",sWebLanguage)%>
             </td>
@@ -499,7 +499,7 @@
         
         <%-- encounter --%>
         <tr>
-            <td class="admin"><%=getTran("web","encounter",sWebLanguage)%> *</td>
+            <td class="admin"><%=getTran(request,"web","encounter",sWebLanguage)%> *</td>
             <td class="admin2">
                 <input type="hidden" name="EditDiagnosisEncounter" value="<%=sEditDiagnosisEncounter%>">
                 <input class="text" type="text" name="EditDiagnosisEncounterName" readonly size="<%=sTextWidth%>" value="<%=sEditDiagnosisEncounterName%>">
@@ -511,7 +511,7 @@
         
         <%-- author --%>
         <tr>
-            <td class="admin"><%=getTran("medical.diagnosis","author",sWebLanguage)%> *</td>
+            <td class="admin"><%=getTran(request,"medical.diagnosis","author",sWebLanguage)%> *</td>
             <td class="admin2">
                 <input type="hidden" name="EditDiagnosisAuthor" value="<%=sEditDiagnosisAuthor%>">
                 <input class="text" type="text" name="EditDiagnosisAuthorName" readonly size="<%=sTextWidth%>" value="<%=sEditDiagnosisAuthorName%>">
@@ -523,7 +523,7 @@
         
         <%-- lateralisation --%>
         <tr>
-            <td class="admin"><%=getTran("medical.diagnosis","lateralisation",sWebLanguage)%> *</td>
+            <td class="admin"><%=getTran(request,"medical.diagnosis","lateralisation",sWebLanguage)%> *</td>
             <td class="admin2">
                 <%=writeTextarea("EditDiagnosisLateralisation","","","",sEditDiagnosisLateralisation)%>
             </td>
@@ -536,7 +536,7 @@
         <%=ScreenHelper.setFormButtonsStop()%>
     </table>
 
-    <%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%>
+    <%=getTran(request,"Web","colored_fields_are_obligate",sWebLanguage)%>
 </form>
 
 <script>EditDiagnosisForm.EditDiagnosisDate.focus();</script>

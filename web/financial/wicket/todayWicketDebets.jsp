@@ -23,8 +23,8 @@
                     sReturn+= "<tr class='list"+sClass+"' onclick=\"setWicket('"+wicketOps.getUid()+"');\">"+
                                "<td>"+ScreenHelper.stdDateFormat.format(wicketOps.getOperationDate())+"</td>"+
                                "<td>"+wicketOps.getUid()+"</td>"+
-                               "<td>"+HTMLEntities.htmlentities(getTran("service",Wicket.get(wicketOps.getWicketUID()).getServiceUID(),sWeblanguage))+"</td>"+
-                               "<td>"+HTMLEntities.htmlentities(getTran("debet.type",wicketOps.getOperationType(),sWeblanguage))+"</td>"+
+                               "<td>"+HTMLEntities.htmlentities(getTran(null,"service",Wicket.get(wicketOps.getWicketUID()).getServiceUID(),sWeblanguage))+"</td>"+
+                               "<td>"+HTMLEntities.htmlentities(getTran(null,"debet.type",wicketOps.getOperationType(),sWeblanguage))+"</td>"+
                                "<td>"+wicketOps.getAmount()+"</td>"+
                                "<td>"+HTMLEntities.htmlentities(wicketOps.getComment().toString())+"</td>"+
                               "</tr>";
@@ -54,12 +54,12 @@
 		<div style="width:100%;height:250px;border: 0px solid #666666;overflow:auto;">
 		    <table width="100%" class="list" cellspacing="0" cellpadding="0">
 		        <tr class="admin">
-		            <td><%=HTMLEntities.htmlentities(getTran("web","date",sWebLanguage))%></td>
+		            <td><%=HTMLEntities.htmlentities(getTran(request,"web","date",sWebLanguage))%></td>
 		            <td>ID</td>
-		            <td><%=HTMLEntities.htmlentities(getTran("web","wicket",sWebLanguage))%></td>
-		            <td><%=HTMLEntities.htmlentities(getTran("wicket","operation_type",sWebLanguage))%></td>
-		            <td width="200"><%=HTMLEntities.htmlentities(getTran("web","amount",sWebLanguage))%> <%=MedwanQuery.getInstance().getConfigParam("currency","€")%></td>
-		            <td><%=HTMLEntities.htmlentities(getTran("web","comment",sWebLanguage))%></td>
+		            <td><%=HTMLEntities.htmlentities(getTran(request,"web","wicket",sWebLanguage))%></td>
+		            <td><%=HTMLEntities.htmlentities(getTran(request,"wicket","operation_type",sWebLanguage))%></td>
+		            <td width="200"><%=HTMLEntities.htmlentities(getTran(request,"web","amount",sWebLanguage))%> <%=MedwanQuery.getInstance().getConfigParam("currency","€")%></td>
+		            <td><%=HTMLEntities.htmlentities(getTran(request,"web","comment",sWebLanguage))%></td>
 		        </tr>
 		        
 		        <tbody class="hand">

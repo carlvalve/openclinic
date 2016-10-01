@@ -63,14 +63,14 @@
         <td>
             <table class="menu" width="100%" cellspacing="0" cellpadding="0" id="<%=sServiceID%>">
                 <tr class="admin" style="height:16px;">
-                    <td><%=getTran("openclinic.chuk","urgency.number.bed",sWebLanguage)%></td>
-                    <td><%=getTran("openclinic.chuk","urgency.name.patient",sWebLanguage)%></td>
-                    <td><%=getTran("openclinic.chuk","urgency.date.hour.entrance",sWebLanguage)%></td>
-                    <td><%=getTran("openclinic.chuk","urgency.origin",sWebLanguage)%></td>
-                    <td><%=getTran("openclinic.chuk","urgency.problem",sWebLanguage)%></td>
-                    <td><%=getTran("openclinic.chuk","urgency.date.hour.leave",sWebLanguage)%></td>
-                    <td><%=getTran("openclinic.chuk","urgency.destination",sWebLanguage)%></td>
-                    <td><%=getTran("openclinic.chuk","urgency.died",sWebLanguage)%></td>
+                    <td><%=getTran(request,"openclinic.chuk","urgency.number.bed",sWebLanguage)%></td>
+                    <td><%=getTran(request,"openclinic.chuk","urgency.name.patient",sWebLanguage)%></td>
+                    <td><%=getTran(request,"openclinic.chuk","urgency.date.hour.entrance",sWebLanguage)%></td>
+                    <td><%=getTran(request,"openclinic.chuk","urgency.origin",sWebLanguage)%></td>
+                    <td><%=getTran(request,"openclinic.chuk","urgency.problem",sWebLanguage)%></td>
+                    <td><%=getTran(request,"openclinic.chuk","urgency.date.hour.leave",sWebLanguage)%></td>
+                    <td><%=getTran(request,"openclinic.chuk","urgency.destination",sWebLanguage)%></td>
+                    <td><%=getTran(request,"openclinic.chuk","urgency.died",sWebLanguage)%></td>
                 </tr>
                 <%
                     vBedsInService = Bed.selectBedsInService(sServiceID);
@@ -139,7 +139,7 @@
                                     }
                                 %>
                                 </td>
-                                <td><%=getTran("urgency.origin",encounter.getOrigin(),sWebLanguage)%></td>
+                                <td><%=getTran(request,"urgency.origin",encounter.getOrigin(),sWebLanguage)%></td>
                                 <td><%=sProblem%></td>
                                 <td>
                                 <%

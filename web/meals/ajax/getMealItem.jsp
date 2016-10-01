@@ -24,7 +24,7 @@
     <table class="list" cellspacing="1" cellpadding="1" width="100%">
         <%-- ITEM NAME --%>
         <tr>
-            <td class="admin" width="120"><%=HTMLEntities.htmlentities(getTran("meals","name",sWebLanguage))%>&nbsp;*&nbsp;</td>
+            <td class="admin" width="120"><%=HTMLEntities.htmlentities(getTran(request,"meals","name",sWebLanguage))%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <input class="text" style="width:200px" type="text" name="mealItemName" id="mealItemName" value="<%=checkString(HTMLEntities.htmlentities(mealItem.name))%>"/>
             </td>
@@ -32,7 +32,7 @@
         
         <%-- ITEM UNIT --%>
         <tr>
-            <td class="admin"><%=HTMLEntities.htmlentities(getTran("meals","unit",sWebLanguage))%>&nbsp;*&nbsp;</td>
+            <td class="admin"><%=HTMLEntities.htmlentities(getTran(request,"meals","unit",sWebLanguage))%>&nbsp;*&nbsp;</td>
             <td class="admin2">
                 <select id="mealItemUnit" class="text" style="width:200px">
                     <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%>
@@ -59,7 +59,7 @@
         
         <%-- DESCRIPTION --%>
         <tr>
-            <td class="admin"><%=HTMLEntities.htmlentities(getTran("meals","description",sWebLanguage))%></td>
+            <td class="admin"><%=HTMLEntities.htmlentities(getTran(request,"meals","description",sWebLanguage))%></td>
             <td class="admin2">
                 <textarea class="text" style="width:200px" rows="2" onKeyup="resizeTextarea(this,10);limitLength(this);" id="mealItemDescription"><%=HTMLEntities.htmlentities(checkString(mealItem.description))%></textarea>
             </td>
@@ -69,9 +69,9 @@
         
         <%-- MEAL ITEM NUTRICIENTS --%>
         <tr>
-            <td class="admin"><%=HTMLEntities.htmlentities(getTran("meals","nutricients",sWebLanguage))%></td>
+            <td class="admin"><%=HTMLEntities.htmlentities(getTran(request,"meals","nutricients",sWebLanguage))%></td>
             <td class="admin2">
-                <a href="javascript:void(0)" class="link add" onclick="searchNutricientItemsWindow(false);"><span><%=HTMLEntities.htmlentities(getTran("meals","addNutricientItem",sWebLanguage).toLowerCase())%></span></a>
+                <a href="javascript:void(0)" class="link add" onclick="searchNutricientItemsWindow(false);"><span><%=HTMLEntities.htmlentities(getTran(request,"meals","addNutricientItem",sWebLanguage).toLowerCase())%></span></a>
                 <br>
                 
                 <ul id="nutricientList" class="items" style="width:90%">

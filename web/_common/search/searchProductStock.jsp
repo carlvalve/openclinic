@@ -22,6 +22,7 @@
            sReturnProductStockNameField  = checkString(request.getParameter("ReturnProductStockNameField")),
            sReturnServiceStockUidField   = checkString(request.getParameter("ReturnServiceStockUidField")),
            sReturnServiceStockNameField  = checkString(request.getParameter("ReturnServiceStockNameField")),
+           sReturnServiceStockFunction  = checkString(request.getParameter("ReturnServiceStockFunction")),
            sReturnProductStockLevelField = checkString(request.getParameter("ReturnProductStockLevelField"));
 
     // display products of user-service by default
@@ -57,7 +58,7 @@
         <%-- SEARCH FIELDS --%>
         <tr>
             <%-- product --%>
-            <td class="admin2" width="100"><%=getTran("Web","product",sWebLanguage)%></td>
+            <td class="admin2" width="100"><%=getTran(request,"Web","product",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="hidden" name="SearchProductUid" value="<%=sSearchProductUid%>">
                 <input type="text" name="SearchProductName" class="text" value="<%=sSearchProductName%>" size="40" READONLY>
@@ -69,7 +70,7 @@
         
         <tr>
             <%-- service --%>
-            <td class="admin2"><%=getTran("Web","service",sWebLanguage)%></td>
+            <td class="admin2"><%=getTran(request,"Web","service",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="hidden" name="SearchServiceUid" value="<%=sSearchServiceUid%>">
                 <input type="text" name="SearchServiceName" class="text" value="<%=sSearchServiceName%>" size="40" READONLY>
@@ -96,6 +97,7 @@
     <input type="hidden" name="ReturnProductStockUidField" value="<%=sReturnProductStockUidField%>">
     <input type="hidden" name="ReturnProductStockNameField" value="<%=sReturnProductStockNameField%>">
     <input type="hidden" name="ReturnServiceStockUidField" value="<%=sReturnServiceStockUidField%>">
+    <input type="hidden" name="ReturnServiceStockFunction" value="<%=sReturnServiceStockFunction%>">
     <input type="hidden" name="ReturnServiceStockNameField" value="<%=sReturnServiceStockNameField%>">
     <input type="hidden" name="ReturnProductStockLevelField" value="<%=sReturnProductStockLevelField%>">
     <input type="hidden" name="DisplayProductStocksOfActiveUserService" value="<%=sDisplayProductStocksOfActiveUserService%>">
@@ -128,14 +130,25 @@
       window.opener.document.getElementsByName('<%=sReturnServiceStockNameField%>')[0].value = serviceStockName;
     }
 
+    <%
+    	if(sReturnServiceStockFunction.length()>0){
+    %>
+		    if(window.opener.<%=sReturnServiceStockFunction%>){
+		        window.opener.<%=sReturnServiceStockFunction%>;
+		     }
+    <%
+    	}
+   	%>
+	
     <%-- set level --%>
     if('<%=sReturnProductStockLevelField%>'.length > 0){
       window.opener.document.getElementsByName('<%=sReturnProductStockLevelField%>')[0].value = productStockLevel;
     }
 
     if(window.opener.deselectAllPrescriptions!=null){
-       window.opener.deselectAllPrescriptions();
-    }
+        window.opener.deselectAllPrescriptions();
+     }
+
 
     if(window.opener.document.getElementsByName('displayDeliveriesButton')[0] != undefined){
       window.opener.document.getElementsByName('displayDeliveriesButton')[0].style.visibility = 'visible';

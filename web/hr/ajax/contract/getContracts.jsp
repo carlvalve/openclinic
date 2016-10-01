@@ -84,7 +84,7 @@
         }
     }
     else{
-        sReturn = "<td colspan='6'>"+getTran("web","noRecordsFound",sWebLanguage)+"</td>";
+        sReturn = "<td colspan='6'>"+getTran(request,"web","noRecordsFound",sWebLanguage)+"</td>";
     }
 
     if(contracts.size() > 0){
@@ -92,12 +92,12 @@
 <table width="100%" class="sortable" id="searchresults" cellspacing="1" style="border:none;">
     <%-- header --%>
     <tr class="admin" style="padding-left: 1px;">
-        <td width="10%" nowrap><%=HTMLEntities.htmlentities(getTran("web.hr","contractId",sWebLanguage))%></td>
-        <td width="10%" nowrap><asc><%=HTMLEntities.htmlentities(getTran("web.hr","beginDate",sWebLanguage))%></asc></td>
-        <td width="10%" nowrap><%=HTMLEntities.htmlentities(getTran("web.hr","endDate",sWebLanguage))%></td>
-        <td width="15%" nowrap><%=HTMLEntities.htmlentities(getTran("web.hr","duration",sWebLanguage))%></td>
-        <td width="10%" nowrap><%=HTMLEntities.htmlentities(getTran("web.hr","functionCode",sWebLanguage))%></td>
-        <td width="*" nowrap><%=HTMLEntities.htmlentities(getTran("web.hr","functionTitle",sWebLanguage))%></td>
+        <td width="10%" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.hr","contractId",sWebLanguage))%></td>
+        <td width="10%" nowrap><asc><%=HTMLEntities.htmlentities(getTran(request,"web.hr","beginDate",sWebLanguage))%></asc></td>
+        <td width="10%" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.hr","endDate",sWebLanguage))%></td>
+        <td width="15%" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.hr","duration",sWebLanguage))%></td>
+        <td width="10%" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.hr","functionCode",sWebLanguage))%></td>
+        <td width="*" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.hr","functionTitle",sWebLanguage))%></td>
     </tr>
     
     <tbody class="hand">
@@ -105,7 +105,7 @@
     </tbody>
 </table> 
 
-&nbsp;<i><%=contracts.size()+" "+getTran("web","recordsFound",sWebLanguage)%></i>
+&nbsp;<i><%=contracts.size()+" "+getTran(request,"web","recordsFound",sWebLanguage)%></i>
         <%
     }
     else{

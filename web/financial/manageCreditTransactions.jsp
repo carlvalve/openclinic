@@ -89,7 +89,7 @@
             sEditCreditEncounterUID = checkString(encounter.getUid());
             String sType = "", sBegin = "", sEnd = "";
             if (checkString(encounter.getType()).length()>0){
-                sType = ", "+getTran("encountertype",encounter.getType(),sWebLanguage);
+                sType = ", "+getTran(request,"encountertype",encounter.getType(),sWebLanguage);
             }
 
             if (encounter.getBegin()!=null){
@@ -108,34 +108,34 @@
     <table class='list' border='0' width='100%' cellspacing='1'>
         <%-- date --%>
         <tr>
-            <td class='admin' width="<%=sTDAdminWidth%>"><%=getTran("Web","date",sWebLanguage)%></td>
+            <td class='admin' width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","date",sWebLanguage)%></td>
             <td class='admin2'><%=writeDateField("EditCreditDate","EditForm",sEditCreditDate,sWebLanguage)%></td>
         </tr>
         <%-- bedrag --%>
         <tr>
-            <td class='admin'><%=getTran("web","amount",sWebLanguage)%></td>
+            <td class='admin'><%=getTran(request,"web","amount",sWebLanguage)%></td>
             <td class='admin2'>
                 <input class='text' type='text' name='EditCreditAmount' value='<%=sEditCreditAmount%>' size='20' onblur="isNumberNegAndPos(this)">  <%=MedwanQuery.getInstance().getConfigParam("currency","€")%>
             </td>
         </tr>
         <%-- omschrijving --%>
         <tr>
-            <td class='admin'><%=getTran("web","description",sWebLanguage)%></td>
+            <td class='admin'><%=getTran(request,"web","description",sWebLanguage)%></td>
             <td class='admin2'><%=writeTextarea("EditCreditDescription","","","",sEditCreditDescription)%></td>
         </tr>
         <%-- type betaling --%>
         <tr>
-            <td class='admin'><%=getTran("web","type",sWebLanguage)%></td>
+            <td class='admin'><%=getTran(request,"web","type",sWebLanguage)%></td>
             <td class='admin2'>
                 <select class="text" name='EditCreditType'>
                 <option value=""></option>
-                    <%=ScreenHelper.writeSelectUnsorted("credit.type",sEditCreditType,sWebLanguage)%>
+                    <%=ScreenHelper.writeSelectUnsorted(request,"credit.type",sEditCreditType,sWebLanguage)%>
                 </select>
             </td>
         </tr>
         <%-- encounter --%>
         <tr>
-            <td class='admin'><%=getTran("web","encounter",sWebLanguage)%></td>
+            <td class='admin'><%=getTran(request,"web","encounter",sWebLanguage)%></td>
             <td class='admin2'>
                 <input type="hidden" name="EditCreditEncounterUID" value="<%=sEditCreditEncounterUID%>">
                 <input class="text" type="text" name="EditCreditEncounterName" readonly size="<%=sTextWidth%>" value="<%=sEditCreditEncounterName%>">
@@ -145,7 +145,7 @@
         </tr>
         <%-- sourcetype --%>
         <tr>
-            <td class='admin'><%=getTran("web","sourcetype",sWebLanguage)%></td>
+            <td class='admin'><%=getTran(request,"web","sourcetype",sWebLanguage)%></td>
             <td class='admin2'>
                 <%
                     String sEditCheckPatient  = "";
@@ -156,8 +156,8 @@
                         sEditCheckService = " checked";
                     }
                 %>
-                <input type='radio' name='EditCreditSourceType' id='Editperson' value='Person' onclick='changeEditType();' <%=sEditCheckPatient%>><label for='Editperson'><%=getTran("web","person",sWebLanguage)%></label>
-                <input type='radio' name='EditCreditSourceType' id='Editservice' value='Service' onclick='changeEditType();' <%=sEditCheckService%>><label for='Editservice'><%=getTran("web","service",sWebLanguage)%></label>
+                <input type='radio' name='EditCreditSourceType' id='Editperson' value='Person' onclick='changeEditType();' <%=sEditCheckPatient%>><label for='Editperson'><%=getTran(request,"web","person",sWebLanguage)%></label>
+                <input type='radio' name='EditCreditSourceType' id='Editservice' value='Service' onclick='changeEditType();' <%=sEditCheckService%>><label for='Editservice'><%=getTran(request,"web","service",sWebLanguage)%></label>
             </td>
         </tr>
         <%-- source --%>
@@ -181,7 +181,7 @@
             </td>
         </tr>
     </table>
-    <%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%>
+    <%=getTran(request,"Web","colored_fields_are_obligate",sWebLanguage)%>
     <input type='hidden' name='Action' value=''>
     <input type='hidden' name='EditCreditUID' value='<%=sEditCreditUID%>'>
     <input type='hidden' name='EditCreditBalanceUID' value='<%=sEditCreditBalanceUID%>'>
@@ -207,11 +207,11 @@
         EditForm.EditCreditSourceName.value = "";
 
         if(document.getElementById("Editperson").checked == true){
-             document.getElementById("EditTypeLabel").innerText = "<%=getTran("Web","person",sWebLanguage)%>";
+             document.getElementById("EditTypeLabel").innerText = "<%=getTran(null,"Web","person",sWebLanguage)%>";
             EditForm.EditCreditSourceUID.value ="<%=activePatient.personid%>";
             EditForm.EditCreditSourceName.value ="<%=activePatient.lastname+" "+activePatient.firstname%>";
         }else{
-             document.getElementById("EditTypeLabel").innerText = "<%=getTran("Web","service",sWebLanguage)%>";
+             document.getElementById("EditTypeLabel").innerText = "<%=getTran(null,"Web","service",sWebLanguage)%>";
             <%
             Encounter activeEncounter = Encounter.getActiveEncounter(activePatient.personid);
             Service service = null;
@@ -240,12 +240,12 @@
 
     if(EditForm.EditCreditSourceName.value == ""){
         document.getElementById("Editperson").checked = true;
-        document.getElementById("EditTypeLabel").innerText = "<%=getTran("Web","person",sWebLanguage)%>";
+        document.getElementById("EditTypeLabel").innerText = "<%=getTran(null,"Web","person",sWebLanguage)%>";
     }else{
         if(document.getElementById("Editperson").checked == true){
-            document.getElementById("EditTypeLabel").innerText = "<%=getTran("Web","person",sWebLanguage)%>";
+            document.getElementById("EditTypeLabel").innerText = "<%=getTran(null,"Web","person",sWebLanguage)%>";
         }else{
-            document.getElementById("EditTypeLabel").innerText = "<%=getTran("Web","service",sWebLanguage)%>";
+            document.getElementById("EditTypeLabel").innerText = "<%=getTran(null,"Web","service",sWebLanguage)%>";
         }
     }
 

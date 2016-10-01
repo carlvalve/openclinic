@@ -4,7 +4,7 @@
 
 <table width="100%" class="list" height="100%" cellspacing="0">
     <tr class="admin">
-        <td colspan="3"><%=getTran("curative","vaccination.status.title",sWebLanguage)%>
+        <td colspan="3"><%=getTran(request,"curative","vaccination.status.title",sWebLanguage)%>
             &nbsp;<a href="<%=request.getRequestURI().replaceAll(request.getServletPath(),"")+MedwanQuery.getInstance().getConfigString("vaccinationForwardKey","/healthrecord/showVaccinationSummary.do")%>?ts=<%=getTs()%>"><img src="<c:url value='/_img/icons/icon_edit.gif'/>" class="link" alt="<%=getTranNoLink("web","editVaccinations",sWebLanguage)%>" style="vertical-align:-4px;"></a>
         </td>
     </tr>
@@ -24,7 +24,7 @@
 	        		while(iVaccinations.hasNext()){
 	        			String vaccin = (String) iVaccinations.next();
                         %><td width="1"><img src="<c:url value='/_img/icons/icon_warning.gif'/>" alt=""><%
-	                    out.print(" <b>"+getTran("web",vaccin,sWebLanguage)+"</b></td>");
+	                    out.print(" <b>"+getTran(request,"web",vaccin,sWebLanguage)+"</b></td>");
                         counter++;
                         if(counter>=5){
     	                    // alternate row-style
@@ -74,7 +74,7 @@
 		                        %><td width="1"/><%
 		                    }
 		
-		                    out.print("<td><b>"+getTran("web.occup",vaccInfoVO.getType(),sWebLanguage)+" ("+checkString(vaccInfoVO.getTransactionVO().getItem("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VACCINATION_DATE").getValue())+")</b></td><td>"+(nextDate.length()>0?"<img src='_img/themes/default/pijl.gif'> ":"")+nextDate+"</td></tr>");
+		                    out.print("<td><b>"+getTran(request,"web.occup",vaccInfoVO.getType(),sWebLanguage)+" ("+checkString(vaccInfoVO.getTransactionVO().getItem("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VACCINATION_DATE").getValue())+")</b></td><td>"+(nextDate.length()>0?"<img src='_img/themes/default/pijl.gif'> ":"")+nextDate+"</td></tr>");
 		                }
 		            }
 	        	}

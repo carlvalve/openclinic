@@ -12,19 +12,19 @@
     if(sId.indexOf("ACP_")==0){
         kv = h.getT10PFCCA();
         chart = h.getACPChart(kv[Integer.parseInt(s[1])].getKey());
-        sTopLegend = "<div class='topLegend'>"+getTran("web.statistics","comorbidity.index",sWebLanguage)+": "+h.getACPI(kv[Integer.parseInt(s[1])].getKey())+"</div>";
+        sTopLegend = "<div class='topLegend'>"+getTran(request,"web.statistics","comorbidity.index",sWebLanguage)+": "+h.getACPI(kv[Integer.parseInt(s[1])].getKey())+"</div>";
     }else if(sId.indexOf("ACPW_")==0){
         kv = h.getT10PFCCA();
         chart = h.getACPWChart(kv[Integer.parseInt(s[1])].getKey());
-        sTopLegend = "<div class='topLegend'>"+getTran("web.statistics","weighed.comorbidity.index",sWebLanguage)+": "+h.getACPIW(kv[Integer.parseInt(s[1])].getKey())+"</div>";
+        sTopLegend = "<div class='topLegend'>"+getTran(request,"web.statistics","weighed.comorbidity.index",sWebLanguage)+": "+h.getACPIW(kv[Integer.parseInt(s[1])].getKey())+"</div>";
     }else if(sId.indexOf("ACMP_")==0){
         kv = h.getT10PFCCA();
         chart = h.getACMPChart(kv[Integer.parseInt(s[1])].getKey());
-        sTopLegend = "<div class='topLegend'>"+getTran("web.statistics","comortality.index",sWebLanguage)+": "+h.getACMPI(kv[Integer.parseInt(s[1])].getKey())+"</div>";
+        sTopLegend = "<div class='topLegend'>"+getTran(request,"web.statistics","comortality.index",sWebLanguage)+": "+h.getACMPI(kv[Integer.parseInt(s[1])].getKey())+"</div>";
     }else if(sId.indexOf("ACMPW_")==0){
         kv = h.getT10PFCCA();
         chart = h.getACMPWChart(kv[Integer.parseInt(s[1])].getKey());
-        sTopLegend = "<div class='topLegend'>"+getTran("web.statistics","weighed.comortality.index",sWebLanguage)+": "+h.getACMPIW(kv[Integer.parseInt(s[1])].getKey())+"</div>";
+        sTopLegend = "<div class='topLegend'>"+getTran(request,"web.statistics","weighed.comortality.index",sWebLanguage)+": "+h.getACMPIW(kv[Integer.parseInt(s[1])].getKey())+"</div>";
     }
 
     String sWidth = checkString(request.getParameter("width"));

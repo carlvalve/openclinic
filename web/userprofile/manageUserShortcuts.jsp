@@ -126,20 +126,20 @@
 <%-- ############################ USER DEFINED ICONS ########################### --%>
 <table width="100%" cellspacing="1" cellpadding="0" class="list">
     <tr>
-        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web.userProfile","savedShortcuts",sWebLanguage)%></td>
+        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web.userProfile","savedShortcuts",sWebLanguage)%></td>
         <td class="admin2" id="savedShortcutsTD">
             <%-- ajax --%>
         </td>
     </tr>
 </table>    
-&nbsp;<%=getTran("web.userProfile","clickAnIconToEditIt",sWebLanguage)%>
+&nbsp;<%=getTran(request,"web.userProfile","clickAnIconToEditIt",sWebLanguage)%>
 <br><br>
 
 <%-- ################################ ADD/EDIT ROW ############################# --%>
 <table width="100%" cellspacing="1" cellpadding="0" class="list">
     <%-- SHORTCUT TYPE ----------------------------------%>
     <tr>
-        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","type",sWebLanguage)%>&nbsp;*&nbsp;</td>
+        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","type",sWebLanguage)%>&nbsp;*&nbsp;</td>
         <td class="admin2">
             <select name="ShortcutType" id="ShortcutType" class="text" onchange="getSubtypes(this);">
                 <option value="-1"><%=getTranNoLink("web","choose",sWebLanguage)%></option>
@@ -194,7 +194,7 @@
         
     <%-- SHORTCUT SUB-TYPE (hidden) --%>
     <tr id="shortcutSubtypeTR" style="display: none">
-        <td class="admin"><%=getTran("web","subtype",sWebLanguage)%>&nbsp;*&nbsp;</td>
+        <td class="admin"><%=getTran(request,"web","subtype",sWebLanguage)%>&nbsp;*&nbsp;</td>
         <td class="admin2" id="shortcutSubtypeTD">
             <%-- ajax --%>
         </td>
@@ -202,7 +202,7 @@
 
     <%-- SHORTCUT ICON --%>
     <tr>
-        <td class="admin"><%=getTran("web","icon",sWebLanguage)%>&nbsp;*&nbsp;</td>
+        <td class="admin"><%=getTran(request,"web","icon",sWebLanguage)%>&nbsp;*&nbsp;</td>
         <td class="admin2">
             <input type="hidden" id="ShortcutIcon" name="ShortcutIcon" value="">
             
@@ -226,7 +226,7 @@
                         }
                     }
                     else{
-                        %><font color="red"><%=(getTran("web.userprofile","directoryNotFound",sWebLanguage)+" : '"+sIconsDir+"' (--> localProjectPath)")%></font><%
+                        %><font color="red"><%=(getTran(request,"web.userprofile","directoryNotFound",sWebLanguage)+" : '"+sIconsDir+"' (--> localProjectPath)")%></font><%
                     }
                 %>
             </div>
@@ -235,7 +235,7 @@
     
     <%-- SHORTCUT ICON TEXT --%>
     <tr>
-        <td class="admin"><%=getTran("web","iconText",sWebLanguage)%>&nbsp;*&nbsp;</td>
+        <td class="admin"><%=getTran(request,"web","iconText",sWebLanguage)%>&nbsp;*&nbsp;</td>
         <td class="admin2">
             <input type="text" name="ShortcutIconText" id="ShortcutIconText" value="<%=sShortcutIconText%>" size="40" maxLength="50">
         </td>
@@ -252,13 +252,13 @@
         </td>
     </tr>
 </table>    
-&nbsp;<%=getTran("web","asterisk_fields_are_obligate",sWebLanguage)%>
+&nbsp;<%=getTran(request,"web","asterisk_fields_are_obligate",sWebLanguage)%>
 
 <%-- display message --%>
 <br><br><span id="msgDiv">&nbsp;<%=sMsg%></span>
 
 <script>
-  document.getElementById("msgDiv").innerHTML = "<%=getTran("web","maxIcons",sWebLanguage)%>:&nbsp;<%=MedwanQuery.getInstance().getConfigString("maxUserDefinedShortcuts","5")%>";
+  document.getElementById("msgDiv").innerHTML = "<%=getTran(null,"web","maxIcons",sWebLanguage)%>:&nbsp;<%=MedwanQuery.getInstance().getConfigString("maxUserDefinedShortcuts","5")%>";
 
   var selectedShortcuts = new Array();
   var clickedIcon, editedIcon, prevFullShortcutType = "";

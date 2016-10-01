@@ -71,7 +71,7 @@
             <%-- NUMBER OF COPIES --%>
             <tr>
                 <td class="admin2" style="border-bottom:1px solid #ccc">
-                    <%=getTran("web","labelcount",sWebLanguage)%>&nbsp;
+                    <%=getTran(request,"web","labelcount",sWebLanguage)%>&nbsp;
                     <input class="text" size="2" type="text" name="labelcount" value="<%=MedwanQuery.getInstance().getConfigString("defaultLabelCount","1")%>"/>
                     <input class="button" type="submit" name="submit" value="<%=getTranNoLink("web","print",sWebLanguage)%>"/>
                 </td>
@@ -80,9 +80,9 @@
             <%-- FORMAT --%>
             <tr>
                 <td style="padding:3px;">
-                    <input type="radio" name="type" id="r1" value="1" checked/><%=getLabel("web","labeltype1",sWebLanguage,"r1")%><br>
-                    <input type="radio" name="type" id="r2" value="2"/><%=getLabel("web","labeltype2",sWebLanguage,"r2")%><br>
-                    <input type="radio" name="type" id="r3" value="3"/><%=getLabel("web","labeltype3",sWebLanguage,"r3")%>
+                    <input type="radio" name="type" id="r1" value="1" checked/><%=getLabel(request,"web","labeltype1",sWebLanguage,"r1")%><br>
+                    <input type="radio" name="type" id="r2" value="2"/><%=getLabel(request,"web","labeltype2",sWebLanguage,"r2")%><br>
+                    <input type="radio" name="type" id="r3" value="3"/><%=getLabel(request,"web","labeltype3",sWebLanguage,"r3")%>
                 </td>
             </tr>
         </table>

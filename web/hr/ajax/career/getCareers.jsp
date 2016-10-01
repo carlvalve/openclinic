@@ -52,7 +52,7 @@
 
             String sServiceName = "";
             if(career.serviceUid.length() > 0){
-                sServiceName = getTran("service",career.serviceUid,sWebLanguage);
+                sServiceName = getTran(request,"service",career.serviceUid,sWebLanguage);
             }
             
             hSort.put(career.begin.getTime()+"="+career.getUid(),
@@ -81,7 +81,7 @@
         }
     }
     else{
-        sReturn = "<td colspan='4'>"+getTran("web","noRecordsFound",sWebLanguage)+"</td>";
+        sReturn = "<td colspan='4'>"+getTran(request,"web","noRecordsFound",sWebLanguage)+"</td>";
     }
 %>
 
@@ -91,11 +91,11 @@
 <table width="100%" class="sortable" id="searchresults" cellspacing="1" style="border:none;">
     <%-- header --%>
     <tr class="admin" style="padding-left:1px;">
-        <td width="10%" nowrap><asc><%=HTMLEntities.htmlentities(getTran("web.hr","begin",sWebLanguage))%></asc></td>
-        <td width="10%" nowrap><%=HTMLEntities.htmlentities(getTran("web.hr","end",sWebLanguage))%></td>
-        <td width="10%" nowrap><%=HTMLEntities.htmlentities(getTran("web","duration",sWebLanguage))%></td>
-        <td width="20%" nowrap><%=HTMLEntities.htmlentities(getTran("web.hr","position",sWebLanguage))%></td>
-        <td width="30%" nowrap><%=HTMLEntities.htmlentities(getTran("web","department",sWebLanguage))%></td>
+        <td width="10%" nowrap><asc><%=HTMLEntities.htmlentities(getTran(request,"web.hr","begin",sWebLanguage))%></asc></td>
+        <td width="10%" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.hr","end",sWebLanguage))%></td>
+        <td width="10%" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web","duration",sWebLanguage))%></td>
+        <td width="20%" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.hr","position",sWebLanguage))%></td>
+        <td width="30%" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web","department",sWebLanguage))%></td>
     </tr>
     
     <tbody class="hand">
@@ -103,7 +103,7 @@
     </tbody>
 </table> 
 
-&nbsp;<i><%=careers.size()+" "+getTran("web","recordsFound",sWebLanguage)%></i>
+&nbsp;<i><%=careers.size()+" "+getTran(request,"web","recordsFound",sWebLanguage)%></i>
         <%
     }
     else{

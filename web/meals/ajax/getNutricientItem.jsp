@@ -22,7 +22,7 @@
 	<table class="list" class="list" cellspacing="1" cellpadding="1" width="100%" onKeyDown="if(enterEvent(event,13)){setNutricientItem();return false;}">
 	    <%-- NUTRIENT NAME --%>
 	    <tr>
-	        <td class="admin" width="120"><%=HTMLEntities.htmlentities(getTran("meals","name",sWebLanguage))%></td>
+	        <td class="admin" width="120"><%=HTMLEntities.htmlentities(getTran(request,"meals","name",sWebLanguage))%></td>
 	        <td class="admin2">
 	            <input class="text" type="text" style="width:200px" name="nutricientItemName" id="nutricientItemName" value="<%=checkString(HTMLEntities.htmlentities(item.name))%>"/>
 	        </td>
@@ -30,7 +30,7 @@
 	    
 	    <%-- UNIT --%>
 	    <tr>
-	        <td class="admin"><%=HTMLEntities.htmlentities(getTran("meals","unit",sWebLanguage))%></td>
+	        <td class="admin"><%=HTMLEntities.htmlentities(getTran(request,"meals","unit",sWebLanguage))%></td>
 	        <td class="admin2">
 	            <select id="nutricientItemUnit" class="text" style="width:200px">
                     <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%>

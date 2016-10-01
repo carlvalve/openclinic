@@ -48,9 +48,9 @@
 				drugs+= "<tr class='admin'>"+
 			             "<td/>"+
 						 "<td>ID</td>"+
-			             "<td>"+getTran("web","product",sWebLanguage)+"</td>"+
-						 "<td>"+getTran("web","quantity",sWebLanguage)+"</td>"+
-			             "<td>"+getTran("web","batch",sWebLanguage)+"</td>"+
+			             "<td>"+getTran(request,"web","product",sWebLanguage)+"</td>"+
+						 "<td>"+getTran(request,"web","quantity",sWebLanguage)+"</td>"+
+			             "<td>"+getTran(request,"web","batch",sWebLanguage)+"</td>"+
 						"</tr>";
 			}
 			

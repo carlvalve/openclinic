@@ -25,7 +25,7 @@
 <body title="<%=getTranNoLink("Web.Occup","medwan.common.click-for-history",sWebLanguage)%>" onclick="window.location.href='<c:url value="/healthrecord/itemHistory.jsp"/>?itemType=<%=request.getParameter("itemType")%>';">
 
 <table class="list" width="100%" cellspacing="1" cellpadding="0">
-    <tr class="admin"><td colspan="2"><%=getTran("Web.Occup","medwan.occupational-medicine.getgraph",sWebLanguage)%></td></tr>
+    <tr class="admin"><td colspan="2"><%=getTran(request,"Web.Occup","medwan.occupational-medicine.getgraph",sWebLanguage)%></td></tr>
 </table>
 
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
@@ -199,10 +199,10 @@ D.YScale="1";
     <%
     
     if(sUnits.length()>0){
-        out.print("D.SetText('','','"+getTran("TRANSACTION_TYPE_LAB_RESULT",request.getParameter("itemType"),sWebLanguage)+" ("+getTran("TRANSACTION_TYPE_LAB_RESULT","be.mxs.common.model.vo.healthrecord.IConstants.EXT_"+format+"UNIT_"+sUnits,sWebLanguage)+")')");
+        out.print("D.SetText('','','"+getTran(request,"TRANSACTION_TYPE_LAB_RESULT",request.getParameter("itemType"),sWebLanguage)+" ("+getTran(request,"TRANSACTION_TYPE_LAB_RESULT","be.mxs.common.model.vo.healthrecord.IConstants.EXT_"+format+"UNIT_"+sUnits,sWebLanguage)+")')");
     }
     else if(itemsDouble!=null){
-        out.print("D.SetText('','','"+getTran("Web.Occup","medwan.healthrecord.cardial.pression-arterielle",sWebLanguage)+" "+(request.getParameter("itemType").indexOf("RIGHT")>-1?getTran("Web.Occup","medwan.common.right",sWebLanguage):getTran("Web.Occup","medwan.common.left",sWebLanguage))+" (mmHg)')");
+        out.print("D.SetText('','','"+getTran(request,"Web.Occup","medwan.healthrecord.cardial.pression-arterielle",sWebLanguage)+" "+(request.getParameter("itemType").indexOf("RIGHT")>-1?getTran(request,"Web.Occup","medwan.common.right",sWebLanguage):getTran(request,"Web.Occup","medwan.common.left",sWebLanguage))+" (mmHg)')");
     }
 
     %>
@@ -269,12 +269,12 @@ D.Draw("#FFFFFF", "#000000", false, "", "", "#DDDDFF","#CCCCCC");
     else {
         if(vals<=1){
             out.print("</script>"+
-                      "<div class='text'>&nbsp;"+getTran("Web.Occup","medwan.common.not-enough-measurements",sWebLanguage)+"</div>"+
+                      "<div class='text'>&nbsp;"+getTran(request,"Web.Occup","medwan.common.not-enough-measurements",sWebLanguage)+"</div>"+
                       "<script>");
         }
         else {
             out.print("</script>"+
-                      "<div class='text'>&nbsp;"+getTran("Web.Occup","medwan.common.all-measurements-on-same-date",sWebLanguage)+"</div>"+
+                      "<div class='text'>&nbsp;"+getTran(request,"Web.Occup","medwan.common.all-measurements-on-same-date",sWebLanguage)+"</div>"+
                       "<script>");
         }
     }

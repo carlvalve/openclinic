@@ -73,9 +73,9 @@
 		    <table id="searchresults" class="sortable" width="100%" cellpadding="1" cellspacing="0" style="border:1px solid #ccc;">
 		        <%-- header --%>
 		        <tr class="admin">
-		            <td><%=HTMLEntities.htmlentities(getTran("web","id",sWebLanguage))%></td>
-		            <td><%=HTMLEntities.htmlentities(getTran("web","name",sWebLanguage))%></td>
-		            <td><%=HTMLEntities.htmlentities(getTran("web","reagents",sWebLanguage))%></td>
+		            <td><%=HTMLEntities.htmlentities(getTran(request,"web","id",sWebLanguage))%></td>
+		            <td><%=HTMLEntities.htmlentities(getTran(request,"web","name",sWebLanguage))%></td>
+		            <td><%=HTMLEntities.htmlentities(getTran(request,"web","reagents",sWebLanguage))%></td>
 		        </tr>
 		
 		        <tbody class="hand"><%=HTMLEntities.htmlentities(sHtml.toString())%></tbody>
@@ -86,7 +86,7 @@
 	    }
 	    else{
 	        // display 'no results' message
-	       %><%=HTMLEntities.htmlentities(getTran("web","norecordsfound",sWebLanguage))%><%
+	       %><%=HTMLEntities.htmlentities(getTran(request,"web","norecordsfound",sWebLanguage))%><%
 	    }
 	}
 %>

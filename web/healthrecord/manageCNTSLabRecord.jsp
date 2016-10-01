@@ -20,7 +20,7 @@
         <tr>
             <td class="admin" width="<%=sTDAdminWidth%>">
                 <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-                <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+                <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
             </td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" id="trandate" OnBlur='checkDate(this)'>
@@ -34,7 +34,7 @@
 	        if(item!=null) sObjectId = item.getValue();
 	    %>
 	    <tr>
-	        <td class="admin"><%=getTran("Web.Occup","bloodgiftreference",sWebLanguage)%></td>
+	        <td class="admin"><%=getTran(request,"Web.Occup","bloodgiftreference",sWebLanguage)%></td>
 	        <td class="admin2">
 	            <select class="text" id="cntsobjectid" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_LAB_OBJECTID" property="itemId"/>]>.value">
 	                <option/>
@@ -56,12 +56,12 @@
 	                	}
 	                %>
 	            </select>
-		        <input type='button' class='button' value='<%=getTran("web","printlabels",sWebLanguage) %>' onclick='printBloodgiftLabel()'/>
+		        <input type='button' class='button' value='<%=getTran(null,"web","printlabels",sWebLanguage) %>' onclick='printBloodgiftLabel()'/>
 	        </td>
 	    </tr>
-	    <tr class='admin'><td colspan='2'><%=getTran("web","bloodproductsprepared",sWebLanguage) %></td></tr>
+	    <tr class='admin'><td colspan='2'><%=getTran(request,"web","bloodproductsprepared",sWebLanguage) %></td></tr>
         <tr>
-            <td class="admin"><%=getTran("bloodproducts","pfc",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"bloodproducts","pfc",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
             	<select onchange="setExpiryDate('cntspfcexpirydate',365);" class='text' id="pfcpockets" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTSLAB_PFCPOCKETS" property="itemId"/>]>.value">
             		<option value="0" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTSLAB_PFCPOCKETS;value=0" property="value" outputString="selected"/>>0</option>
@@ -75,15 +75,15 @@
             		<option value="8" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTSLAB_PFCPOCKETS;value=8" property="value" outputString="selected"/>>8</option>
             		<option value="9" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTSLAB_PFCPOCKETS;value=9" property="value" outputString="selected"/>>9</option>
             	</select> 
-            	<%=getTran("web","pockets",sWebLanguage) %>
+            	<%=getTran(request,"web","pockets",sWebLanguage) %>
             	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			    <%=getTran("bloodgift","expirydate",sWebLanguage)%>
+			    <%=getTran(request,"bloodgift","expirydate",sWebLanguage)%>
 			    <input type="hidden" id="pfcexpirydate" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTSLAB_PFCEXPIRYDATE" property="itemId"/>]>.value"/>
 			    <%=ScreenHelper.writeDateField("cntspfcexpirydate", "transactionForm", ((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTSLAB_PFCEXPIRYDATE"), false, true, sWebLanguage, sCONTEXTPATH)%>
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("bloodproducts","prp",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"bloodproducts","prp",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
             	<select onchange="setExpiryDate('cntsprpexpirydate',5);" class='text' id="prppockets" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTSLAB_PRPPOCKETS" property="itemId"/>]>.value">
             		<option value="0" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTSLAB_PRPPOCKETS;value=0" property="value" outputString="selected"/>>0</option>
@@ -97,15 +97,15 @@
             		<option value="8" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTSLAB_PRPPOCKETS;value=8" property="value" outputString="selected"/>>8</option>
             		<option value="9" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTSLAB_PRPPOCKETS;value=9" property="value" outputString="selected"/>>9</option>
             	</select> 
-            	<%=getTran("web","pockets",sWebLanguage) %>
+            	<%=getTran(request,"web","pockets",sWebLanguage) %>
             	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			    <%=getTran("bloodgift","expirydate",sWebLanguage)%>
+			    <%=getTran(request,"bloodgift","expirydate",sWebLanguage)%>
 			    <input type="hidden" id="prpexpirydate" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTSLAB_PRPEXPIRYDATE" property="itemId"/>]>.value"/>
 			    <%=ScreenHelper.writeDateField("cntsprpexpirydate", "transactionForm", ((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTSLAB_PRPEXPIRYDATE"), false, true, sWebLanguage, sCONTEXTPATH)%>
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("bloodproducts","cgr",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"bloodproducts","cgr",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
             	<select onchange="setExpiryDate('cntscgrexpirydate',30);" class='text' id="cgrpockets" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTSLAB_CGRPOCKETS" property="itemId"/>]>.value">
             		<option value="0" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTSLAB_CGRPOCKETS;value=0" property="value" outputString="selected"/>>0</option>
@@ -119,15 +119,15 @@
             		<option value="8" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTSLAB_CGRPOCKETS;value=8" property="value" outputString="selected"/>>8</option>
             		<option value="9" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTSLAB_CGRPOCKETS;value=9" property="value" outputString="selected"/>>9</option>
             	</select> 
-            	<%=getTran("web","pockets",sWebLanguage) %>
+            	<%=getTran(request,"web","pockets",sWebLanguage) %>
             	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			    <%=getTran("bloodgift","expirydate",sWebLanguage)%>
+			    <%=getTran(request,"bloodgift","expirydate",sWebLanguage)%>
 			    <input type="hidden" id="cgrexpirydate" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTSLAB_CGREXPIRYDATE" property="itemId"/>]>.value"/>
 			    <%=ScreenHelper.writeDateField("cntscgrexpirydate", "transactionForm", ((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTSLAB_CGREXPIRYDATE"), false, true, sWebLanguage, sCONTEXTPATH)%>
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("bloodproducts","st",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"bloodproducts","st",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
             	<select onchange="setExpiryDate('cntsstexpirydate',30);" class='text' id="stpockets" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTSLAB_STPOCKETS" property="itemId"/>]>.value">
             		<option value="0" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTSLAB_STPOCKETS;value=0" property="value" outputString="selected"/>>0</option>
@@ -141,15 +141,15 @@
             		<option value="8" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTSLAB_STPOCKETS;value=8" property="value" outputString="selected"/>>8</option>
             		<option value="9" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTSLAB_STPOCKETS;value=9" property="value" outputString="selected"/>>9</option>
             	</select> 
-            	<%=getTran("web","pockets",sWebLanguage) %>
+            	<%=getTran(request,"web","pockets",sWebLanguage) %>
             	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			    <%=getTran("bloodgift","expirydate",sWebLanguage)%>
+			    <%=getTran(request,"bloodgift","expirydate",sWebLanguage)%>
 			    <input type="hidden" id="stexpirydate" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTSLAB_STEXPIRYDATE" property="itemId"/>]>.value"/>
 			    <%=ScreenHelper.writeDateField("cntsstexpirydate", "transactionForm", ((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTSLAB_STEXPIRYDATE"), false, true, sWebLanguage, sCONTEXTPATH)%>
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("bloodproducts","cp",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"bloodproducts","cp",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
             	<select onchange="setExpiryDate('cntscpexpirydate',5);" class='text' id="cppockets" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTSLAB_CPPOCKETS" property="itemId"/>]>.value">
             		<option value="0" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTSLAB_CPPOCKETS;value=0" property="value" outputString="selected"/>>0</option>
@@ -163,16 +163,16 @@
             		<option value="8" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTSLAB_CPPOCKETS;value=8" property="value" outputString="selected"/>>8</option>
             		<option value="9" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTSLAB_CPPOCKETS;value=9" property="value" outputString="selected"/>>9</option>
             	</select> 
-            	<%=getTran("web","pockets",sWebLanguage) %>
+            	<%=getTran(request,"web","pockets",sWebLanguage) %>
             	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			    <%=getTran("bloodgift","expirydate",sWebLanguage)%>
+			    <%=getTran(request,"bloodgift","expirydate",sWebLanguage)%>
 			    <input type="hidden" id="cpexpirydate" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTSLAB_CPEXPIRYDATE" property="itemId"/>]>.value"/>
 			    <%=ScreenHelper.writeDateField("cntscpexpirydate", "transactionForm", ((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTSLAB_CPEXPIRYDATE"), false, true, sWebLanguage, sCONTEXTPATH)%>
             </td>
         </tr>
         <%-- DESCRIPTION --%>
         <tr>
-            <td class="admin"><%=getTran("Web.Occup","comment",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"Web.Occup","comment",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_CNTSLAB_COMMENT")%> class="text" cols="100" rows="3" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTSLAB_COMMENT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTSLAB_COMMENT" property="value"/></textarea>
             </td>
@@ -186,14 +186,14 @@
     <%if(tran.getTransactionId()>-1){ %>
      <!-- Show delivered blood products here -->
      <table width='100%'>
-     	<tr class='admin'><td colspan="6"><%=getTran("cnts","deliveredbloodproducts",sWebLanguage) %></td></tr>
+     	<tr class='admin'><td colspan="6"><%=getTran(request,"cnts","deliveredbloodproducts",sWebLanguage) %></td></tr>
      	<tr>
-     		<td class='admin'><%=getTran("web","date",sWebLanguage) %></td>
-     		<td class='admin'><%=getTran("web","location",sWebLanguage) %></td>
-     		<td class='admin'><%=getTran("web","product",sWebLanguage) %></td>
-     		<td class='admin'><%=getTran("web","pockets",sWebLanguage) %></td>
-     		<td class='admin'><%=getTran("web","patient",sWebLanguage) %></td>
-     		<td class='admin'><%=getTran("web","telephone",sWebLanguage) %></td>
+     		<td class='admin'><%=getTran(request,"web","date",sWebLanguage) %></td>
+     		<td class='admin'><%=getTran(request,"web","location",sWebLanguage) %></td>
+     		<td class='admin'><%=getTran(request,"web","product",sWebLanguage) %></td>
+     		<td class='admin'><%=getTran(request,"web","pockets",sWebLanguage) %></td>
+     		<td class='admin'><%=getTran(request,"web","patient",sWebLanguage) %></td>
+     		<td class='admin'><%=getTran(request,"web","telephone",sWebLanguage) %></td>
      	</tr>
      	<%
      		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
@@ -215,7 +215,7 @@
      		ps.close();
      		conn.close();
      		if(!bResults){
-     			out.println("<tr><td colspan='6'>"+getTran("web","none",sWebLanguage)+"</td></tr>");
+     			out.println("<tr><td colspan='6'>"+getTran(request,"web","none",sWebLanguage)+"</td></tr>");
      		}
      	%>
      </table>
@@ -227,7 +227,12 @@
 <script>
 	function printBloodgiftLabel(){
 		if(document.getElementById("cntsobjectid").value.length>0){
-			window.open("<c:url value="/healthrecord/createBloodgiftLabelPdf.jsp"/>?transactiondata="+encodeURIComponent(document.getElementById("cntsobjectid").value+";<%=activePatient.personid%>; ;"+document.getElementById("pfcpockets").value+";"+document.getElementById("cntspfcexpirydate").value+";"+document.getElementById("prppockets").value+";"+document.getElementById("cntsprpexpirydate").value+";"+document.getElementById("cgrpockets").value+";"+document.getElementById("cntscgrexpirydate").value+";"+document.getElementById("stpockets").value+";"+document.getElementById("cntsstexpirydate").value+";"+document.getElementById("cppockets").value+";"+document.getElementById("cntscpexpirydate").value+";"+document.getElementById("cntsobjectid").value));	
+			if(document.getElementById("pfcpockets").value*1+document.getElementById("prppockets").value*1+document.getElementById("cgrpockets").value*1+document.getElementById("stpockets").value*1+document.getElementById("cppockets").value*1<=0){
+				alert('<%=getTranNoLink("web.manage","zeropockets",sWebLanguage)%>');
+			}
+			else{
+				window.open("<c:url value="/healthrecord/createBloodgiftLabelPdf.jsp"/>?transactiondata="+encodeURIComponent(document.getElementById("cntsobjectid").value+";<%=activePatient.personid%>; ;"+document.getElementById("pfcpockets").value+";"+document.getElementById("cntspfcexpirydate").value+";"+document.getElementById("prppockets").value+";"+document.getElementById("cntsprpexpirydate").value+";"+document.getElementById("cgrpockets").value+";"+document.getElementById("cntscgrexpirydate").value+";"+document.getElementById("stpockets").value+";"+document.getElementById("cntsstexpirydate").value+";"+document.getElementById("cppockets").value+";"+document.getElementById("cntscpexpirydate").value+";"+document.getElementById("cntsobjectid").value));	
+			}
 		}
 		else{
 			alert('<%=getTranNoLink("web.manage","datamissing",sWebLanguage)%>');

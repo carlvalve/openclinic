@@ -129,13 +129,13 @@
 	
 	        // header
 	        sOut.append("<tr class='admin'>")
-	             .append("<td width='20%'>"+getTran("web","product",sWebLanguage)+"</td>")
-	             .append("<td width='10%'>"+getTran("web","unit",sWebLanguage)+"</td>")
-	             .append("<td width='10%' style='text-align:right;'>"+getTran("web","unitprice",sWebLanguage)+" </td>")
-	             .append("<td width='27%'>"+getTran("web","service",sWebLanguage)+"</td>")
-	             .append("<td width='12%'>"+getTran("web","servicestock",sWebLanguage)+"</td>")
-	             .append("<td align='right' width='6%'>"+getTran("web","level",sWebLanguage)+" </td>")
-	             .append("<td width='15%'>"+getTran("web","productGroup",sWebLanguage)+"</td>")
+	             .append("<td width='20%'>"+getTran(request,"web","product",sWebLanguage)+"</td>")
+	             .append("<td width='10%'>"+getTran(request,"web","unit",sWebLanguage)+"</td>")
+	             .append("<td width='10%' style='text-align:right;'>"+getTran(request,"web","unitprice",sWebLanguage)+" </td>")
+	             .append("<td width='27%'>"+getTran(request,"web","service",sWebLanguage)+"</td>")
+	             .append("<td width='12%'>"+getTran(request,"web","servicestock",sWebLanguage)+"</td>")
+	             .append("<td align='right' width='6%'>"+getTran(request,"web","level",sWebLanguage)+" </td>")
+	             .append("<td width='15%'>"+getTran(request,"web","productGroup",sWebLanguage)+"</td>")
 	            .append("</tr>");
 	
 	        // tbody
@@ -179,7 +179,7 @@
 		                    // productGroup
 		                    sProductGroup = checkString(product.getProductGroup());
 		                    if(sProductGroup.length() > 0){
-		                        sProductGroup = getTran("product.productgroup",sProductGroup,sWebLanguage);
+		                        sProductGroup = getTran(request,"product.productgroup",sProductGroup,sWebLanguage);
 		                    }
 		
 		                    // supplier
@@ -218,7 +218,7 @@
     
     if(sAction.equals("find")){
         if(iTotal==0){
-            %><%=HTMLEntities.htmlentities(getTran("web","noRecordsFound",sWebLanguage))%><%
+            %><%=HTMLEntities.htmlentities(getTran(request,"web","noRecordsFound",sWebLanguage))%><%
         }
         else{
             %>
@@ -226,7 +226,7 @@
                     <%=HTMLEntities.htmlentities(sOut.toString())%>
                 </table>
                 
-                <%=iTotal%> <%=HTMLEntities.htmlentities(getTran("web","recordsFound",sWebLanguage))%>
+                <%=iTotal%> <%=HTMLEntities.htmlentities(getTran(request,"web","recordsFound",sWebLanguage))%>
                 <script>sortables_init();</script>
             <%
         }

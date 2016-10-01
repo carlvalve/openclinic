@@ -11,7 +11,7 @@
     <table border="0" width='100%' align='center' cellspacing="1" class="list">
         <%-- OPTIONS --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web.UserProfile","ChangeDefaultPage",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web.UserProfile","ChangeDefaultPage",sWebLanguage)%></td>
             <td class="admin2">
                 <select name='DefaultPage' class="text">
                 <%

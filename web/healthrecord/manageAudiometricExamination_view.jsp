@@ -35,14 +35,14 @@
         </td>
         <td width="150" nowrap>
             <br><br>
-            <input id="DVisible" type="checkbox" onclick="if (this.checked){setVisibility(true)}else{setVisibility(false)}" checked><%=getLabel("Web.Occup","medwan.common.view.graph",sWebLanguage,"DVisible")%>
+            <input id="DVisible" type="checkbox" onclick="if (this.checked){setVisibility(true)}else{setVisibility(false)}" checked><%=getLabel(request,"Web.Occup","medwan.common.view.graph",sWebLanguage,"DVisible")%>
             <br><br>
-            <font color="red"><b><%=getTran("Web.Occup","medwan.healthrecord.audiometry.OD",sWebLanguage)%></b></font>&nbsp;
-            <font color="blue"><b><%=getTran("Web.Occup","medwan.healthrecord.audiometry.OG",sWebLanguage)%></b></font>&nbsp;
-            <font color="#00AA00"><b><%=getTran("Web.Occup","medwan.healthrecord.audiometry.normal",sWebLanguage)%></b></font>
+            <font color="red"><b><%=getTran(request,"Web.Occup","medwan.healthrecord.audiometry.OD",sWebLanguage)%></b></font>&nbsp;
+            <font color="blue"><b><%=getTran(request,"Web.Occup","medwan.healthrecord.audiometry.OG",sWebLanguage)%></b></font>&nbsp;
+            <font color="#00AA00"><b><%=getTran(request,"Web.Occup","medwan.healthrecord.audiometry.normal",sWebLanguage)%></b></font>
         </td>
         <td nowrap style="vertical-align:top;">
-            <%=getTran("Web.Occup","medwan.common.history",sWebLanguage)%>
+            <%=getTran(request,"Web.Occup","medwan.common.history",sWebLanguage)%>
 
             <select name="History" class="text" onchange="changeHistory()">
                 <%
@@ -97,7 +97,7 @@
     <tr>
         <td class="admin">
             <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-            <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+            <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
         </td>
         <td class="admin2">
             <input type="text" class="text" size="12" maxLength="10" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" id="trandate" OnBlur='checkDate(this)'> <script>writeTranDate();</script>
@@ -106,7 +106,7 @@
     <%-- RIGHT EAR ---------------------------------------------------------------------------------------------------%>
     <tr>
         <td class="admin" align="left">
-            <%=getTran("Web.Occup","medwan.healthrecord.audiometry.OD",sWebLanguage)%>
+            <%=getTran(request,"Web.Occup","medwan.healthrecord.audiometry.OD",sWebLanguage)%>
         </td>
         <td class="admin2" align="left">
             <table>
@@ -234,7 +234,7 @@
     <%-- LEFT EAR ----------------------------------------------------------------------------------------------------%>
     <tr>
         <td class="admin" align="left">
-            <%=getTran("Web.Occup","medwan.healthrecord.audiometry.OG",sWebLanguage)%>
+            <%=getTran(request,"Web.Occup","medwan.healthrecord.audiometry.OG",sWebLanguage)%>
         </td>
         <td class="admin2" align="left">
             <table>
@@ -360,13 +360,13 @@
         </td>
     </tr>
     <tr>
-        <td class="admin"><%=getTran("Web.Occup","personal.audiometric.history",sWebLanguage)%></td>
+        <td class="admin"><%=getTran(request,"Web.Occup","personal.audiometric.history",sWebLanguage)%></td>
         <td class="admin2">
             <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" cols="80" rows="2" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_AUDIOMETRY_PERSONAL_HISTORY" property="itemId"/>]>.value"><%=ScreenHelper.getLastItem(request,"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_AUDIOMETRY_PERSONAL_HISTORY").getValue()%></textarea>
         </td>
     </tr>
     <tr>
-        <td class="admin"><%=getTran("Web.Occup","family.audiometric.history",sWebLanguage)%></td>
+        <td class="admin"><%=getTran(request,"Web.Occup","family.audiometric.history",sWebLanguage)%></td>
         <td class="admin2">
             <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" cols="80" rows="2" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_AUDIOMETRY_FAMILY_HISTORY" property="itemId"/>]>.value"><%=ScreenHelper.getLastItem(request,"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_AUDIOMETRY_FAMILY_HISTORY").getValue()%></textarea>
         </td>

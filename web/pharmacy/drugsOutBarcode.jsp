@@ -17,12 +17,12 @@
     <table width="100%" class="list" cellpadding="0" cellspacing="1">        
         <%-- SERVICE STOCK --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","servicestock",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","servicestock",sWebLanguage)%></td>
             <td class="admin2">
-                <select name="servicestock" id="servicestock">
+                <select class='text' name="servicestock" id="servicestock" onchange="setDefaultPharmacy();doAdd('yes')">
                     <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>
                     <%
-                        String defaultPharmacy = MedwanQuery.getInstance().getConfigString("defaultPharmacy","");
+                        String defaultPharmacy = (String)session.getAttribute("defaultPharmacy");
                         Vector servicestocks = ServiceStock.getStocksByUser(activeUser.userid);
                         
                         ServiceStock stock;
@@ -37,14 +37,24 @@
         
         <%-- PRODUCT --%>
         <tr>
-            <td class='admin'><%=getTran("web","product",sWebLanguage)%></td>
-            <td class='admin2'><input type='text' class='text' name='drugbarcode' id='drugbarcode' size='20' onkeyup='if(enterEvent(event,13)){doAdd("");}'/></td>
+            <td class='admin'><%=getTran(request,"web","product",sWebLanguage)%></td>
+            <td class='admin2'>
+		        <input type="hidden" name="EditProductUid" id="EditProductUid" value="">
+            	<input type='text' class='text' name='drugbarcode' id='drugbarcode' size='60' onkeyup='if(enterEvent(event,13)){doAdd("");document.getElementById("EditProductUid").value=""}'/>
+				<div id="autocomplete_prescription" class="autocomple"></div>
+            </td>
         </tr>
         
         <%-- QUANTITY --%>
         <tr>
-            <td class='admin'><%=getTran("web","quantity",sWebLanguage)%></td>
+            <td class='admin'><%=getTran(request,"web","quantity",sWebLanguage)%></td>
             <td class='admin2'><input type='text' class='text' name='quantity' id='quantity' size='5' value='1'/></td>
+        </tr>
+        
+        <%-- COMMENT --%>
+        <tr>
+            <td class='admin'><%=getTran(request,"web","comment",sWebLanguage)%></td>
+            <td class='admin2'><input type='text' class='text' name='comment' id='comment' size='60' value=''/></td>
         </tr>
         
         <%-- BUTTONS --%>
@@ -71,8 +81,10 @@
   function doAdd(loadonly){
     var url = "<c:url value='/pharmacy/addDrugsOutBarcode.jsp'/>?loadonly="+loadonly+
               "&ServiceStock="+document.getElementById("servicestock").value+
+              "&DrugUid="+document.getElementById("EditProductUid").value+
               "&DrugBarcode="+document.getElementById("drugbarcode").value+
               "&Quantity="+document.getElementById("quantity").value+
+              "&Comment="+document.getElementById("comment").value+
               "&ts="+new Date().getTime();
     new Ajax.Request(url,{
       method: "GET",
@@ -123,17 +135,49 @@
       onSuccess: function(resp){
         var label = eval('('+resp.responseText+')');
         if(label.message && label.message.length>0){
-          $("divDrugsOut").innerHTML = "<font color='red'>"+label.message+"</font>";
+        	$("divDrugsOut").innerHTML = "<font color='red'>"+label.message+"</font>";
         }
         else{
-          if(label.drugs.length > 0){
             $('divDrugsOut').innerHTML = label.drugs;
-          }
         }
       }
     });
   }
     
+  <%-- DO DELIVER --%>
+  function setDefaultPharmacy(){
+    var url = '<c:url value="/pharmacy/setDefaultPharmacy.jsp"/>?serviceStockUid='+document.getElementById("servicestock").value+'&ts='+new Date();
+    new Ajax.Request(url,{
+      method: "GET",
+      parameters: "",
+      onSuccess: function(resp){
+      }
+    });
+  }
+    
+	new Ajax.Autocompleter('drugbarcode','autocomplete_prescription','medical/ajax/getDrugs.jsp',{
+		  minChars:1,
+		  method:'post',
+		  afterUpdateElement:afterAutoComplete,
+		  callback:composeCallbackURL
+		});
+		
+		function afterAutoComplete(field,item){
+		  var regex = new RegExp('[-0123456789.]*-idcache','i');
+		  var nomimage = regex.exec(item.innerHTML);
+		  var id = nomimage[0].replace('-idcache','');
+		  document.getElementById("EditProductUid").value = id;
+		  document.getElementById("drugbarcode").value=document.getElementById("drugbarcode").value.substring(0,document.getElementById("drugbarcode").value.indexOf(id));
+		}
+		
+		function composeCallbackURL(field,item){
+		  var url = "";
+		  if(field.id=="drugbarcode"){
+			url = "field=findDrugName&findDrugName="+field.value+"&serviceStockUid="+document.getElementById("servicestock").value;
+		  }
+		  return url;
+		}
+
   doAdd('yes');
   document.getElementById('drugbarcode').focus();
 </script>

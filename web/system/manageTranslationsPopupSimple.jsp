@@ -42,7 +42,7 @@
         for(int i=0; i<invalidLabelKeyChars.length(); i++){
             if((editLabelType+editLabelID).indexOf(invalidLabelKeyChars.charAt(i)) > -1){
                 invalidCharFound = true;
-                msg = getTran("Web.manage","invalidcharsfound",sWebLanguage)+" '"+invalidLabelKeyChars+"'";
+                msg = getTran(null,"Web.manage","invalidcharsfound",sWebLanguage)+" '"+invalidLabelKeyChars+"'";
                 break;
             }
         }
@@ -73,7 +73,7 @@
 
                 reloadSingleton(session);
 
-                msg = "'"+editLabelType+"$"+editLabelID+"$"+editLabelLang+"' "+getTran("Web","saved",sWebLanguage);
+                msg = "'"+editLabelType+"$"+editLabelID+"$"+editLabelLang+"' "+getTran(null,"Web","saved",sWebLanguage);
             }
             else{
                 sAction = "Add";
@@ -94,7 +94,7 @@
         for(int i=0; i<invalidLabelKeyChars.length(); i++){
             if((editLabelType+editLabelID).indexOf(invalidLabelKeyChars.charAt(i)) > -1){
                 invalidCharFound = true;
-                msg = getTran("Web.manage","invalidcharsfound",sWebLanguage)+" '"+invalidLabelKeyChars+"'";
+                msg = getTran(null,"Web.manage","invalidcharsfound",sWebLanguage)+" '"+invalidLabelKeyChars+"'";
                 break;
             }
         }
@@ -113,7 +113,7 @@
             if(!label.exists()){
                 label.saveToDB();
 
-                msg = getTran("Web.manage","labeladded",sWebLanguage);
+                msg = getTran(null,"Web.manage","labeladded",sWebLanguage);
 
                 editOldLabelID = editLabelID;
                 editOldLabelType = editLabelType;
@@ -124,7 +124,7 @@
             else{
                 // a label with the given ids allready exists
                 labelAllreadyExists = true;
-                msg = getTran("Web.Manage","labelExists",sWebLanguage);
+                msg = getTran(null,"Web.Manage","labelExists",sWebLanguage);
             }
         }
     }
@@ -168,7 +168,7 @@
     <table border="0" width="250" cellspacing="0" cellpadding="5" style="border:1px solid #aaa">
         <tr>
             <td bgcolor="#dddddd" style="text-align:center">
-              <%=getTran("web","searchInProgress",sWebLanguage)%>
+              <%=getTran(null,"web","searchInProgress",sWebLanguage)%>
             </td>
         </tr>
     </table>
@@ -185,7 +185,7 @@
 
         <%-- language --%>
         <tr>
-            <td class="admin"><%=getTran("Web","Language",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(null,"Web","Language",sWebLanguage)%></td>
             <td class="admin2">
                 <select name="EditLabelLang" class="text">
                     <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>
@@ -195,7 +195,7 @@
                         while (tokenizer.hasMoreTokens()) {
                             tmpLang = tokenizer.nextToken();
 
-                    %><option value="<%=tmpLang%>" <%=(editLabelLang.equals(tmpLang)?"selected":"")%>><%=getTran("Web.language",tmpLang,sWebLanguage)%></option><%
+                    %><option value="<%=tmpLang%>" <%=(editLabelLang.equals(tmpLang)?"selected":"")%>><%=getTran(null,"Web.language",tmpLang,sWebLanguage)%></option><%
                         }
                     %>
                 </select>
@@ -204,7 +204,7 @@
 
         <%-- value --%>
         <tr>
-            <td class="admin"><%=getTran("Web.Translations","Label",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(null,"Web.Translations","Label",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea name="EditLabelValue" class="normal" rows="4" cols="80" onKeyDown="textCounter(document.transactionForm.EditLabelValue,document.transactionForm.remLen,250)" onKeyUp="textCounter(document.transactionForm.EditLabelValue,document.transactionForm.remLen,250);resizeTextarea(this,10);"><%=editLabelValue%></textarea>
                 <input readonly type="text" class="text" name="remLen" size="3" value="250">
@@ -217,7 +217,7 @@
         if(sAction.equals("Add") || sAction.equals("Save")){
             if(msg == null){
                 // std message
-                out.print(getTran("Web.Manage","noDataChanged",sWebLanguage));
+                out.print(getTran(null,"Web.Manage","noDataChanged",sWebLanguage));
             }
             else{
                 // custom (red) message

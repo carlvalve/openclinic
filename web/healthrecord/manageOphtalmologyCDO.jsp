@@ -24,7 +24,7 @@
 	    <tr>
 	        <td class="admin">
 	            <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-	            <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+	            <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
 	        </td>
 	        <td class="admin2" colspan="5">
 	            <input type="text" class="text" size="12" maxLength="10" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" id="trandate" OnBlur='checkDate(this)'> <script>writeTranDate();</script>
@@ -33,7 +33,7 @@
 	    
 	    <%-- 0 - physician --%>
 	    <tr>
-	        <td class="admin"><%=getTran("web","cdo.physician",sWebLanguage)%>&nbsp;*&nbsp;</td>
+	        <td class="admin"><%=getTran(request,"web","cdo.physician",sWebLanguage)%>&nbsp;*&nbsp;</td>
 	        <td class="admin2" nowrap colspan="6">
 	            <select id='physician' class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_PHYSICIAN" property="itemId"/>]>.value" >
 	                <option></option>
@@ -44,7 +44,7 @@
 	    
 	    <%-- 1 - actual complaints --%>
 	    <tr>
-	        <td class="admin"><%=getTran("web","actual.complaints",sWebLanguage)%>&nbsp;*&nbsp;</td>
+	        <td class="admin"><%=getTran(request,"web","actual.complaints",sWebLanguage)%>&nbsp;*&nbsp;</td>
 	        <td class="admin2" colspan="5">	
 	        	<input type="hidden" id="complaints" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_1" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_1" property="value"/>"/>
 	        	<table width='100%'>
@@ -92,7 +92,7 @@
     	
     	<%-- 2 - localisation --%>
 	    <tr>
-	        <td class="admin"><%=getTran("web","localisation",sWebLanguage)%></td>
+	        <td class="admin"><%=getTran(request,"web","localisation",sWebLanguage)%></td>
 	        <td class="admin2" colspan="5" nowrap>
 	            <select id='cdo2' class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_2" property="itemId"/>]>.value" onchange="if(this.value==0){document.getElementById('localisation_comment').style.visibility='visible'}else{document.getElementById('localisation_comment').value='';document.getElementById('localisation_comment').style.visibility='hidden'};">
 	                <%=ScreenHelper.writeSelectUpperCase("cdo.2",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_2"),sWebLanguage,false,false)%>
@@ -103,21 +103,21 @@
 	    
     	<%-- 3/4/5 - severity -------------%>
 	    <tr>
-	        <td class="admin"><%=getTran("web","severity",sWebLanguage)%></td>
+	        <td class="admin"><%=getTran(request,"web","severity",sWebLanguage)%></td>
 	        <td class="admin2" nowrap>
 	            <select id='cdo3' class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_3" property="itemId"/>]>.value" onchange="if(this.value==0){document.getElementById('severity_comment').style.visibility='visible'}else{document.getElementById('severity_comment').value='';document.getElementById('severity_comment').style.visibility='hidden'};">
 	                <%=ScreenHelper.writeSelectUpperCase("cdo.3",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_3"),sWebLanguage,false,false)%>
 	            </select>
 	            <input onKeyup="this.value=this.value.toUpperCase();" type="text" id="severity_comment" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_3_COMMENT" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_3_COMMENT" translate="false" property="value"/>"/>
 	        </td>
-	        <td class="admin"><%=getTran("web","cdo.duration",sWebLanguage)%></td>
+	        <td class="admin"><%=getTran(request,"web","cdo.duration",sWebLanguage)%></td>
 	        <td class="admin2" nowrap>
 	            <select id='cdo4' class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_4" property="itemId"/>]>.value" onchange="if(this.value==0){document.getElementById('duration_comment').style.visibility='visible'}else{document.getElementById('duration_comment').value='';document.getElementById('duration_comment').style.visibility='hidden'};">
 	                <%=ScreenHelper.writeSelectUpperCase("cdo.4",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_4"),sWebLanguage,false,false)%>
 	            </select>
 	            <input onKeyup="this.value=this.value.toUpperCase();" type="text" id="duration_comment" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_4_COMMENT" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_4_COMMENT" translate="false" property="value"/>"/>
 	        </td>
-	        <td class="admin"><%=getTran("web","cdo.rythm",sWebLanguage)%></td>
+	        <td class="admin"><%=getTran(request,"web","cdo.rythm",sWebLanguage)%></td>
 	        <td class="admin2" nowrap>
 	            <select id='cdo5' class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_5" property="itemId"/>]>.value" onchange="if(this.value==0){document.getElementById('rythm_comment').style.visibility='visible'}else{document.getElementById('rythm_comment').value='';document.getElementById('rythm_comment').style.visibility='hidden'};">
 	                <%=ScreenHelper.writeSelectUpperCase("cdo.5",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_5"),sWebLanguage,false,false)%>
@@ -128,7 +128,7 @@
 	    
     	<%-- 6 - history --%>
 	    <tr>
-	        <td class="admin"><%=getTran("web","cdo.history",sWebLanguage)%></td>
+	        <td class="admin"><%=getTran(request,"web","cdo.history",sWebLanguage)%></td>
 	        <td class="admin2" nowrap>	
 	        	<input type="hidden" id="history" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_6" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_6" property="value"/>"/>
 	        	<table width='100%'>
@@ -173,7 +173,7 @@
 	        </td>
 	        
 	        <%-- 7 - meds --%>
-	        <td class="admin"><%=getTran("web","cdo.meds",sWebLanguage)%></td>
+	        <td class="admin"><%=getTran(request,"web","cdo.meds",sWebLanguage)%></td>
 	        <td class="admin2" nowrap>
 	            <select id='cdo7' class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_7" property="itemId"/>]>.value" onchange="if(this.value==0){document.getElementById('meds_comment').style.visibility='visible'}else{document.getElementById('meds_comment').value='';document.getElementById('meds_comment').style.visibility='hidden'};">
 	                <%=ScreenHelper.writeSelectUpperCase("cdo.7",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_7"),sWebLanguage,false,false)%>
@@ -182,7 +182,7 @@
 	        </td>
 	        
 	        <%-- 8 - allergy --%>
-	        <td class="admin"><%=getTran("web","cdo.allergy",sWebLanguage)%></td>
+	        <td class="admin"><%=getTran(request,"web","cdo.allergy",sWebLanguage)%></td>
 	        <td class="admin2" nowrap>
 	            <select id='cdo8' class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_8" property="itemId"/>]>.value" onchange="if(this.value==0){document.getElementById('allergy_comment').style.visibility='visible'}else{document.getElementById('allergy_comment').value='';document.getElementById('allergy_comment').style.visibility='hidden'};">
 	                <%=ScreenHelper.writeSelectUpperCase("cdo.8",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_8"),sWebLanguage,false,false)%>
@@ -193,7 +193,7 @@
 	    
     	<%-- 9/10 - history family + surgery ------------%>
 	    <tr>
-	        <td class="admin"><%=getTran("web","cdo.history.family",sWebLanguage)%></td>
+	        <td class="admin"><%=getTran(request,"web","cdo.history.family",sWebLanguage)%></td>
 	        <td class="admin2" nowrap>
 	            <select id='cdo9' class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_9" property="itemId"/>]>.value" onchange="if(this.value==0){document.getElementById('history_family_comment').style.visibility='visible'}else{document.getElementById('history_family_comment').value='';document.getElementById('history_family_comment').style.visibility='hidden'};">
 	                <%=ScreenHelper.writeSelectUpperCase("cdo.9",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_9"),sWebLanguage,false,false)%>
@@ -201,7 +201,7 @@
 	            <input onKeyup="this.value=this.value.toUpperCase();" type="text" id="history_family_comment" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_9_COMMENT" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_9_COMMENT" translate="false" property="value"/>"/>
 	        </td>
 	        
-	        <td class="admin"><%=getTran("web","cdo.history.surgery",sWebLanguage)%></td>
+	        <td class="admin"><%=getTran(request,"web","cdo.history.surgery",sWebLanguage)%></td>
 	        <td class="admin2" colspan="3" nowrap>
 	            <select id='cdo10' class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_10" property="itemId"/>]>.value" onchange="if(this.value==0){document.getElementById('history_surgery_comment').style.visibility='visible'}else{document.getElementById('history_surgery_comment').value='';document.getElementById('history_surgery_comment').style.visibility='hidden'};">
 	                <%=ScreenHelper.writeSelectUpperCase("cdo.10",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_10"),sWebLanguage,false,false)%>
@@ -212,12 +212,12 @@
 	    
     	<%-- history eye + intake -------------------%>
 	    <tr>
-	        <td class="admin"><%=getTran("web","cdo.history.eye",sWebLanguage)%></td>
+	        <td class="admin"><%=getTran(request,"web","cdo.history.eye",sWebLanguage)%></td>
 	        <td class="admin2">
 	            <textarea  onKeyup="this.value=this.value.toUpperCase();resizeTextarea(this,10);" class="text" cols="60" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_11" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_11" translate="false" property="value"/></textarea>
 	        </td>
 	        
-	        <td class="admin"><%=getTran("web","cdo.intake",sWebLanguage)%></td>
+	        <td class="admin"><%=getTran(request,"web","cdo.intake",sWebLanguage)%></td>
 	        <td class="admin2" colspan="3">
 	            <textarea  onKeyup="this.value=this.value.toUpperCase();resizeTextarea(this,10);" class="text" cols="60" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_12" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_12" translate="false" property="value"/></textarea>
 	        </td>
@@ -261,82 +261,82 @@
 						</td>
 	    			</tr>
 	    			<tr>
-	    				<td colspan="3" class="admin"><%=getTran("web","cdo.eyelid",sWebLanguage)%></td>
+	    				<td colspan="3" class="admin"><%=getTran(request,"web","cdo.eyelid",sWebLanguage)%></td>
 	    				<td colspan="6" class="admin2"><input type="checkbox" class="hand" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_20" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_20;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/></td>
 	    			<tr>
-	    				<td colspan="3" class="admin"><%=getTran("web","cdo.lacrymaldrain",sWebLanguage)%></td>
+	    				<td colspan="3" class="admin"><%=getTran(request,"web","cdo.lacrymaldrain",sWebLanguage)%></td>
 	    				<td colspan="6" class="admin2"><input type="checkbox" class="hand" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_21" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_21;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/></td>
 	    			</tr>
 	    			<tr>
-	    				<td colspan="3" class="admin"><%=getTran("web","cdo.orbit",sWebLanguage)%></td>
+	    				<td colspan="3" class="admin"><%=getTran(request,"web","cdo.orbit",sWebLanguage)%></td>
 	    				<td colspan="6" class="admin2"><input type="checkbox" class="hand" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_22" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_22;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/></td>
 	    			</tr>
 	    			<tr>
-	    				<td colspan="3" class="admin"><%=getTran("web","cdo.drye.eye",sWebLanguage)%></td>
+	    				<td colspan="3" class="admin"><%=getTran(request,"web","cdo.drye.eye",sWebLanguage)%></td>
 	    				<td colspan="6" class="admin2"><input type="checkbox" class="hand" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_23" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_23;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/></td>
 	    			</tr>
 	    			<tr>
-	    				<td colspan="3" class="admin"><%=getTran("web","cdo.conjunctivitis",sWebLanguage)%></td>
+	    				<td colspan="3" class="admin"><%=getTran(request,"web","cdo.conjunctivitis",sWebLanguage)%></td>
 	    				<td colspan="6" class="admin2"><input type="checkbox" class="hand" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_24" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_24;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/></td>
 	    			</tr>
 	    			<tr>
-	    				<td colspan="3" class="admin"><%=getTran("web","cdo.cornea",sWebLanguage)%></td>
+	    				<td colspan="3" class="admin"><%=getTran(request,"web","cdo.cornea",sWebLanguage)%></td>
 	    				<td colspan="6" class="admin2"><input type="checkbox" class="hand" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_25" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_25;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/></td>
 	    			</tr>
 	    			<tr>
-	    				<td colspan="3" class="admin"><%=getTran("web","cdo.sclera",sWebLanguage)%></td>
+	    				<td colspan="3" class="admin"><%=getTran(request,"web","cdo.sclera",sWebLanguage)%></td>
 	    				<td colspan="6" class="admin2"><input type="checkbox" class="hand" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_26" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_26;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/></td>
 	    			</tr>
 	    			<tr>
-	    				<td colspan="3" class="admin"><%=getTran("web","cdo.cristalline",sWebLanguage)%></td>
+	    				<td colspan="3" class="admin"><%=getTran(request,"web","cdo.cristalline",sWebLanguage)%></td>
 	    				<td colspan="6" class="admin2"><input type="checkbox" class="hand" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_27" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_27;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/></td>
 	    			</tr>
 	    			<tr>
-	    				<td colspan="3" class="admin"><%=getTran("web","cdo.glaucoma",sWebLanguage)%></td>
+	    				<td colspan="3" class="admin"><%=getTran(request,"web","cdo.glaucoma",sWebLanguage)%></td>
 	    				<td colspan="6" class="admin2"><input type="checkbox" class="hand" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_28" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_28;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/></td>
 	    			</tr>
 	    			<tr>
-	    				<td colspan="3" class="admin"><%=getTran("web","cdo.uveitis",sWebLanguage)%></td>
+	    				<td colspan="3" class="admin"><%=getTran(request,"web","cdo.uveitis",sWebLanguage)%></td>
 	    				<td colspan="6" class="admin2"><input type="checkbox" class="hand" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_29" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_29;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/></td>
 	    			</tr>
 	    			<tr>
-	    				<td colspan="3" class="admin"><%=getTran("web","cdo.tumor",sWebLanguage)%></td>
+	    				<td colspan="3" class="admin"><%=getTran(request,"web","cdo.tumor",sWebLanguage)%></td>
 	    				<td colspan="6" class="admin2"><input type="checkbox" class="hand" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_30" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_30;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/></td>
 	    			</tr>
 	    			<tr>
-	    				<td colspan="3" class="admin"><%=getTran("web","cdo.vascular",sWebLanguage)%></td>
+	    				<td colspan="3" class="admin"><%=getTran(request,"web","cdo.vascular",sWebLanguage)%></td>
 	    				<td colspan="6" class="admin2"><input type="checkbox" class="hand" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_31" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_31;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/></td>
 	    			</tr>
 	    			<tr>
-	    				<td colspan="3" class="admin"><%=getTran("web","cdo.macular",sWebLanguage)%></td>
+	    				<td colspan="3" class="admin"><%=getTran(request,"web","cdo.macular",sWebLanguage)%></td>
 	    				<td colspan="6" class="admin2"><input type="checkbox" class="hand" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_32" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_32;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/></td>
 	    			</tr>
 	    			<tr>
-	    				<td colspan="3" class="admin"><%=getTran("web","cdo.dystrophia",sWebLanguage)%></td>
+	    				<td colspan="3" class="admin"><%=getTran(request,"web","cdo.dystrophia",sWebLanguage)%></td>
 	    				<td colspan="6" class="admin2"><input type="checkbox" class="hand" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_33" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_33;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/></td>
 	    			</tr>
 	    			<tr>
-	    				<td colspan="3" class="admin"><%=getTran("web","cdo.release",sWebLanguage)%></td>
+	    				<td colspan="3" class="admin"><%=getTran(request,"web","cdo.release",sWebLanguage)%></td>
 	    				<td colspan="6" class="admin2"><input type="checkbox" class="hand" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_34" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_34;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/></td>
 	    			</tr>
 	    			<tr>
-	    				<td colspan="3" class="admin"><%=getTran("web","cdo.strabismus",sWebLanguage)%></td>
+	    				<td colspan="3" class="admin"><%=getTran(request,"web","cdo.strabismus",sWebLanguage)%></td>
 	    				<td colspan="6" class="admin2"><input type="checkbox" class="hand" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_35" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_35;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/></td>
 	    			</tr>
 	    			<tr>
-	    				<td colspan="3" class="admin"><%=getTran("web","cdo.neuro.ophtalmology",sWebLanguage)%></td>
+	    				<td colspan="3" class="admin"><%=getTran(request,"web","cdo.neuro.ophtalmology",sWebLanguage)%></td>
 	    				<td colspan="6" class="admin2"><input type="checkbox" class="hand" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_36" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_36;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/></td>
 	    			</tr>
 	    			<tr>
-	    				<td colspan="3" class="admin"><%=getTran("web","cdo.toxicity",sWebLanguage)%></td>
+	    				<td colspan="3" class="admin"><%=getTran(request,"web","cdo.toxicity",sWebLanguage)%></td>
 	    				<td colspan="6" class="admin2"><input type="checkbox" class="hand" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_37" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_37;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/></td>
 	    			</tr>
 	    			<tr>
-	    				<td colspan="3" class="admin"><%=getTran("web","cdo.traumatism",sWebLanguage)%></td>
+	    				<td colspan="3" class="admin"><%=getTran(request,"web","cdo.traumatism",sWebLanguage)%></td>
 	    				<td colspan="6" class="admin2"><input type="checkbox" class="hand" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_38" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_38;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/></td>
 	    			</tr>
 	    			<tr>
-	    				<td colspan="3" class="admin"><%=getTran("web","cdo.refraction.error",sWebLanguage)%></td>
+	    				<td colspan="3" class="admin"><%=getTran(request,"web","cdo.refraction.error",sWebLanguage)%></td>
 	    				<td colspan="6" class="admin2"><input type="checkbox" class="hand" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_39" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_39;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/></td>
 	    			</tr>
 	    		</table>
@@ -344,8 +344,8 @@
 	    	<td class="admin2" colspan="4" style="vertical-align: top; padding: 0px">
 	    		<table width="100%">
 	    			<tr>
-	    				<td class="admin"><%=getTran("web","cdo.correction.worn",sWebLanguage)%></td>
-	    				<td class="admin"><%=getTran("web","cdo.RE",sWebLanguage)%></td>
+	    				<td class="admin"><%=getTran(request,"web","cdo.correction.worn",sWebLanguage)%></td>
+	    				<td class="admin"><%=getTran(request,"web","cdo.RE",sWebLanguage)%></td>
 	    				<td class="admin2" colspan="2"><input onblur="isNumber(this)" type="text" size="6" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_16_RIGHT_1" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_16_RIGHT_1" translate="false" property="value"/>"/>
 	    					=<input onblur="isNumber(this)" type="text" size="5" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_16_RIGHT_2" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_16_RIGHT_2" translate="false" property="value"/>"/>
 	    					/
@@ -354,7 +354,7 @@
 	    			</tr>
 	    			<tr>
 	    				<td class="admin2"></td>
-	    				<td class="admin"><%=getTran("web","cdo.LE",sWebLanguage)%></td>
+	    				<td class="admin"><%=getTran(request,"web","cdo.LE",sWebLanguage)%></td>
 	    				<td class="admin2" colspan="2"><input onblur="isNumber(this)" type="text" size="6" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_16_LEFT_1" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_16_LEFT_1" translate="false" property="value"/>"/>
 	    					=<input onblur="isNumber(this)" type="text" size="5" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_16_LEFT_2" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_16_LEFT_2" translate="false" property="value"/>"/>
 	    					/
@@ -364,16 +364,16 @@
 	    			<tr>
 	    				<td class="admin2" colspan="2"></td>
 	    				<td class="admin2" style='text-align: center'>
-	    					<%=getTran("web","cdo.addplus.L",sWebLanguage)%>
+	    					<%=getTran(request,"web","cdo.addplus.L",sWebLanguage)%>
 	    					<input onblur="isNumber(this)" type="text" size="5" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_16_ADD_L" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_16_ADD_L" translate="false" property="value"/>"/>
-	    					<%=getTran("web","cdo.addplus.R",sWebLanguage)%>
+	    					<%=getTran(request,"web","cdo.addplus.R",sWebLanguage)%>
 	    					<input onblur="isNumber(this)" type="text" size="5" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_16_ADD_R" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_16_ADD_R" translate="false" property="value"/>"/>
 	    				</td>
 	    				<td/>
 	    			</tr>
 	    			<tr>
-	    				<td class="admin"><%=getTran("web","cdo.refraction.measured",sWebLanguage)%></td>
-	    				<td class="admin"><%=getTran("web","cdo.RE",sWebLanguage)%></td>
+	    				<td class="admin"><%=getTran(request,"web","cdo.refraction.measured",sWebLanguage)%></td>
+	    				<td class="admin"><%=getTran(request,"web","cdo.RE",sWebLanguage)%></td>
 	    				<td class="admin2" colspan="2"><input  onblur="isNumber(this)"type="text" size="6" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_17_RIGHT_1" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_17_RIGHT_1" translate="false" property="value"/>"/>
 	    					=<input  onblur="isNumber(this)"type="text" size="5" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_17_RIGHT_2" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_17_RIGHT_2" translate="false" property="value"/>"/>
 	    					/
@@ -382,7 +382,7 @@
 	    			</tr>
 	    			<tr>
 	    				<td class="admin2"></td>
-	    				<td class="admin"><%=getTran("web","cdo.LE",sWebLanguage)%></td>
+	    				<td class="admin"><%=getTran(request,"web","cdo.LE",sWebLanguage)%></td>
 	    				<td class="admin2" colspan="2"><input  onblur="isNumber(this)"type="text" size="6" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_17_LEFT_1" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_17_LEFT_1" translate="false" property="value"/>"/>
 	    					=<input  onblur="isNumber(this)"type="text" size="5" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_17_LEFT_2" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_17_LEFT_2" translate="false" property="value"/>"/>
 	    					/
@@ -392,9 +392,9 @@
 	    			<tr>
 	    				<td class="admin2" colspan="2"></td>
 	    				<td class="admin2" style='text-align: center'>
-	    					<%=getTran("web","cdo.addplus.L",sWebLanguage)%>
+	    					<%=getTran(request,"web","cdo.addplus.L",sWebLanguage)%>
 	    					<input onblur="isNumber(this)" type="text" size="5" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_17_ADD_L" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_17_ADD_L" translate="false" property="value"/>"/>
-	    					<%=getTran("web","cdo.addplus.R",sWebLanguage)%>
+	    					<%=getTran(request,"web","cdo.addplus.R",sWebLanguage)%>
 	    					<input onblur="isNumber(this)" type="text" size="5" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_17_ADD_R" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_17_ADD_R" translate="false" property="value"/>"/>
 	    				</td>
 	    				<td/>
@@ -402,7 +402,7 @@
 	    			
     	            <%-- cdo visual field --%>
 	    			<tr>
-	    				<td class="admin" colspan="4"><%=getTran("web","cdo.visual.field",sWebLanguage)%></td>
+	    				<td class="admin" colspan="4"><%=getTran(request,"web","cdo.visual.field",sWebLanguage)%></td>
 	    			</tr>
 	    			<tr>
 	    				<td colspan="4" class="admin2">
@@ -473,9 +473,9 @@
 	    			</tr>
 	    			<tr>
 	    				<td class='admin2'/>
-	    				<td class="admin2"><%=getTran("web","cdo.size.in.mm",sWebLanguage)%></td>
-	    				<td class="admin2"><%=getTran("web","cdo.reaction",sWebLanguage)%></td>
-	    				<td class="admin2"><%=getTran("web","cdo.rapd",sWebLanguage)%></td>
+	    				<td class="admin2"><%=getTran(request,"web","cdo.size.in.mm",sWebLanguage)%></td>
+	    				<td class="admin2"><%=getTran(request,"web","cdo.reaction",sWebLanguage)%></td>
+	    				<td class="admin2"><%=getTran(request,"web","cdo.rapd",sWebLanguage)%></td>
 	    			</tr>
 	    			<tr>
 	    				<td class="admin2" style="text-align: right">19.<font style="font-size: 44">P </font></td>
@@ -515,19 +515,19 @@
 	    		<table width="100%">
 	    		    <%-- header --%>
 	    			<tr>
-		    			<td class="admin"><%=getTran("web","cdo.fundus",sWebLanguage)%></td>
-		    			<td class="admin" style="text-align: left"><%=getTran("web","cdo.CD",sWebLanguage)%></td>
-		    			<td class="admin" style="text-align: right"><%=getTran("web","cdo.CD",sWebLanguage)%></td>
-		    			<td class="admin"><%=getTran("web","cdo.gonioscopy",sWebLanguage)%></td>
+		    			<td class="admin"><%=getTran(request,"web","cdo.fundus",sWebLanguage)%></td>
+		    			<td class="admin" style="text-align: left"><%=getTran(request,"web","cdo.CD",sWebLanguage)%></td>
+		    			<td class="admin" style="text-align: right"><%=getTran(request,"web","cdo.CD",sWebLanguage)%></td>
+		    			<td class="admin"><%=getTran(request,"web","cdo.gonioscopy",sWebLanguage)%></td>
 	    			</tr>
 	    			<tr>
 		    			<td class="admin2" nowrap>
 							<input type="checkbox" class="hand" id="cb_fundus_direct" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_FUNDUS_DIRECT" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_FUNDUS_DIRECT;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/>
-							<%=getLabel("web","cdo.direct",sWebLanguage,"cb_fundus_direct")%>&nbsp;					
+							<%=getLabel(request,"web","cdo.direct",sWebLanguage,"cb_fundus_direct")%>&nbsp;					
 							<input type="checkbox" class="hand" id="cb_fundus_20d" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_FUNDUS_20D" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_FUNDUS_20D;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/>
-							<%=getLabel("web","cdo.20D",sWebLanguage,"cb_fundus_20d")%>&nbsp;					
+							<%=getLabel(request,"web","cdo.20D",sWebLanguage,"cb_fundus_20d")%>&nbsp;					
 							<input type="checkbox" class="hand" id="cb_fundus_90d" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_FUNDUS_90D" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_FUNDUS_90D;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/>
-							<%=getLabel("web","cdo.90D",sWebLanguage,"cb_fundus_90d")%>&nbsp;					
+							<%=getLabel(request,"web","cdo.90D",sWebLanguage,"cb_fundus_90d")%>&nbsp;					
 						</td>
 		    			<td class="admin2" style="text-align: left">
 							<input type="text" size="3" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_FUNDUS_PCT1" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_FUNDUS_PCT1" translate="false" property="value"/>"/>
@@ -543,23 +543,23 @@
 		    			<td class="admin2" style="padding: 0px">
 		    				<table width="100%">
 		    					<tr>
-					    			<td class="admin" width="1%"><%=getTran("web","cdo.papil",sWebLanguage)%></td>
+					    			<td class="admin" width="1%"><%=getTran(request,"web","cdo.papil",sWebLanguage)%></td>
 					    			<td class="admin2"><input type="checkbox" class="hand" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_FUNDUS_PAPIL" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_FUNDUS_PAPIL;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/></td>
 		    					</tr>
 		    					<tr>
-					    			<td class="admin"><%=getTran("web","cdo.NFL",sWebLanguage)%></td>
+					    			<td class="admin"><%=getTran(request,"web","cdo.NFL",sWebLanguage)%></td>
 					    			<td class="admin2"><input type="checkbox" class="hand" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_FUNDUS_NFL" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_FUNDUS_NFL;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/></td>
 		    					</tr>
 		    					<tr>
-					    			<td class="admin"><%=getTran("web","cdo.macula",sWebLanguage)%></td>
+					    			<td class="admin"><%=getTran(request,"web","cdo.macula",sWebLanguage)%></td>
 					    			<td class="admin2"><input type="checkbox" class="hand" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_FUNDUS_MACULA" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_FUNDUS_MACULA;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/></td>
 		    					</tr>
 		    					<tr>
-					    			<td class="admin"><%=getTran("web","cdo.vessels",sWebLanguage)%></td>
+					    			<td class="admin"><%=getTran(request,"web","cdo.vessels",sWebLanguage)%></td>
 					    			<td class="admin2"><input type="checkbox" class="hand" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_FUNDUS_VESSELS" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_FUNDUS_VESSELS;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/></td>
 		    					</tr>
 		    					<tr>
-					    			<td class="admin"><%=getTran("web","cdo.periphery",sWebLanguage)%></td>
+					    			<td class="admin"><%=getTran(request,"web","cdo.periphery",sWebLanguage)%></td>
 					    			<td class="admin2"><input type="checkbox" class="hand" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_FUNDUS_PERIPHERY" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_FUNDUS_PERIPHERY;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/></td>
 		    					</tr>
 		    				</table>
@@ -576,25 +576,25 @@
 	    
 	    <%-- cdo complementary exams --%>
 	    <tr>
-	        <td class="admin"><%=getTran("web","cdo.complementary.exams",sWebLanguage)%></td>
+	        <td class="admin"><%=getTran(request,"web","cdo.complementary.exams",sWebLanguage)%></td>
 	        <td class="admin2">
 	            <textarea  onKeyup="this.value=this.value.toUpperCase();resizeTextarea(this,10);" class="text" cols="60" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_40" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_40" translate="false" property="value"/></textarea>
 	        </td>
-	        <td class="admin"><%=getTran("web","cdo.results",sWebLanguage)%></td>
+	        <td class="admin"><%=getTran(request,"web","cdo.results",sWebLanguage)%></td>
 	        <td class="admin2" colspan="3">
 	            <textarea  onKeyup="this.value=this.value.toUpperCase();resizeTextarea(this,10);" class="text" cols="60" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_41" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_41" translate="false" property="value"/></textarea>
 	        </td>
 	    </tr>
 	    <tr>
-	        <td class="admin" colspan="2"><%=getTran("web","cdo.todays.diagnosis",sWebLanguage)%></td>
-	        <td class="admin" colspan="4"><%=getTran("web","cdo.todays.intake",sWebLanguage)%></td>
+	        <td class="admin" colspan="2"><%=getTran(request,"web","cdo.todays.diagnosis",sWebLanguage)%></td>
+	        <td class="admin" colspan="4"><%=getTran(request,"web","cdo.todays.intake",sWebLanguage)%></td>
 	    </tr>
 	    <tr>
 	        <td class="admin" colspan="2" style="padding: 0px">
 	        	<table width="100%">
 	        		<%-- general diagnosis --%>
 	        		<tr>
-				        <td class="admin"><%=getTran("web","cdo.general.diagnosis",sWebLanguage)%></td>
+				        <td class="admin"><%=getTran(request,"web","cdo.general.diagnosis",sWebLanguage)%></td>
 				        <td class="admin2">
 				        	<table>
 				        		<tr><td>
@@ -624,7 +624,7 @@
 	        		
 	        		<%-- specific diagnosis --%>
 	        		<tr>
-				        <td class="admin"><%=getTran("web","cdo.specific.diagnosis",sWebLanguage)%></td>
+				        <td class="admin"><%=getTran(request,"web","cdo.specific.diagnosis",sWebLanguage)%></td>
 				        <td class="admin2">
 				        	<table>
 				        		<tr><td>
@@ -656,9 +656,9 @@
 	        <td class="admin" colspan="4" style="padding: 0px; vertical-align: top">
 	        	<table width="100%">
 	        		<tr>
-				        <td class="admin" width="30%"><%=getTran("web","cdo.name",sWebLanguage)%></td>
-				        <td class="admin" width="15%"><%=getTran("web","cdo.treatment.rythm",sWebLanguage)%></td>
-				        <td class="admin" width="15%"><%=getTran("web","cdo.treatment.duration",sWebLanguage)%></td>
+				        <td class="admin" width="30%"><%=getTran(request,"web","cdo.name",sWebLanguage)%></td>
+				        <td class="admin" width="15%"><%=getTran(request,"web","cdo.treatment.rythm",sWebLanguage)%></td>
+				        <td class="admin" width="15%"><%=getTran(request,"web","cdo.treatment.duration",sWebLanguage)%></td>
 				    </tr>
 				    <tr>
 				    	<td class="admin2"><input onKeyup="this.value=this.value.toUpperCase();" type="text" size="58" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_43_1_3" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_43_1_3" translate="false" property="value"/>"/></td>
@@ -696,13 +696,13 @@
 	    
 	    <!-- 
 		<tr>
-	        <td class="admin" colspan="6"><%=getTran("web","cdo.next.control",sWebLanguage)%></td>
+	        <td class="admin" colspan="6"><%=getTran(request,"web","cdo.next.control",sWebLanguage)%></td>
 		</tr>
 		<tr>
-	        <td class="admin" colspan="1"><%=getTran("web","cdo.date",sWebLanguage)%></td>
-	        <td class="admin" colspan="1"><%=getTran("web","cdo.reason",sWebLanguage)%></td>
-	        <td class="admin" colspan="2"><%=getTran("web","cdo.todo",sWebLanguage)%></td>
-	        <td class="admin" colspan="2"><%=getTran("web","cdo.physician",sWebLanguage)%></td>
+	        <td class="admin" colspan="1"><%=getTran(request,"web","cdo.date",sWebLanguage)%></td>
+	        <td class="admin" colspan="1"><%=getTran(request,"web","cdo.reason",sWebLanguage)%></td>
+	        <td class="admin" colspan="2"><%=getTran(request,"web","cdo.todo",sWebLanguage)%></td>
+	        <td class="admin" colspan="2"><%=getTran(request,"web","cdo.physician",sWebLanguage)%></td>
 		</tr>
 	    <tr>
 	    	<td class="admin2"><input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_44_DATE_1" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CDO_44_DATE_1" translate="false" property="value"/>" id="cdodate1" OnBlur='checkDate(this)'> <script>writeMyDate("cdodate1");</script></td>

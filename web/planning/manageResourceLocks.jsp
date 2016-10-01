@@ -10,16 +10,16 @@
 <form name="transactionForm" method="post">
 	<table width='100%'>
 		<tr class='admin'>
-			<td><%=getTran("web","resource",sWebLanguage) %></td>
-			<td><%=getTran("web","period",sWebLanguage) %></td>
-			<td><%=getTran("web","service",sWebLanguage) %></td>
+			<td><%=getTran(request,"web","resource",sWebLanguage) %></td>
+			<td><%=getTran(request,"web","period",sWebLanguage) %></td>
+			<td><%=getTran(request,"web","service",sWebLanguage) %></td>
 			<td/>
 		</tr>
 		<tr>
 			<td class='admin'>
 				<select name='resource' id='resource' onchange='loadResourceLocks()'>	
 					<option/>
-					<%=ScreenHelper.writeSelect("planningresource", "", sWebLanguage) %>
+					<%=ScreenHelper.writeSelect(request,"planningresource", "", sWebLanguage) %>
 				</select>
            		<%
            			String authorizedresources = Reservation.getAccessibleResources(activeUser.userid);
@@ -36,23 +36,23 @@
 			<td class='admin'>
 				<table>
 					<tr>
-						<td><%=getTran("web","from",sWebLanguage) %> <%=ScreenHelper.writeDateTimeField("begin", "transactionForm", begindate, sWebLanguage, sCONTEXTPATH,"loadResourceLocks()") %></td>
+						<td width='1%'><%=getTran(request,"web","from",sWebLanguage) %></td><td><%=ScreenHelper.writeDateTimeField("begin", "transactionForm", begindate, sWebLanguage, sCONTEXTPATH,"loadResourceLocks()") %></td>
 					</tr>
 					<tr>
-						<td><%=getTran("web","till",sWebLanguage) %> <%=ScreenHelper.writeDateTimeField("end", "transactionForm", enddate, sWebLanguage, sCONTEXTPATH,"loadResourceLocks()") %></td>
+						<td><%=getTran(request,"web","till",sWebLanguage) %></td><td><%=ScreenHelper.writeDateTimeField("end", "transactionForm", enddate, sWebLanguage, sCONTEXTPATH,"loadResourceLocks()") %></td>
 					</tr>
 				</table>
 			</td>
-            <td class='admin'>
+            <td class='admin' nowrap>
                 <input type="hidden" name="service" id="service">
                 <input class="text" type="text" name="servicename" id="servicename" readonly size="<%=sTextWidth%>">
                 
-                <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTran("web","select",sWebLanguage)%>" onclick="searchService('service','servicename');">
-                <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran("web","clear",sWebLanguage)%>" onclick="transactionForm.service.value='';transactionForm.servicename.value='';">
+                <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTran(null,"web","select",sWebLanguage)%>" onclick="searchService('service','servicename');">
+                <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran(null,"web","clear",sWebLanguage)%>" onclick="transactionForm.service.value='';transactionForm.servicename.value='';">
             </td>
-			<td class='admin'>
-				<input type='button' class='button' name='addButton' id='addButton' value='<%=getTran("web","lock",sWebLanguage) %>' onclick='saveResourceLock();'/>
-				<input type='button' class='button' name='exitButton' id='exitButton' value='<%=getTran("web","close",sWebLanguage) %>' onclick='window.close();'/>
+			<td class='admin' nowrap>
+				<input type='button' class='button' name='addButton' id='addButton' value='<%=getTran(null,"web","lock",sWebLanguage) %>' onclick='saveResourceLock();'/>
+				<input type='button' class='button' name='exitButton' id='exitButton' value='<%=getTran(null,"web","close",sWebLanguage) %>' onclick='window.close();'/>
 			</td>
 		</tr>
 	</table>

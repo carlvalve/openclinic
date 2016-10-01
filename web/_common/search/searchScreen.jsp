@@ -35,7 +35,7 @@
 
     StringBuffer sOut = new StringBuffer();
     int iMaxRSIndex = 100, iTotal = 1, iRSIndex = 0;
-    String chooseTran = getTran("web", "choose", sWebLanguage);
+    String chooseTran = getTran(request,"web", "choose", sWebLanguage);
 
     //--- "function" and "service" ---
     if (sLabelType.equalsIgnoreCase("function") || sLabelType.equalsIgnoreCase("service")) {
@@ -132,7 +132,7 @@
             <%-- SEARCH HEADER --%>
             <tr>
                 <td width='100%' height='25'>
-                    &nbsp;<%=getTran("Web","Find",sWebLanguage)%>&nbsp;&nbsp;
+                    &nbsp;<%=getTran(request,"Web","Find",sWebLanguage)%>&nbsp;&nbsp;
                     <input type="text" NAME='FindText' class="text" value="<%=sFindText%>" size="40" >
 
                     <%-- buttons --%>
@@ -153,7 +153,7 @@
                                         // display 'no results' message
                                         %>
                                             <tr>
-                                                <td colspan='3'><%=getTran("web","norecordsfound",sWebLanguage)%></td>
+                                                <td colspan='3'><%=getTran(request,"web","norecordsfound",sWebLanguage)%></td>
                                             </tr>
                                         <%
                                     }
@@ -161,12 +161,12 @@
                                         if(sLabelType.equalsIgnoreCase("function") || sLabelType.equalsIgnoreCase("service")){
                                             // previous
                                             if (iRSIndex >= iMaxRSIndex) {
-                                                %><a href='#' title='<%=getTran("Web","Previous",sWebLanguage)%>' OnClick="SearchForm.RSIndex.value='<%=(iRSIndex-iMaxRSIndex)%>';doFind();"><img src='<c:url value='/_img/themes/default/arrow_left.gif'/>' border='0'></a>&nbsp;<%
+                                                %><a href='#' title='<%=getTran(null,"Web","Previous",sWebLanguage)%>' OnClick="SearchForm.RSIndex.value='<%=(iRSIndex-iMaxRSIndex)%>';doFind();"><img src='<c:url value='/_img/themes/default/arrow_left.gif'/>' border='0'></a>&nbsp;<%
                                             }
 
                                             // next
                                             if (iTotal == iMaxRSIndex) {
-                                                %><a href='#' title='<%=getTran("Web","Next",sWebLanguage)%>' OnClick="SearchForm.RSIndex.value='<%=(iRSIndex+iMaxRSIndex)%>';doFind();"><img src='<c:url value='/_img/arrow-right.jpg'/>' border='0'></a><%
+                                                %><a href='#' title='<%=getTran(null,"Web","Next",sWebLanguage)%>' OnClick="SearchForm.RSIndex.value='<%=(iRSIndex+iMaxRSIndex)%>';doFind();"><img src='<c:url value='/_img/arrow-right.jpg'/>' border='0'></a><%
                                             }
                                         }
 

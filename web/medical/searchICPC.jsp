@@ -14,7 +14,7 @@
     <table border="0" width="250" cellspacing="0" cellpadding="5" style="border:1px solid #aaa">
         <tr>
             <td bgcolor="#dddddd" style="text-align:center">
-              <%=getTran("web","searchInProgress",sWebLanguage)%>
+              <%=getTran(request,"web","searchInProgress",sWebLanguage)%>
             </td>
         </tr>
     </table>
@@ -36,7 +36,7 @@
     <input type="hidden" name="ListMode" value="">
     <table class='menu' width='100%' cellspacing="0" border='0'>
         <tr>
-            <td><%=getTran("Web","Keyword",sWebLanguage)%>&nbsp;&nbsp;</td>
+            <td><%=getTran(request,"Web","Keyword",sWebLanguage)%>&nbsp;&nbsp;</td>
             <td colspan='2'>
                 <input type='text' class='text' name='keywords' size='40' value="<%=request.getParameter("keywords")!=null?request.getParameter("keywords"):""%>" onblur="limitLength(this);" onKeyDown='if(enterEvent(event,13)){doFind();return false;}else{return true;}'/>
                 <input class='button' type='button' name='findButton' onClick='doFind();' value='<%=getTranNoLink("Web","Find",sWebLanguage)%>'/>
@@ -97,7 +97,7 @@
 
 
                 if (foundRecordsICPC2 > 0) {
-                    out.print("<tr class='admin'><td colspan='2'>" + getTran("Web.Occup", "ICPC-2", sWebLanguage) + "</td></tr>");
+                    out.print("<tr class='admin'><td colspan='2'>" + getTran(request,"Web.Occup", "ICPC-2", sWebLanguage) + "</td></tr>");
                 }
         %><tbody class="hand"><%
 
@@ -105,7 +105,7 @@
 
             if(foundRecordsICD10 > 0){
                 out.print("</table><table class='menu' width='100%' cellspacing='0' border='0'>");
-                out.print("<tr class='admin'><td colspan='2'>"+getTran("Web.Occup","ICD-10",sWebLanguage)+"</td></tr>");
+                out.print("<tr class='admin'><td colspan='2'>"+getTran(request,"Web.Occup","ICD-10",sWebLanguage)+"</td></tr>");
             }
             %><tbody class="hand"><%
 
@@ -115,7 +115,7 @@
                 // display 'no results' message
                 %>
                     <tr class="label2">
-                        <td colspan='3'><%=getTran("web","norecordsfound",sWebLanguage)%></td>
+                        <td colspan='3'><%=getTran(request,"web","norecordsfound",sWebLanguage)%></td>
                     </tr>
                 <%
             }
@@ -140,7 +140,7 @@
 
                 // header
                 if(codes.size() > 0){
-                    out.print("<tr class='admin'><td colspan='2'>"+getTran("Web.Occup","ICPC-2",sWebLanguage)+"</td></tr>");
+                    out.print("<tr class='admin'><td colspan='2'>"+getTran(request,"Web.Occup","ICPC-2",sWebLanguage)+"</td></tr>");
                 }
 
                 %><tbody class="hand"><%
@@ -169,7 +169,7 @@
 
                     // header
                     if(codes.size() > 0){
-                        out.print("<tr class='admin'><td colspan='2'>"+getTran("Web.Occup","ICD-10",sWebLanguage)+"</td></tr>");
+                        out.print("<tr class='admin'><td colspan='2'>"+getTran(request,"Web.Occup","ICD-10",sWebLanguage)+"</td></tr>");
                     }
 
                     for (int n=0; n<codes.size(); n++){
@@ -195,7 +195,7 @@
                 // display 'no results' message
                 %>
                     <tr class="label2">
-                        <td colspan='2'><%=getTran("web","norecordsfound",sWebLanguage)%></td>
+                        <td colspan='2'><%=getTran(request,"web","norecordsfound",sWebLanguage)%></td>
                     </tr>
                 <%
             }

@@ -34,11 +34,11 @@
 %>
 <table width='100%'>
     <tr class='admin'>
-        <td colspan='2'><%=getTran("medical.diagnosis","comorbidityfor",sWebLanguage)%> <%=MedwanQuery.getInstance().getCodeTran(sDiagnosisCodeType+"code"+ScreenHelper.padRight(sDiagnosisCode,"0",5), sWebLanguage)%> (n=<%=totalcases%>)</td>
+        <td colspan='2'><%=getTran(request,"medical.diagnosis","comorbidityfor",sWebLanguage)%> <%=MedwanQuery.getInstance().getCodeTran(sDiagnosisCodeType+"code"+ScreenHelper.padRight(sDiagnosisCode,"0",5), sWebLanguage)%> (n=<%=totalcases%>)</td>
     </tr>
     <tr class='admin'>
         <td>#</td>
-        <td><%=getTran("medical.diagnosis","diagnosiscode",sWebLanguage)%></td>
+        <td><%=getTran(request,"medical.diagnosis","diagnosiscode",sWebLanguage)%></td>
     </tr>
 <%
         Vector comorbidities;
@@ -66,7 +66,7 @@
     }
 %>
     <tr class='admin'>
-        <td><%=getTran("web","detail",sWebLanguage)%></td>
+        <td><%=getTran(request,"web","detail",sWebLanguage)%></td>
         <td>
             <a href="javascript:showAgain(1)">1</a>
             <a href="javascript:showAgain(2)">2</a>

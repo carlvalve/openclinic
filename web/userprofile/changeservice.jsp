@@ -58,7 +58,7 @@
     <table width="100%" cellspacing="1" cellpadding="0" class="list">
         <%-- SELECT SERVICE --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","Service",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","Service",sWebLanguage)%></td>
             <td class="admin2">
                 <select name='EditDefaultService' class="text">
                 <%
@@ -78,7 +78,7 @@
         </tr>
         <%-- ADD SERVICE --%>
         <tr>
-            <td class="admin"><%=getTran("Web","add",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web","add",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="hidden" name="AddServiceCode">
                 <input class="text" type="text" name="AddServiceDescription" size="<%=sTextWidth%>" readonly>

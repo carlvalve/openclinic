@@ -87,7 +87,7 @@
         <tr class="admin">
             <td width="1%" nowrap>
                 <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-                <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+                <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
             </td>
             <td nowrap>
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" id="trandate" OnBlur='checkDate(this)'>
@@ -103,11 +103,11 @@
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
             <td class='tabs' width='5'>&nbsp;</td>
-            <td class='tabunselected' width="1%" onclick="activateTab(1)" id="td1" nowrap>&nbsp;<b><%=getTran("Web.Occup","medwan.healthrecord.tab.summary",sWebLanguage)%></b>&nbsp;</td>
+            <td class='tabunselected' width="1%" onclick="activateTab(1)" id="td1" nowrap>&nbsp;<b><%=getTran(request,"Web.Occup","medwan.healthrecord.tab.summary",sWebLanguage)%></b>&nbsp;</td>
             <td class='tabs' width='5'>&nbsp;</td>
-            <td class='tabunselected' width="1%" onclick="activateTab(3)" id="td3" nowrap>&nbsp;<b><%=getTran("Web.Occup","Familiaal_Anamnese",sWebLanguage)%></b>&nbsp;</td>
+            <td class='tabunselected' width="1%" onclick="activateTab(3)" id="td3" nowrap>&nbsp;<b><%=getTran(request,"Web.Occup","Familiaal_Anamnese",sWebLanguage)%></b>&nbsp;</td>
             <td class='tabs' width='5'>&nbsp;</td>
-            <td class='tabunselected' width="1%" onclick="activateTab(4)" id="td4" nowrap>&nbsp;<b><%=getTran("Web.Occup","Persoonlijke_Antecedenten",sWebLanguage)%></b>&nbsp;</td>
+            <td class='tabunselected' width="1%" onclick="activateTab(4)" id="td4" nowrap>&nbsp;<b><%=getTran(request,"Web.Occup","Persoonlijke_Antecedenten",sWebLanguage)%></b>&nbsp;</td>
             <td width="*" class='tabs'>&nbsp;</td>
         </tr>
     </table>

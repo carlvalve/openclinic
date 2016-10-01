@@ -95,15 +95,15 @@
 <form name='transactionForm' method='post' enctype='multipart/form-data'>
 	<input type='hidden' name='action' id='action' value=''/>
 	<table width='100%'>
-		<tr class='admin'><td colspan='4'><%=getTran("web.manage","manageworddocuments",sWebLanguage) %></td></tr>
+		<tr class='admin'><td colspan='4'><%=getTran(request,"web.manage","manageworddocuments",sWebLanguage) %></td></tr>
 		<tr>
 			<td>
 				<table width='100%'>
 					<tr>
-						<td class='admin' width='10%' rowspan='2' nowrap><%=getTran("web","document",sWebLanguage) %></td>
+						<td class='admin' width='10%' rowspan='2' nowrap><%=getTran(request,"web","document",sWebLanguage) %></td>
 						<td class='admin2'>
 							<select class='text' name='selectedDocument' id='selectedDocument' onchange='document.getElementById("documentname").value=this.value;'>
-								<option value=''><%=getTran("web","new",sWebLanguage) %></option>
+								<option value=''><%=getTran(request,"web","new",sWebLanguage) %></option>
 								<%
 									Connection conn = MedwanQuery.getInstance().getAdminConnection();
 									PreparedStatement ps = conn.prepareStatement("select name from WordDocuments order by name");
@@ -114,8 +114,8 @@
 									}
 								%>
 							</select>
-							<input type='button' class='button' name='savebutton' value='<%=getTran("web","save",sWebLanguage) %>' onclick='document.getElementById("action").value="save";transactionForm.submit();'/>
-							<input type='button' class='button' name='deletebutton' value='<%=getTran("web","delete",sWebLanguage) %>' onclick='document.getElementById("action").value="delete";transactionForm.submit();'/>
+							<input type='button' class='button' name='savebutton' value='<%=getTran(null,"web","save",sWebLanguage) %>' onclick='document.getElementById("action").value="save";transactionForm.submit();'/>
+							<input type='button' class='button' name='deletebutton' value='<%=getTran(null,"web","delete",sWebLanguage) %>' onclick='document.getElementById("action").value="delete";transactionForm.submit();'/>
 						</td>
 					</tr>
 					<tr>
@@ -127,7 +127,7 @@
 			</td>
 			<td class='admin2'>
 				<table width='100%'>
-					<tr><td><%=getTran("web","document",sWebLanguage) %>: <input class='button' type='file' name='documentfile'/></td></tr>
+					<tr><td><%=getTran(request,"web","document",sWebLanguage) %>: <input class='button' type='file' name='documentfile'/></td></tr>
 				</table>
 			</td>
 		</tr>

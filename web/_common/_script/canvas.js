@@ -20,6 +20,9 @@ var curColor = colorBlack;
 var curSize = 5;
 var curTool = "crayon";
 
+var touchX;
+var touchY;
+
 <!-- Drawing functions -->
 function addClick(x, y, dragging)
 {
@@ -96,6 +99,30 @@ function initCanvas(parentDiv,canvasWidth,canvasHeight,canvasImage){
 	  	redraw();
 	};
 
+	canvas.ontouchstart = function(){
+		var activeElement=this;
+		canvasOffsetLeft=0;
+		canvasOffsetTop=0;
+		while(activeElement.parentElement){
+			if(activeElement.tagName!='TR' && activeElement.tagName!='DIV'){
+				canvasOffsetLeft+=activeElement.offsetLeft;
+				canvasOffsetTop+=activeElement.offsetTop;
+			}
+			else if(activeElement.tagName=='DIV'){
+				canvasOffsetTop-=activeElement.scrollTop;
+			}
+			activeElement=activeElement.parentElement;
+		}
+	  	paint = true;
+	  	var e = event;
+	  	if(e.touches && e.touches.length==1){
+	  		var touch = e.touches[0];
+	  		addClick(touch.pageX - canvasOffsetLeft, touch.pageY - canvasOffsetTop);
+		  	redraw();
+	  	}
+	  	event.preventDefault();
+	};
+	
 	canvas.onmousemove = function(e){
 		if(paint){
 			var activeElement=this;
@@ -115,8 +142,39 @@ function initCanvas(parentDiv,canvasWidth,canvasHeight,canvasImage){
 		    redraw();
 		}
 	};
+
+	canvas.ontouchmove = function(e){
+		if(paint){
+			var activeElement=this;
+			canvasOffsetLeft=0;
+			canvasOffsetTop=0;
+			while(activeElement.parentElement){
+				if(activeElement.tagName!='TR' && activeElement.tagName!='DIV'){
+					canvasOffsetLeft+=activeElement.offsetLeft;
+					canvasOffsetTop+=activeElement.offsetTop;
+				}
+				else if(activeElement.tagName=='DIV'){
+					canvasOffsetTop-=activeElement.scrollTop;
+				}
+				activeElement=activeElement.parentElement;
+			}
+		  	if(e.touches && e.touches.length==1){
+		  		var touch = e.touches[0];
+		  		addClick(touch.pageX - canvasOffsetLeft, touch.pageY - canvasOffsetTop,true);
+			  	redraw();
+		  	}
+		  	event.preventDefault();
+		}
+	};
 	
 	canvas.onmouseup = function(e){
+		paint = false;
+	};
+	
+	canvas.ontouchend = function(){
+		if(clickX.length>0){
+			document.getElementById('drawingContent').value=document.getElementById('canvas').toDataURL();
+		}
 		paint = false;
 	};
 	
@@ -135,6 +193,8 @@ function resizeCanvasToImage(){
 	canvas.height=outlineImage.height;
 	redraw();
 }
+
+
 
 function canvasSetColor(color){
 	curColor=color;

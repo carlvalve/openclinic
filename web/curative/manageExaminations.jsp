@@ -23,7 +23,7 @@
 		        "</td>"+
 		        "<td align='center'>"+
 		         "<a onmouseover=\"window.status='';return true;\" href=\""+sCONTEXTPATH+"/healthrecord/createTransaction.do?be.mxs.healthrecord.createTransaction.transactionType="+sTranType+"&be.mxs.healthrecord.createTransaction.context="+activeUser.activeService.defaultContext+"&ts="+getTs()+"\">"+
-		          getTran("Web.Occup","medwan.common.new",sWebLanguage)+
+		          getTran(null,"Web.Occup","medwan.common.new",sWebLanguage)+
 		         "</a>"+
 		        "</td>"+
 		        "<td align='center'>"+
@@ -42,11 +42,11 @@
 	if(activeUser.getAccessRight("occup.externaldocuments")){
 	    %>
 		    <tr class="admin">
-		        <td colspan="5">&nbsp;<%=getTran("web","documents",sWebLanguage)%></td>
+		        <td colspan="5">&nbsp;<%=getTran(request,"web","documents",sWebLanguage)%></td>
 		    </tr>
 		    <tr>
 		        <td colspan="5">
-		            <img src="<c:url value="/_img/themes/default/pijl.gif"/>">&nbsp;<a onmouseover="window.status='';return true;" href="<c:url value='/healthrecord/createTransaction.do'/>?be.mxs.healthrecord.createTransaction.transactionType=be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_EXTERNAL_DOCUMENT&be.mxs.healthrecord.createTransaction.context=<%=activeUser.activeService.defaultContext%>&ts=<%=getTs()%>"><%=getTran("Web","add.new.document",sWebLanguage)%></a>
+		            <img src="<c:url value="/_img/themes/default/pijl.gif"/>">&nbsp;<a onmouseover="window.status='';return true;" href="<c:url value='/healthrecord/createTransaction.do'/>?be.mxs.healthrecord.createTransaction.transactionType=be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_EXTERNAL_DOCUMENT&be.mxs.healthrecord.createTransaction.context=<%=activeUser.activeService.defaultContext%>&ts=<%=getTs()%>"><%=getTran(request,"Web","add.new.document",sWebLanguage)%></a>
 		        </td>
 		    </tr>
 	    <%
@@ -62,28 +62,28 @@
     SortedMap exams = new TreeMap();
     int counter = 0;
     String examName;
+    for(int n=0; n<userServiceExams.size(); n++){
+        verifiedExaminationVO = (VerifiedExaminationVO) userServiceExams.get(n);
+        examName = getTran(request,"examination",verifiedExaminationVO.examinationId+"",sWebLanguage);
+        exams.put(examName,verifiedExaminationVO);
+    }
 
     // header
     if(activeUser.getAccessRight("examinations.global.select")){
 	    %>
 	    <tr class="admin">
-	        <td width="400">&nbsp;<%=getTran("web","globalexaminations",sWebLanguage)%></td>
+	        <td width="400">&nbsp;<%=getTran(request,"web","globalexaminations",sWebLanguage)%></td>
 	        <td width="100"/>
-	        <td align="center" width="100"><%=getTran("web","lastexamination",sWebLanguage)%></td>
-	        <td align="center" width="100"><%=getTran("web","planned",sWebLanguage)%></td>
+	        <td align="center" width="100"><%=getTran(request,"web","lastexamination",sWebLanguage)%></td>
+	        <td align="center" width="100"><%=getTran(request,"web","planned",sWebLanguage)%></td>
 	        <td/>
 	    </tr>
 	    <%
 
-	    for(int n=0; n<userServiceExams.size(); n++){
-	        verifiedExaminationVO = (VerifiedExaminationVO) userServiceExams.get(n);
-	        examName = getTran("examination",verifiedExaminationVO.examinationId+"",sWebLanguage);
-	        exams.put(examName,verifiedExaminationVO);
-	    }
 
 		//*** SURVEILLANCE ***
 	    String sTTNursing = "be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_SURVEILLANCE_PROTOCOL";
-	    String sTranNursing = getTran("web.occup",sTTNursing,sWebLanguage);
+	    String sTranNursing = getTran(request,"web.occup",sTTNursing,sWebLanguage);
 	    TransactionVO tranNursing = sessionContainerWO.getLastTransaction(sTTNursing);
 	   
 	    String sNursingTranId = "";
@@ -98,7 +98,7 @@
 	
 		//*** LABO ***
 	    String sTTLabo = "be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_LAB_REQUEST";
-	    String sTranLabo = getTran("web.occup",sTTLabo,sWebLanguage);
+	    String sTranLabo = getTran(request,"web.occup",sTTLabo,sWebLanguage);
 	    TransactionVO tranLabo = sessionContainerWO.getLastTransaction(sTTLabo);
 
 	    String sLaboTranId = "";
@@ -113,7 +113,7 @@
 	
 		//*** ANATOMOPATHOLOGY ***
 	    String sTTAna = "be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_ANATOMOPATHOLOGY";
-	    String sTranAna = getTran("web.occup",sTTAna,sWebLanguage);
+	    String sTranAna = getTran(request,"web.occup",sTTAna,sWebLanguage);
 	    TransactionVO tranAna = sessionContainerWO.getLastTransaction(sTTAna);
 	
 	    String sAnaTranId = "";
@@ -128,7 +128,7 @@
 	
 		//*** ARCHIVE ***
 	    String sTTArc = "be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_ARCHIVE_DOCUMENT";
-	    String sTranArc = getTran("web.occup",sTTArc,sWebLanguage);
+	    String sTranArc = getTran(request,"web.occup",sTTArc,sWebLanguage);
 	    TransactionVO tranArc = sessionContainerWO.getLastTransaction(sTTArc);
 	
 	    String sArcTranId = "";
@@ -143,7 +143,7 @@
 	
 		//*** MIR2 ***
 	    String sTTMir = "be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MIR2";
-	    String sTranMir = getTran("web.occup",sTTMir,sWebLanguage);
+	    String sTranMir = getTran(request,"web.occup",sTTMir,sWebLanguage);
 	    TransactionVO tranMir = sessionContainerWO.getLastTransaction(sTTMir);
 	  
 	    String sMirTranId = "";
@@ -158,7 +158,7 @@
 	    
 	    //*** REFERENCE ***
 	    String sTTReference ="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_REFERENCE";
-	    String sTranReference = getTran("web.occup",sTTReference,sWebLanguage);
+	    String sTranReference = getTran(request,"web.occup",sTTReference,sWebLanguage);
 	    TransactionVO tranReference = sessionContainerWO.getLastTransaction(sTTReference);
 	
 	    String sReferenceTranId = "";
@@ -188,7 +188,7 @@
 	 		%>
 			    <tr class="list<%=sClass%>">
 			        <td>
-			            <img src="<c:url value="/_img/themes/default/pijl.gif"/>"><button accesskey="<%=counter%>" class="buttoninvisible" onclick="javascript:openPopup('medical/manageCarePrescriptionsPopup.jsp',700,400);"></button><u><%=counter++%></u> <a href="javascript:openPopup('medical/manageCarePrescriptionsPopup.jsp',700,400);void(0);"><%=getTran("web","careprescriptions",sWebLanguage)%></a>
+			            <img src="<c:url value="/_img/themes/default/pijl.gif"/>"><button accesskey="<%=counter%>" class="buttoninvisible" onclick="javascript:openPopup('medical/manageCarePrescriptionsPopup.jsp',700,400);"></button><u><%=counter++%></u> <a href="javascript:openPopup('medical/manageCarePrescriptionsPopup.jsp',700,400);void(0);"><%=getTran(request,"web","careprescriptions",sWebLanguage)%></a>
 			        </td>
 			        <td/><td/><td/><td/>
 			    </tr>
@@ -205,7 +205,7 @@
 		    %>
 			    <tr class="list<%=sClass%>">
 			        <td>
-			            <img src="<c:url value="/_img/themes/default/pijl.gif"/>"><button accesskey="<%=counter%>" class="buttoninvisible" onclick="javascript:openPopup('medical/managePrescriptionsPopup.jsp',700,400);"></button><u><%=counter++%></u> <a href="javascript:openPopup('medical/managePrescriptionsPopup.jsp',700,400);void(0);"><%=getTran("web","medications",sWebLanguage)%></a>
+			            <img src="<c:url value="/_img/themes/default/pijl.gif"/>"><button accesskey="<%=counter%>" class="buttoninvisible" onclick="javascript:openPopup('medical/managePrescriptionsPopup.jsp',700,400);"></button><u><%=counter++%></u> <a href="javascript:openPopup('medical/managePrescriptionsPopup.jsp',700,400);void(0);"><%=getTran(request,"web","medications",sWebLanguage)%></a>
 			        </td>
 			        <td/><td/><td/><td/>
 			    </tr>
@@ -220,13 +220,13 @@
 
     	String sServiceSuffix = "";
     	if(activeUser.activeService.code.length() > 0){
-    		sServiceSuffix = "("+getTran("Service",activeUser.activeService.code,sWebLanguage)+")";
+    		sServiceSuffix = "("+getTran(request,"Service",activeUser.activeService.code,sWebLanguage)+")";
     	}
     	
 	    %>
 	    <%-- TITLE --%>
 	    <tr class="admin">
-	        <td colspan="5">&nbsp;<%=getTran("web","specificExaminations",sWebLanguage)%><%=sServiceSuffix%></td>
+	        <td colspan="5">&nbsp;<%=getTran(request,"web","specificExaminations",sWebLanguage)%><%=sServiceSuffix%></td>
 	    </tr>
 	    
 	    <%
@@ -254,7 +254,7 @@
 		                        &&(!verifiedExaminationVO.getTransactionType().equalsIgnoreCase("be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_PEDIATRY_DELIVERY"))){
 		                    %>
 		                    <a onmouseover="window.status='';return true;" href="<c:url value='/healthrecord/createTransaction.do'/>?be.mxs.healthrecord.createTransaction.transactionType=<%=verifiedExaminationVO.getTransactionType()%>&be.mxs.healthrecord.createTransaction.context=<%=activeUser.activeService.defaultContext%>&ts=<%=getTs()%>">
-		                        <%=getTran("Web.Occup","medwan.common.new",sWebLanguage)%>
+		                        <%=getTran(request,"Web.Occup","medwan.common.new",sWebLanguage)%>
 		                    </a>
 		                    <%
 		                        }
@@ -281,7 +281,7 @@
 	    <%-- OTHER SERVICES AND THEIR EXAMINATIONS --------------------------------------------------%>
 	    <tr id="otherServicesHeader" onClick="toggleOtherServices();" onmouseover="this.style.cursor='hand';" onmouseout="this.style.cursor='default';" height="15">
 	        <td colspan="5">
-	            <img src="<c:url value="/_img/themes/default/pijl.gif"/>">&nbsp;<a href="#"><b><%=getTran("Web.manage","examinationsofotherservices",sWebLanguage)%></b></a>
+	            <img src="<c:url value="/_img/themes/default/pijl.gif"/>">&nbsp;<a href="#"><b><%=getTran(request,"Web.manage","examinationsofotherservices",sWebLanguage)%></b></a>
 	        </td>
 	    </tr>
 	<%
@@ -303,14 +303,14 @@
 
         // run thru other services, displaying their linked examinations
         String serviceId, defaultContext, sClass = "";
-        String showExamsTran = getTran("web.manage","showExaminations",sWebLanguage);
+        String showExamsTran = getTran(request,"web.manage","showExaminations",sWebLanguage);
         Vector otherServiceExams;
 		
         SortedMap otherServicesSorted = new TreeMap();
         Enumeration servicesEnum = otherServices.keys();
         while(servicesEnum.hasMoreElements()){
         	serviceId=(String)servicesEnum.nextElement();
-        	otherServicesSorted.put(getTran("service",serviceId,sWebLanguage).toUpperCase()+";"+serviceId,otherServices.get(serviceId));
+        	otherServicesSorted.put(getTran(request,"service",serviceId,sWebLanguage).toUpperCase()+";"+serviceId,otherServices.get(serviceId));
         }        
         
         Iterator servicesIterator = otherServicesSorted.keySet().iterator();
@@ -336,7 +336,7 @@
                     verifiedExaminationVO = (VerifiedExaminationVO)otherServiceExams.get(n);
                    
                     if(MedwanQuery.getInstance().getConfigString("noShowExaminationsGender"+activePatient.gender,"").indexOf(verifiedExaminationVO.getTransactionType()+";")<0){
-	                    examName = getTran("examination",verifiedExaminationVO.examinationId+"",sWebLanguage);
+	                    examName = getTran(request,"examination",verifiedExaminationVO.examinationId+"",sWebLanguage);
 	                    otherExams.put(examName,verifiedExaminationVO);
                     }
                 }
@@ -350,7 +350,7 @@
                         <%-- plus-sign and servicename --%>
                         <td colspan="4">
                             <img id="img_<%=serviceId%>" src="<%=sCONTEXTPATH%>/_img/icons/icon_plus.png" class="link" style="vertical-align:-3px;"/>&nbsp;<%=serviceName%>
-                            (<%=examNames.size()%> <%=getTran("web.manage","examinations",sWebLanguage).toLowerCase()%>)
+                            (<%=examNames.size()%> <%=getTran(request,"web.manage","examinations",sWebLanguage).toLowerCase()%>)
                         </td>
                     </tr>
                     <tr>
@@ -361,10 +361,10 @@
                             %>
                                 <%-- sub-header --%>
                                 <tr class="admin">
-                                    <td width="360"><%=getTran("web","examination",sWebLanguage)%></td>
+                                    <td width="360"><%=getTran(request,"web","examination",sWebLanguage)%></td>
                                     <td width="100"/>
-                                    <td align="center" width="100"><%=getTran("web","lastexamination",sWebLanguage)%></td>
-                                    <td align="center" width="100"><%=getTran("web","planned",sWebLanguage)%></td>
+                                    <td align="center" width="100"><%=getTran(request,"web","lastexamination",sWebLanguage)%></td>
+                                    <td align="center" width="100"><%=getTran(request,"web","planned",sWebLanguage)%></td>
                                     <td/>
                                 </tr>
                                 <%
@@ -394,7 +394,7 @@
                                             else{
 		                                        %>
 		                                        <a onmouseover="window.status='';return true;" href="<c:url value='/healthrecord/createTransaction.do'/>?be.mxs.healthrecord.createTransaction.transactionType=<%=verifiedExaminationVO.getTransactionType()%>&be.mxs.healthrecord.createTransaction.context=<%=defaultContext%>&ts=<%=getTs()%>">
-		                                            <%=getTran("Web.Occup","medwan.common.new",sWebLanguage)%>
+		                                            <%=getTran(request,"Web.Occup","medwan.common.new",sWebLanguage)%>
 		                                        </a>
 		                                        <%
                                             }
@@ -418,7 +418,7 @@
                                     }
                                 }
                                 else{
-                                    %><tr><td colspan="5">&nbsp;<%=getTran("web.manage","noLinkedExaminationsFound",sWebLanguage)%></td></tr><%
+                                    %><tr><td colspan="5">&nbsp;<%=getTran(request,"web.manage","noLinkedExaminationsFound",sWebLanguage)%></td></tr><%
                                 }
                                 %>
                             </table>

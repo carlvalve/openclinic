@@ -7,18 +7,18 @@
         String sTmpMolecule = "";
 
         if (sMolecule.length()>0){
-            sTmpMolecule = getTran("tracnet.molecules",sMolecule,sWebLanguage);
+            sTmpMolecule = getTran(null,"tracnet.molecules",sMolecule,sWebLanguage);
         }
 
         String sTmpReason = "";
 
         if (sReason.length()>0){
-            sTmpReason = getTran("tracnet.molecules.exitreasons",sReason,sWebLanguage);
+            sTmpReason = getTran(null,"tracnet.molecules.exitreasons",sReason,sWebLanguage);
         }
         sTmp.append("<tr id='rowSuivi"+iTotal+"'>")
              .append("<td class=\"admin2\">")
-              .append("<a href='javascript:deleteSuivi(rowSuivi"+iTotal+")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran("Web.Occup","medwan.common.delete",sWebLanguage) + "' border='0'></a> ")
-              .append("<a href='javascript:editSuivi(rowSuivi"+iTotal+")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_edit.gif' alt='" + getTran("Web.Occup","medwan.common.edit",sWebLanguage) + "' border='0'></a>")
+              .append("<a href='javascript:deleteSuivi(rowSuivi"+iTotal+")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran(null,"Web.Occup","medwan.common.delete",sWebLanguage) + "' border='0'></a> ")
+              .append("<a href='javascript:editSuivi(rowSuivi"+iTotal+")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_edit.gif' alt='" + getTran(null,"Web.Occup","medwan.common.edit",sWebLanguage) + "' border='0'></a>")
              .append("</td>")
              .append("<td class='admin2'>&nbsp;" + sTmpMolecule + "</td>")
              .append("<td class='admin2'>&nbsp;" +sDateBegin + "</td>")
@@ -37,18 +37,18 @@
         String sTmpMolecule = "";
 
         if (sMolecule.length()>0){
-            sTmpMolecule = getTran("tracnet.other.molecules",sMolecule,sWebLanguage);
+            sTmpMolecule = getTran(null,"tracnet.other.molecules",sMolecule,sWebLanguage);
         }
 
         String sTmpReason = "";
 
         if (sReason.length()>0){
-            sTmpReason = getTran("tracnet.molecules.exitreasons",sReason,sWebLanguage);
+            sTmpReason = getTran(null,"tracnet.molecules.exitreasons",sReason,sWebLanguage);
         }
         sTmp.append("<tr id='rowSummary"+iTotal+"'>")
              .append("<td class=\"admin2\">")
-              .append("<a href='javascript:deleteSummary(rowSummary"+iTotal+")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran("Web.Occup","medwan.common.delete",sWebLanguage) + "' border='0'></a> ")
-              .append("<a href='javascript:editSummary(rowSummary"+iTotal+")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_edit.gif' alt='" + getTran("Web.Occup","medwan.common.edit",sWebLanguage) + "' border='0'></a>")
+              .append("<a href='javascript:deleteSummary(rowSummary"+iTotal+")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran(null,"Web.Occup","medwan.common.delete",sWebLanguage) + "' border='0'></a> ")
+              .append("<a href='javascript:editSummary(rowSummary"+iTotal+")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_edit.gif' alt='" + getTran(null,"Web.Occup","medwan.common.edit",sWebLanguage) + "' border='0'></a>")
              .append("</td>")
              .append("<td class='admin2'>&nbsp;" + sTmpMolecule + "</td>")
              .append("<td class='admin2'>&nbsp;" +sDateBegin + "</td>")
@@ -78,7 +78,7 @@
         <tr>
             <td class="admin" width="<%=sTDAdminWidth%>">
                 <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-                <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+                <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
             </td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" id="trandate" OnBlur='checkDate(this)'>
@@ -90,11 +90,11 @@
     <table class="list" cellspacing="1" cellpadding="0" id="tblSuivi" width="100%">
         <tr>
             <td class="admin" width="40"/>
-            <td class="admin"><%=getTran("openclinic.chuk","tracnet.suivi.arv.molecule.arv",sWebLanguage)%></td>
-            <td class="admin"><%=getTran("openclinic.chuk","tracnet.suivi.arv.date.begin",sWebLanguage)%></td>
-            <td class="admin"><%=getTran("openclinic.chuk","tracnet.suivi.arv.date.end",sWebLanguage)%></td>
-            <td class="admin"><%=getTran("openclinic.chuk","tracnet.suivi.arv.reason",sWebLanguage)%></td>
-            <td class="admin"><%=getTran("openclinic.chuk","tracnet.suivi.arv.comment",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","tracnet.suivi.arv.molecule.arv",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","tracnet.suivi.arv.date.begin",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","tracnet.suivi.arv.date.end",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","tracnet.suivi.arv.reason",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","tracnet.suivi.arv.comment",sWebLanguage)%></td>
             <td class="admin"/>
         </tr>
         <tr>
@@ -102,7 +102,7 @@
             <td class="admin2">
                 <select class="text" name="suiviMolecule">
                     <option/>
-                    <%=ScreenHelper.writeSelect("tracnet.molecules","",sWebLanguage,false,true)%>
+                    <%=ScreenHelper.writeSelect(request,"tracnet.molecules","",sWebLanguage,false,true)%>
                 </select>
             </td>
             <td class="admin2"><%=writeDateField("suiviDateBegin","transactionForm","",sWebLanguage)%></td>
@@ -110,7 +110,7 @@
             <td class="admin2">
                 <select class="text" name="suiviReason">
                     <option/>
-                    <%=ScreenHelper.writeSelect("tracnet.molecules.exitreasons","",sWebLanguage,false,true)%>
+                    <%=ScreenHelper.writeSelect(request,"tracnet.molecules.exitreasons","",sWebLanguage,false,true)%>
                 </select>
             </td>
             <td class="admin2">
@@ -203,23 +203,23 @@ if (sSuivi.indexOf("£")>-1){
 
     <table class="list" cellspacing="1" cellpadding="0" width="100%">
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("openclinic.chuk","tracnet.suivi.arv.program.exit",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"openclinic.chuk","tracnet.suivi.arv.program.exit",sWebLanguage)%></td>
             <td class="admin2">
-                <%=getTran("web.occup","medwan.common.date",sWebLanguage)%>
+                <%=getTran(request,"web.occup","medwan.common.date",sWebLanguage)%>
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_ARV_EXIT_DATE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_ARV_EXIT_DATE" property="value"/>" id="exit_date" OnBlur='checkDate(this)'>
                 <script>writeMyDate("exit_date");</script>
                 <br>
-                <b><u><%=getTran("openclinic.chuk","tracnet.suivi.arv.exit.motif",sWebLanguage)%></u></b>
+                <b><u><%=getTran(request,"openclinic.chuk","tracnet.suivi.arv.exit.motif",sWebLanguage)%></u></b>
                 <br>
-                <input <%=setRightClick("ITEM_TYPE_TRACNET_SUIVI_ARV_EXIT_TRANSFER")%> type="checkbox" id="cbexittransfer" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_ARV_EXIT_TRANSFER" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_ARV_EXIT_TRANSFER;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><%=getLabel("openclinic.chuk","tracnet.suivi.arv.exit.transfer",sWebLanguage,"cbexittransfer")%>
+                <input <%=setRightClick("ITEM_TYPE_TRACNET_SUIVI_ARV_EXIT_TRANSFER")%> type="checkbox" id="cbexittransfer" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_ARV_EXIT_TRANSFER" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_ARV_EXIT_TRANSFER;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><%=getLabel(request,"openclinic.chuk","tracnet.suivi.arv.exit.transfer",sWebLanguage,"cbexittransfer")%>
                 <input type="text" class="text" size="50" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_ARV_EXIT_TRANSFER_TO" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_ARV_EXIT_TRANSFER_TO" property="value"/>"/>
                 <br>
-                <input <%=setRightClick("ITEM_TYPE_TRACNET_SUIVI_ARV_EXIT_DEATH")%> type="checkbox" id="cbexitdeath" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_ARV_EXIT_DEATH" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_ARV_EXIT_DEATH;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><%=getLabel("openclinic.chuk","tracnet.suivi.arv.exit.death",sWebLanguage,"cbexitdeath")%>
+                <input <%=setRightClick("ITEM_TYPE_TRACNET_SUIVI_ARV_EXIT_DEATH")%> type="checkbox" id="cbexitdeath" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_ARV_EXIT_DEATH" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_ARV_EXIT_DEATH;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><%=getLabel(request,"openclinic.chuk","tracnet.suivi.arv.exit.death",sWebLanguage,"cbexitdeath")%>
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_ARV_EXIT_DEATH_DATE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_ARV_EXIT_DEATH_DATE" property="value"/>" id="exit_death_date" OnBlur='checkDate(this)'>
                 <script>writeMyDate("exit_death_date");</script>
                 <br>
-                <input <%=setRightClick("ITEM_TYPE_TRACNET_SUIVI_ARV_EXIT_NOT_SEEN")%> type="checkbox" id="cbexitnotseen" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_ARV_EXIT_NOT_SEEN" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_ARV_EXIT_NOT_SEEN;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><%=getLabel("openclinic.chuk","tracnet.suivi.arv.exit.notseen",sWebLanguage,"cbexitnotseen")%>
-                <br/><%=getTran("openclinic.chuk","tracnet.suivi.arv.exit.find.again",sWebLanguage)%>
+                <input <%=setRightClick("ITEM_TYPE_TRACNET_SUIVI_ARV_EXIT_NOT_SEEN")%> type="checkbox" id="cbexitnotseen" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_ARV_EXIT_NOT_SEEN" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_ARV_EXIT_NOT_SEEN;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><%=getLabel(request,"openclinic.chuk","tracnet.suivi.arv.exit.notseen",sWebLanguage,"cbexitnotseen")%>
+                <br/><%=getTran(request,"openclinic.chuk","tracnet.suivi.arv.exit.find.again",sWebLanguage)%>
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_ARV_EXIT_FIND_AGAIN" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_ARV_EXIT_FIND_AGAIN" property="value"/>" id="exit_find_again" OnBlur='checkDate(this)'>
                 <script>writeMyDate("exit_find_again");</script>
             </td>
@@ -228,20 +228,20 @@ if (sSuivi.indexOf("£")>-1){
     <br>
     <table class="list" cellspacing="1" cellpadding="0" id="tblSummary" width="100%">
         <tr class="admin">
-            <td colspan="7"><%=getTran("openclinic.chuk","tracnet.suivi.arv.summary",sWebLanguage)%></td>
+            <td colspan="7"><%=getTran(request,"openclinic.chuk","tracnet.suivi.arv.summary",sWebLanguage)%></td>
         </tr>
         <tr>
             <td class="admin" width="40"/>
-            <td class="admin"><%=getTran("openclinic.chuk","tracnet.suivi.arv.molecule.arv",sWebLanguage)%></td>
-            <td class="admin"><%=getTran("openclinic.chuk","tracnet.suivi.arv.date.begin",sWebLanguage)%></td>
-            <td class="admin"><%=getTran("openclinic.chuk","tracnet.suivi.arv.date.end",sWebLanguage)%></td>
-            <td class="admin"><%=getTran("openclinic.chuk","tracnet.suivi.arv.summary.reason",sWebLanguage)%></td>
-            <td class="admin"><%=getTran("openclinic.chuk","tracnet.suivi.arv.comment",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","tracnet.suivi.arv.molecule.arv",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","tracnet.suivi.arv.date.begin",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","tracnet.suivi.arv.date.end",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","tracnet.suivi.arv.summary.reason",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","tracnet.suivi.arv.comment",sWebLanguage)%></td>
             <td class="admin"/>
         </tr>
         <tr>
             <td class="admin2"/>
-            <td class="admin2"><%=getTran("openclinic.chuk","tracnet.suivi.arv.molecule.cotrimoxazole",sWebLanguage)%></td>
+            <td class="admin2"><%=getTran(request,"openclinic.chuk","tracnet.suivi.arv.molecule.cotrimoxazole",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_ARV_SUMMARY_COTRIMOXAZOLE_DATE_BEGIN" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_ARV_SUMMARY_COTRIMOXAZOLE_DATE_BEGIN" property="value"/>" id="cotr_date_begin" OnBlur='checkDate(this)'>
                 <script>writeMyDate("cotr_date_begin");</script>
@@ -264,7 +264,7 @@ if (sSuivi.indexOf("£")>-1){
                             }
                         }
                     %>
-                    <%=ScreenHelper.writeSelect("tracnet.molecules.exitreasons",sType,sWebLanguage,false,true)%>
+                    <%=ScreenHelper.writeSelect(request,"tracnet.molecules.exitreasons",sType,sWebLanguage,false,true)%>
                 </select>
             </td>
             <td class="admin2">
@@ -274,7 +274,7 @@ if (sSuivi.indexOf("£")>-1){
         </tr>
         <tr>
             <td class="admin2"/>
-            <td class="admin2"><%=getTran("openclinic.chuk","tracnet.suivi.arv.molecule.dapsone",sWebLanguage)%></td>
+            <td class="admin2"><%=getTran(request,"openclinic.chuk","tracnet.suivi.arv.molecule.dapsone",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_ARV_SUMMARY_DAPSONE_DATE_BEGIN" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_ARV_SUMMARY_DAPSONE_DATE_BEGIN" property="value"/>" id="dapsone_date_begin" OnBlur='checkDate(this)'>
                 <script>writeMyDate("dapsone_date_begin");</script>
@@ -296,7 +296,7 @@ if (sSuivi.indexOf("£")>-1){
                             }
                         }
                     %>
-                    <%=ScreenHelper.writeSelect("tracnet.molecules.exitreasons",sType,sWebLanguage,false,true)%>
+                    <%=ScreenHelper.writeSelect(request,"tracnet.molecules.exitreasons",sType,sWebLanguage,false,true)%>
                 </select>
             </td>
             <td class="admin2">
@@ -306,7 +306,7 @@ if (sSuivi.indexOf("£")>-1){
         </tr>
         <tr>
             <td class="admin2"/>
-            <td class="admin2"><%=getTran("openclinic.chuk","tracnet.suivi.arv.molecule.fluconazole",sWebLanguage)%></td>
+            <td class="admin2"><%=getTran(request,"openclinic.chuk","tracnet.suivi.arv.molecule.fluconazole",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_ARV_SUMMARY_FLUCONAZOLE_DATE_BEGIN" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRACNET_SUIVI_ARV_SUMMARY_FLUCONAZOLE_DATE_BEGIN" property="value"/>" id="fluc_date_begin" OnBlur='checkDate(this)'>
                 <script>writeMyDate("fluc_date_begin");</script>
@@ -328,7 +328,7 @@ if (sSuivi.indexOf("£")>-1){
                             }
                         }
                     %>
-                    <%=ScreenHelper.writeSelect("tracnet.molecules.exitreasons",sType,sWebLanguage,false,true)%>
+                    <%=ScreenHelper.writeSelect(request,"tracnet.molecules.exitreasons",sType,sWebLanguage,false,true)%>
                 </select>
             </td>
             <td class="admin2">
@@ -340,7 +340,7 @@ if (sSuivi.indexOf("£")>-1){
             <td class="admin2"/>
             <td class="admin2">
                 <select class="text" name="summaryMolecule">
-                    <%=ScreenHelper.writeSelect("tracnet.other.molecules","",sWebLanguage,false,true)%>
+                    <%=ScreenHelper.writeSelect(request,"tracnet.other.molecules","",sWebLanguage,false,true)%>
                 </select>
             </td>
             <td class="admin2"><%=writeDateField("summaryDateBegin","transactionForm","",sWebLanguage)%></td>
@@ -348,7 +348,7 @@ if (sSuivi.indexOf("£")>-1){
             <td class="admin2">
                 <select class="text" name="summaryReason">
                     <option/>
-                    <%=ScreenHelper.writeSelect("tracnet.molecules.exitreasons","",sWebLanguage,false,true)%>
+                    <%=ScreenHelper.writeSelect(request,"tracnet.molecules.exitreasons","",sWebLanguage,false,true)%>
                 </select>
             </td>
             <td class="admin2"><textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" class="text" cols="50" rows="2" name="summaryComment"></textarea></td>

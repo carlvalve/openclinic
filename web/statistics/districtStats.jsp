@@ -9,7 +9,7 @@
 <%-- 1 - distribution_admissions_per_service_per_district ---------------------------------------%>   
 <table width="100%" class="list" cellpadding="0" cellspacing="1">
     <tr class="admin">
-        <td colspan="3"><%=getTran("web","distribution_admissions_per_service_per_district",sWebLanguage)%></td>
+        <td colspan="3"><%=getTran(request,"web","distribution_admissions_per_service_per_district",sWebLanguage)%></td>
     </tr>
     
 	<%
@@ -20,7 +20,7 @@
 		        DistrictStats.ServiceDistrictStat serviceDistrictStat = (DistrictStats.ServiceDistrictStat)admissionservicedistrictstats.elementAt(n);
 		            
 		        out.print("<tr class='list1'>"+
-		        		   "<td colspan='3'><b>"+serviceDistrictStat.service+" - "+(serviceDistrictStat.service.length()==0?getTran("web","unknown",sWebLanguage):getTran("service",serviceDistrictStat.service,sWebLanguage)).toUpperCase()+"</b></td>"+
+		        		   "<td colspan='3'><b>"+serviceDistrictStat.service+" - "+(serviceDistrictStat.service.length()==0?getTran(request,"web","unknown",sWebLanguage):getTran(request,"service",serviceDistrictStat.service,sWebLanguage)).toUpperCase()+"</b></td>"+
 		                  "</tr>");
 		        int total = 0;
 		        
@@ -34,7 +34,7 @@
 		            	            
 		            out.print("<tr class='list'>"+
 		                       "<td width='1%'/>"+
-		                       "<td width='1%' nowrap>"+(districtStat.district.length()==0?getTran("web","unknown",sWebLanguage):districtStat.district).toUpperCase()+"</td>"+
+		                       "<td width='1%' nowrap>"+(districtStat.district.length()==0?getTran(request,"web","unknown",sWebLanguage):districtStat.district).toUpperCase()+"</td>"+
 		                       "<td>"+districtStat.total +(total>0?" ("+districtStat.total*100/total+"%)":"")+"</td>"+
 		                      "</tr>");
 		        }
@@ -43,7 +43,7 @@
 	    else{
 	    	%>
 	    	    <tr>
-	    	        <td><%=getTran("web","noRecordsFound",sWebLanguage)%></td>
+	    	        <td><%=getTran(request,"web","noRecordsFound",sWebLanguage)%></td>
 	    	    </tr>
 	    	<%
 	    }
@@ -54,7 +54,7 @@
 <%-- 2 - distribution_admissions_per_district ---------------------------------------------------%>
 <table width="100%" class="list" cellpadding="0" cellspacing="1">
     <tr class="admin">
-        <td colspan="2"><%=getTran("web","distribution_admissions_per_district",sWebLanguage)%></td>
+        <td colspan="2"><%=getTran(request,"web","distribution_admissions_per_district",sWebLanguage)%></td>
     </tr>
 	<%
 	    Vector admissiondistrictstats = DistrictStats.getAdmissionDistrictStats();
@@ -76,7 +76,7 @@
 	            else                   sClass = "";
 	            
 		        out.print("<tr class='list"+sClass+"'>"+
-		                   "<td width='1%' nowrap><b>"+(districtStat.district.length()==0?getTran("web","unknown",sWebLanguage):districtStat.district).toUpperCase()+"</b></td>"+
+		                   "<td width='1%' nowrap><b>"+(districtStat.district.length()==0?getTran(request,"web","unknown",sWebLanguage):districtStat.district).toUpperCase()+"</b></td>"+
 		                   "<td>"+districtStat.total+(total>0?" ("+districtStat.total*100/total+"%)":"")+"</td>"+
 		                  "</tr>");
 		    }
@@ -84,7 +84,7 @@
 	    else{
 	    	%>
 	    	    <tr>
-	    	        <td><%=getTran("web","noRecordsFound",sWebLanguage)%></td>
+	    	        <td><%=getTran(request,"web","noRecordsFound",sWebLanguage)%></td>
 	    	    </tr>
 	    	<%
 	    }	
@@ -95,7 +95,7 @@
 <%-- 3 - distribution_passive_per_district ------------------------------------------------------%>
 <table width="100%" class="list" cellpadding="0" cellspacing="1">
     <tr class="admin">
-        <td colspan="2"><%=getTran("web","distribution_passive_per_district",sWebLanguage)%></td>
+        <td colspan="2"><%=getTran(request,"web","distribution_passive_per_district",sWebLanguage)%></td>
     </tr>
 	<%
 	    Vector passivedistrictstats = DistrictStats.getPassiveDistrictStats();
@@ -117,7 +117,7 @@
 	            else                   sClass = "";
 		        
 		        out.print("<tr class='list"+sClass+"'>"+
-		                   "<td width='1%' nowrap><b>"+(districtStat.district.length()==0?getTran("web","unknown",sWebLanguage):districtStat.district).toUpperCase()+"</b></td>"+
+		                   "<td width='1%' nowrap><b>"+(districtStat.district.length()==0?getTran(request,"web","unknown",sWebLanguage):districtStat.district).toUpperCase()+"</b></td>"+
 		                   "<td>"+districtStat.total+(total>0?" ("+districtStat.total*100/total+"%)":"")+"</td>"+
 		                  "</tr>");
 		    }
@@ -125,7 +125,7 @@
 	    else{
 	    	%>
 	    	    <tr>
-	    	        <td><%=getTran("web","noRecordsFound",sWebLanguage)%></td>
+	    	        <td><%=getTran(request,"web","noRecordsFound",sWebLanguage)%></td>
 	    	    </tr>
 	    	<%
 	    }	

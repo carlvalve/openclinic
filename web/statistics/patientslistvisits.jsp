@@ -69,8 +69,8 @@
 	StringBuffer sOut = new StringBuffer();
 
 	// title
-	String sTitle = getTran("Web","statistics.patientslist.visits",sWebLanguage)+
-	                " &nbsp;&nbsp;[<i>"+getTran("web","period",sWebLanguage)+": "+sStart+" - "+sEnd+"</i>]";
+	String sTitle = getTran(request,"Web","statistics.patientslist.visits",sWebLanguage)+
+	                " &nbsp;&nbsp;[<i>"+getTran(request,"web","period",sWebLanguage)+": "+sStart+" - "+sEnd+"</i>]";
 	sOut.append(writeTableHeaderDirectText(sTitle,sWebLanguage," closeWindow()"));
 	
 	sOut.append("<table width='100%' class='sortable' id='searchresults' cellpadding='0' cellspacing='1'>");
@@ -85,13 +85,13 @@
 		if(encounteruid!=objectId || !sServiceUid.equalsIgnoreCase(service)){
 			if(counter==0){
 		        sOut.append("<tr class='gray'>")
-			         .append("<td>"+getTran("web","encounterid",sWebLanguage)+"</td>"+
-			                 "<td>"+getTran("web","name",sWebLanguage)+"</td>"+
-			                 "<td>"+getTran("web","dateofbirth",sWebLanguage)+"</td>"+
-			                 "<td>"+getTran("web","date",sWebLanguage)+"</td>"+
-			                 "<td>"+getTran("web","service",sWebLanguage)+"</td>"+
-			                 "<td>"+getTran("web","assureur",sWebLanguage)+"</td>"+
-			                 "<td>"+getTran("web","lastinvoice",sWebLanguage)+"</td>")
+			         .append("<td>"+getTran(request,"web","encounterid",sWebLanguage)+"</td>"+
+			                 "<td>"+getTran(request,"web","name",sWebLanguage)+"</td>"+
+			                 "<td>"+getTran(request,"web","dateofbirth",sWebLanguage)+"</td>"+
+			                 "<td>"+getTran(request,"web","date",sWebLanguage)+"</td>"+
+			                 "<td>"+getTran(request,"web","service",sWebLanguage)+"</td>"+
+			                 "<td>"+getTran(request,"web","assureur",sWebLanguage)+"</td>"+
+			                 "<td>"+getTran(request,"web","lastinvoice",sWebLanguage)+"</td>")
 			        .append("</tr>");
 			}
 			counter++;
@@ -140,13 +140,13 @@
 			}
 			
 			sOut.append("<tr onClick='window.location.href=\"main.do?Page=curative/index.jsp&ts=").append(getTs()).append("&PersonID=").append(rs.getString("personid")).append("\";' class='list1'>")
-			     .append("<td>#"+objectId).append("</td>")
-			     .append("<td>"+rs.getString("lastname")).append(" ").append(rs.getString("firstname")).append("</td>")
-			     .append("<td>").append((d1==null?"":ScreenHelper.stdDateFormat.format(d1))).append("</td>")
-			     .append("<td>").append((d2==null?"":ScreenHelper.stdDateFormat.format(d2))).append("</td>")
-			     .append("<td>").append(getTranNoLink("service",sServiceUid,sWebLanguage)).append("</td>")
-			     .append("<td>").append(sInsurar).append("</td>")
-			     .append("<td><font "+sColor+">"+sLastInvoice).append("</font></td>")
+			     .append("<td class='hand'>#"+objectId).append("</td>")
+			     .append("<td class='hand'>"+rs.getString("lastname")).append(" ").append(rs.getString("firstname")).append("</td>")
+			     .append("<td class='hand'>").append((d1==null?"":ScreenHelper.stdDateFormat.format(d1))).append("</td>")
+			     .append("<td class='hand'>").append((d2==null?"":ScreenHelper.stdDateFormat.format(d2))).append("</td>")
+			     .append("<td class='hand'>").append(getTranNoLink("service",sServiceUid,sWebLanguage)).append("</td>")
+			     .append("<td class='hand'>").append(sInsurar).append("</td>")
+			     .append("<td class='hand'><font "+sColor+">"+sLastInvoice).append("</font></td>")
 			    .append("</tr>");
 		}
 		
@@ -164,12 +164,12 @@
 	if(counter > 0){
 		sOut.append("<table class='list' cellpadding='0' cellspacing='1' width='100%' style='border-top:none;'>"+
 		             "<tr class='gray'>"+
-				      "<td colspan='6'><b>").append(getTran("web","totalpatients",sWebLanguage)).append(": ").append(counter).append("</b></td>"+
+				      "<td colspan='6'><b>").append(getTran(request,"web","totalpatients",sWebLanguage)).append(": ").append(counter).append("</b></td>"+
 		             "</tr>"+
 				    "</table>");
 	}
 	else{
-	    sOut.append(getTran("web","noRecordsFound",sWebLanguage));	
+	    sOut.append(getTran(request,"web","noRecordsFound",sWebLanguage));	
 	}
 	
 	out.print(sOut);

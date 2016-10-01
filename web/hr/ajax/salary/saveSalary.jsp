@@ -366,10 +366,10 @@
     boolean errorOccurred = salary.store(activeUser.userid);
     
     if(!errorOccurred){
-        sMessage = "<font color='green'>"+getTran("web","dataIsSaved",sWebLanguage)+"</font>";
+        sMessage = "<font color='green'>"+getTran(request,"web","dataIsSaved",sWebLanguage)+"</font>";
     }
     else{
-        sMessage = getTran("web","error",sWebLanguage);
+        sMessage = getTran(request,"web","error",sWebLanguage);
     }
 %>
 

@@ -2,7 +2,7 @@
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
 <table width='100%'>
-	<tr class='admin'><td><%=getTran("web","mandatory.patientdata.ismissing",sWebLanguage) %></td></tr>
+	<tr class='admin'><td><%=getTran(request,"web","mandatory.patientdata.ismissing",sWebLanguage) %></td></tr>
 <%
 	Vector missing = activePatient.getMissingMandatoryFieldsTranslated(sWebLanguage);
 	for(int n=0;n<missing.size();n++){
@@ -10,4 +10,4 @@
 	}
 %>
 </table>
-<center><input type='button' value='<%=getTran("web","close",sWebLanguage) %>' onclick='window.close();'/></center>
+<center><input type='button' value='<%=getTran(null,"web","close",sWebLanguage) %>' onclick='window.close();'/></center>

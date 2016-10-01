@@ -13,12 +13,12 @@
         String sGroup = checkString((String)activePatient.adminextends.get("usergroup"));
         String sStatut = checkString((String)activePatient.adminextends.get("statut"));
         String sStatutDescr = "<select name='RStatut' select-one class='text'><option value=''/>"
-            +ScreenHelper.writeSelect("admin.statut",sStatut,sWebLanguage)+"</select>";
+            +ScreenHelper.writeSelect(request,"admin.statut",sStatut,sWebLanguage)+"</select>";
 
         %>
         <table border='0' width='100%' class="list" cellspacing="1" style="border-top:none;">
             <tr>
-                <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("admin","category",sWebLanguage)%></td>
+                <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"admin","category",sWebLanguage)%></td>
                 <td class="admin2">
                     <input type="text" readonly class="text" name="RCategoryText" value="<%=sCategoryDescr%>" size="<%=sTextWidth%>">
                     <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchCategory('RCategory','RCategoryText');">
@@ -27,15 +27,15 @@
                 </td>
             </tr>
              <tr>
-                <td class="admin"><%=getTran("admin","statut",sWebLanguage)%></td>
+                <td class="admin"><%=getTran(request,"admin","statut",sWebLanguage)%></td>
                 <td class="admin2"><%=sStatutDescr%></td>
             </tr>
              <tr>
-                <td class="admin"><%=getTran("admin","group",sWebLanguage)%></td>
+                <td class="admin"><%=getTran(request,"admin","group",sWebLanguage)%></td>
                 <td class="admin2">
                 	<select name="RGroup" class="text">
                 		<option value=''/>
-                		<%=ScreenHelper.writeSelect("usergroup",sGroup,sWebLanguage)%>
+                		<%=ScreenHelper.writeSelect(request,"usergroup",sGroup,sWebLanguage)%>
                 	</select>
                 </td>
             </tr>

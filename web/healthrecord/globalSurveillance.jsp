@@ -29,7 +29,7 @@
     private StringBuffer addSignesVitauxResp(int iTotal,String sHeure,String sResp,String sAmbient,String sUnder,String sVolume, String sMode, String sObservation,String sWebLanguage){
         StringBuffer sTmp = new StringBuffer();
         if(sMode.length()>0){
-            sMode = getTran("surveillane.vital.resp.signs.mode",sMode,sWebLanguage);
+            sMode = getTran(null,"surveillane.vital.resp.signs.mode",sMode,sWebLanguage);
         }
         
         sTmp.append(
@@ -541,7 +541,7 @@
         <tr>
             <td class="admin" width="<%=sTDAdminWidth%>">
                 <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-                <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+                <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
             </td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" id="trandate" OnBlur='checkDate(this)'>
@@ -554,21 +554,21 @@
     <%-- Signes Vitaux ----------------------------------------------------------------------%>
     <table cellspacing="1" cellpadding="0" width="100%" border="0" id="tblSignesVitaux" class="list">
         <tr class="admin">
-            <td colspan="11"><%=getTran("openclinic.chuk","vital.signs",sWebLanguage).toUpperCase()%></td>
+            <td colspan="11"><%=getTran(request,"openclinic.chuk","vital.signs",sWebLanguage).toUpperCase()%></td>
         </tr>
 
         <%-- header --%>
         <tr>
             <td class="admin" width="40" rowspan="2"/>
-            <td class="admin" rowspan="2" style="width: 50;vertical-align:bottom;padding-bottom:4px;"><%=getTran("Web.occup","medwan.common.hour",sWebLanguage)%></td>
-            <td class="admin" colspan="2"><center><%=getTran("openclinic.chuk","ta",sWebLanguage)%></center></td>
-            <td class="admin" width="75" rowspan="2" style="vertical-align:bottom;padding-bottom:4px;"><%=getTran("openclinic.chuk","heartfrequency",sWebLanguage)%></td>
-            <td class="admin" width="90" rowspan="2" style="vertical-align:bottom;padding-bottom:4px;"><%=getTran("openclinic.chuk","temperature",sWebLanguage)%></td>
+            <td class="admin" rowspan="2" style="width: 50;vertical-align:bottom;padding-bottom:4px;"><%=getTran(request,"Web.occup","medwan.common.hour",sWebLanguage)%></td>
+            <td class="admin" colspan="2"><center><%=getTran(request,"openclinic.chuk","ta",sWebLanguage)%></center></td>
+            <td class="admin" width="75" rowspan="2" style="vertical-align:bottom;padding-bottom:4px;"><%=getTran(request,"openclinic.chuk","heartfrequency",sWebLanguage)%></td>
+            <td class="admin" width="90" rowspan="2" style="vertical-align:bottom;padding-bottom:4px;"><%=getTran(request,"openclinic.chuk","temperature",sWebLanguage)%></td>
             <td class="admin" rowspan="2"/>
         </tr>
         <tr>
-            <td class="admin" width="50"><%=getTran("openclinic.chuk","sys",sWebLanguage)%></td>
-            <td class="admin" width="50"><%=getTran("openclinic.chuk","dias",sWebLanguage)%></td>
+            <td class="admin" width="50"><%=getTran(request,"openclinic.chuk","sys",sWebLanguage)%></td>
+            <td class="admin" width="50"><%=getTran(request,"openclinic.chuk","dias",sWebLanguage)%></td>
         </tr>
         <tr>
             <td class="admin2" width="40"/>
@@ -607,19 +607,19 @@
     <%-- Signes Vitaux rest------------------------------------------------------------------%>
     <table cellspacing="1" cellpadding="0" width="100%" border="0" id="tblSignesVitauxResp" class="list">
         <tr class="admin">
-            <td colspan="11"><%=getTran("openclinic.chuk","vital.resp.signs",sWebLanguage).toUpperCase()%></td>
+            <td colspan="11"><%=getTran(request,"openclinic.chuk","vital.resp.signs",sWebLanguage).toUpperCase()%></td>
         </tr>
 
         <%-- header --%>
         <tr>
             <td class="admin" width="40"/>
-            <td class="admin" width="50"><%=getTran("Web.occup","medwan.common.hour",sWebLanguage)%></td>
-            <td class="admin" width="75"><%=getTran("openclinic.chuk","respiration",sWebLanguage)%></td>
-            <td class="admin" width="75"><%=getTran("openclinic.chuk","air.ambient",sWebLanguage)%></td>
-            <td class="admin" width="100"><%=getTran("openclinic.chuk","under.o2",sWebLanguage)%></td>
-            <td class="admin" width="100"><%=getTran("openclinic.chuk","volume.o2",sWebLanguage)%></td>
-            <td class="admin" width="150"><%=getTran("openclinic.chuk","mode.o2",sWebLanguage)%></td>
-            <td class="admin" width="300"><%=getTran("openclinic.chuk","observation",sWebLanguage)%></td>
+            <td class="admin" width="50"><%=getTran(request,"Web.occup","medwan.common.hour",sWebLanguage)%></td>
+            <td class="admin" width="75"><%=getTran(request,"openclinic.chuk","respiration",sWebLanguage)%></td>
+            <td class="admin" width="75"><%=getTran(request,"openclinic.chuk","air.ambient",sWebLanguage)%></td>
+            <td class="admin" width="100"><%=getTran(request,"openclinic.chuk","under.o2",sWebLanguage)%></td>
+            <td class="admin" width="100"><%=getTran(request,"openclinic.chuk","volume.o2",sWebLanguage)%></td>
+            <td class="admin" width="150"><%=getTran(request,"openclinic.chuk","mode.o2",sWebLanguage)%></td>
+            <td class="admin" width="300"><%=getTran(request,"openclinic.chuk","observation",sWebLanguage)%></td>
             <td class="admin"/>
         </tr>
         <tr>
@@ -643,7 +643,7 @@
             <td class="admin2" width="150">
                 <select class="text" name="svrmode">
                     <option/>
-                    <%=ScreenHelper.writeSelect("surveillane.vital.resp.signs.mode","",sWebLanguage)%>
+                    <%=ScreenHelper.writeSelect(request,"surveillane.vital.resp.signs.mode","",sWebLanguage)%>
                 </select>
             </td>
             <td class="admin2" width="300">
@@ -671,18 +671,18 @@
     <%-- Conscience -------------------------------------------------------------------------%>
     <table cellspacing="1" cellpadding="0" width="100%" border="0" id="tblConscience" class="list">
         <tr class="admin">
-            <td colspan="8"><%=getTran("openclinic.chuk","consciousness",sWebLanguage).toUpperCase()%></td>
+            <td colspan="8"><%=getTran(request,"openclinic.chuk","consciousness",sWebLanguage).toUpperCase()%></td>
         </tr>
 
         <%-- header --%>
         <tr>
             <td class="admin" width="40"/>
-            <td class="admin" width="50"><%=getTran("Web.occup","medwan.common.hour",sWebLanguage)%></td>
-            <td class="admin" width="150"><%=getTran("openclinic.chuk","opening.eyes",sWebLanguage)%>( /4)</td>
-            <td class="admin" width="150"><%=getTran("openclinic.chuk","mot.reaction",sWebLanguage)%>( /6)</td>
-            <td class="admin" width="150"><%=getTran("openclinic.chuk","verb.reaction",sWebLanguage)%>( /5)</td>
-            <td class="admin" width="100"><%=getTran("web.occup","total",sWebLanguage)%>( /15)</td>
-            <td class="admin" width="150"><%=getTran("openclinic.chuk","pain.score",sWebLanguage)%></td>
+            <td class="admin" width="50"><%=getTran(request,"Web.occup","medwan.common.hour",sWebLanguage)%></td>
+            <td class="admin" width="150"><%=getTran(request,"openclinic.chuk","opening.eyes",sWebLanguage)%>( /4)</td>
+            <td class="admin" width="150"><%=getTran(request,"openclinic.chuk","mot.reaction",sWebLanguage)%>( /6)</td>
+            <td class="admin" width="150"><%=getTran(request,"openclinic.chuk","verb.reaction",sWebLanguage)%>( /5)</td>
+            <td class="admin" width="100"><%=getTran(request,"web.occup","total",sWebLanguage)%>( /15)</td>
+            <td class="admin" width="150"><%=getTran(request,"openclinic.chuk","pain.score",sWebLanguage)%></td>
             <td class="admin"/>
         </tr>
         <tr>
@@ -695,7 +695,7 @@
             <td class="admin2" width="150">
                 <select class="text" name="conspain">
                     <option/>
-                    <option value="0" style="background-color:forestgreen">0 <%=getTran("openclinic.chuk","0.nopain",sWebLanguage)%></option>
+                    <option value="0" style="background-color:forestgreen">0 <%=getTran(request,"openclinic.chuk","0.nopain",sWebLanguage)%></option>
                     <option value="1" style="background-color:limegreen">1</option>
                     <option value="2" style="background-color:#00FF33">2</option>
                     <option value="3" style="background-color:#33FF66">3</option>
@@ -705,7 +705,7 @@
                     <option value="7" style="background-color:orange">7</option>
                     <option value="8" style="background-color:darkorange">8</option>
                     <option value="9" style="background-color:#FF3300">9</option>
-                    <option value="10" style="background-color:#CC3300">10 <%=getTran("openclinic.chuk","10.worstpain",sWebLanguage)%></option>
+                    <option value="10" style="background-color:#CC3300">10 <%=getTran(request,"openclinic.chuk","10.worstpain",sWebLanguage)%></option>
                 </select>
             </td>
             <td class="admin2">
@@ -728,16 +728,16 @@
     <%-- Biometrie --------------------------------------------------------------------------%>
     <table cellspacing="1" cellpadding="0" width="100%" border="0" id="tblBiometrie" class="list">
         <tr class="admin">
-            <td colspan="6"><%=getTran("openclinic.chuk","biometry",sWebLanguage).toUpperCase()%></td>
+            <td colspan="6"><%=getTran(request,"openclinic.chuk","biometry",sWebLanguage).toUpperCase()%></td>
         </tr>
 
         <%-- header --%>
         <tr>
             <td class="admin" width="40"/>
-            <td class="admin" width="50"><%=getTran("Web.occup","medwan.common.hour",sWebLanguage)%></td>
-            <td class="admin" width="75"><%=getTran("openclinic.chuk","weigth",sWebLanguage)%></td>
-            <td class="admin" width="75"><%=getTran("openclinic.chuk","heigth",sWebLanguage)%></td>
-            <td class="admin" width="75"><%=getTran("openclinic.chuk","bmi",sWebLanguage)%></td>
+            <td class="admin" width="50"><%=getTran(request,"Web.occup","medwan.common.hour",sWebLanguage)%></td>
+            <td class="admin" width="75"><%=getTran(request,"openclinic.chuk","weigth",sWebLanguage)%></td>
+            <td class="admin" width="75"><%=getTran(request,"openclinic.chuk","heigth",sWebLanguage)%></td>
+            <td class="admin" width="75"><%=getTran(request,"openclinic.chuk","bmi",sWebLanguage)%></td>
             <td class="admin"/>
         </tr>
         <tr>
@@ -766,23 +766,23 @@
     <%-- Input summary ----------------------------------------------------------------------%>
     <table cellspacing="1" cellpadding="0" width="100%" border="0" id="tblBilanEntree" class="list">
         <tr class="admin">
-            <td colspan="9"><%=getTran("openclinic.chuk","input.summary",sWebLanguage).toUpperCase()%></td>
+            <td colspan="9"><%=getTran(request,"openclinic.chuk","input.summary",sWebLanguage).toUpperCase()%></td>
         </tr>
 
         <%-- header --%>
         <tr>
             <td class="admin" width="40" rowspan="2"/>
-            <td class="admin" width="50" rowspan="2" style="vertical-align:bottom;padding-bottom:4px;"><%=getTran("Web.occup","medwan.common.hour",sWebLanguage)%></td>
-            <td class="admin" width="400" colspan="4"><center><%=getTran("openclinic.chuk","perfusions",sWebLanguage)%></center></td>
-            <td class="admin" width="75" rowspan="2" style="vertical-align:bottom;padding-bottom:4px;"><%=getTran("openclinic.chuk","transfusion",sWebLanguage)%></td>
-            <td class="admin" width="75" rowspan="2" style="vertical-align:bottom;padding-bottom:4px;"><%=getTran("openclinic.chuk","type",sWebLanguage)%></td>
+            <td class="admin" width="50" rowspan="2" style="vertical-align:bottom;padding-bottom:4px;"><%=getTran(request,"Web.occup","medwan.common.hour",sWebLanguage)%></td>
+            <td class="admin" width="400" colspan="4"><center><%=getTran(request,"openclinic.chuk","perfusions",sWebLanguage)%></center></td>
+            <td class="admin" width="75" rowspan="2" style="vertical-align:bottom;padding-bottom:4px;"><%=getTran(request,"openclinic.chuk","transfusion",sWebLanguage)%></td>
+            <td class="admin" width="75" rowspan="2" style="vertical-align:bottom;padding-bottom:4px;"><%=getTran(request,"openclinic.chuk","type",sWebLanguage)%></td>
             <td class="admin" rowspan="2"/>
         </tr>
         <tr>
-            <td class="admin" width="100"><%=getTran("openclinic.chuk","lactate",sWebLanguage)%></td>
-            <td class="admin" width="100"><%=getTran("openclinic.chuk","glucose",sWebLanguage)%> 5%</td>
-            <td class="admin" width="100"><%=getTran("openclinic.chuk","physiological",sWebLanguage)%></td>
-            <td class="admin" width="100"><%=getTran("openclinic.chuk","haem",sWebLanguage)%></td>
+            <td class="admin" width="100"><%=getTran(request,"openclinic.chuk","lactate",sWebLanguage)%></td>
+            <td class="admin" width="100"><%=getTran(request,"openclinic.chuk","glucose",sWebLanguage)%> 5%</td>
+            <td class="admin" width="100"><%=getTran(request,"openclinic.chuk","physiological",sWebLanguage)%></td>
+            <td class="admin" width="100"><%=getTran(request,"openclinic.chuk","haem",sWebLanguage)%></td>
         </tr>
         <tr>
             <td class="admin2" width="40"/>
@@ -827,39 +827,39 @@
     <%-- Output summary ---------------------------------------------------------------------%>
     <table cellspacing="1" cellpadding="0" border="0" width="100%" class="list">
         <tr class="admin">
-            <td colspan="8"><%=getTran("openclinic.chuk","output.summary",sWebLanguage).toUpperCase()%></td>
+            <td colspan="8"><%=getTran(request,"openclinic.chuk","output.summary",sWebLanguage).toUpperCase()%></td>
         </tr>
 
         <%-- header --%>
         <tr>
-            <td class="admin" width="150"><%=getTran("openclinic.chuk","diuresis",sWebLanguage)%></td>
+            <td class="admin" width="150"><%=getTran(request,"openclinic.chuk","diuresis",sWebLanguage)%></td>
             <td class="admin2" width="100">
                 <input id="bilanoutput1" <%=setRightClick("ITEM_TYPE_PROTSURV_BILANSORTIE_DIURESE")%> type="text" class="text" size="4" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROTSURV_BILANSORTIE_DIURESE" property="itemId"/>]>.value" value="<%=sBilanSortieDiurese%>" onblur="isNumber(this);addBilanOutput();"> ml
             </td>
-            <td class="admin" width="150"><%=getTran("openclinic.chuk","aspiration",sWebLanguage)%></td>
+            <td class="admin" width="150"><%=getTran(request,"openclinic.chuk","aspiration",sWebLanguage)%></td>
             <td class="admin2" width="100">
                 <input id="bilanoutput2" <%=setRightClick("ITEM_TYPE_PROTSURV_BILANSORTIE_ASPIRATION")%> type="text" class="text" size="4" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROTSURV_BILANSORTIE_ASPIRATION" property="itemId"/>]>.value" value="<%=sBilanSortieAspiration%>" onblur="isNumber(this);addBilanOutput();"> ml
             </td>
-            <td class="admin" width="150"><%=getTran("openclinic.chuk","vomiting",sWebLanguage)%></td>
+            <td class="admin" width="150"><%=getTran(request,"openclinic.chuk","vomiting",sWebLanguage)%></td>
             <td class="admin2" width="100">
                 <input <%=setRightClick("ITEM_TYPE_PROTSURV_BILANSORTIE_VOMISSEMENTS")%> type="text" class="text" size="4" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROTSURV_BILANSORTIE_VOMISSEMENTS" property="itemId"/>]>.value" value="<%=sBilanSortieVomissements%>" onblur="isNumber(this);"> /j
             </td>
-            <td class="admin" width="150"><%=getTran("openclinic.chuk","selles",sWebLanguage)%></td>
+            <td class="admin" width="150"><%=getTran(request,"openclinic.chuk","selles",sWebLanguage)%></td>
             <td class="admin2">
                 <input <%=setRightClick("ITEM_TYPE_PROTSURV_BILANSORTIE_SELLES")%> type="text" class="text" size="4" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROTSURV_BILANSORTIE_SELLES" property="itemId"/>]>.value" value="<%=sBilanSortieSelles%>" onblur="isNumber(this);"> /j
             </td>
         </tr>
 
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","thoracic.drain",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","thoracic.drain",sWebLanguage)%></td>
             <td class="admin2">
                 <input id="bilanoutput3" <%=setRightClick("ITEM_TYPE_PROTSURV_BILANSORTIE_DRAIN_THORACIQUE")%> type="text" class="text" size="4" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROTSURV_BILANSORTIE_DRAIN_THORACIQUE" property="itemId"/>]>.value" value="<%=sBilanSortieDrainThoracique%>" onblur="isNumber(this);addBilanOutput();"> ml
             </td>
-            <td class="admin"><%=getTran("openclinic.chuk","abdominal.drain",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","abdominal.drain",sWebLanguage)%></td>
             <td class="admin2">
                 <input id="bilanoutput4" <%=setRightClick("ITEM_TYPE_PROTSURV_BILANSORTIE_DRAIN_ABDOMINAL")%> type="text" class="text" size="4" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROTSURV_BILANSORTIE_DRAIN_ABDOMINAL" property="itemId"/>]>.value" value="<%=sBilanSortieDrainAbdominal%>" onblur="isNumber(this);addBilanOutput();"> ml
             </td>
-            <td class="admin"><%=getTran("openclinic.chuk","other.drain",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","other.drain",sWebLanguage)%></td>
             <td class="admin2">
                 <input id="bilanoutput5" <%=setRightClick("ITEM_TYPE_PROTSURV_BILANSORTIE_AUTRE_DRAIN")%> type="text" class="text" size="4" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROTSURV_BILANSORTIE_AUTRE_DRAIN" property="itemId"/>]>.value" value="<%=sBilanSortieAutreDrain%>" onblur="isNumber(this);addBilanOutput();"> ml
             </td>
@@ -868,13 +868,13 @@
         </tr>
 
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","nasogastric.probe",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","nasogastric.probe",sWebLanguage)%></td>
             <td class="admin2">
                 <input id="bilanoutput6" <%=setRightClick("ITEM_TYPE_PROTSURV_BILANSORTIE_SONDE_NASOGASTRIQUE")%> type="text" class="text" size="4" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROTSURV_BILANSORTIE_SONDE_NASOGASTRIQUE" property="itemId"/>]>.value" value="<%=sBilanSortieSondeNasogastrique%>" onblur="isNumber(this);addBilanOutput();"> ml
             </td>
             <td class="admin"/>
             <td class="admin2"/>
-            <td class="admin"><%=getTran("openclinic.chuk","other.exits",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","other.exits",sWebLanguage)%></td>
             <td class="admin2">
                 <input id="bilanoutput7" <%=setRightClick("ITEM_TYPE_PROTSURV_BILANSORTIE_AUTRES_SORTIES")%> type="text" class="text" size="4" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROTSURV_BILANSORTIE_AUTRES_SORTIES" property="itemId"/>]>.value" value="<%=sBilanSortieAutresSorties%>" onblur="isNumber(this);addBilanOutput();"> ml
             </td>
@@ -888,7 +888,7 @@
     <%-- TOTAL ------------------------------------------------------------------------------%>
     <table class="list" width="100%" cellspacing="1" cellpadding="0">
         <tr class="admin">
-            <td colspan="2"><%=getTran("openclinic.chuk","bilan.total",sWebLanguage).toUpperCase()%></td>
+            <td colspan="2"><%=getTran(request,"openclinic.chuk","bilan.total",sWebLanguage).toUpperCase()%></td>
                 <%
                     Encounter activeEncounter = Encounter.getActiveEncounter(activePatient.personid);
                     Vector vTransactions = MedwanQuery.getInstance().getTransactionsByType(Integer.parseInt(activePatient.personid), sPREFIX+"TRANSACTION_TYPE_SURVEILLANCE_PROTOCOL");
@@ -942,7 +942,7 @@
 
         <%-- BILAN INPUT TOTAL --%>
         <tr>
-            <td class="admin" width="150"><%=getTran("openclinic.chuk","bilan.input.total",sWebLanguage)%></td>
+            <td class="admin" width="150"><%=getTran(request,"openclinic.chuk","bilan.input.total",sWebLanguage)%></td>
             <td class="admin2" width="100">
                 <input id="tbilaninputtotal" size="5" readonly type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROTSURV_BILANENTREE_TOTAL" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROTSURV_BILANENTREE_TOTAL" property="value"/>">
             </td>
@@ -959,7 +959,7 @@
 
         <%-- BILAN OUTPUT TOTAL --%>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","bilan.output.total",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","bilan.output.total",sWebLanguage)%></td>
             <td class="admin2">
                 <input id="tbilanoutputtotal" size="5" readonly type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROTSURV_BILANSORTIE_TOTAL" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROTSURV_BILANSORTIE_TOTAL" property="value"/>">
             </td>
@@ -976,7 +976,7 @@
 
         <%-- BILAN TOTAL --%>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","bilan.total",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","bilan.total",sWebLanguage)%></td>
             <td class="admin2">
                 <input id="tbilantotal" size="5" readonly type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROTSURV_BILAN_TOTAL" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROTSURV_BILAN_TOTAL" property="value"/>">
             </td>
@@ -996,33 +996,33 @@
     <%-- NUTRITIONAL SITUATION ------------------------------------------------------------------%>
     <table cellspacing="1" cellpadding="0" border="0" width="100%" class="list">
         <tr class="admin">
-            <td colspan="3"><%=getTran("openclinic.chuk","nutritional.situation",sWebLanguage).toUpperCase()%></td>
+            <td colspan="3"><%=getTran(request,"openclinic.chuk","nutritional.situation",sWebLanguage).toUpperCase()%></td>
         </tr>
 
         <tr>
-            <td class="admin" rowspan="3" width="100"><%=getTran("openclinic.chuk","balanced.meal",sWebLanguage)%></td>
-            <td class="admin" width="50"><%=getTran("openclinic.chuk","morning",sWebLanguage)%></td>
+            <td class="admin" rowspan="3" width="100"><%=getTran(request,"openclinic.chuk","balanced.meal",sWebLanguage)%></td>
+            <td class="admin" width="50"><%=getTran(request,"openclinic.chuk","morning",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_PROTSURV_SITUATION_NUTRITIONAL_MATIN")%> class="text" cols="100" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROTSURV_SITUATION_NUTRITIONAL_MATIN" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROTSURV_SITUATION_NUTRITIONAL_MATIN" property="value"/></textarea>
             </td>
         </tr>
 
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","midday",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","midday",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_PROTSURV_SITUATION_NUTRITIONAL_MIDI")%> class="text" cols="100" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROTSURV_SITUATION_NUTRITIONAL_MIDI" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROTSURV_SITUATION_NUTRITIONAL_MIDI" property="value"/></textarea>
             </td>
         </tr>
 
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","evening",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","evening",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_PROTSURV_SITUATION_NUTRITIONAL_SOIR")%> class="text" cols="100" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROTSURV_SITUATION_NUTRITIONAL_SOIR" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROTSURV_SITUATION_NUTRITIONAL_SOIR" property="value"/></textarea>
             </td>
         </tr>
 
         <tr>
-            <td class="admin" colspan="2"><%=getTran("openclinic.chuk","other_regime",sWebLanguage)%></td>
+            <td class="admin" colspan="2"><%=getTran(request,"openclinic.chuk","other_regime",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_PROTSURV_SITUATION_NUTRITIONAL_OTHER_REGIME")%> class="text" cols="100" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROTSURV_SITUATION_NUTRITIONAL_OTHER_REGIME" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROTSURV_SITUATION_NUTRITIONAL_OTHER_REGIME" property="value"/></textarea>
             </td>
@@ -1037,23 +1037,23 @@
                     <%-- header --%>
                     <tr>
                         <td class="admin" width="40" rowspan="2"></td>
-                        <td class="admin" width="50" rowspan="2" style="vertical-align:bottom;padding-bottom:4px;"><%=getTran("Web.occup","medwan.common.hour",sWebLanguage)%></td>
-                        <td class="admin" width="350" colspan="5"><center><%=getTran("openclinic.chuk","nutritive.liquid",sWebLanguage)%></center></td>
-                        <td class="admin" width="210" colspan="3"><center><%=getTran("openclinic.chuk","nutritional.state",sWebLanguage)%></center></td>
-                        <td class="admin" width="*" rowspan="2" style="vertical-align:bottom;padding-bottom:4px;"><%=getTran("openclinic.chuk","observation",sWebLanguage)%></td>
+                        <td class="admin" width="50" rowspan="2" style="vertical-align:bottom;padding-bottom:4px;"><%=getTran(request,"Web.occup","medwan.common.hour",sWebLanguage)%></td>
+                        <td class="admin" width="350" colspan="5"><center><%=getTran(request,"openclinic.chuk","nutritive.liquid",sWebLanguage)%></center></td>
+                        <td class="admin" width="210" colspan="3"><center><%=getTran(request,"openclinic.chuk","nutritional.state",sWebLanguage)%></center></td>
+                        <td class="admin" width="*" rowspan="2" style="vertical-align:bottom;padding-bottom:4px;"><%=getTran(request,"openclinic.chuk","observation",sWebLanguage)%></td>
                         <td class="admin" width="200" rowspan="2"></td>
                     </tr>
 
                     <%-- header --%>
                     <tr>
-                        <td class="admin" width="70"><%=getTran("openclinic.chuk","milk",sWebLanguage)%></td>
-                        <td class="admin" width="70"><%=getTran("openclinic.chuk","pulp",sWebLanguage)%></td>
-                        <td class="admin" width="70"><%=getTran("openclinic.chuk","soup",sWebLanguage)%></td>
-                        <td class="admin" width="70"><%=getTran("openclinic.chuk","juice",sWebLanguage)%></td>
-                        <td class="admin" width="70"><%=getTran("openclinic.chuk","water",sWebLanguage)%></td>
-                        <td class="admin" width="70"><%=getTran("openclinic.chuk","pb",sWebLanguage)%></td>
-                        <td class="admin" width="70"><%=getTran("openclinic.chuk","pt",sWebLanguage)%></td>
-                        <td class="admin" width="70"><%=getTran("openclinic.chuk","imc",sWebLanguage)%></td>
+                        <td class="admin" width="70"><%=getTran(request,"openclinic.chuk","milk",sWebLanguage)%></td>
+                        <td class="admin" width="70"><%=getTran(request,"openclinic.chuk","pulp",sWebLanguage)%></td>
+                        <td class="admin" width="70"><%=getTran(request,"openclinic.chuk","soup",sWebLanguage)%></td>
+                        <td class="admin" width="70"><%=getTran(request,"openclinic.chuk","juice",sWebLanguage)%></td>
+                        <td class="admin" width="70"><%=getTran(request,"openclinic.chuk","water",sWebLanguage)%></td>
+                        <td class="admin" width="70"><%=getTran(request,"openclinic.chuk","pb",sWebLanguage)%></td>
+                        <td class="admin" width="70"><%=getTran(request,"openclinic.chuk","pt",sWebLanguage)%></td>
+                        <td class="admin" width="70"><%=getTran(request,"openclinic.chuk","imc",sWebLanguage)%></td>
                     </tr>
 
                     <tr>
@@ -1113,10 +1113,10 @@
     <%-- Other ----------------------------------------------------------------------------------%>
     <table cellspacing="1" cellpadding="0" border="0" width="100%" class="list">
         <tr class="admin">
-            <td colspan="2"><%=getTran("openclinic.chuk","other",sWebLanguage).toUpperCase()%></td>
+            <td colspan="2"><%=getTran(request,"openclinic.chuk","other",sWebLanguage).toUpperCase()%></td>
         </tr>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("openclinic.chuk","other",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"openclinic.chuk","other",sWebLanguage)%></td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_PROTSURV_AUTRES")%> class="text" cols="100" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROTSURV_AUTRES" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROTSURV_AUTRES" property="value"/></textarea>
             </td>

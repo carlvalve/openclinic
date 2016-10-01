@@ -4,13 +4,13 @@
 <table width="100%" class="list" cellpadding="0" cellspacing="1">
      <tr>
          <td width="1%" rowspan="4"><img src="<c:url value='_img/logo_main.jpg'/>"/></td>
-         <td class="admin2"><a href="<c:url value=''/>popup.jsp?PopupHeight=500&PopupWidth=600&Page=/healthnet/networkstatus.jsp" target="healthnet"><%=getTran("healthnet","networkstatus",sWebLanguage)%></a></td>
+         <td class="admin2"><a href="<c:url value=''/>popup.jsp?PopupHeight=500&PopupWidth=600&Page=/healthnet/networkstatus.jsp" target="healthnet"><%=getTran(request,"healthnet","networkstatus",sWebLanguage)%></a></td>
      </tr>
      <tr>
-         <td class="admin2"><a href="<c:url value=''/>popup.jsp?PopupHeight=500&PopupWidth=600&Page=/healthnet/bedutilization.jsp" target="healthnet"><%=getTran("healthnet","bedutilization",sWebLanguage)%></a></td>
+         <td class="admin2"><a href="<c:url value=''/>popup.jsp?PopupHeight=500&PopupWidth=600&Page=/healthnet/bedutilization.jsp" target="healthnet"><%=getTran(request,"healthnet","bedutilization",sWebLanguage)%></a></td>
      </tr>
      <tr>
-         <td class="admin2"><a href="<c:url value=''/>popup.jsp?PopupHeight=500&PopupWidth=600&Page=/healthnet/adt.jsp" target="healthnet"><%=getTran("healthnet","adt",sWebLanguage)%></a></td>
+         <td class="admin2"><a href="<c:url value=''/>popup.jsp?PopupHeight=500&PopupWidth=600&Page=/healthnet/adt.jsp" target="healthnet"><%=getTran(request,"healthnet","adt",sWebLanguage)%></a></td>
      </tr>
 </table>
 <div style="padding-top:5px;"/>

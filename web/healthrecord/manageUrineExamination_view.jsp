@@ -64,7 +64,7 @@
         <tr>
             <td class="admin" width="30%">
                 <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-                <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+                <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
             </td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" id="trandate" OnBlur='checkDate(this)'>
@@ -75,12 +75,12 @@
         <%-- albumine --%>
         <tr>
             <td class='admin'>
-                <%=getTran("Web.Occup","medwan.healthrecord.urine-exam.albumine",sWebLanguage)%>&nbsp;
+                <%=getTran(request,"Web.Occup","medwan.healthrecord.urine-exam.albumine",sWebLanguage)%>&nbsp;
             </td>
             <td class='admin2'>
                 <select <%=setRightClick("ITEM_TYPE_URINE_ALBUMINE")%> class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_URINE_ALBUMINE" property="itemId"/>]>.value" class="text">
                     <option/>
-                    <option value="medwan.common.negative" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_URINE_ALBUMINE;value=medwan.common.negative" property="value" outputString="selected"/> onclick='_A="-"' ><%=getTran("Web.Occup","medwan.common.negative",sWebLanguage)%>
+                    <option value="medwan.common.negative" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_URINE_ALBUMINE;value=medwan.common.negative" property="value" outputString="selected"/> onclick='_A="-"' ><%=getTran(request,"Web.Occup","medwan.common.negative",sWebLanguage)%>
                     <option value="30" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_URINE_ALBUMINE;value=30" property="value" outputString="selected"/> onclick='_A="30"'>30
                     <option value="100" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_URINE_ALBUMINE;value=100" property="value" outputString="selected"/> onclick='_A="100"'>100
                     <option value="500" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_URINE_ALBUMINE;value=500" property="value" outputString="selected"/> onclick='_A="500"'>500
@@ -91,11 +91,11 @@
         
         <%-- glucose --%>
         <tr>
-            <td class='admin'><%=getTran("Web.Occup","medwan.healthrecord.urine-exam.glucose",sWebLanguage)%>&nbsp;</td>
+            <td class='admin'><%=getTran(request,"Web.Occup","medwan.healthrecord.urine-exam.glucose",sWebLanguage)%>&nbsp;</td>
             <td class='admin2'>
                 <select <%=setRightClick("ITEM_TYPE_URINE_GLUCOSE")%> class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_URINE_GLUCOSE" property="itemId"/>]>.value" class="text">
                     <option/>
-                    <option value="medwan.common.negative" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_URINE_GLUCOSE;value=medwan.common.negative" property="value" outputString="selected"/> onclick='_G="-"'><%=getTran("Web.Occup","medwan.common.negative",sWebLanguage)%>
+                    <option value="medwan.common.negative" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_URINE_GLUCOSE;value=medwan.common.negative" property="value" outputString="selected"/> onclick='_G="-"'><%=getTran(request,"Web.Occup","medwan.common.negative",sWebLanguage)%>
                     <option value="50" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_URINE_GLUCOSE;value=50" property="value" outputString="selected"/> onclick='_G="50"'>50
                     <option value="100" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_URINE_GLUCOSE;value=100" property="value" outputString="selected"/> onclick='_G="100"'>100
                     <option value="300" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_URINE_GLUCOSE;value=300" property="value" outputString="selected"/> onclick='_G="300"'>300
@@ -107,11 +107,11 @@
         
         <%--
         <tr>
-        <td class='admin'><%=getTran("Web.Occup","medwan.healthrecord.urine-exam.blood",sWebLanguage)%>&nbsp;</td>
+        <td class='admin'><%=getTran(request,"Web.Occup","medwan.healthrecord.urine-exam.blood",sWebLanguage)%>&nbsp;</td>
             <td class='admin2'>
                 <select <%=setRightClick("ITEM_TYPE_URINE_BLOOD")%> class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_URINE_BLOOD" property="itemId"/>]>.value" class="text">
                     <option/>
-                    <option value="medwan.common.negative" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_URINE_BLOOD;value=medwan.common.negative" property="value" outputString="selected"/> onclick='_B="-"'><%=getTran("Web.Occup","medwan.common.negative",sWebLanguage)%>
+                    <option value="medwan.common.negative" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_URINE_BLOOD;value=medwan.common.negative" property="value" outputString="selected"/> onclick='_B="-"'><%=getTran(request,"Web.Occup","medwan.common.negative",sWebLanguage)%>
                     <option value="5-10" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_URINE_BLOOD;value=5-10" property="value" outputString="selected"/> onclick='_B="5-10"'>5-10
                     <option value="25" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_URINE_BLOOD;value=25" property="value" outputString="selected"/> onclick='_B="25"'>25
                     <option value="50" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_URINE_BLOOD;value=50" property="value" outputString="selected"/> onclick='_B="50"'>50
@@ -124,7 +124,7 @@
         
         <%-- remark --%>
         <tr>
-            <td class='admin'><%=getTran("Web.Occup","medwan.common.remark",sWebLanguage)%>&nbsp;</td>
+            <td class='admin'><%=getTran(request,"Web.Occup","medwan.common.remark",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_URINE_REMARK")%> class="text" cols="75" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_URINE_REMARK" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_URINE_REMARK" property="value"/></textarea>
             </td>

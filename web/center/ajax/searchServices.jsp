@@ -19,10 +19,10 @@
 <table width="100%" cellspacing="0" class="sortable" id="searchresults">
     <tr height="20" class="admin">
         <td width="20">&nbsp;</td>
-        <td width="80"><%=getTran("web","version",sWebLanguage)%></td>
-        <td width="100"><%=getTran("web","updatetime",sWebLanguage)%></td>
-        <td width="100"><%=getTran("wicket","create_date",sWebLanguage)%></td>
-        <td width="*"><%=getTran("web","user",sWebLanguage)%></td>
+        <td width="80"><%=getTran(request,"web","version",sWebLanguage)%></td>
+        <td width="100"><%=getTran(request,"web","updatetime",sWebLanguage)%></td>
+        <td width="100"><%=getTran(request,"wicket","create_date",sWebLanguage)%></td>
+        <td width="*"><%=getTran(request,"web","user",sWebLanguage)%></td>
     </tr>
     
     <tbody class="hand">
@@ -70,6 +70,6 @@
     </tbody>
 </table>
 
-<span><%=centerList.size()%> <%=HTMLEntities.htmlentities(getTran("web","recordsfound",sWebLanguage))%></span>
+<span><%=centerList.size()%> <%=HTMLEntities.htmlentities(getTran(request,"web","recordsfound",sWebLanguage))%></span>
 
 <script>sortables_init();</script>

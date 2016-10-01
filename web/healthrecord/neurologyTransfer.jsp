@@ -24,7 +24,7 @@
 				    <tr>
 				        <td class="admin">
 				            <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-				            <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+				            <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
 				        </td>
 				        <td class="admin2">
 				            <input type="text" class="text" size="12" maxLength="10" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" id="trandate" OnBlur='checkDate(this)'> <script>writeTranDate();</script>
@@ -33,7 +33,7 @@
 				    
 				    <%--  TRANSFER DATE --%>
 				    <tr>
-				        <td class="admin" width="<%=sTDAdminWidth%>" nowrap><%=getTran("Web.occup","neurology_transfer_transferdate",sWebLanguage)%>&nbsp;</td>
+				        <td class="admin" width="<%=sTDAdminWidth%>" nowrap><%=getTran(request,"Web.occup","neurology_transfer_transferdate",sWebLanguage)%>&nbsp;</td>
 				        <td class="admin2" width="100%">
 				            <input type="text" class="text" size="12" maxLength="10" id="transferDate" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEUROLOGY_TRANSFER_TRANSFERDATE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEUROLOGY_TRANSFER_TRANSFERDATE" property="value" formatType="date"/>"/>
 				            <script>writeMyDate("transferDate");</script>
@@ -42,7 +42,7 @@
 				    
 				    <%-- CONSULTATION MOTIF --%>
 				    <tr>
-				        <td class="admin"><%=getTran("Web.occup","neurology_transfer_consultationmotif",sWebLanguage)%>&nbsp;</td>
+				        <td class="admin"><%=getTran(request,"Web.occup","neurology_transfer_consultationmotif",sWebLanguage)%>&nbsp;</td>
 				        <td class="admin2">
 				            <textarea id="consultationMotifTA" onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_NEUROLOGY_TRANSFER_CONSULTATIONMOTIF")%> class="text" cols="60" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEUROLOGY_TRANSFER_CONSULTATIONMOTIF" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEUROLOGY_TRANSFER_CONSULTATIONMOTIF" property="value"/></textarea>
 				            <a style="vertical-align:top;" class="hand" onclick="showTerminologyList('consultationMotifTA','consultationMotif');"><img title="<%=getTranNoLink("web","terminologylist",sWebLanguage)%>" src="<c:url value="/_img/icons/icon_help.gif"/>"></a>
@@ -51,7 +51,7 @@
 				   
 				    <%-- SUMMARY WORK DONE WITH PATIENT --%>
 				    <tr>
-				        <td class="admin"><%=getTran("Web.occup","neurology_transfer_summaryworkdonewithpatient",sWebLanguage)%>&nbsp;</td>
+				        <td class="admin"><%=getTran(request,"Web.occup","neurology_transfer_summaryworkdonewithpatient",sWebLanguage)%>&nbsp;</td>
 				        <td class="admin2">
 				            <textarea id="workDoneTA" onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_NEUROLOGY_TRANSFER_SUMMARY_WORK_DONE_WITH_PATIENT ")%> class="text" cols="60" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEUROLOGY_TRANSFER_SUMMARY_WORK_DONE_WITH_PATIENT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEUROLOGY_TRANSFER_SUMMARY_WORK_DONE_WITH_PATIENT" property="value"/></textarea>
 				            <a style="vertical-align:top;" class="hand" onclick="showTerminologyList('workDoneTA','workDone');"><img title="<%=getTranNoLink("web","terminologylist",sWebLanguage)%>" src="<c:url value="/_img/icons/icon_help.gif"/>"></a>
@@ -60,7 +60,7 @@
 				    
 				    <%-- TRANSFER MOTIF --%>
 				    <tr>
-				        <td class="admin"><%=getTran("Web.occup","neurology_transfer_transfermotif",sWebLanguage)%>&nbsp;</td>
+				        <td class="admin"><%=getTran(request,"Web.occup","neurology_transfer_transfermotif",sWebLanguage)%>&nbsp;</td>
 				        <td class="admin2">
 				            <textarea id="transferMotifTA" onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_NEUROLOGY_TRANSFER_TRANSFERMOTIF")%> class="text" cols="60" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEUROLOGY_TRANSFER_TRANSFERMOTIF" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEUROLOGY_TRANSFER_TRANSFERMOTIF" property="value"/></textarea>
 				            <a style="vertical-align:top;" class="hand" onclick="showTerminologyList('transferMotifTA','transferMotif');"><img title="<%=getTranNoLink("web","terminologylist",sWebLanguage)%>" src="<c:url value="/_img/icons/icon_help.gif"/>"></a>
@@ -69,7 +69,7 @@
 				    
 				    <%-- TRANSFER TREATMENT --%>
 				    <tr>
-				        <td class="admin"><%=getTran("Web.occup","neurology_transfer_transfertreatment",sWebLanguage)%>&nbsp;</td>
+				        <td class="admin"><%=getTran(request,"Web.occup","neurology_transfer_transfertreatment",sWebLanguage)%>&nbsp;</td>
 				        <td class="admin2">
 				            <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_NEUROLOGY_TRANSFER_TRANSFERTREATMENT")%> class="text" cols="60" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEUROLOGY_TRANSFER_TRANSFERTREATMENT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEUROLOGY_TRANSFER_TRANSFERTREATMENT" property="value"/></textarea>
 				        </td>

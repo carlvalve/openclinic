@@ -25,7 +25,7 @@ if (checkString(request.getParameter("SaveMotivation")).trim().length()>0)
 %>
 <html>
 <head>
-    <title>OpenClinic <%=sAPPTITLE%> <%=getTran("Web.Occup","be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RECRUITMENT_PV_MOTIVATION",sWebLanguage)%></title>
+    <title>OpenClinic <%=sAPPTITLE%> <%=getTran(request,"Web.Occup","be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RECRUITMENT_PV_MOTIVATION",sWebLanguage)%></title>
     <%=sCSSNORMAL%>
 </head>
 <body>
@@ -34,7 +34,7 @@ if (checkString(request.getParameter("SaveMotivation")).trim().length()>0)
     <br>
     <table border="0" cellpadding="5" cellspacing="0" class="list">
         <tr class="admin">
-            <td><%=getTran("Web.Occup","be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RECRUITMENT_PV_MOTIVATION",sWebLanguage)%></td>
+            <td><%=getTran(request,"Web.Occup","be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RECRUITMENT_PV_MOTIVATION",sWebLanguage)%></td>
             <td><input type="text" class="text" name="EditMotivation" size="50" value="<%=sMotivation%>"></td>
         </tr>
         <tr>

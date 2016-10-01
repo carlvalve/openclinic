@@ -138,17 +138,17 @@
                     }
                 %>
                 <tr>
-                    <td width="100" class="admin"><%=HTMLEntities.htmlentities(getTran("web","type",sWebLanguage))%>&nbsp;*&nbsp;</td>
+                    <td width="100" class="admin"><%=HTMLEntities.htmlentities(getTran(request,"web","type",sWebLanguage))%>&nbsp;*&nbsp;</td>
                     <td class="admin2">
 		                <select class="text" id="Type" name="Type">
-		                    <%=ScreenHelper.writeSelect("hr.salarycalculation.type",sSelectedType,sWebLanguage)%>
+		                    <%=ScreenHelper.writeSelect(request,"hr.salarycalculation.type",sSelectedType,sWebLanguage)%>
 		                </select>
                     </td>
                 </tr>
                                 
                 <%-- 1 - calculation date --%>
                 <tr>
-                    <td class="admin"><%=HTMLEntities.htmlentities(getTran("web","date",sWebLanguage))%></td>
+                    <td class="admin"><%=HTMLEntities.htmlentities(getTran(request,"web","date",sWebLanguage))%></td>
                     <td class="admin2"><%=sCalculationBegin%></td>
                 </tr>
                 
@@ -158,14 +158,14 @@
                              
                 <%-- 3 - calculation codes --%>
                 <tr>
-                    <td class="admin"><%=HTMLEntities.htmlentities(getTran("hr.salarycalculations","codes",sWebLanguage))%>&nbsp;*&nbsp;</td>
+                    <td class="admin"><%=HTMLEntities.htmlentities(getTran(request,"hr.salarycalculations","codes",sWebLanguage))%>&nbsp;*&nbsp;</td>
                     <td class="admin2">
                         <table id="tblCC" cellpadding="0" cellspacing="0" width="98%" class="sortable" headerRowCount="2" style="border:1px solid #ccc;">
                             <%-- a - header --%>
                             <tr class="admin">
                                 <td width="36">&nbsp;</td>
-                                <td width="100" style="padding-left:1px;"><%=getTran("web","duration",sWebLanguage)%></td>
-                                <td width="380" style="padding-left:1px;"><%=getTran("web","code",sWebLanguage)%></td>
+                                <td width="100" style="padding-left:1px;"><%=getTran(request,"web","duration",sWebLanguage)%></td>
+                                <td width="380" style="padding-left:1px;"><%=getTran(request,"web","code",sWebLanguage)%></td>
                             </tr>
                             
                             <%-- b - add row --%>
@@ -175,7 +175,7 @@
                                                                 
                                 <%-- duration (hours) --%>
                                 <td class="admin" nowrap>
-                                    <input type="text" class="text" id="addDuration" name="addDuration" size="3" maxLength="4" onKeyUp="removeTrailingZeros(this);if(!isInteger(this))this.value='';"></input>&nbsp;<%=getTran("web","hours",sWebLanguage)%>
+                                    <input type="text" class="text" id="addDuration" name="addDuration" size="3" maxLength="4" onKeyUp="removeTrailingZeros(this);if(!isInteger(this))this.value='';"></input>&nbsp;<%=getTran(request,"web","hours",sWebLanguage)%>
                                 </td>
                                 
                                 <%-- code (and label) --%>
@@ -227,7 +227,7 @@
                     if(updateUser!=null){
 		                %>
 			                <tr>
-			                    <td class="admin"><%=HTMLEntities.htmlentities(getTran("web","user",sWebLanguage))%></td>
+			                    <td class="admin"><%=HTMLEntities.htmlentities(getTran(request,"web","user",sWebLanguage))%></td>
 			                    <td class="admin2"><%=updateUser.get("lastname")+", "+updateUser.get("firstname")%></td>
 			                </tr>
 			            <%

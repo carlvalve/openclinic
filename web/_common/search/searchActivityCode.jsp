@@ -17,8 +17,8 @@
     <%-- SEARCH INPUTS --%>
     <tr>
       <td width='100%' height='25'>
-        &nbsp;<%=getTran("web.manage","labanalysis.cols.code",sWebLanguage)%>&nbsp;<input class="text" type="text" name="FindCode" value="<%=sFindCode%>" size="16">
-        &nbsp;<%=getTran("web.manage","labanalysis.cols.name",sWebLanguage)%>&nbsp;<input class="text" type="text" name="FindText" value="<%=sFindText%>" size="32">
+        &nbsp;<%=getTran(request,"web.manage","labanalysis.cols.code",sWebLanguage)%>&nbsp;<input class="text" type="text" name="FindCode" value="<%=sFindCode%>" size="16">
+        &nbsp;<%=getTran(request,"web.manage","labanalysis.cols.name",sWebLanguage)%>&nbsp;<input class="text" type="text" name="FindText" value="<%=sFindText%>" size="32">
         &nbsp;<input class="button" type="submit" name="FindButton"  value="<%=getTranNoLink("Web","find",sWebLanguage)%>">
         &nbsp;<input class="button" type="button" name="ClearButton" value="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onClick="clearForm();">
         &nbsp;<input class="button" type="button" name="NewButton"   value="<%=getTranNoLink("Web","new",sWebLanguage)%>" onClick="newActivity();">
@@ -96,7 +96,7 @@
                     // display 'no results' message
                     %>
                       <tr>
-                        <td colspan='3'><%=getTran("web","norecordsfound",sWebLanguage)%></td>
+                        <td colspan='3'><%=getTran(request,"web","norecordsfound",sWebLanguage)%></td>
                       </tr>
                     <%
                 }

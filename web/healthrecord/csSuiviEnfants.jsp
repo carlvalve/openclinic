@@ -16,7 +16,7 @@
         <%-- DATE --%>
         <tr>
             <td class="admin" width="<%=sTDAdminWidth%>">
-                <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;<%=getTran("Web.Occup", "medwan.common.date", sWebLanguage)%>
+                <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;<%=getTran(request,"Web.Occup", "medwan.common.date", sWebLanguage)%>
             </td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" id="trandate" OnBlur="checkDate(this);">
@@ -24,19 +24,19 @@
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("cs.suivi.enfants", "test.vih", sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"cs.suivi.enfants", "test.vih", sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <select id="type_visite" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_SUIVI_ENFANTS_TEMPS" property="itemId"/>]>.value">
                     <option/>
                     <%SessionContainerWO sessionContainerWO = (SessionContainerWO) SessionContainerFactory.getInstance().getSessionContainerWO(request, SessionContainerWO.class.getName());
                         String item = sessionContainerWO.getCurrentTransactionVO().getItem(sPREFIX + "ITEM_TYPE_CS_SUIVI_ENFANTS_TEMPS").getValue();%>
-                    <option value="6.weeks" <%=(item.equals("6.weeks") ? "selected" : "")%>>6 <%=getTran("web", "weeks", sWebLanguage)%>
+                    <option value="6.weeks" <%=(item.equals("6.weeks") ? "selected" : "")%>>6 <%=getTran(request,"web", "weeks", sWebLanguage)%>
                     </option>
-                    <option value="7.5.months" <%=(item.equals("7.5.months") ? "selected" : "")%>>7 <%=getTran("web", "months", sWebLanguage)%>
+                    <option value="7.5.months" <%=(item.equals("7.5.months") ? "selected" : "")%>>7 <%=getTran(request,"web", "months", sWebLanguage)%>
                     </option>
-                    <option value="9.months" <%=(item.equals("9.months") ? "selected" : "")%>>9 <%=getTran("web", "months", sWebLanguage)%>
+                    <option value="9.months" <%=(item.equals("9.months") ? "selected" : "")%>>9 <%=getTran(request,"web", "months", sWebLanguage)%>
                     </option>
-                    <option value="15.months" <%=(item.equals("15.months") ? "selected" : "")%>>15 <%=getTran("web", "months", sWebLanguage)%>
+                    <option value="15.months" <%=(item.equals("15.months") ? "selected" : "")%>>15 <%=getTran(request,"web", "months", sWebLanguage)%>
                     </option>
                 </select>
             </td>
@@ -63,17 +63,17 @@
                 <mxs:propertyAccessorI18N name="transaction.items" scope="page"
                                           compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_SUIVI_ENFANTS_DECES;value=yes"
                                           property="value"
-                                          outputString="checked"/>><%=getLabel("web", "yes", sWebLanguage, "deces1")%>
+                                          outputString="checked"/>><%=getLabel(request,"web", "yes", sWebLanguage, "deces1")%>
                 <input type="radio" onDblClick="uncheckRadio(this);" id="deces2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_SUIVI_ENFANTS_DECES" property="itemId"/>]>.value" value="no"
                 <mxs:propertyAccessorI18N name="transaction.items" scope="page"
                                           compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_SUIVI_ENFANTS_DECES;value=no"
                                           property="value"
-                                          outputString="checked"/>><%=getLabel("web", "no", sWebLanguage, "deces2")%>
+                                          outputString="checked"/>><%=getLabel(request,"web", "no", sWebLanguage, "deces2")%>
             </td>
         </tr>
           <%-- COMMENT --%>
         <tr>
-            <td class="admin"><%=getTran("web", "comment", sWebLanguage)%>
+            <td class="admin"><%=getTran(request,"web", "comment", sWebLanguage)%>
             </td>
             <td colspan="3" class="admin2">
                 <textarea id="comment" rows="1" onKeyup="resizeTextarea(this,10);" class="text" cols="75" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_SUIVI_ENFANTS_COMMENTAIRE_0" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_SUIVI_ENFANTS_COMMENTAIRE_0" property="value"/><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_SUIVI_ENFANTS_COMMENTAIRE_1" property="value"/><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_SUIVI_ENFANTS_COMMENTAIRE_2" property="value"/><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_SUIVI_ENFANTS_COMMENTAIRE_2" property="value"/><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_SUIVI_ENFANTS_COMMENTAIRE_3" property="value"/><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CS_SUIVI_ENFANTS_COMMENTAIRE_4" property="value"/></textarea>

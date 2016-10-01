@@ -4,7 +4,7 @@
 
 <%!
 	private String getRow(String name, String type, String id,String language){
-		return "<tr><td class='admin2'><input type='checkbox' value='1' name='"+name+"' "+(MedwanQuery.getInstance().getConfigInt(name,1)==1?"checked":"")+"/>"+getTran(type,id,language)+"</td></tr>";
+		return "<tr><td class='admin2'><input type='checkbox' value='1' name='"+name+"' "+(MedwanQuery.getInstance().getConfigInt(name,1)==1?"checked":"")+"/>"+getTran(null,type,id,language)+"</td></tr>";
 	}
 
 	private void setConfig(String name, HttpServletRequest request){
@@ -63,8 +63,8 @@
 <%=checkPermission("system.management","all",activeUser)%>
 <form name='transactionForm' method='post'>
 	<table width='100%'>
-		<tr class='admin'><td colspan='2'><%=getTran("web","managevisiblefields",sWebLanguage) %></td></tr>
-		<tr valign='top'><td><table width='100%'><tr><td class='admin'><%=getTran("web","actualpersonaldata",sWebLanguage) %></td></tr>
+		<tr class='admin'><td colspan='2'><%=getTran(request,"web","managevisiblefields",sWebLanguage) %></td></tr>
+		<tr valign='top'><td><table width='100%'><tr><td class='admin'><%=getTran(request,"web","actualpersonaldata",sWebLanguage) %></td></tr>
 		<%=getRow("showAdminLastname","web","lastname",sWebLanguage) %>
 		<%=getRow("showAdminFirstname","web","firstname",sWebLanguage) %>
 		<%=getRow("showAdminDateOfBirth","web","dateofbirth",sWebLanguage) %>
@@ -84,7 +84,7 @@
 		<%=getRow("showAdminComment4","web","comment4",sWebLanguage) %>
 		<%=getRow("showAdminComment5","web","comment5",sWebLanguage) %>
 		<%=getRow("showAdminDeathCertificate","web","deathcertificate",sWebLanguage) %></td></table></td>
-		<td><table width='100%'><tr><td class='admin'><%=getTran("web","private",sWebLanguage) %></td></tr>
+		<td><table width='100%'><tr><td class='admin'><%=getTran(request,"web","private",sWebLanguage) %></td></tr>
 		<%=getRow("showAdminPrivateSanitaryDistrict","web","region",sWebLanguage) %>
 		<%=getRow("showAdminPrivateDistrict","web","district",sWebLanguage) %>
 		<%=getRow("showAdminPrivateSector","web","sector",sWebLanguage) %>
@@ -105,6 +105,6 @@
 		<%=getRow("showAdminPrivateHSPost","web","healthpost",sWebLanguage) %>
 		<%=getRow("showAdminPrivateHSVillage","web","healthvillage",sWebLanguage) %>
 		</table></td></tr>
-		<tr><td colspan='2'><input type='submit' name='submit' value='<%=getTran("web","save",sWebLanguage) %>'/></td></tr>
+		<tr><td colspan='2'><input type='submit' name='submit' value='<%=getTran(null,"web","save",sWebLanguage) %>'/></td></tr>
 	</table>
 </form>

@@ -175,7 +175,7 @@
 	    out.write("</table></div></div>");
 	}
 	else{
-		%><%=getTran("web","noRecordsFound",sWebLanguage)%><%
+		%><%=getTran(request,"web","noRecordsFound",sWebLanguage)%><%
 	}
 	
     rs.close();

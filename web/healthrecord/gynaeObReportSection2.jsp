@@ -70,13 +70,13 @@
 
             <table cellspacing="1" cellpadding="0" width="100%" border="0" id="fetalDescription" class="list">
                 <tr>
-                    <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("openclinic.chuk", "obreport.lmp", sWebLanguage)%>
+                    <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"openclinic.chuk", "obreport.lmp", sWebLanguage)%>
                     </td>
                     <td class="admin2" width="<%=sTDAdminWidth%>">
                         <input id="ac_ITEM_TYPE_OBREPORT_LMP" size="20" <%=setRightClick("ITEM_TYPE_OBREPORT_LMP")%> type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OBREPORT_LMP" property="itemId"/>]>.value" value="<%=sITEM_TYPE_OBREPORT_LMP%>">
                         <div id="ITEM_TYPE_OBREPORT_LMP_update" style="display:none;border:1px solid black;background-color:white;"></div>
                     </td>
-                    <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("openclinic.chuk", "obreport.edd", sWebLanguage)%>
+                    <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"openclinic.chuk", "obreport.edd", sWebLanguage)%>
                     </td>
                     <td class="admin2">
                         <input id="ac_ITEM_TYPE_OBREPORT_EDD" size="20" <%=setRightClick("ITEM_TYPE_OBREPORT_EDD")%> type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OBREPORT_EDD" property="itemId"/>]>.value" value="<%=sITEM_TYPE_OBREPORT_EDD%>">
@@ -84,7 +84,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="admin" ><%=getTran("openclinic.chuk", "obreport.ga", sWebLanguage)%>
+                    <td class="admin" ><%=getTran(request,"openclinic.chuk", "obreport.ga", sWebLanguage)%>
                     </td>
                     <td class="admin2">
                         <input id="ac_ITEM_TYPE_OBREPORT_GA" size="20" <%=setRightClick("ITEM_TYPE_OBREPORT_GA")%> type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OBREPORT_GA" property="itemId"/>]>.value" value="<%=sITEM_TYPE_OBREPORT_GA%>">
@@ -98,39 +98,39 @@
                     <td>
                     </td>
                     <td>
-                        <%=getTran("web.occup", "be.mxs.common.model.vo.healthrecord.iconstants.item_type_date", sWebLanguage)%> 1
+                        <%=getTran(request,"web.occup", "be.mxs.common.model.vo.healthrecord.iconstants.item_type_date", sWebLanguage)%> 1
                     </td>
                     <td>
-                        <%=getTran("web.occup", "be.mxs.common.model.vo.healthrecord.iconstants.item_type_date", sWebLanguage)%> 2
+                        <%=getTran(request,"web.occup", "be.mxs.common.model.vo.healthrecord.iconstants.item_type_date", sWebLanguage)%> 2
                     </td>
                     <td>
-                        <%=getTran("web.occup", "be.mxs.common.model.vo.healthrecord.iconstants.item_type_date", sWebLanguage)%> 3
+                        <%=getTran(request,"web.occup", "be.mxs.common.model.vo.healthrecord.iconstants.item_type_date", sWebLanguage)%> 3
                     </td>
                 </tr>
                 <tr>
                     <td class="admin">
-                        <%=getTran("web.occup", "be.mxs.common.model.vo.healthrecord.iconstants.item_type_date", sWebLanguage)%>
+                        <%=getTran(request,"web.occup", "be.mxs.common.model.vo.healthrecord.iconstants.item_type_date", sWebLanguage)%>
                     </td>
                     <td class="admin2">
                         <input id="ac_ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_DATE1" size="20" <%=setRightClick("ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_DATE1")%> type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_DATE1" property="itemId"/>]>.value" value="<%=sITEM_TYPE_OBREPORT_FETAL_BIOMETRY_DATE1%>">
-                        <script>writeMyDate("ac_ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_DATE1", "<c:url value="/_img/icons/icon_agenda.gif"/>", "<%=getTran("Web","PutToday",sWebLanguage)%>");</script>
+                        <script>writeMyDate("ac_ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_DATE1", "<c:url value="/_img/icons/icon_agenda.gif"/>", "<%=getTran(null,"Web","PutToday",sWebLanguage)%>");</script>
                     </td>
                     <td class="admin2">
                         <input id="ac_ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_DATE2" size="20" <%=setRightClick("ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_DATE2")%> type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_DATE2" property="itemId"/>]>.value" value="<%=sITEM_TYPE_OBREPORT_FETAL_BIOMETRY_DATE2%>">
-                        <script>writeMyDate("ac_ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_DATE2", "<c:url value="/_img/icons/icon_agenda.gif"/>", "<%=getTran("Web","PutToday",sWebLanguage)%>");</script>
+                        <script>writeMyDate("ac_ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_DATE2", "<c:url value="/_img/icons/icon_agenda.gif"/>", "<%=getTran(null,"Web","PutToday",sWebLanguage)%>");</script>
                     </td>
                     <td class="admin2">
                         <input id="ac_ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_DATE3" size="20" <%=setRightClick("ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_DATE3")%> type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_DATE3" property="itemId"/>]>.value" value="<%=sITEM_TYPE_OBREPORT_FETAL_BIOMETRY_DATE3%>">
-                        <script>writeMyDate("ac_ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_DATE3", "<c:url value="/_img/icons/icon_agenda.gif"/>", "<%=getTran("Web","PutToday",sWebLanguage)%>");</script>
+                        <script>writeMyDate("ac_ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_DATE3", "<c:url value="/_img/icons/icon_agenda.gif"/>", "<%=getTran(null,"Web","PutToday",sWebLanguage)%>");</script>
                     </td>
                 </tr>
                 <tr class="admin">
-                    <td colspan="4"><%=getTran("openclinic.chuk", "obreport.fetal.biometry", sWebLanguage).toUpperCase()%>
+                    <td colspan="4"><%=getTran(request,"openclinic.chuk", "obreport.fetal.biometry", sWebLanguage).toUpperCase()%>
                     </td>
                 </tr>
                 <%--                            FETAL BIOMETRY BPD                          --%>
                 <tr>
-                    <td class="admin"><%=getTran("openclinic.chuk", "obreport.bpd", sWebLanguage)%>
+                    <td class="admin"><%=getTran(request,"openclinic.chuk", "obreport.bpd", sWebLanguage)%>
                     </td>
                     <td class="admin2">
                         <input id="ac_ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_BPD1" size="20" <%=setRightClick("ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_BPD1")%> type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_BPD1" property="itemId"/>]>.value" value="<%=sITEM_TYPE_OBREPORT_FETAL_BIOMETRY_BPD1%>" onblur="isNumber(this);">
@@ -144,7 +144,7 @@
                 </tr>
                 <%--                            FETAL BIOMETRY HC                          --%>
                 <tr>
-                    <td class="admin"><%=getTran("openclinic.chuk", "obreport.hc", sWebLanguage)%>
+                    <td class="admin"><%=getTran(request,"openclinic.chuk", "obreport.hc", sWebLanguage)%>
                     </td>
                     <td class="admin2">
                         <input id="ac_ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_HC1" size="20" <%=setRightClick("ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_HC1")%> type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_HC1" property="itemId"/>]>.value" value="<%=sITEM_TYPE_OBREPORT_FETAL_BIOMETRY_HC1%>" onblur="isNumber(this);">
@@ -158,7 +158,7 @@
                 </tr>
                 <%--                            FETAL BIOMETRY AC                          --%>
                 <tr>
-                    <td class="admin"><%=getTran("openclinic.chuk", "obreport.ac", sWebLanguage)%>
+                    <td class="admin"><%=getTran(request,"openclinic.chuk", "obreport.ac", sWebLanguage)%>
                     </td>
                     <td class="admin2">
                         <input id="ac_ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_AC1" size="20" <%=setRightClick("ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_AC1")%> type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_AC1" property="itemId"/>]>.value" value="<%=sITEM_TYPE_OBREPORT_FETAL_BIOMETRY_AC1%>" onblur="isNumber(this);">
@@ -172,7 +172,7 @@
                 </tr>
                 <%--                            FETAL BIOMETRY CRL                          --%>
                 <tr>
-                    <td class="admin"><%=getTran("openclinic.chuk", "obreport.crl", sWebLanguage)%>
+                    <td class="admin"><%=getTran(request,"openclinic.chuk", "obreport.crl", sWebLanguage)%>
                     </td>
                     <td class="admin2">
                         <input id="ac_ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_CRL1" size="20" <%=setRightClick("ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_CRL1")%> type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_CRL1" property="itemId"/>]>.value" value="<%=sITEM_TYPE_OBREPORT_FETAL_BIOMETRY_CRL1%>" onblur="isNumber(this);">
@@ -186,7 +186,7 @@
                 </tr>
                 <%--                            FETAL BIOMETRY FL                          --%>
                 <tr>
-                    <td class="admin"><%=getTran("openclinic.chuk", "obreport.fl", sWebLanguage)%>
+                    <td class="admin"><%=getTran(request,"openclinic.chuk", "obreport.fl", sWebLanguage)%>
                     </td>
                     <td class="admin2">
                         <input id="ac_ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_FL1" size="20" <%=setRightClick("ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_FL1")%> type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_FL1" property="itemId"/>]>.value" value="<%=sITEM_TYPE_OBREPORT_FETAL_BIOMETRY_FL1%>" onblur="isNumber(this);">
@@ -200,7 +200,7 @@
                 </tr>
                 <%--                            FETAL BIOMETRY APTD                          --%>
                 <tr>
-                    <td class="admin"><%=getTran("openclinic.chuk", "obreport.aptd", sWebLanguage)%>
+                    <td class="admin"><%=getTran(request,"openclinic.chuk", "obreport.aptd", sWebLanguage)%>
                     </td>
                     <td class="admin2">
                         <input id="ac_ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_APTD1" size="20" <%=setRightClick("ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_APTD1")%> type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_APTD1" property="itemId"/>]>.value" value="<%=sITEM_TYPE_OBREPORT_FETAL_BIOMETRY_APTD1%>" onblur="isNumber(this);">
@@ -214,7 +214,7 @@
                 </tr>
                 <%--                            FETAL BIOMETRY TAD                          --%>
                 <tr>
-                    <td class="admin"><%=getTran("openclinic.chuk", "obreport.tad", sWebLanguage)%>
+                    <td class="admin"><%=getTran(request,"openclinic.chuk", "obreport.tad", sWebLanguage)%>
                     </td>
                     <td class="admin2">
                         <input id="ac_ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_TAD1" size="20" <%=setRightClick("ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_TAD1")%> type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OBREPORT_FETAL_BIOMETRY_TAD1" property="itemId"/>]>.value" value="<%=sITEM_TYPE_OBREPORT_FETAL_BIOMETRY_TAD1%>" onblur="isNumber(this);">
@@ -228,11 +228,11 @@
                 </tr>
                 <%--                               UMBILICAL ARTERY                          --%>
                 <tr class="admin">
-                    <td colspan="4"><%=getTran("openclinic.chuk", "obreport.umbilical.artery", sWebLanguage).toUpperCase()%>
+                    <td colspan="4"><%=getTran(request,"openclinic.chuk", "obreport.umbilical.artery", sWebLanguage).toUpperCase()%>
                     </td>
                 </tr>
                 <tr>
-                    <td class="admin"><%=getTran("openclinic.chuk", "obreport.umbilical.artery.ri", sWebLanguage)%>
+                    <td class="admin"><%=getTran(request,"openclinic.chuk", "obreport.umbilical.artery.ri", sWebLanguage)%>
                     </td>
                     <td class="admin2">
                         <input id="ac_ITEM_TYPE_OBREPORT_UMBILICAL_ARTERY_RI1" size="20" <%=setRightClick("ITEM_TYPE_OBREPORT_UMBILICAL_ARTERY_RI1")%> type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OBREPORT_UMBILICAL_ARTERY_RI1" property="itemId"/>]>.value" value="<%=sITEM_TYPE_OBREPORT_UMBILICAL_ARTERY_RI1%>" onblur="isNumber(this);">
@@ -246,11 +246,11 @@
                 </tr>
                 <%--                               LEFT UTERINE ARTERY                          --%>
                 <tr class="admin">
-                    <td colspan="4"><%=getTran("openclinic.chuk", "obreport.left.uterine.artery", sWebLanguage).toUpperCase()%>
+                    <td colspan="4"><%=getTran(request,"openclinic.chuk", "obreport.left.uterine.artery", sWebLanguage).toUpperCase()%>
                     </td>
                 </tr>
                 <tr>
-                    <td class="admin"><%=getTran("openclinic.chuk", "obreport.left.uterine.artery.ri", sWebLanguage)%>
+                    <td class="admin"><%=getTran(request,"openclinic.chuk", "obreport.left.uterine.artery.ri", sWebLanguage)%>
                     </td>
                     <td class="admin2">
                         <input id="ac_ITEM_TYPE_OBREPORT_LEFT_UTERINE_ARTERY_RI1" size="20" <%=setRightClick("ITEM_TYPE_OBREPORT_LEFT_UTERINE_ARTERY_RI1")%> type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OBREPORT_LEFT_UTERINE_ARTERY_RI1" property="itemId"/>]>.value" value="<%=sITEM_TYPE_OBREPORT_LEFT_UTERINE_ARTERY_RI1%>" onblur="isNumber(this);">
@@ -263,7 +263,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="admin"><%=getTran("openclinic.chuk", "obreport.left.uterine.artery.sd", sWebLanguage)%>
+                    <td class="admin"><%=getTran(request,"openclinic.chuk", "obreport.left.uterine.artery.sd", sWebLanguage)%>
                     </td>
                     <td class="admin2">
                         <input id="ac_ITEM_TYPE_OBREPORT_LEFT_UTERINE_ARTERY_SD1" size="20" <%=setRightClick("ITEM_TYPE_OBREPORT_LEFT_UTERINE_ARTERY_SD1")%> type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OBREPORT_LEFT_UTERINE_ARTERY_SD1" property="itemId"/>]>.value" value="<%=sITEM_TYPE_OBREPORT_LEFT_UTERINE_ARTERY_SD1%>" onblur="isNumber(this);">
@@ -277,11 +277,11 @@
                 </tr>
                 <%--                               RIGHT UTERINE ARTERY                          --%>
                 <tr class="admin">
-                    <td colspan="4"><%=getTran("openclinic.chuk", "obreport.right.uterine.artery", sWebLanguage).toUpperCase()%>
+                    <td colspan="4"><%=getTran(request,"openclinic.chuk", "obreport.right.uterine.artery", sWebLanguage).toUpperCase()%>
                     </td>
                 </tr>
                 <tr>
-                    <td class="admin"><%=getTran("openclinic.chuk", "obreport.right.uterine.artery.ri", sWebLanguage)%>
+                    <td class="admin"><%=getTran(request,"openclinic.chuk", "obreport.right.uterine.artery.ri", sWebLanguage)%>
                     </td>
                     <td class="admin2">
                         <input id="ac_ITEM_TYPE_OBREPORT_RIGHT_UTERINE_ARTERY_RI1" size="20" <%=setRightClick("ITEM_TYPE_OBREPORT_RIGHT_UTERINE_ARTERY_RI1")%> type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OBREPORT_RIGHT_UTERINE_ARTERY_RI1" property="itemId"/>]>.value" value="<%=sITEM_TYPE_OBREPORT_RIGHT_UTERINE_ARTERY_RI1%>" onblur="isNumber(this);">
@@ -294,7 +294,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="admin"><%=getTran("openclinic.chuk", "obreport.right.uterine.artery.sd", sWebLanguage)%>
+                    <td class="admin"><%=getTran(request,"openclinic.chuk", "obreport.right.uterine.artery.sd", sWebLanguage)%>
                     </td>
                     <td class="admin2">
                         <input id="ac_ITEM_TYPE_OBREPORT_RIGHT_UTERINE_ARTERY_SD1" size="20" <%=setRightClick("ITEM_TYPE_OBREPORT_RIGHT_UTERINE_ARTERY_SD1")%> type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OBREPORT_RIGHT_UTERINE_ARTERY_SD1" property="itemId"/>]>.value" value="<%=sITEM_TYPE_OBREPORT_RIGHT_UTERINE_ARTERY_SD1%>" onblur="isNumber(this);">
@@ -308,11 +308,11 @@
                 </tr>
                 <%--                               RIGHT FETAL CAROTIS                          --%>
                 <tr class="admin">
-                    <td colspan="4"><%=getTran("openclinic.chuk", "obreport.right.fetal.carotis", sWebLanguage).toUpperCase()%>
+                    <td colspan="4"><%=getTran(request,"openclinic.chuk", "obreport.right.fetal.carotis", sWebLanguage).toUpperCase()%>
                     </td>
                 </tr>
                 <tr>
-                    <td class="admin"><%=getTran("openclinic.chuk", "obreport.right.fetal.carotis.ri", sWebLanguage)%>
+                    <td class="admin"><%=getTran(request,"openclinic.chuk", "obreport.right.fetal.carotis.ri", sWebLanguage)%>
                     </td>
                     <td class="admin2">
                         <input id="ac_ITEM_TYPE_OBREPORT_RIGHT_FETAL_CAROTIS_RI1" size="20" <%=setRightClick("ITEM_TYPE_OBREPORT_RIGHT_FETAL_CAROTIS_RI1")%> type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OBREPORT_RIGHT_FETAL_CAROTIS_RI1" property="itemId"/>]>.value" value="<%=sITEM_TYPE_OBREPORT_RIGHT_FETAL_CAROTIS_RI1%>" onblur="isNumber(this);">
@@ -325,7 +325,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="admin"><%=getTran("openclinic.chuk", "obreport.right.fetal.carotis.sd", sWebLanguage)%>
+                    <td class="admin"><%=getTran(request,"openclinic.chuk", "obreport.right.fetal.carotis.sd", sWebLanguage)%>
                     </td>
                     <td class="admin2">
                         <input id="ac_ITEM_TYPE_OBREPORT_RIGHT_FETAL_CAROTIS_SD1" size="20" <%=setRightClick("ITEM_TYPE_OBREPORT_RIGHT_FETAL_CAROTIS_SD1")%> type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OBREPORT_RIGHT_FETAL_CAROTIS_SD1" property="itemId"/>]>.value" value="<%=sITEM_TYPE_OBREPORT_RIGHT_FETAL_CAROTIS_SD1%>" onblur="isNumber(this);">
@@ -339,11 +339,11 @@
                 </tr>
                 <%--                                           DUCTUS VENOSUS                             --%>
                 <tr class="admin">
-                    <td colspan="4"><%=getTran("openclinic.chuk", "obreport.ductus.venosus", sWebLanguage).toUpperCase()%>
+                    <td colspan="4"><%=getTran(request,"openclinic.chuk", "obreport.ductus.venosus", sWebLanguage).toUpperCase()%>
                     </td>
                 </tr>
                 <tr>
-                    <td class="admin"><%=getTran("openclinic.chuk", "obreport.ductus.venosus.ri", sWebLanguage)%>
+                    <td class="admin"><%=getTran(request,"openclinic.chuk", "obreport.ductus.venosus.ri", sWebLanguage)%>
                     </td>
                     <td class="admin2">
                         <input id="ac_ITEM_TYPE_OBREPORT_DUCTUS_VENOSUS_RI1" size="20" <%=setRightClick("ITEM_TYPE_OBREPORT_DUCTUS_VENOSUS_RI1")%> type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OBREPORT_DUCTUS_VENOSUS_RI1" property="itemId"/>]>.value" value="<%=sITEM_TYPE_OBREPORT_DUCTUS_VENOSUS_RI1%>" onblur="isNumber(this);">
@@ -356,7 +356,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="admin"><%=getTran("openclinic.chuk", "obreport.ductus.venosus.sd", sWebLanguage)%>
+                    <td class="admin"><%=getTran(request,"openclinic.chuk", "obreport.ductus.venosus.sd", sWebLanguage)%>
                     </td>
                     <td class="admin2">
                         <input id="ac_ITEM_TYPE_OBREPORT_DUCTUS_VENOSUS_SD1" size="20" <%=setRightClick("ITEM_TYPE_OBREPORT_DUCTUS_VENOSUS_SD1")%> type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OBREPORT_DUCTUS_VENOSUS_SD1" property="itemId"/>]>.value" value="<%=sITEM_TYPE_OBREPORT_DUCTUS_VENOSUS_SD1%>" onblur="isNumber(this);">
@@ -370,35 +370,35 @@
                 </tr>
                 <%--                                            CALC                               --%>
                 <tr class="admin">
-                    <td colspan="4"><%=getTran("openclinic.chuk", "obreport.calc", sWebLanguage).toUpperCase()%>
+                    <td colspan="4"><%=getTran(request,"openclinic.chuk", "obreport.calc", sWebLanguage).toUpperCase()%>
                     </td>
                 </tr>
                 <tr>
-                    <td class="admin"><%=getTran("openclinic.chuk", "obreport.calc.fl.bpd", sWebLanguage)%>
+                    <td class="admin"><%=getTran(request,"openclinic.chuk", "obreport.calc.fl.bpd", sWebLanguage)%>
                     </td>
                     <td class="admin2">
                         <input id="ac_ITEM_TYPE_OBREPORT_CALC_FL_BPD" size="20" <%=setRightClick("ITEM_TYPE_OBREPORT_CALC_FL_BPD")%> type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OBREPORT_CALC_FL_BPD" property="itemId"/>]>.value" value="<%=sITEM_TYPE_OBREPORT_CALC_FL_BPD%>" onblur="isNumber(this);"> %
                     </td>
-                    <td class="admin"><%=getTran("openclinic.chuk", "obreport.calc.hc.ac", sWebLanguage)%>
+                    <td class="admin"><%=getTran(request,"openclinic.chuk", "obreport.calc.hc.ac", sWebLanguage)%>
                     </td>
                     <td class="admin2">
                         <input id="ac_ITEM_TYPE_OBREPORT_CALC_HC_AC" size="20" <%=setRightClick("ITEM_TYPE_OBREPORT_CALC_HC_AC")%> type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OBREPORT_CALC_HC_AC" property="itemId"/>]>.value" value="<%=sITEM_TYPE_OBREPORT_CALC_HC_AC%>" onblur="isNumber(this);"> %
                     </td>
                 </tr>
                 <tr>
-                    <td class="admin"><%=getTran("openclinic.chuk", "obreport.calc.fl.hc", sWebLanguage)%>
+                    <td class="admin"><%=getTran(request,"openclinic.chuk", "obreport.calc.fl.hc", sWebLanguage)%>
                     </td>
                     <td class="admin2">
                         <input id="ac_ITEM_TYPE_OBREPORT_CALC_FL_HC" size="20" <%=setRightClick("ITEM_TYPE_OBREPORT_CALC_FL_HC")%> type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OBREPORT_CALC_FL_HC" property="itemId"/>]>.value" value="<%=sITEM_TYPE_OBREPORT_CALC_FL_HC%>" onblur="isNumber(this);"> %
                     </td>
-                    <td class="admin"><%=getTran("openclinic.chuk", "obreport.calc.fl.ac", sWebLanguage)%>
+                    <td class="admin"><%=getTran(request,"openclinic.chuk", "obreport.calc.fl.ac", sWebLanguage)%>
                     </td>
                     <td class="admin2">
                         <input id="ac_ITEM_TYPE_OBREPORT_CALC_FL_AC" size="20" <%=setRightClick("ITEM_TYPE_OBREPORT_CALC_FL_AC")%> type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OBREPORT_CALC_FL_AC" property="itemId"/>]>.value" value="<%=sITEM_TYPE_OBREPORT_CALC_FL_AC%>" onblur="isNumber(this);"> %
                     </td>
                 </tr>
                 <tr>
-                    <td class="admin"><%=getTran("openclinic.chuk", "obreport.calc.ci.bpd.ofd", sWebLanguage)%>
+                    <td class="admin"><%=getTran(request,"openclinic.chuk", "obreport.calc.ci.bpd.ofd", sWebLanguage)%>
                     </td>
                     <td class="admin2">
                         <input id="ac_ITEM_TYPE_OBREPORT_CALC_CI_BPD_OFD" size="20" <%=setRightClick("ITEM_TYPE_OBREPORT_CALC_CI_BPD_OFD")%> type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OBREPORT_CALC_CI_BPD_OFD" property="itemId"/>]>.value" value="<%=sITEM_TYPE_OBREPORT_CALC_CI_BPD_OFD%>" onblur="isNumber(this);"> %

@@ -74,7 +74,7 @@
 <table width="100%" class="menu" cellspacing="1">
     <%-- LEADER INI FILE --%>
     <tr>
-        <td>&nbsp;<%=getTran("Web.Translations","leaderinifile",sWebLanguage)%></td>
+        <td>&nbsp;<%=getTran(request,"Web.Translations","leaderinifile",sWebLanguage)%></td>
         <td>
             <input type="radio" name="LeaderIniFile" id="rbNL" value="nl" <%=sLeaderIniFile.equalsIgnoreCase("nl")?"checked":""%>><label for="rbNL">NL</label>
             <input type="radio" name="LeaderIniFile" id="rbFR" value="fr" <%=sLeaderIniFile.equalsIgnoreCase("fr")?"checked":""%>><label for="rbFR">FR</label>
@@ -87,7 +87,7 @@
     </tr>
     <%-- exclude types --%>
     <tr height="22">
-        <td>&nbsp;<%=getTran("web.translations","Excludedtypes",sWebLanguage)%></td>
+        <td>&nbsp;<%=getTran(request,"web.translations","Excludedtypes",sWebLanguage)%></td>
         <td><%=excludedLabelTypes%></td>
     </tr>
 </table>
@@ -140,7 +140,7 @@
 	
 	    %>
 	        <br>
-	        <%=getTran("Web","DataIsDeleted",sWebLanguage)%>
+	        <%=getTran(request,"Web","DataIsDeleted",sWebLanguage)%>
 	    <%
   }
   //################################################################################################
@@ -153,8 +153,8 @@
     <table width="100%" cellspacing="1">
         <tr>
             <td>
-                <a href="javascript:checkAll(true);"><%=getTran("Web.Manage.CheckDb","CheckAll",sWebLanguage)%></a>
-                <a href="javascript:checkAll(false);"><%=getTran("Web.Manage.CheckDb","UncheckAll",sWebLanguage)%></a>
+                <a href="javascript:checkAll(true);"><%=getTran(request,"Web.Manage.CheckDb","CheckAll",sWebLanguage)%></a>
+                <a href="javascript:checkAll(false);"><%=getTran(request,"Web.Manage.CheckDb","UncheckAll",sWebLanguage)%></a>
             </td>
             <td align="right">
                 <a href='#bottom'><img src='<c:url value='/_img/themes/default/bottom.gif'/>' class='link' border="0"></a>
@@ -318,8 +318,8 @@
     <table width="100%" cellspacing="1">
         <tr>
             <td>
-                <a href="javascript:checkAll(true);"><%=getTran("Web.Manage.CheckDb","CheckAll",sWebLanguage)%></a>
-                <a href="javascript:checkAll(false);"><%=getTran("Web.Manage.CheckDb","UncheckAll",sWebLanguage)%></a>
+                <a href="javascript:checkAll(true);"><%=getTran(request,"Web.Manage.CheckDb","CheckAll",sWebLanguage)%></a>
+                <a href="javascript:checkAll(false);"><%=getTran(request,"Web.Manage.CheckDb","UncheckAll",sWebLanguage)%></a>
             </td>
             <td align="right">
                 <a href="#topp" class="topbutton">&nbsp;</a>
@@ -334,10 +334,10 @@
         <%-- NUMBER OF LABELS FOUND --%>
         <tr>
             <td colspan="2">
-                <%=labelCount%> <%=getTran("Web.Manage","labelsSearched",sWebLanguage)%><br>
-                <%=validLabelCount%> <%=getTran("Web.Manage","validlabelsFound",sWebLanguage)%><br>
-                <%=invalidLabelCount%> <%=getTran("Web.Manage","invalidLabelsFound",sWebLanguage)%><br>
-                <%=excludedLabelCount%> <%=getTran("Web.Manage","excludedLabelsFound",sWebLanguage)%>
+                <%=labelCount%> <%=getTran(request,"Web.Manage","labelsSearched",sWebLanguage)%><br>
+                <%=validLabelCount%> <%=getTran(request,"Web.Manage","validlabelsFound",sWebLanguage)%><br>
+                <%=invalidLabelCount%> <%=getTran(request,"Web.Manage","invalidLabelsFound",sWebLanguage)%><br>
+                <%=excludedLabelCount%> <%=getTran(request,"Web.Manage","excludedLabelsFound",sWebLanguage)%>
            </td>
         </tr>
     </table>
@@ -349,7 +349,7 @@
 <%-- link to manage translations --%>
 <%=ScreenHelper.alignButtonsStart()%>
     <img src='<c:url value="/_img/themes/default/pijl.gif"/>'>
-    <a  href="<c:url value='/main.do'/>?Page=system/manageTranslations.jsp?ts=<%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran("Web","managetranslations",sWebLanguage)%></a>&nbsp;
+    <a  href="<c:url value='/main.do'/>?Page=system/manageTranslations.jsp?ts=<%=getTs()%>" onMouseOver="window.status='';return true;"><%=getTran(request,"Web","managetranslations",sWebLanguage)%></a>&nbsp;
 <%=ScreenHelper.alignButtonsStop()%>
 
 <a name="bottom">&nbsp;</a>

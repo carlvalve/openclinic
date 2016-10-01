@@ -7,10 +7,10 @@
 <%=writeTableHeader("Web","openXRayRequest",sWebLanguage," doBack();")%>
 <table class='list' width='100%' cellspacing="1" cellpadding="0">
     <tr class='admin'>
-        <td><%=getTran("web","date",sWebLanguage)%></td>
-        <td><%=getTran("web","id",sWebLanguage)%></td>
-        <td><%=getTran("web","type",sWebLanguage)%></td>
-        <td><%=getTran("web","patient",sWebLanguage)%></td>
+        <td><%=getTran(request,"web","date",sWebLanguage)%></td>
+        <td><%=getTran(request,"web","id",sWebLanguage)%></td>
+        <td><%=getTran(request,"web","type",sWebLanguage)%></td>
+        <td><%=getTran(request,"web","patient",sWebLanguage)%></td>
     </tr>
 <%
     if(bToExecute || bToValidate){
@@ -54,7 +54,7 @@
                 ItemVO id=transactionVO.getItem("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_IDENTIFICATION_RX");
                 out.println("<tr><td class='admin2'><a href='javascript:selectTran("+transactionVO.getServerId()+","+transactionVO.getTransactionId()+")'><b>"+ScreenHelper.stdDateFormat.format(transactionVO.getUpdateTime())+"</b></a></td>" +
                         "<td class='admin2'>"+(id!=null?id.getValue():"?")+"</td>" +
-                        "<td class='admin2'><b>"+(type!=null && !type.getValue().equalsIgnoreCase("0") && !type.getValue().equalsIgnoreCase("")?getTran("mir_type",type.getValue(),sWebLanguage):"?")+"</b></td>" +
+                        "<td class='admin2'><b>"+(type!=null && !type.getValue().equalsIgnoreCase("0") && !type.getValue().equalsIgnoreCase("")?getTran(request,"mir_type",type.getValue(),sWebLanguage):"?")+"</b></td>" +
                         "<td class='admin2'><b>"+rs.getString("firstname")+" "+rs.getString("lastname")+"</b></td></tr>");
             }
         }

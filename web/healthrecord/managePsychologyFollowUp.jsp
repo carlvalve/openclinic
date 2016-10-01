@@ -5,8 +5,8 @@
 	private String addPsychology(int iTotal, String sTmpPsychologyDate, String sTmpPsychologyTime, String sTmpPsychologyObservation, String sTmpPsychologyConclusion, String sWebLanguage) {
 	    return "<tr id='rowPsychology" + iTotal + "'>"
 	            + "<td width='36'>"
-	            + " <a href='javascript:deletePsychology(rowPsychology" + iTotal + ")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran("Web.Occup", "medwan.common.delete", sWebLanguage) + "' border='0'></a> "
-	            + " <a href='javascript:editPsychology(rowPsychology" + iTotal + ")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_edit.gif' alt='" + getTran("Web.Occup", "medwan.common.edit", sWebLanguage) + "' border='0'></a>"
+	            + " <a href='javascript:deletePsychology(rowPsychology" + iTotal + ")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran(null,"Web.Occup", "medwan.common.delete", sWebLanguage) + "' border='0'></a> "
+	            + " <a href='javascript:editPsychology(rowPsychology" + iTotal + ")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_edit.gif' alt='" + getTran(null,"Web.Occup", "medwan.common.edit", sWebLanguage) + "' border='0'></a>"
 	            + "</td>"
 	            + "<td>&nbsp;" + sTmpPsychologyDate + "</td>"
 	            + "<td>&nbsp;" + sTmpPsychologyTime + "</td>"
@@ -92,7 +92,7 @@
     
 <%--  Personne de référence/Institution --%>
     <tr>
-        <td class="admin" width="10%"><%=getTran("web","referenceperson",sWebLanguage)%>&nbsp;</td>
+        <td class="admin" width="10%"><%=getTran(request,"web","referenceperson",sWebLanguage)%>&nbsp;</td>
         <td class="admin2">
             <input class="text" type="text" size="50" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PSYFU_REFERENCEPERSON" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PSYFU_REFERENCEPERSON" property="value"/>" onblur="limitLength(this);">
         </td>
@@ -100,7 +100,7 @@
     
 <%--  Noms du psychologue clinicien --%>
     <tr>
-        <td class="admin" width="10%"><%=getTran("web","psychologist",sWebLanguage)%>&nbsp;</td>
+        <td class="admin" width="10%"><%=getTran(request,"web","psychologist",sWebLanguage)%>&nbsp;</td>
         <td class="admin2">
             <input class="text" type="text" size="50" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PSYFU_PSYCHOLOGIST" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PSYFU_PSYCHOLOGIST" property="value"/>" onblur="limitLength(this);">
         </td>
@@ -108,7 +108,7 @@
     
 <%--  Anamnèse familiale --%>
     <tr>
-        <td class="admin" width="20%"><%=getTran("web","familyhistory",sWebLanguage)%>&nbsp;</td>
+        <td class="admin" width="20%"><%=getTran(request,"web","familyhistory",sWebLanguage)%>&nbsp;</td>
         <td class="admin2">
             <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_PSYFU_FAMILYHISTORY")%> class="text" cols="80" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PSYFU_FAMILYHISTORY" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PSYFU_FAMILYHISTORY" property="value"/></textarea>
         </td>
@@ -116,24 +116,24 @@
     
 <%--  Anamnèse personnelle et contexte de la crise --%>
     <tr>
-        <td class="admin"><%=getTran("web","personalhistory.and.cisiscontext",sWebLanguage)%>&nbsp;</td>
+        <td class="admin"><%=getTran(request,"web","personalhistory.and.cisiscontext",sWebLanguage)%>&nbsp;</td>
         <td class="admin2">
             <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_PSYFU_PERSONALHISTORY")%> class="text" cols="80" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PSYFU_PERSONALHISTORY" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PSYFU_PERSONALHISTORY" property="value"/></textarea>
         </td>
     </tr>
 
     <tr class="admin" >
-        <td colspan="2" > <%=getTran("web","followup.chart",sWebLanguage)%></td>
+        <td colspan="2" > <%=getTran(request,"web","followup.chart",sWebLanguage)%></td>
     </tr>
     <tr>
     	<td colspan="2">
 	    	<table id="tblPsychology" width="100%">
 	    		<tr>
 	                <td class="admin" width="36">&nbsp;</td>
-	  	     		<td class="admin"><%=getTran("web","date",sWebLanguage)%></td>
-	  	     		<td class="admin"><%=getTran("web","hour",sWebLanguage)%></td>
-		     		<td class="admin"><%=getTran("web","session.report",sWebLanguage)%></td>
-		     		<td class="admin"><%=getTran("web","evolution",sWebLanguage)%></td>
+	  	     		<td class="admin"><%=getTran(request,"web","date",sWebLanguage)%></td>
+	  	     		<td class="admin"><%=getTran(request,"web","hour",sWebLanguage)%></td>
+		     		<td class="admin"><%=getTran(request,"web","session.report",sWebLanguage)%></td>
+		     		<td class="admin"><%=getTran(request,"web","evolution",sWebLanguage)%></td>
 	                <td class="admin">&nbsp;</td>
 		     	</tr>
 		     	<tr>

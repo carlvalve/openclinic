@@ -12,7 +12,7 @@
 
     while(iterator.hasNext()){
         transaction = (TransactionVO)iterator.next();
-        sTransTranslation = getTran("Web.occup",transaction.getTransactionType(),sWebLanguage);
+        sTransTranslation = getTran(request,"Web.occup",transaction.getTransactionType(),sWebLanguage);
         newTransaction = (TransactionVO)hTrans.get(sTransTranslation);
 
         if(newTransaction==null){
@@ -27,7 +27,7 @@
 %>
 <html>
 <head>
-    <title><%=getTran("web.occup","medwan.occupational-medicine.showlasttransactions",sWebLanguage)%></title>
+    <title><%=getTran(request,"web.occup","medwan.occupational-medicine.showlasttransactions",sWebLanguage)%></title>
     <%=sCSSNORMAL%>
     <%=sJSSORTTABLE%>
 </head>
@@ -36,8 +36,8 @@
     <table width="100%" cellspacing="0" cellpadding="0" class="sortable" id="searchresults">
         <%-- header --%>
         <tr class="admin">
-            <td width="80"><SORTTYPE:DATE><DESC><%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%></DESC></SORTTYPE:DATE></td>
-            <td><%=getTran("Web.Occup","medwan.common.contacttype",sWebLanguage)%></td>
+            <td width="80"><SORTTYPE:DATE><DESC><%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%></DESC></SORTTYPE:DATE></td>
+            <td><%=getTran(request,"Web.Occup","medwan.common.contacttype",sWebLanguage)%></td>
         </tr>
        
         <tbody class="hand">
@@ -65,7 +65,7 @@
                             <tr height="18px" class="list<%=sClass%>" onMouseOver="this.className='list_select'" onMouseOut="this.className='list<%=sClass%>'">
                                 <td>&nbsp;<%=ScreenHelper.stdDateFormat.format(transaction.getUpdateTime())%></td>
                                 <td>
-                                    &nbsp;<a href="<%=sCONTEXTPATH+sForward%>&be.mxs.healthrecord.transaction_id=<%=transaction.getTransactionId()%>&be.mxs.healthrecord.server_id=<%=transaction.getServerId()%>&ts=<%=getTs()%>&useTemplate=no" onMouseOver="window.status='';return true;"><%=getTran("Web.occup",transaction.getTransactionType(),sWebLanguage)%></a>
+                                    &nbsp;<a href="<%=sCONTEXTPATH+sForward%>&be.mxs.healthrecord.transaction_id=<%=transaction.getTransactionId()%>&be.mxs.healthrecord.server_id=<%=transaction.getServerId()%>&ts=<%=getTs()%>&useTemplate=no" onMouseOver="window.status='';return true;"><%=getTran(request,"Web.occup",transaction.getTransactionType(),sWebLanguage)%></a>
                                 </td>
                             </tr>
                         <%

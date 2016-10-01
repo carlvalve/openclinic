@@ -18,7 +18,7 @@
     ///////////////////////////////////////////////////////////////////////////////////////////////
     
     DecimalFormat deci = new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#"));
-    String sTitle = getTran("web","statistics.canceledinvoicelists",sWebLanguage)+"&nbsp;&nbsp;&nbsp;<i>["+sStart+" - "+sEnd+"]</i>";
+    String sTitle = getTran(request,"web","statistics.canceledinvoicelists",sWebLanguage)+"&nbsp;&nbsp;&nbsp;<i>["+sStart+" - "+sEnd+"]</i>";
 %>
 
 <%=writeTableHeaderDirectText(sTitle,sWebLanguage," closeWindow()")%>
@@ -45,12 +45,12 @@
     		
     		// header
     		out.print("<tr>");
-    		 out.print("<td class='admin'>"+getTran("web","ID",sWebLanguage)+"</td>");
-    		 out.print("<td class='admin'>"+getTran("web","date",sWebLanguage)+"</td>");
-    		 out.print("<td class='admin'>"+getTran("web","lastupdate",sWebLanguage)+"</td>");
-    		 out.print("<td class='admin'>"+getTran("web","patient",sWebLanguage)+"</td>");
-    		 out.print("<td class='admin'>"+getTran("web","amount",sWebLanguage)+"</td>");
-    		 out.print("<td class='admin'>"+getTran("web","balance",sWebLanguage)+"</td>");
+    		 out.print("<td class='admin'>"+getTran(request,"web","ID",sWebLanguage)+"</td>");
+    		 out.print("<td class='admin'>"+getTran(request,"web","date",sWebLanguage)+"</td>");
+    		 out.print("<td class='admin'>"+getTran(request,"web","lastupdate",sWebLanguage)+"</td>");
+    		 out.print("<td class='admin'>"+getTran(request,"web","patient",sWebLanguage)+"</td>");
+    		 out.print("<td class='admin'>"+getTran(request,"web","amount",sWebLanguage)+"</td>");
+    		 out.print("<td class='admin'>"+getTran(request,"web","balance",sWebLanguage)+"</td>");
     		out.print("</tr>");
     	}
     	
@@ -68,8 +68,8 @@
 %>
 </table>
 
-<%=getTran("web","patients",sWebLanguage)%>: <%=dossierCount%><br>
-<%=getTran("web","invoices",sWebLanguage)%>: <%=invoiceCount%><br>
+<%=getTran(request,"web","patients",sWebLanguage)%>: <%=dossierCount%><br>
+<%=getTran(request,"web","invoices",sWebLanguage)%>: <%=invoiceCount%><br>
 
 <%=ScreenHelper.alignButtonsStart()%>
     <input type="button" class="button" name="closeButton" value="<%=getTranNoLink("web","close",sWebLanguage)%>" onclick="closeWindow();">

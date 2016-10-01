@@ -39,7 +39,7 @@
     String service  = checkString(request.getParameter("ServiceID"));
     String serviceName = "";
     if(service.length() > 0){
-        serviceName=getTran("service",service,sWebLanguage);
+        serviceName=getTran(request,"service",service,sWebLanguage);
     }
     
     String showCalculations = checkString(request.getParameter("showCalculations"));
@@ -79,7 +79,7 @@
     
     <table width="100%" class="menu" cellspacing="1" cellpadding="0">
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","codetype",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","codetype",sWebLanguage)%></td>
             <td class="admin2">
                 <%-- CODE TYPE --%>
                 <select name="codetype" class="text">
@@ -90,12 +90,12 @@
                 </select>
                 
                 <%-- CODE --%>
-                <%=getTran("web","code",sWebLanguage)%>
+                <%=getTran(request,"web","code",sWebLanguage)%>
                 <input type="text" class="text" name="code" value="<%=checkString(request.getParameter("code"))%>"/>
                 <input type="checkbox" name="codedetails" <%=request.getParameter("codedetails")!=null?"checked":""%>>
                 
                 <%-- DETAIL --%>
-                <%=getTran("web","detail",sWebLanguage)%>
+                <%=getTran(request,"web","detail",sWebLanguage)%>
                 <select name="detail" class="text">
                     <option value="1" <%=detail==1?"selected":""%>>1</option>
                     <option value="2" <%=detail==2?"selected":""%>>2</option>
@@ -106,23 +106,23 @@
                 
                 <%-- CONTACT TYPE --%>
                 <select class="text" name="contacttype" id="contacttype" onchange="validateContactType();">
-                    <%=ScreenHelper.writeSelect("encountertype",contacttype,sWebLanguage)%>
+                    <%=ScreenHelper.writeSelect(request,"encountertype",contacttype,sWebLanguage)%>
                 </select>
             </td>
         </tr>
         
         <%-- PERIOD --%>
         <tr>
-            <td class="admin"><%=getTran("web","period",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web","period",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
-                <%=getTran("web","from",sWebLanguage)%>&nbsp;<%=writeDateField("fromdate","diagstats",fromdate,sWebLanguage)%>&nbsp;
-                <%=getTran("web","to",sWebLanguage)%>&nbsp;<%=writeDateField("todate","diagstats",todate,sWebLanguage)%>&nbsp;
+                <%=getTran(request,"web","from",sWebLanguage)%>&nbsp;<%=writeDateField("fromdate","diagstats",fromdate,sWebLanguage)%>&nbsp;
+                <%=getTran(request,"web","to",sWebLanguage)%>&nbsp;<%=writeDateField("todate","diagstats",todate,sWebLanguage)%>&nbsp;
             </td>
         </tr>
         
         <%-- SERVICE --%>
         <tr>
-            <td class="admin"><%=getTran("Web","service",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web","service",sWebLanguage)%></td>
             <td class="admin2" colspan="2">
                 <input type="hidden" name="ServiceID" id="ServiceID" value="<%=service%>">
                 <input class="text" type="text" name="ServiceName" id="ServiceName" readonly size="<%=sTextWidth%>" value="<%=serviceName%>">
@@ -134,7 +134,7 @@
         
         <%-- CALCULATIONS --%>
         <tr>
-            <td class="admin"><%=getTran("Web","show.statistical.calculations",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web","show.statistical.calculations",sWebLanguage)%></td>
             <td class="admin2" colspan='2'>
                 <input id="showCalculations" type="checkbox" name="showCalculations" <%=showCalculations.length()>0?"checked":""%>>
             </td>
@@ -142,7 +142,7 @@
         
         <%-- SORT ORDER --%>
         <tr>
-            <td class="admin"><%=getTran("Web","sortorder",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web","sortorder",sWebLanguage)%></td>
             <td class="admin2">
                 <select name="sortorder" id="sortorder" class="text">
                     <option value="duration" <%="duration".equalsIgnoreCase(sortorder)?" selected":""%>><%=getTranNoLink("web","sortorder.duration",sWebLanguage)%></option>
@@ -189,15 +189,15 @@
             %>
                 <table width="100%" class='list' cellspacing="1" cellpadding="0">
                     <tr height="60">
-                        <td class="admin2" width="5%"><b><%=getTran("web","code",sWebLanguage)%></b></td>
-                        <td class="admin2" width="35%"><b><%=getTran("web","codename",sWebLanguage)%></b></td>
-                        <td class="admin2" width="10%"><b><%=getTran("web","numberofdiagnoses",sWebLanguage)%> (<%=getTran("web","numberofcases",sWebLanguage)%>=<%=mainStats.getTotalContacts()%>)</b></td>
+                        <td class="admin2" width="5%"><b><%=getTran(request,"web","code",sWebLanguage)%></b></td>
+                        <td class="admin2" width="35%"><b><%=getTran(request,"web","codename",sWebLanguage)%></b></td>
+                        <td class="admin2" width="10%"><b><%=getTran(request,"web","numberofdiagnoses",sWebLanguage)%> (<%=getTran(request,"web","numberofcases",sWebLanguage)%>=<%=mainStats.getTotalContacts()%>)</b></td>
                         <td class="admin2" width="5%"><b>%</b></td>
-                        <td class="admin2" width="10%"><b><%=getTran("web","totalduration",sWebLanguage)%> (<%=getTran("web","durationofcases",sWebLanguage)%>=<%=mainStats.getTotalDuration()%>)</b></td>
+                        <td class="admin2" width="10%"><b><%=getTran(request,"web","totalduration",sWebLanguage)%> (<%=getTran(request,"web","durationofcases",sWebLanguage)%>=<%=mainStats.getTotalDuration()%>)</b></td>
                         <td class="admin2" width="5%"><b>%</b></td>
-                        <td class="admin2" width="10%"><b><%=getTran("web","dead",sWebLanguage)%> (<%=getTran("web","numberofdead",sWebLanguage)%>=<%=totalDead%>=<%=deciComma.format(new Double(totalDead).doubleValue()*100.0/mainStats.getTotalContacts())%>%)</b></td>
-                        <td class="admin2" width="10%"><b><%=getTran("web","relativenumberofdead",sWebLanguage)%></b></td>
-                        <td class="admin2" width="10%"><b><%=getTran("web","globalrelativenumberofdead",sWebLanguage)%></b></td>
+                        <td class="admin2" width="10%"><b><%=getTran(request,"web","dead",sWebLanguage)%> (<%=getTran(request,"web","numberofdead",sWebLanguage)%>=<%=totalDead%>=<%=deciComma.format(new Double(totalDead).doubleValue()*100.0/mainStats.getTotalContacts())%>%)</b></td>
+                        <td class="admin2" width="10%"><b><%=getTran(request,"web","relativenumberofdead",sWebLanguage)%></b></td>
+                        <td class="admin2" width="10%"><b><%=getTran(request,"web","globalrelativenumberofdead",sWebLanguage)%></b></td>
                     </tr>
             <%
         }
@@ -224,10 +224,10 @@
                 
                 <table width="100%" class='list' cellspacing="1" cellpadding="0">
                     <tr class="admin">
-                        <td width="10%"><%=getTran("web","code",sWebLanguage)%></td>
-                        <td width="30%"><%=getTran("web","codename",sWebLanguage)%></td>
-                        <td width="30%"><%=getTran("web","numberofdiagnoses",sWebLanguage)%> (<%=getTran("web","numberofcases",sWebLanguage)%>=<%=mainStats.getTotalContacts()%>)</td>
-                        <td width="30%"><%=getTran("web","totalduration",sWebLanguage)%> (<%=getTran("web","durationofcases",sWebLanguage)%>=<%=mainStats.getTotalDuration()%>)</td>
+                        <td width="10%"><%=getTran(request,"web","code",sWebLanguage)%></td>
+                        <td width="30%"><%=getTran(request,"web","codename",sWebLanguage)%></td>
+                        <td width="30%"><%=getTran(request,"web","numberofdiagnoses",sWebLanguage)%> (<%=getTran(request,"web","numberofcases",sWebLanguage)%>=<%=mainStats.getTotalContacts()%>)</td>
+                        <td width="30%"><%=getTran(request,"web","totalduration",sWebLanguage)%> (<%=getTran(request,"web","durationofcases",sWebLanguage)%>=<%=mainStats.getTotalDuration()%>)</td>
                     </tr>
                     <tr>
                         <td><%=diagnosisStats.getCode().replaceAll("%","").toUpperCase()%></td>
@@ -255,18 +255,18 @@
                                 <table width="100%" cellspacing="1" cellpadding="0">
                                     <tr class="gray">
                                         <td>&nbsp;</td>
-                                        <td><%=getTran("web","outcome",sWebLanguage)%></td>
-                                        <td><%=getTran("web","numberofcases",sWebLanguage)%></td>
-                                        <td><%=getTran("web","admissionduration",sWebLanguage)%></td>
-                                        <td><%=getTran("web","meanduration",sWebLanguage)%></td>
-                                        <td><%=getTran("web","medianduration",sWebLanguage)%></td>
-                                        <td><%=getTran("web","standarddeviationduration",sWebLanguage)%></td>
-                                        <td><%=getTran("web","minimumduration",sWebLanguage)%></td>
-                                        <td><%=getTran("web","maximumduration",sWebLanguage)%></td>
-                                        <td><%=getTran("web","comorbidity",sWebLanguage)%></td>
-                                        <td><%=getTran("web","correctedtotalduration",sWebLanguage)%></td>
-                                        <td><%=getTran("web","correctedmeanduration",sWebLanguage)%></td>
-                                        <td><%=getTran("web","correctedmedianduration",sWebLanguage)%></td>
+                                        <td><%=getTran(request,"web","outcome",sWebLanguage)%></td>
+                                        <td><%=getTran(request,"web","numberofcases",sWebLanguage)%></td>
+                                        <td><%=getTran(request,"web","admissionduration",sWebLanguage)%></td>
+                                        <td><%=getTran(request,"web","meanduration",sWebLanguage)%></td>
+                                        <td><%=getTran(request,"web","medianduration",sWebLanguage)%></td>
+                                        <td><%=getTran(request,"web","standarddeviationduration",sWebLanguage)%></td>
+                                        <td><%=getTran(request,"web","minimumduration",sWebLanguage)%></td>
+                                        <td><%=getTran(request,"web","maximumduration",sWebLanguage)%></td>
+                                        <td><%=getTran(request,"web","comorbidity",sWebLanguage)%></td>
+                                        <td><%=getTran(request,"web","correctedtotalduration",sWebLanguage)%></td>
+                                        <td><%=getTran(request,"web","correctedmeanduration",sWebLanguage)%></td>
+                                        <td><%=getTran(request,"web","correctedmedianduration",sWebLanguage)%></td>
                                     </tr>
                                     
                                     <%
@@ -286,18 +286,18 @@
                                             
                                             out.print("<tr>"+
                                                        "<td width='2%'>&nbsp;</td>"+
-                                                       "<td width='9%'>"+getTran("outcome",outcomeStat.getOutcome(),sWebLanguage)+" ("+deciComma.format(new Double(outcomeStat.getDiagnosisCases()).doubleValue()*100.0/diagnosisStats.getDiagnosisAllCases())+"%)</td>"+
+                                                       "<td width='9%'>"+getTran(request,"outcome",outcomeStat.getOutcome(),sWebLanguage)+" ("+deciComma.format(new Double(outcomeStat.getDiagnosisCases()).doubleValue()*100.0/diagnosisStats.getDiagnosisAllCases())+"%)</td>"+
                                                        "<td><a href=\"javascript:listcases('"+diagnosisStats.getCodeType()+"','"+diagnosisStats.getCode().replaceAll("%","").toUpperCase()+"','"+codeLabel+"','"+outcomeStat.getOutcome()+"');\">"+new DecimalFormat("#0").format(outcomeStat.getDiagnosisCases())+"</a></td>"+
-                                                       "<td>"+deciComma.format(new Double(outcomeStat.getMeanDuration()*outcomeStat.getDiagnosisCases()))+" "+getTran("web","days",sWebLanguage)+"</td>"+
-                                                       "<td>"+deciComma.format(outcomeStat.getMeanDuration())+" "+getTran("web","days",sWebLanguage)+"</td>"+
-                                                       "<td><b>"+deciComma.format(median)+" "+getTran("web","days",sWebLanguage)+"</b></br>(Q1="+q[0]+",Q3="+q[2]+")</td>"+
-                                                       "<td>"+deciComma.format(sd)+" "+getTran("web","days",sWebLanguage)+"</td>" +
-                                                       "<td"+(outcomeStat.getMinDuration()<outcomeStat.getMeanDuration()-3*sd?" style='color: red'":"")+">"+deciComma.format(outcomeStat.getMinDuration())+" "+getTran("web","days",sWebLanguage)+"</td>"+
-                                                       "<td"+(outcomeStat.getMaxDuration()>outcomeStat.getMeanDuration()+3*sd?" style='color: red'":"")+">"+deciComma.format(outcomeStat.getMaxDuration())+" "+getTran("web","days",sWebLanguage)+"</td>"+
+                                                       "<td>"+deciComma.format(new Double(outcomeStat.getMeanDuration()*outcomeStat.getDiagnosisCases()))+" "+getTran(request,"web","days",sWebLanguage)+"</td>"+
+                                                       "<td>"+deciComma.format(outcomeStat.getMeanDuration())+" "+getTran(request,"web","days",sWebLanguage)+"</td>"+
+                                                       "<td><b>"+deciComma.format(median)+" "+getTran(request,"web","days",sWebLanguage)+"</b></br>(Q1="+q[0]+",Q3="+q[2]+")</td>"+
+                                                       "<td>"+deciComma.format(sd)+" "+getTran(request,"web","days",sWebLanguage)+"</td>" +
+                                                       "<td"+(outcomeStat.getMinDuration()<outcomeStat.getMeanDuration()-3*sd?" style='color: red'":"")+">"+deciComma.format(outcomeStat.getMinDuration())+" "+getTran(request,"web","days",sWebLanguage)+"</td>"+
+                                                       "<td"+(outcomeStat.getMaxDuration()>outcomeStat.getMeanDuration()+3*sd?" style='color: red'":"")+">"+deciComma.format(outcomeStat.getMaxDuration())+" "+getTran(request,"web","days",sWebLanguage)+"</td>"+
                                                        "<td><a href=\"javascript:listcomorbidity('"+diagnosisStats.getCodeType()+"','"+diagnosisStats.getCode().replaceAll("%","").toUpperCase()+"','"+outcomeStat.getOutcome()+"','"+outcomeStat.getDiagnosisCases()+"');\">"+deciComma.format(outcomeStat.getCoMorbidityScore())+"</a></td>"+
                                                        "<td>"+deciComma.format(new Double(outcomeStat.getMeanDuration()*outcomeStat.getDiagnosisCases()/outcomeStat.getCoMorbidityScore()))+"</td>"+
-                                                       "<td>"+deciComma.format(outcomeStat.getMeanDuration()/outcomeStat.getCoMorbidityScore())+" (+-"+deciComma.format(outcomeStat.getStandardDeviationDuration()/outcomeStat.getCoMorbidityScore())+") "+getTran("web","days",sWebLanguage)+"</td>"+
-                                                       "<td><b>"+deciComma.format(median/outcomeStat.getCoMorbidityScore())+" (+-"+deciComma.format(outcomeStat.getStandardDeviationDuration()/outcomeStat.getCoMorbidityScore())+") "+getTran("web","days",sWebLanguage)+"</b></td>"+
+                                                       "<td>"+deciComma.format(outcomeStat.getMeanDuration()/outcomeStat.getCoMorbidityScore())+" (+-"+deciComma.format(outcomeStat.getStandardDeviationDuration()/outcomeStat.getCoMorbidityScore())+") "+getTran(request,"web","days",sWebLanguage)+"</td>"+
+                                                       "<td><b>"+deciComma.format(median/outcomeStat.getCoMorbidityScore())+" (+-"+deciComma.format(outcomeStat.getStandardDeviationDuration()/outcomeStat.getCoMorbidityScore())+") "+getTran(request,"web","days",sWebLanguage)+"</b></td>"+
                                                       "<tr>");
                                         }
                                     %>

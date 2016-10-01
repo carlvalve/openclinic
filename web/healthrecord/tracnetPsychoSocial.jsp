@@ -63,15 +63,15 @@
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
             <td class='tabs' width='5'>&nbsp;</td>
-            <td class='tabunselected' width="1%" onclick="activateTab(1)" id="td1" onmouseover='this.style.cursor="hand"' onmouseout='this.style.cursor="default"' nowrap>&nbsp;<b><%=getTran("openclinic.chuk","tracnet.psychosocial.page1",sWebLanguage)%></b>&nbsp;</td>
+            <td class='tabunselected' width="1%" onclick="activateTab(1)" id="td1" onmouseover='this.style.cursor="hand"' onmouseout='this.style.cursor="default"' nowrap>&nbsp;<b><%=getTran(request,"openclinic.chuk","tracnet.psychosocial.page1",sWebLanguage)%></b>&nbsp;</td>
             <td class='tabs' width='5'>&nbsp;</td>
-            <td class='tabunselected' width="1%" onclick="activateTab(2)" id="td2" onmouseover='this.style.cursor="hand"' onmouseout='this.style.cursor="default"' nowrap>&nbsp;<b><%=getTran("openclinic.chuk","tracnet.psychosocial.page2",sWebLanguage)%></b>&nbsp;</td>
+            <td class='tabunselected' width="1%" onclick="activateTab(2)" id="td2" onmouseover='this.style.cursor="hand"' onmouseout='this.style.cursor="default"' nowrap>&nbsp;<b><%=getTran(request,"openclinic.chuk","tracnet.psychosocial.page2",sWebLanguage)%></b>&nbsp;</td>
             <td style="border-bottom: 1px solid Black;" width='5'>&nbsp;</td>
-            <td class='tabunselected' width="1%" onclick="activateTab(3)" id="td3" onmouseover='this.style.cursor="hand"' onmouseout='this.style.cursor="default"' nowrap>&nbsp;<b><%=getTran("openclinic.chuk","tracnet.psychosocial.page3",sWebLanguage)%></b>&nbsp;</td>
+            <td class='tabunselected' width="1%" onclick="activateTab(3)" id="td3" onmouseover='this.style.cursor="hand"' onmouseout='this.style.cursor="default"' nowrap>&nbsp;<b><%=getTran(request,"openclinic.chuk","tracnet.psychosocial.page3",sWebLanguage)%></b>&nbsp;</td>
             <td class='tabs' width='5'>&nbsp;</td>
-            <td class='tabunselected' width="1%" onclick="activateTab(4)" id="td4" onmouseover='this.style.cursor="hand"' onmouseout='this.style.cursor="default"' nowrap>&nbsp;<b><%=getTran("openclinic.chuk","tracnet.psychosocial.page4",sWebLanguage)%></b>&nbsp;</td>
+            <td class='tabunselected' width="1%" onclick="activateTab(4)" id="td4" onmouseover='this.style.cursor="hand"' onmouseout='this.style.cursor="default"' nowrap>&nbsp;<b><%=getTran(request,"openclinic.chuk","tracnet.psychosocial.page4",sWebLanguage)%></b>&nbsp;</td>
             <td style="border-bottom: 1px solid Black;" width='5'>&nbsp;</td>
-            <td class='tabunselected' width="1%" onclick="activateTab(5)" id="td5" onmouseover='this.style.cursor="hand"' onmouseout='this.style.cursor="default"' nowrap>&nbsp;<b><%=getTran("openclinic.chuk","tracnet.psychosocial.page5",sWebLanguage)%></b>&nbsp;</td>
+            <td class='tabunselected' width="1%" onclick="activateTab(5)" id="td5" onmouseover='this.style.cursor="hand"' onmouseout='this.style.cursor="default"' nowrap>&nbsp;<b><%=getTran(request,"openclinic.chuk","tracnet.psychosocial.page5",sWebLanguage)%></b>&nbsp;</td>
             <td width="*" class='tabs'>&nbsp;</td>
         </tr>
     </table>

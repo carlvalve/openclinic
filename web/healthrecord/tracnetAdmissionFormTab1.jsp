@@ -10,18 +10,18 @@
         String sTmpAdopt = "";
 
         if (sAdopt.length()>0){
-            sTmpAdopt = getTran("web.occup",sAdopt,sWebLanguage);
+            sTmpAdopt = getTran(null,"web.occup",sAdopt,sWebLanguage);
         }
 
         String sTmpTest = "";
 
         if (sTest.length()>0){
-            sTmpTest = getTran("web.occup",sTest,sWebLanguage);
+            sTmpTest = getTran(null,"web.occup",sTest,sWebLanguage);
         }
         sTmp.append("<tr id='rowChildren"+iTotal+"'>")
              .append("<td class=\"admin2\">")
-              .append("<a href='javascript:deleteChildren(rowChildren"+iTotal+")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran("Web.Occup","medwan.common.delete",sWebLanguage) + "' border='0'></a> ")
-              .append("<a href='javascript:editChildren(rowChildren"+iTotal+")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_edit.gif' alt='" + getTran("Web.Occup","medwan.common.edit",sWebLanguage) + "' border='0'></a>")
+              .append("<a href='javascript:deleteChildren(rowChildren"+iTotal+")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran(null,"Web.Occup","medwan.common.delete",sWebLanguage) + "' border='0'></a> ")
+              .append("<a href='javascript:editChildren(rowChildren"+iTotal+")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_edit.gif' alt='" + getTran(null,"Web.Occup","medwan.common.edit",sWebLanguage) + "' border='0'></a>")
              .append("</td>")
              .append("<td class='admin2'>&nbsp;" + sAge + "</td>")
              .append("<td class='admin2'>&nbsp;" + sTmpAdopt + "</td>")
@@ -39,13 +39,13 @@
         String sTmpMolecule = "";
 
         if (sMolecule.length()>0){
-            sTmpMolecule = getTran("tracnet.molecules",sMolecule,sWebLanguage);
+            sTmpMolecule = getTran(null,"tracnet.molecules",sMolecule,sWebLanguage);
         }
 
         sTmp.append("<tr id='rowARV"+iTotal+"'>")
              .append("<td class=\"admin2\">")
-              .append("<a href='javascript:deleteARV(rowARV"+iTotal+")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran("Web.Occup","medwan.common.delete",sWebLanguage) + "' border='0'></a> ")
-              .append("<a href='javascript:editARV(rowARV"+iTotal+")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_edit.gif' alt='" + getTran("Web.Occup","medwan.common.edit",sWebLanguage) + "' border='0'></a>")
+              .append("<a href='javascript:deleteARV(rowARV"+iTotal+")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran(null,"Web.Occup","medwan.common.delete",sWebLanguage) + "' border='0'></a> ")
+              .append("<a href='javascript:editARV(rowARV"+iTotal+")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_edit.gif' alt='" + getTran(null,"Web.Occup","medwan.common.edit",sWebLanguage) + "' border='0'></a>")
              .append("</td>")
              .append("<td class='admin2'>&nbsp;" + sTmpMolecule + "</td>")
              .append("<td class='admin2'>&nbsp;" +sDuration + "</td>")
@@ -62,13 +62,13 @@
         String sTmpMolecule = "";
 
         if (sMolecule.length()>0){
-            sTmpMolecule = getTran("tracnet.antecedents.molecules",sMolecule,sWebLanguage);
+            sTmpMolecule = getTran(null,"tracnet.antecedents.molecules",sMolecule,sWebLanguage);
         }
 
         sTmp.append("<tr id='rowAntecedents"+iTotal+"'>")
              .append("<td class=\"admin2\">")
-              .append("<a href='javascript:deleteAntecedents(rowAntecedents"+iTotal+")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran("Web.Occup","medwan.common.delete",sWebLanguage) + "' border='0'></a> ")
-              .append("<a href='javascript:editAntecedents(rowAntecedents"+iTotal+")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_edit.gif' alt='" + getTran("Web.Occup","medwan.common.edit",sWebLanguage) + "' border='0'></a>")
+              .append("<a href='javascript:deleteAntecedents(rowAntecedents"+iTotal+")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran(null,"Web.Occup","medwan.common.delete",sWebLanguage) + "' border='0'></a> ")
+              .append("<a href='javascript:editAntecedents(rowAntecedents"+iTotal+")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_edit.gif' alt='" + getTran(null,"Web.Occup","medwan.common.edit",sWebLanguage) + "' border='0'></a>")
              .append("</td>")
              .append("<td class='admin2'>&nbsp;" + sTmpMolecule + "</td>")
              .append("<td class='admin2'>&nbsp;" +sDateBegin + "</td>")
@@ -87,18 +87,18 @@
     <tr>
         <td class="admin" width="<%=sTDAdminWidth%>">
             <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-            <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+            <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
         </td>
         <td class="admin2">
             <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" id="trandate" OnBlur="checkDate(this);">
             <script>writeTranDate();</script>
         </td>
-        <td class="admin"><%=getTran("openclinic.chuk","tracnet.admission.form.first.hiv.test",sWebLanguage)%></td>
+        <td class="admin"><%=getTran(request,"openclinic.chuk","tracnet.admission.form.first.hiv.test",sWebLanguage)%></td>
         <td class="admin2">
             <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ADMISSION_FORM_FIRST_HIV_TEST" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ADMISSION_FORM_FIRST_HIV_TEST" property="value"/>" id="first_hiv_test" OnBlur='checkDate(this)'>
             <script>writeMyDate("first_hiv_test");</script>
         </td>
-        <td class="admin"><%=getTran("openclinic.chuk","tracnet.admission.form.partner",sWebLanguage)%></td>
+        <td class="admin"><%=getTran(request,"openclinic.chuk","tracnet.admission.form.partner",sWebLanguage)%></td>
         <td class="admin2">
             <select class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ADMISSION_FORM_PARTNER" property="itemId"/>]>.value">
                 <option/>
@@ -113,7 +113,7 @@
                         }
                     }
                 %>
-                <%=ScreenHelper.writeSelect("tracnet.admission.form.partner",sType,sWebLanguage,false,true)%>
+                <%=ScreenHelper.writeSelect(request,"tracnet.admission.form.partner",sType,sWebLanguage,false,true)%>
             </select>
         </td>
     </tr>
@@ -121,14 +121,14 @@
 <br>
 <table class="list" cellspacing="1" cellpadding="0" id="tblChildren" width="100%">
     <tr class="admin">
-            <td colspan="6"><%=getTran("openclinic.chuk","tracnet.admission.form.children",sWebLanguage)%></td>
+            <td colspan="6"><%=getTran(request,"openclinic.chuk","tracnet.admission.form.children",sWebLanguage)%></td>
         </tr>
     <tr>
         <td class="admin" width="40"/>
-        <td class="admin" width="100"><%=getTran("openclinic.chuk","tracnet.admission.form.children.age",sWebLanguage)%></td>
-        <td class="admin" width="100"><%=getTran("openclinic.chuk","tracnet.admission.form.children.adopt",sWebLanguage)%></td>
-        <td class="admin" width="100"><%=getTran("openclinic.chuk","tracnet.admission.form.children.test",sWebLanguage)%></td>
-        <td class="admin" width="300"><%=getTran("openclinic.chuk","tracnet.admission.form.children.result",sWebLanguage)%></td>
+        <td class="admin" width="100"><%=getTran(request,"openclinic.chuk","tracnet.admission.form.children.age",sWebLanguage)%></td>
+        <td class="admin" width="100"><%=getTran(request,"openclinic.chuk","tracnet.admission.form.children.adopt",sWebLanguage)%></td>
+        <td class="admin" width="100"><%=getTran(request,"openclinic.chuk","tracnet.admission.form.children.test",sWebLanguage)%></td>
+        <td class="admin" width="300"><%=getTran(request,"openclinic.chuk","tracnet.admission.form.children.result",sWebLanguage)%></td>
         <td class="admin"/>
     </tr>
     <tr>
@@ -137,15 +137,15 @@
         <td class="admin2">
             <select class="text" name="childrenAdopt">
                 <option/>
-                <option value="medwan.common.yes"><%=getTran("web.occup","medwan.common.yes",sWebLanguage)%></option>
-                <option value="medwan.common.no"><%=getTran("web.occup","medwan.common.no",sWebLanguage)%></option>
+                <option value="medwan.common.yes"><%=getTran(request,"web.occup","medwan.common.yes",sWebLanguage)%></option>
+                <option value="medwan.common.no"><%=getTran(request,"web.occup","medwan.common.no",sWebLanguage)%></option>
             </select>
         </td>
         <td class="admin2">
             <select class="text" name="childrenTest">
                 <option/>
-                <option value="medwan.common.yes"><%=getTran("web.occup","medwan.common.yes",sWebLanguage)%></option>
-                <option value="medwan.common.no"><%=getTran("web.occup","medwan.common.no",sWebLanguage)%></option>
+                <option value="medwan.common.yes"><%=getTran(request,"web.occup","medwan.common.yes",sWebLanguage)%></option>
+                <option value="medwan.common.no"><%=getTran(request,"web.occup","medwan.common.no",sWebLanguage)%></option>
             </select>
         </td>
         <td class="admin2"><input type="text" class="text" size="50" name="childrenResult"></td>
@@ -218,7 +218,7 @@ if (sChildren.indexOf("£")>-1){
 <br>
 <table class="list" cellspacing="1" cellpadding="0" id="tblSuivi" width="100%">
     <tr>
-        <td class="admin"><%=getTran("openclinic.chuk","tracnet.admission.form.admission.type",sWebLanguage)%></td>
+        <td class="admin"><%=getTran(request,"openclinic.chuk","tracnet.admission.form.admission.type",sWebLanguage)%></td>
         <td class="admin2">
             <select class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ADMISSION_FORM_ADMISSION_TYPE" property="itemId"/>]>.value">
                 <option/>
@@ -232,33 +232,33 @@ if (sChildren.indexOf("£")>-1){
                         }
                     }
                 %>
-                <%=ScreenHelper.writeSelect("tracnet.admission.form.admission.type",sType,sWebLanguage,false,true)%>
+                <%=ScreenHelper.writeSelect(request,"tracnet.admission.form.admission.type",sType,sWebLanguage,false,true)%>
             </select>
-            <%=getTran("openclinic.chuk","tracnet.admission.form.admission.type.other",sWebLanguage)%>
+            <%=getTran(request,"openclinic.chuk","tracnet.admission.form.admission.type.other",sWebLanguage)%>
             <input type="text" class="text" size="50" <%=setRightClick("ITEM_TYPE_ADMISSION_FORM_ADMISSION_OTHER")%> name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ADMISSION_FORM_ADMISSION_OTHER" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ADMISSION_FORM_ADMISSION_OTHER" property="value"/>">
             <br>
-            <%=getTran("openclinic.chuk","tracnet.admission.form.admission.type.place",sWebLanguage)%>
+            <%=getTran(request,"openclinic.chuk","tracnet.admission.form.admission.type.place",sWebLanguage)%>
             <input type="text" class="text" size="50" <%=setRightClick("ITEM_TYPE_ADMISSION_FORM_ADMISSION_PLACE")%> name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ADMISSION_FORM_ADMISSION_PLACE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ADMISSION_FORM_ADMISSION_PLACE" property="value"/>">
         </td>
     </tr>
     <tr>
-        <td class="admin"><%=getTran("openclinic.chuk","tracnet.admission.form.took.arv",sWebLanguage)%></td>
+        <td class="admin"><%=getTran(request,"openclinic.chuk","tracnet.admission.form.took.arv",sWebLanguage)%></td>
         <td class="admin2">
-            <input <%=setRightClick("ITEM_TYPE_ADMISSION_FORM_TOOK_ARV")%> type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ADMISSION_FORM_TOOK_ARV" property="itemId"/>]>.value" value="medwan.common.yes" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ADMISSION_FORM_TOOK_ARV;value=medwan.common.yes" property="value" outputString="checked"/> id="cbtookarv_yes"><%=getLabel("web.occup","medwan.common.yes",sWebLanguage,"cbtookarv_yes")%>
-            <input <%=setRightClick("ITEM_TYPE_ADMISSION_FORM_TOOK_ARV")%> type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ADMISSION_FORM_TOOK_ARV" property="itemId"/>]>.value" value="medwan.common.no" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ADMISSION_FORM_TOOK_ARV;value=medwan.common.no" property="value" outputString="checked"/> id="cbtookarv_no"><%=getLabel("web.occup","medwan.common.no",sWebLanguage,"cbtookarv_no")%>
+            <input <%=setRightClick("ITEM_TYPE_ADMISSION_FORM_TOOK_ARV")%> type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ADMISSION_FORM_TOOK_ARV" property="itemId"/>]>.value" value="medwan.common.yes" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ADMISSION_FORM_TOOK_ARV;value=medwan.common.yes" property="value" outputString="checked"/> id="cbtookarv_yes"><%=getLabel(request,"web.occup","medwan.common.yes",sWebLanguage,"cbtookarv_yes")%>
+            <input <%=setRightClick("ITEM_TYPE_ADMISSION_FORM_TOOK_ARV")%> type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ADMISSION_FORM_TOOK_ARV" property="itemId"/>]>.value" value="medwan.common.no" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ADMISSION_FORM_TOOK_ARV;value=medwan.common.no" property="value" outputString="checked"/> id="cbtookarv_no"><%=getLabel(request,"web.occup","medwan.common.no",sWebLanguage,"cbtookarv_no")%>
         </td>
     </tr>
 </table>
 <br>
 <table class="list" cellspacing="1" cellpadding="0" id="tblARV" width="100%">
     <tr class="admin">
-        <td colspan="5"><%=getTran("openclinic.chuk","tracnet.admission.form.wich.arvs",sWebLanguage)%></td>
+        <td colspan="5"><%=getTran(request,"openclinic.chuk","tracnet.admission.form.wich.arvs",sWebLanguage)%></td>
     </tr>
     <tr>
         <td class="admin" width="40"/>
-        <td class="admin" width="200"><%=getTran("openclinic.chuk","tracnet.admission.form.arv.molecule",sWebLanguage)%></td>
-        <td class="admin" width="100"><%=getTran("openclinic.chuk","tracnet.admission.form.arv.duration",sWebLanguage)%></td>
-        <td class="admin" width="300"><%=getTran("openclinic.chuk","tracnet.admission.form.arv.comment",sWebLanguage)%></td>
+        <td class="admin" width="200"><%=getTran(request,"openclinic.chuk","tracnet.admission.form.arv.molecule",sWebLanguage)%></td>
+        <td class="admin" width="100"><%=getTran(request,"openclinic.chuk","tracnet.admission.form.arv.duration",sWebLanguage)%></td>
+        <td class="admin" width="300"><%=getTran(request,"openclinic.chuk","tracnet.admission.form.arv.comment",sWebLanguage)%></td>
         <td class="admin"/>
     </tr>
     <tr>
@@ -266,7 +266,7 @@ if (sChildren.indexOf("£")>-1){
         <td class="admin2">
              <select class="text" name="ARVMolecule">
                 <option/>
-                <%=ScreenHelper.writeSelect("tracnet.molecules","",sWebLanguage,false,true)%>
+                <%=ScreenHelper.writeSelect(request,"tracnet.molecules","",sWebLanguage,false,true)%>
             </select>
         </td>
         <td class="admin2"><input type="text" class="text" size="5" name="ARVDuration" onblur="isNumber(this)"></td>
@@ -336,14 +336,14 @@ if (sARV.indexOf("£")>-1){
 
 <table class="list" cellspacing="1" cellpadding="0" id="tblAntecedents" width="100%">
     <tr class="admin">
-        <td colspan="6"><%=getTran("openclinic.chuk","tracnet.admission.form.antecedents",sWebLanguage)%></td>
+        <td colspan="6"><%=getTran(request,"openclinic.chuk","tracnet.admission.form.antecedents",sWebLanguage)%></td>
     </tr>
     <tr>
         <td class="admin" width="40"/>
-        <td class="admin"><%=getTran("openclinic.chuk","tracnet.admission.form.antecedents.molecule.arv",sWebLanguage)%></td>
-        <td class="admin" width="100"><%=getTran("openclinic.chuk","tracnet.admission.form.antecedents.date.begin",sWebLanguage)%></td>
-        <td class="admin" width="100"><%=getTran("openclinic.chuk","tracnet.admission.form.antecedents.date.end",sWebLanguage)%></td>
-        <td class="admin" width="300"><%=getTran("openclinic.chuk","tracnet.suivi.arv.comment",sWebLanguage)%></td>
+        <td class="admin"><%=getTran(request,"openclinic.chuk","tracnet.admission.form.antecedents.molecule.arv",sWebLanguage)%></td>
+        <td class="admin" width="100"><%=getTran(request,"openclinic.chuk","tracnet.admission.form.antecedents.date.begin",sWebLanguage)%></td>
+        <td class="admin" width="100"><%=getTran(request,"openclinic.chuk","tracnet.admission.form.antecedents.date.end",sWebLanguage)%></td>
+        <td class="admin" width="300"><%=getTran(request,"openclinic.chuk","tracnet.suivi.arv.comment",sWebLanguage)%></td>
         <td class="admin"/>
     </tr>
     <tr>
@@ -351,7 +351,7 @@ if (sARV.indexOf("£")>-1){
         <td class="admin2">
             <select class="text" name="antecedentsMolecule">
                 <option/>
-                <%=ScreenHelper.writeSelect("tracnet.antecedents.molecules","",sWebLanguage,false,true)%>
+                <%=ScreenHelper.writeSelect(request,"tracnet.antecedents.molecules","",sWebLanguage,false,true)%>
             </select>
         </td>
         <td class="admin2"><%=writeDateField("antecedentsDateBegin","transactionForm","",sWebLanguage)%></td>
@@ -426,7 +426,7 @@ if (sAntecedents.indexOf("£")>-1){
 <br>
 <table class="list" cellspacing="1" cellpadding="0" id="tblSuivi" width="100%">
     <tr>
-        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("openclinic.chuk","tracnet.admission.form.allergy",sWebLanguage)%></td>
+        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"openclinic.chuk","tracnet.admission.form.allergy",sWebLanguage)%></td>
         <td class="admin2">
             <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_ADMISSION_FORM_ALLERGY")%> class="text" cols="100" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ADMISSION_FORM_ALLERGY" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ADMISSION_FORM_ALLERGY" property="value"/></textarea>
         </td>

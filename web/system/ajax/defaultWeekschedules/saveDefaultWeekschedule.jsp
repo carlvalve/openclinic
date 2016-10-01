@@ -311,7 +311,7 @@
     //*** 4 - save xml representing all the schedules as configValue ***
     MedwanQuery.getInstance().setConfigString("defaultWeekschedules",getSchedulesAsXml());
     
-    String sMessage = "<font color='green'>"+getTran("web","dataIsSaved",sWebLanguage)+"</font>";
+    String sMessage = "<font color='green'>"+getTran(request,"web","dataIsSaved",sWebLanguage)+"</font>";
 %>
 
 {

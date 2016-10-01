@@ -8,16 +8,16 @@
 %>
 <table width='100%'>
 	<tr>
-		<td class='admin'><%=getTran("web","physician",sWebLanguage) %></td>
+		<td class='admin'><%=getTran(request,"web","physician",sWebLanguage) %></td>
 		<td class='admin2'>
                 <input type="hidden" name="doctor" id='doctor' value="">
                 <input class="text" type="text" name="doctorname" id="doctorname" readonly size="40" value="">
-                <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTran("web","select",sWebLanguage)%>" onclick="searchManager('doctor','doctorname');">
-                <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran("web","clear",sWebLanguage)%>" onclick="document.getElementById('doctor').value='';document.getElementById('doctorname').value='';">
+                <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTran(null,"web","select",sWebLanguage)%>" onclick="searchManager('doctor','doctorname');">
+                <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran(null,"web","clear",sWebLanguage)%>" onclick="document.getElementById('doctor').value='';document.getElementById('doctorname').value='';">
 		</td>
 	</tr>
 	<tr>
-		<td class='admin'><%=getTran("web","service",sWebLanguage) %></td>
+		<td class='admin'><%=getTran(request,"web","service",sWebLanguage) %></td>
 		<td class='admin2'>
              <input type='hidden' name='service' id='service' value=''>
              <input class='text' type='text' name='servicename' id='servicename' readonly size='40' value=''>&nbsp;
@@ -26,7 +26,7 @@
 		</td>
 	</tr>
 	<tr>
-		<td colspan='2'><input type='button' name='find' value='<%=getTran("web","find",sWebLanguage) %>' onclick='findinvoices();'/></td>
+		<td colspan='2'><input type='button' name='find' value='<%=getTran(null,"web","find",sWebLanguage) %>' onclick='findinvoices();'/></td>
 	</tr>
 </table>
 

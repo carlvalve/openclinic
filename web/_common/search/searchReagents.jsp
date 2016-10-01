@@ -35,7 +35,7 @@
         %>
         <%-- NAME --%>
         <tr>
-            <td class="admin2" width="120" nowrap><%=getTran("web","name",sWebLanguage)%></td>
+            <td class="admin2" width="120" nowrap><%=getTran(request,"web","name",sWebLanguage)%></td>
             <td class="admin2" width="380" nowrap>
                 <input type="text" class="text" name="FindReagentName" id="FindReagentName" size="20" maxlength="20" value="<%=sFindReagentName%>" onkeyup="searchReagents();">
             </td>

@@ -88,10 +88,10 @@
                     }
                 }
             }
-            sMessage = getTran("web","dataissaved",sWebLanguage);
+            sMessage = getTran(request,"web","dataissaved",sWebLanguage);
         }
         else {
-            sMessage = "<font color='red'>"+getTran("web.occup","medwan.transaction.delete.wrong-password",sWebLanguage)+"</font>";
+            sMessage = "<font color='red'>"+getTran(request,"web.occup","medwan.transaction.delete.wrong-password",sWebLanguage)+"</font>";
         }
         MedwanQuery.reload();
     }
@@ -139,7 +139,7 @@
                                     sApplicationId = checkString(eApplication.attributeValue("id"));
                                     sApplicationDisplaySection = checkString(eApplication.attributeValue("displaysection"));
 
-                                    title = getTran(sApplicationType, sApplicationId, sWebLanguage);
+                                    title = getTran(request,sApplicationType, sApplicationId, sWebLanguage);
                                     perms = new Hashtable();
 
                                     Iterator permissions = eApplication.elementIterator("permission");
@@ -149,7 +149,7 @@
                                         sPermissionId = checkString(ePermission.attributeValue("id"));
                                         sPermission = checkString(ePermission.getText());
 
-                                        perms.put(getTran(sPermissionType, sPermissionId, sWebLanguage), sPermission);
+                                        perms.put(getTran(request,sPermissionType, sPermissionId, sWebLanguage), sPermission);
                                     }
 
                                     bDisplaySection = !sApplicationDisplaySection.equalsIgnoreCase("false");
@@ -161,7 +161,7 @@
                     }
                 %>
         <tr>
-            <td><%=getTran("web.occup","medwan.authentication.password",sWebLanguage)%></td>
+            <td><%=getTran(request,"web.occup","medwan.authentication.password",sWebLanguage)%></td>
             <td><input name="EditPassword" class="text" type="password"></td>
         </tr>
     </table>
@@ -178,7 +178,7 @@
 
   function doSave(){
       if (profileForm.EditPassword.value.length==0){
-    	  alertDialogDirectText("<%=getTran("web.occup","medwan.transaction.delete.wrong-password",sWebLanguage)%>");
+    	  alertDialogDirectText("<%=getTran(null,"web.occup","medwan.transaction.delete.wrong-password",sWebLanguage)%>");
       }
       else {
           profileForm.ActionField.value="save";

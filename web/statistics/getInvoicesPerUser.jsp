@@ -30,8 +30,8 @@
 
 %>
 <form name='transactionForm' method='post'>
-	<%=getTran("web","from",sWebLanguage)+"&nbsp;"+writeDateField("begin","transactionForm",sBegin,sWebLanguage) %>&nbsp;
-	<%=getTran("web","to",sWebLanguage)+"&nbsp;"+writeDateField("end","transactionForm",sEnd,sWebLanguage) %> &nbsp;
+	<%=getTran(request,"web","from",sWebLanguage)+"&nbsp;"+writeDateField("begin","transactionForm",sBegin,sWebLanguage) %>&nbsp;
+	<%=getTran(request,"web","to",sWebLanguage)+"&nbsp;"+writeDateField("end","transactionForm",sEnd,sWebLanguage) %> &nbsp;
 	<select name='userid'>
 		<option/>
 		<%
@@ -42,7 +42,7 @@
 			}
 		%>
 	</select>&nbsp;
-	<input type='submit' name='submit' value='<%=getTran("web","find",sWebLanguage) %>'/>
+	<input type='submit' name='submit' value='<%=getTran(null,"web","find",sWebLanguage) %>'/>
 </form>
 <table width='800px'>
 <%	
@@ -70,9 +70,9 @@
 				}
 				PatientInvoice invoice = PatientInvoice.get(invoiceuid);
 				//We write the invoice data
-				out.println("<tr class='admin' width='10%'><td>"+invoice.getUid()+"</td><td width='30%'>"+(invoice.getPatient()!=null?invoice.getPatient().getFullName()+" ("+invoice.getPatientUid()+")":"")+"</td><td width='20%'>"+(invoice.getDate()!=null?ScreenHelper.euDateFormat.format(invoice.getDate()):"")+"</td><td width='20%'>"+getTran("finance.patientinvoice.status",invoice.getStatus(),sWebLanguage)+"</td><td width='20%'>"+getTran("balance","balance",sWebLanguage)+": "+invoice.getBalance()+"</td></tr>");
+				out.println("<tr class='admin' width='10%'><td>"+invoice.getUid()+"</td><td width='30%'>"+(invoice.getPatient()!=null?invoice.getPatient().getFullName()+" ("+invoice.getPatientUid()+")":"")+"</td><td width='20%'>"+(invoice.getDate()!=null?ScreenHelper.euDateFormat.format(invoice.getDate()):"")+"</td><td width='20%'>"+getTran(request,"finance.patientinvoice.status",invoice.getStatus(),sWebLanguage)+"</td><td width='20%'>"+getTran(request,"balance","balance",sWebLanguage)+": "+invoice.getBalance()+"</td></tr>");
 				out.println("<tr><td colspan='5'><table width='100%'>");
-				out.println("<tr><td width='20%'></td><td class='admin' width='20%'>"+getTran("web","user",sWebLanguage)+"</td><td class='admin' width='20%'>"+getTran("web","patient",sWebLanguage)+"</td><td class='admin' width='20%'>"+getTran("web","insurar",sWebLanguage)+"</td><td class='admin' width='20%'>"+getTran("web","extrainsurar",sWebLanguage)+"</td></tr>");
+				out.println("<tr><td width='20%'></td><td class='admin' width='20%'>"+getTran(request,"web","user",sWebLanguage)+"</td><td class='admin' width='20%'>"+getTran(request,"web","patient",sWebLanguage)+"</td><td class='admin' width='20%'>"+getTran(request,"web","insurar",sWebLanguage)+"</td><td class='admin' width='20%'>"+getTran(request,"web","extrainsurar",sWebLanguage)+"</td></tr>");
 				activeinvoice=invoice.getUid();
 			}
 			if(invoiceuid!=null){

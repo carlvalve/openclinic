@@ -24,7 +24,7 @@
 			         <tr>
 			            <td class="admin" width="<%=sTDAdminWidth%>">
 			                <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-			                <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+			                <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
 			            </td>
 			            <td class="admin2">
 			                <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" id="trandate" OnBlur='checkDate(this)'>
@@ -34,58 +34,58 @@
         
 			        <%-- ACTUAL SUBMISSION --%>
 			        <tr class="admin">
-			            <td colspan="2"><%=getTran("web","short.analysis.actual.admission",sWebLanguage)%></td>
+			            <td colspan="2"><%=getTran(request,"web","short.analysis.actual.admission",sWebLanguage)%></td>
 			        </tr>
 			        <tr>
-			            <td class="admin"><%=getTran("web","clinical.admission.summary",sWebLanguage)%></td>
+			            <td class="admin"><%=getTran(request,"web","clinical.admission.summary",sWebLanguage)%></td>
 			            <td class="admin2">
 			                <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_NPIS_CLINICALADMISSIONSUMMARY")%> class="text" cols="80" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NPIS_CLINICALADMISSIONSUMMARY" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NPIS_CLINICALADMISSIONSUMMARY" property="value"/></textarea>
 			            </td>
 			        </tr>
 			        <tr>
-			            <td class="admin"><%=getTran("web","psychiatric.and.somatic.history",sWebLanguage)%></td>
+			            <td class="admin"><%=getTran(request,"web","psychiatric.and.somatic.history",sWebLanguage)%></td>
 			            <td class="admin2">
 			                <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_NPIS_PSYSOMHISTORY")%> class="text" cols="80" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NPIS_PSYSOMHISTORY" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NPIS_PSYSOMHISTORY" property="value"/></textarea>
 			            </td>
 			        </tr>
 			        <tr>
-			            <td class="admin"><%=getTran("web","complentary.exams",sWebLanguage)%></td>
+			            <td class="admin"><%=getTran(request,"web","complentary.exams",sWebLanguage)%></td>
 			            <td class="admin2">
 			                <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_NPIS_COMPLEMENTARYEXAMS")%> class="text" cols="80" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NPIS_COMPLEMENTARYEXAMS" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NPIS_COMPLEMENTARYEXAMS" property="value"/></textarea>
 			            </td>
 			        </tr>
 			        <tr>
-			            <td class="admin"><%=getTran("web","evolution.and.treatment",sWebLanguage)%></td>
+			            <td class="admin"><%=getTran(request,"web","evolution.and.treatment",sWebLanguage)%></td>
 			            <td class="admin2">
 			                <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_NPIS_EVOLUTION")%> class="text" cols="80" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NPIS_EVOLUTION" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NPIS_EVOLUTION" property="value"/></textarea>
 			            </td>
 			        </tr>
 			        <tr>
-			            <td class="admin"><%=getTran("web","social.summary",sWebLanguage)%></td>
+			            <td class="admin"><%=getTran(request,"web","social.summary",sWebLanguage)%></td>
 			            <td class="admin2">
 			                <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_NPIS_SOCIALSUMMARY")%> class="text" cols="80" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NPIS_SOCIALSUMMARY" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NPIS_SOCIALSUMMARY" property="value"/></textarea>
 			            </td>
 			        </tr>
 			        <tr>
-			            <td class="admin"><%=getTran("web","psychological.status",sWebLanguage)%></td>
+			            <td class="admin"><%=getTran(request,"web","psychological.status",sWebLanguage)%></td>
 			            <td class="admin2">
 			                <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_NPIS_PSYCHOLOGICALSTATUS")%> class="text" cols="80" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NPIS_PSYCHOLOGICALSTATUS" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NPIS_PSYCHOLOGICALSTATUS" property="value"/></textarea>
 			            </td>
 			        </tr>
 			        <tr>
-			            <td class="admin"><%=getTran("web","diagnostic.discussion",sWebLanguage)%></td>
+			            <td class="admin"><%=getTran(request,"web","diagnostic.discussion",sWebLanguage)%></td>
 			            <td class="admin2">
 			                <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_NPIS_DIAGNOSTICDISCUSSION")%> class="text" cols="80" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NPIS_DIAGNOSTICDISCUSSION" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NPIS_DIAGNOSTICDISCUSSION" property="value"/></textarea>
 			            </td>
 			        </tr>
 			        <tr>
-			            <td class="admin"><%=getTran("web","discharge.treatment",sWebLanguage)%></td>
+			            <td class="admin"><%=getTran(request,"web","discharge.treatment",sWebLanguage)%></td>
 			            <td class="admin2">
 			                <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_NPIS_DISCHARGETREATMENT")%> class="text" cols="80" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NPIS_DISCHARGETREATMENT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NPIS_DISCHARGETREATMENT" property="value"/></textarea>
 			            </td>
 			        </tr>
 			        <tr>
-			            <td class="admin"><%=getTran("web","specific.reccommendations",sWebLanguage)%></td>
+			            <td class="admin"><%=getTran(request,"web","specific.reccommendations",sWebLanguage)%></td>
 			            <td class="admin2">
 			                <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_NPIS_RECCOMMENDATIONS")%> class="text" cols="80" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NPIS_RECCOMMENDATIONS" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NPIS_RECCOMMENDATIONS" property="value"/></textarea>
 			            </td>

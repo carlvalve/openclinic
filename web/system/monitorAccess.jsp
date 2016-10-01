@@ -26,7 +26,7 @@
         String sDelAccessId = checkString(request.getParameter("DelAccessId"));
         if(sDelAccessId.length() > 0){
             net.admin.system.AccessLog.delete(sDelAccessId);
-            sMsg = getTran("web","dataIsDeleted",sWebLanguage);
+            sMsg = getTran(request,"web","dataIsDeleted",sWebLanguage);
         }
     }
     //--- DELETE ACCESSES -------------------------------------------------------------------------
@@ -43,7 +43,7 @@
         }
 
         net.admin.system.AccessLog.delete(delFromDate,delUntilDate);
-        sMsg = getTran("web","dataIsDeleted",sWebLanguage);
+        sMsg = getTran(request,"web","dataIsDeleted",sWebLanguage);
     }
 %>
 
@@ -57,11 +57,11 @@
     
     <table width="100%" class="menu" cellspacing="1" cellpadding="0">
         <tr>
-            <td width="<%=sTDAdminWidth%>" class="admin2"><%=getTran("Web","Begin",sWebLanguage)%></td>
+            <td width="<%=sTDAdminWidth%>" class="admin2"><%=getTran(request,"Web","Begin",sWebLanguage)%></td>
             <td class="admin2"><%=writeDateField("FindBegin","transactionForm",sFindBegin,sWebLanguage)%></td>
         </tr>
         <tr>
-            <td class="admin2"><%=getTran("Web","End",sWebLanguage)%></td>
+            <td class="admin2"><%=getTran(request,"Web","End",sWebLanguage)%></td>
             <td class="admin2"><%=writeDateField("FindEnd","transactionForm",sFindEnd,sWebLanguage)%></td>
         </tr>
         <tr>
@@ -89,8 +89,8 @@
                     <%-- HEADER --%>
                     <tr class="admin">
                         <td width="20">&nbsp;</td>
-                        <td width="150"><%=getTran("Web","accesstime",sWebLanguage)%></td>
-                        <td width="700"><%=getTran("Web","user",sWebLanguage)%></td>
+                        <td width="150"><%=getTran(request,"Web","accesstime",sWebLanguage)%></td>
+                        <td width="700"><%=getTran(request,"Web","user",sWebLanguage)%></td>
                         <%-- link to bottom --%>
                         <td width="16" height="20" align="right">
                             <a href="#bottom" class="top"><img src="<c:url value='/_img/themes/default/bottom.gif'/>" class="link" style="vertical-align:bottom;" border="0"></a>
@@ -125,7 +125,7 @@
 
                         // no records found
                         if(iCounter==0){
-                            %><tr><td colspan="4"><%=getTran("web","norecordsfound",sWebLanguage)%></td></tr><%
+                            %><tr><td colspan="4"><%=getTran(request,"web","norecordsfound",sWebLanguage)%></td></tr><%
                         }
                     %>
                 </table>
@@ -133,7 +133,7 @@
                     // number of records found
                     if(iCounter > 0){
                         %>
-                        <div style="padding-bottom:5px;padding-top:2px;"><%=getTran("Web.Occup","total-number",sWebLanguage)%> : <%=iCounter%></div>
+                        <div style="padding-bottom:5px;padding-top:2px;"><%=getTran(request,"Web.Occup","total-number",sWebLanguage)%> : <%=iCounter%></div>
                         <%
                     }
         }
@@ -142,9 +142,9 @@
             %>
                 <table class="menu" width="100%">
                     <tr>
-                        <td width="<%=sTDAdminWidth%>"><%=getTran("Web","from",sWebLanguage)%></td>
+                        <td width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","from",sWebLanguage)%></td>
                         <td><%=writeDateField("DelFromDate","transactionForm",sDelFromDate,sWebLanguage)%></td>
-                        <td><%=getTran("Web","to",sWebLanguage)%></td>
+                        <td><%=getTran(request,"Web","to",sWebLanguage)%></td>
                         <td>
                             <%=writeDateField("DelUntilDate","transactionForm",sDelUntilDate,sWebLanguage)%>&nbsp;&nbsp;
                             <input type="button" class="button" name="deleteRangeButton" value="<%=getTranNoLink("web","delete",sWebLanguage)%>" onClick="deleteAccesses();">

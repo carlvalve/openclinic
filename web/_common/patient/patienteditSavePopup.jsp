@@ -51,25 +51,25 @@
 
                         // double message
                         msgImmatNew = "<font color='red'>" +
-                                getTran("Web.PatientEdit", "patient.exists", sWebLanguage) + " " + getTran("web", "immatnew", sWebLanguage) +
+                                getTran(request,"Web.PatientEdit", "patient.exists", sWebLanguage) + " " + getTran(request,"web", "immatnew", sWebLanguage) +
                                 ". (" + sImmatNew + ")" +
                                 "</font>" +
                                 "<br><br>";
 
                         // click to open existing patient
-                        link1ImmatNew = getTran("Web.PatientEdit", "click", sWebLanguage) +
+                        link1ImmatNew = getTran(request,"Web.PatientEdit", "click", sWebLanguage) +
                                 " <a href='javascript:showExistingPatient(" + sPersonId + ");'> " +
-                                getTran("Web.PatientEdit", "here", sWebLanguage) + "</a> " +
-                                getTran("Web.PatientEdit", "patient.open.fiche", sWebLanguage) + "<br><br>";
+                                getTran(request,"Web.PatientEdit", "here", sWebLanguage) + "</a> " +
+                                getTran(request,"Web.PatientEdit", "patient.open.fiche", sWebLanguage) + "<br><br>";
 
                         // click to open existing patient in new window
-                        link1ImmatNew += getTran("Web.PatientEdit", "click", sWebLanguage) +
+                        link1ImmatNew += getTran(request,"Web.PatientEdit", "click", sWebLanguage) +
                                 " <a href='javascript:showExistingPatientInNewWindow(" + sPersonId + ");'> " +
-                                getTran("Web.PatientEdit", "here", sWebLanguage) + "</a> " +
-                                getTran("Web.PatientEdit", "patient.open.fiche.innewwindow", sWebLanguage) + "<br><br>";
+                                getTran(request,"Web.PatientEdit", "here", sWebLanguage) + "</a> " +
+                                getTran(request,"Web.PatientEdit", "patient.open.fiche.innewwindow", sWebLanguage) + "<br><br>";
 
                         // creation impossible
-                        link2ImmatNew = getTran("Web.PatientEdit", "patient.creation.impossible", sWebLanguage);
+                        link2ImmatNew = getTran(request,"Web.PatientEdit", "patient.creation.impossible", sWebLanguage);
                     }
                 }
 
@@ -82,28 +82,28 @@
 
                         // double message
                         msgNatReg = "<font color='red'>" +
-                                getTran("Web.PatientEdit", "patient.exists", sWebLanguage) + " " + getTran("web", "natreg", sWebLanguage) + "." +
+                                getTran(request,"Web.PatientEdit", "patient.exists", sWebLanguage) + " " + getTran(request,"web", "natreg", sWebLanguage) + "." +
                                 "<br>(" + sNatReg + ")" +
                                 "</font>" +
                                 "<br><br>";
 
                         // click to open existing patient
-                        link1NatReg = getTran("Web.PatientEdit", "click", sWebLanguage) +
+                        link1NatReg = getTran(request,"Web.PatientEdit", "click", sWebLanguage) +
                                 " <a href='javascript:showExistingPatient(" + sPersonId + ");'> " +
-                                getTran("Web.PatientEdit", "here", sWebLanguage) + "</a> " +
-                                getTran("Web.PatientEdit", "patient.open.fiche", sWebLanguage) + "<br><br>";
+                                getTran(request,"Web.PatientEdit", "here", sWebLanguage) + "</a> " +
+                                getTran(request,"Web.PatientEdit", "patient.open.fiche", sWebLanguage) + "<br><br>";
 
                         // click to open existing patient in new window
-                        link1NatReg += getTran("Web.PatientEdit", "click", sWebLanguage) +
+                        link1NatReg += getTran(request,"Web.PatientEdit", "click", sWebLanguage) +
                                 " <a href='javascript:showExistingPatientinNewWindow(" + sPersonId + ");'> " +
-                                getTran("Web.PatientEdit", "here", sWebLanguage) + "</a> " +
-                                getTran("Web.PatientEdit", "patient.open.fiche.innewwindow", sWebLanguage) + "<br><br>";
+                                getTran(request,"Web.PatientEdit", "here", sWebLanguage) + "</a> " +
+                                getTran(request,"Web.PatientEdit", "patient.open.fiche.innewwindow", sWebLanguage) + "<br><br>";
 
                         // click to create double patient
-                        link2NatReg = getTran("Web.PatientEdit", "click", sWebLanguage) +
+                        link2NatReg = getTran(request,"Web.PatientEdit", "click", sWebLanguage) +
                                 " <a href='javascript:doSave();'> " +
-                                getTran("Web.PatientEdit", "here", sWebLanguage) + "</a> " +
-                                getTran("Web.PatientEdit", "patient.create.fiche", sWebLanguage);
+                                getTran(request,"Web.PatientEdit", "here", sWebLanguage) + "</a> " +
+                                getTran(request,"Web.PatientEdit", "patient.create.fiche", sWebLanguage);
                     }
                 }
 
@@ -122,28 +122,28 @@
 
                         // double melding
                         msgNames = "<font color='red'>" +
-                                getTran("Web.PatientEdit", "patient.exists.mv", sWebLanguage) + " " + getTran("Web", "lastname", sWebLanguage) + ", " + getTran("Web", "firstname", sWebLanguage) + ", " + getTran("Web", "dateofbirth", sWebLanguage) + "." +
+                                getTran(request,"Web.PatientEdit", "patient.exists.mv", sWebLanguage) + " " + getTran(request,"Web", "lastname", sWebLanguage) + ", " + getTran(request,"Web", "firstname", sWebLanguage) + ", " + getTran(request,"Web", "dateofbirth", sWebLanguage) + "." +
                                 "<br>(" + sName + ", " + sFirstname + ", " + sDateOfBirth + ")" +
                                 "</font>" +
                                 "<br><br>";
 
                         // click to open existing patient
-                        link1Names = getTran("Web.PatientEdit", "click", sWebLanguage) +
+                        link1Names = getTran(request,"Web.PatientEdit", "click", sWebLanguage) +
                                 " <a href='javascript:showExistingPatient(" + sPersonId + ");'> " +
-                                getTran("Web.PatientEdit", "here", sWebLanguage) + "</a> " +
-                                getTran("Web.PatientEdit", "patient.open.fiche", sWebLanguage) + "<br><br>";
+                                getTran(request,"Web.PatientEdit", "here", sWebLanguage) + "</a> " +
+                                getTran(request,"Web.PatientEdit", "patient.open.fiche", sWebLanguage) + "<br><br>";
 
                         // click to open existing patient in new window
-                        link1Names += getTran("Web.PatientEdit", "click", sWebLanguage) +
+                        link1Names += getTran(request,"Web.PatientEdit", "click", sWebLanguage) +
                                 " <a href='javascript:showExistingPatientInNewWindow(" + sPersonId + ");'> " +
-                                getTran("Web.PatientEdit", "here", sWebLanguage) + "</a> " +
-                                getTran("Web.PatientEdit", "patient.open.fiche.innewwindow", sWebLanguage) + "<br><br>";
+                                getTran(request,"Web.PatientEdit", "here", sWebLanguage) + "</a> " +
+                                getTran(request,"Web.PatientEdit", "patient.open.fiche.innewwindow", sWebLanguage) + "<br><br>";
 
                         // click to create double patient
-                        link2Names = getTran("Web.PatientEdit", "click", sWebLanguage) +
+                        link2Names = getTran(request,"Web.PatientEdit", "click", sWebLanguage) +
                                 " <a href='javascript:doSave();'> " +
-                                getTran("Web.PatientEdit", "here", sWebLanguage) + "</a> " +
-                                getTran("Web.PatientEdit", "patient.create.fiche", sWebLanguage);
+                                getTran(request,"Web.PatientEdit", "here", sWebLanguage) + "</a> " +
+                                getTran(request,"Web.PatientEdit", "patient.create.fiche", sWebLanguage);
                     }
                 }
             }
@@ -194,25 +194,25 @@
 
                                 // double message
                                 msgImmatNew = "<font color='red'>" +
-                                        getTran("Web.PatientEdit", "patient.exists", sWebLanguage) + " " + getTran("Web", "immatnew", sWebLanguage) + "." +
+                                        getTran(request,"Web.PatientEdit", "patient.exists", sWebLanguage) + " " + getTran(request,"Web", "immatnew", sWebLanguage) + "." +
                                         "<br>(" + fileId + ")" +
                                         "</font>" +
                                         "<br><br>";
 
                                 // click to open existing patient
-                                link1ImmatNew = getTran("Web.PatientEdit", "click", sWebLanguage) +
+                                link1ImmatNew = getTran(request,"Web.PatientEdit", "click", sWebLanguage) +
                                         " <a href='javascript:showExistingPatient(" + existingPersonID + ");'> " +
-                                        getTran("Web.PatientEdit", "here", sWebLanguage) + "</a> " +
-                                        getTran("Web.PatientEdit", "patient.open.fiche", sWebLanguage) + "<br><br>";
+                                        getTran(request,"Web.PatientEdit", "here", sWebLanguage) + "</a> " +
+                                        getTran(request,"Web.PatientEdit", "patient.open.fiche", sWebLanguage) + "<br><br>";
 
                                 // click to open existing patient in new window
-                                link1ImmatNew += getTran("Web.PatientEdit", "click", sWebLanguage) +
+                                link1ImmatNew += getTran(request,"Web.PatientEdit", "click", sWebLanguage) +
                                         " <a href='javascript:showExistingPatientInNewWindow(" + existingPersonID + ");'> " +
-                                        getTran("Web.PatientEdit", "here", sWebLanguage) + "</a> " +
-                                        getTran("Web.PatientEdit", "patient.open.fiche.innewwindow", sWebLanguage) + "<br><br>";
+                                        getTran(request,"Web.PatientEdit", "here", sWebLanguage) + "</a> " +
+                                        getTran(request,"Web.PatientEdit", "patient.open.fiche.innewwindow", sWebLanguage) + "<br><br>";
 
                                 // creation impossible
-                                link2ImmatNew = getTran("Web.PatientEdit", "patient.creation.impossible", sWebLanguage);
+                                link2ImmatNew = getTran(request,"Web.PatientEdit", "patient.creation.impossible", sWebLanguage);
                             }
                         }
                     }
@@ -261,28 +261,28 @@
 
                                 // double message
                                 msgNatReg = "<font color='red'>" +
-                                        getTran("Web.PatientEdit", "patient.exists", sWebLanguage) + " " + getTran("Web", "natreg", sWebLanguage) + "." +
+                                        getTran(request,"Web.PatientEdit", "patient.exists", sWebLanguage) + " " + getTran(request,"Web", "natreg", sWebLanguage) + "." +
                                         "<br>(" + fileId + " : " + sNatReg + ")" +
                                         "</font>" +
                                         "<br><br>";
 
                                 // click to open existing patient
-                                link1NatReg = getTran("Web.PatientEdit", "click", sWebLanguage) +
+                                link1NatReg = getTran(request,"Web.PatientEdit", "click", sWebLanguage) +
                                         " <a href='javascript:showExistingPatient(" + existingPersonID + ");'> " +
-                                        getTran("Web.PatientEdit", "here", sWebLanguage) + "</a> " +
-                                        getTran("Web.PatientEdit", "patient.open.fiche", sWebLanguage) + "<br><br>";
+                                        getTran(request,"Web.PatientEdit", "here", sWebLanguage) + "</a> " +
+                                        getTran(request,"Web.PatientEdit", "patient.open.fiche", sWebLanguage) + "<br><br>";
 
                                 // click to open existing patient in new window
-                                link1NatReg += getTran("Web.PatientEdit", "click", sWebLanguage) +
+                                link1NatReg += getTran(request,"Web.PatientEdit", "click", sWebLanguage) +
                                         " <a href='javascript:showExistingPatientInNewWindow(" + existingPersonID + ");'> " +
-                                        getTran("Web.PatientEdit", "here", sWebLanguage) + "</a> " +
-                                        getTran("Web.PatientEdit", "patient.open.fiche.innewwindow", sWebLanguage) + "<br><br>";
+                                        getTran(request,"Web.PatientEdit", "here", sWebLanguage) + "</a> " +
+                                        getTran(request,"Web.PatientEdit", "patient.open.fiche.innewwindow", sWebLanguage) + "<br><br>";
 
                                 // click to update patient
-                                link2NatReg = getTran("Web.PatientEdit", "click", sWebLanguage) +
+                                link2NatReg = getTran(request,"Web.PatientEdit", "click", sWebLanguage) +
                                         " <a href='javascript:doSave();'> " +
-                                        getTran("Web.PatientEdit", "here", sWebLanguage) + "</a> " +
-                                        getTran("Web.PatientEdit", "patient.update.fiche", sWebLanguage);
+                                        getTran(request,"Web.PatientEdit", "here", sWebLanguage) + "</a> " +
+                                        getTran(request,"Web.PatientEdit", "patient.update.fiche", sWebLanguage);
                             }
                         }
                     }
@@ -340,28 +340,28 @@
 
                                 // double melding
                                 msgNames = "<font color='red'>" +
-                                        getTran("Web.PatientEdit", "patient.exists.mv", sWebLanguage) + " " + getTran("Web", "lastname", sWebLanguage) + ", " + getTran("Web", "firstname", sWebLanguage) + ", " + getTran("Web", "dateofbirth", sWebLanguage) + "." +
+                                        getTran(request,"Web.PatientEdit", "patient.exists.mv", sWebLanguage) + " " + getTran(request,"Web", "lastname", sWebLanguage) + ", " + getTran(request,"Web", "firstname", sWebLanguage) + ", " + getTran(request,"Web", "dateofbirth", sWebLanguage) + "." +
                                         "<br>(" + fileId + " : " + sName + ", " + sFirstname + ", " + sDateOfBirth + ")" +
                                         "</font>" +
                                         "<br><br>";
 
                                 // click to open existing patient
-                                link1Names = getTran("Web.PatientEdit", "click", sWebLanguage) +
+                                link1Names = getTran(request,"Web.PatientEdit", "click", sWebLanguage) +
                                         " <a href='javascript:showExistingPatient(" + existingPersonID + ");'> " +
-                                        getTran("Web.PatientEdit", "here", sWebLanguage) + "</a> " +
-                                        getTran("Web.PatientEdit", "patient.open.fiche", sWebLanguage) + "<br><br>";
+                                        getTran(request,"Web.PatientEdit", "here", sWebLanguage) + "</a> " +
+                                        getTran(request,"Web.PatientEdit", "patient.open.fiche", sWebLanguage) + "<br><br>";
 
                                 // click to open existing patient in new window
-                                link1Names += getTran("Web.PatientEdit", "click", sWebLanguage) +
+                                link1Names += getTran(request,"Web.PatientEdit", "click", sWebLanguage) +
                                         " <a href='javascript:showExistingPatientInNewWindow(" + existingPersonID + ");'> " +
-                                        getTran("Web.PatientEdit", "here", sWebLanguage) + "</a> " +
-                                        getTran("Web.PatientEdit", "patient.open.fiche.innewwindow", sWebLanguage) + "<br><br>";
+                                        getTran(request,"Web.PatientEdit", "here", sWebLanguage) + "</a> " +
+                                        getTran(request,"Web.PatientEdit", "patient.open.fiche.innewwindow", sWebLanguage) + "<br><br>";
 
                                 // click to update patient
-                                link2Names = getTran("Web.PatientEdit", "click", sWebLanguage) +
+                                link2Names = getTran(request,"Web.PatientEdit", "click", sWebLanguage) +
                                         " <a href='javascript:doSave();'> " +
-                                        getTran("Web.PatientEdit", "here", sWebLanguage) + "</a> " +
-                                        getTran("Web.PatientEdit", "patient.update.fiche", sWebLanguage);
+                                        getTran(request,"Web.PatientEdit", "here", sWebLanguage) + "</a> " +
+                                        getTran(request,"Web.PatientEdit", "patient.update.fiche", sWebLanguage);
                             }
                         }
                     }

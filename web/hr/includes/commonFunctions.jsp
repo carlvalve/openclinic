@@ -107,10 +107,10 @@
         // format
         if(totalYears > 0){
             if(totalYears==1){
-                sPeriod+= totalYears+" "+ScreenHelper.getTran("web","year",sWebLanguage).toLowerCase();
+                sPeriod+= totalYears+" "+ScreenHelper.getTran(null,"web","year",sWebLanguage).toLowerCase();
             }
             else{
-                sPeriod+= totalYears+" "+ScreenHelper.getTran("web","years",sWebLanguage).toLowerCase();
+                sPeriod+= totalYears+" "+ScreenHelper.getTran(null,"web","years",sWebLanguage).toLowerCase();
             }
         }
         
@@ -118,10 +118,10 @@
             if(sPeriod.length() > 0) sPeriod+= ", "; // separator
 
             if(totalMonths==1){
-                sPeriod+= totalMonths+" "+ScreenHelper.getTran("web","month",sWebLanguage).toLowerCase();
+                sPeriod+= totalMonths+" "+ScreenHelper.getTran(null,"web","month",sWebLanguage).toLowerCase();
             }
             else{
-                sPeriod+= totalMonths+" "+ScreenHelper.getTran("web","months",sWebLanguage).toLowerCase();
+                sPeriod+= totalMonths+" "+ScreenHelper.getTran(null,"web","months",sWebLanguage).toLowerCase();
             }
         }       
         
@@ -129,10 +129,10 @@
             if(sPeriod.length() > 0) sPeriod+= ", "; // separator
 
             if(totalDays==1){
-                sPeriod+= totalDays+" "+ScreenHelper.getTran("web","day",sWebLanguage).toLowerCase();
+                sPeriod+= totalDays+" "+ScreenHelper.getTran(null,"web","day",sWebLanguage).toLowerCase();
             }
             else{
-                sPeriod+= totalDays+" "+ScreenHelper.getTran("web","days",sWebLanguage).toLowerCase();
+                sPeriod+= totalDays+" "+ScreenHelper.getTran(null,"web","days",sWebLanguage).toLowerCase();
             }
         }        
 

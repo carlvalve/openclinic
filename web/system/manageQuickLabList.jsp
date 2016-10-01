@@ -148,7 +148,7 @@ public String getProfileNameForCode(String sCode, String sWebLanguage){
 			Debug.println("--> SAVE : config 'quickLabList' = "+pars);
 		}
 		
-		sMsg+= getTran("web","dataIsSaved",sWebLanguage);
+		sMsg+= getTran(request,"web","dataIsSaved",sWebLanguage);
 	}
 
     //*** fetch saved analyses for display ***
@@ -173,14 +173,14 @@ public String getProfileNameForCode(String sCode, String sWebLanguage){
 
 <form name="transactionForm" method="post">
     <%=writeTableHeader("Web.UserProfile","ManageQuickLabList",sWebLanguage," doBack();")%>
-    <%=getTran("web","click.code.field.to.choose.color",sWebLanguage)%><br><br>
+    <%=getTran(request,"web","click.code.field.to.choose.color",sWebLanguage)%><br><br>
     
 	<table width="100%" cellspacing="1" class="list" width="100%">
 		<%
 			out.print("<tr>");
 			for(int n=0; n<cols; n++){
-				out.print("<td class='admin'>"+getTran("web","code",sWebLanguage)+"</td>");
-				out.print("<td class='admin'>"+getTran("web","description",sWebLanguage)+"</td>");
+				out.print("<td class='admin'>"+getTran(request,"web","code",sWebLanguage)+"</td>");
+				out.print("<td class='admin'>"+getTran(request,"web","description",sWebLanguage)+"</td>");
 			}
 			out.print("</tr>");
 			

@@ -21,7 +21,7 @@
         <tr>
             <td class="admin" width="<%=sTDAdminWidth%>">
                 <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("web.occup","History",sWebLanguage)%>">...</a>&nbsp;
-                <%=getTran("web","date",sWebLanguage)%>
+                <%=getTran(request,"web","date",sWebLanguage)%>
             </td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DATE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DATE" property="value" formatType="date"/>" id="trandate" onBlur="if(checkDate(this)){ checkAfter('nextdate',this); }"/>
@@ -31,7 +31,7 @@
 
         <%-- NEXT DATE --%>
         <tr>
-            <td class="admin"><%=getTran("web.occup","intradermo.nextdate",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.occup","intradermo.nextdate",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEXTDATE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEXTDATE" property="value" formatType="date"/>" id="nextdate" onBlur="if(checkDate(this)){ checkBefore('trandate',this); }"/>
                 <script>writeMyDate("nextdate","<c:url value="/_img/calbtn.gif"/>","<%=getTranNoLink("web","PutToday",sWebLanguage)%>");</script>
@@ -40,7 +40,7 @@
 
         <%-- READ DATE --%>
         <tr>
-            <td class="admin"><%=getTran("web.occup","intradermo.readdate",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.occup","intradermo.readdate",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_READDATE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_READDATE" property="value" formatType="date"/>" id="readdate" onBlur="if(checkDate(this)){ checkBefore('trandate',this); }"/>
                 <script>writeMyDate("readdate","<c:url value="/_img/calbtn.gif"/>","<%=getTranNoLink("web","PutToday",sWebLanguage)%>");</script>
@@ -49,18 +49,18 @@
 
         <%-- RESULT (dropdown) --%>
         <tr>
-            <td class="admin"><%=getTran("web.occup","intradermo.result",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.occup","intradermo.result",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <select id="result" onChange="setBelongingFieldsActive(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RESULT" property="itemId"/>]>.value" class="text">
-                    <option value="medwan.common.negative" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RESULT;value=medwan.common.negative" property="value" outputString="selected"/>><%=getTran("web.occup","medwan.common.negative",sWebLanguage)%>
-                    <option value="medwan.common.positive" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RESULT;value=medwan.common.positive" property="value" outputString="selected"/>><%=getTran("web.occup","medwan.common.positive",sWebLanguage)%>
+                    <option value="medwan.common.negative" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RESULT;value=medwan.common.negative" property="value" outputString="selected"/>><%=getTran(request,"web.occup","medwan.common.negative",sWebLanguage)%>
+                    <option value="medwan.common.positive" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RESULT;value=medwan.common.positive" property="value" outputString="selected"/>><%=getTran(request,"web.occup","medwan.common.positive",sWebLanguage)%>
                 </select>
             </td>
         </tr>
 
         <%-- induration size --%>
         <tr>
-            <td class="admin"><%=getTran("web.occup","intradermo.indurationsize",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.occup","intradermo.indurationsize",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" id="indurationsize" size="12" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_INDURATION_SIZE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_INDURATION_SIZE" property="value"/>" onBlur="isNumber(this);"> mm
             </td>
@@ -68,44 +68,44 @@
 
         <%-- associated reactions (dropdown) --%>
         <tr>
-            <td class="admin"><%=getTran("web.occup","intradermo.associatedreactions",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.occup","intradermo.associatedreactions",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <select id="associatedreactions" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ASSOCIATED_REACTIONS" property="itemId"/>]>.value" class="text">
-                    <option value="intradermo.accosiatedreactions.no" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ASSOCIATED_REACTIONS;value=intradermo.accosiatedreactions.no"  property="value" outputString="selected"/>><%=getTran("web.occup","intradermo.accosiatedreactions.no",sWebLanguage)%>
-                    <option value="intradermo.accosiatedreactions.yes"<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ASSOCIATED_REACTIONS;value=intradermo.accosiatedreactions.yes" property="value" outputString="selected"/>><%=getTran("web.occup","intradermo.accosiatedreactions.yes",sWebLanguage)%>
+                    <option value="intradermo.accosiatedreactions.no" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ASSOCIATED_REACTIONS;value=intradermo.accosiatedreactions.no"  property="value" outputString="selected"/>><%=getTran(request,"web.occup","intradermo.accosiatedreactions.no",sWebLanguage)%>
+                    <option value="intradermo.accosiatedreactions.yes"<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ASSOCIATED_REACTIONS;value=intradermo.accosiatedreactions.yes" property="value" outputString="selected"/>><%=getTran(request,"web.occup","intradermo.accosiatedreactions.yes",sWebLanguage)%>
                 </select>
             </td>
         </tr>
 
         <%-- induration consistence (dropdown) --%>
         <tr>
-            <td class="admin"><%=getTran("web.occup","intradermo.indurationconsistence",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.occup","intradermo.indurationconsistence",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <select id="indurationconsistence" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_INDURATION_CONSISTENCY" property="itemId"/>]>.value" class="text">
                     <option>
-                    <option value="intradermo.indurationconsistency.1" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_INDURATION_CONSISTENCY;value=intradermo.indurationconsistency.1" property="value" outputString="selected"/>><%=getTran("web.occup","intradermo.indurationconsistency.1",sWebLanguage)%>
-                    <option value="intradermo.indurationconsistency.2" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_INDURATION_CONSISTENCY;value=intradermo.indurationconsistency.2" property="value" outputString="selected"/>><%=getTran("web.occup","intradermo.indurationconsistency.2",sWebLanguage)%>
-                    <option value="intradermo.indurationconsistency.3" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_INDURATION_CONSISTENCY;value=intradermo.indurationconsistency.3" property="value" outputString="selected"/>><%=getTran("web.occup","intradermo.indurationconsistency.3",sWebLanguage)%>
-                    <option value="intradermo.indurationconsistency.4" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_INDURATION_CONSISTENCY;value=intradermo.indurationconsistency.4" property="value" outputString="selected"/>><%=getTran("web.occup","intradermo.indurationconsistency.4",sWebLanguage)%>
+                    <option value="intradermo.indurationconsistency.1" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_INDURATION_CONSISTENCY;value=intradermo.indurationconsistency.1" property="value" outputString="selected"/>><%=getTran(request,"web.occup","intradermo.indurationconsistency.1",sWebLanguage)%>
+                    <option value="intradermo.indurationconsistency.2" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_INDURATION_CONSISTENCY;value=intradermo.indurationconsistency.2" property="value" outputString="selected"/>><%=getTran(request,"web.occup","intradermo.indurationconsistency.2",sWebLanguage)%>
+                    <option value="intradermo.indurationconsistency.3" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_INDURATION_CONSISTENCY;value=intradermo.indurationconsistency.3" property="value" outputString="selected"/>><%=getTran(request,"web.occup","intradermo.indurationconsistency.3",sWebLanguage)%>
+                    <option value="intradermo.indurationconsistency.4" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_INDURATION_CONSISTENCY;value=intradermo.indurationconsistency.4" property="value" outputString="selected"/>><%=getTran(request,"web.occup","intradermo.indurationconsistency.4",sWebLanguage)%>
                 </select>
             </td>
         </tr>
 
         <%-- reaction types (checkboxes) --%>
         <tr>
-            <td class="admin"><%=getTran("web.occup","intradermo.reactiontype",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.occup","intradermo.reactiontype",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
-                <input type="checkbox" id="reaction1" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REACTION_TYPE_BUBBLE" property="itemId"/>]>.value"       value="intradermo.reactiontype.bubble"       <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REACTION_TYPE_BUBBLE;value=intradermo.reactiontype.bubble" property="value" outputString="checked"/>/><%=getLabel("web.occup","intradermo.reactiontype.bubble",sWebLanguage,"reaction1")%>
-                <input type="checkbox" id="reaction2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REACTION_TYPE_BLUSH" property="itemId"/>]>.value"        value="intradermo.reactiontype.blush"        <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REACTION_TYPE_BLUSH;value=intradermo.reactiontype.blush" property="value" outputString="checked"/>/><%=getLabel("web.occup","intradermo.reactiontype.blush",sWebLanguage,"reaction2")%>
-                <input type="checkbox" id="reaction3" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REACTION_TYPE_OEDEEM" property="itemId"/>]>.value"       value="intradermo.reactiontype.oedeem"       <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REACTION_TYPE_OEDEEM;value=intradermo.reactiontype.oedeem" property="value" outputString="checked"/>/><%=getLabel("web.occup","intradermo.reactiontype.oedeem",sWebLanguage,"reaction3")%>
-                <input type="checkbox" id="reaction4" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REACTION_TYPE_LYMPHANGITIS" property="itemId"/>]>.value" value="intradermo.reactiontype.lymphangitis" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REACTION_TYPE_LYMPHANGITIS;value=intradermo.reactiontype.lymphangitis" property="value" outputString="checked"/>/><%=getLabel("web.occup","intradermo.reactiontype.lymphangitis",sWebLanguage,"reaction4")%>
-                <input type="checkbox" id="reaction5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REACTION_TYPE_ADENOPATHY" property="itemId"/>]>.value"   value="intradermo.reactiontype.adenopathy"   <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REACTION_TYPE_ADENOPATHY;value=intradermo.reactiontype.adenopathy" property="value" outputString="checked"/>/><%=getLabel("web.occup","intradermo.reactiontype.adenopathy",sWebLanguage,"reaction5")%>
+                <input type="checkbox" id="reaction1" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REACTION_TYPE_BUBBLE" property="itemId"/>]>.value"       value="intradermo.reactiontype.bubble"       <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REACTION_TYPE_BUBBLE;value=intradermo.reactiontype.bubble" property="value" outputString="checked"/>/><%=getLabel(request,"web.occup","intradermo.reactiontype.bubble",sWebLanguage,"reaction1")%>
+                <input type="checkbox" id="reaction2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REACTION_TYPE_BLUSH" property="itemId"/>]>.value"        value="intradermo.reactiontype.blush"        <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REACTION_TYPE_BLUSH;value=intradermo.reactiontype.blush" property="value" outputString="checked"/>/><%=getLabel(request,"web.occup","intradermo.reactiontype.blush",sWebLanguage,"reaction2")%>
+                <input type="checkbox" id="reaction3" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REACTION_TYPE_OEDEEM" property="itemId"/>]>.value"       value="intradermo.reactiontype.oedeem"       <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REACTION_TYPE_OEDEEM;value=intradermo.reactiontype.oedeem" property="value" outputString="checked"/>/><%=getLabel(request,"web.occup","intradermo.reactiontype.oedeem",sWebLanguage,"reaction3")%>
+                <input type="checkbox" id="reaction4" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REACTION_TYPE_LYMPHANGITIS" property="itemId"/>]>.value" value="intradermo.reactiontype.lymphangitis" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REACTION_TYPE_LYMPHANGITIS;value=intradermo.reactiontype.lymphangitis" property="value" outputString="checked"/>/><%=getLabel(request,"web.occup","intradermo.reactiontype.lymphangitis",sWebLanguage,"reaction4")%>
+                <input type="checkbox" id="reaction5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REACTION_TYPE_ADENOPATHY" property="itemId"/>]>.value"   value="intradermo.reactiontype.adenopathy"   <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REACTION_TYPE_ADENOPATHY;value=intradermo.reactiontype.adenopathy" property="value" outputString="checked"/>/><%=getLabel(request,"web.occup","intradermo.reactiontype.adenopathy",sWebLanguage,"reaction5")%>
             </td>
         </tr>
 
         <%-- COMMENT --%>
         <tr>
-            <td class="admin"><%=getTran("web.occup","intradermo.comment",sWebLanguage)%>&nbsp;</td>
+            <td class="admin"><%=getTran(request,"web.occup","intradermo.comment",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" class="text" cols="110" rows="3" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_COMMENT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_COMMENT" property="value"/></textarea>
             </td>
@@ -113,7 +113,7 @@
 
         <%-- RESULT RECEIVED --%>
         <tr>
-            <td class="admin"><%=getTran("web.occup","resultreceived",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web.occup","resultreceived",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="checkbox" id="resultReceivedCB">
                 <input type="hidden" id="resultReceived" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RESULTRECEIVED" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RESULTRECEIVED" property="value" translate="false"/>">
@@ -135,7 +135,7 @@
     String sBlockedReason="";
         // display "dossier blocked"
         if(dossierBlocked){
-            %><br><font color="red"><%=getTran("web",sBlockedReason,sWebLanguage)%></font>&nbsp;<%
+            %><br><font color="red"><%=getTran(request,"web",sBlockedReason,sWebLanguage)%></font>&nbsp;<%
         }
     %>
 

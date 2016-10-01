@@ -9,7 +9,7 @@
 <%!
     //--- GET HOURS FIELD -------------------------------------------------------------------------
     public String getHoursField(String id, Date date, String sWebLanguage){
-        String sOut = getTran("meals","at",sWebLanguage)+"&nbsp;";
+        String sOut = getTran(request,"meals","at",sWebLanguage)+"&nbsp;";
     
 	    // hour
 	    sOut+= (date.getHours()<10?"0"+date.getHours():""+date.getHours());
@@ -44,7 +44,7 @@
     <table class="list" cellspacing="1" cellpadding="1" width="100%" onKeyDown="if(enterEvent(event,13)){setProfile();return false;}">
         <%-- PROFILE NAME --%>
         <tr>
-            <td class="admin" width="100"><%=HTMLEntities.htmlentities(getTran("meals","name",sWebLanguage))%></td>
+            <td class="admin" width="100"><%=HTMLEntities.htmlentities(getTran(request,"meals","name",sWebLanguage))%></td>
             <td class="admin2">
                 <b><%=checkString(HTMLEntities.htmlentities(profile.name))%></b>
             </td>
@@ -52,7 +52,7 @@
         
         <%-- PROFILE ITEMS (MEALS) --%>
         <tr>
-            <td class="admin"><%=HTMLEntities.htmlentities(getTran("meals","profileItems",sWebLanguage))%></td>
+            <td class="admin"><%=HTMLEntities.htmlentities(getTran(request,"meals","profileItems",sWebLanguage))%></td>
             <td class="admin2">
                 <ul id="patientProfileItems" class="items" style="width:380px">
                     <%
@@ -74,7 +74,7 @@
         
         <%-- PROFILE NUTRIENTS --%>
         <tr>
-            <td class="admin"><%=HTMLEntities.htmlentities(getTran("meals","nutricients",sWebLanguage))%></td>
+            <td class="admin"><%=HTMLEntities.htmlentities(getTran(request,"meals","nutricients",sWebLanguage))%></td>
             <td class="admin2">
                 <a href="javascript:void(0)" id="profileNutricientsButton" class="link down" onclick="getNutricientsInPatientProfile(true);"><%=getTranNoLink("meals","seeNutricients",sWebLanguage).toLowerCase()%></a> 
                 <ul id="profileNutricientsList" class="items" style="display:none;width:380px"></ul>

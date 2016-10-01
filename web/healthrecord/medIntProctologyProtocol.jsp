@@ -26,7 +26,7 @@
 			        <tr>
 			            <td class="admin" width="<%=sTDAdminWidth%>">
 			                <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;
-			                <%=getTran("Web.Occup","medwan.common.date",sWebLanguage)%>
+			                <%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%>
 			            </td>
 			            <td class="admin2">
 			                <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" id="trandate" OnBlur='checkDate(this)'>
@@ -36,7 +36,7 @@
 			
 			        <%-- motive --%>
 			        <tr>
-			            <td class="admin"><%=getTran("openclinic.chuk","motive",sWebLanguage)%></td>
+			            <td class="admin"><%=getTran(request,"openclinic.chuk","motive",sWebLanguage)%></td>
 			            <td class="admin2">
 			                <textarea onkeyup="resizeTextarea(this,3);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_PROCOTOLOGY_PROTOCOL_MOTIVE")%> class="text" cols="64" rows="3" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROCOTOLOGY_PROTOCOL_MOTIVE" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROCOTOLOGY_PROTOCOL_MOTIVE" property="value"/></textarea>
 			            </td>
@@ -44,7 +44,7 @@
 			
 			        <%-- eternal_examination --%>
 			        <tr>
-			            <td class="admin"><%=getTran("openclinic.chuk","eternal_examination",sWebLanguage)%></td>
+			            <td class="admin"><%=getTran(request,"openclinic.chuk","eternal_examination",sWebLanguage)%></td>
 			            <td class="admin2">
 			                <textarea onkeyup="resizeTextarea(this,3);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_PROCOTOLOGY_PROTOCOL_EXTERNAL_EXAMINATION")%> class="text" cols="64" rows="3" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROCOTOLOGY_PROTOCOL_EXTERNAL_EXAMINATION" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROCOTOLOGY_PROTOCOL_EXTERNAL_EXAMINATION" property="value"/></textarea>
 			            </td>
@@ -52,7 +52,7 @@
 			
 			        <%-- touch_rectum --%>
 			        <tr>
-			            <td class="admin"><%=getTran("openclinic.chuk","touch_rectum",sWebLanguage)%></td>
+			            <td class="admin"><%=getTran(request,"openclinic.chuk","touch_rectum",sWebLanguage)%></td>
 			            <td class="admin2">
 			                <textarea onkeyup="resizeTextarea(this,3);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_PROCOTOLOGY_PROTOCOL_TOUCH_RECTUM")%> class="text" cols="64" rows="3" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROCOTOLOGY_PROTOCOL_TOUCH_RECTUM" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROCOTOLOGY_PROTOCOL_TOUCH_RECTUM" property="value"/></textarea>
 			            </td>
@@ -60,14 +60,14 @@
 			
 			        <%-- anuscopy --%>
 			        <tr>
-			            <td class="admin"><%=getTran("openclinic.chuk","anuscopy",sWebLanguage)%></td>
+			            <td class="admin"><%=getTran(request,"openclinic.chuk","anuscopy",sWebLanguage)%></td>
 			            <td class="admin2">
 			                <table cellspacing="0" cellpadding="0" width="370" border="0">
 			                    <tr>
 			                        <td rowspan="2" style="text-align:right" width="50">
 			                            <textarea onkeyup="resizeTextarea(this,3);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_PROCOTOLOGY_PROTOCOL_LEFT_BACK")%> class="text" cols="20" rows="3" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROCOTOLOGY_PROTOCOL_LEFT_BACK" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROCOTOLOGY_PROTOCOL_LEFT_BACK" property="value"/></textarea>
 			                        </td>
-			                        <td style="text-align:center;vertical-align:bottom;"><%=getTran("openclinic.chuk","back",sWebLanguage)%></td>
+			                        <td style="text-align:center;vertical-align:bottom;"><%=getTran(request,"openclinic.chuk","back",sWebLanguage)%></td>
 			                        <td rowspan="2">
 			                            <textarea onkeyup="resizeTextarea(this,3);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_PROCOTOLOGY_PROTOCOL_RIGHT_BACK")%> class="text" cols="20" rows="3" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROCOTOLOGY_PROTOCOL_RIGHT_BACK" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROCOTOLOGY_PROTOCOL_RIGHT_BACK" property="value"/></textarea>
 			                        </td>
@@ -80,9 +80,9 @@
 			                    </tr>
 			
 			                    <tr>
-			                        <td style="text-align:right;"><%=getTran("web.occup","medwan.common.left",sWebLanguage)%></td>
+			                        <td style="text-align:right;"><%=getTran(request,"web.occup","medwan.common.left",sWebLanguage)%></td>
 			                        <td style="text-align:left;">
-			                            <%=getTran("web.occup","medwan.common.right",sWebLanguage)%>
+			                            <%=getTran(request,"web.occup","medwan.common.right",sWebLanguage)%>
 			                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;   
 			                            <input type="button" class="button" name="buttonClear" value="<%=getTranNoLink("web","clear",sWebLanguage)%>" onclick="doClear()"/>
 			                        </td>
@@ -98,7 +98,7 @@
 			                    </tr>
 			
 			                    <tr>
-			                        <td style="text-align:center;vertical-align:top;"><%=getTran("openclinic.chuk","belly",sWebLanguage)%></td>
+			                        <td style="text-align:center;vertical-align:top;"><%=getTran(request,"openclinic.chuk","belly",sWebLanguage)%></td>
 			                    </tr>
 			                </table>
 			            </td>
@@ -106,7 +106,7 @@
 			
 			        <%-- rectosigmoidoscopy --%>
 			        <tr>
-			            <td class="admin"><%=getTran("openclinic.chuk","rectosigmoidoscopy",sWebLanguage)%></td>
+			            <td class="admin"><%=getTran(request,"openclinic.chuk","rectosigmoidoscopy",sWebLanguage)%></td>
 			            <td class="admin2">
 			                <textarea onkeyup="resizeTextarea(this,3);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_PROCOTOLOGY_PROTOCOL_RECTOSIGMOIDOSCOPY")%> class="text" cols="64" rows="3" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROCOTOLOGY_PROTOCOL_RECTOSIGMOIDOSCOPY" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROCOTOLOGY_PROTOCOL_RECTOSIGMOIDOSCOPY" property="value"/></textarea>
 			            </td>
@@ -114,15 +114,15 @@
 			
 			        <%-- Investigations_done --%>
 			        <tr>
-			            <td class="admin"><%=getTran("openclinic.chuk","Investigations_done",sWebLanguage)%></td>
+			            <td class="admin"><%=getTran(request,"openclinic.chuk","Investigations_done",sWebLanguage)%></td>
 			            <td class="admin2">
-			                <input <%=setRightClick("ITEM_TYPE_PROCOTOLOGY_PROTOCOL_BIOSCOPY")%> type="checkbox" id="central" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROCOTOLOGY_PROTOCOL_BIOSCOPY" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROCOTOLOGY_PROTOCOL_BIOSCOPY;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><label for="central"><%=getTran("openclinic.chuk","biopsy",sWebLanguage)%></label>
+			                <input <%=setRightClick("ITEM_TYPE_PROCOTOLOGY_PROTOCOL_BIOSCOPY")%> type="checkbox" id="central" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROCOTOLOGY_PROTOCOL_BIOSCOPY" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROCOTOLOGY_PROTOCOL_BIOSCOPY;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><label for="central"><%=getTran(request,"openclinic.chuk","biopsy",sWebLanguage)%></label>
 			            </td>
 			        </tr>
 			
 			        <%-- conclusion --%>
 			        <tr>
-			            <td class="admin"><%=getTran("openclinic.chuk","conclusion",sWebLanguage)%></td>
+			            <td class="admin"><%=getTran(request,"openclinic.chuk","conclusion",sWebLanguage)%></td>
 			            <td class="admin2">
 			                <textarea onkeyup="resizeTextarea(this,3);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_PROCOTOLOGY_PROTOCOL_CONCLUSION")%> class="text" cols="64" rows="3" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROCOTOLOGY_PROTOCOL_CONCLUSION" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROCOTOLOGY_PROTOCOL_CONCLUSION" property="value"/></textarea>
 			            </td>
@@ -130,7 +130,7 @@
 			
 			        <%-- remarks --%>
 			        <tr>
-			            <td class="admin"><%=getTran("openclinic.chuk","remarks",sWebLanguage)%></td>
+			            <td class="admin"><%=getTran(request,"openclinic.chuk","remarks",sWebLanguage)%></td>
 			            <td class="admin2">
 			                <textarea onkeyup="resizeTextarea(this,3);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_PROCOTOLOGY_PROTOCOL_REMARKS")%> class="text" cols="64" rows="3" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROCOTOLOGY_PROTOCOL_REMARKS" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PROCOTOLOGY_PROTOCOL_REMARKS" property="value"/></textarea>
 			            </td>

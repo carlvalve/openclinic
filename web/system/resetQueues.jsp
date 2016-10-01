@@ -6,9 +6,9 @@
 		<tr>
 			<td class='admin'>
 				<select name='queueendreason' class='text'>
-					<%=ScreenHelper.writeSelect("queueendreason",MedwanQuery.getInstance().getConfigString("defaultResetQueueEndReason","99"),sWebLanguage) %>
+					<%=ScreenHelper.writeSelect(request,"queueendreason",MedwanQuery.getInstance().getConfigString("defaultResetQueueEndReason","99"),sWebLanguage) %>
 				</select>
-				<input class='button' type='submit' name='resetqueue' value='<%=getTran("web","reset",sWebLanguage) %>'/>
+				<input class='button' type='submit' name='resetqueue' value='<%=getTran(null,"web","reset",sWebLanguage) %>'/>
 			</td>
 		</tr>
 	</table>
@@ -17,6 +17,6 @@
 <%
 	if(request.getParameter("resetqueue")!=null){
 		Queue.resetQueues(request.getParameter("queueendreason"),Integer.parseInt(activeUser.userid));
-		out.println(getTran("web","queueshavebeenreset",sWebLanguage));
+		out.println(getTran(request,"web","queueshavebeenreset",sWebLanguage));
 	}
 %>

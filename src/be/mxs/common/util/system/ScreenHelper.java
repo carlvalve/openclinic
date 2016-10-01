@@ -81,6 +81,49 @@ public class ScreenHelper {
     	return s;
     }
     
+    public static String createDrawingDiv(HttpServletRequest request,String name, String itemtype, Object transaction,String image, String imageType){
+    	String sContextPath=request.getRequestURI().replaceAll(request.getServletPath(),"");
+    	TransactionVO tran = (TransactionVO)transaction;
+    	String s = "<script src='"+sContextPath+"/_common/_script/canvas.js'></script>";
+    	s+="<table cellspacing='0' cellpadding='0'>";
+    	s+="<tr><td>";
+    	s+="<img src='"+sContextPath+"/_img/themes/default/canvas_small.png' width='14px' onclick='canvasSetRadius(1)'/>";
+    	s+="<img src='"+sContextPath+"/_img/themes/default/canvas_normal.png' width='14px' onclick='canvasSetRadius(5)'/>";
+    	s+="<img src='"+sContextPath+"/_img/themes/default/canvas_big.png' width='14px' onclick='canvasSetRadius(10)'/>";
+    	s+="</td><td>";
+    	s+="<img src='"+sContextPath+"/_img/themes/default/previous.jpg' width='14px' onclick='canvasReloadBaseImage()'/>";
+    	s+="<img src='"+sContextPath+"/_img/themes/default/erase.png' width='14px' onclick='canvasLoadImage(\""+sContextPath+image+"\")'/>";
+    	s+="</td><td>";
+    	s+="<select id='drawingtype' class='text'>"+writeSelect(request,imageType,"",((User)request.getSession().getAttribute("activeUser")).person.language)+"</select>";
+    	s+="<img src='"+sContextPath+"/_img/icons/icon_default.gif' width='14px' onclick='updateDrawing()'/>";
+    	s+="</td><td/></tr><tr><td colspan='3'>";
+    	s+="<div id='"+name+"' onmouseover='this.style.cursor=\"hand\"'></div>";
+    	s+="</td><td valign='top'><table cellspacing='0' cellpadding='0'>";
+    	s+="<tr><td><img src='"+sContextPath+"/_img/themes/default/canvas_black.png' width='14px' onclick='canvasSetColor(\"black\")'/></td></tr>";
+    	s+="<tr><td><img src='"+sContextPath+"/_img/themes/default/canvas_white.png' width='14px' onclick='canvasSetColor(\"white\")'/></td></tr>";
+    	s+="<tr><td><img src='"+sContextPath+"/_img/themes/default/canvas_red.png' width='14px' onclick='canvasSetColor(\"red\")'/></td></tr>";
+    	s+="<tr><td><img src='"+sContextPath+"/_img/themes/default/canvas_blue.png' width='14px' onclick='canvasSetColor(\"blue\")'/></td></tr>";
+    	s+="<tr><td><img src='"+sContextPath+"/_img/themes/default/canvas_yellow.png' width='14px' onclick='canvasSetColor(\"yellow\")'/></td></tr>";
+    	s+="<tr><td><img src='"+sContextPath+"/_img/themes/default/canvas_green.png' width='14px' onclick='canvasSetColor(\"green\")'/></td></tr>";
+    	s+="</table></td></tr></table>";
+    	s+="<input type='hidden' name='drawingContent' id='drawingContent'/>";
+    	s+="<input type='hidden' name='currentTransactionVO.items.<ItemVO[hashCode="+tran.getItem(itemtype).hashCode()+"]>.value' value='drawingContent'/>";
+    	s+="<script>";
+    	String sDrawing=ScreenHelper.getDrawing(tran.getServerId(),tran.getTransactionId(),itemtype);
+    	if(sDrawing.length()<10){
+    		s+="context = initCanvas('canvasDiv',100,100,'"+sContextPath+image+"');";
+    	}
+    	else {
+    		s+="context = initCanvas('canvasDiv',100,100,'"+sDrawing+"');";
+    	}
+    	s+="function updateDrawing(){";
+    	s+="  drawingtype=document.getElementById('drawingtype').value.replace(new RegExp('<sl>', 'g'), '/');";
+		s+="  canvasLoadImage('"+sContextPath+"'+drawingtype);";
+		s+="}";
+    	s+="</script>";
+    	return s;
+    }
+    
     public static String createSignatureDiv(HttpServletRequest request,String name, String fieldname,String documentuid, String image){
     	String sContextPath=request.getRequestURI().replaceAll(request.getServletPath(),"");
     	String s = "<script src='"+sContextPath+"/_common/_script/canvas.js'></script>";
@@ -1716,6 +1759,89 @@ public static String removeAccents(String sTest){
         return writeSelect(request,sLabelType,sSelected,sWebLanguage,false,false);
     }
 
+    public static String writeCheckBoxes(HttpServletRequest request,String sLabelType, String name, String sSelected, String sWebLanguage, boolean sorted){
+    	String sResult="";
+        Label label;
+        Iterator it;
+
+        Hashtable labelTypes = (Hashtable)MedwanQuery.getInstance().getLabels().get(sWebLanguage.toLowerCase());
+        if(labelTypes!=null){
+            Hashtable labelIds = (Hashtable)labelTypes.get(sLabelType.toLowerCase());
+
+            if(labelIds!=null){
+                Enumeration idsEnum = labelIds.elements();
+                Hashtable hSelected = new Hashtable();
+
+                if(sorted){
+                    // sorted on value
+                    while(idsEnum.hasMoreElements()){
+                        label = (Label)idsEnum.nextElement();
+                        hSelected.put(label.value,label.id);
+                    }
+                }
+                else{
+                    // sorted on id
+                    while(idsEnum.hasMoreElements()){
+                        label = (Label)idsEnum.nextElement();
+                        hSelected.put(label.id,label.value);
+                    }
+                }
+
+                // sort on keys :
+                //  when sorted (on value), key = labelValue
+                //  when !sorted (sorted on id), key = labelID
+                Vector keys = new Vector(hSelected.keySet());
+                Collections.sort(keys);
+                it = keys.iterator();
+
+                // to html
+                String sLabelValue, sLabelID;
+                while(it.hasNext()){
+                    if(sorted){
+                        sLabelValue = (String)it.next();
+                        sLabelID = (String)hSelected.get(sLabelValue);
+                    }
+                    else{
+                        sLabelID = (String)it.next();
+                        sLabelValue = (String)hSelected.get(sLabelID);
+                    }
+
+                    sResult+= "<input type='checkbox' name='"+name+"."+sLabelID+"' id='"+name+"."+sLabelID+"' value='"+sLabelID+"'";
+                    if(arrayContains(sSelected,sLabelID,";")){
+                        sResult+= " checked";
+                    }
+
+                    sResult+= ">"+sLabelValue+" ";
+                }
+            }
+        }
+    	return sResult;
+    }
+    
+    public static String makeArrayFromParameters(HttpServletRequest request,String name,String separator){
+    	String array="";
+    	Enumeration pars = request.getParameterNames();
+    	while(pars.hasMoreElements()){
+    		String par = (String)pars.nextElement();
+    		if(par.startsWith(name+".")){
+    			if(array.length()>0){
+    				array+=separator;
+    			}
+    			array+=request.getParameter(par);
+    		}
+    	}
+    	return array;
+    }
+    
+    public static boolean arrayContains(String array,String value,String separator){
+    	String[] options = array.split(separator);
+    	for(int n=0;n<options.length;n++){
+    		if(options[n].equalsIgnoreCase(value)){
+    			return true;
+    		}
+    	}
+    	return false;
+    }
     //--- WRITE SELECT ----------------------------------------------------------------------------
     public static String writeSelect(HttpServletRequest request,String sLabelType, String sSelected, String sWebLanguage, boolean showLabelID, boolean sorted){
         String sOptions = "";

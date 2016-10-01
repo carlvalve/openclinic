@@ -176,6 +176,6 @@
         }
     }
     else{
-        %><%=getTran("web.userProfile","noShortcutsDefined",sWebLanguage)%><%
+        %><%=getTran(request,"web.userProfile","noShortcutsDefined",sWebLanguage)%><%
     }
 %>

@@ -1,7 +1,7 @@
 <%@include file="/mobile/_common/head.jsp"%>
 
 <table class="list" padding="0" cellspacing="1" width="<%=sTABLE_WIDTH%>">
-	<tr class="admin"><td colspan="2"><%=getTran("mobile","labdata",activeUser)%></td></tr>
+	<tr class="admin"><td colspan="2"><%=getTran(request,"mobile","labdata",activeUser)%></td></tr>
 	
 <%
 	String sMinDate = stdDateFormat.format(new java.util.Date().getTime()-dataFreshness);
@@ -32,7 +32,7 @@
 		}
 	}
 	else{
-		out.print("<tr><td colspan='2'><i>"+getTran("web","noData",activeUser)+"</i></td></tr>");
+		out.print("<tr><td colspan='2'><i>"+getTran(request,"web","noData",activeUser)+"</i></td></tr>");
 	}
 %>
 </table>

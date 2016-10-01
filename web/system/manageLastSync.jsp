@@ -122,7 +122,7 @@
             Debug.println("Parameter: " + sParameter);
             if (sParameter.startsWith("server")) {
               	Connection ad_conn = MedwanQuery.getInstance().getAdminConnection();
-                sendToEmailAddresses(checkString(request.getParameter(sParameter)), ad_conn, getTran("Web.Manage.lastsync", "mailsubject", sWebLanguage), new StringBuffer(getTran("Web.Manage.lastsync", "mailmessage", sWebLanguage)));
+                sendToEmailAddresses(checkString(request.getParameter(sParameter)), ad_conn, getTran(request,"Web.Manage.lastsync", "mailsubject", sWebLanguage), new StringBuffer(getTran(request,"Web.Manage.lastsync", "mailmessage", sWebLanguage)));
                 ad_conn.close();
             }
         }
@@ -137,11 +137,11 @@
             <input class='button' type="button" name="select_button" value="<%=getTranNoLink("web","selectall",sWebLanguage)%>" onclick="selectAll('MailLastSyncForm','checked');">&nbsp;
             <input class='button' type="button" name="deselect_button" value="<%=getTranNoLink("web","deselectall",sWebLanguage)%>" onclick="deselectAll('MailLastSyncForm','');">
           </td>
-          <td><%=getTran("Web.Manage.lastsync","ServerNumber",sWebLanguage)%></td>
-          <td><%=getTran("Web.Manage.lastsync","ServerName",sWebLanguage)%></td>
-          <td><%=getTran("Web.Manage.lastsync","LastSyncTime",sWebLanguage)%></td>
-          <td><%=getTran("Web.Manage.lastsync","Number_of_days_passed",sWebLanguage)%></td>
-          <td><%=getTran("Web.Manage.lastsync","Users",sWebLanguage)%></td>
+          <td><%=getTran(request,"Web.Manage.lastsync","ServerNumber",sWebLanguage)%></td>
+          <td><%=getTran(request,"Web.Manage.lastsync","ServerName",sWebLanguage)%></td>
+          <td><%=getTran(request,"Web.Manage.lastsync","LastSyncTime",sWebLanguage)%></td>
+          <td><%=getTran(request,"Web.Manage.lastsync","Number_of_days_passed",sWebLanguage)%></td>
+          <td><%=getTran(request,"Web.Manage.lastsync","Users",sWebLanguage)%></td>
         </tr>
     <%
         Vector vConfigs = new Vector();

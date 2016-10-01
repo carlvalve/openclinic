@@ -84,7 +84,7 @@
 
     // no records found message
     if (sOut.length() == 0) {
-        sOut.append("<tr><td colspan='2'>&nbsp;" + getTran("web", "norecordsfound", sWebLanguage) + "</td></tr>");
+        sOut.append("<tr><td colspan='2'>&nbsp;" + getTran(request,"web", "norecordsfound", sWebLanguage) + "</td></tr>");
     }
 %>
 

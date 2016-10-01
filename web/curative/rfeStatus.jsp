@@ -16,7 +16,7 @@
 <table width="100%" class="list" height="100%" cellspacing="0">
     <tr class="admin">
         <td colspan="3">
-            <%=getTran("openclinic.chuk","actualrfe",sWebLanguage)%>&nbsp;
+            <%=getTran(request,"openclinic.chuk","actualrfe",sWebLanguage)%>&nbsp;
             <%
                 if(encounter!=null){
 		            %><a href="javascript:showRFElist();"><img src="<c:url value='/_img/icons/icon_edit.gif'/>" class="link" alt="<%=getTranNoLink("web","editrfelist",sWebLanguage)%>" style="vertical-align:-4px;"></a><%

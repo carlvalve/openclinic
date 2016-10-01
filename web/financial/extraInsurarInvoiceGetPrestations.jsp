@@ -152,13 +152,13 @@
                 if(checkString(debet.getUid()).length() > 0) {
                     if(debet != null) {
                         if(begin!=null & begin.after(debet.getDate())){
-                            continue;
+                            //continue;
                         }
                         if(end!=null & end.before(debet.getDate())){
-                            continue;
+                            //continue;
                         }
                         if(sServiceUid.length()>0){
-                       		if(sServiceUid.indexOf("'"+debet.determineServiceUid()+"'")<0){
+                       		if(sServiceUid.toLowerCase().indexOf("'"+debet.determineServiceUid().toLowerCase()+"'")<0){
                        			continue;
                        		}
                         }
@@ -244,11 +244,11 @@
 <table width="100%" cellspacing="1" cellpadding="0">
     <tr class="gray">
         <td width="50"/>
-        <td width="200"><%=HTMLEntities.htmlentities(getTran("web.control","output_h_4",sWebLanguage))%></td>
-        <td width="80"><%=HTMLEntities.htmlentities(getTran("web", "date", sWebLanguage))%></td>
-        <td><%=HTMLEntities.htmlentities(getTran("web.finance","encounter",sWebLanguage))%></td>
-        <td width="200"><%=HTMLEntities.htmlentities(getTran("web","prestation",sWebLanguage))%></td>
-        <td width="100"><%=HTMLEntities.htmlentities(getTran("web","amount",sWebLanguage))%></td>
+        <td width="200"><%=HTMLEntities.htmlentities(getTran(request,"web.control","output_h_4",sWebLanguage))%></td>
+        <td width="80"><%=HTMLEntities.htmlentities(getTran(request,"web", "date", sWebLanguage))%></td>
+        <td><%=HTMLEntities.htmlentities(getTran(request,"web.finance","encounter",sWebLanguage))%></td>
+        <td width="200"><%=HTMLEntities.htmlentities(getTran(request,"web","prestation",sWebLanguage))%></td>
+        <td width="100"><%=HTMLEntities.htmlentities(getTran(request,"web","amount",sWebLanguage))%></td>
     </tr>
 <%
 	String sServiceUid = checkString(request.getParameter("EditInvoiceService"));

@@ -5,6 +5,8 @@
 <%
 	String loadonly    = checkString(request.getParameter("loadonly")),
            drugbarcode = checkString(request.getParameter("DrugBarcode")),
+           druguid = checkString(request.getParameter("DrugUid")),
+           comment = checkString(request.getParameter("Comment")),
 	       sQuantity   = checkString(request.getParameter("Quantity"));
 	
 	int quantity = 1;
@@ -22,13 +24,23 @@
     	Debug.println("\n******************** pharmacy/addDrugsOutBarcode.jsp ******************");
     	Debug.println("loadonly    : "+loadonly);
     	Debug.println("drugbarcode : "+drugbarcode);
+    	Debug.println("comment     : "+comment);
     	Debug.println("sQuantity   : "+sQuantity+"\n");
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
 	// search product
-	ProductStock productstock = ProductStock.getByBarcode(drugbarcode,servicestock);
-	if(loadonly.length()==0 && productstock==null){
+	ProductStock productstock = null;
+    if(druguid.length()==0){
+    	productstock= ProductStock.getByBarcode(drugbarcode,servicestock);
+    }
+    else{
+    	Vector stocks =ProductStock.find(servicestock, druguid, "", "", "", "", "", "", "", "", "", "OC_STOCK_OBJECTID", "ASC");
+    	if(stocks.size()>0){
+    		productstock=(ProductStock)stocks.elementAt(0);
+    	}
+    }
+	if(loadonly.length()==0 && (servicestock.length()==0 || productstock==null)){
 		out.print("{\"message\":\""+getTranNoLink("web","productstock.does.not.exist",sWebLanguage)+"\"}");
 	}
 	else if(loadonly.length()==0 && productstock.getLevel()<quantity){
@@ -75,13 +87,14 @@
 						ps.close();
 						
 						ps = conn.prepareStatement("insert into OC_DRUGSOUTLIST(OC_LIST_SERVERID,OC_LIST_OBJECTID,OC_LIST_PATIENTUID,"+
-						                           "OC_LIST_PRODUCTSTOCKUID,OC_LIST_QUANTITY,OC_LIST_BATCHUID) values(?,?,?,?,?,?)");
+						                           "OC_LIST_PRODUCTSTOCKUID,OC_LIST_QUANTITY,OC_LIST_BATCHUID,OC_LIST_COMMENT) values(?,?,?,?,?,?,?)");
 						ps.setInt(1,MedwanQuery.getInstance().getConfigInt("serverId"));
 						ps.setInt(2,MedwanQuery.getInstance().getOpenclinicCounter("DRUGSOUT"));
 						ps.setString(3,activePatient.personid);
 						ps.setString(4,productstock.getUid());
 						ps.setInt(5,batch.getLevel());
 						ps.setString(6,batch.getUid());
+						ps.setString(7,comment);
 						ps.execute();
 						ps.close();
 					}
@@ -112,13 +125,14 @@
 						ps.close();
 						
 						ps = conn.prepareStatement("insert into OC_DRUGSOUTLIST(OC_LIST_SERVERID,OC_LIST_OBJECTID,OC_LIST_PATIENTUID,"+
-						                           " OC_LIST_PRODUCTSTOCKUID,OC_LIST_QUANTITY,OC_LIST_BATCHUID) values(?,?,?,?,?,?)");
+						                           " OC_LIST_PRODUCTSTOCKUID,OC_LIST_QUANTITY,OC_LIST_BATCHUID,OC_LIST_COMMENT) values(?,?,?,?,?,?,?)");
 						ps.setInt(1,MedwanQuery.getInstance().getConfigInt("serverId"));
 						ps.setInt(2,MedwanQuery.getInstance().getOpenclinicCounter("DRUGSOUT"));
 						ps.setString(3,activePatient.personid);
 						ps.setString(4,productstock.getUid());
 						ps.setInt(5,tofind);
 						ps.setString(6,batch.getUid());
+						ps.setString(7,comment);
 						ps.execute();
 						ps.close();
 					}
@@ -153,13 +167,14 @@
 					ps.close();
 					
 					ps = conn.prepareStatement("insert into OC_DRUGSOUTLIST(OC_LIST_SERVERID,OC_LIST_OBJECTID,OC_LIST_PATIENTUID,"+
-					                           " OC_LIST_PRODUCTSTOCKUID,OC_LIST_QUANTITY,OC_LIST_BATCHUID) values(?,?,?,?,?,?)");
+					                           " OC_LIST_PRODUCTSTOCKUID,OC_LIST_QUANTITY,OC_LIST_BATCHUID,OC_LIST_COMMENT) values(?,?,?,?,?,?,?)");
 					ps.setInt(1,MedwanQuery.getInstance().getConfigInt("serverId"));
 					ps.setInt(2,MedwanQuery.getInstance().getOpenclinicCounter("DRUGSOUT"));
 					ps.setString(3,activePatient.personid);
 					ps.setString(4,productstock.getUid());
 					ps.setInt(5,tofind);
 					ps.setString(6,"");
+					ps.setString(7,comment);
 					ps.execute();
 					ps.close();
 				}
@@ -182,10 +197,12 @@
 				int level = stock.getLevel();
 				
 				Batch batch = Batch.get(rs.getString("OC_LIST_BATCHUID"));
-				String sBatch = "?";
+				String sBatch = "";
+				String sExpires = "";
 				if(batch!=null){
 					sBatch = batch.getBatchNumber();
 					level = batch.getLevel();
+					sExpires = ScreenHelper.formatDate(batch.getEnd());
 				}
 				
 				// header
@@ -193,23 +210,33 @@
 					drugs+= "<tr class='admin'>"+
 				             "<td/>"+
 							 "<td>ID</td>"+
-				             "<td>"+getTran("web","product",sWebLanguage)+"</td>"+
-							 "<td>"+getTran("web","quantity",sWebLanguage)+"</td>"+
-				             "<td>"+getTran("web","batch",sWebLanguage)+"</td>"+
+				             "<td>"+getTran(request,"web","product",sWebLanguage)+"</td>"+
+							 "<td>"+getTran(request,"web","quantity",sWebLanguage)+"</td>"+
+				             "<td>"+getTran(request,"web","batch",sWebLanguage)+"</td>"+
+				             "<td>"+getTran(request,"web","level",sWebLanguage)+"</td>"+
+				             "<td>"+getTran(request,"web","expires",sWebLanguage)+"</td>"+
+				             "<td>"+getTran(request,"web","comment",sWebLanguage)+"</td>"+
 							"</tr>";
 				}
 				count++;
 				
 				// one row
+				String stocklabel="";
+				if(!stock.getServiceStockUid().equalsIgnoreCase(servicestock)){
+					stocklabel=" <font style='font-size: 8' color='darkgrey'>&nbsp;<img height='10' src='"+sCONTEXTPATH+"/_img/icons/icon_warning.gif'/>("+stock.getServiceStock().getName()+")</font>";
+				}
 				drugs+= "<tr>"+
 				         "<td class='admin2'>"+
 				          "<a href='javascript:doDelete(\\\""+rs.getInt("OC_LIST_SERVERID")+"."+rs.getInt("OC_LIST_OBJECTID")+"\\\");'>"+
 				           "<img src='_img/icons/icon_delete.gif' class='link' title='"+getTranNoLink("web","delete",sWebLanguage)+"'/></a>"+
 				         "</td>"+
 				         "<td class='admin2'>"+stock.getUid()+"</td>"+
-				         "<td class='admin2'>"+stock.getProduct().getName()+"</td>"+
-				         "<td class='admin2'>"+rs.getInt("OC_LIST_QUANTITY")+"</td>"+
-				         "<td class='admin2'>"+sBatch+" ("+level+")</td>"+
+				         "<td class='admin2'><b>"+stock.getProduct().getName()+"</b>"+stocklabel+"</td>"+
+				         "<td class='admin2'><b>"+rs.getInt("OC_LIST_QUANTITY")+"</b></td>"+
+				         "<td class='admin2'>"+sBatch+"</td>"+
+				         "<td class='admin2'>"+level+"</td>"+
+				         "<td class='admin2'>"+sExpires+"</td>"+
+				         "<td class='admin2'><b>"+rs.getString("OC_LIST_COMMENT")+"</b></td>"+
 				        "</tr>";
 			}
 		}

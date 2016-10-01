@@ -66,7 +66,7 @@
     <table border="0" width="250" cellspacing="0" cellpadding="5" style="border:1px solid #aaa">
         <tr>
             <td bgcolor="#dddddd" style="text-align:center">
-                <%=getTran("web","searchInProgress",sWebLanguage)%>
+                <%=getTran(request,"web","searchInProgress",sWebLanguage)%>
             </td>
         </tr>
     </table>
@@ -86,8 +86,8 @@
                                 %>
                                     <tbody class="hand">
                                         <tr class="admin">
-                                            <td nowrap><%=getTran("Web","name",sWebLanguage)%></td>
-                                            <td width='110' nowrap><%=getTran("Web","service",sWebLanguage)%></td>
+                                            <td nowrap><%=getTran(request,"Web","name",sWebLanguage)%></td>
+                                            <td width='110' nowrap><%=getTran(request,"Web","service",sWebLanguage)%></td>
                                         </tr>
                                         <%
                                         if(!vPersonIDs.contains(activePatient.personid)){
@@ -129,7 +129,7 @@
                                 // display 'no results' message
                                 %>
                                     <tr>
-                                        <td colspan='3'><%=getTran("web","norecordsfound",sWebLanguage)%></td>
+                                        <td colspan='3'><%=getTran(request,"web","norecordsfound",sWebLanguage)%></td>
                                     </tr>
                                 <%
                             }

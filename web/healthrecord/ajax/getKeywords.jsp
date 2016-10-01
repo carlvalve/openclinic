@@ -25,7 +25,7 @@
 %>
 
 <table width="100%">
-	<tr><td class="admin" colspan="2"><%=getTran("web","keywords",sWebLanguage)%> <%=getTran("web","for",sWebLanguage)%> '<%=getTran("web",labelType,sWebLanguage)%>'</td></tr>
+	<tr><td class="admin" colspan="2"><%=getTran(request,"web","keywords",sWebLanguage)%> <%=getTran(request,"web","for",sWebLanguage)%> '<%=getTran(null,"web",labelType,sWebLanguage)%>'</td></tr>
 
 <%
 	if(labelType.length() > 0){

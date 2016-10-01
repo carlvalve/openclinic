@@ -51,7 +51,7 @@
                 }
             }
 
-            srcDestTypeTran = getTran("productstockoperation.sourcedestinationtype",srcDestType,sWebLanguage);
+            srcDestTypeTran = getTran(null,"productstockoperation.sourcedestinationtype",srcDestType,sWebLanguage);
 
             // translate description
             sOperationDescr = operation.getDescription();
@@ -69,7 +69,7 @@
                     .append("<td onclick=\"doShowDetails('" + sOperationUid + "');\">" + (productStock != null ? productStock.getProduct().getName() : "") + "</td>")
                     .append("<td onclick=\"doShowDetails('" + sOperationUid + "');\">" + srcDestTypeTran + "</td>")
                     .append("<td onclick=\"doShowDetails('" + sOperationUid + "');\">" + srcDestName + "</td>")
-                    .append("<td onclick=\"doShowDetails('" + sOperationUid + "');\">" + (operationDate == null ? "" : stdDateFormat.format(operationDate)) + "</td>")
+                    .append("<td onclick=\"doShowDetails('" + sOperationUid + "');\">" + (operationDate == null ? "" : ScreenHelper.formatDate(operationDate)) + "</td>")
                     .append("<td onclick=\"doShowDetails('" + sOperationUid + "');\">" + operation.getUnitsChanged() + "</td>")
                     .append("</tr>");
         }
@@ -89,6 +89,7 @@
            sEditSrcDestName     = checkString(request.getParameter("EditSrcDestName")),
            sEditProductName     = checkString(request.getParameter("EditProductName")),
            sEditOperationDate   = checkString(request.getParameter("EditOperationDate")),
+           sEditDocumentUid     = checkString(request.getParameter("EditDocumentUid")),
            sEditProductStockUid = checkString(request.getParameter("EditProductStockUid"));
 
     /// DEBUG /////////////////////////////////////////////////////////////////////////////////////
@@ -102,6 +103,7 @@
         Debug.println("sEditSrcDestUid      : "+sEditSrcDestUid);
         Debug.println("sEditSrcDestName     : "+sEditSrcDestName);
         Debug.println("sEditOperationDate   : "+sEditOperationDate);
+        Debug.println("sEditDocumentUid     : "+sEditDocumentUid);
         Debug.println("sEditProductStockUid : "+sEditProductStockUid+"\n");
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -111,7 +113,7 @@
            sFindProductStockUid, sFindUnitsChanged, sSelectedOperationDescr = "",
            sSelectedSrcDestType = "", sSelectedSrcDestUid = "", sSelectedSrcDestName = "",
            sSelectedOperationDate = "", sSelectedProductName = "", sSelectedUnitsChanged = "",
-           sSelectedProductStockUid = "";
+           sSelectedProductStockUid = "", sSelectedDocumentUid="";
     
     int foundOperationCount = 0;
     StringBuffer operationsHtml = null;
@@ -152,23 +154,28 @@
         operation.setSourceDestination(sourceDestination);
         operation.setProductStockUid(sEditProductStockUid);
         operation.setUpdateUser(activeUser.userid);
+        operation.setDocumentUID(sEditDocumentUid);
 
         if(sEditOperationDate.length() > 0) operation.setDate(ScreenHelper.parseDate(sEditOperationDate));
         if(sEditUnitsChanged.length() > 0)  operation.setUnitsChanged(Integer.parseInt(sEditUnitsChanged));
 
         //***** save operation *****
-        operation.store();
+        String storeResult=operation.store();
+        if(storeResult!=null){
+        	out.println("<script>alert('"+getTran(request,"web",storeResult,sWebLanguage)+"');</script>");
+        	out.flush();
+        }
 
         // show saved data
         sAction = "showDetails";
-        msg = getTran("web","dataissaved",sWebLanguage);
+        msg = getTran(request,"web","dataissaved",sWebLanguage);
 
         sEditOperationUid = operation.getUid();
     }
     //--- DELETE ----------------------------------------------------------------------------------
     else if(sAction.equals("delete") && sEditOperationUid.length()>0){
         ProductStockOperation.delete(sEditOperationUid);
-        msg = getTran("web","dataisdeleted",sWebLanguage);
+        msg = getTran(request,"web","dataisdeleted",sWebLanguage);
         sAction = "findShowOverview"; // display overview even if only one record remains
     }
 
@@ -183,7 +190,6 @@
         Vector idsVector = getFoundOperationsFromRs(operationsHtml,vOperations,sWebLanguage);
         foundOperationCount = idsVector.size();
     }
-
     //--- SHOW DETAILS ----------------------------------------------------------------------------
     if(sAction.startsWith("showDetails")){
         displayEditFields = true;
@@ -197,10 +203,11 @@
                 sSelectedOperationDescr = operation.getDescription();
                 sSelectedOperationDate  = operation.getDate().toString();
                 sSelectedUnitsChanged   = Integer.toString(operation.getUnitsChanged());
+                sSelectedDocumentUid=operation.getDocumentUID();
 
                 // format date
                 java.util.Date tmpDate = operation.getDate();
-                if(tmpDate!=null) sSelectedOperationDate = stdDateFormat.format(tmpDate);
+                if(tmpDate!=null) sSelectedOperationDate = ScreenHelper.formatDate(tmpDate);
 
                 // ProductStock
                 sSelectedProductStockUid = operation.getProductStockUid();
@@ -216,8 +223,11 @@
                 if(sSelectedSrcDestType.indexOf("patient") > -1 || sSelectedSrcDestType.indexOf("medic") > -1){
                     sSelectedSrcDestName = ScreenHelper.getFullPersonName(sSelectedSrcDestUid);
                 }
+                else if(sSelectedSrcDestType.indexOf("servicestock") > -1){
+                    sSelectedSrcDestName = operation.getSourceDestinationName();
+                }
                 else if(sSelectedSrcDestType.indexOf("service") > -1){
-                    sSelectedSrcDestName = getTran("service",sSelectedSrcDestUid,sWebLanguage);
+                    sSelectedSrcDestName = getTran(request,"service",sSelectedSrcDestUid,sWebLanguage);
                 }
             }
         }
@@ -230,12 +240,14 @@
             sSelectedSrcDestName    = sEditSrcDestName;
             sSelectedOperationDate  = sEditOperationDate;
             sSelectedProductName    = sEditProductName;
+            sSelectedDocumentUid	= sEditDocumentUid;
         }
         else{
             // showDetailsNew : empty defaults
             sSelectedSrcDestType = "";
             sSelectedSrcDestUid  = "";
             sSelectedSrcDestName = "";
+            sSelectedDocumentUid = "";
         }
     }
 
@@ -266,40 +278,40 @@
                 <table width="100%" class="list" cellspacing="1" onClick="transactionForm.onkeydown='if(enterEvent(event,13)){doSearch();}';" onKeyDown="if(enterEvent(event,13)){doSearch();}">
                     <%-- description --%>
                     <tr>
-                        <td class="admin2" width="<%=sTDAdminWidth%>" nowrap><%=getTran("Web","description",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2" width="<%=sTDAdminWidth%>" nowrap><%=getTran(request,"Web","description",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <select class="text" name="FindOperationDescr" style="vertical-align:-2px;">
                                 <option value=""></option>
-                                <%=ScreenHelper.writeSelectUnsorted("productstockoperation.medicationdelivery",sFindOperationDescr,sWebLanguage)%>
-                                <%=ScreenHelper.writeSelectUnsorted("productstockoperation.medicationreceipt",sFindOperationDescr,sWebLanguage)%>
+                                <%=ScreenHelper.writeSelectUnsorted(request,"productstockoperation.medicationdelivery",sFindOperationDescr,sWebLanguage)%>
+                                <%=ScreenHelper.writeSelectUnsorted(request,"productstockoperation.medicationreceipt",sFindOperationDescr,sWebLanguage)%>
                             </select>
                         </td>
                     </tr>
                     <%-- units changed --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","unitschanged",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","unitschanged",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <input class="text" type="text" name="FindUnitsChanged" size="5" maxLength="5" value="<%=sFindUnitsChanged%>" onKeyUp="isNumber(this);">
                         </td>
                     </tr>
                     <%-- SourceDestination type --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","sourcedestinationtype",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","sourcedestinationtype",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <select class="text" name="FindSrcDestType">
                                 <option value=""></option>
-                                <%=ScreenHelper.writeSelectUnsorted("productstockoperation.sourcedestinationtype",sFindSrcDestType,sWebLanguage)%>
+                                <%=ScreenHelper.writeSelectUnsorted(request,"productstockoperation.sourcedestinationtype",sFindSrcDestType,sWebLanguage)%>
                             </select>
                         </td>
                     </tr>
                     <%-- operation date --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","date",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","date",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2"><%=writeDateField("FindOperationDate","transactionForm",sFindOperationDate,sWebLanguage)%></td>
                     </tr>
                     <%-- Product stock --%>
                     <tr>
-                        <td class="admin2" nowrap><%=getTran("Web","productstock",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2" nowrap><%=getTran(request,"Web","productstock",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <input type="hidden" name="FindProductStockUid" value="<%=sFindProductStockUid%>">
                             <input class="text" type="text" name="FindProductStockName" readonly size="<%=sTextWidth%>" value="<%=sFindProductStockName%>">
@@ -334,19 +346,19 @@
                         <%-- header --%>
                         <tr class="admin">
                             <td width="20" nowrap>&nbsp;</td>
-                            <td width="20%"><%=getTran("Web","description",sWebLanguage)%></td>
-                            <td width="20%"><%=getTran("Web","product",sWebLanguage)%></td>
-                            <td width="10%"><%=getTran("Web","sourcedestinationtype",sWebLanguage)%></td>
-                            <td width="30%"><%=getTran("Web","sourcedestinationname",sWebLanguage)%></td>
-                            <td width="10%"><%=getTran("Web","date",sWebLanguage)%></td>
-                            <td width="*"><%=getTran("Web","unitschanged",sWebLanguage)%></td>
+                            <td width="20%"><%=getTran(request,"Web","description",sWebLanguage)%></td>
+                            <td width="20%"><%=getTran(request,"Web","product",sWebLanguage)%></td>
+                            <td width="10%"><%=getTran(request,"Web","sourcedestinationtype",sWebLanguage)%></td>
+                            <td width="30%"><%=getTran(request,"Web","sourcedestinationname",sWebLanguage)%></td>
+                            <td width="10%"><%=getTran(request,"Web","date",sWebLanguage)%></td>
+                            <td width="*"><%=getTran(request,"Web","unitschanged",sWebLanguage)%></td>
                         </tr>
                         <tbody class="hand"><%=operationsHtml%></tbody>
                     </table>
                     
                     <%-- number of records found --%>
                     <span style="width:49%;text-align:left;">
-                        <%=foundOperationCount%> <%=getTran("web","recordsfound",sWebLanguage)%>
+                        <%=foundOperationCount%> <%=getTran(request,"web","recordsfound",sWebLanguage)%>
                     </span>
                     
                     <%
@@ -365,7 +377,7 @@
             }
             else{
                 // no records found
-                %><%=getTran("web","norecordsfound",sWebLanguage)%><br><br><%
+                %><%=getTran(request,"web","norecordsfound",sWebLanguage)%><br><br><%
             }
         }
 
@@ -375,18 +387,18 @@
                 <table class="list" width="100%" cellspacing="1">
                     <%-- description --%>
                     <tr>
-                        <td class="admin" width="<%=sTDAdminWidth%>" nowrap><%=getTran("Web","description",sWebLanguage)%>&nbsp;*&nbsp;</td>
+                        <td class="admin" width="<%=sTDAdminWidth%>" nowrap><%=getTran(request,"Web","description",sWebLanguage)%>&nbsp;*&nbsp;</td>
                         <td class="admin2">
                             <select class="text" name="EditOperationDescr" onChange="displaySrcDestSelector();" style="vertical-align:-2px;">
                                 <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>
-                                <%=ScreenHelper.writeSelectUnsorted("productstockoperation.medicationdelivery",sSelectedOperationDescr,sWebLanguage)%>
-                                <%=ScreenHelper.writeSelectUnsorted("productstockoperation.medicationreceipt",sSelectedOperationDescr,sWebLanguage)%>
+                                <%=ScreenHelper.writeSelectUnsorted(request,"productstockoperation.medicationdelivery",sSelectedOperationDescr,sWebLanguage)%>
+                                <%=ScreenHelper.writeSelectUnsorted(request,"productstockoperation.medicationreceipt",sSelectedOperationDescr,sWebLanguage)%>
                             </select>
                         </td>
                     </tr>
                     <%-- units changed --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","unitschanged",sWebLanguage)%> *</td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","unitschanged",sWebLanguage)%> *</td>
                         <td class="admin2">
                             <input class="text" type="text" name="EditUnitsChanged" size="5" maxLength="5" value="<%=sSelectedUnitsChanged%>" onKeyUp="isNumber(this);" onBlur="displaySrcDestSelector();">
                         </td>
@@ -398,7 +410,7 @@
                             <%-- SOURCE DESTINATION TYPE SELECTOR --%>
                             <select class="text" name="EditSrcDestType" onChange="displaySrcDestSelector();" style="vertical-align:-2px;">
                                 <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>
-                                <%=ScreenHelper.writeSelectUnsorted("productstockoperation.sourcedestinationtype",sSelectedSrcDestType,sWebLanguage)%>
+                                <%=ScreenHelper.writeSelectUnsorted(request,"productstockoperation.sourcedestinationtype",sSelectedSrcDestType,sWebLanguage)%>
                             </select>
                             
                             <%-- SOURCE DESTINATION SELECTOR --%>
@@ -412,21 +424,20 @@
                     
                     <script>
                       displaySrcDestSelector();
-
                       <%-- DISPLAY SOURCE DESTINATION SELECTOR --%>
                       function displaySrcDestSelector(){
                         var srcDestType, srcDestUid, srcDestName, descrType;
 
                         descrType = transactionForm.EditOperationDescr.value;
                         if(descrType.length == 0){
-                          document.getElementById('EditSourceDestinationLabel').innerHTML = "<%=getTran("Web","sourcedestination",sWebLanguage)%>";
+                          document.getElementById('EditSourceDestinationLabel').innerHTML = "<%=getTran(null,"Web","sourcedestination",sWebLanguage)%>";
                         }
                         else{
                           if(descrType.indexOf('delivery') > -1){
-                            document.getElementById('EditSourceDestinationLabel').innerHTML = "<%=getTran("Web","deliveredto",sWebLanguage)%>";
+                            document.getElementById('EditSourceDestinationLabel').innerHTML = "<%=getTran(null,"Web","deliveredto",sWebLanguage)%>";
                           }
                           else if(descrType.indexOf('receipt') > -1){
-                            document.getElementById('EditSourceDestinationLabel').innerHTML = "<%=getTran("Web","receivedby",sWebLanguage)%>";
+                            document.getElementById('EditSourceDestinationLabel').innerHTML = "<%=getTran(null,"Web","receivedfrom",sWebLanguage)%>";
                           }
                         }
 
@@ -443,52 +454,57 @@
                             transactionForm.EditSrcDestName.value = "<%=activeUser.person.firstname+" "+activeUser.person.lastname%>";
 
                             if(descrType.indexOf('delivery') > -1){
-                              document.getElementById('EditSourceDestinationLabel').innerHTML = "<%=getTran("Web","deliveredto",sWebLanguage)%>";
+                              document.getElementById('EditSourceDestinationLabel').innerHTML = "<%=getTran(null,"Web","deliveredto",sWebLanguage)%>";
                             }
                             else if(descrType.indexOf('receipt') > -1){
-                              document.getElementById('EditSourceDestinationLabel').innerHTML = "<%=getTran("Web","receivedby",sWebLanguage)%>";
+                              document.getElementById('EditSourceDestinationLabel').innerHTML = "<%=getTran(null,"Web","receivedfrom",sWebLanguage)%>";
                             }
                           }
                           <%-- patient --%>
                           else if(srcDestType.indexOf('patient')>-1){
                             document.getElementById('SearchSrcDestButtonDiv').innerHTML = "<img src='<c:url value="/_img/icons/icon_search.gif"/>' class='link' alt='<%=getTranNoLink("Web","select",sWebLanguage)%>' onclick=\"searchPatient('EditSrcDestUid','EditSrcDestName');\">&nbsp;"
                                                                                          +"<img src='<c:url value="/_img/icons/icon_delete.gif"/>' class='link' alt='<%=getTranNoLink("Web","clear",sWebLanguage)%>' onclick=\"transactionForm.EditSrcDestUid.value='';transactionForm.EditSrcDestName.value='';\">&nbsp;";
-                            transactionForm.EditSrcDestUid.value = "<%=activePatient.personid%>";
-                            transactionForm.EditSrcDestName.value = "<%=activePatient.firstname+" "+activePatient.lastname%>";
+                            transactionForm.EditSrcDestUid.value = "<%=activePatient==null?"":activePatient.personid%>";
+                            transactionForm.EditSrcDestName.value = "<%=activePatient==null?"":activePatient.firstname+" "+activePatient.lastname%>";
 
                             if(descrType.indexOf('delivery') > -1){
-                              document.getElementById('EditSourceDestinationLabel').innerHTML = "<%=getTran("Web","deliveredto",sWebLanguage)%>";
+                              document.getElementById('EditSourceDestinationLabel').innerHTML = "<%=getTran(null,"Web","deliveredto",sWebLanguage)%>";
                             }
                             else if(descrType.indexOf('receipt') > -1){
-                              document.getElementById('EditSourceDestinationLabel').innerHTML = "<%=getTran("Web","receivedby",sWebLanguage)%>";
+                              document.getElementById('EditSourceDestinationLabel').innerHTML = "<%=getTran(null,"Web","receivedfrom",sWebLanguage)%>";
                             }
                           }
                           <%-- service --%>
+                          else if(srcDestType.indexOf('servicestock')>-1){
+                              document.getElementById('SearchSrcDestButtonDiv').innerHTML = "<img src='<c:url value="/_img/icons/icon_search.gif"/>' class='link' alt='<%=getTranNoLink("Web","select",sWebLanguage)%>' onclick=\"searchServiceStock('EditSrcDestUid','EditSrcDestName');\">&nbsp;"
+                                                                                           +"<img src='<c:url value="/_img/icons/icon_delete.gif"/>' class='link' alt='<%=getTranNoLink("Web","clear",sWebLanguage)%>' onclick=\"transactionForm.EditSrcDestUid.value='';transactionForm.EditSrcDestName.value='';\">&nbsp;";
+                              if(descrType.indexOf('delivery') > -1){
+                                document.getElementById('EditSourceDestinationLabel').innerHTML = "<%=getTran(null,"Web","deliveredto",sWebLanguage)%>";
+                              }
+                              else if(descrType.indexOf('receipt') > -1){
+                                document.getElementById('EditSourceDestinationLabel').innerHTML = "<%=getTran(null,"Web","receivedfrom",sWebLanguage)%>";
+                              }
+                            }
                           else if(srcDestType.indexOf('service')>-1){
-                            document.getElementById('SearchSrcDestButtonDiv').innerHTML = "<img src='<c:url value="/_img/icons/icon_search.gif"/>' class='link' alt='<%=getTranNoLink("Web","select",sWebLanguage)%>' onclick=\"searchService('EditSrcDestUid','EditSrcDestName');\">&nbsp;"
-                                                                                         +"<img src='<c:url value="/_img/icons/icon_delete.gif"/>' class='link' alt='<%=getTranNoLink("Web","clear",sWebLanguage)%>' onclick=\"transactionForm.EditSrcDestUid.value='';transactionForm.EditSrcDestName.value='';\">&nbsp;";
-                            <%
-                                // get active service of active user
-                                String serviceId = "";//MedwanQuery.getInstance().getActiveServiceId(Integer.parseInt(activeUser.userid));
-                                Service userService = Service.getService(serviceId);
-                            %>
+                                  document.getElementById('SearchSrcDestButtonDiv').innerHTML = "<img src='<c:url value="/_img/icons/icon_search.gif"/>' class='link' alt='<%=getTranNoLink("Web","select",sWebLanguage)%>' onclick=\"searchService('EditSrcDestUid','EditSrcDestName');\">&nbsp;"
+                                                                                               +"<img src='<c:url value="/_img/icons/icon_delete.gif"/>' class='link' alt='<%=getTranNoLink("Web","clear",sWebLanguage)%>' onclick=\"transactionForm.EditSrcDestUid.value='';transactionForm.EditSrcDestName.value='';\">&nbsp;";
+                                  <%
+                                      String serviceId = "";//MedwanQuery.getInstance().getActiveServiceId(Integer.parseInt(activeUser.userid));
+                                      Service userService = Service.getService(serviceId);
+                                  %>
 
-                            if(srcDestUid!=undefined && srcDestName!=undefined){
-                              transactionForm.EditSrcDestUid.value = srcDestUid;
-                              transactionForm.EditSrcDestName.value = srcDestName;
-                            }
-                            else{
-                              transactionForm.EditSrcDestUid.value = "<%=userService.code%>";
-                              transactionForm.EditSrcDestName.value = "<%=getTran("service",userService.code,sWebLanguage)%>";
-                            }
+                                  if(transactionForm.EditSrcDestUid.value==''){
+                                    transactionForm.EditSrcDestUid.value = "<%=userService==null?"":userService.code%>";
+                                    transactionForm.EditSrcDestName.value = "<%=userService==null?"":getTran(request,"service",userService.code,sWebLanguage)%>";
+                                  }
 
-                            if(descrType.indexOf('delivery') > -1){
-                              document.getElementById('EditSourceDestinationLabel').innerHTML = "<%=getTran("Web","deliveredto",sWebLanguage)%>";
-                            }
-                            else if(descrType.indexOf('receipt') > -1){
-                              document.getElementById('EditSourceDestinationLabel').innerHTML = "<%=getTran("Web","receivedby",sWebLanguage)%>";
-                            }
-                          }
+                                  if(descrType.indexOf('delivery') > -1){
+                                    document.getElementById('EditSourceDestinationLabel').innerHTML = "<%=getTran(null,"Web","deliveredto",sWebLanguage)%>";
+                                  }
+                                  else if(descrType.indexOf('receipt') > -1){
+                                    document.getElementById('EditSourceDestinationLabel').innerHTML = "<%=getTran(null,"Web","receivedfrom",sWebLanguage)%>";
+                                  }
+                                }
                         }
                         else{
                           document.getElementById('SrcDestSelector').style.visibility = 'hidden';
@@ -498,7 +514,7 @@
                     
                     <%-- operation date --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","date",sWebLanguage)%> *</td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","date",sWebLanguage)%> *</td>
                         <td class="admin2"><%=writeDateField("EditOperationDate","transactionForm",sSelectedOperationDate,sWebLanguage)%></td>
                         <%
                             // if new order : set today as default value for dateOrdered
@@ -510,9 +526,10 @@
                     
                     <%-- Product stock --%>
                     <tr>
-                        <td class="admin" nowrap><%=getTran("Web","productstock",sWebLanguage)%> *</td>
+                        <td class="admin" nowrap><%=getTran(request,"Web","productstock",sWebLanguage)%> *</td>
                         <td class="admin2">
-                            <input type="hidden" name="EditProductStockUid" value="<%=sSelectedProductStockUid%>">
+                            <input type="hidden" name="EditProductStockUid" value="<%=sSelectedProductStockUid%>"/>
+                            <input type="hidden" name="EditDocumentUid" value="<%=sSelectedDocumentUid%>"/>
                             <input class="text" type="text" name="EditProductStockName" readonly size="<%=sTextWidth%>" value="<%=sSelectedProductName%>">
 
                             <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchProductStock('EditProductStockUid','EditProductStockName');">
@@ -548,7 +565,7 @@
                 </table>
                 
                 <%-- indication of obligated fields --%>
-                <%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%>
+                <%=getTran(request,"Web","colored_fields_are_obligate",sWebLanguage)%>
                 <br><br>
             <%
         }
@@ -580,10 +597,12 @@
 
   <%-- DO SAVE --%>
   function doSave(){
+  
     if(checkStockFields()){
       transactionForm.saveButton.disabled = true;
-      transactionForm.newButton.disabled = true;
-
+      if(transactionForm.newButton){
+    	  transactionForm.newButton.disabled = true;
+      }
       transactionForm.Action.value = "save";
       transactionForm.submit();
     }
@@ -711,8 +730,12 @@
 
   <%-- popup : search service --%>
   function searchService(serviceUidField,serviceNameField){
-    openPopup("/_common/search/searchService.jsp&ts=<%=getTs()%>&VarCode="+serviceUidField+"&VarText="+serviceNameField);
-  }
+	    openPopup("/_common/search/searchService.jsp&ts=<%=getTs()%>&VarCode="+serviceUidField+"&VarText="+serviceNameField);
+	  }
+
+  function searchServiceStock(serviceUidField,serviceNameField){
+	    openPopup("/_common/search/searchServiceStock.jsp&ts=<%=getTs()%>&ReturnServiceStockUidField="+serviceUidField+"&ReturnServiceStockNameField="+serviceNameField);
+	  }
 
   <%-- popup : search patient --%>
   function searchPatient(patientUidField,patientNameField){

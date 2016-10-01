@@ -30,7 +30,7 @@
 			<table class="list" width="100%" cellspacing="1" cellpadding="1" onKeyDown="if(enterEvent(event,13)){searchMealItemsWindow();return false;}">
 			    <%-- NAME --%>
 			    <tr>
-			        <td class="admin" width="100"><%=HTMLEntities.htmlentities(getTran("meals","mealItemName",sWebLanguage))%></td>
+			        <td class="admin" width="100"><%=HTMLEntities.htmlentities(getTran(request,"meals","mealItemName",sWebLanguage))%></td>
 			        <td class="admin2">
 			            <input type="text" class="text" id="FindMealItemName" maxLength="255" value="<%=HTMLEntities.htmlentities(sFindItemName)%>"/>
 			        </td>
@@ -38,7 +38,7 @@
 			    
 			    <%-- DESCRIPTION --%>
 			    <tr>
-			        <td class="admin"><%=HTMLEntities.htmlentities(getTran("meals","mealItemDescription",sWebLanguage))%></td>
+			        <td class="admin"><%=HTMLEntities.htmlentities(getTran(request,"meals","mealItemDescription",sWebLanguage))%></td>
 			        <td class="admin2">
 			            <input type="text" class="text" id="FindMealItemDescription" maxLength="100" value="<%=HTMLEntities.htmlentities(sFindItemDescription)%>"/>&nbsp;&nbsp;
 			         
@@ -59,10 +59,10 @@
 						<table width="100%" id="searchresultsMealItems" class="sortable" cellspacing="0" cellpadding="0">
 						    <%-- HEADER --%>
 						    <tr class="gray">
-						        <td width="150"><%=HTMLEntities.htmlentities(getTran("meals","name",sWebLanguage))%></td>
-						        <td width="100"><%=HTMLEntities.htmlentities(getTran("meals","unit",sWebLanguage))%></td>
-				                <td width="100"><%=HTMLEntities.htmlentities(getTran("meals","nutrients",sWebLanguage))%></td>
-						        <td width="*"><%=HTMLEntities.htmlentities(getTran("meals","description",sWebLanguage))%></td>
+						        <td width="150"><%=HTMLEntities.htmlentities(getTran(request,"meals","name",sWebLanguage))%></td>
+						        <td width="100"><%=HTMLEntities.htmlentities(getTran(request,"meals","unit",sWebLanguage))%></td>
+				                <td width="100"><%=HTMLEntities.htmlentities(getTran(request,"meals","nutrients",sWebLanguage))%></td>
+						        <td width="*"><%=HTMLEntities.htmlentities(getTran(request,"meals","description",sWebLanguage))%></td>
 						    </tr>
 	    
 			           	    <tbody class="hand">
@@ -97,7 +97,7 @@
 		    %>
 		
             <script>Modalbox.resizeToContent();</script>
-			<%=lMealsitems.size()%> <%=HTMLEntities.htmlentities(getTran("web","recordsFound",sWebLanguage))%><br><br>
+			<%=lMealsitems.size()%> <%=HTMLEntities.htmlentities(getTran(request,"web","recordsFound",sWebLanguage))%><br><br>
 						
 			<input type="button" class="button" name="backButton" value="<%=HTMLEntities.htmlentities(getTranNoLink("web","back",sWebLanguage))%>" onclick="openBackMeal();">
 		</div>
@@ -110,10 +110,10 @@
 				    <%-- HEADER --%>
 				    <tr class="gray">
 				        <td width="25">&nbsp;</td>
-				        <td width="150"><%=HTMLEntities.htmlentities(getTran("meals","name",sWebLanguage))%></td>
-				        <td width="100"><%=HTMLEntities.htmlentities(getTran("meals","unit",sWebLanguage))%></td>
-				        <td width="100"><%=HTMLEntities.htmlentities(getTran("meals","nutrients",sWebLanguage))%></td>
-				        <td width="*"><%=HTMLEntities.htmlentities(getTran("meals","description",sWebLanguage))%></td>
+				        <td width="150"><%=HTMLEntities.htmlentities(getTran(request,"meals","name",sWebLanguage))%></td>
+				        <td width="100"><%=HTMLEntities.htmlentities(getTran(request,"meals","unit",sWebLanguage))%></td>
+				        <td width="100"><%=HTMLEntities.htmlentities(getTran(request,"meals","nutrients",sWebLanguage))%></td>
+				        <td width="*"><%=HTMLEntities.htmlentities(getTran(request,"meals","description",sWebLanguage))%></td>
 				    </tr>
 				    
 				    <tbody class="hand">
@@ -144,12 +144,12 @@
 				    </tbody>
 				</table>
 			
-				<%=lMealsitems.size()%> <%=HTMLEntities.htmlentities(getTran("web","recordsfound",sWebLanguage))%>
+				<%=lMealsitems.size()%> <%=HTMLEntities.htmlentities(getTran(request,"web","recordsfound",sWebLanguage))%>
                 <script>ts_makeSortable(document.getElementById("searchresultsMealItems"));</script>	
 			<%
 		}
 		else{
-			%><%=HTMLEntities.htmlentities(getTran("web","noRecordsfound",sWebLanguage))%><%
+			%><%=HTMLEntities.htmlentities(getTran(request,"web","noRecordsfound",sWebLanguage))%><%
 		}
 	}
 %>

@@ -20,7 +20,7 @@
 	java.util.Date start = ScreenHelper.parseDate(sStart+" 00:00"),
 	               end   = ScreenHelper.parseDate(sEnd+" 23:59");
 	
-	String sTitle = getTranNoLink("Web","statistics.incomeVentilationPerPerformer",sWebLanguage)+": <i>"+sStart+" "+getTran("web","to",sWebLanguage)+" "+sEnd+"</i>";
+	String sTitle = getTranNoLink("Web","statistics.incomeVentilationPerPerformer",sWebLanguage)+": <i>"+sStart+" "+getTran(request,"web","to",sWebLanguage)+" "+sEnd+"</i>";
 %>
 
 <form name="transactionForm" method="post">
@@ -58,7 +58,7 @@
 		        %>
 				<tr>
 				    <td colspan="7" class="admin2">
-				        <input type="checkbox" class="hand" name="showDetails" id="rDetails" value="true" onClick="transactionForm.submit();"><%=getLabel("web","showDetails",sWebLanguage,"rDetails")%>
+				        <input type="checkbox" class="hand" name="showDetails" id="rDetails" value="true" onClick="transactionForm.submit();"><%=getLabel(request,"web","showDetails",sWebLanguage,"rDetails")%>
 				    </td>
 				</tr>
 				<%
@@ -67,17 +67,17 @@
 		        %>
 				<tr>
 				    <td colspan="7" class="admin2">
-		                <input type="checkbox" class="hand" name="showDetails" id="rDetails" checked value="false" onClick="transactionForm.submit();"><%=getLabel("web","showDetails",sWebLanguage,"rDetails")%></a>
+		                <input type="checkbox" class="hand" name="showDetails" id="rDetails" checked value="false" onClick="transactionForm.submit();"><%=getLabel(request,"web","showDetails",sWebLanguage,"rDetails")%></a>
 		            </td>
                 </tr>
 				<tr class="gray">
-					<td width="90"><%=getTran("web","date",sWebLanguage)%>&nbsp;</td>
-					<td width="180"><%=getTran("web","patient",sWebLanguage)%>&nbsp;</td>
-					<td width="90"><%=getTran("web","dateofbirth",sWebLanguage)%>&nbsp;</td>
-					<td width="140"><%=getTran("web","prestation",sWebLanguage)%>&nbsp;</td>
-					<td width="80"><%=getTran("web","price",sWebLanguage)%>&nbsp;</td>
-					<td width="90"><%=getTran("web","careproviderfee",sWebLanguage)%>&nbsp;</td>
-					<td width="*"><%=getTran("web","reason",sWebLanguage)%>&nbsp;</td>
+					<td width="90"><%=getTran(request,"web","date",sWebLanguage)%>&nbsp;</td>
+					<td width="180"><%=getTran(request,"web","patient",sWebLanguage)%>&nbsp;</td>
+					<td width="90"><%=getTran(request,"web","dateofbirth",sWebLanguage)%>&nbsp;</td>
+					<td width="140"><%=getTran(request,"web","prestation",sWebLanguage)%>&nbsp;</td>
+					<td width="80"><%=getTran(request,"web","price",sWebLanguage)%>&nbsp;</td>
+					<td width="90"><%=getTran(request,"web","careproviderfee",sWebLanguage)%>&nbsp;</td>
+					<td width="*"><%=getTran(request,"web","reason",sWebLanguage)%>&nbsp;</td>
 				</tr>		           
 		        <%
 		    }
@@ -89,7 +89,7 @@
 		if(activeuser.length()>0 && !u.equalsIgnoreCase(activeuser)){
 			User user = User.get(Integer.parseInt(activeuser));
 			s = "<tr class='admin'>"+
-			     "<td colspan='5'>"+getTran("web","totalfor",sWebLanguage)+" "+user.person.lastname.toUpperCase()+", "+user.person.firstname+"</td>"+
+			     "<td colspan='5'>"+getTran(request,"web","totalfor",sWebLanguage)+" "+user.person.lastname.toUpperCase()+", "+user.person.firstname+"</td>"+
 			     "<td colspan='2'>"+deci.format(useramount)+" "+MedwanQuery.getInstance().getConfigString("currency","")+"</td>"+
 			    "</tr>"+
 			    "<tr><td colspan='7'><hr/></td></tr>";
@@ -111,31 +111,31 @@
 		r = checkString(rs.getString("OC_DEBETFEE_REASON")).split(";");
 		reason = "";
 		if(r[0].equalsIgnoreCase("0")){
-			reason = getTran("careproviderfee.reasons",r[0],sWebLanguage);
+			reason = getTran(request,"careproviderfee.reasons",r[0],sWebLanguage);
 			if(r.length > 1){
 				User originalUser = User.get(Integer.parseInt(r[1]));
-				reason+=" ("+getTran("web","redirected.to",sWebLanguage)+": <b>"+originalUser.person.lastname.toUpperCase()+", "+originalUser.person.firstname+"</b>)";
+				reason+=" ("+getTran(request,"web","redirected.to",sWebLanguage)+": <b>"+originalUser.person.lastname.toUpperCase()+", "+originalUser.person.firstname+"</b>)";
 			}
 		}
 		else if(r[0].equalsIgnoreCase("1")){
-			reason = getTran("careproviderfee.reasons",r[0],sWebLanguage)+" ("+rs.getString("OC_DEBETFEE_CALCULATION");
+			reason = getTran(request,"careproviderfee.reasons",r[0],sWebLanguage)+" ("+rs.getString("OC_DEBETFEE_CALCULATION");
 			if(r.length > 1){
 				User originalUser = User.get(Integer.parseInt(r[1]));
-				reason+=" - "+getTran("web","encoded.for",sWebLanguage)+": <b>"+originalUser.person.lastname.toUpperCase()+", "+originalUser.person.firstname+"</b>";
+				reason+=" - "+getTran(request,"web","encoded.for",sWebLanguage)+": <b>"+originalUser.person.lastname.toUpperCase()+", "+originalUser.person.firstname+"</b>";
 			}
 			reason+= ")";
 		}
 		else if(r[0].equalsIgnoreCase("2")){
-			reason = getTran("careproviderfee.reasons",r[0],sWebLanguage)+" ("+getTran("prestation.type",r[1],sWebLanguage)+" - "+rs.getString("OC_DEBETFEE_CALCULATION")+")";
+			reason = getTran(request,"careproviderfee.reasons",r[0],sWebLanguage)+" ("+getTran(request,"prestation.type",r[1],sWebLanguage)+" - "+rs.getString("OC_DEBETFEE_CALCULATION")+")";
 		}
 		else if(r[0].equalsIgnoreCase("3")){
-			reason = getTran("careproviderfee.reasons",r[0],sWebLanguage)+" ("+r[1]+" - "+rs.getString("OC_DEBETFEE_CALCULATION")+")";
+			reason = getTran(request,"careproviderfee.reasons",r[0],sWebLanguage)+" ("+r[1]+" - "+rs.getString("OC_DEBETFEE_CALCULATION")+")";
 		}
 		else if(r[0].equalsIgnoreCase("4")){
-			reason = getTran("careproviderfee.reasons",r[0],sWebLanguage)+" ("+rs.getString("OC_DEBETFEE_CALCULATION")+")";
+			reason = getTran(request,"careproviderfee.reasons",r[0],sWebLanguage)+" ("+rs.getString("OC_DEBETFEE_CALCULATION")+")";
 		}
 		else if(r[0].equalsIgnoreCase("5")){
-			reason = getTran("careproviderfee.reasons",r[0],sWebLanguage);
+			reason = getTran(request,"careproviderfee.reasons",r[0],sWebLanguage);
 		}
 
 		s+=  "<td class='admin2'>"+reason+"</td>"+
@@ -147,7 +147,7 @@
 	if(activeuser.length() > 0){
 		User user = User.get(Integer.parseInt(activeuser));
 		s = "<tr class='admin'>"+
-		     "<td colspan='5'>"+getTran("web","totalfor",sWebLanguage)+" "+user.person.lastname.toUpperCase()+", "+user.person.firstname+"</td>"+
+		     "<td colspan='5'>"+getTran(request,"web","totalfor",sWebLanguage)+" "+user.person.lastname.toUpperCase()+", "+user.person.firstname+"</td>"+
 		     "<td colspan='2'>"+deci.format(useramount)+" "+MedwanQuery.getInstance().getConfigString("currency","")+"</td>"+
 		    "</tr>"+
 		    "<tr><td colspan='7'><hr/></td></tr>";
@@ -158,10 +158,10 @@
     
 <%
 	if(recordCount > 0){
-		%><%=recordCount%> <%=getTran("web","recordsFound",sWebLanguage)%><%
+		%><%=recordCount%> <%=getTran(request,"web","recordsFound",sWebLanguage)%><%
 	}
 	else{
-		%><%=getTran("web","noRecordsFound",sWebLanguage)%><%
+		%><%=getTran(request,"web","noRecordsFound",sWebLanguage)%><%
     }
 %>
 

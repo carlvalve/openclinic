@@ -63,18 +63,18 @@
         }
 
         if (checkString(reference.getRequestServiceUID()).length()>0){
-            sRequestServiceName = getTran("service",reference.getRequestServiceUID(),sWebLanguage);
+            sRequestServiceName = getTran(request,"service",reference.getRequestServiceUID(),sWebLanguage);
         }
 %>
 <form name="editForm" method="post" action="<c:url value='/main.do'/>?Page=healthrecord/referenceEdit.jsp&ts=<%=getTs()%>">
     <%=writeTableHeader("Web","internal_references",sWebLanguage," doMyBack();")%>
     <table class="list" width="100%" border="0" cellspacing="1" cellpadding="0">
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("openclinic.chuk","reference.request.date",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"openclinic.chuk","reference.request.date",sWebLanguage)%></td>
             <td class="admin2"><%=writeDateField("EditRequestDate","editForm",checkString(ScreenHelper.stdDateFormat.format(reference.getRequestDate())),sWebLanguage)%></td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","reference.request.service",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","reference.request.service",sWebLanguage)%></td>
             <td class="admin2">
                 <input class='text' TYPE="text" NAME="EditRequestServiceName" readonly size="<%=sTextWidth%>" TITLE="<%=sRequestServiceName%>" VALUE="<%=sRequestServiceName%>">
                 <%=ScreenHelper.writeServiceButton("buttonRequestServiceUID","EditRequestServiceUID", "EditRequestServiceName", sWebLanguage,sCONTEXTPATH)%>
@@ -82,17 +82,17 @@
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","reference.status",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","reference.status",sWebLanguage)%></td>
             <td class="admin2">
                 <input type='text' class='text' name="EditStatus" value="<%=checkString(reference.getStatus())%>" size="<%=sTextWidth%>">
             </td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","reference.execution.date",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","reference.execution.date",sWebLanguage)%></td>
             <td class="admin2"><%=writeDateField("EditExecutionDate","editForm",sExecutionDate,sWebLanguage)%></td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("openclinic.chuk","reference.createdby",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"openclinic.chuk","reference.createdby",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="hidden" id="EditCreationUserUID" name="EditCreationUserUID" value="<%=checkString(reference.getCreationUserUID())%>">
                 <input class="text" type="text" name="EditCreationUserName" readonly size="<%=sTextWidth%>" value="<%=sCreationUserName%>">

@@ -50,7 +50,7 @@
 
             // show saved data
             sAction = "showDetails";
-            msg = getTran("web","dataissaved",sWebLanguage);
+            msg = getTran(request,"web","dataissaved",sWebLanguage);
             sFindCenterCode = sEditCenterCode;
         }
         //***** update existing record *****
@@ -74,14 +74,14 @@
 
                 // show saved data
                 sAction = "showDetails";
-                msg = getTran("web","dataissaved",sWebLanguage);
+                msg = getTran(request,"web","dataissaved",sWebLanguage);
                 sFindCenterCode = sEditCenterCode;
             }
             //***** reject new addition *****
             else{
                 // show saved data
                 sAction = "showDetailsAfterReject";
-                msg = "<font color='red'>"+getTran("web.manage","centerexists",sWebLanguage)+"</font>";
+                msg = "<font color='red'>"+getTran(request,"web.manage","centerexists",sWebLanguage)+"</font>";
             }
         }
     }
@@ -89,7 +89,7 @@
     else if(sAction.equals("delete") && sEditCenterCode.length()>0){
         MedicalCenter.deleteMedicalCenter(sEditCenterCode);
         sFindCenterCode = "";
-        msg = getTran("web","dataisdeleted",sWebLanguage);
+        msg = getTran(request,"web","dataisdeleted",sWebLanguage);
     }
 %>
 <form name="transactionForm" method="post"
@@ -116,32 +116,32 @@
     <table width="100%" class="menu" cellspacing="0" border="0">
         <%-- row 1 --%>
         <tr>
-            <td width="<%=sTDAdminWidth%>"><%=getTran("Web","code",sWebLanguage)%></td>
+            <td width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","code",sWebLanguage)%></td>
             <td>
                 <input type="text" class="text" name="FindCenterCode" size="<%=sTextWidth%>" maxLength="5" value="<%=(sFindCenterCode.equals("-1")?"":sFindCenterCode)%>">
             </td>
         </tr>
         <tr>
-            <td><%=getTran("Web","name",sWebLanguage)%></td>
+            <td><%=getTran(request,"Web","name",sWebLanguage)%></td>
             <td>
                 <input type="text" class="text" name="FindCenterName" size="<%=sTextWidth%>" maxLength="255" value="<%=sFindCenterName%>">
             </td>
         </tr>
         <%-- row 2 --%>
         <tr>
-            <td><%=getTran("Web","address",sWebLanguage)%></td>
+            <td><%=getTran(request,"Web","address",sWebLanguage)%></td>
             <td>
                 <input type="text" class="text" name="FindCenterAddress" size="<%=sTextWidth%>" maxLength="255" value="<%=sFindCenterAddress%>">
             </td>
         </tr>
         <tr>
-            <td><%=getTran("Web","zipcode",sWebLanguage)%></td>
+            <td><%=getTran(request,"Web","zipcode",sWebLanguage)%></td>
             <td>
                 <input type="text" class="text" name="FindCenterZipcode" size="<%=sTextWidth%>" maxLength="5" value="<%=sFindCenterZipcode%>">
             </td>
         </tr>
         <tr>
-            <td><%=getTran("Web","city",sWebLanguage)%></td>
+            <td><%=getTran(request,"Web","city",sWebLanguage)%></td>
             <td>
                 <input type="text" class="text" name="FindCenterCity" size="<%=sTextWidth%>" maxLength="255" value="<%=sFindCenterCity%>">
             </td>
@@ -169,7 +169,7 @@
 
             StringBuffer centers = new StringBuffer();
             String sClass = "1", sCode = "";
-            String detailsTran = getTran("web.occup","medwan.common.show-details",sWebLanguage);
+            String detailsTran = getTran(request,"web.occup","medwan.common.show-details",sWebLanguage);
             SimpleDateFormat hourDateFormat = ScreenHelper.fullDateFormat;
 
             while (iter.hasNext()) {
@@ -202,24 +202,24 @@
                     <table width="100%" cellspacing="0" cellpadding="0" class="list" id="searchresults">
                         <%-- header --%>
                         <tr class="admin">
-                            <td width="10%"><%=getTran("Web","code",sWebLanguage)%></td>
-                            <td width="25%"><%=getTran("Web","name",sWebLanguage)%></td>
-                            <td width="20%"><%=getTran("Web","address",sWebLanguage)%></td>
-                            <td width="10%"><%=getTran("Web","zipcode",sWebLanguage)%></td>
-                            <td width="20%"><%=getTran("Web","city",sWebLanguage)%></td>
-                            <td width="15%"><%=getTran("Web","updatetime",sWebLanguage)%></td>
+                            <td width="10%"><%=getTran(request,"Web","code",sWebLanguage)%></td>
+                            <td width="25%"><%=getTran(request,"Web","name",sWebLanguage)%></td>
+                            <td width="20%"><%=getTran(request,"Web","address",sWebLanguage)%></td>
+                            <td width="10%"><%=getTran(request,"Web","zipcode",sWebLanguage)%></td>
+                            <td width="20%"><%=getTran(request,"Web","city",sWebLanguage)%></td>
+                            <td width="15%"><%=getTran(request,"Web","updatetime",sWebLanguage)%></td>
                         </tr>
 
                         <tbody class="hand"><%=centers%></tbody>
                     </table>
 
                     <%-- number of records found --%>
-                    <%=foundCenterCount%> <%=getTran("web","recordsfound",sWebLanguage)%>
+                    <%=foundCenterCount%> <%=getTran(request,"web","recordsfound",sWebLanguage)%>
                 <%
             }
             else{
                 // no records found
-                %><%=getTran("web","norecordsfound",sWebLanguage)%><%
+                %><%=getTran(request,"web","norecordsfound",sWebLanguage)%><%
             }
 
             if(foundCenterCount > 20){
@@ -279,35 +279,35 @@
                     </tr>
                     <%-- center code --%>
                     <tr>
-                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","code",sWebLanguage)%> *</td>
+                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","code",sWebLanguage)%> *</td>
                         <td class="admin2">
                             <input class="text" type="text" name="EditCenterCode" value="<%=sSelectedCenterCode%>" size="5" maxLength="5">
                         </td>
                     </tr>
                     <%-- center name --%>
                     <tr>
-                        <td class="admin"><%=getTran("Web","name",sWebLanguage)%> *</td>
+                        <td class="admin"><%=getTran(request,"Web","name",sWebLanguage)%> *</td>
                         <td class="admin2">
                             <input type="text" class="text" name="EditCenterName" value="<%=sSelectedCenterName%>" size="50" maxLength="255">
                         </td>
                     </tr>
                     <%-- center address --%>
                     <tr>
-                        <td class="admin"><%=getTran("Web","address",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"Web","address",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="text" class="text" name="EditCenterAddress" value="<%=sSelectedCenterAddress%>" size="50" maxLength="255">
                         </td>
                     </tr>
                     <%-- center city --%>
                     <tr>
-                        <td class="admin"><%=getTran("Web","city",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"Web","city",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="text" class="text" name="EditCenterCity" value="<%=sSelectedCenterCity%>" size="<%=sTextWidth%>" maxLength="255" READONLY>
                         </td>
                     </tr>
                     <%-- center country --%>
                     <tr>
-                        <td class="admin"><%=getTran("Web","country",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"Web","country",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="text" class="text" name="EditCenterCountryText" value="<%=getTranNoLink("Country",sSelectedCenterCountry,sWebLanguage)%>" size="50" maxLength="255">
                             <%=ScreenHelper.writeSearchButton("buttonCountry","Country","EditCenterCountry","EditCenterCountryText","",sWebLanguage,sCONTEXTPATH)%>
@@ -316,28 +316,28 @@
                     </tr>
                     <%-- center telephone --%>
                     <tr>
-                        <td class="admin"><%=getTran("Web","telephone",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"Web","telephone",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="text" class="text" name="EditCenterTelephone" value="<%=sSelectedCenterTelephone%>" size="50" maxLength="255">
                         </td>
                     </tr>
                     <%-- center fax --%>
                     <tr>
-                        <td class="admin"><%=getTran("Web","fax",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"Web","fax",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="text" class="text" name="EditCenterFax" value="<%=sSelectedCenterFax%>" size="50" maxLength="255">
                         </td>
                     </tr>
                     <%-- center email --%>
                     <tr>
-                        <td class="admin"><%=getTran("Web","email",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"Web","email",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="text" class="text" name="EditCenterEmail" value="<%=sSelectedCenterEmail%>" size="50" maxLength="255">
                         </td>
                     </tr>
                     <%-- center comment --%>
                     <tr>
-                        <td class="admin"><%=getTran("Web","Comment",sWebLanguage)%></td>
+                        <td class="admin"><%=getTran(request,"Web","Comment",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="text" class="text" name="EditCenterComment" value="<%=sSelectedCenterComment%>" size="50" maxLength="255">
                         </td>
@@ -369,7 +369,7 @@
                 </table>
                 
                 <%-- indication of obligated fields --%>
-                <%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%>
+                <%=getTran(request,"Web","colored_fields_are_obligate",sWebLanguage)%>
             <%
         }
     %>

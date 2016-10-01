@@ -60,7 +60,7 @@
                 <table width="100%" cellspacing="1" cellpadding="0" class="list">
                     <%-- theme --%>
                     <tr>
-                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","theme",sWebLanguage)%>&nbsp;*&nbsp;</td>
+                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","theme",sWebLanguage)%>&nbsp;*&nbsp;</td>
                         <td class="admin2">
                             <select name="UserTheme" class="text">
                                 <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>

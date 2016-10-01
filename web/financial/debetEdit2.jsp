@@ -47,17 +47,17 @@
     <%=writeTableHeader("web","debetEdit",sWebLanguage,"")%>
     <table class="menu" width="100%" cellspacing="0">
         <tr>
-            <td width="<%=sTDAdminWidth%>"><%=getTran("web.occup","medwan.common.date",sWebLanguage)%></td>
-            <td width="100"><%=getTran("Web","Begin",sWebLanguage)%></td>
+            <td width="<%=sTDAdminWidth%>"><%=getTran(request,"web.occup","medwan.common.date",sWebLanguage)%></td>
+            <td width="100"><%=getTran(request,"Web","Begin",sWebLanguage)%></td>
             <td width="150"><%=writeDateField("FindDateBegin","EditForm",sFindDateBegin,sWebLanguage)%></td>
-            <td width="100"><%=getTran("Web","end",sWebLanguage)%></td>
+            <td width="100"><%=getTran(request,"Web","end",sWebLanguage)%></td>
             <td><%=writeDateField("FindDateEnd","EditForm",sFindDateEnd,sWebLanguage)%></td>
         </tr>
         <tr>
-            <td width="<%=sTDAdminWidth%>"><%=getTran("web","amount",sWebLanguage)%></td>
-            <td><%=getTran("Web","min",sWebLanguage)%></td>
+            <td width="<%=sTDAdminWidth%>"><%=getTran(request,"web","amount",sWebLanguage)%></td>
+            <td><%=getTran(request,"Web","min",sWebLanguage)%></td>
             <td><input type="text" class="text" name="FindAmountMin" value="<%=sFindAmountMin%>" onblur="isNumber(this)"></td>
-            <td><%=getTran("Web","max",sWebLanguage)%></td>
+            <td><%=getTran(request,"Web","max",sWebLanguage)%></td>
             <td><input type="text" class="text" name="FindAmountMax" value="<%=sFindAmountMax%>" onblur="isNumber(this)"></td>
         </tr>
         <tr>
@@ -77,11 +77,11 @@
     <br>
     <table class='list' border='0' width='100%' cellspacing='1'>
         <tr>
-            <td class='admin' width="<%=sTDAdminWidth%>"><%=getTran("Web","date",sWebLanguage)%> *</td>
+            <td class='admin' width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","date",sWebLanguage)%> *</td>
             <td class='admin2'><%=writeDateField("EditDate","EditForm",ScreenHelper.getSQLDate(debet.getDate()),sWebLanguage)%></td>
         </tr>
         <tr>
-            <td class='admin'><%=getTran("Web","insurance",sWebLanguage)%> *</td>
+            <td class='admin'><%=getTran(request,"Web","insurance",sWebLanguage)%> *</td>
             <td class='admin2'>
                 <select class="text" id='EditInsuranceUID' name="EditInsuranceUID" onchange="changeInsurance()">
                     <option/>
@@ -119,15 +119,15 @@
                         }
                     %>
                 </select>&nbsp;
-                <%=getTran("web","complementarycoverage",sWebLanguage)%>
+                <%=getTran(request,"web","complementarycoverage",sWebLanguage)%>
                 <select class="text" name="coverageinsurance" id="coverageinsurance" onchange="changeInsurance();checkCoverage();">
                     <option value=""></option>
-                    <%=ScreenHelper.writeSelect("patientsharecoverageinsurance",checkString(debet.getExtraInsurarUid()),sWebLanguage)%>
+                    <%=ScreenHelper.writeSelect(request,"patientsharecoverageinsurance",checkString(debet.getExtraInsurarUid()),sWebLanguage)%>
                 </select>
               </td>
         </tr>
         <tr>
-            <td class='admin'><%=getTran("web","prestation",sWebLanguage)%> *</td>
+            <td class='admin'><%=getTran(request,"web","prestation",sWebLanguage)%> *</td>
             <td class='admin2'>
                 <input type="hidden" name="tmpPrestationUID">
                 <input type="hidden" name="tmpPrestationName">
@@ -165,7 +165,7 @@
                     %>
                 </select>
                 <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchPrestation();">
-				<%=getTran("web","prestationgroups",sWebLanguage)%>
+				<%=getTran(request,"web","prestationgroups",sWebLanguage)%>
 				<select class="text" name="EditPrestationGroup" id="EditPrestationGroup" onchange="document.getElementById('EditPrestationName').value='';changePrestation(false)">
                     <option/>
 					<%=ScreenHelper.getPrestationGroupOptions()%>
@@ -173,7 +173,7 @@
             </td>
         </tr>
         <tr>
-            <td class='admin'><%=getTran("web","quantity",sWebLanguage)%></td>
+            <td class='admin'><%=getTran(request,"web","quantity",sWebLanguage)%></td>
             <td class='admin2'>
                 <input class='text' type='text' name='EditQuantity' value='<%=debet.getQuantity()%>' size='4' onkeyup='changePrestation(false);'>
             </td>
@@ -182,9 +182,9 @@
         <%
         	if(sEditDebetUID.length() > 0 && debet!=null && debet.getPrestation()!=null){
                 String prestationcontent ="<table width='100%'>";
-                prestationcontent+="<tr><td width='50%'><b>"+getTran("web","prestation",sWebLanguage)+
-                "</b></td><td width='25%'><b>"+getTran("web.finance","amount.patient",sWebLanguage)+
-                "</b></td><td><b>"+getTran("web.finance","amount.insurar",sWebLanguage)+"</b></td></tr>";
+                prestationcontent+="<tr><td width='50%'><b>"+getTran(request,"web","prestation",sWebLanguage)+
+                "</b></td><td width='25%'><b>"+getTran(request,"web.finance","amount.patient",sWebLanguage)+
+                "</b></td><td><b>"+getTran(request,"web.finance","amount.insurar",sWebLanguage)+"</b></td></tr>";
                 prestationcontent+="<tr>";
                 prestationcontent+="<td><input type='hidden' name='PPC_"+debet.getPrestationUid()+"'/>"+debet.getPrestation().getDescription()+"</td>";
                 prestationcontent+="<td "+(debet.getExtraInsurarUid().length()>0?"class='strikeonly'":"")+"><input type='hidden' name='PPP_"+debet.getPrestationUid()+"' value='"+(debet.getAmount()+debet.getExtraInsurarAmount())+"'/>"+(debet.getAmount()+debet.getExtraInsurarAmount())+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>";
@@ -197,7 +197,7 @@
         %>
         </td></tr>
         <tr>
-            <td class='admin'><%=getTran("web","encounter",sWebLanguage)%> *</td>
+            <td class='admin'><%=getTran(request,"web","encounter",sWebLanguage)%> *</td>
             <td class='admin2'>
                 <input type="hidden" name="EditEncounterUID" value="<%=debet.getEncounterUid()%>">
                 <input class="text" type="text" name="EditEncounterName" readonly size="<%=sTextWidth%>" value="<%=sEditEncounterName%>">
@@ -206,7 +206,7 @@
             </td>
         </tr>
         <tr>
-            <td class='admin'><%=getTran("web","supplier",sWebLanguage)%></td>
+            <td class='admin'><%=getTran(request,"web","supplier",sWebLanguage)%></td>
             <td class='admin2'>
                 <input type="hidden" name="EditSupplierUID" value="<%=debet.getSupplierUid()%>">
                 <input class="text" type="text" name="EditSupplierName" readonly size="<%=sTextWidth%>" value="<%=sEditSupplierName%>">
@@ -215,23 +215,23 @@
             </td>
         </tr>
         <tr>
-            <td class='admin'><%=getTran("web.finance","patientinvoice",sWebLanguage)%></td>
+            <td class='admin'><%=getTran(request,"web.finance","patientinvoice",sWebLanguage)%></td>
             <td class='admin2'>
                 <input class='text' readonly type='text' name='EditPatientInvoiceUID' value='<%=checkString(debet.getPatientInvoiceUid())%>' size='20'>
             </td>
         </tr>
         <tr>
-            <td class='admin'><%=getTran("web.finance","insurarinvoice",sWebLanguage)%></td>
+            <td class='admin'><%=getTran(request,"web.finance","insurarinvoice",sWebLanguage)%></td>
             <td class='admin2'>
                 <input class='text' readonly type='text' name='EditInsuranceInvoiceUID' value='<%=checkString(debet.getInsurarInvoiceUid())%>' size='20'>
             </td>
         </tr>
         <tr>
-            <td class='admin'><%=getTran("web","comment",sWebLanguage)%></td>
+            <td class='admin'><%=getTran(request,"web","comment",sWebLanguage)%></td>
             <td class='admin2'><%=writeTextarea("EditComment","","","",checkString(debet.getComment()))%></td>
         </tr>
         <tr>
-            <td class='admin'><%=getTran("web","canceled",sWebLanguage)%></td>
+            <td class='admin'><%=getTran(request,"web","canceled",sWebLanguage)%></td>
             <td class='admin2'><input type="checkbox" class="hand" name="EditCredit" <%if(debet.getCredited()>0){out.print(" checked");}%> onclick="doCredit()"></td>
         </tr>
         <tr>
@@ -241,7 +241,7 @@
             </td>
         </tr>
     </table>
-    <%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%>
+    <%=getTran(request,"Web","colored_fields_are_obligate",sWebLanguage)%>
     <div id="divMessage" name="divMessage"></div>
     <input type='hidden' id="EditDebetUID" name='EditDebetUID' value='<%=sEditDebetUID%>'>
 </form>
@@ -361,7 +361,7 @@
       });
     }
     else{
-                window.showModalDialog?alertDialog("web.manage","dataMissing"):alertDialogDirectText('<%=getTran("web.manage","dataMissing",sWebLanguage)%>');
+                window.showModalDialog?alertDialog("web.manage","dataMissing"):alertDialogDirectText('<%=getTran(null,"web.manage","dataMissing",sWebLanguage)%>');
     }
   }
 

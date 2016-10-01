@@ -136,7 +136,9 @@ else{
     if(msg.length() > 0){
 		%>alertDialogDirectText("<%=msg%>");<%
     }
+
 %>
+window.setTimeout('document.getElementById("Juist").scrollTop=0',200);
 </script>
 </body>
 </html>

@@ -28,7 +28,7 @@
                         sReturn += "<tr class='list" + sClass + "'>"
                                 + "<td><img src='"+sImage+"' name='cbCredit" + insurarcredit.getUid() + "=" + insurarcredit.getAmount() + "' onclick='doBalance(this, false)'></td>"
                                 + "<td>" + ScreenHelper.getSQLDate(insurarcredit.getDate()) + "</td>"
-                                + "<td>" + HTMLEntities.htmlentities(getTran("credit.type", checkString(insurarcredit.getType()), sWebLanguage)+(checkString(insurarcredit.getComment()).length()>0?" ("+insurarcredit.getComment()+")":"")) + "</td>"
+                                + "<td>" + HTMLEntities.htmlentities(getTran(null,"credit.type", checkString(insurarcredit.getType()), sWebLanguage)+(checkString(insurarcredit.getComment()).length()>0?" ("+insurarcredit.getComment()+")":"")) + "</td>"
                                 + "<td>" + insurarcredit.getAmount() + "</td>"
                                 + "</tr>";
                     }
@@ -42,9 +42,9 @@
 <table width="100%" cellspacing="1" cellpadding="0">
     <tr class="gray">
         <td width="20"/>
-        <td width="80"><%=HTMLEntities.htmlentities(getTran("web","date",sWebLanguage))%></td>
-        <td width="50%"><%=HTMLEntities.htmlentities(getTran("web","type",sWebLanguage))%></td>
-        <td><%=HTMLEntities.htmlentities(getTran("web", "amount", sWebLanguage))%></td>
+        <td width="80"><%=HTMLEntities.htmlentities(getTran(request,"web","date",sWebLanguage))%></td>
+        <td width="50%"><%=HTMLEntities.htmlentities(getTran(request,"web","type",sWebLanguage))%></td>
+        <td><%=HTMLEntities.htmlentities(getTran(request,"web", "amount", sWebLanguage))%></td>
     </tr>
 <%
 	String sClass = "";

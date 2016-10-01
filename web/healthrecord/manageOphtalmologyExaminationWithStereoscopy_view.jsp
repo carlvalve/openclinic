@@ -44,7 +44,7 @@
         <tr>
             <td class="admin" width="30%">
                 <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("web.occup","History",sWebLanguage)%>">...</a>&nbsp;
-                <%=getTran("web","date",sWebLanguage)%>
+                <%=getTran(request,"web","date",sWebLanguage)%>
             </td>
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" id="trandate" OnBlur='checkDate(this)'> <script>writeTranDate();</script>
@@ -54,50 +54,50 @@
         <%-- AV --%>
         <tr>
             <td class="admin">
-                <a href="javascript:subScreen('/healthrecord/template.jsp?be.mxs.healthrecord.transaction_id=currentTransaction&Page=manageOphtalmologyAV_view.jsp&ts=<%=getTs()%>');"><%=getTran("web.occup","medwan.healthrecord.ophtalmology.acuite-visuelle",sWebLanguage)%></a>
+                <a href="javascript:subScreen('/healthrecord/template.jsp?be.mxs.healthrecord.transaction_id=currentTransaction&Page=manageOphtalmologyAV_view.jsp&ts=<%=getTs()%>');"><%=getTran(request,"web.occup","medwan.healthrecord.ophtalmology.acuite-visuelle",sWebLanguage)%></a>
             </td>
             <td class="admin2">
-                <%=getTran("web.occup","medwan.common.not-executed",sWebLanguage)%>&nbsp;<input disabled type="checkbox" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VISUS_AV_RAS;value=medwan.common.true" property="value" outputString="checked"/> />
+                <%=getTran(request,"web.occup","medwan.common.not-executed",sWebLanguage)%>&nbsp;<input disabled type="checkbox" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VISUS_AV_RAS;value=medwan.common.true" property="value" outputString="checked"/> />
             </td>
         </tr>
 
         <%-- STEREO --%>
         <tr>
-            <td class="admin"><a href="javascript:subScreen('/healthrecord/template.jsp?be.mxs.healthrecord.transaction_id=currentTransaction&Page=manageOphtalmologyStereo_view.jsp&ts=<%=getTs()%>');"><%=getTran("web.occup","medwan.healthrecord.ophtalmology.stereoscopie",sWebLanguage)%></a></td>
+            <td class="admin"><a href="javascript:subScreen('/healthrecord/template.jsp?be.mxs.healthrecord.transaction_id=currentTransaction&Page=manageOphtalmologyStereo_view.jsp&ts=<%=getTs()%>');"><%=getTran(request,"web.occup","medwan.healthrecord.ophtalmology.stereoscopie",sWebLanguage)%></a></td>
             <td class="admin2">
-                <%=getTran("web.occup","medwan.common.not-executed",sWebLanguage)%>&nbsp;<input disabled type="checkbox" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VISUS_STEREO_RAS;value=medwan.common.true" property="value" outputString="checked"/> />
+                <%=getTran(request,"web.occup","medwan.common.not-executed",sWebLanguage)%>&nbsp;<input disabled type="checkbox" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VISUS_STEREO_RAS;value=medwan.common.true" property="value" outputString="checked"/> />
             </td>
         </tr>
 
         <%-- COLOR --%>
         <tr>
-            <td class="admin"><a href="javascript:subScreen('/healthrecord/template.jsp?be.mxs.healthrecord.transaction_id=currentTransaction&Page=manageOphtalmologyColor_view.jsp&ts=<%=getTs()%>');"><%=getTran("web.occup","medwan.healthrecord.ophtalmology.couleurs",sWebLanguage)%></a></td>
+            <td class="admin"><a href="javascript:subScreen('/healthrecord/template.jsp?be.mxs.healthrecord.transaction_id=currentTransaction&Page=manageOphtalmologyColor_view.jsp&ts=<%=getTs()%>');"><%=getTran(request,"web.occup","medwan.healthrecord.ophtalmology.couleurs",sWebLanguage)%></a></td>
             <td class="admin2">
-                <%=getTran("web.occup","medwan.common.not-executed",sWebLanguage)%>&nbsp;<input disabled type="checkbox" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VISUS_COLOR_RAS;value=medwan.common.true" property="value" outputString="checked"/> />
+                <%=getTran(request,"web.occup","medwan.common.not-executed",sWebLanguage)%>&nbsp;<input disabled type="checkbox" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VISUS_COLOR_RAS;value=medwan.common.true" property="value" outputString="checked"/> />
             </td>
         </tr>
 
         <%-- PERI --%>
         <tr>
-            <td class="admin"><a href="javascript:subScreen('/healthrecord/template.jsp?be.mxs.healthrecord.transaction_id=currentTransaction&Page=manageOphtalmologyPeri_view.jsp&ts=<%=getTs()%>');"><%=getTran("web.occup","medwan.healthrecord.ophtalmology.vision-peripherique",sWebLanguage)%></a></td>
+            <td class="admin"><a href="javascript:subScreen('/healthrecord/template.jsp?be.mxs.healthrecord.transaction_id=currentTransaction&Page=manageOphtalmologyPeri_view.jsp&ts=<%=getTs()%>');"><%=getTran(request,"web.occup","medwan.healthrecord.ophtalmology.vision-peripherique",sWebLanguage)%></a></td>
             <td class="admin2">
-                <%=getTran("web.occup","medwan.common.not-executed",sWebLanguage)%>&nbsp;<input disabled type="checkbox" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VISUS_PERI_RAS;value=medwan.common.true" property="value" outputString="checked"/> />
+                <%=getTran(request,"web.occup","medwan.common.not-executed",sWebLanguage)%>&nbsp;<input disabled type="checkbox" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VISUS_PERI_RAS;value=medwan.common.true" property="value" outputString="checked"/> />
             </td>
         </tr>
 
         <%-- MESO --%>
         <tr>
-            <td class="admin"><a href="javascript:subScreen('/healthrecord/template.jsp?be.mxs.healthrecord.transaction_id=currentTransaction&Page=manageOphtalmologyMeso_view.jsp&ts=<%=getTs()%>');"><%=getTran("web.occup","medwan.healthrecord.ophtalmology.vision-mesopique",sWebLanguage)%></a></td>
+            <td class="admin"><a href="javascript:subScreen('/healthrecord/template.jsp?be.mxs.healthrecord.transaction_id=currentTransaction&Page=manageOphtalmologyMeso_view.jsp&ts=<%=getTs()%>');"><%=getTran(request,"web.occup","medwan.healthrecord.ophtalmology.vision-mesopique",sWebLanguage)%></a></td>
             <td class="admin2">
-                <%=getTran("web.occup","medwan.common.not-executed",sWebLanguage)%>&nbsp;<input disabled type="checkbox" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VISUS_MESO_RAS;value=medwan.common.true" property="value" outputString="checked"/> />
+                <%=getTran(request,"web.occup","medwan.common.not-executed",sWebLanguage)%>&nbsp;<input disabled type="checkbox" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VISUS_MESO_RAS;value=medwan.common.true" property="value" outputString="checked"/> />
             </td>
         </tr>
 
         <%-- SCREEN --%>
         <tr>
-            <td class="admin"><a href="javascript:subScreen('/healthrecord/template.jsp?be.mxs.healthrecord.transaction_id=currentTransaction&Page=manageOphtalmologyScreen_view.jsp&ts=<%=getTs()%>');"><%=getTran("web.occup","medwan.healthrecord.ophtalmology.workers-on-screen",sWebLanguage)%></a></td>
+            <td class="admin"><a href="javascript:subScreen('/healthrecord/template.jsp?be.mxs.healthrecord.transaction_id=currentTransaction&Page=manageOphtalmologyScreen_view.jsp&ts=<%=getTs()%>');"><%=getTran(request,"web.occup","medwan.healthrecord.ophtalmology.workers-on-screen",sWebLanguage)%></a></td>
             <td class="admin2">
-                <%=getTran("web.occup","medwan.common.not-executed",sWebLanguage)%>&nbsp;<input disabled type="checkbox" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VISUS_SCREEN_RAS;value=medwan.common.true" property="value" outputString="checked"/> />
+                <%=getTran(request,"web.occup","medwan.common.not-executed",sWebLanguage)%>&nbsp;<input disabled type="checkbox" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VISUS_SCREEN_RAS;value=medwan.common.true" property="value" outputString="checked"/> />
             </td>
         </tr>
     </table>

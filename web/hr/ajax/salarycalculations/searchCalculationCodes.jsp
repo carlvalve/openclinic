@@ -113,7 +113,7 @@
             <table class="list" border="0" width="100%" cellspacing="1">
                 <%-- search CODE --%>
                 <tr>
-                    <td class="admin" width="120"><%=getTran("web","code",sWebLanguage)%>&nbsp;</td>
+                    <td class="admin" width="120"><%=getTran(request,"web","code",sWebLanguage)%>&nbsp;</td>
                     <td class="admin2">
                         <input type="text" class="text" id="searchCode" name="searchCode" size="20" maxLength="40" value="<%=sSearchCode%>">
                     </td>
@@ -121,7 +121,7 @@
                 
                 <%-- search LABEL --%>
                 <tr>
-                    <td class="admin"><%=getTran("web","name",sWebLanguage)%>&nbsp;</td>
+                    <td class="admin"><%=getTran(request,"web","name",sWebLanguage)%>&nbsp;</td>
                     <td class="admin2">
                         <input type="text" class="text" id="searchLabel" name="searchLabel" size="40" maxLength="60" value="<%=sSearchLabel%>">
                     </td>
@@ -153,8 +153,8 @@
                     <table id="searchresults" cellpadding="0" cellspacing="0" width="100%" class="sortable" style="border:1px solid #ccc;">
                         <%-- header --%>
                         <tr class="admin">
-                            <td class="admin" style="padding-left:0;" width="20%" nowrap><%=getTran("web","code",sWebLanguage)%></td>
-                            <td class="admin" style="padding-left:0;" width="80%" nowrap><%=getTran("web","name",sWebLanguage)%></td>
+                            <td class="admin" style="padding-left:0;" width="20%" nowrap><%=getTran(request,"web","code",sWebLanguage)%></td>
+                            <td class="admin" style="padding-left:0;" width="80%" nowrap><%=getTran(request,"web","name",sWebLanguage)%></td>
                         </tr>
                         
                         <tbody>
@@ -185,10 +185,10 @@
         
         // number of found records
         if(foundCodes.size() > 0){
-            %><%=foundCodes.size()%> <%=getTran("web","recordsFound",sWebLanguage)%><%
+            %><%=foundCodes.size()%> <%=getTran(request,"web","recordsFound",sWebLanguage)%><%
         }
         else{
-            %><%=getTran("web","noRecordsFound",sWebLanguage)%><%
+            %><%=getTran(request,"web","noRecordsFound",sWebLanguage)%><%
         }
     }
     

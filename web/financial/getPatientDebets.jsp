@@ -62,7 +62,7 @@
 
                         sCredited = "";
                         if(debet.getCredited()>0){
-                            sCredited = getTran("web","canceled",sWebLanguage);
+                            sCredited = getTran(null,"web","canceled",sWebLanguage);
                         }
                         double patientAmount=debet.getExtraInsurarUid2()!=null && debet.getExtraInsurarUid2().length()>0?0:debet.getAmount();
                         double insurarAmount=debet.getInsurarAmount()+debet.getExtraInsurarAmount();
@@ -138,16 +138,16 @@
 <table width="100%" cellspacing="1" cellpadding="0">
     <%-- HEADER --%>
     <tr class="gray">
-        <td width="20"><%=getTran("web","invoiceabbreviation",sWebLanguage)%></td>
-        <td width="80"><%=getTran("web","date",sWebLanguage)%></td>
-        <td><%=getTran("web","insurar",sWebLanguage)%></td>
-        <td><%=getTran("web.finance","encounter",sWebLanguage)%></td>
-        <td><%=getTran("web","prestation",sWebLanguage)%></td>
-        <td><%=getTran("web","amount",sWebLanguage)%></td>
-        <td><%=getTran("web","credit",sWebLanguage)%></td>
-        <td><%=getTran("web","insuranceinvoiceid",sWebLanguage)%></td>
-        <td><%=getTran("web","extrainsuranceinvoiceid",sWebLanguage)%></td>
-        <td><%=getTran("web","extrainsuranceinvoiceid2",sWebLanguage)%></td>
+        <td width="20"><%=getTranNoLink("web","invoiceabbreviation",sWebLanguage)%></td>
+        <td width="80"><%=getTranNoLink("web","date",sWebLanguage)%></td>
+        <td><%=getTranNoLink("web","insurar",sWebLanguage)%></td>
+        <td><%=getTranNoLink("web.finance","encounter",sWebLanguage)%></td>
+        <td><%=getTranNoLink("web","prestation",sWebLanguage)%></td>
+        <td><%=getTranNoLink("web","amount",sWebLanguage)%></td>
+        <td><%=getTranNoLink("web","credit",sWebLanguage)%></td>
+        <td><%=getTranNoLink("web","insuranceinvoiceid",sWebLanguage)%></td>
+        <td><%=getTranNoLink("web","extrainsuranceinvoiceid",sWebLanguage)%></td>
+        <td><%=getTranNoLink("web","extrainsuranceinvoiceid2",sWebLanguage)%></td>
     </tr>
     
 <%

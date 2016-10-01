@@ -41,11 +41,11 @@
     
     <table class="menu" width="100%" cellspacing="1" cellpadding="0">
          <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","Begin",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","Begin",sWebLanguage)%></td>
             <td class="admin2"><%=writeDateField("FindBegin","transactionForm",sFindBegin,sWebLanguage)%></td>
         </tr>
         <tr>
-            <td class="admin"><%=getTran("Web","End",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"Web","End",sWebLanguage)%></td>
             <td class="admin2"><%=writeDateField("FindEnd","transactionForm",sFindEnd,sWebLanguage)%></td>
         </tr>
         
@@ -68,11 +68,11 @@
     	        <%-- HEADER --%>
 			    <tr class="admin">
 			        <td width="20">&nbsp;</td>
-			        <td width="200"><%=getTran("web","user",sWebLanguage)%></td>
-			        <td width="150"><%=getTran("web","profile",sWebLanguage)%></td>
-			        <td width="150"><%=getTran("web","service",sWebLanguage)%></td>
-			        <td width="100"><%=getTran("web","opened_records",sWebLanguage)%></td>
-			        <td width="*"><%=getTran("web","creations_modifications",sWebLanguage)%></td>
+			        <td width="200"><%=getTran(request,"web","user",sWebLanguage)%></td>
+			        <td width="150"><%=getTran(request,"web","profile",sWebLanguage)%></td>
+			        <td width="150"><%=getTran(request,"web","service",sWebLanguage)%></td>
+			        <td width="100"><%=getTran(request,"web","opened_records",sWebLanguage)%></td>
+			        <td width="*"><%=getTran(request,"web","creations_modifications",sWebLanguage)%></td>
 			    </tr>
 		<%
 		
@@ -197,18 +197,18 @@
     	
     	// total
 		out.print("<tr>"+
-    	           "<td class='admin' colspan='6'>"+getTran("web","total",sWebLanguage)+": "+rows+"</td>"+
+    	           "<td class='admin' colspan='6'>"+getTran(request,"web","total",sWebLanguage)+": "+rows+"</td>"+
     	          "</tr>");
 
         %></table><%
 	}
 	
 	if(lines.size()==0){
-		%><%=getTran("web","noRecordsFound",sWebLanguage)%><%
+		%><%=getTran(request,"web","noRecordsFound",sWebLanguage)%><%
 	}
 	else{
 	    %>
-	        <%=lines.size()%> <%=getTran("web","recordsFound",sWebLanguage)%>
+	        <%=lines.size()%> <%=getTran(request,"web","recordsFound",sWebLanguage)%>
 	    
 			<%=ScreenHelper.alignButtonsStart()%>
 			    <input type="button" class="button" name="backButton" value="<%=getTranNoLink("web","back",sWebLanguage)%>" onClick="doBack();"/>

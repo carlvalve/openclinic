@@ -48,7 +48,7 @@
     <table width="100%" class="menu" cellspacing="1" cellpadding="0">
         <%-- PROFILE --%>
         <tr>
-            <td width="<%=sTDAdminWidth%>" class="admin2"><%=getTran("Web.UserProfile","UserProfile",sWebLanguage)%></td>
+            <td width="<%=sTDAdminWidth%>" class="admin2"><%=getTran(request,"Web.UserProfile","UserProfile",sWebLanguage)%></td>
             <td class="admin2">
                 <select name="FindProfileID" class="text" onchange="transactionForm.FindApplication.selectedIndex = -1;transactionForm.submit();"><option/>
                     <%=sProfiles%>
@@ -58,15 +58,15 @@
 
         <%-- APPLICATION --%>
         <tr>
-            <td class="admin2"><%=getTran("Web","Applications",sWebLanguage)%></td>
+            <td class="admin2"><%=getTran(request,"Web","Applications",sWebLanguage)%></td>
             <td class="admin2">
                 <select name="FindApplication" class="text" onChange="transactionForm.FindProfileID.selectedIndex = -1;transactionForm.submit();">
                     <option/>
                     <%
                         Hashtable hScreens = new Hashtable();
-                        hScreens.put("administration", getTran("Web","Administration",sWebLanguage));
-                        hScreens.put("agenda",getTran("Web","agenda",sWebLanguage));
-                        hScreens.put("medicalrecord",getTran("Web","medicalrecord",sWebLanguage));
+                        hScreens.put("administration", getTran(request,"Web","Administration",sWebLanguage));
+                        hScreens.put("agenda",getTran(request,"Web","agenda",sWebLanguage));
+                        hScreens.put("medicalrecord",getTran(request,"Web","medicalrecord",sWebLanguage));
 
                         String sScreen, sKey;
                         Enumeration e = hScreens.keys();
@@ -118,17 +118,17 @@
                     <tr class="admin">
                         <td width="<%=sTDAdminWidth%>">
                             <span class="hand" onClick="transactionForm.OrderField.value='searchname';transactionForm.submit();">
-                                <u><%=getTran("Web","Name",sWebLanguage)%></u>
+                                <u><%=getTran(request,"Web","Name",sWebLanguage)%></u>
                             </span>
                         </td>
 
                         <td>
-                            <u><%=getTran("Web","service",sWebLanguage)%></u>
+                            <u><%=getTran(request,"Web","service",sWebLanguage)%></u>
                         </td>
 
                         <td width="*">
                             <span class="hand" onClick="transactionForm.OrderField.value='userid';transactionForm.submit();">
-                               <u><%=getTran("Web.occup","medwan.authentication.login",sWebLanguage)%></u>
+                               <u><%=getTran(request,"Web.occup","medwan.authentication.login",sWebLanguage)%></u>
                             </span>
                         </td>
                     </tr>

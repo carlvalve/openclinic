@@ -31,7 +31,7 @@
         String sClass = "1", sDateBeginFormatted, sDateEndFormatted, sProductName = "", sProductUid,
                sPreviousProductUid = "", sTimeUnit, sTimeUnitCount, sUnitsPerTimeUnit, sPrescrRule = "",
                sProductUnit, timeUnitTran, sSupplyingServiceName, sSupplyingServiceUid,
-               sServiceStockUid, sServiceStockName;
+               sServiceStockUid, sServiceStockName, sAuthorized;
         DecimalFormat unitCountDeci = new DecimalFormat("#.#");
         Product product = null;
         java.util.Date tmpDate;
@@ -65,7 +65,7 @@
                     sProductName = product.getName();
                 } 
                 else{
-                    sProductName = "<font color='red'>"+getTran("web","nonexistingproduct",sWebLanguage)+"</font>";
+                    sProductName = "<font color='red'>"+getTran(null,"web","nonexistingproduct",sWebLanguage)+"</font>";
                 }
             }
 
@@ -74,29 +74,30 @@
             sTimeUnit = prescr.getTimeUnit();
             sTimeUnitCount = prescr.getTimeUnitCount()+"";
             sUnitsPerTimeUnit = prescr.getUnitsPerTimeUnit()+"";
+            sAuthorized = checkString(prescr.getAuthorization());
 
             // only compose prescriptio-rule if all data is available
             if(!sTimeUnitCount.equals("0") && !sUnitsPerTimeUnit.equals("0") && product!=null){
-                sPrescrRule = getTran("web.prescriptions","prescriptionrule",sWebLanguage);
+                sPrescrRule = getTran(null,"web.prescriptions","prescriptionrule",sWebLanguage);
                 sPrescrRule = sPrescrRule.replaceAll("#unitspertimeunit#",unitCountDeci.format(Double.parseDouble(sUnitsPerTimeUnit)));
 
                 // productunits
                 if(Double.parseDouble(sUnitsPerTimeUnit)==1){
-                    sProductUnit = getTran("product.unit",product.getUnit(),sWebLanguage);
+                    sProductUnit = getTran(null,"product.unit",product.getUnit(),sWebLanguage);
                 }
                 else{
-                    sProductUnit = getTran("product.unit",product.getUnit(),sWebLanguage);
+                    sProductUnit = getTran(null,"product.unit",product.getUnit(),sWebLanguage);
                 }
                 sPrescrRule = sPrescrRule.replaceAll("#productunit#",sProductUnit.toLowerCase());
 
                 // timeunits
                 if(Integer.parseInt(sTimeUnitCount)==1){
                     sPrescrRule = sPrescrRule.replaceAll("#timeunitcount#","");
-                    timeUnitTran = getTran("prescription.timeunit",sTimeUnit,sWebLanguage);
+                    timeUnitTran = getTran(null,"prescription.timeunit",sTimeUnit,sWebLanguage);
                 }
                 else{
                     sPrescrRule = sPrescrRule.replaceAll("#timeunitcount#",sTimeUnitCount);
-                    timeUnitTran = getTran("prescription.timeunits",sTimeUnit,sWebLanguage);
+                    timeUnitTran = getTran(null,"prescription.timeunits",sTimeUnit,sWebLanguage);
                 }
                 sPrescrRule = sPrescrRule.replaceAll("#timeunit#",timeUnitTran.toLowerCase());
             }
@@ -104,7 +105,7 @@
             // supplying service name
             sSupplyingServiceUid = checkString(prescr.getSupplyingServiceUid());
             if(sSupplyingServiceUid.length() > 0){
-                sSupplyingServiceName = getTran("service",sSupplyingServiceUid,sWebLanguage);
+                sSupplyingServiceName = getTran(null,"service",sSupplyingServiceUid,sWebLanguage);
             }
             else{
                 sSupplyingServiceName = "";
@@ -136,9 +137,11 @@
                  .append("<td onclick=\"doShowDetails('"+prescr.getUid()+"');\"><b>"+sProductName+"</b></td>")
                  .append("<td onclick=\"doShowDetails('"+prescr.getUid()+"');\">"+sDateBeginFormatted+"</td>")
                  .append("<td onclick=\"doShowDetails('"+prescr.getUid()+"');\">"+sDateEndFormatted+"</td>")
+                 .append("<td onclick=\"doShowDetails('"+prescr.getUid()+"');\">"+sAuthorized+"</td>")
+                 .append("<td onclick=\"doShowDetails('"+prescr.getUid()+"');\">"+User.getFullUserName(prescr.getPrescriberUid())+"</td>")
                  .append("<td onclick=\"doShowDetails('"+prescr.getUid()+"');\">"+sPrescrRule.toLowerCase()+"</td>")
                  .append("<td onclick=\"doShowDetails('"+prescr.getUid()+"');\">"+prescr.getDeliveredQuantity()+"</td>")
-                 .append("<td "+(!available && openQuantity>0 ? " class='strike'":"")+(openQuantity>0?" bgcolor='#ff9999'":"")+">"+(available && openQuantity>0?"<a title='"+getTranNoLink("web","deliver",sWebLanguage)+"' href=\"javascript:doDeliverMedication('"+prescr.getUid()+"');\"><font style='color: black;'>":"<font style='color:black;text-decoration:line-through;'>")+openQuantity+"</font></a></td>")
+                 .append("<td  onclick=\"doShowDetails('"+prescr.getUid()+"');\" "+(openQuantity>0?" bgcolor='#ff9999'":"")+"><font style='color: black;'>"+openQuantity+"</font></a></td>")
                 .append("</tr>");
         }
 
@@ -163,6 +166,7 @@
            sEditUnitsPerTimeUnit    = checkString(request.getParameter("EditUnitsPerTimeUnit")),
            sEditSupplyingServiceUid = checkString(request.getParameter("EditSupplyingServiceUid")),
            sEditServiceStockUid     = checkString(request.getParameter("EditServiceStockUid")),
+           sEditAuthorization       = checkString(request.getParameter("EditAuthorization")),
            sEditRequiredPackages    = checkString(request.getParameter("EditRequiredPackages"));
     
     if(activePatient==null && sEditPrescrUid.length() > 0){
@@ -227,6 +231,7 @@
         Debug.println("sEditPrescriberFullName   : "+sEditPrescriberFullName);
         Debug.println("sEditProductName          : "+sEditProductName);
         Debug.println("sEditSupplyingServiceName : "+sEditSupplyingServiceName);
+        Debug.println("sEditAuthorization        : "+sEditAuthorization);
         Debug.println("sEditRequiredPackages     : "+sEditRequiredPackages+"\n");
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -235,7 +240,8 @@
            sSelectedDateBegin = "", sSelectedDateEnd = "", sSelectedTimeUnit = "", sSelectedTimeUnitCount = "",
            sSelectedUnitsPerTimeUnit = "", sSelectedSupplyingServiceUid = "", sSelectedProductUnit = "",
            sSelectedPrescriberFullName = "", sSelectedProductName = "", sSelectedSupplyingServiceName = "",
-           sSelectedServiceStockUid = "", sSelectedServiceStockName = "", sSelectedRequiredPackages = "";
+           sSelectedServiceStockUid = "", sSelectedServiceStockName = "", sSelectedRequiredPackages = "",
+           sSelectedAuthorization="";
 
     // variables
     int foundPrescrCount;
@@ -258,6 +264,7 @@
         prescr.setPrescriberUid(sEditPrescriberUid);
         prescr.setProductUid(sEditProductUid);
         prescr.setTimeUnit(sEditTimeUnit);
+        prescr.setAuthorization(sEditAuthorization);
         if(sEditDateBegin.length() > 0) prescr.setBegin(ScreenHelper.parseDate(sEditDateBegin));
         if(sEditDateEnd.length() > 0) prescr.setEnd(ScreenHelper.parseDate(sEditDateEnd));
         if(sEditTimeUnitCount.length() > 0) prescr.setTimeUnitCount(Integer.parseInt(sEditTimeUnitCount));
@@ -311,13 +318,13 @@
                 prescriptionSchema.setPrescriptionUid(prescr.getUid());
                 prescriptionSchema.store();
 
-                msg = "<font color='green'>"+getTran("web","dataissaved",sWebLanguage)+"</font>";
+                msg = "<font color='green'>"+getTran(request,"web","dataissaved",sWebLanguage)+"</font>";
             }
             //***** reject new addition *****
             else{
                 // show rejected data
                 sAction = "showDetailsAfterAddReject";
-                msg = "<font color='red'>"+getTran("web.manage","prescriptionexists",sWebLanguage)+"</font>";
+                msg = "<font color='red'>"+getTran(request,"web.manage","prescriptionexists",sWebLanguage)+"</font>";
             }
         }
         else{
@@ -327,7 +334,7 @@
                 prescriptionSchema.setPrescriptionUid(prescr.getUid());
                 prescriptionSchema.store();
 
-                msg = "<font color='green'>"+getTran("web","dataissaved",sWebLanguage)+"</font>";
+                msg = "<font color='green'>"+getTran(request,"web","dataissaved",sWebLanguage)+"</font>";
             }
             //***** reject double record thru update *****
             else{
@@ -335,7 +342,7 @@
                     // nothing : just updating a record with its own data
                     if(prescr.changed()){
                         prescr.store(false);
-                        msg = "<font color='green'>"+getTran("web","dataissaved",sWebLanguage)+"</font>";
+                        msg = "<font color='green'>"+getTran(request,"web","dataissaved",sWebLanguage)+"</font>";
                     }
 
                     prescriptionSchema.setPrescriptionUid(prescr.getUid());
@@ -345,7 +352,7 @@
                     // tried to update one prescription with exact the same data as an other prescription
                     // show rejected data
                     sAction = "showDetailsAfterUpdateReject";
-                    msg = "<font color='red'>"+getTran("web.manage","prescriptionexists",sWebLanguage)+"</font>";
+                    msg = "<font color='red'>"+getTran(request,"web.manage","prescriptionexists",sWebLanguage)+"</font>";
                 }
             }
         }
@@ -357,7 +364,7 @@
         Prescription.delete(sEditPrescrUid);
         PrescriptionSchema prescriptionSchemaToDelete = PrescriptionSchema.getPrescriptionSchema(sEditPrescrUid);
         prescriptionSchemaToDelete.delete();
-        msg = getTran("web","dataisdeleted",sWebLanguage);
+        msg = getTran(request,"web","dataisdeleted",sWebLanguage);
         out.println("<script>isModified=true;</script>");
     }
 
@@ -389,6 +396,7 @@
                 sSelectedServiceStockUid = checkString(prescr.getServiceStockUid());
                 sSelectedRequiredPackages = prescr.getRequiredPackages()+"";
                 sSelectedPrescriberUid = prescr.getPrescriberUid();
+                sSelectedAuthorization = checkString(prescr.getAuthorization());
 
                 // afgeleide data
 	          	Connection ad_conn = MedwanQuery.getInstance().getAdminConnection();
@@ -415,7 +423,7 @@
                     sSelectedProductName = product.getName();
 
                     if(sSelectedProductName.length()==0){
-                        sSelectedProductName = "<font color='red'>"+getTran("web","nonexistingproduct",sWebLanguage)+"</font>";
+                        sSelectedProductName = "<font color='red'>"+getTran(request,"web","nonexistingproduct",sWebLanguage)+"</font>";
                     }
                 }
             }
@@ -434,6 +442,7 @@
             sSelectedSupplyingServiceUid = sEditSupplyingServiceUid;
             sSelectedServiceStockUid = sEditServiceStockUid;
             sSelectedRequiredPackages = sEditRequiredPackages;
+            sSelectedAuthorization = sEditAuthorization;
 
             // afgeleide data
             sSelectedPrescriberFullName = sEditPrescriberFullName;
@@ -469,7 +478,7 @@
     }
     Debug.println("--> editableByPrescriber : "+editableByPrescriber);  
     
-    String sTitle = ("true".equalsIgnoreCase(request.getParameter("ServicePrescriptions"))?getTran("Web.manage","ManageServicePrescriptions",sWebLanguage)+"&nbsp;"+activeUser.activeService.getLabel(sWebLanguage):getTran("Web.manage","ManagePatientPrescriptions",sWebLanguage)+"&nbsp;"+activePatient.lastname+" "+activePatient.firstname);
+    String sTitle = ("true".equalsIgnoreCase(request.getParameter("ServicePrescriptions"))?getTran(request,"Web.manage","ManageServicePrescriptions",sWebLanguage)+"&nbsp;"+activeUser.activeService.getLabel(sWebLanguage):getTran(request,"Web.manage","ManagePatientPrescriptions",sWebLanguage)+"&nbsp;"+activePatient.lastname+" "+activePatient.firstname);
     
     String sCloseAction = "closeWindow();";
     if(sAction.startsWith("showDetails")){
@@ -483,7 +492,7 @@
 <%
     String onClick = "onclick=\"searchProduct('EditProductUid','EditProductName','ProductUnit','EditUnitsPerTimeUnit','UnitsPerPackage',null,'EditServiceStockUid','EditRequiredPackages');\"";
     if(!"true".equalsIgnoreCase(request.getParameter("ServicePrescriptions")) && activePatient==null){
-        %><%=getTran("web","firstselectaperson",sWebLanguage)%><%
+        %><%=getTran(request,"web","firstselectaperson",sWebLanguage)%><%
     } 
     else{
     //*************************************************************************************
@@ -497,7 +506,7 @@
 <table class="list" width="100%" cellspacing="1">
 <%-- product --%>
 <tr>
-    <td class="admin"><%=getTran("Web","product",sWebLanguage)%>&nbsp;*&nbsp;</td>
+    <td class="admin"><%=getTran(request,"Web","product",sWebLanguage)%>&nbsp;*&nbsp;</td>
     <td class="admin2">
         <input type="hidden" name="EditProductUid" id="EditProductUid" value="<%=sSelectedProductUid%>">
         <input type="hidden" name="ProductUnit" value="<%=sSelectedProductUnit%>">
@@ -511,20 +520,20 @@
 
 <%-- ***** prescription-rule (dosage) ***** --%>
 <tr>
-    <td class="admin"><%=getTran("Web","prescriptionrule",sWebLanguage)%>&nbsp;*&nbsp;</td>
+    <td class="admin"><%=getTran(request,"Web","prescriptionrule",sWebLanguage)%>&nbsp;*&nbsp;</td>
     <td class="admin2">
         <%-- Units Per Time Unit --%>
         <input type="text" class="text" style="vertical-align:-3px;" name="EditUnitsPerTimeUnit" id="EditUnitsPerTimeUnit" value="<%=(sSelectedUnitsPerTimeUnit.length()>0?(doubleFormat.format(Double.parseDouble(sSelectedUnitsPerTimeUnit))).replaceAll(",","."):"")%>" size="5" maxLength="5" onKeyUp="isNumber(this);calculatePackagesNeeded();">
         <span id="EditUnitsPerTimeUnitLabel"></span>
 
         <%-- Time Unit Count --%>
-        &nbsp;<%=getTran("web","per",sWebLanguage)%>
+        &nbsp;<%=getTran(request,"web","per",sWebLanguage)%>
         <input type="text" class="text" style="vertical-align:-3px;" name="EditTimeUnitCount" id="EditTimeUnitCount" value="<%=sSelectedTimeUnitCount%>" size="5" maxLength="5" onKeyUp="calculatePackagesNeeded();">
 
         <%-- Time Unit (dropdown : Hour|Day|Week|Month) --%>
         <select class="text" name="EditTimeUnit" id="EditTimeUnit" onChange="setEditUnitsPerTimeUnitLabel();setEditTimeUnitCount();calculatePackagesNeeded();" style="vertical-align:-3px;">
             <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>
-            <%=ScreenHelper.writeSelectUnsorted("prescription.timeunit",sSelectedTimeUnit,sWebLanguage)%>
+            <%=ScreenHelper.writeSelectUnsorted(request,"prescription.timeunit",sSelectedTimeUnit,sWebLanguage)%>
         </select>
 
         <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" style="vertical-align:-4px;" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="clearDescriptionRule();">
@@ -533,7 +542,7 @@
 
 <%-- date begin --%>
 <tr>
-    <td class="admin"><%=getTran("Web","begindate",sWebLanguage)%>&nbsp;*&nbsp;</td>
+    <td class="admin"><%=getTran(request,"Web","begindate",sWebLanguage)%>&nbsp;*&nbsp;</td>
     <td class="admin2">
         <input type="text" maxlength="10" class="text" id="EditDateBegin" name="EditDateBegin" value="<%=sSelectedDateBegin%>" size="12" onblur="if(!checkDate(this)){alertDialog('Web.Occup','date.error');this.value='';}else{calculatePackagesNeeded(false);}if(isEndDateBeforeBeginDate()){displayEndBeforeBeginAlert();}" onKeyUp="if(this.value.length==10){calculatePackagesNeeded(false);}else{transactionForm.EditRequiredPackages.value='';}">
         <img name="popcal" class="link" src="<%=sCONTEXTPATH%>/_img/icons/icon_agenda.gif" alt="<%=getTranNoLink("Web","Select",sWebLanguage)%>" onclick="gfPop1.fPopCalendar(document.getElementById('EditDateBegin'));return false;">
@@ -544,7 +553,7 @@
 
 <%-- date end --%>
 <tr>
-    <td class="admin"><%=getTran("Web","enddate",sWebLanguage)%>&nbsp;*&nbsp;</td>
+    <td class="admin"><%=getTran(request,"Web","enddate",sWebLanguage)%>&nbsp;*&nbsp;</td>
     <td class="admin2">
         <input type="text" maxlength="10" class="text" id="EditDateEnd" name="EditDateEnd" value="<%=sSelectedDateEnd%>" size="12" onblur="if(!checkDate(this)){alertDialog('Web.Occup','date.error');this.value='';}else{calculatePackagesNeeded(false);}if(isEndDateBeforeBeginDate()){displayEndBeforeBeginAlert();}" onKeyUp="if(this.value.length==10){calculatePackagesNeeded(false);}else{transactionForm.EditRequiredPackages.value='';}">
         <img name="popcal" class="link" src="<%=sCONTEXTPATH%>/_img/icons/icon_agenda.gif" alt="<%=getTranNoLink("Web","Select",sWebLanguage)%>" onclick="gfPop1.fPopCalendar(document.getElementById('EditDateEnd'));return false;">
@@ -569,16 +578,16 @@
     }
 %>
 <tr>
-    <td class="admin"><%=getTran("Web","packages",sWebLanguage)%>&nbsp;*&nbsp;</td>
+    <td class="admin"><%=getTran(request,"Web","packages",sWebLanguage)%>&nbsp;*&nbsp;</td>
     <td class="admin2">
         <input class="text" type="text" name="EditRequiredPackages" id="EditRequiredPackages" size="5" maxLength="5" value="<%=sSelectedRequiredPackages%>" onKeyUp="if(isInteger(this)){calculatePrescriptionPeriod();}">
-        &nbsp;(<input type="text" class="text" name="UnitsPerPackage" id="UnitsPerPackage" value="<%=sUnitsPerPackage%>" size="3" readonly style="border:none;background:transparent;text-align:right;">&nbsp;<%=getTran("web","packageunits",sWebLanguage).toLowerCase()%>)
+        &nbsp;(<input type="text" class="text" name="UnitsPerPackage" id="UnitsPerPackage" value="<%=sUnitsPerPackage%>" size="3" readonly style="border:none;background:transparent;text-align:right;">&nbsp;<%=getTran(request,"web","packageunits",sWebLanguage).toLowerCase()%>)
     </td>
 </tr>
 
 <%-- prescriber --%>
 <tr>
-    <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","prescriber",sWebLanguage)%>&nbsp;*&nbsp;</td>
+    <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","prescriber",sWebLanguage)%>&nbsp;*&nbsp;</td>
     <td class="admin2">
         <input type="hidden" name="EditPrescriberUid" id="EditPrescriberUid" value="<%=sSelectedPrescriberUid%>">
         <input class="text" type="text" name="EditPrescriberFullName" id="EditPrescriberFullName" readonly size="<%=sTextWidth%>" value="<%=sSelectedPrescriberFullName%>">
@@ -589,7 +598,7 @@
 
 <%-- Service Stock --%>
 <tr>
-    <td class="admin"><%=getTran("Web","servicestock",sWebLanguage)%>&nbsp;</td>
+    <td class="admin"><%=getTran(request,"Web","servicestock",sWebLanguage)%>&nbsp;</td>
     <td class="admin2">
         <input type="hidden" name="EditServiceStockUid" value="<%=sSelectedServiceStockUid%>">
         <input class="text" type="text" name="EditServiceStockName" readonly size="<%=sTextWidth%>" value="<%=sSelectedServiceStockName%>">
@@ -601,25 +610,33 @@
 
 <%-- Supplying Service --%>
 <tr>
-    <td class="admin" nowrap><%=getTran("Web","supplyingservice",sWebLanguage)%>&nbsp;</td>
+    <td class="admin" nowrap><%=getTran(request,"Web","supplyingservice",sWebLanguage)%>&nbsp;</td>
     <td class="admin2">
         <input type="hidden" name="EditSupplyingServiceUid" value="<%=sSelectedSupplyingServiceUid%>">
         <input class="text" type="text" name="EditSupplyingServiceName" readonly size="<%=sTextWidth%>" value="<%=sSelectedSupplyingServiceName%>">
     </td>
 </tr>
 
+<%-- Authorized receiver --%>
+<tr>
+    <td class="admin" nowrap><%=getTran(request,"Web","authorizedreceiver",sWebLanguage)%>&nbsp;</td>
+    <td class="admin2">
+        <input class="text" type="text" name="EditAuthorization" size="<%=sTextWidth%>" value="<%=sSelectedAuthorization%>">
+    </td>
+</tr>
+
 <%-- schema --%>
 <tr>
-    <td class="admin" nowrap><%=getTran("Web","schema",sWebLanguage)%>&nbsp;</td>
+    <td class="admin" nowrap><%=getTran(request,"Web","schema",sWebLanguage)%>&nbsp;</td>
     <td class="admin2">
         <table>
             <tr>
-                <td><input class="text" type="text" name="time1" value="<%=prescriptionSchema.getTimeQuantity(0).getKey()%>" size="2"><%=getTran("web","abbreviation.hour",sWebLanguage)%></td>
-                <td><input class="text" type="text" name="time2" value="<%=prescriptionSchema.getTimeQuantity(1).getKey()%>" size="2"><%=getTran("web","abbreviation.hour",sWebLanguage)%></td>
-                <td><input class="text" type="text" name="time3" value="<%=prescriptionSchema.getTimeQuantity(2).getKey()%>" size="2"><%=getTran("web","abbreviation.hour",sWebLanguage)%></td>
-                <td><input class="text" type="text" name="time4" value="<%=prescriptionSchema.getTimeQuantity(3).getKey()%>" size="2"><%=getTran("web","abbreviation.hour",sWebLanguage)%></td>
-                <td><input class="text" type="text" name="time5" value="<%=prescriptionSchema.getTimeQuantity(4).getKey()%>" size="2"><%=getTran("web","abbreviation.hour",sWebLanguage)%></td>
-                <td><input class="text" type="text" name="time6" value="<%=prescriptionSchema.getTimeQuantity(5).getKey()%>" size="2"><%=getTran("web","abbreviation.hour",sWebLanguage)%></td>
+                <td><input class="text" type="text" name="time1" value="<%=prescriptionSchema.getTimeQuantity(0).getKey()%>" size="2"><%=getTran(request,"web","abbreviation.hour",sWebLanguage)%></td>
+                <td><input class="text" type="text" name="time2" value="<%=prescriptionSchema.getTimeQuantity(1).getKey()%>" size="2"><%=getTran(request,"web","abbreviation.hour",sWebLanguage)%></td>
+                <td><input class="text" type="text" name="time3" value="<%=prescriptionSchema.getTimeQuantity(2).getKey()%>" size="2"><%=getTran(request,"web","abbreviation.hour",sWebLanguage)%></td>
+                <td><input class="text" type="text" name="time4" value="<%=prescriptionSchema.getTimeQuantity(3).getKey()%>" size="2"><%=getTran(request,"web","abbreviation.hour",sWebLanguage)%></td>
+                <td><input class="text" type="text" name="time5" value="<%=prescriptionSchema.getTimeQuantity(4).getKey()%>" size="2"><%=getTran(request,"web","abbreviation.hour",sWebLanguage)%></td>
+                <td><input class="text" type="text" name="time6" value="<%=prescriptionSchema.getTimeQuantity(5).getKey()%>" size="2"><%=getTran(request,"web","abbreviation.hour",sWebLanguage)%></td>
                 <td>&nbsp;&nbsp;<img class="link" src="<c:url value="/_img/icons/icon_search.gif"/>" alt="<%=getTranNoLink("web","loadSchedule",sWebLanguage)%>" onClick="javascript:loadSchema();"/></a></td>
             </tr>
             <tr>
@@ -637,7 +654,7 @@
 </table>
 
 <%-- indication of obligated fields --%>
-<%=getTran("Web","colored_fields_are_obligate",sWebLanguage)%>
+<%=getTran(request,"Web","colored_fields_are_obligate",sWebLanguage)%>
 
 <%-- display message --%>
 <br><span id="msgArea">&nbsp;<%=msg%></span><span id='productmsg'></span>
@@ -657,7 +674,7 @@
 	    	}
         }
         else{
-        	%><font color="red"><%=getTran("web.occup","onlyEditableByPrescriber",sWebLanguage)%><br></font><%
+        	%><font color="red"><%=getTran(request,"web.occup","onlyEditableByPrescriber",sWebLanguage)%><br></font><%
         }
 	    
 		%><input class="button" type="button" name="returnButton" value='<%=getTranNoLink("Web","backtooverview",sWebLanguage)%>' onclick="doBack();"><%
@@ -930,18 +947,18 @@ function isEndDateBeforeBeginDate(){
                         ad_conn.close();
                         
                         // header per patient
-                        out.print("<tr class='gray'><td colspan='25'>"+getTran("Web.manage","ManagePatientPrescriptions",sWebLanguage)+"&nbsp;"+p.lastname+" "+p.firstname+"</td>");
+                        out.print("<tr class='gray'><td colspan='25'>"+getTran(request,"Web.manage","ManagePatientPrescriptions",sWebLanguage)+"&nbsp;"+p.lastname+" "+p.firstname+"</td>");
 
                         %>
                             <%-- header --%>
 	                        <tr class="label">
 	                            <td width="20" nowrap>&nbsp;</td>
-	                            <td width="250"><%=getTran("Web","product",sWebLanguage)%></td>
-	                            <td width="80"><SORTTYPE:DATE><%=getTran("Web","begindate",sWebLanguage)%></SORTTYPE:DATE></td>
-	                            <td width="80"><SORTTYPE:DATE><%=getTran("Web","enddate",sWebLanguage)%></SORTTYPE:DATE></td>
-	                            <td width="70"><%=getTran("Web","prescriptionrule",sWebLanguage)%></td>
-	                            <td width="70"><%=getTran("Web","delivered.quantity",sWebLanguage)%></td>
-	                            <td width="*"><%=getTran("Web","tobedelivered.quantity",sWebLanguage)%></td>
+	                            <td width="250"><%=getTran(request,"Web","product",sWebLanguage)%></td>
+	                            <td width="80"><SORTTYPE:DATE><%=getTran(request,"Web","begindate",sWebLanguage)%></SORTTYPE:DATE></td>
+	                            <td width="80"><SORTTYPE:DATE><%=getTran(request,"Web","enddate",sWebLanguage)%></SORTTYPE:DATE></td>
+	                            <td width="70"><%=getTran(request,"Web","prescriptionrule",sWebLanguage)%></td>
+	                            <td width="70"><%=getTran(request,"Web","delivered.quantity",sWebLanguage)%></td>
+	                            <td width="*"><%=getTran(request,"Web","tobedelivered.quantity",sWebLanguage)%></td>
 	                        </tr>
                         <%
                         
@@ -955,7 +972,7 @@ function isEndDateBeforeBeginDate(){
 
 <%-- number of records found --%>
 <span style="width:49%;text-align:left;">
-    &nbsp;<%=foundPrescrCount%> <%=getTran("web","activeprescriptionsfound",sWebLanguage)%>
+    &nbsp;<%=foundPrescrCount%> <%=getTran(request,"web","activeprescriptionsfound",sWebLanguage)%>
 </span>
 
 <%
@@ -979,12 +996,14 @@ else{
     <%-- header --%>
     <tr>
         <td class="admin" width="22" nowrap>&nbsp;</td>
-        <td class="admin"><%=getTran("Web","product",sWebLanguage)%></td>
-        <td class="admin"><SORTTYPE:DATE><%=getTran("Web","begindate",sWebLanguage)%></SORTTYPE:DATE></td>
-        <td class="admin"><SORTTYPE:DATE><%=getTran("Web","enddate",sWebLanguage)%></SORTTYPE:DATE></td>
-        <td class="admin"><%=getTran("Web","prescriptionrule",sWebLanguage)%></td>
-        <td class="admin" nowrap><%=getTran("Web","delivered.quantity",sWebLanguage)%></td>
-        <td class="admin" nowrap><%=getTran("Web","tobedelivered.quantity",sWebLanguage)%></td>
+        <td class="admin"><%=getTran(request,"Web","product",sWebLanguage)%></td>
+        <td class="admin"><SORTTYPE:DATE><%=getTran(request,"Web","begindate",sWebLanguage)%></SORTTYPE:DATE></td>
+        <td class="admin"><SORTTYPE:DATE><%=getTran(request,"Web","enddate",sWebLanguage)%></SORTTYPE:DATE></td>
+        <td class="admin"><%=getTran(request,"Web","authorizedreceiver",sWebLanguage)%></td>
+        <td class="admin"><%=getTran(request,"Web","prescriber",sWebLanguage)%></td>
+        <td class="admin"><%=getTran(request,"Web","prescriptionrule",sWebLanguage)%></td>
+        <td class="admin" nowrap><%=getTran(request,"Web","delivered.quantity",sWebLanguage)%></td>
+        <td class="admin" nowrap><%=getTran(request,"Web","tobedelivered.quantity",sWebLanguage)%></td>
     </tr>
 
     <tbody class="hand"><%=prescriptionsHtml%></tbody>
@@ -992,7 +1011,7 @@ else{
 
 <%-- number of records found --%>
 <span style="width:49%;text-align:left;">
-    &nbsp;<%=foundPrescrCount%> <%=getTran("web","activeprescriptionsfound",sWebLanguage)%>
+    &nbsp;<%=foundPrescrCount%> <%=getTran(request,"web","activeprescriptionsfound",sWebLanguage)%>
 </span>
 <%
 		    if(foundPrescrCount > 20){
@@ -1023,7 +1042,7 @@ else{
 		<td id='interactionswarning' style='display: none'>
 		<a href='javascript:findInteractions();'>
 		<img src="<c:url value='/_img/icons/icon_warning.gif'/>" title='<%=getTranNoLink("web","prescription_has_interactions",sWebLanguage)%>'/>
-		<%=getTran("web","prescription_has_interactions",sWebLanguage)%>!</a>
+		<%=getTran(request,"web","prescription_has_interactions",sWebLanguage)%>!</a>
 		</td>
 	</tr>
 </table>	
@@ -1152,14 +1171,14 @@ function checkPrescriptionFields(){
         maySubmit = true;
       }
       else{
-        window.showModalDialog?alertDialog("web.Occup","endMustComeAfterBegin"):alertDialogDirectText('<%=getTran("web.Occup","endMustComeAfterBegin",sWebLanguage)%>');
+        window.showModalDialog?alertDialog("web.Occup","endMustComeAfterBegin"):alertDialogDirectText('<%=getTran(null,"web.Occup","endMustComeAfterBegin",sWebLanguage)%>');
         transactionForm.EditDateEnd.focus();
       }
     }
   }
   else{
     maySubmit = false;
-    window.showModalDialog?alertDialog("web.manage","dataMissing"):alertDialogDirectText('<%=getTran("web.manage","dataMissing",sWebLanguage)%>');
+    window.showModalDialog?alertDialog("web.manage","dataMissing"):alertDialogDirectText('<%=getTran(null,"web.manage","dataMissing",sWebLanguage)%>');
   }
 
   return maySubmit;
@@ -1413,10 +1432,10 @@ function doBack(){
 	        document.getElementById("EditPrescriberFullName").value=product.prescribername;
 	        document.getElementById("productmsg").innerHTML='';
 	        if(product.levels.indexOf("0/")==0){
-	        	document.getElementById("productmsg").innerHTML=document.getElementById("productmsg").innerHTML+"<br/><img src='<c:url value="/"/>_img/icons/icon_warning.gif'/><%=getTran("web","nodistributionstock",sWebLanguage)%>";
+	        	document.getElementById("productmsg").innerHTML=document.getElementById("productmsg").innerHTML+"<br/><img src='<c:url value="/"/>_img/icons/icon_warning.gif'/><%=getTran(request,"web","nodistributionstock",sWebLanguage)%>";
 	        }
 	        if(product.levels.indexOf("/0")>-1){
-	        	document.getElementById("productmsg").innerHTML=document.getElementById("productmsg").innerHTML+"<br/><img src='<c:url value="/"/>_img/icons/icon_warning.gif'/><%=getTran("web","nocentralstock",sWebLanguage)%>";
+	        	document.getElementById("productmsg").innerHTML=document.getElementById("productmsg").innerHTML+"<br/><img src='<c:url value="/"/>_img/icons/icon_warning.gif'/><%=getTran(request,"web","nocentralstock",sWebLanguage)%>";
 	        }
 	        calculatePrescriptionPeriod();
 			loadSchema();

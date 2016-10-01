@@ -34,17 +34,17 @@
     <table>
         <tr>
             <td valign='bottom'>
-                <%=getTran("web","from",sWebLanguage)%>&nbsp;</td><td  valign='bottom'><%=writeDateField("begin","serviceIncome",sBegin,sWebLanguage)%>&nbsp;<%=getTran("web","to",sWebLanguage)%>&nbsp;<%=writeDateField("end","serviceIncome",sEnd,sWebLanguage)%>&nbsp;
+                <%=getTran(request,"web","from",sWebLanguage)%>&nbsp;</td><td  valign='bottom'><%=writeDateField("begin","serviceIncome",sBegin,sWebLanguage)%>&nbsp;<%=getTran(request,"web","to",sWebLanguage)%>&nbsp;<%=writeDateField("end","serviceIncome",sEnd,sWebLanguage)%>&nbsp;
                 <input type="submit" class="button" name="find" value="<%=getTranNoLink("web","find",sWebLanguage)%>"/>
             </td>
         </tr>
         <tr>
         	<td valign='bottom'>
-        		<%=getTran("Web","service",sWebLanguage)%></td><td colspan='2'  valign='bottom'><input type='hidden' name='statserviceid' id='statserviceid' value='<%=service %>'>
+        		<%=getTran(request,"Web","service",sWebLanguage)%></td><td colspan='2'  valign='bottom'><input type='hidden' name='statserviceid' id='statserviceid' value='<%=service %>'>
         		<input class='text' type='text' name='statservicename' id='statservicename' readonly size='40' value='<%=serviceName %>'>
         		<img src='_img/icons/icon_search.gif' class='link' alt='<%=getTranNoLink("Web","select",sWebLanguage)%>' onclick='searchService("statserviceid","statservicename");'>
         		<img src='_img/icons/icon_delete.gif' class='link' alt='<%=getTranNoLink("Web","clear",sWebLanguage)%>' onclick='statserviceid.value="";statservicename.value="";'>
-				<input type="checkbox" name="details" <%=request.getParameter("details")!=null?"checked":"" %>/><%= getTran("web","showdetails",sWebLanguage)%>
+				<input type="checkbox" name="details" <%=request.getParameter("details")!=null?"checked":"" %>/><%= getTran(request,"web","showdetails",sWebLanguage)%>
         	</td>
         </tr>
     </table>
@@ -80,8 +80,8 @@
                     out.println("<tr><td/><td colspan='4'><hr/></td></tr><tr><td colspan='2'/><td><b>"+(totalserviceinsurarincome+totalservicepatientincome)+"</b></td><td><b>"+totalservicepatientincome+"</b></td><td><b>"+totalserviceinsurarincome+"</b></td></tr>");
                 }
                 activeservice=serviceuid;
-                out.println("<tr class='admin'><td>"+(activeservice.length()==0?"?":activeservice+": "+getTran("service",activeservice,sWebLanguage))+"</td>"+
-                        "<td>#</td><td>"+getTran("web","total",sWebLanguage)+"</td><td>"+getTran("web","patient",sWebLanguage)+"</td><td>"+getTran("web","insurar",sWebLanguage)+"</td></tr>");
+                out.println("<tr class='admin'><td>"+(activeservice.length()==0?"?":activeservice+": "+getTran(request,"service",activeservice,sWebLanguage))+"</td>"+
+                        "<td>#</td><td>"+getTran(request,"web","total",sWebLanguage)+"</td><td>"+getTran(request,"web","patient",sWebLanguage)+"</td><td>"+getTran(request,"web","insurar",sWebLanguage)+"</td></tr>");
                 totalpatientincome+=totalservicepatientincome;
                 totalinsurarincome+=totalserviceinsurarincome;
                 totalserviceinsurarincome=0;
@@ -101,7 +101,7 @@
           	out.println("<tr><td/><td colspan='4'><hr/></td></tr><tr><td colspan='2'/><td><b>"+(totalserviceinsurarincome+totalservicepatientincome)+"</b></td><td><b>"+totalservicepatientincome+"</b></td><td><b>"+totalserviceinsurarincome+"</b></td></tr>");
             totalpatientincome+=totalservicepatientincome;
             totalinsurarincome+=totalserviceinsurarincome;
-            out.println("<tr class='admin'><td>"+getTran("web","allservices",sWebLanguage)+"</td><td/><td><b>"+(totalinsurarincome+totalpatientincome)+"</b></td><td><b>"+totalpatientincome+"</b></td><td><b>"+totalinsurarincome+"</b></td></tr>");
+            out.println("<tr class='admin'><td>"+getTran(request,"web","allservices",sWebLanguage)+"</td><td/><td><b>"+(totalinsurarincome+totalpatientincome)+"</b></td><td><b>"+totalpatientincome+"</b></td><td><b>"+totalinsurarincome+"</b></td></tr>");
         }
         rs.close();
         ps.close();

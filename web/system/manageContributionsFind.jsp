@@ -19,11 +19,11 @@
 <table cellspacing="0" width="100%">
 <tr class="admin">
     <td width="25">&nbsp;</td>
-    <td width="100"><%=HTMLEntities.htmlentities(getTran("web","code",sWebLanguage))%></td>
-    <td width="300"><%=HTMLEntities.htmlentities(getTran("web","description",sWebLanguage))%></td>
-    <td width="70"><%=HTMLEntities.htmlentities(getTran("web","type",sWebLanguage))%></td>
-    <td width="80" align="left"><%=HTMLEntities.htmlentities(getTran("web","price",sWebLanguage))%>&nbsp;<%=sCurrency%></td>
-    <td><%=HTMLEntities.htmlentities(getTran("web","categories",sWebLanguage))%></td>
+    <td width="100"><%=HTMLEntities.htmlentities(getTran(request,"web","code",sWebLanguage))%></td>
+    <td width="300"><%=HTMLEntities.htmlentities(getTran(request,"web","description",sWebLanguage))%></td>
+    <td width="70"><%=HTMLEntities.htmlentities(getTran(request,"web","type",sWebLanguage))%></td>
+    <td width="80" align="left"><%=HTMLEntities.htmlentities(getTran(request,"web","price",sWebLanguage))%>&nbsp;<%=sCurrency%></td>
+    <td><%=HTMLEntities.htmlentities(getTran(request,"web","categories",sWebLanguage))%></td>
     <td/>
 </tr>
 <tbody>
@@ -36,7 +36,7 @@
         if(insurance!=null){
             category=insurance.getType();
         }
-        String sTranDelete = getTran("Web", "delete", sWebLanguage);
+        String sTranDelete = getTran(request,"Web", "delete", sWebLanguage);
         String sClass = "1", sType;
         Prestation prestation;
 
@@ -48,7 +48,7 @@
 	            // type
 	            sType = checkString(prestation.getType());
 	            if (sType.length() > 0) {
-	                sType = getTran("prestation.type", sType, sWebLanguage);
+	                sType = getTran(request,"prestation.type", sType, sWebLanguage);
 	            }
 	
 	            // alternate row-style
@@ -82,13 +82,13 @@
 
 // number of found records
 if(prestationCount > 100){
-    %>&gt;100 <%=HTMLEntities.htmlentities(getTran("web","recordsFound",sWebLanguage))%><%
+    %>&gt;100 <%=HTMLEntities.htmlentities(getTran(request,"web","recordsFound",sWebLanguage))%><%
 }
 else if(prestationCount > 0){
-    %><%=prestationCount%> <%=HTMLEntities.htmlentities(getTran("web","recordsFound",sWebLanguage))%><%
+    %><%=prestationCount%> <%=HTMLEntities.htmlentities(getTran(request,"web","recordsFound",sWebLanguage))%><%
 }
 else{
-    %><br><%=HTMLEntities.htmlentities(getTran("web","noRecordsFound",sWebLanguage))%><%
+    %><br><%=HTMLEntities.htmlentities(getTran(request,"web","noRecordsFound",sWebLanguage))%><%
 }
 %>
 <script>

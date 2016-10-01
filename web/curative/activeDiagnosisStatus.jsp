@@ -6,7 +6,7 @@
 <table width="100%" class="list" height="100%" cellspacing="0">
     <tr class="admin">
         <td colspan="3">
-            <%=getTran("web.occup","medwan.common.problemlist",sWebLanguage)%>&nbsp;
+            <%=getTran(request,"web.occup","medwan.common.problemlist",sWebLanguage)%>&nbsp;
             <a href="javascript:showProblemlist();"><img src="<c:url value='/_img/icons/icon_edit.gif'/>" class="link" alt="<%=getTranNoLink("web","editproblemlist",sWebLanguage)%>" style="vertical-align:-4px;"></a>
         </td>
     </tr>
@@ -35,7 +35,7 @@
 	            else{
 	                out.print("<tr valign='top'>"+
 	                           "<td style='{color: red}'><b><i>!!!</i></b></td>"+
-	                           "<td style='{color: red}'><b><i>"+getTran("web","diagnosis.restrictedaccess",sWebLanguage).toUpperCase()+"</i></td>"+
+	                           "<td style='{color: red}'><b><i>"+getTran(request,"web","diagnosis.restrictedaccess",sWebLanguage).toUpperCase()+"</i></td>"+
 	                           "<td>"+ScreenHelper.stdDateFormat.format(activeProblem.getBegin())+"</td>"+
 	                          "</tr>");
 	            }

@@ -10,7 +10,7 @@
     </tr>
     <tr>
         <td colspan="3" style="text-align:center">
-			<b><%=getTran("mobile","welcome",activeUser)%> <%=activeUser.person.firstname+" "+activeUser.person.lastname%></b>
+			<b><%=getTran(request,"mobile","welcome",activeUser)%> <%=activeUser.person.firstname+" "+activeUser.person.lastname%></b>
 		</td>
     </tr>
     <tr>
@@ -22,7 +22,7 @@
 				ps.setString(1,activeUser.userid);
 				ResultSet rs = ps.executeQuery();
 				if(rs.next()){
-					out.println("<font color='#999999'>"+getTran("mobile","lastlogin",activeUser)+": "+ScreenHelper.fullDateFormatSS.format(rs.getTimestamp("maxtime"))+"</font>");
+					out.println("<font color='#999999'>"+getTran(request,"mobile","lastlogin",activeUser)+": "+ScreenHelper.fullDateFormatSS.format(rs.getTimestamp("maxtime"))+"</font>");
 				}
 				rs.close();
 				ps.close();
@@ -52,10 +52,10 @@
     // link to full-size application	
 	if(session.getAttribute("activePatient")!=null){
 		String pid = ((AdminPerson)session.getAttribute("activePatient")).personid;
-	    %><a href='<%="http://"+request.getServerName()+request.getRequestURI().replaceAll(request.getServletPath(),"")%>/main.do?Page=curative/index.jsp&PersonID=<%=pid%>&ts=<%=new java.util.Date().getTime()+""%>'><%=getTran("web","desktop.interface",activeUser)%></a><%
+	    %><a href='<%="http://"+request.getServerName()+request.getRequestURI().replaceAll(request.getServletPath(),"")%>/main.do?Page=curative/index.jsp&PersonID=<%=pid%>&ts=<%=new java.util.Date().getTime()+""%>'><%=getTran(request,"web","desktop.interface",activeUser)%></a><%
 	}
 	else{
-	    %><a href='<%="http://"+request.getServerName()+request.getRequestURI().replaceAll(request.getServletPath(),"")%>/main.do?CheckService=true&CheckMedicalCenter=true&ts=<%=new java.util.Date().getTime()+""%>'><%=getTran("web","desktop.interface",activeUser)%></a><%
+	    %><a href='<%="http://"+request.getServerName()+request.getRequestURI().replaceAll(request.getServletPath(),"")%>/main.do?CheckService=true&CheckMedicalCenter=true&ts=<%=new java.util.Date().getTime()+""%>'><%=getTran(request,"web","desktop.interface",activeUser)%></a><%
 	}
 %>
 <%@include file="/mobile/_common/footer.jsp"%>

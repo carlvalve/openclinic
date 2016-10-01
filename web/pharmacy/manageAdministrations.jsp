@@ -47,7 +47,7 @@
 	            AdministrationSchema.storeAdministration(prescriptionUid,compactDateFormat.parse(sDay),Integer.parseInt(time),
 	            		                                 Integer.parseInt(value));
 	        }
-            sMsg = getTran("web","dataIsSaved",sWebLanguage);
+            sMsg = getTran(request,"web","dataIsSaved",sWebLanguage);
         }
         
         //*** 2 - careprescr ***
@@ -64,7 +64,7 @@
 	            CarePrescriptionAdministrationSchema.storeAdministration(prescriptionUid,compactDateFormat.parse(sDay),
 	            		                                                 Integer.parseInt(time),Integer.parseInt(value));
 	        }
-            sMsg = getTran("web","dataIsSaved",sWebLanguage);
+            sMsg = getTran(request,"web","dataIsSaved",sWebLanguage);
         }
     }
 %>
@@ -95,7 +95,7 @@
                        "<td/>");
             for(int d=0; d<adminDays; d++){
                 for(int i=0; i<line.getTimeQuantities().size(); i++){
-                    out.print("<td class='admin'><center>"+((KeyValue)line.getTimeQuantities().elementAt(i)).getKey()+getTran("web","abbreviation.hour", sWebLanguage)+"</center></td>");
+                    out.print("<td class='admin'><center>"+((KeyValue)line.getTimeQuantities().elementAt(i)).getKey()+getTran(request,"web","abbreviation.hour", sWebLanguage)+"</center></td>");
                 }
             }
             out.print("</tr>");
@@ -177,7 +177,7 @@
                        "<td/>");
             for(int d=0; d<adminDays; d++){
                 for(int i=0; i<cLine.getTimeQuantities().size(); i++){
-                    out.print("<td class='admin'><center>"+((KeyValue)cLine.getTimeQuantities().elementAt(i)).getKey()+getTran("web","abbreviation.hour",sWebLanguage)+"</center></td>");
+                    out.print("<td class='admin'><center>"+((KeyValue)cLine.getTimeQuantities().elementAt(i)).getKey()+getTran(request,"web","abbreviation.hour",sWebLanguage)+"</center></td>");
                 }
             }
             out.print("</tr>");
@@ -188,7 +188,7 @@
             cLine = (CarePrescriptionAdministrationSchema.AdministrationSchemaLine)cSchema.getCarePrescriptionSchemas().elementAt(n);
 
             out.print("<tr bgcolor='lightgrey'>");
-             out.print("<td>&nbsp;<b>"+(cLine.getCarePrescription().getCareUid()!=null?getTran("care_type",cLine.getCarePrescription().getCareUid(),sWebLanguage):"Unknown care type")+"&nbsp;</b></td>");
+             out.print("<td>&nbsp;<b>"+(cLine.getCarePrescription().getCareUid()!=null?getTran(request,"care_type",cLine.getCarePrescription().getCareUid(),sWebLanguage):"Unknown care type")+"&nbsp;</b></td>");
 
             for(int d=0; d<adminDays; d++){
                 day = new java.util.Date(dStart.getTime()+d * 24 * 3600 * 1000);

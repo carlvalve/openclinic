@@ -118,7 +118,7 @@
         </div>
         <div id="container">
             <div id="content">
-            	<label><h3><%=getTran("web","datacenter.intro",sWebLanguage).replaceAll("OpenClinic", "<a href='http://sourceforge.net/projects/open-clinic'>OpenClinic</a>") %> <%=getTran("web","datacenter.intro2",sWebLanguage)%></h3></label>
+            	<label><h3><%=getTran(request,"web","datacenter.intro",sWebLanguage).replaceAll("OpenClinic", "<a href='http://sourceforge.net/projects/open-clinic'>OpenClinic</a>") %> <%=getTran(request,"web","datacenter.intro2",sWebLanguage)%></h3></label>
             	<table width="100%" class="content" cellpadding="0" cellspacing="1" style="padding:0px;">
 			<%
 				String toggleCountryCode="",toggleCountryIdx="";
@@ -228,7 +228,7 @@
 					       .append("<td colspan='1' width='25%' nowrap>")
 					        .append("<img src='"+sCONTEXTPATH+"/_img/icons/icon_plus.png' style='vertical-align:-3px;' id='plus_"+countryIdx+"' onClick=\"toggleSites('"+sCountryCode+"','"+countryIdx+"');\"/> <b>"+(sCountryCode.equals("B")?"BE":sCountryCode)+" - "+sCountryName+"</b>")
 					       .append("</td>")
-					       .append("<td align='right' width='15%'>"+countSites(countries,sCountryCode)+" "+getTran("web","sites",sWebLanguage)+" "+getTran("web","datacenter.in",sWebLanguage).toLowerCase()+" "+countCities(countries,sCountryCode)+" "+getTran("web","cities",sWebLanguage)+"</td>")
+					       .append("<td align='right' width='15%'>"+countSites(countries,sCountryCode)+" "+getTran(request,"web","sites",sWebLanguage)+" "+getTran(request,"web","datacenter.in",sWebLanguage).toLowerCase()+" "+countCities(countries,sCountryCode)+" "+getTran(request,"web","cities",sWebLanguage)+"</td>")
 					       .append("<td align='right' width='10%'>"+deci.format(countryTotal.patients)+"</td>")
 					       .append("<td align='right' width='10%'>"+deci.format(countryTotal.visits)+"</td>")
 					       .append("<td align='right' width='10%'>"+deci.format(countryTotal.admissions)+"</td>")
@@ -246,45 +246,45 @@
 				
 				// totals row : header
 				out.println("<tr style='padding:0px;' bgcolor='black'>"+
-				              "<td colspan='1' width='1%' nowrap><b><font color='white'>"+getTran("web","total",sWebLanguage)+"</font></b></td>"+
+				              "<td colspan='1' width='1%' nowrap><b><font color='white'>"+getTran(request,"web","total",sWebLanguage)+"</font></b></td>"+
 				              "<td>"+
-				                "<font color='white'><b>"+summarySite.id+" "+getTran("web","sites",sWebLanguage)+" "+getTran("web","datacenter.in",sWebLanguage).toLowerCase()+" "+countries.size()+" "+getTran("web","countries",sWebLanguage)+"</b><br>"+
+				                "<font color='white'><b>"+summarySite.id+" "+getTran(request,"web","sites",sWebLanguage)+" "+getTran(request,"web","datacenter.in",sWebLanguage).toLowerCase()+" "+countries.size()+" "+getTran(request,"web","countries",sWebLanguage)+"</b><br>"+
 						          " [<a style='color:white;' href='javascript:void(0);' onClick=\"openGISMap('"+summarySite.id+"','sites','clusterer');\">GIS</a>]&nbsp;"+
 						          " [<a style='color:white;' href='javascript:void(0);' onClick=\"openGISMap('"+summarySite.id+"','sites','mapChart');\">GISmap</a>]"+
 				                "</font>"+
 				              "</td>"+
 				              "<td>"+
-				                "<font color='white'><b>"+getTran("web","patients",sWebLanguage)+"</b><br>"+
+				                "<font color='white'><b>"+getTran(request,"web","patients",sWebLanguage)+"</b><br>"+
 				                  " [<a style='color:white;' href='javascript:void(0);' onClick=\"openGISMap('"+summarySite.id+"','patients','clusterer');\">GIS</a>]&nbsp;"+
 						          " [<a style='color:white;' href='javascript:void(0);' onClick=\"openGISMap('"+summarySite.id+"','patients','mapChart');\">GISmap</a>]"+
 				                "</font>"+
 				              "</td>"+
 				              "<td>"+
-				                "<font color='white'><b>"+getTran("web","outpatients",sWebLanguage)+"</b><br>"+
+				                "<font color='white'><b>"+getTran(request,"web","outpatients",sWebLanguage)+"</b><br>"+
 				                  " [<a style='color:white;' href='javascript:void(0);' onClick=\"openGISMap('"+summarySite.id+"','outpatients','clusterer');\">GIS</a>]&nbsp;"+
 						          " [<a style='color:white;' href='javascript:void(0);' onClick=\"openGISMap('"+summarySite.id+"','outpatients','mapChart');\">GISmap</a>]"+
 				                "</font>"+
 				              "</td>"+
 				              "<td>"+
-				                "<font color='white'><b>"+getTran("web","admissions",sWebLanguage)+"</b><br>"+
+				                "<font color='white'><b>"+getTran(request,"web","admissions",sWebLanguage)+"</b><br>"+
 				                  " [<a style='color:white;' href='javascript:void(0);' onClick=\"openGISMap('"+summarySite.id+"','admissions','clusterer');\">GIS</a>]&nbsp;"+
 						          " [<a style='color:white;' href='javascript:void(0);' onClick=\"openGISMap('"+summarySite.id+"','admissions','mapChart');\">GISmap</a>]"+
 				                "</font>"+
 				              "</td>"+
 				              "<td>"+
-				                "<font color='white'><b>"+getTran("web","labanalyses",sWebLanguage)+"</b><br>"+
+				                "<font color='white'><b>"+getTran(request,"web","labanalyses",sWebLanguage)+"</b><br>"+
 				                  " [<a style='color:white;' href='javascript:void(0);' onClick=\"openGISMap('"+summarySite.id+"','labanalyses','clusterer');\">GIS</a>]&nbsp;"+
 						          " [<a style='color:white;' href='javascript:void(0);' onClick=\"openGISMap('"+summarySite.id+"','labanalyses','mapChart');\">GISmap</a>]"+
 				                "</font>"+
 				              "</td>"+
 				              "<td>"+
-				                "<font color='white'><b>"+getTran("web","invoices",sWebLanguage)+"</b><br>"+
+				                "<font color='white'><b>"+getTran(request,"web","invoices",sWebLanguage)+"</b><br>"+
 				                  " [<a style='color:white;' href='javascript:void(0);' onClick=\"openGISMap('"+summarySite.id+"','invoices','clusterer');\">GIS</a>]&nbsp;"+
 						          " [<a style='color:white;' href='javascript:void(0);' onClick=\"openGISMap('"+summarySite.id+"','invoices','mapChart');\">GISmap</a>]"+
 				                "</font>"+
 				              "</td>"+
 				              "<td>"+
-				                "<font color='white'><b>"+getTran("web","debets",sWebLanguage)+"</b><br>"+
+				                "<font color='white'><b>"+getTran(request,"web","debets",sWebLanguage)+"</b><br>"+
 				                  " [<a style='color:white;' href='javascript:void(0);' onClick=\"openGISMap('"+summarySite.id+"','debets','clusterer');\">GIS</a>]&nbsp;"+
 						          " [<a style='color:white;' href='javascript:void(0);' onClick=\"openGISMap('"+summarySite.id+"','debets','mapChart');\">GISmap</a>]"+
 				                "</font>"+

@@ -97,7 +97,7 @@
                     else if(sLanguage.equalsIgnoreCase("d")) sLanguage = "de";
 
                     // translate language
-                    sLanguage = getTran("web.language",sLanguage,sWebLanguage);
+                    sLanguage = getTran(request,"web.language",sLanguage,sWebLanguage);
 
                     Object[] charArray = sLanguage.split("");
                     String charLayout = "";

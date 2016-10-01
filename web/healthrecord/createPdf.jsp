@@ -146,10 +146,10 @@
             // header
             sOut.append("<tr class='admin'>")
                  .append("<td width='30'>&nbsp;</td>")
-                 .append("<td width='80'><DESC>"+getTran("web","date", sWebLanguage)+"</DESC></td>")
-                 .append("<td width='45%'>"+getTran("web.occup","medwan.common.contacttype", sWebLanguage)+"</td>")
-                 .append("<td width='250'>"+getTran("web.occup","medwan.common.context", sWebLanguage)+"</td>")
-                 .append("<td width='200'>"+getTran("web.occup","medwan.common.user", sWebLanguage)+"</td>")
+                 .append("<td width='80'><DESC>"+getTran(request,"web","date", sWebLanguage)+"</DESC></td>")
+                 .append("<td width='45%'>"+getTran(request,"web.occup","medwan.common.contacttype", sWebLanguage)+"</td>")
+                 .append("<td width='250'>"+getTran(request,"web.occup","medwan.common.context", sWebLanguage)+"</td>")
+                 .append("<td width='200'>"+getTran(request,"web.occup","medwan.common.user", sWebLanguage)+"</td>")
                 .append("</tr>");
 
             // records
@@ -192,22 +192,22 @@
                             if (tranType.equals(sPREFIX+"TRANSACTION_TYPE_DOCUMENT")) {
                                 docTypeItem = transaction.getItem(sPREFIX+"ITEM_TYPE_DOCUMENT_TYPE");
                                 if (docTypeItem != null) {
-                                    sExaminationName = getTran("web.documents", docTypeItem.getValue(), sWebLanguage);
+                                    sExaminationName = getTran(request,"web.documents", docTypeItem.getValue(), sWebLanguage);
                                 }
                                 else {
                                     docTypeItem = transaction.getItem("documentId");
                                     if (docTypeItem != null) {
                                         sDocType = docTypeItem.getValue();
                                         sDocType = sDocType.substring(0, sDocType.indexOf("."));
-                                        sExaminationName = getTran("web.documents", sDocType, sWebLanguage);
+                                        sExaminationName = getTran(request,"web.documents", sDocType, sWebLanguage);
                                     }
                                     else {
-                                        sExaminationName = getTran("web.occup", tranType, sWebLanguage); // just 'DOCUMENT'
+                                        sExaminationName = getTran(request,"web.occup", tranType, sWebLanguage); // just 'DOCUMENT'
                                     }
                                 }
                             }
                             else {
-                                sExaminationName = getTran("web.occup", tranType, sWebLanguage);
+                                sExaminationName = getTran(request,"web.occup", tranType, sWebLanguage);
                             }
 
                             //*** what context-modifier ***
@@ -222,7 +222,7 @@
                                      .append("</td>")
                                      .append("<td onClick=\"clickCheckBox('tranAndServerID_"+cbCounter+"')\">"+dateFormat.format(tranDate)+"</td>")
                                      .append("<td onClick=\"clickCheckBox('tranAndServerID_"+cbCounter+"')\">"+sExaminationName+"</td>")
-                                     .append("<td onClick=\"clickCheckBox('tranAndServerID_"+cbCounter+"')\">"+getTran("service", tranCtxt, sWebLanguage)+"</td>")
+                                     .append("<td onClick=\"clickCheckBox('tranAndServerID_"+cbCounter+"')\">"+getTran(request,"service", tranCtxt, sWebLanguage)+"</td>")
                                      .append("<td onClick=\"clickCheckBox('tranAndServerID_"+cbCounter+"')\">"+tranUser+"</td>")
                                     .append("</tr>");
 
@@ -239,8 +239,8 @@
                                           .append("<input type='checkbox' value='"+tranID+"_"+serverID+"' name='tranAndServerID_"+cbCounter+"'>")
                                          .append("</td>")
                                          .append("<td onClick=\"clickCheckBox('tranAndServerID_"+cbCounter+"')\">"+dateFormat.format(tranDate)+"</td>")
-                                         .append("<td onClick=\"clickCheckBox('tranAndServerID_"+cbCounter+"')\">"+getTran("web.occup", tranType, sWebLanguage)+"</td>")
-                                         .append("<td onClick=\"clickCheckBox('tranAndServerID_"+cbCounter+"')\">"+getTran("service", tranCtxt, sWebLanguage)+"</td>")
+                                         .append("<td onClick=\"clickCheckBox('tranAndServerID_"+cbCounter+"')\">"+getTran(request,"web.occup", tranType, sWebLanguage)+"</td>")
+                                         .append("<td onClick=\"clickCheckBox('tranAndServerID_"+cbCounter+"')\">"+getTran(request,"service", tranCtxt, sWebLanguage)+"</td>")
                                          .append("<td onClick=\"clickCheckBox('tranAndServerID_"+cbCounter+"')\">"+tranUser+"</td>")
                                         .append("</tr>");
 
@@ -257,8 +257,8 @@
                                       .append("<input type='checkbox' value='"+tranID+"_"+serverID+"' name='tranAndServerID_"+cbCounter+"'>")
                                      .append("</td>")
                                      .append("<td onClick=\"clickCheckBox('tranAndServerID_"+cbCounter+"')\">"+dateFormat.format(tranDate)+"</td>")
-                                     .append("<td onClick=\"clickCheckBox('tranAndServerID_"+cbCounter+"')\">"+getTran("web.occup", tranType, sWebLanguage)+"</td>")
-                                     .append("<td onClick=\"clickCheckBox('tranAndServerID_"+cbCounter+"')\">"+getTran("service", tranCtxt, sWebLanguage)+"</td>")
+                                     .append("<td onClick=\"clickCheckBox('tranAndServerID_"+cbCounter+"')\">"+getTran(request,"web.occup", tranType, sWebLanguage)+"</td>")
+                                     .append("<td onClick=\"clickCheckBox('tranAndServerID_"+cbCounter+"')\">"+getTran(request,"service", tranCtxt, sWebLanguage)+"</td>")
                                      .append("<td onClick=\"clickCheckBox('tranAndServerID_"+cbCounter+"')\">"+tranUser+"</td>")
                                     .append("</tr>");
 
@@ -283,7 +283,7 @@
                 tranDate = new Timestamp(transaction.getUpdateTime().getTime());
 
                 if (tranDate.getTime() >= dateFrom.getTime() && tranDate.getTime() <= dateTo.getTime()) {
-                    sTransTranslation = getTran("Web.occup", transaction.getTransactionType(), sWebLanguage);
+                    sTransTranslation = getTran(request,"Web.occup", transaction.getTransactionType(), sWebLanguage);
                     newTransaction = (TransactionVO) hTrans.get(sTransTranslation);
 
                     if (newTransaction == null) {
@@ -296,8 +296,8 @@
             // header
             sOut.append("<tr class='admin'>")
                  .append("<td width='30'>&nbsp;</td>")
-                 .append("<td width='*'>"+getTran("web.occup", "medwan.common.contacttype", sWebLanguage)+"</td>")
-                 .append("<td width='250'>"+getTran("web.occup", "medwan.common.context", sWebLanguage)+"</td>")
+                 .append("<td width='*'>"+getTran(request,"web.occup", "medwan.common.contacttype", sWebLanguage)+"</td>")
+                 .append("<td width='250'>"+getTran(request,"web.occup", "medwan.common.context", sWebLanguage)+"</td>")
                 .append("</tr>");
 
             // records
@@ -341,8 +341,8 @@
                                      .append("<td align='center'>")
                                       .append("<input type='checkbox' value='"+tranType+"' name='tranType_"+cbCounter+"'>")
                                      .append("</td>")
-                                     .append("<td onClick=\"clickCheckBox('tranType_"+cbCounter+"')\">"+getTran("web.occup", tranType, sWebLanguage)+"</td>")
-                                     .append("<td onClick=\"clickCheckBox('tranType_"+cbCounter+"')\">"+getTran("service", tranCtxt, sWebLanguage)+"</td>")
+                                     .append("<td onClick=\"clickCheckBox('tranType_"+cbCounter+"')\">"+getTran(request,"web.occup", tranType, sWebLanguage)+"</td>")
+                                     .append("<td onClick=\"clickCheckBox('tranType_"+cbCounter+"')\">"+getTran(request,"service", tranCtxt, sWebLanguage)+"</td>")
                                     .append("</tr>");
 
                                 cbCounter++;
@@ -357,8 +357,8 @@
                                          .append("<td align='center'>")
                                           .append("<input type='checkbox' value='"+tranType+"' name='tranType_"+cbCounter+"'>")
                                          .append("</td>")
-                                         .append("<td onClick=\"clickCheckBox('tranType_"+cbCounter+"')\">"+getTran("web.occup", tranType, sWebLanguage)+"</td>")
-                                         .append("<td onClick=\"clickCheckBox('tranType_"+cbCounter+"')\">"+getTran("service", tranCtxt, sWebLanguage)+"</td>")
+                                         .append("<td onClick=\"clickCheckBox('tranType_"+cbCounter+"')\">"+getTran(request,"web.occup", tranType, sWebLanguage)+"</td>")
+                                         .append("<td onClick=\"clickCheckBox('tranType_"+cbCounter+"')\">"+getTran(request,"service", tranCtxt, sWebLanguage)+"</td>")
                                         .append("</tr>");
 
                                     cbCounter++;
@@ -373,8 +373,8 @@
                                      .append("<td align='center'>")
                                       .append("<input type='checkbox' value='"+tranType+"' name='tranType_"+cbCounter+"'>")
                                      .append("</td>")
-                                     .append("<td onClick=\"clickCheckBox('tranType_"+cbCounter+"')\">"+getTran("web.occup", tranType, sWebLanguage)+"</td>")
-                                     .append("<td onClick=\"clickCheckBox('tranType_"+cbCounter+"')\">"+getTran("service", tranCtxt, sWebLanguage)+"</td>")
+                                     .append("<td onClick=\"clickCheckBox('tranType_"+cbCounter+"')\">"+getTran(request,"web.occup", tranType, sWebLanguage)+"</td>")
+                                     .append("<td onClick=\"clickCheckBox('tranType_"+cbCounter+"')\">"+getTran(request,"service", tranCtxt, sWebLanguage)+"</td>")
                                     .append("</tr>");
 
                                 cbCounter++;
@@ -398,7 +398,7 @@
                 tranDate = new Timestamp(transaction.getUpdateTime().getTime());
 
                 if (tranDate.getTime() >= dateFrom.getTime() && tranDate.getTime() <= dateTo.getTime()) {
-                    sTransTranslation = getTran("Web.occup", transaction.getTransactionType(), sWebLanguage);
+                    sTransTranslation = getTran(request,"Web.occup", transaction.getTransactionType(), sWebLanguage);
                     newTransaction = (TransactionVO) hTrans.get(sTransTranslation);
 
                     if (newTransaction == null) {
@@ -415,9 +415,9 @@
             // header
             sOut.append("<tr class='admin'>")
                  .append("<std width='30'>&nbsp;</td>")
-                 .append("<td width='80'>"+getTran("web", "date", sWebLanguage)+"</td>")
-                 .append("<td width='70%'>"+getTran("web.occup", "medwan.common.contacttype", sWebLanguage)+"</td>")
-                 .append("<td width='200'>"+getTran("web.occup", "medwan.common.user", sWebLanguage)+"</td>")
+                 .append("<td width='80'>"+getTran(request,"web", "date", sWebLanguage)+"</td>")
+                 .append("<td width='70%'>"+getTran(request,"web.occup", "medwan.common.contacttype", sWebLanguage)+"</td>")
+                 .append("<td width='200'>"+getTran(request,"web.occup", "medwan.common.user", sWebLanguage)+"</td>")
                 .append("</tr>");
 
             // records
@@ -458,7 +458,7 @@
                                   .append("<input type='checkbox' value='"+tranID+"_"+serverID+"' name='tranAndServerID_"+cbCounter+"'>")
                                  .append("</td>")
                                  .append("<td onClick=\"clickCheckBox('tranAndServerID_"+cbCounter+"')\">"+(tranDate == null ? "" : dateFormat.format(tranDate))+"</td>")
-                                 .append("<td onClick=\"clickCheckBox('tranAndServerID_"+cbCounter+"')\">"+getTran("web.occup", tranType, sWebLanguage)+"</td>")
+                                 .append("<td onClick=\"clickCheckBox('tranAndServerID_"+cbCounter+"')\">"+getTran(request,"web.occup", tranType, sWebLanguage)+"</td>")
                                  .append("<td onClick=\"clickCheckBox('tranAndServerID_"+cbCounter+"')\">"+tranUser+"</td>")
                                 .append("</tr>");
                         }
@@ -535,7 +535,7 @@
                 <table class="list" width="100%" border="0" cellspacing="1">
                     <%-- date from --%>
                     <tr>
-                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("Web","begindate",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","begindate",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <%=writeDateField("dateFrom","transactionForm",sDateFrom,sWebLanguage)%>
                         </td>
@@ -543,7 +543,7 @@
 
                     <%-- date to --%>
                     <tr>
-                        <td class="admin"><%=getTran("Web","enddate",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin"><%=getTran(request,"Web","enddate",sWebLanguage)%>&nbsp;</td>
                         <td class="admin2">
                             <%=writeDateField("dateTo","transactionForm",sDateTo,sWebLanguage)%>
                         </td>
@@ -554,11 +554,11 @@
                         if(sAction.equals("applyFilter") && (sSelectedFilter.equals("select_trans") || sSelectedFilter.equals("select_trantypes"))){
                             %>
                                 <tr>
-                                    <td class="admin"><%=getTran("Web","context",sWebLanguage)%>&nbsp;</td>
+                                    <td class="admin"><%=getTran(request,"Web","context",sWebLanguage)%>&nbsp;</td>
                                     <td class="admin2">
                                         <select name="selectedTranCtxt" class="text">
-                                            <option value="allContexts" SELECTED><%=getTran("web.occup","allContexts",sWebLanguage)%></option>
-                                            <option value="withoutContext" <%=(sSelectedTranCtxt.equals("withoutContext")?"SELECTED":"")%>><%=getTran("web.occup","withoutContext",sWebLanguage)%></option>
+                                            <option value="allContexts" SELECTED><%=getTran(request,"web.occup","allContexts",sWebLanguage)%></option>
+                                            <option value="withoutContext" <%=(sSelectedTranCtxt.equals("withoutContext")?"SELECTED":"")%>><%=getTran(request,"web.occup","withoutContext",sWebLanguage)%></option>
                                             <%
                                                 String sDoc = MedwanQuery.getInstance().getConfigString("templateSource")+"contexts.xml";
                                                 if (sDoc.length()>0){
@@ -574,7 +574,7 @@
 
                                                         %>
                                                             <option value="<%=ctxtId%>" <%=(sSelectedTranCtxt.equalsIgnoreCase(ctxtId)?"SELECTED":"")%>>
-                                                                <%=getTran("Web.Occup",ctxtId,sWebLanguage)%>
+                                                                <%=getTran(request,"Web.Occup",ctxtId,sWebLanguage)%>
                                                             </option>
                                                         <%
                                                     }
@@ -614,23 +614,23 @@
                             %>
                                 <%-- print selected transactions --%>
                                 <tr>
-                                    <td class="admin" rowspan="3" width="<%=sTDAdminWidth%>"><%=getTran("web.occup","filter",sWebLanguage)%>&nbsp;</td>
+                                    <td class="admin" rowspan="3" width="<%=sTDAdminWidth%>"><%=getTran(request,"web.occup","filter",sWebLanguage)%>&nbsp;</td>
                                     <td class="admin2">
-                                        <input type="radio" class="radio" onClick="enableProceed();" onDblClick="enablePrint();uncheckRadio(this);" name="filter" id="filter1" value="select_trans" <%=(sSelectedFilter.equals("select_trans")? "CHECKED":"")%>><%=getLabel("web.occup","filter.select_trans",sWebLanguage,"filter1")%>
+                                        <input type="radio" class="radio" onClick="enableProceed();" onDblClick="enablePrint();uncheckRadio(this);" name="filter" id="filter1" value="select_trans" <%=(sSelectedFilter.equals("select_trans")? "CHECKED":"")%>><%=getLabel(request,"web.occup","filter.select_trans",sWebLanguage,"filter1")%>
                                     </td>
                                 </tr>
 
                                 <%-- print selected transaction types --%>
                                 <tr>
                                     <td class="admin2" colspan="2">
-                                        <input type="radio" class="radio" onClick="enableProceed();" onDblClick="enablePrint();uncheckRadio(this);" name="filter" id="filter2" value="select_trantypes" <%=(sSelectedFilter.equals("select_trantypes")? "CHECKED":"")%>><%=getLabel("web.occup","filter.select_trantypes",sWebLanguage,"filter2")%>
+                                        <input type="radio" class="radio" onClick="enableProceed();" onDblClick="enablePrint();uncheckRadio(this);" name="filter" id="filter2" value="select_trantypes" <%=(sSelectedFilter.equals("select_trantypes")? "CHECKED":"")%>><%=getLabel(request,"web.occup","filter.select_trantypes",sWebLanguage,"filter2")%>
                                     </td>
                                 </tr>
 
                                 <%-- print most recent transaction of the selected types --%>
                                 <tr>
                                     <td class="admin2" colspan="2">
-                                        <input type="radio" class="radio" onClick="enableProceed();" onDblClick="enablePrint();uncheckRadio(this);" name="filter" id="filter3" value="select_trantypes_recent" <%=(sSelectedFilter.equals("select_trantypes_recent")? "CHECKED":"")%>><%=getLabel("web.occup","filter.select_trantypes_recent",sWebLanguage,"filter3")%>
+                                        <input type="radio" class="radio" onClick="enableProceed();" onDblClick="enablePrint();uncheckRadio(this);" name="filter" id="filter3" value="select_trantypes_recent" <%=(sSelectedFilter.equals("select_trantypes_recent")? "CHECKED":"")%>><%=getLabel(request,"web.occup","filter.select_trantypes_recent",sWebLanguage,"filter3")%>
                                     </td>
                                 </tr>
                             <%
@@ -653,8 +653,8 @@
                                 <table width="100%" cellspacing="1">
                                     <tr>
                                         <td>
-                                            <a href="javascript:checkAll(true);"><%=getTran("Web.Manage.CheckDb","CheckAll",sWebLanguage)%></a>
-                                            <a href="javascript:checkAll(false);"><%=getTran("Web.Manage.CheckDb","UncheckAll",sWebLanguage)%></a>
+                                            <a href="javascript:checkAll(true);"><%=getTran(request,"Web.Manage.CheckDb","CheckAll",sWebLanguage)%></a>
+                                            <a href="javascript:checkAll(false);"><%=getTran(request,"Web.Manage.CheckDb","UncheckAll",sWebLanguage)%></a>
                                         </td>
                                         <td align="right">
                                             <a href="#bottom" class="top"><img src="<c:url value='/_img/themes/default/bottom.gif'/>" class="link" border="0"></a>
@@ -671,8 +671,8 @@
                                 <table width="100%" cellspacing="1">
                                     <tr>
                                         <td>
-                                            <a href="javascript:checkAll(true);"><%=getTran("Web.Manage.CheckDb","CheckAll",sWebLanguage)%></a>
-                                            <a href="javascript:checkAll(false);"><%=getTran("Web.Manage.CheckDb","UncheckAll",sWebLanguage)%></a>
+                                            <a href="javascript:checkAll(true);"><%=getTran(request,"Web.Manage.CheckDb","CheckAll",sWebLanguage)%></a>
+                                            <a href="javascript:checkAll(false);"><%=getTran(request,"Web.Manage.CheckDb","UncheckAll",sWebLanguage)%></a>
                                         </td>
                                         <td align="right">
                                             <a href="#top" class="topbutton">&nbsp;</a>
@@ -685,7 +685,7 @@
                         }
                         else{
                             %>
-                                <p><%=getTran("web","noRecordsFound",sWebLanguage)%></p>
+                                <p><%=getTran(request,"web","noRecordsFound",sWebLanguage)%></p>
                             <%
                         }
                     }
@@ -710,7 +710,7 @@
                                         while (tokenizer.hasMoreTokens()) {
                                             tmpLang = tokenizer.nextToken();
 
-                                            %><option value="<%=tmpLang%>"<%if (tmpLang.equalsIgnoreCase(sPrintLanguage)){out.print(" selected");}%>><%=getTran("Web.language",tmpLang,sWebLanguage)%></option><%
+                                            %><option value="<%=tmpLang%>"<%if (tmpLang.equalsIgnoreCase(sPrintLanguage)){out.print(" selected");}%>><%=getTran(request,"Web.language",tmpLang,sWebLanguage)%></option><%
                                         }
                                     %>
                                 </select>
@@ -784,12 +784,12 @@
 
                   <%-- SET PRINTBUTTON TO PROCEED --%>
                   function setPrintButtonTextToProceed(){
-                    transactionForm.printButton.value = "<%=getTran("web","proceed",sWebLanguage)%>";
+                    transactionForm.printButton.value = "<%=getTran(null,"web","proceed",sWebLanguage)%>";
                   }
 
                   <%-- SET PRINTBUTTON TO PRINT --%>
                   function setPrintButtonTextToPrint(){
-                    transactionForm.printButton.value = "<%=getTran("Web.Occup","medwan.common.print",sWebLanguage)%>";
+                    transactionForm.printButton.value = "<%=getTran(null,"Web.Occup","medwan.common.print",sWebLanguage)%>";
                   }
 
                   <%-- CLICK CHECKBOX --%>

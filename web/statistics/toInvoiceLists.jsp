@@ -19,11 +19,11 @@
     <table class="menu" width="100%" cellspacing="1" cellpadding="0">
         <%-- INVOICE TYPE --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web.finance","invoicetype",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web.finance","invoicetype",sWebLanguage)%></td>
             <td class="admin2">
-                <input type="radio" class="hand" id="FindTypePatient" name="FindInvoiceType" value="patient" checked="true"><%=getLabel("web","patient",sWebLanguage,"FindTypePatient")%>
-                <input type="radio" class="hand" id="FindTypeInsurar" name="FindInvoiceType" value="insurar"><%=getLabel("web","insurar",sWebLanguage,"FindTypeInsurar")%>
-                <input type="radio" class="hand" id="FindExtraInvoiceType" name="FindInvoiceType" value="extrainsurar"><%=getLabel("web","extrainsurar",sWebLanguage,"FindExtraInvoiceType")%>
+                <input type="radio" class="hand" id="FindTypePatient" name="FindInvoiceType" value="patient" checked="true"><%=getLabel(request,"web","patient",sWebLanguage,"FindTypePatient")%>
+                <input type="radio" class="hand" id="FindTypeInsurar" name="FindInvoiceType" value="insurar"><%=getLabel(request,"web","insurar",sWebLanguage,"FindTypeInsurar")%>
+                <input type="radio" class="hand" id="FindExtraInvoiceType" name="FindInvoiceType" value="extrainsurar"><%=getLabel(request,"web","extrainsurar",sWebLanguage,"FindExtraInvoiceType")%>
             </td>
         </tr>
         

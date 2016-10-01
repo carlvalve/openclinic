@@ -15,7 +15,7 @@
             sChecked = " checked";
         }
 
-        return "<input type='checkbox' name='" + index + "$" + sTab + "$" + sFieldName + "'" + sChecked + " id='" + sTab + "_cb" + sFieldName + "'>&nbsp;" + getLabel(sLabelType, sID, sWebLanguage, sTab + "_cb" + sFieldName) + "<br>";
+        return "<input type='checkbox' name='" + index + "$" + sTab + "$" + sFieldName + "'" + sChecked + " id='" + sTab + "_cb" + sFieldName + "'>&nbsp;" + getLabel(null,sLabelType, sID, sWebLanguage, sTab + "_cb" + sFieldName) + "<br>";
     }
 
     //--- HASH TO STRING --------------------------------------------------------------------------
@@ -87,7 +87,7 @@
     <%-- tab = Admin ----------------------------------------------------------------------------%>
     <table width="100%" cellspacing="0" class="menu">
         <tr class="label" height="18">
-            <td class="titleadmin"><%=getTran("Web","actualpersonaldata",sWebLanguage)%></td>
+            <td class="titleadmin"><%=getTran(request,"Web","actualpersonaldata",sWebLanguage)%></td>
         </tr>
         <tr>
             <td>
@@ -125,13 +125,13 @@
             </td>
         </tr>
     </table>
-    <a href="javascript:checkAll('Admin',true);"><%=getTran("Web.Manage.CheckDb","CheckAll",sWebLanguage)%></a>
-    <a href="javascript:checkAll('Admin',false);"><%=getTran("Web.Manage.CheckDb","UncheckAll",sWebLanguage)%></a>
+    <a href="javascript:checkAll('Admin',true);"><%=getTran(request,"Web.Manage.CheckDb","CheckAll",sWebLanguage)%></a>
+    <a href="javascript:checkAll('Admin',false);"><%=getTran(request,"Web.Manage.CheckDb","UncheckAll",sWebLanguage)%></a>
     <br><br>
     <%-- tab = AdminPrivate ---------------------------------------------------------------------%>
     <table width="100%" cellspacing="0" class="menu">
         <tr class="label" height="18">
-            <td class="titleadmin"><%=getTran("Web","private",sWebLanguage)%></td>
+            <td class="titleadmin"><%=getTran(request,"Web","private",sWebLanguage)%></td>
         </tr>
         <tr>
             <td>
@@ -157,8 +157,8 @@
             </td>
         </tr>
     </table>
-    <a href="javascript:checkAll('AdminPrivate',true);"><%=getTran("Web.Manage.CheckDb","CheckAll",sWebLanguage)%></a>
-    <a href="javascript:checkAll('AdminPrivate',false);"><%=getTran("Web.Manage.CheckDb","UncheckAll",sWebLanguage)%></a>
+    <a href="javascript:checkAll('AdminPrivate',true);"><%=getTran(request,"Web.Manage.CheckDb","CheckAll",sWebLanguage)%></a>
+    <a href="javascript:checkAll('AdminPrivate',false);"><%=getTran(request,"Web.Manage.CheckDb","UncheckAll",sWebLanguage)%></a>
     <br><br>
     <%-- BUTTONS --%>
     <%=ScreenHelper.alignButtonsStart()%>

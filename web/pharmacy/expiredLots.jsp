@@ -28,7 +28,7 @@
 	    </tr>
 	    
 		<tr>
-		    <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran("web","expiry.date.before",sWebLanguage)%></td>
+		    <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","expiry.date.before",sWebLanguage)%></td>
 	        <td class="admin2"><%=writeDateField("expirydate","transactionForm",sExpiryDate,sWebLanguage)%></td>
 	    </tr>
 	    <tr>
@@ -63,11 +63,11 @@
 				<table width="100%" class="list" cellpadding="0" cellspacing="1">
 				    <%-- header --%>
 					<tr class="admin">
-						<td><%=getTran("web","servicestock",sWebLanguage)%></td>
-						<td><%=getTran("web","productstock",sWebLanguage)%></td>
-						<td><%=getTran("web","batch.number",sWebLanguage)%></td>
-						<td><%=getTran("web","level",sWebLanguage)%></td>
-						<td><%=getTran("web","batch.expiration",sWebLanguage)%></td>
+						<td><%=getTran(request,"web","servicestock",sWebLanguage)%></td>
+						<td><%=getTran(request,"web","productstock",sWebLanguage)%></td>
+						<td><%=getTran(request,"web","batch.number",sWebLanguage)%></td>
+						<td><%=getTran(request,"web","level",sWebLanguage)%></td>
+						<td><%=getTran(request,"web","batch.expiration",sWebLanguage)%></td>
 					</tr>
 			<%
 			
@@ -101,11 +101,11 @@
 			%>			
 				</table>
 				
-				<%=recCount%> <%=getTran("web","recordsFound",sWebLanguage)%>
+				<%=recCount%> <%=getTran(request,"web","recordsFound",sWebLanguage)%>
 			<%
 		}
 		else{
-			%><%=getTran("web","noRecordsFound",sWebLanguage)%><%
+			%><%=getTran(request,"web","noRecordsFound",sWebLanguage)%><%
 		}		
 	}
 	catch(Exception e){

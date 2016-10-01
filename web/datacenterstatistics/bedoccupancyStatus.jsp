@@ -13,11 +13,11 @@
 %>
 <table class="sortable" id="searchresults" width='100%' cellspacing="1" cellpadding="0">
     <tr class="gray">
-        <th><%=getTran("web","service",sWebLanguage)%></th>
-        <th width='150'><%=getTran("web","totalbeds",sWebLanguage)%></th>
-        <th width='150'><%=getTran("web","occupiedbeds",sWebLanguage)%></th>
-        <th width='150'><%=getTran("web","freebeds",sWebLanguage)%></th>
-        <th width='150'><%=getTran("web","bedoccupancy",sWebLanguage)%></th>
+        <th><%=getTran(request,"web","service",sWebLanguage)%></th>
+        <th width='150'><%=getTran(request,"web","totalbeds",sWebLanguage)%></th>
+        <th width='150'><%=getTran(request,"web","occupiedbeds",sWebLanguage)%></th>
+        <th width='150'><%=getTran(request,"web","freebeds",sWebLanguage)%></th>
+        <th width='150'><%=getTran(request,"web","bedoccupancy",sWebLanguage)%></th>
     </tr>
 <%
     Vector services = Service.getServicesWithBeds();
@@ -32,7 +32,7 @@
         alloccupiedbeds+= occupiedBeds;
         
         out.print("<tr class='list'>"+
-                   "<td>"+(service.code.indexOf(".") > -1?getTran("service",service.code.split("\\.")[0],sWebLanguage)+" &gt; ":"")+"<a href='javascript:selectMyService(\""+service.code+"\");'>"+getTran("service", service.code, sWebLanguage)+"</a></td>"+
+                   "<td>"+(service.code.indexOf(".") > -1?getTran(request,"service",service.code.split("\\.")[0],sWebLanguage)+" &gt; ":"")+"<a href='javascript:selectMyService(\""+service.code+"\");'>"+getTran(request,"service", service.code, sWebLanguage)+"</a></td>"+
                    "<td>"+totalBeds+"</td>"+
                    "<td>"+occupiedBeds+"</td>"+
                    "<td><b>"+(totalBeds-occupiedBeds)+"</b></td>"+
@@ -43,7 +43,7 @@
     
     out.print("<table width='100%' cellspacing='1' cellpadding='0'>"+
                "<tr class='gray'>"+
-                "<td>"+getTran("web","total",sWebLanguage)+"</td>"+
+                "<td>"+getTran(request,"web","total",sWebLanguage)+"</td>"+
                 "<td width='150'>"+allbeds+"</td>"+
                 "<td width='150'>"+alloccupiedbeds+"</td>"+
                 "<td width='150'><b>"+(allbeds-alloccupiedbeds)+"</b></td>"+
@@ -55,14 +55,14 @@
 %>
 <table class="list" width='100%' cellspacing="1" cellpadding="0">
     <tr class="admin">
-        <td colspan='2'><%=(sServiceId.indexOf(".") > -1 ? getTran("service", sServiceId.split("\\.")[0], sWebLanguage)+" &gt; " : "")+getTran("service", sServiceId, sWebLanguage)%></td>
+        <td colspan='2'><%=(sServiceId.indexOf(".") > -1 ? getTran(request,"service", sServiceId.split("\\.")[0], sWebLanguage)+" &gt; " : "")+getTran(request,"service", sServiceId, sWebLanguage)%></td>
     </tr>
 </table>
 
 <table class="sortable" id="searchresults" width='100%' cellspacing="1" cellpadding="0">
     <tr class="gray">
-        <td width='50'><%=getTran("web","bed",sWebLanguage)%></td>
-        <td><%=getTran("web","patient",sWebLanguage)%></td>
+        <td width='50'><%=getTran(request,"web","bed",sWebLanguage)%></td>
+        <td><%=getTran(request,"web","patient",sWebLanguage)%></td>
     </tr>
 <%
         Service service = Service.getService(request.getParameter("ServiceID"));

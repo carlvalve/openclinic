@@ -20,11 +20,11 @@
     <%=writeTableHeader("Web","internal_references_summary",sWebLanguage," doBack();")%>
     <table width="100%" class="list" cellspacing="1" onkeydown="if(enterEvent(event,13)){transactionForm.submit();}">
         <tr>
-            <td class="admin2" width="<%=sTDAdminWidth%>"><%=getTran("Web","Begin",sWebLanguage)%></td>
+            <td class="admin2" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","Begin",sWebLanguage)%></td>
             <td class="admin2"><%=writeDateField("FindBegin","transactionForm",sFindBegin,sWebLanguage)%></td>
         </tr>
         <tr>
-            <td class="admin2"><%=getTran("Web","End",sWebLanguage)%></td>
+            <td class="admin2"><%=getTran(request,"Web","End",sWebLanguage)%></td>
             <td class="admin2"><%=writeDateField("FindEnd","transactionForm",sFindEnd,sWebLanguage)%></td>
         </tr>
         <%=ScreenHelper.setSearchFormButtonsStart()%>
@@ -58,16 +58,16 @@
 %>
     <table class="list" width="100%" cellspacing="1">
         <tr class="admin">
-            <td colspan="7"><%=getTran("openclinic.chuk","reference.opinion.asked",sWebLanguage)%></td>
+            <td colspan="7"><%=getTran(request,"openclinic.chuk","reference.opinion.asked",sWebLanguage)%></td>
         </tr>
         <tr class="gray">
             <td width="45"/>
-            <td width="200"><%=getTran("openclinic.chuk","reference.patient.name",sWebLanguage)%></td>
-            <td width="100"><%=getTran("openclinic.chuk","reference.request.date",sWebLanguage)%></td>
-            <td><%=getTran("openclinic.chuk","reference.request.service",sWebLanguage)%></td>
-            <td width="200"><%=getTran("openclinic.chuk","reference.status",sWebLanguage)%></td>
-            <td width="100"><%=getTran("openclinic.chuk","reference.execution.date",sWebLanguage)%></td>
-            <td width="200"><%=getTran("openclinic.chuk","reference.createdby",sWebLanguage)%></td>
+            <td width="200"><%=getTran(request,"openclinic.chuk","reference.patient.name",sWebLanguage)%></td>
+            <td width="100"><%=getTran(request,"openclinic.chuk","reference.request.date",sWebLanguage)%></td>
+            <td><%=getTran(request,"openclinic.chuk","reference.request.service",sWebLanguage)%></td>
+            <td width="200"><%=getTran(request,"openclinic.chuk","reference.status",sWebLanguage)%></td>
+            <td width="100"><%=getTran(request,"openclinic.chuk","reference.execution.date",sWebLanguage)%></td>
+            <td width="200"><%=getTran(request,"openclinic.chuk","reference.createdby",sWebLanguage)%></td>
         </tr>
         <tbody class="hand">
         <%
@@ -95,7 +95,7 @@
                 sServiceUID = checkString(reference.getCreationServiceUID());
 
                 if (sServiceUID.length()>0){
-                    sServiceName = getTran("service",sServiceUID,sWebLanguage);
+                    sServiceName = getTran(request,"service",sServiceUID,sWebLanguage);
                 }
                 else {
                     sServiceName = "";
@@ -128,20 +128,20 @@
         %>
         </tbody>
     </table>
-    <%=getTran("Web.Occup","total-number",sWebLanguage)%>: <%=iCounter%>
+    <%=getTran(request,"Web.Occup","total-number",sWebLanguage)%>: <%=iCounter%>
     <br/><br/>
     <table class="list" width="100%" cellspacing="1">
         <tr class="admin">
-            <td colspan="7"><%=getTran("openclinic.chuk","reference.opinion.given",sWebLanguage)%></td>
+            <td colspan="7"><%=getTran(request,"openclinic.chuk","reference.opinion.given",sWebLanguage)%></td>
         </tr>
         <tr class="gray">
             <td width="45"/>
-            <td width="200"><%=getTran("openclinic.chuk","reference.patient.name",sWebLanguage)%></td>
-            <td width="100"><%=getTran("openclinic.chuk","reference.request.date",sWebLanguage)%></td>
-            <td><%=getTran("openclinic.chuk","reference.claimant.service",sWebLanguage)%></td>
-            <td width="200"><%=getTran("openclinic.chuk","reference.status",sWebLanguage)%></td>
-            <td width="100"><%=getTran("openclinic.chuk","reference.execution.date",sWebLanguage)%></td>
-            <td width="200"><%=getTran("openclinic.chuk","reference.createdby",sWebLanguage)%></td>
+            <td width="200"><%=getTran(request,"openclinic.chuk","reference.patient.name",sWebLanguage)%></td>
+            <td width="100"><%=getTran(request,"openclinic.chuk","reference.request.date",sWebLanguage)%></td>
+            <td><%=getTran(request,"openclinic.chuk","reference.claimant.service",sWebLanguage)%></td>
+            <td width="200"><%=getTran(request,"openclinic.chuk","reference.status",sWebLanguage)%></td>
+            <td width="100"><%=getTran(request,"openclinic.chuk","reference.execution.date",sWebLanguage)%></td>
+            <td width="200"><%=getTran(request,"openclinic.chuk","reference.createdby",sWebLanguage)%></td>
         </tr>
         <tbody class="hand">
         <%
@@ -167,7 +167,7 @@
                 sServiceUID = checkString(reference.getRequestServiceUID());
 
                 if (sServiceUID.length()>0){
-                    sServiceName = getTran("service",sServiceUID,sWebLanguage);
+                    sServiceName = getTran(request,"service",sServiceUID,sWebLanguage);
                 }
                 else {
                     sServiceName = "";
@@ -201,7 +201,7 @@
         %>
         </tbody>
     </table>
-    <%=getTran("Web.Occup","total-number",sWebLanguage)%>: <%=iCounter%>
+    <%=getTran(request,"Web.Occup","total-number",sWebLanguage)%>: <%=iCounter%>
     <script>
         function doOpen(sUID, sPatientUID){
             window.location.href= "<c:url value='/main.do'/>?Page=healthrecord/referenceEdit.jsp&EditUID="+sUID+"&PersonID="+sPatientUID+"&ts="+new Date().getTime();

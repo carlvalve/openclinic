@@ -90,7 +90,7 @@
 	<form name="localCodeForm" id="localCodeForm" method="post" action="<c:url value="/popup.jsp?Page=/system/manageLocalCodes.jsp"/>">
 		<table width='100%' class="list" cellpadding="0" cellspacing="1">
 			<tr>
-				<td class='admin'><%=getTran("web","code",sWebLanguage)%></td>
+				<td class='admin'><%=getTran(request,"web","code",sWebLanguage)%></td>
 				<td class='admin2'><%=sType%> <input type='text' name='localcode' size='10' value='<%=sLocalCode %>'/></td>
 			</tr>
 			
