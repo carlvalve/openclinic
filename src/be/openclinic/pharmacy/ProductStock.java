@@ -222,6 +222,10 @@ public class ProductStock extends OC_Object implements Comparable {
         return level;
     }
     
+    public int getAvailableLevel() {
+        return level-getExpiredProducts();
+    }
+    
     public int getReceivedForProductionOrder(String productionOrderId){
     	int netReceived=0;
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
@@ -690,6 +694,35 @@ public class ProductStock extends OC_Object implements Comparable {
         return uid;
     }
     
+    public int getExpiredProducts(){
+    	int level=0;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+        	ps = oc_conn.prepareStatement("select sum(OC_BATCH_LEVEL) as level from OC_BATCHES where OC_BATCH_LEVEL>0 and OC_BATCH_PRODUCTSTOCKUID=? and OC_BATCH_END<=?");
+        	ps.setString(1, this.getUid());
+        	ps.setDate(2, new java.sql.Date(new java.util.Date().getTime()));
+        	rs=ps.executeQuery();
+        	if(rs.next()){
+        		level=rs.getInt("level");
+        	}
+        }
+        catch(Exception e){
+        	e.printStackTrace();
+        }
+        finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                oc_conn.close();
+            }
+            catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+    	return level;
+    }
     public boolean hasExpiringProducts(int days){
     	boolean bHas=false;
     	long time = days*24*3600;

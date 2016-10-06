@@ -114,7 +114,9 @@ public class PDFArchiveDocumentBarcodeGenerator extends PDFOfficialBasic {
             table.setWidthPercentage(100);
 
             Image image = PdfBarcode.getQRCode(sCode, docWriter, MedwanQuery.getInstance().getConfigInt("archiveDocumentBarcodeSize",200));
-            image.scaleToFit(doc.right()/MedwanQuery.getInstance().getConfigInt("archiveDocumentBarcodeColumns",2), doc.top());
+            if(MedwanQuery.getInstance().getConfigInt("archiveBarcodeScaleToFit",1)==1){
+            	image.scaleToFit(doc.right()/MedwanQuery.getInstance().getConfigInt("archiveDocumentBarcodeColumns",2), doc.top());
+            }
 
             cell = new PdfPCell(image);
             cell.setBorder(PdfPCell.NO_BORDER);
@@ -141,6 +143,10 @@ public class PDFArchiveDocumentBarcodeGenerator extends PDFOfficialBasic {
             cell.setPaddingTop(0);
             cell.setPaddingBottom(0);
             table.addCell(cell);
+            for(int n=2;n<MedwanQuery.getInstance().getConfigInt("archiveDocumentBarcodeColumns",2);n++){
+            	cell=createBorderlessCell(1);
+                table.addCell(cell);
+            }
 
             doc.add(table);
         }

@@ -72,10 +72,10 @@ public class ScreenHelper {
     	s+="<script>";
     	String sDrawing=ScreenHelper.getDrawing(tran.getServerId(),tran.getTransactionId(),itemtype);
     	if(sDrawing.length()<10){
-    		s+="context = initCanvas('canvasDiv',100,100,'"+sContextPath+image+"');";
+    		s+="context = initCanvas('"+name+"',100,100,'"+sContextPath+image+"');";
     	}
     	else {
-    		s+="context = initCanvas('canvasDiv',100,100,'"+sDrawing+"');";
+    		s+="context = initCanvas('"+name+"',100,100,'"+sDrawing+"');";
     	}
     	s+="</script>";
     	return s;
@@ -92,9 +92,9 @@ public class ScreenHelper {
     	s+="<img src='"+sContextPath+"/_img/themes/default/canvas_big.png' width='14px' onclick='canvasSetRadius(10)'/>";
     	s+="</td><td>";
     	s+="<img src='"+sContextPath+"/_img/themes/default/previous.jpg' width='14px' onclick='canvasReloadBaseImage()'/>";
-    	s+="<img src='"+sContextPath+"/_img/themes/default/erase.png' width='14px' onclick='canvasLoadImage(\""+sContextPath+image+"\")'/>";
+    	//s+="<img src='"+sContextPath+"/_img/themes/default/erase.png' width='14px' onclick='updateDrawing()'/>";
     	s+="</td><td>";
-    	s+="<select id='drawingtype' class='text'>"+writeSelect(request,imageType,"",((User)request.getSession().getAttribute("activeUser")).person.language)+"</select>";
+    	s+="<select onchange='updateDrawing()' id='drawingtype' class='text'>"+writeSelect(request,imageType,"",((User)request.getSession().getAttribute("activeUser")).person.language)+"</select>";
     	s+="<img src='"+sContextPath+"/_img/icons/icon_default.gif' width='14px' onclick='updateDrawing()'/>";
     	s+="</td><td/></tr><tr><td colspan='3'>";
     	s+="<div id='"+name+"' onmouseover='this.style.cursor=\"hand\"'></div>";
@@ -107,14 +107,14 @@ public class ScreenHelper {
     	s+="<tr><td><img src='"+sContextPath+"/_img/themes/default/canvas_green.png' width='14px' onclick='canvasSetColor(\"green\")'/></td></tr>";
     	s+="</table></td></tr></table>";
     	s+="<input type='hidden' name='drawingContent' id='drawingContent'/>";
-    	s+="<input type='hidden' name='currentTransactionVO.items.<ItemVO[hashCode="+tran.getItem(itemtype).hashCode()+"]>.value' value='drawingContent'/>";
+    	s+="<input type='hidden' id='"+name+"Drawing' name='currentTransactionVO.items.<ItemVO[hashCode="+tran.getItem(itemtype).hashCode()+"]>.value' value='drawingContent'/>";
     	s+="<script>";
     	String sDrawing=ScreenHelper.getDrawing(tran.getServerId(),tran.getTransactionId(),itemtype);
     	if(sDrawing.length()<10){
-    		s+="context = initCanvas('canvasDiv',100,100,'"+sContextPath+image+"');";
+    		s+="context = initCanvas('"+name+"',100,100,'"+sContextPath+image+"');";
     	}
     	else {
-    		s+="context = initCanvas('canvasDiv',100,100,'"+sDrawing+"');";
+    		s+="context = initCanvas('"+name+"',100,100,'"+sDrawing+"');";
     	}
     	s+="function updateDrawing(){";
     	s+="  drawingtype=document.getElementById('drawingtype').value.replace(new RegExp('<sl>', 'g'), '/');";
@@ -136,10 +136,10 @@ public class ScreenHelper {
     	s+="<script>";
     	String sDrawing=ScreenHelper.getDrawing(Integer.parseInt(documentuid.split("\\.")[0]),Integer.parseInt(documentuid.split("\\.")[1]),documentuid.split("\\.")[2]);
     	if(sDrawing.length()<10){
-    		s+="context = initCanvas('canvasDiv',100,100,'"+sContextPath+image+"');";
+    		s+="context = initCanvas('"+name+"',100,100,'"+sContextPath+image+"');";
     	}
     	else {
-    		s+="context = initCanvas('canvasDiv',100,100,'"+sDrawing+"');";
+    		s+="context = initCanvas('"+name+"',100,100,'"+sDrawing+"');";
     	}
     	s+="</script>";
     	return s;
