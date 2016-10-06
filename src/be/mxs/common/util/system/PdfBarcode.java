@@ -5,6 +5,8 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -76,7 +78,11 @@ public class PdfBarcode {
 			    	f.delete();
 			    }
 			    ImageIO.write(bim, "PNG", f);
-			    barcode=decode(bim,null);
+	            Map<DecodeHintType,Object> tmpHintsMap = new EnumMap<DecodeHintType, Object>(DecodeHintType.class);
+	            tmpHintsMap.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
+	            tmpHintsMap.put(DecodeHintType.POSSIBLE_FORMATS, EnumSet.allOf(BarcodeFormat.class));
+	            tmpHintsMap.put(DecodeHintType.PURE_BARCODE, Boolean.FALSE);
+			    barcode=decode(bim,tmpHintsMap);
 			    if(barcode.length()>0){
 			    	Debug.println("Found barcode value "+barcode+" on page "+mypage);
 					break;		    	
@@ -84,7 +90,7 @@ public class PdfBarcode {
 			    else {
 				    for(int n=0;n<bim.getHeight()*9/10;n+=bim.getHeight()/10){
 					    BufferedImage cropedImage = bim.getSubimage(0, n, bim.getWidth(), bim.getHeight()/10);
-					    barcode=decode(cropedImage,null);
+					    barcode=decode(cropedImage,tmpHintsMap);
 					    if(barcode.length()==11){
 					    	Debug.println("Found barcode value "+barcode+" on page "+mypage);
 					    	bExit=true;
@@ -136,7 +142,7 @@ public class PdfBarcode {
         try {
             PdfContentByte cb = docWriter.getDirectContent();
             Hashtable<EncodeHintType, ErrorCorrectionLevel> hintMap = new Hashtable<EncodeHintType, ErrorCorrectionLevel>();
-            hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
+            hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
             QRCodeWriter qrCodeWriter = new QRCodeWriter();
             BitMatrix byteMatrix = qrCodeWriter.encode(text,BarcodeFormat.QR_CODE, size, size, hintMap);
             int CrunchifyWidth = byteMatrix.getWidth();

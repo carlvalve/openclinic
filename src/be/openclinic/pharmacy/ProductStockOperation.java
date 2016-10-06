@@ -284,6 +284,9 @@ public class ProductStockOperation extends OC_Object{
     			else if(getSourceDestination().getObjectType().equalsIgnoreCase("production")){
     				s=ScreenHelper.getTran("web", "production", language);
     			}
+    			else {
+    				s=ScreenHelper.checkString(getSourceDestination().getObjectUid());
+    			}
     		}
     		else {
     			s=ScreenHelper.checkString(getSourceDestination().getObjectUid());

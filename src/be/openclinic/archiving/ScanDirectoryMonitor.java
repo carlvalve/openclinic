@@ -251,6 +251,7 @@ public class ScanDirectoryMonitor implements Runnable{
 		//****************************************************************************
     	try{
 	    	String barcode = PdfBarcode.getBarcodeFromDocument(file);
+	    	System.out.println("########################################## "+barcode);
 	    	if(barcode.length()==11){
 	    		String sUDI = barcode;
 	    		if(validUDI(sUDI)){
@@ -458,7 +459,7 @@ public class ScanDirectoryMonitor implements Runnable{
         		person=AdminPerson.getAdminPerson(obj.getString(Tag.PatientID));
         	}
         	Debug.println("Patient Name: "+person.getFullName());
-        	if(person.lastname.trim().length()>0){
+        	if(person.lastname.trim().length()>0 || MedwanQuery.getInstance().getConfigInt("pacsTestLoad",0)==1){
 	    		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
 	    		PreparedStatement ps=null;
 	    		ResultSet rs=null;
@@ -547,7 +548,7 @@ public class ScanDirectoryMonitor implements Runnable{
 			    				MedwanQuery.getInstance().updateTransaction(Integer.parseInt(obj.getString(Tag.PatientID)),transaction);
 			    			}
 			    			else{
-			    				MedwanQuery.getInstance().updateTransaction(9966,transaction);
+			    				MedwanQuery.getInstance().updateTransaction(9975,transaction);
 			    			}
 			    		}
 	
@@ -663,9 +664,9 @@ public class ScanDirectoryMonitor implements Runnable{
 		
 		if(MedwanQuery.getInstance().getConfigInt("pacsTestLoad",0)==1){
 			DicomObject obj = Dicom.getDicomObject(file);
-			obj.putString(Tag.PatientName, VR.PN, "VERBEKE^FRANK");
-			obj.putString(Tag.PatientAge, VR.AS, "51");
-			obj.putString(Tag.PatientID, VR.LO, "9966");
+			obj.putString(Tag.PatientName, VR.PN, "TEST^TEST");
+			obj.putString(Tag.PatientAge, VR.AS, "2");
+			obj.putString(Tag.PatientID, VR.LO, "9975");
 			obj.putString(Tag.PatientSex, VR.LO, "M");
 	    	File toFile = new File(SCANDIR_BASE+"/"+SCANDIR_TO+"/"+sPathAndName);
 	    	Dicom.writeDicomObject(obj, toFile);
