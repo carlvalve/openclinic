@@ -22,7 +22,7 @@ Modalbox.Methods = {
 		overlayClose: false, // Close modal box by clicking on overlay
 		width: 500, // Default width in px
 		height: 80, // Default height in px
-		overlayOpacity: .55, // Default overlay opacity
+		overlayOpacity: .35, // Default overlay opacity
 		overlayDuration: .10, // Default overlay fade in/out duration in seconds
 		slideDownDuration: .2, // Default Modalbox appear slide down effect in seconds
 		slideUpDuration: .1, // Default Modalbox hiding slide up effect in seconds
@@ -68,7 +68,7 @@ Modalbox.Methods = {
 		this.MBframe.insert({'bottom':this.MBcontent});
 
 		// Inserting into DOM. If parameter set and form element have been found will inject into it. Otherwise will inject into body as topmost element.
-		// Be sure to set padding and marging to null via CSS for both body and (in case of asp.net) form elements.
+		// Be sure to set padding and margin to null via CSS for both body and (in case of asp.net) form elements.
 		var injectToEl = this.options.aspnet ? $(document.body).down('form') : $(document.body);
 		injectToEl.insert({'top':this.MBwindow});
 		injectToEl.insert({'top':this.MBoverlay});
@@ -232,7 +232,7 @@ Modalbox.Methods = {
 
 	resizeToInclude: function(element,options){
 
-		// Resizes the modalbox window to the camulative height of element. Calculations are using CSS properties for margins and border.
+		// Resizes the modalbox window to the cumulative height of element. Calculations are using CSS properties for margins and border.
 		// This method might be useful to resize modalbox before including or updating content.
 
 		var el = $(element);
@@ -308,6 +308,9 @@ Modalbox.Methods = {
 				}.bind(this)
 			});
 		} else{ // Height is defined. Creating a scrollable window
+			if(this.options.height>screen.height-200){
+				this.options.height=screen.height-200;
+			}
 			this._setWidth();
 			this.MBcontent.setStyle({overflow: 'auto',height: $(this.MBwindow).getHeight() - $(this.MBheader).getHeight() - 13 + 'px'});
 			setTimeout(function(){ // MSIE fix

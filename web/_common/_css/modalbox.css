@@ -15,7 +15,7 @@
 
 #MB_window {
   position: absolute;
-  margin-top : 50;
+  margin-top : 0;
   border: 0 solid;
   text-align: left;
   z-index: 9999999;

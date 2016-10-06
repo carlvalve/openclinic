@@ -21,6 +21,7 @@ html {
  height:100%;
 }
 
+
 #overlay {
      visibility: hidden;
      position: absolute;
@@ -34,17 +35,12 @@ html {
 }
 
 #overlay div {
-     margin: 100px auto;
+     margin: 10px auto;
      background-color: #fff;
      border:1px solid #000;
      padding:15px;
      text-align:center;
      overflow: hidden;
-}
-
-body {
- height:100%;
- width:100%;
 }
 
 * {
@@ -732,7 +728,8 @@ A.underlined:hover {
 
 /*OTHERS*/
 body {
- margin:0;
+ margin: 0;
+ padding: 0;
  color:#333;
  font-family:arial, sans-serif;
  font-size:10px;
@@ -1209,6 +1206,16 @@ TR.Label2 {
  font-family:arial, sans-serif;
  font-size:9px;
  font-weight:bold;
+ text-align:left;
+ padding:1px;
+ text-indent:5px;
+}
+
+TR.Label3 {
+ color:#333;
+ font-family:arial, sans-serif;
+ font-size:9px;
+ font-weight:normal;
  text-align:left;
  padding:1px;
  text-indent:5px;

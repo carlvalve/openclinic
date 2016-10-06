@@ -84,6 +84,7 @@
 				availableProductStocksVector.add(productStock);
 				availableProductStocks.put(productStock,stock);
 			}
+			out.println("<script>var availableLevel="+productStock.getAvailableLevel()+";</script>");
         }
     }
 
@@ -668,6 +669,20 @@
 
                   <%-- DISPLAY SOURCE DESTINATION SELECTOR --%>
                   function displaySrcDestSelector(){
+                	if(document.getElementById('EditOperationDescr') && document.getElementById('EditOperationDescr').value!='medicationdelivery.4' && document.getElementById("saveButton")){
+                  	  if(availableLevel<=0){
+	            		  //Hide save button
+	            		  if(document.getElementById("saveButton")){
+	            			  document.getElementById("saveButton").style.display='none';
+	            		  }
+	            	  }
+                  	  else{
+                  		  document.getElementById("saveButton").style.display='';
+                  	  }
+                	}
+               	  else{
+                 		  document.getElementById("saveButton").style.display='';
+                 	  }
                     var srcDestType, emptyEditSrcDest, srcDestUid, srcDestName;
 					if(document.getElementById('prescriptionline')){
 						document.getElementById('prescriptionline').style.visibility = "hidden";
@@ -844,7 +859,7 @@
                 <%=ScreenHelper.alignButtonsStart()%>
                     <%
                         if(sAction.equals("showDetailsNew") && availableProductStocks.size()>0 ){
-                            %><input class="button" type="button" name="saveButton" value='<%=getTranNoLink("Web","deliver",sWebLanguage)%>' onclick="doDeliver();"><%
+                            %><input class="button" type="button" name="saveButton" id="saveButton" value='<%=getTranNoLink("Web","deliver",sWebLanguage)%>' onclick="doDeliver();"><%
                         }
                     %>
                     <input type="button" class="button" name="closeButton" value='<%=getTranNoLink("Web","close",sWebLanguage)%>' onclick='window.close();'>

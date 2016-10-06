@@ -127,20 +127,22 @@
 			        <tr>
 			            <td class="admin" colspan="2"><%=getTran(request,"openclinic.chuk","surgical.act",sWebLanguage)%></td>
 			            <td class="admin2">
-			                <select id="act1" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT1" property="itemId"/>]>.value">
+			            	<table cellpadding="0" cellspacing="0">
+			                <tr><td><select id="act1" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT1" property="itemId"/>]>.value">
 				            	<option/>
 				            	<%=ScreenHelper.writeSelect(request,"surgicalacts",(((TransactionVO)transaction).getItem("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT1")).getValue(),sWebLanguage,false,true) %>
-			                </select><br>
+			                </select></td></tr>
 			                
-			                <select id="act2" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT2" property="itemId"/>]>.value">
+			                <tr><td><select id="act2" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT2" property="itemId"/>]>.value">
 				            	<option/>
 				            	<%=ScreenHelper.writeSelect(request,"surgicalacts",(((TransactionVO)transaction).getItem("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT2")).getValue(),sWebLanguage,false,true) %>
-			                </select><br>
+			                </select></td></tr>
 			                
-			                <select id="act3" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT3" property="itemId"/>]>.value">
+			                <tr><td><select id="act3" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT3" property="itemId"/>]>.value">
 				            	<option/>
 				            	<%=ScreenHelper.writeSelect(request,"surgicalacts",(((TransactionVO)transaction).getItem("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT3")).getValue(),sWebLanguage,false,true) %>
-			                </select>
+			                </select></td></tr>
+			                </table>
 			            </td>
 			        </tr>
 			

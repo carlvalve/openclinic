@@ -293,9 +293,7 @@
               <%-- DELETE ALL FAMILY RELATIONS --%>
               function deleteAllFR(){
                 if(tblFR.rows.length > 1){
-                  if(yesnoDeleteDialog()){
-                    deleteAllFRNoConfirm();
-                  }
+              		yesnoModalBox("deleteAllFRNoConfirm()","<%=ScreenHelper.getTranNoLink("Web","areYouSureToDelete",sWebLanguage)%>");
                 }
               }
 
@@ -324,14 +322,16 @@
 
               initRelationsArray(sFR);
 
-              <%-- DELETE FAMILY RELATION --%>
               function deleteFR(rowid){
-                  if(yesnoDeleteDialog()){
-                  sFR = deleteRowFromArrayString(sFR,rowid.id);
+				  yesnoModalBox("doDeleteFR("+rowid.id+","+rowid.rowIndex+")","<%=ScreenHelper.getTranNoLink("Web","areYouSureToDelete",sWebLanguage)%>");
+           	  }
+              
+              <%-- DELETE FAMILY RELATION --%>
+              function doDeleteFR(id,index){
+                  sFR = deleteRowFromArrayString(sFR,id);
                   initRelationsArray(sFR);
-                  tblFR.deleteRow(rowid.rowIndex);
+                  tblFR.deleteRow(index);
                   updateRowStyles();
-                }
               }
 
               <%-- popup : search patient --%>
