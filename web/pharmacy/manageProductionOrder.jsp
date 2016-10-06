@@ -182,7 +182,7 @@
 						<tr>
 							<td width='33%'><a href='javascript:openInvoice("<%=invoice.getUid() %>");'><%=invoice.getUid() %></a></td>
 							<td class='admin'><%=getTran(request,"web","estimateddeliverydate",sWebLanguage) %></td>
-							<td class='admin2'><%=order.getCloseDateTime()!=null?order.getEstimatedDelivery():ScreenHelper.writeDateField("ProductionOrderEstimatedDelivery", "transactionForm", order.getEstimatedDelivery(), true, false, sWebLanguage, sCONTEXTPATH)%></td>
+							<td class='admin2'><%=order.getCloseDateTime()!=null?order.getEstimatedDelivery():ScreenHelper.writeDateField("ProductionOrderEstimatedDelivery", "transactionForm", order.getEstimatedDelivery(), true, true, sWebLanguage, sCONTEXTPATH)%></td>
 						</tr>
 					</table>
 				</td>

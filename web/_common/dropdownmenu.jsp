@@ -683,7 +683,7 @@
     var html = "<div style='border:1px solid #bbccff;padding:1px;'>"+
 			    "<p style='text-align:center'>"+msg+"</p>"+
 			    "<p style='text-align:center'>"+
-			     "<input type='button' class='button' style='padding-left:7px;padding-right:7px' value='<%=getTranNoLink("web","yes",sWebLanguage)%>' onclick='eval(\""+yesFunction+"\");Modalbox.hide();'/>&nbsp;&nbsp;"+
+			     "<input type='button' class='button' style='padding-left:7px;padding-right:7px' value='<%=getTranNoLink("web","yes",sWebLanguage)%>' onclick='"+yesFunction+";Modalbox.hide();'/>&nbsp;&nbsp;"+
 			     "<input type='button' class='button' style='padding-left:7px;padding-right:7px' value='<%=getTranNoLink("web","no",sWebLanguage)%>' onclick='Modalbox.hide();'/>"+
 			    "</p>"+
 			   "</div>";

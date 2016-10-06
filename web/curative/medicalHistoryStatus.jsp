@@ -23,7 +23,7 @@ try{
         <%-- PAGE TITLE --%>
         <tr class="admin">
             <td>
-                <%=getTran(request,"curative","medicalhistory.status.title",sWebLanguage)%>&nbsp;
+                <%=getTran(request,"curative","clinicaldocuments.status.title",sWebLanguage)%>&nbsp;
                 <a href="javascript:newExamination();"><img src="<c:url value='/_img/icons/icon_new.gif'/>" class="link" alt="<%=getTranNoLink("web","manageExaminations",sWebLanguage)%>" style="vertical-align:-4px;"></a>
 				<%if(MedwanQuery.getInstance().getConfigString("quickTransaction1."+activeUser.userid,"").length()>0){ %>
                     <a href="javascript:newFastTransaction('<%=MedwanQuery.getInstance().getConfigString("quickTransaction1."+activeUser.userid)%>');"><img src="<c:url value='/_img/icons/icon_new1.gif'/>" class="link" title="<%=getTranNoLink("web.occup",MedwanQuery.getInstance().getConfigString("quickTransaction1."+activeUser.userid).split("\\&")[0],sWebLanguage)%>" style="vertical-align:-4px;"></a>

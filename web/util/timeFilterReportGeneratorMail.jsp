@@ -657,8 +657,10 @@
 		return sSelect;
 	}
 %>
-<table width='100%'>
 <%
+	StringBuffer output=new StringBuffer("");
+	output.append("<table width='100%'>");
+	try{
 		long day=24*3600*1000;
 		StringBuffer csvResults = new StringBuffer();
 		String reportTemplate = checkString(request.getParameter("template"));
@@ -666,7 +668,7 @@
 		String end = ScreenHelper.formatDate(new java.util.Date(ScreenHelper.parseDate(checkString(request.getParameter("end"))).getTime()+day));
 		
 		
-		//reportTemplate = MedwanQuery.getInstance().getConfigString("nationalReportTemplate","http://localhost/openclinic/_common/xml/senegalmonthlyreportPS.xml")+"?ts="+getTs();
+		reportTemplate = MedwanQuery.getInstance().getConfigString("nationalReportTemplate","http://localhost/openclinic/_common/xml/senegalmonthlyreportPS.xml")+"?ts="+getTs();
 		
 		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
 		PreparedStatement ps = null;
@@ -674,23 +676,23 @@
 		SAXReader reader = new SAXReader(false);
 		Document document = reader.read(new URL(reportTemplate));
 		Element root = document.getRootElement();
+		Element schedule = root.element("schedule");
+		if(schedule.attributeValue("type").equalsIgnoreCase("daily") && schedule.attributeValue("dow").contains(""+new GregorianCalendar().get(Calendar.DAY_OF_WEEK))){
+			begin=ScreenHelper.formatDate(new java.util.Date(new java.util.Date().getTime()-day));
+			end=ScreenHelper.formatDate(new java.util.Date());
+		}
 		Iterator results = root.elementIterator("result");
 		while(results.hasNext()){
 			SortedMap rows = new TreeMap();
 			Element result = (Element)results.next();
 			if(result.attributeValue("type").equalsIgnoreCase("title")){
-				out.println("<tr class='admin'><td colspan='2'>"+result.element("label").getText()+"</td></tr>");
-				out.flush();
-				csvResults.append(result.element("label").getText()+"\n");
+				output.append("<tr><td colspan='2'>"+result.element("label").getText()+"</td></tr>");
 			}
 			else if(result.attributeValue("type").equalsIgnoreCase("subtitle")){
-				out.println("<tr><td class='titleadmin' colspan='2'>"+result.element("label").getText()+"</td></tr>");
-				out.flush();
-				csvResults.append(result.element("label").getText()+"\n");
+				output.append("<tr><td colspan='2'>"+result.element("label").getText()+"</td></tr>");
 			}
 			else if(result.attributeValue("type").equalsIgnoreCase("configvalue")){
-				out.println("<tr><td class='titleadmin'>"+result.element("label").getText()+"</td><td>"+MedwanQuery.getInstance().getConfigString(result.element("label").getText(),result.element("label").attributeValue("default"))+"</td></tr>");
-				out.flush();
+				output.append("<tr><td>"+result.element("label").getText()+"</td><td>"+MedwanQuery.getInstance().getConfigString(result.element("label").getText(),result.element("label").attributeValue("default"))+"</td></tr>");
 			}
 			else if(result.attributeValue("type").equalsIgnoreCase("value")){
 				Element filter = result.element("filter");
@@ -723,12 +725,10 @@
 							sSelect=setSelectString(value, sSelect, parameters, "OC_ENCOUNTER_OUTCOME", value.getText());
 						}
 						else if(selectField.attributeValue("name").equalsIgnoreCase("serviceuid")){
-							System.out.println("1");
 							Element value = selectField.element("value");
 							sSelect=setSelectString(value, sSelect, parameters, "OC_ENCOUNTER_SERVICEUID", value.getText());
 						}
 						else if(selectField.attributeValue("name").equalsIgnoreCase("duration")){
-							System.out.println("2");
 							Element value = selectField.element("value");
 							sSelect=setSelectInt(value, sSelect, parameters, MedwanQuery.getInstance().datediff("day", "OC_ENCOUNTER_BEGINDATE", "OC_ENCOUNTER_ENDDATE"), Integer.parseInt(value.getText()));
 						}
@@ -737,19 +737,15 @@
 							sSelect=setSelectString(value, sSelect, parameters, "OC_ENCOUNTER_ORIGIN", value.getText());
 						}
 					}
-					System.out.println(sSelect);
 					ps=conn.prepareStatement(sSelect);
 					for(int n=0;n<parameters.size();n++){
 						Object p = parameters.elementAt(n);
 						setParameter(p, ps, n);
-						System.out.println("parameter="+p);
 					}
 					rs=ps.executeQuery();
 					if(rs.next()){
 						if(filter.elementText("outputvalue").equalsIgnoreCase("duration")){
-							out.println("<tr><td class='admin'>"+result.element("label").getText()+"</td><td class='admin2'>"+rs.getInt("duration")+"</td></tr>");
-							out.flush();
-							csvResults.append(result.element("label").getText()+";"+rs.getInt("duration")+"\n");
+							output.append("<tr><td>"+result.element("label").getText()+"</td><td>"+rs.getInt("duration")+"</td></tr>");
 						}
 					}
 					rs.close();
@@ -808,32 +804,22 @@
 					if(rs.next()){
 						if(filter.elementText("outputvalue").equalsIgnoreCase("patientincome")){
 							String income=new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(rs.getDouble("patientincome"));
-							out.println("<tr><td class='admin'>"+result.element("label").getText()+"</td><td class='admin2'>"+income+"</td></tr>");
-							out.flush();
-							csvResults.append(result.element("label").getText()+";"+income+"\n");
+							output.append("<tr><td>"+result.element("label").getText()+"</td><td>"+income+"</td></tr>");
 						}
 						else if(filter.elementText("outputvalue").equalsIgnoreCase("insurerincome")){
 							String income=new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(rs.getDouble("insurerincome"));
-							out.println("<tr><td class='admin'>"+result.element("label").getText()+"</td><td class='admin2'>"+income+"</td></tr>");
-							out.flush();
-							csvResults.append(result.element("label").getText()+";"+income+"\n");
+							output.append("<tr><td>"+result.element("label").getText()+"</td><td>"+income+"</td></tr>");
 						}
 						else if(filter.elementText("outputvalue").equalsIgnoreCase("extrainsurerincome")){
 							String income=new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(rs.getDouble("extrainsurerincome"));
-							out.println("<tr><td class='admin'>"+result.element("label").getText()+"</td><td class='admin2'>"+income+"</td></tr>");
-							out.flush();
-							csvResults.append(result.element("label").getText()+";"+income+"\n");
+							output.append("<tr><td>"+result.element("label").getText()+"</td><td>"+income+"</td></tr>");
 						}
 						else if(filter.elementText("outputvalue").equalsIgnoreCase("totalincome")){
 							String income=new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(rs.getDouble("patientincome")+rs.getDouble("insurerincome")+rs.getDouble("extrainsurerincome"));
-							out.println("<tr><td class='admin'>"+result.element("label").getText()+"</td><td class='admin2'>"+income+"</td></tr>");
-							out.flush();
-							csvResults.append(result.element("label").getText()+";"+income+"\n");
+							output.append("<tr><td>"+result.element("label").getText()+"</td><td>"+income+"</td></tr>");
 						}
 						else if(filter.elementText("outputvalue").equalsIgnoreCase("count")){
-							out.println("<tr><td class='admin'>"+result.element("label").getText()+"</td><td class='admin2'>"+rs.getString("total")+"</td></tr>");
-							out.flush();
-							csvResults.append(result.element("label").getText()+";"+rs.getString("total")+"\n");
+							output.append("<tr><td>"+result.element("label").getText()+"</td><td>"+rs.getString("total")+"</td></tr>");
 						}
 					}
 					rs.close();
@@ -879,12 +865,10 @@
 									sSelect=setSelectString(value, sSelect, parameters, "OC_ENCOUNTER_OUTCOME", value.getText());
 								}
 								else if(selectField.attributeValue("name").equalsIgnoreCase("serviceuid")){
-									System.out.println("1");
 									Element value = selectField.element("value");
 									sSelect=setSelectString(value, sSelect, parameters, "OC_ENCOUNTER_SERVICEUID", value.getText());
 								}
 								else if(selectField.attributeValue("name").equalsIgnoreCase("duration")){
-									System.out.println("2");
 									Element value = selectField.element("value");
 									sSelect=setSelectInt(value, sSelect, parameters, MedwanQuery.getInstance().datediff("day", "OC_ENCOUNTER_BEGINDATE", "OC_ENCOUNTER_ENDDATE"), Integer.parseInt(value.getText()));
 								}
@@ -893,12 +877,10 @@
 									sSelect=setSelectString(value, sSelect, parameters, "OC_ENCOUNTER_ORIGIN", value.getText());
 								}
 							}
-							System.out.println(sSelect);
 							ps=conn.prepareStatement(sSelect);
 							for(int n=0;n<parameters.size();n++){
 								Object p = parameters.elementAt(n);
 								setParameter(p, ps, n);
-								System.out.println("parameter="+p);
 							}
 							rs=ps.executeQuery();
 							while(rs.next()){
@@ -952,15 +934,15 @@
 									Hashtable variables = (Hashtable)rows.get(uid);
 									Iterator outputs = filter.elementIterator("output");
 									while(outputs.hasNext()){
-										Element output = (Element)outputs.next();
-										if(output.getText().equalsIgnoreCase("encounteruid")){
+										Element outputElement = (Element)outputs.next();
+										if(outputElement.getText().equalsIgnoreCase("encounteruid")){
 											variables.put("encounteruid",rs.getString("OC_ENCOUNTER_SERVERID")+"."+rs.getString("OC_ENCOUNTER_OBJECTID"));
 										}
-										else if(output.getText().equalsIgnoreCase("patientuid")){
+										else if(outputElement.getText().equalsIgnoreCase("patientuid")){
 											variables.put("patientuid",rs.getString("OC_ENCOUNTER_PATIENTUID"));
 										}
-										else if(output.getText().equalsIgnoreCase("serviceuid")){
-											variables.put("serviceuid",rs.getString("OC_ENCOUNTER_SERVICEUID"));
+										else if(outputElement.getText().equalsIgnoreCase("serviceuid")){
+											variables.put("patientuid",rs.getString("OC_ENCOUNTER_SERVICEUID"));
 										}
 									}
 								}
@@ -1171,14 +1153,14 @@
 									Hashtable variables = (Hashtable)rows.get(uid);
 									Iterator outputs = filter.elementIterator("output");
 									while(outputs.hasNext()){
-										Element output = (Element)outputs.next();
-										if(output.getText().equalsIgnoreCase("patientuid")){
+										Element outputElement = (Element)outputs.next();
+										if(outputElement.getText().equalsIgnoreCase("patientuid")){
 											variables.put("patientuid",uid);
 										}
-										else if(output.getText().equalsIgnoreCase("gender")){
+										else if(outputElement.getText().equalsIgnoreCase("gender")){
 											variables.put("gender",rs.getString("gender"));
 										}
-										else if(output.getText().equalsIgnoreCase("sector")){
+										else if(outputElement.getText().equalsIgnoreCase("sector")){
 											variables.put("sector",rs.getString("sector"));
 										}
 									}
@@ -1383,17 +1365,17 @@
 									Hashtable variables = (Hashtable)rows.get(uid);
 									Iterator outputs = filter.elementIterator("output");
 									while(outputs.hasNext()){
-										Element output = (Element)outputs.next();
-										if(output.getText().equalsIgnoreCase("patientuid")){
+										Element outputElement = (Element)outputs.next();
+										if(outputElement.getText().equalsIgnoreCase("patientuid")){
 											variables.put("patientuid",rs.getString("personid"));
 										}
-										else if(output.getText().equalsIgnoreCase("transactionid")){
+										else if(outputElement.getText().equalsIgnoreCase("transactionid")){
 											variables.put("transactionid",uid);
 										}
-										else if(output.getText().equalsIgnoreCase("transactiontype")){
+										else if(outputElement.getText().equalsIgnoreCase("transactiontype")){
 											variables.put("transactiontype",rs.getString("transactiontype"));
 										}
-										else if(output.getText().equalsIgnoreCase("itemvalue")){
+										else if(outputElement.getText().equalsIgnoreCase("itemvalue")){
 											variables.put("itemvalue",rs.getString("value"));
 										}
 									}
@@ -1442,10 +1424,6 @@
 										sSelect=setSelectString(value, sSelect, parameters, "transactiontype", (String)v);
 									}
 								}
-								if(uid.equals("1.102918")){
-									System.out.println("select = "+selectElement.asXML());
-									System.out.println("has item field: "+(selectElement.element("item")!=null));
-								}
 								Iterator itemfields = selectElement.elementIterator("item");
 								while(itemfields.hasNext()){
 									Element itemfield = (Element)itemfields.next();
@@ -1457,16 +1435,10 @@
 										sSelect=setSelectItemValue(value, sSelect,parameters, rows, uid);
 									}
 								}
-								if(uid.equals("1.102918")){
-									System.out.println(sSelect);
-								}
 								ps=conn.prepareStatement(sSelect);
 								for(int n=0;n<parameters.size();n++){
 									Object p = parameters.elementAt(n);
 									setParameter(p, ps, n);
-									if(uid.equals("1.102918")){
-										System.out.println("parameter="+p);
-									}
 								}
 								rs=ps.executeQuery();
 								boolean bNoMatch=true;
@@ -1493,9 +1465,6 @@
 									if(filter.element("item")!=null){
 										//We must now load all items from the transaction
 										TransactionVO transaction = MedwanQuery.getInstance().loadTransaction(MedwanQuery.getInstance().getConfigInt("serverId"), rs.getInt("transactionid"));
-										if(uid.equals("1.102918")){
-											System.out.println("transactionitems="+transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_PRENATAL_CPNORDER"));
-										}
 										Iterator items = filter.elementIterator("item");
 										while(items.hasNext()){
 											Element itemelement = (Element)items.next();
@@ -1612,20 +1581,20 @@
 									Hashtable variables = (Hashtable)rows.get(uid);
 									Iterator outputs = filter.elementIterator("output");
 									while(outputs.hasNext()){
-										Element output = (Element)outputs.next();
-										if(output.getText().equalsIgnoreCase("encounteruid")){
+										Element outputElement = (Element)outputs.next();
+										if(outputElement.getText().equalsIgnoreCase("encounteruid")){
 											variables.put("encounteruid",rs.getString("oc_rfe_encounteruid"));
 										}
-										else if(output.getText().equalsIgnoreCase("rfeuid")){
+										else if(outputElement.getText().equalsIgnoreCase("rfeuid")){
 											variables.put("rfeuid",uid);
 										}
-										else if(output.getText().equalsIgnoreCase("rfeflags")){
+										else if(outputElement.getText().equalsIgnoreCase("rfeflags")){
 											variables.put("rfeflags",rs.getString("oc_rfe_flags"));
 										}
-										else if(output.getText().equalsIgnoreCase("rfecodetype")){
+										else if(outputElement.getText().equalsIgnoreCase("rfecodetype")){
 											variables.put("rfecodetype",rs.getString("oc_rfe_codetype"));
 										}
-										else if(output.getText().equalsIgnoreCase("rfecode")){
+										else if(outputElement.getText().equalsIgnoreCase("rfecode")){
 											variables.put("rfecode",rs.getString("oc_rfe_code"));
 										}
 									}
@@ -1812,20 +1781,20 @@
 									Hashtable variables = (Hashtable)rows.get(uid);
 									Iterator outputs = filter.elementIterator("output");
 									while(outputs.hasNext()){
-										Element output = (Element)outputs.next();
-										if(output.getText().equalsIgnoreCase("encounteruid")){
+										Element outputElement = (Element)outputs.next();
+										if(outputElement.getText().equalsIgnoreCase("encounteruid")){
 											variables.put("encounteruid",rs.getString("oc_diagnosis_encounteruid"));
 										}
-										else if(output.getText().equalsIgnoreCase("diagnosisuid")){
+										else if(outputElement.getText().equalsIgnoreCase("diagnosisuid")){
 											variables.put("diagnosisuid",uid);
 										}
-										else if(output.getText().equalsIgnoreCase("diagnosisflags")){
+										else if(outputElement.getText().equalsIgnoreCase("diagnosisflags")){
 											variables.put("diagnosisflags",rs.getString("oc_diagnosis_flags"));
 										}
-										else if(output.getText().equalsIgnoreCase("rfecodetype")){
+										else if(outputElement.getText().equalsIgnoreCase("rfecodetype")){
 											variables.put("diagnosiscodetype",rs.getString("oc_rfe_codetype"));
 										}
-										else if(output.getText().equalsIgnoreCase("rfecode")){
+										else if(outputElement.getText().equalsIgnoreCase("rfecode")){
 											variables.put("diagnosiscode",rs.getString("oc_diagnosis_code"));
 										}
 									}
@@ -2017,17 +1986,17 @@
 									Hashtable variables = (Hashtable)rows.get(uid);
 									Iterator outputs = filter.elementIterator("output");
 									while(outputs.hasNext()){
-										Element output = (Element)outputs.next();
-										if(output.getText().equalsIgnoreCase("transactionid")){
+										Element outputElement = (Element)outputs.next();
+										if(outputElement.getText().equalsIgnoreCase("transactionid")){
 											variables.put("transactionid",rs.getString("transactionid"));
 										}
-										else if(output.getText().equalsIgnoreCase("labanalysisuid")){
+										else if(outputElement.getText().equalsIgnoreCase("labanalysisuid")){
 											variables.put("labanalysisuid",uid);
 										}
-										else if(output.getText().equalsIgnoreCase("patientuid")){
+										else if(outputElement.getText().equalsIgnoreCase("patientuid")){
 											variables.put("patientuid",rs.getString("patientid"));
 										}
-										else if(output.getText().equalsIgnoreCase("analysiscode")){
+										else if(outputElement.getText().equalsIgnoreCase("analysiscode")){
 											variables.put("analysiscode",rs.getString("analysiscode"));
 										}
 									}
@@ -2153,15 +2122,16 @@
 						counter=hRows.size();
 					}
 				}
-				System.out.println("counter="+counter);
-				out.println("<tr><td class='admin'>"+result.element("label").getText()+"</td><td class='admin2'>"+counter+"</td></tr>");
-				out.flush();
-				csvResults.append(result.element("label").getText()+";"+counter+"\n");
+				output.append("<tr><td>"+result.element("label").getText()+"</td><td>"+counter+"</td></tr>");
 			}
 			if(rs!=null) rs.close();
 			if(ps!=null) ps.close();
 		}
-		System.out.println(csvResults);
 		conn.close();
+	}
+	catch(Exception e){
+		e.printStackTrace();
+	}
+	output.append("</table>");
+	System.out.println(output);
 %>
-</table>

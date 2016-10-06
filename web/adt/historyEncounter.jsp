@@ -244,9 +244,12 @@
     }
   }
 
-  <%-- DELETE ENCOUNTER --%>
   function deleteEncounter(id){
-      if(yesnoDeleteDialog()){
+	  yesnoModalBox("doDeleteEncounter(\""+id+"\")","<%=ScreenHelper.getTranNoLink("Web","areYouSureToDelete",sWebLanguage)%>");
+  }
+	
+  <%-- DELETE ENCOUNTER --%>
+  function doDeleteEncounter(id){
       var url = "<c:url value='/adt/ajaxActions/deleteEncounter.jsp'/>?EditEncounterUID="+id+"&ts="+new Date().getTime();
       new Ajax.Request(url,{
         onSuccess: function(resp){
@@ -264,6 +267,5 @@
           alert(resp.responseText);
         }
       });
-    } 
   }
 </script>

@@ -69,7 +69,7 @@ String sAuthorId=checkString(request.getParameter("AuthorUID"));
                             out.print("<tr class='label2'>");
                         }
                         else {
-                            out.print("<tr>");
+                            out.print("<tr style='label3'>");
                         }
 
                         out.print(" <td onclick='addICPC(\""+code.code+"\",\""+code.label+"\");'>"+code.code+"</td>");
@@ -99,7 +99,7 @@ String sAuthorId=checkString(request.getParameter("AuthorUID"));
                             out.print("<tr class='label2'>");
                         }
                         else {
-                            out.print("<tr>");
+                            out.print("<tr style='label3'>");
                         }
 
                         out.print(" <td onclick='addICD10(\""+code.code+"\",\""+code.label+"\");'>"+code.code+"</td>");
@@ -140,7 +140,7 @@ String sAuthorId=checkString(request.getParameter("AuthorUID"));
                                 out.print("<tr class='label2'>");
                             }
                             else {
-                                out.print("<tr>");
+                                out.print("<tr style='label3'>");
                             }
 
                             out.print(" <td onclick='addICPC(\""+code.code+"\",\""+code.label+"\");'>"+code.code+"</td>");
@@ -159,7 +159,7 @@ String sAuthorId=checkString(request.getParameter("AuthorUID"));
                             out.print("<tr class='label2'>");
                         }
                         else {
-                            out.print("<tr>");
+                            out.print("<tr style='label3'>");
                         }
 
                         out.print(" <td onclick='addICD10(\""+code.code+"\",\""+code.label+"\");'>"+code.code+"</td>");
@@ -187,7 +187,7 @@ String sAuthorId=checkString(request.getParameter("AuthorUID"));
                                 out.print("<tr class='label2'>");
                             }
                             else {
-                                out.print("<tr>");
+                                out.print("<tr style='label3'>");
                             }
 
                             out.print(" <td onclick='addICPC(\""+code.code+"\",\""+code.label+"\");'>"+code.code+"</td>");
@@ -203,7 +203,7 @@ String sAuthorId=checkString(request.getParameter("AuthorUID"));
                             out.print("<tr class='label2'>");
                         }
                         else {
-                            out.print("<tr>");
+                            out.print("<tr style='label3'>");
                         }
 
                         out.print(" <td onclick='addICD10(\""+code.code+"\",\""+code.label+"\");'>"+code.code+"</td>");

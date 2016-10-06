@@ -40,54 +40,10 @@
 		<tr>
 			<td class='admin2'>
 				<%=getTran(request,"web","provider",sWebLanguage)%>: 
-				<select name='providerUid' id='providerUid' class='text'>
-					<option value=""></option>
-					<%
-						Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
-						PreparedStatement ps = null;
-					  	if(MedwanQuery.getInstance().getConfigString("stockOperationDocumentServiceSources","all").indexOf("all")>=0){
-							ps=conn.prepareStatement("SELECT distinct oc_operation_srcdesttype,oc_operation_srcdestuid FROM oc_productstockoperations o where oc_operation_description like 'medicationreceipt%' and oc_operation_srcdesttype in ('supplier','servicestock')"+
-													" union"+
-													" select distinct 'servicestock' as oc_operation_srcdesttype,'"+MedwanQuery.getInstance().getConfigString("serverId")+".'"+MedwanQuery.getInstance().concatSign()+MedwanQuery.getInstance().convert("varchar", "OC_STOCK_OBJECTID")+" as oc_operation_srcdestuid from OC_SERVICESTOCKS"+
-													" order by oc_operation_srcdestuid");
-					  	}
-					  	else if(MedwanQuery.getInstance().getConfigString("stockOperationDocumentServiceSources","all").indexOf("4")<0){
-							ps=conn.prepareStatement("SELECT distinct oc_operation_srcdestuid FROM oc_productstockoperations o where oc_operation_description like 'medicationreceipt%' and oc_operation_srcdesttype ='supplier' order by oc_operation_srcdestuid");
-					  	}
-					  	else {
-					  		ps = conn.prepareStatement("SELECT distinct OC_DOCUMENT_SOURCEUID as oc_operation_srcdestuid FROM oc_productstockoperationdocuments o where oc_document_type=4");
-					  	}
-						ResultSet rs = ps.executeQuery();
-						while(rs.next()){
-							String provider=rs.getString("oc_operation_srcdestuid");
-						  	if(MedwanQuery.getInstance().getConfigString("stockOperationDocumentServiceSources","all").indexOf("all")>=0){
-								String providertype=rs.getString("oc_operation_srcdesttype");
-								if(providertype.equalsIgnoreCase("servicestock")){
-									if(provider.equalsIgnoreCase(sServiceStockId)){
-										continue;
-									}
-									ServiceStock serviceStock = ServiceStock.get(provider);
-									if(serviceStock!=null){
-										provider=serviceStock.getName();
-									}
-								}
-						  		out.print("<option value='"+provider+"'>"+provider+"</option>");
-						  	}
-						  	else if(MedwanQuery.getInstance().getConfigString("stockOperationDocumentServiceSources","all").indexOf("4")<0){
-						  		out.print("<option value='"+provider+"'>"+provider+"</option>");
-						  	}
-						  	else {
-						  		String service=getTran(request,"service",provider,sWebLanguage);
-						  		if(!service.equalsIgnoreCase(provider)){
-						  			out.print("<option value='"+service+"'>"+service+"</option>");
-						  		}
-						  	}
-						}
-						rs.close();
-						ps.close();
-						conn.close();
-					%>
-				</select>
+            	<input type='text' class='text' name='providerUid' id='providerUid' size='30'/>
+            	
+				<div id="autocomplete_provider" class="autocomple"></div>
+				
 			</td>
 		</tr>
 		<tr>
@@ -99,8 +55,31 @@
 </form>
 
 <script>
-  function printReport(){
-	window.open('<c:url value="pharmacy/printServiceIncomingStockOperationsPerProvider.jsp"/>?FindBeginDate='+document.getElementById('FindBeginDate').value+'&FindEndDate='+document.getElementById('FindEndDate').value+'&ServiceStockUid=<%=sServiceStockId%>&provider='+document.getElementById('providerUid').value);
-	window.close();
-  }
+
+	new Ajax.Autocompleter('providerUid','autocomplete_provider','pharmacy/ajax/getProviders.jsp',{
+		minChars:1,
+		method:'post',
+		afterUpdateElement:afterAutoComplete,
+		callback:composeCallbackURL
+	});
+		
+	function afterAutoComplete(field,item){
+		var regex = new RegExp(':none">.*-idcache','i');
+		var nomimage = regex.exec(item.innerHTML);
+		var id = nomimage[0].replace('-idcache','').replace(':none">','');
+		document.getElementById("providerUid").value = id;
+	}
+	
+	function composeCallbackURL(field,item){
+		var url = "";
+		if(field.id=="providerUid"){
+			url = "findProviderName="+field.value+"&findServiceStockUid=<%=sServiceStockId%>";
+		}
+		return url;
+	}
+
+	function printReport(){
+		window.open('<c:url value="pharmacy/printServiceIncomingStockOperationsPerProvider.jsp"/>?FindBeginDate='+document.getElementById('FindBeginDate').value+'&FindEndDate='+document.getElementById('FindEndDate').value+'&ServiceStockUid=<%=sServiceStockId%>&provider='+document.getElementById('providerUid').value);
+		window.close();
+	}
 </script>

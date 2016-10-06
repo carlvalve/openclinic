@@ -1026,22 +1026,24 @@
       show("internaltransfers");
     }
   }
+  
+  function doDeleteService(sServiceID){
+		var url = "<c:url value='/adt/ajaxActions/editEncounterDeleteService.jsp'/>"+
+		"?EncounterUID=<%=sEditEncounterUID%>"+
+		"&ServiceUID="+sServiceID+
+		"&ts="+new Date().getTime();
+		document.getElementById('divServices').innerHTML = "<img src='<%=sCONTEXTPATH%>/_img/themes/<%=sUserTheme%>/ajax-loader.gif'/>&nbsp;Deleting";
+		new Ajax.Updater("divServices",url,{
+			evalScripts:true,
+			onComplete:function(resp){
+			$('divServices').innerHTML = resp.responseText;
+			}
+		});
+  }
 
   <%-- DELETE SERVICE --%>
   function deleteService(sServiceID){
-    if(yesnoDeleteDialog()){
-      var url = "<c:url value='/adt/ajaxActions/editEncounterDeleteService.jsp'/>"+
-                "?EncounterUID=<%=sEditEncounterUID%>"+
-    		    "&ServiceUID="+sServiceID+
-    		    "&ts="+new Date().getTime();
-      document.getElementById('divServices').innerHTML = "<img src='<%=sCONTEXTPATH%>/_img/themes/<%=sUserTheme%>/ajax-loader.gif'/>&nbsp;Deleting";
-      new Ajax.Updater("divServices",url,{
-        evalScripts:true,
-        onComplete:function(resp){
-          $('divServices').innerHTML = resp.responseText;
-        }
-      });
-    }
+	yesnoModalBox("doDeleteService(\""+sServiceID+"\")","<%=ScreenHelper.getTranNoLink("Web","areYouSureToDelete",sWebLanguage)%>");
   }
     
   <%-- SET TRANSFER --%>
@@ -1051,9 +1053,11 @@
     show("transfer");
   }
 
-  <%-- DELETE RFE --%>
   function deleteRFE(serverid,objectid){
-    if(yesnoDeleteDialog()){
+	yesnoModalBox("doDeleteRFE("+serverid+","+objectid+")","<%=ScreenHelper.getTranNoLink("Web","areYouSureToDelete",sWebLanguage)%>");
+  }
+  <%-- DELETE RFE --%>
+  function doDeleteRFE(serverid,objectid){
       var params = "serverid="+serverid+
                    "&objectid="+objectid+
                    "&encounterUid=<%=sEditEncounterUID%>"+
@@ -1066,7 +1070,6 @@
           rfe.innerHTML = resp.responseText;
         }
       });
-    }
   }
 
   <%-- CHANGE SERVICE --%>
