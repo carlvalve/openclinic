@@ -160,6 +160,12 @@
 
                         while(iter.hasNext()){
                             tmpWicket = (Wicket)iter.next();
+                            tmpWicket = Wicket.get(tmpWicket.getUid());
+                            if(tmpWicket!=null && tmpWicket.getService()!=null){
+								if(checkString(tmpWicket.getService().inactive).equalsIgnoreCase("1")){
+                            		continue;
+								}
+                            }
 
                             %>
                             <option value="<%=tmpWicket.getUid()%>" <%=sFindWicketUid.equals(tmpWicket.getUid())?" selected":""%>>

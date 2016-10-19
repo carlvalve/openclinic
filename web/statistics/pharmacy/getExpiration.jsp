@@ -7,12 +7,16 @@
 <%@include file="/includes/validateUser.jsp"%>
 <%
 	String sServiceStockId = checkString(request.getParameter("ServiceStockUid"));
+	long day=24*3600*1000;
 %>
 <form name='transactionForm' method='post'>
 	<table width='100%'>
 		<tr>
 			<td class='admin2'>
-				<%=getTran(request,"web","date",sWebLanguage)%> <%=writeDateField("FindDate","transactionForm",ScreenHelper.formatDate(new java.util.Date()),sWebLanguage)%>
+				<%=getTran(request,"web","begindate",sWebLanguage)%> <%=writeDateField("begin","transactionForm",ScreenHelper.formatDate(new java.util.Date()),sWebLanguage)%>
+			</td>
+			<td class='admin2'>
+				<%=getTran(request,"web","enddate",sWebLanguage)%> <%=writeDateField("end","transactionForm",ScreenHelper.formatDate(new java.util.Date(new java.util.Date().getTime()+90*day)),sWebLanguage)%>
 			</td>
 			<td class='admin2'>
 				<input type='button' class="button" name='print' value='<%=getTranNoLink("web","print",sWebLanguage)%>' onclick='printReport();'/>
@@ -23,7 +27,7 @@
 
 <script>
   function printReport(){
-	window.open('<c:url value="pharmacy/printExpiration.jsp"/>?FindDate='+document.getElementById('FindDate').value+'&ServiceStockUid=<%=sServiceStockId%>');
+	window.open('<c:url value="pharmacy/printExpiration.jsp"/>?begin='+document.getElementById('begin').value+'&end='+document.getElementById('end').value+'&ServiceStockUid=<%=sServiceStockId%>');
 	window.close();
   }
 </script>

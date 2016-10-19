@@ -1,4 +1,4 @@
-<%@page import="be.openclinic.pharmacy.*,
+<%@page import="be.openclinic.pharmacy.*,be.openclinic.finance.*,
                 be.openclinic.medical.Prescription"%>
 <%@include file="/includes/validateUser.jsp"%>
 <%@page errorPage="/includes/error.jsp"%>
@@ -401,13 +401,41 @@
 	                            		productStockBatches+= productStock.getUid();
 										expiredProductStockBatches+= productStock.getUid();
 										int nProductStockBatches=0,nExpiredBatches=0;
-//If delivery to patient: first look for personal batches!!!!
+										//If delivery to patient: first look for personal batches!!!!
+										//First look at production order batches
 										for(int n=0; n<batches.size(); n++){
 	                            			Batch batch = (Batch)batches.elementAt(n);
 	                            			if(activePatient!=null && batch!=null && batch.getType()!=null && batch.getType().equalsIgnoreCase("production") && batch.getBatchNumber()!=null && batch.getBatchNumber().equalsIgnoreCase(activePatient.personid) && (batch.getEnd()==null || !batch.getEnd().before(new java.util.Date()))){
 		                            			if(batch.getEnd()==null || !batch.getEnd().before(new java.util.Date()) || MedwanQuery.getInstance().getConfigInt("enableExpiredProductsDistribution",0)>0){
 		                            				if(nProductStockBatches<10){
-		                            					productStockBatches+= "$"+batch.getUid()+";"+batch.getBatchNumber()+";"+batch.getLevel()+";"+(batch.getEnd()==null?"":ScreenHelper.stdDateFormat.format(batch.getEnd()))+";"+batch.getComment();
+		                            					int level=batch.getLevel();
+		                            					String comment= batch.getComment();
+		                            					double outStandingPayments=0;
+		                            					if(MedwanQuery.getInstance().getConfigInt("enableCCBRTProductionOrderMecanism",0)==1){
+		                            						//First we look if there are any outstanding production payments for this patient
+			                            					Vector productionOrders = ProductionOrder.getProductionOrders(activePatient.personid, productStock.getUid(), "", null, null);
+			                            					for(int i=0;i<productionOrders.size();i++){
+			                            						ProductionOrder order = (ProductionOrder)productionOrders.elementAt(i);
+			                            						if(order!=null && order.getCloseDateTime()!=null && order.getDebetUid()!=null){
+			                            							//This is a closed order with invoice, verify if the attached invoice has been paid
+			                            							Debet debet = Debet.get(order.getDebetUid());
+			                            							if(debet!=null){
+			                            								PatientInvoice invoice = debet.getPatientInvoice();
+			                            								if(invoice.getBalance()>0){
+			                            									//There is remaining debt, add it
+			                            									outStandingPayments+=invoice.getBalance();
+			                            								}
+			                            							}
+			                            						}
+			                            					}
+			                            					if(outStandingPayments>0){
+			                            						if(!activeUser.getAccessRight("pharmacy.production.deliverwhendebt.select")){
+			                            							level=0;
+			                            						}
+			                            						comment += " (<img src=\""+sCONTEXTPATH+"/_img/icons/icon_warning.gif\"/>"+getTranNoLink("web","outstandingproductioninvoicedebt",sWebLanguage)+" "+ new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#")).format(outStandingPayments)+" "+MedwanQuery.getInstance().getConfigString("currency","")+")";
+			                            					}
+		                            					}
+		                            					productStockBatches+= "$"+batch.getUid()+";"+batch.getBatchNumber()+";"+level+";"+(batch.getEnd()==null?"":ScreenHelper.stdDateFormat.format(batch.getEnd()))+";"+comment;
 		                            					nProductStockBatches++;
 		                            				}
 		                            				else{
@@ -422,6 +450,7 @@
 		                            			}
 	                            			}
 	                            		}
+										//Then look at other personal batches (bloodbank for instance)
 										for(int n=0; n<batches.size(); n++){
 	                            			Batch batch = (Batch)batches.elementAt(n);
 	                            			if(batch!=null && (batch.getType()==null || !batch.getType().equalsIgnoreCase("production"))){

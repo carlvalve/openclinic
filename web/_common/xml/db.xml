@@ -352,6 +352,7 @@
 	    	<column name="OC_MATERIAL_UPDATEUID" dbtype="int" javatype="integer"/>
 	    	<column name="OC_MATERIAL_VERSION" dbtype="int" javatype="integer"/>
 	        <column name="OC_MATERIAL_COMMENT" dbtype="varchar" javatype="string" size="255"/>      
+	        <column name="OC_MATERIAL_DATEUSED" dbtype="datetime" javatype="date"/>      
     	</columns>
 	    <indexes>
 	    	<index name="OC_MATERIAL_PRODUCTIONORDERID">
@@ -374,6 +375,7 @@
 	    	<column name="OC_MATERIAL_UPDATEUID" dbtype="int" javatype="integer"/>
 	    	<column name="OC_MATERIAL_VERSION" dbtype="int" javatype="integer"/>
 	        <column name="OC_MATERIAL_COMMENT" dbtype="varchar" javatype="string" size="255"/>      
+	        <column name="OC_MATERIAL_DATEUSED" dbtype="datetime" javatype="date"/>      
     	</columns>
 	</table>
 	

@@ -45,12 +45,33 @@
             <%
             	}
 			%>
+            <%-- productSubGroup --%>
+            <tr>
+                <td class="admin" nowrap><%=getTran(request,"Web","servicestock",sWebLanguage)%></td>
+                <td class="admin2" colspan='2'>
+                	<table width='100%'>
+               		<%
+						Vector servicestocks = ServiceStock.findAll();   
+	               		for(int n=0;n<servicestocks.size();n++){
+							ServiceStock stock = (ServiceStock)servicestocks.elementAt(n);
+							out.println("<tr><td><input "+(stock.getUid().equals(sServiceStockId)?"checked":"")+" type='checkbox' class='text' name='cbServiceStock."+stock.getUid()+"'/>"+stock.getName()+"</td></tr>");
+	               		}
+               		%>
+                	</table>
+                </td>
+            </tr>
 		</table>
 	</form>
 
 	<script>
 		function printReport(){
-			window.open('<c:url value="pharmacy/printServiceStockInventorySummary.jsp"/>?ProductGroup='+document.getElementById('productgroup').value+'&ProductSubGroup='+document.getElementById('EditProductSubGroup').value+'&FindDate='+document.getElementById('FindDate').value+'&ServiceStockUid=<%=sServiceStockId%>');
+			var servicestocks='';
+			for(n=0;n<document.all.length;n++){
+				if(document.all[n] && document.all[n].name && document.all[n].name.indexOf("cbServiceStock")>-1 && document.all[n].checked){
+					servicestocks+=document.all[n].name.replace("cbServiceStock.","")+";";
+				}
+			}
+			window.open('<c:url value="pharmacy/printServiceStockInventorySummary.jsp"/>?ProductGroup='+document.getElementById('productgroup').value+'&ProductSubGroup='+document.getElementById('EditProductSubGroup').value+'&FindDate='+document.getElementById('FindDate').value+'&ServiceStockUid='+servicestocks);
 			window.close();
 		}
 		

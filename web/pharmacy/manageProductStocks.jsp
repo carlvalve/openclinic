@@ -174,9 +174,11 @@ public double getLastYearsAveragePrice(Product product){
 
             // non-existing productname in red
             if(sProductName.length() == 0) {
+                html.append("<td>&nbsp;</td>"); //No product code
                 html.append("<td onclick=\"doShowDetails('"+sStockUid+"');\"><font color='red'>"+getTran(null,"web","nonexistingproduct",sWebLanguage)+"</font></td>");
             } 
             else {
+                html.append("<td onclick=\"doShowDetails('"+sStockUid+"');\">&nbsp;"+checkString(productStock.getProduct().getCode())+"</td>");
                 html.append("<td onclick=\"doShowDetails('"+sStockUid+"');\">"+sProductName+"</td>");
             }
 
@@ -234,6 +236,54 @@ public double getLastYearsAveragePrice(Product product){
 
             html.append("</td>");
 
+            html.append("</tr>");
+        }
+
+        return html;
+    }
+    
+    //--- OBJECTS TO HTML (layout 3) --------------------------------------------------------------
+    private StringBuffer objectsToHtml3(Vector objects, String serviceUid, String sWebLanguage,User activeUser){
+        StringBuffer html = new StringBuffer();
+        String sClass = "1", sStockUid = "", sProductUid = "", sProductName = "", sStockBegin = "";
+        Product product;
+
+        Hashtable productnames = Product.getProductNames();
+        ProductStock productStock;
+        for (int i=0; i<objects.size(); i++){
+            productStock = (ProductStock)objects.get(i);
+            sStockUid = productStock.getUid();
+
+            if(productnames.get(productStock.getProductUid()) != null) {
+                sProductName = (String)productnames.get(productStock.getProductUid());
+                sProductUid = productStock.getProductUid();
+            } 
+            else{
+                sProductName = "<font color='red'>"+getTran(null,"web","nonexistingproduct",sWebLanguage)+"</font>";
+            }
+
+            // alternate row-style
+            if(sClass.equals("")) sClass = "1";
+            else                  sClass = "";
+            
+            //*** display stock in one row ***
+            html.append("<tr class='list"+sClass+"'>");
+
+            // non-existing productname in red
+            if(sProductName.length() == 0) {
+                html.append("<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>"); //No product code
+                html.append("<td><font color='red'>"+getTran(null,"web","nonexistingproduct",sWebLanguage)+"</font></td>");
+            } 
+            else {
+                html.append("<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;"+checkString(productStock.getProduct().getCode())+"</td>");
+                html.append("<td>"+sProductName+"</td>");
+            }
+
+            // level
+            int stockLevel = productStock.getLevel();
+            html.append("<td><input type='hidden' id='theoretical."+sStockUid+"' name='theoretical."+sStockUid+"' value='"+stockLevel+"'>"+stockLevel+"</td>");
+            html.append("<td><input type='text' class='text' id='physical."+sStockUid+"' name='physical."+sStockUid+"' value='"+stockLevel+"' onkeyup='calculateDifference(this)'></td>");
+            html.append("<td><input type='text' class='readonly' readonly id='difference."+sStockUid+"' name='difference."+sStockUid+"' value='0'></td>");
             html.append("</tr>");
         }
 
@@ -432,7 +482,41 @@ public double getLastYearsAveragePrice(Product product){
         msg = getTran(request,"web","dataisdeleted",sWebLanguage);
         sAction = "findShowOverview"; // display overview even if only one record remains
     }
-
+    else if(sAction.equals("updateinventory")){
+    	Enumeration params = request.getParameterNames();
+    	while(params.hasMoreElements()){
+    		String parname = (String)params.nextElement();
+    		if(parname.startsWith("difference") && !request.getParameter(parname).equalsIgnoreCase("0")){
+    			try{
+    				//We need to make an inventory correction in the database
+    				int nDifference = Integer.parseInt(request.getParameter(parname));
+    				ProductStockOperation operation = new ProductStockOperation();
+    				operation.setCreateDateTime(new java.util.Date());
+    				operation.setDate(new java.util.Date());
+    				if(nDifference<0){
+    					operation.setDescription("medicationdelivery.3");
+        				operation.setUnitsChanged(-nDifference);
+    				}
+    				else{
+    					operation.setDescription("medicationreceipt.3");
+        				operation.setUnitsChanged(nDifference);
+    				}
+    				operation.setProductStockUid(parname.replaceAll("difference\\.", ""));
+    				operation.setUid("-1");
+    				operation.setUpdateDateTime(new java.util.Date());
+    				operation.setUpdateUser(activeUser.userid);
+    				operation.setVersion(1);
+    				operation.setSourceDestination(new ObjectReference("",""));
+    				operation.store();
+    			}
+    			catch(Exception e){
+    				e.printStackTrace();
+    			}
+    		}
+    	}
+        sAction = "findShowOverview"; // showDetails
+    }
+    
     //--- FIND ------------------------------------------------------------------------------------
     if(sAction.startsWith("find")){
         if(sAction.equals("findShowOverview")){
@@ -472,8 +556,15 @@ public double getLastYearsAveragePrice(Product product){
                                                  sFindSupplierUid,"","OC_PRODUCT_NAME","ASC");
 
         // display other layout if stocks of only one service are shown
-        if(sServiceId.length()==0) stocksHtml = objectsToHtml1(productStocks,sWebLanguage);
-        else                       stocksHtml = objectsToHtml2(productStocks,sServiceId,sWebLanguage,activeUser);
+        if(sServiceId.length()==0) {
+        	stocksHtml = objectsToHtml1(productStocks,sWebLanguage);
+        }
+        else if(request.getParameter("updateInventory")==null){
+        	stocksHtml = objectsToHtml2(productStocks,sServiceId,sWebLanguage,activeUser);
+        }
+        else {
+        	stocksHtml = objectsToHtml3(productStocks,sServiceId,sWebLanguage,activeUser);
+        }
 
         foundStockCount = productStocks.size();
 
@@ -573,6 +664,8 @@ public double getLastYearsAveragePrice(Product product){
     }
 %>
 <form name="transactionForm" id="transactionForm" method="post" action='<c:url value="/main.do"/>?Page=pharmacy/manageProductStocks.jsp<%=sFormActionParams%>&ts=<%=getTs()%>' <%=sOnKeyDown%> <%=(displaySearchFields||sAction.equals("findShowOverview")?"onClick=\"clearMessage();\"":"onclick=\"setSaveButton(event);clearMessage();\" onkeyup=\"setSaveButton(event);\"")%>>
+    <input type='hidden' name='EditServiceStockUid' value='<%=checkString(request.getParameter("EditServiceStockUid")) %>'/>
+    <input type='hidden' name='DisplaySearchFields' value='<%=checkString(request.getParameter("DisplaySearchFields")) %>'/>
     <%=writeTableHeader("Web.manage","ManageProductStocks",sWebLanguage,(sAction.equals("findShowOverview")?"":"doBack();"))%>
     
     <%-- display servicename and servicestockname --%>
@@ -605,7 +698,12 @@ public double getLastYearsAveragePrice(Product product){
 	                        %>
 		                        <tr>
 		                            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","servicestock",sWebLanguage)%>&nbsp;</td>
-		                            <td class="admin2" colspan='2'><%=sServiceStockName%> (<%=serviceStock.getUid() %>)</td>
+		                            <td class="admin2"><%=sServiceStockName%> (<%=serviceStock.getUid() %>)</td>
+			                        <td class="admin2">
+			                        <% if(activeUser.getAccessRight("pharmacy.updateinventory.select")){%>
+			                        	<input class="text" type="checkbox" name="updateInventory" id="updateInventory" value='1' <%=request.getParameter("updateInventory")!=null?"checked":"" %> onclick="document.getElementById('Action').value='findShowOverview';transactionForm.submit();"><%=getTran(request,"Web","updateinventory",sWebLanguage)%>
+			                        <% }%>
+			                        </td>
 		                        </tr>
 	                        <%
                         }
@@ -801,6 +899,7 @@ public double getLastYearsAveragePrice(Product product){
         // used for showing productStocks in one serviceStock
         if(displayFoundRecordsLayout2){
             if(foundStockCount > 0){
+            	if(request.getParameter("updateInventory")==null){
                 %>
                     <table width="100%" cellspacing="0" cellpadding="0" class="sortable" id="searchresults">
                         <%-- header --%>
@@ -808,6 +907,7 @@ public double getLastYearsAveragePrice(Product product){
                             <td/>
                             <td/>
                             <td/>
+                            <td><%=getTran(request,"web","code",sWebLanguage)%></td>
                             <td><%=getTran(request,"Web","productName",sWebLanguage)%></td>
                             <td style="text-align:right"><%=getTran(request,"Web","level",sWebLanguage)%>&nbsp;&nbsp;</td>
                             <td style="text-align:right"><%=getTran(request,"Web","openorders",sWebLanguage)%>&nbsp;&nbsp;</td>
@@ -845,6 +945,47 @@ public double getLastYearsAveragePrice(Product product){
                         <input class="button" type="button" name="returnButton" value='<%=getTranNoLink("Web.manage","manageservicestocks",sWebLanguage)%>' onclick="doBackToPrevModule();">
                     <%=ScreenHelper.alignButtonsStop()%>
                 <%
+            	}
+                else{
+				%>
+                	<table width="100%" cellspacing="0" cellpadding="0" class="sortable" id="searchresults">
+                    <%-- header --%>
+                    <tr class="admin">
+                        <td/>
+                        <td/>
+                        <td/>
+                        <td><%=getTran(request,"web","code",sWebLanguage)%></td>
+                        <td><%=getTran(request,"Web","productName",sWebLanguage)%></td>
+                        <td><%=getTran(request,"Web","theoreticallevel",sWebLanguage)%>&nbsp;&nbsp;</td>
+                        <td><%=getTran(request,"Web","physicallevel",sWebLanguage)%>&nbsp;&nbsp;</td>
+                        <td><%=getTran(request,"Web","difference",sWebLanguage)%>&nbsp;&nbsp;</td>
+                    </tr>
+                    <tbody class="hand"><%=stocksHtml%></tbody>
+                </table>
+                
+                <%-- number of records found --%>
+                <span style="width:49%;text-align:left;">
+                    <%=foundStockCount%> <%=getTran(request,"web","recordsfound",sWebLanguage)%>
+                </span>
+                
+                <%
+                    if(foundStockCount > 20){
+                        // link to top of page
+                        %>
+                            <span style="width:51%;text-align:right;">
+                                <a href="#topp" class="topbutton">&nbsp;</a>
+                            </span>
+                            <br>
+                        <%
+                    }
+                %>
+                
+                <%-- BUTTONS --%>
+                <%=ScreenHelper.alignButtonsStart()%>
+                    <input class="button" type="button" name="update" value='<%=getTranNoLink("web","update",sWebLanguage)%>' onclick="doUpdateInventory();">
+                <%=ScreenHelper.alignButtonsStop()%>
+				<%
+                }
             }
             else{
                 // no records found
@@ -1029,6 +1170,7 @@ public double getLastYearsAveragePrice(Product product){
                             %>
                             <%-- BACK TO OVERVIEW --%>
                             <input class="button" type="button" name="returnButton" value='<%=getTranNoLink("Web","backtooverview",sWebLanguage)%>' onclick="doBackToOverview();">
+                            <input class="button" type="button" name="printBarcodeButton" value='<%=getTranNoLink("Web","printbarcode",sWebLanguage)%>' onclick="doPrintBarcode('<%=sEditStockUid%>');">
                             <%-- display message --%>
                             <span id="msgArea"><%=msg%></span>
                         </td>
@@ -1050,10 +1192,10 @@ public double getLastYearsAveragePrice(Product product){
     %>
     
     <%-- hidden fields --%>
-    <input type="hidden" name="Action">
-    <input type="hidden" name="EditStockUid" value="<%=sEditStockUid%>">
-    <input type="hidden" name="DisplaySearchFields" value="<%=displaySearchFields%>">
-    <input type="hidden" name="DisplayLowStocks" value="<%=displayLowStocks%>">
+    <input type="hidden" name="Action" id="Action">
+    <input type="hidden" name="EditStockUid" id="EditStockUid" value="<%=sEditStockUid%>">
+    <input type="hidden" name="DisplaySearchFields" id="DisplaySearchFields" value="<%=displaySearchFields%>">
+    <input type="hidden" name="DisplayLowStocks" id="DisplayLowStocks" value="<%=displayLowStocks%>">
 </form>
 
 <%-- SCRIPTS ------------------------------------------------------------------------------------%>
@@ -1348,7 +1490,13 @@ public double getLastYearsAveragePrice(Product product){
 		 rows[n].style.display = "";
       }
 	  else{
-	    rows[n].style.display = "none";
+		  cell = rows[n].cells[4];
+		  if(cell.firstChild.nodeValue.toLowerCase().indexOf(s.toLowerCase())>=0){
+			 rows[n].style.display = "";
+	      }
+		  else{
+		    rows[n].style.display = "none";
+		  }
 	  }
 	}
   }
@@ -1472,5 +1620,19 @@ public double getLastYearsAveragePrice(Product product){
     }
 
     openPopup(url);
+  }
+  
+  function calculateDifference(el){
+	  document.getElementById(el.name.replace('physical','difference')).value=el.value*1-document.getElementById(el.name.replace('physical','theoretical')).value*1;
+  }
+  
+  function doUpdateInventory(){
+	document.getElementById("Action").value='updateinventory';
+	transactionForm.submit();
+  }
+  
+  function doPrintBarcode(productStockUid){
+      var url = "<c:url value='/pharmacy/createProductStockLabelPdf.jsp'/>?productStockUid="+productStockUid;
+      printwindow=window.open(url,"ProductStockLabelPdf<%=new java.util.Date().getTime()%>","height=300,width=400,toolbar=yes,status=no,scrollbars=yes,resizable=yes,menubar=yes");
   }
 </script>

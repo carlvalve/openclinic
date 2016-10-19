@@ -19,6 +19,16 @@
 		order.setCloseDateTime(null);
 		order.store();
 	}
+	else if(checkString(request.getParameter("action")).equalsIgnoreCase("cancel")){
+		//Now close the production order
+		order.setUpdateDateTime(new java.util.Date());
+		order.setQuantity(0);
+		order.setComment("CANCELED");
+		order.setPatientUid(-1);
+		order.setTargetProductStockUid("");
+		order.setUpdateUid(Integer.parseInt(activeUser.userid));
+		order.store();
+	}
 	else if(checkString(request.getParameter("action")).equalsIgnoreCase("close")){
 		java.util.Date dClose = ScreenHelper.parseDate(request.getParameter("ProductionOrderCloseDateTime"));
 		if(dClose==null){
@@ -33,22 +43,27 @@
 		if(nQuantity>0){
 			//Remove used raw materials from their stocks
 			//Reduce source stock with taken quantity
-			Vector materials = order.getMaterials();
+			Vector materials = order.getUnusedMaterialsSummary();
 			for(int n=0;n<materials.size();n++){
 				ProductionOrderMaterial material = (ProductionOrderMaterial)materials.elementAt(n);
-				ProductStock productStock = ProductStock.get(material.getProductStockUid());
-				ProductStockOperation operation = new ProductStockOperation();
-				operation.setUid("-1");
-				operation.setCreateDateTime(new java.util.Date());
-				operation.setDate(new java.util.Date());
-				operation.setDescription(MedwanQuery.getInstance().getConfigString("productionStockDeliveryOperationDescription","medicationdelivery.production"));
-				//Link operation to productionorder
-				operation.setSourceDestination(new ObjectReference("production",sProductionOrderUid));
-				operation.setProductStockUid(productStock.getUid());
-				operation.setUnitsChanged(new Double(material.getQuantity()).intValue());
-				operation.setVersion(1);
-				operation.setUpdateUser(activeUser.userid);
-				operation.store();
+				//we don't store new operations for raw materials that have already been used
+				if(material.getDateUsed()==null){
+					ProductStock productStock = ProductStock.get(material.getProductStockUid());
+					ProductStockOperation operation = new ProductStockOperation();
+					operation.setUid("-1");
+					operation.setCreateDateTime(new java.util.Date());
+					operation.setDate(new java.util.Date());
+					operation.setDescription(MedwanQuery.getInstance().getConfigString("productionStockDeliveryOperationDescription","medicationdelivery.production"));
+					//Link operation to productionorder
+					operation.setSourceDestination(new ObjectReference("production",sProductionOrderUid));
+					operation.setProductStockUid(productStock.getUid());
+					operation.setUnitsChanged(new Double(material.getQuantity()).intValue());
+					operation.setVersion(1);
+					operation.setUpdateUser(activeUser.userid);
+					operation.store();
+					//Now mark the material as having been used
+					material.setUsed(material.getProductionOrderId(),material.getProductStockUid(),new java.util.Date());
+				}
 			}
 			//If personalized batch doesn't exist, create it
 			String sBatchId="";
@@ -84,20 +99,26 @@
 					batch.store();
 				}
 			}
-			ProductStockOperation operation = new ProductStockOperation();
-			operation.setUid("-1");
-			operation.setCreateDateTime(new java.util.Date());
-			operation.setDate(new java.util.Date());
-			operation.setDescription(MedwanQuery.getInstance().getConfigString("productionStockReceiptOperationDescription","medicationreceipt.production"));
-			//Link operation to productionorder
-			operation.setSourceDestination(new ObjectReference("production",sProductionOrderUid));
-			operation.setProductStockUid(order.getTargetProductStockUid());
-			operation.setUnitsChanged(nQuantity);
-			operation.setVersion(1);
-			operation.setUpdateUser(activeUser.userid);
-			//Add person data to batch information
-			operation.setBatchUid(Batch.getByBatchNumber(order.getTargetProductStockUid(), sBatchId).getUid());
-			operation.store();
+			//Add produced goods to stock
+			//First check the already registered produced good for this order
+			int nOrderQuantity = ProductStockOperation.getProducedQuantity(Integer.parseInt(sProductionOrderUid),order.getTargetProductStockUid());
+			if(nQuantity!=nOrderQuantity){
+				ProductStockOperation operation = new ProductStockOperation();
+				operation.setUid("-1");
+				operation.setCreateDateTime(new java.util.Date());
+				operation.setDate(new java.util.Date());
+				operation.setDescription(MedwanQuery.getInstance().getConfigString("productionStockReceiptOperationDescription","medicationreceipt.production"));
+				//Link operation to productionorder
+				operation.setSourceDestination(new ObjectReference("production",sProductionOrderUid));
+				operation.setProductStockUid(order.getTargetProductStockUid());
+				//We first detect the produced quantity that has already been registered for this production order
+				operation.setUnitsChanged(nQuantity-nOrderQuantity);
+				operation.setVersion(1);
+				operation.setUpdateUser(activeUser.userid);
+				//Add person data to batch information
+				operation.setBatchUid(Batch.getByBatchNumber(order.getTargetProductStockUid(), sBatchId).getUid());
+				operation.store();
+			}
 			//Now close the production order
 			order.setCloseDateTime(dClose);
 			order.setUpdateDateTime(new java.util.Date());
@@ -217,7 +238,13 @@
 					if(order.canClose(activeUser)){
 				%>
 					<input class='button' type='button' name='closeButton' id='closeButton' value='<%=getTran(null,"web","closeorder",sWebLanguage) %>' onclick='closeProductionOrder()'/>
-				<%	}
+				<%	
+					}
+					if(order.canCancel()){
+				%>
+					<input class='button' type='button' name='cancelButton' id='cancelButton' value='<%=getTranNoLink("web","cancelorder",sWebLanguage) %>' onclick='cancelProductionOrder()'/>
+				<%	
+					}
 					if(order.getCloseDateTime()!=null && activeUser.getAccessRightNoSA("pharmacy.reopenproductionorder.select")){
 				%>
 					<input class='button' type='button' name='reopenButton' id='reopenButton' value='<%=getTranNoLink("web","reopen",sWebLanguage) %>' onclick='reopenProductionOrder()'/>
@@ -263,6 +290,11 @@
 			document.getElementById('action').value='close';
 			transactionForm.submit();
 		}
+	}
+	
+	function cancelProductionOrder(){
+		document.getElementById('action').value='cancel';
+		transactionForm.submit();
 	}
 	
 	function reopenProductionOrder(){

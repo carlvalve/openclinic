@@ -349,6 +349,33 @@ TD.admin {
  line-height:22px;
 }
 
+TD.bigadmin {
+ color:#505050;
+ font-family:arial, sans-serif;
+ font-size:16px;
+ font-weight:bolder;
+ text-align:center;
+ padding:3px;
+ text-indent:5px;
+ background-color:#C3D9FF;
+ height:28px;
+ line-height:28px;
+}
+
+TD.admincentered {
+ color:#505050;
+ font-family:arial, sans-serif;
+ font-size:10px;
+ font-weight:bolder;
+ text-align:center;
+ vertical-align:middle;
+ padding:3px;
+ text-indent:5px;
+ background-color:#C3D9FF;
+ height:22px;
+ line-height:22px;
+}
+
 TD.admingrey {
  color: #F0F0F0;
  font-family:arial, sans-serif;
@@ -839,6 +866,15 @@ INPUT.greytext {
  FONT-FAMILY:arial, sans-serif; 
 }
 	
+INPUT.redtext {
+ FONT-WEIGHT:normal;
+ FONT-SIZE:10px;
+ height:18px;
+ background-color:#FF7F50;
+ COLOR:black;
+ FONT-FAMILY:arial, sans-serif; 
+}
+	
 INPUT.normal {
  FONT-WEIGHT:normal;
  FONT-SIZE:10px;
@@ -847,6 +883,16 @@ INPUT.normal {
  height:18px;
  FONT-FAMILY:arial, sans-serif;
  background:url("../../_img/themes/default/back_input.png") no-repeat;
+}
+
+INPUT.barcode {
+ FONT-WEIGHT:normal;
+ FONT-SIZE:20px;
+ text-align: center;
+ BACKGROUND:#fff;
+ COLOR:black;
+ height:28px;
+ FONT-FAMILY:arial, sans-serif;
 }
 
 INPUT.checkbox {
@@ -1033,6 +1079,18 @@ input.redbutton {
  border:solid 1px #b5b5b5;
  cursor:pointer;
  background-color:#ff3300;
+}
+
+input.bigbutton {
+ padding-bottom:2px;
+ font-family:arial, sans-serif;
+ font-size:20px;
+ font-weight:normal;
+ color:black;
+ height:28px;
+
+ border:solid 1px #b5b5b5;
+ cursor:pointer;
 }
 
 input.hiddenredbutton {

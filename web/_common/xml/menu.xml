@@ -59,6 +59,7 @@
 			</Menu>
 			<Menu labelid="manageProductStockDocuments" accessrights="pharmacy.manageproductstockdocuments.select" url="/main.do?Page=pharmacy/manageProductStockDocuments.jsp"/>
 			<Menu labelid="recalculatePrices" accessrights="pharmacy.recalculateprices.select" url="/main.do?Page=pharmacy/recalculatePrices.jsp"/>
+			<Menu labelid="quickinventoryupdate" accessrights="pharmacy.updateinventory.select" url="javascript:quickinventoryupdate()"/>
 			<Menu labelid="synchronization" accessrights="pharmacy.synchronization.select">
 				<Menu labelid="export" accessrights="pharmacy.export.select" url="javascript:downloadPharmacyExport();"/>
 				<Menu labelid="import" accessrights="pharmacy.import.select" url="/main.do?Page=pharmacy/importFile.jsp"/>

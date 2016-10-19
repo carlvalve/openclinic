@@ -210,6 +210,7 @@
 					drugs+= "<tr class='admin'>"+
 				             "<td/>"+
 							 "<td>ID</td>"+
+				             "<td>"+getTran(request,"web","code",sWebLanguage)+"</td>"+
 				             "<td>"+getTran(request,"web","product",sWebLanguage)+"</td>"+
 							 "<td>"+getTran(request,"web","quantity",sWebLanguage)+"</td>"+
 				             "<td>"+getTran(request,"web","batch",sWebLanguage)+"</td>"+
@@ -231,6 +232,7 @@
 				           "<img src='_img/icons/icon_delete.gif' class='link' title='"+getTranNoLink("web","delete",sWebLanguage)+"'/></a>"+
 				         "</td>"+
 				         "<td class='admin2'>"+stock.getUid()+"</td>"+
+				         "<td class='admin2'><b>"+stock.getProduct().getCode()+"</b></td>"+
 				         "<td class='admin2'><b>"+stock.getProduct().getName()+"</b>"+stocklabel+"</td>"+
 				         "<td class='admin2'><b>"+rs.getInt("OC_LIST_QUANTITY")+"</b></td>"+
 				         "<td class='admin2'>"+sBatch+"</td>"+

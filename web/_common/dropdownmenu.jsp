@@ -772,9 +772,14 @@
         }
     %>
   }
+  function quickinventoryupdate(){
+	    void(0);
+	    openPopup("/pharmacy/quickInventoryUpdate.jsp&ts=<%=getTs()%>",300,400);
+	  }
   function showAdminPopup(){
-    openPopup("/_common/patient/patientdataPopup.jsp&ts=<%=getTs()%>");
-  }
+	    openPopup("/_common/patient/patientdataPopup.jsp&ts=<%=getTs()%>");
+	  }
+  
   function showQueues(){
       window.open("<c:url value='/util/manageQueues.jsp'/>?ts=<%=getTs()%>","Queue","toolbar=no,status=no,scrollbars=yes,resizable=yes,width=800,height=740,location=no,menubar=no").moveTo((screen.width - 800) / 2,(screen.height - 620) / 2);
 	  //openPopup("/util/manageQueues.jsp&ts=<%=getTs()%>&PopupWidth=800&PopupHeight=620");

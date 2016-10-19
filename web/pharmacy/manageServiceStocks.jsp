@@ -1460,7 +1460,7 @@ private String addValidationUser(int userIdx, String userName, String sWebLangua
   }
 
   function printInventorySummary(serviceStockUid){
-	openPopup("statistics/pharmacy/getServiceStockInventorySummary.jsp&ts=<%=getTs()%>&ServiceStockUid="+serviceStockUid,700,100);
+	openPopup("statistics/pharmacy/getServiceStockInventorySummary.jsp&ts=<%=getTs()%>&ServiceStockUid="+serviceStockUid,700,500);
   }
 
   function printStockOperations(serviceStockUid){
@@ -1512,7 +1512,7 @@ private String addValidationUser(int userIdx, String userName, String sWebLangua
 	  }
 
   function printExpiration(serviceStockUid){
-	openPopup("statistics/pharmacy/getExpiration.jsp&ts=<%=getTs()%>&ServiceStockUid="+serviceStockUid,200,200);
+	openPopup("statistics/pharmacy/getExpiration.jsp&ts=<%=getTs()%>&ServiceStockUid="+serviceStockUid,500,200);
   }
 
   function printStockOut(serviceStockUid){
