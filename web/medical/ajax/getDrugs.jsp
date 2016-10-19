@@ -28,17 +28,17 @@
                 if(sServiceStockUid.length()==0){
                 	levels=product.getAccessibleStockLevels();
 	                if(levels.equalsIgnoreCase("0/0")){
-	                	out.write("<font color='lightgray'>"+HTMLEntities.htmlentities(product.getName())+" ("+levels+")</font>");
+	                	out.write("<font color='lightgray'>"+HTMLEntities.htmlentities(product.getCode())+" "+HTMLEntities.htmlentities(product.getName())+" ("+levels+")</font>");
 	                }
 	                else if(levels.indexOf("0/")==0){
-	                	out.write(HTMLEntities.htmlentities(product.getName())+" ("+levels+")");
+	                	out.write(HTMLEntities.htmlentities(product.getCode())+" "+HTMLEntities.htmlentities(product.getName())+" ("+levels+")");
 	                }
 	                else {
-	                	out.write("<b>"+HTMLEntities.htmlentities(product.getName())+"</b> ("+levels+")");
+	                	out.write("<b>"+HTMLEntities.htmlentities(product.getCode())+" "+HTMLEntities.htmlentities(product.getName())+"</b> ("+levels+")");
 	                }
                 }
                 else{
-                	out.write("<b>"+HTMLEntities.htmlentities(product.getName())+"</b>");
+                	out.write("<b>"+HTMLEntities.htmlentities(product.getCode())+" "+HTMLEntities.htmlentities(product.getName())+"</b>");
                 	
                 }
                 out.write("<span style='display:none'>"+product.getUid()+"-idcache</span>");

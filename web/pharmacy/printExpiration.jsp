@@ -2,7 +2,8 @@
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
 <%
-	String sDate = checkString(request.getParameter("FindDate"));
+	String sBegin = checkString(request.getParameter("begin"));
+	String sEnd = checkString(request.getParameter("end"));
 	String sServiceStockId=checkString(request.getParameter("ServiceStockUid"));
     sProject = checkString((String)session.getAttribute("activeProjectTitle")).toLowerCase();
 	PDFPharmacyReportGenerator pdfGenerator = new PDFPharmacyReportGenerator(activeUser,sProject);
@@ -10,7 +11,8 @@
     try {
         Hashtable parameters = new Hashtable();
         parameters.put("serviceStockUID",sServiceStockId);
-        parameters.put("date",sDate);
+        parameters.put("begin",sBegin);
+        parameters.put("end",sEnd);
     	baosPDF = pdfGenerator.generatePDFDocumentBytes(request,"expiration",parameters);
         StringBuffer sbFilename = new StringBuffer();
         sbFilename.append("filename_").append(System.currentTimeMillis()).append(".pdf");

@@ -1,6 +1,7 @@
 <%@page import="be.openclinic.pharmacy.*"%>
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/_common/templateAddIns.jsp"%>
+<%=sJSSORTTABLE%>
 <%
 	String sServiceStockUid=request.getParameter("ServiceStockUid");
 	String sRequestingServiceStockUid=request.getParameter("RequestingServiceStockUid");
@@ -23,9 +24,12 @@
 %>
 <form name="transactionForm" method="post">
 	<table width="100%">
-		<tr class='admin'><td colspan='6'><%=getTran(request,"web","acceptorderfrom",sWebLanguage) %> [<%=serviceName %>]</td></tr>
+		<tr class='admin'><td><%=getTran(request,"web","acceptorderfrom",sWebLanguage) %> [<%=serviceName %>]</td></tr>
+	</table>
+	<table width="100%" class="sortable" id="searchresults">
 		<tr class='admin'>
 			<td><%=getTran(request,"web","product",sWebLanguage) %></td>
+			<td><%=getTran(request,"web","PO",sWebLanguage) %></td>
 			<td></td>
 			<td><%=getTran(request,"web","ordered",sWebLanguage) %></td>
 			<td><%=getTran(request,"web","amc",sWebLanguage) %></td>
@@ -52,21 +56,21 @@
 				ProductStock remoteStock=ProductStock.get(rs.getString("oc_stock_serverid")+"."+rs.getString("oc_stock_objectid"));
 				Vector productstocks = ProductStock.find(sServiceStockUid, rs.getString("oc_stock_productuid"), "", "", "", "", "", "", "", "", "", "oc_stock_productuid", "");
 				String orderuid=rs.getInt("oc_order_serverid")+"."+rs.getInt("oc_order_objectid");
+				String productionorderuid = checkString(rs.getString("oc_order_productionorderuid"));
 				if(productstocks.size()>0 ){
 					ProductStock localStock = (ProductStock)productstocks.elementAt(0);
 					if(localStock.getLevel()>0){
 						int ordered=rs.getInt("oc_order_packagesordered");
 						int delivered=rs.getInt("oc_order_packagesdelivered");
-						String productionorderuid = checkString(rs.getString("oc_order_productionorderuid"));
 						int quantity=ordered-delivered;
-						out.println("<tr><td class='admin'><a href='javascript:doOrder(\""+localStock.getUid()+"\","+quantity+",\""+orderuid+"\",\""+productionorderuid+"\")'>"+rs.getString("oc_order_description")+"</a></td><td class='admin2'><img src='"+sCONTEXTPATH+"/_img/icons/icon_erase.gif' title='"+getTran(request,"web","refuse",sWebLanguage)+"' onclick='closeOrder(\""+orderuid+"\")'/></td><td class='admin2'>"+ordered+"</td><td class='admin2'>"+remoteStock.getAverageConsumption(12, true, false, false)+"</td><td class='admin2'>"+delivered+"</td><td class='admin2'>"+localStock.getLevel()+"</td></tr>");
+						out.println("<tr><td class='admin'><a href='javascript:doOrder(\""+localStock.getUid()+"\","+quantity+",\""+orderuid+"\",\""+productionorderuid+"\")'>"+rs.getString("oc_order_description")+"</a></td><td class='admin2'>"+productionorderuid+"</td><td class='admin2'><img src='"+sCONTEXTPATH+"/_img/icons/icon_erase.gif' title='"+getTran(request,"web","refuse",sWebLanguage)+"' onclick='closeOrder(\""+orderuid+"\")'/></td><td class='admin2'>"+ordered+"</td><td class='admin2'>"+remoteStock.getAverageConsumption(12, true, false, false)+"</td><td class='admin2'>"+delivered+"</td><td class='admin2'>"+localStock.getLevel()+"</td></tr>");
 					}
 					else{
-						out.println("<tr><td class='admingrey'>"+rs.getString("oc_order_description")+"</td><td class='admin2'><img src='"+sCONTEXTPATH+"/_img/icons/icon_erase.gif' title='"+getTran(request,"web","refuse",sWebLanguage)+"' onclick='closeOrder(\""+orderuid+"\")'/></td><td class='admin2'>"+rs.getString("oc_order_packagesordered")+"</td><td class='admin2'>"+rs.getString("oc_order_packagesdelivered")+"</td><td class='admin2'/></tr>");
+						out.println("<tr><td class='admingrey'>"+rs.getString("oc_order_description")+"</td><td class='admin2'>"+productionorderuid+"</td><td class='admin2'><img src='"+sCONTEXTPATH+"/_img/icons/icon_erase.gif' title='"+getTran(request,"web","refuse",sWebLanguage)+"' onclick='closeOrder(\""+orderuid+"\")'/></td><td class='admin2'>"+rs.getString("oc_order_packagesordered")+"</td><td class='admin2'>"+rs.getString("oc_order_packagesdelivered")+"</td><td class='admin2'/></tr>");
 					}
 				}
 				else{
-					out.println("<tr><td class='admingrey'>"+rs.getString("oc_order_description")+"</td><td class='admin2'><img src='"+sCONTEXTPATH+"/_img/icons/icon_erase.gif' title='"+getTran(request,"web","refuse",sWebLanguage)+"' onclick='closeOrder(\""+orderuid+"\")'/></td><td class='admin2'>"+rs.getString("oc_order_packagesordered")+"</td><td class='admin2'>"+rs.getString("oc_order_packagesdelivered")+"</td><td class='admin2'/></tr>");
+					out.println("<tr><td class='admingrey'>"+rs.getString("oc_order_description")+"</td><td class='admin2'>"+productionorderuid+"</td><td class='admin2'><img src='"+sCONTEXTPATH+"/_img/icons/icon_erase.gif' title='"+getTran(request,"web","refuse",sWebLanguage)+"' onclick='closeOrder(\""+orderuid+"\")'/></td><td class='admin2'>"+rs.getString("oc_order_packagesordered")+"</td><td class='admin2'>"+rs.getString("oc_order_packagesdelivered")+"</td><td class='admin2'/></tr>");
 				}
 			}
 			rs.close();

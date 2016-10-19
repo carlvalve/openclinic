@@ -170,7 +170,7 @@
            		//Debug.println("sPatientSelectedRequired : "+sPatientSelectedRequired); 
            		
 		        if(sPatientSelectedRequired.equalsIgnoreCase("true")){
-		        	boolean patientSelected = (activePatient!=null && activePatient.personid.length() > 0);
+		        	boolean patientSelected = (activePatient!=null && activePatient.personid!=null && activePatient.personid.length() > 0);
 	           		//Debug.println("patientSelected : "+patientSelected);
 	                okToDisplayIcon = patientSelected;
 	            }
@@ -182,7 +182,7 @@
 	       		String sEmployeeSelectedRequired = checkString(menuElem.attributeValue("employeeselected"));
            		//Debug.println("sEmployeeSelectedRequired : "+sEmployeeSelectedRequired);
            		
-		        if(sEmployeeSelectedRequired.equalsIgnoreCase("true")){
+		        if(sEmployeeSelectedRequired.equalsIgnoreCase("true") && activePatient!=null){
 	                boolean employeeSelected = activePatient.isEmployee();
 	           		//Debug.println("employeeSelected : "+employeeSelected);
 	                okToDisplayIcon = employeeSelected;
@@ -277,7 +277,7 @@
 				else{
                     %><img class="link" onclick="showPACS()" border='0' src="<c:url value='/_img/icons/icon_xray.png'/>" title="<%=getTranNoLink("web","imagestore",sWebLanguage)%>"/><%
 				}
-		        if(activeUser.getAccessRight("labos.patientlaboresults.select") && activePatient.hasLabRequests()){
+		        if(activePatient!=null && activeUser.getAccessRight("labos.patientlaboresults.select") && activePatient.hasLabRequests()){
 		            %><input type='button' accesskey=':' onclick="clickMenuItem('javascript:searchLab();');" style='display: none'/><img class="link" onclick="clickMenuItem('javascript:searchLab();');" title="<%=getTranNoLink("Web","labresults",sWebLanguage)%>" src="<c:url value='/_img/icons/icon_labo.png'/>"/><%
 		        }
 		        %><img class="link" onclick="clickMenuItem('<c:url value="/mobile/patientMenu.jsp"/>');" border='0' src="<c:url value='/_img/icons/icon_mobile.gif'/>" title="<%=getTranNoLink("web","mobile.interface",sWebLanguage)%>"/>&nbsp;<%

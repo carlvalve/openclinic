@@ -8,6 +8,7 @@
 	boolean bAutoFind = bActivePatientOnly && checkString(request.getParameter("autofind")).equalsIgnoreCase("1");
 	String sProductStockUid = checkString(request.getParameter("EditProductStockUid"));
 	String sProductionOrderUid = checkString(request.getParameter("EditProductionOrderId"));
+	String sProductionOrderTechnician = checkString(request.getParameter("EditProductionOrderTechnician"));
 	String sMinDate = checkString(request.getParameter("EditMinDate"));
 	String sMaxDate = checkString(request.getParameter("EditMaxDate"));
 	String sAction = checkString(request.getParameter("action"));
@@ -96,6 +97,15 @@
 	        </td>
 		</tr>
 		<tr>
+			<td class='admin' width='1%' nowrap><%=getTran(request,"web","technician",sWebLanguage) %>&nbsp;</td>
+			<td class='admin2'>
+				<select class='text' name='EditProductionOrderTechnician' id='EditProductionOrderTechnician'/>
+					<option/>
+					<%=ScreenHelper.writeSelect(request,"productiontechnician", sProductionOrderTechnician, sWebLanguage) %>
+				</select>
+			</td>
+		</tr>
+		<tr>
 			<td class='admin' width="<%=sTDAdminWidth%>" nowrap><%=getTran(request,"web","begindate",sWebLanguage) %>&nbsp;</td>
 			<td class='admin2'><%=ScreenHelper.writeDateField("EditMinDate", "transactionForm", "", true, false, sWebLanguage, sCONTEXTPATH,"transactionForm.EditProductionOrderId.value=\"\"") %></td>
 		</tr>
@@ -156,9 +166,11 @@
 			if(sServiceStockUid.length()>0){
 				for(int n=0;n<productionOrders.size();n++){
 					ProductionOrder order = (ProductionOrder)productionOrders.elementAt(n);
-					if(order.getProductStock().getServiceStockUid().equalsIgnoreCase(sServiceStockUid)){
-						bHasContent=true;
-						break;
+					if(sProductionOrderTechnician.length()==0 || sProductionOrderTechnician.equalsIgnoreCase(order.getTechnician())){
+						if(order.getProductStock()!=null && order.getProductStock().getServiceStockUid()!=null && order.getProductStock().getServiceStockUid().equalsIgnoreCase(sServiceStockUid)){
+							bHasContent=true;
+							break;
+						}
 					}
 				}
 			}
@@ -178,7 +190,10 @@
 				<%
 				for(int n=0;n<productionOrders.size();n++){
 					ProductionOrder order = (ProductionOrder)productionOrders.elementAt(n);
-					if(sServiceStockUid.length()>0 && !order.getProductStock().getServiceStockUid().equalsIgnoreCase(sServiceStockUid)){
+					if(sProductionOrderTechnician.length()>0 && !sProductionOrderTechnician.equalsIgnoreCase(order.getTechnician())){
+						continue;
+					}
+					if(order.getProductStock()==null || order.getProductStock().getServiceStockUid()==null || (sServiceStockUid.length()>0 && !order.getProductStock().getServiceStockUid().equalsIgnoreCase(sServiceStockUid))){
 						continue;	
 					}
 					ProductStock stock = order.getProductStock();

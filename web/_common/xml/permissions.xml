@@ -188,6 +188,7 @@
         <permission type="web" id="medicationschema">medication.medicationschema</permission>
     </application>
     <application type="Web" id="financial">
+        <permission type="web" id="financial.patientinvoice.overrideprintrestrictions">financial.patientinvoice.overrideprintrestrictions</permission>
         <permission type="web" id="financial.closeantedatedinvoice">financial.closeantedatedinvoice</permission>
         <permission type="web" id="needsapprovalrights">financial.insurerapproval</permission>
         <permission type="web" id="noshowinvoicecredit">financial.invoicenoshow</permission>
@@ -284,7 +285,9 @@
         <permission type="web" id="exporttomaster">system.exporttomaster</permission>
         <permission type="web" id="devices">system.devices</permission>
     </application>
-    <application type="Web" id="pharmacy">
+    <application type="Web" id="pharmacy">pharmacy.updateinventory
+    	<permission type="web" id="pharmacy.updateinventory">pharmacy.updateinventory</permission>
+    	<permission type="web" id="pharmacy.production.deliverwhendebt">pharmacy.production.deliverwhendebt</permission>
     	<permission type="web" id="pharmacy.overridelinkedmaterialsrequirement">pharmacy.overridelinkedmaterialsrequirement</permission>
         <permission type="web" id="patient.copypharmacystocks">patient.copypharmacystocks</permission>
         <permission type="web" id="patient.modifypharmacydelivery">patient.modifypharmacydelivery</permission>

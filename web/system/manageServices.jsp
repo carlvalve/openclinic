@@ -895,6 +895,15 @@
                 }
 
                 if(maySubmit){
+                    <%-- check for valid contact-email --%>
+                    if(transactionForm.EditServiceCode.value==transactionForm.EditServiceParentCode.value){
+                        maySubmit = false;
+                        alertDialog("web","codeandparentmaynotbeidentical");
+                        transactionForm.EditServiceCode.focus();
+                    }
+                }	
+                
+                if(maySubmit){
                   if(transactionForm.EditServiceCode.value.length>0){
                     var allLabelsHaveAValue = true;
                     var emptyLabelField = "";

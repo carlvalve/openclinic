@@ -614,6 +614,7 @@
 
                 // pdf print button for existing invoices
                 if(checkString(patientInvoice.getUid()).length() > 0){
+                	if(activeUser.getAccessRightNoSA("financial.patientinvoice.overrideprintrestrictions.select") || patientInvoice.canBePrinted()){
                     %>
                         <%=getTran(request,"Web.Occup","PrintLanguage",sWebLanguage)%>
 
@@ -697,6 +698,7 @@
                         <input accesskey="I" class="button" type="button" name="buttonPrint" value='<%=getTranNoLink("Web","print.receipt.pdf",sWebLanguage)%>' onclick="doPrintPatientReceiptPdf('<%=patientInvoice.getUid()%>');">
                         <%
                         	}
+                		}
                         %>
                         <%
                         	if(MedwanQuery.getInstance().getConfigInt("enablePatientInvoiceRecreation",0)==1 && activeUser.getAccessRight("financial.modifyinvoice.select") && checkString(patientInvoice.getStatus()).equalsIgnoreCase("closed")){
@@ -887,7 +889,12 @@
 	        );
 		}
 
+		
 	    function doSave(){
+	    	yesnoModalBox("doSaveInvoice()","<%=ScreenHelper.getTranNoLink("Web","areYouSureToCreateInvoice",sWebLanguage)%>");
+	    }
+	    
+	    function doSaveInvoice(){
 	        var bInvoiceSeries=false;
 	        var sInvoiceSeries="";
 	        if(EditForm.invoiceseries){

@@ -130,46 +130,54 @@
         	ps.setTimestamp(2,new Timestamp(new java.util.Date().getTime()-7*day));
         	ResultSet rs = ps.executeQuery();
         	int counter=0;
-        	while(rs.next() && counter<MedwanQuery.getInstance().getConfigInt("maxMostRecentHealthrecords",20)){
-        		String patientid = rs.getString("accesscode").replaceAll("A.", "");
-        		AdminPerson patient = AdminPerson.getAdminPerson(patientid);
-        		if(patient!=null && patient.lastname!=null && patient.lastname.length()>0){
-            		counter++;
-            		String cls = "admin2";
-            		java.sql.Timestamp lastaccess = rs.getTimestamp("accesstime");
-            		if(new java.util.Date().getTime()-lastaccess.getTime()>day){
-            			out.println("<tr class='listText'>");
-            			cls="";
-            		}else {
-            			out.println("<tr>");
-            		}
-	        		out.println("<td class='admin'><a href='"+sCONTEXTPATH+"/patientslist.do?findPersonID="+patient.personid+"'>"+patient.personid+"</a></td>");
-	        		out.println("<td class='"+cls+"'><b>"+patient.getFullName()+"</b></td>");
-	        		out.println("<td class='"+cls+"'>"+patient.dateOfBirth+"</td>");
-	        		out.println("<td class='"+cls+"'>"+patient.gender+"</td>");
-	        		Encounter encounter=Encounter.getActiveEncounter(patient.personid);
-	        		if(encounter!=null){
-		        		out.println("<td class='"+cls+"'><a href='"+sCONTEXTPATH+"/patientslist.do?findUnit="+encounter.getServiceUID()+"'>"+encounter.getService().getLabel(sWebLanguage)+"</a></td>");
-		        		if(activeUser.getAccessRight("diagnoses.select")){
-		        			String sDiagnoses = "<table>";
-			        		Vector diagnoses = Diagnosis.selectDiagnoses("", "", encounter.getUid(), "", "", "", "", "", "", "", "", "", "");
-			        		if(diagnoses.size()>0){
-			        			for(int n=0;n<diagnoses.size();n++){
-			        				Diagnosis diag = (Diagnosis)diagnoses.elementAt(n);
-		        					sDiagnoses+="<tr><td>"+diag.getCode()+"</td><td><b>"+diag.getLabel(sWebLanguage)+"</b></td></tr>";
-			        			}
+			try{
+	        	while(rs.next() && counter<MedwanQuery.getInstance().getConfigInt("maxMostRecentHealthrecords",20)){
+	        		String patientid = rs.getString("accesscode").replaceAll("A.", "");
+	        		AdminPerson patient = AdminPerson.getAdminPerson(patientid);
+	        		if(patient!=null && patient.lastname!=null && patient.lastname.length()>0){
+	            		counter++;
+	            		String cls = "admin2";
+	            		java.sql.Timestamp lastaccess = rs.getTimestamp("accesstime");
+	            		if(new java.util.Date().getTime()-lastaccess.getTime()>day){
+	            			out.println("<tr class='listText'>");
+	            			cls="";
+	            		}else {
+	            			out.println("<tr>");
+	            		}
+		        		out.println("<td class='admin'><a href='"+sCONTEXTPATH+"/patientslist.do?findPersonID="+patient.personid+"'>"+patient.personid+"</a></td>");
+		        		out.println("<td class='"+cls+"'><b>"+patient.getFullName()+"</b></td>");
+		        		out.println("<td class='"+cls+"'>"+patient.dateOfBirth+"</td>");
+		        		out.println("<td class='"+cls+"'>"+patient.gender+"</td>");
+		        		Encounter encounter=Encounter.getActiveEncounter(patient.personid);
+		        		if(encounter!=null){
+			        		out.println("<td class='"+cls+"'><a href='"+sCONTEXTPATH+"/patientslist.do?findUnit="+encounter.getServiceUID()+"'>"+encounter.getService().getLabel(sWebLanguage)+"</a></td>");
+			        		if(activeUser.getAccessRight("diagnoses.select")){
+			        			String sDiagnoses = "<table>";
+				        		Vector diagnoses = Diagnosis.selectDiagnoses("", "", encounter.getUid(), "", "", "", "", "", "", "", "", "", "");
+				        		if(diagnoses.size()>0){
+				        			for(int n=0;n<diagnoses.size();n++){
+				        				Diagnosis diag = (Diagnosis)diagnoses.elementAt(n);
+			        					sDiagnoses+="<tr><td>"+diag.getCode()+"</td><td><b>"+diag.getLabel(sWebLanguage)+"</b></td></tr>";
+				        			}
+				        		}
+				        		out.println("<td class='"+cls+"'>"+sDiagnoses+"</table></td>");
 			        		}
-			        		out.println("<td class='"+cls+"'>"+sDiagnoses+"</table></td>");
 		        		}
+		        		else{
+			        		out.println("<td class='"+cls+"'></td><td class='"+cls+"'></td>");
+		        		}
+		        		out.println("<td class='"+cls+"'>"+new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(lastaccess)+" <img src='"+sCONTEXTPATH+"/_img/icons/icon_history2.gif' onclick='javascript:getAccessHistory(20,"+patient.personid+")'/></td>");
+		        		out.println("<td class='"+cls+"'>"+rs.getInt("number")+"</td>");
+		        		out.println("</tr>");
 	        		}
-	        		else{
-		        		out.println("<td class='"+cls+"'></td><td class='"+cls+"'></td>");
-	        		}
-	        		out.println("<td class='"+cls+"'>"+new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(lastaccess)+" <img src='"+sCONTEXTPATH+"/_img/icons/icon_history2.gif' onclick='javascript:getAccessHistory(20,"+patient.personid+")'/></td>");
-	        		out.println("<td class='"+cls+"'>"+rs.getInt("number")+"</td>");
-	        		out.println("</tr>");
-        		}
-        	}
+	        	}
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+        	rs.close();
+        	ps.close();
+        	conn.close();
         	if(counter==0){
         		if(activeUser.getAccessRight("diagnoses.select")){
         			out.println("<td colspan='8'>"+getTran(request,"web","norecordsfound",sWebLanguage)+"</td>");

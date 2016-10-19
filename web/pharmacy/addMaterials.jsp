@@ -12,6 +12,12 @@
 		}
 	}
 	String sProductionOrderId=checkString(request.getParameter("productionOrderId"));
+	ProductionOrder productionOrder=null;
+	int nSummarySize=0;
+	if(sProductionOrderId.length()>0){
+		productionOrder = ProductionOrder.get(Integer.parseInt(sProductionOrderId));
+		nSummarySize=productionOrder.getMaterialsSummary().size();
+	}
 	String sAction = checkString(request.getParameter("action"));
 	Debug.println("sProductionOrderId = "+sProductionOrderId);
 	Debug.println("sAction            = "+sAction);
@@ -32,21 +38,32 @@
 			if(sProductStockUid.length()>0){
 				ProductStock productStock = ProductStock.get(sProductStockUid);
 				if(productStock!=null && productStock.getProduct()!=null){
-					ProductOrder order = new ProductOrder();
-					order.setCreateDateTime(new java.util.Date());
-					order.setDateOrdered(new java.util.Date());
-					order.setDescription(productStock.getProduct().getName()+" ("+getTranNoLink("web","productionorder",sWebLanguage)+" #"+sProductionOrderId+")");
-					order.setFrom(MedwanQuery.getInstance().getConfigString("mainProductionWarehouseUID",""));
-					order.setImportance("type1native");
-					order.setPackagesOrdered(quantity);
-					order.setProductStockUid(sProductStockUid);
-					order.setUpdateDateTime(new java.util.Date());
-					order.setUpdateUser(activeUser.userid);
-					order.setUid("-1");
-					order.setVersion(1);
-					order.setProductionorderuid(sProductionOrderId);
-					order.store();
-					//Add materials to productorder
+					//if an open productorder already exists for this material, add it to the existing one
+					//if not, create a new productorder
+					ProductOrder order = null;
+					Vector orders = ProductOrder.findProductOrdersForProductionOrder(false, true, Integer.parseInt(sProductionOrderId), sProductStockUid, MedwanQuery.getInstance().getConfigString("mainProductionWarehouseUID",""));
+					if(orders.size()>0){
+						order = (ProductOrder)orders.elementAt(0);
+						order.setPackagesOrdered(order.getPackagesOrdered()+quantity);
+						order.store();
+					}
+					else{
+						order = new ProductOrder();
+						order.setCreateDateTime(new java.util.Date());
+						order.setDateOrdered(new java.util.Date());
+						order.setDescription(productStock.getProduct().getName()+" ("+getTranNoLink("web","productionorder",sWebLanguage)+" #"+sProductionOrderId+")");
+						order.setFrom(MedwanQuery.getInstance().getConfigString("mainProductionWarehouseUID",""));
+						order.setImportance("type1native");
+						order.setPackagesOrdered(quantity);
+						order.setProductStockUid(sProductStockUid);
+						order.setUpdateDateTime(new java.util.Date());
+						order.setUpdateUser(activeUser.userid);
+						order.setUid("-1");
+						order.setVersion(1);
+						order.setProductionorderuid(sProductionOrderId);
+						order.store();
+					}
+					//Add materials to productionorder
 					ProductionOrderMaterial material = new ProductionOrderMaterial();
 					material.setCreateDateTime(order.getCreateDateTime());
 					material.setProductionOrderId(Integer.parseInt(sProductionOrderId));
@@ -86,7 +103,18 @@
 		}
 		%>
 		<script>
-			window.opener.loadMaterials();
+		<%
+			if(productionOrder!=null && (productionOrder.getMaterialsSummary().size()==0 || nSummarySize==0)){
+				%>
+				window.opener.location.reload();
+				<%
+			}
+			else{
+				%>
+				window.opener.loadMaterials();
+				<%
+			}
+		%>
 			window.close();
 		</script>
 		<%

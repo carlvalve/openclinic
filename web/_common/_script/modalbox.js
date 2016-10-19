@@ -23,10 +23,10 @@ Modalbox.Methods = {
 		width: 500, // Default width in px
 		height: 80, // Default height in px
 		overlayOpacity: .35, // Default overlay opacity
-		overlayDuration: .10, // Default overlay fade in/out duration in seconds
-		slideDownDuration: .2, // Default Modalbox appear slide down effect in seconds
-		slideUpDuration: .1, // Default Modalbox hiding slide up effect in seconds
-		resizeDuration: .15, // Default resize duration seconds
+		overlayDuration: .05, // Default overlay fade in/out duration in seconds
+		slideDownDuration: .05, // Default Modalbox appear slide down effect in seconds
+		slideUpDuration: .05, // Default Modalbox hiding slide up effect in seconds
+		resizeDuration: .05, // Default resize duration seconds
 		inactiveFade: true, // Fades MB window on inactive state
 		transitions: true, // Toggles transition effects. Transitions are enabled by default
 		loadingString: "Please wait. Loading...",// Default loading string message
@@ -484,6 +484,7 @@ Modalbox.Methods = {
 
 	_setPosition: function(){
 		$(this.MBwindow).setStyle({left: (($(this.MBoverlay).getWidth() - $(this.MBwindow).getWidth()) / 2 ) + "px"});
+		$(this.MBwindow).setStyle({top: (($(this.MBoverlay).getHeight() - $(this.MBwindow).getHeight()) / 2 ) + "px"});
 	},
 
 	_setWidthAndPosition: function(){
