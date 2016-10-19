@@ -93,7 +93,7 @@ public class Batch extends OC_Object{
 	                batch.setUpdateUser(ScreenHelper.checkString(rs.getString("OC_BATCH_UPDATEUID")));
 	            }
 	            else{
-	                throw new Exception("ERROR : BATCH "+batchUid+" NOT FOUND");
+	                throw new Exception("ERROR : GET BATCH "+batchUid+" NOT FOUND");
 	            }
         	}
         }
@@ -146,7 +146,7 @@ public class Batch extends OC_Object{
                 batch.setUpdateUser(ScreenHelper.checkString(rs.getString("OC_BATCH_UPDATEUID")));
             }
             else{
-                throw new Exception("ERROR : BATCH "+batchNumber+" NOT FOUND");
+                throw new Exception("ERROR : GET BATCH BY NUMBER "+batchNumber+" NOT FOUND");
             }
         }
         catch(Exception e){

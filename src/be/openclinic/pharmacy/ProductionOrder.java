@@ -111,12 +111,43 @@ public class ProductionOrder extends OC_Object{
 		return ProductionOrderMaterial.getProductionOrderMaterials(getId());
 	}
 
+	public Vector getUnusedMaterials() {
+		return ProductionOrderMaterial.getProductionOrderUnusedMaterials(getId());
+	}
+
+	public Vector getMaterialsSummary() {
+		return ProductionOrderMaterial.getProductionOrderMaterialsSummary(getId());
+	}
+
+	public Vector getUnusedMaterialsSummary() {
+		return ProductionOrderMaterial.getProductionOrderUnusedMaterialsSummary(getId());
+	}
+
+	public boolean canCancel(){
+    	if(getCloseDateTime()!=null){
+    		return false;
+    	}
+    	if(getMaterialsSummary().size()>0){
+    		return false;
+    	}
+		if(ScreenHelper.checkString(getTargetProductStockUid()).length()==0){
+			return false;
+		}
+    	return true;
+	}
+	
     public boolean canClose(User user){
     	if(getCloseDateTime()!=null){
     		return false;
     	}
+		if(getMaterials().size()==0){
+			return false;
+		}
+		if(ScreenHelper.checkString(getTargetProductStockUid()).length()==0){
+			return false;
+		}
     	Hashtable productstocks = new Hashtable();
-		Vector materials = getMaterials();
+		Vector materials = getUnusedMaterials();
 		for(int n=0;n<materials.size();n++){
 			ProductionOrderMaterial material = (ProductionOrderMaterial)materials.elementAt(n);
 			ProductStock productStock = ProductStock.get(material.getProductStockUid());
@@ -128,9 +159,6 @@ public class ProductionOrder extends OC_Object{
 					productstocks.put(productStock.getUid(),material.getQuantity()+(Double)productstocks.get(productStock.getUid()));
 				}
 			}
-		}
-		if(materials.size()==0){
-			return false;
 		}
 		Enumeration eProducts = productstocks.keys();
 		while(eProducts.hasMoreElements()){

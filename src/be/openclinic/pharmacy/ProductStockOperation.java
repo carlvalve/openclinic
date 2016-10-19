@@ -443,6 +443,40 @@ public class ProductStockOperation extends OC_Object{
     	return store(true);
     }
     
+    public static int getProducedQuantity(int nProductionOrderId,String sProductStockUid){
+    	int nQuantity=0;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection conn=MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+        	String sSql = "select sum(oc_operation_unitschanged) as quantity from oc_productstockoperations where oc_operation_description='medicationreceipt.production' and"
+        			+ " oc_operation_srcdesttype='production' and oc_operation_srcdestuid=? and oc_operation_productstockuid=?";
+        	ps=conn.prepareStatement(sSql);
+        	ps.setInt(1, nProductionOrderId);
+        	ps.setString(2, sProductStockUid);
+        	rs = ps.executeQuery();
+        	if(rs.next()){
+        		nQuantity=rs.getInt("quantity");
+        	}
+        	rs.close();
+        	ps.close();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                conn.close();
+            }
+            catch(SQLException se){
+                se.printStackTrace();
+            }
+        }
+        return nQuantity;
+    }
+    
     public String storeNoProductStockUpdate(){
         //First we will check if this operation is acceptable
     	boolean isnew=false;

@@ -187,6 +187,7 @@ public class PharmacyReports {
 		reportline+="FG ITEM CODE;";
 		reportline+="RM ITEM CODE;";
 		reportline+="RM ITEM DESCRIPTION;";
+		reportline+="RM ITEM QUANTITY;";
 		reportline+="RM ITEM COMMENT;";
 		reportline+="SALES ORDER NR;";
 		reportline+="ESTIMATED DELIVERY;";
@@ -204,12 +205,12 @@ public class PharmacyReports {
 						Product product = productionOrder.getProductStock().getProduct();
 						if(product!=null){
 							//Now we search for all raw materials
-							Vector materials = productionOrder.getMaterials();
+							Vector materials = productionOrder.getMaterialsSummary();
 							if(materials.size()==0){
 								reportline="";
 								reportline+=ScreenHelper.formatDate(productionOrder.getCreateDateTime())+";";
 								reportline+=productionOrder.getId()+";";
-								reportline+=product.getCode()+";;;;";
+								reportline+=product.getCode()+";;;;;";
 								if(productionOrder.getDebetUid()!=null){
 									Debet debet = Debet.get(productionOrder.getDebetUid());
 									if(debet!=null){
@@ -238,51 +239,42 @@ public class PharmacyReports {
 								for(int q=0;q<materials.size();q++){
 									reportline="";
 									ProductionOrderMaterial material = (ProductionOrderMaterial)materials.elementAt(q);
-									if(q==0){
-										reportline="";
-										reportline+=ScreenHelper.formatDate(productionOrder.getCreateDateTime())+";";
-										reportline+=productionOrder.getId()+";";
-										reportline+=product.getCode()+";";
-									}
-									else{
-										reportline+=";;;";
-									}
+									reportline="";
+									reportline+=ScreenHelper.formatDate(productionOrder.getCreateDateTime())+";";
+									reportline+=productionOrder.getId()+";";
+									reportline+=product.getCode()+";";
 									//Add material data
 									if(material.getProductStock()!=null && material.getProductStock().getProduct()!=null){
 										reportline+=material.getProductStock().getProduct().getCode()+";";
 										reportline+=material.getProductStock().getProduct().getName()+";";
+										reportline+=material.getQuantity()+";";
 										reportline+=material.getComment()+";";
 									}
 									else{
-										reportline+="?;?;?;";
+										reportline+="?;?;?;?;";
 									}
-									if(q==0){
-										if(productionOrder.getDebetUid()!=null){
-											Debet debet = Debet.get(productionOrder.getDebetUid());
-											if(debet!=null){
-												reportline+=debet.getPatientInvoiceUid()+";";
-												PatientInvoice invoice = PatientInvoice.get(debet.getPatientInvoiceUid());
-												if(invoice!=null && invoice.getEstimatedDeliveryDate()!=null){
-													reportline+=invoice.getEstimatedDeliveryDate()+";";
-												}
-												else{
-													reportline+=";";
-												}
+									if(productionOrder.getDebetUid()!=null){
+										Debet debet = Debet.get(productionOrder.getDebetUid());
+										if(debet!=null){
+											reportline+=debet.getPatientInvoiceUid()+";";
+											PatientInvoice invoice = PatientInvoice.get(debet.getPatientInvoiceUid());
+											if(invoice!=null && invoice.getEstimatedDeliveryDate()!=null){
+												reportline+=invoice.getEstimatedDeliveryDate()+";";
 											}
 											else{
-												reportline+=";;";
+												reportline+=";";
 											}
 										}
 										else{
 											reportline+=";;";
 										}
-										reportline+=ScreenHelper.getTranNoLink("productiontechnician",productionOrder.getTechnician(),language)+";";
-										reportline+=ScreenHelper.getTranNoLink("productiondestination",productionOrder.getDestination(),language)+";";
-										reportline+=ScreenHelper.formatDate(productionOrder.getCloseDateTime());
 									}
 									else{
-										reportline+=";;;;;";
+										reportline+=";;";
 									}
+									reportline+=ScreenHelper.getTranNoLink("productiontechnician",productionOrder.getTechnician(),language)+";";
+									reportline+=ScreenHelper.getTranNoLink("productiondestination",productionOrder.getDestination(),language)+";";
+									reportline+=ScreenHelper.formatDate(productionOrder.getCloseDateTime());
 									report.add(reportline+"\r\n");
 								}
 							}

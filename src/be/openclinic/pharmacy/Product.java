@@ -846,9 +846,10 @@ public class Product extends OC_Object implements Comparable {
         Connection oc_conn = MedwanQuery.getInstance().getOpenclinicConnection();
         try{
             String sSelect = "SELECT * FROM OC_PRODUCTS"+
-                             " WHERE OC_PRODUCT_NAME like ? order by OC_PRODUCT_NAME";
+                             " WHERE OC_PRODUCT_NAME like ? or OC_PRODUCT_CODE like ? order by OC_PRODUCT_NAME";
             ps = oc_conn.prepareStatement(sSelect);
             ps.setString(1, "%"+name+"%");
+            ps.setString(2, "%"+name+"%");
             rs = ps.executeQuery();
 
             int counter=0;
@@ -858,7 +859,7 @@ public class Product extends OC_Object implements Comparable {
             	counter++;
                 product = new Product();
                 product.setUid(rs.getString("OC_PRODUCT_SERVERID")+"."+rs.getString("OC_PRODUCT_OBJECTID"));
-
+                product.setCode(rs.getString("OC_PRODUCT_CODE"));
                 product.setName(rs.getString("OC_PRODUCT_NAME"));
                 product.setUnit(rs.getString("OC_PRODUCT_UNIT"));
                 product.setUnitPrice(rs.getDouble("OC_PRODUCT_UNITPRICE"));
@@ -941,14 +942,15 @@ public class Product extends OC_Object implements Comparable {
         try{
             String sSelect = "SELECT * FROM OC_PRODUCTS,OC_PRODUCTSTOCKS"+
                              " WHERE "
-                             + " OC_PRODUCT_NAME like ? AND"
+                             + " (OC_PRODUCT_NAME like ? OR OC_PRODUCT_CODE like ?) AND"
                              + " OC_PRODUCT_OBJECTID=replace(OC_STOCK_PRODUCTUID,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') AND"
                              + " OC_STOCK_SERVICESTOCKUID=? AND"
                              + " OC_STOCK_LEVEL>0"
                              + " order by OC_PRODUCT_NAME";
             ps = oc_conn.prepareStatement(sSelect);
             ps.setString(1, "%"+name+"%");
-            ps.setString(2, serviceStockUid);
+            ps.setString(2, "%"+name+"%");
+            ps.setString(3, serviceStockUid);
             rs = ps.executeQuery();
 
             int counter=0;
@@ -958,7 +960,7 @@ public class Product extends OC_Object implements Comparable {
             	counter++;
                 product = new Product();
                 product.setUid(rs.getString("OC_PRODUCT_SERVERID")+"."+rs.getString("OC_PRODUCT_OBJECTID"));
-
+                product.setCode(rs.getString("OC_PRODUCT_CODE"));
                 product.setName(rs.getString("OC_PRODUCT_NAME")+" ("+rs.getString("OC_STOCK_LEVEL")+")");
                 product.setUnit(rs.getString("OC_PRODUCT_UNIT"));
                 product.setUnitPrice(rs.getDouble("OC_PRODUCT_UNITPRICE"));
