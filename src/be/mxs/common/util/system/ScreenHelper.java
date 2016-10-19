@@ -1542,7 +1542,7 @@ public static String removeAccents(String sTest){
                 }
 
                 if(jsAlert.length() > 0){
-                    String sMessage = getTranNoLink("web","nopermission",activeUser.person.language);
+                    String sMessage = getTranNoLink("web","nopermission",activeUser==null || activeUser.person==null?"en":activeUser.person.language);
                     jsAlert = "<script>"+(screenIsPopup?"window.close();":"window.history.go(-1);")+
                                "var popupUrl = '"+sAPPFULLDIR+"/_common/search/okPopup.jsp?ts="+getTs()+"&labelValue="+sMessage;
 

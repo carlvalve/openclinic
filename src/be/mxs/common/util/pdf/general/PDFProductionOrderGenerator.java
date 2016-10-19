@@ -152,6 +152,10 @@ public class PDFProductionOrderGenerator extends PDFInvoiceGenerator {
             table.addCell(cell);
             cell = createValueCell(order.getProductStock().getProduct().getName(),80,10,Font.BOLD);
             table.addCell(cell);
+            cell = createValueCell(getTran("web","comment"),20,10,Font.NORMAL);
+            table.addCell(cell);
+            cell = createValueCell(order.getComment(),80,10,Font.BOLD);
+            table.addCell(cell);
 
             cell=createEmptyCell(100);
             table.addCell(cell);

@@ -9,6 +9,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Vector;
+
+import org.apache.poi.poifs.property.NPropertyTable;
+
 import java.sql.*;
 
 import net.admin.Service;
@@ -650,11 +653,59 @@ public class ProductOrder extends OC_Object{
         }
     }
 
+    public static Vector findProductOrdersForProductionOrder(boolean searchDelivered, boolean searchUndelivered,int nProductionOrderId,String sProductStockUid, String sOrderFrom){
+        Vector foundObjects = new Vector();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection conn=MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+            // compose query
+            String sSelect = "SELECT OC_ORDER_SERVERID, OC_ORDER_OBJECTID"+
+                             " FROM OC_PRODUCTORDERS po WHERE 1=1";
+            
+            // delivered, delivered or both types of orders ?
+            if(searchDelivered && searchUndelivered){
+                sSelect+= "";
+            }
+            else if(searchDelivered){
+                sSelect+= " AND OC_ORDER_STATUS='closed'";
+            }
+            else if(searchUndelivered){
+                sSelect+= " AND (OC_ORDER_STATUS IS NULL OR OC_ORDER_STATUS<>'closed') ";
+            }
+            
+            sSelect += " AND OC_ORDER_PRODUCTIONORDERUID=?";
+            sSelect += " AND OC_ORDER_PRODUCTSTOCKUID=?";
+            sSelect += " AND OC_ORDER_FROM=?";
+            ps=conn.prepareStatement(sSelect);
+            ps.setInt(1,nProductionOrderId);
+            ps.setString(2, sProductStockUid);
+            ps.setString(3, sOrderFrom);
+            rs=ps.executeQuery();
+            while(rs.next()){
+                foundObjects.add(get(rs.getString("OC_ORDER_SERVERID")+"."+rs.getString("OC_ORDER_OBJECTID")));
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                conn.close();
+            }
+            catch(SQLException se){
+                se.printStackTrace();
+            }
+        }
+    	return foundObjects;
+    }
     //--- FIND ------------------------------------------------------------------------------------
     public static Vector find(boolean searchDelivered, boolean searchUndelivered, String sFindDescription,
                               String sFindServiceUid, String sFindProductStockUid, String sFindPackagesOrdered,
                               String sFindDateDeliveryDue, String sFindDateOrdered, String sFindSupplierUid,
-                              String sFindServiceStockUid, String sSortCol, String sSortDir){
+                              String sFindServiceStockUid,String sSortCol, String sSortDir){
         Vector foundObjects = new Vector();
         PreparedStatement ps = null;
         ResultSet rs = null;

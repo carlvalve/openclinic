@@ -54,8 +54,6 @@ public class PdfBarcode {
 	        // setting results.
 	        finalResult = String.valueOf(result.getText());
 	    } catch (Exception e) {
-	        //e.printStackTrace();
-	        //throw new BarcodeEngine().new BarcodeEngineException(e.getMessage());
 	    }
 	    return finalResult;
 	}
@@ -72,27 +70,38 @@ public class PdfBarcode {
 			    ++mypage;
 		    	boolean bExit=false;
 			    Debug.println("Analyzing page "+mypage);
-			    BufferedImage bim = pdPage.convertToImage(BufferedImage.TYPE_BYTE_GRAY, 300);
-			    File f = new File(MedwanQuery.getInstance().getConfigString("tempDirectory","/tmp")+"/IMG_"+mypage+".png");
-			    if(f.exists()){
-			    	f.delete();
-			    }
-			    ImageIO.write(bim, "PNG", f);
-	            Map<DecodeHintType,Object> tmpHintsMap = new EnumMap<DecodeHintType, Object>(DecodeHintType.class);
-	            tmpHintsMap.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
-	            tmpHintsMap.put(DecodeHintType.POSSIBLE_FORMATS, EnumSet.allOf(BarcodeFormat.class));
-	            tmpHintsMap.put(DecodeHintType.PURE_BARCODE, Boolean.FALSE);
-			    barcode=decode(bim,tmpHintsMap);
-			    if(barcode.length()>0){
-			    	Debug.println("Found barcode value "+barcode+" on page "+mypage);
+			    BufferedImage bim = pdPage.convertToImage(BufferedImage.TYPE_BYTE_BINARY, 300);
+			    barcode=decode(bim,null);
+			    if(barcode.length()==11){
+			    	Debug.println("Found barcode value "+barcode+" on page "+mypage+" (stage 1)");
 					break;		    	
 			    }
 			    else {
-				    for(int n=0;n<bim.getHeight()*9/10;n+=bim.getHeight()/10){
-					    BufferedImage cropedImage = bim.getSubimage(0, n, bim.getWidth(), bim.getHeight()/10);
-					    barcode=decode(cropedImage,tmpHintsMap);
+				    for(int n=0;n<bim.getHeight()*10/100;n+=bim.getHeight()/100){
+					    BufferedImage cropedImage = bim.getSubimage(0, n, bim.getWidth(), bim.getHeight()*90/100);
+					    barcode=decode(cropedImage,null);
 					    if(barcode.length()==11){
-					    	Debug.println("Found barcode value "+barcode+" on page "+mypage);
+					    	Debug.println("Found barcode value "+barcode+" on page "+mypage+" (stage 2 - step "+n+")");
+					    	bExit=true;
+							break;		    	
+					    }
+				    }
+				    if(bExit) break;
+				    for(int n=0;n<bim.getHeight()*75/100;n+=bim.getHeight()/100){
+					    BufferedImage cropedImage = bim.getSubimage(0, n, bim.getWidth(), bim.getHeight()*25/100);
+					    barcode=decode(cropedImage,null);
+					    if(barcode.length()==11){
+					    	Debug.println("Found barcode value "+barcode+" on page "+mypage+" (stage 3 - step "+n+")");
+					    	bExit=true;
+							break;		    	
+					    }
+				    }
+				    if(bExit) break;
+				    for(int n=0;n<bim.getHeight()*90/100;n+=bim.getHeight()/100){
+					    BufferedImage cropedImage = bim.getSubimage(0, n, bim.getWidth(), bim.getHeight()*10/100);
+					    barcode=decode(cropedImage,null);
+					    if(barcode.length()==11){
+					    	Debug.println("Found barcode value "+barcode+" on page "+mypage+" (stage 4 - step "+n+")");
 					    	bExit=true;
 							break;		    	
 					    }

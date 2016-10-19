@@ -16,7 +16,16 @@ public class ProductionOrderMaterial extends OC_Object{
 	private double quantity;
 	private int updateUid;
 	private String comment;
+	private java.util.Date dateUsed;
 	
+	public java.util.Date getDateUsed() {
+		return dateUsed;
+	}
+
+	public void setDateUsed(java.util.Date dateUsed) {
+		this.dateUsed = dateUsed;
+	}
+
 	public static ProductionOrderMaterial get(int id){
 		ProductionOrderMaterial productionOrderMaterial = null;
 		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
@@ -37,6 +46,7 @@ public class ProductionOrderMaterial extends OC_Object{
 				productionOrderMaterial.setQuantity(rs.getInt("OC_MATERIAL_QUANTITY"));
 				productionOrderMaterial.setVersion(rs.getInt("OC_MATERIAL_VERSION"));
 				productionOrderMaterial.setComment(rs.getString("OC_MATERIAL_COMMENT"));
+				productionOrderMaterial.setDateUsed(rs.getTimestamp("OC_MATERIAL_DATEUSED"));
 			}
 		}
         catch(Exception e){
@@ -81,6 +91,7 @@ public class ProductionOrderMaterial extends OC_Object{
 				productionOrderMaterial.setQuantity(rs.getInt("OC_MATERIAL_QUANTITY"));
 				productionOrderMaterial.setVersion(rs.getInt("OC_MATERIAL_VERSION"));
 				productionOrderMaterial.setComment(rs.getString("OC_MATERIAL_COMMENT"));
+				productionOrderMaterial.setDateUsed(rs.getTimestamp("OC_MATERIAL_DATEUSED"));
 				materials.add(productionOrderMaterial);
 			}
 		}
@@ -101,6 +112,187 @@ public class ProductionOrderMaterial extends OC_Object{
 		return materials;
 	}
 	
+	public static Vector getProductionOrderUnusedMaterials(int productionOrderId){
+		Vector materials = new Vector();
+		ProductionOrderMaterial productionOrderMaterial = null;
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		PreparedStatement ps = null;
+		ResultSet rs =null;
+		try{
+			ps=conn.prepareStatement("select * from OC_PRODUCTIONORDERMATERIALS where OC_MATERIAL_PRODUCTIONORDERID=? and OC_MATERIAL_DATEUSED IS NULL");
+			ps.setInt(1, productionOrderId);
+			rs=ps.executeQuery();
+			while(rs.next()){
+				productionOrderMaterial = new ProductionOrderMaterial();
+				productionOrderMaterial.setId(rs.getInt("OC_MATERIAL_ID"));
+				productionOrderMaterial.setProductionOrderId(rs.getInt("OC_MATERIAL_PRODUCTIONORDERID"));
+				productionOrderMaterial.setProductStockUid(rs.getString("OC_MATERIAL_PRODUCTSTOCKUID"));
+				productionOrderMaterial.setCreateDateTime(rs.getTimestamp("OC_MATERIAL_CREATEDATETIME"));
+				productionOrderMaterial.setUpdateDateTime(rs.getTimestamp("OC_MATERIAL_UPDATETIME"));
+				productionOrderMaterial.setUpdateUid(rs.getInt("OC_MATERIAL_UPDATEUID"));
+				productionOrderMaterial.setQuantity(rs.getInt("OC_MATERIAL_QUANTITY"));
+				productionOrderMaterial.setVersion(rs.getInt("OC_MATERIAL_VERSION"));
+				productionOrderMaterial.setComment(rs.getString("OC_MATERIAL_COMMENT"));
+				productionOrderMaterial.setDateUsed(rs.getTimestamp("OC_MATERIAL_DATEUSED"));
+				materials.add(productionOrderMaterial);
+			}
+		}
+        catch(Exception e){
+        	e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                conn.close();
+
+            }
+            catch(SQLException se){
+                se.printStackTrace();
+            }
+        }
+		return materials;
+	}
+	
+	public static Vector getProductionOrderMaterialsSummary(int productionOrderId){
+		Vector materials = new Vector();
+		ProductionOrderMaterial productionOrderMaterial = null;
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		PreparedStatement ps = null;
+		ResultSet rs =null;
+		try{
+			ps=conn.prepareStatement("select max(OC_MATERIAL_ID) as OC_MATERIAL_ID,"
+					+ "OC_MATERIAL_PRODUCTIONORDERID,"
+					+ "OC_MATERIAL_PRODUCTSTOCKUID,"
+					+ "max(OC_MATERIAL_CREATEDATETIME) as OC_MATERIAL_CREATEDATETIME,"
+					+ "max(OC_MATERIAL_UPDATETIME) as OC_MATERIAL_UPDATETIME,"
+					+ "max(OC_MATERIAL_UPDATEUID) as OC_MATERIAL_UPDATEUID,"
+					+ "sum(OC_MATERIAL_QUANTITY) as OC_MATERIAL_QUANTITY,"
+					+ "max(OC_MATERIAL_VERSION) as OC_MATERIAL_VERSION,"
+					+ "max(OC_MATERIAL_COMMENT) as OC_MATERIAL_COMMENT"
+					+ " from OC_PRODUCTIONORDERMATERIALS where OC_MATERIAL_PRODUCTIONORDERID=?"
+					+ " group by OC_MATERIAL_PRODUCTIONORDERID,OC_MATERIAL_PRODUCTSTOCKUID");
+			ps.setInt(1, productionOrderId);
+			rs=ps.executeQuery();
+			while(rs.next()){
+				productionOrderMaterial = new ProductionOrderMaterial();
+				productionOrderMaterial.setId(rs.getInt("OC_MATERIAL_ID"));
+				productionOrderMaterial.setProductionOrderId(rs.getInt("OC_MATERIAL_PRODUCTIONORDERID"));
+				productionOrderMaterial.setProductStockUid(rs.getString("OC_MATERIAL_PRODUCTSTOCKUID"));
+				productionOrderMaterial.setCreateDateTime(rs.getTimestamp("OC_MATERIAL_CREATEDATETIME"));
+				productionOrderMaterial.setUpdateDateTime(rs.getTimestamp("OC_MATERIAL_UPDATETIME"));
+				productionOrderMaterial.setUpdateUid(rs.getInt("OC_MATERIAL_UPDATEUID"));
+				productionOrderMaterial.setQuantity(rs.getInt("OC_MATERIAL_QUANTITY"));
+				productionOrderMaterial.setVersion(rs.getInt("OC_MATERIAL_VERSION"));
+				productionOrderMaterial.setComment(rs.getString("OC_MATERIAL_COMMENT"));
+				if(productionOrderMaterial.getQuantity()!=0){
+					materials.add(productionOrderMaterial);
+				}
+			}
+		}
+        catch(Exception e){
+        	e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                conn.close();
+
+            }
+            catch(SQLException se){
+                se.printStackTrace();
+            }
+        }
+		return materials;
+	}
+	
+	public static Vector getProductionOrderUnusedMaterialsSummary(int productionOrderId){
+		Vector materials = new Vector();
+		ProductionOrderMaterial productionOrderMaterial = null;
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		PreparedStatement ps = null;
+		ResultSet rs =null;
+		try{
+			ps=conn.prepareStatement("select max(OC_MATERIAL_ID) as OC_MATERIAL_ID,"
+					+ "OC_MATERIAL_PRODUCTIONORDERID,"
+					+ "OC_MATERIAL_PRODUCTSTOCKUID,"
+					+ "max(OC_MATERIAL_CREATEDATETIME) as OC_MATERIAL_CREATEDATETIME,"
+					+ "max(OC_MATERIAL_UPDATETIME) as OC_MATERIAL_UPDATETIME,"
+					+ "max(OC_MATERIAL_UPDATEUID) as OC_MATERIAL_UPDATEUID,"
+					+ "sum(OC_MATERIAL_QUANTITY) as OC_MATERIAL_QUANTITY,"
+					+ "max(OC_MATERIAL_VERSION) as OC_MATERIAL_VERSION,"
+					+ "max(OC_MATERIAL_COMMENT) as OC_MATERIAL_COMMENT"
+					+ " from OC_PRODUCTIONORDERMATERIALS where OC_MATERIAL_PRODUCTIONORDERID=? and OC_MATERIAL_DATEUSED is NULL"
+					+ " group by OC_MATERIAL_PRODUCTIONORDERID,OC_MATERIAL_PRODUCTSTOCKUID");
+			ps.setInt(1, productionOrderId);
+			rs=ps.executeQuery();
+			while(rs.next()){
+				productionOrderMaterial = new ProductionOrderMaterial();
+				productionOrderMaterial.setId(rs.getInt("OC_MATERIAL_ID"));
+				productionOrderMaterial.setProductionOrderId(rs.getInt("OC_MATERIAL_PRODUCTIONORDERID"));
+				productionOrderMaterial.setProductStockUid(rs.getString("OC_MATERIAL_PRODUCTSTOCKUID"));
+				productionOrderMaterial.setCreateDateTime(rs.getTimestamp("OC_MATERIAL_CREATEDATETIME"));
+				productionOrderMaterial.setUpdateDateTime(rs.getTimestamp("OC_MATERIAL_UPDATETIME"));
+				productionOrderMaterial.setUpdateUid(rs.getInt("OC_MATERIAL_UPDATEUID"));
+				productionOrderMaterial.setQuantity(rs.getInt("OC_MATERIAL_QUANTITY"));
+				productionOrderMaterial.setVersion(rs.getInt("OC_MATERIAL_VERSION"));
+				productionOrderMaterial.setComment(rs.getString("OC_MATERIAL_COMMENT"));
+				if(productionOrderMaterial.getQuantity()!=0){
+					materials.add(productionOrderMaterial);
+				}
+			}
+		}
+        catch(Exception e){
+        	e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                conn.close();
+
+            }
+            catch(SQLException se){
+                se.printStackTrace();
+            }
+        }
+		return materials;
+	}
+	
+	public void setUsed(java.util.Date date){
+		setDateUsed(date);
+		store();
+	}
+	
+	public static void setUsed(int nProductionOrderId,String sProductStockUid,java.util.Date date){
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		PreparedStatement ps = null;
+		try{
+			String sQuery = "update oc_productionordermaterials set oc_material_dateused=? "
+					+ "where oc_material_productionorderid=? and oc_material_productstockuid=? and oc_material_dateused is null";
+			ps=conn.prepareStatement(sQuery);
+			ps.setTimestamp(1, new java.sql.Timestamp(date.getTime()));
+			ps.setInt(2, nProductionOrderId);
+			ps.setString(3, sProductStockUid);
+			ps.execute();
+			ps.close();
+		}
+        catch(Exception e){
+        	e.printStackTrace();
+        }
+        finally{
+            try{
+                if(ps!=null) ps.close();
+                conn.close();
+
+            }
+            catch(SQLException se){
+                se.printStackTrace();
+            }
+        }
+	}
+	
 	public boolean store(){
 		boolean bStored=false;
 		if(id==-1){
@@ -119,6 +311,7 @@ public class ProductionOrderMaterial extends OC_Object{
 					+ " OC_MATERIAL_UPDATETIME,"
 					+ " OC_MATERIAL_UPDATEUID,"
 					+ " OC_MATERIAL_VERSION,"
+					+ " OC_MATERIAL_DATEUSED,"
 					+ " OC_MATERIAL_COMMENT)"
 					+ " SELECT OC_MATERIAL_ID,"
 					+ " OC_MATERIAL_PRODUCTIONORDERID,"
@@ -128,6 +321,7 @@ public class ProductionOrderMaterial extends OC_Object{
 					+ " OC_MATERIAL_UPDATETIME,"
 					+ " OC_MATERIAL_UPDATEUID,"
 					+ " OC_MATERIAL_VERSION,"
+					+ " OC_MATERIAL_DATEUSED,"
 					+ " OC_MATERIAL_COMMENT"
 					+ " FROM OC_PRODUCTIONORDERMATERIALS WHERE OC_MATERIAL_ID=?");
 			ps.setInt(1, id);
@@ -147,8 +341,9 @@ public class ProductionOrderMaterial extends OC_Object{
 					+ " OC_MATERIAL_UPDATETIME,"
 					+ " OC_MATERIAL_UPDATEUID,"
 					+ " OC_MATERIAL_VERSION,"
-					+ " OC_MATERIAL_COMMENT)"
-					+ " VALUES(?,?,?,?,?,?,?,?,?)");
+					+ " OC_MATERIAL_COMMENT,"
+					+ " OC_MATERIAL_DATEUSED)"
+					+ " VALUES(?,?,?,?,?,?,?,?,?,?)");
 			ps.setInt(1, id);
 			ps.setInt(2, getProductionOrderId());
 			ps.setString(3, getProductStockUid());
@@ -158,6 +353,7 @@ public class ProductionOrderMaterial extends OC_Object{
 			ps.setInt(7, getUpdateUid());
 			ps.setInt(8, getVersion());
 			ps.setString(9, getComment());
+			ps.setTimestamp(10, getDateUsed()==null?null:new java.sql.Timestamp(getDateUsed().getTime()));
 			bStored=ps.execute();
 		}
         catch(Exception e){

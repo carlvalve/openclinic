@@ -362,6 +362,23 @@ public class PatientInvoice extends Invoice {
 		return s;
 	}
 
+	public void setClosureDate(String s){
+		setModifier(11,s);
+	}
+
+	public String getClosureDate(){
+		String s="";
+		if(getModifiers()!=null){
+			try{
+				s=getModifiers().split(";")[11];
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return s;
+	}
+
 	//MFP reporting section
 	
 	public String getSignatures(){
@@ -407,6 +424,37 @@ public class PatientInvoice extends Invoice {
 
 	public void setAcceptationUid(String acceptationUid) {
 		this.acceptationUid = acceptationUid;
+	}
+	
+	public boolean canBePrinted(){
+		boolean bCan = false;
+		long nMaximumAge=MedwanQuery.getInstance().getConfigInt("maximumInvoiceAgeForPrintingInHours",0)*3600*1000;
+		if(nMaximumAge==0){
+			bCan=true;
+		}
+		else{
+			if(getStatus()==null || !getStatus().equalsIgnoreCase("closed")){
+				bCan=true;
+			}
+			else if(getClosureDate()!=null && getClosureDate().length()>0){
+				try{
+					if(new java.util.Date().getTime()-ScreenHelper.parseDate(getClosureDate()).getTime()<nMaximumAge){
+						bCan=true;
+					}
+				}
+				catch(Exception e){
+					if(new java.util.Date().getTime()-getUpdateDateTime().getTime()<nMaximumAge){
+						bCan=true;
+					}
+				}
+			}
+			else{
+				if(new java.util.Date().getTime()-getUpdateDateTime().getTime()<nMaximumAge){
+					bCan=true;
+				}
+			}
+		}
+		return bCan;
 	}
 
 	public String getInvoiceNumber() {
@@ -1120,7 +1168,13 @@ public class PatientInvoice extends Invoice {
             }
 
             if(ids.length == 2){
-               sSelect = " INSERT INTO OC_PATIENTINVOICES (" +
+            	if(getStatus().equalsIgnoreCase("closed") && getClosureDate().length()==0){
+            		if(getUpdateDateTime()==null){
+            			setUpdateDateTime(new java.util.Date());
+            		}
+            		setClosureDate(ScreenHelper.formatDate(getUpdateDateTime()));
+            	}
+            	sSelect = " INSERT INTO OC_PATIENTINVOICES (" +
                           " OC_PATIENTINVOICE_SERVERID," +
                           " OC_PATIENTINVOICE_OBJECTID," +
                           " OC_PATIENTINVOICE_DATE," +

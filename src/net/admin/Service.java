@@ -527,7 +527,7 @@ public class Service {
             Service service = Service.getService(childId);
             if(service!=null){
                 parentId = service.parentcode;
-                if(parentId!=null && parentId.trim().length()>0){
+                if(parentId!=null && !parentId.equalsIgnoreCase(service.code) && parentId.trim().length()>0){
                     parentIds.add(parentId);
                     parentIds.addAll(getParentIds(parentId)); // recursion
                 }

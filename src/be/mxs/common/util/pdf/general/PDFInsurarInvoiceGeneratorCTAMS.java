@@ -1239,7 +1239,7 @@ public class PDFInsurarInvoiceGeneratorCTAMS extends PDFInvoiceGenerator {
         		e.printStackTrace();
         	}
         }
-        cell = createUnderlinedCell("TOT\n"+coverage+"%",1,7);
+        cell = createUnderlinedCell("INS\n"+coverage+"%",1,7);
         cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
         singleCellHeaderTable = new PdfPTable(1);
         singleCellHeaderTable.addCell(cell);

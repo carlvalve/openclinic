@@ -1,5 +1,6 @@
 package be.openclinic.reporting;
 
+import java.io.File;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -58,12 +59,12 @@ public class TimeFilterReportGenerator {
 		try{
 			long day=24*3600*1000;
 			StringBuffer csvResults = new StringBuffer();
-			String reportTemplate = MedwanQuery.getInstance().getConfigString("templateSource")+"/"+ScreenHelper.checkString(template);
+			String reportTemplate = MedwanQuery.getInstance().getConfigString("templateDirectory")+"/"+ScreenHelper.checkString(template);
 			Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
 			PreparedStatement ps = null;
 			ResultSet rs = null;
 			SAXReader reader = new SAXReader(false);
-			Document document = reader.read(new URL(reportTemplate));
+			Document document = reader.read(new File(reportTemplate));
 			Element root = document.getRootElement();
 			Element schedule = root.element("schedule");
 			String period="";
