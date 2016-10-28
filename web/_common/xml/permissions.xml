@@ -14,6 +14,7 @@
         <permission type="Web.Occup" id="medicalimagingrequest">occup.medicalimagingrequest</permission>
         <permission type="Web.Occup" id="reference">occup.reference</permission>
         <permission type="Web.Occup" id="surveillance">occup.surveillance</permission>
+        <permission type="Web.Occup" id="manageIntradermo">manageIntradermo</permission>
         <permission type="Web.Occup" id="urineexamination">occup.urineexamination</permission>
         <permission type="Web.Occup" id="diabetesfollowup">occup.diabetesfollowup</permission>
         <permission type="Web.Occup" id="neurologycarefile">occup.neurologycarefile</permission>

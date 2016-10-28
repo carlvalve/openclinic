@@ -123,16 +123,16 @@
         <tr>
         	<%
         		if(activeUser.getAccessRight("medication.medicationschema.select")){
-                    %><td colspan="3" style="vertical-align:top;" height="100%" width="50%"><%conditionalInclude("curative/medicationStatus.jsp",pageContext,"medication.medicationschema.select",activeUser);%></td><%
+                    %><td colspan="4" style="vertical-align:top;" height="100%"><%conditionalInclude("curative/medicationStatus.jsp",pageContext,"medication.medicationschema.select",activeUser);%></td><%
         		}
         		else {
-                    %><td colspan="3" style="vertical-align:top;" height="100%" width="50%"><table width='100%'><tr class='admin'><td>&nbsp;</td></tr></table></td><%
+                    %><td colspan="4" style="vertical-align:top;" height="100%"><table width='100%'><tr class='admin'><td>&nbsp;</td></tr></table></td><%
         		}
         		if(activeUser.getAccessRight("occup.vaccinations.select")){
-        	        %><td colspan="3" style="vertical-align:top;" height="100%"><%conditionalInclude("curative/vaccinationStatus.jsp",pageContext,"occup.vaccinations.select",activeUser);%></td><%
+        	        %><td colspan="2" style="vertical-align:top;" height="100%"><%conditionalInclude("curative/vaccinationStatus.jsp",pageContext,"occup.vaccinations.select",activeUser);%></td><%
         		}
         		else {
-                    %><td colspan="3" style="vertical-align:top;" height="100%" width="50%"><table width='100%'><tr class='admin'><td>&nbsp;</td></tr></table></td><%
+                    %><td colspan="2" style="vertical-align:top;" height="100%"><table width='100%'><tr class='admin'><td>&nbsp;</td></tr></table></td><%
         		}
             %>
         <tr>

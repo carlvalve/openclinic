@@ -54,6 +54,16 @@
 
         return remainingBlockDuration;
     }    
+    
+    private void doRedirect(JspWriter out, String url){
+    	try{
+	    	out.write("<script>window.location.href='"+url+"';</script>");
+	    	out.flush();
+    	}
+    	catch(Exception e){
+    		e.printStackTrace();
+    	}
+    }
 %>
 
 <%	
@@ -140,7 +150,7 @@
   session.removeAttribute("UserTheme");
 
   if(sUserLogin.length()==0 || sUserPassword.length()==0){
-      response.sendRedirect("login.jsp?message=Empty values!&ts="+getTs());
+      doRedirect(out,"login.jsp?message=Empty values!&ts="+getTs());
   }
   else{
       try{
@@ -159,7 +169,7 @@
                   bPermission = User.hasPermission(user.userid,sDate);
                   if(!bPermission){
                 	  ad_conn.close();
-                      response.sendRedirect("login.jsp?message=Permission stopped&ts="+getTs());
+                      doRedirect(out,"login.jsp?message=Permission stopped&ts="+getTs());
                   }
                   session.setAttribute("activeUser",user);
                   MedwanQuery.setSession(session,user);
@@ -248,7 +258,7 @@
                   if(availability > -1){
                       if(daysLeftTillAvail <= 0){
                     	  ad_conn.close();
-                          response.sendRedirect("changePassword.do?ts="+getTs());
+                          doRedirect(out,"changePassword.do?ts="+getTs());
                       }
                   }
                   
@@ -257,7 +267,7 @@
                       if(daysLeftTillNotice <= 0){
                           // the user may perform all actions, but first sees the passwordscreen
                     	  ad_conn.close();
-                          response.sendRedirect("main.do?Page=userprofile/changepassword.jsp&popup=yes&daysLeft="+(int)daysLeftTillAvail+"&ts="+getTs());
+                          doRedirect(out,"main.do?Page=userprofile/changepassword.jsp&popup=yes&daysLeft="+(int)daysLeftTillAvail+"&ts="+getTs());
                       }
                   }
 
@@ -269,32 +279,32 @@
                     Element element = document.getRootElement();
                     Debug.println("Redirecting to "+element.attributeValue("url"));
 	           	    ad_conn.close();
-                    response.sendRedirect(element.attributeValue("url"));
+                    doRedirect(out,element.attributeValue("url"));
                   }
                   catch(Exception r){}
                   // redirect to other projectpage
                   if(request.getParameter("startPage")!=null){
                       Debug.println("Redirecting to "+request.getParameter("startPage"));
                 	  ad_conn.close();
-                      response.sendRedirect(request.getParameter("startPage"));
+                      doRedirect(out,request.getParameter("startPage"));
                   }
             	  ad_conn.close();
             	  
             	  //Check the default application for this user
             	  if(user.getParameter("DefaultPage").equalsIgnoreCase("accountancy")){
-            		  response.sendRedirect("accountancy/index.jsp?ts="+getTs());
+            		  doRedirect(out,"accountancy/index.jsp?ts="+getTs());
             	  }
             	  else if(user.getParameter("DefaultPage").equalsIgnoreCase("capital")){
-            		  response.sendRedirect("capital/index.jsp?ts="+getTs());
+            		  doRedirect(out,"capital/index.jsp?ts="+getTs());
             	  }
             	  else if(user.getParameter("DefaultPage").equalsIgnoreCase("payroll")){
-            		  response.sendRedirect("payroll/index.jsp?ts="+getTs());
+            		  doRedirect(out,"payroll/index.jsp?ts="+getTs());
             	  }
             	  else if(user.getParameter("DefaultPage").equalsIgnoreCase("maintenance")){
-            		  response.sendRedirect("maintenance/index.jsp?ts="+getTs());
+            		  doRedirect(out,"maintenance/index.jsp?ts="+getTs());
             	  }
             	  else{
-            		  response.sendRedirect("main.do?CheckService=true&CheckMedicalCenter=true&ts="+getTs());
+            		  doRedirect(out,"main.do?CheckService=true&CheckMedicalCenter=true&ts="+getTs());
             	  }
               }
               //--- wrong password or wrong login ---
@@ -306,11 +316,11 @@
                           if(blockDuration >= 0 ){
                               // go to a page telling the user he has to wait
 	                    	  ad_conn.close();
-                              response.sendRedirect("blocked.jsp?duration="+blockDuration);
+                              doRedirect(out,"blocked.jsp?duration="+blockDuration);
                           }
                           else{
                         	  ad_conn.close();
-	                          response.sendRedirect("login.jsp?message=Password is wrong&ts="+getTs());
+	                          doRedirect(out,"login.jsp?message=Password is wrong&ts="+getTs());
                           }
                       }
                   }
@@ -320,11 +330,11 @@
                       if(blockDuration >= 0 ){
                           // go to a page telling the user he has to wait
                           ad_conn.close();
-		                  response.sendRedirect("login.jsp");
+		                  doRedirect(out,"login.jsp");
                       }
                       else{
                     	  ad_conn.close();
-		                  response.sendRedirect("login.jsp?message=Login is wrong&ts="+getTs());
+		                  doRedirect(out,"login.jsp?message=Login is wrong&ts="+getTs());
                       }
                   }
               }
@@ -332,7 +342,7 @@
           }
           else{
         	  ad_conn.close();
-		      response.sendRedirect("login.jsp?message=Connection error !&ts="+getTs());
+		      doRedirect(out,"login.jsp?message=Connection error !&ts="+getTs());
           }
       }
       catch(NumberFormatException e){
@@ -342,14 +352,14 @@
           ad_conn.close();
           if(remainingBlockDuration >= 0 ){
               // go to a page telling the user he has to wait
-              response.sendRedirect("login.jsp");
+              doRedirect(out,"login.jsp");
           }
           else{
-              response.sendRedirect("login.jsp?message=Login is wrong&ts="+getTs());
+              doRedirect(out,"login.jsp?message=Login is wrong&ts="+getTs());
           }
       }
       catch(Exception e){
-          response.sendRedirect("login.jsp?message=General error !&ts="+getTs());
+          doRedirect(out,"login.jsp?message=General error !&ts="+getTs());
           e.printStackTrace();
       }
   }
