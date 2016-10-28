@@ -891,7 +891,18 @@
 
 		
 	    function doSave(){
-	    	yesnoModalBox("doSaveInvoice()","<%=ScreenHelper.getTranNoLink("Web","areYouSureToCreateInvoice",sWebLanguage)%>");
+	    	<%
+	    		if(MedwanQuery.getInstance().getConfigInt("askForInvoiceCreationConfirmation",0)==1){
+	    	%>
+	    			yesnoModalBox("doSaveInvoice()","<%=ScreenHelper.getTranNoLink("Web","areYouSureToCreateInvoice",sWebLanguage)%>");
+	    	<%
+	    		}
+	    		else{
+	    	%>
+	    			doSaveInvoice();
+	    	<%
+	    		}
+	    	%>
 	    }
 	    
 	    function doSaveInvoice(){

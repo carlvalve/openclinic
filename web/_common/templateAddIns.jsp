@@ -217,7 +217,7 @@ function checkAfter(afterId,beforeObj){
     document.write("<a href='javascript:void(0);' onclick='if(self.gfPop"+gfPopType+")gfPop"+gfPopType+".fPopCalendar(document.getElementById(\""+sObject+"\"));return false;' HIDEFOCUS>" +
                    "<img name='popcal' class='link' src='"+sImg+"' alt='<%=getTranNoLink("web","Select",sWebLanguage)%>'></a>" +
                    "&nbsp;<a href='javascript:void(0);' onClick='getToday("+sObject+");'>" +
-                   "<img class='link' src='"+sDir+"/icon_compose.gif' alt='<%=getTranNoLink("web","putToday",sWebLanguage)%>'></a>");
+                   "<img class='link' src='<c:url value="/_img/icons/icon_compose.gif"/>' alt='<%=getTranNoLink("web","putToday",sWebLanguage)%>'></a>");
   } 
     
   <%-- GET MY DATE --%>

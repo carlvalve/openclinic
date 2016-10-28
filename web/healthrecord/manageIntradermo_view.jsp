@@ -10,7 +10,7 @@
     <input type="hidden" id="transactionId" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.transactionId" value="<bean:write name="transaction" scope="page" property="transactionId"/>"/>
     <input type="hidden" id="serverId" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.serverId" value="<bean:write name="transaction" scope="page" property="serverId"/>"/>
     <input type="hidden" id="transactionType" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.transactionType" value="<bean:write name="transaction" scope="page" property="transactionType"/>"/>
-    <input type="hidden" readonly name="be.mxs.healthrecord.updateTransaction.actionForwardKey" value="/occupationalmedicine/managePeriodicExaminations.do?&ts=<%=getTs()%>"/>
+    <input type="hidden" readonly name="be.mxs.healthrecord.updateTransaction.actionForwardKey" value="/main.do?Page=curative/index.jsp&ts=<%=getTs()%>"/>
     <input type="hidden" readonly name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_CONTEXT" translate="false" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_CONTEXT" translate="false" property="value"/>"/>
 
     <%=writeHistoryFunctions(tran.getTransactionType(),sWebLanguage)%>
@@ -33,8 +33,8 @@
         <tr>
             <td class="admin"><%=getTran(request,"web.occup","intradermo.nextdate",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
-                <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEXTDATE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEXTDATE" property="value" formatType="date"/>" id="nextdate" onBlur="if(checkDate(this)){ checkBefore('trandate',this); }"/>
-                <script>writeMyDate("nextdate","<c:url value="/_img/calbtn.gif"/>","<%=getTranNoLink("web","PutToday",sWebLanguage)%>");</script>
+                <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEXTDATE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_NEXTDATE" property="value" formatType="date"/>" id="nextdate" onBlur="checkDate(this)"/>
+                <script>writeMyDate("nextdate","<c:url value="/_img/themes/default/calbtn.gif"/>","<%=getTranNoLink("web","PutToday",sWebLanguage)%>");</script>
             </td>
         </tr>
 
@@ -42,8 +42,8 @@
         <tr>
             <td class="admin"><%=getTran(request,"web.occup","intradermo.readdate",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
-                <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_READDATE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_READDATE" property="value" formatType="date"/>" id="readdate" onBlur="if(checkDate(this)){ checkBefore('trandate',this); }"/>
-                <script>writeMyDate("readdate","<c:url value="/_img/calbtn.gif"/>","<%=getTranNoLink("web","PutToday",sWebLanguage)%>");</script>
+                <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_READDATE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_READDATE" property="value" formatType="date"/>" id="readdate" onBlur="checkDate(this)"/>
+                <script>writeMyDate("readdate","<c:url value="/_img/themes/default/calbtn.gif"/>","<%=getTranNoLink("web","PutToday",sWebLanguage)%>");</script>
             </td>
         </tr>
 
@@ -143,9 +143,10 @@
     <p align="right">
         <%
             if(!dossierBlocked ){
+                %><input class="button" type="button" name="saveButton" style="display:;" value="<%=getTran(request,"web","save",sWebLanguage) %>" onclick='submitForm();'/><%
             }
             else{
-                %><button class="button" name="saveButton" style="display:none;">hidden</button><%
+                %><input class="button" type="button" name="saveButton" style="display:none;">hidden</button><%
             }
         %>
         <input class="button" type="button" name="resetButton" value="<%=getTranNoLink("web","reset",sWebLanguage)%>" onclick="doReset();">
@@ -210,10 +211,6 @@
   <%-- SUBMIT FORM --%>
   function submitForm(){
     var okToSubmit = true;
-
-    if(okToSubmit){
-      okToSubmit = checkTranDate();
-    }
 
     if(okToSubmit){
       <%-- set the value of the hidden field 'resultReceived' to the textual condition of resultReceivedCB --%>
