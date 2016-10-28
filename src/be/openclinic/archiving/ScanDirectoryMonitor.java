@@ -449,14 +449,21 @@ public class ScanDirectoryMonitor implements Runnable{
     	Debug.println("DICOM object: "+obj);
     	if(obj!=null){
         	Debug.println("Patient ID: "+obj.getString(Tag.PatientID));
-        	int n = -1;
+        	int nPatientId = -1;
         	try{
-        		n=Integer.parseInt(obj.getString(Tag.PatientID));
+        		nPatientId=Integer.parseInt(obj.getString(Tag.PatientID));
         	}
-        	catch(Exception t){}
+        	catch(Exception t){
+        		try{
+        			nPatientId=Integer.parseInt(obj.getString(Tag.PatientID).toUpperCase().replaceAll(MedwanQuery.getInstance().getConfigString("removeStringFromDICOMPatientID", "CHUK").toUpperCase(),""));
+        		}
+        		catch(Exception u){
+        			u.printStackTrace();
+        		}
+        	}
         	AdminPerson person = new AdminPerson();
-        	if(n>-1){
-        		person=AdminPerson.getAdminPerson(obj.getString(Tag.PatientID));
+        	if(nPatientId>-1){
+        		person=AdminPerson.getAdminPerson(nPatientId+"");
         	}
         	Debug.println("Patient Name: "+person.getFullName());
         	if(person.lastname.trim().length()>0 || MedwanQuery.getInstance().getConfigInt("pacsTestLoad",0)==1){
@@ -545,7 +552,7 @@ public class ScanDirectoryMonitor implements Runnable{
 			    					"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_REFMED",ScreenHelper.checkString(obj.getString(Tag.ReferringPhysicianName)),new Date(),itemContextVO));
 	
 			    			if(MedwanQuery.getInstance().getConfigInt("pacsTestLoad",0)==0){
-			    				MedwanQuery.getInstance().updateTransaction(Integer.parseInt(obj.getString(Tag.PatientID)),transaction);
+			    				MedwanQuery.getInstance().updateTransaction(nPatientId,transaction);
 			    			}
 			    			else{
 			    				MedwanQuery.getInstance().updateTransaction(9975,transaction);
