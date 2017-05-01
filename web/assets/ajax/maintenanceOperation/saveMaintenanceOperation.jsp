@@ -10,6 +10,7 @@
     String sMaintenancePlanUID = ScreenHelper.checkString(request.getParameter("maintenancePlanUID")),
            sDate               = ScreenHelper.checkString(request.getParameter("date")),
            sOperator           = ScreenHelper.checkString(request.getParameter("operator")),
+           sSupplier           = ScreenHelper.checkString(request.getParameter("supplier")),
            sResult             = ScreenHelper.checkString(request.getParameter("result")),
            sComment            = ScreenHelper.checkString(request.getParameter("comment")),
            sNextDate           = ScreenHelper.checkString(request.getParameter("nextDate"));
@@ -22,6 +23,7 @@
         Debug.println("sMaintenancePlanUID   : "+sMaintenancePlanUID);
         Debug.println("sDate                 : "+sDate);
         Debug.println("sOperator             : "+sOperator);
+        Debug.println("sSupplier             : "+sSupplier);
         Debug.println("sResult               : "+sResult);
         Debug.println("sComment              : "+sComment);
         Debug.println("sNextDate             : "+sNextDate+"\n");
@@ -50,6 +52,7 @@
     operation.operator = sOperator;
     operation.result = sResult;
     operation.comment = sComment;
+    operation.supplier = sSupplier;
     
     // nextDate
     if(sNextDate.length() > 0){

@@ -90,6 +90,12 @@
         catch (Exception e){
         	sEditServiceAdmissionLimit="0";
         }
+        try{
+        	int i = Integer.parseInt(sEditTotalBeds);
+        }
+        catch (Exception e){
+        	sEditTotalBeds="0";
+        }
         // codes
         String //sEditServiceCode1 = checkString(request.getParameter("EditServiceCode1")),
                 //sEditServiceCode2 = checkString(request.getParameter("EditServiceCode2")),
@@ -179,6 +185,7 @@
             else{
                 hServiceInfo.put("inactive",new Integer(0));
             }
+            hServiceInfo.put("users","");
 
             Service.manageServiceSave(hServiceInfo);
 
@@ -263,6 +270,7 @@
                 hServiceInfo.put("inactive",new Integer(0));
             }
             hServiceInfo.put("oldserviceid",sEditOldServiceCode);
+            hServiceInfo.put("users","");
 
             Service.manageServiceUpdate(hServiceInfo);
 

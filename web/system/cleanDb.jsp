@@ -1,6 +1,16 @@
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
 <%!
+	public boolean viewExists(Element root, String table, String db){
+		Iterator i = root.elementIterator("view");
+		while(i.hasNext()){
+			Element t = (Element)i.next();
+			if(t.attributeValue("db").equalsIgnoreCase(db) && t.attributeValue("name").equalsIgnoreCase(table)){
+				return true;
+			}
+		}
+		return false;
+	}
 	public boolean tableExists(Element root, String table, String db){
 		Iterator i = root.elementIterator("table");
 		while(i.hasNext()){
@@ -50,6 +60,21 @@
 				st.close();
 				conn.close();
 			}
+			else if(parameter.startsWith("dropview")){
+				String database=parameter.split("\\$")[1];
+				String table =parameter.split("\\$")[2];
+				Connection conn = null;
+				if(database.equalsIgnoreCase("admin")){
+					conn=MedwanQuery.getInstance().getAdminConnection();
+				}
+				else if(database.equalsIgnoreCase("openclinic")){
+					conn=MedwanQuery.getInstance().getOpenclinicConnection();
+				}
+				Statement st = conn.createStatement();
+				st.execute("drop view "+table);
+				st.close();
+				conn.close();
+			}
 			else if(parameter.startsWith("dropindex")){
 				String database=parameter.split("\\$")[1];
 				String table =parameter.split("\\$")[2];
@@ -90,6 +115,9 @@
 			if(tabletype.equalsIgnoreCase("table") && !tableExists(root,tablename,"ocadmin")){
 				out.println("<tr><td>"+MedwanQuery.getInstance().getConfigString("admindbName","?admin?")+"</td><td><font color='red'>TABLE "+tablename+"</font></td><td><input type='checkbox' name='droptable$admin$"+tablename+"' checked/></td></tr>");
 			}
+			else if(tabletype.equalsIgnoreCase("view") && !viewExists(root,tablename,"ocadmin")){
+				out.println("<tr><td>"+MedwanQuery.getInstance().getConfigString("admindbName","?admin?")+"</td><td><font color='red'>VIEW "+tablename+"</font></td><td><input type='checkbox' name='dropview$admin$"+tablename+"' checked/></td></tr>");
+			}
 			else if(tabletype.equalsIgnoreCase("table")){
 				ResultSet rs2 = conn.getMetaData().getIndexInfo(null, null, tablename, false, false);	
 				while(rs2.next()){
@@ -120,6 +148,9 @@
 					}
 				}
 				out.println("<tr><td>"+MedwanQuery.getInstance().getConfigString("openclinicdbName","?openclinic?")+"</td><td><font color='red'>TABLE "+tablename+"</font></td><td><input type='checkbox' name='droptable$openclinic$"+tablename+"' "+checked+"/></td></tr>");
+			}
+			else if(tabletype.equalsIgnoreCase("view") && !viewExists(root,tablename,"openclinic")){
+				out.println("<tr><td>"+MedwanQuery.getInstance().getConfigString("openclinicdbName","?openclinic?")+"</td><td><font color='red'>VIEW "+tablename+"</font></td><td><input type='checkbox' name='dropview$openclinic$"+tablename+"' checked/></td></tr>");
 			}
 			else if(tabletype.equalsIgnoreCase("table")){
 				ResultSet rs2 = conn.getMetaData().getIndexInfo(null, null, tablename, false, false);	

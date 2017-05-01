@@ -111,6 +111,7 @@
             </td>
         </tr>
 
+
         <%-- RESULT RECEIVED --%>
         <tr>
             <td class="admin"><%=getTran(request,"web.occup","resultreceived",sWebLanguage)%></td>
@@ -204,7 +205,7 @@
   <%-- BACK --%>
   function doBack(){
     if(checkSaveButton()){
-      window.location.href = "<c:url value="/occupationalmedicine/managePeriodicExaminations.do"/>?ts=<%=getTs()%>";
+      window.location.href = "<c:url value="/main.do?Page=curative/index.jsp"/>?ts=<%=getTs()%>";
     }
   }
 

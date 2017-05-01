@@ -67,6 +67,16 @@
 				            <textarea onKeyup="resizeTextarea(this,10);" <%=setRightClick("ITEM_TYPE_HPRC_COMMENT")%> class="text" cols="74" rows="1" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_COMMENT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_COMMENT" property="value"/></textarea>
 				        </td>
 				    </tr>
+			        <%-- TYPE OF PAYMENT --%>
+			        <tr>
+			            <td class="admin"><%=getTran(request,"web.occup","payment.type",sWebLanguage)%>&nbsp;</td>
+			            <td class="admin2">
+			            	<select name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PAYMENT_TYPE" property="itemId"/>]>.value" class="text">
+			            		<option/>
+			            		<%=ScreenHelper.writeSelect(request, "payment.type", ((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PAYMENT_TYPE"), sWebLanguage) %>
+			            	</select>
+			            </td>
+			        </tr>
 
 				</table>
 				
@@ -88,12 +98,20 @@
 </form>
 
 <script>
-  <%-- SUBMIT FORM --%>
-  function submitForm(){
-    document.getElementById("buttonsDiv").style.visibility = "hidden";
-    var temp = Form.findFirstElement(transactionForm);//for ff compatibility
-    document.transactionForm.submit();
-  }
+<%-- SUBMIT FORM --%> 
+	function submitForm(){
+		  if(document.getElementById('encounteruid').value==''){
+				alertDialogDirectText('<%=getTranNoLink("web","no.encounter.linked",sWebLanguage)%>');
+				searchEncounter();
+			  }	
+		  else {
+		    transactionForm.saveButton.disabled = true;
+		    <%
+		        SessionContainerWO sessionContainerWO = (SessionContainerWO)SessionContainerFactory.getInstance().getSessionContainerWO(request,SessionContainerWO.class.getName());
+		        out.print(takeOverTransaction(sessionContainerWO, activeUser,"document.transactionForm.submit();"));
+		    %>
+		  }
+	}    
 </script>
 
 <%=writeJSButtons("transactionForm","saveButton")%>

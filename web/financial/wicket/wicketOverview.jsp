@@ -388,7 +388,7 @@
                 }
                 
                 double dBeginBalance = wicket.calculateBalance(new java.util.Date(ScreenHelper.parseDate(sFromDate).getTime()-1)),
-                       dEndBalance   = wicket.calculateBalance(new java.util.Date(ScreenHelper.parseDate(sToDate).getTime()+24*3600*1000-1));
+                       dEndBalance   = dBeginBalance+dCreditsTotal-dDebetsTotal;
 
 
                 String sBeginBalance = priceFormat.format(dBeginBalance),

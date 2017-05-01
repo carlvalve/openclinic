@@ -19,7 +19,10 @@
             <%=getTran(request,"openclinic.chuk","actualrfe",sWebLanguage)%>&nbsp;
             <%
                 if(encounter!=null){
-		            %><a href="javascript:showRFElist();"><img src="<c:url value='/_img/icons/icon_edit.gif'/>" class="link" alt="<%=getTranNoLink("web","editrfelist",sWebLanguage)%>" style="vertical-align:-4px;"></a><%
+		    %>
+		    	<a href="javascript:showRFElist();"><img src="<c:url value='/_img/icons/icon_edit.gif'/>" class="link" alt="<%=getTranNoLink("web","editrfelist",sWebLanguage)%>" style="vertical-align:-4px;"></a>
+	            <a href="javascript:doPanorama();"><img src="<c:url value='/_img/icons/icon_panorama.gif'/>" class="link" title="<%=getTranNoLink("ikirezi","panorama",sWebLanguage)%>" style="vertical-align:-4px;"></a>
+		    <%
                 }
             %>
         </td>

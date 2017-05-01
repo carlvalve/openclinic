@@ -114,7 +114,7 @@
 									}
 								%>
 							</select>
-							<input type='button' class='button' name='savebutton' value='<%=getTran(null,"web","save",sWebLanguage) %>' onclick='document.getElementById("action").value="save";transactionForm.submit();'/>
+							<input type='button' class='button' name='savebutton' value='<%=getTran(null,"web","save",sWebLanguage) %>' onclick='doSave();'/>
 							<input type='button' class='button' name='deletebutton' value='<%=getTran(null,"web","delete",sWebLanguage) %>' onclick='document.getElementById("action").value="delete";transactionForm.submit();'/>
 						</td>
 					</tr>
@@ -133,4 +133,16 @@
 		</tr>
 	</table>
 </form>
+
+<script>
+	function doSave(){
+		if(document.getElementById("documentname").value.indexOf(">")>-1 || document.getElementById("documentname").value.indexOf("<")>-1 || document.getElementById("documentname").value.indexOf("´")>-1 || document.getElementById("documentname").value.indexOf("'")>-1 || document.getElementById("documentname").value.indexOf("`")>-1){
+			alert('<%=getTranNoLink("web","forbiddenCharactersInFileName",sWebLanguage)%>');
+		}
+		else{
+			document.getElementById("action").value="save";
+			transactionForm.submit();
+		}
+	}
+</script>
 

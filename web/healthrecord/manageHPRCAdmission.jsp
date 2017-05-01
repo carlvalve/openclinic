@@ -139,7 +139,21 @@
 	                </tr>
 	                <tr>
 			            <td class='admin' width ="<%=sTDAdminWidth%>"><%=getTran(request,"Web.Occup","medwan.healthrecord.biometry.bmi",sWebLanguage)%>&nbsp;</td>
-			            <td class='admin2' colspan="3"><input tabindex="-1" class="text" type="text" size="10" readonly name="BMI"></td>
+			            <td class='admin2'><input tabindex="-1" class="text" type="text" size="10" readonly name="BMI"></td>
+			            <td class='admin'><%=getTran(request,"Web.Occup","medwan.healthrecord.respiratory.frequence-respiratoire",sWebLanguage)%></td>
+			            <td class='admin2' nowrap>
+			                <input <%=setRightClick("ITEM_TYPE_CARDIAL_CLINICAL_EXAMINATION_RESPIRATORY_FREQUENCY")%> type="text" class="text" size="3" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIAL_CLINICAL_EXAMINATION_RESPIRATORY_FREQUENCY" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIAL_CLINICAL_EXAMINATION_RESPIRATORY_FREQUENCY" property="value"/>"> /min
+			                <input <%=setRightClick("ITEM_TYPE_CARDIAL_CLINICAL_EXAMINATION_RESPIRATORY_RYTMH")%> type="radio" onDblClick="uncheckRadio(this);" id="nex-r9" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIAL_CLINICAL_EXAMINATION_RESPIRATORY_RYTMH" property="itemId"/>]>.value" value="medwan.healthrecord.cardial.regulier" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIAL_CLINICAL_EXAMINATION_RESPIRATORY_RYTMH;value=medwan.healthrecord.cardial.regulier" property="value" outputString="checked"/>><%=getLabel(request,"Web.Occup","medwan.healthrecord.cardial.regulier",sWebLanguage,"nex-r9")%>
+			                <input <%=setRightClick("ITEM_TYPE_CARDIAL_CLINICAL_EXAMINATION_RESPIRATORY_RYTMH")%> type="radio" onDblClick="uncheckRadio(this);" id="nex-r10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIAL_CLINICAL_EXAMINATION_RESPIRATORY_RYTMH" property="itemId"/>]>.value" value="medwan.healthrecord.cardial.irregulier" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIAL_CLINICAL_EXAMINATION_RESPIRATORY_RYTMH;value=medwan.healthrecord.cardial.irregulier" property="value" outputString="checked"/>><%=getLabel(request,"Web.Occup","medwan.healthrecord.cardial.irregulier",sWebLanguage,"nex-r10")%>
+			            </td>
+	                </tr>
+	                <tr>
+			            <td class='admin' width ="<%=sTDAdminWidth%>"><%=getTran(request,"Web.Occup","medwan.healthrecord.weightforlength",sWebLanguage)%>&nbsp;</td>
+			            <td class='admin2'><input tabindex="-1" class="text" type="text" size="10" readonly name="WFL" id="WFL"></td>
+			            <td class='admin'><%=getTran(request,"Web.Occup","medwan.healthrecord.brachial.circumference",sWebLanguage)%></td>
+			            <td class='admin2' nowrap>
+			                <input <%=setRightClick("ITEM_TYPE_BRACHIAL_CIRCUMFERENCE")%> type="text" class="text" size="3" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BRACHIAL_CIRCUMFERENCE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BRACHIAL_CIRCUMFERENCE" property="value"/>"/> cm
+			            </td>
 	                </tr>
 	                <tr class="admin">
 	                    <td align="center" colspan="4"><%=getTran(request,"web","physicalexamination",sWebLanguage)%></td>
@@ -201,6 +215,15 @@
 				            <textarea onKeyup="resizeTextarea(this,10);" <%=setRightClick("ITEM_TYPE_HPRC_COMMENT")%> class="text" cols="50" rows="1" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_COMMENT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_COMMENT" property="value"/></textarea>
 				        </td>
 				    </tr>
+				    <tr>
+				        <td width ="<%=sTDAdminWidth%>" class='admin'> - <%=getTran(request,"web","integration",sWebLanguage)%>&nbsp;</td>
+				        <td class='admin2' colspan="3">
+							<select class='text' name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_INTEGRATION" property="itemId"/>]>.value">
+								<option/>
+								<%=ScreenHelper.writeSelect(request, "bi.integration", ((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_INTEGRATION"), sWebLanguage) %>
+							</select>
+				        </td>
+				    </tr>
 				</table>
 	    	</td>
 	    </tr>
@@ -215,12 +238,20 @@
 </form>
 
 <script>
-  <%-- SUBMIT FORM --%>
-  function submitForm(){
-    document.getElementById("buttonsDiv").style.visibility = "hidden";
-    var temp = Form.findFirstElement(transactionForm);//for ff compatibility
-    document.transactionForm.submit();
-  }
+	<%-- SUBMIT FORM --%> 
+	function submitForm(){
+		  if(document.getElementById('encounteruid').value==''){
+				alertDialogDirectText('<%=getTranNoLink("web","no.encounter.linked",sWebLanguage)%>');
+				searchEncounter();
+			  }	
+		  else {
+		    transactionForm.saveButton.disabled = true;
+		    <%
+		        SessionContainerWO sessionContainerWO = (SessionContainerWO)SessionContainerFactory.getInstance().getSessionContainerWO(request,SessionContainerWO.class.getName());
+		        out.print(takeOverTransaction(sessionContainerWO, activeUser,"document.transactionForm.submit();"));
+		    %>
+		  }
+	}    
 
   <%-- VALIDATE WEIGHT --%>
   <%
@@ -271,17 +302,20 @@
 
   <%-- CALCULATE BMI --%>
   function calculateBMI(){
-    var _BMI = 0;
+    var _BMI = 0, _WFL=0;
     var heightInput = document.getElementsByName('currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BIOMETRY_HEIGHT" property="itemId"/>]>.value')[0];
     var weightInput = document.getElementsByName('currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BIOMETRY_WEIGHT" property="itemId"/>]>.value')[0];
 
     if(heightInput.value > 0){
-      _BMI = (weightInput.value * 10000) / (heightInput.value * heightInput.value);
+        _BMI = (weightInput.value * 10000) / (heightInput.value * heightInput.value);
+        _WFL = (weightInput.value) / (heightInput.value);
       if (_BMI > 100 || _BMI < 5){
-        document.getElementsByName('BMI')[0].value = "";
+          document.getElementsByName('BMI')[0].value = "";
+          document.getElementsByName('WFL')[0].value = "";
       }
       else {
-        document.getElementsByName('BMI')[0].value = Math.round(_BMI*10)/10;
+          document.getElementsByName('BMI')[0].value = Math.round(_BMI*10)/10;
+          document.getElementsByName('WFL')[0].value = Math.round(_WFL*100)/100;
       }
     }
   }

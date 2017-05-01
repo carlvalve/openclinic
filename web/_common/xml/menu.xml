@@ -104,12 +104,14 @@
 			<Menu labelid="manageUserDiagnoses" accessrights="diagnoses.manageuserdiagnoses.select" url="/main.do?Page=medical/manageUserDiagnoses.jsp"/>
 			<Menu labelid="manageDiagnosesPop" accessrights="diagnoses.populationdiagnoses.select" url="/main.do?Page=medical/manageDiagnosesPop.jsp"/>
 			<Menu labelid="manageDiagnosesPatient" accessrights="diagnoses.patientdiagnoses.select" url="/main.do?Page=medical/manageDiagnosesPatient.jsp"/>
+			<Menu labelid="manageDiagnosesPanorama" accessrights="diagnoses.patientdiagnoses.select" url="javascript:doPanorama();"/>
 		</Menu>
 		<Menu labelid="meals" accessrights="manage.patientMeals" url="/main.do?Page=meals/index.jsp"/>
 		<Menu labelid="assets" accessrights="assets.select">
 			<Menu labelid="assets" accessrights="assets.select" url="/main.do?Page=assets/manage_assets.jsp"/>
-			<Menu labelid="maintenancePlans" accessrights="maintenanceplans.select" url="/main.do?Page=assets/manage_maintenancePlans.jsp"/>
-			<Menu labelid="maintenanceOperations" accessrights="maintenanceoperations.select" url="/main.do?Page=assets/manage_maintenanceOperations.jsp"/>
+			<Menu labelid="maintenanceplans" accessrights="maintenanceplans.select" url="/main.do?Page=assets/manage_maintenancePlans.jsp"/>
+			<Menu labelid="maintenanceoperations" accessrights="maintenanceoperations.select" url="/main.do?Page=assets/manage_maintenanceOperations.jsp"/>
+			<Menu labelid="remoteassets" accessrights="remoteassets.select" url="/main.do?Page=assets/remoteassets.jsp"/>
 		</Menu>
 		<Menu labelid="statistics" accessrights="statistics.select" url="/main.do?Page=statistics/index.jsp"/>
 		<Menu labelid="registers" accessrights="registers.select" url="/main.do?Page=registers/manageRegisters.jsp"/>
@@ -141,7 +143,7 @@
 		<Menu labelid="myProfile" url="/main.do?Page=userprofile/index.jsp"/>
 		<Menu labelid="devices" accessrights="system.devices.select" enableparameter="enableDevices">
 			<Menu labelid="ddopp_ob_gyn" patientselected="true" url="javascript:executeLocalDeviceCommand('ddopp','ob_gyn')"/>
-			<Menu labelid="ddopp_vascular" patientselected="true" url="javascript:executeLocalDeviceCommand('ddopp','vascular')"/>
+			<Menu labelid="ddopp_vascular" curl="javascript:executeLocalDeviceCommand('ddopp','vascular')"/>
 			<Menu labelid="ddopp_general" patientselected="true" url="javascript:executeLocalDeviceCommand('ddopp','general')"/>
 		</Menu>
 		<Menu labelid="mergepersons" accessrights="system.mergepersons.select" url="/main.do?Page=system/mergePersons.jsp"/>
@@ -158,6 +160,7 @@
 		<Menu labelid="sourceforge" url="javascript:showsourceforge();"/>
 		<Menu labelid="wiki" url="javascript:showwiki();"/>
 		<Menu labelid="versionhistory" url="javascript:showversionhistory();"/>
+		<Menu labelid="clinicalassistant" patientselected="true" accessrights="clinicalassistant.select" url="/main.do?Page=curative/clinicalAssistant.jsp"/>
 	</Menu>
 	<!-- ######################### these are 'links' which are not to be displayed as a menu-item,      ########################## -->
 	<!-- ######################### but that are a choise (option) for user-defined-shortcut-icons.      ########################## -->

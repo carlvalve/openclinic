@@ -782,14 +782,15 @@
     	}
     	
     	User user = new User();
-    	user.initialize(username,user.encrypt(password));
-        request.getSession().setAttribute("activeUser",user);
-        MedwanQuery.setSession(request.getSession(),user);
-        
-        //Add some session attributes for user connectivity monitoring
-        request.getSession().setAttribute("mon_ipaddress",request.getRemoteAddr());
-        request.getSession().setAttribute("mon_browser",browser+" "+version);
-        request.getSession().setAttribute("mon_start",new java.util.Date());
+    	if(user.initialize(username,user.encrypt(password))){
+	        request.getSession().setAttribute("activeUser",user);
+	        MedwanQuery.setSession(request.getSession(),user);
+	        
+	        //Add some session attributes for user connectivity monitoring
+	        request.getSession().setAttribute("mon_ipaddress",request.getRemoteAddr());
+	        request.getSession().setAttribute("mon_browser",browser+" "+version);
+	        request.getSession().setAttribute("mon_start",new java.util.Date());
+    	}
     }
 
     //--- GET BUTTONS HTML ------------------------------------------------------------------------

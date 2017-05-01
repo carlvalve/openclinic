@@ -30,7 +30,7 @@ public double getLastYearsAveragePrice(Product product){
 
 <%!
     //--- OBJECTS TO HTML (layout 1) --------------------------------------------------------------
-    private StringBuffer objectsToHtml1(Vector objects, String sWebLanguage){
+    private StringBuffer objectsToHtml1(Vector objects, String sWebLanguage, String userid){
         StringBuffer html = new StringBuffer();
         String sClass = "1", sStockUid = "", sServiceStockName = "", sProductName = "", sStockBegin = "",
                sOrderLevel = "", sMinimumLevel = "";
@@ -79,9 +79,15 @@ public double getLastYearsAveragePrice(Product product){
             else sClass = "";
 
             // display stock in one row
-            html.append("<tr class='list"+sClass+"' onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\" title='"+detailsTran+"'>")
-                 .append("<td onclick=\"doShowDetails('"+sStockUid+"');\" align='center'><img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.gif' class='link' alt='"+deleteTran+"' onclick=\"doDelete('"+sStockUid+"');\"></td>")
-                 .append("<td onclick=\"doShowDetails('"+sStockUid+"');\">"+sServiceStockName+"</td>")
+            html.append("<tr class='list"+sClass+"' onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\" title='"+detailsTran+"'>");
+        	//Only show delete button if user is stock manager
+        	if(productStock.getServiceStock()!=null && productStock.getServiceStock().getStockManagerUid().equalsIgnoreCase(userid)){
+                 html.append("<td onclick=\"doShowDetails('"+sStockUid+"');\" align='center'><img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.gif' class='link' alt='"+deleteTran+"' onclick=\"doDelete('"+sStockUid+"');\"></td>");
+        	}
+            else{
+            	html.append("<td/>");
+            }
+            html.append("<td onclick=\"doShowDetails('"+sStockUid+"');\">"+sServiceStockName+"</td>")
                  .append("<td onclick=\"doShowDetails('"+sStockUid+"');\">"+sProductName+"</td>");
 
             if(sMinimumLevel.length() > 0 && sOrderLevel.length() > 0){
@@ -163,7 +169,7 @@ public double getLastYearsAveragePrice(Product product){
             
             //*** display stock in one row ***
             html.append("<tr class='list"+sClass+"'>")
-                 .append("<td width='16'>"+(activeUser.getAccessRight("pharmacy.manageproductstocks.delete")?"<img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.gif' class='link' alt='"+deleteTran+"' onclick=\"doDelete('"+sStockUid+"');\" title='"+deleteTran+"'></td>":"<td/>"))
+                 .append("<td width='16'>"+(activeUser.getAccessRight("pharmacy.manageproductstocks.delete") && (productStock.getServiceStock()!=null && productStock.getServiceStock().getStockManagerUid().equalsIgnoreCase(activeUser.userid))?"<img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.gif' class='link' alt='"+deleteTran+"' onclick=\"doDelete('"+sStockUid+"');\" title='"+deleteTran+"'></td>":"</td>"))
 		         .append("<td width='16'>"+(activeUser.getAccessRight("pharmacy.viewproductstockfiches.select")?"<img src='"+sCONTEXTPATH+"/_img/icons/icon_edit.gif' class='link' onclick=\"printFiche('"+sStockUid+"');\" title='"+ficheTran+"'></td>":"<td/>"));
             if(opendeliveries.contains(productStock.getServiceStockUid()+"$"+productStock.getProductUid())){
                 html.append("<td width='16'><img src='"+sCONTEXTPATH+"/_img/icons/icon_incoming.gif' class='link' alt='"+incomingTran+"' onclick='javascript:receiveProduct(\""+sStockUid+"\",\""+sProductName+"\");'/>&nbsp;</td>");
@@ -229,7 +235,9 @@ public double getLastYearsAveragePrice(Product product){
                 	}
                     html.append("<input type='button' title='"+changeLevelOutTran+"' class='button' style='width:30px;' value=\""+outTran+"\" onclick=\"deliverProduct('"+sStockUid+"','"+sProductName+"','"+stockLevel+"');\">&nbsp;");
                 }
-                html.append("<input type='button' title='"+changeLevelInTran+"' class='button' style='width:30px;' value=\""+inTran+"\" onclick=\"receiveProduct('"+sStockUid+"','"+sProductName+"');\">&nbsp;");
+                if(productStock.getServiceStock().isReceivingUser(activeUser.userid)){
+                	html.append("<input type='button' title='"+changeLevelInTran+"' class='button' style='width:30px;' value=\""+inTran+"\" onclick=\"receiveProduct('"+sStockUid+"','"+sProductName+"');\">&nbsp;");
+                }
                 html.append("<input type='button' title='"+orderThisProductTran+"' class='button' value=\""+orderTran+"\" onclick=\"orderProduct('"+sStockUid+"','"+sProductName+"');\">&nbsp;");
                 html.append("<input type='button' title='"+batchesTran+"' class='button' value=\""+batchesTran+"\" onclick=\"batchesList('"+sStockUid+"');\">&nbsp;");
             }
@@ -247,6 +255,7 @@ public double getLastYearsAveragePrice(Product product){
         StringBuffer html = new StringBuffer();
         String sClass = "1", sStockUid = "", sProductUid = "", sProductName = "", sStockBegin = "";
         Product product;
+        long day=24*3600*1000;
 
         Hashtable productnames = Product.getProductNames();
         ProductStock productStock;
@@ -261,30 +270,99 @@ public double getLastYearsAveragePrice(Product product){
             else{
                 sProductName = "<font color='red'>"+getTran(null,"web","nonexistingproduct",sWebLanguage)+"</font>";
             }
-
-            // alternate row-style
-            if(sClass.equals("")) sClass = "1";
-            else                  sClass = "";
-            
-            //*** display stock in one row ***
-            html.append("<tr class='list"+sClass+"'>");
-
-            // non-existing productname in red
-            if(sProductName.length() == 0) {
-                html.append("<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>"); //No product code
-                html.append("<td><font color='red'>"+getTran(null,"web","nonexistingproduct",sWebLanguage)+"</font></td>");
-            } 
-            else {
-                html.append("<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;"+checkString(productStock.getProduct().getCode())+"</td>");
-                html.append("<td>"+sProductName+"</td>");
-            }
-
-            // level
-            int stockLevel = productStock.getLevel();
-            html.append("<td><input type='hidden' id='theoretical."+sStockUid+"' name='theoretical."+sStockUid+"' value='"+stockLevel+"'>"+stockLevel+"</td>");
-            html.append("<td><input type='text' class='text' id='physical."+sStockUid+"' name='physical."+sStockUid+"' value='"+stockLevel+"' onkeyup='calculateDifference(this)'></td>");
-            html.append("<td><input type='text' class='readonly' readonly id='difference."+sStockUid+"' name='difference."+sStockUid+"' value='0'></td>");
-            html.append("</tr>");
+			
+            int stocklevel = productStock.getLevel();
+            boolean bHasNegative=false;
+           	//We must write a row for each batch with a level<>0
+           	Vector batches = Batch.getAllBatches(productStock.getUid());
+           	for(int n=0;n<batches.size();n++){
+           		Batch batch = (Batch)batches.elementAt(n);
+           		if(batch.getLevel()==0){
+           			continue;
+           		}
+           		else if(batch.getLevel()<0){
+           			bHasNegative=true;
+           		}
+           		stocklevel-=batch.getLevel();
+	            // alternate row-style
+	            if(sClass.equals("")) sClass = "1";
+	            else                  sClass = "";
+	            
+	            //*** display stock in one row ***
+	            html.append("<tr class='list"+sClass+"'>");
+	
+	            // non-existing productname in red
+	            if(sProductName.length() == 0) {
+	                html.append("<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>"); //No product code
+	                html.append("<td><font color='red'>"+getTran(null,"web","nonexistingproduct",sWebLanguage)+"</font></td>");
+	                html.append("<td/>");
+	            } 
+	            else {
+	                html.append("<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;"+checkString(productStock.getProduct().getCode())+"</td>");
+	                html.append("<td><b>"+sProductName+(batch.getLevel()<0?"<img src='"+sCONTEXTPATH+"/_img/icons/icon_warning.gif'/>":"")+"</b></td>");
+	                html.append("<td><b>"+batch.getBatchNumber()+"</b></td>");
+	            }
+	
+	            // level
+				double physicallevel=batch.getLevel();
+	            String s = Pointer.getPointer("physical."+sStockUid+"."+batch.getUid());
+	            String difference="0";
+	            if(s.length()>0){
+	            	physicallevel=Double.parseDouble(s);
+	            	difference=(physicallevel-batch.getLevel())+"";
+	            }
+	            html.append("<td><input type='hidden' id='theoretical."+sStockUid+"."+batch.getUid()+"' name='theoretical."+sStockUid+"."+batch.getUid()+"' value='"+batch.getLevel()+"'>"+batch.getLevel()+"</td>");
+	            html.append("<td><input size='8' type='text' class='"+(Double.parseDouble(difference)==0?"text":"red")+"' id='physical."+sStockUid+"."+batch.getUid()+"' name='physical."+sStockUid+"."+batch.getUid()+"' value='"+physicallevel+"' onkeyup='calculateDifference(this)'></td>");
+	            html.append("<td><input size='8' type='text' class='readonly' readonly id='difference."+sStockUid+"."+batch.getUid()+"' name='difference."+sStockUid+"."+batch.getUid()+"' value='"+difference+"'></td>");
+	            double lp=productStock.getProduct().getLooseLastYearsAveragePrice(new java.util.Date());
+	            if(lp==0){
+	            	html.append("<td><input size='8' type='text' class='text' id='pump."+sStockUid+"."+batch.getUid()+"' name='pump."+sStockUid+"."+batch.getUid()+"' value=''>"+" "+MedwanQuery.getInstance().getConfigString("currency","EUR")+"</td>");
+	            }
+	            else{
+	            	html.append("<td>"+new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#")).format(lp)+" "+MedwanQuery.getInstance().getConfigString("currency","EUR")+"</td>");
+	            }
+	            html.append("</tr>");
+           	}
+           	if(stocklevel!=0){
+	            // alternate row-style
+	            if(sClass.equals("")) sClass = "1";
+	            else                  sClass = "";
+	            
+	            //*** display stock in one row ***
+	            html.append("<tr class='list"+sClass+"'>");
+	
+	            // non-existing productname in red
+	            if(sProductName.length() == 0) {
+	                html.append("<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>"); //No product code
+	                html.append("<td><font color='red'>"+getTran(null,"web","nonexistingproduct",sWebLanguage)+"</font></td>");
+	                html.append("<td/>");
+	            } 
+	            else {
+	                html.append("<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;"+checkString(productStock.getProduct().getCode())+"</td>");
+	                html.append("<td><b>"+sProductName+(bHasNegative?"<img src='"+sCONTEXTPATH+"/_img/icons/icon_warning.gif'/>":"")+"</b></td>");
+	                html.append("<td><b>?</b></td>");
+	            }
+	
+	            // level
+				double physicallevel=stocklevel;
+	            String difference="0";
+	            String s = Pointer.getPointer("physical."+sStockUid);
+	            if(s.length()>0){
+	            	physicallevel=Double.parseDouble(s);
+	            	difference=(physicallevel-stocklevel)+"";
+	            }
+	            html.append("<td><input type='hidden' id='theoretical."+sStockUid+"' name='theoretical."+sStockUid+"' value='"+stocklevel+"'>"+stocklevel+"</td>");
+	            html.append("<td><input size='8' type='text' class='"+(Double.parseDouble(difference)==0?"text":"red")+"' id='physical."+sStockUid+"' name='physical."+sStockUid+"' value='"+physicallevel+"' onkeyup='calculateDifference(this)'></td>");
+	            html.append("<td><input size='8' type='text' class='readonly' readonly id='difference."+sStockUid+"' name='difference."+sStockUid+"' value='"+difference+"'></td>");
+	            double lp=productStock.getProduct().getLooseLastYearsAveragePrice(new java.util.Date());
+	            if(lp==0){
+		            html.append("<td><input size='8' type='text' class='text' id='pump."+sStockUid+"' name='pump."+sStockUid+"' value=''>"+" "+MedwanQuery.getInstance().getConfigString("currency","EUR")+"</td>");
+	            }
+	            else{
+	            	html.append("<td>"+new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#")).format(lp)+" "+MedwanQuery.getInstance().getConfigString("currency","EUR")+"</td>");
+	            }
+	            html.append("</tr>");
+           	}
         }
 
         return html;
@@ -357,7 +435,7 @@ public double getLastYearsAveragePrice(Product product){
 
     /// DEBUG /////////////////////////////////////////////////////////////////////////////////////
     if(Debug.enabled){
-        Debug.println("\n******************** pharacy/manageProductStocks.jsp *******************");
+        Debug.println("\n******************** pharmacy/manageProductStocks.jsp *******************");
         Debug.println("sAction                : "+sAction);
         Debug.println("sEditStockUid          : "+sEditStockUid);
         Debug.println("sEditServiceStockUid   : "+sEditServiceStockUid);
@@ -482,14 +560,26 @@ public double getLastYearsAveragePrice(Product product){
         msg = getTran(request,"web","dataisdeleted",sWebLanguage);
         sAction = "findShowOverview"; // display overview even if only one record remains
     }
+    else if(sAction.equals("storeinventory")){
+    	Enumeration params = request.getParameterNames();
+    	while(params.hasMoreElements()){
+    		String parname = (String)params.nextElement();
+    		if(parname.startsWith("physical") && (Pointer.getPointer(parname).length()>0 || Double.parseDouble(request.getParameter(parname))!=Double.parseDouble(request.getParameter(parname.replaceAll("physical", "theoretical"))))){
+				//The physical stock is different from the theoretical one!
+				Pointer.deletePointers(parname);
+				Pointer.storePointer(parname, request.getParameter(parname));
+    		}
+    	}
+        sAction = "findShowOverview"; // showDetails
+    }
     else if(sAction.equals("updateinventory")){
     	Enumeration params = request.getParameterNames();
     	while(params.hasMoreElements()){
     		String parname = (String)params.nextElement();
-    		if(parname.startsWith("difference") && !request.getParameter(parname).equalsIgnoreCase("0")){
+    		if(parname.startsWith("difference") && new Double(request.getParameter(parname))!=0){
     			try{
     				//We need to make an inventory correction in the database
-    				int nDifference = Integer.parseInt(request.getParameter(parname));
+    				int nDifference = new Double(request.getParameter(parname)).intValue();
     				ProductStockOperation operation = new ProductStockOperation();
     				operation.setCreateDateTime(new java.util.Date());
     				operation.setDate(new java.util.Date());
@@ -501,13 +591,29 @@ public double getLastYearsAveragePrice(Product product){
     					operation.setDescription("medicationreceipt.3");
         				operation.setUnitsChanged(nDifference);
     				}
-    				operation.setProductStockUid(parname.replaceAll("difference\\.", ""));
+    				if(parname.split("\\.").length>4){
+    					operation.setBatchUid(parname.split("\\.")[3]+"."+parname.split("\\.")[4]);
+    				}
+    				operation.setProductStockUid(parname.split("\\.")[1]+"."+parname.split("\\.")[2]);
     				operation.setUid("-1");
     				operation.setUpdateDateTime(new java.util.Date());
     				operation.setUpdateUser(activeUser.userid);
     				operation.setVersion(1);
     				operation.setSourceDestination(new ObjectReference("",""));
     				operation.store();
+    				Pointer.deletePointers(parname.replaceAll("difference","physical"));
+    			}
+    			catch(Exception e){
+    				e.printStackTrace();
+    			}
+    		}
+    		else if(parname.startsWith("pump") && request.getParameter(parname).trim().length()>0 && !request.getParameter(parname).equalsIgnoreCase("0")){
+    			try{
+    				if(Double.parseDouble(request.getParameter(parname.replaceAll("pump","physical")))>0){
+		    			ProductStock productStock = ProductStock.get(parname.split("\\.")[1]+"."+parname.split("\\.")[2]);
+		    			Pointer.storePointer("pump."+productStock.getProductUid(), request.getParameter(parname));
+		    			Pointer.storePointer("drugprice."+productStock.getProductUid()+".0.0", request.getParameter(parname.replaceAll("pump","physical"))+";"+request.getParameter(parname));
+    				}
     			}
     			catch(Exception e){
     				e.printStackTrace();
@@ -534,7 +640,9 @@ public double getLastYearsAveragePrice(Product product){
         sFindEnd               = checkString(request.getParameter("FindEnd"));
         sFindDefaultImportance = checkString(request.getParameter("FindDefaultImportance"));
         sFindSupplierUid       = checkString(request.getParameter("FindSupplierUid"));
-
+        if(request.getParameter("hideZeroLevel")!=null){
+        	sFindLevel="1";
+        }
         // get supplier name
         if(sFindSupplierUid.length() > 0) sFindSupplierName = getTran(request,"service",sFindSupplierUid,sWebLanguage);
         else                              sFindSupplierName = "";
@@ -557,7 +665,7 @@ public double getLastYearsAveragePrice(Product product){
 
         // display other layout if stocks of only one service are shown
         if(sServiceId.length()==0) {
-        	stocksHtml = objectsToHtml1(productStocks,sWebLanguage);
+        	stocksHtml = objectsToHtml1(productStocks,sWebLanguage,activeUser.userid);
         }
         else if(request.getParameter("updateInventory")==null){
         	stocksHtml = objectsToHtml2(productStocks,sServiceId,sWebLanguage,activeUser);
@@ -664,7 +772,6 @@ public double getLastYearsAveragePrice(Product product){
     }
 %>
 <form name="transactionForm" id="transactionForm" method="post" action='<c:url value="/main.do"/>?Page=pharmacy/manageProductStocks.jsp<%=sFormActionParams%>&ts=<%=getTs()%>' <%=sOnKeyDown%> <%=(displaySearchFields||sAction.equals("findShowOverview")?"onClick=\"clearMessage();\"":"onclick=\"setSaveButton(event);clearMessage();\" onkeyup=\"setSaveButton(event);\"")%>>
-    <input type='hidden' name='EditServiceStockUid' value='<%=checkString(request.getParameter("EditServiceStockUid")) %>'/>
     <input type='hidden' name='DisplaySearchFields' value='<%=checkString(request.getParameter("DisplaySearchFields")) %>'/>
     <%=writeTableHeader("Web.manage","ManageProductStocks",sWebLanguage,(sAction.equals("findShowOverview")?"":"doBack();"))%>
     
@@ -703,6 +810,7 @@ public double getLastYearsAveragePrice(Product product){
 			                        <% if(activeUser.getAccessRight("pharmacy.updateinventory.select")){%>
 			                        	<input class="text" type="checkbox" name="updateInventory" id="updateInventory" value='1' <%=request.getParameter("updateInventory")!=null?"checked":"" %> onclick="document.getElementById('Action').value='findShowOverview';transactionForm.submit();"><%=getTran(request,"Web","updateinventory",sWebLanguage)%>
 			                        <% }%>
+			                        	<input class="text" type="checkbox" name="hideZeroLevel" id="hideZeroLevel" value='1' <%=request.getParameter("hideZeroLevel")!=null?"checked":"" %> onclick="document.getElementById('Action').value='findShowOverview';transactionForm.submit();"><%=getTran(request,"Web","hideZeroLevelstocks",sWebLanguage)%>
 			                        </td>
 		                        </tr>
 	                        <%
@@ -956,9 +1064,11 @@ public double getLastYearsAveragePrice(Product product){
                         <td/>
                         <td><%=getTran(request,"web","code",sWebLanguage)%></td>
                         <td><%=getTran(request,"Web","productName",sWebLanguage)%></td>
+                        <td><%=getTran(request,"Web","batch",sWebLanguage)%></td>
                         <td><%=getTran(request,"Web","theoreticallevel",sWebLanguage)%>&nbsp;&nbsp;</td>
                         <td><%=getTran(request,"Web","physicallevel",sWebLanguage)%>&nbsp;&nbsp;</td>
                         <td><%=getTran(request,"Web","difference",sWebLanguage)%>&nbsp;&nbsp;</td>
+                        <td><%=getTran(request,"Web","pump",sWebLanguage)%>&nbsp;&nbsp;</td>
                     </tr>
                     <tbody class="hand"><%=stocksHtml%></tbody>
                 </table>
@@ -982,7 +1092,10 @@ public double getLastYearsAveragePrice(Product product){
                 
                 <%-- BUTTONS --%>
                 <%=ScreenHelper.alignButtonsStart()%>
+                    <input class="button" type="button" name="storeinventory" value='<%=getTranNoLink("web","save",sWebLanguage)%>' onclick="doStoreInventory();">
                     <input class="button" type="button" name="update" value='<%=getTranNoLink("web","update",sWebLanguage)%>' onclick="doUpdateInventory();">
+                    <input class="button" type="button" name="printdifferences" value='<%=getTranNoLink("web","printdifferences",sWebLanguage)%>' onclick="doPrintDifferences();">
+                    <input class="button" type="button" name="printall" value='<%=getTranNoLink("web","printall",sWebLanguage)%>' onclick="doPrintAll();">
                 <%=ScreenHelper.alignButtonsStop()%>
 				<%
                 }
@@ -1158,8 +1271,14 @@ public double getLastYearsAveragePrice(Product product){
                                     // existing productStock : display saveButton with save-label
                                     %>
                                         <input class="button" type="button" name="saveButton" value='<%=getTranNoLink("Web","save",sWebLanguage)%>' onclick="doSave();">
-                                        <input class="button" type="button" name="deleteButton" value='<%=getTranNoLink("Web","delete",sWebLanguage)%>' onclick="doDelete('<%=sEditStockUid%>');">
+                                    <% 
+                                    	//Only show delete button if user is stock manager
+                                    	ProductStock productStock = ProductStock.get(sEditStockUid);
+                                    	if(productStock!=null && productStock.getServiceStock()!=null && productStock.getServiceStock().getStockManagerUid().equalsIgnoreCase(activeUser.userid)){
+                                    %>
+                                        	<input class="button" type="button" name="deleteButton" value='<%=getTranNoLink("Web","delete",sWebLanguage)%>' onclick="doDelete('<%=sEditStockUid%>');">
                                     <%
+                                    	}
                                 }
                                 else if(sAction.equals("showDetailsNew") || sAction.equals("showDetailsAfterAddReject")){
                                     // new productStock : display saveButton with add-label
@@ -1627,12 +1746,27 @@ public double getLastYearsAveragePrice(Product product){
   }
   
   function doUpdateInventory(){
-	document.getElementById("Action").value='updateinventory';
-	transactionForm.submit();
+	if(window.confirm('<%=getTranNoLink("web","areyousure",sWebLanguage)%>')){
+		document.getElementById("Action").value='updateinventory';
+		transactionForm.submit();
+	}
+  }
+	  
+  function doStoreInventory(){
+		document.getElementById("Action").value='storeinventory';
+		transactionForm.submit();
   }
   
   function doPrintBarcode(productStockUid){
       var url = "<c:url value='/pharmacy/createProductStockLabelPdf.jsp'/>?productStockUid="+productStockUid;
       printwindow=window.open(url,"ProductStockLabelPdf<%=new java.util.Date().getTime()%>","height=300,width=400,toolbar=yes,status=no,scrollbars=yes,resizable=yes,menubar=yes");
+  }
+  function doPrintDifferences(productStockUid){
+      var url = "<c:url value='/pharmacy/createInventoryUpdatePdf.jsp'/>?serviceStockUid=<%=sEditServiceStockUid%>";
+      printwindow=window.open(url,"createInventoryUpdatePdf<%=new java.util.Date().getTime()%>","height=300,width=400,toolbar=yes,status=no,scrollbars=yes,resizable=yes,menubar=yes");
+  }
+  function doPrintAll(productStockUid){
+      var url = "<c:url value='/pharmacy/createInventoryUpdatePdf.jsp'/>?serviceStockUid=<%=sEditServiceStockUid%>&printall=1";
+      printwindow=window.open(url,"createInventoryUpdatePdf<%=new java.util.Date().getTime()%>","height=300,width=400,toolbar=yes,status=no,scrollbars=yes,resizable=yes,menubar=yes");
   }
 </script>

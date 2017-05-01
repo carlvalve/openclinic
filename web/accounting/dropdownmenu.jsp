@@ -456,10 +456,10 @@
     Modalbox.show(url,{title:'<%=getTranNoLink("web","loadPicture",sWebLanguage)%>',width:650});
   }
   function showPicture(){
-    <%-- openPopup("util/showPicture.jsp&ts=<%=getTs()%>&personid=<%=activePatient!=null?activePatient.personid:"0"%>",400,400); --%>
-    var url = "<c:url value="/util/ajax/showPicture.jsp"/>?personid=<%=activePatient!=null?activePatient.personid:"0"%>&ts="+new Date().getTime();
-    Modalbox.show(url,{title:'<%=getTranNoLink("web","showPicture",sWebLanguage)%>',width:162});
-  }
+	    <%-- openPopup("util/showPicture.jsp&ts=<%=getTs()%>&personid=<%=activePatient!=null?activePatient.personid:"0"%>",400,400); --%>
+	    var url = "<c:url value="/util/ajax/showPicture.jsp"/>?personid=<%=activePatient!=null?activePatient.personid:"0"%>&ts="+new Date().getTime();
+	    Modalbox.show(url,{title:'<%=getTranNoLink("web","showPicture",sWebLanguage)%>',width:162});
+	  }
   function deletePicture(){
     var url = "<c:url value='/util/ajax/deletePicture.jsp'/>?ts="+new Date().getTime();
     Modalbox.show(url,{title:'<%=getTranNoLink("web","loadPicture",sWebLanguage)%>',width:162});

@@ -1,5 +1,4 @@
-<%@page import="be.openclinic.assets.MaintenancePlan,
-                be.openclinic.assets.MaintenanceOperation,
+<%@page import="be.openclinic.assets.*,
                 be.mxs.common.util.system.HTMLEntities,
                 java.util.*"%>
 <%@page errorPage="/includes/error.jsp"%>
@@ -39,6 +38,8 @@
     // search-criteria
     String sPlanUID  = checkString(request.getParameter("planUID")), // to obtain plan-name
            sOperator = checkString(request.getParameter("operator")),
+           sAssetUID = checkString(request.getParameter("assetuid")),
+           sServiceUID = checkString(request.getParameter("serviceuid")),
            sResult   = checkString(request.getParameter("result"));
 
     // extra searchcriteria
@@ -51,6 +52,7 @@
         Debug.println("\n********** assets/ajax/maintenanceOperation/getMaintenanceOperations.jsp *********");
         Debug.println("sPlanUID  : "+sPlanUID);
         Debug.println("sOperator : "+sOperator);
+        Debug.println("sAssetUID : "+sAssetUID);
         Debug.println("sResult   : "+sResult+"\n");
 
         // extra searchcriteria
@@ -64,6 +66,7 @@
     findObject.maintenanceplanUID = sPlanUID;
     findObject.operator = sOperator;
     findObject.result = sResult;
+    findObject.setTag(sAssetUID+";"+sServiceUID);
 
     List operations = MaintenanceOperation.getList(findObject);
     String sReturn = "";
@@ -77,10 +80,25 @@
             operation = (MaintenanceOperation)operations.get(i);
 
             String sPlanName = getPlanName(operation.maintenanceplanUID);
+            String nomenclature="";
+            MaintenancePlan plan = operation.getMaintenancePlan();
+            boolean bAuthorized=true;
+            if(plan!=null){
+            	nomenclature=plan.getAssetCode()+" - "+getTranNoLink("admin.nomenclature.asset",plan.getAssetNomenclature(),sWebLanguage);
+                Asset asset=plan.getAsset();
+                if(asset!=null){
+    	            bAuthorized=asset.isAuthorizedUser(activeUser.userid);
+    	            if(!bAuthorized && !activeUser.isAdmin()){
+    	            	continue;
+    	            }
+                }
+            }
             
             hSort.put(operation.maintenanceplanUID+"="+operation.getUid(),
                       " onclick=\"displayMaintenanceOperation('"+operation.getUid()+"');\">"+
-                      "<td class='hand' style='padding-left:5px'>"+sPlanName+"</td>"+
+                      "<td class='hand' style='padding-left:5px'>["+operation.getUid()+"]</td>"+
+                      "<td class='hand' style='padding-left:5px'>"+nomenclature+(!bAuthorized?" <img src='"+sCONTEXTPATH+"/_img/icons/icon_forbidden.png'/>":"")+"</td>"+
+                      "<td class='hand' style='padding-left:5px'>["+operation.maintenanceplanUID+"] "+sPlanName+"</td>"+
                       "<td class='hand' style='padding-left:5px'>"+ScreenHelper.stdDateFormat.format(operation.date)+"</td>"+
                       "<td class='hand' style='padding-left:5px'>"+operation.operator+"</td>"+
                       "<td class='hand' style='padding-left:5px'>"+getTranNoLink("assets.maintenanceoperations.result",operation.result,sWebLanguage)+"</td>"+
@@ -111,10 +129,12 @@
 <table width="100%" class="sortable" id="searchresults" cellspacing="1" style="border:none;">
     <%-- header --%>
     <tr class="admin" style="padding-left:1px;">    
-        <td width="25%" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.assets","maintenancePlan",sWebLanguage))%></td>
-        <td width="7%" nowrap><asc><%=HTMLEntities.htmlentities(getTran(request,"web.assets","date",sWebLanguage))%></asc></td>
-        <td width="25%" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.assets","operator",sWebLanguage))%></td>
-        <td width="*" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.assets","result",sWebLanguage))%></td>
+        <td nowrap><%=HTMLEntities.htmlentities(getTran(request,"web","operation",sWebLanguage))%></td>
+        <td nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.assets","nomenclature",sWebLanguage))%></td>
+        <td nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.assets","maintenancePlan",sWebLanguage))%></td>
+        <td nowrap><asc><%=HTMLEntities.htmlentities(getTran(request,"web.assets","date",sWebLanguage))%></asc></td>
+        <td nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.assets","operator",sWebLanguage))%></td>
+        <td nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.assets","result",sWebLanguage))%></td>
     </tr>
     
     <tbody class="hand"><%=sReturn%></tbody>

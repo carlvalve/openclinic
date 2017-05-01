@@ -107,6 +107,9 @@
         <permission type="examination" id="1132">msas.registry.admission</permission>
         <permission type="examination" id="1133">occup.ccbrt.vvfscreening</permission>
         <permission type="examination" id="1134">occup.ccbrt.vvf6monthsurvey</permission>
+        <permission type="examination" id="1135">occup.ccbrt.vvfsurgery</permission>
+        <permission type="examination" id="1136">occup.kirapreop</permission>
+        <permission type="examination" id="1137">occup.kiraneuropsy</permission>
     </application>
     <application type="Web" id="newexaminations">
         <permission type="web" id="globalexaminations">examinations.global</permission>
@@ -129,6 +132,7 @@
 <!--    <permission type="Web" id="medical">medical</permission>  -->
         <permission type="Web" id="problemlist">problemlist</permission>
         <permission type="Web" id="examinations">examinations</permission>
+        <permission type="Web" id="clinicalassistant">clinicalassistant</permission>
     </application>
     <application type="Web" id="applications">
         <permission type="web" id="chronicmedication">chronicmedication</permission>
@@ -257,6 +261,12 @@
         <permission type="web" id="occup.medicalimagingrequest.execute">occup.medicalimagingrequest.execute</permission>
         <permission type="web" id="openxrayrequest">rx.openxrayrequests</permission>
     </application>
+    <application type="Web" id="assets">
+        <permission type="web" id="maintenanceoperations">maintenanceoperations</permission>
+        <permission type="web" id="assets">assets</permission>
+        <permission type="web" id="maintenanceplans">maintenanceplans</permission>
+        <permission type="web" id="remoteassets">remoteassets</permission>
+    </application>
     <application type="Web" id="system">
         <permission type="web" id="systemmanagement">system.management</permission>
         <permission type="web" id="centerinfo">system.centerinfo</permission>
@@ -287,6 +297,7 @@
         <permission type="web" id="devices">system.devices</permission>
     </application>
     <application type="Web" id="pharmacy">pharmacy.updateinventory
+    	<permission type="web" id="pharmacy.issueproductsinpast">pharmacy.issueproductsinpast</permission>
     	<permission type="web" id="pharmacy.updateinventory">pharmacy.updateinventory</permission>
     	<permission type="web" id="pharmacy.production.deliverwhendebt">pharmacy.production.deliverwhendebt</permission>
     	<permission type="web" id="pharmacy.overridelinkedmaterialsrequirement">pharmacy.overridelinkedmaterialsrequirement</permission>

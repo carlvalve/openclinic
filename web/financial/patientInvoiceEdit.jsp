@@ -611,6 +611,11 @@
                 <input accesskey="S" class='button' type="button" name="buttonSave" value='<%=getTranNoLink("Web","save",sWebLanguage)%>' onclick="doSave(this);">&nbsp;
                 <%
                 }
+                if(MedwanQuery.getInstance().getConfigInt("enableUnsavedProformaInvoice",0)==1){
+                %>
+                <input class='button' type="button" name="buttonSave" value='<%=getTranNoLink("invoice","proforma",sWebLanguage)%>' onclick="doPrintUnsavedInvoice()">&nbsp;
+                <%
+                }
 
                 // pdf print button for existing invoices
                 if(checkString(patientInvoice.getUid()).length() > 0){
@@ -1098,6 +1103,87 @@
 	        }
 	    }
 	
+   		function doPrintUnsavedInvoice(){
+	        var bInvoiceSeries=false;
+	        var sInvoiceSeries="";
+	        if(EditForm.invoiceseries){
+	        	for (var i=0; i < EditForm.invoiceseries.length; i++){
+	        	   if (EditForm.invoiceseries[i].checked){
+	        	      bInvoiceSeries=true;
+	        	      sInvoiceSeries=EditForm.invoiceseries[i].value;
+	        	   }
+	        	}
+	        }
+	        else {
+				bInvoiceSeries=true;
+	        }
+	        var originalStatus=document.getElementById('invoiceStatus').selectedIndex;
+
+    	    var sCbs = "";
+        	for(i = 0; i < EditForm.elements.length; i++) {
+             	elm = EditForm.elements[i];
+
+             	if ((elm.type == 'checkbox'||elm.type == 'hidden')&&(elm.checked)) {
+                	sCbs += elm.name.split("=")[0]+",";
+             	}
+        	}
+			reduction=-1;
+			var reductions=document.getElementsByName('reduction');
+			if(reductions[0] && reductions[0].type=='radio'){
+				for(var n=0;n<reductions.length;n++){
+					if(reductions[n].checked){
+						reduction=reductions[n].value*1;
+					}
+		   		}
+			}
+			else {
+				reduction=0;
+			}
+			red="";
+			if(reduction!=-1){
+				red=reduction;
+		 	}
+         	var today = new Date();
+         	if(document.getElementById('invoiceStatus').selectedIndex){
+         		status=document.getElementById("invoiceStatus").options[document.getElementById("invoiceStatus").selectedIndex].value;
+         	}
+         	else{
+         		status=document.getElementById('invoiceStatus').value;
+         	}
+            parameters= 'EditDate=' + document.getElementById('EditDate').value
+                       +'&EditDeliveryDate=' + EditForm.EditDeliveryDate.value
+                       +'&EditPatientInvoiceUID=' + EditForm.EditPatientInvoiceUID.value
+                       +'&EditInvoiceUID=' + EditForm.EditInvoiceUID.value
+                       +'&EditStatus=' + status
+                       +'&EditCBs='+sCbs
+                       +'&EditInvoiceSeries='+sInvoiceSeries
+                       +'&EditInsurarReference='+EditForm.EditInsurarReference.value
+                       +'&EditInsurarReferenceDate='+EditForm.EditInsurarReferenceDate.value
+                       +'&EditInvoiceVerifier='+document.getElementById('EditInvoiceVerifier').value
+                       +'&EditReduction='+red
+                       +'&EditInvoiceCorrection='+document.getElementById("EditInvoiceCorrection")
+                       +'&EditComment='+document.getElementById('EditComment').value
+           	        <% if(MedwanQuery.getInstance().getConfigInt("enableMFP",0)==1 && MedwanQuery.getInstance().getConfigInt("hideMFPInvoiceFields",0)==0){ %>
+                    	+'&EditInvoiceDoctor='+document.getElementById('EditInvoiceDoctor').value
+                    	+'&EditInvoicePost='+document.getElementById('EditInvoicePost').value
+                    	+'&EditInvoiceAgent='+document.getElementById('EditInvoiceAgent').value
+                    	+'&EditInvoiceDrugsRecipient='+document.getElementById('EditInvoiceDrugsRecipient').value
+                    	+'&EditInvoiceDrugsIdCard='+document.getElementById('EditInvoiceDrugsIdCard').value
+                    	+'&EditInvoiceDrugsIdCardDate='+document.getElementById('EditInvoiceDrugsIdCardDate').value
+                    	+'&EditInvoiceDrugsIdCardPlace='+document.getElementById('EditInvoiceDrugsIdCardPlace').value
+                  	<%}
+        	        else if(MedwanQuery.getInstance().getConfigInt("enableMFP",0)==1 && MedwanQuery.getInstance().getConfigInt("hideCCBRTInvoiceFields",1)==0){ 
+        	        %>
+                    	+'&EditInvoiceDoctor='+(document.getElementById('EditInvoiceDoctor')?document.getElementById('EditInvoiceDoctor').value:"")
+                    	+'&EditInvoicePost='+(document.getElementById('EditInvoicePost')?document.getElementById('EditInvoicePost').value:"")
+                    	+'&EditInvoiceDrugsRecipient='+(document.getElementById('EditInvoiceDrugsRecipient')?document.getElementById('EditInvoiceDrugsRecipient').value:"")
+                  	<%}
+                  	%>
+                    +'&EditBalance=' + document.getElementById('EditBalance').value;
+            var url= '<c:url value="/financial/printUnsavedInvoicePdf.jsp"/>?ts='+today+"&"+parameters;
+	        window.open(url,"PatientInvoicePdf<%=new java.util.Date().getTime()%>","height=600,width=900,toolbar=yes,status=no,scrollbars=yes,resizable=yes,menubar=yes");
+    	}
+
 	    function selectAll(sStartsWith,bValue,buttonDisable,buttonEnable,bAdd){
 	      for(i=0; i<EditForm.elements.length; i++){
 	        elm = EditForm.elements[i];

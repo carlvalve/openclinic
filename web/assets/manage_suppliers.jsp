@@ -416,3 +416,4 @@
   //loadSuppliers();
   resizeAllTextareas(8);
 </script>
+<%=sJSBUTTONS%>

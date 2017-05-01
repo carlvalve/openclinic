@@ -80,6 +80,7 @@
     //*** 4 - TECHNICAL STATS *********************************************************************
     if(activeUser.getAccessRight("statistics.select")){        
         out.print(ScreenHelper.writeTblHeader(getTran(request,"Web","statistics.technicalstats",sWebLanguage),sCONTEXTPATH));
+        out.println(writeTblChildWithCode("javascript:downloadTechnicalStats(\"undelivered.rwamaterial.orders\",\"openclinic\");",getTran(request,"Web","statistics.download.undelivered.rwamaterial.orders",sWebLanguage)));
         out.print("<tr>"+
                    "<td class='admin2' colspan='2'>"+
                     getTran(request,"web","from",sWebLanguage)+"&nbsp;"+writeDateField("begintech","stats",firstdayPreviousMonth,sWebLanguage)+"&nbsp;&nbsp;"+
@@ -275,8 +276,11 @@ function downloadInvoicesSummary(query,db){
     var URL = "/statistics/downloadInvoicesSummary.jsp&query="+query+"&db="+db+"&begin="+document.getElementsByName('begin')[0].value+"&end="+document.getElementsByName('end')[0].value;
 	openPopup(URL,400,300,"OpenClinic");
   }
-  function downloadStats(query,db){
+function downloadStats(query,db){
     window.open("<c:url value='/util/csvStats.jsp?'/>query="+query+"&db="+db+"&begin="+document.getElementsByName('begin')[0].value+"&end="+document.getElementsByName('end')[0].value);
+  }
+function downloadTechnicalStats(query,db){
+    window.open("<c:url value='/util/csvStats.jsp?'/>query="+query+"&db="+db+"&begin="+document.getElementsByName('begintech')[0].value+"&end="+document.getElementsByName('endtech')[0].value);
   }
   function downloadDatacenterStats(query,db){
     window.open("<c:url value='/datacenterstatistics/csvStats.jsp?'/>query="+query+"&db="+db+"&begin="+document.getElementsByName('begin')[0].value+"&end="+document.getElementsByName('end')[0].value);
@@ -318,6 +322,11 @@ function downloadInvoicesSummary(query,db){
   function hospitalReport(){
     window.open("<c:url value='/statistics/printHospitalReportChapterSelection.jsp?'/>start="+document.getElementById('begin2').value+"&end="+document.getElementById('end2').value+"&ts=<%=getTs()%>");
   }
+  function getMFPSummary(){
+      var URL="/statistics/createMFPSummary.jsp&start="+document.getElementById('beginmfp').value+"&end="+document.getElementById('endmfp').value+"&serviceid="+document.getElementById('mfpserviceid').value+"&ts=<%=getTs()%>";
+		openPopup(URL,400,600,"OpenClinic");
+  }
+
   function insuranceReport(){
     window.location.href="<c:url value='main.jsp?Page=/statistics/insuranceStats.jsp&'/>start="+document.getElementById('begin3').value+"&end="+document.getElementById('end3').value+"&ts=<%=getTs()%>";
   }

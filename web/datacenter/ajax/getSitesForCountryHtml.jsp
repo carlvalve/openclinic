@@ -43,7 +43,6 @@
     		sCountryCode="'"+sCountryCode+"'";
     	}
 	    conn = MedwanQuery.getInstance().getStatsConnection();
-	    System.out.println("Country code="+sCountryCode);
 		String sSql = "select distinct * from dc_monitorservers a, dc_monitorvalues b"+
 		              " where b.dc_monitorvalue_serverid = a.dc_monitorserver_serverid"+
 		              "  and b.dc_monitorvalue_date > ?"+

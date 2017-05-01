@@ -53,6 +53,9 @@
 	}
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
+	if(sUid.length()>0 && sUid.split("\\.").length<2){
+		sUid=MedwanQuery.getInstance().getConfigString("serverId")+"."+sUid;
+	}
 	
 	if(sDeleteOperation.length() > 0){
 		ProductStockOperation.deleteWithProductStockUpdate(sDeleteOperation);

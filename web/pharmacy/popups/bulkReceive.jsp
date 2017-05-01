@@ -72,7 +72,6 @@
 					returnOperation.setOrderUID(deliveryOperation.getOrderUID());
 					returnOperation.setComment(ScreenHelper.getTran("web","refused",sWebLanguage)+": "+sComment);
 					returnOperation.store();
-					System.out.println("Batch UID return-operation = "+returnOperation.getBatchUid());
 				}
 			}
 		}
@@ -139,7 +138,7 @@
 			 out.print("<td>"+operation.getUnitsReceived()+"</td>");
 			 out.print("<td>"+(operation.getBatchNumber()!=null?operation.getBatchNumber():"")+"</td>");
 			 out.print("<td>"+(operation.getBatchEnd()!=null?operation.getBatchEnd():"")+"</td>");
-			 out.print("<td><input type='text' class='text' size='5' onchange='validatemax("+(operation.getUnitsChanged()-operation.getUnitsReceived())+",this.value);' name='receive."+operation.getUid()+"' value='"+(operation.getUnitsChanged()-operation.getUnitsReceived())+"'><input type='checkbox' name='checkreceive."+operation.getUid()+"' value='1'/></td>");
+			 out.print("<td><input type='text' class='text' size='5' onchange='if(!validatemax("+(operation.getUnitsChanged()-operation.getUnitsReceived())+",this.value)){this.value=0;document.getElementById(\"checkreceive."+operation.getUid()+"\").checked=false;}' name='receive."+operation.getUid()+"' id='receive."+operation.getUid()+"' value='"+(operation.getUnitsChanged()-operation.getUnitsReceived())+"'><input type='checkbox' name='checkreceive."+operation.getUid()+"' id='checkreceive."+operation.getUid()+"' onclick='if(document.getElementById(\"receive."+operation.getUid()+"\").value==0){this.checked=false}' value='1'/></td>");
 			out.print("</tr>");
 		}
 
@@ -174,9 +173,14 @@
   <%-- VALIDATE MAX --%>
   function validatemax(maxval,thisval){
     if(maxval*1 < thisval*1){
-      alertDialogDirectText('<%=getTran(null,"web","value.must.be",sWebLanguage)%> <= '+maxval);
+      alertDialogDirectText('<%=getTran(null,"web","value.must.be",sWebLanguage)%> <='+maxval);
       return false;
     }
+    else if(thisval*1<0){
+        alertDialogDirectText('<%=getTran(null,"web","value.must.be",sWebLanguage)%> >=0');
+        return false;
+    }
+    return true;
   }
 	
   <%-- DO DELETE --%>
@@ -184,7 +188,7 @@
     var url = '<c:url value="/pharmacy/closeProductStockOperation.jsp"/>?operationuid='+operationuid+'&ts='+new Date();
     new Ajax.Request(url,{
 	  method: "GET",
-      parameters: "",
+      parameters: "", 
       onSuccess: function(resp){
         window.location.reload();
       }

@@ -62,8 +62,12 @@
                 %><img src="_img/openinsurancelogo.jpg" border="0"><%
             }
             else if ("bloodbank".equalsIgnoreCase(MedwanQuery.getInstance().getConfigString("edition",""))) {
-                session.setAttribute("edition", "openinsurance");
+                session.setAttribute("edition", "bloodbank");
             	%><img src="_img/logo_bloodbank.jpg" border="0"><%
+            }
+            else if ("gmao".equalsIgnoreCase(MedwanQuery.getInstance().getConfigString("edition",""))) {
+                session.setAttribute("edition", "gmao");
+            	%><img src="_img/logo_gmao.jpg" border="0"><%
             }
             else{
          	   session.setAttribute("edition","openclinic");

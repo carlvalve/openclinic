@@ -59,12 +59,20 @@
 </form>
 
 <script>
-  <%-- SUBMIT FORM --%>
-  function submitForm(){
-    document.getElementById("buttonsDiv").style.visibility = "hidden";
-    var temp = Form.findFirstElement(transactionForm);//for ff compatibility
-    document.transactionForm.submit();
-  }
+	<%-- SUBMIT FORM --%> 
+	function submitForm(){
+		  if(document.getElementById('encounteruid').value==''){
+				alertDialogDirectText('<%=getTranNoLink("web","no.encounter.linked",sWebLanguage)%>');
+				searchEncounter();
+			  }	
+		  else {
+		    transactionForm.saveButton.disabled = true;
+		    <%
+		        SessionContainerWO sessionContainerWO = (SessionContainerWO)SessionContainerFactory.getInstance().getSessionContainerWO(request,SessionContainerWO.class.getName());
+		        out.print(takeOverTransaction(sessionContainerWO, activeUser,"document.transactionForm.submit();"));
+		    %>
+		  }
+	}    
 </script>
 
 <%=writeJSButtons("transactionForm","saveButton")%>

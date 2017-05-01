@@ -1452,4 +1452,25 @@
     <fr>VVF Examen chirurgical</fr>  
     <en>VVF Surgery examination</en> 
   </Row>  
+  <Row> 
+    <id>1136</id>  
+    <class>anesthesia</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_KIRA_PREOP</transactiontype>  
+    <fr>Fiche de consultation pre-anesthésique (modèle KIRA)</fr>  
+    <en>Pre-anesthaesia record (KIRA model)</en> 
+  </Row>  
+  <Row> 
+    <id>1137</id>  
+    <class>neuropsychiatry</class>  
+    <transactiontype>be.mxs.common.	model.vo.healthrecord.IConstants.TRANSACTION_TYPE_KIRA_NEUROPSY</transactiontype>  
+    <fr>Rapport d'expertise mentale (modèle KIRA)</fr>  
+    <en>Mental health expertise report (KIRA model)</en> 
+  </Row>  
+  <Row> 
+    <id>1138</id>  
+    <class>general.medicine</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_VITALSIGNS</transactiontype>  
+    <fr>Signes vitaux</fr>  
+    <en>Vital signs</en> 
+  </Row>  
 </Examinations>

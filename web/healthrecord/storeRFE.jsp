@@ -5,6 +5,7 @@
     String encounterUid= ScreenHelper.checkString(request.getParameter("encounterUid"));
     String codeType= ScreenHelper.checkString(request.getParameter("codeType"));
     String code= ScreenHelper.checkString(request.getParameter("code"));
+    String complaintonset= ScreenHelper.checkString(request.getParameter("onset"));
     String alternativeCodeType= ScreenHelper.checkString(request.getParameter("alternativeCodeType"));
     String alternativeCode= ScreenHelper.checkString(request.getParameter("alternativeCode"));
     String flags= ScreenHelper.checkString(request.getParameter("flags"));
@@ -12,12 +13,18 @@
     String userUid= ScreenHelper.checkString(request.getParameter("userUid"));
     String trandate= ScreenHelper.checkString(request.getParameter("trandate"));
     String transfertoproblemlist= ScreenHelper.checkString(request.getParameter("transfertoproblemlist"));
-    Date d = new Date();
+    Date d = null;
     try{
         d = ScreenHelper.parseDate(trandate);
     }
     catch(Exception e){
-
+    }
+    if(d==null){
+        try{
+            d = ScreenHelper.parseDate(complaintonset);
+        }
+        catch(Exception e){
+        }
     }
     ReasonForEncounter reasonForEncounter = new ReasonForEncounter();
     reasonForEncounter.setVersion(1);

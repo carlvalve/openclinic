@@ -118,6 +118,199 @@
 	    </indexes>
     </table>
     
+    <table name="OC_ATC" db="openclinic" sync="NONE">
+    	<columns>
+	    	<column name="OC_ATC_CODE" dbtype="varchar" javatype="string" size="10"/>
+	    	<column name="OC_ATC_PARENTCODE" dbtype="varchar" javatype="string" size="10"/>
+    	</columns>
+    	<indexes>
+	    	<index name="OC_ATC_CODE">
+	    		<indexcolumn order="ASC" name="OC_ATC_CODE"/>
+	    	</index>
+	    	<index name="OC_ATC_PARENTCODE">
+	    		<indexcolumn order="ASC" name="OC_ATC_PARENTCODE"/>
+	    	</index>
+    	</indexes>
+    </table>
+    
+    <table name="OC_DRUGCONTRAINDICATIONS" db="openclinic" sync = "NONE">
+    	<columns>
+	    	<column name="OC_DRUGCONTRAINDICATION_CODE" dbtype="varchar" javatype="string" size="10"/>
+	    	<column name="OC_DRUGCONTRAINDICATION_ICD10CODEMIN" dbtype="varchar" javatype="string" size="10"/>
+	    	<column name="OC_DRUGCONTRAINDICATION_ICD10CODEMAX" dbtype="varchar" javatype="string" size="10"/>
+    	</columns>
+	    <indexes>
+	    	<index name="OC_DRUGCONTRAINDICATION_CODE">
+	    		<indexcolumn order="ASC" name="OC_DRUGCONTRAINDICATION_CODE"/>
+	    	</index>
+	    	<index name="OC_DRUGCONTRAINDICATION_ICD10CODEMIN">
+	    		<indexcolumn order="ASC" name="OC_DRUGCONTRAINDICATION_ICD10CODEMIN"/>
+	    	</index>
+	    	<index name="OC_DRUGCONTRAINDICATION_ICD10CODEMAX">
+	    		<indexcolumn order="ASC" name="OC_DRUGCONTRAINDICATION_ICD10CODEMAX"/>
+	    	</index>
+	    </indexes>
+    </table>
+    
+    
+    <table name="OC_DRUGINDICATIONGROUPS" db="openclinic" sync = "NONE">
+    	<columns>
+	    	<column name="OC_DRUGINDICATIONGROUP_CODE" dbtype="varchar" javatype="string" size="15"/>
+	    	<column name="OC_DRUGINDICATIONGROUP_ICD10CODEMIN" dbtype="varchar" javatype="string" size="10"/>
+	    	<column name="OC_DRUGINDICATIONGROUP_ICD10CODEMAX" dbtype="varchar" javatype="string" size="10"/>
+    	</columns>
+	    <indexes>
+	    	<index name="OC_DRUGINDICATIONGROUP_CODE">
+	    		<indexcolumn order="ASC" name="OC_DRUGINDICATIONGROUP_CODE"/>
+	    	</index>
+	    	<index name="OC_DRUGINDICATIONGROUP_ICD10CODEMIN">
+	    		<indexcolumn order="ASC" name="OC_DRUGINDICATIONGROUP_ICD10CODEMIN"/>
+	    	</index>
+	    	<index name="OC_DRUGINDICATIONGROUP_ICD10CODEMAX">
+	    		<indexcolumn order="ASC" name="OC_DRUGINDICATIONGROUP_ICD10CODEMAX"/>
+	    	</index>
+	    </indexes>
+    </table>
+    
+    <table name="OC_DRUGCONTRAINDICATIONLINKS" db="openclinic" sync = "NONE">
+    	<columns>
+	    	<column name="OC_DRUGCONTRAINDICATIONLINK_CODE" dbtype="varchar" javatype="string" size="10"/>
+	    	<column name="OC_DRUGCONTRAINDICATIONLINK_ATCCODE" dbtype="varchar" javatype="string" size="10"/>
+    	</columns>
+	    <indexes>
+	    	<index name="OC_DRUGCONTRAINDICATIONLINK_CODE">
+	    		<indexcolumn order="ASC" name="OC_DRUGCONTRAINDICATIONLINK_CODE"/>
+	    	</index>
+	    	<index name="OC_DRUGCONTRAINDICATIONLINK_ATCCODE">
+	    		<indexcolumn order="ASC" name="OC_DRUGCONTRAINDICATIONLINK_ATCCODE"/>
+	    	</index>
+	    </indexes>
+    </table>
+    
+    <table name="OC_DRUGINDICATIONLINKS" db="openclinic" sync = "NONE">
+    	<columns>
+	    	<column name="OC_DRUGINDICATIONLINK_GROUPCODE" dbtype="varchar" javatype="string" size="10"/>
+	    	<column name="OC_DRUGINDICATIONLINK_CODE" dbtype="varchar" javatype="string" size="10"/>
+    	</columns>
+	    <indexes>
+	    	<index name="OC_DRUGINDICATIONLINK_GROUPCODE">
+	    		<indexcolumn order="ASC" name="OC_DRUGINDICATIONLINK_GROUPCODE"/>
+	    	</index>
+	    	<index name="OC_DRUGINDICATIONLINK_CODE">
+	    		<indexcolumn order="ASC" name="OC_DRUGINDICATIONLINK_CODE"/>
+	    	</index>
+	    </indexes>
+    </table>
+    
+    <table name="OC_DRUGINDICATIONS" db="openclinic" sync = "NONE">
+    	<columns>
+	    	<column name="OC_DRUGINDICATION_ATCCODE" dbtype="varchar" javatype="string" size="10"/>
+	    	<column name="OC_DRUGINDICATION_CODE" dbtype="varchar" javatype="string" size="10"/>
+    	</columns>
+	    <indexes>
+	    	<index name="OC_DRUGINDICATION_ATCCODE">
+	    		<indexcolumn order="ASC" name="OC_DRUGINDICATION_ATCCODE"/>
+	    	</index>
+	    	<index name="OC_DRUGINDICATION_CODE">
+	    		<indexcolumn order="ASC" name="OC_DRUGINDICATION_CODE"/>
+	    	</index>
+	    </indexes>
+    </table>
+    
+    <table name="OC_DRUGINTERACTIONS" db="openclinic" sync = "NONE">
+    	<columns>
+	    	<column name="OC_DRUGINTERACTION_CODE" dbtype="varchar" javatype="string" size="10"/>
+	    	<column name="OC_DRUGINTERACTION_CLASS1" dbtype="varchar" javatype="string" size="10"/>
+	    	<column name="OC_DRUGINTERACTION_CLASS2" dbtype="varchar" javatype="string" size="10"/>
+	    	<column name="OC_DRUGINTERACTION_SEVERITY" dbtype="int" javatype="integer"/>
+    	</columns>
+	    <indexes>
+	    	<index name="OC_DRUGINTERACTION_CODE">
+	    		<indexcolumn order="ASC" name="OC_DRUGINTERACTION_CODE"/>
+	    	</index>
+	    	<index name="OC_DRUGINTERACTION_CLASS1">
+	    		<indexcolumn order="ASC" name="OC_DRUGINTERACTION_CLASS1"/>
+	    	</index>
+	    	<index name="OC_DRUGINTERACTION_CLASS2">
+	    		<indexcolumn order="ASC" name="OC_DRUGINTERACTION_CLASS2"/>
+	    	</index>
+	    </indexes>
+    </table>
+    
+    <table name="OC_DRUGINTERACTIONCLASSES" db="openclinic" sync = "NONE">
+    	<columns>
+	    	<column name="OC_DRUGINTERACTIONCLASS_CODE" dbtype="varchar" javatype="string" size="10"/>
+	    	<column name="OC_DRUGINTERACTIONCLASS_ATCCODE" dbtype="varchar" javatype="string" size="10"/>
+    	</columns>
+	    <indexes>
+	    	<index name="OC_DRUGINTERACTIONCLASS_CODE">
+	    		<indexcolumn order="ASC" name="OC_DRUGINTERACTIONCLASS_CODE"/>
+	    	</index>
+	    	<index name="OC_DRUGINTERACTIONCLASS_ATCCODE">
+	    		<indexcolumn order="ASC" name="OC_DRUGINTERACTIONCLASS_ATCCODE"/>
+	    	</index>
+	    </indexes>
+    </table>
+    
+    <table name="OC_DRUGALLERGIES" db="openclinic" sync = "NONE">
+    	<columns>
+	    	<column name="OC_DRUGALLERGY_CODE" dbtype="varchar" javatype="string" size="10"/>
+	    	<column name="OC_DRUGALLERGY_ATCCODE" dbtype="varchar" javatype="string" size="10"/>
+    	</columns>
+	    <indexes>
+	    	<index name="OC_DRUGALLERGY_CODE">
+	    		<indexcolumn order="ASC" name="OC_DRUGALLERGY_CODE"/>
+	    	</index>
+	    	<index name="OC_DRUGALLERGY_ATCCODE">
+	    		<indexcolumn order="ASC" name="OC_DRUGALLERGY_ATCCODE"/>
+	    	</index>
+	    </indexes>
+    </table>
+    
+    <table name="OC_DRUGTHESAURUS" db="openclinic" sync="NONE">
+    	<columns>
+	    	<column name="OC_DRUGTHESAURUS_DRUGNAME" dbtype="varchar" javatype="string" size="255"/>
+	    	<column name="OC_DRUGTHESAURUS_NORMALIZEDDRUGNAME" dbtype="varchar" javatype="string" size="255"/>
+	    	<column name="OC_DRUGTHESAURUS_CODE" dbtype="varchar" javatype="string" size="10"/>
+	    	<column name="OC_DRUGTHESAURUS_RXNORMCODE" dbtype="varchar" javatype="string" size="10"/>
+	    	<column name="OC_DRUGTHESAURUS_RXNORMCOMMENT" dbtype="varchar" javatype="string" size="255"/>
+    	</columns>
+	    <indexes>
+	    	<index name="OC_DRUGTHESAURUS_DRUGNAME">
+	    		<indexcolumn order="ASC" name="OC_DRUGTHESAURUS_DRUGNAME"/>
+	    	</index>
+	    	<index name="OC_DRUGTHESAURUS_NORMALIZEDDRUGNAME">
+	    		<indexcolumn order="ASC" name="OC_DRUGTHESAURUS_NORMALIZEDDRUGNAME"/>
+	    	</index>
+	    	<index name="OC_DRUGTHESAURUS_CODE">
+	    		<indexcolumn order="ASC" name="OC_DRUGTHESAURUS_CODE"/>
+	    	</index>
+	    	<index name="OC_DRUGTHESAURUS_RXNORMCODE">
+	    		<indexcolumn order="ASC" name="OC_DRUGTHESAURUS_RXNORMCODE"/>
+	    	</index>
+	    </indexes>
+    </table>
+    
+    <table name="OC_PRESTATIONDRUGCODES" db="openclinic" sync="NONE">
+    	<columns>
+	    	<column name="OC_PRESTATIONDRUGCODE_PRESTATIONUID" dbtype="varchar" javatype="string" size="50"/>
+	    	<column name="OC_PRESTATIONDRUGCODE_ATCCODE" dbtype="varchar" javatype="string" size="10"/>
+	    	<column name="OC_PRESTATIONDRUGCODE_RXNORMCODE" dbtype="varchar" javatype="string" size="10"/>
+	    	<column name="OC_PRESTATIONDRUGCODE_RXNORMNAME" dbtype="varchar" javatype="string" size="255"/>
+    	</columns>
+	    <indexes>
+	    	<index name="OC_PRESTATIONDRUGCODE_PRESTATIONUID">
+	    		<indexcolumn order="ASC" name="OC_PRESTATIONDRUGCODE_PRESTATIONUID"/>
+	    	</index>
+	    	<index name="OC_PRESTATIONDRUGCODE_ATCCODE">
+	    		<indexcolumn order="ASC" name="OC_PRESTATIONDRUGCODE_ATCCODE"/>
+	    	</index>
+	    	<index name="OC_PRESTATIONDRUGCODE_RXNORMCODE">
+	    		<indexcolumn order="ASC" name="OC_PRESTATIONDRUGCODE_RXNORMCODE"/>
+	    	</index>
+	    </indexes>
+    </table>
+    
     <table name="OC_EXCHANGERATES" db="openclinic" sync="NONE">
     	<columns>
 	        <column name="OC_EXCHANGERATE_DATE" dbtype="datetime" javatype="date"/>      
@@ -808,8 +1001,42 @@
       </indexes>
     </table>  
     
+    <table name="OC_NOMENCLATURE" db="openclinic" sync="NONE">
+    	<columns>
+	        <column name="OC_NOMENCLATURE_TYPE" dbtype="varchar" javatype="string" size="50"/>
+	        <column name="OC_NOMENCLATURE_ID" dbtype="varchar" javatype="string" size="50"/>
+	        <column name="OC_NOMENCLATURE_PARENTID" dbtype="varchar" javatype="string" size="50"/>
+	        <column name="OC_NOMENCLATURE_DATA" dbtype="text" javatype="string"/>
+	        <column name="OC_NOMENCLATURE_UPDATEUSERID" dbtype="int" javatype="integer"/>
+	        <column name="OC_NOMENCLATURE_UPDATETIME" dbtype="datetime" javatype="date"/>
+	        <column name="OC_NOMENCLATURE_INACTIVE" dbtype="int" javatype="integer"/>
+    	</columns>
+      <indexes>
+        <index name="OC_NOMENCLATURE_TYPE_ID">
+          <indexcolumn order="ASC" name="OC_NOMENCLATURE_TYPE"/>
+          <indexcolumn order="ASC" name="OC_NOMENCLATURE_ID"/>
+        </index>
+        <index name="OC_NOMENCLATURE_PARENTID">
+          <indexcolumn order="ASC" name="OC_NOMENCLATURE_PARENTID"/>
+        </index>
+      </indexes>
+    </table>
 
     <!-- ####################################### ASSETS TABLES #################################### -->
+    <table name="OC_ASSETCOMPONENTS" db="openclinic" sync="none">
+    	<columns>
+	        <column name="OC_COMPONENT_ASSETUID" dbtype="varchar" javatype="string" size="50"/>
+	  	    <column name="OC_COMPONENT_NOMENCLATURE" dbtype="varchar" javatype="string" size="50"/> 
+	  	    <column name="OC_COMPONENT_TYPE" dbtype="varchar" javatype="string" size="255"/>
+	  	    <column name="OC_COMPONENT_CHARACTERISTICS" dbtype="varchar" javatype="string" size="3000"/>
+	  	    <column name="OC_COMPONENT_STATUS" dbtype="varchar" javatype="string" size="3000"/>
+    	</columns>
+      <indexes>
+        <index name="OC_COMPONENT_ASSETUID">
+          <indexcolumn order="ASC" name="OC_COMPONENT_ASSETUID"/>
+        </index>
+      </indexes>
+    </table>
     <table name="OC_ASSETS" db="openclinic" sync="NONE">
       <columns>
         <column name="OC_ASSET_SERVERID" dbtype="int" javatype="integer"/>
@@ -841,9 +1068,31 @@
   	    <column name="OC_ASSET_SALEDATE" dbtype="datetime" javatype="date"/>
   	    <column name="OC_ASSET_SALEVALUE" dbtype="float" javatype="float"/> 
   	    <column name="OC_ASSET_SALECLIENT" dbtype="varchar" javatype="string" size="255"/> 
-  	     
 	    <column name="OC_ASSET_UPDATETIME" dbtype="datetime" javatype="date"/>
     	<column name="OC_ASSET_UPDATEID" dbtype="int" javatype="integer"/>
+  	    <column name="OC_ASSET_GMDNCODE" dbtype="varchar" javatype="string" size="50"/> 
+  	    <column name="OC_ASSET_SERVICE" dbtype="varchar" javatype="string" size="50"/> 
+  	    <column name="OC_ASSET_NOMENCLATURE" dbtype="varchar" javatype="string" size="50"/> 
+  	    <column name="OC_ASSET_COMMENT1" dbtype="varchar" javatype="string" size="50"/> 
+  	    <column name="OC_ASSET_COMMENT2" dbtype="varchar" javatype="string" size="50"/> 
+  	    <column name="OC_ASSET_COMMENT3" dbtype="varchar" javatype="string" size="50"/> 
+  	    <column name="OC_ASSET_COMMENT4" dbtype="varchar" javatype="string" size="50"/> 
+  	    <column name="OC_ASSET_COMMENT5" dbtype="varchar" javatype="string" size="50"/> 
+  	    <column name="OC_ASSET_COMMENT6" dbtype="varchar" javatype="string" size="50"/> 
+  	    <column name="OC_ASSET_COMMENT7" dbtype="varchar" javatype="string" size="50"/> 
+  	    <column name="OC_ASSET_COMMENT8" dbtype="varchar" javatype="string" size="50"/> 
+  	    <column name="OC_ASSET_COMMENT9" dbtype="varchar" javatype="string" size="50"/> 
+  	    <column name="OC_ASSET_COMMENT10" dbtype="varchar" javatype="string" size="50"/> 
+  	    <column name="OC_ASSET_COMMENT11" dbtype="varchar" javatype="string" size="50"/> 
+  	    <column name="OC_ASSET_COMMENT12" dbtype="varchar" javatype="string" size="50"/> 
+  	    <column name="OC_ASSET_COMMENT13" dbtype="varchar" javatype="string" size="50"/> 
+  	    <column name="OC_ASSET_COMMENT14" dbtype="varchar" javatype="string" size="50"/> 
+  	    <column name="OC_ASSET_COMMENT15" dbtype="varchar" javatype="string" size="50"/> 
+  	    <column name="OC_ASSET_COMMENT16" dbtype="varchar" javatype="string" size="50"/> 
+  	    <column name="OC_ASSET_COMMENT17" dbtype="varchar" javatype="string" size="50"/> 
+  	    <column name="OC_ASSET_COMMENT18" dbtype="varchar" javatype="string" size="50"/> 
+  	    <column name="OC_ASSET_COMMENT19" dbtype="varchar" javatype="string" size="50"/> 
+  	    <column name="OC_ASSET_COMMENT20" dbtype="varchar" javatype="string" size="50"/> 
       </columns>
       <indexes>
         <index name="OC_ASSET_OBJECTID">
@@ -907,10 +1156,22 @@
         <column name="OC_MAINTENANCEPLAN_NAME" dbtype="varchar" javatype="string" size="255"/>
         <column name="OC_MAINTENANCEPLAN_ASSETUID" dbtype="varchar" javatype="string" size="50"/> 
     	<column name="OC_MAINTENANCEPLAN_STARTDATE" dbtype="datetime" javatype="date"/> 
- 	    <column name="OC_MAINTENANCEPLAN_FREQUENCY" dbtype="int" javatype="integer"/>
+    	<column name="OC_MAINTENANCEPLAN_ENDDATE" dbtype="datetime" javatype="date"/> 
+ 	    <column name="OC_MAINTENANCEPLAN_FREQUENCY" dbtype="varchar" javatype="string" size="50"/>
  	    <column name="OC_MAINTENANCEPLAN_OPERATOR" dbtype="varchar" javatype="string" size="255"/> 
     	<column name="OC_MAINTENANCEPLAN_PLANMANAGER" dbtype="varchar" javatype="string" size="255"/> 
     	<column name="OC_MAINTENANCEPLAN_INSTRUCTIONS" dbtype="text" javatype="string"/>     
+    	<column name="OC_MAINTENANCEPLAN_TYPE" dbtype="text" javatype="string"/>     
+ 	    <column name="OC_MAINTENANCEPLAN_COMMENT1" dbtype="varchar" javatype="string" size="255"/>
+ 	    <column name="OC_MAINTENANCEPLAN_COMMENT2" dbtype="varchar" javatype="string" size="255"/>
+ 	    <column name="OC_MAINTENANCEPLAN_COMMENT3" dbtype="varchar" javatype="string" size="255"/>
+ 	    <column name="OC_MAINTENANCEPLAN_COMMENT4" dbtype="varchar" javatype="string" size="255"/>
+ 	    <column name="OC_MAINTENANCEPLAN_COMMENT5" dbtype="varchar" javatype="string" size="255"/>
+ 	    <column name="OC_MAINTENANCEPLAN_COMMENT6" dbtype="varchar" javatype="string" size="255"/>
+ 	    <column name="OC_MAINTENANCEPLAN_COMMENT7" dbtype="varchar" javatype="string" size="255"/>
+ 	    <column name="OC_MAINTENANCEPLAN_COMMENT8" dbtype="varchar" javatype="string" size="255"/>
+ 	    <column name="OC_MAINTENANCEPLAN_COMMENT9" dbtype="varchar" javatype="string" size="255"/>
+ 	    <column name="OC_MAINTENANCEPLAN_COMMENT10" dbtype="varchar" javatype="string" size="255"/>
   	     
 	    <column name="OC_MAINTENANCEPLAN_UPDATETIME" dbtype="datetime" javatype="date"/>
     	<column name="OC_MAINTENANCEPLAN_UPDATEID" dbtype="int" javatype="integer"/>
@@ -934,6 +1195,7 @@
         <column name="OC_MAINTENANCEOPERATION_MAINTENANCEPLANUID" dbtype="varchar" javatype="string" size="50"/> 
     	<column name="OC_MAINTENANCEOPERATION_DATE" dbtype="datetime" javatype="date"/>
  	    <column name="OC_MAINTENANCEOPERATION_OPERATOR" dbtype="varchar" javatype="string" size="255"/> 
+ 	    <column name="OC_MAINTENANCEOPERATION_SUPPLIER" dbtype="varchar" javatype="string" size="255"/> 
     	<column name="OC_MAINTENANCEOPERATION_RESULT" dbtype="varchar" javatype="string" size="50"/> 
     	<column name="OC_MAINTENANCEOPERATION_COMMENT" dbtype="varchar" javatype="string" size="255"/> 
     	<column name="OC_MAINTENANCEOPERATION_NEXTDATE" dbtype="datetime" javatype="date"/>     
@@ -2760,6 +3022,7 @@
 			<column name="OC_STOCK_END" dbtype="datetime" javatype="date"/>
 			<column name="OC_STOCK_STOCKMANAGERUID" dbtype="varchar" javatype="string" size="255"/>
 			<column name="OC_STOCK_AUTHORIZEDUSERS" dbtype="varchar" javatype="string" size="255"/>
+			<column name="OC_STOCK_RECEIVINGUSERS" dbtype="varchar" javatype="string" size="255"/>
 			<column name="OC_STOCK_DEFAULTSUPPLIERUID" dbtype="varchar" javatype="string" size="255"/>
             <column name="OC_STOCK_ORDERPERIODINMONTHS" dbtype="int" javatype="integer"/>
             <column name="OC_STOCK_NOSYNC" dbtype="int" javatype="integer"/>
@@ -4571,6 +4834,7 @@
             <column name="performeruid" dbtype="varchar" javatype="string" size="50"/>
             <column name="stayprestationuid" dbtype="varchar" javatype="string" size="50"/>
             <column name="serviceadmissionlimit" dbtype="int" javatype="integer"/>
+            <column name="users" dbtype="varchar" javatype="string" size="255"/>
         </columns>
 		<indexes>
 			<index name="services_serviceid">

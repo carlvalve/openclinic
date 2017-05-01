@@ -257,7 +257,7 @@
         displaySearchFields = true;
         displayFoundRecords = true;
 
-        Vector orders = ProductOrder.find(false,true, // displayDeliveredOrders,displayUndeliveredOrders
+        Vector orders = ProductOrder.find(true,true, // displayDeliveredOrders,displayUndeliveredOrders
                                           sFindDescription,sFindServiceUid,sFindProductStockUid,
                                           sFindPackagesOrdered,sFindDateDeliveryDue,sFindDateOrdered,
                                           sFindSupplierUid,sFindServiceStockUid,sSortCol,sSortDir);
