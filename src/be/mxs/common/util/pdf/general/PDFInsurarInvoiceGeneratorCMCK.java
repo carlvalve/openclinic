@@ -264,7 +264,7 @@ public class PDFInsurarInvoiceGeneratorCMCK extends PDFInvoiceGenerator {
             	//Beneficiaries
             	String beneficiarykey="?";
             	if(debet.getEncounter()!=null && debet.getEncounter().getPatient()!=null){
-            		beneficiarykey=debet.getEncounter().getPatient().getFullName();
+            		beneficiarykey=debet.getEncounter().getPatient().firstname+" "+debet.getEncounter().getPatient().lastname;
             	}
 
             	//PrestationClass
@@ -284,14 +284,14 @@ public class PDFInsurarInvoiceGeneratorCMCK extends PDFInvoiceGenerator {
             table.addCell(cell);
 			cell=createLabelCell("\n",100);
 			table.addCell(cell);
-			cell = createBoldLabelCell(getTran("web","beneficiary"), 30);
+			cell = createBoldLabelCell(getTran("web","beneficiary"), 20);
 			cell.setBorder(PdfPCell.TOP+PdfPCell.LEFT+PdfPCell.RIGHT);
 			table.addCell(cell);
-			cell = createBoldLabelCell(getTran("web","prestations"), 70);
+			cell = createBoldLabelCell(getTran("web","prestations"), 80);
 			cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
 			cell.setBorder(PdfPCell.BOX);
 			table.addCell(cell);
-			cell = createEmptyCell(30);
+			cell = createEmptyCell(20);
 			cell.setBorder(PdfPCell.LEFT);
 			table.addCell(cell);
 			cell = createBoldLabelCell(getTran("web","prestation"), 30);
@@ -308,6 +308,10 @@ public class PDFInsurarInvoiceGeneratorCMCK extends PDFInvoiceGenerator {
 			cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 			cell.setBorder(PdfPCell.BOX);
 			table.addCell(cell);
+			cell = createBoldLabelCell(getTran("web","insurar"), 10);
+			cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+			cell.setBorder(PdfPCell.BOX);
+			table.addCell(cell);
 			cell = createBoldLabelCell(getTran("web","patient"), 10);
 			cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 			cell.setBorder(PdfPCell.BOX);
@@ -315,7 +319,7 @@ public class PDFInsurarInvoiceGeneratorCMCK extends PDFInvoiceGenerator {
 			
 			Iterator iInvoices = invoices.keySet().iterator();
 			String activebc="$$$", activebeneficiary="$$$",activeprestationclass="$$$";
-			double bcpatienttotal=0,bcinsurartotal=0,classpatienttotal=0,classinsurartotal=0,generaltotal=0,generalpatienttotal=0;
+			double bctotal=0,bcpatienttotal=0,bcinsurartotal=0,classtotal=0,classpatienttotal=0,classinsurartotal=0,generaltotal=0,generalinsurertotal=0,generalpatienttotal=0;
 			while(iInvoices.hasNext()){
 				String invoicekey = (String)iInvoices.next();
 				Debet debet = (Debet)invoices.get(invoicekey);
@@ -326,31 +330,38 @@ public class PDFInsurarInvoiceGeneratorCMCK extends PDFInvoiceGenerator {
 						cell = createBoldLabelCell("", 10);
 						cell.setBorder(PdfPCell.LEFT);
 						table.addCell(cell);
-						cell = createBoldLabelCell(getTran("web","subtotal.for")+" "+getTran("prestation.class",activeprestationclass), 70);
+						cell = createBoldLabelCell(getTran("web","subtotal.for")+" "+getTran("prestation.class",activeprestationclass), 60);
 						cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 						table.addCell(cell);
-						cell = createBoldLabelCell(new Double(classinsurartotal).intValue()+"", 10);
+						cell = createBoldLabelCell(ScreenHelper.getPriceFormat(classtotal), 10);
 						cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 						table.addCell(cell);
-						cell = createBoldLabelCell(new Double(classpatienttotal).intValue()+"", 10);
+						cell = createBoldLabelCell(ScreenHelper.getPriceFormat(classinsurartotal), 10);
+						cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+						table.addCell(cell);
+						cell = createBoldLabelCell(ScreenHelper.getPriceFormat(classpatienttotal), 10);
 						cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 						cell.setBorder(PdfPCell.RIGHT);
 						table.addCell(cell);
 					}
 					if(!activebc.equals("$$$")){
 						//We must print the bc subtotal
-						cell = createBoldLabelCell("", 60);
+						cell = createBoldLabelCell("", 50);
 						cell.setBorder(PdfPCell.LEFT);
 						table.addCell(cell);
 						cell = createBoldLabelCell(getTran("web","subtotal.bc"), 20,9);
 						cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 						cell.setBorder(PdfPCell.TOP);
 						table.addCell(cell);
-						cell = createBoldLabelCell(new Double(bcinsurartotal).intValue()+"", 10,9);
+						cell = createBoldLabelCell(ScreenHelper.getPriceFormat(bctotal), 10,9);
 						cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 						cell.setBorder(PdfPCell.TOP);
 						table.addCell(cell);
-						cell = createBoldLabelCell(new Double(bcpatienttotal).intValue()+"", 10,9);
+						cell = createBoldLabelCell(ScreenHelper.getPriceFormat(bcinsurartotal), 10,9);
+						cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+						cell.setBorder(PdfPCell.TOP);
+						table.addCell(cell);
+						cell = createBoldLabelCell(ScreenHelper.getPriceFormat(bcpatienttotal), 10,9);
 						cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 						cell.setBorder(PdfPCell.TOP+PdfPCell.RIGHT);
 						table.addCell(cell);
@@ -378,8 +389,10 @@ public class PDFInsurarInvoiceGeneratorCMCK extends PDFInvoiceGenerator {
 					table.addCell(cell);
 					activebeneficiary="$$$";
 					activeprestationclass="$$$";
+					classtotal=0;
 					classpatienttotal=0;
 					classinsurartotal=0;
+					bctotal=0;
 					bcinsurartotal=0;
 					bcpatienttotal=0;
 					activebc=bc;
@@ -391,21 +404,24 @@ public class PDFInsurarInvoiceGeneratorCMCK extends PDFInvoiceGenerator {
 						cell = createBoldLabelCell("", 10);
 						cell.setBorder(PdfPCell.LEFT);
 						table.addCell(cell);
-						cell = createBoldLabelCell(getTran("web","subtotal.for")+" "+getTran("prestation.class",activeprestationclass), 70);
+						cell = createBoldLabelCell(getTran("web","subtotal.for")+" "+getTran("prestation.class",activeprestationclass), 60);
 						cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 						table.addCell(cell);
-						cell = createBoldLabelCell(new Double(classinsurartotal).intValue()+"", 10);
+						cell = createBoldLabelCell(ScreenHelper.getPriceFormat(classtotal), 10);
 						cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 						table.addCell(cell);
-						cell = createBoldLabelCell(new Double(classpatienttotal).intValue()+"", 10);
+						cell = createBoldLabelCell(ScreenHelper.getPriceFormat(classinsurartotal), 10);
+						cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+						table.addCell(cell);
+						cell = createBoldLabelCell(ScreenHelper.getPriceFormat(classpatienttotal), 10);
 						cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 						cell.setBorder(PdfPCell.RIGHT);
 						table.addCell(cell);
 					}
-					cell = createBoldLabelCell("", 10);
+					cell = createBoldLabelCell("", 5);
 					cell.setBorder(PdfPCell.LEFT);
 					table.addCell(cell);
-					cell = createBoldLabelCell(beneficiary, 90,9);
+					cell = createBoldLabelCell(beneficiary, 95,9);
 					cell.setBorder(PdfPCell.RIGHT);
 					table.addCell(cell);
 					activeprestationclass="$$$";
@@ -418,52 +434,62 @@ public class PDFInsurarInvoiceGeneratorCMCK extends PDFInvoiceGenerator {
 						cell = createBoldLabelCell("", 10);
 						cell.setBorder(PdfPCell.LEFT);
 						table.addCell(cell);
-						cell = createBoldLabelCell(getTran("web","subtotal.for")+" "+getTran("prestation.class",activeprestationclass), 70);
+						cell = createBoldLabelCell(getTran("web","subtotal.for")+" "+getTran("prestation.class",activeprestationclass), 60);
 						cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 						table.addCell(cell);
-						cell = createBoldLabelCell(new Double(classinsurartotal).intValue()+"", 10);
+						cell = createBoldLabelCell(ScreenHelper.getPriceFormat(classtotal), 10);
 						cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 						table.addCell(cell);
-						cell = createBoldLabelCell(new Double(classpatienttotal).intValue()+"", 10);
+						cell = createBoldLabelCell(ScreenHelper.getPriceFormat(classinsurartotal), 10);
+						cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+						table.addCell(cell);
+						cell = createBoldLabelCell(ScreenHelper.getPriceFormat(classpatienttotal), 10);
 						cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 						cell.setBorder(PdfPCell.RIGHT);
 						table.addCell(cell);
 					}
-					cell = createBoldLabelCell("", 30);
+					cell = createBoldLabelCell("", 20);
 					cell.setBorder(PdfPCell.LEFT);
 					table.addCell(cell);
-					cell = createBoldLabelCell(getTran("prestation.class",prestationclass), 70,9);
+					cell = createBoldLabelCell(getTran("prestation.class",prestationclass), 80,9);
 					cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
 					cell.setBorder(PdfPCell.TOP+PdfPCell.RIGHT);
 					table.addCell(cell);
+					classtotal=0;
 					classpatienttotal=0;
 					classinsurartotal=0;
 					activeprestationclass=prestationclass;
 				}
-				cell = createLabelCell("", 10);
+				cell = createLabelCell("", 5);
 				cell.setBorder(PdfPCell.LEFT);
 				table.addCell(cell);
 				String invoicedate=invoicekey.split(";").length<5?"?":invoicekey.split(";")[4];
-				cell = createLabelCell(invoicedate, 20);
+				cell = createLabelCell(invoicedate, 15);
 				table.addCell(cell);
 				cell = createLabelCell(debet.getPrestation().getDescription(), 30);
 				table.addCell(cell);
 				cell = createLabelCell(new Double(debet.getQuantity()).intValue()+"", 10);
 				table.addCell(cell);
-				cell = createLabelCell(new Double((debet.getAmount()+debet.getInsurarAmount()+debet.getExtraInsurarAmount())/debet.getQuantity()).intValue()+"", 10);
+				cell = createLabelCell(ScreenHelper.getPriceFormat((debet.getAmount()+debet.getInsurarAmount()+debet.getExtraInsurarAmount())/debet.getQuantity()), 10);
 				cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 				table.addCell(cell);
-				cell = createLabelCell(new Double(debet.getInsurarAmount()).intValue()+"", 10);
+				cell = createLabelCell(ScreenHelper.getPriceFormat(debet.getInsurarAmount()+debet.getAmount()), 10);
 				cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 				table.addCell(cell);
-				cell = createLabelCell(new Double(debet.getAmount()).intValue()+"", 10);
+				cell = createLabelCell(ScreenHelper.getPriceFormat(debet.getInsurarAmount()), 10);
+				cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+				table.addCell(cell);
+				cell = createLabelCell(ScreenHelper.getPriceFormat(debet.getAmount()), 10);
 				cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 				cell.setBorder(PdfPCell.RIGHT);
 				table.addCell(cell);
-				generaltotal+=debet.getInsurarAmount();
+				generaltotal+=debet.getInsurarAmount()+debet.getAmount();
+				generalinsurertotal+=debet.getInsurarAmount();
 				generalpatienttotal+=debet.getAmount();
+				bctotal+=debet.getInsurarAmount()+debet.getAmount();
 				bcinsurartotal+=debet.getInsurarAmount();
 				bcpatienttotal+=debet.getAmount();
+				classtotal+=debet.getInsurarAmount()+debet.getAmount();
 				classinsurartotal+=debet.getInsurarAmount();
 				classpatienttotal+=debet.getAmount();
 			}
@@ -472,44 +498,60 @@ public class PDFInsurarInvoiceGeneratorCMCK extends PDFInvoiceGenerator {
 				cell = createBoldLabelCell("", 10);
 				cell.setBorder(PdfPCell.LEFT);
 				table.addCell(cell);
-				cell = createBoldLabelCell(getTran("web","subtotal.for")+" "+getTran("prestation.class",activeprestationclass), 70);
+				cell = createBoldLabelCell(getTran("web","subtotal.for")+" "+getTran("prestation.class",activeprestationclass), 60);
 				cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 				table.addCell(cell);
-				cell = createBoldLabelCell(new Double(classinsurartotal).intValue()+"", 10);
+				cell = createBoldLabelCell(ScreenHelper.getPriceFormat(classtotal), 10);
 				cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 				table.addCell(cell);
-				cell = createBoldLabelCell(new Double(classpatienttotal).intValue()+"", 10);
+				cell = createBoldLabelCell(ScreenHelper.getPriceFormat(classinsurartotal), 10);
+				cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+				table.addCell(cell);
+				cell = createBoldLabelCell(ScreenHelper.getPriceFormat(classpatienttotal), 10);
 				cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 				cell.setBorder(PdfPCell.RIGHT);
 				table.addCell(cell);
 			}
 			if(!activebc.equals("$$$")){
 				//We must print the bc subtotal
-				cell = createBoldLabelCell("", 60);
+				cell = createBoldLabelCell("", 50);
 				cell.setBorder(PdfPCell.LEFT);
 				table.addCell(cell);
 				cell = createBoldLabelCell(getTran("web","subtotal.bc"), 20,9);
 				cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 				cell.setBorder(PdfPCell.TOP);
 				table.addCell(cell);
-				cell = createBoldLabelCell(new Double(bcinsurartotal).intValue()+"", 10,9);
+				cell = createBoldLabelCell(ScreenHelper.getPriceFormat(bctotal), 10,9);
 				cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 				cell.setBorder(PdfPCell.TOP);
 				table.addCell(cell);
-				cell = createBoldLabelCell(new Double(bcpatienttotal).intValue()+"", 10,9);
+				cell = createBoldLabelCell(ScreenHelper.getPriceFormat(bcinsurartotal), 10,9);
+				cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+				cell.setBorder(PdfPCell.TOP);
+				table.addCell(cell);
+				cell = createBoldLabelCell(ScreenHelper.getPriceFormat(bcpatienttotal), 10,9);
 				cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 				cell.setBorder(PdfPCell.TOP+PdfPCell.RIGHT);
 				table.addCell(cell);
 			}
-			cell = createBoldLabelCell(getTran("web","generaltotal")+": "+new Double(generaltotal).intValue(),90,10);
+			cell = createBoldLabelCell(getTran("web","generaltotal")+": "+ScreenHelper.getPriceFormat(generaltotal),80,10);
 			cell.setBorder(PdfPCell.TOP);
 			cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 			table.addCell(cell);
-			cell = createBoldLabelCell(new Double(generalpatienttotal).intValue()+"",90,10);
+			cell = createBoldLabelCell(ScreenHelper.getPriceFormat(generalinsurertotal),10,10);
 			cell.setBorder(PdfPCell.TOP);
 			cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 			table.addCell(cell);
-			addBlankRow();
+			cell = createBoldLabelCell(ScreenHelper.getPriceFormat(generalpatienttotal),10,10);
+			cell.setBorder(PdfPCell.TOP);
+			cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+			table.addCell(cell);
+			for(int n=0;n<MedwanQuery.getInstance().getConfigInt("CMCKInvoiceNewlinesBeforeInvoiceDirector",6);n++){
+				cell=createLabelCell("\n",100);
+				table.addCell(cell);
+			}
+			cell=createLabelCell("",50);
+			table.addCell(cell);
 			cell=createLabelCell(getTran("web.occup","invoicedirector"),50);
 			table.addCell(cell);
             

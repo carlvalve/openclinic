@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Hashtable;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,13 +15,87 @@ import be.mxs.common.util.system.Miscelaneous;
 import be.mxs.common.util.system.Pointer;
 import be.mxs.common.util.system.ScreenHelper;
 import be.mxs.webapp.wl.session.SessionContainerFactory;
+import be.openclinic.adt.Encounter;
 import be.openclinic.finance.Debet;
 import be.openclinic.finance.PatientInvoice;
 import net.admin.AdminPrivateContact;
+import net.admin.Service;
 import net.admin.User;
 
 public class PharmacyReports {
 
+	public static Vector getConsumptionReport(String serviceStockUid, java.util.Date begin, java.util.Date end, String language){
+		Vector report=new Vector();
+		String reportline="";
+		//Header
+		reportline+="POSTING DATE;";
+		reportline+="ITEM NO;";
+		reportline+="ITEM DESCRIPTION;";
+		reportline+="QUANTITY;";
+		reportline+="STOCK PRICE;";
+		reportline+="TOTAL;";
+		reportline+="COST CENTER;";
+		reportline+="ISSUED TO;";
+		reportline+="LOCATION;";
+		reportline+="GROUP DESCRIPTION;";
+		reportline+="GROUP CATGEORY;\r\n";
+		report.add(reportline);
+		ServiceStock serviceStock = ServiceStock.get(serviceStockUid);
+		if(serviceStock!=null && serviceStock.hasValidUid()){
+			try {
+				Hashtable pumps = new Hashtable();
+				Hashtable encounters = new Hashtable();
+				Vector operations = ProductStockOperation.getServiceStockDeliveries(serviceStockUid, begin, end, "OC_OPERATION_DATE", "ASC");
+				for (int n=0;n<operations.size();n++){
+					long time = new java.util.Date().getTime();
+					ProductStockOperation operation = (ProductStockOperation)operations.elementAt(n);
+					Product product=null;
+					if(operation.getProductStock()!=null){
+						product=operation.getProductStock().getProduct();
+					}
+					if((operation.getUnitsChanged()-operation.getUnitsReceived()!=0) && product!=null){
+						if(pumps.get(product.getUid()+"."+ScreenHelper.formatDate(operation.getDate()))==null){
+							pumps.put(product.getUid()+"."+ScreenHelper.formatDate(operation.getDate()),product.getLastYearsAveragePrice(operation.getDate()));
+						}
+						double pump = (Double)pumps.get(product.getUid()+"."+ScreenHelper.formatDate(operation.getDate()));
+						reportline=ScreenHelper.formatDate(operation.getDate())+";";
+						reportline+=product.getCode()+";";
+						reportline+=product.getName()+";";
+						reportline+=(operation.getUnitsChanged()-operation.getUnitsReceived())+";";
+						reportline+=ScreenHelper.getPriceFormat(pump)+";";
+						reportline+=ScreenHelper.getPriceFormat((operation.getUnitsChanged()-operation.getUnitsReceived())*pump)+";";
+						if(operation.getSourceDestination().getObjectType().equalsIgnoreCase("patient")){
+							if(encounters.get(operation.getEncounterUID())==null){
+								encounters.put(operation.getEncounterUID(), Encounter.get(operation.getEncounterUID()));
+							}
+							Encounter encounter = (Encounter)encounters.get(operation.getEncounterUID());
+							if(encounter!=null){
+								Service service = Service.getService(encounter.getServiceUID(operation.getDate()));
+								if(service!=null){
+									reportline+=service.getLabel(language);
+								}
+							}
+							reportline+=";";
+						}
+						else{
+							reportline+=";";
+						}
+						reportline+=ScreenHelper.getTranNoLink("productstockoperation.medicationdelivery", operation.getDescription(), language)+";";
+						reportline+=operation.getProductStock().getServiceStock().getName()+";";
+						reportline+=ScreenHelper.getTranNoLink("product.productgroup",product.getProductGroup(),language)+";";
+						reportline+=ScreenHelper.getTranNoLink("drug.category",product.getProductSubGroup(),language)+";\n";
+						report.add(reportline);
+
+					}
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return report;
+	}
+	
 	public static Vector getInventoryAnalysisReport(String serviceStockUid, java.util.Date date){
 		Vector report=new Vector();
 		String reportline="";

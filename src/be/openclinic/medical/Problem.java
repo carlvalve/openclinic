@@ -393,8 +393,8 @@ public class Problem extends OC_Object {
         if(code.length()      > 0)   {sConditions += " " + MedwanQuery.getInstance().getConfigString("lowerCompare").replaceAll("<param>","OC_PROBLEM_CODE") + " LIKE ? AND";}
         if(comment.length()   > 0)   {sConditions += " " + MedwanQuery.getInstance().getConfigString("lowerCompare").replaceAll("<param>","OC_PROBLEM_COMMENT") + " LIKE ? AND";}
         if(patientID.length() > 0)   {sConditions += " OC_PROBLEM_PATIENTUID = ? AND";}
-        if(beginDate.length() > 0)   {sConditions += " OC_PROBLEM_BEGIN >= ? AND";}
-        if(endDate.length()   > 0)   {sConditions += " OC_PROBLEM_END < ? AND";}
+        if(beginDate.length() > 0)   {sConditions += " OC_PROBLEM_BEGIN <= ? AND";}
+        if(endDate.length()   > 0)   {sConditions += " (OC_PROBLEM_END IS NULL OR OC_PROBLEM_END >= ?) AND";}
 
         if(sConditions.length() > 0){
             sSelect += " WHERE " + sConditions;
@@ -403,7 +403,6 @@ public class Problem extends OC_Object {
         if(sortColumn.length() > 0){
             sSelect += " ORDER BY " + sortColumn;
         }
-
 
         Connection oc_conn = MedwanQuery.getInstance().getOpenclinicConnection();
         try{

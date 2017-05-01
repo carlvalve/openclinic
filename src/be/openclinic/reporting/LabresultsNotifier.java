@@ -383,8 +383,9 @@ public class LabresultsNotifier {
 				
 						String sResult=sHeader+result;
 						sResult+= "\n\n" + MedwanQuery.getInstance().getLabel("sendhtmlmail", "closingmail", user.language) + "\n\n" + MedwanQuery.getInstance().getLabel("sendhtmlmail", "closingmailname", user.language);
-						sendHtmlMail.sendSimpleMail(MedwanQuery.getInstance().getConfigString("PatientEdit.MailServer"), MedwanQuery.getInstance().getConfigString("labNotifierEmailSender","frank.verbeke@mxs.be"), sentto, sMailTitle + " " + transactionId, sResult);					
-						setSpoolMessageSent(transactionId,transport);
+						if(sendHtmlMail.sendSimpleMail(MedwanQuery.getInstance().getConfigString("PatientEdit.MailServer"), MedwanQuery.getInstance().getConfigString("labNotifierEmailSender","frank.verbeke@mxs.be"), sentto, sMailTitle + " " + transactionId, sResult)){
+							setSpoolMessageSent(transactionId,transport);
+						}
 					}
 					catch(Exception m){
 						
@@ -441,8 +442,9 @@ public class LabresultsNotifier {
 						String sFileName = "Transaction"+ new SimpleDateFormat("ddMMyyyy-HHmmss").format(new java.util.Date())+"_Tid"+transactionId+".html";
 		                String sAttachment = MedwanQuery.getInstance().getConfigString("tempDirectory","/tmp")+"/"+sFileName;				
 						ProcessFiles.writeFile(sAttachment, sResult);
-						sendHtmlMail.sendAttachEmail(MedwanQuery.getInstance().getConfigString("PatientEdit.MailServer"), MedwanQuery.getInstance().getConfigString("labNotifierEmailSender","frank.verbeke@mxs.be"), sentto, sMailTitle + " " + transactionId, sMailTitle + " " + transactionId, sAttachment, sFileName);						
-						setSpoolMessageSent(transactionId,transport);
+						if(sendHtmlMail.sendAttachEmail(MedwanQuery.getInstance().getConfigString("PatientEdit.MailServer"), MedwanQuery.getInstance().getConfigString("labNotifierEmailSender","frank.verbeke@mxs.be"), sentto, sMailTitle + " " + transactionId, sMailTitle + " " + transactionId, sAttachment, sFileName)){
+							setSpoolMessageSent(transactionId,transport);
+						}
 					}
 					catch(Exception m){
 						

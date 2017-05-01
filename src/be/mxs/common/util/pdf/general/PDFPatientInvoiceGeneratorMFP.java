@@ -39,6 +39,14 @@ public class PDFPatientInvoiceGeneratorMFP extends PDFInvoiceGenerator {
 
     //--- GENERATE PDF DOCUMENT BYTES -------------------------------------------------------------
     public ByteArrayOutputStream generatePDFDocumentBytes(final HttpServletRequest req, String sInvoiceUid) throws Exception {
+		// get specified invoice
+        PatientInvoice invoice = PatientInvoice.get(sInvoiceUid);
+        return generatePDFDocumentBytes(req, invoice);
+	}
+    
+    //--- GENERATE PDF DOCUMENT BYTES -------------------------------------------------------------
+    public ByteArrayOutputStream generatePDFDocumentBytes(final HttpServletRequest req, Invoice inv) throws Exception {
+    	PatientInvoice invoice = (PatientInvoice)inv;
         ByteArrayOutputStream baosPDF = new ByteArrayOutputStream();
 		docWriter = PdfWriter.getInstance(doc,baosPDF);
         this.req = req;
@@ -61,7 +69,6 @@ public class PDFPatientInvoiceGeneratorMFP extends PDFInvoiceGenerator {
 			}
 			doc.setMargins(MedwanQuery.getInstance().getConfigInt("patientInvoiceMarginLeft",new Float(doc.leftMargin()).intValue()), MedwanQuery.getInstance().getConfigInt("patientInvoiceMarginRight",new Float(doc.rightMargin()).intValue()), MedwanQuery.getInstance().getConfigInt("patientInvoiceMarginTop",new Float(doc.topMargin()).intValue()), MedwanQuery.getInstance().getConfigInt("patientInvoiceMarginBottom",new Float(doc.bottomMargin()).intValue()));
             // get specified invoice
-            PatientInvoice invoice = PatientInvoice.get(sInvoiceUid);
             addMFPFooter(invoice);
 
             doc.open();

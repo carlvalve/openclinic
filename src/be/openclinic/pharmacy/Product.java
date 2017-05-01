@@ -203,6 +203,17 @@ public class Product extends OC_Object implements Comparable {
     }
 
     public double getLastYearsAveragePrice(){
+    	if(MedwanQuery.getInstance().getConfigInt("usePUMPFormula",1)==2){
+			String pump = Pointer.getLastExactPointer("pump."+getUid());
+			if(pump.length()>0){
+				try{
+					return Double.parseDouble(pump);
+				}
+				catch(Exception t){
+					t.printStackTrace();
+				}
+			}
+    	}
     	double price=0;
     	long day = 24*3600*1000;
     	long year = 365*day;
@@ -226,6 +237,17 @@ public class Product extends OC_Object implements Comparable {
     }
     
     public double getLastYearsAveragePrice(java.util.Date date){
+    	if(MedwanQuery.getInstance().getConfigInt("usePUMPFormula",1)==2){
+			String pump = Pointer.getLastExactPointer("pump."+getUid(),date);
+			if(pump.length()>0){
+				try{
+					return Double.parseDouble(pump);
+				}
+				catch(Exception t){
+					t.printStackTrace();
+				}
+			}
+    	}
     	double price=0;
     	long day = 24*3600*1000;
     	long year = 365*day;
@@ -246,6 +268,17 @@ public class Product extends OC_Object implements Comparable {
     }
     
     public double getLooseLastYearsAveragePrice(java.util.Date date){
+    	if(MedwanQuery.getInstance().getConfigInt("usePUMPFormula",1)==2){
+			String pump = Pointer.getLastExactPointer("pump."+getUid(),date);
+			if(pump.length()>0){
+				try{
+					return Double.parseDouble(pump);
+				}
+				catch(Exception t){
+					t.printStackTrace();
+				}
+			}
+    	}
     	double price=0;
     	long day = 24*3600*1000;
     	long year = 365*day;
@@ -263,7 +296,7 @@ public class Product extends OC_Object implements Comparable {
     		price=totalprice/count;
     	}
     	else {
-    		String last = Pointer.getLastPointer("drugprice."+getUid());
+    		String last = Pointer.getLastExactPointer("drugprice."+getUid());
     		String[] s = last.split(";");
     		if(s.length>1){
     			totalprice+=Double.parseDouble(s[0])*Double.parseDouble(s[1]);
@@ -1285,7 +1318,6 @@ public class Product extends OC_Object implements Comparable {
 			if(sFindProductGroup.length() > 0)     ps.setString(questionMarkIdx++,sFindProductGroup);
 			
 			// execute
-			System.out.println(sSelect);
 			rs = ps.executeQuery();
 			
 			while(rs.next()){
@@ -1600,6 +1632,38 @@ public class Product extends OC_Object implements Comparable {
         return quantity;
     }
 
+    //--- QUANTITY AVAILABLE ----------------------------------------------------------------------
+    public int getTotalQuantityAvailable(){
+        int quantity = 0;
+        
+        Connection oc_conn = MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+            String sQuery = "select sum(oc_stock_level) total"+
+                            " from oc_productstocks"+
+                            " where oc_stock_productuid=?";
+            PreparedStatement ps = oc_conn.prepareStatement(sQuery);
+            ps.setString(1,getUid());
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                quantity = rs.getInt("total");
+            }
+            rs.close();
+            ps.close();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        
+        try{
+			oc_conn.close();
+		}
+        catch(SQLException e){
+			e.printStackTrace();
+		}
+        
+        return quantity;
+    }
+
     public boolean isInStock(String sServiceUID){
         return Product.isInStock(getUid(),sServiceUID);
     }
@@ -1610,6 +1674,23 @@ public class Product extends OC_Object implements Comparable {
 
     public int quantityAvailable(String sServiceUID){
         return Product.quantityAvailable(getUid(),sServiceUID);
+    }
+
+    public double getLastPurchasePrice(){
+    	return getLastPurchasePrice(new java.util.Date());
+    }
+
+    public double getLastPurchasePrice(java.util.Date date){
+    	double price = 0;
+		//Try to find the latest purchase price for this product
+		String purchaseData = Pointer.getLastPointer("drugprice."+this.getUid()+".",date);
+		if(purchaseData.length()>0 && purchaseData.split(";").length>1){
+			try{
+				price = Double.parseDouble(purchaseData.split(";")[1]);
+			}
+			catch(Exception e){}
+		}
+    	return price;
     }
 
     //--- COMPARE TO ------------------------------------------------------------------------------

@@ -195,6 +195,7 @@ public class InsurarCredit extends OC_Object {
                          " WHERE OC_INSURARCREDIT_SERVERID = ? AND OC_INSURARCREDIT_OBJECTID = ?";
                 ps = oc_conn.prepareStatement(sQuery);
                 ps.setDate(1,new java.sql.Date(this.getDate().getTime()));
+                Debug.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+this.getInvoiceUid());
                 ps.setString(2,this.getInvoiceUid());
                 ps.setDouble(3,this.getAmount());
                 ps.setString(4,this.getType());

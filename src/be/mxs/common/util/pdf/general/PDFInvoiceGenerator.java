@@ -41,6 +41,10 @@ public abstract class PDFInvoiceGenerator extends PDFBasic {
     //--- ABSTRACT METHODS ------------------------------------------------------------------------
     public abstract ByteArrayOutputStream generatePDFDocumentBytes(final HttpServletRequest req, String sInvoiceUid) throws Exception;
 
+    public ByteArrayOutputStream generatePDFDocumentBytes(final HttpServletRequest req, Invoice inv) throws Exception {
+    	return null;
+    }
+
     //--- ADD FOOTER ------------------------------------------------------------------------------
     protected void addFooter(){
         String sFooter = getConfigString("footer."+sProject);
@@ -371,10 +375,10 @@ public abstract class PDFInvoiceGenerator extends PDFBasic {
     }
 
     protected PdfPCell createTotalPriceCell(double price, boolean indicateNegative, int colspan){
-        String sValue = priceFormat.format(price)+" "+sCurrency;
-        if(indicateNegative){
-            sValue = "- "+sValue;
-        }
+		String sValue = (indicateNegative?"- ":"")+priceFormat.format(price)+" "+sCurrency;
+    	if(MedwanQuery.getInstance().getConfigInt("totalPriceCurrencyBeforeAmount",0)==1){
+    		sValue = sCurrency+" "+(indicateNegative?"- ":"")+priceFormat.format(price);
+    	}
         
         cell = new PdfPCell(new Paragraph(sValue,FontFactory.getFont(FontFactory.HELVETICA,7,Font.BOLD)));
         cell.setColspan(colspan);
@@ -386,13 +390,19 @@ public abstract class PDFInvoiceGenerator extends PDFBasic {
     }
 
     protected PdfPCell createTotalPriceCell(double price, boolean indicateNegative, int colspan,java.util.Date date){
-        String sValue = priceFormat.format(price)+" "+sCurrency;
-        if(indicateNegative){
-            sValue = "- "+sValue;
-        }
+		String sValue = (indicateNegative?"- ":"")+priceFormat.format(price)+" "+sCurrency;
+    	if(MedwanQuery.getInstance().getConfigInt("totalPriceCurrencyBeforeAmount",0)==1){
+    		sValue = sCurrency+" "+(indicateNegative?"- ":"")+priceFormat.format(price);
+    	}
+    	
         String sAlternateCurrency = MedwanQuery.getInstance().getConfigString("AlternateCurrency","");
         if(sAlternateCurrency.length()>0){
-        	sValue+="\n("+new DecimalFormat(MedwanQuery.getInstance().getConfigString("AlternateCurrencyPriceFormat","# ##0.00")).format(price/ExportSAP_AR_INV.getExchangeRate(sAlternateCurrency, date))+" "+sAlternateCurrency+")";
+        	if(MedwanQuery.getInstance().getConfigInt("totalPriceCurrencyBeforeAmount",0)==0){
+        		sValue+="\n("+new DecimalFormat(MedwanQuery.getInstance().getConfigString("AlternateCurrencyPriceFormat","# ##0.00")).format(price/ExportSAP_AR_INV.getExchangeRate(sAlternateCurrency, date))+" "+sAlternateCurrency+")";
+        	}
+        	else{
+        		sValue+="\n("+sAlternateCurrency+" "+(indicateNegative?"- ":"")+new DecimalFormat(MedwanQuery.getInstance().getConfigString("AlternateCurrencyPriceFormat","# ##0.00")).format(price/ExportSAP_AR_INV.getExchangeRate(sAlternateCurrency, date))+")";
+        	}
         }
         
         cell = new PdfPCell(new Paragraph(sValue,FontFactory.getFont(FontFactory.HELVETICA,7,Font.BOLD)));

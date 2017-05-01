@@ -64,6 +64,7 @@ public class Service {
     public String stayprestationuid;
     
     public String acceptsVisits="0";
+    public String users="";
 
    public Service(){
         type = "";
@@ -110,11 +111,422 @@ public class Service {
         acceptsVisits="0";
         stayprestationuid="";
         serviceadmissionlimit=0;
+        users="";
         //updatetime;
         //updateuserid;
     }
 
-    //--- GET LABEL -------------------------------------------------------------------------------
+    public String getType() {
+	return type;
+}
+
+  //--- IS AUTHORIZED USER ----------------------------------------------------------------------
+    public boolean isAuthorizedUser(String userid){
+        if(this.users.length()==0){
+        	if(getParentcode().length()>0){
+        		Service parent = Service.getService(getParentcode());
+        		if(parent!=null){
+        			return parent.isAuthorizedUser(userid);
+        		}
+        		else{
+        			return true;
+        		}
+        	}
+        	else{
+        		return true;
+        	}
+        }
+        else {
+            StringTokenizer tokenizer = new StringTokenizer(users,"$");
+            while(tokenizer.hasMoreTokens()){
+                if(userid.equalsIgnoreCase(tokenizer.nextToken())){
+                	return true;
+                }
+            }
+        	if(getParentcode().length()>0){
+        		Service parent = Service.getService(getParentcode());
+        		if(parent!=null){
+        			return parent.isAuthorizedUserStrict(userid);
+        		}
+        	}
+            return false;
+        }
+    }
+
+  //--- IS AUTHORIZED USER ----------------------------------------------------------------------
+    public boolean isAuthorizedUserStrict(String userid){
+        StringTokenizer tokenizer = new StringTokenizer(users,"$");
+        while(tokenizer.hasMoreTokens()){
+            if(userid.equalsIgnoreCase(tokenizer.nextToken())){
+           		return true;
+            }
+        }
+    	if(getParentcode().length()>0){
+    		Service parent = Service.getService(getParentcode());
+    		if(parent!=null){
+    			return parent.isAuthorizedUserStrict(userid);
+    		}
+    	}
+        return false;
+    }
+
+public void setType(String type) {
+	this.type = type;
+}
+
+public String getCode() {
+	return code;
+}
+
+public void setCode(String code) {
+	this.code = code;
+}
+
+public Vector getLabels() {
+	return labels;
+}
+
+public void setLabels(Vector labels) {
+	this.labels = labels;
+}
+
+public String getAddress() {
+	return address;
+}
+
+public void setAddress(String address) {
+	this.address = address;
+}
+
+public String getCity() {
+	return city;
+}
+
+public void setCity(String city) {
+	this.city = city;
+}
+
+public String getZipcode() {
+	return zipcode;
+}
+
+public void setZipcode(String zipcode) {
+	this.zipcode = zipcode;
+}
+
+public String getCountry() {
+	return country;
+}
+
+public void setCountry(String country) {
+	this.country = country;
+}
+
+public String getTelephone() {
+	return telephone;
+}
+
+public void setTelephone(String telephone) {
+	this.telephone = telephone;
+}
+
+public String getFax() {
+	return fax;
+}
+
+public void setFax(String fax) {
+	this.fax = fax;
+}
+
+public String getEmail() {
+	return email;
+}
+
+public void setEmail(String email) {
+	this.email = email;
+}
+
+public String getComment() {
+	return comment;
+}
+
+public void setComment(String comment) {
+	this.comment = comment;
+}
+
+public String getParentcode() {
+	return parentcode;
+}
+
+public void setParentcode(String parentcode) {
+	this.parentcode = parentcode;
+}
+
+public String getShowOrder() {
+	return showOrder;
+}
+
+public void setShowOrder(String showOrder) {
+	this.showOrder = showOrder;
+}
+
+public String getLanguage() {
+	return language;
+}
+
+public void setLanguage(String language) {
+	this.language = language;
+}
+
+public String getInscode() {
+	return inscode;
+}
+
+public void setInscode(String inscode) {
+	this.inscode = inscode;
+}
+
+public String getContract() {
+	return contract;
+}
+
+public void setContract(String contract) {
+	this.contract = contract;
+}
+
+public String getContracttype() {
+	return contracttype;
+}
+
+public void setContracttype(String contracttype) {
+	this.contracttype = contracttype;
+}
+
+public String getContractdate() {
+	return contractdate;
+}
+
+public void setContractdate(String contractdate) {
+	this.contractdate = contractdate;
+}
+
+public String getPortal_email() {
+	return portal_email;
+}
+
+public void setPortal_email(String portal_email) {
+	this.portal_email = portal_email;
+}
+
+public String getWicket() {
+	return wicket;
+}
+
+public void setWicket(String wicket) {
+	this.wicket = wicket;
+}
+
+public String getInactive() {
+	return inactive;
+}
+
+public void setInactive(String inactive) {
+	this.inactive = inactive;
+}
+
+public String getDefaultContext() {
+	return defaultContext;
+}
+
+public void setDefaultContext(String defaultContext) {
+	this.defaultContext = defaultContext;
+}
+
+public String getDefaultServiceStockUid() {
+	return defaultServiceStockUid;
+}
+
+public void setDefaultServiceStockUid(String defaultServiceStockUid) {
+	this.defaultServiceStockUid = defaultServiceStockUid;
+}
+
+public String getContactperson() {
+	return contactperson;
+}
+
+public void setContactperson(String contactperson) {
+	this.contactperson = contactperson;
+}
+
+public String getContactaddress() {
+	return contactaddress;
+}
+
+public void setContactaddress(String contactaddress) {
+	this.contactaddress = contactaddress;
+}
+
+public String getContactzipcode() {
+	return contactzipcode;
+}
+
+public void setContactzipcode(String contactzipcode) {
+	this.contactzipcode = contactzipcode;
+}
+
+public String getContactcity() {
+	return contactcity;
+}
+
+public void setContactcity(String contactcity) {
+	this.contactcity = contactcity;
+}
+
+public String getContactcountry() {
+	return contactcountry;
+}
+
+public void setContactcountry(String contactcountry) {
+	this.contactcountry = contactcountry;
+}
+
+public String getContacttelephone() {
+	return contacttelephone;
+}
+
+public void setContacttelephone(String contacttelephone) {
+	this.contacttelephone = contacttelephone;
+}
+
+public String getContactfax() {
+	return contactfax;
+}
+
+public void setContactfax(String contactfax) {
+	this.contactfax = contactfax;
+}
+
+public String getContactemail() {
+	return contactemail;
+}
+
+public void setContactemail(String contactemail) {
+	this.contactemail = contactemail;
+}
+
+public String getCode1() {
+	return code1;
+}
+
+public void setCode1(String code1) {
+	this.code1 = code1;
+}
+
+public String getCode2() {
+	return code2;
+}
+
+public void setCode2(String code2) {
+	this.code2 = code2;
+}
+
+public String getCode3() {
+	return code3;
+}
+
+public void setCode3(String code3) {
+	this.code3 = code3;
+}
+
+public String getCode4() {
+	return code4;
+}
+
+public void setCode4(String code4) {
+	this.code4 = code4;
+}
+
+public String getCode5() {
+	return code5;
+}
+
+public void setCode5(String code5) {
+	this.code5 = code5;
+}
+
+public int getTotalbeds() {
+	return totalbeds;
+}
+
+public void setTotalbeds(int totalbeds) {
+	this.totalbeds = totalbeds;
+}
+
+public int getServiceadmissionlimit() {
+	return serviceadmissionlimit;
+}
+
+public void setServiceadmissionlimit(int serviceadmissionlimit) {
+	this.serviceadmissionlimit = serviceadmissionlimit;
+}
+
+public Date getUpdatetime() {
+	return updatetime;
+}
+
+public void setUpdatetime(Date updatetime) {
+	this.updatetime = updatetime;
+}
+
+public String getUpdateuserid() {
+	return updateuserid;
+}
+
+public void setUpdateuserid(String updateuserid) {
+	this.updateuserid = updateuserid;
+}
+
+public String getCostcenter() {
+	return costcenter;
+}
+
+public void setCostcenter(String costcenter) {
+	this.costcenter = costcenter;
+}
+
+public String getPerformeruid() {
+	return performeruid;
+}
+
+public void setPerformeruid(String performeruid) {
+	this.performeruid = performeruid;
+}
+
+public String getStayprestationuid() {
+	return stayprestationuid;
+}
+
+public void setStayprestationuid(String stayprestationuid) {
+	this.stayprestationuid = stayprestationuid;
+}
+
+public String getAcceptsVisits() {
+	return acceptsVisits;
+}
+
+public void setAcceptsVisits(String acceptsVisits) {
+	this.acceptsVisits = acceptsVisits;
+}
+
+public String getUsers() {
+	return users;
+}
+
+public void setUsers(String users) {
+	this.users = users;
+}
+
+	//--- GET LABEL -------------------------------------------------------------------------------
     public String getLabel(String language){
         Label label;
         for (int n=0;n<labels.size();n++){
@@ -154,8 +566,9 @@ public class Service {
                     "  inscode, contract, contracttype, contactperson, contractdate,"+
                     "  contactaddress, contactzipcode, contactcity, contactcountry,"+
                     "  contacttelephone, contactfax, contactemail, portal_email, wicket, defaultcontext,"+
-                    "  defaultservicestockuid, code1, code2, code3, code4, code5, updatetime,totalbeds,inactive,costcenter,performeruid,acceptsVisits,stayprestationuid,serviceadmissionlimit)"+
-                    " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    "  defaultservicestockuid, code1, code2, code3, code4, code5, updatetime,totalbeds,inactive,"
+                    + "costcenter,performeruid,acceptsVisits,stayprestationuid,serviceadmissionlimit,users)"+
+                    " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 	          ps = conn.prepareStatement(sSelect);
 	          ps.setString(1,this.code.toUpperCase());
@@ -201,6 +614,7 @@ public class Service {
 	          ps.setString(39,this.acceptsVisits);
 	          ps.setString(40,this.stayprestationuid);
 	          ps.setInt(41,this.serviceadmissionlimit);
+	          ps.setString(42,this.users);
 	          ps.executeUpdate();
 	          if(ps!=null) ps.close();
 	          conn.close();
@@ -298,6 +712,7 @@ public class Service {
                     if(this.contactfax.trim().length()>0) hSelect.put(" contactfax = ? ",this.contactfax);
                     if(this.contactemail.trim().length()>0) hSelect.put(" contactemail = ? ",this.contactemail);
 
+                    if(this.users.trim().length()>0) hSelect.put(" users = ? ",this.users);
                     if(this.code1.trim().length()>0) hSelect.put(" code1 = ? ",this.code1);
                     if(this.code2.trim().length()>0) hSelect.put(" code2 = ? ",this.code2);
                     if(this.code3.trim().length()>0) hSelect.put(" code3 = ? ",this.code3);
@@ -369,8 +784,9 @@ public class Service {
                               "  inscode, contract, contracttype, contactperson, contractdate,"+
                               "  contactaddress, contactzipcode, contactcity, contactcountry,"+
                               "  contacttelephone, contactfax, contactemail, portal_email, wicket, defaultcontext,"+
-                              "  defaultservicestockuid, code1, code2, code3, code4, code5, updatetime,totalbeds,inactive,costcenter,performeruid,acceptsVisits,stayprestationuid,serviceadmissionlimit)"+
-                              " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                              "  defaultservicestockuid, code1, code2, code3, code4, code5, updatetime,totalbeds,inactive,costcenter,"
+                              + "performeruid,acceptsVisits,stayprestationuid,serviceadmissionlimit,users)"+
+                              " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
                     rs.close();
                     ps.close();
@@ -418,6 +834,7 @@ public class Service {
                     ps.setString(39,this.acceptsVisits);
                     ps.setString(40,this.stayprestationuid);
                     ps.setInt(41,this.serviceadmissionlimit);
+                    ps.setString(42,this.users);
                     ps.executeUpdate();
                     if(ps!=null) ps.close();
                 }
@@ -487,6 +904,7 @@ public class Service {
                     service.code3 = rs.getString("code3");
                     service.code4 = rs.getString("code4");
                     service.code5 = rs.getString("code5");
+                    service.users = ScreenHelper.checkString(rs.getString("users"));
 
                     service.updatetime = rs.getDate("updatetime");
                     service.updateuserid = rs.getString("updateuserid");
@@ -1027,6 +1445,16 @@ public class Service {
     	}
     	return name;
     }
+    public String getFullyQualifiedName(String language,String separator){
+    	String name=getLabel(language);
+    	if(parentcode!=null && parentcode.length()>0){
+    		Service parentService = Service.getService(parentcode);
+    		if(parentService!=null){
+    			name=parentService.getFullyQualifiedName(language)+separator+name;
+    		}
+    	}
+    	return name;
+    }
     //--- GET SERVICE LABELS ----------------------------------------------------------------------
     // return vector with the labels (diff. lang) for the service
     public Vector getServiceLabels(){
@@ -1056,8 +1484,9 @@ public class Service {
                          " fax, comment, updatetime, email, serviceparentid, inscode, serviceorder," +
                          " servicelanguage, updateuserid, contract, contracttype, contactperson, contractdate," +
                          " defaultcontext, defaultservicestockuid, contactaddress, contactzipcode, contactcity," +
-                         " contactcountry, contacttelephone, contactfax, contactemail, code3, code5,wicket,totalbeds,inactive,costcenter,performeruid,acceptsVisits,stayprestationuid,serviceadmissionlimit)" +
-                         " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                         " contactcountry, contacttelephone, contactfax, contactemail, code3, code5,wicket,totalbeds,"
+                         + "inactive,costcenter,performeruid,acceptsVisits,stayprestationuid,serviceadmissionlimit,users)" +
+                         " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
     	Connection ad_conn = MedwanQuery.getInstance().getAdminConnection();
         try{
@@ -1103,6 +1532,7 @@ public class Service {
             ps.setString(36,hService.get("acceptsVisits").toString());
             ps.setString(37,hService.get("stayprestationuid").toString());
             ps.setInt(38,((Integer)hService.get("serviceadmissionlimit")).intValue());
+            ps.setString(39,hService.get("users").toString());
 
             ps.executeUpdate();
             ps.close();
@@ -1129,7 +1559,8 @@ public class Service {
                          "  servicelanguage = ?, updateuserid = ?, contract = ?, contracttype = ?, contactperson = ?," +
                          "  contractdate = ?, defaultcontext = ?, defaultservicestockuid = ?, contactaddress = ?," +
                          "  contactzipcode = ?, contactcity = ?, contactcountry = ?, contacttelephone = ?," +
-                         "  contactfax = ?, contactemail = ?, code3 = ?, code5 = ?, wicket = ?, totalbeds = ?, inactive = ?, costcenter= ?, performeruid=?,acceptsVisits=?,stayprestationuid=?,serviceadmissionlimit=?" +
+                         "  contactfax = ?, contactemail = ?, code3 = ?, code5 = ?, wicket = ?, totalbeds = ?, inactive = ?, "
+                         + "costcenter= ?, performeruid=?,acceptsVisits=?,stayprestationuid=?,serviceadmissionlimit=?,users=?" +
                          " WHERE serviceid = ?";
 
     	Connection ad_conn = MedwanQuery.getInstance().getAdminConnection();
@@ -1176,8 +1607,9 @@ public class Service {
             ps.setString(36, hService.get("acceptsVisits").toString());
             ps.setString(37, hService.get("stayprestationuid").toString());
             ps.setInt(38, Integer.parseInt(hService.get("serviceadmissionlimit").toString()));
+            ps.setString(39, hService.get("users").toString());
 
-            ps.setString(39, hService.get("oldserviceid").toString());
+            ps.setString(40, hService.get("oldserviceid").toString());
 
             ps.executeUpdate();
             ps.close();

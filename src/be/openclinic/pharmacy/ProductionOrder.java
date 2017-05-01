@@ -11,6 +11,7 @@ import java.util.Vector;
 import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.system.ScreenHelper;
 import be.openclinic.common.OC_Object;
+import be.openclinic.finance.Debet;
 import net.admin.User;
 
 public class ProductionOrder extends OC_Object{
@@ -616,6 +617,14 @@ public class ProductionOrder extends OC_Object{
 	}
 	public void setDebetUid(String debetUid) {
 		this.debetUid = debetUid;
+	}
+	public Debet getDebet(){
+		if(debetUid!=null){
+			return Debet.get(debetUid);
+		}
+		else{
+			return null;
+		}
 	}
 	public int getPatientUid() {
 		return patientUid;

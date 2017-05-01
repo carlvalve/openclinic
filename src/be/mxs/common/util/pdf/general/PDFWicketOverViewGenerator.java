@@ -35,7 +35,7 @@ public class PDFWicketOverViewGenerator extends PDFBasic {
 
     private SimpleDateFormat stdDateFormat = ScreenHelper.stdDateFormat;
     private SimpleDateFormat fullDateFormat = ScreenHelper.fullDateFormat;
-    private String sCurrency = MedwanQuery.getInstance().getConfigParam("currency","€");
+    private String sCurrency = MedwanQuery.getInstance().getConfigParam("currency","EUR");
     private DecimalFormat priceFormat = new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#,##0.00"));
 
     //--- CONSTRUCTOR -----------------------------------------------------------------------------
@@ -554,7 +554,7 @@ public class PDFWicketOverViewGenerator extends PDFBasic {
         if(sToDate.length()==0){
             sToDate=ScreenHelper.stdDateFormat.format(new Date());
         }
-        endBalance = wicket.calculateBalance(new Date(ScreenHelper.parseDate(sToDate).getTime()+24*3600*1000-1)); // now
+        endBalance = beginBalance+saldo;
         table.addCell(createBoldLabelCell(getTran("web.financial","endSituation").toUpperCase(),20));
         table.addCell(createTotalPriceCell(endBalance,20));
         table.addCell(createEmptyCell(50));

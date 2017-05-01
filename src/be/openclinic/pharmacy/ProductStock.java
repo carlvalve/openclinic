@@ -72,6 +72,9 @@ public class ProductStock extends OC_Object implements Comparable {
         }
         return product;
     }
+    public Vector getBatches(){
+    	return Batch.getBatches(this.getUid());
+    }
     public Vector getAllProductStockOperations(){
     	return ProductStockOperation.getAll(this.getUid());
     }
@@ -908,7 +911,7 @@ public class ProductStock extends OC_Object implements Comparable {
         	String sQuery="select * from OC_PRODUCTSTOCKS a, OC_PRODUCTS b"
         			+ " where"
         			+ " b.OC_PRODUCT_OBJECTID=replace(OC_STOCK_PRODUCTUID,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and"
-        			+ (ScreenHelper.checkString(name).length()==0?"":" b.OC_PRODUCT_NAME like '%"+name+"%' and")
+        			+ (ScreenHelper.checkString(name).length()==0?"":" (b.OC_PRODUCT_NAME like '%"+name+"%' or b.OC_PRODUCT_CODE like '%"+name+"%') and")
         			+ " b.OC_PRODUCT_PRODUCTSUBGROUP in "+"('"+MedwanQuery.getInstance().getConfigString("ProductProductionMaterialSubGroup","MAT").replaceAll(",","','")+"')"
         			+ " order by OC_PRODUCT_NAME";
         	ps=conn.prepareStatement(sQuery);

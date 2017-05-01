@@ -809,7 +809,6 @@ public class ProductOrder extends OC_Object{
 
             // set questionmark values
             int questionMarkIdx = 1;
-            if(searchDelivered)                   ps.setDate(questionMarkIdx++,new java.sql.Date(new java.util.Date().getTime()));
             if(sFindDescription.length() > 0)     ps.setString(questionMarkIdx++,sFindDescription.toLowerCase()+"%");
             if(sFindServiceStockUid.length() > 0) ps.setString(questionMarkIdx++,sFindServiceStockUid);
             if(sFindProductStockUid.length() > 0) ps.setString(questionMarkIdx++,sFindProductStockUid);

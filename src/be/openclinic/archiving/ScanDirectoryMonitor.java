@@ -186,6 +186,7 @@ public class ScanDirectoryMonitor implements Runnable{
 	//--- RUN SCHEDULER ---------------------------------------------------------------------------
 	public static void runScheduler(){	
         try{        
+        	loadConfig();
         	int acceptedFilesInRun = 0, faultyFilesInRun = 0, deniedFilesInRun = 0, skippedFilesInRun=0;
         	if(files.size()>5000){
         		files=new Hashtable();

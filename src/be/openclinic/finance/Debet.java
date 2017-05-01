@@ -2860,6 +2860,42 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
         return vUnassignedDebets;
     }
     
+    public static Vector getEncounterDebets(String sEncounterUid) {
+        String sSelect = "";
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Vector vDebets = new Vector();
+        Connection oc_conn = MedwanQuery.getInstance().getOpenclinicConnection();
+        Debug.println("Build GetEncounterDebets Query");
+        try{
+            sSelect = "SELECT * FROM OC_DEBETS WHERE oc_debet_encounteruid=?";
+            ps = oc_conn.prepareStatement(sSelect);
+            ps.setString(1, sEncounterUid);
+            rs = ps.executeQuery();
+            Debug.println("Query executed");
+            while (rs.next()) {
+            	vDebets.add(Debet.get(rs.getInt("OC_DEBET_SERVERID") + "." + rs.getInt("OC_DEBET_OBJECTID")));
+            }
+            Debug.println("Debets loaded");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            Debug.println("OpenClinic => Debet.java => getEncounterDebets => " + e.getMessage() + " = " + sSelect);
+        }
+        finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                oc_conn.close();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return vDebets;
+    }
+    
     //--- GET PATIENT DEBET PRESTATIONS -----------------------------------------------------------
     public static Vector getPatientDebetPrestations(String sPatientId, String sDateBegin, String sDateEnd, String sAmountMin, String sAmountMax) {
         String sSelect = "";

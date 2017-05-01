@@ -41,7 +41,7 @@ public class EndPageCard extends PdfPageEventHelper {
     public void onEndPage(PdfWriter writer, Document document) {
         try{
             // load image
-            Image watermarkImg =Image.getInstance(new URL(url+contextPath+projectDir+"/_img/cardheader3.png"));
+            Image watermarkImg =Image.getInstance(new URL((url+contextPath+projectDir+"/_img/cardheader3.png").replaceAll("//", "/").replaceAll("http:/", "http://")));
             watermarkImg.scaleToFit(310*200*MedwanQuery.getInstance().getConfigInt("userCardHeaderZoom",100)/25400,310);
             //watermarkImg.setRotationDegrees(30);
             int[] transparencyValues = {100,100};
