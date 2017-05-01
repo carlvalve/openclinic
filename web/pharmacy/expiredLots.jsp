@@ -56,23 +56,20 @@
 		String sColor = "";
 		java.util.Date dExp;
 		
+		%>			
+		<table width="100%" class="list" cellpadding="0" cellspacing="1">
+		    <%-- header --%>
+			<tr class="admin">
+				<td><%=getTran(request,"web","servicestock",sWebLanguage)%></td>
+				<td><%=getTran(request,"web","productstock",sWebLanguage)%></td>
+				<td><%=getTran(request,"web","batch.number",sWebLanguage)%></td>
+				<td><%=getTran(request,"web","level",sWebLanguage)%></td>
+				<td><%=getTran(request,"web","batch.expiration",sWebLanguage)%></td>
+			</tr>
+		<%
+	
 		if(rs.next()){
 			int recCount = 0;
-			
-			%>			
-				<table width="100%" class="list" cellpadding="0" cellspacing="1">
-				    <%-- header --%>
-					<tr class="admin">
-						<td><%=getTran(request,"web","servicestock",sWebLanguage)%></td>
-						<td><%=getTran(request,"web","productstock",sWebLanguage)%></td>
-						<td><%=getTran(request,"web","batch.number",sWebLanguage)%></td>
-						<td><%=getTran(request,"web","level",sWebLanguage)%></td>
-						<td><%=getTran(request,"web","batch.expiration",sWebLanguage)%></td>
-					</tr>
-			<%
-			
-			rs.beforeFirst(); // rewind
-
 			String sClass = "1";
 			while(rs.next()){
 				// expired --> red

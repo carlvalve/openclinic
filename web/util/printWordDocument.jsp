@@ -1,4 +1,4 @@
-<%@page import="net.admin.*,java.sql.*,be.openclinic.adt.*,be.mxs.common.util.db.*,be.mxs.common.util.system.*,org.apache.poi.xwpf.usermodel.*,org.apache.poi.openxml4j.opc.*,java.util.*,java.io.*,org.apache.xmlbeans.*,be.mxs.common.util.io.*"%>
+<%@page import="net.admin.*,java.sql.*,be.openclinic.assets.*,be.openclinic.adt.*,be.mxs.common.util.db.*,be.mxs.common.util.system.*,org.apache.poi.xwpf.usermodel.*,org.apache.poi.openxml4j.opc.*,java.util.*,java.io.*,org.apache.xmlbeans.*,be.mxs.common.util.io.*"%>
 <%
 	String docname = request.getParameter("name");
 	Connection conn = MedwanQuery.getInstance().getAdminConnection();
@@ -7,6 +7,8 @@
 	ResultSet rs = ps.executeQuery();
 	if(rs.next()){
 		DocxManager docx= new DocxManager(new ByteArrayInputStream(rs.getBytes("document")));
+		//System parameters
+		docx.replaceText("${today}",ScreenHelper.formatDate(new java.util.Date()));
 		//User parameters
 		User user=(User)session.getAttribute("activeUser");
 		String language = user.person.language;
@@ -72,8 +74,86 @@
 		}
 		catch(Exception e){};
 		docx.replaceText("${patient_1stencounterdate}",firstencounterdate);
-
-		
+		//Assets
+		Asset asset = (Asset)session.getAttribute("activeAsset");
+		if(asset!=null){
+			docx.replaceText("${asset_annuity}",asset.annuity);
+			docx.replaceText("${asset_assettype}",asset.assetType);
+			docx.replaceText("${asset_characteristics}",asset.characteristics);
+			docx.replaceText("${asset_code}",asset.code);
+			docx.replaceText("${asset_cenorm}",asset.comment1);
+			docx.replaceText("${asset_brand}",asset.comment2);
+			docx.replaceText("${asset_othernorm}",asset.comment3);
+			docx.replaceText("${asset_voltage}",asset.comment4);
+			docx.replaceText("${asset_intensity}",asset.comment5);
+			docx.replaceText("${asset_fundingsource}",ScreenHelper.getTranNoLink("assets.fundingsource",asset.comment6,user.person.language));
+			docx.replaceText("${asset_functionality}",ScreenHelper.getTranNoLink("assets.functionality",asset.comment7,user.person.language));
+			docx.replaceText("${asset_details}",asset.comment8);
+			docx.replaceText("${asset_status}",ScreenHelper.getTranNoLink("assets.status",asset.comment9,user.person.language));
+			docx.replaceText("${asset_model}",asset.comment10);
+			docx.replaceText("${asset_productiondate}",asset.comment11);
+			docx.replaceText("${asset_deliverydate}",asset.comment12);
+			docx.replaceText("${asset_firstusagedate}",asset.comment13);
+			docx.replaceText("${asset_endofwarantydate}",asset.comment14);
+			docx.replaceText("${asset_components}",asset.getComponentsString(user.person.language));
+			docx.replaceText("${asset_unused}",asset.comment16);
+			docx.replaceText("${asset_unused}",asset.comment17);
+			docx.replaceText("${asset_unused}",asset.comment18);
+			docx.replaceText("${asset_unused}",asset.comment19);
+			docx.replaceText("${asset_unused}",asset.comment20);
+			docx.replaceText("${asset_description}",asset.description);
+			docx.replaceText("${asset_gmdncode}",asset.gmdncode);
+			docx.replaceText("${asset_loancomment}",asset.loanComment);
+			docx.replaceText("${asset_loaninterestrate}",asset.loanInterestRate);
+			docx.replaceText("${asset_nomenclaturecode}",asset.nomenclature);
+			docx.replaceText("${asset_nomenclaturename}",ScreenHelper.getTranNoLink("admin.nomenclature.asset",asset.nomenclature,user.person.language));
+			docx.replaceText("${asset_receiptby}",asset.receiptBy);
+			docx.replaceText("${asset_salesclient}",asset.saleClient);
+			docx.replaceText("${asset_serialnumber}",asset.serialnumber);
+			docx.replaceText("${asset_serviceuid}",asset.serviceuid);
+			if(asset.getService()!=null){
+				docx.replaceText("${asset_servicename}",asset.getService().getLabel(user.person.language));
+			}
+			docx.replaceText("${asset_supplieruid}",asset.supplierUid);
+			docx.replaceText("${asset_suppliername}",asset.getSupplierName());
+			docx.replaceText("${asset_uid}",asset.getUid());
+		}
+		MaintenancePlan plan = (MaintenancePlan)session.getAttribute("activeMaintenancePlan");
+		if(plan!=null){
+			docx.replaceText("${plan_uid}",plan.getUid());
+			docx.replaceText("${plan_transportcosts}",plan.comment1);
+			docx.replaceText("${plan_consumablescost}",plan.comment2);
+			docx.replaceText("${plan_othercosts}",plan.comment3);
+			docx.replaceText("${plan_supplieruid}",plan.comment4);
+			Supplier supplier = Supplier.get(ScreenHelper.checkString(plan.comment4));
+			if(supplier!=null){
+				docx.replaceText("${plan_suppliername}",supplier.getName());
+			}
+			docx.replaceText("${plan_unused}",plan.comment5);
+			docx.replaceText("${plan_unused}",plan.comment6);
+			docx.replaceText("${plan_unused}",plan.comment7);
+			docx.replaceText("${plan_unused}",plan.comment8);
+			docx.replaceText("${plan_unused}",plan.comment9);
+			docx.replaceText("${plan_unused}",plan.comment10);
+			docx.replaceText("${plan_frequency}",plan.frequency);
+			docx.replaceText("${plan_instructions}",plan.instructions);
+			docx.replaceText("${plan_name}",plan.name);
+			docx.replaceText("${plan_operator}",plan.operator);
+			docx.replaceText("${plan_manager}",plan.planManager);
+			docx.replaceText("${plan_type}",ScreenHelper.getTranNoLink("maintenanceplan.type",plan.type,user.person.language));
+		}
+		MaintenanceOperation operation = (MaintenanceOperation)session.getAttribute("activeMaintenanceOperation");
+		if(operation!=null){
+			docx.replaceText("${operation_uid}",operation.getUid());
+			docx.replaceText("${operation_comment}",operation.comment);
+			docx.replaceText("${operation_operator}",operation.operator);
+			docx.replaceText("${operation_result}",ScreenHelper.getTranNoLink("assets.maintenanceoperations.result",operation.result,user.person.language));
+			docx.replaceText("${operation_supplieruid}",operation.supplier);
+			Supplier supplier = Supplier.get(ScreenHelper.checkString(operation.supplier));
+			if(supplier!=null){
+				docx.replaceText("${operation_suppliername}",supplier.getName());
+			}
+		}
 	    response.setContentType("application/msword");
 	    response.setHeader("Content-disposition","inline; filename=tmp_"+System.currentTimeMillis()+".docx");
 	    ServletOutputStream sos = response.getOutputStream();

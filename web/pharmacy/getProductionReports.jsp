@@ -14,6 +14,13 @@
 			reportContent.append(reportlines.elementAt(n));
 		}
 	}
+	else if(report.equalsIgnoreCase("consumptionReport")){
+		reportContent = new StringBuffer();
+		Vector reportlines=PharmacyReports.getConsumptionReport(serviceStockUid,begin,end,sWebLanguage);
+		for(int n=0;n<reportlines.size();n++){
+			reportContent.append(reportlines.elementAt(n));
+		}
+	}
 	else if(report.equalsIgnoreCase("specialOrderReport")){
 		reportContent = new StringBuffer();
 		Vector reportlines=PharmacyReports.getSpecialOrderReport(serviceStockUid,begin,end);

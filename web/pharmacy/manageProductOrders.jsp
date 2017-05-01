@@ -424,6 +424,18 @@ Debug.println("a");
 		            	try{
 		            		Pointer.deletePointers("drugprice."+productStock.getProduct().getUid()+"."+operation.getUid());
 		            		Pointer.storePointer("drugprice."+productStock.getProduct().getUid()+"."+operation.getUid(),nPackagesDelivered+";"+Double.parseDouble(request.getParameter("EditPrice")));
+		        			//Recalculate PUMP
+		        			//Get previous PUMP
+		        			double dPump=productStock.getProduct().getLastYearsAveragePrice();
+		        			if(dPump>0){
+		        				//Find existing quantity for the product
+		        				int nExisting = productStock.getProduct().getTotalQuantityAvailable()-nPackagesDelivered; //new delivery was already added to stocks
+		        				dPump = (nExisting*dPump+nPackagesDelivered*Double.parseDouble(request.getParameter("EditPrice")))/(nExisting+nPackagesDelivered);
+		        			}
+		        			else{
+		        				dPump=Double.parseDouble(request.getParameter("EditPrice"));
+		        			}
+		            		Pointer.storePointer("pump."+productStock.getProduct().getUid(),dPump+"");
 		            	}
 		            	catch(Exception e){
 		            		//e.printStackTrace();

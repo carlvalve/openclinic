@@ -2,7 +2,10 @@
 <%@include file="/includes/validateUser.jsp"%>
 <%
 	boolean bModified=false;
+	String sServiceStock = checkString(request.getParameter("DestinationServiceStock"));
+
 	if(checkString(request.getParameter("actionValue")).equalsIgnoreCase("validate")){
+		Hashtable documents = new Hashtable();
 		Enumeration parameters = request.getParameterNames();
 		while(parameters.hasMoreElements()){
 			String parameter = (String)parameters.nextElement();
@@ -10,7 +13,29 @@
 				String operationid=parameter.replaceAll("cbValidate\\.", "");
 				ProductStockOperation operation = ProductStockOperation.get(operationid);
 				if(operation!=null){
+					OperationDocument document = (OperationDocument)documents.get(operation.getSourceDestination().getObjectUid());
+					if(document==null){
+						//we first generate a unique validation document 
+						if(MedwanQuery.getInstance().getConfigInt("generateProductStockOperationDocumentOnOutgoingValidation",0)==1){
+							document=new OperationDocument();
+							document.setCreateDateTime(new java.util.Date());
+							document.setDate(new java.util.Date());
+							document.setDestinationuid(operation.getSourceDestination().getObjectUid());
+							document.setSourceuid(request.getParameter("ServiceStockUid"));
+							document.setType("1");
+							document.setUpdateDateTime(new java.util.Date());
+							document.setUpdateUser(activeUser.userid);
+							document.setVersion(1);
+							document.setReference("#LOCK#");
+							document.store();
+							documents.put(operation.getSourceDestination().getObjectUid(),document);
+						}
+					}
 					operation.setValidated(1);
+					if(document!=null){
+						//Attach the operation to the validation document
+						operation.setDocumentUID(document.getUid());
+					}
 					operation.store();
 					bModified=true;
 				}
@@ -38,7 +63,6 @@
 		}
 	}
 	
-	String sServiceStock = checkString(request.getParameter("DestinationServiceStock"));
 %>
 <form name='transactionForm' method='post'>
 	<input type='hidden' name='actionValue' id='actionValue'/>
@@ -63,6 +87,7 @@
 							ServiceStock serviceStock = (ServiceStock)serviceStocks.elementAt(n);
 							if(stocks.contains(serviceStock.getUid()) && !serviceStock.getUid().equalsIgnoreCase(request.getParameter("ServiceStockUid"))){
 								out.println("<option "+(serviceStock.getUid().equalsIgnoreCase(sServiceStock)?"selected":"")+" value='"+serviceStock.getUid()+"'>"+serviceStock.getName()+"</option>");
+								stocks.remove(serviceStock.getUid());
 							}
 						}
 					%>

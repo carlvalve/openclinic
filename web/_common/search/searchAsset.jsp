@@ -33,6 +33,8 @@
            sDescription         = checkString(request.getParameter("searchDescription")),
            sSerialnumber        = checkString(request.getParameter("searchSerialnumber")),
            sAssetType           = checkString(request.getParameter("searchAssetType")),
+           sServiceUid          = checkString(request.getParameter("searchServiceUid")),
+           sServiceName         = checkString(request.getParameter("searchServiceName")),
            sSupplierUid         = checkString(request.getParameter("searchSupplierUid")),
            sSupplierName        = checkString(request.getParameter("searchSupplierName")),
            sPurchasePeriodBegin = checkString(request.getParameter("searchPeriodBegin")),
@@ -63,6 +65,16 @@
             <input type="hidden" name="Action" value="search">
                             
             <table class="list" border="0" width="100%" cellspacing="1">
+            	<tr>
+		            <td class="admin"><%=getTran(request,"web","service",sWebLanguage)%>&nbsp;</td>
+		           	<td class="admin2">
+		                <input type="hidden" name="searchServiceUid" id="searchServiceUid" value="<%=sServiceUid%>">
+		                <input class="text" type="text" name="searchServiceName" id="searchServiceName" readonly size="50" value="<%=sServiceName%>" >
+		                <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTran(null,"Web","select",sWebLanguage)%>" onclick="searchService('searchServiceUid','searchServiceName');">
+		                <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="SearchForm.searchServiceUid.value='';SearchForm.searchServiceName.value='';">
+					</td>
+            	</tr>
+            	
                 <%-- search CODE --%>
                 <tr>
                     <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","code",sWebLanguage)%></td>
@@ -75,7 +87,7 @@
                 <tr>
                     <td class="admin"><%=getTran(request,"web","description",sWebLanguage)%></td>
                     <td class="admin2">
-                        <textarea class="text" name="searchDescription" id="searchDescription" cols="80" rows="4" onKeyup="resizeTextarea(this,8);"><%=sDescription%></textarea>
+                        <textarea class="text" name="searchDescription" id="searchDescription" cols="40" rows="1" onKeyup="resizeTextarea(this,8);"><%=sDescription%></textarea>
                     </td>
                 </tr>
                 
@@ -86,17 +98,6 @@
                         <input type="text" class="text" id="searchSerialnumber" name="searchSerialnumber" size="20" maxLength="50" value="<%=sSerialnumber%>">
                     </td>
                 </tr>         
-        
-                <%-- search ASSET TYPE --%>
-                <tr>
-                    <td class="admin"><%=getTran(request,"web.assets","assetType",sWebLanguage)%></td>
-                    <td class="admin2">
-                        <select class="text" id="searchAssetType" name="searchAssetType">
-                            <option/>
-                            <%=ScreenHelper.writeSelect(request,"assets.type",sAssetType,sWebLanguage)%>
-                        </select>
-                    </td>
-                </tr>   
                 
                 <%-- search SUPPLIER --%>
                 <tr>
@@ -136,13 +137,14 @@
     
     if(sAction.equals("search")){
 	    if(sCode.length() > 0 || sDescription.length() > 0 || sSerialnumber.length() > 0 || sAssetType.length() > 0 ||
-	       sSupplierUid.length() > 0 || sPurchasePeriodBegin.length() > 0 || sPurchasePeriodEnd.length() > 0 || showAllAssetsOnEmptySearch){
+	    		sSupplierUid.length() > 0 || sServiceUid.length() > 0 || sPurchasePeriodBegin.length() > 0 || sPurchasePeriodEnd.length() > 0 || showAllAssetsOnEmptySearch){
 		    Asset findItem = new Asset();
 		    findItem.code = sCode;
 		    findItem.description = sDescription;		    
 		    findItem.serialnumber = sSerialnumber;
 		    findItem.assetType = sAssetType;
 		    findItem.supplierUid = sSupplierUid;
+		    findItem.serviceuid = sServiceUid;
 		    
 		    if(sPurchasePeriodBegin.length() > 0){
 		        findItem.purchasePeriodBegin = ScreenHelper.parseDate(sPurchasePeriodBegin);
@@ -220,9 +222,13 @@
   window.resizeTo(700,500);
   resizeAllTextareas(4);
 
+  function searchService(serviceUidField,serviceNameField){
+	  	openPopup("/_common/search/searchService.jsp&ts=<%=getTs()%>&VarCode="+serviceUidField+"&VarText="+serviceNameField);
+	  	document.getElementById(serviceNameField).focus();
+	    }
   <%-- SELECT SUPPLIER --%>
   function selectSupplier(uidField,nameField){
-    var url = "/_common/search/searchSupplier.jsp&ts=<%=getTs()%>"+
+    var url = "/_common/search/searchSupplier.jsp&ts=<%=getTs()%>&PopupWidth=500&PopupHeight=400"+
               "&ReturnFieldUid="+uidField+
               "&ReturnFieldName="+nameField;
     openPopup(url);
@@ -253,6 +259,7 @@
     var okToSubmit = true;
     
     if(document.getElementById("searchCode").value.length > 0 ||
+       document.getElementById("searchServiceUid").value.length > 0 ||
        document.getElementById("searchDescription").value.length > 0 ||
        document.getElementById("searchSerialnumber").value.length > 0 ||
        document.getElementById("searchAssetType").value.length > 0 ||

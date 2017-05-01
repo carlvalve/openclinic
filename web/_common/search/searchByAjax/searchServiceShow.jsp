@@ -38,7 +38,7 @@
     }
 
     //--- WRITE MY ROW ----------------------------------------------------------------------------
-    private String writeMyRow(String sType, String sID, String sWebLanguage, String sIcon){
+    private String writeMyRow(String sType, String sID, String sWebLanguage, String sIcon, User user){
         String row = "";
         
         String sLabel = getTran(null,sType, sID, sWebLanguage).replaceAll("'","´");
@@ -50,6 +50,7 @@
             boolean isactive = showinactive || !service.inactive.equalsIgnoreCase("1");
 
             if(isactive){
+				hasBeds=service.isAuthorizedUser(user.userid) || user.isAdmin();
                 // Set display class
                 String sClass = "";
                 if(service.inactive.equalsIgnoreCase("1")){
@@ -71,7 +72,9 @@
                 else{
                     row+= "<td class='"+sClass+"'>"+(hasBeds && acceptsvisits ? "<a href='javascript:selectParentService(\""+sID+"\",\""+sLabel+"\")' title='"+getTranNoLink("Web", "select", sWebLanguage)+"'>" : "")+sLabel+(hasBeds && acceptsvisits? "</a>" : "")+"</td>";
                 }
-
+				if(!service.isAuthorizedUser(user.userid)){
+					row+="<td><img src='"+sCONTEXTPATH+"/_img/icons/icon_forbidden.png'/></td>";
+				}
                 row += "</tr>";
             }
         }
@@ -133,7 +136,7 @@
         while(iter.hasNext()){
             sServiceID = (String)iter.next();
             set.add(sServiceID);
-            hSelected.put(sServiceID,writeMyRow("Service",sServiceID,sWebLanguage,""));
+            hSelected.put(sServiceID,writeMyRow("Service",sServiceID,sWebLanguage,"",activeUser));
 
             iTotal++;
         }
@@ -172,7 +175,7 @@
             // add label to labels that will be displayed
             if(displayLabel){
                 set.add(labelid);
-                hSelected.put(labelid,writeMyRow("service",labelid,sWebLanguage,""));
+                hSelected.put(labelid,writeMyRow("service",labelid,sWebLanguage,"",activeUser));
                 iTotal++;
             }
         }
@@ -215,7 +218,7 @@
 
                 if(displayService){
                     set.add(sServiceID);
-                    hSelected.put(sServiceID,writeMyRow("service",sServiceID,sWebLanguage,""));
+                    hSelected.put(sServiceID,writeMyRow("service",sServiceID,sWebLanguage,"",activeUser));
                     iTotal++;
                 }
             }

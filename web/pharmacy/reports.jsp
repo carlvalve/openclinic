@@ -4,6 +4,11 @@
 
 <form name="reports">
 <%
+	// production
+	out.print(ScreenHelper.writeTblHeader(getTran(request,"web","pharmacy.reports.production",sWebLanguage),sCONTEXTPATH));
+	out.println(writeTblChildWithCode("javascript:downloadTechnicalStats(\"undelivered.rwamaterial.orders\",\"openclinic\");",getTran(request,"Web","statistics.download.undelivered.rwamaterial.orders",sWebLanguage)));
+	out.print(ScreenHelper.writeTblFooter()+"<br>");
+	
 	String stocks = "";
 	Vector serviceStocks = ServiceStock.getStocksByUser(activeUser.userid);
 	ServiceStock serviceStock;
@@ -43,6 +48,7 @@
 	out.print(ScreenHelper.writeTblHeader(getTran(request,"web","pharmacy.reports.outgoing",sWebLanguage),sCONTEXTPATH));
      out.print(writeTblChildWithCode("javascript:openPopup(\"pharmacy/patientDeliveries.jsp\",800,600,\"quickFile\")",getTran(request,"web","pharmacy.report.patientdeliveries",sWebLanguage)));
   	out.print(ScreenHelper.writeTblFooter()+"<br>");
+
 %>
 </form>
 
@@ -51,4 +57,9 @@
     window.open("<c:url value="/"/>pharmacy/pharmacyCsvReport.jsp?type="+sType+"&start="+document.getElementById("start").value+
     		    "&end="+document.getElementById("end").value+"&servicestockuid="+document.getElementById("servicestockuid").value,1,1,"pharmacyreport");
   }
+  
+  function downloadTechnicalStats(query,db){
+	    window.open("<c:url value='/util/csvStats.jsp?'/>query="+query+"&db="+db);
+	  }
+
 </script>

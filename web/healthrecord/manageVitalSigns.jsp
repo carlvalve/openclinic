@@ -185,7 +185,7 @@
         <tr>
             <td class="admin" width="<%=sTDAdminWidth%>">&nbsp;</td>
             <td class="admin2">
-                <%=getButtonsHtml(request,activeUser,activePatient,"occup.protocol.colonoscopy",sWebLanguage)%>
+                <%=getButtonsHtml(request,activeUser,activePatient,"occup.vitalsigns",sWebLanguage)%>
             </td>
         </tr>
     </table>

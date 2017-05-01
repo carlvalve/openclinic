@@ -5,6 +5,7 @@
     String sCode  = checkString(request.getParameter("Code")),
             sLabel = checkString(request.getParameter("Label")),
             reloadroot = checkString(request.getParameter("reloadroot")),
+            complaintonset = checkString(request.getParameter("complaintonset")),
            sType  = checkString(request.getParameter("Type"));
            
     String sPatientUid = checkString(request.getParameter("patientuid"));
@@ -78,6 +79,13 @@
                     }
                 %>
             </td>
+        </tr>
+        <!-- onset of complaints -->
+        <tr>
+            <td class="admin" nowrap><%=getTran(request,"medical.diagnosis","complaints.onset",sWebLanguage)%></td>
+            <td class="admin2">
+            	<%=writeDateField("complaintsonset", "transactionForm", ScreenHelper.getDate(), sWebLanguage) %>
+        	</td>
         </tr>
         <%
             if(flags.indexOf("C")>-1){
@@ -534,6 +542,7 @@
                  "&trandate=<%=ScreenHelper.checkString(request.getParameter("trandate"))%>"+
                  "&codeType=<%=sType%>"+
                  "&code=<%=sCode%>"+
+                 "&onset="+document.getElementById("complaintsonset").value+
                  "&alternativeCodeType=<%=sType.equalsIgnoreCase("icpc")?"ICD10":"ICPC"%>"+
                  "&alternativeCode="+alt+
                  "&language=<%=sWebLanguage%>"+

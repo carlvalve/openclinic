@@ -53,3 +53,4 @@
     UserProfile.submit();
   }
 </script>
+<%=sJSBUTTONS%>

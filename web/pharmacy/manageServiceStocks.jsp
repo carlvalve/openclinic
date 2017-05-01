@@ -9,16 +9,30 @@
 <%!
 //--- ADD AUTHORIZED USER ---------------------------------------------------------------------
 private String addAuthorizedUser(int userIdx, String userName, String sWebLanguage){
-    StringBuffer html = new StringBuffer();
+  StringBuffer html = new StringBuffer();
 
-    html.append("<tr id='rowAuthorizedUsers"+userIdx+"'>")
-         .append("<td width='18'>")
-          .append("<img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.gif' onclick='deleteAuthorizedUser(rowAuthorizedUsers"+userIdx+");' class='link' alt='"+getTranNoLink("web","delete",sWebLanguage)+"'>")
-         .append("</td>")
-         .append("<td>"+userName+"</td>")
-        .append("</tr>");
+  html.append("<tr id='rowAuthorizedUsers"+userIdx+"'>")
+       .append("<td width='18'>")
+        .append("<img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.gif' onclick='deleteAuthorizedUser(rowAuthorizedUsers"+userIdx+");' class='link' alt='"+getTranNoLink("web","delete",sWebLanguage)+"'>")
+       .append("</td>")
+       .append("<td>"+userName+"</td>")
+      .append("</tr>");
 
-    return html.toString();
+  return html.toString();
+}
+
+//--- ADD RECEIVING USER ---------------------------------------------------------------------
+private String addReceivingUser(int userIdx, String userName, String sWebLanguage){
+  StringBuffer html = new StringBuffer();
+
+  html.append("<tr id='rowReceivingUsers"+userIdx+"'>")
+       .append("<td width='18'>")
+        .append("<img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.gif' onclick='deleteReceivingUser(rowReceivingUsers"+userIdx+");' class='link' alt='"+getTranNoLink("web","delete",sWebLanguage)+"'>")
+       .append("</td>")
+       .append("<td>"+userName+"</td>")
+      .append("</tr>");
+
+  return html.toString();
 }
 
 //--- ADD DISPENSING USER ---------------------------------------------------------------------
@@ -52,8 +66,8 @@ private String addValidationUser(int userIdx, String userName, String sWebLangua
     //--- OBJECTS TO HTML -------------------------------------------------------------------------
     private StringBuffer objectsToHtml(Vector objects, String sWebLanguage, User activeUser,String showHidden,boolean bActivePatientPrescription,String showUnauthorized){
         StringBuffer html = new StringBuffer();
-        Vector authorizedUserIds;
-        String sClass = "1", sServiceStockUid = "", sServiceUid = "", sServiceName = "", sAuthorizedUserIds,
+        Vector authorizedUserIds, receivingUserIds;
+        String sClass = "1", sServiceStockUid = "", sServiceUid = "", sServiceName = "", sAuthorizedUserIds, sReceivingUserIds,
                sManagerUid = "", sPreviousManagerUid = "", sManagerName = "";
         StringTokenizer tokenizer;
 
@@ -209,16 +223,20 @@ private String addValidationUser(int userIdx, String userName, String sWebLangua
     String msg = "", sFindStockName = "", sFindServiceUid = "", sFindServiceName = "",
            sFindBegin = "", sFindEnd = "", sFindManagerUid = "", sSelectedStockName = "",
            sSelectedServiceUid = "", sSelectedBegin = "", sSelectedEnd = "", sSelectedManagerUid = "",
-           sSelectedServiceName = "", sSelectedManagerName = "", authorizedUserId = "", dispensingUserId = "", validationUserId="",
-           authorizedUserName = "", dispensingUserName = "", validationUserName="", sFindDefaultSupplierUid = "", sFindDefaultSupplierName = "",
+           sSelectedServiceName = "", sSelectedManagerName = "", authorizedUserId = "", receivingUserId = "", dispensingUserId = "", validationUserId="",
+           authorizedUserName = "", receivingUserName = "", dispensingUserName = "", validationUserName="", sFindDefaultSupplierUid = "", sFindDefaultSupplierName = "",
            sSelectedDefaultSupplierUid = "", sSelectedDefaultSupplierName = "", sSelectedOrderPeriod = "",
            sSelectedNosync="",sSelectedHidden="",sSelectedValidateOutgoing="";
 
     StringBuffer stocksHtml = null;
-    int foundStockCount = 0, authorisedUsersIdx = 1, dispensingUsersIdx = 1, validationUsersIdx=1;
+    int foundStockCount = 0, authorisedUsersIdx = 1, receivingUsersIdx = 1, dispensingUsersIdx = 1, validationUsersIdx=1;
     StringBuffer authorizedUsersHTML = new StringBuffer(),
             authorizedUsersJS = new StringBuffer(),
             authorizedUsersDB = new StringBuffer();
+
+    StringBuffer receivingUsersHTML = new StringBuffer(),
+            receivingUsersJS = new StringBuffer(),
+            receivingUsersDB = new StringBuffer();
 
     StringBuffer dispensingUsersHTML = new StringBuffer(),
     		dispensingUsersJS = new StringBuffer(),
@@ -271,6 +289,19 @@ private String addValidationUser(int userIdx, String userName, String sWebLangua
                 authorizedUserId = idTokenizer.nextToken();
                 authorizedUserObj = User.get(Integer.parseInt(authorizedUserId));
                 stock.addAuthorizedUser(authorizedUserObj);
+            }
+        }
+
+        // authorized users
+        User receivingUserObj;
+        String receivingUserIds = checkString(request.getParameter("EditReceivingUsers"));
+        if(receivingUserIds.length() > 0){
+            receivingUsersIdx = 1;
+            StringTokenizer idTokenizer = new StringTokenizer(receivingUserIds,"$");
+            while(idTokenizer.hasMoreTokens()){
+                receivingUserId = idTokenizer.nextToken();
+                receivingUserObj = User.get(Integer.parseInt(receivingUserId));
+                stock.addReceivingUser(receivingUserObj);
             }
         }
 
@@ -423,6 +454,22 @@ private String addValidationUser(int userIdx, String userName, String sWebLangua
                         authorizedUsersJS.append("rowAuthorizedUsers"+authorisedUsersIdx+"="+authorizedUserId+"£"+authorizedUserName+"$");
                         authorizedUsersHTML.append(addAuthorizedUser(authorisedUsersIdx,authorizedUserName,sWebLanguage));
                         authorizedUsersDB.append(authorizedUserId+"$");
+                    }
+                }
+
+                // receiving users
+                String receivingUserIds = checkString(serviceStock.getReceivingUserIds());
+                if(receivingUserIds.length() > 0){
+                    receivingUsersIdx = 1;
+                    StringTokenizer idTokenizer = new StringTokenizer(receivingUserIds,"$");
+                    while(idTokenizer.hasMoreTokens()){
+                        receivingUserId = idTokenizer.nextToken();
+                        receivingUserName = ScreenHelper.getFullUserName(receivingUserId);
+                        receivingUsersIdx++;
+
+                        receivingUsersJS.append("rowReceivingUsers"+receivingUsersIdx+"="+receivingUserId+"£"+receivingUserName+"$");
+                        receivingUsersHTML.append(addReceivingUser(receivingUsersIdx,receivingUserName,sWebLanguage));
+                        receivingUsersDB.append(receivingUserId+"$");
                     }
                 }
 
@@ -771,6 +818,24 @@ private String addValidationUser(int userIdx, String userName, String sWebLangua
                         </td>
                     </tr>
 
+                    <%-- Receiving users --%>
+                    <tr>
+                        <td class="admin" nowrap><%=getTran(request,"Web","Receivingusers",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2">
+                            <%-- add row --%>
+                            <input type="hidden" name="ReceivingUserIdAdd" value="">
+                            <input class="text" type="text" name="ReceivingUserNameAdd" size="<%=sTextWidth%>" value="" readonly>
+                           
+                            <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchReceivingUser('ReceivingUserIdAdd','ReceivingUserNameAdd');">
+                            <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="transactionForm.ReceivingUserIdAdd.value='';transactionForm.ReceivingUserNameAdd.value='';">
+                            <img src="<c:url value="/_img/icons/icon_add.gif"/>" class="link" alt="<%=getTranNoLink("Web","add",sWebLanguage)%>" onclick="addReceivingUser();">
+                            <table width="100%" cellspacing="1" id="tblReceivingUsers">
+                                <%=receivingUsersHTML%>
+                            </table>
+                            <input type="hidden" name="EditReceivingUsers" value="<%=receivingUsersDB%>">
+                        </td>
+                    </tr>
+
                     <%-- Dispensing users --%>
                     <tr>
                         <td class="admin" nowrap><%=getTran(request,"Web","dispensingusers",sWebLanguage)%>&nbsp;</td>
@@ -920,6 +985,10 @@ private String addValidationUser(int userIdx, String userName, String sWebLangua
             		<td class='text'><a href="javascript:printIncomingStockOperationsPerCategoryItem('<%=sEditStockUid %>')"><%=getTran(request,"web","serviceincomingstockoperationspercategoryitem.pdf",sWebLanguage)%></a></td>
             		<td class='text'><a href="javascript:printOutgoingStockOperationsPerService('<%=sEditStockUid %>')"><%=getTran(request,"web","serviceoutgoingstockoperationsperservice.pdf",sWebLanguage)%></a></td>
             	</tr>
+				<tr>
+            		<td class='text'><a href="javascript:printProductionReportPeriod('consumptionReport','<%=sEditStockUid %>')"><%=getTran(request,"web","production.consumptionReport.csv",sWebLanguage)%></a></td>
+            		<td class='text' colspan="4"><a href="javascript:printStockContent('<%=sEditStockUid %>')"><%=getTran(request,"web","production.stockContent.csv",sWebLanguage)%></a></td>
+            	</tr>
             	
             <%
             	if(MedwanQuery.getInstance().getConfigInt("enablePharmacyProductionReports",0)==1){
@@ -1040,6 +1109,9 @@ private String addValidationUser(int userIdx, String userName, String sWebLangua
   <%-- AUTHORIZED USERS FUNCTIONS ---------------------------------------------------------------%>
   var iAuthorizedUsersIdx = <%=authorisedUsersIdx%>;
   var sAuthorizedUsers = "<%=authorizedUsersJS%>";
+ 
+  var iReceivingUsersIdx = <%=receivingUsersIdx%>;
+  var sReceivingUsers = "<%=receivingUsersJS%>";
  
   var iDispensingUsersIdx = <%=dispensingUsersIdx%>;
   var sDispensingUsers = "<%=dispensingUsersJS%>";
@@ -1197,6 +1269,56 @@ private String addValidationUser(int userIdx, String userName, String sWebLangua
     }
   }
 
+  <%-- ADD RECEIVING USER --%>
+  function addReceivingUser(){
+    if(transactionForm.ReceivingUserIdAdd.value.length > 0){
+      iReceivingUsersIdx++;
+
+      sReceivingUsers+= "rowReceivingUsers"+iReceivingUsersIdx+"£"+
+                         transactionForm.ReceivingUserIdAdd.value+"£"+
+                         transactionForm.ReceivingUserNameAdd.value+"$";
+      var tr = tblReceivingUsers.insertRow(tblReceivingUsers);
+      tr.id = "rowReceivingUsers"+iReceivingUsersIdx;
+
+      var td = tr.insertCell(0);
+      td.width = 16;
+      td.innerHTML = "<a href='javascript:deleteReceivingUser(rowReceivingUsers"+iReceivingUsersIdx+")'><img src='<%=sCONTEXTPATH%>/_img/icons/icon_delete.gif' alt='<%=getTranNoLink("Web","delete",sWebLanguage)%>' border='0'></a>";
+      tr.appendChild(td);
+
+      td = tr.insertCell(1);
+      td.innerHTML = transactionForm.ReceivingUserNameAdd.value;
+      tr.appendChild(td);
+
+      <%-- update the hidden field containing just the userids --%>
+      transactionForm.EditReceivingUsers.value = transactionForm.EditReceivingUsers.value+transactionForm.ReceivingUserIdAdd.value+"$";
+
+      clearReceivingUserFields();
+ }
+    else{
+        alertDialog("web","firstselectaperson");
+        transactionForm.ReceivingUserNameAdd.focus();
+    }
+  }
+
+  <%-- CLEAR AUTHORIZED USER FIELDS --%>
+  function clearReceivingUserFields(){
+    transactionForm.ReceivingUserIdAdd.value = "";
+    transactionForm.ReceivingUserNameAdd.value = "";
+  }
+
+  <%-- DELETE AUTHORIZED USER --%>
+  function deleteReceivingUser(rowid){
+      if(yesnoDeleteDialog()){
+      sReceivingUsers = deleteRowFromArrayString(sReceivingUsers,rowid.id);
+
+      <%-- update the hidden field containing just the userids --%>
+      transactionForm.EditReceivingUsers.value = extractUserIds(sReceivingUsers);
+
+      tblReceivingUsers.deleteRow(rowid.rowIndex);
+      clearReceivingUserFields();
+    }
+  }
+
   <%-- EXTRACT USER IDS (between '=' and '£') --%>
   function extractUserIds(sourceString){
     var array = sourceString.split("$");
@@ -1227,6 +1349,9 @@ private String addValidationUser(int userIdx, String userName, String sWebLangua
   function doSave(){
     if(transactionForm.AuthorizedUserIdAdd.value.length > 0){
         addAuthorizedUser();
+    }
+    if(transactionForm.ReceivingUserIdAdd.value.length > 0){
+        addReceivingUser();
     }
     if(transactionForm.DispensingUserIdAdd.value.length > 0){
         addDispensingUser();
@@ -1394,6 +1519,11 @@ private String addValidationUser(int userIdx, String userName, String sWebLangua
     openPopup("/_common/search/searchUser.jsp&ts=<%=getTs()%>&ReturnUserID="+userUidField+"&ReturnName="+userNameField+"&displayImmatNew=no");
   }
 
+  <%-- popup : search authorized user --%>
+  function searchReceivingUser(userUidField,userNameField){
+    openPopup("/_common/search/searchUser.jsp&ts=<%=getTs()%>&ReturnUserID="+userUidField+"&ReturnName="+userNameField+"&displayImmatNew=no");
+  }
+
   <%-- popup : search dispensing user --%>
   function searchDispensingUser(userUidField,userNameField){
     openPopup("/_common/search/searchUser.jsp&ts=<%=getTs()%>&ReturnUserID="+userUidField+"&ReturnName="+userNameField+"&displayImmatNew=no");
@@ -1406,7 +1536,7 @@ private String addValidationUser(int userIdx, String userName, String sWebLangua
 
   <%-- DISPLAY PRODUCT STOCK MANAGEMENT --%>
   function displayProductStockManagement(serviceStockUid,serviceId){
-    window.location.href = "<%=sCONTEXTPATH%>/main.do?Page=pharmacy/manageProductStocks.jsp&Action=findShowOverview&EditServiceStockUid="+serviceStockUid+"&DisplaySearchFields=false&ServiceId="+serviceId+"&ts=<%=getTs()%>";
+    window.location.href = "<%=sCONTEXTPATH%>/main.do?Page=pharmacy/manageProductStocks.jsp&Action=findShowOverview&hideZeroLevel=<%=MedwanQuery.getInstance().getConfigString("defaultHideZeroLevelProductStocks","1")%>&EditServiceStockUid="+serviceStockUid+"&DisplaySearchFields=false&ServiceId="+serviceId+"&ts=<%=getTs()%>";
   }
 
   <%-- popup : search (external) supplier --%>
@@ -1505,6 +1635,10 @@ private String addValidationUser(int userIdx, String userName, String sWebLangua
 
   function printMonthlyConsumption(serviceStockUid){
 		openPopup("statistics/pharmacy/getMonthlyConsumption.jsp&ts=<%=getTs()%>&ServiceStockUid="+serviceStockUid,200,200);
+	  }
+
+  function printStockContent(serviceStockUid){
+		window.open("pharmacy/exportstock.jsp?ts=<%=getTs()%>&servicestockuid="+serviceStockUid);
 	  }
 
   function copyProducts(serviceStockUid){

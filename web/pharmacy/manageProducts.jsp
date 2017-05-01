@@ -279,13 +279,22 @@
         // Update pump
         if(request.getParameter("pump.price")!=null && request.getParameter("pump.quantity")!=null){
         	double pump_price = 0, pump_quantity = 0;
+        	String pump_date=checkString(request.getParameter("pump_date"));
         	try{
         		pump_price = Double.parseDouble(request.getParameter("pump.price"));
         		pump_quantity = Double.parseDouble(request.getParameter("pump.quantity"));
         		
         		if(pump_price > 0 && pump_quantity > 0){
         			Pointer.deleteLoosePointers("drugprice."+product.getUid()+".");
-        			Pointer.storePointer("drugprice."+product.getUid()+".0.0",pump_quantity+";"+pump_price);
+        			Pointer.deleteLoosePointers("pump."+product.getUid());
+        			if(pump_date.length()>0){
+            			Pointer.storePointer("drugprice."+product.getUid()+".0.0",pump_quantity+";"+pump_price,ScreenHelper.parseDate(pump_date));
+        				Pointer.storePointer("pump."+product.getUid(),pump_price+"",ScreenHelper.parseDate(pump_date));
+        			}
+        			else{
+            			Pointer.storePointer("drugprice."+product.getUid()+".0.0",pump_quantity+";"+pump_price);
+        				Pointer.storePointer("pump."+product.getUid(),pump_price+"");
+        			}
         		}
         	}
         	catch(Exception e){
@@ -679,13 +688,16 @@
                             <input disabled class="greytext" type="text" name="AverageUnitPrice" size="15" maxLength="15" value="<%=ScreenHelper.getPriceFormat(Double.parseDouble(sAverageUnitPrice))%>" onKeyUp="isNumber(this);">&nbsp;<%=MedwanQuery.getInstance().getConfigParam("currency","€")%>
                         </td>
                     </tr>
-                    
+                    <%
+                    	long day=24*3600*1000;
+                    %>
                     <%-- Last Year Average Price --%>
                     <tr>
                         <td class="admin" nowrap><%=getTran(request,"Web","reinitialize.lastyearsaverageprice",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="text" name="pump.price" size="15" maxLength="15" value="" onKeyUp="isNumber(this);">&nbsp;<%=MedwanQuery.getInstance().getConfigParam("currency","€")%>
-                            &nbsp, <%=getTran(request,"Web","quantity",sWebLanguage)%>: <input type="text" name="pump.quantity" size="15" maxLength="15" value="" onKeyUp="isNumber(this);">
+                            &nbsp; <%=getTran(request,"Web","quantity",sWebLanguage)+(Product.get(sEditProductUid)==null?"":" (max <b>"+Product.get(sEditProductUid).getTotalQuantityAvailable()+"</b>)")%>: <input type="text" name="pump.quantity" size="15" maxLength="15" value="" onKeyUp="isNumber(this);">
+                            &nbsp; <%=getTran(request,"Web","date",sWebLanguage)%>: <%=ScreenHelper.writeDateField("pump_date", "transactionForm", ScreenHelper.formatDate(new java.util.Date(new java.util.Date().getTime()-365*day)), true, false, sWebLanguage, sCONTEXTPATH) %>
                         </td>
                     </tr>
                     

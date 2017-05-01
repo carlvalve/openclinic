@@ -120,14 +120,8 @@
         sMyProjects+= sTmpProject+",";
 
         if(sTmpProject.equalsIgnoreCase(sSearchProject) || sTmpProject.equalsIgnoreCase(sProjectAccessAllSites)){
-            thisUser.personid = activePatient.personid;
-            thisUser.userid = checkString(user.userid);
-            thisUser.password = user.password;
-            thisUser.start = user.start;
-            thisUser.stop = user.stop;
-            thisUser.project = sTmpProject;
-
-            thisUser.initialize(thisUser.userid,thisUser.password);
+            thisUser=User.get(Integer.parseInt(user.userid));
+            break;
         }
     }
 
@@ -154,6 +148,8 @@
                 || parameter.parameter.equalsIgnoreCase("defaultpage")
                 || parameter.parameter.equalsIgnoreCase("defaultwicket")
                 || parameter.parameter.equalsIgnoreCase("organisationid")
+                || parameter.parameter.equalsIgnoreCase("remotelogin")
+                || parameter.parameter.equalsIgnoreCase("remotepassword")
                 || parameter.parameter.equalsIgnoreCase("automaticorganizationidvalidation")
                 || parameter.parameter.equalsIgnoreCase("medicalcentercode")
                 || parameter.parameter.equalsIgnoreCase("defaultserviceid")
@@ -362,7 +358,7 @@
                                 String sSelected = sDefaultPage;
 
                                 SAXReader xmlReader = new SAXReader();
-                                String sDefaultPageXML = MedwanQuery.getInstance().getConfigString("templateSource")+ "defaultPages.xml";
+                                String sDefaultPageXML = MedwanQuery.getInstance().getConfigString("templateSource")+ MedwanQuery.getInstance().getConfigString("defaultPagesXML","defaultPages.xml");
                                 Document documentPages;
 
                                 String sType, setSelected = "";
@@ -432,8 +428,26 @@
                         <input type='text' class='text' name='Editorganisationid' id='Editorganisationid' value='<%=thisUser.getParameter("organisationId").trim()%>'>
                     </td>
                 </tr>
+                <%
+                	if(MedwanQuery.getInstance().getConfigInt("enableRemoteLoginGMAO",0)==1){
+                %>
+                <%-- remotelogin --%>
+                <tr>
+                    <td class="admin"><%=getTran(request,"Web.UserProfile","remotelogingmao",sWebLanguage)%></td>
+                    <td class="admin2">
+                        <input type='text' class='text' name='Editremotelogingmao' id='Editremotelogingmao' value='<%=thisUser.getParameter("remotelogingmao").trim()%>'>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="admin"><%=getTran(request,"Web.UserProfile","remotepasswordgmao",sWebLanguage)%></td>
+                    <td class="admin2">
+                        <input type='password' class='text' name='Editremotepasswordgmao' id='Editremotepasswordgmao' value='<%=thisUser.getParameter("remotepasswordgmao").trim()%>'>
+                    </td>
+                </tr>
                 
                 <%
+                	}
                     if(MedwanQuery.getInstance().getConfigInt("enableMedicalCouncilLookup",0)==1){
                 %>
                 <tr>
@@ -455,7 +469,7 @@
                 <tr>
                     <td class="admin"><%=getTran(request,"Web.UserProfile","medicalCenterCode",sWebLanguage)%></td>
                     <td class="admin2">
-                        <input type='text' class='text' name='Editmedicalcentercode' id="medicalcentercode" value='<%=thisUser.getParameter("medicalcentercode").trim()%>' onKeyUp='isNumberLimited(this,0,99999);lookupMedicalCenter();' onBlur="checkMedicalCenterLength();">
+                        <input type='text' class='text' name='Editmedicalcentercode' id="medicalcentercode" value='<%=thisUser.getParameter("medicalcentercode").trim()%>' >
                         <span id="medicalCenterMsg"></span>
                     </td>
                 </tr>
@@ -550,18 +564,14 @@
           
           <%-- DO SAVE --%>
           function doSave(){
-            var medicalCenterOK = checkMedicalCenterLength();
             var aliasOK = (document.getElementById("aliasMsgOK").value.length==0?true:false);
 
-            if(medicalCenterOK && aliasOK){
+            if(aliasOK){
               transactionForm.Action.value = "save";
               transactionForm.submit();
             }
             else{
-              if(!aliasOK) transactionForm.Editalias.focus();
-              else{
-                transactionForm.Editmedicalcentercode.focus();
-              }
+              transactionForm.Editalias.focus();
             }
           }
 

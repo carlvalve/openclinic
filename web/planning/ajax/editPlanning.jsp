@@ -517,7 +517,6 @@
 			            		if(encounter!=null && encounter.getService()!=null && encounter.getService().code3!=null){
 			            			clinic=encounter.getService().code3;
 			            		}
-			            		System.out.println("clinic="+clinic);
 			            		ps.setString(1,"%;%;%;%;%;%;%;"+clinic+";%");
 			            		ResultSet rs = ps.executeQuery();
 			            		while(rs.next()){

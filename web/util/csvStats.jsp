@@ -6,6 +6,25 @@
                 java.text.SimpleDateFormat,
                 java.util.Date"%>
 <%@include file="/includes/validateUser.jsp"%>
+<%!
+	boolean hasPBFTransaction(String encounteruid,String userid){
+		boolean bHasTransactions = false;
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		try{
+			PreparedStatement ps = conn.prepareStatement("select * from transactions t, items i where t.serverid=i.serverid and t.transactionid=i.transactionid and "+
+					" i.type='be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID' and i.value='"+encounteruid+"' and t.userId="+userid+" and t.transactionType NOT IN ('be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_LAB_REQUEST','be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MIR2')");
+			ResultSet rs = ps.executeQuery();
+			bHasTransactions=rs.next();
+			rs.close();
+			ps.close();
+			conn.close();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return bHasTransactions;
+	}
+%>
                 
 <%
 	boolean done=false;
@@ -348,6 +367,26 @@
                 "  where a.personid = b.personid"+
                 "   order by userid";
     }
+	//*** UNDELIVERED RAW MATERIAL ORDERS ******************************************************
+    else if("undelivered.rwamaterial.orders".equalsIgnoreCase(sQueryType)){
+        query = "select oc_order_dateordered PO_DATE,"+
+        		" o.oc_order_productionorderuid PO_NUMBER,"+
+        		" pr.oc_product_code FG_ITEM_CODE,"+
+        		" pr2.oc_product_code RM_ITEM_CODE,"+
+        		" pr2.oc_product_name RM_ITEM_DESCRIPTION,"+
+        		" o.oc_order_packagesordered RM_ORDERED,"+
+        		" o.oc_order_packagesdelivered RM_DELIVERED,"+
+        		" o.oc_order_comment RM_COMMENTS"+
+        		" from oc_productorders o, oc_productionorders p, oc_productstocks s, oc_products pr, oc_productstocks s2, oc_products pr2 where"+
+        		" oc_order_packagesordered>oc_order_packagesdelivered and"+
+        		" oc_productionorder_id=oc_order_productionorderuid and"+
+        		" s.oc_stock_objectid=replace(oc_productionorder_targetproductstockuid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and"+
+        		" pr.oc_product_objectid=replace(s.oc_stock_productuid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and"+
+        		" s2.oc_stock_objectid=replace(oc_order_productstockuid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and"+
+        		" pr2.oc_product_objectid=replace(s2.oc_stock_productuid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and"+
+        		" oc_order_processed=0 and"+
+        		" oc_order_status is null";
+    }
 	//*** 5 - PRESTATIONS ************************************************
     else if("prestation.list".equalsIgnoreCase(sQueryType)){
         query = "select OC_PRESTATION_CODE CODE, OC_PRESTATION_DESCRIPTION DESCRIPTION, OC_PRESTATION_PRICE DEFAULTPRICE,"+
@@ -360,6 +399,7 @@
 	//*** 6 - DEBETS *****************************************************
     else if("debet.list".equalsIgnoreCase(sQueryType)){
         query = "select oc_debet_date as DATE, lastname as NOM, firstname as PRENOM, oc_prestation_description as PRESTATION,"+
+    			" oc_prestation_reftype as FAMILY, oc_prestation_invoicegroup as INVOICEGROUP,"+
                 "  oc_debet_quantity as QUANTITE,"+MedwanQuery.getInstance().convert("int","oc_debet_amount")+" as PATIENT,"+
                    MedwanQuery.getInstance().convert("int","oc_debet_insuraramount")+" as ASSUREUR, oc_label_value as SERVICE,"+
                 "  oc_debet_credited as ANNULE,replace(oc_debet_patientinvoiceuid,'1.','') as FACT_PATIENT, oc_encounter_type as ENCOUNTER_TYPE"+
@@ -521,17 +561,17 @@
 		long l = 24*3600*1000;
 		java.util.Date endDate = ScreenHelper.parseDate(request.getParameter("end"));
 		endDate.setTime(endDate.getTime()+l);
+		
+		String childServices = Service.getChildIdsAsString(service);
 
 		// search all the invoices from this period     
-		query = "select a.oc_encounter_objectid,a.oc_encounter_begindate,b.personid,b.firstname,b.lastname,b.gender,b.dateofbirth,b.comment5,c.address,c.sector,c.cell from oc_encounters_view a,adminview b,privateview c where"+
+		query = "select a.oc_encounter_serviceuid,a.oc_encounter_objectid,a.oc_encounter_serverid,a.oc_encounter_begindate,b.personid,b.firstname,b.lastname,b.gender,b.dateofbirth,b.comment5,c.address,c.sector,c.cell from oc_encounters_view a,adminview b,privateview c where"+
 		        " a.oc_encounter_patientuid=b.personid and"+
 				" b.personid=c.personid and"+
 				" a.oc_encounter_type in ("+encountertypes+") and"+
 		        " oc_encounter_begindate>="+ MedwanQuery.getInstance().convertStringToDate("'<begin>'")+" and"+
 		        " oc_encounter_begindate<"+ MedwanQuery.getInstance().convertStringToDate("'<end>'")+
-				(service.length()>0?" and oc_encounter_serviceuid='"+service+"'":"")+
-				(doctor.length()>0?" and exists (select * from transactions t, items i where t.serverid=i.serverid and t.transactionid=i.transactionid and "+
-				" i.type='be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID' and i.value='"+MedwanQuery.getInstance().getConfigString("serverId")+".'"+MedwanQuery.getInstance().concatSign()+"a.oc_encounter_objectid and t.userId="+doctor+" and t.transactionType NOT IN ('be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_LAB_REQUEST','be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MIR2'))":"")+
+				(service.length()>0?" and oc_encounter_serviceuid in ("+childServices+")":"")+
 		        " order by oc_encounter_begindate,oc_encounter_objectid";
         query = query.replaceAll("<begin>",request.getParameter("begin"))
         		     .replaceAll("<end>",ScreenHelper.formatDate(endDate));
@@ -545,7 +585,7 @@
 	    ServletOutputStream os = response.getOutputStream();
 	    
 	    // header
-		sResult.append("DATE;PATIENTID;FIRSTNAME;NAME;GENDER;AGE;BIRTHDATE;FAMILY_CHIEF;ADDRESS;DOCTOR;ICD10;DIAGNOSIS/RFE*\r\n");
+		sResult.append("DEPARTMENT;DATE;PATIENTID;FIRSTNAME;NAME;GENDER;AGE;BIRTHDATE;FAMILY_CHIEF;ADDRESS;DOCTOR;ICD10;DIAGNOSIS/RFE*;TREATMENT\r\n");
 	    
     	byte[] b = sResult.toString().getBytes();
         for(int n=0; n<b.length; n++){
@@ -554,7 +594,11 @@
         os.flush();
         int activeEncounterObjectId=-1;
 		while(rs.next()){
+			int encounterServerId = rs.getInt("oc_encounter_serverid");
 			int encounterObjectId=rs.getInt("oc_encounter_objectid");
+			if(doctor.length()>0 && !hasPBFTransaction(encounterServerId+"."+encounterObjectId, doctor)){
+				continue;
+			}
 			if(encounterObjectId==activeEncounterObjectId){
 				//We don't want to show the same encounter multiple times
 				continue;
@@ -562,6 +606,7 @@
 			activeEncounterObjectId=encounterObjectId;
 			
 			sResult = new StringBuffer();
+			sResult.append(getTranNoLink("service",checkString(rs.getString("oc_encounter_serviceuid")),sWebLanguage)+";");
 			sResult.append(ScreenHelper.formatDate(rs.getDate("oc_encounter_begindate"))+";");
 			sResult.append(rs.getString("personid")+";");
 			sResult.append(ScreenHelper.removeAccents(rs.getString("firstname").toUpperCase()).replaceAll("´", "'").replaceAll("`", "'")+";");
@@ -571,14 +616,32 @@
 			String age = "";
 			try{
 				int a = AdminPerson.getAge(dateofbirth);
-				if(a<5){
-					age = "0->4";
+				if(a<1){
+					age = "0->11m";
+				}
+				else if(a<5){
+					age = "12->59m";
+				}
+				else if(a<10){
+					age = "5->9";
+				}
+				else if(a<10){
+					age = "5->9";
 				}
 				else if(a<15){
-					age = "5->14";
+					age = "10->14";
+				}
+				else if(a<20){
+					age = "15->19";
+				}
+				else if(a<25){
+					age = "20->24";
+				}
+				else if(a<50){
+					age = "25->49";
 				}
 				else {
-					age = "15+";
+					age = "50+";
 				}
 			}
 			catch(Exception e){
@@ -604,13 +667,16 @@
 				address+=rs.getString("cell");	
 			}
 			sResult.append(address.toUpperCase()+";");
-			SortedSet hDiagnoses = new TreeSet();
+			SortedSet hAuthors = new TreeSet(),hDiagcodes = new TreeSet(),hDiaglabels = new TreeSet();
 			//Now add the diagnoses for the Encounter
 			if(checkString(request.getParameter("diagsicd10")).equalsIgnoreCase("1")){
 				Vector diagnoses = Diagnosis.selectDiagnoses("", "", MedwanQuery.getInstance().getConfigString("serverId")+"."+encounterObjectId, doctor, "", "", "", "", "", "", "", "icd10", "");
 				for(int n=0;n<diagnoses.size();n++){
 					Diagnosis diagnosis = (Diagnosis)diagnoses.elementAt(n);
-					hDiagnoses.add(User.getFullUserName(diagnosis.getAuthorUID())+";"+diagnosis.getCode().toUpperCase()+";"+MedwanQuery.getInstance().getDiagnosisLabel("icd10", diagnosis.getCode(), sWebLanguage));
+					hAuthors.add(User.getFullUserName(diagnosis.getAuthorUID()));
+					hDiagcodes.add(diagnosis.getCode().toUpperCase());
+					hDiaglabels.add(MedwanQuery.getInstance().getDiagnosisLabel("icd10", diagnosis.getCode(), sWebLanguage));
+					//hDiagnoses.add(User.getFullUserName(diagnosis.getAuthorUID())+";"+diagnosis.getCode().toUpperCase()+";"+MedwanQuery.getInstance().getDiagnosisLabel("icd10", diagnosis.getCode(), sWebLanguage));
 				}
 			}
 			if(checkString(request.getParameter("diagsrfe")).equalsIgnoreCase("1")){
@@ -618,7 +684,10 @@
 				for(int n=0;n<rfes.size();n++){
 					ReasonForEncounter rfe = (ReasonForEncounter)rfes.elementAt(n);
 					if(rfe.getCodeType().equalsIgnoreCase("icd10")){
-						hDiagnoses.add(User.getFullUserName(rfe.getAuthorUID())+";"+rfe.getCode().toUpperCase()+";*"+MedwanQuery.getInstance().getDiagnosisLabel("icd10", rfe.getCode(), sWebLanguage));
+						hAuthors.add(User.getFullUserName(rfe.getAuthorUID()));
+						hDiagcodes.add(rfe.getCode().toUpperCase());
+						hDiaglabels.add(MedwanQuery.getInstance().getDiagnosisLabel("icd10", rfe.getCode(), sWebLanguage));
+						//hDiagnoses.add(User.getFullUserName(rfe.getAuthorUID())+";"+rfe.getCode().toUpperCase()+";*"+MedwanQuery.getInstance().getDiagnosisLabel("icd10", rfe.getCode(), sWebLanguage));
 					}
 				}
 			}
@@ -626,24 +695,60 @@
 				HashSet hFree = Encounter.getFreeTextDiagnoses(MedwanQuery.getInstance().getConfigString("serverId")+"."+encounterObjectId);
 				Iterator iFree = hFree.iterator();
 				while(iFree.hasNext()){
-					hDiagnoses.add(((String)iFree.next()).toUpperCase().replaceAll("\n", " ").replaceAll("\r", ""));
+					String[] diaglabel=((String)iFree.next()).split(";");
+					hAuthors.add(diaglabel[0]);
+					hDiagcodes.add(diaglabel[1]);
+					hDiaglabels.add(diaglabel[2]);
+					//hDiagnoses.add(((String)iFree.next()).toUpperCase().replaceAll("\n", " ").replaceAll("\r", ""));
 				}
 			}
 			
-			if(hDiagnoses.size()==0){
-				sResult.append("-;-;-;");
+			if(hAuthors.size()==0){
+				sResult.append("-;");
 			}
-			Iterator iDiagnoses = hDiagnoses.iterator();
-			int c=0;
-			while(iDiagnoses.hasNext()){
-				if(c>0){
-					sResult.append("\r\n;;;;;;;;;");
+			else{
+				Iterator i = hAuthors.iterator();
+				while(i.hasNext()){
+					sResult.append(i.next());
+					if(i.hasNext()){
+						sResult.append(", ");
+					}
 				}
-				c++;
-				sResult.append(ScreenHelper.removeAccents((String)iDiagnoses.next()).replaceAll("´", "'").replaceAll("`", "'"));
+				sResult.append(";");
+			}
+			if(hDiagcodes.size()==0){
+				sResult.append("-;");
+			}
+			else{
+				Iterator i = hDiagcodes.iterator();
+				while(i.hasNext()){
+					sResult.append(i.next());
+					if(i.hasNext()){
+						sResult.append(", ");
+					}
+				}
+				sResult.append(";");
+			}
+			if(hDiaglabels.size()==0){
+				sResult.append("-;");
+			}
+			else{
+				Iterator i = hDiaglabels.iterator();
+				while(i.hasNext()){
+					sResult.append(i.next());
+					if(i.hasNext()){
+						sResult.append(", ");
+					}
+				}
+				sResult.append(";");
+			}
+			//Add Treatment here
+			Vector treatments = MedwanQuery.getInstance().getEncounterItems(encounterServerId+"."+encounterObjectId, "be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RMH_TREATMENT");
+			for(int n=0;n<treatments.size();n++){
+				ItemVO item = (ItemVO)treatments.elementAt(n);
+				sResult.append(ScreenHelper.removeAccents(item.getValue()).replaceAll("´", "'").replaceAll("`", "'").toUpperCase().replaceAll("\n", ", ").replaceAll("\r", "")+" ");
 			}
 			sResult.append("\r\n");
-			
 	    	b = sResult.toString().getBytes();
 	        for(int n=0; n<b.length; n++){
 	            os.write(b[n]);

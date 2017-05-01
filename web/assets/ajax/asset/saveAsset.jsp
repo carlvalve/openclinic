@@ -169,6 +169,8 @@
     String sEditAssetUID = checkString(request.getParameter("EditAssetUID"));
 
     String sCode          = checkString(request.getParameter("code")),
+           sGMDNCode      = checkString(request.getParameter("gmdncode")),
+           sNomenclature  = checkString(request.getParameter("nomenclature")),
            sParentUID     = checkString(request.getParameter("parentUID")),
            sDescription   = checkString(request.getParameter("description")),
            sSerialnumber  = checkString(request.getParameter("serialnumber")),
@@ -186,6 +188,27 @@
            sAccountingCode    = checkString(request.getParameter("accountingCode")),
            sGains             = checkString(request.getParameter("gains")),
            sLosses            = checkString(request.getParameter("losses")),
+           sComment1            = checkString(request.getParameter("comment1")),
+           sComment2            = checkString(request.getParameter("comment2")),
+           sComment3            = checkString(request.getParameter("comment3")),
+           sComment4            = checkString(request.getParameter("comment4")),
+           sComment5            = checkString(request.getParameter("comment5")),
+           sComment6            = checkString(request.getParameter("comment6")),
+           sComment7            = checkString(request.getParameter("comment7")),
+           sComment8            = checkString(request.getParameter("comment8")),
+           sComment9            = checkString(request.getParameter("comment9")),
+           sComment10            = checkString(request.getParameter("comment10")),
+           sComment11            = checkString(request.getParameter("comment11")),
+           sComment12            = checkString(request.getParameter("comment12")),
+           sComment13            = checkString(request.getParameter("comment13")),
+           sComment14            = checkString(request.getParameter("comment14")),
+           sComment15            = checkString(request.getParameter("comment15")),
+           sComment16            = checkString(request.getParameter("comment16")),
+           sComment17            = checkString(request.getParameter("comment17")),
+           sComment18            = checkString(request.getParameter("comment18")),
+           sComment19            = checkString(request.getParameter("comment19")),
+           sComment20            = checkString(request.getParameter("comment20")),
+           sServiceUid           = checkString(request.getParameter("serviceuid")),
 
            //*** loan ***
            sLoanDate                = checkString(request.getParameter("loanDate")),
@@ -205,6 +228,7 @@
         Debug.println("\n******************* assets/ajax/asset/saveAsset.jsp *******************");
         Debug.println("sEditAssetUID      : "+sEditAssetUID);
         Debug.println("sCode              : "+sCode);
+        Debug.println("sGMDN              : "+sGMDNCode);
         Debug.println("sParentUID         : "+sParentUID);
         Debug.println("sDescription       : "+sDescription);
         Debug.println("sSerialnumber      : "+sSerialnumber);
@@ -222,6 +246,27 @@
         Debug.println("sAccountingCode    : "+sAccountingCode);
         Debug.println("sGains             : "+sGains);
         Debug.println("sLosses            : "+sLosses);
+        Debug.println("sComment1          : "+sComment1);
+        Debug.println("sComment2          : "+sComment2);
+        Debug.println("sComment3          : "+sComment3);
+        Debug.println("sComment4          : "+sComment4);
+        Debug.println("sComment5          : "+sComment5);
+        Debug.println("sComment6          : "+sComment6);
+        Debug.println("sComment7          : "+sComment7);
+        Debug.println("sComment8          : "+sComment8);
+        Debug.println("sComment9          : "+sComment9);
+        Debug.println("sComment10          : "+sComment10);
+        Debug.println("sComment11          : "+sComment11);
+        Debug.println("sComment12          : "+sComment12);
+        Debug.println("sComment13          : "+sComment13);
+        Debug.println("sComment14          : "+sComment14);
+        Debug.println("sComment15          : "+sComment15);
+        Debug.println("sComment16          : "+sComment16);
+        Debug.println("sComment17          : "+sComment17);
+        Debug.println("sComment18          : "+sComment18);
+        Debug.println("sComment19          : "+sComment19);
+        Debug.println("sComment20          : "+sComment20);
+        Debug.println("sServiceUid         : "+sServiceUid);
         
         //*** loan ***
         Debug.println("loanDate                : "+sLoanDate);
@@ -242,7 +287,7 @@
     Asset asset = new Asset();
     String sMessage = "";
     
-    if(sEditAssetUID.length() > 0){
+    if(sEditAssetUID.length() > 0 ){
         asset.setUid(sEditAssetUID);
     }
     else{
@@ -262,6 +307,7 @@
     }
 
     asset.code = sCode;
+    asset.gmdncode = sGMDNCode;
     asset.supplierUid = sParentUID;
     sDescription = sDescription.replaceAll("\r","");
     sDescription = sDescription.replaceAll("\r\n","<br>");
@@ -324,11 +370,39 @@
     
     asset.setUpdateDateTime(ScreenHelper.getSQLDate(getDate()));
     asset.setUpdateUser(activeUser.userid);
-    
+	asset.setNomenclature(sNomenclature);
+    asset.setComment1(sComment1);
+    asset.setComment2(sComment2);
+    asset.setComment3(sComment3);
+    asset.setComment4(sComment4);
+    asset.setComment5(sComment5);
+    asset.setComment6(sComment6);
+    asset.setComment7(sComment7);
+    asset.setComment8(sComment8);
+    asset.setComment9(sComment9);
+    asset.setComment10(sComment10);
+    asset.setComment11(sComment11);
+    asset.setComment12(sComment12);
+    asset.setComment13(sComment13);
+    asset.setComment14(sComment14);
+    asset.setComment15(sComment15);
+    asset.setComment16(sComment16);
+    asset.setComment17(sComment17);
+    asset.setComment18(sComment18);
+    asset.setComment19(sComment19);
+    asset.setComment20(sComment20);
+    asset.setServiceuid(sServiceUid);
     
     boolean errorOccurred = asset.store(activeUser.userid);
     
     if(!errorOccurred){
+    	//now remove unlinked components
+   		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		PreparedStatement ps = conn.prepareStatement("delete from oc_assetcomponents where oc_component_assetuid=? and oc_component_nomenclature not in "+"('"+asset.getComment15().replaceAll(";", "','")+" ')");
+		ps.setString(1, asset.getUid());
+		ps.execute();
+		ps.close();
+		conn.close();
         sMessage = "<font color='green'>"+getTranNoLink("web","dataIsSaved",sWebLanguage)+"</font>";
     }
     else{

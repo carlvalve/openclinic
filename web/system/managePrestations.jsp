@@ -44,6 +44,7 @@
            sEditPrestationCategories  = checkString(request.getParameter("EditPrestationCategories")),
            sEditPrestationFamily  = checkString(request.getParameter("EditPrestationFamily")),
            sEditPrestationInvoiceGroup  = checkString(request.getParameter("EditPrestationInvoiceGroup")),
+           sEditPrestationATCCode  = checkString(request.getParameter("EditPrestationATCCode")),
            sEditPrestationTimeslot  = checkString(request.getParameter("EditPrestationTimeslot")),
            sEditPrestationCostcenter  = checkString(request.getParameter("EditPrestationCostcenter")),
            sEditPrestationMfpPercentage  = checkString(request.getParameter("EditPrestationMfpPercentage")),
@@ -63,6 +64,7 @@
            sEditPrestationProductionOrder = checkString(request.getParameter("EditPrestationProductionOrder")),
            sEditPrestationProductionOrderPaymentLevel = checkString(request.getParameter("EditPrestationProductionOrderPaymentLevel")),
            sEditPrestationProductionOrderPrescription = checkString(request.getParameter("EditPrestationProductionOrderPrescription")),
+           sEditPrestationProductionOrderRawMaterials = checkString(request.getParameter("EditPrestationProductionOrderRawMaterials")),
 		   sEditCareProvider = checkString(request.getParameter("EditCareProvider")),
 		   sEditReservedForServiceType = checkString(request.getParameter("EditReservedForServiceType"));
 		if(sEditPrestationVariablePrice.length()==0){
@@ -201,12 +203,14 @@
         prestation.setVariablePrice(Integer.parseInt(sEditPrestationVariablePrice));
         prestation.setPrestationClass(sEditPrestationClass);
         prestation.setServiceUid(sEditPrestationServiceUid);
+        prestation.setATCCode(sEditPrestationATCCode);
         prestation.setNomenclature(sEditPrestationNomenclature);
         prestation.setCostCenter(sEditPrestationCostcenter);
         prestation.setDhis2code(sEditPrestationDHIS2Code);
         prestation.setProductionOrder(sEditPrestationProductionOrder);
         prestation.setProductionOrderPaymentLevel(new Double(Double.parseDouble(sEditPrestationProductionOrderPaymentLevel)).intValue());
         prestation.setProductionOrderPrescription(new Double(Double.parseDouble(sEditPrestationProductionOrderPrescription)).intValue());
+        prestation.setProductionOrderRawMaterials(sEditPrestationProductionOrderRawMaterials);
         prestation.setFlag1(sEditPrestationFlag1);
         prestation.setReservedForServiceType(sEditReservedForServiceType);
         prestation.setTimeslot(sEditPrestationTimeslot);
@@ -414,6 +418,13 @@
 					                        </td>
 					                    </tr>
 					                    <tr>
+					                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","productionorderrawmaterials",sWebLanguage)%> <input type='button' class='button' name='addRawMaterial' onclick='addRawMaterials()' value='<%=getTran(request,"web","add",sWebLanguage)%>'/></td>
+					                        <td class="admin2">
+					                        	<div id='divRawMaterials'></div>
+					                            <input type="hidden" name="EditPrestationProductionOrderRawMaterials" id="EditPrestationProductionOrderRawMaterials" value="<%=prestation.getProductionOrderRawMaterials() %>"/>
+					                        </td>
+					                    </tr>
+					                    <tr>
 					                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","productionorderprescription",sWebLanguage)%></td>
 					                        <td class="admin2">
 					                        	<select class='text' name='EditPrestationProductionOrderPrescription' id='EditPrestationProductionOrderPrescription'>
@@ -484,6 +495,12 @@
                             <%
                         		}
                             %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="admin"><%=getTran(request,"web","atccode",sWebLanguage)%></td>
+                        <td class="admin2">
+                           	<input type="text" class="text" name="EditPrestationATCCode" size="10" maxlength="50" value="<%=prestation.getATCCode()%>">
                         </td>
                     </tr>
                     <tr>
@@ -864,16 +881,16 @@
 
   function deleteCategory(rowid){
       if(yesnoDeleteDialog()){
-      sCategory = deleteRowFromArrayString(sCategory,rowid.id.substring(11,rowid.id.length-1));
-      tblCategories.deleteRow(rowid.rowIndex);
-      clearCategoryFields();
+      	  sCategory = deleteRowFromArrayString(sCategory,rowid.id.substring(11,rowid.id.length));
+      	  tblCategories.deleteRow(rowid.rowIndex);
+      	clearCategoryFields();
     }
   }
 
   function deleteRowFromArrayString(sArray,rowid){
     var array = sArray.split(";");
     for(var i=0; i<array.length; i++){
-      if(array[i].indexOf(rowid) > -1){
+      if(i==rowid){
         array.splice(i,1);
       }
     }
@@ -914,5 +931,36 @@
     out.print("  searchPrestation();");
   }
   %>
+	function addRawMaterials(){
+	    openPopup("/_common/search/searchRawMaterial.jsp&ts=<%=getTs()%>&PopupWidth=600");
+	}
+	function addRawMaterialFunction(productstockid,quantity){
+		//Add the product to the raw materials list
+		if(document.getElementById("EditPrestationProductionOrderRawMaterials").value.length>0){
+			document.getElementById("EditPrestationProductionOrderRawMaterials").value=document.getElementById("EditPrestationProductionOrderRawMaterials").value+",";
+		}
+		document.getElementById("EditPrestationProductionOrderRawMaterials").value=document.getElementById("EditPrestationProductionOrderRawMaterials").value+productstockid+":"+quantity;
+		loadRawMaterialsFunction();
+	}
+	function deleteRawMaterial(id){
+	    if(confirm("<%=getTran(null,"Web","AreYouSure",sWebLanguage)%>")){
+			document.getElementById("EditPrestationProductionOrderRawMaterials").value=document.getElementById("EditPrestationProductionOrderRawMaterials").value.replace(id,'');
+			document.getElementById("EditPrestationProductionOrderRawMaterials").value=document.getElementById("EditPrestationProductionOrderRawMaterials").value.replace(',,',',');
+			loadRawMaterialsFunction();
+	    }
+	}
+	function loadRawMaterialsFunction(){
+	    var params = "materials="+document.getElementById("EditPrestationProductionOrderRawMaterials").value;
+      var url = '<c:url value="/pharmacy/loadRawMaterials.jsp"/>?ts='+new Date().getTime();
+      new Ajax.Request(url,{
+        method: "POST",
+        parameters: params,
+        onSuccess: function(resp){
+          document.getElementById('divRawMaterials').innerHTML = resp.responseText;
+        }
+      });
+	}
+
+  window.setTimeout('loadRawMaterialsFunction();',500);
 </script>
 <%=writeJSButtons("transactionForm","saveButton")%>

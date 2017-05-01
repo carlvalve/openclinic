@@ -25,7 +25,7 @@
                 	if(main.length()>0 && main.equalsIgnoreCase(productStock.getServiceStockUid())){
                 		continue;
                 	}
-                	name=productStock.getProduct().getName();
+                	name=productStock.getProduct().getCode()+" - "+productStock.getProduct().getName();
                 }
                 counter++;
                 out.write("<li>");

@@ -33,6 +33,8 @@
             <td>
                 <%
                     Hashtable hMenu = new Hashtable();
+	                hMenu.put(getTran(request,"web","manageAssetNomenclature",sWebLanguage),"main.do?Page=system/manageAssetNomenclature.jsp");
+	                hMenu.put(getTran(request,"web","manageAssetComponentNomenclature",sWebLanguage),"main.do?Page=system/manageAssetComponentNomenclature.jsp");
 	                hMenu.put(getTran(request,"web.manage","ManageCategories",sWebLanguage),"main.do?Page=system/manageCategories.jsp");
 	                hMenu.put(getTran(request,"web.manage","ManageDrugCategories",sWebLanguage),"main.do?Page=system/manageDrugCategories.jsp");
                     hMenu.put(getTran(request,"web.manage","ManageServices",sWebLanguage),"main.do?Page=system/manageServices.jsp");
@@ -70,6 +72,7 @@
                     hMenu.put(getTran(request,"web.manage","managePlanningResourceAccess",sWebLanguage),"main.do?Page=system/managePlanningResourceAccess.jsp");
                     hMenu.put(getTran(request,"web.manage","managePlanningResourceLocks",sWebLanguage),"main.do?Page=planning/manageResourceLocks.jsp");
                     hMenu.put(getTran(request,"web.manage","manageInsurerPrestations",sWebLanguage),"main.do?Page=system/manageInsurerPrestations.jsp");
+                    hMenu.put(getTran(request,"web.manage","managePrestationATCMappings",sWebLanguage),"main.do?Page=system/managePrestationATCMappings.jsp");
 
                     out.print(ScreenHelper.writeTblHeader(getTran(request,"Web","Manage",sWebLanguage),sCONTEXTPATH)+
                     		  sortMenu(hMenu)+

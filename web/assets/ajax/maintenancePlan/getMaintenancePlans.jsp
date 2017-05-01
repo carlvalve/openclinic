@@ -33,6 +33,9 @@
     // search-criteria
     String sName     = checkString(request.getParameter("name")),
            sAssetUID = checkString(request.getParameter("assetUID")),
+           sType	 = checkString(request.getParameter("type")),
+           sShowInactive        = checkString(request.getParameter("showinactive")),
+           sServiceUid	 = checkString(request.getParameter("serviceuid")),
            sOperator = checkString(request.getParameter("operator"));
 
     /// DEBUG /////////////////////////////////////////////////////////////////////////////////////
@@ -40,6 +43,9 @@
         Debug.println("\n********** assets/ajax/maintenancePlan/getMaintenancePlans.jsp *********");
         Debug.println("sName     : "+sName);
         Debug.println("sAssetUID : "+sAssetUID);
+        Debug.println("sShowInactive : "+sShowInactive);
+        Debug.println("sServiceUid : "+sServiceUid);
+        Debug.println("sType	 : "+sType);
         Debug.println("sOperator : "+sOperator+"\n");
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -49,6 +55,8 @@
     findObject.name = sName;
     findObject.assetUID = sAssetUID;
     findObject.operator = sOperator;
+    findObject.type 	= sType;
+    findObject.setTag(sServiceUid);
 
     List plans = MaintenancePlan.getList(findObject);
     String sReturn = "";
@@ -60,14 +68,31 @@
         // sort on plans.code
         for(int i=0; i<plans.size(); i++){
             plan = (MaintenancePlan)plans.get(i);
-
+            Asset asset=plan.getAsset();
+            if(sShowInactive.equalsIgnoreCase("false") && plan.isInactive()){
+            	continue;
+            }
+            boolean bAuthorized=true;
+            if(asset!=null){
+	            bAuthorized=asset.isAuthorizedUser(activeUser.userid);
+	            if(!bAuthorized && !activeUser.isAdmin()){
+	            	continue;
+	            }
+            }
+            String sOverdue="";
+            if(plan.isOverdue()){
+            	sOverdue=" <img height='14' src='"+sCONTEXTPATH+"/_img/icons/icon_warning.gif'/>";
+            }
             hSort.put(plan.name+"="+plan.getUid(),
                       " onclick=\"displayMaintenancePlan('"+plan.getUid()+"');\">"+
-                      "<td class='hand' style='padding-left:5px'>"+checkString(plan.name)+"</td>"+
-                      "<td class='hand' style='padding-left:5px'>"+getAssetCode(plan.assetUID)+"</td>"+
+                      "<td class='hand' style='padding-left:5px'>["+plan.assetUID+"] "+getAssetCode(plan.assetUID)+"</td>"+
+                      "<td class='hand' style='padding-left:5px'>"+getTranNoLink("admin.nomenclature.asset",checkString(plan.getAssetNomenclature()),sWebLanguage)+(!bAuthorized?" <img src='"+sCONTEXTPATH+"/_img/icons/icon_forbidden.png'/>":"")+"</td>"+
+                      "<td class='hand' style='padding-left:5px'>"+getTranNoLink("maintenanceplan.type",checkString(plan.getType()),sWebLanguage)+"</td>"+
+                      "<td class='hand' style='padding-left:5px'>"+checkString(plan.getName())+"</td>"+
                       "<td class='hand' style='padding-left:5px'>"+(plan.startDate!=null?ScreenHelper.stdDateFormat.format(plan.startDate):"")+"</td>"+
-                      "<td class='hand' style='padding-left:5px'>"+plan.frequency+"&nbsp;"+getTran(request,"web","days",sWebLanguage)+"</td>"+
-                      "<td class='hand' style='padding-left:5px'>"+checkString(plan.operator)+"</td>"+
+                      "<td class='hand' style='padding-left:5px'>"+getTran(request,"maintenanceplan.frequency",plan.frequency,sWebLanguage)+"</td>"+
+                      "<td class='hand' style='padding-left:5px'>"+ScreenHelper.formatDate(plan.getNextOperationDate())+sOverdue+"</td>"+
+                      (sShowInactive.equalsIgnoreCase("true")?"<td class='hand'>"+ScreenHelper.formatDate(plan.getEndDate())+"</td>":"")+
                      "</tr>");
         }
         
@@ -95,11 +120,20 @@
 <table width="100%" class="sortable" id="searchresults" cellspacing="1" style="border:none;">
     <%-- header --%>
     <tr class="admin" style="padding-left:1px;">    
-        <td width="25%" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.assets","name",sWebLanguage))%></td>
-        <td width="10%" nowrap><asc><%=HTMLEntities.htmlentities(getTran(request,"web.assets","asset",sWebLanguage))%></asc></td>
-        <td width="7%" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.assets","startDate",sWebLanguage))%></td>
-        <td width="7%" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.assets","frequency",sWebLanguage))%></td>
-        <td width="*" nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.assets","operator",sWebLanguage))%></td>
+        <td nowrap><asc><%=HTMLEntities.htmlentities(getTran(request,"web.assets","asset",sWebLanguage))%></asc></td>
+        <td nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.assets","nomenclature",sWebLanguage))%></td>
+        <td nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.assets","type",sWebLanguage))%></td>
+        <td nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.assets","name",sWebLanguage))%></td>
+        <td nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.assets","startDate",sWebLanguage))%></td>
+        <td nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.assets","frequency",sWebLanguage))%></td>
+        <td nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.assets","nextMaintenanceDate",sWebLanguage))%></td>
+        <%
+        	if(sShowInactive.equalsIgnoreCase("true")){
+        %>
+		        <td nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.assets","endDate",sWebLanguage))%></td>
+        <%
+        	}
+        %>
     </tr>
     
     <tbody class="hand"><%=sReturn%></tbody>

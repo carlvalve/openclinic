@@ -153,7 +153,7 @@
             session.setAttribute("PrevUsedDocument",sEditProductStockDocumentUid);
         }
 
-        //*** create product ***
+        //*** create operation ***
         ProductStockOperation operation = new ProductStockOperation();
         operation.setUid(sEditOperationUid);
         operation.setDescription(sEditOperationDescr);
@@ -396,7 +396,7 @@
 	                        				expiredProductStockBatches+= "£";
 	                        			}
 	                        			
-	                            		out.print("<tr><td><input onclick='totalStock="+(productStock.getLevel()-expiredQuantity)+";setMaxQuantityValue("+(iMaxQuantity<(productStock.getLevel()-expiredQuantity)?iMaxQuantity:(productStock.getLevel()-expiredQuantity))+");showBatches(false);' type='radio' "+(serviceStock.getUid().equalsIgnoreCase((String)session.getAttribute("activeServiceStockUid"))||availableProductStocks.size()==1?"checked":"")+" name='EditProductStockUid' value='"+productStock.getUid()+"'><font "+((productStock.getLevel()-expiredQuantity)<iMaxQuantity?"color='red'>":">")+serviceStock.getName()+" ("+(productStock.getLevel()-expiredQuantity)+")</font></td></tr>");
+	                            		out.print("<tr><td><input onclick='totalStock="+(productStock.getLevel()-expiredQuantity)+";setMaxQuantityValue("+(iMaxQuantity<(productStock.getLevel()-expiredQuantity)?iMaxQuantity:(productStock.getLevel()-expiredQuantity))+");showBatches(true,false);' type='radio' "+(serviceStock.getUid().equalsIgnoreCase((String)session.getAttribute("activeServiceStockUid"))||availableProductStocks.size()==1?"checked":"")+" name='EditProductStockUid' value='"+productStock.getUid()+"'><font "+((productStock.getLevel()-expiredQuantity)<iMaxQuantity?"color='red'>":">")+serviceStock.getName()+" ("+(productStock.getLevel()-expiredQuantity)+")</font></td></tr>");
 										
 	                            		productStockBatches+= productStock.getUid();
 										expiredProductStockBatches+= productStock.getUid();
@@ -560,17 +560,16 @@
 			                            
 			                            <%-- SOURCE DESTINATION SELECTOR --%>
 			                            <span id="SrcDestSelector" style="visibility:hidden;">
-			                                <input class="text" type="text" name="EditSrcDestName" id="EditSrcDestName" size="<%=sTextWidth%>" value="<%=sSelectedSrcDestName%>" onchange="if(document.getElementById('EditSrcDestType')[document.getElementById('EditSrcDestType').selectedIndex].value=='servicestock'){showBatches(false);}" readonly>
+			                                <input class="text" type="text" name="EditSrcDestName" id="EditSrcDestName" size="<%=sTextWidth%>" value="<%=sSelectedSrcDestName%>" onchange="if(document.getElementById('EditSrcDestType')[document.getElementById('EditSrcDestType').selectedIndex].value=='servicestock'){showBatches(true,false);}" readonly>
 			                                <span id="SearchSrcDestButtonDiv"><%-- filled by JS below --%></span>
 			                                <input type="hidden" name="EditSrcDestUid" id="EditSrcDestUid" value="<%=sSelectedSrcDestUid%>">
 			                            </span>
 			                        </td>
 			                    </tr>
-						        
 			                    <%-- OPERATION DATE --%>
 			                    <tr>
 			                        <td class="admin"><%=getTran(request,"Web","date",sWebLanguage)%>&nbsp;*</td>
-			                        <td class="admin2"><%=writeDateField("EditOperationDate","transactionForm",sSelectedOperationDate,sWebLanguage)%></td>
+			                        <td class="admin2"><%=activeUser.getAccessRight("pharmacy.issueproductsinpast.select")?ScreenHelper.writeDateField("EditOperationDate","transactionForm",sSelectedOperationDate,true,false,sWebLanguage,sCONTEXTPATH):"<input type='text' size='10' readonly name='EditOperationDate' value='"+sSelectedOperationDate+"'/>"%></td>
 			                    </tr>
 			                    
 			                    <%-- ENCOUNTER --%>
@@ -698,7 +697,7 @@
 
                   <%-- DISPLAY SOURCE DESTINATION SELECTOR --%>
                   function displaySrcDestSelector(){
-                	if(document.getElementById('EditOperationDescr') && document.getElementById('EditOperationDescr').value!='medicationdelivery.4' && document.getElementById("saveButton")){
+                	if(document.getElementById('EditOperationDescr') && '<%=MedwanQuery.getInstance().getConfigString("productstockoperationsonexpireddrugs","medicationdelivery.4,medicationdelivery.2")%>'.indexOf(document.getElementById('EditOperationDescr').value)<0 && document.getElementById("saveButton")){
                   	  if(availableLevel<=0){
 	            		  //Hide save button
 	            		  if(document.getElementById("saveButton")){
@@ -868,10 +867,13 @@
                     }
                         
 					if(document.getElementById('EditOperationDescr') && document.getElementById('EditOperationDescr').value=='<%=MedwanQuery.getInstance().getConfigString("productstockoperationexpireddrugsevacuation","medicationdelivery.4")%>'){
-					  showBatches(true);
+					  showBatches(false,true);
+					}
+					else if(document.getElementById('EditOperationDescr') && '<%=MedwanQuery.getInstance().getConfigString("productstockoperationsonexpireddrugs","medicationdelivery.4,medicationdelivery.2")%>'.indexOf(document.getElementById('EditOperationDescr').value)>=0){
+					  showBatches(true,true);
 					}
 					else{
-					  showBatches(false);
+					  showBatches(true,false);
 					}
 						
 				    prevSrcDestType = srcDestType;
@@ -887,8 +889,10 @@
                 <%-- EDIT BUTTONS --%>
                 <%=ScreenHelper.alignButtonsStart()%>
                     <%
-                        if(sAction.equals("showDetailsNew") && availableProductStocks.size()>0 ){
-                            %><input class="button" type="button" name="saveButton" id="saveButton" value='<%=getTranNoLink("Web","deliver",sWebLanguage)%>' onclick="doDeliver();"><%
+                        if(sAction.equals("showDetailsNew") && (availableProductStocks.size()>0) ){
+                            %>
+                            	<input class="button" type="button" name="saveButton" id="saveButton" value='<%=getTranNoLink("Web","deliver",sWebLanguage)%>' onclick='doDeliver();'/>
+                            <%
                         }
                     %>
                     <input type="button" class="button" name="closeButton" value='<%=getTranNoLink("Web","close",sWebLanguage)%>' onclick='window.close();'>
@@ -1064,7 +1068,7 @@
         onSuccess: function(resp){
           var label = eval('('+resp.responseText+')');
           batches = label.batches;
-          showBatches(false);
+          showBatches(true,false);
         }
       });
   }
@@ -1104,7 +1108,7 @@
   }
 
   <%-- SHOW BATCHES --%>
-  function showBatches(expired){
+  function showBatches(notexpired,expired){
 	var remainingQuantity = totalStock;
     var ih = "<table>";
     var productStockUid = "";
@@ -1120,7 +1124,44 @@
 	}
 	
 	var bFound = false;
-	if(productStockUid.length>0 && !expired){
+    if(productStockUid.length>0 && expired){
+  	  var b = expiredbatches.split("£");
+  	  for(n=0; n<b.length; n++){
+  		var c = b[n].split("$");
+  		if(c[0]==productStockUid){
+  		  for(q=1; q<c.length; q++){
+  			var d = c[q].split(";");
+  			ih+= "<tr><td><input onclick='setMaxQuantityValue("+d[2]+");' type='radio' name='EditBatchUid' value='"+d[0]+"' ";
+  			if(q==1){
+  			  bFound = true;
+  			  ih+= "checked";
+  			    <%
+  			    	if(bLockedMaxQuantity){
+  			    %>
+  					  setMaxQuantityValue(Math.min(d[2],setMaxQuantity));
+  				<%
+  			    	}
+  			    	else{
+  				%>
+  					  setMaxQuantityValue(d[2]);
+  				<%
+  			    	}
+  				%>
+  			}
+  			
+  			if(document.getElementById("EditUnitsChanged").value*1>d[2]*1){
+  			  ih+=" />"+d[1]+" (<font color='red'><b>"+d[2]+"</b></font> - exp. "+d[3]+") <i>"+d[4]+"</i><img src='<c:url value="/_img/icons/icon_warning.gif"/>'/></td></tr>";
+  			}
+  			else{
+  			  ih+=" />"+d[1]+" ("+d[2]+" - exp. "+d[3]+") <i>"+d[4]+"</i><img src='<c:url value="/_img/icons/icon_warning.gif"/>'/></td></tr>";
+  			}
+  			
+  			remainingQuantity-= d[2];
+  		  }
+  		}
+  	  } 
+    }
+	if(productStockUid.length>0 && notexpired){
 	  var b = batches.split("£");
 	  for(n=0; n<b.length; n++){
 	    var c = b[n].split("$");
@@ -1156,7 +1197,7 @@
 			%>
 			}
 			if(document.getElementById("EditUnitsChanged").value*1>d[2]*1){
-			  ih+= " />"+d[1]+" (<font color='red'><b>"+d[2]+"</b></font> - exp. "+d[3]+") <i>"+d[4]+"</i><br/>";
+			  ih+= " />"+d[1]+" (<font color='red'><b>"+d[2]+"</b></font> - exp. "+d[3]+") <i>"+d[4]+"</i></td></tr>";
 			}
 			else{
 			  ih+= " />"+d[1]+" ("+d[2]+" - exp. "+d[3]+") <i>"+d[4]+"</i></td></tr>";
@@ -1200,43 +1241,6 @@
 		}
 		ih+=" />? ("+remainingQuantity+")";
 	  }
-    }
-    else if(productStockUid.length>0 && expired){
-	  var b = expiredbatches.split("£");
-	  for(n=0; n<b.length; n++){
-		var c = b[n].split("$");
-		if(c[0]==productStockUid){
-		  for(q=1; q<c.length; q++){
-			var d = c[q].split(";");
-			ih+= "<input onclick='setMaxQuantityValue("+d[2]+");' type='radio' name='EditBatchUid' value='"+d[0]+"' ";
-			if(q==1){
-			  bFound = true;
-			  ih+= "checked";
-			    <%
-			    	if(bLockedMaxQuantity){
-			    %>
-					  setMaxQuantityValue(Math.min(d[2],setMaxQuantity));
-				<%
-			    	}
-			    	else{
-				%>
-					  setMaxQuantityValue(d[2]);
-				<%
-			    	}
-				%>
-			}
-			
-			if(document.getElementById("EditUnitsChanged").value*1>d[2]*1){
-			  ih+=" />"+d[1]+" (<font color='red'><b>"+d[2]+"</b></font> - exp. "+d[3]+") <i>"+d[4]+"</i><br/>";
-			}
-			else{
-			  ih+=" />"+d[1]+" ("+d[2]+" - exp. "+d[3]+") <i>"+d[4]+"</i></td></tr>";
-			}
-			
-			remainingQuantity-= d[2];
-		  }
-		}
-	  } 
     }
 	ih+="</table>"
     document.getElementById("batch").innerHTML = ih;

@@ -263,7 +263,6 @@
                         }
                         else{
                             String sMenuXML = MedwanQuery.getInstance().getConfigString("MenuXMLFile");
-                            if(sMenuXML.length()==0) sMenuXML = "menu.xml";
                             String sMenuXMLUrl = "http://"+request.getServerName()+request.getRequestURI().replaceAll(request.getServletPath(),"")+"/"+sAPPDIR+"/_common/xml/"+sMenuXML+"&ts="+getTs();
 
                             // Check if menu file exists, else use file at templateSource location.
@@ -448,6 +447,14 @@
 	    openPopup("/pacs/studyList.jsp&ts=<%=getTs()%>",800,400).focus();
 	  }
 	    
+  function doPanorama(){
+	    openPopup("/ikirezi/panorama.jsp&ts=<%=getTs()%>",800,550).focus();
+	  }
+	    
+  function doAssistant(){
+	    openPopup("/ikirezi/assistant.jsp&type=investigations&ts=<%=getTs()%>",500,300).focus();
+	  }
+	    
   function uploadDocs(){
 	    openPopup("/util/uploadDocuments.jsp&ts=<%=getTs()%>",400,400).focus();
 	  }
@@ -495,9 +502,13 @@
         window.location.href = url;
       }
     else if(barcode.substring(0,1)=="8"){
-      url = "<c:url value='/main.do'/>?Page=financial/patientCreditEdit.jsp&ts=<%=ScreenHelper.getTs()%>&LoadPatientId=true&FindPatientCreditUID="+barcode.substring(1);
-      window.location.href = url;
-    }
+        url = "<c:url value='/main.do'/>?Page=financial/patientCreditEdit.jsp&ts=<%=ScreenHelper.getTs()%>&LoadPatientId=true&FindPatientCreditUID="+barcode.substring(1);
+        window.location.href = url;
+      }
+    else if(barcode.substring(0,1)=="9"){
+        url = "<c:url value='/main.do'/>?Page=pharmacy/manageProductStockDocuments.jsp&ts=<%=ScreenHelper.getTs()%>&doaction=edit&documentuid="+barcode.substring(1);
+        window.location.href = url;
+      }
   }
 
   function executeLocalDeviceCommand(devicetype,examtype){

@@ -63,7 +63,10 @@
 						
 						%>
 						    <tr class="admin">
-						      <td align="center"><a href="javascript:openPopup('healthrecord/findRFE.jsp&PopupWidth=700&PopupHeight=400&field=rfe&encounterUid=<%=activeEncounterUid%>&ts=<%=getTs()%>',700,400);void(0);"><%=getTran(request,"openclinic.chuk","rfe",sWebLanguage)%> <%=getTran(request,"Web.Occup","ICPC-2",sWebLanguage)%>/<%=getTran(request,"Web.Occup","ICD-10",sWebLanguage)%></a></td>
+						      <td align="center">
+						      	<a href="javascript:openPopup('healthrecord/findRFE.jsp&PopupWidth=700&PopupHeight=400&field=rfe&encounterUid=<%=activeEncounterUid%>&ts=<%=getTs()%>',700,400);void(0);"><%=getTran(request,"openclinic.chuk","rfe",sWebLanguage)%> <%=getTran(request,"Web.Occup","ICPC-2",sWebLanguage)%>/<%=getTran(request,"Web.Occup","ICD-10",sWebLanguage)%></a>
+				            	<a href="javascript:doPanorama();"><img src="<c:url value='/_img/icons/icon_panorama.gif'/>" class="link" title="<%=getTranNoLink("ikirezi","panorama",sWebLanguage)%>" style="vertical-align:-4px;"></a>
+						      </td>
 						    </tr>
 						    <tr>
 						      <td id="rfe"><%=sRfe%></td>

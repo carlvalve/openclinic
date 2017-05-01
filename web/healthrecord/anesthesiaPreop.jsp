@@ -284,21 +284,13 @@
             	<%=getLabel(request,"openclinic.chuk","openclinic.anesthesia.asa",sWebLanguage,"class r1")%>																										      			
                 <select <%=setRightClick("ITEM_TYPE_ANESTHESIA_CLASS_ASA")%> class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_CLASS_ASA" property="itemId"/>]>.value" class="text">
                 	<option/>
-                	<option value='1'>1</option>
-                	<option value='1'>2</option>
-                	<option value='1'>3</option>
-                	<option value='1'>4</option>
-                	<option value='1'>5</option>
-                	<option value='1'>6</option>
+                	<%=ScreenHelper.writeSelect(request, "asa", ((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_CLASS_ASA"), sWebLanguage) %>
                 </select>
                 &nbsp;
             	<%=getLabel(request,"openclinic.chuk","openclinic.anesthesia.mallampati",sWebLanguage,"class r1")%>
                 <select <%=setRightClick("ITEM_TYPE_ANESTHESIA_CLASS_MALLAMPATI")%> class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_CLASS_MALLAMPATI" property="itemId"/>]>.value" class="text">
                 	<option/>
-                	<option value='1'>1</option>
-                	<option value='1'>2</option>
-                	<option value='1'>3</option>
-                	<option value='1'>4</option>
+                	<%=ScreenHelper.writeSelect(request, "mallampati", ((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_CLASS_MALLAMPATI"), sWebLanguage) %>
                 </select>
                 &nbsp;
                 &nbsp;<textarea onKeyup="resizeTextarea(this,10);limitChars(this,4000);" <%=setRightClick("ITEM_TYPE_ANESTHESIA_CLASSCOMMENT")%> class="text" cols="80" rows="1" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_CLASSCOMMENT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_CLASSCOMMENT" property="value"/></textarea>

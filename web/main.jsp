@@ -65,7 +65,7 @@
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0" id="holder">
     <tr>
-        <td colspan="2" style="vertical-align:top;" id="header"><%ScreenHelper.setIncludePage("/_common/header.jsp",pageContext);%></td>
+        <td colspan="2" style="vertical-align:top;" id="header"><%ScreenHelper.setIncludePage(customerInclude("/_common/header.jsp"),pageContext);%></td>
     </tr>
     <% if(!"datacenter".equalsIgnoreCase((String)session.getAttribute("edition"))){ %>
     <tr class="menu_navigation">
@@ -73,7 +73,7 @@
             <%ScreenHelper.setIncludePage("/_common/navigation.jsp",pageContext);%>
         </td>
         <td align="right" style="padding-top:3px;">
-            <%ScreenHelper.setIncludePage("/_common/iconsRight.jsp",pageContext);%>
+            <%ScreenHelper.setIncludePage(customerInclude("/_common/iconsRight.jsp"),pageContext);%>
         </td>
     </tr>
     <% } %>
@@ -91,7 +91,7 @@ if(sPage.length() > 0 && !sPage.equalsIgnoreCase("null")){
     ScreenHelper.setIncludePage(customerInclude("/"+sPage),pageContext);
 } 
 else{
-    ScreenHelper.setIncludePage("/_common/start.jsp",pageContext);
+    ScreenHelper.setIncludePage(customerInclude("/_common/start.jsp"),pageContext);
 }
                             %>
                         </td>

@@ -225,9 +225,13 @@
 								
 								// display one document
 								out.print("<tr class='listText'>"+
-								           "<td><input type='button' class='button' value='"+getTranNoLink("web","select",sWebLanguage)+"' onclick='selectDocument(\""+document.getUid()+"\",\""+getTran(request,"operationdocumenttypes",sType,sWebLanguage)+"\",\""+document.getDestinationuid()+"\",\""+sDestination+"\",\""+sSource+"\",\""+document.getSourceuid()+"\");'/></td>"+
+										   (sReference.equalsIgnoreCase("#LOCK#")?"<td/>":
+								           "<td><input type='button' class='button' value='"+getTranNoLink("web","select",sWebLanguage)+"' onclick='selectDocument(\""+document.getUid()+"\",\""+getTran(request,"operationdocumenttypes",sType,sWebLanguage)+"\",\""+document.getDestinationuid()+"\",\""+sDestination+"\",\""+sSource+"\",\""+document.getSourceuid()+"\");'/></td>"
+										   )+
 								           "<td>"+document.getUid()+"</td>"+
-								           "<td><a href='javascript:editDocument(\""+document.getUid()+"\");'>"+sDate+"</a></td>"+
+										   (sReference.equalsIgnoreCase("#LOCK#")?"<td>"+sDate+"</td>":
+								           "<td><a href='javascript:editDocument(\""+document.getUid()+"\");'>"+sDate+"</a></td>"
+										   )+
 								           "<td>"+getTran(request,"operationdocumenttypes",sType,sWebLanguage)+"</td>"+
 								           "<td>"+sSource+"</td>"+
 								           "<td>"+sDestination+"</td>"+

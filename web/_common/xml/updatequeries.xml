@@ -288,4 +288,10 @@
   	<Query id='QUERY.admin.comment4.ext3000' db='ocadmin' date='20/08/2016' dbserver='MySQL'>
 		alter table admin modify column comment4 varchar(3000);
   	</Query>	
+  	<Query id='QUERY.openclinic.insurarcredits.invoiceuid' db='openclinic' date='21/01/2017' dbserver='Microsoft SQL Server'>
+		alter table oc_insurarcredits alter column oc_insurarcredit_invoiceuid varchar(50);
+  	</Query>	
+  	<Query id='QUERY.openclinic.insurarcredits.invoiceuid' db='openclinic' date='21/01/2017' dbserver='MySQL'>
+		alter table oc_insurarcredits modify column oc_insurarcredit_invoiceuid varchar(50);
+  	</Query>	
 </Queries>

@@ -32,9 +32,11 @@
     	}
 		for(int n=0;n<openOrders.size();n++){
 			ProductionOrder productionOrder = (ProductionOrder)openOrders.elementAt(n);
-			String editTag="<td><a href='javascript:openProductionOrder("+productionOrder.getId()+")'><b>"+productionOrder.getProductStock().getProduct().getName()+"</b></a></td>";
-			String noEditTag="<td><b>"+productionOrder.getProductStock().getProduct().getName()+"</b></td>";
-			out.println("<tr><td>"+ScreenHelper.formatDate(productionOrder.getCreateDateTime())+"</td>"+(activeUser.getAccessRight("system.manageproductionorders.select")?editTag:noEditTag)+"</tr>");
+			if(productionOrder.getProductStock()!=null && productionOrder.getProductStock().getProduct()!=null){
+				String editTag="<td><a href='javascript:openProductionOrder("+productionOrder.getId()+")'><b>"+productionOrder.getProductStock().getProduct().getName()+"</b></a></td>";
+				String noEditTag="<td><b>"+productionOrder.getProductStock().getProduct().getName()+"</b></td>";
+				out.println("<tr><td>"+ScreenHelper.formatDate(productionOrder.getCreateDateTime())+"</td>"+(activeUser.getAccessRight("system.manageproductionorders.select")?editTag:noEditTag)+"</tr>");
+			}
 		}
         if(openOrders.size() > 0){
 		    %>
@@ -46,7 +48,7 @@
     	Vector undeliveredOrders = new Vector();
     	for(int n=0;n<productionOrders.size();n++){
     		ProductionOrder order = (ProductionOrder)productionOrders.elementAt(n);
-    		if(order.getCloseDateTime()!=null){
+    		if(order.getCloseDateTime()!=null && order.getProductStock()!=null){
     			//Now we check if this order has already been delivered
     			Vector deliveries = ProductStockOperation.getDeliveries(order.getProductStock().getUid(), activePatient.personid, order.getUpdateDateTime(), null, "OC_OPERATION_OBJECTID", "ASC");
     			if(deliveries.size()==0){
@@ -63,10 +65,12 @@
     	}
 		for(int n=0;n<undeliveredOrders.size();n++){
 			ProductionOrder productionOrder = (ProductionOrder)undeliveredOrders.elementAt(n);
-			String deliverTag="<td onmouseover='this.style.cursor=\"hand\"' onmouseout='this.style.cursor=\"default\"'><img onclick='deliverOrder(\""+productionOrder.getProductStock().getUid()+"\",\""+productionOrder.getProductStock().getProduct().getName()+"\");' src='"+sCONTEXTPATH+"/_img/icons/icon_person.png"+"'/></td>";
-			String editTag="<td><a href='javascript:openProductionOrder("+productionOrder.getId()+")'><b>"+productionOrder.getProductStock().getProduct().getName()+"</b></a></td>";
-			String noEditTag="<td><b>"+productionOrder.getProductStock().getProduct().getName()+"</b></td>";
-			out.println("<tr>"+(productionOrder.getProductStock().getServiceStock().isDispensingUser(activeUser.userid)?deliverTag:"")+"<td>"+ScreenHelper.formatDate(productionOrder.getCreateDateTime())+"</td>"+(activeUser.getAccessRight("system.manageproductionorders.select")?editTag:noEditTag)+"</tr>");
+			if(productionOrder.getProductStock()!=null && productionOrder.getProductStock().getProduct()!=null){
+				String deliverTag="<td onmouseover='this.style.cursor=\"hand\"' onmouseout='this.style.cursor=\"default\"'><img onclick='deliverOrder(\""+productionOrder.getProductStock().getUid()+"\",\""+productionOrder.getProductStock().getProduct().getName()+"\");' src='"+sCONTEXTPATH+"/_img/icons/icon_person.png"+"'/></td>";
+				String editTag="<td><a href='javascript:openProductionOrder("+productionOrder.getId()+")'><b>"+productionOrder.getProductStock().getProduct().getName()+"</b></a></td>";
+				String noEditTag="<td><b>"+productionOrder.getProductStock().getProduct().getName()+"</b></td>";
+				out.println("<tr>"+(productionOrder.getProductStock().getServiceStock().isDispensingUser(activeUser.userid)?deliverTag:"")+"<td>"+ScreenHelper.formatDate(productionOrder.getCreateDateTime())+"</td>"+(activeUser.getAccessRight("system.manageproductionorders.select")?editTag:noEditTag)+"</tr>");
+			}
 		}
         if(undeliveredOrders.size() > 0){
 		    %>

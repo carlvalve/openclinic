@@ -15,7 +15,7 @@
 
 <body style="padding:5px;">
 <%
-    String sPlanUid = checkString(request.getParameter("PlanUid"));
+	String sPlanUid = checkString(request.getParameter("PlanUid"));
     
     String sFunction = checkString(request.getParameter("doFunction"));
         
@@ -38,6 +38,8 @@
     
     String sName            = ScreenHelper.checkString(request.getParameter("searchName")),
            sAssetUID        = ScreenHelper.checkString(request.getParameter("searchAssetUID")),
+           sServiceUid      = checkString(request.getParameter("searchServiceUid")),
+           sServiceName     = checkString(request.getParameter("searchServiceName")),
            sSearchAssetCode = ScreenHelper.checkString(request.getParameter("searchAssetCode")),
            sOperator        = ScreenHelper.checkString(request.getParameter("searchOperator"));
 
@@ -62,6 +64,15 @@
             <input type="hidden" name="Action" value="search">
                             
             <table class="list" border="0" width="100%" cellspacing="1">
+            	<tr>
+		            <td class="admin"><%=getTran(request,"web","service",sWebLanguage)%>&nbsp;</td>
+		           	<td class="admin2">
+		                <input type="hidden" name="searchServiceUid" id="searchServiceUid" value="<%=sServiceUid%>">
+		                <input class="text" type="text" name="searchServiceName" id="searchServiceName" readonly size="50" value="<%=sServiceName%>" >
+		                <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTran(null,"Web","select",sWebLanguage)%>" onclick="searchService('searchServiceUid','searchServiceName');">
+		                <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="SearchForm.searchServiceUid.value='';SearchForm.searchServiceName.value='';">
+					</td>
+            	</tr>
                 <%-- search NAME --%>
 		        <tr>
 		            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","name",sWebLanguage)%>&nbsp;</td>
@@ -174,9 +185,13 @@
   window.resizeTo(700,500);
   resizeAllTextareas(4);
 
+  function searchService(serviceUidField,serviceNameField){
+	  	openPopup("/_common/search/searchService.jsp&ts=<%=getTs()%>&VarCode="+serviceUidField+"&VarText="+serviceNameField);
+	  	document.getElementById(serviceNameField).focus();
+	    }
   <%-- SELECT ASSET --%>
   function selectAsset(uidField,codeField){
-    var url = "/_common/search/searchAsset.jsp&ts=<%=getTs()%>"+
+    var url = "/_common/search/searchAsset.jsp&ts=<%=getTs()%>&PopupWidth=600&PopupHeight=500"+
               "&ReturnFieldUid="+uidField+
               "&ReturnFieldCode="+codeField;
     openPopup(url);

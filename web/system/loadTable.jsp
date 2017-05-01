@@ -225,6 +225,93 @@
 		                f.delete();
 						message="<h3>"+lines+" " +getTran(request,"web","records.loaded",sWebLanguage)+"</h3>";
 					}
+					else if(mrequest.getParameter("filetype").equalsIgnoreCase("userscsv")){
+						String lastname,firstname,dateofbirth,gender,profile,language;
+						//Read file as a prestations csv file
+		                File f = new File(upBean.getFolderstore()+"/"+sFileName);
+						BufferedReader reader = new BufferedReader(new FileReader(f));
+						lines=0;
+						while(reader.ready()){
+							String[] line = reader.readLine().split(";");
+							if(line.length<6){
+								break;
+							}
+							else{
+								lastname=line[0].trim();
+								firstname=line[1].trim();
+								dateofbirth=line[2].trim();
+								try{
+									dateofbirth=ScreenHelper.formatDate(new SimpleDateFormat("yyyy-MM-dd").parse(dateofbirth));
+								}
+								catch(Exception e){
+									e.printStackTrace();
+								}
+								gender=line[3].trim();
+								profile=line[4].trim();
+								int profileid=0;
+								try{
+									Connection conn = MedwanQuery.getInstance().getAdminConnection();
+									PreparedStatement ps = conn.prepareStatement("select * from userprofiles where userprofilename=?");
+									ps.setString(1, profile);
+									ResultSet rs = ps.executeQuery();
+									if(rs.next()){
+										profileid=rs.getInt("userprofileid");
+									}
+									rs.close();
+									ps.close();
+									conn.close();
+								}
+								catch(Exception e){
+									e.printStackTrace();
+								}
+								language=line[5].trim();
+								Hashtable hSelect = new Hashtable();
+								hSelect.put(" lastname = ? AND",lastname);
+								hSelect.put(" firstname = ? AND",firstname);
+								hSelect.put(" dateofbirth = ? AND",dateofbirth);
+								String personid  = AdminPerson.getPersonIdBySearchNameDateofBirth(hSelect);
+								if(personid == null){
+									//The person does not yet exist, create him
+									AdminPerson person = new AdminPerson();
+									person.sourceid="1";
+									person.dateOfBirth=dateofbirth;
+									person.lastname=lastname;
+									person.firstname=firstname;
+									person.gender=gender;
+									person.language=language;
+									Connection conn = MedwanQuery.getInstance().getAdminConnection();
+									person.saveToDB(conn);
+									conn.close();
+									personid = person.personid;
+								}
+								if(personid!=null){
+									//Now find the user that goes with the person	
+									String userid = User.getUseridByPersonid(personid);
+									if(userid==null || userid.length()==0){
+										//The user does not exist, create it
+										User user = new User();
+										user.personid=personid;
+										user.project= MedwanQuery.getInstance().getConfigString("defaultProject");
+										user.start=ScreenHelper.formatDate(new java.util.Date());
+										user.password=user.encrypt(user.project);
+										user.parameters=new Vector();
+										user.parameters.add(new Parameter("DefaultPage","medicalrecord"));
+										user.parameters.add(new Parameter("userprofileid",profileid+""));
+										user.parameters.add(new Parameter("userlanguage",language));
+										user.parameters.add(new Parameter("userproject",MedwanQuery.getInstance().getConfigString("defaultProject")));
+										user.parameters.add(new Parameter("pwdChangeDate",System.currentTimeMillis()+""));
+										user.saveToDB();
+										userid=user.userid;
+									}
+								}
+								lines++;
+							}
+						}
+						reader.close();
+						reloadSingleton(session);
+		                f.delete();
+						message="<h3>"+lines+" " +getTran(request,"web","records.loaded",sWebLanguage)+"</h3>";
+					}
 					else if(mrequest.getParameter("filetype").equalsIgnoreCase("pharmacyloadcsv")){
 						//Imports can only be done to the central warehouse in OpenClinic
 						if(MedwanQuery.getInstance().getConfigString("PEXOpenClinicServiceStock","").length()==0){
@@ -237,6 +324,7 @@
 							}
 							else{
 								String pex_uid,pex_date,pex_code,pex_name,pex_quantity,pex_price,pex_supplier,pex_batch,pex_expires,pex_comment ;
+								String sDateFormat=MedwanQuery.getInstance().getConfigString("pharmacyImportDateFormat","yyyyMMdd");
 								//Read file as a pharmacy delivery csv file
 				                File f = new File(upBean.getFolderstore()+"/"+sFileName);
 								BufferedReader reader = new BufferedReader(new FileReader(f));
@@ -259,10 +347,10 @@
 										pex_expires=line[8].trim();
 										pex_comment=line[9].trim();
 										try{
-											java.util.Date d = new SimpleDateFormat("yyyyMMdd").parse(pex_date);
+											java.util.Date d = new SimpleDateFormat(sDateFormat).parse(pex_date);
 										}
 										catch(Exception e){
-											pex_date=new SimpleDateFormat("yyyyMMdd").format(new java.util.Date());
+											pex_date=new SimpleDateFormat(sDateFormat).format(new java.util.Date());
 										}
 										try{
 											int n= Integer.parseInt(pex_quantity);
@@ -305,7 +393,7 @@
 												product.setCode(pex_code);
 												product.setName(pex_name);
 												product.setUnit("");
-												product.setCreateDateTime(new SimpleDateFormat("yyyyMMdd").parse(pex_date));
+												product.setCreateDateTime(new SimpleDateFormat(sDateFormat).parse(pex_date));
 												product.setUpdateDateTime(new java.util.Date());
 												product.setUpdateUser(activeUser.userid);
 												product.store();
@@ -320,8 +408,8 @@
 												//The product stock doesn't exist yet, create a new one
 												productStock = new ProductStock();
 												productStock.setUid("-1");
-												productStock.setBegin(new SimpleDateFormat("yyyyMMdd").parse(pex_date));
-												productStock.setCreateDateTime(new SimpleDateFormat("yyyyMMdd").parse(pex_date));
+												productStock.setBegin(new SimpleDateFormat(sDateFormat).parse(pex_date));
+												productStock.setCreateDateTime(new SimpleDateFormat(sDateFormat).parse(pex_date));
 												productStock.setLevel(0);
 												productStock.setOrderLevel(0);
 												productStock.setMaximumLevel(0);
@@ -342,9 +430,9 @@
 													batch= new Batch();
 													batch.setUid("-1");
 													batch.setBatchNumber(pex_batch);
-													batch.setCreateDateTime(new SimpleDateFormat("yyyyMMdd").parse(pex_date));
+													batch.setCreateDateTime(new SimpleDateFormat(sDateFormat).parse(pex_date));
 													try{
-														batch.setEnd(new SimpleDateFormat("yyyyMMdd").parse(pex_expires));
+														batch.setEnd(new SimpleDateFormat(sDateFormat).parse(pex_expires));
 													}
 													catch(Exception e){}
 													batch.setLevel(0);
@@ -360,11 +448,11 @@
 											ProductStockOperation receiptOperation = new ProductStockOperation();
 											receiptOperation.setUid("-1");
 											try{
-												receiptOperation.setBatchEnd(new SimpleDateFormat("yyyyMMdd").parse(pex_expires));
+												receiptOperation.setBatchEnd(new SimpleDateFormat(sDateFormat).parse(pex_expires));
 											}
 											catch(Exception e){}
 											receiptOperation.setBatchNumber(pex_batch);
-											receiptOperation.setDate(new SimpleDateFormat("yyyyMMdd").parse(pex_date));
+											receiptOperation.setDate(new SimpleDateFormat(sDateFormat).parse(pex_date));
 											receiptOperation.setDescription("medicationreceipt.4");
 											receiptOperation.setProductStockUid(productStock.getUid());
 											receiptOperation.setSourceDestination(new ObjectReference("supplier",pex_supplier));
@@ -378,6 +466,18 @@
 											if(Double.parseDouble(pex_price)>0){
 							            		Pointer.deletePointers("drugprice."+productStock.getProduct().getUid()+"."+receiptOperation.getUid());
 							            		Pointer.storePointer("drugprice."+productStock.getProduct().getUid()+"."+receiptOperation.getUid(),pex_quantity+";"+pex_price);
+							        			//Recalculate PUMP
+							        			//Get previous PUMP
+							        			double dPump=productStock.getProduct().getLastYearsAveragePrice(new SimpleDateFormat(sDateFormat).parse(pex_date));
+							        			if(dPump>0){
+							        				//Find existing quantity for the product
+							        				int nExisting = productStock.getProduct().getTotalQuantityAvailable()-Integer.parseInt(pex_quantity); //new delivery was already added to stocks
+							        				dPump = (nExisting*dPump+Integer.parseInt(pex_quantity)*Double.parseDouble(pex_price))/(nExisting+Integer.parseInt(pex_quantity));
+							        			}
+							        			else{
+							        				dPump=Double.parseDouble(pex_price);
+							        			}
+							            		Pointer.storePointer("pump."+productStock.getProduct().getUid(),dPump+"");
 											}
 										}
 										rs.close();
@@ -633,6 +733,7 @@
 						<option value="prestationscsv"><%=getTran(request,"web","prestations.csv",sWebLanguage)%></option>
 						<option value="servicescsv"><%=getTran(request,"web","services.csv",sWebLanguage)%></option>
 						<option value="labelscsv"><%=getTran(request,"web","labels.csv",sWebLanguage)%></option>
+						<option value="userscsv"><%=getTran(request,"web","userscsv",sWebLanguage)%></option>
 						<option value="labxml"><%=getTran(request,"web","lab.xml",sWebLanguage)%></option>
 						<option value="drugsxml"><%=getTran(request,"web","drugs.xml",sWebLanguage)%></option>
 					<%} %>
@@ -662,6 +763,9 @@
 		}
 		else if(document.getElementById("filetype").value=="labelscsv"){
 			document.getElementById("structure").innerHTML="Required structure (* are mandatory):<br/><b>Type* ; ID* ; Language* ; Label*</b>";
+		}
+		else if(document.getElementById("filetype").value=="userscsv"){
+			document.getElementById("structure").innerHTML="Required structure (* are mandatory):<br/><b>Name* ; Firstname* ; DateofBirth (yyyy-mm-dd)* ; Gender (M/F)* ; Profile*, Language (FR/EN/NL/PT/ES)*</b>";
 		}
 		else {
 			document.getElementById("structure").innerHTML="";
