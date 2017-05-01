@@ -1,6 +1,7 @@
 package be.openclinic.assets;
 
 import be.openclinic.common.OC_Object;
+import be.openclinic.util.Nomenclature;
 import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.system.Debug;
 import be.mxs.common.util.system.ScreenHelper;
@@ -27,7 +28,8 @@ public class MaintenanceOperation extends OC_Object {
     public String maintenanceplanUID;
     public java.util.Date date;
     public String operator; // 255
-    public String result; // 50
+    public String supplier; // 255
+	public String result; // 50
     public String comment; // 255
     public java.util.Date nextDate;
     
@@ -36,7 +38,103 @@ public class MaintenanceOperation extends OC_Object {
     public java.util.Date periodPerformedEnd;
     
     
-    //--- CONSTRUCTOR ---
+    public String getSupplier() {
+		return supplier;
+	}
+
+	public void setSupplier(String supplier) {
+		this.supplier = supplier;
+	}
+
+	public int getServerId() {
+		return serverId;
+	}
+
+	public void setServerId(int serverId) {
+		this.serverId = serverId;
+	}
+
+	public int getObjectId() {
+		return objectId;
+	}
+
+	public void setObjectId(int objectId) {
+		this.objectId = objectId;
+	}
+
+	public String getMaintenanceplanUID() {
+		return maintenanceplanUID;
+	}
+
+	public void setMaintenanceplanUID(String maintenanceplanUID) {
+		this.maintenanceplanUID = maintenanceplanUID;
+	}
+	
+	public MaintenancePlan getMaintenancePlan(){
+		MaintenancePlan plan = MaintenancePlan.get(this.maintenanceplanUID);
+		if(plan==null){
+			plan = new MaintenancePlan();
+		}
+		return plan;
+	}
+
+	public java.util.Date getDate() {
+		return date;
+	}
+
+	public void setDate(java.util.Date date) {
+		this.date = date;
+	}
+
+	public String getOperator() {
+		return operator;
+	}
+
+	public void setOperator(String operator) {
+		this.operator = operator;
+	}
+
+	public String getResult() {
+		return result;
+	}
+
+	public void setResult(String result) {
+		this.result = result;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	public java.util.Date getNextDate() {
+		return nextDate;
+	}
+
+	public void setNextDate(java.util.Date nextDate) {
+		this.nextDate = nextDate;
+	}
+
+	public java.util.Date getPeriodPerformedBegin() {
+		return periodPerformedBegin;
+	}
+
+	public void setPeriodPerformedBegin(java.util.Date periodPerformedBegin) {
+		this.periodPerformedBegin = periodPerformedBegin;
+	}
+
+	public java.util.Date getPeriodPerformedEnd() {
+		return periodPerformedEnd;
+	}
+
+	public void setPeriodPerformedEnd(java.util.Date periodPerformedEnd) {
+		this.periodPerformedEnd = periodPerformedEnd;
+	}
+
+	//--- CONSTRUCTOR ---
     public MaintenanceOperation(){
         serverId = -1;
         objectId = -1;
@@ -44,6 +142,7 @@ public class MaintenanceOperation extends OC_Object {
         maintenanceplanUID = "";
         date = null;
         operator = ""; // 255
+        supplier="";
         result = ""; // 50
         comment = ""; // 255
         nextDate = null;
@@ -66,9 +165,9 @@ public class MaintenanceOperation extends OC_Object {
                 // insert new operation
                 sSql = "INSERT INTO OC_MAINTENANCEOPERATIONS(OC_MAINTENANCEOPERATION_SERVERID,OC_MAINTENANCEOPERATION_OBJECTID,"+
                        "  OC_MAINTENANCEOPERATION_MAINTENANCEPLANUID,OC_MAINTENANCEOPERATION_DATE,OC_MAINTENANCEOPERATION_OPERATOR,"+
-                	   "  OC_MAINTENANCEOPERATION_RESULT,OC_MAINTENANCEOPERATION_COMMENT,OC_MAINTENANCEOPERATION_NEXTDATE,"+
+                	   "  OC_MAINTENANCEOPERATION_RESULT,OC_MAINTENANCEOPERATION_COMMENT,OC_MAINTENANCEOPERATION_NEXTDATE,OC_MAINTENANCEOPERATION_SUPPLIER,"+
                        "  OC_MAINTENANCEOPERATION_UPDATETIME,OC_MAINTENANCEOPERATION_UPDATEID)"+
-                       " VALUES(?,?,?,?,?,?,?,?,?,?)"; // 10 
+                       " VALUES(?,?,?,?,?,?,?,?,?,?,?)"; // 10 
                 ps = oc_conn.prepareStatement(sSql);
                 
                 int serverId = MedwanQuery.getInstance().getConfigInt("serverId"),
@@ -92,6 +191,7 @@ public class MaintenanceOperation extends OC_Object {
                 else{
                     ps.setDate(psIdx++,null);
                 }
+                ps.setString(psIdx++,supplier);
                 
                 // update-info
                 ps.setTimestamp(psIdx++,new Timestamp(new java.util.Date().getTime())); // now
@@ -103,7 +203,7 @@ public class MaintenanceOperation extends OC_Object {
                 // update existing record
                 sSql = "UPDATE OC_MAINTENANCEOPERATIONS SET"+
                        "  OC_MAINTENANCEOPERATION_MAINTENANCEPLANUID = ?, OC_MAINTENANCEOPERATION_DATE = ?,OC_MAINTENANCEOPERATION_OPERATOR = ?,"+
-                	   "  OC_MAINTENANCEOPERATION_RESULT = ?, OC_MAINTENANCEOPERATION_COMMENT = ?, OC_MAINTENANCEOPERATION_NEXTDATE = ?,"+
+                	   "  OC_MAINTENANCEOPERATION_RESULT = ?, OC_MAINTENANCEOPERATION_COMMENT = ?, OC_MAINTENANCEOPERATION_NEXTDATE = ?, OC_MAINTENANCEOPERATION_SUPPLIER=?,"+
                        "  OC_MAINTENANCEOPERATION_UPDATETIME = ?, OC_MAINTENANCEOPERATION_UPDATEID = ?"+ // update-info
                        " WHERE (OC_MAINTENANCEOPERATION_SERVERID = ? AND OC_MAINTENANCEOPERATION_OBJECTID = ?)"; // identification
                 ps = oc_conn.prepareStatement(sSql);
@@ -123,6 +223,7 @@ public class MaintenanceOperation extends OC_Object {
                     ps.setDate(psIdx++,null);
                 }
 
+                ps.setString(psIdx++,supplier);
                 // update-info
                 ps.setTimestamp(psIdx++,new Timestamp(new java.util.Date().getTime())); // now
                 ps.setString(psIdx++,userUid);
@@ -153,6 +254,91 @@ public class MaintenanceOperation extends OC_Object {
         return errorOccurred;
     }
     
+    public java.util.Date getNextOperationDate(){
+		MaintenancePlan plan = getMaintenancePlan();
+		if(plan!=null){
+			if(ScreenHelper.checkString(plan.getFrequency()).length()>0){
+				String frequency = plan.getFrequency();
+				if(frequency.length()>0){
+					GregorianCalendar calendar = new GregorianCalendar();
+					calendar.setTime(new java.util.Date());
+					if(frequency.equalsIgnoreCase("1")){
+						//Daily
+						calendar.add(GregorianCalendar.HOUR, 24);
+					}
+					else if(frequency.equalsIgnoreCase("2")){
+						//Weekly
+						calendar.add(GregorianCalendar.HOUR, 24*7);
+					}
+					else if(frequency.equalsIgnoreCase("3")){
+						//Monthly
+						calendar.add(GregorianCalendar.MONTH, 1);
+					}
+					else if(frequency.equalsIgnoreCase("4")){
+						//Quarterly
+						calendar.add(GregorianCalendar.MONTH, 3);
+					}
+					else if(frequency.equalsIgnoreCase("5")){
+						//Half-yearly
+						calendar.add(GregorianCalendar.MONTH, 6);
+					}
+					else if(frequency.equalsIgnoreCase("6")){
+						//Yearly
+						calendar.add(GregorianCalendar.MONTH, 12);
+					}
+					else{
+						return null;
+					}
+					return calendar.getTime();
+				}
+			}
+			else{
+				Nomenclature nomenclature = Nomenclature.get("asset", plan.getAssetNomenclature());
+				if(nomenclature!=null){
+					String frequency="";
+					if(plan.getType().equalsIgnoreCase("1")){
+						frequency = nomenclature.getParameter("controlfrequency");
+					}
+					else if(plan.getType().equalsIgnoreCase("2")){
+						frequency = nomenclature.getParameter("maintenancefrequency");
+					}
+					if(frequency.length()>0){
+						GregorianCalendar calendar = new GregorianCalendar();
+						calendar.setTime(new java.util.Date());
+						if(frequency.equalsIgnoreCase("1")){
+							//Daily
+							calendar.add(GregorianCalendar.HOUR, 24);
+						}
+						else if(frequency.equalsIgnoreCase("2")){
+							//Weekly
+							calendar.add(GregorianCalendar.HOUR, 24*7);
+						}
+						else if(frequency.equalsIgnoreCase("3")){
+							//Monthly
+							calendar.add(GregorianCalendar.MONTH, 1);
+						}
+						else if(frequency.equalsIgnoreCase("4")){
+							//Quarterly
+							calendar.add(GregorianCalendar.MONTH, 3);
+						}
+						else if(frequency.equalsIgnoreCase("5")){
+							//Half-yearly
+							calendar.add(GregorianCalendar.MONTH, 6);
+						}
+						else if(frequency.equalsIgnoreCase("6")){
+							//Yearly
+							calendar.add(GregorianCalendar.MONTH, 12);
+						}
+						else{
+							return null;
+						}
+						return calendar.getTime();
+					}
+				}
+			}
+		}
+		return null;
+	}
     //--- DELETE ----------------------------------------------------------------------------------
     public static boolean delete(String sOperationUid){
     	boolean errorOccurred = false;
@@ -221,6 +407,7 @@ public class MaintenanceOperation extends OC_Object {
                 operation.operator           = ScreenHelper.checkString(rs.getString("OC_MAINTENANCEOPERATION_OPERATOR"));
                 operation.result             = ScreenHelper.checkString(rs.getString("OC_MAINTENANCEOPERATION_RESULT"));
                 operation.comment            = ScreenHelper.checkString(rs.getString("OC_MAINTENANCEOPERATION_COMMENT"));
+                operation.supplier            = ScreenHelper.checkString(rs.getString("OC_MAINTENANCEOPERATION_SUPPLIER"));
                 operation.nextDate           = rs.getDate("OC_MAINTENANCEOPERATION_NEXTDATE");
                 
                 // update-info
@@ -260,7 +447,7 @@ public class MaintenanceOperation extends OC_Object {
         
         try{
         	//*** compose query ***************************
-            String sSql = "SELECT * FROM OC_MAINTENANCEOPERATIONS WHERE 1=1"; // 'where' facilitates further composition of query
+            String sSql = "SELECT * FROM OC_MAINTENANCEOPERATIONS,OC_MAINTENANCEPLANS,OC_ASSETS WHERE OC_ASSET_OBJECTID=replace(OC_MAINTENANCEPLAN_ASSETUID,'"+MedwanQuery.getInstance().getConfigString("serverId","1")+".','') AND OC_MAINTENANCEPLAN_OBJECTID=replace(OC_MAINTENANCEOPERATION_MAINTENANCEPLANUID,'"+MedwanQuery.getInstance().getConfigString("serverId","1")+".','')"; // 'where' facilitates further composition of query
 
             //*** search-criteria *** 
             if(findItem.maintenanceplanUID.length() > 0){
@@ -278,6 +465,12 @@ public class MaintenanceOperation extends OC_Object {
                 sSql+= " AND OC_MAINTENANCEOPERATION_DATE <= '"+findItem.periodPerformedEnd+"'";
             }
             
+            if(ScreenHelper.checkString(findItem.getTag()).split(";")[0].length()>0){
+                sSql+= " AND OC_MAINTENANCEPLAN_ASSETUID = '"+findItem.getTag().split(";")[0]+"'";
+            }
+            if(ScreenHelper.checkString(findItem.getTag()).split(";").length>1 && ScreenHelper.checkString(findItem.getTag()).split(";")[1].length()>0){
+                sSql+= " AND OC_ASSET_SERVICE like '"+findItem.getTag().split(";")[1]+"%'";
+            }
             if(ScreenHelper.checkString(findItem.operator).length() > 0){
                 sSql+= " AND OC_MAINTENANCEOPERATION_OPERATOR LIKE '%"+findItem.operator+"%'";
             }
@@ -287,6 +480,7 @@ public class MaintenanceOperation extends OC_Object {
             
             sSql+= " ORDER BY OC_MAINTENANCEOPERATION_MAINTENANCEPLANUID ASC";
             
+            System.out.println(sSql);
             ps = oc_conn.prepareStatement(sSql);
             
                         
@@ -306,6 +500,7 @@ public class MaintenanceOperation extends OC_Object {
                 operation.result             = ScreenHelper.checkString(rs.getString("OC_MAINTENANCEOPERATION_RESULT"));
                 operation.comment            = ScreenHelper.checkString(rs.getString("OC_MAINTENANCEOPERATION_COMMENT"));
                 operation.nextDate           = rs.getDate("OC_MAINTENANCEOPERATION_NEXTDATE");
+                operation.supplier           = ScreenHelper.checkString(rs.getString("OC_MAINTENANCEOPERATION_SUPPLIER"));
                
                 // update-info
                 operation.setUpdateDateTime(rs.getTimestamp("OC_MAINTENANCEOPERATION_UPDATETIME"));

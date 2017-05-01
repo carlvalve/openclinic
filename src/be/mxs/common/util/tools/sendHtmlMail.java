@@ -78,59 +78,62 @@ public class sendHtmlMail {
         //transport.sendMessage(message, message.getAllRecipients());               
 	}
 	
-	static public void sendEmailWithImages(String smtpServer, String sFrom, String sTo, String sSubject, String sMessage, String sImage) throws Exception{      		    	
+	static public boolean sendEmailWithImages(String smtpServer, String sFrom, String sTo, String sSubject, String sMessage, String sImage) throws Exception{      		    	
 	    	// * * The browser accesses these images just as if it were displaying an image in a Web page. Unfortunately, spammers have used this mechanism as a sneaky way to record who visits their site (and mark your email as valid). To protect your privacy, many Web-based (and other) email clients don't display images in HTML emails.
 			//	An alternative to placing absolute URLs to images in your HTML is to include the images as attachments to the email. The HTML can reference the image in an attachment by using the protocol prefix cid: plus the content-id of the attachment.      		       
-	        try{
-		        Properties props = new Properties();
-		        props.setProperty("mail.transport.protocol", "smtp");
-		        props.setProperty("mail.host", smtpServer); //props.setProperty("mail.user", "myuser"); //props.setProperty("mail.password", "mypwd");
-		
-		        Session mailSession = Session.getDefaultInstance(props, null);
-		        mailSession.setDebug(MedwanQuery.getInstance().getConfigString("Debug").equalsIgnoreCase("On"));
-		        Transport transport = mailSession.getTransport();
-		
-		        MimeMessage message = new MimeMessage(mailSession);
-		        message.setSubject(sSubject);
-		        message.setFrom(new InternetAddress(sFrom));	  
-		        message.setSentDate(new java.util.Date());
-		        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(sTo,false));
-		
-		        // This HTML mail have to 2 part, the BODY and the embedded image       
-		        MimeMultipart multipart = new MimeMultipart("related");
-		
-		        // first part  (the html)
-		        BodyPart messageBodyPart = new MimeBodyPart();		
-		        String htmlText = sMessage;	    //String htmlText = "<H1>Hello</H1>	<img src=\"cid:image\">";
-		        //messageBodyPart.setHeader("content-type: text/html", "charset=ISO-8859-1")
-		        message.setHeader("content-type", "text/html; charset=ISO-8859-1"); 
-		        messageBodyPart.setContent(htmlText, "text/html");
+	    boolean bSuccess = false;    
+		try{
+	        Properties props = new Properties();
+	        props.setProperty("mail.transport.protocol", "smtp");
+	        props.setProperty("mail.host", smtpServer); //props.setProperty("mail.user", "myuser"); //props.setProperty("mail.password", "mypwd");
+	
+	        Session mailSession = Session.getDefaultInstance(props, null);
+	        mailSession.setDebug(MedwanQuery.getInstance().getConfigString("Debug").equalsIgnoreCase("On"));
+	        Transport transport = mailSession.getTransport();
+	
+	        MimeMessage message = new MimeMessage(mailSession);
+	        message.setSubject(sSubject);
+	        message.setFrom(new InternetAddress(sFrom));	  
+	        message.setSentDate(new java.util.Date());
+	        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(sTo,false));
+	
+	        // This HTML mail have to 2 part, the BODY and the embedded image       
+	        MimeMultipart multipart = new MimeMultipart("related");
+	
+	        // first part  (the html)
+	        BodyPart messageBodyPart = new MimeBodyPart();		
+	        String htmlText = sMessage;	    //String htmlText = "<H1>Hello</H1>	<img src=\"cid:image\">";
+	        //messageBodyPart.setHeader("content-type: text/html", "charset=ISO-8859-1")
+	        message.setHeader("content-type", "text/html; charset=ISO-8859-1"); 
+	        messageBodyPart.setContent(htmlText, "text/html");
+	
+	        // add it
+	        multipart.addBodyPart(messageBodyPart);
+	        
+	        if(new java.io.File(sImage).exists()){
+		        // second part (the image)
+		        messageBodyPart = new MimeBodyPart();
+		        DataSource fds = new FileDataSource(sImage);
+		        messageBodyPart.setDataHandler(new DataHandler(fds));
+		        messageBodyPart.setHeader("Content-ID","<image_logo>");
 		
 		        // add it
 		        multipart.addBodyPart(messageBodyPart);
-		        
-		        if(new java.io.File(sImage).exists()){
-			        // second part (the image)
-			        messageBodyPart = new MimeBodyPart();
-			        DataSource fds = new FileDataSource(sImage);
-			        messageBodyPart.setDataHandler(new DataHandler(fds));
-			        messageBodyPart.setHeader("Content-ID","<image_logo>");
-			
-			        // add it
-			        multipart.addBodyPart(messageBodyPart);
-		        }
-		
-		        // put everything together
-		        message.setContent(multipart);
-		
-		        transport.connect();
-		        transport.sendMessage(message,
-		            message.getRecipients(Message.RecipientType.TO));
-		        transport.close();
 	        }
-	        catch(Exception e){
-	        	Debug.print(e.getMessage());
-	        }
+	
+	        // put everything together
+	        message.setContent(multipart);
+	
+	        transport.connect();
+	        transport.sendMessage(message,
+	        message.getRecipients(Message.RecipientType.TO));
+	        transport.close();
+	        bSuccess=true;
+        }
+        catch(Exception e){
+        	Debug.print(e.getMessage());
+        }
+		return bSuccess;
 		       
     }
 	//sendAttachEmail
@@ -196,8 +199,9 @@ public class sendHtmlMail {
         }
     }	
 	//sendAttachEmail
-    static public void sendAttachEmail(String smtpServer, String sFrom, String sTo, String sSubject, String sMessage, String sAttachment, String sFileName)
+    static public boolean sendAttachEmail(String smtpServer, String sFrom, String sTo, String sSubject, String sMessage, String sAttachment, String sFileName)
             throws AddressException, MessagingException {
+    	boolean bSuccess = false;
     	try{
 	        Properties props = new Properties();
 	        props.setProperty("mail.transport.protocol", "smtp");
@@ -247,12 +251,14 @@ public class sendHtmlMail {
 	
 	        transport.connect();
 	        transport.sendMessage(message,
-	            message.getRecipients(Message.RecipientType.TO));
+	        message.getRecipients(Message.RecipientType.TO));
 	        transport.close();
+	        bSuccess = true;
     	}
         catch(Exception e){
         	Debug.print(e.getMessage());
         }
+    	return bSuccess;
     }
 	
     

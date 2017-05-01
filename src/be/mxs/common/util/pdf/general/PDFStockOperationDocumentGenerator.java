@@ -11,6 +11,7 @@ import be.mxs.common.util.pdf.official.PDFOfficialBasic;
 import be.mxs.common.util.system.ScreenHelper;
 import be.mxs.common.util.db.MedwanQuery;
 import be.openclinic.pharmacy.OperationDocument;
+import be.openclinic.pharmacy.ProductOrder;
 import be.openclinic.pharmacy.ProductStockOperation;
 import net.admin.*;
 
@@ -143,27 +144,47 @@ public class PDFStockOperationDocumentGenerator extends PDFOfficialBasic {
     		if(mergedOrders.get(operation.getProductStock().getProduct().getUid())!=null){
     			// order already exists, merge
     			ProductStockOperation existingOperation = (ProductStockOperation)mergedOrders.get(operation.getProductStock().getProduct().getUid());
+    			existingOperation.setComment(existingOperation.getComment()+", "+operation.getUid());
     			existingOperation.setUnitsChanged(existingOperation.getUnitsChanged()+operation.getUnitsChanged());
     		}
     		else {
+    			operation.setComment(operation.getUid());
     			mergedOrders.put(operation.getProductStock().getProduct().getUid(), operation);
     		}
     	}
     	
+    	int fontsize = MedwanQuery.getInstance().getConfigInt("productStockOperationDocumentFontSize",6);
     	Enumeration mo = mergedOrders.keys();
-    	int n = 0;
+    	int n = 1;
     	while(mo.hasMoreElements()){
     		ProductStockOperation operation = (ProductStockOperation)mergedOrders.get(mo.nextElement());
 
-    		table.addCell(createValueCell((n+1)+"",0,6,5,true));        	
-        	table.addCell(createValueCell("",0,6,10,true));        	
-        	table.addCell(createValueCell(operation.getProductStock().getProduct().getName(),1,6,38,true));        	
-        	table.addCell(createValueCell("",0,6,10,true));        	
-        	table.addCell(createValueCell(operation.getProductStock().getLevel()+"",1,6,6,true));        	
-        	table.addCell(createValueCell(ScreenHelper.getTranNoLink("product.units",operation.getProductStock().getProduct().getUnit(),sPrintLanguage),1,6,10,true));
-        	table.addCell(createValueCell("",0,6,7,true));        	
-        	table.addCell(createValueCell(operation.getUnitsChanged()+"",1,6,7,true));        	
-        	table.addCell(createValueCell("",0,6,7,true));
+    		table.addCell(createValueCell((n++)+"",0,fontsize,5,true));        	
+        	table.addCell(createValueCell(operation.getComment(),0,fontsize,10,true));        	
+        	table.addCell(createValueCell(operation.getProductStock().getProduct().getName(),1,fontsize,38,true));        	
+        	cell=createValueCell(operation.getProductStock().getMaximumLevel()+"",0,fontsize,10,true);
+        	cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+        	table.addCell(cell);        	
+        	cell=createValueCell(operation.getProductStock().getLevel()+"",1,fontsize,6,true);
+        	cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+        	table.addCell(cell);        	
+        	cell=createValueCell(ScreenHelper.getTranNoLink("product.units",operation.getProductStock().getProduct().getUnit(),sPrintLanguage),1,fontsize,10,true);
+        	cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+        	table.addCell(cell);        	
+        	int nOrdered=0;
+        	if(ScreenHelper.checkString(operation.getOrderUID()).length()>0){
+        		ProductOrder order = ProductOrder.get(operation.getOrderUID());
+        		if(order!=null){
+        			nOrdered=order.getPackagesOrdered();
+        		}
+        	}
+        	cell=createValueCell(nOrdered==0?"":nOrdered+"",0,fontsize,7,true);
+        	cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+        	table.addCell(cell);        	
+        	cell=createValueCell(operation.getUnitsChanged()+"",1,fontsize,7,true);
+        	cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+        	table.addCell(cell);        	
+        	table.addCell(createValueCell("",0,fontsize,7,true));
     	}
     	
     	for(n=0; n<40-operations.size(); n++){          	
@@ -238,7 +259,7 @@ public class PDFStockOperationDocumentGenerator extends PDFOfficialBasic {
             PdfContentByte cb = docWriter.getDirectContent();
             Barcode39 barcode39 = new Barcode39();
             barcode39.setFont(null);
-            barcode39.setCode("8"+MedwanQuery.getInstance().getConfigString("mdnacserverid","00")+document.getUid().split("\\.")[1]);
+            barcode39.setCode("9"+document.getUid().split("\\.")[1]);
             Image image = barcode39.createImageWithBarcode(cb,null,null);
             image.scalePercent(99);
             cell = new PdfPCell(image);
@@ -257,8 +278,14 @@ public class PDFStockOperationDocumentGenerator extends PDFOfficialBasic {
         	cell.setColspan(20);
         	table2.addCell(cell);
         	
-        	cell = createValueCell(ScreenHelper.getTranNoLink("mdnac","visa.log1",sPrintLanguage)+"\n"+ScreenHelper.getTranNoLink("mdnac","visa.log2",sPrintLanguage));
-        	cell.setColspan(30);
+        	if(MedwanQuery.getInstance().getConfigInt("enableLogVisaOnStockOperationDocument",1)==1){
+        		cell = createValueCell(ScreenHelper.getTranNoLink("mdnac","visa.log1",sPrintLanguage)+"\n"+ScreenHelper.getTranNoLink("mdnac","visa.log2",sPrintLanguage),30);
+        	}
+        	else {
+        		cell = createValueCell(16,document.getUid().split("\\.")[1],30);
+        		cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+        		cell.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
+        	}
         	table2.addCell(cell);
         	
         	table3 = new PdfPTable(10);

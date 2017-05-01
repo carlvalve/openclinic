@@ -810,7 +810,7 @@ public class ProductStockOperation extends OC_Object{
                 productStock.setSupplierUid("");
             }
             productStock.store();
-
+            
            	BatchOperation.storeOperation(this.getUid(), sourceBatchUid, destinationBatchUid, this.getUnitsChanged(),new java.util.Date());
             
             //Generate prestation if indicated in product
@@ -1998,7 +1998,18 @@ public class ProductStockOperation extends OC_Object{
                 sourceDestination.setObjectType(rs.getString("OC_OPERATION_SRCDESTTYPE"));
                 sourceDestination.setObjectUid(rs.getString("OC_OPERATION_SRCDESTUID"));
                 if(serviceStocks.get(sourceDestination.getObjectUid())==null){
-                	serviceStocks.put(sourceDestination.getObjectUid(), ServiceStock.get(sourceDestination.getObjectUid()));
+                	ServiceStock serviceStock = null;
+                	try{
+                		serviceStock=ServiceStock.get(sourceDestination.getObjectUid());
+                	}
+                	catch(Exception e){
+                		System.out.println("Error creating servicestock");
+                		continue;
+                	}
+                	if(serviceStock==null){
+                		continue;
+                	}
+                	serviceStocks.put(sourceDestination.getObjectUid(), serviceStock);
                 }
                 ServiceStock serviceStock = (ServiceStock)serviceStocks.get(sourceDestination.getObjectUid());
                 if(serviceStock==null || !serviceStock.isValidationUser(userid)){
@@ -2250,5 +2261,30 @@ public class ProductStockOperation extends OC_Object{
             }
         }
         return vProdStockOperations;
+    }
+    
+    public double getLastPurchasePrice(){
+    	double price = 0;
+    	if(this.getProductStock()!=null && this.getProductStock().getProductUid()!=null){
+	    	//First check id a price has been associated to this operation
+			String purchaseData = Pointer.getPointer("drugprice."+this.getProductStock().getProductUid()+"."+this.getUid());
+			if(purchaseData.length()>0 && purchaseData.split(";").length>1){
+				try{
+					price = Double.parseDouble(purchaseData.split(";")[1]);
+				}
+				catch(Exception e){}
+			}
+			else{
+				//Try to find the latest purchase price for this product
+				purchaseData = Pointer.getLastPointer("drugprice."+this.getProductStock().getProductUid()+".",this.getDate());
+				if(purchaseData.length()>0 && purchaseData.split(";").length>1){
+					try{
+						price = Double.parseDouble(purchaseData.split(";")[1]);
+					}
+					catch(Exception e){}
+				}
+			}
+    	}
+    	return price;
     }
 }

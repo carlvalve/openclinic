@@ -5,6 +5,7 @@ import com.itextpdf.text.*;
 
 import java.util.*;
 import java.io.ByteArrayOutputStream;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 
 import be.mxs.common.util.system.Miscelaneous;
@@ -14,6 +15,7 @@ import be.mxs.common.util.system.PdfBarcode;
 import be.mxs.common.util.system.Pointer;
 import be.mxs.common.util.system.ScreenHelper;
 import be.mxs.common.util.db.MedwanQuery;
+import be.mxs.common.util.io.ExportSAP_AR_INV;
 import be.openclinic.finance.*;
 import be.openclinic.adt.Encounter;
 import net.admin.*;
@@ -37,6 +39,14 @@ public class PDFPatientInvoiceGenerator extends PDFInvoiceGenerator {
 
     //--- GENERATE PDF DOCUMENT BYTES -------------------------------------------------------------
     public ByteArrayOutputStream generatePDFDocumentBytes(final HttpServletRequest req, String sInvoiceUid) throws Exception {
+		// get specified invoice
+        PatientInvoice invoice = PatientInvoice.get(sInvoiceUid);
+        return generatePDFDocumentBytes(req, invoice);
+	}
+    
+    //--- GENERATE PDF DOCUMENT BYTES -------------------------------------------------------------
+    public ByteArrayOutputStream generatePDFDocumentBytes(final HttpServletRequest req, Invoice inv) throws Exception {
+    	PatientInvoice invoice = (PatientInvoice)inv;
         ByteArrayOutputStream baosPDF = new ByteArrayOutputStream();
 		docWriter = PdfWriter.getInstance(doc,baosPDF);
         this.req = req;
@@ -60,7 +70,6 @@ public class PDFPatientInvoiceGenerator extends PDFInvoiceGenerator {
 			doc.setMargins(MedwanQuery.getInstance().getConfigInt("patientInvoiceMarginLeft",new Float(doc.leftMargin()).intValue()), MedwanQuery.getInstance().getConfigInt("patientInvoiceMarginRight",new Float(doc.rightMargin()).intValue()), MedwanQuery.getInstance().getConfigInt("patientInvoiceMarginTop",new Float(doc.topMargin()).intValue()), MedwanQuery.getInstance().getConfigInt("patientInvoiceMarginBottom",new Float(doc.bottomMargin()).intValue()));
 
 			// get specified invoice
-            PatientInvoice invoice = PatientInvoice.get(sInvoiceUid);
 
 			if(MedwanQuery.getInstance().getConfigInt("patientinvoicefooteraddpatientdata",0)==0){
 				addFooter();
@@ -75,11 +84,11 @@ public class PDFPatientInvoiceGenerator extends PDFInvoiceGenerator {
 
             doc.open();
 
-            if(sProforma.equalsIgnoreCase("no") || MedwanQuery.getInstance().getConfigInt("printReceiptForProformaInvoice",1)==1){
+            if((MedwanQuery.getInstance().getConfigInt("printReceiptForInvoice",1)==1) && (sProforma.equalsIgnoreCase("no") || MedwanQuery.getInstance().getConfigInt("printReceiptForProformaInvoice",1)==1)){
             	addReceipt(invoice);
-            }
-            if(MedwanQuery.getInstance().getConfigInt("pageBreakAfterReceiptForDefaultInvoice",0)==1){
-            	doc.newPage();
+                if(MedwanQuery.getInstance().getConfigInt("pageBreakAfterReceiptForDefaultInvoice",0)==1){
+                	doc.newPage();
+                }
             }
 
             //Print a separate invoice for every service that was linked to at least one debet
@@ -663,7 +672,12 @@ public class PDFPatientInvoiceGenerator extends PDFInvoiceGenerator {
             // saldo
             PdfPTable saldoTable = new PdfPTable(1);
             saldoTable.addCell(createGrayCell(getTran("web","invoiceSaldo").toUpperCase(),1));
-            cell = new PdfPCell(getSaldo(debets, invoice));
+            if(MedwanQuery.getInstance().getConfigInt("enableESDFormat",0)==0){
+            	cell = new PdfPCell(getSaldo(debets, invoice));
+            }
+            else {
+            	cell = new PdfPCell(getSaldoESD(debets, invoice));
+            }
             cell.setPadding(cellPadding);
             saldoTable.addCell(createCell(cell,1,PdfPCell.ALIGN_LEFT,PdfPCell.BOX));
             table.addCell(createCell(new PdfPCell(saldoTable),1,PdfPCell.ALIGN_CENTER,PdfPCell.NO_BORDER));
@@ -1189,7 +1203,7 @@ public class PDFPatientInvoiceGenerator extends PDFInvoiceGenerator {
 
         // debets
         table.addCell(createEmptyCell(9));
-        cell = createLabelCell(getTran("web","invoiceDebets"),5);
+        cell = createLabelCell(getTran("web","totalprice"),5);
         cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
         cell.setPaddingRight(5);
         table.addCell(cell);
@@ -1207,7 +1221,7 @@ public class PDFPatientInvoiceGenerator extends PDFInvoiceGenerator {
 
         // saldo
         table.addCell(createEmptyCell(9));
-        cell = createBoldLabelCell(getTran("web","totalprice").toUpperCase(),5);
+        cell = createBoldLabelCell(getTran("web","balance").toUpperCase(),5);
         cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
         cell.setPaddingRight(5);
         table.addCell(cell);
@@ -1240,8 +1254,151 @@ public class PDFPatientInvoiceGenerator extends PDFInvoiceGenerator {
         cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
         cell.setPaddingRight(5);
         table.addCell(cell);
-        table.addCell(createTotalPriceCell(complementaryinsurar,3));
+        table.addCell(createTotalPriceCell(complementaryinsurar,3,invoice.getDate()));
         table.addCell(createEmptyCell(3));
+
+
+        return table;
+    }
+    
+    //--- GET SALDO -------------------------------------------------------------------------------
+    private PdfPTable getSaldoESD(Vector debets, PatientInvoice invoice){
+        String sAlternateCurrency = MedwanQuery.getInstance().getConfigString("AlternateCurrency","");
+
+    	PdfPTable table = new PdfPTable(40);
+        table.setWidthPercentage(pageWidth);
+
+        // debets
+        table.addCell(createEmptyCell(1));
+        cell = createLabelCell(getTran("web","totalprice")+" "+getTran("web","esdcurrency1"),10);
+        cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+        cell.setPaddingRight(5);
+        table.addCell(cell);
+		String sValue=new DecimalFormat(MedwanQuery.getInstance().getConfigString("AlternateCurrencyPriceFormat","# ##0.00")).format(this.patientDebetTotal/ExportSAP_AR_INV.getExchangeRate(sAlternateCurrency, invoice.getDate()))+" "+sAlternateCurrency;
+    	if(MedwanQuery.getInstance().getConfigInt("totalAlternatePriceCurrencyBeforeAmount",0)==1){
+    		sValue=sAlternateCurrency+" "+new DecimalFormat(MedwanQuery.getInstance().getConfigString("AlternateCurrencyPriceFormat","# ##0.00")).format(this.patientDebetTotal/ExportSAP_AR_INV.getExchangeRate(sAlternateCurrency, invoice.getDate()));
+    	}
+    	cell=createValueCell(sValue,6,7,Font.BOLD);
+    	cell.setBorder(PdfPCell.TOP);
+        cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+        table.addCell(cell);
+        table.addCell(createEmptyCell(3));
+        if(sAlternateCurrency.length()>0){
+            table.addCell(createEmptyCell(1));
+            cell = createLabelCell(getTran("web","totalprice")+" "+getTran("web","esdcurrency2"),10);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+            cell.setPaddingRight(5);
+            table.addCell(cell);
+            table.addCell(createTotalPriceCell(this.patientDebetTotal,6));
+            table.addCell(createEmptyCell(3));
+        }
+        else {
+            table.addCell(createEmptyCell(20));
+        }
+
+        // credits
+        table.addCell(createEmptyCell(1));
+        cell = createLabelCell(getTran("web","invoiceCredits"),10);
+        cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+        cell.setPaddingRight(5);
+        table.addCell(cell);
+		sValue=new DecimalFormat(MedwanQuery.getInstance().getConfigString("AlternateCurrencyPriceFormat","# ##0.00")).format(this.creditTotal/ExportSAP_AR_INV.getExchangeRate(sAlternateCurrency, invoice.getDate()))+" "+sAlternateCurrency;
+    	if(MedwanQuery.getInstance().getConfigInt("totalAlternatePriceCurrencyBeforeAmount",0)==1){
+    		sValue=sAlternateCurrency+" -"+new DecimalFormat(MedwanQuery.getInstance().getConfigString("AlternateCurrencyPriceFormat","# ##0.00")).format(this.creditTotal/ExportSAP_AR_INV.getExchangeRate(sAlternateCurrency, invoice.getDate()));
+    	}
+    	cell=createValueCell(sValue,6,7,Font.BOLD);
+    	cell.setBorder(PdfPCell.TOP);
+        cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+        table.addCell(cell);
+        table.addCell(createEmptyCell(3));
+        if(sAlternateCurrency.length()>0){
+            table.addCell(createEmptyCell(1));
+            cell = createLabelCell(getTran("web","invoiceCredits"),10);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+            cell.setPaddingRight(5);
+            table.addCell(cell);
+            table.addCell(createTotalPriceCell(this.creditTotal,(this.creditTotal>=0),6));
+            table.addCell(createEmptyCell(3));
+        }
+        else {
+            table.addCell(createEmptyCell(20));
+        }
+
+        // saldo
+        table.addCell(createEmptyCell(1));
+        cell = createBoldLabelCell(getTran("web","balance").toUpperCase(),10);
+        cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+        cell.setPaddingRight(5);
+        table.addCell(cell);
+        double saldo = (this.patientDebetTotal - Math.abs(this.creditTotal));
+		sValue=new DecimalFormat(MedwanQuery.getInstance().getConfigString("AlternateCurrencyPriceFormat","# ##0.00")).format(saldo/ExportSAP_AR_INV.getExchangeRate(sAlternateCurrency, invoice.getDate()))+" "+sAlternateCurrency;
+    	if(MedwanQuery.getInstance().getConfigInt("totalAlternatePriceCurrencyBeforeAmount",0)==1){
+    		sValue=sAlternateCurrency+" "+new DecimalFormat(MedwanQuery.getInstance().getConfigString("AlternateCurrencyPriceFormat","# ##0.00")).format(saldo/ExportSAP_AR_INV.getExchangeRate(sAlternateCurrency, invoice.getDate()));
+    	}
+    	cell=createValueCell(sValue,6,7,Font.BOLD);
+    	cell.setBorder(PdfPCell.TOP);
+        cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+        table.addCell(cell);
+        table.addCell(createEmptyCell(3));
+        if(sAlternateCurrency.length()>0){
+            table.addCell(createEmptyCell(1));
+            cell = createBoldLabelCell(getTran("web","balance").toUpperCase(),10);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+            cell.setPaddingRight(5);
+            table.addCell(cell);
+            table.addCell(createTotalPriceCell(saldo,6));
+            table.addCell(createEmptyCell(3));
+        }
+        else {
+            table.addCell(createEmptyCell(20));
+        }
+
+        
+        double complementaryinsurar = 0;
+        String sComplementaryInsurars="";
+        for (int n=0;n<debets.size();n++){
+        	Debet debet = (Debet)debets.elementAt(n);
+        	if(debet.getExtraInsurarUid2()!=null && debet.getExtraInsurarUid2().length()>0){
+        		Insurar e2 = Insurar.get(debet.getExtraInsurarUid2());
+        		if(e2!=null){
+        			String sName = e2.getName();
+        			if(sComplementaryInsurars.indexOf(sName)<0){
+        				if(sComplementaryInsurars.length()>0){
+        					sComplementaryInsurars+=", ";
+        				}
+        				sComplementaryInsurars+=sName;
+        			}
+        		}
+        		complementaryinsurar+=debet.getAmount();
+        	}
+        }
+        // complementary insurar
+        table.addCell(createEmptyCell(1));
+        cell = createBoldLabelCell(getTran("web","complementarycoverage2").toUpperCase()+" ("+sComplementaryInsurars+")",10);
+        cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+        cell.setPaddingRight(5);
+        table.addCell(cell);
+		sValue=new DecimalFormat(MedwanQuery.getInstance().getConfigString("AlternateCurrencyPriceFormat","# ##0.00")).format(complementaryinsurar/ExportSAP_AR_INV.getExchangeRate(sAlternateCurrency, invoice.getDate()))+" "+sAlternateCurrency;
+    	if(MedwanQuery.getInstance().getConfigInt("totalAlternatePriceCurrencyBeforeAmount",0)==1){
+    		sValue=sAlternateCurrency+" "+new DecimalFormat(MedwanQuery.getInstance().getConfigString("AlternateCurrencyPriceFormat","# ##0.00")).format(complementaryinsurar/ExportSAP_AR_INV.getExchangeRate(sAlternateCurrency, invoice.getDate()));
+    	}
+    	cell=createValueCell(sValue,6,7,Font.BOLD);
+    	cell.setBorder(PdfPCell.TOP);
+        cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+        table.addCell(cell);
+        table.addCell(createEmptyCell(3));
+        if(sAlternateCurrency.length()>0){
+            table.addCell(createEmptyCell(1));
+            cell = createBoldLabelCell(getTran("web","complementarycoverage2").toUpperCase()+" ("+sComplementaryInsurars+")",10);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+            cell.setPaddingRight(5);
+            table.addCell(cell);
+            table.addCell(createTotalPriceCell(complementaryinsurar,6));
+            table.addCell(createEmptyCell(3));
+        }
+        else {
+            table.addCell(createEmptyCell(20));
+        }
 
 
         return table;

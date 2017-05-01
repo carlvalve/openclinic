@@ -170,6 +170,7 @@ public class OperationDocument extends OC_Object {
                 operation.setUpdateUser(ScreenHelper.checkString(rs.getString("OC_OPERATION_UPDATEUID")));
                 operation.setVersion(rs.getInt("OC_OPERATION_VERSION"));
                 operation.setBatchUid(rs.getString("OC_OPERATION_BATCHUID"));
+                operation.setOrderUID(rs.getString("OC_OPERATION_ORDERUID"));
                 operation.setOperationUID(rs.getString("OC_OPERATION_UID"));
                 operation.setReceiveComment(rs.getString("OC_OPERATION_RECEIVECOMMENT"));
                 operation.setUnitsReceived(rs.getInt("OC_OPERATION_UNITSRECEIVED"));

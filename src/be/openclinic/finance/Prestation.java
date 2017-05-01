@@ -274,6 +274,40 @@ public class Prestation extends OC_Object{
 		return s;
 	}
 	
+	public void setATCCode(String s){
+		setModifier(11,s+"");
+	}
+	
+	public String getATCCode(){
+		String s = "";
+		if(getModifiers()!=null){
+			try{
+				s =getModifiers().split(";")[11];
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return s;
+	}
+	
+	public void setProductionOrderRawMaterials(String s){
+		setModifier(12,s+"");
+	}
+	
+	public String getProductionOrderRawMaterials(){
+		String s = "";
+		if(getModifiers()!=null){
+			try{
+				s =getModifiers().split(";")[12];
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return s;
+	}
+	
 	public boolean isVisibleFor(Insurar insurar){
 		if(insurar==null){
 			return true;

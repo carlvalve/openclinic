@@ -32,6 +32,9 @@ public class PDFPatientPaymentReceiptGeneratorCPLR extends PDFInvoiceGenerator {
         doc = new Document();
     }
 
+    public ByteArrayOutputStream generatePDFDocumentBytes(final HttpServletRequest req, Invoice inv) throws Exception {
+    	return null;
+    }
     //--- GENERATE PDF DOCUMENT BYTES -------------------------------------------------------------
     public ByteArrayOutputStream generatePDFDocumentBytes(final HttpServletRequest req, String sCreditUid) throws Exception {
         ByteArrayOutputStream baosPDF = new ByteArrayOutputStream();

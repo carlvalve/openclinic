@@ -275,27 +275,27 @@ public class PDFOrderTicketsGenerator extends PDFOfficialBasic {
     	int n=0;
     	while(mo.hasMoreElements()){
     		ProductOrder order = (ProductOrder)mergedOrders.get(mo.nextElement());
-        	cell=createValueCell((n+1)+"",0,6,5,true);
+        	cell=createValueCell((n+1)+"",0,MedwanQuery.getInstance().getConfigInt("pharmacyOrderContentFontSize",6),5,true);
         	table.addCell(cell);
-        	cell=createValueCell("",0,6,10,true);
+        	cell=createValueCell("",0,MedwanQuery.getInstance().getConfigInt("pharmacyOrderContentFontSize",6),10,true);
         	table.addCell(cell);
-        	cell=createValueCell(order.getProductStock().getProduct().getName(),1,6,38,true);
+        	cell=createValueCell(order.getProductStock().getProduct().getName(),1,MedwanQuery.getInstance().getConfigInt("pharmacyOrderContentFontSize",6),38,true);
         	table.addCell(cell);
-        	cell=createValueCell(order.getProductStock().getMaximumLevel()+"",1,6,10,true);
+        	cell=createValueCell(order.getProductStock().getMaximumLevel()+"",1,MedwanQuery.getInstance().getConfigInt("pharmacyOrderContentFontSize",6),10,true);
         	table.addCell(cell);
-        	cell=createValueCell(order.getProductStock().getLevel()+"",1,6,6,true);
+        	cell=createValueCell(order.getProductStock().getLevel()+"",1,MedwanQuery.getInstance().getConfigInt("pharmacyOrderContentFontSize",6),6,true);
         	table.addCell(cell);
-        	cell=createValueCell(ScreenHelper.getTranNoLink("product.units",order.getProductStock().getProduct().getUnit(),sPrintLanguage),1,6,10,true);
+        	cell=createValueCell(ScreenHelper.getTranNoLink("product.units",order.getProductStock().getProduct().getUnit(),sPrintLanguage),1,MedwanQuery.getInstance().getConfigInt("pharmacyOrderContentFontSize",6),10,true);
         	table.addCell(cell);
-        	cell=createValueCell(order.getPackagesOrdered()-order.getPackagesDelivered()+"",1,6,7,true);
+        	cell=createValueCell(order.getPackagesOrdered()-order.getPackagesDelivered()+"",1,MedwanQuery.getInstance().getConfigInt("pharmacyOrderContentFontSize",6),7,true);
         	table.addCell(cell);
-        	cell=createValueCell("",0,6,7,true);
+        	cell=createValueCell("",0,MedwanQuery.getInstance().getConfigInt("pharmacyOrderContentFontSize",6),7,true);
         	table.addCell(cell);
-        	cell=createValueCell("",0,6,7,true);
+        	cell=createValueCell("",0,MedwanQuery.getInstance().getConfigInt("pharmacyOrderContentFontSize",6),7,true);
         	table.addCell(cell);
         	n++;
     	}
-    	for(n=0;n<40-mergedOrders.size();n++){
+    	for(n=40;n<40-mergedOrders.size();n++){
         	cell=createValueCell(" ",0,6,5,true);
         	table.addCell(cell);
         	cell=createValueCell(" ",0,6,10,true);

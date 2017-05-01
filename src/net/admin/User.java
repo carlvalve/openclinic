@@ -227,7 +227,6 @@ public class User extends OC_Object {
 
     public boolean initialize (Connection connection, String sLogin, byte[] aPassword){
     	boolean bReturn = false;
-    	
         if((sLogin!=null)&&(sLogin.trim().length()>0)&&(aPassword!=null)&&(aPassword.length>0)){
             try{
                 String sSelect = "SELECT a.userid,a.personid, a.encryptedpassword, a.start, a.stop, a.project FROM Users a, Userparameters b WHERE a.userid=b.userid and b.parameter='alias' and value = ? ";
@@ -299,6 +298,7 @@ public class User extends OC_Object {
                  	
                     ps.setInt(1,Integer.parseInt(sLogin));
                     ResultSet rs = ps.executeQuery();
+
                     if(rs.next()){
                         this.userid = rs.getString("userid");
                         this.personid = rs.getString("personid");
@@ -307,7 +307,6 @@ public class User extends OC_Object {
                         this.start = ScreenHelper.getSQLDate(rs.getDate("start"));
                         this.stop = ScreenHelper.getSQLDate(rs.getDate("stop"));
                         this.project = ScreenHelper.checkString(rs.getString("project"));
-
                         if(checkPassword(aPassword)){
                         	rs.close();
                         	ps.close();

@@ -36,8 +36,9 @@ public class Translate {
 			GetMethod method = new GetMethod(url);
 			method.setRequestHeader("Content-type","text/xml; charset=windows-1252");
 			Vector<NameValuePair> vNvp = new Vector<NameValuePair>();
-        	vNvp.add(new NameValuePair("de","frank.verbeke@vub.ac.be"));
+        	vNvp.add(new NameValuePair("de","frank@minf.be"));
         	vNvp.add(new NameValuePair("of","tmx"));
+        	vNvp.add(new NameValuePair("key","51868268a07cc4216f68"));
         	vNvp.add(new NameValuePair("q",text));
         	vNvp.add(new NameValuePair("langpair",sourcelanguage+"|"+targetlanguage));
 			NameValuePair[] nvp = new NameValuePair[vNvp.size()];

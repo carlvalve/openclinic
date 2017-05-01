@@ -12,7 +12,10 @@ import java.util.GregorianCalendar;
 import java.util.HashSet;
 
 import be.mxs.common.util.db.MedwanQuery;
+import be.mxs.common.util.system.ScreenHelper;
+import jpos.profile.PropInfoList.Iterator;
 import net.admin.AdminPerson;
+import net.admin.User;
 
 public class ExportNHIFEClaims {
 
@@ -50,6 +53,15 @@ public class ExportNHIFEClaims {
 	    }
     	rs.close();
     	ps.close();
+	    sSql="select * from oc_config where oc_key='BUNGE'";
+	    ps = conn.prepareStatement(sSql);
+	    rs = ps.executeQuery();
+	    String sBUNGE="";
+	    if(rs.next()){
+	    	sBUNGE=rs.getString("oc_value");
+	    }
+    	rs.close();
+    	ps.close();
 	    sSql="select * from oc_config where oc_key='concatSign'";
 	    ps = conn.prepareStatement(sSql);
 	    rs = ps.executeQuery();
@@ -77,8 +89,9 @@ public class ExportNHIFEClaims {
 	    }
     	rs.close();
     	ps.close();
-    	if(sNHIF.length()>0){
+    	if(sNHIF.length()>0 || sBUNGE.length()>0){
     		System.out.println("NHIF UID = "+sNHIF);
+    		System.out.println("BUNGE UID = "+sBUNGE);
     		rs.close();
     		ps.close();
     		//We exporteren automatisch voor de vorige maand, tenzij een specifieke periode wordt opgegeven
@@ -129,7 +142,7 @@ public class ExportNHIFEClaims {
 	    				+ " oc_patientinvoice_status='closed' and"
 	    				+ " oc_insurance_objectid=replace(oc_debet_insuranceuid,'1.','') and"
 	    				+ " length(oc_patientinvoice_comment)>0 and"
-	    				+ " oc_insurance_insuraruid=? order by oc_patientinvoice_date";
+	    				+ " oc_insurance_insuraruid in ('"+sNHIF+"','"+sBUNGE+"') order by oc_patientinvoice_date";
     		}
     		else{
     			sSql="select oc_patientinvoice_objectid from oc_patientinvoices where "
@@ -145,19 +158,18 @@ public class ExportNHIFEClaims {
         		}
         		rs.close();
         		ps.close();
-	    		sSql="select distinct b.*,a.oc_debet_encounteruid,OC_INSURANCE_NR from oc_debets a, oc_patientinvoices b, oc_insurances c where"
+	    		sSql="select distinct b.*,a.oc_debet_encounteruid,OC_INSURANCE_NR,oc_insurance_insuraruid from oc_debets a, oc_patientinvoices b, oc_insurances c where"
 	    				+ " oc_debet_patientinvoiceuid='1.'+convert(varchar,oc_patientinvoice_objectid) and"
 	    				+ " oc_patientinvoice_date>=? and"
 	    				+ " oc_patientinvoice_date<? and"
 	    				+ " oc_patientinvoice_status='closed' and"
 	    				+ " oc_insurance_objectid=replace(oc_debet_insuranceuid,'1.','') and"
 	    				+ " len(oc_patientinvoice_comment)>0 and"
-	    				+ " oc_insurance_insuraruid=? order by oc_patientinvoice_date";
+	    				+ " oc_insurance_insuraruid in ('"+sNHIF+"','"+sBUNGE+"') order by oc_patientinvoice_date";
     		}
     		ps = conn2.prepareStatement(sSql);
     		ps.setDate(1, new java.sql.Date(dBegin.getTime()));
     		ps.setDate(2, new java.sql.Date(dEnd.getTime()));
-    		ps.setString(3, sNHIF);
     		rs=ps.executeQuery();
     		int lines=0;
     		while(rs.next()){
@@ -166,6 +178,7 @@ public class ExportNHIFEClaims {
 				int nPatientId=rs.getInt("OC_PATIENTINVOICE_PATIENTUID");
 				String sInvoiceUid="1."+rs.getString("oc_patientinvoice_objectid");
 				String sEncounterUid=rs.getString("oc_debet_encounteruid");
+				String sInsurarUid=rs.getString("oc_insurance_insuraruid");
     			if(zeroInvoices.contains(nInvoiceObjectId)){
     				continue;
     			}
@@ -238,6 +251,7 @@ public class ExportNHIFEClaims {
     				ps3.setInt(1, nPatientId);
     				ResultSet rs3 = ps3.executeQuery();
     				if(rs3.next()){
+    					java.sql.Date dDateOfBirth=rs3.getDate("dateofbirth");
 	    				int nFolioNo=1;
 	    				sSql="select max(FolioNo) maxno from Folios where ClaimNo=?";
 	    				ps2=nhifconn.prepareStatement(sSql);
@@ -254,8 +268,9 @@ public class ExportNHIFEClaims {
 	    				sSql="insert into Folios(folioid,claimno,foliono,serialno,cardno,firstname,lastname,gender"
 	    						+ ",age,attendancedate,patientfileno,authorizationno,servicetypeid,"
 	    						+ "sourcefacilitycode,sourcedocumentno,letterrefno,patienttypecode,dateadmitted,"
-	    						+ "datedischarged,createdby,datecreated,lastmodified,lastmodifiedby)"
-	    						+ "values(newid(),?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	    						+ "datedischarged,createdby,datecreated,lastmodified,lastmodifiedby,DateOfBirth,"
+	    						+ "TelephoneNo,EmployerNo,PractitionerName,QualificationID,SchemeID)"
+	    						+ "values(newid(),?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 	    				ps2=nhifconn.prepareStatement(sSql);
 	    				ps2.setString(1, sub(sClaimNo,50));
 	    				ps2.setInt(2,nFolioNo);
@@ -286,7 +301,12 @@ public class ExportNHIFEClaims {
 	    				ps3=conn.prepareStatement("select * from oc_debets,oc_encounters where oc_debet_patientinvoiceuid=? and oc_encounter_objectid=replace(oc_debet_encounteruid,'1.','')");
 	    				ps3.setString(1, sInvoiceUid);
 	    				rs3=ps3.executeQuery();
+	    				HashSet practitioners = new HashSet();
 	    				while(rs3.next()){
+	    					String practitioner = rs3.getString("oc_debet_performeruid");
+	    					if(practitioner!=null && practitioner.length()>0){
+	    						practitioners.add(practitioner);
+	    					}
 	    					String s = rs3.getString("oc_encounter_type");
 	    					if(s!=null && s.equalsIgnoreCase("admission")){
 	    						sStatus="IN";
@@ -303,6 +323,65 @@ public class ExportNHIFEClaims {
 	    				ps2.setDate(20, new java.sql.Date(dInvoice.getTime()));
 	    				ps2.setDate(21, new java.sql.Date(new java.util.Date().getTime()));
 	    				ps2.setString(22, sNHIFUserName);
+	    				ps2.setDate(23, dDateOfBirth);
+	    				ps3=conn.prepareStatement("select * from privateview where personid=?");
+	    				ps3.setInt(1, nPatientId);
+	    				rs3=ps3.executeQuery();
+	    				if(rs3.next()){
+	    					ps2.setString(24, rs3.getString("telephone"));
+	    				}
+	    				else{
+	    					ps2.setString(24, "");
+	    				}
+	    				rs3.close();
+	    				ps3.close();
+	    				ps2.setString(25, "");
+	    				String practitioner="";
+	    				String qualification="";
+	    				java.util.Iterator iPractitioners = practitioners.iterator();
+	    				while(iPractitioners.hasNext()){
+	    					String id = (String)iPractitioners.next();
+	    					if(practitioner.length()>0){
+	    						practitioner+=", ";
+	    					}
+		    				ps3=conn.prepareStatement("select lastname,firstname from usersview u,adminview a where u.personid=a.personid and userid=?");
+		    				ps3.setInt(1, Integer.parseInt(id));
+		    				rs3=ps3.executeQuery();
+		    				if(rs3.next()){
+		    					practitioner+=rs3.getString("firstname")+" "+rs3.getString("lastname");
+			    				rs3.close();
+			    				ps3.close();
+			    				ps3=conn.prepareStatement("select * from ocadmin.dbo.userparameters where userid=? and parameter='medicalcenter'");
+			    				ps3.setInt(1, Integer.parseInt(id));
+			    				rs3=ps3.executeQuery();
+			    				if(rs3.next()){
+	    							String mc =  rs3.getString("value");
+	    							try{
+		    							if(mc!=null && mc.length()>0 && (qualification.length()==0 || Integer.parseInt(qualification)>Integer.parseInt(mc))){
+		    								qualification=mc;
+		    							}
+	    							}
+	    							catch(Exception e){
+	    								e.printStackTrace();
+	    							}
+			    				}
+		    				}
+		    				rs3.close();
+		    				ps3.close();
+	    				}
+	    				ps2.setString(26, practitioner);
+	    				try{
+	    					ps2.setInt(27, Integer.parseInt(qualification));
+	    				}
+	    				catch(Exception e){
+	    					ps2.setInt(27, 0);
+	    				}
+	    				if(sInsurarUid.equalsIgnoreCase(sNHIF)){
+	    					ps2.setInt(28, 1001);
+	    				}
+	    				else{
+	    					ps2.setInt(28, 2001);
+	    				}
 	    				ps2.execute();
     				}
     				rs3.close();
@@ -327,12 +406,13 @@ public class ExportNHIFEClaims {
     				//Eerst zoeken we alle prestaties op die aan de actieve factuur verbonden zijn
     				PreparedStatement ps3=conn.prepareStatement("select sum(OC_DEBET_QUANTITY) OC_DEBET_QUANTITY,"
 						+ " oc_prestation_code,"
-						+ " oc_prestation_nomenclature"
-						+ " from oc_debets,oc_prestations "
+						+ " oc_prestation_nomenclature,oc_insurance_insuraruid"
+						+ " from oc_debets,oc_prestations,oc_insurances "
 						+ " where "
 						+ " oc_prestation_objectid=replace(oc_debet_prestationuid,'1.','') and "
+						+ " oc_insurance_objectid=replace(oc_debet_insuranceuid,'1.','') and "
 						+ " oc_debet_patientinvoiceuid=? and oc_debet_credited=0"
-						+ " group by oc_prestation_code,oc_prestation_nomenclature");
+						+ " group by oc_prestation_code,oc_prestation_nomenclature,oc_insurance_insuraruid");
     				ps3.setString(1, "1."+nInvoiceObjectId);
     				ResultSet rs3=ps3.executeQuery();
     				while(rs3.next()){
@@ -366,20 +446,36 @@ public class ExportNHIFEClaims {
 		    						double nUnitPrice=0;
 		    						rs2.close();
 		    						ps2.close();
+		    						//Find item type
 		    						sSql="select * from PackageItems where ItemCode=?";
 		    						ps2=nhifconn.prepareStatement(sSql);
 		    						ps2.setString(1, sDebetCode);
 		    						rs2=ps2.executeQuery();
 		    						if(rs2.next()){
 		    							nItemTypeId=rs2.getInt("ItemTypeId");
+		    						}
+		    						rs2.close();
+		    						ps2.close();
+		    						//Find unit price
+		    						sSql="select * from GenericPackage where ItemCode=? and PackageID=?";
+		    						ps2=nhifconn.prepareStatement(sSql);
+		    						ps2.setString(1, sDebetCode);
+		    	    				if(sInsurarUid.equalsIgnoreCase(sNHIF)){
+		    	    					ps2.setInt(2, 102);
+		    	    				}
+		    	    				else{
+		    	    					ps2.setInt(2, 201);
+		    	    				}
+		    						rs2=ps2.executeQuery();
+		    						if(rs2.next()){
 		    							nUnitPrice=rs2.getDouble("UnitPrice");
 		    						}
 		    						if(nItemTypeId>-1){
 		        						rs2.close();
 		        						ps2.close();
 				    					sSql="insert into FolioItems(FolioItemID,FolioID,ItemTypeID,ItemCode,OtherDetails,ItemQuantity,"
-				    							+ "UnitPrice,AmountClaimed,CreatedBy,datecreated,lastmodifiedby,lastmodified)"
-				    							+ " values(newid(),?,?,?,?,?,?,?,?,?,?,?)";
+				    							+ "UnitPrice,AmountClaimed,CreatedBy,datecreated,lastmodifiedby,lastmodified,PriceCode)"
+				    							+ " values(newid(),?,?,?,?,?,?,?,?,?,?,?,?)";
 				    					ps2=nhifconn.prepareStatement(sSql);
 				    					ps2.setString(1, sFolioId);
 				    					ps2.setInt(2,nItemTypeId);
@@ -392,6 +488,12 @@ public class ExportNHIFEClaims {
 				    					ps2.setDate(9, new java.sql.Date(dInvoice.getTime()));
 				    					ps2.setString(10, sNHIFUserName);
 				    					ps2.setDate(11, new java.sql.Date(new java.util.Date().getTime()));
+			    	    				if(sInsurarUid.equalsIgnoreCase(sNHIF)){
+			    	    					ps2.setString(12, "102-"+sDebetCode);
+			    	    				}
+			    	    				else{
+			    	    					ps2.setString(12, "201-"+sDebetCode);
+			    	    				}
 				    					ps2.execute();
 		    						}
 		    						else{

@@ -195,6 +195,9 @@ public class TransactionVO extends IObjectReference implements Serializable, IId
     	}
 		Debug.println("done converting"); ////////
     }
+    public static TransactionVO get(int serverid,int objectid){
+    	return MedwanQuery.getInstance().loadTransaction(serverid,objectid);
+    }
 
     //--- CONTAINS DATE VALUE ---------------------------------------------------------------------
     // recognises dates in values concatinated with $ and £ (rows and cells)

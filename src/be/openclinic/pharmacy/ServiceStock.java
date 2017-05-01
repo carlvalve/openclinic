@@ -19,6 +19,8 @@ public class ServiceStock extends OC_Object{
     private AdminPerson stockManager;
     private Vector authorizedUsers;
     private String authorizedUserIds;
+    private Vector receivingUsers;
+    private String receivingUserIds;
     private Vector dispensingUsers;
     private String dispensingUserIds;
     private Vector validationUsers;
@@ -91,6 +93,7 @@ public class ServiceStock extends OC_Object{
 	//--- CONSTRUCTOR -----------------------------------------------------------------------------
     public ServiceStock(){
         this.authorizedUsers = new Vector();
+        this.receivingUsers = new Vector();
         this.dispensingUsers = new Vector();
         this.validationUsers = new Vector();
     }
@@ -285,6 +288,47 @@ public class ServiceStock extends OC_Object{
     public String getAuthorizedUserIds(){
         return this.authorizedUserIds;
     }
+    //--- RECIVING USERS ------------------------------------------------------------------------
+    public Vector getReceivingUsers(){
+        User user;
+        if(receivingUserIds!=null && receivingUserIds.length() > 0){
+            StringTokenizer idTokenizer = new StringTokenizer(receivingUserIds,"$");
+            String receivingUserId;
+           
+            while(idTokenizer.hasMoreTokens()){
+            	receivingUserId = idTokenizer.nextToken();
+            	Connection ad_conn = MedwanQuery.getInstance().getAdminConnection();
+                user = User.get(Integer.parseInt(receivingUserId));
+               
+                try{
+					ad_conn.close();
+				}
+                catch(SQLException e){
+					e.printStackTrace();
+				}
+                
+                this.receivingUsers.add(user);
+            }
+        }
+        
+        return this.receivingUsers;
+    }
+    
+    public void setReceivingUsers(Vector receivingUsers){
+        this.receivingUsers = receivingUsers;
+    }
+    public void addReceivingUser(User user){
+        this.receivingUsers.addElement(user);
+    }
+    public void removeReceivingUser(User user){
+        this.receivingUsers.removeElement(user);
+    }
+    public void setReceivingUserIds(String ids){
+        this.receivingUserIds = ids;
+    }
+    public String getReceivingUserIds(){
+        return this.receivingUserIds;
+    }
     
     //--- IS AUTHORIZED USER ----------------------------------------------------------------------
     public boolean isAuthorizedUser(String userid){
@@ -302,10 +346,42 @@ public class ServiceStock extends OC_Object{
         return false;
     }
 
+    //--- IS AUTHORIZED USER ----------------------------------------------------------------------
+    public boolean isReceivingUser(String userid){
+        if(userid.equalsIgnoreCase(this.getStockManagerUid())) return true;
+        if(receivingUserIds!=null && receivingUserIds.length() > 0){
+            StringTokenizer tokenizer = new StringTokenizer(receivingUserIds,"$");
+            while(tokenizer.hasMoreTokens()){
+                if(userid.equalsIgnoreCase(tokenizer.nextToken())){
+                    return true;
+                }
+            }
+        }
+        else {
+        	return true;
+        }
+        
+        return false;
+    }
+
     //--- IS AUTHORIZED USER NOT MANAGER ----------------------------------------------------------
     public boolean isAuthorizedUserNotManager(String userid){
         if(authorizedUserIds!=null && authorizedUserIds.length() > 0){
             StringTokenizer tokenizer = new StringTokenizer(authorizedUserIds,"$");
+            while(tokenizer.hasMoreTokens()){
+                if(userid.equalsIgnoreCase(tokenizer.nextToken())){
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
+    
+    //--- IS AUTHORIZED USER NOT MANAGER ----------------------------------------------------------
+    public boolean isReceivingUserNotManager(String userid){
+        if(receivingUserIds!=null && receivingUserIds.length() > 0){
+            StringTokenizer tokenizer = new StringTokenizer(receivingUserIds,"$");
             while(tokenizer.hasMoreTokens()){
                 if(userid.equalsIgnoreCase(tokenizer.nextToken())){
                     return true;
@@ -365,6 +441,13 @@ public class ServiceStock extends OC_Object{
     //--- GET -------------------------------------------------------------------------------------
     public static ServiceStock get(String stockUid){
         ServiceStock stock = null;
+        try{
+        	int n = Integer.parseInt(stockUid.split("\\.")[0]);
+        	n = Integer.parseInt(stockUid.split("\\.")[1]);
+        }
+        catch(Exception e){
+        	return null;
+        }
         PreparedStatement ps = null;
         ResultSet rs = null;
         if(stockUid.indexOf(".") == -1) return null;
@@ -374,8 +457,8 @@ public class ServiceStock extends OC_Object{
             String sSelect = "SELECT * FROM OC_SERVICESTOCKS"+
                              " WHERE OC_STOCK_SERVERID = ? AND OC_STOCK_OBJECTID = ?";
             ps = oc_conn.prepareStatement(sSelect);
-            ps.setInt(1,Integer.parseInt(stockUid.substring(0,stockUid.indexOf("."))));
-            ps.setInt(2,Integer.parseInt(stockUid.substring(stockUid.indexOf(".")+1)));
+            ps.setInt(1,Integer.parseInt(stockUid.split("\\.")[0]));
+            ps.setInt(2,Integer.parseInt(stockUid.split("\\.")[1]));
             rs = ps.executeQuery();
 
             // get data from DB
@@ -386,6 +469,7 @@ public class ServiceStock extends OC_Object{
                 stock.setServiceUid(rs.getString("OC_STOCK_SERVICEUID"));
                 stock.setStockManagerUid(rs.getString("OC_STOCK_STOCKMANAGERUID"));
                 stock.setAuthorizedUserIds(rs.getString("OC_STOCK_AUTHORIZEDUSERS"));
+                stock.setReceivingUserIds(rs.getString("OC_STOCK_RECEIVINGUSERS"));
                 stock.setDispensingUserIds(rs.getString("OC_STOCK_DISPENSINGUSERS"));
                 stock.setValidationUserIds(rs.getString("OC_STOCK_VALIDATIONUSERS"));
                 stock.setDefaultSupplierUid(rs.getString("OC_STOCK_DEFAULTSUPPLIERUID"));
@@ -505,8 +589,8 @@ public class ServiceStock extends OC_Object{
                           "  OC_STOCK_NAME, OC_STOCK_SERVICEUID, OC_STOCK_BEGIN, OC_STOCK_END,"+
                           "  OC_STOCK_STOCKMANAGERUID, OC_STOCK_AUTHORIZEDUSERS, OC_STOCK_DEFAULTSUPPLIERUID,"+
                           "  OC_STOCK_ORDERPERIODINMONTHS, OC_STOCK_CREATETIME, OC_STOCK_UPDATETIME,"+
-                          "  OC_STOCK_UPDATEUID, OC_STOCK_VERSION, OC_STOCK_NOSYNC, OC_STOCK_HIDDEN,OC_STOCK_DISPENSINGUSERS,OC_STOCK_VALIDATEOUTGOING,OC_STOCK_VALIDATIONUSERS)"+
-                          " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,1,?,?,?,?,?)";
+                          "  OC_STOCK_UPDATEUID, OC_STOCK_VERSION, OC_STOCK_NOSYNC, OC_STOCK_HIDDEN,OC_STOCK_DISPENSINGUSERS,OC_STOCK_VALIDATEOUTGOING,OC_STOCK_VALIDATIONUSERS,OC_STOCK_RECEIVINGUSERS)"+
+                          " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,1,?,?,?,?,?,?)";
                 ps = oc_conn.prepareStatement(sSelect);
 
                 // set new servicestockuid
@@ -577,6 +661,13 @@ public class ServiceStock extends OC_Object{
                 if(validationUserIds.length() > 0) ps.setString(18,validationUserIds.toString());
                 else                               ps.setNull(18,Types.VARCHAR);
 
+                // Receiving users
+                StringBuffer receivingUserIds = new StringBuffer();
+                for(int i=0; i<this.getReceivingUsers().size(); i++){
+                    user = (User)this.getReceivingUsers().elementAt(i);
+                    receivingUserIds.append(user.userid+"$");
+                }
+
                 ps.executeUpdate();
             }
             else{
@@ -586,7 +677,7 @@ public class ServiceStock extends OC_Object{
                 sSelect = "UPDATE OC_SERVICESTOCKS SET OC_STOCK_NAME=?, OC_STOCK_SERVICEUID=?,"+
                           "  OC_STOCK_BEGIN=?, OC_STOCK_END=?, OC_STOCK_STOCKMANAGERUID=?,"+
                           "  OC_STOCK_AUTHORIZEDUSERS=?, OC_STOCK_DEFAULTSUPPLIERUID=?, OC_STOCK_ORDERPERIODINMONTHS=?,"+
-                          "  OC_STOCK_UPDATETIME=?, OC_STOCK_UPDATEUID=?, OC_STOCK_VERSION=(OC_STOCK_VERSION+1), OC_STOCK_NOSYNC=?, OC_STOCK_HIDDEN=?, OC_STOCK_DISPENSINGUSERS=?, OC_STOCK_VALIDATEOUTGOING=?, OC_STOCK_VALIDATIONUSERS=?"+
+                          "  OC_STOCK_UPDATETIME=?, OC_STOCK_UPDATEUID=?, OC_STOCK_VERSION=(OC_STOCK_VERSION+1), OC_STOCK_NOSYNC=?, OC_STOCK_HIDDEN=?, OC_STOCK_DISPENSINGUSERS=?, OC_STOCK_VALIDATEOUTGOING=?, OC_STOCK_VALIDATIONUSERS=?, OC_STOCK_RECEIVINGUSERS=?"+
                           " WHERE OC_STOCK_SERVERID=? AND OC_STOCK_OBJECTID=?";
                 ps = oc_conn.prepareStatement(sSelect);
                 ps.setString(1,this.getName());
@@ -650,8 +741,17 @@ public class ServiceStock extends OC_Object{
                 if(validationUserIds.length() > 0) ps.setString(15,validationUserIds.toString());
                 else                               ps.setNull(15,Types.VARCHAR);
                 // where
-                ps.setInt(16,Integer.parseInt(this.getUid().substring(0,this.getUid().indexOf("."))));
-                ps.setInt(17,Integer.parseInt(this.getUid().substring(this.getUid().indexOf(".")+1)));
+                // receiving users
+                StringBuffer receivingUserIds = new StringBuffer();
+                for(int i=0; i<this.getReceivingUsers().size(); i++){
+                    user = (User)this.getReceivingUsers().elementAt(i);
+                    receivingUserIds.append(user.userid+"$");
+                }                
+                if(receivingUserIds.length() > 0) ps.setString(16,receivingUserIds.toString());
+                else                               ps.setNull(16,Types.VARCHAR);
+                
+                ps.setInt(17,Integer.parseInt(this.getUid().substring(0,this.getUid().indexOf("."))));
+                ps.setInt(18,Integer.parseInt(this.getUid().substring(this.getUid().indexOf(".")+1)));
                 ps.executeUpdate();
             }
         }
@@ -1198,6 +1298,7 @@ public class ServiceStock extends OC_Object{
                 stock.setName(rs.getString("OC_STOCK_NAME"));
                 stock.setServiceUid(rs.getString("OC_STOCK_SERVICEUID"));
                 stock.setAuthorizedUserIds(rs.getString("OC_STOCK_AUTHORIZEDUSERS"));
+                stock.setReceivingUserIds(rs.getString("OC_STOCK_RECEIVINGUSERS"));
                 stock.setDispensingUserIds(rs.getString("OC_STOCK_DISPENSINGUSERS"));
                 stock.setValidationUserIds(rs.getString("OC_STOCK_VALIDATIONUSERS"));
                 stock.setValidateoutgoingtransactions(rs.getInt("OC_STOCK_VALIDATEOUTGOING"));
@@ -1262,6 +1363,7 @@ public class ServiceStock extends OC_Object{
                                 stock.setName(rs.getString("OC_STOCK_NAME"));
                                 stock.setServiceUid(rs.getString("OC_STOCK_SERVICEUID"));
                                 stock.setAuthorizedUserIds(rs.getString("OC_STOCK_AUTHORIZEDUSERS"));
+                                stock.setReceivingUserIds(rs.getString("OC_STOCK_RECEIVINGUSERS"));
                                 stock.setDispensingUserIds(rs.getString("OC_STOCK_DISPENSINGUSERS"));
                                 stock.setValidationUserIds(rs.getString("OC_STOCK_VALIDATIONUSERS"));
                                 stock.setValidateoutgoingtransactions(rs.getInt("OC_STOCK_VALIDATEOUTGOING"));
@@ -1330,6 +1432,7 @@ public class ServiceStock extends OC_Object{
                                 stock.setName(rs.getString("OC_STOCK_NAME"));
                                 stock.setServiceUid(rs.getString("OC_STOCK_SERVICEUID"));
                                 stock.setAuthorizedUserIds(rs.getString("OC_STOCK_AUTHORIZEDUSERS"));
+                                stock.setReceivingUserIds(rs.getString("OC_STOCK_RECEIVINGUSERS"));
                                 stock.setDispensingUserIds(rs.getString("OC_STOCK_DISPENSINGUSERS"));
                                 stock.setValidationUserIds(rs.getString("OC_STOCK_VALIDATIONUSERS"));
                                 stock.setValidateoutgoingtransactions(rs.getInt("OC_STOCK_VALIDATEOUTGOING"));
@@ -1383,6 +1486,7 @@ public class ServiceStock extends OC_Object{
                         stock.setName(rs.getString("OC_STOCK_NAME"));
                         stock.setServiceUid(rs.getString("OC_STOCK_SERVICEUID"));
                         stock.setAuthorizedUserIds(rs.getString("OC_STOCK_AUTHORIZEDUSERS"));
+                        stock.setReceivingUserIds(rs.getString("OC_STOCK_RECEIVINGUSERS"));
                         stock.setDispensingUserIds(rs.getString("OC_STOCK_DISPENSINGUSERS"));
                         stock.setValidationUserIds(rs.getString("OC_STOCK_VALIDATIONUSERS"));
                         stock.setValidateoutgoingtransactions(rs.getInt("OC_STOCK_VALIDATEOUTGOING"));
@@ -1434,6 +1538,7 @@ public class ServiceStock extends OC_Object{
                         stock.setName(rs.getString("OC_STOCK_NAME"));
                         stock.setServiceUid(rs.getString("OC_STOCK_SERVICEUID"));
                         stock.setAuthorizedUserIds(rs.getString("OC_STOCK_AUTHORIZEDUSERS"));
+                        stock.setReceivingUserIds(rs.getString("OC_STOCK_RECEIVINGUSERS"));
                         stock.setDispensingUserIds(rs.getString("OC_STOCK_DISPENSINGUSERS"));
                         stock.setValidationUserIds(rs.getString("OC_STOCK_VALIDATIONUSERS"));
                         stock.setValidateoutgoingtransactions(rs.getInt("OC_STOCK_VALIDATEOUTGOING"));

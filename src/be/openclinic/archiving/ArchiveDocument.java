@@ -391,6 +391,61 @@ public class ArchiveDocument extends OC_Object implements Comparable {
 		return archDoc;		
 	}
 	
+	public static Vector getAllByReference(String sReference){
+		Vector docs = new Vector();
+		ArchiveDocument archDoc = null;
+
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		String sSql = "SELECT * FROM arch_documents"+
+		              " WHERE ARCH_DOCUMENT_REFERENCE = ?";
+		
+		try{
+			ps = conn.prepareStatement(sSql);
+			ps.setString(1,sReference);
+			rs = ps.executeQuery();
+			
+			while(rs.next()){
+				archDoc = new ArchiveDocument();
+				archDoc.setUid(rs.getInt("ARCH_DOCUMENT_SERVERID")+"."+rs.getInt("ARCH_DOCUMENT_OBJECTID"));
+				
+				archDoc.udi = ScreenHelper.checkString(rs.getString("ARCH_DOCUMENT_UDI"));
+				archDoc.title = ScreenHelper.checkString(rs.getString("ARCH_DOCUMENT_TITLE"));
+				archDoc.description = ScreenHelper.checkString(rs.getString("ARCH_DOCUMENT_DESCRIPTION"));
+				archDoc.category = ScreenHelper.checkString(rs.getString("ARCH_DOCUMENT_CATEGORY"));
+				archDoc.author = ScreenHelper.checkString(rs.getString("ARCH_DOCUMENT_AUTHOR"));
+				archDoc.date = rs.getDate("ARCH_DOCUMENT_DATE");
+				archDoc.destination = ScreenHelper.checkString(rs.getString("ARCH_DOCUMENT_DESTINATION"));
+				archDoc.reference = ScreenHelper.checkString(rs.getString("ARCH_DOCUMENT_REFERENCE"));
+				archDoc.personId = rs.getInt("ARCH_DOCUMENT_PERSONID");
+				archDoc.storageName = ScreenHelper.checkString(rs.getString("ARCH_DOCUMENT_STORAGENAME"));
+				archDoc.deleteDate = rs.getDate("ARCH_DOCUMENT_DELETEDATE");
+
+	            // link with transaction
+				archDoc.tranServerId = rs.getInt("ARCH_DOCUMENT_TRAN_SERVERID");
+				archDoc.tranTranId = rs.getInt("ARCH_DOCUMENT_TRAN_TRANSACTIONID");
+				docs.add(archDoc);
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		finally{
+			try{
+				if(rs!=null) rs.close();
+				if(ps!=null) ps.close();
+				if(conn!=null) conn.close();
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+		
+		return docs;		
+	}
+	
 	//--- GET -------------------------------------------------------------------------------------
 	public static ArchiveDocument get(String sUDI){
         return get(sUDI,false);		

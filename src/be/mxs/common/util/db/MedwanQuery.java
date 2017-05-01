@@ -58,6 +58,7 @@ public class MedwanQuery {
 	private static DataSource dsAdmin = null;
 	private static DataSource dsLongAdmin = null;
 	private static DataSource dsStats = null;
+	private static DataSource dsIkirezi = null;
     private static MedwanQuery medwanQuery = null;
     private static Hashtable sessions = new Hashtable();
     private String dsAdminName = "admindb";
@@ -66,6 +67,7 @@ public class MedwanQuery {
     private String dsOpenclinicName = "openclinicdb";
     private String dsLongOpenclinicName = "longopenclinicdb";
     private String dsStatsName = "statsdb";
+    private String dsIkireziName = "ikirezidb";
     private Hashtable activities = new Hashtable();
     private Hashtable config;
     private Hashtable restrictedDiagnoses;
@@ -118,6 +120,7 @@ public class MedwanQuery {
 			dsAdmin = (DataSource)ctx.lookup("java:comp/env/admin");
 			dsLongAdmin = (DataSource)ctx.lookup("java:comp/env/longadmin");
 			dsStats = (DataSource)ctx.lookup("java:comp/env/stats");
+			dsIkirezi = (DataSource)ctx.lookup("java:comp/env/ikirezi");
 		}
 		catch(NamingException e1){
 			e1.printStackTrace();
@@ -817,6 +820,10 @@ public class MedwanQuery {
         return dsOpenclinicName;
     }
     
+    public String getIkireziDatasourceName(){
+        return dsIkireziName;
+    }
+    
     public String getStatsDatasourceName(){
         return dsStatsName;
     }
@@ -1091,6 +1098,18 @@ public class MedwanQuery {
     	try{
     		conn=dsOpenClinic.getConnection();
 		}
+    	catch(Exception e){
+			e.printStackTrace();
+		}
+    	return conn;
+    }
+    
+    //--- GET CONFIG CONNECTION -------------------------------------------------------------------
+    public Connection getIkireziConnection(){
+    	Connection conn=null;
+    	try{
+    		if(dsIkirezi!=null) conn=dsIkirezi.getConnection();
+		} 
     	catch(Exception e){
 			e.printStackTrace();
 		}
@@ -4147,12 +4166,12 @@ public class MedwanQuery {
         Vector personalVaccinations = new Vector();
         Vector otherVaccinations = new Vector();
         String sStartedVaccinations = "'*'";
-        Connection OccupdbConnection;
+        Connection OccupdbConnection=null;
+        PreparedStatement Occupstatement = null, Occupstatement2 = null;
+        ResultSet Occuprs = null,Occuprs2 = null;
         try{
             String transactionType;
             int activeTransactionId = -1, status, version, versionserverid, activeServerId = -1;
-            PreparedStatement Occupstatement2;
-            ResultSet Occuprs2;
             TransactionVO activeTransaction = null;
             Date creationDate, updateTime;
             ItemContextVO itemContextVO;
@@ -4161,11 +4180,10 @@ public class MedwanQuery {
             VaccinationInfoVO vaccinationInfoVO;
             Iterator elements;
             OccupdbConnection = getOpenclinicConnection();
-            ResultSet Occuprs;
             
             //Eerst laden we alle vaccinatietransacties die er voor deze patient ooit geweest zijn.
             //We maken tevens een Hashtable aan met voor elke vaccinnaam de recentste vaccinatie
-            PreparedStatement Occupstatement = OccupdbConnection.prepareStatement("select a.*,b.* from Transactions a,Items b,Healthrecord c where a.serverid=b.serverid and a.healthRecordId=c.healthRecordId and a.transactionId=b.transactionId and transactionType='be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_VACCINATION' and c.personId=? order by a.serverid,a.transactionId");
+            Occupstatement = OccupdbConnection.prepareStatement("select a.*,b.* from Transactions a,Items b,Healthrecord c where a.serverid=b.serverid and a.healthRecordId=c.healthRecordId and a.transactionId=b.transactionId and transactionType='be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_VACCINATION' and c.personId=? order by a.serverid,a.transactionId");
             Occupstatement.setInt(1, personVO.getPersonId().intValue());
             Occuprs = Occupstatement.executeQuery();
             Hashtable hPersVacs = new Hashtable();
@@ -4337,6 +4355,19 @@ public class MedwanQuery {
 
         } catch(Exception e){
             e.printStackTrace();
+        }
+        finally{
+        	try{
+        		if(Occuprs!=null) Occuprs.close();
+        		if(Occuprs2!=null) Occuprs2.close();
+        		if(Occupstatement!=null) Occupstatement.close();
+        		if(Occupstatement2!=null) Occupstatement2.close();
+        	}
+        	catch(Exception r){}
+        	try{
+        		if(OccupdbConnection!=null) OccupdbConnection.close();
+        	}
+        	catch(Exception r){}
         }
         return personalVaccinationsInfoVO;
     }
@@ -6161,6 +6192,43 @@ public class MedwanQuery {
         }
         MedwanQuery.getInstance().getObjectCache().putObject("transaction",transactionVO);
         return transactionVO;
+    }
+    
+    public Vector getEncounterItems(String encounterUid, String itemType){
+        Vector hs = new Vector();
+    	Encounter encounter = Encounter.get(encounterUid);
+    	int healthRecordId = MedwanQuery.getInstance().getHealthRecordIdFromPersonId(Integer.parseInt(encounter.getPatientUID()));
+    	String sSql = "select * from items a,(select t.* from transactions t,items i "
+    			+ " where "
+    			+ " t.healthrecordid=? and "
+    			+ " t.transactionid=i.transactionid and t.serverid=i.serverid and "
+    			+ " i.type='be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID' and "
+    			+ " i.value=?) b "
+    			+ " where "
+    			+ " a.transactionid=b.transactionid and a.serverid=b.serverid and "
+    			+ " a.type=?";
+        Connection OccupdbConnection;
+        try{
+            OccupdbConnection = getOpenclinicConnection();
+            PreparedStatement ps = OccupdbConnection.prepareStatement(sSql);
+            ps.setInt(1, healthRecordId);
+            ps.setString(2, encounterUid);
+            ps.setString(3, itemType);
+            ResultSet rs = ps.executeQuery();
+            ItemVO historyItem;
+            while (rs.next()){
+                historyItem = new ItemVO(new Integer(rs.getInt("itemId")), itemType, rs.getString("value"), new java.util.Date(rs.getDate("updateTime").getTime()), null);
+                historyItem.setServerId(rs.getInt("serverid"));
+                hs.add(historyItem);
+            }
+            rs.close();
+            ps.close();
+            OccupdbConnection.close();
+            
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+    	return hs;
     }
     
     //--- GET ITEM HISTORY ------------------------------------------------------------------------

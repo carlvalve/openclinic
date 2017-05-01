@@ -273,7 +273,7 @@ public abstract class PDFBasic {
         try{
             PdfPTable table = new PdfPTable(1);
             table.setTotalWidth(100);
-            cell = new PdfPCell(new Phrase());
+            cell = new PdfPCell(new Phrase("\n"));
             cell.setBorder(PdfPCell.NO_BORDER);
             cell.setPaddingTop(height);
             table.addCell(cell);
