@@ -173,6 +173,16 @@ public class ProductStock extends OC_Object implements Comparable {
 		}
     	return consumption;
     }
+    
+    public int getUnbatchedLevel(){
+    	int level = getLevel();
+    	Vector batches = getBatches();
+    	for(int n=0;n<batches.size();n++){
+    		Batch batch = (Batch)batches.elementAt(n);
+    		level-=batch.getLevel();
+    	}
+    	return level;
+    }
 
     public long getAverageConsumption(int months, boolean bIncludePatients, boolean bIncludeStocks, boolean bOther){
     	Date date = ScreenHelper.parseDate(new SimpleDateFormat("01/MM/yyyy").format(new Date()));
@@ -1443,6 +1453,18 @@ public class ProductStock extends OC_Object implements Comparable {
         return units;
     }
     
+    public int getTotalUnitsInForPeriod(Vector receipts,java.util.Date dateFrom,java.util.Date dateTo) {
+        int units = 0;
+        ProductStockOperation receipt;
+        for (int i = 0; i < receipts.size(); i++) {
+        	receipt = (ProductStockOperation) receipts.get(i);
+            if(receipt.getDescription().startsWith("medicationreceipt") && !receipt.getDate().before(dateFrom) && receipt.getDate().before(dateTo)){
+            	units += receipt.getUnitsChanged();
+            }
+        }
+        return units;
+    }
+
     public int getTotalUnitsInForPeriod(java.util.Date dateFrom,java.util.Date dateTo,String userid) {
         int units = 0;
 
@@ -1457,6 +1479,18 @@ public class ProductStock extends OC_Object implements Comparable {
         return units;
     }
     
+    public int getTotalUnitsInForPeriod(Vector receipts,java.util.Date dateFrom,java.util.Date dateTo, String userid) {
+        int units = 0;
+        ProductStockOperation receipt;
+        for (int i = 0; i < receipts.size(); i++) {
+        	receipt = (ProductStockOperation) receipts.get(i);
+            if(receipt.getDescription().startsWith("medicationreceipt") && !receipt.getDate().before(dateFrom) && receipt.getDate().before(dateTo) && receipt.getUpdateUser().equalsIgnoreCase(userid)){
+            	units += receipt.getUnitsChanged();
+            }
+        }
+        return units;
+    }
+
     public int getTotalUnitsInForPeriod(java.util.Date dateFrom,java.util.Date dateTo,String userid,String sBatchNumber) {
         int units = 0;
 
@@ -1500,6 +1534,19 @@ public class ProductStock extends OC_Object implements Comparable {
         return units;
     }
     
+    //--- GET TOTAL UNITS OUT FOR YEAR ------------------------------------------------------------
+    public int getTotalUnitsOutForPeriod(Vector deliveries,java.util.Date dateFrom,java.util.Date dateTo) {
+        int units = 0;
+        ProductStockOperation delivery;
+        for (int i = 0; i < deliveries.size(); i++) {
+            delivery = (ProductStockOperation) deliveries.get(i);
+            if(delivery.getDescription().startsWith("medicationdelivery") && !delivery.getDate().before(dateFrom) && delivery.getDate().before(dateTo)){
+            	units += delivery.getUnitsChanged();
+            }
+        }
+        return units;
+    }
+    
     public int getTotalUnitsOutForPeriod(java.util.Date dateFrom,java.util.Date dateTo, String userid) {
         int units = 0;
         Vector deliveries = ProductStockOperation.getDeliveries(getUid(), "", dateFrom, dateTo, "OC_OPERATION_DATE", "ASC");
@@ -1512,6 +1559,19 @@ public class ProductStock extends OC_Object implements Comparable {
         }
         return units;
     }
+
+    public int getTotalUnitsOutForPeriod(Vector deliveries,java.util.Date dateFrom,java.util.Date dateTo, String userid) {
+        int units = 0;
+        ProductStockOperation delivery;
+        for (int i = 0; i < deliveries.size(); i++) {
+            delivery = (ProductStockOperation) deliveries.get(i);
+            if(delivery.getDescription().startsWith("medicationdelivery") && !delivery.getDate().before(dateFrom) && delivery.getDate().before(dateTo) && delivery.getUpdateUser().equalsIgnoreCase(userid)){
+            	units += delivery.getUnitsChanged();
+            }
+        }
+        return units;
+    }
+    
     
     public int getTotalUnitsOutForYear(java.util.Date dateFrom) {
         int units = 0;
@@ -1537,7 +1597,7 @@ public class ProductStock extends OC_Object implements Comparable {
     // Count level at a given time starting from the initial level (0), based on the operations
     // done on this productStock,
     //---------------------------------------------------------------------------------------------
-    public int getLevel(java.util.Date dateUntill) {
+    public int getLevelOld(java.util.Date dateUntill) {
         java.util.Date dateFrom = new java.util.Date(0); // begin of time
         // IN
         int unitsIn = 0;
@@ -1546,6 +1606,9 @@ public class ProductStock extends OC_Object implements Comparable {
         for (int i = 0; i < receipts.size(); i++) {
             receipt = (ProductStockOperation) receipts.get(i);
             unitsIn += receipt.getUnitsChanged();
+        }
+        if(getUid().equalsIgnoreCase("1.6760")){
+        	System.out.println("IN="+unitsIn);
         }
 
         // OUT
@@ -1558,6 +1621,54 @@ public class ProductStock extends OC_Object implements Comparable {
         }
         return unitsIn - unitsOut;
     }
+    
+    public int getLevel(Vector operations, java.util.Date dateUntill) {
+    	return getTotalUnitsInForPeriod(operations, new java.util.Date(0), dateUntill)-getTotalUnitsOutForPeriod(operations, new java.util.Date(0), dateUntill);
+    }
+    
+    public int getLevel(java.util.Date dateUntill) {
+    	int level=0;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+            String sSelect = "SELECT SUM(level) level from ("+
+            				 " SELECT sum(OC_OPERATION_UNITSCHANGED) level"+
+                             "  FROM OC_PRODUCTSTOCKOPERATIONS"+
+                             " WHERE OC_OPERATION_DESCRIPTION LIKE 'medicationreceipt.%'" +
+                             " and OC_OPERATION_PRODUCTSTOCKUID='"+getUid()+"'"+
+                             " AND OC_OPERATION_DATE < ?"+
+                             " UNION"+
+                             " SELECT -sum(OC_OPERATION_UNITSCHANGED) level"+
+                             "  FROM OC_PRODUCTSTOCKOPERATIONS"+
+                             " WHERE OC_OPERATION_DESCRIPTION LIKE 'medicationdelivery.%'" +
+                             " and OC_OPERATION_PRODUCTSTOCKUID='"+getUid()+"'"+
+                             " AND OC_OPERATION_DATE < ?) z";
+
+            ps = oc_conn.prepareStatement(sSelect);
+            ps.setTimestamp(1,new java.sql.Timestamp(dateUntill.getTime()));
+            ps.setTimestamp(2,new java.sql.Timestamp(dateUntill.getTime()));
+            rs = ps.executeQuery();
+            if(rs.next()){
+            	level=rs.getInt("level");
+            }
+            rs.close();
+            ps.close();
+        }
+        catch(Exception e){
+        	e.printStackTrace();
+        }
+    	finally{
+    		try {
+				oc_conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+        return level;
+    }
+    
     //--- COMPARE TO ------------------------------------------------------------------------------
     public int compareTo(Object obj) {
         ProductStock otherProductStock = (ProductStock) obj;

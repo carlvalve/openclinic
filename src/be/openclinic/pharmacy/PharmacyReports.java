@@ -5,12 +5,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 
 import be.dpms.medwan.webapp.wo.common.system.SessionContainerWO;
 import be.mxs.common.util.db.MedwanQuery;
+import be.mxs.common.util.system.HTMLEntities;
 import be.mxs.common.util.system.Miscelaneous;
 import be.mxs.common.util.system.Pointer;
 import be.mxs.common.util.system.ScreenHelper;
@@ -24,9 +28,174 @@ import net.admin.User;
 
 public class PharmacyReports {
 
+	public static Vector getInventoryReport(String serviceStockUid, java.util.Date begin, java.util.Date end, String language){
+		Vector report=new Vector();
+		long day = 24*3600*1000;
+		String reportline="";
+		//Header
+		reportline+="CODE;";
+		reportline+="PRODUCT;";
+		reportline+="UNIT;";
+		reportline+="INITIAL;";
+		reportline+="IN;";
+		reportline+="OUT;";
+		reportline+="THEORETICAL;";
+		reportline+="PUMP;";
+		reportline+="THEORETICAL_VALUE;";
+		reportline+="PHYSICAL;";
+		reportline+="PHYSICAL_VALUE;";
+		reportline+="MISSING;";
+		reportline+="OVERSTOCK;\r\n";
+		report.add(reportline);
+		ServiceStock serviceStock = ServiceStock.get(serviceStockUid);
+		if(serviceStock!=null && serviceStock.hasValidUid()){
+	 		//Now we have to find all productstocks sorted by productname
+	 		SortedMap stocks = new TreeMap();
+	 		Vector productStocks = ServiceStock.getProductStocks(serviceStockUid);
+	 		for(int n=0;n<productStocks.size();n++){
+	 			ProductStock stock = (ProductStock)productStocks.elementAt(n);
+	 			//First find the product subcategory
+	 			String uid=stock.getProduct()==null?"|"+stock.getUid():HTMLEntities.unhtmlentities(stock.getProduct().getName().toUpperCase())+"|"+stock.getUid();
+	 			stocks.put(uid, stock);
+	 		}
+	 		
+	 		Hashtable printedSubTitels = new Hashtable();
+	 		Iterator iStocks = stocks.keySet().iterator();
+	 		boolean bInitialized = false;
+	 		double sectionTotal=0,generalTotal=0;
+	 		String lasttitle="";
+	 		while(iStocks.hasNext()){
+	 			String key = (String)iStocks.next();
+	 			ProductStock stock = (ProductStock)stocks.get(key);
+	 			int initiallevel=stock.getLevel(begin);
+	 			int in = stock.getTotalUnitsInForPeriod(begin, new java.util.Date(end.getTime()+day));
+	 			int out = stock.getTotalUnitsOutForPeriod(begin, new java.util.Date(end.getTime()+day));
+	 			if(initiallevel!=0 || in!=0 || out!=0){
+	 				reportline="";
+		 			//Nu printen we de gegevens van de productstock
+		 			reportline+=(stock.getProduct()==null?"":stock.getProduct().getCode())+";";
+		 			reportline+=(stock.getProduct()==null?"":stock.getProduct().getName())+";";
+		 			reportline+=(stock.getProduct()==null?"":ScreenHelper.getTranNoLink("product.unit",stock.getProduct().getUnit(),language))+";";
+		 			reportline+=initiallevel+";";
+		 			reportline+=in+";";
+		 			reportline+=out+";";
+		 			reportline+=(initiallevel+in-out)+";";
+		 			double pump=0;
+		 			if(stock.getProduct()!=null){
+		 				pump=stock.getProduct().getLastYearsAveragePrice(new java.util.Date(end.getTime()+day));
+		 			}
+		 			reportline+=pump+";";
+		 			reportline+=((initiallevel+in-out)*pump)+";";
+		 			reportline+=";";
+		 			reportline+=";";
+		 			reportline+=";";
+		 			reportline+=";\n";
+		 			report.add(reportline);
+	 			}
+	 		}
+		}
+		return report;
+	}
+	
+	public static Vector getInventorySummaryReport(String serviceStockUid, java.util.Date begin, java.util.Date end, String language){
+		Vector report=new Vector();
+		long day = 24*3600*1000;
+		String reportline="";
+		//Header
+		reportline+="CODE;";
+		reportline+="PRODUCT;";
+		reportline+="BATCH;";
+		reportline+="EXPIRES;";
+		reportline+="THEORETICAL;";
+		reportline+="PUMP;";
+		reportline+="THEORETICAL_VALUE;\n";
+		report.add(reportline);
+		ServiceStock serviceStock = ServiceStock.get(serviceStockUid);
+		if(serviceStock!=null && serviceStock.hasValidUid()){
+			SortedMap groups = new TreeMap();
+			String[] serviceStockUids = serviceStockUid.split(";");
+			for(int q=0;q<serviceStockUids.length;q++){
+				Vector productStocks = ServiceStock.getProductStocks(serviceStockUids[q]);
+				for(int n=0;n<productStocks.size();n++){
+					ProductStock stock = (ProductStock)productStocks.elementAt(n);
+					if((MedwanQuery.getInstance().getConfigInt("pharmacyShowZeroLevelStocks",0)==0 && stock.getLevel()==0) || stock.getProduct()==null){
+						continue;
+					}
+					String uid=stock.getProduct().getName().toUpperCase();
+					if(uid.length()>0){
+						if(groups.get(uid)==null){
+							groups.put(uid, new TreeMap());
+						}
+						SortedMap stocks = (TreeMap)groups.get(uid);
+						int datelevel=stock.getLevel(end);
+						//Now we add an entry for each combination productUid+BatchNumber
+						//Look up all batches for this product
+						int nBatchedQuantity=0;
+						Vector batches = Batch.getAllBatches(stock.getUid());
+						for(int b=0;b<batches.size() && (nBatchedQuantity<datelevel);b++){
+							Batch batch = (Batch)batches.elementAt(b);
+							int level=batch.getLevel(end);
+							if(level>0){
+								if(datelevel<nBatchedQuantity+level){
+									level=level-(nBatchedQuantity+level-datelevel);
+								}
+								nBatchedQuantity+=level;
+								uid=stock.getProduct().getName()+";"+ScreenHelper.checkString(stock.getProduct().getCode())+";"+stock.getProduct().getUid()+";"+batch.getBatchNumber()+";"+ScreenHelper.formatDate(batch.getEnd())+" ;";
+								if(stocks.get(uid)==null){
+									stocks.put(uid, 0);
+								}
+								stocks.put(uid,	(Integer)stocks.get(uid)+level);
+							}
+						}
+						if(nBatchedQuantity<datelevel){
+							//Part of the stock has no batch associated 
+							uid=stock.getProduct().getName()+";"+ScreenHelper.checkString(stock.getProduct().getCode())+";"+stock.getProduct().getUid()+"; ; ;";
+							if(stocks.get(uid)==null){
+								stocks.put(uid, 0);
+							}
+							stocks.put(uid,	(Integer)stocks.get(uid)+datelevel-nBatchedQuantity);
+						}
+					}
+				}
+			}
+			Hashtable printedSubTitels = new Hashtable();
+			Iterator iGroups = groups.keySet().iterator();
+			boolean bInitialized = false;
+			double sectionTotal=0,generalTotal=0;
+			String title="";
+			while(iGroups.hasNext()){
+				String key = (String)iGroups.next();
+				SortedMap stocks = (SortedMap)groups.get(key);
+				//Now we print a line for each element in the stocks for this group
+				Iterator iStocks = stocks.keySet().iterator();
+				while(iStocks.hasNext()){
+					String key2 = (String)iStocks.next();
+					//Nu printen we de gegevens van de productstock
+					reportline="";
+					reportline+=key2.split(";")[1]+";";
+					reportline+=key2.split(";")[0]+";";
+					reportline+=key2.split(";")[3]+";";
+					reportline+=key2.split(";")[4]+";";
+					int level=(Integer)stocks.get(key2);
+					reportline+=level+";";
+					double pump=0;
+					Product product = Product.get(key2.split(";")[2]);
+					if(product!=null){
+						pump=product.getLastYearsAveragePrice(new java.util.Date(end.getTime()+day));
+					}
+					reportline+=pump+";";
+					reportline+=level*pump+";\n";
+					report.add(reportline);
+				}
+			}
+		}
+		return report;
+	}
+	
 	public static Vector getConsumptionReport(String serviceStockUid, java.util.Date begin, java.util.Date end, String language){
 		Vector report=new Vector();
 		String reportline="";
+		end = ScreenHelper.endOfDay(end);
 		//Header
 		reportline+="POSTING DATE;";
 		reportline+="ITEM NO;";
@@ -55,7 +224,7 @@ public class PharmacyReports {
 					}
 					if((operation.getUnitsChanged()-operation.getUnitsReceived()!=0) && product!=null){
 						if(pumps.get(product.getUid()+"."+ScreenHelper.formatDate(operation.getDate()))==null){
-							pumps.put(product.getUid()+"."+ScreenHelper.formatDate(operation.getDate()),product.getLastYearsAveragePrice(operation.getDate()));
+							pumps.put(product.getUid()+"."+ScreenHelper.formatDate(operation.getDate()),product.getLastYearsAveragePrice(ScreenHelper.endOfDay(operation.getCreateDateTime())));
 						}
 						double pump = (Double)pumps.get(product.getUid()+"."+ScreenHelper.formatDate(operation.getDate()));
 						reportline=ScreenHelper.formatDate(operation.getDate())+";";
@@ -119,7 +288,8 @@ public class PharmacyReports {
 					ProductStock productStock = (ProductStock)productStocks.elementAt(n);
 					if(productStock!=null && productStock.getProduct()!=null){
 						reportline="";
-						double level = productStock.getLevel(date);
+						Vector operations = ProductStockOperation.getAll(productStock.getUid());
+						double level = productStock.getLevel(operations,date);
 						double cost = productStock.getProduct().getLastYearsAveragePrice(date);
 						reportline+=productStock.getProduct().getCode()+";";
 						reportline+=productStock.getProduct().getName()+";";
@@ -127,9 +297,9 @@ public class PharmacyReports {
 						reportline+=cost+";";
 						reportline+=level*cost+";";
 						reportline+=productStock.getMinimumLevel()+";";
-						reportline+=productStock.getTotalUnitsOutForPeriod(Miscelaneous.addMonthsToDate(date,-1),date)+";";
-						reportline+=productStock.getTotalUnitsOutForPeriod(Miscelaneous.addMonthsToDate(date,-3),date)+";";
-						reportline+=productStock.getTotalUnitsOutForPeriod(Miscelaneous.addMonthsToDate(date,-6),date)+";";
+						reportline+=productStock.getTotalUnitsOutForPeriod(operations,Miscelaneous.addMonthsToDate(date,-1),date)+";";
+						reportline+=productStock.getTotalUnitsOutForPeriod(operations,Miscelaneous.addMonthsToDate(date,-3),date)+";";
+						reportline+=productStock.getTotalUnitsOutForPeriod(operations,Miscelaneous.addMonthsToDate(date,-6),date)+";";
 						reportline+=Pointer.getLastPointer("PHARMA.PRODUCT.PURCHASE."+productStock.getProductUid())+";";
 						reportline+="\r\n";
 						report.add(reportline);
@@ -163,15 +333,19 @@ public class PharmacyReports {
 				for(int n=0;n<productionOrders.size();n++){
 					ProductionOrder productionOrder = (ProductionOrder)productionOrders.elementAt(n);
 					if(productionOrder!=null && productionOrder.getProductStock()!=null){
-						Product product = productionOrder.getProductStock().getProduct();
-						if(product!=null && product.getCode().startsWith(MedwanQuery.getInstance().getConfigString("specialOrderPrefix","SO"))){
-							//Now we search for all raw materials
-							Vector materials = productionOrder.getMaterials();
-							if(materials.size()==0){
+						Vector materials = productionOrder.getMaterialsSummary();
+						for(int q=0;q<materials.size();q++){
+							ProductionOrderMaterial material = (ProductionOrderMaterial)materials.elementAt(q);
+							Product product = material.getProductStock().getProduct();
+							if(product!=null && product.getCode().startsWith(MedwanQuery.getInstance().getConfigString("specialOrderPrefix","SO"))){
 								reportline="";
 								reportline+=ScreenHelper.formatDate(productionOrder.getCreateDateTime())+";";
 								reportline+=productionOrder.getId()+";";
-								reportline+=product.getCode()+";;;;";
+								reportline+=product.getCode()+";";
+								//Add material data
+								reportline+=material.getProductStock().getProduct().getCode()+";";
+								reportline+=material.getProductStock().getProduct().getName()+";";
+								reportline+=material.getComment()+";";
 								if(productionOrder.getDebetUid()!=null){
 									Debet debet = Debet.get(productionOrder.getDebetUid());
 									if(debet!=null){
@@ -192,55 +366,6 @@ public class PharmacyReports {
 									reportline+=";;";
 								}
 								report.add(reportline+"\r\n");
-							}
-							else{
-								for(int q=0;q<materials.size();q++){
-									reportline="";
-									ProductionOrderMaterial material = (ProductionOrderMaterial)materials.elementAt(q);
-									if(q==0){
-										reportline="";
-										reportline+=ScreenHelper.formatDate(productionOrder.getCreateDateTime())+";";
-										reportline+=productionOrder.getId()+";";
-										reportline+=product.getCode()+";";
-									}
-									else{
-										reportline+=";;;";
-									}
-									//Add material data
-									if(material.getProductStock()!=null && material.getProductStock().getProduct()!=null){
-										reportline+=material.getProductStock().getProduct().getCode()+";";
-										reportline+=material.getProductStock().getProduct().getName()+";";
-										reportline+=material.getComment()+";";
-									}
-									else{
-										reportline+="?;?;?;";
-									}
-									if(q==0){
-										if(productionOrder.getDebetUid()!=null){
-											Debet debet = Debet.get(productionOrder.getDebetUid());
-											if(debet!=null){
-												reportline+=debet.getPatientInvoiceUid()+";";
-												PatientInvoice invoice = PatientInvoice.get(debet.getPatientInvoiceUid());
-												if(invoice!=null && invoice.getEstimatedDeliveryDate()!=null){
-													reportline+=invoice.getEstimatedDeliveryDate()+";";
-												}
-												else{
-													reportline+=";";
-												}
-											}
-											else{
-												reportline+=";;";
-											}
-										}
-										else{
-											reportline+=";;";
-										}
-									}
-									else{
-										reportline+=";;";
-									}
-									report.add(reportline+"\r\n");
-								}
 							}
 						}
 					}
@@ -377,8 +502,79 @@ public class PharmacyReports {
 		reportline+="ITEM DESCRIPTION;";
 		reportline+="UNIT AMOUNT;";
 		reportline+="TOTAL AMOUNT;";
+		reportline+="PATIENT AMOUNT;";
 		reportline+="AMOUNT PAID;";
 		reportline+="BALANCE AMOUNT;";
+		reportline+="INSURANCE AMOUNT;";
+		reportline+="INVOICE STATUS;\r\n";
+		report.add(reportline);
+		serviceStockUid=Service.getChildIdsAsString(serviceStockUid);
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		try{
+			PreparedStatement ps = conn.prepareStatement("select oc_patientinvoice_date,oc_patientinvoice_serverid,oc_patientinvoice_objectid,a.personid,lastname,firstname,telephone,oc_prestation_code,oc_prestation_description,oc_debet_prestationuid,oc_debet_quantity,oc_patientinvoice_status,oc_debet_amount,oc_debet_insuraramount, oc_debet_extrainsuraramount"
+							+ " from oc_patientinvoices, oc_debets, adminview a, privateview b, oc_prestations where"
+							+ " oc_patientinvoice_date >= ? and"
+							+ " oc_patientinvoice_date <? and"
+							+ " oc_prestation_objectid=replace(oc_debet_prestationuid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and"
+							+ " a.personid=b.personid and"
+							+ " a.personid=oc_patientinvoice_patientuid and"
+							+ " oc_debet_patientinvoiceuid="+MedwanQuery.getInstance().convert("varchar","oc_patientinvoice_serverid")+MedwanQuery.getInstance().concatSign()+"'.'"+MedwanQuery.getInstance().concatSign()+MedwanQuery.getInstance().convert("varchar","oc_patientinvoice_objectid")+" and"
+							+ " oc_debet_serviceuid in ("+serviceStockUid+") ORDER BY oc_patientinvoice_date,oc_patientinvoice_objectid,oc_prestation_code");
+			ps.setDate(1, new java.sql.Date(begin.getTime()));
+			ps.setDate(2, new java.sql.Date(end.getTime()));
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				PatientInvoice invoice = PatientInvoice.get(rs.getString("oc_patientinvoice_serverid")+"."+rs.getString("oc_patientinvoice_objectid"));
+				double patientamount = rs.getDouble("oc_debet_amount");
+				double insuraramount = rs.getDouble("oc_debet_insuraramount")+rs.getDouble("oc_debet_extrainsuraramount");
+				double quantity = rs.getInt("oc_debet_quantity");
+				double paidamount=0;
+				if(invoice.getPatientAmount()>0){
+					paidamount=patientamount*invoice.getAmountPaid()/invoice.getPatientAmount();
+				}
+				reportline=ScreenHelper.formatDate(rs.getDate("oc_patientinvoice_date"))+";";
+				reportline+=rs.getString("oc_patientinvoice_objectid")+";";
+				reportline+=rs.getString("personid")+";";
+				reportline+=rs.getString("lastname").toUpperCase()+", "+rs.getString("firstname")+";";
+				reportline+=rs.getString("telephone")+";";
+				reportline+=rs.getString("oc_prestation_code")+";";
+				reportline+=rs.getString("oc_prestation_description").toUpperCase().replaceAll(";", " ")+";";
+				reportline+=(patientamount+insuraramount)/quantity+";";
+				reportline+=(patientamount+insuraramount)+";";
+				reportline+=patientamount+";";
+				reportline+=paidamount+";";
+				reportline+=(patientamount+-paidamount)+";";
+				reportline+=insuraramount+";";
+				reportline+=rs.getString("oc_patientinvoice_status")+"\n";
+				report.add(reportline);
+			}
+			rs.close();
+			ps.close();
+			conn.close();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return report;
+	}
+
+	public static Vector getProductionSalesOrderReport(String serviceStockUid, java.util.Date begin, java.util.Date end){
+		Vector report=new Vector();
+		String reportline="";
+		//Header
+		reportline+="DATE;";
+		reportline+="SALES ORDER DOC NR;";
+		reportline+="IP NR;";
+		reportline+="CUSTOMER NAME;";
+		reportline+="CUSTOMER PHONE;";
+		reportline+="ITEM CODE;";
+		reportline+="ITEM DESCRIPTION;";
+		reportline+="UNIT AMOUNT;";
+		reportline+="TOTAL AMOUNT;";
+		reportline+="PATIENT AMOUNT;";
+		reportline+="AMOUNT PAID;";
+		reportline+="BALANCE AMOUNT;";
+		reportline+="INSURANCE AMOUNT;";
 		reportline+="INVOICE STATUS;\r\n";
 		report.add(reportline);
 		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
@@ -407,9 +603,9 @@ public class PharmacyReports {
 					reportline+=invoice.getInvoiceNumber()+";";
 					reportline+=invoice.getPatientUid()+";";
 					if(invoice.getPatient()!=null){
-						reportline+=invoice.getPatient().getFullName()+";";
+						reportline+=invoice.getPatient().getFullName().replaceAll(";"," ")+";";
 						if(invoice.getPatient().getActivePrivate()!=null){
-							reportline+=((AdminPrivateContact)invoice.getPatient().getActivePrivate()).telephone+";";
+							reportline+=((AdminPrivateContact)invoice.getPatient().getActivePrivate()).telephone.replaceAll(";"," ")+";";
 						}
 						else{
 							reportline+=";";
@@ -423,9 +619,9 @@ public class PharmacyReports {
 					for(int n=0;n<debets.size();n++){
 						Debet debet = (Debet)debets.elementAt(n);
 						if(debet.getPrestation()!=null && debet.getQuantity()>0 && debet.getPrestation().getCode().startsWith(MedwanQuery.getInstance().getConfigString("finishedGoodsPrefix","FG"))){
-							reportline+=debet.getPrestation().getCode()+";";
-							reportline+=debet.getPrestation().getDescription()+";";
-							reportline+=invoice.getPatientAmount()/debet.getQuantity()+";";
+							reportline+=debet.getPrestation().getCode().replaceAll(";"," ")+";";
+							reportline+=debet.getPrestation().getDescription().replaceAll(";"," ")+";";
+							reportline+=invoice.getTotalAmount()/debet.getQuantity()+";";
 							bHasFinishedGoods=true;
 							break;
 						}
@@ -433,9 +629,11 @@ public class PharmacyReports {
 					if(!bHasFinishedGoods){
 						reportline+=";;;";
 					}
+					reportline+=invoice.getTotalAmount()+";";
 					reportline+=invoice.getPatientAmount()+";";
 					reportline+=invoice.getAmountPaid()+";";
 					reportline+=invoice.getBalance()+";";
+					reportline+=(invoice.getTotalAmount()-invoice.getPatientAmount())+";";
 					reportline+=invoice.getStatus()+";\r\n";
 					report.add(reportline);
 				}
@@ -473,8 +671,8 @@ public class PharmacyReports {
 							+ " oc_prestation_code like ? and"
 							+ " oc_debet_patientinvoiceuid='"+MedwanQuery.getInstance().getConfigString("serverId")+".'"+MedwanQuery.getInstance().concatSign()+MedwanQuery.getInstance().convert("varchar", "OC_PATIENTINVOICE_OBJECTID")+" and"
 							+ " oc_productionorder_debetuid='"+MedwanQuery.getInstance().getConfigString("serverId")+".'"+MedwanQuery.getInstance().concatSign()+MedwanQuery.getInstance().convert("varchar", "OC_DEBET_OBJECTID")+" and"
-							+ " oc_patientinvoice_date >= ? and"
-							+ " oc_patientinvoice_date <? and"
+							+ " oc_operation_date >= ? and"
+							+ " oc_operation_date <? and"
 							+ " oc_operation_productstockuid=oc_productionorder_targetproductstockuid and"
 							+ " oc_stock_objectid=replace(oc_productionorder_targetproductstockuid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and"
 							+ " oc_stock_servicestockuid=? and"
@@ -482,7 +680,7 @@ public class PharmacyReports {
 							+ " oc_operation_srcdesttype='patient' and"
 							+ " oc_operation_srcdestuid=oc_patientinvoice_patientuid and"
 							+ " oc_operation_date>=oc_productionorder_createdatetime"
-							+ " ORDER BY oc_patientinvoice_date,oc_patientinvoice_objectid");
+							+ " ORDER BY oc_operation_date,oc_patientinvoice_date,oc_patientinvoice_objectid");
 			ps.setString(1, MedwanQuery.getInstance().getConfigString("finishedGoodsPrefix","FG")+"%");
 			ps.setDate(2, new java.sql.Date(begin.getTime()));
 			ps.setDate(3, new java.sql.Date(end.getTime()));
@@ -553,7 +751,7 @@ public class PharmacyReports {
 							reportline+=ScreenHelper.formatDate(productionOrder.getCreateDateTime())+";";
 							if(productionOrder.getDebetUid()!=null){
 								Debet debet = Debet.get(productionOrder.getDebetUid());
-								if(debet!=null && debet.getPatientInvoice()!=null && debet.getPrestation()!=null && debet.getInsurarAmount()>0 && debet.getInsurance()!=null && debet.getInsurance().getInsurar()!=null){
+								if(debet!=null && debet.getPatientInvoice()!=null && debet.getPrestation()!=null && debet.getPatientInvoice().getInsurarAmount()>0 && debet.getInsurance()!=null && debet.getInsurance().getInsurar()!=null){
 									reportline+=debet.getPatientInvoiceUid()+";";
 									reportline+=debet.getInsurance().getInsurarUid()+";";
 									reportline+=debet.getInsurance().getInsurar().getName()+";";
@@ -582,6 +780,7 @@ public class PharmacyReports {
 		String reportline="";
 		//Header
 		reportline+="ORDER DATE;";
+		reportline+="CREATED BY;";
 		reportline+="SALES ORDER NR;";
 		reportline+="IP NR;";
 		reportline+="CUSTOMER NAME;";
@@ -607,6 +806,7 @@ public class PharmacyReports {
 						if(product!=null){
 							reportline="";
 							reportline+=ScreenHelper.formatDate(productionOrder.getCreateDateTime())+";";
+							reportline+=MedwanQuery.getInstance().getUserName(Integer.parseInt(productionOrder.getUpdateUser(1)))+";";
 							if(productionOrder.getDebetUid()!=null){
 								Debet debet = Debet.get(productionOrder.getDebetUid());
 								if(debet!=null && debet.getPatientInvoice()!=null && debet.getPrestation()!=null){
@@ -650,5 +850,4 @@ public class PharmacyReports {
 		}
 		return report;
 	}
-
 }

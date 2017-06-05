@@ -567,6 +567,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 ps.setTimestamp(14, new Timestamp(new java.util.Date().getTime()));
                 ps.setString(15, this.getUpdateUser());
                 ps.setInt(16, iVersion);
+                System.out.println("--------------->"+this.getInsurarAmount());
                 ps.setDouble(17, this.getInsurarAmount());
                 ps.setInt(18, this.getQuantity());
                 ps.setString(19, ScreenHelper.checkString(this.getExtraInsurarUid()));
@@ -3032,26 +3033,24 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
         try {
             String serverid = MedwanQuery.getInstance().getConfigString("serverId") + ".";
             sSelect = "SELECT SUM(d.OC_DEBET_AMOUNT) as somme,MAX(d.oc_debet_date) as maxdate,min(oc_debet_date) as mindate,count(OC_DEBET_OBJECTID) as nb,a.lastname,a.firstname,a.personid,a.gender,a.dateofbirth FROM  OC_DEBETS d,OC_ENCOUNTERS b,adminview a WHERE OC_DEBET_AMOUNT >0 AND " +
-                    MedwanQuery.getInstance().convert("int", "replace(d.OC_DEBET_ENCOUNTERUID,'" + serverid + "','')") + "=b.OC_ENCOUNTER_OBJECTID AND " + MedwanQuery.getInstance().convert("int", "b.OC_ENCOUNTER_PATIENTUID") + "=a.personid GROUP BY a.lastname,a.firstname,a.gender,a.dateofbirth ORDER BY a.lastname,a.firstname,a.personid,a.gender,a.dateofbirth";
+                    MedwanQuery.getInstance().convert("int", "replace(d.OC_DEBET_ENCOUNTERUID,'" + serverid + "','')") + "=b.OC_ENCOUNTER_OBJECTID AND (OC_DEBET_PATIENTINVOICEUID is null OR OC_DEBET_PATIENTINVOICEUID='') AND " + MedwanQuery.getInstance().convert("int", "b.OC_ENCOUNTER_PATIENTUID") + "=a.personid GROUP BY a.personid,a.lastname,a.firstname,a.gender,a.dateofbirth ORDER BY a.lastname,a.firstname,a.personid,a.gender,a.dateofbirth";
             ps = oc_conn.prepareStatement(sSelect);
             rs = ps.executeQuery();
             while (rs.next()) {
-            	if(ScreenHelper.checkString(rs.getString("OC_DEBET_PATIENTINVOICEUID")).trim().length()==0){
-	                Debet debet = new Debet();
-	                debet.setAmount(rs.getDouble("somme"));
-	                debet.setComment(rs.getInt("nb") + "");
-	                //*********************
-	                //add Patient name
-	                //*********************
-	                debet.setPatientName(ScreenHelper.checkString(rs.getString("lastname")) + " " + ScreenHelper.checkString(rs.getString("firstname")));
-	                debet.setPatientbirthdate(ScreenHelper.formatDate(rs.getDate("dateofbirth")));
-	                debet.setPatientgender(rs.getString("gender"));
-	                debet.setPatientid(rs.getString("personid"));
-	                debet.setRefUid(new java.text.SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("mindate"))+" - "+new java.text.SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("maxdate")));
-	                debet.setEncounterUid(rs.getString("personid"));
-	                MedwanQuery.getInstance().getObjectCache().putObject("debet", debet);
-	                vDebets.add(debet);
-            	}
+                Debet debet = new Debet();
+                debet.setAmount(rs.getDouble("somme"));
+                debet.setComment(rs.getInt("nb") + "");
+                //*********************
+                //add Patient name
+                //*********************
+                debet.setPatientName(ScreenHelper.checkString(rs.getString("lastname")) + " " + ScreenHelper.checkString(rs.getString("firstname")));
+                debet.setPatientbirthdate(ScreenHelper.formatDate(rs.getDate("dateofbirth")));
+                debet.setPatientgender(rs.getString("gender"));
+                debet.setPatientid(rs.getString("personid"));
+                debet.setRefUid(new java.text.SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("mindate"))+" - "+new java.text.SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("maxdate")));
+                debet.setEncounterUid(rs.getString("personid"));
+                MedwanQuery.getInstance().getObjectCache().putObject("debet", debet);
+                vDebets.add(debet);
             }
         }
         catch (Exception e) {

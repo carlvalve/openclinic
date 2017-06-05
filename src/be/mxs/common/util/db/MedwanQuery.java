@@ -2210,6 +2210,25 @@ public class MedwanQuery {
     	return conn;
     }
     
+    public String getTransactionType(String uid){
+    	String type="";
+    	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+    	try {
+			PreparedStatement ps = conn.prepareStatement("select transactionType from Transactions where serverid=? and transactionid=?");
+			ps.setInt(1, Integer.parseInt(uid.split("\\.")[0]));
+			ps.setInt(2, Integer.parseInt(uid.split("\\.")[1]));
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()){
+				type=rs.getString("transactionType");
+			}
+			rs.close();
+			ps.close();
+    		conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+    	return type;
+    }
     //--- STORE DOCUMENT --------------------------------------------------------------------------
     public boolean storeDocument(String type, String format, String name, String filename,
     		                     int userid, String folder, java.util.Date updatetime, int personId){
@@ -3029,6 +3048,10 @@ public class MedwanQuery {
             e.printStackTrace();
         }
         return bExist;
+    }
+    
+    public String getCodeTran(String codetype, String code, String language){
+    	return getCodeTran(codetype+"code"+code, language);
     }
     
     //--- GET CODE TRAN ---------------------------------------------------------------------------
@@ -6797,6 +6820,135 @@ public class MedwanQuery {
             PreparedStatement Occupstatement = OccupdbConnection.prepareStatement(sSql);
             Occupstatement.setInt(1, personId);
             Occupstatement.setString(2, transactionType);
+            ResultSet Occuprs;
+            for(Occuprs = Occupstatement.executeQuery(); Occuprs.next();){
+                transactionList.add(loadTransaction(Occuprs.getInt("serverid"),Occuprs.getInt("transactionId")));
+            }
+            Occuprs.close();
+            Occupstatement.close();
+            OccupdbConnection.close();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        
+        return transactionList;
+    }
+
+    public Vector getTransactionsByTypeBetween(int personId, String transactionType,java.util.Date begin, java.util.Date end){
+        Vector transactionList = new Vector();
+        Connection OccupdbConnection;
+        String sSql = "SELECT a.* FROM Transactions a, Healthrecord b"+
+                      " WHERE a.healthRecordId = b.healthRecordId"+
+        		      "  AND personId = ?"+
+                      "  AND transactionType = ?"+
+                      "  AND updateTime >= ?"+
+                      "  AND updateTime < ?"+
+        		      " ORDER BY updateTime DESC";
+        
+        try{
+            OccupdbConnection = getOpenclinicConnection();
+            PreparedStatement Occupstatement = OccupdbConnection.prepareStatement(sSql);
+            Occupstatement.setInt(1, personId);
+            Occupstatement.setString(2, transactionType);
+            Occupstatement.setDate(3, new java.sql.Date(begin.getTime()));
+            Occupstatement.setDate(4, new java.sql.Date(end.getTime()));
+            ResultSet Occuprs;
+            for(Occuprs = Occupstatement.executeQuery(); Occuprs.next();){
+                transactionList.add(loadTransaction(Occuprs.getInt("serverid"),Occuprs.getInt("transactionId")));
+            }
+            Occuprs.close();
+            Occupstatement.close();
+            OccupdbConnection.close();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        
+        return transactionList;
+    }
+
+    public TransactionVO getLastTransactionsByTypeBefore(int personId, String transactionType,java.util.Date date){
+        TransactionVO transaction = null;
+        Connection OccupdbConnection;
+        String sSql = "SELECT a.* FROM Transactions a, Healthrecord b"+
+                      " WHERE a.healthRecordId = b.healthRecordId"+
+        		      "  AND personId = ?"+
+                      "  AND transactionType = ?"+
+                      "  AND updateTime <= ?"+
+        		      " ORDER BY updateTime DESC";
+        
+        try{
+            OccupdbConnection = getOpenclinicConnection();
+            PreparedStatement Occupstatement = OccupdbConnection.prepareStatement(sSql);
+            Occupstatement.setInt(1, personId);
+            Occupstatement.setString(2, transactionType);
+            Occupstatement.setDate(3, new java.sql.Date(date.getTime()));
+            ResultSet Occuprs = Occupstatement.executeQuery();
+            if(Occuprs.next()){
+                transaction=loadTransaction(Occuprs.getInt("serverid"),Occuprs.getInt("transactionId"));
+            }
+            Occuprs.close();
+            Occupstatement.close();
+            OccupdbConnection.close();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        
+        return transaction;
+    }
+
+    public TransactionVO getLastTransactionsByTypeAfter(int personId, String transactionType,java.util.Date date){
+        TransactionVO transaction = null;
+        Connection OccupdbConnection;
+        String sSql = "SELECT a.* FROM Transactions a, Healthrecord b"+
+                      " WHERE a.healthRecordId = b.healthRecordId"+
+        		      "  AND personId = ?"+
+                      "  AND transactionType = ?"+
+                      "  AND updateTime > ?"+
+        		      " ORDER BY updateTime DESC";
+        
+        try{
+            OccupdbConnection = getOpenclinicConnection();
+            PreparedStatement Occupstatement = OccupdbConnection.prepareStatement(sSql);
+            Occupstatement.setInt(1, personId);
+            Occupstatement.setString(2, transactionType);
+            Occupstatement.setDate(3, new java.sql.Date(date.getTime()));
+            ResultSet Occuprs = Occupstatement.executeQuery();
+            if(Occuprs.next()){
+                transaction=loadTransaction(Occuprs.getInt("serverid"),Occuprs.getInt("transactionId"));
+            }
+            Occuprs.close();
+            Occupstatement.close();
+            OccupdbConnection.close();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        
+        return transaction;
+    }
+
+    public Vector getTransactionsByType(int personId, String transactionType, String encounterUid){
+        Vector transactionList = new Vector();
+        Connection OccupdbConnection;
+        String sSql = "SELECT a.* FROM Transactions a, Healthrecord b, Items c"+
+                      " WHERE a.healthRecordId = b.healthRecordId"+
+                      " AND a.serverid = c.serverid"+
+                      " AND a.transactionid = c.transactionid"+
+                      " AND c.type='be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID'"+
+                      " AND c.value=?"+
+        		      " AND personId = ?"+
+                      " AND transactionType = ?"+
+        		      " ORDER BY updateTime DESC";
+        
+        try{
+            OccupdbConnection = getOpenclinicConnection();
+            PreparedStatement Occupstatement = OccupdbConnection.prepareStatement(sSql);
+            Occupstatement.setString(1, encounterUid);
+            Occupstatement.setInt(2, personId);
+            Occupstatement.setString(3, transactionType);
             ResultSet Occuprs;
             for(Occuprs = Occupstatement.executeQuery(); Occuprs.next();){
                 transactionList.add(loadTransaction(Occuprs.getInt("serverid"),Occuprs.getInt("transactionId")));

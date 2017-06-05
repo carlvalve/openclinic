@@ -282,7 +282,7 @@ public class DiagnosisStats extends DStats{
                 outcomeStat.setMeanDuration(rs.getDouble("meanDuration"));
                 outcomeStat.setMinDuration(rs.getInt("min"));
                 outcomeStat.setStandardDeviationDuration(rs.getDouble("standardDeviationDuration"));
-                outcomeStat.setOutcome(rs.getString("OC_ENCOUNTER_OUTCOME"));
+                outcomeStat.setOutcome(ScreenHelper.checkString(rs.getString("OC_ENCOUNTER_OUTCOME")));
                 outcomeStats.add(outcomeStat);
             }
 

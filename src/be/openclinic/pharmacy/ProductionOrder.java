@@ -9,6 +9,7 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 import be.mxs.common.util.db.MedwanQuery;
+import be.mxs.common.util.system.Debug;
 import be.mxs.common.util.system.ScreenHelper;
 import be.openclinic.common.OC_Object;
 import be.openclinic.finance.Debet;
@@ -28,6 +29,45 @@ public class ProductionOrder extends OC_Object{
 	public String getModifiers() {
 		return modifiers;
 	}
+	
+    public String getUpdateUser(int version) {
+    	if(getVersion()==version){
+    		return getUpdateUser();
+    	}
+    	else{
+    		String user="";
+    		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+    		PreparedStatement ps = null;
+    		ResultSet rs =null;
+    		try{
+    			ps=conn.prepareStatement("SELECT * FROM OC_PRODUCTIONORDERS_HISTORY "
+    					+ "where "
+    					+ "OC_PRODUCTIONORDER_ID=? and "
+    					+ "OC_PRODUCTIONORDER_VERSION=?");
+    			ps.setInt(1, getId());
+    			ps.setInt(2, version);
+    			rs=ps.executeQuery();
+    			if(rs.next()){
+    				user=rs.getString("OC_PRODUCTIONORDER_UPDATEUID");
+    			}
+    		}
+            catch(Exception e){
+            	e.printStackTrace();
+            }
+            finally{
+                try{
+                    if(rs!=null) rs.close();
+                    if(ps!=null) ps.close();
+                    conn.close();
+
+                }
+                catch(SQLException se){
+                    se.printStackTrace();
+                }
+            }
+    		return user;
+    	}
+    }
 
 	public void setModifiers(String modifiers) {
 		this.modifiers = modifiers;
@@ -139,12 +179,15 @@ public class ProductionOrder extends OC_Object{
 	
     public boolean canClose(User user){
     	if(getCloseDateTime()!=null){
+    		Debug.println("CANNOT CLOSE: order already closed");
     		return false;
     	}
 		if(getMaterials().size()==0){
+    		Debug.println("CANNOT CLOSE: no materials in order");
 			return false;
 		}
 		if(ScreenHelper.checkString(getTargetProductStockUid()).length()==0){
+    		Debug.println("CANNOT CLOSE: order has no target product stock");
 			return false;
 		}
     	Hashtable productstocks = new Hashtable();
@@ -167,7 +210,9 @@ public class ProductionOrder extends OC_Object{
 			ProductStock productStock = ProductStock.get(key);
 			double nQuantity=(Double)productstocks.get(key);
 			int nLinked=productStock.getReceivedForProductionOrder(this.getId()+"");
-			if(productStock.getLevel()<nQuantity){
+
+			if(MedwanQuery.getInstance().getConfigInt("enableCCBRTProductionOrderMecanism",0)==1 && productStock.getLevel()<nQuantity){
+	    		Debug.println("CANNOT CLOSE: insufficient raw materials stock level ("+key+")");
 				return false;
 			}
 			if(MedwanQuery.getInstance().getConfigInt("enableCCBRTProductionOrderMecanism",0)==1 && nLinked<nQuantity && !user.getAccessRightNoSA("pharmacy.overridelinkedmaterialsrequirement.select")){

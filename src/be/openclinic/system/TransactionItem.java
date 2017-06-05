@@ -107,7 +107,7 @@ public class TransactionItem {
 
         TransactionItem objTI = new TransactionItem();
 
-        String sSelect = "SELECT defaultValue,modifier FROM TransactionItems"+
+        String sSelect = "SELECT defaultValue,modifier,priority FROM TransactionItems"+
                          " WHERE transactionTypeId=? AND itemTypeId=?";
 
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
@@ -123,6 +123,7 @@ public class TransactionItem {
                 objTI.setTransactionTypeId(sTranid);
                 objTI.setDefaultValue(ScreenHelper.checkString(rs.getString("defaultValue")));
                 objTI.setModifier(ScreenHelper.checkString(rs.getString("modifier")));
+                objTI.setPriority(rs.getInt("priority"));
             }
 
             rs.close();
@@ -155,12 +156,13 @@ public class TransactionItem {
             ps.executeUpdate();
             ps.close();
             
-            sQuery  = "INSERT INTO TransactionItems(transactionTypeId,itemTypeId,defaultValue,modifier) VALUES(?,?,?,?)";
+            sQuery  = "INSERT INTO TransactionItems(transactionTypeId,itemTypeId,defaultValue,modifier,priority) VALUES(?,?,?,?,?)";
             ps = oc_conn.prepareStatement(sQuery);
             ps.setString(1,objTI.getTransactionTypeId());
             ps.setString(2,objTI.getItemTypeId());
             ps.setString(3,objTI.getDefaultValue());
             ps.setString(4,objTI.getModifier());
+            ps.setInt(5,objTI.getPriority());
 
             ps.executeUpdate();
             ps.close();
@@ -228,7 +230,7 @@ public class TransactionItem {
                 objTI.setTransactionTypeId(ScreenHelper.checkString(rs.getString("transactionTypeId")));
                 objTI.setItemTypeId(ScreenHelper.checkString(rs.getString("itemTypeId")));
                 objTI.setDefaultValue(ScreenHelper.checkString(rs.getString("defaultValue")));
-                objTI.setModifier(ScreenHelper.checkString(rs.getString("priority")));
+                objTI.setModifier(ScreenHelper.checkString(rs.getString("modifier")));
                 if(ScreenHelper.checkString(rs.getString("priority")).length() > 0){
                     objTI.setPriority(Integer.parseInt(rs.getString("priority")));
                 }
@@ -293,7 +295,7 @@ public class TransactionItem {
 
         TransactionItem objTI;
 
-        String sSelect = "SELECT itemTypeId, defaultValue, modifier FROM TransactionItems WHERE transactionTypeId=? ORDER BY 1";
+        String sSelect = "SELECT itemTypeId, defaultValue, modifier, priority FROM TransactionItems WHERE transactionTypeId=? ORDER BY 1";
 
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
@@ -307,6 +309,7 @@ public class TransactionItem {
                 objTI.setItemTypeId(ScreenHelper.checkString(rs.getString("itemTypeId")));
                 objTI.setDefaultValue(ScreenHelper.checkString(rs.getString("defaultvalue")));
                 objTI.setModifier(ScreenHelper.checkString(rs.getString("modifier")));
+                objTI.setPriority(rs.getInt("priority"));
 
                 vTI.addElement(objTI);
             }
@@ -330,7 +333,7 @@ public class TransactionItem {
     public static void saveTransactionItem(TransactionItem objTI,String oldTranID,String oldItemID){
         PreparedStatement ps = null;
 
-        String sUpdate = " UPDATE TransactionItems SET transactionTypeId=?,itemTypeId=?,defaultValue=?,modifier=?"+
+        String sUpdate = " UPDATE TransactionItems SET transactionTypeId=?,itemTypeId=?,defaultValue=?,modifier=?, priority=?"+
                          " WHERE transactionTypeId=? AND itemTypeId=?";
 
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
@@ -340,8 +343,9 @@ public class TransactionItem {
             ps.setString(2,objTI.getItemTypeId());
             ps.setString(3,objTI.getDefaultValue());
             ps.setString(4,objTI.getModifier());
-            ps.setString(5,oldTranID);
-            ps.setString(6,oldItemID);
+            ps.setInt(5,objTI.getPriority());
+            ps.setString(6,oldTranID);
+            ps.setString(7,oldItemID);
             ps.executeUpdate();
             ps.close();
         }catch(Exception e){

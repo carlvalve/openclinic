@@ -351,7 +351,7 @@ public class ExportNHIFEClaims {
 		    					practitioner+=rs3.getString("firstname")+" "+rs3.getString("lastname");
 			    				rs3.close();
 			    				ps3.close();
-			    				ps3=conn.prepareStatement("select * from ocadmin.dbo.userparameters where userid=? and parameter='medicalcenter'");
+			    				ps3=conn.prepareStatement("select * from ocadmin.dbo.userparameters where userid=? and parameter='medicalcentercode'");
 			    				ps3.setInt(1, Integer.parseInt(id));
 			    				rs3=ps3.executeQuery();
 			    				if(rs3.next()){

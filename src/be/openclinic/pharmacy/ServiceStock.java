@@ -668,6 +668,9 @@ public class ServiceStock extends OC_Object{
                     receivingUserIds.append(user.userid+"$");
                 }
 
+                if(receivingUserIds.length() > 0) ps.setString(19,receivingUserIds.toString());
+                else                               ps.setNull(19,Types.VARCHAR);
+
                 ps.executeUpdate();
             }
             else{
