@@ -243,7 +243,7 @@ if(request.getParameter("modifyquantityoperation")!=null){
 			               "<td>"+(operation.getBatchEnd()!=null?ScreenHelper.formatDate(operation.getBatchEnd()):"?")+"</td>"+
 			               (operation.getDescription().equalsIgnoreCase("medicationdelivery.1")?
 			               "<td>"+checkString(operation.getComment())+"</td>"+
-			               "<td><input type='button' class='button' value='"+getTranNoLink("web","returnproduct",sWebLanguage)+"' onclick='returnProduct(\""+operation.getUid()+"\");'/></td>":"<td/>")+
+			               "<td><input type='button' class='button' value='"+getTranNoLink("web","returnproduct",sWebLanguage)+"' onclick='returnProduct(\""+operation.getUid()+"\");'/> <input type='button' name='printItemButton' class='button' value='"+getTranNoLink("web","print",sWebLanguage)+"' onclick='printitem(\""+operation.getUid()+"\");'></td>":"<td/>")+
 			              "</tr>");
 				
 				recCount++;
@@ -275,10 +275,14 @@ if(request.getParameter("modifyquantityoperation")!=null){
 <%=ScreenHelper.alignButtonsStop()%>
 
 <script>
-  function printlist(){
-	  window.open("<c:url value="pharmacy/printPatientDeliveries.jsp"/>?ts=<%=getTs()%>&offsetdate=<%=sExpiryDate%>");
-  }
-	
+	function printlist(){
+		  window.open("<c:url value="pharmacy/printPatientDeliveries.jsp"/>?ts=<%=getTs()%>&offsetdate=<%=sExpiryDate%>");
+	}
+		
+	function printitem(uid){
+		  window.open("<c:url value="pharmacy/printPatientDeliveries.jsp"/>?ts=<%=getTs()%>&operation="+uid);
+	}
+		
   function cancelOperation(uid){
       if(yesnoDeleteDialog()){
       document.getElementById('deleteoperation').value = uid;

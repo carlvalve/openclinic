@@ -68,7 +68,7 @@
 
                   while(iter.hasNext()){
                       sTmpLabeltype = (String)iter.next();
-                      %><option value="<%=sTmpLabeltype%>" <%=(sTmpLabeltype.equals(findLabelType)?"selected":"")%>><%=sTmpLabeltype%></option><%
+                      %><option value="<%=sTmpLabeltype%>" <%=(sTmpLabeltype.equalsIgnoreCase(findLabelType)?"selected":"")%>><%=sTmpLabeltype%></option><%
                   }
               %>
           </select>

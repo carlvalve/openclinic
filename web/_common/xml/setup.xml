@@ -451,10 +451,10 @@
 		<config key="tmpDir" value="/tmp"/>
 		<config key="tmpDirectory" value="/tmp"/>
 		<config key="tempDirectory" value="/tmp"/>
-		<config key="DocumentsURL" value="$context$/documents/"/>
-		<config key="datacenterTemplateSource" value="$context$/_common/xml/"/>
-		<config key="imageSource" value="$context$"/>
-		<config key="templateSource" value="$context$/_common/xml/"/>
+		<config key="DocumentsURL" value="$localcontext$/documents/"/>
+		<config key="datacenterTemplateSource" value="$localcontext$/_common/xml/"/>
+		<config key="imageSource" value="$localcontext$"/>
+		<config key="templateSource" value="$localcontext$/_common/xml/"/>
 		<config key="projectname" value="$minicontext$"/>
 		<config key="PDFIMG.logo_pdf.jpg.$project$" value="$localcontext$/projects/$project$/_img/logo_$project$.gif"/>
 	</os>

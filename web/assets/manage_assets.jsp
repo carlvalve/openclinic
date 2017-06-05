@@ -478,7 +478,7 @@
 	        </tr>        
 	        
 	        <tr>
-	            <td class="admin"><%=getTran(request,"web.assets","productiodate",sWebLanguage)%>&nbsp;</td>
+	            <td class="admin"><%=getTran(request,"web.assets","productiodate",sWebLanguage)%>*&nbsp;</td>
 	            <td class="admin2" nowrap>
 	                <%=writeDateField("comment11","EditForm",checkString(asset.getComment11()),sWebLanguage)%>        
 	            </td>                        
@@ -1063,11 +1063,31 @@
   
   <%-- REQUIRED FIELDS PROVIDED --%>
   function requiredFieldsProvided(){
-    return document.getElementById("code").value.length > 0 &&
-           document.getElementById("description").value.length > 0 &&
-           document.getElementById("nomenclature").value.length > 0 &&
-           document.getElementById("quantity").value.length > 0 &&
-           document.getElementById("serviceuid").value.length > 0;           
+	  if(document.getElementById("comment11").value.length == 0 ){
+		  document.getElementById("comment11").focus();
+		  return false;
+	  }
+	  else if(document.getElementById("code").value.length == 0 ){
+		  document.getElementById("code").focus();
+		  return false;
+	  }
+	  else if(document.getElementById("description").value.length == 0 ){
+		  document.getElementById("description").focus();
+		  return false;
+	  }
+	  else if(document.getElementById("nomenclature").value.length == 0 ){
+		  document.getElementById("nomenclature").focus();
+		  return false;
+	  }
+	  else if(document.getElementById("quantity").value.length == 0 ){
+		  document.getElementById("quantity").focus();
+		  return false;
+	  }
+	  else if(document.getElementById("serviceuid").value.length == 0 ){
+		  document.getElementById("serviceuid").focus();
+		  return false;
+	  }
+    return true;           
   }
     
   <%-- LOAD (all) ASSETS --%>

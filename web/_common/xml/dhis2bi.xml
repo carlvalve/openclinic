@@ -6,7 +6,7 @@
 		<user>fverbeke</user>
 		<password>FVerbeke2015</password>
 	</config>
-	<dataset type="examinationsabnormal" uid="n7vMhpxeHOF">
+	<dataset type="examination" resulttype="abnormal" uid="n7vMhpxeHOF">
 		<dataelement code="BI01" uid="TQjQHrTKo1f"/>
 		<dataelement code="BI02" uid="CNmv4bKLjFp"/>
 		<dataelement code="BI03" uid="zJOF1kwPsqq"/>
@@ -56,13 +56,13 @@
 		<dataelement code="RX06" uid="tnYv9u4Zd1d"/>
 		<dataelement code="RX99" uid="UDF4e8DLgdv"/>
 	</dataset>
-	<dataset type="examinations" uid="n7vMhpxeHOF">
-		<category type="age">
+	<dataset type="examination" uid="n7vMhpxeHOF">
+		<categoryOptionCombo type="age">
 			<option uid="hdW79u4HG4n" min="0" max="1"/>
 			<option uid="gvXsXCKqbPD" min="1" max="5"/>
 			<option uid="pgKbjjCEJaY" min="5" max="15"/>
 			<option uid="WfVzAEsE68K" min="15" max="999"/>
-		</category>
+		</categoryOptionCombo>
 		<dataelements>
 			<dataelement code="BI01" uid="gPtzkjuCS4F"/>
 			<dataelement code="BI02" uid="sZUiu20eK8s"/>
@@ -114,7 +114,7 @@
 			<dataelement code="RX99" uid="Uz4xiOPSdX8"/>
 		</dataelements>
 	</dataset>
-	<dataset type="technicalactivitiesplanned" uid="MIUHFmgewAq">
+	<dataset type="technicalactivity" planned="true" uid="MIUHFmgewAq">
 		<dataelements>
 			<dataelement code="GO101" uid="gUg4fC9FCo2"/>
 			<dataelement code="DIG108" uid="BUVAnOO4Fdx"/>
@@ -238,7 +238,7 @@
 			<dataelement code="GO299" uid="Xs1zVcD9GmV"/>
 		</dataelements>
 	</dataset>
-	<dataset type="technicalactivitiesdead" uid="WSBPbvvamIO">
+	<dataset type="technicalactivity" mortality="true" uid="WSBPbvvamIO">
 		<dataelements>
 			<dataelement code="GO101" uid="rHecVuigDqR"/>
 			<dataelement code="DIG108" uid="ZtiwL0KHQvG"/>
@@ -362,13 +362,13 @@
 			<dataelement code="GO299" uid="jpjBctR15wa"/>
 		</dataelements>
 	</dataset>
-	<dataset type="technicalactivitiesalive" uid="WSBPbvvamIO">
-		<category type="age">
+	<dataset type="technicalactivity" mortality="false" uid="WSBPbvvamIO">
+		<categoryOptionCombo type="age">
 			<option uid="hdW79u4HG4n" min="0" max="1"/>
 			<option uid="gvXsXCKqbPD" min="1" max="5"/>
 			<option uid="pgKbjjCEJaY" min="5" max="15"/>
 			<option uid="WfVzAEsE68K" min="15" max="999"/>
-		</category>
+		</categoryOptionCombo>
 		<dataelements>
 			<dataelement code="GO101" uid="zuAgX4brKZC"/>
 			<dataelement code="DIG108" uid="bZ89QX8ZitP"/>
@@ -492,14 +492,14 @@
 			<dataelement code="GO299" uid="bQc08B5C9uW"/>
 		</dataelements>
 	</dataset>
-	<dataset type="diagnosesbyage" uid="e3K68oDyOd7">
-		<category type="age">
+	<dataset type="diagnosis" classification="icd10" newcase="true" uid="e3K68oDyOd7">
+		<categoryOptionCombo type="age">
 			<option uid="hdW79u4HG4n" min="0" max="1"/>
 			<option uid="gvXsXCKqbPD" min="1" max="5"/>
 			<option uid="pgKbjjCEJaY" min="5" max="15"/>
 			<option uid="WfVzAEsE68K" min="15" max="999"/>
-		</category>
-		<category type="department">
+		</categoryOptionCombo>
+		<attributeOptionCombo type="department">
 			<option uid="nt5c6y5g8xh" value="chi" name="Chirurgie"/>
 			<option uid="zL7ERhQ7zfr" value="con" name="Consultations"/>
 			<option uid="qkJPPbcUiLz" value="den" name="Dentisterie"/>
@@ -521,7 +521,7 @@
 			<option uid="fZAOOp3vfJz" value="lab" name="Labo"/>
 			<option uid="eLH7iKE6aQu" value="ima" name="Imagerie"/>
 			<option uid="GYuSAEVbiwk" value="pre" name="Prevention"/>
-		</category>
+		</attributeOptionCombo>
 		<dataelements>
 			<dataelement code="U80" uid="ucx8SiKObiU"/>
 			<dataelement code="U88" uid="mXReqXG442c"/>
@@ -1755,12 +1755,12 @@
 			<dataelement code="Z99" uid="uto6AfaAY4s"/>
 		</dataelements>
 	</dataset>
-	<dataset type="diagnosesbygender" uid="e3K68oDyOd7">
-		<category type="gender">
+	<dataset type="diagnosis" newcase="true" classification="icd10" uid="e3K68oDyOd7">
+		<categoryOptionCombo type="gender">
 			<option uid="MLUsXG5RM6g" value="m"/>
 			<option uid="XPJfNX1Dagi" value="f"/>
-		</category>
-		<category type="department">
+		</categoryOptionCombo>
+		<attributeOptionCombo type="department">
 			<option uid="nt5c6y5g8xh" value="chi" name="Chirurgie"/>
 			<option uid="zL7ERhQ7zfr" value="con" name="Consultations"/>
 			<option uid="qkJPPbcUiLz" value="den" name="Dentisterie"/>
@@ -1782,7 +1782,7 @@
 			<option uid="fZAOOp3vfJz" value="lab" name="Labo"/>
 			<option uid="eLH7iKE6aQu" value="ima" name="Imagerie"/>
 			<option uid="GYuSAEVbiwk" value="pre" name="Prevention"/>
-		</category>
+		</attributeOptionCombo>
 		<dataelements>
 			<dataelement code="U80" uid="FKIulLjqykt"/>
 			<dataelement code="U88" uid="CFbbcin6KV6"/>
@@ -3016,12 +3016,12 @@
 			<dataelement code="Z99" uid="eUnaLLHCAx2"/>
 		</dataelements>
 	</dataset>
-	<dataset type="deathdiagnosesbygender" uid="UxOZ0s37iwZ">
-		<category type="gender">
+	<dataset type="diagnosis" mortality="true" classification="icd10" uid="UxOZ0s37iwZ">
+		<categoryOptionCombo type="gender">
 			<option uid="MLUsXG5RM6g" value="m"/>
 			<option uid="XPJfNX1Dagi" value="f"/>
-		</category>
-		<category type="department">
+		</categoryOptionCombo>
+		<attributeOptionCombo type="department">
 			<option uid="nt5c6y5g8xh" value="chi" name="Chirurgie"/>
 			<option uid="zL7ERhQ7zfr" value="con" name="Consultations"/>
 			<option uid="qkJPPbcUiLz" value="den" name="Dentisterie"/>
@@ -3043,7 +3043,7 @@
 			<option uid="fZAOOp3vfJz" value="lab" name="Labo"/>
 			<option uid="eLH7iKE6aQu" value="ima" name="Imagerie"/>
 			<option uid="GYuSAEVbiwk" value="pre" name="Prevention"/>
-		</category>
+		</attributeOptionCombo>
 		<dataelements>
 			<dataelement code="U80" uid="zrwiKYCVdcK"/>
 			<dataelement code="U88" uid="d2Z3B9UiOsm"/>
@@ -4277,14 +4277,14 @@
 			<dataelement code="Z99" uid="VX09ip8B2il"/>
 		</dataelements>
 	</dataset>
-	<dataset type="deathdiagnosesbyage" uid="UxOZ0s37iwZ">
-		<category type="age">
+	<dataset type="diagnosis" classification="icd10" mortality="true" uid="UxOZ0s37iwZ">
+		<categoryOptionCombo type="age">
 			<option uid="hdW79u4HG4n" min="0" max="1"/>
 			<option uid="gvXsXCKqbPD" min="1" max="5"/>
 			<option uid="pgKbjjCEJaY" min="5" max="15"/>
 			<option uid="WfVzAEsE68K" min="15" max="999"/>
-		</category>
-		<category type="department">
+		</categoryOptionCombo>
+		<attributeOptionCombo type="department">
 			<option uid="nt5c6y5g8xh" value="chi" name="Chirurgie"/>
 			<option uid="zL7ERhQ7zfr" value="con" name="Consultations"/>
 			<option uid="qkJPPbcUiLz" value="den" name="Dentisterie"/>
@@ -4306,7 +4306,7 @@
 			<option uid="fZAOOp3vfJz" value="lab" name="Labo"/>
 			<option uid="eLH7iKE6aQu" value="ima" name="Imagerie"/>
 			<option uid="GYuSAEVbiwk" value="pre" name="Prevention"/>
-		</category>
+		</attributeOptionCombo>
 		<dataelements>
 			<dataelement code="U80" uid="MQKcz28yrEk"/>
 			<dataelement code="U88" uid="L1ZwW8rrxNT"/>

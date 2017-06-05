@@ -8,6 +8,7 @@
 String sShowPatientEncounters=checkString(request.getParameter("showpatientencounters"));
 String sPatientUid=request.getParameter("patientuid");
 String sAuthorId=checkString(request.getParameter("AuthorUID"));
+String sEncounterUid = checkString(request.getParameter("EncounterUid"));
 	if(sPatientUid==null){
 		sPatientUid=activePatient.personid;
 	}
@@ -32,7 +33,7 @@ String sAuthorId=checkString(request.getParameter("AuthorUID"));
         <tr>
             <td nowrap><%=HTMLEntities.htmlentities(getTran(request,"Web","Keyword",sWebLanguage))%>&nbsp;&nbsp;</td>
             <td colspan='2'>
-                <input type='text' class='text' name='keywords' size='40' value="<%=request.getParameter("keywords")!=null?request.getParameter("keywords"):""%>" onblur="limitLength(this);" onKeyDown='if(enterEvent(event,13)){doFind();}'/>
+                <input type='text' class='text' name='keywords' id='keywords' size='40' value="<%=request.getParameter("keywords")!=null?request.getParameter("keywords"):""%>" onblur="limitLength(this);" onKeyDown='if(enterEvent(event,13)){doFind();}'/>
                 <input class='button' type='button' name='findButton' onclick='doFind();' value='<%=getTranNoLink("Web","Find",sWebLanguage)%>'/>
                 <input class='button' type='button' name='cancel' onclick='window.close()' value='<%=getTranNoLink("Web","Close",sWebLanguage)%>'/>
             </td>
@@ -273,7 +274,7 @@ String sAuthorId=checkString(request.getParameter("AuthorUID"));
                 }
             }
             else{
-                openPopup("/_common/search/diagnoseInfo.jsp&AuthorUID=<%=sAuthorId%>&ts=<%=getTs()%>&showpatientencounters=<%=sShowPatientEncounters%>&Type=ICPC&Code="+code+"&Value="+document.getElementsByName('ICPCComment'+code)[0].value+"&Label="+label+"&returnField=<%=sReturnField%>&returnField2=<%=sReturnField2%>&patientuid=<%=sPatientUid%>",800,600);
+                openPopup("/_common/search/diagnoseInfo.jsp&EncounterUid=<%=sEncounterUid%>&AuthorUID=<%=sAuthorId%>&ts=<%=getTs()%>&showpatientencounters=<%=sShowPatientEncounters%>&Type=ICPC&Code="+code+"&Value="+document.getElementsByName('ICPCComment'+code)[0].value+"&Label="+label+"&returnField=<%=sReturnField%>&returnField2=<%=sReturnField2%>&patientuid=<%=sPatientUid%>",800,600);
             }
         }
         else {
@@ -314,7 +315,7 @@ String sAuthorId=checkString(request.getParameter("AuthorUID"));
         }
       }
       else {
-        openPopup('/_common/search/diagnoseInfo.jsp&AuthorUID=<%=sAuthorId%>&ts=<%=getTs()%>&showpatientencounters=<%=sShowPatientEncounters%>&Type=ICD10&Code='+code+'&Value='+document.getElementsByName("ICD10Comment"+code)[0].value+'&Label='+label+'&returnField=<%=sReturnField%>&returnField2=<%=sReturnField2%>&patientuid=<%=sPatientUid%>',800,600);
+        openPopup('/_common/search/diagnoseInfo.jsp&EncounterUid=<%=sEncounterUid%>&AuthorUID=<%=sAuthorId%>&ts=<%=getTs()%>&showpatientencounters=<%=sShowPatientEncounters%>&Type=ICD10&Code='+code+'&Value='+document.getElementsByName("ICD10Comment"+code)[0].value+'&Label='+label+'&returnField=<%=sReturnField%>&returnField2=<%=sReturnField2%>&patientuid=<%=sPatientUid%>',800,600);
       }
     }
     else {
@@ -348,4 +349,5 @@ String sAuthorId=checkString(request.getParameter("AuthorUID"));
   }
 
   var focusfield=document.getElementsByName('keywords')[0];
+  window.setTimeout('document.getElementById("keywords").focus()',300);
 </script>

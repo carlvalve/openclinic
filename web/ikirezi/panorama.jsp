@@ -12,6 +12,8 @@
 <%@include file="/includes/validateUser.jsp"%>
 
 <%
+try{
+
 	if(activePatient==null || (request.getParameter("panorama")==null && request.getParameter("hints")==null)){
 %>
 	<form name='transactionForm' method='post'>
@@ -33,6 +35,7 @@
 					<select class='text' name='complaint1a' id='complaint1a' onchange='validateselects();'>
 						<option/>
 						<%
+							System.out.println("1");
 							Hashtable hMappings = new Hashtable();
 							//First read all existing ICPC mappings from ikirezi.xml
 							String sDoc = MedwanQuery.getInstance().getConfigString("templateSource") + "ikirezi.xml";
@@ -63,6 +66,7 @@
 									}
 								}
 							}
+							System.out.println("2");
 						
 						%>
 					</select>
@@ -121,6 +125,7 @@
 <%
 	}
 	else if (request.getParameter("hints")!=null){
+		System.out.println("3");
 		//Get base data from medical record
 		Vector vSigns= new Vector();
 		//1. First get person reference
@@ -173,6 +178,8 @@
 				}
 			}
 		}
+		System.out.println("4");
+
 		SortedMap sortedsignpowers = new TreeMap();
 		Iterator i = signpowers.keySet().iterator();
 		while(i.hasNext()){
@@ -206,8 +213,12 @@
 			out.println("</tr>");
 		}
 		out.println("</table>");
+		System.out.println("5");
+
 	}
 	else if (request.getParameter("panorama")!=null){
+		System.out.println("6");
+
 		//Get base data from medical record
 		Vector vSigns= new Vector();
 		//1. First get person reference
@@ -250,13 +261,17 @@
 		for(int n=0;n<vSigns.size();n++){
 			sAllSigns+=vSigns.elementAt(n)+";";
 		}
-		
+		System.out.println("7");
+
 		//Ikirezi interface
 		//Make Ikirezi call
 		HashSet diseases = new HashSet();
-		Vector resp = Ikirezi.getDiagnoses(vSigns,sWebLanguage);
+		System.out.println("7.0:"+vSigns);
+		Vector resp = new Vector();
+			resp = Ikirezi.getDiagnoses(vSigns,sWebLanguage);
 		out.print("<script>");
 		out.println(" var signs=[");
+		System.out.println("7.1");
 		for (int n=0;n<resp.size();n++){
 			Vector v = (Vector)resp.elementAt(n);
 			if(n>0){
@@ -265,6 +280,7 @@
 			out.print("'"+(v.elementAt(1)+";"+((String)v.elementAt(4)).replaceAll("%","--pct--")+";"+v.elementAt(5)+";"+v.elementAt(6)).replaceAll("'","´")+"'");
 			diseases.add((v.elementAt(1)+";"+v.elementAt(3)).replaceAll("'","´")+";"+be.openclinic.medical.Diagnosis.getGravity("icd10",(String)v.elementAt(8),100));
 		}
+		System.out.println("7.2");
 		out.println("];");
 		out.println(" var disease=[");
 		Iterator i = diseases.iterator();
@@ -278,6 +294,8 @@
 		}
 		out.println("];");
 		out.println("</script>");
+		System.out.println("7:"+diseases);
+
 	%>
 	
 	<canvas id="ikirezi" width="800" height="600"></canvas>
@@ -297,6 +315,7 @@
 		if(extraHeight>70){
 			extraHeight=70;
 		}
+<%System.out.println("8");%>
 	
 		function draw(){
 			var canvas = document.getElementById('ikirezi');
@@ -334,6 +353,7 @@
 		       		ctx.stroke(rectangle);
 			    }
 			});
+			<%System.out.println("9");%>
 			canvas.addEventListener('click', function(event) {
 				var canvas=document.getElementById('ikirezi');
 				var ctx=canvas.getContext('2d');
@@ -350,6 +370,7 @@
 					}
 			    }
 			});
+			<%System.out.println("10");%>
 			if (canvas.getContext) {
 			    var ctx = canvas.getContext('2d');
 				//1. We berekenen de verschillende punten die er moeten verbonden worden
@@ -378,7 +399,8 @@
 					
 			}
 		}
-		
+		<%System.out.println("11");%>
+
 	    CanvasRenderingContext2D.prototype.textLines = function(x, y, w, h, text,
 	            hard_wrap) {
 	          var ctx = this;
@@ -470,5 +492,9 @@
 	</script>
 	<%
 	}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
 %>
 </body>

@@ -35,20 +35,20 @@
     <table class="menu" width="100%" cellspacing="1" cellpadding="0">
          <%-- DATES --%>
          <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","date",sWebLanguage)%></td>
-            <td class="admin2" width="70"><%=getTran(request,"Web","Begin",sWebLanguage)%></td>
-            <td class="admin2" width="130"><%=writeDateField("FindDateBegin","FindForm",sFindDateBegin,sWebLanguage)%></td>
-            <td class="admin2" width="110"><%=getTran(request,"Web","End",sWebLanguage)%></td>
+            <td class="admin" nowrap width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","date",sWebLanguage)%></td>
+            <td class="admin2" nowrap><%=getTran(request,"Web","Begin",sWebLanguage)%></td>
+            <td class="admin2" nowrap><%=writeDateField("FindDateBegin","FindForm",sFindDateBegin,sWebLanguage)%></td>
+            <td class="admin2" nowrap><%=getTran(request,"Web","End",sWebLanguage)%></td>
             <td class="admin2"><%=writeDateField("FindDateEnd","FindForm",sFindDateEnd,sWebLanguage)%></td>
         </tr>
         
         <%-- AMOUNT --%>
         <tr>
-            <td class="admin"><%=getTran(request,"Web","amount",sWebLanguage)%></td>
-            <td class="admin2"><%=getTran(request,"Web","min",sWebLanguage)%></td>
-            <td class="admin2"><input type="text" class="text" size="10" name="FindAmountMin" id="FindAmountMin" value="<%=sFindAmountMin%>" onblur="isNumber(this)"> <%=MedwanQuery.getInstance().getConfigParam("currency", "€")%></td>
-            <td class="admin2"><%=getTran(request,"Web","max",sWebLanguage)%></td>
-            <td class="admin2"><input type="text" class="text" size="10" name="FindAmountMax" id="FindAmountMax" value="<%=sFindAmountMax%>" onblur="isNumber(this)"> <%=MedwanQuery.getInstance().getConfigParam("currency", "€")%></td>
+            <td class="admin" nowrap ><%=getTran(request,"Web","amount",sWebLanguage)%></td>
+            <td class="admin2" nowrap ><%=getTran(request,"Web","min",sWebLanguage)%></td>
+            <td class="admin2" nowrap ><input type="text" class="text" size="10" name="FindAmountMin" id="FindAmountMin" value="<%=sFindAmountMin%>" onblur="isNumber(this)"> <%=MedwanQuery.getInstance().getConfigParam("currency", "€")%></td>
+            <td class="admin2" nowrap ><%=getTran(request,"Web","max",sWebLanguage)%></td>
+            <td class="admin2" nowrap ><input type="text" class="text" size="10" name="FindAmountMax" id="FindAmountMax" value="<%=sFindAmountMax%>" onblur="isNumber(this)"> <%=MedwanQuery.getInstance().getConfigParam("currency", "€")%></td>
         </tr>
         
         <%-- INVOICE ID --%>
@@ -61,8 +61,8 @@
         <tr>
             <td class="admin"><%=getTran(request,"web.finance","invoicetype",sWebLanguage)%></td>
             <td class="admin2" colspan="4">
-                <input type="radio" onDblClick="uncheckRadio(this);" id="FindType1" name="FindInvoiceType" value="patient" <%if(sFindInvoiceType.equalsIgnoreCase("patient")){out.print("checked");}%>><%=getLabel(request,"web","patient",sWebLanguage,"FindType1")%>
-                <input type="radio" onDblClick="uncheckRadio(this);" id="FindType2" name="FindInvoiceType" value="insurar" <%if(sFindInvoiceType.equalsIgnoreCase("insurar") || sFindInvoiceType.equalsIgnoreCase("")){out.print("checked");}%>><%=getLabel(request,"web","insurar",sWebLanguage,"FindType2")%>
+                <input type="radio" onDblClick="uncheckRadio(this);" id="FindType1" name="FindInvoiceType" value="patient" <%if(sFindInvoiceType.equalsIgnoreCase("patient") || sFindInvoiceType.equalsIgnoreCase("")){out.print("checked");}%>><%=getLabel(request,"web","patient",sWebLanguage,"FindType1")%>
+                <input type="radio" onDblClick="uncheckRadio(this);" id="FindType2" name="FindInvoiceType" value="insurar" <%if(sFindInvoiceType.equalsIgnoreCase("insurar")){out.print("checked");}%>><%=getLabel(request,"web","insurar",sWebLanguage,"FindType2")%>
                 <input type="radio" onDblClick="uncheckRadio(this);" id="FindType3" name="FindInvoiceType" value="extrainsurar" <%if(sFindInvoiceType.equalsIgnoreCase("extrainsurar")){out.print("checked");}%>><%=getLabel(request,"web","extrainsurar",sWebLanguage,"FindType3")%>
                 <input type="radio" onDblClick="uncheckRadio(this);" id="FindType4" name="FindInvoiceType" value="extrainsurar2" <%if(sFindInvoiceType.equalsIgnoreCase("extrainsurar2")){out.print("checked");}%>><%=getLabel(request,"web","complementarycoverage2",sWebLanguage,"FindType4")%>
             </td>

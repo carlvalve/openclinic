@@ -55,7 +55,6 @@
     <!-- <property name="jnlp.weasis.weasis.help.url" value="${cdb}/../weasis-doc" /> -->
     <!-- ================================================================================================================= -->
   </resources>
-
   <application-desc main-class="org.weasis.launcher.WebstartLauncher">
     <argument>$dicom:get -w <%=server %><%=request.getRequestURI().replaceAll(request.getServletPath(),"")%>/pacs/wadoQuery.jsp?studyuid=<%=request.getParameter("studyuid")%>&seriesid=<%=request.getParameter("seriesid")%></argument>
   </application-desc>

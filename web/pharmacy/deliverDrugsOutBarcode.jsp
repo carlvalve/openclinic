@@ -34,13 +34,7 @@
 		operation.setUpdateDateTime(new java.util.Date());
 		operation.setUpdateUser(activeUser.userid);
 		operation.setVersion(1);
-		
-		String sEncounterUid = "";
-		Encounter encounter = Encounter.getActiveEncounter(activePatient.personid);
-		if(encounter!=null){
-			sEncounterUid = encounter.getUid();
-		}
-		operation.setEncounterUID(sEncounterUid);
+		operation.setEncounterUID(checkString(rs.getString("OC_LIST_ENCOUNTERUID")));
 		
 		operation.store();
 		

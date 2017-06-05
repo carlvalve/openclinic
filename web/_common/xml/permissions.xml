@@ -1,5 +1,9 @@
 <permissions>
     <application type="Web" id="examinations" displaysection="false">
+        <permission type="Web.Occup" id="cnrkr.consultation">cnrkr.consultation</permission>
+        <permission type="Web.Occup" id="cnrkr.consultationfollowup">cnrkr.consultationfollowup</permission>
+        <permission type="Web.Occup" id="cnrkr.neuromuscular">cnrkr.neuromuscular</permission>
+        <permission type="Web.Occup" id="cnrkr.kine">cnrkr.kine</permission>
         <permission type="Web.Occup" id="audiometry">occup.audiometry</permission>
         <permission type="Web.Occup" id="clinicalexamination">occup.clinicalexamination</permission>
         <permission type="Web.Occup" id="labrequest">occup.labrequest</permission>
@@ -212,6 +216,7 @@
         <permission type="web" id="insurarCreditEdit">financial.insurarcreditedit</permission>
         <permission type="web" id="debeteedit">financial.debet</permission>
         <permission type="web" id="patientInvoiceEdit">financial.patientinvoice</permission>
+        <permission type="web" id="financial.reopensummaryinvoice">financial.reopensummaryinvoice</permission>
         <permission type="web" id="consolidatedPatientInvoiceEdit">financial.consolidatedpatientinvoice</permission>
         <permission type="web" id="insuranceInvoiceEdit">financial.insuranceinvoice</permission>
         <permission type="web" id="insurance">financial.insurance</permission>
@@ -268,6 +273,9 @@
         <permission type="web" id="remoteassets">remoteassets</permission>
     </application>
     <application type="Web" id="system">
+        <permission type="web" id="system.os">system.os</permission>
+        <permission type="web" id="system.shutdown">system.shutdown</permission>
+        <permission type="web" id="system.reboot">system.reboot</permission>
         <permission type="web" id="systemmanagement">system.management</permission>
         <permission type="web" id="centerinfo">system.centerinfo</permission>
         <permission type="web.manage" id="managelocalrfecodes">system.managelocalrfecodes</permission>
@@ -296,7 +304,7 @@
         <permission type="web" id="exporttomaster">system.exporttomaster</permission>
         <permission type="web" id="devices">system.devices</permission>
     </application>
-    <application type="Web" id="pharmacy">pharmacy.updateinventory
+    <application type="Web" id="pharmacy">
     	<permission type="web" id="pharmacy.issueproductsinpast">pharmacy.issueproductsinpast</permission>
     	<permission type="web" id="pharmacy.updateinventory">pharmacy.updateinventory</permission>
     	<permission type="web" id="pharmacy.production.deliverwhendebt">pharmacy.production.deliverwhendebt</permission>
@@ -307,6 +315,7 @@
         <permission type="web" id="medication">medication</permission>
         <permission type="web" id="medicationdelivery">medication.medicationdelivery</permission>
         <permission type="web" id="medicationreceipt">medication.medicationreceipt</permission>
+        <permission type="web" id="bulkreceive">bulkreceive</permission>
         <permission type="web" id="export">pharmacy.export</permission>
         <permission type="web" id="import">pharmacy.import</permission>
         <permission type="web" id="manageProductStockDocuments">pharmacy.manageproductstockdocuments</permission>
@@ -325,6 +334,7 @@
         <permission type="web" id="synchronization">pharmacy.synchronization</permission>
         <permission type="web" id="loadfile">pharmacy.loadfile</permission>
         <permission type="web" id="pharmacy.reopenproductionorder">pharmacy.reopenproductionorder</permission>
+        <permission type="web" id="pharmacy.deliveryqueues">pharmacy.deliveryqueues</permission>
     </application>
     <application type="web" id="registers">
     	<permission type="web" id="registers">registers</permission>

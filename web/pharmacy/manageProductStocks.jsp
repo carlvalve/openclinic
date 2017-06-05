@@ -157,7 +157,8 @@ public double getLastYearsAveragePrice(Product product){
             java.util.Date tmpDate = productStock.getBegin();
             if(tmpDate!=null) sStockBegin = ScreenHelper.formatDate(tmpDate);
 
-            double nPUMP = getLastYearsAveragePrice(productStock.getProductUid());
+            //double nPUMP = getLastYearsAveragePrice(productStock.getProductUid());
+            double nPUMP = productStock.getProduct().getLastYearsAveragePrice();
             int commandLevel = 0;
             if(openquantities.get(productStock.getUid())!=null){
             	commandLevel=(Integer)openquantities.get(productStock.getUid());

@@ -21,6 +21,20 @@
 			reportContent.append(reportlines.elementAt(n));
 		}
 	}
+	else if(report.equalsIgnoreCase("inventoryReport")){
+		reportContent = new StringBuffer();
+		Vector reportlines=PharmacyReports.getInventoryReport(serviceStockUid,begin,end,sWebLanguage);
+		for(int n=0;n<reportlines.size();n++){
+			reportContent.append(reportlines.elementAt(n));
+		}
+	}
+	else if(report.equalsIgnoreCase("inventorySummaryReport")){
+		reportContent = new StringBuffer();
+		Vector reportlines=PharmacyReports.getInventorySummaryReport(serviceStockUid,begin,end,sWebLanguage);
+		for(int n=0;n<reportlines.size();n++){
+			reportContent.append(reportlines.elementAt(n));
+		}
+	}
 	else if(report.equalsIgnoreCase("specialOrderReport")){
 		reportContent = new StringBuffer();
 		Vector reportlines=PharmacyReports.getSpecialOrderReport(serviceStockUid,begin,end);
@@ -31,6 +45,13 @@
 	else if(report.equalsIgnoreCase("productionReport")){
 		reportContent = new StringBuffer();
 		Vector reportlines=PharmacyReports.getProductionReport(serviceStockUid,begin,end,sWebLanguage);
+		for(int n=0;n<reportlines.size();n++){
+			reportContent.append(reportlines.elementAt(n));
+		}
+	}
+	else if(report.equalsIgnoreCase("productionSalesOrderReport")){
+		reportContent = new StringBuffer();
+		Vector reportlines=PharmacyReports.getProductionSalesOrderReport(serviceStockUid,begin,end);
 		for(int n=0;n<reportlines.size();n++){
 			reportContent.append(reportlines.elementAt(n));
 		}

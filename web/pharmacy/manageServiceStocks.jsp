@@ -987,7 +987,9 @@ private String addValidationUser(int userIdx, String userName, String sWebLangua
             	</tr>
 				<tr>
             		<td class='text'><a href="javascript:printProductionReportPeriod('consumptionReport','<%=sEditStockUid %>')"><%=getTran(request,"web","production.consumptionReport.csv",sWebLanguage)%></a></td>
-            		<td class='text' colspan="4"><a href="javascript:printStockContent('<%=sEditStockUid %>')"><%=getTran(request,"web","production.stockContent.csv",sWebLanguage)%></a></td>
+            		<td class='text'><a href="javascript:printStockContent('<%=sEditStockUid %>')"><%=getTran(request,"web","production.stockContent.csv",sWebLanguage)%></a></td>
+            		<td class='text'><a href="javascript:printInventoryCsv('<%=sEditStockUid %>')"><%=getTran(request,"web","servicestockinventory.csv",sWebLanguage)%></a></td>
+            		<td class='text' colspan="2"><a href="javascript:printInventorySummaryCsv('<%=sEditStockUid %>')"><%=getTran(request,"web","servicestockinventorysummary.csv",sWebLanguage)%></a></td>
             	</tr>
             	
             <%
@@ -1003,12 +1005,18 @@ private String addValidationUser(int userIdx, String userName, String sWebLangua
             		<td class='text'><a href="javascript:printProductionReport('inventoryAnalysisReport','<%=sEditStockUid %>')"><%=getTran(request,"web","production.inventoryAnalysisReport.csv",sWebLanguage)%></a></td>
             		<td class='text'><a href="javascript:printProductionReportPeriod('specialOrderReport','<%=sEditStockUid %>')"><%=getTran(request,"web","production.specialOrderReport.csv",sWebLanguage)%></a></td>
             		<td class='text'><a href="javascript:printProductionReportPeriod('productionReport','<%=sEditStockUid %>')"><%=getTran(request,"web","production.productionReport.csv",sWebLanguage)%></a></td>
-            		<td class='text'><a href="javascript:printProductionReportPeriod('salesOrderReport','<%=sEditStockUid %>')"><%=getTran(request,"web","production.salesOrderReport.csv",sWebLanguage)%></a></td>
-            		<td class='text'><a href="javascript:printProductionReportPeriod('deliveryReport','<%=sEditStockUid %>')"><%=getTran(request,"web","production.deliveryReport.csv",sWebLanguage)%></a></td>
+            		<td class='text'><a href="javascript:printProductionReportPeriod('productionSalesOrderReport','<%=sEditStockUid %>')"><%=getTran(request,"web","production.productionSalesOrderReport.csv",sWebLanguage)%></a></td>
             	</tr>
 				<tr>
             		<td class='text'><a href="javascript:printProductionReportPeriod('insuranceReport','<%=sEditStockUid %>')"><%=getTran(request,"web","production.insuranceReport.csv",sWebLanguage)%></a></td>
             		<td class='text'><a href="javascript:printProductionReportPeriod('salesAnalysisReport','<%=sEditStockUid %>')"><%=getTran(request,"web","production.salesAnalysisReport.csv",sWebLanguage)%></a></td>
+            	</tr>
+            	<tr>
+            		<td colspan="5" class='admin'><%=getTran(request,"web","salesreports",sWebLanguage) %><hr/></td>
+            	</tr>
+				<tr>
+            		<td class='text'><a href="javascript:printProductionReportPeriodService('salesOrderReport','<%=sEditStockUid %>')"><%=getTran(request,"web","production.salesOrderReport.csv",sWebLanguage)%></a></td>
+            		<td class='text'><a href="javascript:printProductionReportPeriod('deliveryReport','<%=sEditStockUid %>')"><%=getTran(request,"web","production.deliveryReport.csv",sWebLanguage)%></a></td>
             	</tr>
             <%
             	}
@@ -1586,12 +1594,20 @@ private String addValidationUser(int userIdx, String userName, String sWebLangua
   }
 
   function printInventory(serviceStockUid){
-	openPopup("statistics/pharmacy/getServiceStockInventory.jsp&ts=<%=getTs()%>&ServiceStockUid="+serviceStockUid,200,200);
-  }
+		openPopup("statistics/pharmacy/getServiceStockInventory.jsp&ts=<%=getTs()%>&ServiceStockUid="+serviceStockUid,200,200);
+	  }
+
+  function printInventoryCsv(serviceStockUid){
+		openPopup("statistics/pharmacy/getServiceStockInventoryCsv.jsp&ts=<%=getTs()%>&ServiceStockUid="+serviceStockUid,200,200);
+	  }
 
   function printInventorySummary(serviceStockUid){
-	openPopup("statistics/pharmacy/getServiceStockInventorySummary.jsp&ts=<%=getTs()%>&ServiceStockUid="+serviceStockUid,700,500);
-  }
+		openPopup("statistics/pharmacy/getServiceStockInventorySummary.jsp&ts=<%=getTs()%>&ServiceStockUid="+serviceStockUid,700,500);
+	  }
+
+  function printInventorySummaryCsv(serviceStockUid){
+		openPopup("statistics/pharmacy/getServiceStockInventorySummaryCsv.jsp&ts=<%=getTs()%>&ServiceStockUid="+serviceStockUid,200,200);
+	  }
 
   function printStockOperations(serviceStockUid){
 	openPopup("statistics/pharmacy/getServiceStockOperations.jsp&ts=<%=getTs()%>&ServiceStockUid="+serviceStockUid,200,200);
@@ -1659,6 +1675,10 @@ private String addValidationUser(int userIdx, String userName, String sWebLangua
 
   function printProductionReportPeriod(report,serviceStockUid){
 	  openPopup("pharmacy/manageProductionReportsPeriod.jsp?ts=<%=getTs()%>&report="+report+"&ServiceStockUid="+serviceStockUid,400,200);
+	  }
+
+  function printProductionReportPeriodService(report,serviceStockUid){
+	  openPopup("pharmacy/manageProductionReportsPeriodService.jsp?ts=<%=getTs()%>&report="+report+"&ServiceStockUid="+serviceStockUid,600,200);
 	  }
 
   <%-- DO BACK --%>

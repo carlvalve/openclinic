@@ -30,12 +30,44 @@
 				            <input type="text" class="text" size="12" maxLength="10" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" id="trandate" OnBlur='checkDate(this)'> <script>writeTranDate();</script>
 				        </td>
 				    </tr>
-				    
 				    <%--  DONNEES CLINIQUES --%>
 				    <tr>
-				        <td width ="<%=sTDAdminWidth%>" class='admin'><%=getTran(request,"web","notes",sWebLanguage)%>&nbsp;</td>
+				        <td width ="<%=sTDAdminWidth%>" class='admin'><%=getTran(request,"web","complaints",sWebLanguage)%>&nbsp;</td>
 				        <td class='admin2'>
-				            <textarea onKeyup="resizeTextarea(this,10);" <%=setRightClick("ITEM_TYPE_HPRC_NOTES")%> class="text" cols="74" rows="5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_NOTES" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_NOTES" property="value"/></textarea>
+				            <textarea onKeyup="resizeTextarea(this,10);" <%=setRightClick("ITEM_TYPE_HPRC_COMPLAINTS")%> class="text" cols="74" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_COMPLAINTS" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_COMPLAINTS" property="value"/></textarea>
+				        </td>
+				    </tr>
+				    <tr>
+				        <td width ="<%=sTDAdminWidth%>" class='admin'><%=getTran(request,"web","physicalexamination",sWebLanguage)%>&nbsp;</td>
+				        <td class='admin2'>
+				            <textarea onKeyup="resizeTextarea(this,10);" <%=setRightClick("ITEM_TYPE_HPRC_PHYSICALEXAM")%> class="text" cols="74" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_PHYSICALEXAM" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_PHYSICALEXAM" property="value"/></textarea>
+				        </td>
+				    </tr>
+				    <tr>
+				        <td width ="<%=sTDAdminWidth%>" class='admin'><%=getTran(request,"web","activetreatment",sWebLanguage)%>&nbsp;</td>
+				        <td class='admin2'>
+				            <textarea onKeyup="resizeTextarea(this,10);" <%=setRightClick("ITEM_TYPE_HPRC_ACTIVETREATMENT")%> class="text" cols="74" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_ACTIVETREATMENT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_ACTIVETREATMENT" property="value"/></textarea>
+				        </td>
+				    </tr>
+				    <tr class='admin'>
+				        <td colspan="2"><%=getTran(request,"web","decisions",sWebLanguage)%>&nbsp;</td>
+				    </tr>
+				    <tr>
+				        <td width ="<%=sTDAdminWidth%>" class='admin'><%=getTran(request,"web","examinations",sWebLanguage)%>&nbsp;</td>
+				        <td class='admin2'>
+				            <textarea onKeyup="resizeTextarea(this,10);" <%=setRightClick("ITEM_TYPE_HPRC_EXAMS")%> class="text" cols="74" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_EXAMS" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_EXAMS" property="value"/></textarea>
+				        </td>
+				    </tr>
+				    <tr>
+				        <td width ="<%=sTDAdminWidth%>" class='admin'><%=getTran(request,"web","treatment",sWebLanguage)%>&nbsp;</td>
+				        <td class='admin2'>
+				            <textarea onKeyup="resizeTextarea(this,10);" <%=setRightClick("ITEM_TYPE_HPRC_TREATMENT")%> class="text" cols="74" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_TREATMENT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_TREATMENT" property="value"/></textarea>
+				        </td>
+				    </tr>
+				    <tr>
+				        <td width ="<%=sTDAdminWidth%>" class='admin'><%=getTran(request,"web","recommendations",sWebLanguage)%>&nbsp;</td>
+				        <td class='admin2'>
+				            <textarea onKeyup="resizeTextarea(this,10);" <%=setRightClick("ITEM_TYPE_HPRC_NOTES")%> class="text" cols="74" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_NOTES" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_NOTES" property="value"/></textarea>
 				        </td>
 				    </tr>
 
@@ -73,6 +105,14 @@
 		    %>
 		  }
 	}    
+	  function searchEncounter(){
+	      openPopup("/_common/search/searchEncounter.jsp&ts=<%=getTs()%>&VarCode=currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID" property="itemId"/>]>.value&VarText=&FindEncounterPatient=<%=activePatient.personid%>");
+	  }
+	  if(document.getElementById('encounteruid').value==''){
+			alertDialogDirectText('<%=getTranNoLink("web","no.encounter.linked",sWebLanguage)%>');
+			searchEncounter();
+	}	
+
 </script>
 
 <%=writeJSButtons("transactionForm","saveButton")%>

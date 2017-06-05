@@ -4,7 +4,7 @@
 <%=checkPermission("system.manageproductionorders","all",activeUser)%>
 <%
 	boolean bActivePatientOnly = activePatient!=null && checkString(request.getParameter("EditActivePatientOnly")).equalsIgnoreCase("1");
-	boolean bOpenOrdersOnly = activePatient!=null && checkString(request.getParameter("EditOpenOrdersOnly")).equalsIgnoreCase("1");
+	boolean bOpenOrdersOnly = checkString(request.getParameter("EditOpenOrdersOnly")).equalsIgnoreCase("1");
 	boolean bAutoFind = bActivePatientOnly && checkString(request.getParameter("autofind")).equalsIgnoreCase("1");
 	String sProductStockUid = checkString(request.getParameter("EditProductStockUid"));
 	String sProductionOrderUid = checkString(request.getParameter("EditProductionOrderId"));
@@ -188,6 +188,7 @@
 						<td><%=getTran(request,"web","comment",sWebLanguage) %></td>
 					</tr>
 				<%
+				int counter=0;
 				for(int n=0;n<productionOrders.size();n++){
 					ProductionOrder order = (ProductionOrder)productionOrders.elementAt(n);
 					if(sProductionOrderTechnician.length()>0 && !sProductionOrderTechnician.equalsIgnoreCase(order.getTechnician())){
@@ -196,6 +197,7 @@
 					if(order.getProductStock()==null || order.getProductStock().getServiceStockUid()==null || (sServiceStockUid.length()>0 && !order.getProductStock().getServiceStockUid().equalsIgnoreCase(sServiceStockUid))){
 						continue;	
 					}
+					counter++;
 					ProductStock stock = order.getProductStock();
 					%>
 					<tr>
@@ -209,13 +211,13 @@
 						<td class='admin2'><%=checkString(order.getComment()) %></td>
 					</tr>
 					<%
-					if(n>MedwanQuery.getInstance().getConfigInt("MaximumProductionOrdersOnScreen",500)){
+					if(counter>MedwanQuery.getInstance().getConfigInt("MaximumProductionOrdersOnScreen",500)){
 						%>
 						<tr>
 							<td colspan="7">><%=MedwanQuery.getInstance().getConfigInt("MaximumProductionOrdersOnScreen",500)+" "+getTran(request,"web","recordsfound",sWebLanguage)%></td>
 						</tr>
 						<%
-						
+						break;
 					}
 				}
 				%>
