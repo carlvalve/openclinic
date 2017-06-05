@@ -95,7 +95,7 @@ public class SummaryInvoice extends OC_Object{
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try{
-			String sQuery="select * from OC_PATIENTINVOICES where OC_PATIENTINVOICE_PATIENTUID=? and OC_PATIENTINVOICE_STATUS='closed' and not exists (select * from OC_SUMMARYINVOICEITEMS where OC_ITEM_PATIENTINVOICEUID="+MedwanQuery.getInstance().convert("varchar", "OC_PATIENTINVOICE_SERVERID")+MedwanQuery.getInstance().concatSign()+"'.'"+MedwanQuery.getInstance().concatSign()+MedwanQuery.getInstance().convert("varchar", "OC_PATIENTINVOICE_OBJECTID")+")";
+			String sQuery="select * from OC_PATIENTINVOICES where OC_PATIENTINVOICE_PATIENTUID=? and not exists (select * from OC_SUMMARYINVOICEITEMS where OC_ITEM_PATIENTINVOICEUID="+MedwanQuery.getInstance().convert("varchar", "OC_PATIENTINVOICE_SERVERID")+MedwanQuery.getInstance().concatSign()+"'.'"+MedwanQuery.getInstance().concatSign()+MedwanQuery.getInstance().convert("varchar", "OC_PATIENTINVOICE_OBJECTID")+") ORDER BY OC_PATIENTINVOICE_DATE";
 			ps=conn.prepareStatement(sQuery);
 			ps.setString(1, sPatientUid);
 			rs=ps.executeQuery();
@@ -349,6 +349,11 @@ public class SummaryInvoice extends OC_Object{
 	}
 	
 	public static SummaryInvoice get(String uid){
+        String [] ids = uid.split("\\.");
+        if(ids.length==1){
+        	uid=MedwanQuery.getInstance().getConfigString("serverId")+"."+uid;
+            ids = uid.split("\\.");
+        }
 		SummaryInvoice summaryInvoice = null;
 		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
 		PreparedStatement ps = null;

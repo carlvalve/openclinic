@@ -230,7 +230,12 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
     		printStockOut(d, t, (String)parameters.get("date"), (String)parameters.get("serviceStockUID"));
     	}
     	else if(type.equalsIgnoreCase("patientDeliveries")){
-    		printPatientDeliveries(d, t, (String)parameters.get("begin"), (String)parameters.get("end"), (String)parameters.get("patientUID"));
+    		if(parameters.get("operation")==null){
+    			printPatientDeliveries(d, t, (String)parameters.get("begin"), (String)parameters.get("end"), (String)parameters.get("patientUID"));
+    		}
+    		else {
+    			printPatientDeliveries(d, t, (String)parameters.get("operation"));
+    		}
     	}
     	else if(type.equalsIgnoreCase("serviceStockOperations")){
     		printServiceStockOperations(d, t, (String)parameters.get("begin"), (String)parameters.get("end"), (String)parameters.get("serviceStockUID"));
@@ -461,112 +466,197 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 		addCol(row,20,ScreenHelper.getTranNoLink("web","pump",sPrintLanguage));
 		addCol(row,20,ScreenHelper.getTranNoLink("web","theor.value",sPrintLanguage));
 		
-		//Now we have to find all productstocks sorted by productsubgroup
-		SortedMap groups = new TreeMap();
-		String[] serviceStockUids = sServiceStockUID.split(";");
-		for(int q=0;q<serviceStockUids.length;q++){
-			Vector productStocks = ServiceStock.getProductStocks(serviceStockUids[q]);
-			for(int n=0;n<productStocks.size();n++){
-				ProductStock stock = (ProductStock)productStocks.elementAt(n);
-				if((MedwanQuery.getInstance().getConfigInt("pharmacyShowZeroLevelStocks",0)==0 && stock.getLevel()==0) || stock.getProduct()==null){
-					continue;
-				}
-				String uid="";
-				//We first figure out in which group this stock should go
-				if(stock!=null && stock.getProduct()!=null && ScreenHelper.checkString(stock.getProduct().getProductGroup()).startsWith(sProductGroup) && ScreenHelper.checkString(stock.getProduct().getProductSubGroup()).startsWith(sProductSubGroup)){
-					//First find the product subcategory
-					uid=stock.getProduct().getProductGroup()==null?"?":HTMLEntities.unhtmlentities(ScreenHelper.getTranNoLink("product.productgroup",stock.getProduct().getProductGroup(),sPrintLanguage))+" > "+stock.getProduct().getFullProductSubGroupName(sPrintLanguage);
-					if(groups.get(uid)==null){
-						groups.put(uid, new TreeMap());
+ 		if(MedwanQuery.getInstance().getConfigInt("printServiceStockInventoryShowClasses",1)==1){
+			//Now we have to find all productstocks sorted by productsubgroup
+			SortedMap groups = new TreeMap();
+			String[] serviceStockUids = sServiceStockUID.split(";");
+			for(int q=0;q<serviceStockUids.length;q++){
+				Vector productStocks = ServiceStock.getProductStocks(serviceStockUids[q]);
+				for(int n=0;n<productStocks.size();n++){
+					ProductStock stock = (ProductStock)productStocks.elementAt(n);
+					if((MedwanQuery.getInstance().getConfigInt("pharmacyShowZeroLevelStocks",0)==0 && stock.getLevel()==0) || stock.getProduct()==null){
+						continue;
 					}
-				}
-				else if(sProductGroup.length()==0 && sProductSubGroup.length()==0){
-					uid="?";
-					if(groups.get(uid)==null){
-						groups.put(uid, new TreeMap());
+					String uid="";
+					//We first figure out in which group this stock should go
+					if(stock!=null && stock.getProduct()!=null && ScreenHelper.checkString(stock.getProduct().getProductGroup()).startsWith(sProductGroup) && ScreenHelper.checkString(stock.getProduct().getProductSubGroup()).startsWith(sProductSubGroup)){
+						//First find the product subcategory
+						uid=stock.getProduct().getProductGroup()==null?"?":HTMLEntities.unhtmlentities(ScreenHelper.getTranNoLink("product.productgroup",stock.getProduct().getProductGroup(),sPrintLanguage))+" > "+stock.getProduct().getFullProductSubGroupName(sPrintLanguage);
+						if(groups.get(uid)==null){
+							groups.put(uid, new TreeMap());
+						}
 					}
-				}
-				if(uid.length()>0){
-					SortedMap stocks = (TreeMap)groups.get(uid);
-					//Now we add an entry for each combination productUid+BatchNumber
-					//Look up all batches for this product
-					int nBatchedQuantity=0;
-					java.util.Date date = ScreenHelper.parseDate(sDate);
-					Vector batches = Batch.getAllBatches(stock.getUid());
-					for(int b=0;b<batches.size();b++){
-						Batch batch = (Batch)batches.elementAt(b);
-						int level=batch.getLevel(date);
-						if(level>0){
-							nBatchedQuantity+=level;
-							uid=stock.getProduct().getName()+";"+checkString(stock.getProduct().getCode())+";"+stock.getProduct().getUid()+";"+batch.getBatchNumber()+";"+ScreenHelper.formatDate(batch.getEnd())+" ;";
+					else if(sProductGroup.length()==0 && sProductSubGroup.length()==0){
+						uid="?";
+						if(groups.get(uid)==null){
+							groups.put(uid, new TreeMap());
+						}
+					}
+					if(uid.length()>0){
+						SortedMap stocks = (TreeMap)groups.get(uid);
+						//Now we add an entry for each combination productUid+BatchNumber
+						//Look up all batches for this product
+						int nBatchedQuantity=0;
+						java.util.Date date = ScreenHelper.parseDate(sDate);
+						int datelevel=stock.getLevel(date);
+						Vector batches = Batch.getAllBatches(stock.getUid());
+						for(int b=0;b<batches.size() && (nBatchedQuantity<datelevel);b++){
+							Batch batch = (Batch)batches.elementAt(b);
+							int level=batch.getLevel(date);
+							if(level>0){
+								if(datelevel<nBatchedQuantity+level){
+									level=level-(nBatchedQuantity+level-datelevel);
+								}
+								nBatchedQuantity+=level;
+								uid=stock.getProduct().getName()+";"+checkString(stock.getProduct().getCode())+";"+stock.getProduct().getUid()+";"+batch.getBatchNumber()+";"+ScreenHelper.formatDate(batch.getEnd())+" ;";
+								if(stocks.get(uid)==null){
+									stocks.put(uid, 0);
+								}
+								stocks.put(uid,	(Integer)stocks.get(uid)+level);
+							}
+						}
+						if(nBatchedQuantity<datelevel){
+							//Part of the stock has no batch associated 
+							uid=stock.getProduct().getName()+";"+checkString(stock.getProduct().getCode())+";"+stock.getProduct().getUid()+"; ; ;";
 							if(stocks.get(uid)==null){
 								stocks.put(uid, 0);
 							}
-							stocks.put(uid,	(Integer)stocks.get(uid)+level);
+							stocks.put(uid,	(Integer)stocks.get(uid)+datelevel-nBatchedQuantity);
 						}
-					}
-					if(stock.getLevel(date)>nBatchedQuantity){
-						//Part of the stock has no batch associated 
-						uid=stock.getProduct().getName()+";"+checkString(stock.getProduct().getCode())+";"+stock.getProduct().getUid()+"; ; ;";
-						if(stocks.get(uid)==null){
-							stocks.put(uid, 0);
-						}
-						stocks.put(uid,	(Integer)stocks.get(uid)+stock.getLevel(date)-nBatchedQuantity);
 					}
 				}
 			}
-		}
-		Hashtable printedSubTitels = new Hashtable();
-		Iterator iGroups = groups.keySet().iterator();
-		boolean bInitialized = false;
-		double sectionTotal=0,generalTotal=0;
-		String title="";
-		while(iGroups.hasNext()){
-			String key = (String)iGroups.next();
-			//For each new group, we are going to print a title
+			Hashtable printedSubTitels = new Hashtable();
+			Iterator iGroups = groups.keySet().iterator();
+			boolean bInitialized = false;
+			double sectionTotal=0,generalTotal=0;
+			String title="";
+			while(iGroups.hasNext()){
+				String key = (String)iGroups.next();
+				//For each new group, we are going to print a title
+				if(bInitialized){
+					//First print the totals from the previous title
+			        row =t.addElement("row");
+					addRightBoldCol(row,210,ScreenHelper.getTranNoLink("web","total.for",sPrintLanguage)+": "+(title.length()==0?"?":title));
+					addPriceBoldCol(row,20,sectionTotal);
+					sectionTotal=0;
+				}
+				bInitialized=true;
+				title=key;
+		        row =t.addElement("row");
+				addBoldCol(row, 230, title);
+				SortedMap stocks = (SortedMap)groups.get(key);
+				//Now we print a line for each element in the stocks for this group
+				Iterator iStocks = stocks.keySet().iterator();
+				while(iStocks.hasNext()){
+					String key2 = (String)iStocks.next();
+					System.out.println("key2="+key2+"("+key2.split(";").length+")");
+					//Nu printen we de gegevens van de productstock
+			        row =t.addElement("row");
+					addCol(row,20,key2.split(";")[1]);
+					addCol(row,90,key2.split(";")[0]);
+					addCol(row,30,key2.split(";")[3]);
+					addCol(row,30,key2.split(";")[4]);
+					int level=(Integer)stocks.get(key2);
+					addCol(row,20,level+"");
+					double pump=0;
+					Product product = Product.get(key2.split(";")[2]);
+					if(product!=null){
+						pump=product.getLastYearsAveragePrice(new java.util.Date(ScreenHelper.parseDate(sDate).getTime()+day));
+					}
+					addPriceCol(row,20,pump,MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#,##0.00"));
+					addPriceCol(row,20,level*pump);
+					sectionTotal+=level*pump;
+					generalTotal+=level*pump;
+				}
+			}
 			if(bInitialized){
-				//First print the totals from the previous title
 		        row =t.addElement("row");
 				addRightBoldCol(row,210,ScreenHelper.getTranNoLink("web","total.for",sPrintLanguage)+": "+(title.length()==0?"?":title));
 				addPriceBoldCol(row,20,sectionTotal);
-				sectionTotal=0;
+				addRightBoldCol(row,210,ScreenHelper.getTranNoLink("web","general.total",sPrintLanguage));
+				addPriceBoldCol(row,20,generalTotal);
 			}
-			bInitialized=true;
-			title=key;
-	        row =t.addElement("row");
-			addBoldCol(row, 230, title);
-			SortedMap stocks = (SortedMap)groups.get(key);
-			//Now we print a line for each element in the stocks for this group
-			Iterator iStocks = stocks.keySet().iterator();
-			while(iStocks.hasNext()){
-				String key2 = (String)iStocks.next();
-				System.out.println("key2="+key2+"("+key2.split(";").length+")");
-				//Nu printen we de gegevens van de productstock
-		        row =t.addElement("row");
-				addCol(row,20,key2.split(";")[1]);
-				addCol(row,90,key2.split(";")[0]);
-				addCol(row,30,key2.split(";")[3]);
-				addCol(row,30,key2.split(";")[4]);
-				int level=(Integer)stocks.get(key2);
-				addCol(row,20,level+"");
-				double pump=0;
-				Product product = Product.get(key2.split(";")[2]);
-				if(product!=null){
-					pump=product.getLastYearsAveragePrice(new java.util.Date(ScreenHelper.parseDate(sDate).getTime()+day));
+ 		}
+ 		else{
+			SortedMap groups = new TreeMap();
+			String[] serviceStockUids = sServiceStockUID.split(";");
+			for(int q=0;q<serviceStockUids.length;q++){
+				Vector productStocks = ServiceStock.getProductStocks(serviceStockUids[q]);
+				for(int n=0;n<productStocks.size();n++){
+					ProductStock stock = (ProductStock)productStocks.elementAt(n);
+					if((MedwanQuery.getInstance().getConfigInt("pharmacyShowZeroLevelStocks",0)==0 && stock.getLevel()==0) || stock.getProduct()==null){
+						continue;
+					}
+					String uid=stock.getProduct().getName().toUpperCase();
+					if(uid.length()>0){
+						if(groups.get(uid)==null){
+							groups.put(uid, new TreeMap());
+						}
+						SortedMap stocks = (TreeMap)groups.get(uid);
+						//Now we add an entry for each combination productUid+BatchNumber
+						//Look up all batches for this product
+						int nBatchedQuantity=0;
+						java.util.Date date = ScreenHelper.parseDate(sDate);
+						Vector batches = Batch.getAllBatches(stock.getUid());
+						for(int b=0;b<batches.size();b++){
+							Batch batch = (Batch)batches.elementAt(b);
+							int level=batch.getLevel(date);
+							if(level>0){
+								nBatchedQuantity+=level;
+								uid=stock.getProduct().getName()+";"+checkString(stock.getProduct().getCode())+";"+stock.getProduct().getUid()+";"+batch.getBatchNumber()+";"+ScreenHelper.formatDate(batch.getEnd())+" ;";
+								if(stocks.get(uid)==null){
+									stocks.put(uid, 0);
+								}
+								stocks.put(uid,	(Integer)stocks.get(uid)+level);
+							}
+						}
+						if(stock.getLevel(date)>nBatchedQuantity){
+							//Part of the stock has no batch associated 
+							uid=stock.getProduct().getName()+";"+checkString(stock.getProduct().getCode())+";"+stock.getProduct().getUid()+"; ; ;";
+							if(stocks.get(uid)==null){
+								stocks.put(uid, 0);
+							}
+							stocks.put(uid,	(Integer)stocks.get(uid)+stock.getLevel(date)-nBatchedQuantity);
+						}
+					}
 				}
-				addPriceCol(row,20,pump,MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#,##0.00"));
-				addPriceCol(row,20,level*pump);
-				sectionTotal+=level*pump;
-				generalTotal+=level*pump;
 			}
-		}
-		if(bInitialized){
+			Hashtable printedSubTitels = new Hashtable();
+			Iterator iGroups = groups.keySet().iterator();
+			boolean bInitialized = false;
+			double sectionTotal=0,generalTotal=0;
+			String title="";
+			while(iGroups.hasNext()){
+				String key = (String)iGroups.next();
+				SortedMap stocks = (SortedMap)groups.get(key);
+				//Now we print a line for each element in the stocks for this group
+				Iterator iStocks = stocks.keySet().iterator();
+				while(iStocks.hasNext()){
+					String key2 = (String)iStocks.next();
+					//Nu printen we de gegevens van de productstock
+			        row =t.addElement("row");
+					addCol(row,20,key2.split(";")[1]);
+					addCol(row,90,key2.split(";")[0]);
+					addCol(row,30,key2.split(";")[3]);
+					addCol(row,30,key2.split(";")[4]);
+					int level=(Integer)stocks.get(key2);
+					addCol(row,20,level+"");
+					double pump=0;
+					Product product = Product.get(key2.split(";")[2]);
+					if(product!=null){
+						pump=product.getLastYearsAveragePrice(new java.util.Date(ScreenHelper.parseDate(sDate).getTime()+day));
+					}
+					addPriceCol(row,20,pump,MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#,##0.00"));
+					addPriceCol(row,20,level*pump);
+					sectionTotal+=level*pump;
+					generalTotal+=level*pump;
+				}
+			}
 	        row =t.addElement("row");
-			addRightBoldCol(row,210,ScreenHelper.getTranNoLink("web","total.for",sPrintLanguage)+": "+(title.length()==0?"?":title));
-			addPriceBoldCol(row,20,sectionTotal);
 			addRightBoldCol(row,210,ScreenHelper.getTranNoLink("web","general.total",sPrintLanguage));
 			addPriceBoldCol(row,20,generalTotal);
-		}
+ 		}
     }
 
     protected void printMonthlyConsumption(org.dom4j.Document d, org.dom4j.Element t, String sDate, String sServiceStockUID,boolean bIncludePatients,boolean bIncludeStocks,boolean bOther) throws ParseException{
@@ -655,100 +745,159 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
  		addCol(row,20,ScreenHelper.getTranNoLink("web","manq",sPrintLanguage),8);
  		addCol(row,20,ScreenHelper.getTranNoLink("web","exced",sPrintLanguage),8);
  		
- 		//Now we have to find all productstocks sorted by productsubgroup
- 		SortedMap stocks = new TreeMap();
- 		Vector productStocks = ServiceStock.getProductStocks(sServiceStockUID);
- 		for(int n=0;n<productStocks.size();n++){
- 			ProductStock stock = (ProductStock)productStocks.elementAt(n);
- 			//First find the product subcategory
- 			String uid=stock.getProduct()==null?"|"+stock.getUid():HTMLEntities.unhtmlentities(stock.getProduct().getFullProductSubGroupName(sPrintLanguage))+"|"+stock.getUid();
- 			stocks.put(uid, stock);
+ 		if(MedwanQuery.getInstance().getConfigInt("printServiceStockInventoryShowClasses",1)==1){
+	 		//Now we have to find all productstocks sorted by productsubgroup
+	 		SortedMap stocks = new TreeMap();
+	 		Vector productStocks = ServiceStock.getProductStocks(sServiceStockUID);
+	 		for(int n=0;n<productStocks.size();n++){
+	 			ProductStock stock = (ProductStock)productStocks.elementAt(n);
+	 			//First find the product subcategory
+	 			String uid=stock.getProduct()==null?"|"+stock.getUid():HTMLEntities.unhtmlentities(stock.getProduct().getFullProductSubGroupName(sPrintLanguage))+"|"+stock.getUid();
+	 			stocks.put(uid, stock);
+	 		}
+	 		
+	 		Hashtable printedSubTitels = new Hashtable();
+	 		Iterator iStocks = stocks.keySet().iterator();
+	 		boolean bInitialized = false;
+	 		double sectionTotal=0,generalTotal=0;
+	 		String lasttitle="";
+	 		while(iStocks.hasNext()){
+	 			String key = (String)iStocks.next();
+	 			ProductStock stock = (ProductStock)stocks.get(key);
+	 			java.util.Date begin = ScreenHelper.parseDate(sDateBegin);
+	 			java.util.Date end = ScreenHelper.parseDate(sDateEnd);
+	 			int initiallevel=stock.getLevel(begin);
+	 			int in = stock.getTotalUnitsInForPeriod(begin, new java.util.Date(end.getTime()+day));
+	 			int out = stock.getTotalUnitsOutForPeriod(begin, new java.util.Date(end.getTime()+day));
+	 			if(initiallevel!=0 || in!=0 || out!=0){
+		 			//Nu kijken we welke tussentitels er moeten geprint worden
+		 			String[] subtitles = key.split("\\|")[0].split(";");
+		 			String title="";
+		 			for(int n=0;n<subtitles.length;n++){
+		 				title+=subtitles[n]+";";
+		 				if(printedSubTitels.get(title)==null){
+		 					//First look if we don't have to print a section total
+		 					if(bInitialized){
+		 				        row =t.addElement("row");
+		 						addRightBoldCol(row,210,ScreenHelper.getTranNoLink("web","total.for",sPrintLanguage)+": "+lasttitle);
+		 						addPriceBoldCol(row,20,sectionTotal);
+		 						addCol(row,20,"");
+		 						addCol(row,20,"");
+		 						addCol(row,20,"");
+		 						addCol(row,20,"");
+		 						sectionTotal=0;
+		 						bInitialized=false;
+		 					}
+		 					//This one must be printed
+		 			        row =t.addElement("row");
+		 			        if(n>0){
+		 			        	addCol(row,n*5,"");
+		 			        }
+		 					addBoldCol(row,230-n*5,subtitles[n]);
+		 					addCol(row,20,"");
+		 					addCol(row,20,"");
+		 					addCol(row,20,"");
+		 					addCol(row,20,"");
+		 					printedSubTitels.put(title, "1");
+		 				}
+		 				lasttitle=subtitles[n];
+		 			}
+		 			bInitialized=true;
+		 			//Nu printen we de gegevens van de productstock
+		 	        row =t.addElement("row");
+		 			addCol(row,20,stock.getProduct()==null?"":stock.getProduct().getCode());
+		 			addCol(row,70,stock.getProduct()==null?"":stock.getProduct().getName());
+		 			addCol(row,20,stock.getProduct()==null?"":ScreenHelper.getTranNoLink("product.unit",stock.getProduct().getUnit(),sPrintLanguage),7);
+		 			addCol(row,20,initiallevel+"");
+		 			addCol(row,20,in+"");
+		 			addCol(row,20,out+"");
+		 			addCol(row,20,(initiallevel+in-out)+"");
+		 			double pump=0;
+		 			if(stock.getProduct()!=null){
+		 				pump=stock.getProduct().getLastYearsAveragePrice(new java.util.Date(end.getTime()+day));
+		 			}
+		 			addPriceCol(row,20,pump,MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#,##0.00"));
+		 			addPriceCol(row,20,(initiallevel+in-out)*pump);
+		 			addCol(row,20,"");
+		 			addCol(row,20,"");
+		 			addCol(row,20,"");
+		 			addCol(row,20,"");
+		 			sectionTotal+=(initiallevel+in-out)*pump;
+		 			generalTotal+=(initiallevel+in-out)*pump;
+	 			}
+	 		}
+	 		if(bInitialized){
+	 	        row =t.addElement("row");
+	 			addRightBoldCol(row,210,ScreenHelper.getTranNoLink("web","total.for",sPrintLanguage)+": "+lasttitle);
+	 			addPriceBoldCol(row,20,sectionTotal);
+	 			addCol(row,20,"");
+	 			addCol(row,20,"");
+	 			addCol(row,20,"");
+	 			addCol(row,20,"");
+	 			addRightBoldCol(row,210,ScreenHelper.getTranNoLink("web","general.total",sPrintLanguage));
+	 			addPriceBoldCol(row,20,generalTotal);
+	 			addCol(row,20,"");
+	 			addCol(row,20,"");
+	 			addCol(row,20,"");
+	 			addCol(row,20,"");
+	 		}
  		}
- 		
- 		Hashtable printedSubTitels = new Hashtable();
- 		Iterator iStocks = stocks.keySet().iterator();
- 		boolean bInitialized = false;
- 		double sectionTotal=0,generalTotal=0;
- 		String lasttitle="";
- 		while(iStocks.hasNext()){
- 			String key = (String)iStocks.next();
- 			ProductStock stock = (ProductStock)stocks.get(key);
- 			//Nu kijken we welke tussentitels er moeten geprint worden
- 			String[] subtitles = key.split("\\|")[0].split(";");
- 			String title="";
- 			for(int n=0;n<subtitles.length;n++){
- 				title+=subtitles[n]+";";
- 				if(printedSubTitels.get(title)==null){
- 					//First look if we don't have to print a section total
- 					if(bInitialized){
- 				        row =t.addElement("row");
- 						addRightBoldCol(row,210,ScreenHelper.getTranNoLink("web","total.for",sPrintLanguage)+": "+lasttitle);
- 						addPriceBoldCol(row,20,sectionTotal);
- 						addCol(row,20,"");
- 						addCol(row,20,"");
- 						addCol(row,20,"");
- 						addCol(row,20,"");
- 						sectionTotal=0;
- 						bInitialized=false;
- 					}
- 					//This one must be printed
- 			        row =t.addElement("row");
- 			        if(n>0){
- 			        	addCol(row,n*5,"");
- 			        }
- 					addBoldCol(row,230-n*5,subtitles[n]);
- 					addCol(row,20,"");
- 					addCol(row,20,"");
- 					addCol(row,20,"");
- 					addCol(row,20,"");
- 					printedSubTitels.put(title, "1");
- 				}
- 				lasttitle=subtitles[n];
- 			}
- 			bInitialized=true;
- 			java.util.Date begin = ScreenHelper.parseDate(sDateBegin);
- 			java.util.Date end = ScreenHelper.parseDate(sDateEnd);
- 			//Nu printen we de gegevens van de productstock
- 	        row =t.addElement("row");
- 			addCol(row,20,stock.getProduct()==null?"":stock.getProduct().getCode());
- 			addCol(row,70,stock.getProduct()==null?"":stock.getProduct().getName());
- 			addCol(row,20,stock.getProduct()==null?"":ScreenHelper.getTranNoLink("product.unit",stock.getProduct().getUnit(),sPrintLanguage),7);
- 			int initiallevel=stock.getLevel(begin);
- 			addCol(row,20,initiallevel+"");
- 			int in = stock.getTotalUnitsInForPeriod(begin, new java.util.Date(end.getTime()+day));
- 			addCol(row,20,in+"");
- 			int out = stock.getTotalUnitsOutForPeriod(begin, new java.util.Date(end.getTime()+day));
- 			addCol(row,20,out+"");
- 			addCol(row,20,(initiallevel+in-out)+"");
- 			double pump=0;
- 			if(stock.getProduct()!=null){
- 				pump=stock.getProduct().getLastYearsAveragePrice(new java.util.Date(end.getTime()+day));
- 			}
- 			addPriceCol(row,20,pump,MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#,##0.00"));
- 			addPriceCol(row,20,(initiallevel+in-out)*pump);
- 			addCol(row,20,"");
- 			addCol(row,20,"");
- 			addCol(row,20,"");
- 			addCol(row,20,"");
- 			sectionTotal+=(initiallevel+in-out)*pump;
- 			generalTotal+=(initiallevel+in-out)*pump;
- 		}
- 		if(bInitialized){
- 	        row =t.addElement("row");
- 			addRightBoldCol(row,210,ScreenHelper.getTranNoLink("web","total.for",sPrintLanguage)+": "+lasttitle);
- 			addPriceBoldCol(row,20,sectionTotal);
- 			addCol(row,20,"");
- 			addCol(row,20,"");
- 			addCol(row,20,"");
- 			addCol(row,20,"");
+ 		else{
+	 		//Now we have to find all productstocks sorted by productname
+	 		SortedMap stocks = new TreeMap();
+	 		Vector productStocks = ServiceStock.getProductStocks(sServiceStockUID);
+	 		for(int n=0;n<productStocks.size();n++){
+	 			ProductStock stock = (ProductStock)productStocks.elementAt(n);
+	 			//First find the product subcategory
+	 			String uid=stock.getProduct()==null?"|"+stock.getUid():HTMLEntities.unhtmlentities(stock.getProduct().getName().toUpperCase())+"|"+stock.getUid();
+	 			stocks.put(uid, stock);
+	 		}
+	 		
+	 		Hashtable printedSubTitels = new Hashtable();
+	 		Iterator iStocks = stocks.keySet().iterator();
+	 		boolean bInitialized = false;
+	 		double sectionTotal=0,generalTotal=0;
+	 		String lasttitle="";
+	 		while(iStocks.hasNext()){
+	 			String key = (String)iStocks.next();
+	 			ProductStock stock = (ProductStock)stocks.get(key);
+	 			java.util.Date begin = ScreenHelper.parseDate(sDateBegin);
+	 			java.util.Date end = ScreenHelper.parseDate(sDateEnd);
+	 			int initiallevel=stock.getLevel(begin);
+	 			int in = stock.getTotalUnitsInForPeriod(begin, new java.util.Date(end.getTime()+day));
+	 			int out = stock.getTotalUnitsOutForPeriod(begin, new java.util.Date(end.getTime()+day));
+	 			if(initiallevel!=0 || in!=0 || out!=0){
+		 			//Nu printen we de gegevens van de productstock
+		 	        row =t.addElement("row");
+		 			addCol(row,20,stock.getProduct()==null?"":stock.getProduct().getCode());
+		 			addCol(row,70,stock.getProduct()==null?"":stock.getProduct().getName());
+		 			addCol(row,20,stock.getProduct()==null?"":ScreenHelper.getTranNoLink("product.unit",stock.getProduct().getUnit(),sPrintLanguage),7);
+		 			addCol(row,20,initiallevel+"");
+		 			addCol(row,20,in+"");
+		 			addCol(row,20,out+"");
+		 			addCol(row,20,(initiallevel+in-out)+"");
+		 			double pump=0;
+		 			if(stock.getProduct()!=null){
+		 				pump=stock.getProduct().getLastYearsAveragePrice(new java.util.Date(end.getTime()+day));
+		 			}
+		 			addPriceCol(row,20,pump,MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#,##0.00"));
+		 			addPriceCol(row,20,(initiallevel+in-out)*pump);
+		 			addCol(row,20,"");
+		 			addCol(row,20,"");
+		 			addCol(row,20,"");
+		 			addCol(row,20,"");
+		 			sectionTotal+=(initiallevel+in-out)*pump;
+		 			generalTotal+=(initiallevel+in-out)*pump;
+	 			}
+	 		}
  			addRightBoldCol(row,210,ScreenHelper.getTranNoLink("web","general.total",sPrintLanguage));
  			addPriceBoldCol(row,20,generalTotal);
  			addCol(row,20,"");
  			addCol(row,20,"");
  			addCol(row,20,"");
  			addCol(row,20,"");
- 		}
-
+	 	}
+	 		
      }
     
     protected void printServiceStockOperations(org.dom4j.Document d, org.dom4j.Element t, String sDateBegin, String sDateEnd, String sServiceStockUID) throws ParseException{
@@ -898,6 +1047,50 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
         }
      }
     
+    protected void printPatientDeliveries(org.dom4j.Document d, org.dom4j.Element t, String sOperationUid) throws ParseException{
+ 		d.add(t);
+        t.addAttribute("size", "110");
+ 		//Add title rows
+        org.dom4j.Element row =t.addElement("row");
+ 		row.addAttribute("type", "title");
+ 		addCol(row,10,ScreenHelper.getTranNoLink("web","code",sPrintLanguage));
+ 		addCol(row,70,ScreenHelper.getTranNoLink("web","productstock",sPrintLanguage));
+ 		addCol(row,10,ScreenHelper.getTranNoLink("web","quantity",sPrintLanguage));
+ 		addCol(row,20,ScreenHelper.getTranNoLink("web","packageunits",sPrintLanguage));
+
+        try{
+			String sQuery = " select oc_stock_productuid,sum(quantity) quantity from ("+
+							" select oc_operation_objectid,c.oc_stock_name,oc_stock_productuid,oc_operation_unitschanged quantity from oc_productstockoperations a,oc_productstocks b,oc_servicestocks c"+
+			                " where oc_operation_objectid=?"+
+			                "  and b.oc_stock_objectid=replace(a.oc_operation_productstockuid,'"+MedwanQuery.getInstance().getConfigInt("serverId")+".','')"+
+			                "  and c.oc_stock_objectid=replace(b.oc_stock_servicestockuid,'"+MedwanQuery.getInstance().getConfigInt("serverId")+".','')) tt group by oc_stock_productuid";
+			Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+			PreparedStatement ps = conn.prepareStatement(sQuery);
+			ps.setInt(1,Integer.parseInt(sOperationUid.split("\\.")[1]));
+			ResultSet rs = ps.executeQuery();
+			
+			Product product;
+			
+			while(rs.next()){
+				product = Product.get(rs.getString("oc_stock_productuid"));
+				if(product!=null){
+		 	        row =t.addElement("row");
+			 		addCol(row,10,product.getCode());
+			 		addCol(row,70,product.getName());
+			 		addCol(row,10,rs.getInt("quantity")+"");
+			 		addCol(row,20,product.getPackageUnits()+" "+ScreenHelper.getTran(null,"product.unit",product.getUnit(),sPrintLanguage));
+				}
+			}
+
+			rs.close();
+			ps.close();
+			conn.close();
+        }
+        catch(Exception e){
+        	e.printStackTrace();
+        }
+     }
+    
     protected void printServiceOutgoingStockOperations(org.dom4j.Document d, org.dom4j.Element t, String sDateBegin, String sDateEnd, String sServiceStockUID) throws ParseException{
  		d.add(t);
         t.addAttribute("size", "215");
@@ -919,7 +1112,6 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 		double subtotal=0, generaltotal=0;
  		Vector deliveries = ProductStockOperation.getServiceStockDeliveries(sServiceStockUID, begin, new java.util.Date(end.getTime()+day), "OC_OPERATION_DATE,OC_OPERATION_SRCDESTUID,OC_OPERATION_DOCUMENTUID", "ASC");
  		String activedate="",activedestination="$$$";
- 		Hashtable lastprices = new Hashtable();
  		for(int n=0;n<deliveries.size();n++){
  			ProductStockOperation operation = (ProductStockOperation)deliveries.elementAt(n);
  			if(operation.getProductStock()!=null){
@@ -951,7 +1143,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 		 	 				document=operation.getSourceDestination().getObjectUid();
 		 	 			}
 		 		 		addBoldCol(row,80,getTran("web","document")+": "+document);
-		 		 		addBoldCol(row,125,ScreenHelper.getTranNoLink("productstockoperation.medicationdelivery",operation.getDescription(),sPrintLanguage)+": "+operation.getSourceDestinationName());
+		 		 		addBoldCol(row,125,ScreenHelper.getTranNoLink("productstockoperation.medicationdelivery",operation.getDescription(),sPrintLanguage)+": "+operation.getSourceDestinationName(sPrintLanguage));
 		 		 		activedestination=destination;
 		 			}
 		 	        row =t.addElement("row");
@@ -960,10 +1152,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
 		 			addCol(row,100,ScreenHelper.checkString(product.getName())+(operation.getBatchNumber()!=null&&operation.getBatchNumber().length()>0?" ("+operation.getBatchNumber().toUpperCase()+")":""));
 		 			addCol(row,20,operation.getDate()==null?"":new SimpleDateFormat("yyyy").format(operation.getDate()));
 		 			addCol(row,20,operation.getUnitsChanged()+"");
-		 			if(lastprices.get(product.getUid())==null){
-		 				lastprices.put(product.getUid(), product.getLastYearsAveragePrice(operation.getUpdateDateTime()==null?new java.util.Date():operation.getUpdateDateTime()));
-		 			}
-		 			double price=(Double)lastprices.get(product.getUid());
+		 			double price=product.getLastYearsAveragePrice(ScreenHelper.endOfDay(operation.getDate()));
 		 			addPriceCol(row,20,price,MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#,##0.00"));
 		 			addPriceCol(row,25,operation.getUnitsChanged()*price);
 		 			subtotal+=operation.getUnitsChanged()*price;
@@ -1073,7 +1262,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
  			addCol(row,100,product!=null?ScreenHelper.checkString(product.getName()):"");
  			addCol(row,20,new SimpleDateFormat("yyyy").format(ScreenHelper.getSQLDate(date)));
  			addCol(row,20,mDeliveries.get(key)+"");
- 			double price=product==null?0:product.getLastYearsAveragePrice(ScreenHelper.getSQLDate(date)==null?new java.util.Date():ScreenHelper.getSQLDate(date));
+ 			double price=product==null?0:product.getLastYearsAveragePrice(ScreenHelper.getSQLDate(date)==null?new java.util.Date():ScreenHelper.endOfDay(date));
  			addPriceCol(row,20,price,MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#,##0.00"));
  			addPriceCol(row,25,((Integer)mDeliveries.get(key))*price);
  			subtotal+=((Integer)mDeliveries.get(key))*price;
@@ -1649,7 +1838,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
  			addCol(row,20,operation.getProductStock()!=null && operation.getProductStock().getProduct()!=null?ScreenHelper.checkString(operation.getProductStock().getProduct().getCode()):"");
  			addCol(row,80,operation.getProductStock()!=null && operation.getProductStock().getProduct()!=null?ScreenHelper.checkString(operation.getProductStock().getProduct().getName()):"");
  			addCol(row,20,operation.getUnitsChanged()+"");
- 			double price=operation.getProductStock()==null || operation.getProductStock().getProduct()==null?0:operation.getProductStock().getProduct().getLastYearsAveragePrice(operation.getDate()==null?new java.util.Date():operation.getDate());
+ 			double price=operation.getProductStock()==null || operation.getProductStock().getProduct()==null?0:operation.getProductStock().getProduct().getLastYearsAveragePrice(operation.getDate()==null?new java.util.Date():ScreenHelper.endOfDay(operation.getDate()));
  			addPriceCol(row,20,price,MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#,##0.00"));
  			addPriceCol(row,20,operation.getUnitsChanged()*price);
  			subtotal+=operation.getUnitsChanged()*price;
@@ -1731,7 +1920,7 @@ public class PDFPharmacyReportGenerator extends PDFOfficialBasic {
  			addCol(row,20,stock!=null && stock.getProduct()!=null?ScreenHelper.checkString(stock.getProduct().getCode()):"");
  			addCol(row,80,stock!=null && stock.getProduct()!=null?ScreenHelper.checkString(stock.getProduct().getName()):"");
  			addCol(row,20,""+quantity);
- 			double price=stock==null || stock.getProduct()==null?0:stock.getProduct().getLastYearsAveragePrice(date==null?new java.util.Date():ScreenHelper.getSQLDate(date));
+ 			double price=stock==null || stock.getProduct()==null?0:stock.getProduct().getLastYearsAveragePrice(date==null?new java.util.Date():ScreenHelper.endOfDay(date));
  			addPriceCol(row,20,price,MedwanQuery.getInstance().getConfigString("priceFormatDetailed","#,##0.00"));
  			addPriceCol(row,20,quantity*price);
  			generaltotal+=quantity*price;

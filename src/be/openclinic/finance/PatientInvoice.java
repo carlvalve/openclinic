@@ -614,6 +614,18 @@ public class PatientInvoice extends Invoice {
     	return amount;
     }
     
+    public double getTotalAmount(){
+    	double amount=0;
+    	Vector debets=getDebets();
+    	if(debets!=null){
+	    	for(int n=0;n<debets.size();n++){
+	    		Debet debet = (Debet)debets.elementAt(n);
+	    		amount+=debet.getTotalAmount();
+	    	}
+    	}
+    	return amount;
+    }
+    
     public double getAmountPaid(){
     	double amount=0;
     	Vector credits=getCredits();

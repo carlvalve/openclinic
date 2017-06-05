@@ -46,7 +46,7 @@ public class OC_Object {
     public String getUpdateUser() {
         return updateUser;
     }
-
+    
     public void setUpdateUser(String updateUser) {
         this.updateUser = updateUser;
     }

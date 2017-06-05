@@ -46,8 +46,17 @@ public class ProductStockOperation extends OC_Object{
     private String comment;
     private int validated;
     private String productionOrderUid;
+    private Date deliverytime;
 
-    public int getValidated() {
+    public Date getDeliverytime() {
+		return deliverytime;
+	}
+
+	public void setDeliverytime(Date deliverytime) {
+		this.deliverytime = deliverytime;
+	}
+
+	public int getValidated() {
 		return validated;
 	}
 
@@ -255,7 +264,7 @@ public class ProductStockOperation extends OC_Object{
     				}
     			}
     			else if(getSourceDestination().getObjectType().equalsIgnoreCase("patient")){
-    				s=AdminPerson.getFullName(ScreenHelper.checkString(getSourceDestination().getObjectUid()));
+    				s=getSourceDestination().getObjectUid()+" - "+AdminPerson.getFullName(ScreenHelper.checkString(getSourceDestination().getObjectUid()));
     			}
     		}
     		else {
@@ -279,7 +288,13 @@ public class ProductStockOperation extends OC_Object{
     				}
     			}
     			else if(getSourceDestination().getObjectType().equalsIgnoreCase("patient")){
-    				s=AdminPerson.getFullName(ScreenHelper.checkString(getSourceDestination().getObjectUid()));
+    				String age = "";
+    				try{
+    					double months = 12*MedwanQuery.getInstance().getAgeDecimal(Integer.parseInt(ScreenHelper.checkString(getSourceDestination().getObjectUid())));
+    					age=" ("+(new Double(months/12).intValue())+" "+ScreenHelper.getTran("web","years",language).toLowerCase()+ " "+ (new Double(months/12).intValue()%12)+" "+ScreenHelper.getTran("web","months",language).toLowerCase()+")";
+    				}
+    				catch(Exception e){}
+    				s=getSourceDestination().getObjectUid()+" - "+AdminPerson.getFullName(ScreenHelper.checkString(getSourceDestination().getObjectUid()))+age;
     			}
     			else if(getSourceDestination().getObjectType().equalsIgnoreCase("production")){
     				s=ScreenHelper.getTran("web", "production", language);
@@ -406,6 +421,7 @@ public class ProductStockOperation extends OC_Object{
 	                operation.setOrderUID(rs.getString("OC_OPERATION_ORDERUID"));
 	                operation.setValidated(rs.getInt("OC_OPERATION_VALIDATED"));
 	                operation.setProductionOrderUid(rs.getString("OC_OPERATION_PRODUCTIONORDERUID"));
+	                operation.setDeliverytime(rs.getTimestamp("OC_OPERATION_DELIVERYTIME"));
 	            }
 	            else{
 	                throw new Exception("ERROR : PRODUCTSTOCKOPERATION "+operationUid+" NOT FOUND");
@@ -519,8 +535,8 @@ public class ProductStockOperation extends OC_Object{
                           "  OC_OPERATION_DATE, OC_OPERATION_PRODUCTSTOCKUID, OC_OPERATION_UNITSCHANGED,"+
                           "  OC_OPERATION_CREATETIME, OC_OPERATION_UPDATETIME, OC_OPERATION_UPDATEUID, OC_OPERATION_PRESCRIPTIONUID,OC_OPERATION_VERSION,OC_OPERATION_BATCHUID,OC_OPERATION_UID,OC_OPERATION_RECEIVECOMMENT," +
                           "  OC_OPERATION_UNITSRECEIVED,OC_OPERATION_RECEIVEPRODUCTSTOCKUID,OC_OPERATION_DOCUMENTUID,OC_OPERATION_ENCOUNTERUID,OC_OPERATION_ORDERUID,OC_OPERATION_COMMENT,OC_OPERATION_VALIDATED,"
-                          + "OC_OPERATION_PRODUCTIONORDERUID)"+
-                          " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,1,?,?,?,?,?,?,?,?,?,?,?)";
+                          + "OC_OPERATION_PRODUCTIONORDERUID,OC_OPERATION_DELIVERYTIME)"+
+                          " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,1,?,?,?,?,?,?,?,?,?,?,?,?)";
 
                 ps = oc_conn.prepareStatement(sSelect);
 
@@ -559,6 +575,8 @@ public class ProductStockOperation extends OC_Object{
                 ps.setString(21, this.getComment());
                 ps.setInt(22, this.getValidated());
                 ps.setString(23, this.getProductionOrderUid());
+                if(this.deliverytime!=null) ps.setTimestamp(24,new java.sql.Timestamp(this.deliverytime.getTime()));
+                else                ps.setNull(24,Types.TIMESTAMP);
 
                 ps.executeUpdate();
             }
@@ -571,7 +589,7 @@ public class ProductStockOperation extends OC_Object{
                           "  OC_OPERATION_SRCDESTUID=?, OC_OPERATION_DATE=?, OC_OPERATION_PRODUCTSTOCKUID=?, OC_OPERATION_UNITSCHANGED=?,"+
                           "  OC_OPERATION_UPDATETIME=?, OC_OPERATION_UPDATEUID=?, OC_OPERATION_PRESCRIPTIONUID=?,OC_OPERATION_VERSION=(OC_OPERATION_VERSION+1),OC_OPERATION_BATCHUID=?," +
                           "  OC_OPERATION_RECEIVECOMMENT=?,OC_OPERATION_UNITSRECEIVED=?,OC_OPERATION_RECEIVEPRODUCTSTOCKUID=?,OC_OPERATION_DOCUMENTUID=?,OC_OPERATION_ENCOUNTERUID=?,"
-                          + "OC_OPERATION_ORDERUID=?,OC_OPERATION_COMMENT=?,OC_OPERATION_VALIDATED=?,OC_OPERATION_PRODUCTIONORDERUID=?"+
+                          + "OC_OPERATION_ORDERUID=?,OC_OPERATION_COMMENT=?,OC_OPERATION_VALIDATED=?,OC_OPERATION_PRODUCTIONORDERUID=?,OC_OPERATION_DELIVERYTIME=?"+
                           " WHERE OC_OPERATION_SERVERID=? AND OC_OPERATION_OBJECTID=?";
 
                 ps = oc_conn.prepareStatement(sSelect);
@@ -600,9 +618,11 @@ public class ProductStockOperation extends OC_Object{
                 ps.setString(17, this.getComment());
                 ps.setInt(18, this.getValidated());
                 ps.setString(19, this.getProductionOrderUid());
+                if(this.deliverytime!=null) ps.setTimestamp(20,new java.sql.Timestamp(this.deliverytime.getTime()));
+                else                ps.setNull(20,Types.TIMESTAMP);
 
-                ps.setInt(20,Integer.parseInt(this.getUid().substring(0,this.getUid().indexOf("."))));
-                ps.setInt(21,Integer.parseInt(this.getUid().substring(this.getUid().indexOf(".")+1)));
+                ps.setInt(21,Integer.parseInt(this.getUid().substring(0,this.getUid().indexOf("."))));
+                ps.setInt(22,Integer.parseInt(this.getUid().substring(this.getUid().indexOf(".")+1)));
 
                 ps.executeUpdate();
             }
@@ -666,8 +686,8 @@ public class ProductStockOperation extends OC_Object{
                           "  OC_OPERATION_DATE, OC_OPERATION_PRODUCTSTOCKUID, OC_OPERATION_UNITSCHANGED,"+
                           "  OC_OPERATION_CREATETIME, OC_OPERATION_UPDATETIME, OC_OPERATION_UPDATEUID, OC_OPERATION_PRESCRIPTIONUID,OC_OPERATION_VERSION,OC_OPERATION_BATCHUID,OC_OPERATION_UID,OC_OPERATION_RECEIVECOMMENT," +
                           "  OC_OPERATION_UNITSRECEIVED,OC_OPERATION_RECEIVEPRODUCTSTOCKUID,OC_OPERATION_DOCUMENTUID,OC_OPERATION_ENCOUNTERUID,OC_OPERATION_ORDERUID,OC_OPERATION_COMMENT,OC_OPERATION_VALIDATED,"
-                          + "OC_OPERATION_PRODUCTIONORDERUID)"+
-                          " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,1,?,?,?,?,?,?,?,?,?,?,?)";
+                          + "OC_OPERATION_PRODUCTIONORDERUID,OC_OPERATION_DELIVERYTIME)"+
+                          " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,1,?,?,?,?,?,?,?,?,?,?,?,?)";
 
                 ps = oc_conn.prepareStatement(sSelect);
 
@@ -706,6 +726,8 @@ public class ProductStockOperation extends OC_Object{
                 ps.setString(21, this.getComment());
                 ps.setInt(22, this.getValidated());
                 ps.setString(23, this.getProductionOrderUid());
+                if(this.deliverytime!=null) ps.setTimestamp(24,new java.sql.Timestamp(this.deliverytime.getTime()));
+                else                ps.setNull(24,Types.TIMESTAMP);
 
                 ps.executeUpdate();
             }
@@ -718,7 +740,7 @@ public class ProductStockOperation extends OC_Object{
                           "  OC_OPERATION_SRCDESTUID=?, OC_OPERATION_DATE=?, OC_OPERATION_PRODUCTSTOCKUID=?, OC_OPERATION_UNITSCHANGED=?,"+
                           "  OC_OPERATION_UPDATETIME=?, OC_OPERATION_UPDATEUID=?, OC_OPERATION_PRESCRIPTIONUID=?,OC_OPERATION_VERSION=(OC_OPERATION_VERSION+1),OC_OPERATION_BATCHUID=?," +
                           "  OC_OPERATION_RECEIVECOMMENT=?,OC_OPERATION_UNITSRECEIVED=?,OC_OPERATION_RECEIVEPRODUCTSTOCKUID=?,OC_OPERATION_DOCUMENTUID=?,OC_OPERATION_ENCOUNTERUID=?,"
-                          + "OC_OPERATION_ORDERUID=?,OC_OPERATION_COMMENT=?,OC_OPERATION_VALIDATED=?,OC_OPERATION_PRODUCTIONORDERUID=?"+
+                          + "OC_OPERATION_ORDERUID=?,OC_OPERATION_COMMENT=?,OC_OPERATION_VALIDATED=?,OC_OPERATION_PRODUCTIONORDERUID=?,OC_OPERATION_DELIVERYTIME=?"+
                           " WHERE OC_OPERATION_SERVERID=? AND OC_OPERATION_OBJECTID=?";
 
                 ps = oc_conn.prepareStatement(sSelect);
@@ -747,8 +769,11 @@ public class ProductStockOperation extends OC_Object{
                 ps.setString(17, this.getComment());
                 ps.setInt(18, this.getValidated());
                 ps.setString(19, this.getProductionOrderUid());
-                ps.setInt(20,Integer.parseInt(this.getUid().substring(0,this.getUid().indexOf("."))));
-                ps.setInt(21,Integer.parseInt(this.getUid().substring(this.getUid().indexOf(".")+1)));
+                if(this.deliverytime!=null) ps.setTimestamp(20,new java.sql.Timestamp(this.deliverytime.getTime()));
+                else                ps.setNull(20,Types.TIMESTAMP);
+
+                ps.setInt(21,Integer.parseInt(this.getUid().substring(0,this.getUid().indexOf("."))));
+                ps.setInt(22,Integer.parseInt(this.getUid().substring(this.getUid().indexOf(".")+1)));
 
                 ps.executeUpdate();
             }
@@ -893,7 +918,7 @@ public class ProductStockOperation extends OC_Object{
         return null;
     }
 
-    //--- STORE -----------------------------------------------------------------------------------
+    //--- CANCEL -----------------------------------------------------------------------------------
     public String cancel(boolean bStorePrestation){
         //First we will check if this operation is acceptable
     	boolean isnew=false;
@@ -1419,7 +1444,7 @@ public class ProductStockOperation extends OC_Object{
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
             String sSelect = "SELECT * FROM OC_PRODUCTSTOCKOPERATIONS"+
-                             " WHERE OC_OPERATION_PRODUCTSTOCKUID='"+productStockUid+"' ORDER BY OC_OPERATION_DATE";
+                             " WHERE OC_OPERATION_PRODUCTSTOCKUID='"+productStockUid+"' ORDER BY OC_OPERATION_DATE,OC_OPERATION_CREATETIME";
 
             // execute
             ps=oc_conn.prepareStatement(sSelect);
@@ -1456,6 +1481,7 @@ public class ProductStockOperation extends OC_Object{
                 operation.setComment(rs.getString("OC_OPERATION_COMMENT"));
                 operation.setValidated(rs.getInt("OC_OPERATION_VALIDATED"));
                 operation.setProductionOrderUid(rs.getString("OC_OPERATION_PRODUCTIONORDERUID"));
+                operation.setDeliverytime(rs.getTimestamp("OC_OPERATION_DELIVERYTIME"));
                 foundRecords.add(operation);
             }
         }
@@ -1494,8 +1520,8 @@ public class ProductStockOperation extends OC_Object{
             }
 
             // dates
-            if(dateFrom!=null)  sSelect+= " AND OC_OPERATION_UPDATETIME >= ?";
-            if(dateUntil!=null) sSelect+= " AND OC_OPERATION_UPDATETIME < ?";
+            if(dateFrom!=null)  sSelect+= " AND OC_OPERATION_DATE >= ?";
+            if(dateUntil!=null) sSelect+= " AND OC_OPERATION_DATE < ?";
 
             // order by selected col or default col
             if(sSortCol.length()>0){
@@ -1884,6 +1910,7 @@ public class ProductStockOperation extends OC_Object{
                 operation.setComment(rs.getString("OC_OPERATION_COMMENT"));
                 operation.setValidated(rs.getInt("OC_OPERATION_VALIDATED"));
                 operation.setProductionOrderUid(rs.getString("OC_OPERATION_PRODUCTIONORDERUID"));
+                operation.setDeliverytime(rs.getTimestamp("OC_OPERATION_DELIVERYTIME"));
                 
                 operations.addElement(operation);
             }
@@ -1952,6 +1979,7 @@ public class ProductStockOperation extends OC_Object{
                 operation.setComment(rs.getString("OC_OPERATION_COMMENT"));
                 operation.setValidated(rs.getInt("OC_OPERATION_VALIDATED"));
                 operation.setProductionOrderUid(rs.getString("OC_OPERATION_PRODUCTIONORDERUID"));
+                operation.setDeliverytime(rs.getTimestamp("OC_OPERATION_DELIVERYTIME"));
                 
                 operations.addElement(operation);
             }
@@ -2041,6 +2069,7 @@ public class ProductStockOperation extends OC_Object{
                 operation.setComment(rs.getString("OC_OPERATION_COMMENT"));
                 operation.setValidated(rs.getInt("OC_OPERATION_VALIDATED"));
                 operation.setProductionOrderUid(rs.getString("OC_OPERATION_PRODUCTIONORDERUID"));
+                operation.setDeliverytime(rs.getTimestamp("OC_OPERATION_DELIVERYTIME"));
                 
                 operations.addElement(operation);
             }
@@ -2139,6 +2168,7 @@ public class ProductStockOperation extends OC_Object{
                 operation.setComment(rs.getString("OC_OPERATION_COMMENT"));
                 operation.setValidated(rs.getInt("OC_OPERATION_VALIDATED"));
                 operation.setProductionOrderUid(rs.getString("OC_OPERATION_PRODUCTIONORDERUID"));
+                operation.setDeliverytime(rs.getTimestamp("OC_OPERATION_DELIVERYTIME"));
 
                 operations.addElement(operation);
             }
@@ -2244,6 +2274,7 @@ public class ProductStockOperation extends OC_Object{
                 operation.setComment(rs.getString("OC_OPERATION_COMMENT"));
                 operation.setValidated(rs.getInt("OC_OPERATION_VALIDATED"));
                 operation.setProductionOrderUid(rs.getString("OC_OPERATION_PRODUCTIONORDERUID"));
+                operation.setDeliverytime(rs.getTimestamp("OC_OPERATION_DELIVERYTIME"));
 
                 vProdStockOperations.addElement(operation);
             }

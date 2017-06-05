@@ -135,7 +135,6 @@ public class PDFInsurarInvoiceGeneratorMFP extends PDFInvoiceGenerator {
             	else {
             		invoiceUid="*"+invoiceUid;
             	}
-            	System.out.println("invoiceuid="+invoiceUid+ " ("+debet.getPatientInvoiceUid()+")");
             	Encounter encounter = debet.getEncounter();
             	serviceUid=debet.determineServiceUid();
             	if(debet.getInsurance()!=null && debet.getInsurance().getInsuranceCategory()!=null){
@@ -254,16 +253,33 @@ public class PDFInsurarInvoiceGeneratorMFP extends PDFInvoiceGenerator {
             	income = (Income)invoices.get(invoiceUid);
                 if(income!=null){
                 	String beneficiary="";
-                	PatientInvoice iv = PatientInvoice.get(invoiceUid.split(";")[0]);
-                	if(iv!=null){
-                		if(iv.getPatient()!=null){
-                			status="";
-                			if(iv.getInsuranceUid().length()>0){
-                				Insurance insurance = Insurance.get(iv.getInsuranceUid());
-                				status=insurance.getStatus();
-                			}
-                			beneficiary=iv.getPatient().lastname.toUpperCase()+", "+iv.getPatient().firstname+" ("+ScreenHelper.getTranNoLink("insurance.status", status, sPrintLanguage)+")";
-                		}
+                	if(invoiceUid.contains("*")){
+                		//This is a summary invoice, we must find one of the subinvoices
+                		SummaryInvoice siv = SummaryInvoice.get(invoiceUid.split(";")[0].replaceAll("\\*", ""));
+	                	if(siv!=null){
+		                	PatientInvoice iv = (PatientInvoice)siv.getPatientInvoices().elementAt(0);
+	                		if(iv.getPatient()!=null){
+	                			status="";
+	                			if(iv.getInsuranceUid().length()>0){
+	                				Insurance insurance = Insurance.get(iv.getInsuranceUid());
+	                				status=insurance.getStatus();
+	                			}
+	                			beneficiary=iv.getPatient().lastname.toUpperCase()+", "+iv.getPatient().firstname+" ("+ScreenHelper.getTranNoLink("insurance.status", status, sPrintLanguage)+")";
+	                		}
+	                	}
+                	}
+                	else{
+	                	PatientInvoice iv = PatientInvoice.get(invoiceUid.split(";")[0]);
+	                	if(iv!=null){
+	                		if(iv.getPatient()!=null){
+	                			status="";
+	                			if(iv.getInsuranceUid().length()>0){
+	                				Insurance insurance = Insurance.get(iv.getInsuranceUid());
+	                				status=insurance.getStatus();
+	                			}
+	                			beneficiary=iv.getPatient().lastname.toUpperCase()+", "+iv.getPatient().firstname+" ("+ScreenHelper.getTranNoLink("insurance.status", status, sPrintLanguage)+")";
+	                		}
+	                	}
                 	}
                 	counter++;
                 	cell = createValueCell(counter+"",10);

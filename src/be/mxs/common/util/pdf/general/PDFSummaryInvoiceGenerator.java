@@ -901,7 +901,7 @@ public class PDFSummaryInvoiceGenerator extends PDFInvoiceGenerator {
         // row
         invoiceTable.addCell(createValueCell(sCreditDate,2));
         invoiceTable.addCell(createValueCell(sCreditType,3));
-        invoiceTable.addCell(createValueCell(sCreditComment,9));
+        invoiceTable.addCell(createValueCell((ScreenHelper.checkString(credit.getInvoiceUid()).split("\\.").length<2?"":getTran("web","invoicenumber")+": "+credit.getInvoiceUid().split("\\.")[1]+" - ")+sCreditComment,9));
         invoiceTable.addCell(createPriceCell(creditAmount,3));
         invoiceTable.addCell(createEmptyCell(3));
     }

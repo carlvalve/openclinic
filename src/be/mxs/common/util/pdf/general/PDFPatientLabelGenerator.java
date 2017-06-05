@@ -198,7 +198,7 @@ public class PDFPatientLabelGenerator extends PDFOfficialBasic {
             }
             else {
                 //Date of birth & gender
-                cell=createLabel(person.dateOfBirth+" "+person.gender,7,1,Font.NORMAL);
+                cell=createLabel(person.dateOfBirth+" "+person.gender,7,4,Font.NORMAL);
                 cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
                 table.addCell(cell);
             }

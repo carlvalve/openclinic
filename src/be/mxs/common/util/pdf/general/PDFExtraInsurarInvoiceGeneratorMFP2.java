@@ -115,7 +115,7 @@ public class PDFExtraInsurarInvoiceGeneratorMFP2 extends PDFInvoiceGenerator {
         model=" Mod MFP.1";
 		SortedMap services = new TreeMap();
 		SortedMap invoices;
-        String serviceUid,invoiceUid,diseaseType,employer,card,immat,affiliate,emp;
+        String serviceUid,invoiceUid,diseaseType,employer,card,immat,affiliate,emp,status="?";
         Income income;
 		for(int n=0;n<debets.size();n++){
         	Debet debet = (Debet)debets.elementAt(n);
@@ -128,7 +128,13 @@ public class PDFExtraInsurarInvoiceGeneratorMFP2 extends PDFInvoiceGenerator {
             	immat="?";
             	affiliate="?";
             	emp="?";
-            	invoiceUid=ScreenHelper.checkString(PatientInvoice.getPatientInvoiceNumber(debet.getPatientInvoiceUid()));
+            	invoiceUid=PatientInvoice.getPatientSummaryInvoiceNumber(debet.getPatientInvoiceUid());
+            	if(invoiceUid.length()==0){
+            		invoiceUid=ScreenHelper.checkString(PatientInvoice.getPatientInvoiceNumber(debet.getPatientInvoiceUid()));
+            	}
+            	else {
+            		invoiceUid="*"+invoiceUid;
+            	}
             	Encounter encounter = debet.getEncounter();
             	serviceUid=debet.determineServiceUid();
             	if(debet.getInsurance()!=null && debet.getInsurance().getInsuranceCategory()!=null){
@@ -246,11 +252,33 @@ public class PDFExtraInsurarInvoiceGeneratorMFP2 extends PDFInvoiceGenerator {
             	income = (Income)invoices.get(invoiceUid);
                 if(income!=null){
                 	String beneficiary="";
-                	PatientInvoice iv = PatientInvoice.get(invoiceUid.split(";")[0]);
-                	if(iv!=null){
-                		if(iv.getPatient()!=null){
-                			beneficiary=iv.getPatient().lastname.toUpperCase()+", "+iv.getPatient().firstname;
-                		}
+                	if(invoiceUid.contains("*")){
+                		//This is a summary invoice, we must find one of the subinvoices
+                		SummaryInvoice siv = SummaryInvoice.get(invoiceUid.split(";")[0].replaceAll("\\*", ""));
+	                	if(siv!=null){
+		                	PatientInvoice iv = (PatientInvoice)siv.getPatientInvoices().elementAt(0);
+	                		if(iv.getPatient()!=null){
+	                			status="";
+	                			if(iv.getInsuranceUid().length()>0){
+	                				Insurance insurance = Insurance.get(iv.getInsuranceUid());
+	                				status=insurance.getStatus();
+	                			}
+	                			beneficiary=iv.getPatient().lastname.toUpperCase()+", "+iv.getPatient().firstname+" ("+ScreenHelper.getTranNoLink("insurance.status", status, sPrintLanguage)+")";
+	                		}
+	                	}
+                	}
+                	else{
+	                	PatientInvoice iv = PatientInvoice.get(invoiceUid.split(";")[0]);
+	                	if(iv!=null){
+	                		if(iv.getPatient()!=null){
+	                			status="";
+	                			if(iv.getInsuranceUid().length()>0){
+	                				Insurance insurance = Insurance.get(iv.getInsuranceUid());
+	                				status=insurance.getStatus();
+	                			}
+	                			beneficiary=iv.getPatient().lastname.toUpperCase()+", "+iv.getPatient().firstname+" ("+ScreenHelper.getTranNoLink("insurance.status", status, sPrintLanguage)+")";
+	                		}
+	                	}
                 	}
                 	counter++;
                 	cell = createValueCell(counter+"",10);

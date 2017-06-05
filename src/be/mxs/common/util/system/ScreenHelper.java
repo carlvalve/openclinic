@@ -145,6 +145,18 @@ public class ScreenHelper {
     	return s;
     }
     
+    public static java.util.Date endOfDay(java.util.Date date){
+    	if(date!=null){
+    		try {
+				return new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(new SimpleDateFormat("dd/MM/yyyy").format(date)+" 23:59:59");
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    	return date;
+    }
+    
     public static String getDrawing(int serverid, int transactionid, String itemtype){
     	String drawing="";
     	Connection conn=MedwanQuery.getInstance().getOpenclinicConnection(); 

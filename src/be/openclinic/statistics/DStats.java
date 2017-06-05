@@ -75,7 +75,7 @@ public class DStats implements Comparable{
         public int compareTo(Object o) {
             int comp;
             if (o.getClass().isInstance(this)){
-                comp = this.outcome.compareTo(((OutcomeStat)o).outcome);
+                comp = ScreenHelper.checkString(this.outcome).compareTo(ScreenHelper.checkString(((OutcomeStat)o).outcome));
             }
             else {
                 throw new ClassCastException();

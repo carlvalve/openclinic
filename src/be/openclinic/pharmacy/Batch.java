@@ -313,7 +313,7 @@ public class Batch extends OC_Object{
         String sSelect;
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
-        	sSelect="select sum(oc_batchoperation_quantity) total from oc_batchoperations where oc_batchoperation_destinationuid=? and oc_batchoperation_updatetime<=?";
+        	sSelect="select sum(oc_batchoperation_quantity) total from oc_batchoperations,oc_productstockoperations where oc_operation_objectid=replace(oc_batchoperation_productstockoperationuid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and oc_batchoperation_destinationuid=? and oc_operation_date<=?";
         	ps=oc_conn.prepareStatement(sSelect);
         	ps.setString(1, getUid());
         	ps.setDate(2, new java.sql.Date(date.getTime()));
@@ -323,7 +323,7 @@ public class Batch extends OC_Object{
         	}
         	rs.close();
         	ps.close();
-        	sSelect="select sum(oc_batchoperation_quantity) total from oc_batchoperations where oc_batchoperation_sourceuid=? and oc_batchoperation_updatetime<=?";
+        	sSelect="select sum(oc_batchoperation_quantity) total from oc_batchoperations,oc_productstockoperations where oc_operation_objectid=replace(oc_batchoperation_productstockoperationuid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and oc_batchoperation_sourceuid=? and oc_operation_date<=?";
         	ps=oc_conn.prepareStatement(sSelect);
         	ps.setString(1, getUid());
         	ps.setDate(2, new java.sql.Date(date.getTime()));
@@ -403,6 +403,39 @@ public class Batch extends OC_Object{
         return batches;
     }
     
+    public static Vector getActiveBatches(String productStockUid){
+    	Vector batches = new Vector();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String sSelect;
+        Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+        try {
+        	sSelect="SELECT * FROM OC_BATCHES WHERE OC_BATCH_PRODUCTSTOCKUID=? and (OC_BATCH_END is null or OC_BATCH_END>=?) and OC_BATCH_LEVEL>0 order by OC_BATCH_END";
+            ps = oc_conn.prepareStatement(sSelect);
+            ps.setString(1,productStockUid);
+            ps.setTimestamp(2, new java.sql.Timestamp(new java.util.Date().getTime()));
+            rs=ps.executeQuery();
+            while(rs.next()){
+            	batches.add(Batch.get(rs.getString("OC_BATCH_SERVERID")+"."+rs.getString("OC_BATCH_OBJECTID")));
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                oc_conn.close();
+            }
+            catch(SQLException se){
+                se.printStackTrace();
+            }
+        }
+        return batches;
+    }
+    
+
     public static Vector getAllBatches(String productStockUid){
     	Vector batches = new Vector();
         PreparedStatement ps = null;
