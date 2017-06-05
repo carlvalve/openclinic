@@ -175,15 +175,22 @@
     
     //*** CALCULATE *******************************************************************************
     if(request.getParameter("calculate")!=null){
-        java.util.SortedSet diags = new TreeSet();
+		System.out.println(1);
+    	java.util.SortedSet diags = new TreeSet();
         DStats mainStats = null;
+		try{
         if(bGroups){
             mainStats = new DiagnosisGroupStats(codetype,checkString(request.getParameter("code"))+"%",ScreenHelper.parseDate(fromdate),ScreenHelper.parseDate(todate),service,sortorder,contacttype);
         }
         else{
             mainStats = new DiagnosisStats(codetype,checkString(request.getParameter("code"))+"%",ScreenHelper.parseDate(fromdate),ScreenHelper.parseDate(todate),service,sortorder,contacttype);
         }
-        
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		System.out.println(2);
+
         int totalDead = mainStats.calculateTotalDead(ScreenHelper.parseDate(fromdate),ScreenHelper.parseDate(todate));
         if(showCalculations.length()==0){
             %>
@@ -201,7 +208,8 @@
                     </tr>
             <%
         }
-        
+		System.out.println(3);
+
         DStats diagnosisStats = null;
         if(request.getParameter("codedetails")!=null){
             if(bGroups){
@@ -212,6 +220,8 @@
             }
         }
         diags.add(mainStats);
+		System.out.println(4);
+
         Vector d = new Vector(diags);
         Collections.reverse(d);
         Iterator iterator = d.iterator();
@@ -219,6 +229,8 @@
             diagnosisStats = (DStats)iterator.next();
             
             if(showCalculations.length() > 0){
+        		System.out.println(5);
+
             %>
                 <br>
                 
@@ -248,6 +260,7 @@
                         %>
                     </tr>
                     <%
+            		System.out.println(6);
                         if(true || !diagnosisStats.equals(mainStats)){
                     %>
                         <tr>
@@ -309,8 +322,12 @@
                     %>
                 </table>
             <%
+    		System.out.println(7);
+
         }
         else{
+    		System.out.println(8);
+
             %>
                 <tr>
                     <td><%=diagnosisStats.getCode().replaceAll("%","").toUpperCase()%></td>

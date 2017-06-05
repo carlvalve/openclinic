@@ -14,9 +14,16 @@
     String itemTypeId = checkString(request.getParameter("itemTypeId"));
     String defaultValue = checkString(request.getParameter("defaultValue"));
     String modifier = checkString(request.getParameter("modifier"));
+    String priority = checkString(request.getParameter("priority"));
     String oldTransactionTypeId = checkString(request.getParameter("oldTransactionTypeId"));
     String oldItemTypeId = checkString(request.getParameter("oldItemTypeId"));
 
+    try{
+    	int p = Integer.parseInt(priority);
+    }
+    catch(Exception e){
+    	priority="0";
+    }
     /*
     // DEBUG //////////////////////////////////////////////////////////
     Debug.println("sActionField = "+sAction);
@@ -38,6 +45,7 @@
     String selectedItemTypeId = "";
     String selectedDefaultValue = "";
     String selectedModifier = "";
+    String selectedPriority = "";
 
     // "Save" on a non-existant record means "Add"
     if (sAction.equals("Save") && (oldTransactionTypeId.equals("") || oldItemTypeId.equals(""))) {
@@ -54,6 +62,7 @@
             objTI.setItemTypeId(itemTypeId);
             objTI.setDefaultValue(defaultValue);
             objTI.setModifier(modifier);
+            objTI.setPriority(Integer.parseInt(priority));
 
             TransactionItem.saveTransactionItem(objTI, transactionTypeId, itemTypeId);
 
@@ -69,6 +78,7 @@
                 objTI.setItemTypeId(itemTypeId);
                 objTI.setDefaultValue(defaultValue);
                 objTI.setModifier(modifier);
+                objTI.setPriority(Integer.parseInt(priority));
 
                 TransactionItem.saveTransactionItem(objTI, oldTransactionTypeId, oldItemTypeId);
 
@@ -91,6 +101,7 @@
             objTI.setItemTypeId(itemTypeId);
             objTI.setDefaultValue(defaultValue);
             objTI.setModifier(modifier);
+            objTI.setPriority(Integer.parseInt(priority));
 
             TransactionItem.addTransactionItem(objTI);
 
@@ -147,6 +158,7 @@
             selectedItemTypeId = itemTypeId;
             selectedDefaultValue = checkString(objTI.getDefaultValue());
             selectedModifier = checkString(objTI.getModifier());
+            selectedPriority = checkString(objTI.getPriority()+"");
             sOut2.append("selected");
         }
         sOut2.append(">" + itemTypeId + "</option>");
@@ -184,29 +196,51 @@
 <%-- DETAILS OF SELECTED TRANSACTION -------------------------------------------------------------%>
 <table class="list" width="100%" cellspacing="1">
   <tr>
-    <td class="admin" width="<%=sTDAdminWidth%>">transactionTypeId</td>
+    <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","transactiontypeid",sWebLanguage) %></td>
     <td class="admin2">
-      <input class="text" type="text" name="transactionTypeId" value="<%=selectedTransactionTypeId%>" size="130" maxLength="255">
+      <input class="text" type="text" name="transactionTypeId" id="transactionTypeId" value="<%=selectedTransactionTypeId%>" size="130" maxLength="255">
     </td>
   </tr>
   <tr>
-    <td class="admin">itemTypeId</td>
+    <td class="admin"><%=getTran(request,"web","itemtypeid",sWebLanguage) %></td>
     <td class="admin2">
       <input class="text" type="text" name="itemTypeId" value="<%=selectedItemTypeId%>" size="130" maxLength="255">
     </td>
   </tr>
+  <%
+  	if(selectedItemTypeId.length()>0){
+  %>
   <tr>
-    <td class="admin">defaultValue</td>
+    <td class="admin"><%=getTran(request,"web","label",sWebLanguage) %></td>
+    <td class="admin2">
+      <%=getTran(request,"web.occup",selectedItemTypeId,sWebLanguage) %>
+    </td>
+  </tr>
+  <tr>
+    <td class="admin"><%=getTran(request,"web","printchapter",sWebLanguage) %></td>
+    <td class="admin2">
+    	<select class='text' name='modifier'>
+    		<option/>
+    		<%=ScreenHelper.writeSelect(request, selectedTransactionTypeId, selectedModifier, sWebLanguage) %>
+    	</select>
+    	<img src='<%=sCONTEXTPATH %>/_img/icons/icon_edit.gif' onclick='manageChapters()'/>
+    </td>
+  </tr>
+  <tr>
+    <td class="admin"><%=getTran(request,"web","printorder",sWebLanguage) %></td>
+    <td class="admin2">
+    	<input type='text' name='priority' class='text' size='10' value='<%=selectedPriority %>'/>
+    </td>
+  </tr>
+  <tr>
+    <td class="admin"><%=getTran(request,"web","defaultvalue",sWebLanguage) %></td>
     <td class="admin2">
       <textarea onKeyup="resizeTextarea(this,10);" class="text" name="defaultValue" rows="4" cols="80" onKeyUp="checkMaxChars(this,255);"><%=selectedDefaultValue%></textarea>
     </td>
   </tr>
-  <tr>
-    <td class="admin">modifier</td>
-    <td class="admin2">
-      <textarea onKeyup="resizeTextarea(this,10);" class="text" name="modifier" rows="4" cols="80" onKeyUp="checkMaxChars(this,255);"><%=selectedModifier%></textarea>
-    </td>
-  </tr>
+  <%
+  	}	
+  %>
   <tr>
       <td class="admin"/>
       <td class="admin2">
@@ -256,7 +290,9 @@ function checkMaxChars(inputObj,maxChars){
     inputObj.value = inputObj.value.substring(0,maxChars);
   }
 }
-
+function manageChapters(){
+	window.open('/openclinic/popup.jsp?Page=system/manageTranslations.jsp&FindLabelType='+document.getElementById('transactionTypeId').value+'&find=1','popup','toolbar=no,status=yes,scrollbars=yes,resizable=yes,width=800,height=500,menubar=no');
+}
 function keysNotEmpty(){
   if(transactionForm.transactionTypeId.value==""){
     alertDialog("web","TransactionItemKeyFieldsAreEmpty");

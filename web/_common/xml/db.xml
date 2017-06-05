@@ -532,6 +532,11 @@
 	    	<column name="OC_PRODUCTIONORDER_QUANTITY" dbtype="int" javatype="integer"/>
 	        <column name="OC_PRODUCTIONORDER_MODIFIERS" dbtype="varchar" javatype="string" size="255"/>      
     	</columns>
+	    <indexes>
+	    	<index name="OC_PRODUCTIONORDER_ID">
+	    		<indexcolumn order="ASC" name="OC_PRODUCTIONORDER_ID"/>
+	    	</index>
+	    </indexes>
     </table>
     
     <table name="OC_PRODUCTIONORDERMATERIALS" db="openclinic" sync="NONE">
@@ -2943,6 +2948,7 @@
 			<column name="OC_LIST_QUANTITY" dbtype="int" javatype="integer"/>
 			<column name="OC_LIST_BATCHUID" dbtype="varchar" size="25" javatype="string"/>
 			<column name="OC_LIST_COMMENT" dbtype="varchar" size="255" javatype="string"/>
+			<column name="OC_LIST_ENCOUNTERUID" dbtype="varchar" size="50" javatype="string"/>
 		</columns>
 		<indexes>
 			<index name="OC_LIST_PATIENTUID">
@@ -2963,6 +2969,7 @@
 			<column name="OC_OPERATION_UNITSCHANGED" dbtype="int" javatype="integer"/>
 			<column name="OC_OPERATION_CREATETIME" dbtype="datetime" javatype="date" nulls="0"/>
 			<column name="OC_OPERATION_UPDATETIME" dbtype="datetime" javatype="date" nulls="0"/>
+			<column name="OC_OPERATION_DELIVERYTIME" dbtype="datetime" javatype="date" nulls="0"/>
 			<column name="OC_OPERATION_UPDATEUID" dbtype="varchar" javatype="string" size="255" nulls="0"/>
 			<column name="OC_OPERATION_VERSION" dbtype="int" javatype="integer" nulls="0"/>
 			<column name="OC_OPERATION_BATCHUID" dbtype="varchar" javatype="string" size="50"/>
@@ -5358,6 +5365,22 @@
             <column name="city" dbtype="varchar" javatype="string"  size="255"/>
             <column name="region" dbtype="varchar" javatype="string"  size="255"/>
             <column name="sector" dbtype="varchar" javatype="string"  size="255"/>
+        </columns>
+        <indexes>
+            <index name="zipcode">
+                <indexcolumn name="zipcode" order="ASC"/>
+            </index>
+            <index name="district">
+                <indexcolumn name="district" order="ASC"/>
+            </index>
+        </indexes>
+    </table>
+    <table name="EthiopiaZipcodes" db="ocadmin" sync="MASTER">
+        <columns>
+            <column name="zipcode" dbtype="varchar" javatype="string" size="10" primary="1"/>
+            <column name="district" dbtype="varchar" javatype="string"  size="255" primary="1"/>
+            <column name="city" dbtype="varchar" javatype="string"  size="255"/>
+            <column name="region" dbtype="varchar" javatype="string"  size="255"/>
         </columns>
         <indexes>
             <index name="zipcode">

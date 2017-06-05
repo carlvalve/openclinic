@@ -217,7 +217,7 @@
 		             
 		        <%-- startDate --%>
 		        <tr>
-		            <td class="admin"><%=getTran(request,"web.assets","startDate",sWebLanguage)%>&nbsp;</td>
+		            <td class="admin"><%=getTran(request,"web.assets","startDate",sWebLanguage)%>*&nbsp;</td>
 		            <td class="admin2">
 		                <%=writeDateField("startDate","EditForm",ScreenHelper.formatDate(plan.getStartDate()),sWebLanguage)%>
 		            </td>
@@ -298,18 +298,24 @@
 		            </td>
 		        </tr>                
 		        <tr>
+		            <td class="admin"><%=getTran(request,"web.assets","externalfee",sWebLanguage)%></td>
+		            <td class="admin2">
+		                <input type="text" name="comment5" id="comment5" size="10" maxLength="10" value="<%=checkString(plan.getComment5())%>"  onKeyUp="isNumber(this);calculateCosts();" onBlur="if(isNumber(this))setDecimalLength(this,2,true);"> <%=MedwanQuery.getInstance().getConfigString("currency","EUR")%>
+		            </td>
 		            <td class="admin"><%=getTran(request,"web.assets","other",sWebLanguage)%></td>
 		            <td class="admin2">
 		                <input type="text" name="comment3" id="comment3" size="10" maxLength="10" value="<%=checkString(plan.getComment3())%>"  onKeyUp="isNumber(this);calculateCosts();" onBlur="if(isNumber(this))setDecimalLength(this,2,true);"> <%=MedwanQuery.getInstance().getConfigString("currency","EUR")%>
 		            </td>
+		        </tr>     
+		        <tr>
 		            <td class="admin"><%=getTran(request,"web.assets","total",sWebLanguage)%></td>
-		            <td class="admin2">
+		            <td class="admin2" colspan="3">
 		                <b><span id='totalcost'></span></b>
 		            </td>
-		        </tr>     
+		        </tr>
 		        <script>
 		        	function calculateCosts(){
-		        		document.getElementById("totalcost").innerHTML=(document.getElementById("comment1").value*1+document.getElementById("comment2").value*1+document.getElementById("comment3").value*1)+' <%=MedwanQuery.getInstance().getConfigString("currency","EUR")%>';
+		        		document.getElementById("totalcost").innerHTML=(document.getElementById("comment1").value*1+document.getElementById("comment2").value*1+document.getElementById("comment3").value*1+document.getElementById("comment5").value*1)+' <%=MedwanQuery.getInstance().getConfigString("currency","EUR")%>';
 		        	}
 		        	calculateCosts();
 		        </script>
@@ -461,8 +467,8 @@
                       "&comment2="+EditForm.comment2.value+
                       "&comment3="+EditForm.comment3.value+
                       "&comment4="+EditForm.comment4.value+
-                      /*
                       "&comment5="+EditForm.comment5.value+
+                      /*
                       "&comment6="+EditForm.comment6.value+
                       "&comment7="+EditForm.comment7.value+
                       "&comment8="+EditForm.comment8.value+
@@ -503,9 +509,23 @@
   
   <%-- REQUIRED FIELDS PROVIDED --%>
   function requiredFieldsProvided(){
-    return (document.getElementById("name").value.length > 0 && 
-            document.getElementById("operator").value.length > 0 && 
-            document.getElementById("assetCode").value.length > 0);
+	  if(document.getElementById("startDate").value.length == 0 ){
+		  document.getElementById("startDate").focus();
+		  return false;
+	  }
+	  else if(document.getElementById("name").value.length == 0 ){
+		  document.getElementById("name").focus();
+		  return false;
+	  }
+	  else if(document.getElementById("operator").value.length == 0 ){
+		  document.getElementById("operator").focus();
+		  return false;
+	  }
+	  else if(document.getElementById("assetCode").value.length == 0 ){
+		  document.getElementById("assetCode").focus();
+		  return false;
+	  }
+    return true;
   }
   
   <%-- LOAD MAINTENANCEPLANS --%>

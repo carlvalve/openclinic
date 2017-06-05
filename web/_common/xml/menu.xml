@@ -47,7 +47,7 @@
 		<Menu labelid="urgencybedoverview" accessrights="adt.urgencybedoverview.select" url="/main.do?Page=adt/overviewUrgencyBeds.jsp"/>
 		<Menu labelid="pharmacy" accessrights="pharmacy.select">
 			<Menu labelid="drugsout" patientselected="true" accessrights="medication.medicationdelivery.select" url="/main.do?Page=pharmacy/drugsOut.jsp"/>
-			<Menu labelid="drugsoutbarcode" patientselected="true" activeencounter="true" accessrights="pharmacy.fastdispensing" url="javascript:showdrugsoutbarcode();"/>
+			<Menu labelid="drugsoutbarcode" patientselected="true" accessrights="pharmacy.fastdispensing" url="javascript:showdrugsoutbarcode();"/>
 			<Menu labelid="patientdrugdeliveries" patientselected="true" accessrights="medication.medicationdelivery.select" url="/main.do?Page=pharmacy/patientDeliveries.jsp"/>
 			<Menu labelid="manageUserProducts" accessrights="pharmacy.manageuserproducts.select" url="/main.do?Page=pharmacy/manageUserProducts.jsp"/>
 			<Menu labelid="manageDrugCategories" accessrights="pharmacy.manageproducts.select" url="/main.do?Page=system/manageDrugCategories.jsp"/>
@@ -67,6 +67,7 @@
 			</Menu>
 			<Menu labelid="pharmacy.reports" accessrights="pharmacy.select" url="/main.do?Page=pharmacy/reports.jsp"/>
 			<Menu labelid="pharmacy.productionorders" accessrights="system.manageproductionorders" url="/main.do?Page=pharmacy/manageProductionOrders.jsp&amp;EditOpenOrdersOnly=1&amp;EditActivePatientOnly=1&amp;autofind=1"/>
+			<Menu labelid="pharmacy.deliveryqueues" accessrights="pharmacy.deliveryqueues" url="javascript:pharmacyDeliveryQueues();"/>
 		</Menu>
 		<Menu labelid="financial" accessrights="financial.select">
 			<Menu labelid="patientCreditEdit" patientselected="true" accessrights="financial.patientcreditedit.select" url="/main.do?Page=financial/patientCreditEdit.jsp"/>
@@ -145,6 +146,9 @@
 			<Menu labelid="ddopp_ob_gyn" patientselected="true" url="javascript:executeLocalDeviceCommand('ddopp','ob_gyn')"/>
 			<Menu labelid="ddopp_vascular" curl="javascript:executeLocalDeviceCommand('ddopp','vascular')"/>
 			<Menu labelid="ddopp_general" patientselected="true" url="javascript:executeLocalDeviceCommand('ddopp','general')"/>
+		</Menu>
+		<Menu labelid="system.os" accessrights="system.os.select">
+			<Menu labelid="system.shutdown" accessrights="system.shutdown.select" url="/main.do?Page=system/shutdown.jsp"/>
 		</Menu>
 		<Menu labelid="mergepersons" accessrights="system.mergepersons.select" url="/main.do?Page=system/mergePersons.jsp"/>
 		<Menu labelid="centerinfo" accessrights="system.centerinfo.select" url="/main.do?Page=center/index.jsp"/>

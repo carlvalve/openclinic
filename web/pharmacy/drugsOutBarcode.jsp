@@ -50,7 +50,31 @@
             <td class='admin'><%=getTran(request,"web","quantity",sWebLanguage)%></td>
             <td class='admin2'><input type='text' class='text' name='quantity' id='quantity' size='5' value='1'/></td>
         </tr>
-        
+        <%
+        	String sEditEncounterUid="";
+			Encounter encounter = Encounter.getActiveEncounter(activePatient.personid);
+			if(encounter!=null){
+				sEditEncounterUid = encounter.getUid();
+			}
+        %>
+        <%-- ENCOUNTER --%>
+        <tr id='encounterline'>
+            <td class='admin'><%=getTran(request,"web","encounter",sWebLanguage)%>&nbsp;*</td>
+            <td class='admin2'>
+                <input type="hidden" name="EditEncounterUID" id="EditEncounterUID" value="<%=sEditEncounterUid%>" onchange='doAdd("yes")'>
+                <%
+	                encounter = Encounter.get(sEditEncounterUid);
+					String sEditEncounterName = "";
+	                if(encounter!=null && encounter.getEncounterDisplayName(sWebLanguage)!=null && encounter.getEncounterDisplayName(sWebLanguage).indexOf("null")==-1 ){
+	                    sEditEncounterName = encounter.getEncounterDisplayName(sWebLanguage);
+	                }		
+                %>
+                <input class="text" type="text" name="EditEncounterName" id="EditEncounterName" readonly size="<%=sTextWidth%>" value="<%=sEditEncounterName%>">
+                
+                <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchEncounter('EditEncounterUID','EditEncounterName');">
+                <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="document.getElementById('EditEncounterUID').value='';document.getElementById('EditEncounterName').value='';">
+            </td>
+        </tr>
         <%-- COMMENT --%>
         <tr>
             <td class='admin'><%=getTran(request,"web","comment",sWebLanguage)%></td>
@@ -79,10 +103,19 @@
 <script>
   <%-- DO ADD --%>
   function doAdd(loadonly){
+	if(loadonly!='yes' && document.getElementById("EditEncounterUID").value.length==0){
+		alert('<%=getTranNoLink("web","no.encounter.linked",sWebLanguage)%>');
+		return;
+	}
+	else if(loadonly!='yes' && document.getElementById("EditProductUid").value.length==0){
+		alert('<%=getTranNoLink("web","no.product.specified",sWebLanguage)%>');
+		return;
+	}
     var url = "<c:url value='/pharmacy/addDrugsOutBarcode.jsp'/>?loadonly="+loadonly+
               "&ServiceStock="+document.getElementById("servicestock").value+
               "&DrugUid="+document.getElementById("EditProductUid").value+
               "&DrugBarcode="+document.getElementById("drugbarcode").value+
+              "&EncounterUid="+document.getElementById("EditEncounterUID").value+
               "&Quantity="+document.getElementById("quantity").value+
               "&Comment="+document.getElementById("comment").value+
               "&ts="+new Date().getTime();
@@ -93,12 +126,22 @@
         var label = eval('('+resp.responseText+')');
         if(label.message && label.message.length>0){
           $("divDrugsOut").innerHTML = "<font color='red'>"+label.message+"</font>";
+          window.setTimeout('doAdd("yes")',1000);
         }
         else{
           if(label.drugs.length > 0){
             $("divDrugsOut").innerHTML = label.drugs;
+            if(label.drugs.indexOf("<NODELIVERY>")>-1){
+            	document.getElementById('deliverbutton').style.visibility='hidden';
+            }
+            else{
+            	document.getElementById('deliverbutton').style.visibility='visible';
+            }
           }
-          document.getElementById("drugbarcode").value = "";
+          if(loadonly!='yes'){
+        	  document.getElementById("drugbarcode").value = "";
+        	  document.getElementById("EditProductUid").value = "";
+          }
         }
       }
     });
@@ -115,10 +158,17 @@
         var label = eval('('+resp.responseText+')');
         if(label.message && label.message.length>0){
           $("divDrugsOut").innerHTML = "<font color='red'>"+label.message+"</font>";
+          window.setTimeout('document.getElementById("quantity").value=0;doAdd("yes")',1000);
         }
         else{
           if(label.drugs.length > 0){
             $('divDrugsOut').innerHTML = label.drugs;
+            if(label.drugs.indexOf("<NODELIVERY>")>-1){
+            	document.getElementById('deliverbutton').style.visibility='hidden';
+            }
+            else{
+            	document.getElementById('deliverbutton').style.visibility='visible';
+            }
           }
         }
       }
@@ -136,9 +186,16 @@
         var label = eval('('+resp.responseText+')');
         if(label.message && label.message.length>0){
         	$("divDrugsOut").innerHTML = "<font color='red'>"+label.message+"</font>";
+            window.setTimeout('doAdd("yes")',1000);
         }
         else{
             $('divDrugsOut').innerHTML = label.drugs;
+            if(label.drugs.indexOf("<NODELIVERY>")>-1){
+            	document.getElementById('deliverbutton').style.visibility='hidden';
+            }
+            else{
+            	document.getElementById('deliverbutton').style.visibility='visible';
+            }
         }
       }
     });
@@ -162,21 +219,26 @@
 		  callback:composeCallbackURL
 		});
 		
-		function afterAutoComplete(field,item){
-		  var regex = new RegExp('[-0123456789.]*-idcache','i');
-		  var nomimage = regex.exec(item.innerHTML);
-		  var id = nomimage[0].replace('-idcache','');
-		  document.getElementById("EditProductUid").value = id;
-		  document.getElementById("drugbarcode").value=document.getElementById("drugbarcode").value.substring(0,document.getElementById("drugbarcode").value.indexOf(id));
-		}
+	function afterAutoComplete(field,item){
+	  var regex = new RegExp('[-0123456789.]*-idcache','i');
+	  var nomimage = regex.exec(item.innerHTML);
+	  var id = nomimage[0].replace('-idcache','');
+	  document.getElementById("EditProductUid").value = id;
+	  document.getElementById("drugbarcode").value=document.getElementById("drugbarcode").value.substring(0,document.getElementById("drugbarcode").value.indexOf(id));
+	}
 		
-		function composeCallbackURL(field,item){
-		  var url = "";
-		  if(field.id=="drugbarcode"){
-			url = "field=findDrugName&findDrugName="+field.value+"&serviceStockUid="+document.getElementById("servicestock").value;
-		  }
-		  return url;
-		}
+	function composeCallbackURL(field,item){
+	  var url = "";
+	  if(field.id=="drugbarcode"){
+		url = "field=findDrugName&findDrugName="+field.value+"&serviceStockUid="+document.getElementById("servicestock").value;
+	  }
+	  return url;
+	}
+  <%-- SEARCH ENCOUNTER --%>
+  function searchEncounter(encounterUidField,encounterNameField){
+    openPopup("/_common/search/searchEncounter.jsp&ts=<%=getTs()%>&VarCode="+encounterUidField+"&VarText="+encounterNameField+
+    		  "&FindEncounterPatient=<%=activePatient.personid%>");
+  }
 
   doAdd('yes');
   document.getElementById('drugbarcode').focus();

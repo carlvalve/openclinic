@@ -227,7 +227,7 @@ sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
 								if(insr!=null && insr.getNeedsApproval()==0){
 									bCanAdd=true;
 								}
-								if(bCanAdd || extrainsurar.contains(key+"*")){
+								if((bCanAdd && insurance!=null) || (insurance!=null && extrainsurar!=null && extrainsurar.contains(key+"*"))){
 									out.println("<option value='"+key+"' "+(checkString(insurance.getExtraInsurarUid()).equalsIgnoreCase(key)?"selected":"")+">"+getTran(request,"patientsharecoverageinsurance",key,sWebLanguage)+"</option>");								
 								}
 							}
@@ -425,7 +425,7 @@ sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
            </td>
        </tr>
         <tr>
-            <td class='admin'><%=getTran(request,"web","invoicingcareprovider",sWebLanguage)%></td>
+            <td class='admin'><%=getTran(request,"web","invoicingcareprovider",sWebLanguage)+(MedwanQuery.getInstance().getConfigInt("invoicingCareProviderMandatory",0)==1?"*":"")%></td>
             <td class='admin2'>
             	<select class='text' name='EditCareProvider' id='EditCareProvider'>
             		<option value=''></option>
@@ -443,7 +443,7 @@ sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
 		            	Iterator i = usernames.iterator();
 		            	while(i.hasNext()){
 		            		String u=(String)i.next();
-		            		out.println("<option value='"+u.split(";")[2]+"'"+(sSelectedValue.equals(u.split(";")[2])?" selected":"")+">"+u.split(";")[0].toUpperCase()+", "+u.split(";")[1]+"</option>");
+		            		out.println("<option value='"+u.split(";")[2]+"'"+(sSelectedValue.equals(u.split(";")[2])?" selected":"")+">"+u.split(";")[0].toUpperCase()+", "+u.split(";")[1]+" ("+u.split(";")[2]+")</option>");
 		            	}
 		            %>
             	</select>
@@ -835,7 +835,12 @@ sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
           alert('<%=getTranNoLink("web.manage","savenotallowed",sWebLanguage)%>');
           return false;
 	  }
-      if((EditForm.EditDate.value.length>0)
+	  if('<%=MedwanQuery.getInstance().getConfigInt("invoicingCareProviderMandatory",0)%>'=='1' && document.getElementById('EditCareProvider').value==''){
+          alert('<%=getTranNoLink("web","invoicingcareprovidermissing",sWebLanguage)%>');
+          document.getElementById('EditCareProvider').focus();
+          return false;
+	  }
+	  if((EditForm.EditDate.value.length>0)
           &&(EditForm.EditInsuranceUID.value.length>0)
           &&(EditForm.EditPrestationUID.value.length>0 || EditForm.EditPrestationGroup.value.length>0 || document.getElementById('prestationcontent').innerHTML.length>0)
           &&(EditForm.EditEncounterUID.value!="null" && EditForm.EditEncounterUID.value.length>0)){

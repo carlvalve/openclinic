@@ -73,7 +73,7 @@
 
 <table class="list" width="100%" cellspacing="0" cellpadding="2">
   <tr class="admin">
-    <td align="center"><a href="javascript:openPopup('healthrecord/findICPC.jsp&AuthorUID='+(document.getElementById('diagnosisUser')?document.getElementById('diagnosisUser').value:'')+'&PopupWidth=700&PopupHeight=400&ts=<%=getTs()%>&patientuid=<%=activePatient.personid %>');void(0);"><%=getTran(request,"openclinic.chuk","diagnostic.document",sWebLanguage)%> <%=getTran(request,"Web.Occup","ICPC-2",sWebLanguage)%>/<%=getTran(request,"Web.Occup","ICD-10",sWebLanguage)%></a></td>
+    <td align="center"><a href="javascript:openPopup('healthrecord/findICPC.jsp&EncounterUid='+document.getElementById('encounteruid').value+'&AuthorUID='+(document.getElementById('diagnosisUser')?document.getElementById('diagnosisUser').value:'')+'&PopupWidth=700&PopupHeight=400&ts=<%=getTs()%>&patientuid=<%=activePatient.personid %>');void(0);"><%=getTran(request,"openclinic.chuk","diagnostic.document",sWebLanguage)%> <%=getTran(request,"Web.Occup","ICPC-2",sWebLanguage)%>/<%=getTran(request,"Web.Occup","ICD-10",sWebLanguage)%></a></td>
   </tr>
   <tr>
     <td id='icpccodes'>

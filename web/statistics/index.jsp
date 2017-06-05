@@ -195,6 +195,7 @@
                   writeTblChildWithCodeNoButton("javascript:downloadStats(\"lab.list\",\"openclinic\");",getTran(request,"Web","statistics.download.labresults",sWebLanguage))+
                   writeTblChildWithCodeNoButton("javascript:downloadInvoicesSummary(\"hmk.invoices.list\",\"openclinic\");",getTran(request,"Web","statistics.download.invoicessummary",sWebLanguage))+
                   (MedwanQuery.getInstance().getConfigInt("enablePBFBurundi",0)==1?writeTblChildWithCodeNoButton("javascript:downloadPBFdocs(\"pbf.burundi.consultationslist\",\"openclinic\");",getTran(request,"Web","statistics.download.pbfburundi",sWebLanguage)):"")+
+                  (MedwanQuery.getInstance().getConfigInt("enablePBFBurundi",0)==1?writeTblChildWithCodeNoButton("javascript:downloadPBFdocs(\"pbf.burundi.admissionslist\",\"openclinic\");",getTran(request,"Web","statistics.download.pbfburundi.admissions",sWebLanguage)):"")+
                   (MedwanQuery.getInstance().getConfigInt("enableMaliVaccinations",0)==1?writeTblChildWithCodeNoButton("javascript:downloadStats(\"vida\",\"stats\");",getTran(request,"Web","statistics.download.vida",sWebLanguage)):"")+
 			      (MedwanQuery.getInstance().getConfigInt("datacenterEnabled",0)==1?writeTblChildWithCodeNoButton("javascript:downloadDatacenterStats(\"service.income.list\",\"stats\");",getTran(request,"Web","statistics.download.serviceincomelist",sWebLanguage)):""));
         out.print(ScreenHelper.writeTblFooter()+"<br>");
@@ -246,6 +247,7 @@
         out.print(ScreenHelper.writeTblHeader(getTran(request,"Web","chin",sWebLanguage),sCONTEXTPATH));
         out.print("<tr>"+
                 writeTblChildWithCode("javascript:nationalreport()",getTran(request,"Web","nationalreport",sWebLanguage))+
+                writeTblChildWithCode("javascript:dhis2report()",getTran(request,"Web","dhis2report",sWebLanguage))+
                    "<td class='admin2' colspan='2'>"+
                     getTran(request,"web","from",sWebLanguage)+"&nbsp;"+writeDateField("begin2","stats",firstdayPreviousMonth,sWebLanguage)+"&nbsp;&nbsp;"+
                     getTran(request,"web","to",sWebLanguage)+"&nbsp;"+writeDateField("end2","stats",lastdayPreviousMonth,sWebLanguage)+
@@ -317,8 +319,12 @@ function downloadTechnicalStats(query,db){
 	openPopup(URL,800,600,"OpenClinic");
   }
   function minisanteReportDH(){
-    window.open("<c:url value='/statistics/createMonthlyReportPdfDH.jsp?'/>start="+document.getElementById('begin2').value+"&end="+document.getElementById('end2').value+"&ts=<%=getTs()%>");
-  }
+	    window.open("<c:url value='/statistics/createMonthlyReportPdfDH.jsp?'/>start="+document.getElementById('begin2').value+"&end="+document.getElementById('end2').value+"&ts=<%=getTs()%>");
+	  }
+  function dhis2report(){
+      var URL="/statistics/createDHIS2Report.jsp";
+		openPopup(URL,400,300,"OpenClinic");
+	  }
   function hospitalReport(){
     window.open("<c:url value='/statistics/printHospitalReportChapterSelection.jsp?'/>start="+document.getElementById('begin2').value+"&end="+document.getElementById('end2').value+"&ts=<%=getTs()%>");
   }

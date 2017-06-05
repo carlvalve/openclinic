@@ -13,7 +13,7 @@
         sFindSortColumn = " OC_INSURANCE_STOP";
     }
 
-    Vector vInsurances = Insurance.selectInsurances(activePatient.personid, sFindSortColumn);
+    Vector vInsurances = Insurance.selectAllInsurances(activePatient.personid, sFindSortColumn);
 
     Iterator iter = vInsurances.iterator();
     Insurance insurance;

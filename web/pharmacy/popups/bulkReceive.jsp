@@ -11,8 +11,8 @@
 			String deliveryOperationUid = param.split("\\.")[1]+"."+param.split("\\.")[2];
 			
 			ProductStockOperation deliveryOperation = ProductStockOperation.get(deliveryOperationUid);
-			if(deliveryOperation!=null && deliveryOperation.getProductStock()!=null){
-				//Identify detsination product stock
+			if(deliveryOperation!=null && deliveryOperation.getProductStock()!=null && deliveryOperation.getUnitsChanged()-deliveryOperation.getUnitsReceived()>=Integer.parseInt(request.getParameter(param))){
+				//Identify destination product stock
 				ProductStock productStock = ProductStock.get(deliveryOperation.getProductStock().getProductUid(),request.getParameter("ServiceStockUid"));
 				if(productStock == null){
 					//does not exist, create one
@@ -129,7 +129,12 @@
 			}
 			
 			out.print("<tr class='admin2'>");
-			 out.print("<td><img src='_img/icons/icon_delete.gif' onclick='javascript:doDelete(\""+operation.getUid()+"\");' class='link'/></td>");
+			if(activeUser.getAccessRight("bulkreceive.delete")){
+				out.print("<td><img src='_img/icons/icon_delete.gif' onclick='javascript:doDelete(\""+operation.getUid()+"\");' class='link'/></td>");
+			}
+			else{
+				out.print("<td></td>");
+			}
 			 out.print("<td>"+operation.getUid()+"</td>");
 			 out.print("<td>"+ScreenHelper.formatDate(operation.getDate())+"</td>");
 			 out.print("<td>"+servicename+"</td>");

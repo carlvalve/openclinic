@@ -20,7 +20,9 @@
         String sEditExtraInsurarUID = checkString(request.getParameter("EditExtraInsurarUID"));
 
         Debet debet = new Debet();
+        System.out.println("before: "+Double.parseDouble(sEditInsurarAmount.replaceAll(",",".")));
         debet.setInsurarAmount(Double.parseDouble(sEditInsurarAmount.replaceAll(",",".")));
+        System.out.println("after: "+debet.getInsurarAmount());
         debet.setComment(sEditComment);
 
         if ((!sEditDebetUID.equals(("-1")))&&(sEditDebetUID.length()>0)) {
@@ -61,6 +63,8 @@
             sMessage = getTranNoLink("web.control","dberror",sWebLanguage);
             debet.setUid("-1");
         }
+        System.out.println("after2: "+debet.getInsurarAmount());
+
 %>
 {
 "Message":"<%=HTMLEntities.htmlentities(sMessage)%>",

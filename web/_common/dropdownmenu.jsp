@@ -458,6 +458,10 @@
   function uploadDocs(){
 	    openPopup("/util/uploadDocuments.jsp&ts=<%=getTs()%>",400,400).focus();
 	  }
+  
+  function pharmacyDeliveryQueues(){
+	    openPopup("pharmacy/managePharmacyQueue.jsp&ts=<%=getTs()%>",800,600).focus();
+  }
 	    
   function readBarcode2(barcode){
     var transform = "<%=MedwanQuery.getInstance().getConfigString("CCDKeyboardTransformString","à&é\\\"'(§è!ç")%>";

@@ -294,4 +294,10 @@
   	<Query id='QUERY.openclinic.insurarcredits.invoiceuid' db='openclinic' date='21/01/2017' dbserver='MySQL'>
 		alter table oc_insurarcredits modify column oc_insurarcredit_invoiceuid varchar(50);
   	</Query>	
+  	<Query id='QUERY.ocadmin.burundizipcodes.cibitoke' db='ocadmin' date='05/06/2017' dbserver='MySQL'>
+		update burundizipcodes set zipcode='BI.CI.CI',district='CIBITOKE' where zipcode='BI.BM.10';
+  	</Query>	
+  	<Query id='QUERY.ocadmin.burundizipcodes.cibitoke' db='ocadmin' date='05/06/2017' dbserver='Microsoft SQL Server'>
+		update burundizipcodes set zipcode='BI.CI.CI',district='CIBITOKE' where zipcode='BI.BM.10';
+  	</Query>
 </Queries>

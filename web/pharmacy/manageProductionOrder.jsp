@@ -1,4 +1,4 @@
-<%@page import="be.openclinic.finance.*"%>
+<%@page import="be.openclinic.finance.*,be.mxs.common.util.system.*"%>
 <%@page import="be.openclinic.pharmacy.*"%>
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
@@ -41,28 +41,30 @@
 		catch(Exception e){}
 		//First add produced quantity to product stock
 		if(nQuantity>0){
-			//Remove used raw materials from their stocks
-			//Reduce source stock with taken quantity
-			Vector materials = order.getUnusedMaterialsSummary();
-			for(int n=0;n<materials.size();n++){
-				ProductionOrderMaterial material = (ProductionOrderMaterial)materials.elementAt(n);
-				//we don't store new operations for raw materials that have already been used
-				if(material.getDateUsed()==null){
-					ProductStock productStock = ProductStock.get(material.getProductStockUid());
-					ProductStockOperation operation = new ProductStockOperation();
-					operation.setUid("-1");
-					operation.setCreateDateTime(new java.util.Date());
-					operation.setDate(new java.util.Date());
-					operation.setDescription(MedwanQuery.getInstance().getConfigString("productionStockDeliveryOperationDescription","medicationdelivery.production"));
-					//Link operation to productionorder
-					operation.setSourceDestination(new ObjectReference("production",sProductionOrderUid));
-					operation.setProductStockUid(productStock.getUid());
-					operation.setUnitsChanged(new Double(material.getQuantity()).intValue());
-					operation.setVersion(1);
-					operation.setUpdateUser(activeUser.userid);
-					operation.store();
-					//Now mark the material as having been used
-					material.setUsed(material.getProductionOrderId(),material.getProductStockUid(),new java.util.Date());
+			if(MedwanQuery.getInstance().getConfigInt("enableCCBRTProductionOrderMecanism",0)==1){
+				//Remove used raw materials from their stocks
+				//Reduce source stock with taken quantity
+				Vector materials = order.getUnusedMaterialsSummary();
+				for(int n=0;n<materials.size();n++){
+					ProductionOrderMaterial material = (ProductionOrderMaterial)materials.elementAt(n);
+					//we don't store new operations for raw materials that have already been used
+					if(material.getDateUsed()==null){
+						ProductStock productStock = ProductStock.get(material.getProductStockUid());
+						ProductStockOperation operation = new ProductStockOperation();
+						operation.setUid("-1");
+						operation.setCreateDateTime(new java.util.Date());
+						operation.setDate(new java.util.Date());
+						operation.setDescription(MedwanQuery.getInstance().getConfigString("productionStockDeliveryOperationDescription","medicationdelivery.production"));
+						//Link operation to productionorder
+						operation.setSourceDestination(new ObjectReference("production",sProductionOrderUid));
+						operation.setProductStockUid(productStock.getUid());
+						operation.setUnitsChanged(new Double(material.getQuantity()).intValue());
+						operation.setVersion(1);
+						operation.setUpdateUser(activeUser.userid);
+						operation.store();
+						//Now mark the material as having been used
+						material.setUsed(material.getProductionOrderId(),material.getProductStockUid(),new java.util.Date());
+					}
 				}
 			}
 			//If personalized batch doesn't exist, create it
@@ -118,6 +120,45 @@
 				//Add person data to batch information
 				operation.setBatchUid(Batch.getByBatchNumber(order.getTargetProductStockUid(), sBatchId).getUid());
 				operation.store();
+				
+				//****************************************************
+				//Update the purchase price of the finished good based on the raw materials value
+				//First calculate total cost of raw materials
+				double totalcost = 0;
+				Vector mats = order.getMaterialsSummary();
+				for(int n=0;n<mats.size();n++){
+					ProductionOrderMaterial mat = (ProductionOrderMaterial)mats.elementAt(n);
+					if(mat.getProductStock()!=null && mat.getProductStock().getProduct()!=null){
+						double cost = mat.getProductStock().getProduct().getLastYearsAveragePrice();
+						totalcost+=cost*mat.getQuantity();
+					}
+				}
+				//Now update the pointers for the drugprice and the PUMP
+            	try{
+            		Pointer.deletePointers("drugprice."+operation.getProductStock().getProduct().getUid()+"."+operation.getUid());
+            		Pointer.storePointer("drugprice."+operation.getProductStock().getProduct().getUid()+"."+operation.getUid(),nQuantity+";"+(totalcost/nQuantity));
+        			//Recalculate PUMP
+        			//Get previous PUMP
+        			double dPump=operation.getProductStock().getProduct().getLastYearsAveragePrice();
+        			if(dPump>0){
+        				//Find existing quantity for the product
+        				int nExisting = operation.getProductStock().getProduct().getTotalQuantityAvailable()-nQuantity; //new delivery was already added to stocks
+						System.out.println("dPump="+dPump);
+						System.out.println("nExisting="+nExisting);
+						System.out.println("totalcost="+totalcost);
+						System.out.println("nQuantity="+nQuantity);
+        				dPump = (nExisting*dPump+totalcost)/(nExisting+nQuantity);
+        			}
+        			else{
+        				dPump=totalcost;
+        			}
+            		Pointer.storePointer("pump."+operation.getProductStock().getProduct().getUid(),(dPump/nQuantity)+"");
+            	}
+            	catch(Exception e){
+            		//e.printStackTrace();
+            	}
+				//**************************************************
+				
 			}
 			//Now close the production order
 			order.setCloseDateTime(dClose);

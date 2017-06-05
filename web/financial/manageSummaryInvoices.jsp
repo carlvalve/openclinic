@@ -133,6 +133,20 @@
 	    });
 	}
 	
+    function reopenSummaryInvoice(){
+	    var params = '';
+	    var today = new Date();
+	    var url= '<c:url value="/financial/getSummaryInvoice.jsp"/>?reopen=true&InvoiceUID='+document.getElementById('FindConsolidatedPatientInvoiceUID').value+"&ServiceUID="+document.getElementById("EditInvoiceService").value;
+	    document.getElementById('invoicedetails').innerHTML = "<img src='<c:url value="/_img/themes/default/ajax-loader.gif"/>'/><br/>Loading";
+	    new Ajax.Request(url,{
+		  	method: "POST",
+	      	parameters: params,
+	      	onSuccess: function(resp){
+	        	$('invoicedetails').innerHTML=resp.responseText;
+	      	}
+	    });
+	}
+	
     function printInvoice(uid){
         var url = "<c:url value="/financial/printSummaryInvoice.jsp"/>?SummaryInvoiceUID="+uid+"&invoiceType="+document.getElementById("invoicetype").value;
         printwindow=window.open(url,"SummaryInvoicePdf<%=new java.util.Date().getTime()%>","height=600,width=900,toolbar=yes,status=no,scrollbars=yes,resizable=yes,menubar=yes");

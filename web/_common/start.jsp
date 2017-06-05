@@ -140,9 +140,9 @@
 	            		java.sql.Timestamp lastaccess = rs.getTimestamp("accesstime");
 	            		if(new java.util.Date().getTime()-lastaccess.getTime()>day){
 	            			out.println("<tr class='listText'>");
-	            			cls="";
 	            		}else {
-	            			out.println("<tr>");
+	            			out.println("<tr class='list'>");
+	            			cls="admin";
 	            		}
 		        		out.println("<td class='admin'><a href='"+sCONTEXTPATH+"/patientslist.do?findPersonID="+patient.personid+"'>"+patient.personid+"</a></td>");
 		        		out.println("<td class='"+cls+"'><b>"+patient.getFullName()+"</b></td>");

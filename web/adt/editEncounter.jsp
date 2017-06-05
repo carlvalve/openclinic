@@ -481,7 +481,7 @@
         
         <%-- manager --%>
         <tr>
-            <td class="admin"><%=getTran(request,"web","manager",sWebLanguage)%></td>
+            <td class="admin"><%=getTran(request,"web","manager",sWebLanguage)%> <%=MedwanQuery.getInstance().getConfigInt("encounterWardManagerMandatory",0)==1?"*":"" %></td>
             <td class="admin2">
                 <input type="hidden" name="EditEncounterManager" value="<%=sEditEncounterManager%>">
                 <input class="text" type="text" name="EditEncounterManagerName" readonly size="<%=sTextWidth%>" value="<%=sEditEncounterManagerName%>">
@@ -878,6 +878,10 @@
     else if(EditEncounterForm.EditEncounterServiceName.value==""){
       alertDialog("web","no_encounter_service");
       EditEncounterForm.EditEncounterServiceName.focus();
+    }
+    else if('<%=MedwanQuery.getInstance().getConfigInt("encounterWardManagerMandatory",0)%>'==1 && EditEncounterForm.EditEncounterManager.value==""){
+        alertDialog("web","encounter_manager_mandatory");
+        EditEncounterForm.EditEncounterManager.focus();
     }
     else if(EditEncounterForm.EditEncounterTransferDate && !EditEncounterForm.EditEncounterTransferDate.value=="" && !EditEncounterForm.EditEncounterEnd.value=="" && makeDate(EditEncounterForm.EditEncounterTransferDate.value)>makeDate(EditEncounterForm.EditEncounterEnd.value)){
       alertDialog("web","encounter_invalid_transferdate");

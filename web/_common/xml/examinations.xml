@@ -1473,4 +1473,32 @@
     <fr>Signes vitaux</fr>  
     <en>Vital signs</en> 
   </Row>  
+  <Row> 
+    <id>1139</id>  
+    <class>cnrkr</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CNRKR_CONSULTATION</transactiontype>  
+    <fr>Consultation CNRKR</fr>  
+    <en>CNRKR outpatient consultation</en> 
+  </Row>  
+  <Row> 
+    <id>1140</id>  
+    <class>cnrkr</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CNRKR_CONSULTATIONFOLLOWUP</transactiontype>  
+    <fr>Consultation de suivi CNRKR</fr>  
+    <en>CNRKR outpatient consultation follow-up</en> 
+  </Row>  
+  <Row> 
+    <id>1141</id>  
+    <class>cnrkr</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CNRKR_NEUROMUSCULAR</transactiontype>  
+    <fr>Consultation maladies neuromusculaires CNRKR</fr>  
+    <en>CNRKR consultation neuromuscular diseases</en> 
+  </Row>  
+  <Row> 
+    <id>1142</id>  
+    <class>cnrkr</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CNRKR_KINE</transactiontype>  
+    <fr>Consultation kinésithérapie CNRKR (modèle OKIDO)</fr>  
+    <en>CNRKR consultation physiotherapy (OKIDO model) diseases</en> 
+  </Row>  
 </Examinations>

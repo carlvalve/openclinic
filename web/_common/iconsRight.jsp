@@ -242,7 +242,7 @@
             }
         }
         
-        if(activePatient!=null && activePatient.personid!=null && activePatient.personid.length()>0 && Encounter.getActiveEncounter(activePatient.personid)!=null && activeUser.getAccessRight("pharmacy.fastdispensing.select")){
+        if(activePatient!=null && activePatient.personid!=null && activePatient.personid.length()>0 && activeUser.getAccessRight("pharmacy.fastdispensing.select")){
             %><img class="link" onclick="showdrugsoutbarcode();"  border='0' src="<c:url value='/_img/icons/icon_pharma.png'/>" title="<%=getTranNoLink("web","drugsoutbarcode",sWebLanguage)%>"/><%
         }
         %>

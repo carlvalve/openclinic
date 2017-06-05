@@ -14,6 +14,10 @@
 	String sMessage="";
 	if(sInvoiceUID.length()>0){
 		invoice=SummaryInvoice.get(sInvoiceUID);
+		if(checkString(request.getParameter("reopen")).equalsIgnoreCase("true")){
+			invoice.setStatus("open");
+			invoice.store();
+		}
 	}
 	if(invoice==null || !invoice.hasValidUid()){
 		if(sInvoiceUID.length()>0){
@@ -34,9 +38,16 @@
 		</td>
 		<td class='admin'><%=getTran(request,"web","invoicestatus",sWebLanguage) %></td>
 		<td class='admin2'>
-			<%if(checkString(invoice.getStatus()).equalsIgnoreCase("closed")){ %>
-			<%=getTran(request,"summaryinvoicestatus","closed",sWebLanguage) %>
-			<%}else{ %>
+			<% 	if(checkString(invoice.getStatus()).equalsIgnoreCase("closed")){ %>
+			 <%=getTran(request,"summaryinvoicestatus","closed",sWebLanguage) %>
+			<%
+				if(activeUser.getAccessRight("financial.reopensummaryinvoice.select")){
+			%>
+				<input type='button' class='button' name='reopen' value='<%=getTranNoLink("web","reopen",sWebLanguage) %>' onclick='reopenSummaryInvoice("<%=invoice.getUid()%>")'/>
+			<%
+				}
+				}else{
+			%>
 			<select class='text' name='InvoiceStatus' id='InvoiceStatus'>
 				<option/>
 				<%=ScreenHelper.writeSelect(request,"summaryinvoicestatus",ScreenHelper.checkString(invoice.getStatus()).length()==0?"open":invoice.getStatus(),sWebLanguage) %>
@@ -108,7 +119,7 @@
 			out.println("<td class='admin2'><a href='javascript:openPatientInvoice(\""+patientInvoice.getUid()+"\")'>"+ScreenHelper.formatDate(patientInvoice.getDate())+"</a></td>");
 			out.println("<td class='admin2'>"+patientInvoice.getInsurarreference()+"</td>");
 			out.println("<td class='admin2'>"+patientInvoice.getServicesAsString(sWebLanguage)+"</td>");
-			out.println("<td class='admin2'>"+getTran(request,"finance.patientinvoice.status",patientInvoice.getStatus(),sWebLanguage)+"</td>");
+			out.println("<td class='admin2'>"+getTran(request,"finance.patientinvoice.status",patientInvoice.getStatus(),sWebLanguage)+(!patientInvoice.getStatus().equalsIgnoreCase("closed")?" <img src='"+sCONTEXTPATH+"/_img/icons/icon_warning.gif'/>":"")+"</td>");
 			out.println("<td class='admin2'>"+new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#")).format(patientInvoice.getBalance())+"</td>");
 			out.println("</tr>");
 		}
@@ -123,7 +134,7 @@
 				out.println("<td class='admin2'><a href='javascript:openPatientInvoice(\""+patientInvoice.getUid()+"\")'>"+ScreenHelper.formatDate(patientInvoice.getDate())+"</a></td>");
 				out.println("<td class='admin2'>"+patientInvoice.getInsurarreference()+"</td>");
 				out.println("<td class='admin2'>"+patientInvoice.getServicesAsString(sWebLanguage)+"</td>");
-				out.println("<td class='admin2'>"+getTran(request,"finance.patientinvoice.status",patientInvoice.getStatus(),sWebLanguage)+"</td>");
+				out.println("<td class='admin2'>"+getTran(request,"finance.patientinvoice.status",patientInvoice.getStatus(),sWebLanguage)+(!patientInvoice.getStatus().equalsIgnoreCase("closed")?" <img src='"+sCONTEXTPATH+"/_img/icons/icon_warning.gif'/>":"")+"</td>");
 				out.println("<td class='admin2'>"+new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#")).format(patientInvoice.getBalance())+"</td>");
 				out.println("</tr>");
 			}

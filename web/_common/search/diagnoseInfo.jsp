@@ -22,6 +22,7 @@
     }
     
     String sServiceUid = checkString(request.getParameter("serviceUid"));
+    String sEncounterUid = checkString(request.getParameter("EncounterUid"));
 %>
 
 <form name="diagnoseInfoForm" action="" method="">
@@ -355,7 +356,10 @@
 	                if(curTran!=null && curTran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID").length()>0){
 	                	activeEnc = Encounter.get(curTran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID"));
 	                }
-	                if(activeEnc==null) {
+	                if((activeEnc==null || !activeEnc.hasValidUid()) && sEncounterUid.length()>0){
+	                	activeEnc = Encounter.get(sEncounterUid);
+	                }
+	                if((activeEnc==null || !activeEnc.hasValidUid())) {
 	                	activeEnc = Encounter.getActiveEncounterOnDate(new Timestamp(activeDate.getTime()),sPatientUid);
 	                }
 					String activeEncParents="",activeService="";

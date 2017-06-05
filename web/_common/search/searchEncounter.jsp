@@ -41,6 +41,9 @@
   <%-- SET ENCOUNTER --%>
   function setEncounter(sEncounterUID,sEncounterName){
     window.opener.document.getElementsByName("<%=sVarCode%>")[0].value = sEncounterUID;
+    if(window.opener.document.getElementsByName("<%=sVarCode%>")[0].onchange){
+    	window.opener.document.getElementsByName("<%=sVarCode%>")[0].onchange();
+    }
 
     if("<%=sVarText%>"!=""){
       window.opener.document.getElementsByName("<%=sVarText%>")[0].value = sEncounterName;

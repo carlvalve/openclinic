@@ -152,6 +152,10 @@
             PreparedStatement ps = oc_conn.prepareStatement(sSQL);
             ps.execute();
             ps.close();
+         	sSQL=MedwanQuery.getInstance().getConfigString("closeAdmisionServicesQuery2","update oc_encounters set oc_encounter_enddate=(select max(oc_encounter_serviceenddate) from oc_encounter_services where oc_encounter_services.oc_encounter_serverid=oc_encounters.oc_encounter_serverid and oc_encounter_services.oc_encounter_objectid=oc_encounters.oc_encounter_objectid) where oc_encounter_enddate is null and  not exists (select * from oc_encounter_services where oc_encounter_services.oc_encounter_serverid=oc_encounters.oc_encounter_serverid and oc_encounter_services.oc_encounter_objectid=oc_encounters.oc_encounter_objectid and oc_encounter_serviceenddate is null)");
+            ps = oc_conn.prepareStatement(sSQL);
+            ps.execute();
+            ps.close();
             MedwanQuery.getInstance().setConfigString("lastAutoCloseAdmissions", new SimpleDateFormat("yyyyMMdd").format(new java.util.Date()));
         }
         catch(Exception e){

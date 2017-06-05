@@ -38,9 +38,11 @@
 			
 			Batch batch = Batch.get(rs.getString("OC_LIST_BATCHUID"));
 			String sBatch = "?";
+			String sExpires = "";
 			if(batch!=null){
 				sBatch = batch.getBatchNumber();
 				level = batch.getLevel();
+				sExpires = ScreenHelper.formatDate(batch.getEnd());
 			}
 			
 			// header
@@ -48,22 +50,32 @@
 				drugs+= "<tr class='admin'>"+
 			             "<td/>"+
 						 "<td>ID</td>"+
+			             "<td>"+getTran(request,"web","code",sWebLanguage)+"</td>"+
 			             "<td>"+getTran(request,"web","product",sWebLanguage)+"</td>"+
 						 "<td>"+getTran(request,"web","quantity",sWebLanguage)+"</td>"+
 			             "<td>"+getTran(request,"web","batch",sWebLanguage)+"</td>"+
+			             "<td>"+getTran(request,"web","level",sWebLanguage)+"</td>"+
+			             "<td>"+getTran(request,"web","expires",sWebLanguage)+"</td>"+
+			             "<td>"+getTran(request,"web","comment",sWebLanguage)+"</td>"+
+			             "<td>"+getTran(request,"web","encounter",sWebLanguage)+"</td>"+
 						"</tr>";
 			}
 			
-			// one row
+			String stocklabel="";
 			drugs+= "<tr>"+
 			         "<td class='admin2'>"+
 			          "<a href='javascript:doDelete(\\\""+rs.getInt("OC_LIST_SERVERID")+"."+rs.getInt("OC_LIST_OBJECTID")+"\\\");'>"+
 			           "<img src='_img/icons/icon_delete.gif' class='link' title='"+getTranNoLink("web","delete",sWebLanguage)+"'/></a>"+
 			         "</td>"+
 			         "<td class='admin2'>"+stock.getUid()+"</td>"+
-			         "<td class='admin2'>"+stock.getProduct().getName()+"</td>"+
-			         "<td class='admin2'>"+rs.getInt("OC_LIST_QUANTITY")+"</td>"+
-			         "<td class='admin2'>"+sBatch+" ("+level+")</td>"+
+			         "<td class='admin2'><b>"+stock.getProduct().getCode()+"</b></td>"+
+			         "<td class='admin2'><b>"+stock.getProduct().getName()+"</b>"+stocklabel+"</td>"+
+			         "<td class='admin2'><b>"+rs.getInt("OC_LIST_QUANTITY")+"</b></td>"+
+			         "<td class='admin2'>"+sBatch+"</td>"+
+			         "<td class='admin2'>"+level+"</td>"+
+			         "<td class='admin2'>"+sExpires+"</td>"+
+			         "<td class='admin2'><b>"+checkString(rs.getString("OC_LIST_COMMENT"))+"</b></td>"+
+			         "<td class='admin2'>"+checkString(rs.getString("OC_LIST_ENCOUNTERUID"))+"</td>"+
 			        "</tr>";
 
 			count++;

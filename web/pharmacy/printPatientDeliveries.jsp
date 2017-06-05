@@ -3,6 +3,7 @@
 <%@include file="/includes/validateUser.jsp"%>
 <%
 	String sBeginDate = checkString(request.getParameter("offsetdate"));
+	String sOperation = checkString(request.getParameter("operation"));
 	PDFPharmacyReportGenerator pdfGenerator = new PDFPharmacyReportGenerator(activeUser,sProject);
     ByteArrayOutputStream baosPDF = null;
     try {
@@ -10,6 +11,7 @@
         parameters.put("begin",sBeginDate);
         parameters.put("end",ScreenHelper.getDate());
         parameters.put("patientUID",activePatient.personid);
+        parameters.put("operation",sOperation);
     	baosPDF = pdfGenerator.generatePDFDocumentBytes(request,"patientDeliveries",parameters);
         StringBuffer sbFilename = new StringBuffer();
         sbFilename.append("filename_").append(System.currentTimeMillis()).append(".pdf");

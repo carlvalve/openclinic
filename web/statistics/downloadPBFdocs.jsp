@@ -8,17 +8,9 @@
 %>
 <table width='100%'>
 	<tr>
-		<td class='admin'><%=getTran(request,"web","physician",sWebLanguage) %></td>
-		<td class='admin2'>
-                <input type="hidden" name="doctor" id='doctor' value="">
-                <input class="text" type="text" name="doctorname" id="doctorname" readonly size="40" value="">
-                <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTran(null,"web","select",sWebLanguage)%>" onclick="searchManager('doctor','doctorname');">
-                <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran(null,"web","clear",sWebLanguage)%>" onclick="document.getElementById('doctor').value='';document.getElementById('doctorname').value='';">
-		</td>
-	</tr>
-	<tr>
 		<td class='admin'><%=getTran(request,"web","service",sWebLanguage) %></td>
 		<td class='admin2'>
+             <input type="hidden" name="doctor" id='doctor' value="">
              <input type='hidden' name='service' id='service' value=''>
              <input class='text' type='text' name='servicename' id='servicename' readonly size='40' value=''>&nbsp;
              <img src='_img/icons/icon_search.gif' class='link' alt='<%=getTranNoLink("Web","select",sWebLanguage)%>' onclick='searchService();'>&nbsp;
@@ -26,6 +18,14 @@
 		</td>
 	</tr>
 <% 	if(checkString(request.getParameter("query")).equalsIgnoreCase("pbf.burundi.consultationslist")){%>
+	<tr>
+		<td class='admin'><%=getTran(request,"web","physician",sWebLanguage) %></td>
+		<td class='admin2'>
+                <input class="text" type="text" name="doctorname" id="doctorname" readonly size="40" value="">
+                <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTran(null,"web","select",sWebLanguage)%>" onclick="searchManager('doctor','doctorname');">
+                <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran(null,"web","clear",sWebLanguage)%>" onclick="document.getElementById('doctor').value='';document.getElementById('doctorname').value='';">
+		</td>
+	</tr>
 	<tr>
 		<td class='admin'><%=getTran(request,"web","include",sWebLanguage) %></td>
 		<td class='admin2'>
@@ -49,19 +49,19 @@
 <script>
 	function findinvoices(){
 		url="<c:url value='/util/csvStats.jsp?'/>query=<%=sQuery%>&db=<%=sDb%>&begin=<%=sBegin%>&end=<%=sEnd%>&doctor="+document.getElementById('doctor').value+"&service="+document.getElementById('service').value;
-		if(document.getElementById('includeadmissions').checked) {
+		if(document.getElementById('includeadmissions') && document.getElementById('includeadmissions').checked) {
 			url+="&includeadmissions="+document.getElementById('includeadmissions').value;
 		}
-		if(document.getElementById('includevisits').checked) {
+		if(document.getElementById('includevisits') && document.getElementById('includevisits').checked) {
 			url+="&includevisits="+document.getElementById('includevisits').value;
 		}
-		if(document.getElementById('diagsicd10').checked) {
+		if(document.getElementById('diagsicd10') && document.getElementById('diagsicd10').checked) {
 			url+="&diagsicd10="+document.getElementById('diagsicd10').value;
 		}
-		if(document.getElementById('diagsrfe').checked) {
+		if(document.getElementById('diagsrfe') && document.getElementById('diagsrfe').checked) {
 			url+="&diagsrfe="+document.getElementById('diagsrfe').value;
 		}
-		if(document.getElementById('diagsfreetext').checked) {
+		if(document.getElementById('diagsfreetext') && document.getElementById('diagsfreetext').checked) {
 			url+="&diagsfreetext="+document.getElementById('diagsfreetext').value;
 		}
 		window.open(url);

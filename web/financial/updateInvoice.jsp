@@ -19,7 +19,7 @@
            sInvoiceType     = checkString(request.getParameter("invoiceType"));
     
     if(sFindInvoiceType.length()==0 && sAction.length()==0){
-    	sFindInvoiceType = "insurar";
+    	sFindInvoiceType = "patient";
     }
     
     /// DEBUG /////////////////////////////////////////////////////////////////////////////////////

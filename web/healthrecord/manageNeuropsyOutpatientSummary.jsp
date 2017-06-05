@@ -84,12 +84,26 @@
 </form>
 
 <script>
-  <%-- SUBMIT FORM --%>
-  function submitForm(){
-    document.getElementById("buttonsDiv").style.visibility = "hidden";
-    var temp = Form.findFirstElement(transactionForm);//for ff compatibility
-    document.transactionForm.submit();
-  }
+	function submitForm(){
+		  if(document.getElementById('encounteruid').value==''){
+				alertDialogDirectText('<%=getTranNoLink("web","no.encounter.linked",sWebLanguage)%>');
+				searchEncounter();
+			  }	
+		  else {
+		    transactionForm.saveButton.disabled = true;
+		    <%
+		        SessionContainerWO sessionContainerWO = (SessionContainerWO)SessionContainerFactory.getInstance().getSessionContainerWO(request,SessionContainerWO.class.getName());
+		        out.print(takeOverTransaction(sessionContainerWO, activeUser,"document.transactionForm.submit();"));
+		    %>
+		  }
+	}    
+	function searchEncounter(){
+	    openPopup("/_common/search/searchEncounter.jsp&ts=<%=getTs()%>&VarCode=currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID" property="itemId"/>]>.value&VarText=&FindEncounterPatient=<%=activePatient.personid%>");
+	}
+	if(document.getElementById('encounteruid').value==''){
+			alertDialogDirectText('<%=getTranNoLink("web","no.encounter.linked",sWebLanguage)%>');
+			searchEncounter();
+	}	
 </script>
 
 <%=writeJSButtons("transactionForm","saveButton")%>

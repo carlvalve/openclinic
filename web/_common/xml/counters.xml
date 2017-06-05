@@ -71,5 +71,6 @@
     <counter name="OC_ASSETS" table="OC_ASSETS" field="OC_ASSET_OBJECTID" bd='openclinic'/>
     <counter name="OC_MAINTENANCEPLANS" table="OC_MAINTENANCEPLANS" field="OC_MAINTENANCEPLAN_OBJECTID" bd='openclinic'/>
     <counter name="OC_MAINTENANCEOPERATIONS" table="OC_MAINTENANCEOPERATIONS" field="OC_MAINTENANCEOPERATION_OBJECTID" bd='openclinic'/>
+    <counter name="OC_PRODUCTIONORDERMATERIAL_ID" table="OC_PRODUCTIONORDERMATERIALS" field="OC_MATERIAL_ID" bd='openclinic'/>
 	
 </counters>
