@@ -41,6 +41,9 @@ public class Product extends OC_Object implements Comparable {
     private boolean applyLowerPrices;
     private boolean automaticInvoicing;
     private String code;
+    private double lastYearsAverage=-1;
+    private Hashtable lastYearAverages=new Hashtable();
+    private Hashtable looseLastYearAverages=new Hashtable();
     
     public String getCode() {
 		return code;
@@ -203,11 +206,15 @@ public class Product extends OC_Object implements Comparable {
     }
 
     public double getLastYearsAveragePrice(){
+    	if(lastYearsAverage>-1){
+    		return lastYearsAverage;
+    	}
     	if(MedwanQuery.getInstance().getConfigInt("usePUMPFormula",1)==2){
 			String pump = Pointer.getLastExactPointer("pump."+getUid());
 			if(pump.length()>0){
 				try{
-					return Double.parseDouble(pump);
+					lastYearsAverage=Double.parseDouble(pump);
+					return lastYearsAverage;
 				}
 				catch(Exception t){
 					t.printStackTrace();
@@ -232,15 +239,19 @@ public class Product extends OC_Object implements Comparable {
     	if(count > 0){
     		price = totalprice/count;
     	}
-    	
+    	lastYearsAverage=price;
     	return price;
     }
     
     public double getLastYearsAveragePrice(java.util.Date date){
+    	if(lastYearAverages.get(date)!=null){
+    		return (Double)lastYearAverages.get(date);
+    	}
     	if(MedwanQuery.getInstance().getConfigInt("usePUMPFormula",1)==2){
 			String pump = Pointer.getLastExactPointer("pump."+getUid(),date);
 			if(pump.length()>0){
 				try{
+					lastYearAverages.put(date, Double.parseDouble(pump));
 					return Double.parseDouble(pump);
 				}
 				catch(Exception t){
@@ -264,14 +275,19 @@ public class Product extends OC_Object implements Comparable {
     	if(count>0){
     		price=totalprice/count;
     	}
+		lastYearAverages.put(date, price);
     	return price;
     }
     
     public double getLooseLastYearsAveragePrice(java.util.Date date){
+    	if(looseLastYearAverages.get(date)!=null){
+    		return (Double)looseLastYearAverages.get(date);
+    	}
     	if(MedwanQuery.getInstance().getConfigInt("usePUMPFormula",1)==2){
 			String pump = Pointer.getLastExactPointer("pump."+getUid(),date);
 			if(pump.length()>0){
 				try{
+					looseLastYearAverages.put(date, Double.parseDouble(pump));
 					return Double.parseDouble(pump);
 				}
 				catch(Exception t){
@@ -306,6 +322,7 @@ public class Product extends OC_Object implements Comparable {
         		price=totalprice/count;
         	}
     	}
+		looseLastYearAverages.put(date, price);
     	return price;
     }
     
@@ -401,7 +418,10 @@ public class Product extends OC_Object implements Comparable {
     }
     //--- GET -------------------------------------------------------------------------------------
     public static Product get(String productUid){
-        Product product = null;
+    	Product product = (Product)MedwanQuery.getInstance().getObjectCache().getObject("product",productUid);
+        if(product!=null){
+            return product;
+        }
         String sUids[] = productUid.split("\\.");
 
         if(sUids.length == 2){
@@ -495,6 +515,7 @@ public class Product extends OC_Object implements Comparable {
                 }
             }
         }
+        MedwanQuery.getInstance().getObjectCache().putObject("product",product);
 
         return product;
     }
@@ -750,6 +771,7 @@ public class Product extends OC_Object implements Comparable {
                 se.printStackTrace();
             }
         }
+        MedwanQuery.getInstance().getObjectCache().putObject("product",this);
     }
 
     //--- EXISTS ----------------------------------------------------------------------------------
@@ -1092,6 +1114,7 @@ public class Product extends OC_Object implements Comparable {
                 se.printStackTrace();
             }
         }
+        MedwanQuery.getInstance().getObjectCache().removeObject("product",productUid);
     }
 
     //--- GET PRODUCT GOUPS -----------------------------------------------------------------------

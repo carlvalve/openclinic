@@ -203,7 +203,7 @@ public class Encounter {
 	}
 	
 	public boolean isOutcome(String outcome){
-		return this.outcome.equalsIgnoreCase(outcome);
+		return this.outcome.startsWith(outcome);
 	}
 	
 	public boolean isType(String type){

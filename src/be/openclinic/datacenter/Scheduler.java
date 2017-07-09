@@ -44,7 +44,7 @@ public class Scheduler implements Runnable{
 	
 	public static void runScheduler(){
         // load scheduler config from XML
-
+		
 		String sDoc=null;
 		SAXReader reader=null;
 		Document document=null;

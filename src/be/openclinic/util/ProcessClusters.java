@@ -33,7 +33,7 @@ public class ProcessClusters {
 			while (rs.next()){
 				//Voor elk van deze encounters gaan we nu de bijhorende diagnoses opzoeken
 				encounterUid=rs.getString("OC_ENCOUNTER_SERVERID")+"."+rs.getString("OC_ENCOUNTER_OBJECTID");
-				if(rs.getString("OC_ENCOUNTER_OUTCOME").equalsIgnoreCase("dead")){
+				if(rs.getString("OC_ENCOUNTER_OUTCOME").startsWith("dead")){
 					nMortality=1;
 				}
 				else {

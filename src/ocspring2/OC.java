@@ -79,11 +79,39 @@ public class OC {
 
    public void setup() {
       Db.Connect();
+      
+      //************
+      //* Modified *
+      //************
+      	Db.runsql("drop temporary table if exists tmp_sel");
+      //************
+      	
       Db.runsql("create temporary table tmp_sel as select id,nrz,nrs, 0 as selection from assocdata");
       Db.runsql("create index temporary1 on tmp_sel(nrs)");
       Db.runsql("create index temporary2 on tmp_sel(nrz)");
+      
+      //************
+      //* Modified *
+      //************
+      	Db.runsql("drop temporary table if exists tmp_did");
+      //************
+      	
       Db.runsql("create temporary table tmp_did (id int(11) NOT NULL AUTO_INCREMENT,NRZ int(11) DEFAULT NULL, PRIMARY KEY (id))");
+
+      //************
+      //* Modified *
+      //************
+      	Db.runsql("drop temporary table if exists tmp_sin");
+      //************
+      	
       Db.runsql("create temporary table tmp_sin (id int(11) NOT NULL AUTO_INCREMENT, NRS int(11) DEFAULT NULL, PRIMARY KEY (id))");
+
+      //************
+      //* Modified *
+      //************
+      	Db.runsql("drop temporary table if exists tmp_nrs");
+      //************
+      	
       Db.runsql("create temporary table tmp_nrs (id int(11) NOT NULL AUTO_INCREMENT, NRS int(11) DEFAULT NULL, PRIMARY KEY (id))");
 
       testi = Db.get_integer("select count(*) from sym where (SYM.TTYPE=0) and nrs=" + selNrs1);

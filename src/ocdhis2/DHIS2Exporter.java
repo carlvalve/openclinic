@@ -305,7 +305,7 @@ public class DHIS2Exporter {
 		Hashtable encounterbod = new Hashtable();
 		for(int n=0;n<items.size();n++){
 			String item = (String)items.elementAt(n);
-			if(!bMortality || item.split(";")[8].equalsIgnoreCase("dead")){
+			if(!bMortality || item.split(";")[8].startsWith("dead")){
 				if(!bNewcase || item.split(";")[9].equalsIgnoreCase("1")){
 					if(sEncounterType.length()==0 || ScreenHelper.checkString(item.split(";")[11]).equalsIgnoreCase(sEncounterType)){
 						if(sTransaction.length()==0 || MedwanQuery.getInstance().getTransactionType(ScreenHelper.checkString(item.split(";")[12])).equalsIgnoreCase(sTransaction)){
@@ -324,7 +324,7 @@ public class DHIS2Exporter {
 		for(int n=0;n<items.size();n++){
 			String item = (String)items.elementAt(n);
 			if(classification==null || classification.equalsIgnoreCase(item.split(";")[4])){
-				if(!bMortality || item.split(";")[8].equalsIgnoreCase("dead")){
+				if(!bMortality || item.split(";")[8].startsWith("dead")){
 					if(!bNewcase || item.split(";")[9].equalsIgnoreCase("1")){
 						if(sEncounterType.length()==0 || ScreenHelper.checkString(item.split(";")[11]).equalsIgnoreCase(sEncounterType)){
 							if(sTransaction.length()==0 || MedwanQuery.getInstance().getTransactionType(ScreenHelper.checkString(item.split(";")[12])).equalsIgnoreCase(sTransaction)){

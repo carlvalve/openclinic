@@ -180,7 +180,7 @@ public class ExporterDHIS2Diagnoses extends Exporter {
 										+ " a.oc_encounter_objectid=replace(b.oc_diagnosis_encounteruid,'"+MedwanQuery.getInstance().getConfigInt("serverId")+".','') and"
 										+ " oc_encounter_enddate >=? and oc_encounter_enddate <? and "
 										+ " oc_diagnosis_codetype='icd10' and "
-										+ " oc_encounter_outcome='dead' and "
+										+ " oc_encounter_outcome like 'dead%' and "
 										+ " a.oc_encounter_patientuid=c.personid"
 										+ " group by OC_DIAGNOSIS_SERVICEUID,oc_diagnosis_code,c.gender,floor("+ MedwanQuery.getInstance().datediff("d", "c.dateofbirth", "oc_encounter_enddate")+"/365) "
 										+ " order by OC_DIAGNOSIS_SERVICEUID,oc_diagnosis_code");

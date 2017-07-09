@@ -121,7 +121,7 @@ public class GeneralPDFCreator extends PDFCreator {
             printDocumentHeader(req);
 
             //*** TITLE ***************************************************************************
-            String title = getTran("web","examinations").toUpperCase();
+            String title = getTran("web","clinicaldocuments").toUpperCase();
 
             Paragraph par = new Paragraph(title,FontFactory.getFont(FontFactory.HELVETICA,15,Font.BOLD));
             par.setAlignment(Paragraph.ALIGN_CENTER);

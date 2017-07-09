@@ -15,6 +15,7 @@ import be.mxs.common.util.io.MessageReaderMedidoc;
 import be.mxs.common.util.system.Debug;
 import be.mxs.common.util.system.ScreenHelper;
 import be.openclinic.finance.Prestation;
+import be.openclinic.system.PreLoader;
 
 import com.inzoom.oledb.Session;
 import com.jpos.POStest.DS6708;
@@ -98,6 +99,7 @@ public class MedwanQuery {
     private Hashtable datacenterparametertypes = new Hashtable();
     private Hashtable countersInUse = new Hashtable();
     private Hashtable accessRightsForTransactionTypes = new Hashtable();
+    private Object preloader=null;
 
     
     //--- CONSTRUCTOR -----------------------------------------------------------------------------
@@ -283,8 +285,6 @@ public class MedwanQuery {
 			e.printStackTrace();
 		}
         
-        //loadRiskExaminationLabcodes();
-        //loadRiskCategories();
         ObjectCacheFactory.getInstance().setObjectCacheSize(getConfigInt("objectCacheSize",10000));
 
         // load DataCenter data
@@ -316,6 +316,9 @@ public class MedwanQuery {
         if(getConfigInt("enableArchiveDirectoryMonitoring", 0)==1 && scanDirectoryMonitor==null){
         	scanDirectoryMonitor=new ScanDirectoryMonitor();
         	scanDirectoryMonitor.activate();
+        }
+        if(!PreLoader.isActive()){
+        	preloader = new PreLoader();
         }
     }
     

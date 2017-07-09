@@ -377,7 +377,7 @@ public class DatacenterHospitalStats {
                             admissiondiagnosispatientfrequencies.put(code, new HashSet());
                         }
                         ((HashSet) admissiondiagnosispatientfrequencies.get(code)).add(encounter.getPatientUid());
-                        if (encounter.getOutcome().equalsIgnoreCase("dead")) {
+                        if (encounter.isOutcome("dead")) {
                             if (admissiondiagnosisdeaths.get(code) == null) {
                                 admissiondiagnosisdeaths.put(code, new HashSet());
                             }
@@ -408,7 +408,7 @@ public class DatacenterHospitalStats {
                         ((HashSet) visitdiagnosispatientfrequencies.get(code)).add(encounter.getPatientUid());
                     }
                 }
-                if (encounter.getOutcome().equalsIgnoreCase("dead")) {
+                if (encounter.isOutcome("dead")) {
                     am.add(encounter.getPatientUid());
                     if(!encounter.isBegincorrected()){
                     	weeklyDeaths[week]++;

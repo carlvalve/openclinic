@@ -1674,6 +1674,52 @@ public class TimeFilterReportGenerator {
 			}
 			return bReturn;
 		}
+		else if(value.attributeValue("compare").equalsIgnoreCase("inlike")){
+			boolean bReturn = false;
+			if(value.attributeValue("type").equalsIgnoreCase("config")){
+				String elements[] = MedwanQuery.getInstance().getConfigString(value.getText(),ScreenHelper.checkString(value.attributeValue("default"))).split(";");
+				for(int n=0;n<elements.length;n++){
+					if(s.startsWith(elements[n])){
+						bReturn = true;
+						break;
+					}
+				}
+			}
+			else{
+				Iterator elements = value.elementIterator("element");
+				while(elements.hasNext()){
+					Element element = (Element)elements.next();
+					if(s.startsWith(element.getText())){
+						bReturn = true;
+						break;
+					}
+				}
+			}
+			return bReturn;
+		}
+		else if(value.attributeValue("compare").equalsIgnoreCase("incontains")){
+			boolean bReturn = false;
+			if(value.attributeValue("type").equalsIgnoreCase("config")){
+				String elements[] = MedwanQuery.getInstance().getConfigString(value.getText(),ScreenHelper.checkString(value.attributeValue("default"))).split(";");
+				for(int n=0;n<elements.length;n++){
+					if(s.contains(elements[n])){
+						bReturn = true;
+						break;
+					}
+				}
+			}
+			else{
+				Iterator elements = value.elementIterator("element");
+				while(elements.hasNext()){
+					Element element = (Element)elements.next();
+					if(s.contains(element.getText())){
+						bReturn = true;
+						break;
+					}
+				}
+			}
+			return bReturn;
+		}
 		else{
 			return true;
 		}
@@ -2191,7 +2237,7 @@ public class TimeFilterReportGenerator {
 				parameters.add(fieldvalue);
 			}
 		}
-		else if(value.attributeValue("compare").equalsIgnoreCase("in")){
+		else if(value.attributeValue("compare").equalsIgnoreCase("in")||value.attributeValue("compare").equalsIgnoreCase("inlike")||value.attributeValue("compare").equalsIgnoreCase("incontains")){
 			sSelect+=" AND "+fieldname+" in ";
 			String values = "";
 			if(value.attributeValue("type").equalsIgnoreCase("config")){

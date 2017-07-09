@@ -145,7 +145,7 @@ public class DStats implements Comparable{
         Iterator iterator = outcomeStats.iterator();
         while(iterator.hasNext()){
             OutcomeStat outcomeStat = (OutcomeStat)iterator.next();
-            if(outcomeStat.outcome.equalsIgnoreCase("dead")){
+            if(outcomeStat.outcome.startsWith("dead")){
                 dead=outcomeStat.getDiagnosisCases();
                 break;
             }
