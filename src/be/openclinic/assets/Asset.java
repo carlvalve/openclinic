@@ -664,6 +664,97 @@ public class Asset extends OC_Object {
         
     	return sAssetCode;
     }
+    
+    public boolean existDefaultMaintenancePlans(){
+    	boolean bExist =false;
+    	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+    	PreparedStatement ps=null;
+    	ResultSet rs=null;
+    	try{
+            if(ScreenHelper.checkString(getNomenclature()).length()>0){
+            	ps=conn.prepareStatement("select * from oc_defaultmaintenanceplans where oc_maintenanceplan_nomenclature=?");
+            	ps.setString(1, getNomenclature());
+            	rs=ps.executeQuery();
+            	if(rs.next()){
+            		bExist=true;
+            	}
+            }
+    	}
+        catch(Exception e){
+        	e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                conn.close();
+            }
+            catch(SQLException se){
+            	se.printStackTrace();
+            }
+        }
+    	return bExist;
+    }
+    
+    public void setDefaultMaintenancePlans(){
+    	if(!existDefaultMaintenancePlans()){
+    		return;
+    	}
+    	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+    	PreparedStatement ps=null;
+    	ResultSet rs=null;
+    	try{
+            if(ScreenHelper.checkString(getNomenclature()).length()>0){
+                //Add the default maintenance plans to this new asset
+                ps=conn.prepareStatement("update oc_maintenanceplans set oc_maintenanceplan_enddate=? where oc_maintenanceplan_assetuid=? and oc_maintenanceplan_enddate is null");
+                ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));
+                ps.setString(2, getUid());
+                ps.execute();
+                ps.close();
+                ps=conn.prepareStatement("select * from oc_defaultmaintenanceplans where oc_maintenanceplan_nomenclature=?");
+                ps.setString(1, getNomenclature());
+                rs=ps.executeQuery();
+                while(rs.next()){
+                	MaintenancePlan plan = new MaintenancePlan();
+                	plan.setUid("-1");
+                	plan.setAssetUID(getUid());
+                	plan.setComment1(rs.getString("OC_MAINTENANCEPLAN_COMMENT1"));
+                	plan.setComment1(rs.getString("OC_MAINTENANCEPLAN_COMMENT2"));
+                	plan.setComment1(rs.getString("OC_MAINTENANCEPLAN_COMMENT3"));
+                	plan.setComment1(rs.getString("OC_MAINTENANCEPLAN_COMMENT4"));
+                	plan.setComment1(rs.getString("OC_MAINTENANCEPLAN_COMMENT5"));
+                	plan.setComment1(rs.getString("OC_MAINTENANCEPLAN_COMMENT6"));
+                	plan.setComment1(rs.getString("OC_MAINTENANCEPLAN_COMMENT7"));
+                	plan.setComment1(rs.getString("OC_MAINTENANCEPLAN_COMMENT8"));
+                	plan.setComment1(rs.getString("OC_MAINTENANCEPLAN_COMMENT9"));
+                	plan.setComment1(rs.getString("OC_MAINTENANCEPLAN_COMMENT10"));
+                	plan.setCreateDateTime(new java.util.Date());
+                	plan.setFrequency(rs.getString("OC_MAINTENANCEPLAN_FREQUENCY"));
+                	plan.setInstructions(rs.getString("OC_MAINTENANCEPLAN_INSTRUCTIONS"));
+                	plan.setName(rs.getString("OC_MAINTENANCEPLAN_NAME"));
+                	plan.setOperator(rs.getString("OC_MAINTENANCEPLAN_OPERATOR"));
+                	plan.setPlanManager(rs.getString("OC_MAINTENANCEPLAN_PLANMANAGER"));
+                	plan.setStartDate(new java.util.Date());
+                	plan.setType(rs.getString("OC_MAINTENANCEPLAN_TYPE"));
+                	plan.setVersion(1);
+                	plan.store(getUpdateUser());
+                }
+            }
+    	}
+        catch(Exception e){
+        	e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                conn.close();
+            }
+            catch(SQLException se){
+            	se.printStackTrace();
+            }
+        }
+    }
         
     //--- STORE -----------------------------------------------------------------------------------
     public boolean store(String userUid){
@@ -887,12 +978,11 @@ public class Asset extends OC_Object {
                 ps.setInt(psIdx,Integer.parseInt(getUid().substring(getUid().indexOf(".")+1)));
                 
                 ps.executeUpdate();
-            }            
+            }           
         }
         catch(Exception e){
             errorOccurred = true;
-            if(Debug.enabled) e.printStackTrace();
-            Debug.printProjectErr(e,Thread.currentThread().getStackTrace());
+            e.printStackTrace();
         }
         finally{
             try{
@@ -901,7 +991,7 @@ public class Asset extends OC_Object {
                 oc_conn.close();
             }
             catch(SQLException se){
-                Debug.printProjectErr(se,Thread.currentThread().getStackTrace());
+            	se.printStackTrace();
             }
         }
         

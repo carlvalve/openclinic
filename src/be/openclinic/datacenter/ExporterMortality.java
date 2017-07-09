@@ -78,7 +78,7 @@ public class ExporterMortality extends Exporter {
 								Hashtable deaths = new Hashtable();
 								Hashtable alldiagnoses = new Hashtable();
 								PreparedStatement ps = oc_conn.prepareStatement("select count(*) total, oc_diagnosis_code from oc_encounters a, oc_diagnoses_view b where a.oc_encounter_objectid=replace(b.oc_diagnosis_encounteruid,'"+MedwanQuery.getInstance().getConfigInt("serverId")+".','') and"+
-								" oc_encounter_enddate >=? and oc_encounter_enddate <? and oc_diagnosis_codetype='icd10' and oc_encounter_type='admission' and oc_encounter_outcome='dead' group by oc_diagnosis_code order by count(*) desc");
+								" oc_encounter_enddate >=? and oc_encounter_enddate <? and oc_diagnosis_codetype='icd10' and oc_encounter_type='admission' and oc_encounter_outcome like 'dead%' group by oc_diagnosis_code order by count(*) desc");
 								ps.setTimestamp(1,new java.sql.Timestamp(begin.getTime()));
 								ps.setTimestamp(2,new java.sql.Timestamp(end.getTime()));
 								ResultSet rs = ps.executeQuery();
@@ -98,7 +98,7 @@ public class ExporterMortality extends Exporter {
 								}
 								rs.close();
 								ps.close();
-								ps = oc_conn.prepareStatement("select count(*) total from oc_encounters where oc_encounter_enddate >=? and oc_encounter_enddate <? and oc_encounter_type='admission' and oc_encounter_outcome='dead'");
+								ps = oc_conn.prepareStatement("select count(*) total from oc_encounters where oc_encounter_enddate >=? and oc_encounter_enddate <? and oc_encounter_type='admission' and oc_encounter_outcome like 'dead%'");
 								ps.setTimestamp(1,new java.sql.Timestamp(begin.getTime()));
 								ps.setTimestamp(2,new java.sql.Timestamp(end.getTime()));
 								rs = ps.executeQuery();

@@ -1958,6 +1958,7 @@ public class Prestation extends OC_Object{
                 e.printStackTrace();
             }
         }
+        MedwanQuery.getInstance().getObjectCache().removeObject("prestation",serverId+"."+objectId);
     }
 
     //--- GET POPULAR PRESTATIONS -----------------------------------------------------------------

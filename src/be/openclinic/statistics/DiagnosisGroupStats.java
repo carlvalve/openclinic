@@ -87,7 +87,7 @@ public class DiagnosisGroupStats extends DStats{
                         "OC_ENCOUNTER_TYPE='"+this.type+"' and " +
                         "OC_ENCOUNTER_ENDDATE>=? and " +
                         "OC_ENCOUNTER_SERVICEUID in ("+children+") AND " +
-                        "OC_ENCOUNTER_OUTCOME='dead'";
+                        "OC_ENCOUNTER_OUTCOME like 'dead%'";
                 ps = loc_conn.prepareStatement(sQuery);
                 ps.setDate(1,new java.sql.Date(end.getTime()));
                 ps.setDate(2,new java.sql.Date(start.getTime()));
@@ -103,7 +103,7 @@ public class DiagnosisGroupStats extends DStats{
                         "OC_ENCOUNTER_BEGINDATE<=? and " +
                         "OC_ENCOUNTER_TYPE='"+this.type+"' and " +
                         "OC_ENCOUNTER_ENDDATE>=? and " +
-                        "OC_ENCOUNTER_OUTCOME='dead'";
+                        "OC_ENCOUNTER_OUTCOME like 'dead%'";
                 ps = loc_conn.prepareStatement(sQuery);
                 ps.setDate(1,new java.sql.Date(end.getTime()));
                 ps.setDate(2,new java.sql.Date(start.getTime()));

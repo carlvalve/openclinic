@@ -56,6 +56,10 @@ public class ObjectCache {
         return object;
     }
     
+    public Hashtable getObjects(){
+    	return objectsTable;
+    }
+    
     public StringBuffer getStatus(){
     	StringBuffer s = new StringBuffer();
     	s.append("Number of cached objects: "+timeTable.size()+"\n");

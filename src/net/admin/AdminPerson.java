@@ -3608,7 +3608,7 @@ public class AdminPerson extends OC_Object{
     	PreparedStatement ps = null;
         ResultSet rs = null;
 
-        String sSelect = "SELECT * from oc_encounters where oc_encounter_patientuid=? and oc_encounter_outcome='dead' order by oc_encounter_enddate desc";
+        String sSelect = "SELECT * from oc_encounters where oc_encounter_patientuid=? and oc_encounter_outcome like 'dead%' order by oc_encounter_enddate desc";
 
     	Connection ad_conn = MedwanQuery.getInstance().getOpenclinicConnection();
         try{

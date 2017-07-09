@@ -319,6 +319,9 @@ public class Pointer {
 			ps.execute();
 			ps.close();
 			conn.close();
+			if(key.startsWith("drugprice") && key.split("\\.").length>2){
+		        MedwanQuery.getInstance().getObjectCache().removeObject("product",key.split("\\.")[1]+"."+key.split("\\.")[2]);
+			}
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -337,6 +340,9 @@ public class Pointer {
 				ps.execute();
 				ps.close();
 				conn.close();
+				if(key.startsWith("drugprice") && key.split("\\.").length>2){
+			        MedwanQuery.getInstance().getObjectCache().removeObject("product",key.split("\\.")[1]+"."+key.split("\\.")[2]);
+				}
 			}
 			catch(Exception e){
 				e.printStackTrace();
@@ -362,6 +368,9 @@ public class Pointer {
 					ps.setTimestamp(3, new java.sql.Timestamp(updatetime.getTime()));
 					ps.execute();
 					ps.close();
+					if(key.startsWith("drugprice") && key.split("\\.").length>2){
+				        MedwanQuery.getInstance().getObjectCache().removeObject("product",key.split("\\.")[1]+"."+key.split("\\.")[2]);
+					}
 				}
 				else {
 					rs.close();
