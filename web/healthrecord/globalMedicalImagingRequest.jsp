@@ -202,8 +202,10 @@
                         <td class="admin2">
                             <input id="nothing_to_mention" type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_NOTHING_TO_MENTION" property="itemId"/>]>.value" value="medwan.common.true" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_NOTHING_TO_MENTION;value=medwan.common.true" property="value" outputString="checked"/>>
                         </td>
-                        <td class="admin"/>
-                        <td class="admin2"/>
+                        <td class="admin"><%=getTran(request,"Web.Occup",sPREFIX+"item_type_mir_abnormal",sWebLanguage)%></td>
+                        <td class="admin2">
+                            <input id="abnormal" type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_ABNORMAL" property="itemId"/>]>.value" value="medwan.common.true" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_ABNORMAL;value=medwan.common.true" property="value" outputString="checked"/>>
+                        </td>
                     </tr>
                     
                     <%-- RADIOLOGIST --%>
@@ -342,8 +344,10 @@
                         <td class="admin2">
                             <input id="nothing_to_mention2" type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_NOTHING_TO_MENTION2" property="itemId"/>]>.value" value="medwan.common.true" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_NOTHING_TO_MENTION2;value=medwan.common.true" property="value" outputString="checked"/>>
                         </td>
-                        <td class="admin"/>
-                        <td class="admin2"/>
+                        <td class="admin"><%=getTran(request,"Web.Occup",sPREFIX+"item_type_mir_abnormal",sWebLanguage)%></td>
+                        <td class="admin2">
+                            <input id="abnormal2" type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_ABNORMAL2" property="itemId"/>]>.value" value="medwan.common.true" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_ABNORMAL2;value=medwan.common.true" property="value" outputString="checked"/>>
+                        </td>
                     </tr>
                 <%
             }
@@ -442,8 +446,10 @@
                         <td class="admin2">
                             <input id="nothing_to_mention3" type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_NOTHING_TO_MENTION3" property="itemId"/>]>.value" value="medwan.common.true" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_NOTHING_TO_MENTION3;value=medwan.common.true" property="value" outputString="checked"/>>
                         </td>
-                        <td class="admin"/>
-                        <td class="admin2"/>
+                        <td class="admin"><%=getTran(request,"Web.Occup",sPREFIX+"item_type_mir_abnormal",sWebLanguage)%></td>
+                        <td class="admin2">
+                            <input id="abnormal3" type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_ABNORMAL3" property="itemId"/>]>.value" value="medwan.common.true" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_ABNORMAL3;value=medwan.common.true" property="value" outputString="checked"/>>
+                        </td>
                     </tr>
                 <%
             }
@@ -548,8 +554,10 @@
                         <td class="admin2">
                             <input id="nothing_to_mention4" type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_NOTHING_TO_MENTION4" property="itemId"/>]>.value" value="medwan.common.true" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_NOTHING_TO_MENTION4;value=medwan.common.true" property="value" outputString="checked"/>>
                         </td>
-                        <td class="admin"/>
-                        <td class="admin2"/>
+                        <td class="admin"><%=getTran(request,"Web.Occup",sPREFIX+"item_type_mir_abnormal",sWebLanguage)%></td>
+                        <td class="admin2">
+                            <input id="abnormal4" type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_ABNORMAL4" property="itemId"/>]>.value" value="medwan.common.true" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_ABNORMAL4;value=medwan.common.true" property="value" outputString="checked"/>>
+                        </td>
                     </tr>
                 <%
             }
@@ -654,8 +662,10 @@
                         <td class="admin2">
                             <input id="nothing_to_mention5" type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_NOTHING_TO_MENTION5" property="itemId"/>]>.value" value="medwan.common.true" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_NOTHING_TO_MENTION5;value=medwan.common.true" property="value" outputString="checked"/>>
                         </td>
-                        <td class="admin"/>
-                        <td class="admin2"/>
+                        <td class="admin"><%=getTran(request,"Web.Occup",sPREFIX+"item_type_mir_abnormal",sWebLanguage)%></td>
+                        <td class="admin2">
+                            <input id="abnormal5" type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_ABNORMAL5" property="itemId"/>]>.value" value="medwan.common.true" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MIR2_ABNORMAL5;value=medwan.common.true" property="value" outputString="checked"/>>
+                        </td>
                     </tr>
                 <%
             }

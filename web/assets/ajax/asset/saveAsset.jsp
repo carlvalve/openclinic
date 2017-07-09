@@ -396,6 +396,10 @@
     boolean errorOccurred = asset.store(activeUser.userid);
     
     if(!errorOccurred){
+    	//initialize maintenance plans if new asset
+    	if(checkString(request.getParameter("newasset")).equals("1")){
+    		asset.setDefaultMaintenancePlans();
+    	}
     	//now remove unlinked components
    		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
 		PreparedStatement ps = conn.prepareStatement("delete from oc_assetcomponents where oc_component_assetuid=? and oc_component_nomenclature not in "+"('"+asset.getComment15().replaceAll(";", "','")+" ')");

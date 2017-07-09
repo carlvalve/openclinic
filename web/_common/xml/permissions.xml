@@ -94,6 +94,7 @@
         <permission type="examination" id="1115">occup.ccbrt.physioregistry</permission>
         <permission type="examination" id="1116">occup.patientcreditrequest</permission>
         <permission type="examination" id="1117">occup.cnts.bloodgift</permission>
+        <permission type="examination" id="1144">occup.cnts.bloodrequest</permission>
         <permission type="examination" id="1118">occup.cntslab</permission>
         <permission type="examination" id="1119">occup.ccbrt.vvfrecord</permission>
         <permission type="examination" id="1120">occup.spectacleprescription</permission>
@@ -114,6 +115,7 @@
         <permission type="examination" id="1135">occup.ccbrt.vvfsurgery</permission>
         <permission type="examination" id="1136">occup.kirapreop</permission>
         <permission type="examination" id="1137">occup.kiraneuropsy</permission>
+        <permission type="examination" id="1143">mspls.registry.deliveries</permission>
     </application>
     <application type="Web" id="newexaminations">
         <permission type="web" id="globalexaminations">examinations.global</permission>

@@ -10,7 +10,13 @@
                 be.openclinic.knowledge.*"%>
 <%@include file="/includes/validateUser.jsp"%>
 <%@page errorPage="/includes/error.jsp"%>
+<%
+	String disease = checkString(request.getParameter("disease"));
+%>
 <table width='100%'>
+	<tr class='admin'>
+		<td colspan='3'><center><%=disease.toUpperCase() %></center></td>
+	</tr>
 	<tr>
 		<th class='admin'><%=getTran(request,"web","finding",sWebLanguage) %></th>
 		<th class='admin'><%=getTran(request,"web","positive",sWebLanguage) %></th>

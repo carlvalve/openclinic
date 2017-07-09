@@ -158,7 +158,7 @@
                                 <td>
                                 <%
                                     sEncounterOutcome = checkString(encounter.getOutcome());
-                                    if(sEncounterOutcome.equalsIgnoreCase("dead")){
+                                    if(sEncounterOutcome.startsWith("dead")){
                                         %><img src="<c:url value='/_img/themes/default/check.gif'/>"/><%
                                     }
                                 %>

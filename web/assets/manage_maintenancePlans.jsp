@@ -342,6 +342,14 @@
 		                <input class="button" type="button" name="buttonOperations" id="buttonOperations" value="<%=getTranNoLink("web","operations",sWebLanguage)%>" onclick="showOperations();">&nbsp;
 		                <input class="button" type="button" name="buttonList" id="buttonList" value="<%=getTranNoLink("web","list",sWebLanguage)%>" onclick="showList();">&nbsp;
 		                <input class="button" type="button" name="buttonDocuments" id="buttonDocuments" value="<%=getTranNoLink("web","documents",sWebLanguage)%>" onclick="printWordDocuments();">&nbsp;
+						<%
+							if(activeUser.getAccessRight("assets.defaultmaintenanceplans.select")){
+						%>
+		                <input class="button" type="button" name="buttonAddDefault" id="buttonAddDefault" value="<%=getTranNoLink("web","adddefault",sWebLanguage)%>" onclick="addDefault();">&nbsp;
+		                <input class="button" type="button" name="buttonViewDefault" id="buttonViewDefault" value="<%=getTranNoLink("web","viewdefault",sWebLanguage)%>" onclick="viewDefault();">&nbsp;
+						<%
+							}
+						%>
 		            </td>
 		        </tr>
 		    </table>
@@ -384,6 +392,53 @@
 		      parameters: "objectid="+objectid,
 		      onSuccess: function(resp){
 	        	  loadDocuments();
+		      },
+		    });
+		}
+	}
+	
+	function viewDefault(){
+  		openPopup("/assets/viewDefaultManagementPlans.jsp&ts=<%=getTs()%>&PopupHeight=200&PopupWidth=500&assetUID="+EditForm.assetUID.value);
+	}
+	
+	function addDefault(){
+		if(EditForm.assetUID.value==''){
+			alert('<%=getTranNoLink("web","assetnotspecified",sWebLanguage)%>');
+		}
+		else if(window.confirm('<%=getTranNoLink("web","areyousure",sWebLanguage)%>')){
+	        var sParams = "EditPlanUID="+EditForm.EditPlanUID.value+
+            "&name="+EditForm.name.value+
+            "&assetUID="+EditForm.assetUID.value+
+            "&startDate="+EditForm.startDate.value+
+            "&endDate="+EditForm.endDate.value+
+            "&frequency="+EditForm.frequency.value+
+            "&operator="+EditForm.operator.value+
+            "&planManager="+EditForm.planManager.value+
+            "&type="+EditForm.type.value+
+            "&comment1="+EditForm.comment1.value+
+            "&comment2="+EditForm.comment2.value+
+            "&comment3="+EditForm.comment3.value+
+            "&comment4="+EditForm.comment4.value+
+            "&comment5="+EditForm.comment5.value+
+            /*
+            "&comment6="+EditForm.comment6.value+
+            "&comment7="+EditForm.comment7.value+
+            "&comment8="+EditForm.comment8.value+
+            "&comment9="+EditForm.comment9.value+
+            "&comment10="+EditForm.comment10.value+
+            */
+            "&instructions="+EditForm.instructions.value;
+		    var url = "<c:url value='/assets/ajax/maintenancePlan/addDefault.jsp'/>?ts="+new Date().getTime();
+		    new Ajax.Request(url,{
+		      method: "POST",
+		      parameters: sParams,
+		      onSuccess: function(resp){
+		    	  if(resp.responseText.indexOf("OK-200")>0){
+		        	  viewDefault();
+		    	  }
+		    	  else if(resp.responseText.indexOf("NOK-300")>0){
+		    		  alert('<%=getTranNoLink("web","assetnotspecified",sWebLanguage)%>');
+		    	  }
 		      },
 		    });
 		}

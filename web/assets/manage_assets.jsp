@@ -222,11 +222,13 @@
 </script>
 
 <%
+	boolean bNewAsset = false;
 	Asset asset = null;
 	if(sAction.equalsIgnoreCase("new")){
 		asset = new Asset();
 		asset.setUid("-1");
 		asset.store(activeUser.userid);
+		bNewAsset=true;
 	}
 	else if(sAction.equalsIgnoreCase("edit")){
 		asset=Asset.get(sEditAssetUID);
@@ -278,7 +280,7 @@
 		        <%-- GMDNCODE --%>
 	            <td class="admin" ><%=getTran(request,"web","nomenclature",sWebLanguage)%> *</td>
 	            <td class="admin2" colspan="3">
-	                <input class="greytext" type="text" readonly size="15" name="FindNomenclatureCode" id="FindNomenclatureCode" value="<%=checkString(asset.getNomenclature())%>">&nbsp;
+	                <input class="greytext" type="text" readonly size="15" name="FindNomenclatureCode" id="FindNomenclatureCode" value="<%=checkString(asset.getNomenclature())%>" onchange="checkDefaultMaintenancePlans();">&nbsp;
 	                <input type="text" class="text" readonly id="nomenclature" name="nomenclature" size="60" maxLength="110" value="<%=getTranNoLink("admin.nomenclature.asset",checkString(asset.getNomenclature()),sWebLanguage)%>">
 	                <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchNomenclature('FindNomenclatureCode','nomenclature');">
 	                <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="EditForm.FindNomenclatureCode.value='';EditForm.nomenclature.value='';">
@@ -478,11 +480,11 @@
 	        </tr>        
 	        
 	        <tr>
-	            <td class="admin"><%=getTran(request,"web.assets","productiodate",sWebLanguage)%>*&nbsp;</td>
+	            <td class="admin"><%=getTran(request,"web.assets","productiodate",sWebLanguage)%>&nbsp;</td>
 	            <td class="admin2" nowrap>
 	                <%=writeDateField("comment11","EditForm",checkString(asset.getComment11()),sWebLanguage)%>        
 	            </td>                        
-	            <td class="admin"><%=getTran(request,"web.assets","deliverydate",sWebLanguage)%>&nbsp;</td>
+	            <td class="admin"><%=getTran(request,"web.assets","deliverydate",sWebLanguage)%>*&nbsp;</td>
 	            <td class="admin2" nowrap>
 	                <%=writeDateField("comment12","EditForm",checkString(asset.getComment12()),sWebLanguage)%>        
 	            </td>                        
@@ -856,6 +858,7 @@
 	                <input class="button" type="button" name="buttonMaintenance" id="buttonMaintenance" value="<%=getTranNoLink("web","maintenanceplans",sWebLanguage)%>" onclick="listMaintenancePlans();">&nbsp;
 	                <input class="button" type="button" name="buttonOperations" id="buttonOperations" value="<%=getTranNoLink("web","operations",sWebLanguage)%>" onclick="listMaintenanceOperations();">&nbsp;
 	                <input class="button" type="button" name="buttonDocuments" id="buttonDocuments" value="<%=getTranNoLink("web","documents",sWebLanguage)%>" onclick="printWordDocuments();">&nbsp;
+	                <input style='display: none' class="button" type="button" name="buttonInitializeMaintenanceplans" id="buttonInitializeMaintenanceplans" value="<%=getTranNoLink("web","resetmaintenanceplans",sWebLanguage)%>" onclick="resetMaintenancePlans();">&nbsp;
 	            </td>
 	        </tr>
 	    </table>
@@ -877,6 +880,23 @@
           out.print("document.getElementById('residualValueHistoryDiv').style.display = 'none';");
       }
   %>
+	function resetMaintenancePlans(){
+		if(document.getElementById("nomenclature").value==''){
+			alert('<%=getTranNoLink("web","assetnotspecified",sWebLanguage)%>');
+		}
+		else if(window.confirm('<%=getTranNoLink("web","areyousure",sWebLanguage)%>')){
+		    var url = "<c:url value='/assets/ajax/asset/setDefaultMaintenancePlans.jsp'/>?ts="+new Date().getTime();
+		    new Ajax.Request(url,{
+		    	method: "POST",
+		    	parameters: "assetUID="+document.getElementById("EditAssetUID").value,
+		    	onSuccess: function(resp){
+					window.location.reload();
+		    	},
+		    	onFailure: function(resp){
+		    	}
+		  	});
+		}
+	}
   function listMaintenancePlans(){
 	  window.location.href='<c:url value="/main.do?Page=assets/manage_maintenancePlans.jsp&assetUID="/>'+document.getElementById("EditAssetUID").value+"&assetCode="+document.getElementById("code").value;
   }
@@ -984,6 +1004,7 @@
         document.getElementById("loanDocuments").value = sLD;
 
         var sParams = "EditAssetUID="+EditForm.EditAssetUID.value+
+        			  <%=bNewAsset?"\"&newasset=1\"+":""%>
 			          "&code="+document.getElementById("code").value+
 			          "&serviceuid="+document.getElementById("serviceuid").value+
 			          "&nomenclature="+document.getElementById("FindNomenclatureCode").value+
@@ -1063,8 +1084,8 @@
   
   <%-- REQUIRED FIELDS PROVIDED --%>
   function requiredFieldsProvided(){
-	  if(document.getElementById("comment11").value.length == 0 ){
-		  document.getElementById("comment11").focus();
+	  if(document.getElementById("comment12").value.length == 0 ){
+		  document.getElementById("comment12").focus();
 		  return false;
 	  }
 	  else if(document.getElementById("code").value.length == 0 ){
@@ -1108,6 +1129,24 @@
     });
   }
 
+  function checkDefaultMaintenancePlans(){
+    var url = "<c:url value='/assets/ajax/asset/checkDefaultMaintenancePlans.jsp'/>?ts="+new Date().getTime();
+    new Ajax.Request(url,{
+      method: "POST",
+      parameters: "nomenclature="+document.getElementById("FindNomenclatureCode").value,
+      onSuccess: function(resp){
+    	  if(resp.responseText.indexOf("OK-200")>-1){
+    		  document.getElementById("buttonInitializeMaintenanceplans").style.display="";
+    	  }
+    	  else{
+    		  document.getElementById("buttonInitializeMaintenanceplans").style.display="none";
+    	  }
+      },
+      onFailure: function(resp){
+      }
+    });
+  }
+  
   function deleteComponent(id){
       if(yesnoDeleteDialog()){
 		  document.getElementById("comment15").value=document.getElementById("comment15").value.replace(id,'');
@@ -2603,5 +2642,6 @@
   }
   
   resizeAllTextareas(8);
+  checkDefaultMaintenancePlans();
 </script>
 <%=sJSBUTTONS%>

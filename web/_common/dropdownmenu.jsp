@@ -262,7 +262,7 @@
                             document = xmlReader.read(new StringReader(sMenu));
                         }
                         else{
-                            String sMenuXML = MedwanQuery.getInstance().getConfigString("MenuXMLFile");
+                            String sMenuXML = MedwanQuery.getInstance().getConfigString("MenuXMLFile","menu.xml");
                             String sMenuXMLUrl = "http://"+request.getServerName()+request.getRequestURI().replaceAll(request.getServletPath(),"")+"/"+sAPPDIR+"/_common/xml/"+sMenuXML+"&ts="+getTs();
 
                             // Check if menu file exists, else use file at templateSource location.
@@ -448,7 +448,7 @@
 	  }
 	    
   function doPanorama(){
-	    openPopup("/ikirezi/panorama.jsp&ts=<%=getTs()%>",800,550).focus();
+	    openPopup("/ikirezi/panorama.jsp&ts=<%=getTs()%>",800,500).focus();
 	  }
 	    
   function doAssistant(){

@@ -28,9 +28,9 @@ try{
 				</td>
 			</tr>
 			<!-- Make a list of all valid complaints from the patient record and their onset dates -->
-			<tr class='admin'><td colspan='2'><%=getTran(request,"ikirezi","principal.complaint",sWebLanguage) %></td></tr>
+			<tr class='admin'><td colspan='2'><%=getTran(request,"ikirezi","principal.complaints",sWebLanguage) %></td></tr>
 			<tr>
-				<td class='admin'><%= getTran(request,"ikirezi","reasonsforencounter",sWebLanguage)%></td>
+				<td class='admin'><%= getTran(request,"ikirezi","firstcomplaint",sWebLanguage)%></td>
 				<td class='admin2'>
 					<select class='text' name='complaint1a' id='complaint1a' onchange='validateselects();'>
 						<option/>
@@ -73,7 +73,7 @@ try{
 				</td>
 			</tr>
 			<tr>
-				<td class='admin'><%= getTran(request,"ikirezi","othercomplaints",sWebLanguage)%></td>
+				<td class='admin'><%= getTran(request,"ikirezi","secondcomplaint",sWebLanguage)%></td>
 				<td class='admin2'>
 					<select class='text' name='complaint1b' id='complaint1b' onchange='validateselects();'>
 						<option/>
@@ -146,12 +146,12 @@ try{
 		vSigns.add(request.getParameter("diseaseProgress"));
 		
 		//3. Get main complaint
-		if(request.getParameter("complaint1a")!=null){
+		if(checkString(request.getParameter("complaint1a")).length()>0){
 			vSigns.add(((String)request.getParameter("complaint1a")).split("\\.")[0]);
 		}
 		
 		//4. Get secondary complaint
-		if(request.getParameter("complaint1b")!=null){
+		if(checkString(request.getParameter("complaint1b")).length()>0){
 			vSigns.add(((String)request.getParameter("complaint1b")).split("\\.")[0]);
 		}
 		else{
@@ -239,22 +239,31 @@ try{
 		vSigns.add(request.getParameter("diseaseProgress"));
 		
 		//3. Get main complaint
-		if(request.getParameter("complaint1a")!=null){
+		if(checkString(request.getParameter("complaint1a")).length()>0){
 			vSigns.add(((String)request.getParameter("complaint1a")).split("\\.")[0]);
+			System.out.println("complaint 1 = "+((String)request.getParameter("complaint1a")).split("\\.")[0]);
 		}
-		else{
+		else if(checkString(request.getParameter("complaint1b")).length()>0){
 			vSigns.add(((String)request.getParameter("complaint1b")).split("\\.")[0]);
-		}
-		
-		//4. Get secondary complaint
-		if(request.getParameter("complaint2a")!=null){
-			vSigns.add(((String)request.getParameter("complaint2a")).split("\\.")[0]);
-		}
-		else if(request.getParameter("complaint2b")!=null){
-			vSigns.add(((String)request.getParameter("complaint2b")).split("\\.")[0]);
+			System.out.println("complaint 1 = "+((String)request.getParameter("complaint1b")).split("\\.")[0]);
 		}
 		else{
 			vSigns.add("0");
+			System.out.println("complaint 1 = 0");
+		}
+		
+		//4. Get secondary complaint
+		if(checkString(request.getParameter("complaint1a")).length()==0){
+			vSigns.add("0");
+			System.out.println("complaint 2 = 0");
+		}
+		else if(checkString(request.getParameter("complaint1b")).length()==0){
+			vSigns.add("0");
+			System.out.println("complaint 2 = 0");
+		}
+		else{
+			vSigns.add(((String)request.getParameter("complaint1b")).split("\\.")[0]);
+			System.out.println("complaint 2 = "+((String)request.getParameter("complaint1b")).split("\\.")[0]);
 		}
 		
 		String sAllSigns = "";
@@ -268,7 +277,7 @@ try{
 		HashSet diseases = new HashSet();
 		System.out.println("7.0:"+vSigns);
 		Vector resp = new Vector();
-			resp = Ikirezi.getDiagnoses(vSigns,sWebLanguage);
+		resp = Ikirezi.getDiagnoses(vSigns,sWebLanguage);
 		out.print("<script>");
 		out.println(" var signs=[");
 		System.out.println("7.1");
@@ -297,7 +306,7 @@ try{
 		System.out.println("7:"+diseases);
 
 	%>
-	
+	<input type='button' class='button' name='back' value='<%=getTranNoLink("web","back",sWebLanguage) %>' style='position: absolute;top: 1%;left: 46%' onclick='window.history.back();'/>
 	<canvas id="ikirezi" width="800" height="600"></canvas>
 	<script>
 		var POINTS = <%=diseases.size()%>;
@@ -366,7 +375,7 @@ try{
 			       	}
 			       	rectangle.rect(centerX-(boxWidth+extraWidth)/2,centerY-boxHeight/2,boxWidth+extraWidth,boxHeight+extraHeight);
 			       	if(ctx.isPointInPath(rectangle,event.clientX,event.clientY)){
-			       		showPanoramaTips(disease[i].split(";")[0]);
+			       		showPanoramaTips(disease[i].split(";")[0],disease[i].split(";")[1]);
 					}
 			    }
 			});
@@ -476,7 +485,7 @@ try{
 	          });
 	        };
 	
-	        function showPanoramaTips(diseaseid){
+	        function showPanoramaTips(diseaseid,diseasename){
 	        	//Concatenate the signs to show so they can be passed to the Modal box
 	        	var s = "";
 	        	for(n=0;n<signs.length;n++){
@@ -484,7 +493,7 @@ try{
 	        			s=s+signs[n]+"$";
 	        		}
 	        	}
-	    	    var url = "<c:url value="/ikirezi/showPanoramaTips.jsp"/>?signs="+s+"&ts="+new Date().getTime();
+	    	    var url = "<c:url value="/ikirezi/showPanoramaTips.jsp"/>?signs="+s+"&disease="+diseasename+"&ts="+new Date().getTime();
 	    	    Modalbox.show(url,{title:'<%=getTranNoLink("ikirezi","panorama",sWebLanguage)%>',width:400, height:500});
 	   	  	}
 	

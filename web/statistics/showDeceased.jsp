@@ -38,7 +38,7 @@
                         " from oc_encounters a, adminview b"+
                         "  where month(a.oc_encounter_enddate)=?"+
                         "   and year(a.oc_encounter_enddate)=?"+
-                        "   and a.oc_encounter_outcome = 'dead'"+
+                        "   and a.oc_encounter_outcome like 'dead%'"+
                         "   and a.oc_encounter_type = 'admission'"+
                         "   and a.oc_encounter_patientuid = b.personid"+
                         " order by oc_encounter_enddate";

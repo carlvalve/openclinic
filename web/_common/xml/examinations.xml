@@ -1501,4 +1501,18 @@
     <fr>Consultation kinésithérapie CNRKR (modèle OKIDO)</fr>  
     <en>CNRKR consultation physiotherapy (OKIDO model) diseases</en> 
   </Row>  
+  <Row> 
+    <id>1143</id>  
+    <class>mspls</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_DELIVERIES</transactiontype>  
+    <fr>MSPLS - Registre des accouchements</fr>  
+    <en>MSPLS - Deliveries register</en> 
+  </Row>  
+  <Row> 
+    <id>1144</id>  
+    <class>cnts</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CNTS_BLOODREQUEST</transactiontype>  
+    <fr>Demande de sang</fr>  
+    <en>Blood request</en> 
+  </Row>  
 </Examinations>
