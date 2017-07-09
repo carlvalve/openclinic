@@ -8,27 +8,6 @@
 <%=sJSSORTTABLE%>
 
 <%!
-	static Hashtable pumps = new Hashtable(),
-	                 pumpcounts = new Hashtable();
-
-public double getLastYearsAveragePrice(Product product){
-	double price=0;
-	if(pumps.get(product.getUid())!=null && pumpcounts.get(product.getUid())!=null){
-		price=(Double)pumps.get(product.getUid())/(Double)pumpcounts.get(product.getUid());
-	}
-	return price;
-}
-
-	public double getLastYearsAveragePrice(String productuid){
-		double price = 0;
-		if(pumps.get(productuid)!=null && pumpcounts.get(productuid)!=null){
-			price=(Double)pumps.get(productuid)/(Double)pumpcounts.get(productuid);
-		}
-		return price;
-	}
-%>
-
-<%!
     //--- OBJECTS TO HTML (layout 1) --------------------------------------------------------------
     private StringBuffer objectsToHtml1(Vector objects, String sWebLanguage, String userid){
         StringBuffer html = new StringBuffer();
@@ -157,13 +136,11 @@ public double getLastYearsAveragePrice(Product product){
             java.util.Date tmpDate = productStock.getBegin();
             if(tmpDate!=null) sStockBegin = ScreenHelper.formatDate(tmpDate);
 
-            //double nPUMP = getLastYearsAveragePrice(productStock.getProductUid());
-            double nPUMP = productStock.getProduct().getLastYearsAveragePrice();
+            double nPUMP = productStock.getProduct().getLastYearsAveragePrice(ScreenHelper.endOfDay(new java.util.Date()));
             int commandLevel = 0;
             if(openquantities.get(productStock.getUid())!=null){
             	commandLevel=(Integer)openquantities.get(productStock.getUid());
             }
-
             // alternate row-style
             if(sClass.equals("")) sClass = "1";
             else                  sClass = "";
@@ -244,7 +221,6 @@ public double getLastYearsAveragePrice(Product product){
             }
 
             html.append("</td>");
-
             html.append("</tr>");
         }
 
@@ -315,7 +291,7 @@ public double getLastYearsAveragePrice(Product product){
 	            html.append("<td><input type='hidden' id='theoretical."+sStockUid+"."+batch.getUid()+"' name='theoretical."+sStockUid+"."+batch.getUid()+"' value='"+batch.getLevel()+"'>"+batch.getLevel()+"</td>");
 	            html.append("<td><input size='8' type='text' class='"+(Double.parseDouble(difference)==0?"text":"red")+"' id='physical."+sStockUid+"."+batch.getUid()+"' name='physical."+sStockUid+"."+batch.getUid()+"' value='"+physicallevel+"' onkeyup='calculateDifference(this)'></td>");
 	            html.append("<td><input size='8' type='text' class='readonly' readonly id='difference."+sStockUid+"."+batch.getUid()+"' name='difference."+sStockUid+"."+batch.getUid()+"' value='"+difference+"'></td>");
-	            double lp=productStock.getProduct().getLooseLastYearsAveragePrice(new java.util.Date());
+	            double lp=productStock.getProduct().getLooseLastYearsAveragePrice(ScreenHelper.endOfDay(new java.util.Date()));
 	            if(lp==0){
 	            	html.append("<td><input size='8' type='text' class='text' id='pump."+sStockUid+"."+batch.getUid()+"' name='pump."+sStockUid+"."+batch.getUid()+"' value=''>"+" "+MedwanQuery.getInstance().getConfigString("currency","EUR")+"</td>");
 	            }
@@ -355,7 +331,7 @@ public double getLastYearsAveragePrice(Product product){
 	            html.append("<td><input type='hidden' id='theoretical."+sStockUid+"' name='theoretical."+sStockUid+"' value='"+stocklevel+"'>"+stocklevel+"</td>");
 	            html.append("<td><input size='8' type='text' class='"+(Double.parseDouble(difference)==0?"text":"red")+"' id='physical."+sStockUid+"' name='physical."+sStockUid+"' value='"+physicallevel+"' onkeyup='calculateDifference(this)'></td>");
 	            html.append("<td><input size='8' type='text' class='readonly' readonly id='difference."+sStockUid+"' name='difference."+sStockUid+"' value='"+difference+"'></td>");
-	            double lp=productStock.getProduct().getLooseLastYearsAveragePrice(new java.util.Date());
+	            double lp=productStock.getProduct().getLooseLastYearsAveragePrice(ScreenHelper.endOfDay(new java.util.Date()));
 	            if(lp==0){
 		            html.append("<td><input size='8' type='text' class='text' id='pump."+sStockUid+"' name='pump."+sStockUid+"' value=''>"+" "+MedwanQuery.getInstance().getConfigString("currency","EUR")+"</td>");
 	            }
@@ -373,43 +349,7 @@ public double getLastYearsAveragePrice(Product product){
 <%
 	long day = 24*3600*1000;
 	long year = 365*day;
-	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
-	PreparedStatement ps = null;
-	try{
-		ps=conn.prepareStatement("select OC_POINTER_KEY,OC_POINTER_VALUE from OC_POINTERS"+
-	                             " where OC_POINTER_KEY like 'drugprice.%'"+
-				                 "  and OC_POINTER_UPDATETIME between ? and ?"+
-	                             " order by OC_POINTER_VALUE");
-		ps.setTimestamp(1,new java.sql.Timestamp(new java.util.Date(new java.util.Date().getTime()-year).getTime()));
-		ps.setTimestamp(2,new java.sql.Timestamp(new java.util.Date().getTime()));
-		ResultSet rs = ps.executeQuery();
-		while(rs.next()){
-			String key = rs.getString("OC_POINTER_KEY");
-			String value= rs.getString("OC_POINTER_VALUE");
-			key = "1."+key.split("\\.")[2];
-			double totalprice = Double.parseDouble(value.split(";")[0])*Double.parseDouble(value.split(";")[1]);
-			double count=Double.parseDouble(value.split(";")[0]);
-			if(pumps.get(key)==null){
-				pumps.put(key,totalprice);
-			}
-			else {
-				pumps.put(key,(Double)pumps.get(key)+totalprice);
-			}
-			if(pumpcounts.get(key)==null){
-				pumpcounts.put(key,count);
-			}
-			else {
-				pumpcounts.put(key,(Double)pumpcounts.get(key)+count);
-			}
-		}
-		rs.close();
-		ps.close();
-		conn.close();
-	}
-	catch(Exception e){
-		e.printStackTrace();
-	}
-  
+
     String sAction = checkString(request.getParameter("Action"));
 
     // retreive form data

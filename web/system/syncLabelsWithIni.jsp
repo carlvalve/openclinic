@@ -466,6 +466,14 @@
                             invalidLabelKeyChars = " /:"; // default
                         }
 
+                        HashSet iniLabels = new HashSet();
+                        Enumeration keys = iniProps.keys();
+                        String iniKey;
+
+                        while (keys.hasMoreElements()) {
+                            iniKey = (String) keys.nextElement();
+                            iniLabels.add(iniKey);
+                        }
                         while(rs.next()){
                             labelType      = checkString(rs.getString("OC_LABEL_TYPE"));
                             labelID        = checkString(rs.getString("OC_LABEL_ID"));
@@ -473,112 +481,110 @@
                             labelUniqueKey = (labelType+"$"+labelID+"$"+labelLang).toLowerCase();
 
                             // only display labels if not in ini, so check existence in ini.
-                            if(excludedLabelTypes.indexOf("*"+labelType.toLowerCase()+"*")<0 && !containsKey(iniProps,labelUniqueKey) && labelID.indexOf(" ")<0){
+                            if(excludedLabelTypes.indexOf("*"+labelType.toLowerCase()+"*")<0 && !iniLabels.contains(labelUniqueKey) && labelID.indexOf(" ")<0){
                                 // display labels, except excluded labeltypes
                                 checked = "checked";
 
-                                if(excludedLabelTypes.indexOf("*"+labelType.toLowerCase()+"*") < 0){
-                                    labelValue = checkString(rs.getString("OC_LABEL_VALUE"));
-                                    if(labelValue.length()==0) labelValue = "<font color='red'>[empty]</font>";
+                                labelValue = checkString(rs.getString("OC_LABEL_VALUE"));
+                                if(labelValue.length()==0) labelValue = "<font color='red'>[empty]</font>";
 
-                                    updateTime = ScreenHelper.getSQLDate(rs.getDate("OC_LABEL_UPDATETIME"));
-                                    labelCount++;
+                                updateTime = ScreenHelper.getSQLDate(rs.getDate("OC_LABEL_UPDATETIME"));
+                                labelCount++;
 
-                                    // alternate row-class
-                                    sClass = (labelCount%2==0?"":"1");
+                                // alternate row-class
+                                sClass = (labelCount%2==0?"":"1");
 
-                                    // red background for invalid key-names
-                                    for(int i=0; i<invalidLabelKeyChars.length(); i++){
-                                        if(labelUniqueKey.indexOf(invalidLabelKeyChars.charAt(i)) > -1){
-                                        	sClass = "red\" style='background:#ff6666';";
-                                            invalidLabelCount++;
-                                            checked = "";
-                                            break;
-                                        }
-                                    }
-
-                                    %>
-                                        <tr class="list<%=sClass%>">
-                                            <td>
-                                                <input type="checkbox" id="cb<%=labelCount%>" name="checkbox$<%=labelUniqueKey%>" <%=checked%>>
-                                            </td>
-                                            <td onclick="setCB('cb<%=labelCount%>');">
-                                                DATE&nbsp;<br>
-                                                TYPE&nbsp;<br>
-                                                ID&nbsp;<br>
-                                                VALUE&nbsp;
-                                            </td>
-                                            <td onclick="setCB('cb<%=labelCount%>');">
-                                                <%=updateTime%><br>
-                                                <%=labelType%><br>
-                                                <b><%=labelID%></b><br>
-                                                <%=labelValue%>
-                                            </td>
-                                        </tr>
-                                    <%
-                                                }
-                                            }
-                                        }
-
-                                        // close db-stuff
-                                        if (rs != null) rs.close();
-                                        if (ps != null) ps.close();
-                                        loc_conn.close();
-                                    }
-                                    //*** In ini, not in DB (INI to DB) *******************************************
-                                    else if (dataDirection.equals("iniToDb")) {
-                                        String sLabelType, sLabelID, sLabelLang, sLabelValue, sLabelUniqueKey;
-                                        labelCount = 0;
-                                        String style;
-
-                                        Hashtable labels = MedwanQuery.getInstance().getLabels();
-                                        Enumeration e = iniProps.propertyNames();
-
-                                        select = "SELECT 1 FROM OC_LABELS WHERE OC_LABEL_TYPE=? AND OC_LABEL_ID=? AND OC_LABEL_LANGUAGE=?";
-                                        loc_conn = MedwanQuery.getInstance().getLongOpenclinicConnection();
-                                        ps = loc_conn.prepareStatement(select);
-
-                                        while (e.hasMoreElements()) {
-                                            sLabelUniqueKey = (String) e.nextElement();
-
-                                            if (sLabelUniqueKey.indexOf("$") > 0) {
-                                                String[] identifiers = sLabelUniqueKey.split("\\$");
-                                                sLabelType = identifiers[0].toLowerCase();
-                                                sLabelID = identifiers[1].toLowerCase();
-                                                sLabelLang = identifiers[2].toLowerCase();
-
-                                                // only check existence in DB of those labels that do not occur in the label hash
-                                                // check at 3 levels of hashes
-                                                if (excludedLabelTypes.indexOf("*"+sLabelType.toLowerCase()+"*")<0 && (labels.get(sLabelLang) == null || ((Hashtable) labels.get(sLabelLang)).get(sLabelType) == null ||
-                                                        ((Hashtable) ((Hashtable) labels.get(sLabelLang)).get(sLabelType)).get(sLabelID) == null)) {
-                                                    // only list record if not in DB, so check existence in DB
-                                                    ps.setString(1, sLabelType);
-                                                    ps.setString(2, sLabelID);
-                                                    ps.setString(3, sLabelLang);
-                                                    rs = ps.executeQuery();
-
-                                                    if (!rs.next()) {
-                                                        sLabelValue = iniProps.getProperty(sLabelUniqueKey);
-                                                        labelCount++;
-                                                        style = (labelCount % 2 == 0 ? "1" : "");
-
-                                        %>
-                                            <tr class="list<%=style%>" >
-                                                <td><input type="checkbox" id="cb<%=labelCount%>" name="checkbox$<%=sLabelUniqueKey%>"></td>
-                                                <td onclick="setCB('cb<%=labelCount%>');">
-                                                    TYPE&nbsp;<br>
-                                                    ID&nbsp;<br>
-                                                    VALUE&nbsp;
-                                                </td>
-                                                <td onclick="setCB('cb<%=labelCount%>');">
-                                                    <%=sLabelType%><br>
-                                                    <b><%=sLabelID%></b><br>
-                                                    <%=sLabelValue%>
-                                                </td>
-                                            </tr>
-                                        <%
+                                // red background for invalid key-names
+                                for(int i=0; i<invalidLabelKeyChars.length(); i++){
+                                    if(labelUniqueKey.indexOf(invalidLabelKeyChars.charAt(i)) > -1){
+                                    	sClass = "red\" style='background:#ff6666';";
+                                        invalidLabelCount++;
+                                        checked = "";
+                                        break;
                                     }
                                 }
+
+                                %>
+                                    <tr class="list<%=sClass%>">
+                                        <td>
+                                            <input type="checkbox" id="cb<%=labelCount%>" name="checkbox$<%=labelUniqueKey%>" <%=checked%>>
+                                        </td>
+                                        <td onclick="setCB('cb<%=labelCount%>');">
+                                            DATE&nbsp;<br>
+                                            TYPE&nbsp;<br>
+                                            ID&nbsp;<br>
+                                            VALUE&nbsp;
+                                        </td>
+                                        <td onclick="setCB('cb<%=labelCount%>');">
+                                            <%=updateTime%><br>
+                                            <%=labelType%><br>
+                                            <b><%=labelID%></b><br>
+                                            <%=labelValue%>
+                                        </td>
+                                    </tr>
+                                <%
+	                                        }
+	                                    }
+	
+	                                    // close db-stuff
+	                                    if (rs != null) rs.close();
+	                                    if (ps != null) ps.close();
+	                                    loc_conn.close();
+	                                }
+	                                //*** In ini, not in DB (INI to DB) *******************************************
+	                                else if (dataDirection.equals("iniToDb")) {
+	                                    String sLabelType, sLabelID, sLabelLang, sLabelValue, sLabelUniqueKey;
+	                                    labelCount = 0;
+	                                    String style;
+	
+	                                    Hashtable labels = MedwanQuery.getInstance().getLabels();
+	                                    Enumeration e = iniProps.propertyNames();
+	
+	                                    select = "SELECT 1 FROM OC_LABELS WHERE OC_LABEL_TYPE=? AND OC_LABEL_ID=? AND OC_LABEL_LANGUAGE=?";
+	                                    loc_conn = MedwanQuery.getInstance().getLongOpenclinicConnection();
+	                                    ps = loc_conn.prepareStatement(select);
+	
+	                                    while (e.hasMoreElements()) {
+	                                        sLabelUniqueKey = (String) e.nextElement();
+	
+	                                        if (sLabelUniqueKey.indexOf("$") > 0) {
+	                                            String[] identifiers = sLabelUniqueKey.split("\\$");
+	                                            sLabelType = identifiers[0].toLowerCase();
+	                                            sLabelID = identifiers[1].toLowerCase();
+	                                            sLabelLang = identifiers[2].toLowerCase();
+	
+	                                            // only check existence in DB of those labels that do not occur in the label hash
+	                                            // check at 3 levels of hashes
+	                                            if (excludedLabelTypes.indexOf("*"+sLabelType.toLowerCase()+"*")<0 && (labels.get(sLabelLang) == null || ((Hashtable) labels.get(sLabelLang)).get(sLabelType) == null ||
+	                                                    ((Hashtable) ((Hashtable) labels.get(sLabelLang)).get(sLabelType)).get(sLabelID) == null)) {
+	                                                // only list record if not in DB, so check existence in DB
+	                                                ps.setString(1, sLabelType);
+	                                                ps.setString(2, sLabelID);
+	                                                ps.setString(3, sLabelLang);
+	                                                rs = ps.executeQuery();
+	
+	                                                if (!rs.next()) {
+	                                                    sLabelValue = iniProps.getProperty(sLabelUniqueKey);
+	                                                    labelCount++;
+	                                                    style = (labelCount % 2 == 0 ? "1" : "");
+	
+	                                    %>
+	                                        <tr class="list<%=style%>" >
+	                                            <td><input type="checkbox" id="cb<%=labelCount%>" name="checkbox$<%=sLabelUniqueKey%>"></td>
+	                                            <td onclick="setCB('cb<%=labelCount%>');">
+	                                                TYPE&nbsp;<br>
+	                                                ID&nbsp;<br>
+	                                                VALUE&nbsp;
+	                                            </td>
+	                                            <td onclick="setCB('cb<%=labelCount%>');">
+	                                                <%=sLabelType%><br>
+	                                                <b><%=sLabelID%></b><br>
+	                                                <%=sLabelValue%>
+	                                            </td>
+	                                        </tr>
+	                                    <%
+	                                }
+	                            }
                             }
                         }
 

@@ -575,7 +575,7 @@
             <td class="admin2">
                 <select class="text" name="EditEncounterOutcome" style="vertical-align:top;">
                     <option value=""><%=getTran(request,"web","choose",sWebLanguage)%></option>
-                    <%=ScreenHelper.writeSelectUnsorted(request,"encounter.outcome",sEditEncounterOutcome,sWebLanguage)%>
+                    <%=ScreenHelper.writeSelectUnsorted(request,MedwanQuery.getInstance().getConfigString("encounterOutcomeType","encounter.outcome"),sEditEncounterOutcome,sWebLanguage)%>
                 </select>
             </td>
         </tr>

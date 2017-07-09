@@ -1153,6 +1153,36 @@
       </indexes>
     </table>
     
+    <table name="OC_DEFAULTMAINTENANCEPLANS" db="openclinic" sync="NONE">
+      <columns>
+        <column name="OC_MAINTENANCEPLAN_NAME" dbtype="varchar" javatype="string" size="255"/>
+        <column name="OC_MAINTENANCEPLAN_UID" dbtype="int" javatype="integer"/> 
+        <column name="OC_MAINTENANCEPLAN_NOMENCLATURE" dbtype="varchar" javatype="string" size="50"/> 
+    	<column name="OC_MAINTENANCEPLAN_STARTDATE" dbtype="datetime" javatype="date"/> 
+    	<column name="OC_MAINTENANCEPLAN_ENDDATE" dbtype="datetime" javatype="date"/> 
+ 	    <column name="OC_MAINTENANCEPLAN_FREQUENCY" dbtype="varchar" javatype="string" size="50"/>
+ 	    <column name="OC_MAINTENANCEPLAN_OPERATOR" dbtype="varchar" javatype="string" size="255"/> 
+    	<column name="OC_MAINTENANCEPLAN_PLANMANAGER" dbtype="varchar" javatype="string" size="255"/> 
+    	<column name="OC_MAINTENANCEPLAN_INSTRUCTIONS" dbtype="text" javatype="string"/>     
+    	<column name="OC_MAINTENANCEPLAN_TYPE" dbtype="text" javatype="string"/>     
+ 	    <column name="OC_MAINTENANCEPLAN_COMMENT1" dbtype="varchar" javatype="string" size="255"/>
+ 	    <column name="OC_MAINTENANCEPLAN_COMMENT2" dbtype="varchar" javatype="string" size="255"/>
+ 	    <column name="OC_MAINTENANCEPLAN_COMMENT3" dbtype="varchar" javatype="string" size="255"/>
+ 	    <column name="OC_MAINTENANCEPLAN_COMMENT4" dbtype="varchar" javatype="string" size="255"/>
+ 	    <column name="OC_MAINTENANCEPLAN_COMMENT5" dbtype="varchar" javatype="string" size="255"/>
+ 	    <column name="OC_MAINTENANCEPLAN_COMMENT6" dbtype="varchar" javatype="string" size="255"/>
+ 	    <column name="OC_MAINTENANCEPLAN_COMMENT7" dbtype="varchar" javatype="string" size="255"/>
+ 	    <column name="OC_MAINTENANCEPLAN_COMMENT8" dbtype="varchar" javatype="string" size="255"/>
+ 	    <column name="OC_MAINTENANCEPLAN_COMMENT9" dbtype="varchar" javatype="string" size="255"/>
+ 	    <column name="OC_MAINTENANCEPLAN_COMMENT10" dbtype="varchar" javatype="string" size="255"/>
+      </columns>
+      <indexes>
+        <index name="OC_MAINTENANCEPLAN_NOMENCLATURE">
+          <indexcolumn order="ASC" name="OC_MAINTENANCEPLAN_NOMENCLATURE"/>
+        </index>
+      </indexes>
+    </table>
+    
     <table name="OC_MAINTENANCEPLANS" db="openclinic" sync="NONE">
       <columns>
         <column name="OC_MAINTENANCEPLAN_SERVERID" dbtype="int" javatype="integer"/>

@@ -34,7 +34,7 @@
     	                " from oc_encounters"+
                         "  where oc_encounter_enddate>=?"+
                         "   and oc_encounter_enddate<=?"+
-                        "   and oc_encounter_outcome = 'dead'"+
+                        "   and oc_encounter_outcome like 'dead%'"+
                         "   and oc_encounter_type = 'admission'"+
                         " group by month(oc_encounter_enddate)";
         Connection oc_conn = MedwanQuery.getInstance().getOpenclinicConnection();
