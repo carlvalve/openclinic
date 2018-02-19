@@ -6,6 +6,7 @@
     // form data
 	boolean needsbeds    = "1".equalsIgnoreCase(request.getParameter("needsbeds")),
 	        needsvisits  = "1".equalsIgnoreCase(request.getParameter("needsvisits")),
+   	        lockservices = "1".equalsIgnoreCase(request.getParameter("lockservices")),
             showinactive = "1".equalsIgnoreCase(request.getParameter("showinactive"));
     
     String sVarCode  = checkString(request.getParameter("VarCode")),
@@ -35,6 +36,7 @@
     <input type="hidden" name="VarText" value="<%=sVarText%>">
     <input type="hidden" name="FindCode">
     <input type="hidden" name="ViewCode">
+    <input type="hidden" name="lockservices" value="<%=lockservices?"1":""%>">
     <input type="hidden" name="showinactive">
     <input type="hidden" name="needsbeds" value="<%=checkString(request.getParameter("needsbeds"))%>"/>
     <input type="hidden" name="needsvisits" value="<%=checkString(request.getParameter("needsvisits"))%>"/>

@@ -7,6 +7,7 @@
     boolean needsbeds = false;
 	boolean needsvisits = false;
     boolean showinactive = false;
+    boolean lockservices = false;
 
     //--- GET PARENT ------------------------------------------------------------------------------
     private String getParent(String sCode, String sWebLanguage){
@@ -38,7 +39,7 @@
     }
 
     //--- WRITE MY ROW ----------------------------------------------------------------------------
-    private String writeMyRow(String sType, String sID, String sWebLanguage, String sIcon, User user){
+    private String writeMyRow(String sType, String sID, String sWebLanguage, String sIcon, User user, boolean lockservices){
         String row = "";
         
         String sLabel = getTran(null,sType, sID, sWebLanguage).replaceAll("'","´");
@@ -50,7 +51,14 @@
             boolean isactive = showinactive || !service.inactive.equalsIgnoreCase("1");
 
             if(isactive){
-				hasBeds=service.isAuthorizedUser(user.userid) || user.isAdmin();
+            	if("gmao".equalsIgnoreCase(MedwanQuery.getInstance().getConfigString("edition",""))){
+                	if(lockservices && ScreenHelper.checkString(service.defaultContext).length()>0){
+                		hasBeds=false;
+                	}
+                	else{
+                		hasBeds=service.isAuthorizedUser(user.userid) || user.isAdmin();
+                	}
+            	}
                 // Set display class
                 String sClass = "";
                 if(service.inactive.equalsIgnoreCase("1")){
@@ -72,9 +80,22 @@
                 else{
                     row+= "<td class='"+sClass+"'>"+(hasBeds && acceptsvisits ? "<a href='javascript:selectParentService(\""+sID+"\",\""+sLabel+"\")' title='"+getTranNoLink("Web", "select", sWebLanguage)+"'>" : "")+sLabel+(hasBeds && acceptsvisits? "</a>" : "")+"</td>";
                 }
-				if(!service.isAuthorizedUser(user.userid)){
-					row+="<td><img src='"+sCONTEXTPATH+"/_img/icons/icon_forbidden.png'/></td>";
-				}
+            	if("gmao".equalsIgnoreCase(MedwanQuery.getInstance().getConfigString("edition",""))){
+					if(!service.isAuthorizedUser(user.userid)){
+						row+="<td><img src='"+sCONTEXTPATH+"/_img/icons/icon_forbidden.png'/></td>";
+					}
+					if(ScreenHelper.checkString(service.defaultContext).length()>0){
+						if(service.defaultContext.equalsIgnoreCase(MedwanQuery.getInstance().getConfigString("GMAOLocalServerId","-1"))){
+							row+="<td><img src='"+sCONTEXTPATH+"/_img/icons/icon_unlocked.png'/></td>";
+						}
+						else{
+							row+="<td><img src='"+sCONTEXTPATH+"/_img/icons/icon_locked.png'/></td>";
+						}
+					}
+					else if(MedwanQuery.getInstance().getConfigInt("GMAOLocalServerId",-1)>0){
+						row+="<td><img src='"+sCONTEXTPATH+"/_img/icons/icon_locked.png'/></td>";
+					}
+            	}
                 row += "</tr>";
             }
         }
@@ -87,6 +108,7 @@
 	needsbeds    = "1".equalsIgnoreCase(request.getParameter("needsbeds"));
 	needsvisits  = "1".equalsIgnoreCase(request.getParameter("needsvisits"));
     showinactive = "1".equalsIgnoreCase(request.getParameter("showinactive"));
+    lockservices = "1".equalsIgnoreCase(request.getParameter("lockservices"));
 
     // form data
     String sViewCode       = checkString(request.getParameter("ViewCode")),
@@ -136,7 +158,7 @@
         while(iter.hasNext()){
             sServiceID = (String)iter.next();
             set.add(sServiceID);
-            hSelected.put(sServiceID,writeMyRow("Service",sServiceID,sWebLanguage,"",activeUser));
+            hSelected.put(sServiceID,writeMyRow("Service",sServiceID,sWebLanguage,"",activeUser,lockservices));
 
             iTotal++;
         }
@@ -175,7 +197,7 @@
             // add label to labels that will be displayed
             if(displayLabel){
                 set.add(labelid);
-                hSelected.put(labelid,writeMyRow("service",labelid,sWebLanguage,"",activeUser));
+                hSelected.put(labelid,writeMyRow("service",labelid,sWebLanguage,"",activeUser,lockservices));
                 iTotal++;
             }
         }
@@ -218,7 +240,7 @@
 
                 if(displayService){
                     set.add(sServiceID);
-                    hSelected.put(sServiceID,writeMyRow("service",sServiceID,sWebLanguage,"",activeUser));
+                    hSelected.put(sServiceID,writeMyRow("service",sServiceID,sWebLanguage,"",activeUser,lockservices));
                     iTotal++;
                 }
             }

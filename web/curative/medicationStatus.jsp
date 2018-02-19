@@ -50,7 +50,7 @@
     		ProductionOrder order = (ProductionOrder)productionOrders.elementAt(n);
     		if(order.getCloseDateTime()!=null && order.getProductStock()!=null){
     			//Now we check if this order has already been delivered
-    			Vector deliveries = ProductStockOperation.getDeliveries(order.getProductStock().getUid(), activePatient.personid, order.getUpdateDateTime(), null, "OC_OPERATION_OBJECTID", "ASC");
+    			Vector deliveries = ProductStockOperation.getDeliveries(order.getProductStock().getUid(), activePatient.personid, ScreenHelper.parseDate(ScreenHelper.formatDate(order.getUpdateDateTime())), null, "OC_OPERATION_OBJECTID", "ASC");
     			if(deliveries.size()==0){
     				undeliveredOrders.add(order);
     			}

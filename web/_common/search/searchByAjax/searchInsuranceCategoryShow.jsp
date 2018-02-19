@@ -25,7 +25,9 @@
             String sActiveInsurances=";";
             for(int n=0;n<activeInsurances.size();n++){
             	Insurance insurance = (Insurance)activeInsurances.elementAt(n);
-            	sActiveInsurances+=insurance.getInsurar().getUid()+"."+insurance.getInsuranceCategoryLetter()+";";
+            	if(insurance.getInsurar()!=null){
+            		sActiveInsurances+=insurance.getInsurar().getUid()+"."+insurance.getInsuranceCategoryLetter()+";";
+            	}
             }
             String sClass = "", sInsurarUID = "";
             boolean recsFound = false;

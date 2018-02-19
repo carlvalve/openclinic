@@ -3,7 +3,7 @@
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
 <%@include file="../assets/includes/commonFunctions.jsp"%>
-<%=checkPermission("assets","edit",activeUser)%>
+<%=checkPermission("assets","select",activeUser)%>
 <%=sJSPROTOTYPE%>
 <%=sJSNUMBER%> 
 <%=sJSSTRINGFUNCTIONS%>
@@ -21,6 +21,7 @@
     
     String sAction = checkString(request.getParameter("action"));
     String sEditAssetUID = checkString(request.getParameter("EditAssetUID"));
+    String sEditServiceUid = checkString(request.getParameter("serviceuid"));
     
     if(sAction.length()==0){
 %> 
@@ -70,12 +71,7 @@
 	            </td>
 	            <td class="admin"><%=getTran(request,"web.assets","supplier",sWebLanguage)%></td>
 	            <td class="admin2">
-	                <input type="hidden" name="searchSupplierUID" id="searchSupplierUID" value="">
-	                <input type="text" class="text" name="searchSupplierName" id="searchSupplierName" readonly size="30" value="" colspan="3">
-	                   
-	                <%-- buttons --%>
-	                <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("web","select",sWebLanguage)%>" onclick="selectSupplier('searchSupplierUID','searchSupplierName');">
-	                <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("web","clear",sWebLanguage)%>" onclick="clearSupplierSearchFields();">
+	                <input type="text" class="text" name="searchSupplierUID" id="searchSupplierUID" size="30" value="">
 	            </td>
 	        </tr>
 	        <%-- search COMPONENTS --%>
@@ -103,7 +99,13 @@
 	                <%=writeDateField("searchPurchaseEnd","SearchForm","",sWebLanguage)%>            
 	            </td>                        
 	            <%
-	            	String sServiceUid = activeUser.getParameter("defaultserviceid");
+	            	if(checkString(request.getParameter("serviceuid")).length()>0){
+	            		session.setAttribute("activeservice", request.getParameter("serviceuid"));
+	            	}
+	            	String sServiceUid = checkString((String)session.getAttribute("activeservice"));
+	            	if(sServiceUid.length()==0){   	
+	            		sServiceUid=activeUser.getParameter("defaultserviceid");
+	            	}
 	            %>
 	            <td class="admin"><%=getTran(request,"web","service",sWebLanguage)%></td>
 	            <td class="admin2">
@@ -117,7 +119,9 @@
 	            	<center>
 	                <input class="button" type="button" name="buttonSearch" id="buttonSearch" value="<%=getTranNoLink("web","search",sWebLanguage)%>" onclick="searchAssets();">&nbsp;
 	                <input class="button" type="button" name="buttonClear" id="buttonClear" value="<%=getTranNoLink("web","clear",sWebLanguage)%>" onclick="clearSearchFields();">&nbsp;
+					<%if(activeUser.getAccessRight("assets.add")){ %>
 	                <input class="button" type="button" name="buttonNew" id="buttonNew" value="<%=getTranNoLink("web","new",sWebLanguage)%>" onclick="createNewAsset();">&nbsp;
+	                <%} %>
 	                </center>
 	            </td>
 	        </tr>
@@ -131,7 +135,7 @@
 		}
 		
 	<%
-		if(checkString(request.getParameter("searchCode")).length()>0){
+		if(checkString(request.getParameter("searchCode")).length()>0 || checkString(request.getParameter("forcedsearch")).length()>0){
 	%>
 			window.setTimeout("searchAssets()",500);
 	<%
@@ -217,16 +221,24 @@
   <%-- CLEAR SUPPLIER SEARCH FIELDS --%>
   function clearSupplierSearchFields(){
     document.getElementById("searchSupplierUID").value = "";  
-    document.getElementById("searchSupplierName").value = "";
   }
 </script>
 
 <%
 	boolean bNewAsset = false;
+	boolean bLocked=false;
 	Asset asset = null;
 	if(sAction.equalsIgnoreCase("new")){
 		asset = new Asset();
 		asset.setUid("-1");
+		if(MedwanQuery.getInstance().getConfigInt("GMAOLocalServerId",-1)>0){
+			asset.setLockedBy(MedwanQuery.getInstance().getConfigInt("GMAOLocalServerId",-1));
+			asset.setLockeddate(new java.util.Date());
+		}
+		else{
+			asset.setLockedBy(-1);
+		}
+		asset.setServiceuid(sEditServiceUid);
 		asset.store(activeUser.userid);
 		bNewAsset=true;
 	}
@@ -234,10 +246,12 @@
 		asset=Asset.get(sEditAssetUID);
 	}
 	if(asset!=null){
+		bLocked = asset.getObjectId()>-1 && ((asset.getLockedBy()>-1 && asset.getLockedBy()!=MedwanQuery.getInstance().getConfigInt("GMAOLocalServerId",-1)) || (asset.getLockedBy()==-1 && MedwanQuery.getInstance().getConfigInt("GMAOLocalServerId",-1)!=0));
 %>
 	<form name="EditForm" id="EditForm" method="POST">
 		<input type='hidden' name='searchCode' id='searchCode' value=''/>
 		<input type='hidden' name='action' id='action' value=''/>
+		<input type='hidden' name='lockedby' id='lockedby' value='<%=asset.getLockedBy()%>'/>
 	    <input type="hidden" id="EditAssetUID" name="EditAssetUID" value="<%=asset.getUid()%>">
 	    <%=writeTableHeader("web","assets",sWebLanguage,"")%>
 	                
@@ -294,8 +308,12 @@
 	        <%-- DESCRIPTION (*) --%>                    
 	        <tr>
 	            <td class="admin"><%=getTran(request,"web","description",sWebLanguage)%>&nbsp;*&nbsp;</td>
-	            <td class="admin2" colspan="5">
+	            <td class="admin2" colspan="3">
 	                <textarea class="text" name="description" id="description" cols="100" rows="2" onKeyup="resizeTextarea(this,8);limitChars(this,245);"><%=checkString(asset.getDescription())%></textarea>
+	            </td>
+	            <td class="admin" ><%=getTran(request,"web.assets","surface",sWebLanguage)%></td>
+	            <td class="admin2">
+	                <input type="text" class="text" id="comment17" name="comment17" size="10" maxLength="30" value="<%=checkString(asset.getComment17())%>">
 	            </td>
 	        </tr>
 	        <tr>
@@ -412,7 +430,9 @@
 	        <tr>
 	        	<td class='admin'>
 	        		<%=getTran(request,"web.assets","components",sWebLanguage) %>
-	            	<img src='<%=sCONTEXTPATH %>/_img/icons/icon_add.gif' onclick="searchComponents('componentField')"/>
+					<%if(!bLocked && activeUser.getAccessRight("assets.edit")){ %>
+		            	<img src='<%=sCONTEXTPATH %>/_img/icons/icon_add.gif' onclick="searchComponents('componentField')"/>
+					<%} %>
 	        	</td> 
 	        	<td class='admin' colspan='5'>
 	        		<a href='javascript:showComponents(1)'><%=getTran(request,"web","show",sWebLanguage) %></a>&nbsp;
@@ -440,10 +460,19 @@
 				            	<input type='hidden' name='componentField' id='componentField' value='' onchange='addComponent(this.value)'/>
 				            	<script>
 				            		function addComponent(value){
-				            			if(document.getElementById('comment15').value.indexOf(";"+value+";")<0 && !document.getElementById('comment15').value.indexOf(value+";")==0){
-				            				document.getElementById('comment15').value+=value+";";
-				            				loadComponents();
-				            			}
+				            		    document.getElementById("componentsDiv").innerHTML = "<img src='<%=sCONTEXTPATH%>/_img/themes/<%=sUserTheme%>/ajax-loader.gif'/><br>Loading..";
+				            		    
+				            		    var url = "<c:url value='/assets/addComponent.jsp'/>?ts="+new Date().getTime();
+				            		    new Ajax.Request(url,{
+				            		      	method: "POST",
+				            		      	parameters: "componentuid=<%=asset.getUid()%>."+value,
+				            		      	onSuccess: function(resp){
+					            		  	loadComponents();
+				            		    },
+				            		    onFailure: function(resp){
+				            		        $("divMessage").innerHTML = "Error in 'assets/addComponent.jsp' : "+resp.responseText.trim();
+				            		    }
+				            		    });
 				            		}
 				            	</script>
 				            	<input type='hidden' name='comment15' id='comment15' value='<%=asset.getComment15() %>'/>
@@ -532,7 +561,9 @@
 		        <%-- DOCUMENTS (multi-add) --%>   
 	            <td class="admin" nowrap>
 	            	<%=getTran(request,"web.assets","documents",sWebLanguage)%>&nbsp;
-	            	<img src='<%=sCONTEXTPATH %>/_img/icons/icon_add.gif' onclick="addDocument()"/>
+					<%if(!bLocked && activeUser.getAccessRight("assets.edit")){ %>
+		            	<img src='<%=sCONTEXTPATH %>/_img/icons/icon_add.gif' onclick="addDocument('<%=asset.getUid()%>')"/>
+		            <%} %>
 	            </td>
 	            <td class="admin2" colspan="4">
 	            	<div id='documentsDiv'></div>
@@ -852,13 +883,16 @@
 	        <tr>     
 	            <td class="admin"/>
 	            <td class="admin2" colspan="7">
+					<%if(!bLocked && activeUser.getAccessRight("assets.edit")){ %>
 	                <input class="button" type="button" name="buttonSave" id="buttonSave" value="<%=getTranNoLink("web","save",sWebLanguage)%>" onclick="saveAsset();">&nbsp;
+					<%} %>
+					<%if(!bLocked && activeUser.getAccessRight("assets.delete")){ %>
 	                <input class="button" type="button" name="buttonDelete" id="buttonDelete" value="<%=getTranNoLink("web","delete",sWebLanguage)%>" onclick="deleteAsset();" >&nbsp;
+					<%} %>
 	                <input class="button" type="button" name="buttonList" id="buttonList" value="<%=getTranNoLink("web","list",sWebLanguage)%>" onclick="listAssets();">&nbsp;
 	                <input class="button" type="button" name="buttonMaintenance" id="buttonMaintenance" value="<%=getTranNoLink("web","maintenanceplans",sWebLanguage)%>" onclick="listMaintenancePlans();">&nbsp;
 	                <input class="button" type="button" name="buttonOperations" id="buttonOperations" value="<%=getTranNoLink("web","operations",sWebLanguage)%>" onclick="listMaintenanceOperations();">&nbsp;
 	                <input class="button" type="button" name="buttonDocuments" id="buttonDocuments" value="<%=getTranNoLink("web","documents",sWebLanguage)%>" onclick="printWordDocuments();">&nbsp;
-	                <input style='display: none' class="button" type="button" name="buttonInitializeMaintenanceplans" id="buttonInitializeMaintenanceplans" value="<%=getTranNoLink("web","resetmaintenanceplans",sWebLanguage)%>" onclick="resetMaintenancePlans();">&nbsp;
 	            </td>
 	        </tr>
 	    </table>
@@ -904,7 +938,7 @@
 	  window.location.href='<c:url value="/main.do?Page=assets/manage_maintenanceOperations.jsp&AssetUID="/>'+document.getElementById("EditAssetUID").value+"&AssetCode="+document.getElementById("code").value;
   }
   function listAssets(){
-	  window.location.href='<c:url value="/main.do?Page=assets/manage_assets.jsp&searchCode="/>'+document.getElementById("EditAssetUID").value;
+	  window.location.href='<c:url value="/main.do?Page=assets/manage_assets.jsp&forcedsearch=1"/>';
   }
   
   <%-- CALCULATE RP TOTAL --%>
@@ -1022,6 +1056,7 @@
                       "&characteristics="+document.getElementById("characteristics").value+
                       "&gains="+document.getElementById("gains").value+
                       "&losses="+document.getElementById("losses").value+
+                      "&lockedby="+document.getElementById("lockedby").value+
                     
                       //*** loan ***
                       "&loanDate="+document.getElementById("loanDate").value+
@@ -1047,8 +1082,8 @@
                       "&comment14="+document.getElementById("comment14").value+
                       "&comment15="+document.getElementById("comment15").value+
                       "&comment16="+document.getElementById("comment16").value+
-                      /*
                       "&comment17="+document.getElementById("comment17").value+
+                      /*
                       "&comment18="+document.getElementById("comment18").value+
                       "&comment19="+document.getElementById("comment19").value+
                       "&comment20="+document.getElementById("comment20").value+
@@ -1149,8 +1184,19 @@
   
   function deleteComponent(id){
       if(yesnoDeleteDialog()){
-		  document.getElementById("comment15").value=document.getElementById("comment15").value.replace(id,'');
-		  loadComponents();
+    	    document.getElementById("componentsDiv").innerHTML = "<img src='<%=sCONTEXTPATH%>/_img/themes/<%=sUserTheme%>/ajax-loader.gif'/><br>Loading..";
+    	    
+    	    var url = "<c:url value='/assets/deleteComponent.jsp'/>?ts="+new Date().getTime();
+    	    new Ajax.Request(url,{
+    	      method: "GET",
+    	      parameters: "componentuid="+id,
+    	      onSuccess: function(resp){
+    	    	  loadComponents();
+    	      },
+    	      onFailure: function(resp){
+    	        $("divMessage").innerHTML = "Error in 'assets/deleteComponent.jsp' : "+resp.responseText.trim();
+    	      }
+    	    });
       }
   }
   
@@ -1170,7 +1216,7 @@
     var url = "<c:url value='/assets/ajax/asset/getComponents.jsp'/>?ts="+new Date().getTime();
     new Ajax.Request(url,{
       method: "GET",
-      parameters: "components="+document.getElementById("comment15").value+"&assetuid=<%=asset==null?"":asset.getUid()%>",
+      parameters: "assetuid=<%=asset==null?"":asset.getUid()%>",
       onSuccess: function(resp){
         $("componentsDiv").innerHTML = resp.responseText;
         if(resp.responseText.indexOf("<tr>")>-1){
@@ -1274,7 +1320,7 @@
           $("divMessage").innerHTML = data.message;
 
           enableButtons();
-          searchAssets();
+          listAssets();
         },
         onFailure: function(resp){
           $("divMessage").innerHTML = "Error in 'assets/ajax/asset/deleteAsset.jsp' : "+resp.responseText.trim();
@@ -2626,8 +2672,8 @@
   	document.getElementById(serviceNameField).focus();
     }
 
-  function addDocument(){
-  	openPopup("/assets/addDocument.jsp&ts=<%=getTs()%>&PopupHeight=200&PopupWidth=500&assetuid=<%=sEditAssetUID%>");
+  function addDocument(uid){
+  	openPopup("/assets/addDocument.jsp&ts=<%=getTs()%>&PopupHeight=200&PopupWidth=500&assetuid="+uid);
   }
 
   <%-- EDIT LOAN DOCUMENT --%>
@@ -2642,6 +2688,6 @@
   }
   
   resizeAllTextareas(8);
-  checkDefaultMaintenancePlans();
+  //checkDefaultMaintenancePlans();
 </script>
 <%=sJSBUTTONS%>

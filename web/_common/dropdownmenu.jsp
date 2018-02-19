@@ -447,10 +447,26 @@
 	    openPopup("/pacs/studyList.jsp&ts=<%=getTs()%>",800,400).focus();
 	  }
 	    
-  function doPanorama(){
-	    openPopup("/ikirezi/panorama.jsp&ts=<%=getTs()%>",800,500).focus();
+  function doPanorama(uid){
+	  var w = 800;
+	  var h = 600;
+	  if(uid){
+		  openPopup("/ikirezi/panorama.jsp&encounteruid="+uid+"&ts=<%=getTs()%>",w,h).focus();
 	  }
+	  else{
+		  openPopup("/ikirezi/panorama.jsp&ts=<%=getTs()%>",w,h).focus();
+	  }
+  }
 	    
+  function doClinicalPathways(uid){
+	  if(uid){
+		  openPopup("/ikirezi/clinicalPathways.jsp&encounteruid="+uid+"&ts=<%=getTs()%>",1024,600).focus();
+	  }
+	  else{
+		  openPopup("/ikirezi/clinicalPathways.jsp&ts=<%=getTs()%>",1024,600).focus();
+	  }
+  }
+
   function doAssistant(){
 	    openPopup("/ikirezi/assistant.jsp&type=investigations&ts=<%=getTs()%>",500,300).focus();
 	  }
@@ -623,8 +639,8 @@
     Modalbox.show(url,{title:'<%=getTranNoLink("web","showPicture",sWebLanguage)%>',width:162});
   }
   function deletePicture(){
-    var url = "<c:url value='/util/ajax/deletePicture.jsp'/>?ts="+new Date().getTime();
-    Modalbox.show(url,{title:'<%=getTranNoLink("web","deletePicture",sWebLanguage)%>',width:162});
+    var url = "<c:url value='/util/ajax/deletePicture.jsp'/>?personid=<%=activePatient!=null?activePatient.personid:"0"%>&ts="+new Date().getTime();
+    window.open(url);
   }
   
   <%-- DO PRINT --%>
@@ -713,8 +729,18 @@
   <%-- OPEN POPUP --%>
   function openPopup(page,width,height,title,parameters){
     var url = "<c:url value='/popup.jsp'/>?Page="+page;
-    if(width!=undefined) url+= "&PopupWidth="+width;
-    if(height!=undefined) url+= "&PopupHeight="+height;
+    if(width!=undefined){
+    	url+= "&PopupWidth="+width;
+    }
+    else{
+   		width=1;
+    }
+    if(height!=undefined){
+    	url+= "&PopupHeight="+height;
+    }
+    else{
+   		height=1;
+    }
     if(title==undefined){
       if(page.indexOf("&") < 0){
         title = page.replace("/","_");
@@ -726,9 +752,12 @@
       }
     }
     if(!parameters || parameters.length==0){
-    	parameters="toolbar=no,status=yes,scrollbars=yes,resizable=yes,width=1,height=1,menubar=no";
+    	parameters="toolbar=no,status=yes,scrollbars=yes,resizable=yes,width="+width+",height="+height+",menubar=no";
     }
     popup = window.open(url,title,parameters);
+    if(width && height){
+    	popup.resizeTo(width,height);
+    }
     popup.moveBy(2000,2000);
     return popup;
   }
@@ -827,6 +856,17 @@
         }
     %>
   }    
+  
+  function showmanualgmao(){
+	    <%
+	        if(MedwanQuery.getInstance().getConfigString("documentationLanguages","en,fr").toLowerCase().indexOf(sWebLanguage.toLowerCase())>-1){
+	            %>window.open("<c:url value="/documents/help/"/>gmao_manual_<%=sWebLanguage.toLowerCase()%>.pdf");<%
+	        }
+	        else{
+	            %>window.open("<c:url value="/documents/help/"/>gmao_manual_en.pdf");<%
+	        }
+	    %>
+	  }    
   
   function showversionhistory(){
 	    var w = window.open("<c:url value='/util/versions.txt'/>");

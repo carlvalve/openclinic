@@ -230,27 +230,6 @@
 				
 				String today = ScreenHelper.formatDate(new java.util.Date()); // now
 				
-				//*** 5b - TREATED PATIENTS ****************************
-				out.print("<tr><td colspan='4'><br/><hr/><br/></td></tr>");
-				out.print(ScreenHelper.writeTblHeader(getTran(request,"Web","statistics.treatedpatients",sWebLanguage),sCONTEXTPATH));
-				out.print("<tr>"+
-				           "<td class='admin2' colspan='2'>"+
-				            getTran(request,"web","from",sWebLanguage)+"&nbsp;"+writeDateField("begin3b","stats",today,sWebLanguage)+"&nbsp;&nbsp;"+
-				            getTran(request,"web","to",sWebLanguage)+"&nbsp;"+writeDateField("end3b","stats",today,sWebLanguage)+
-				           "</td>"+
-				          "</tr>");
-				
-				out.print("<tr>"+
-				           "<td class='admin2' colspan='2'>"+getTran(request,"Web","service",sWebLanguage)+" "+
-				            "<input type='hidden' name='statserviceid' id='statserviceid' value='"+service+"'>"+
-				            "<input class='text' type='text' name='statservicename' id='statservicename' readonly size='"+sTextWidth+"' value='"+serviceName+"'>&nbsp;"+
-				            "<img src='_img/icons/icon_search.gif' class='link' alt='"+getTranNoLink("Web","select",sWebLanguage)+"' onclick='searchService(\"statserviceid\",\"statservicename\");'>&nbsp;"+
-				            "<img src='_img/icons/icon_delete.gif' class='link' alt='"+getTranNoLink("Web","clear",sWebLanguage)+"' onclick='statserviceid.value=\"\";statservicename.value=\"\";'>"+
-				           "</td>"+
-				          "</tr>"+
-				          writeTblChildWithCode("javascript:patientslistvisits()",getTran(request,"Web","statistics.patientslist.visits",sWebLanguage))+
-				          writeTblChildWithCode("javascript:patientslistadmissions()",getTran(request,"Web","statistics.patientslist.admissions",sWebLanguage))+
-				          writeTblChildWithCode("javascript:patientslistsummary()",getTran(request,"Web","statistics.patientslist.summary",sWebLanguage)));
 				out.print(ScreenHelper.writeTblFooter()+"<br>");
 		
 			}

@@ -59,6 +59,9 @@
                 if(requiredQuantity >= minOrderQuantity) sEditPackagesOrdered = requiredQuantity+"";
                 else                                     sEditPackagesOrdered = minOrderQuantity+"";
             }
+            else{
+            	sEditPackagesOrdered="0";
+            }
         }
     }
     if(sEditFrom.length()==0 && sEditProductStockUid.length()>0){
@@ -196,7 +199,7 @@
                     <tr>
                         <td class="admin"><%=getTran(request,"Web","quantity",sWebLanguage)%> *</td>
                         <td class="admin2">
-                            <input type="text" class="text" name="EditPackagesOrdered" value="<%=sSelectedPackagesOrdered%>" size="5" maxLength="5" onKeyUp="if(!isNumberLimited(this,1,99999)){this.value='';}">
+                            <input type="text" class="text" name="EditPackagesOrdered" value="<%=sSelectedPackagesOrdered%>" size="5" maxLength="5" onBlur="if(this.value*1>0 && !isNumberLimited(this,1,<%=sSelectedPackagesOrdered%>)){alert(this.value+' > <%=sSelectedPackagesOrdered%>');this.value='<%=sSelectedPackagesOrdered%>';this.focus()}"> <= <%=sSelectedPackagesOrdered%>
                         </td>
                     </tr>
 

@@ -279,13 +279,15 @@
     else if (sAction.equalsIgnoreCase("new")){
     	boolean bAllowed=true;
     	if(MedwanQuery.getInstance().getConfigInt("negativePatientBalanceAllowedForAppointments",1)==0){
-    		Balance balance = Balance.getActiveBalance(activePatient.personid);
-    		double saldo = Balance.getPatientBalance(activePatient.personid);
-    		if(saldo<balance.getMinimumBalance()){
-    			out.println("<script>alert('"+getTranNoLink("web","notpermittedwithnegativebalance",sWebLanguage)+"');doClose();</script>");
-    			out.flush();
-    			bAllowed=false;
-    		}
+			if(activePatient!=null){
+	    		Balance balance = Balance.getActiveBalance(activePatient.personid);
+	    		double saldo = Balance.getPatientBalance(activePatient.personid);
+	    		if(saldo<balance.getMinimumBalance()){
+	    			out.println("<script>alert('"+getTranNoLink("web","notpermittedwithnegativebalance",sWebLanguage)+"');doClose();</script>");
+	    			out.flush();
+	    			bAllowed=false;
+	    		}
+			}
     	}
 		if(bAllowed){
 	        //####################### IF NEW APPOINTMENT ###################################//
@@ -494,44 +496,47 @@
 			        <td class='admin'><%=getTran(request,"web","prestation",sWebLanguage)%></td>
 					<% 	if(MedwanQuery.getInstance().getConfigInt("enableCCBRT",0)==1){ %>
 			        <td class='admin2'>
-			            <%
-			                ObjectReference orContact = planning.getContact();
-			                if(orContact==null){
-			                    orContact = new ObjectReference();
-			                }
-			            %>
 			            <input type='hidden' name='EditContactType' id='ContactPrestation' value='prestation'/>
 			            <input type="hidden" id="EditEffectiveDateTime" value="" />
 			            <input type="hidden" id="EditCancelationDateTime" value="" />
-			            <input type="hidden" id="EditContactName" name="EditContactName" value="" />
-			            <select class='text' id="EditContactUID" name="EditContactUID" onchange='selectTimeSlot();'>
-			            	<option/>
-			            	<%
-			            		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
-			            		PreparedStatement ps = conn.prepareStatement("select * from OC_PRESTATIONS where OC_PRESTATION_INVOICEGROUP in ('"+MedwanQuery.getInstance().getConfigString("ccbrtProcedureGroup","sl 001 003")+"') AND"+
-			            				" (OC_PRESTATION_INACTIVE is null OR OC_PRESTATION_INACTIVE=0) AND"+
-			            				" OC_PRESTATION_MODIFIERS like ?"+
-			            				" ORDER BY OC_PRESTATION_CODE");
-			            		String clinic = "%";
-			            		Encounter encounter = Encounter.getActiveEncounter(activePatient.personid);
-			            		if(encounter!=null && encounter.getService()!=null && encounter.getService().code3!=null){
-			            			clinic=encounter.getService().code3;
+			            <input type="hidden" id="EditContactUID" name="EditContactUID" value="<%=planning.getContact()==null?"":planning.getContact().getObjectUid() %>" />
+			            <%
+			            	String sActivity = "";
+			            	if(planning.getContact()!=null){
+			            		Prestation p = Prestation.get(planning.getContact().getObjectUid());
+			            		if(p!=null){
+			            			sActivity=ScreenHelper.checkString(p.getCode()).toUpperCase()+" - "+p.getDescription();
 			            		}
-			            		ps.setString(1,"%;%;%;%;%;%;%;"+clinic+";%");
-			            		ResultSet rs = ps.executeQuery();
-			            		while(rs.next()){
-									String uid=rs.getString("OC_PRESTATION_SERVERID")+"."+rs.getString("OC_PRESTATION_OBJECTID");
-									String descr=checkString(rs.getString("OC_PRESTATION_DESCRIPTION")).toUpperCase();
-									if(descr.length()>40){
-										descr=descr.substring(0,40);
-									}
-									out.println("<option value='"+uid+"' "+(uid.equalsIgnoreCase(orContact.getObjectUid())?"selected":"")+">"+(checkString(rs.getString("OC_PRESTATION_CODE"))+" -          ").substring(0,10)+""+descr+"</option>");
-			            		}
-			            		rs.close();
-			            		ps.close();
-			            		conn.close();
-							%>
-			            </select>
+			            	}
+			            %>
+			            <input class='text' type='text' id="EditContactName" name="EditContactName" size="60" value="<%=sActivity %>">
+						<div id="autocomplete_activity" class="autocomple"></div>
+<script>
+	new Ajax.Autocompleter('EditContactName','autocomplete_activity','planning/ajax/getActivities.jsp?',{
+		minChars:1,
+		method:'post',
+		afterUpdateElement:afterAutoComplete,
+		callback:composeCallbackURL
+	});
+	
+	function afterAutoComplete(field,item){
+		var regex = new RegExp('[-0123456789.]*-idcache','i');
+		var nomimage = regex.exec(item.innerHTML);
+		var id = nomimage[0].replace('-idcache','');
+		document.getElementById("EditContactName").value=document.getElementById("EditContactName").value.split('|')[0];
+		document.getElementById("EditContactUID").value = id;
+		selectTimeSlot();
+	}
+	
+	function composeCallbackURL(field,item){
+		var url = "";
+		if(field.id=="EditContactName"){
+			url = "field=findActivityName&findActivityName="+field.value;
+		}
+		return url;
+	}
+
+</script>
 			        </td>
 					<%
 						}
@@ -738,6 +743,7 @@
 	}
 	
 	findResources();
+	
 	
 </script>
 </div>

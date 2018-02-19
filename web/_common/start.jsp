@@ -150,7 +150,7 @@
 		        		out.println("<td class='"+cls+"'>"+patient.gender+"</td>");
 		        		Encounter encounter=Encounter.getActiveEncounter(patient.personid);
 		        		if(encounter!=null){
-			        		out.println("<td class='"+cls+"'><a href='"+sCONTEXTPATH+"/patientslist.do?findUnit="+encounter.getServiceUID()+"'>"+encounter.getService().getLabel(sWebLanguage)+"</a></td>");
+			        		out.println("<td class='"+cls+"'><a href='"+sCONTEXTPATH+"/patientslist.do?findUnit="+encounter.getServiceUID()+"'>"+(encounter.getService()==null?"":encounter.getService().getLabel(sWebLanguage))+"</a></td>");
 			        		if(activeUser.getAccessRight("diagnoses.select")){
 			        			String sDiagnoses = "<table>";
 				        		Vector diagnoses = Diagnosis.selectDiagnoses("", "", encounter.getUid(), "", "", "", "", "", "", "", "", "", "");

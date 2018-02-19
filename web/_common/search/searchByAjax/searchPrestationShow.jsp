@@ -107,7 +107,7 @@
 	             // names
 	             sUid = prestation.getUid();
 	             sCode = checkString(prestation.getCode());
-	             sDescr = checkString(prestation.getDescription());
+	             sDescr = checkString(prestation.getDescription()).replaceAll("'","´");
 	
 	             // type
 	             sType = checkString(prestation.getType());

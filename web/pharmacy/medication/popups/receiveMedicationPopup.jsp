@@ -774,12 +774,20 @@
       else if(transactionForm.EditSrcDestType.value.length==0){
         transactionForm.EditSrcDestType.focus();
       }
-      else if(transactionForm.EditSrcDestUid.value.length==0){
-        transactionForm.EditSrcDestName.focus();
-      }
       else if(transactionForm.EditOperationDate.value.length==0){
-        transactionForm.EditOperationDate.focus();
-      }
+          transactionForm.EditOperationDate.focus();
+        }
+      <% if(MedwanQuery.getInstance().getConfigInt("batchnumbersMandatory",1)==1){ %>
+      else if(transactionForm.EditBatchNumber.value.length==0){
+          transactionForm.EditBatchNumber.focus();
+        }
+      else if(transactionForm.EditBatchEnd.value.length==0){
+          transactionForm.EditBatchEnd.focus();
+        }
+      <%}%>
+      else if(transactionForm.EditSrcDestUid.value.length==0){
+          transactionForm.EditSrcDestName.focus();
+        }
     }
   }
 
@@ -791,8 +799,12 @@
     if(!transactionForm.EditOperationDescr.value.length>0 ||
        !transactionForm.EditUnitsChanged.value.length>0 ||
        !transactionForm.EditOperationDate.value.length>0 ||
-       !transactionForm.EditProductStockUid.value.length>0 ||
-       (transactionForm.EditBatchNumber && transactionForm.EditBatchNumber.value.length>0 && transactionForm.EditBatchEnd.value.length==0)){
+       !transactionForm.EditProductStockUid.value.length>0
+       <% if(MedwanQuery.getInstance().getConfigInt("batchnumbersMandatory",1)==1){ %>
+	       || !transactionForm.EditBatchNumber || !transactionForm.EditBatchNumber.value.length>0 ||
+	       (transactionForm.EditBatchNumber && transactionForm.EditBatchNumber.value.length>0 && transactionForm.EditBatchEnd && transactionForm.EditBatchEnd.value.length==0)
+	   <%}%>
+    	){
       maySubmit = false;
       alertDialog("web.manage","dataMissing");
     }
@@ -873,7 +885,9 @@
       if(sEditReferenceOperationUid.length()>0){
    	      // Show batch information
    	      String sBatchInfo = "<input type='radio' checked/>"+(sEditBatchNumber!=null?sEditBatchNumber:"?")+" ("+sEditUnitsChanged+" - exp. "+sEditBatchEnd+")";
-   	      sBatchInfo+= "<input type='hidden' name='EditBatchUid' value='"+sEditBatchUid+"'/>";
+   	      sBatchInfo+= "<input type='hidden' name='EditBatchUid' id='EditBatchUid' value='"+sEditBatchUid+"'/>";
+   	      sBatchInfo+= "<input type='hidden' name='EditBatchNumber' id='EditBatchNumber' value='"+sEditBatchNumber+"'/>";
+   	      sBatchInfo+= "<input type='hidden' name='EditBatchEnd' id='EditBatchEnd' value='"+sEditBatchEnd+"'/>";
    	      out.print("document.getElementById('batch').innerHTML=\""+sBatchInfo+"\";");
       }
   %>

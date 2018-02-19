@@ -158,7 +158,6 @@
             		//e.printStackTrace();
             	}
 				//**************************************************
-				
 			}
 			//Now close the production order
 			order.setCloseDateTime(dClose);
@@ -261,7 +260,7 @@
 		<tr>
 			<td class='admin' width="<%=sTDAdminWidth%>"><%=getTran(request,"web","comment",sWebLanguage) %></td>
 			<td class='admin2'><textarea <%=order.getCloseDateTime()!=null?"readonly":"" %> class='text' cols='80' rows='2' name='ProductionOrderComment' id='ProductionOrderComment'><%=checkString(order.getComment()) %></textarea></td>
-			<td class='admin' width="<%=sTDAdminWidth%>"><%=getTran(request,"web","quantityproduced",sWebLanguage) %></td>
+			<td class='admin' width="<%=sTDAdminWidth%>"><%=getTran(request,"web","quantityproduced",sWebLanguage) %> <%=debet==null?"":"("+getTran(request,"web","ordered",sWebLanguage).toLowerCase()+": "+debet.getQuantity()+")" %></td>
 			<td class='admin2'><input <%=order.getCloseDateTime()!=null?"readonly":"" %> type='text' class='text' size='5' name='ProductionOrderQuantity' id='ProductionOrderQuantity' value='<%=order.getQuantity()%>'><%=order.getPatientUid()<0 || order.getCloseDateTime()==null?"":" <a href='javascript:traceBatch();'><img src='"+sCONTEXTPATH+"/_img/icons/icon_search.png'/></a>"%></td>
 		</tr>
 		<tr class='admin'>
@@ -324,6 +323,11 @@
 		if(document.getElementById('ProductionOrderQuantity').value*1<=0){
 			bCanClose=window.confirm("<%=getTranNoLink("web","quantityzero.areyousure",sWebLanguage)%>");
 		}
+		<%if(debet!=null){%>
+		else if(document.getElementById('ProductionOrderQuantity').value*1!=<%=debet.getQuantity()%>){
+			bCanClose=window.confirm("<%=getTranNoLink("web","quantitydifferentfromorder.areyousure",sWebLanguage)%>");
+		}
+		<%}%>
 		else {
 			bCanClose=true;
 		}

@@ -22,10 +22,11 @@
 	       sUnit        = checkString(request.getParameter("findUnit")),
 	       sUnitText    = checkString(request.getParameter("findUnitText")),
 	       sArchiveFileCode = checkString(request.getParameter("findArchiveFileCode")),
-	       sPersonID    = checkString(request.getParameter("findPersonID")),
+   	       sPersonID    = checkString(request.getParameter("findPersonID")),
+   	       sSector    = checkString(request.getParameter("findSector")),
 	       sDistrict    = checkString(request.getParameter("findDistrict"));
     String sAction = checkString(request.getParameter("findSearchButtonClick"));
-    String sScript = "";
+    String sCity="",sScript = "";
 
     // fedault focus
     String sDefaultFocus = checkString(activeUser.getParameter("DefaultFocus"));
@@ -40,6 +41,8 @@
         sArchiveFileCode = activePatient.getID("archiveFileCode").trim();
         sNatreg = activePatient.getID("natreg").trim();
         sDistrict = activePatient.getActivePrivate().district.trim();
+        sCity = activePatient.getActivePrivate().city.trim();
+        sSector = activePatient.getActivePrivate().sector.trim();
         sPersonID = activePatient.personid;
 
         Service as = ScreenHelper.getActiveDivision(activePatient.personid);
@@ -145,25 +148,52 @@
                 <input type="hidden" name="findUnit" value="<%=sUnit%>">
             </td>
             <%-- BUTTONS --%>
-            <td align="right" nowrap><%=getTran(request,"Web", "district", sWebLanguage)%>&nbsp;
             <%
-                String sDistricts = "<select class='text' name='findDistrict'><option/>";
-                Vector vDistricts = Zipcode.getDistricts(MedwanQuery.getInstance().getConfigString("zipcodetable","RwandaZipcodes"));
-                Collections.sort(vDistricts);
-                String sTmpDistrict;
+            	String sDistricts="";
+            	if(MedwanQuery.getInstance().getConfigString("patientHeaderDistrictField","district").equalsIgnoreCase("district")){
+	                Vector vDistricts = Zipcode.getDistricts(MedwanQuery.getInstance().getConfigString("zipcodetable","RwandaZipcodes"));
+	                Collections.sort(vDistricts);
+	                String sTmpDistrict;
+					%>
+			            <td align="right" nowrap><%=getTran(request,"Web", "district", sWebLanguage)%>&nbsp;
+	            		<select class='text' name='findDistrict'><option/>
+					<%
+	                for(int i=0; i<vDistricts.size(); i++){
+	                    sTmpDistrict = (String)vDistricts.elementAt(i);
+	
+	                    sDistricts+= "<option value='"+sTmpDistrict+"'";
+	
+	                    if(sTmpDistrict.equalsIgnoreCase(sDistrict)){
+	                        sDistricts+= " selected";
+	                    }
+	                    sDistricts+= ">"+sTmpDistrict+"</option>";
+	                }
+	                sDistricts+= "</select><input type='hidden' name='findSector'/>";
+	
+            	}
+            	else if(MedwanQuery.getInstance().getConfigString("patientHeaderDistrictField","district").equalsIgnoreCase("sector")){
+					sDistrict=MedwanQuery.getInstance().getConfigString("defaultDistrict","");
+            		Vector vDistricts = Zipcode.getCities(sDistrict,MedwanQuery.getInstance().getConfigString("zipcodetable","RwandaZipcodes"));
+            		Collections.sort(vDistricts);
+	                String sTmpDistrict;
+					%>
+		            	<td align="right" nowrap><%=getTran(request,"Web", "sector", sWebLanguage)%>&nbsp;
+	            		<select class='text' name='findSector'><option/>
+					<%
 
-                for(int i=0; i<vDistricts.size(); i++){
-                    sTmpDistrict = (String)vDistricts.elementAt(i);
-
-                    sDistricts+= "<option value='"+sTmpDistrict+"'";
-
-                    if(sTmpDistrict.equalsIgnoreCase(sDistrict)){
-                        sDistricts+= " selected";
-                    }
-                    sDistricts+= ">"+sTmpDistrict+"</option>";
-                }
-
-                sDistricts+= "</select>";
+	                for(int i=0; i<vDistricts.size(); i++){
+	                    sTmpDistrict = (String)vDistricts.elementAt(i);
+	
+	                    sDistricts+= "<option value='"+sTmpDistrict+"'";
+	
+	                    if(sTmpDistrict.equalsIgnoreCase(sSector)){
+	                        sDistricts+= " selected";
+	                    }
+	                    sDistricts+= ">"+sTmpDistrict+"</option>";
+	                }
+	                sDistricts+= "</select><input type='hidden' name='findDistrict'/>";
+	
+            	}
 
                 out.print(sDistricts);
             %>
@@ -300,7 +330,8 @@ function doSPatient(poseQuestion){
       document.getElementById("SF").findimmatnew.value.length > 0 ||
       document.getElementById("SF").findArchiveFileCode.value.length > 0 ||
       document.getElementById("SF").findPersonID.value.length > 0 ||
-      document.getElementById("SF").findDistrict.selectedIndex>-1 ||
+      (document.getElementById("SF").findDistrict.selectedIndex && document.getElementById("SF").findDistrict.selectedIndex>-1) ||
+      (document.getElementById("SF").findSector.selectedIndex && document.getElementById("SF").findSector.selectedIndex>-1) ||
       document.getElementById("SF").findUnitText.value.length > 0) {
       document.getElementById("SF").findSearchButtonClick.value = "Find";
       document.getElementById("SF").findSearchPatient.disabled = true;
@@ -324,7 +355,8 @@ function clearPatient(){
     document.getElementById("SF").findUnit.value = "";
     document.getElementById("SF").findUnitText.value = "";
     document.getElementById("SF").findPersonID.value = "";
-    document.getElementById("SF").findDistrict.selectedIndex = -1;
+    if(document.getElementById("SF").findDistrict.selectedIndex) document.getElementById("SF").findDistrict.selectedIndex = -1;
+    if(document.getElementById("SF").findSector.selectedIndex) document.getElementById("SF").findSector.selectedIndex = -1;
     document.getElementById("SF").findUnitText.style.backgroundColor = "white";
 
     document.getElementById("SF").find<%=sDefaultFocus%>.focus();

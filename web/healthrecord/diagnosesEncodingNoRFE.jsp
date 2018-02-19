@@ -109,7 +109,7 @@
 			     		<td width="1%" nowrap><img src="<c:url value='/_img/icons/icon_delete.gif'/>" class="link" onclick="deleteDiagnosis(ICPCCode<%=item.getItemId()%>);"/></td>
 			            <td width="1%">ICPC</td>
 			            <td width="1%"><b><%=item.getType().replaceAll("ICPCCode","")%></b></td>
-			            <td><b><%=MedwanQuery.getInstance().getCodeTran(item.getType().trim(),sWebLanguage)%> <%=item.getValue().trim()%>&nbsp;<i>G:<%=sGravity%>/C:<%=sCertainty%><%=POA.length()>0?" POA":""%><%=NC.length()>0?" N":""%><%=flags.length()==0?"":" ("+flags+")"%><%=userwarning %></i></b>
+			            <td><b><%=MedwanQuery.getInstance().getCodeTran(item.getType().trim(),sWebLanguage)%> <font color='red'><i><%=item.getValue().trim()%></i></font>&nbsp;<i>G:<%=sGravity%>/C:<%=sCertainty%><%=POA.length()>0?" POA":""%><%=NC.length()>0?" N":""%><%=flags.length()==0?"":" ("+flags+")"%><%=userwarning %></i></b>
 			              <input type='hidden' name='ICPCCode<%=item.getType().replaceAll("ICPCCode","")%>' value="<%=item.getValue().trim()%>"/>
 			              <input type='hidden' name='GravityICPCCode<%=item.getType().replaceAll("ICPCCode","")%>' value="<%=sGravity%>"/>
 			              <input type='hidden' name='CertaintyICPCCode<%=item.getType().replaceAll("ICPCCode","")%>' value="<%=sCertainty%>"/>
@@ -157,7 +157,7 @@
 			            <td width="1%" nowrap><img src='<c:url value="/_img/icons/icon_delete.gif"/>' class="link" onclick="deleteDiagnosis(ICD10Code<%=item.getItemId()%>);"/></td>
 		                <td width="1%">ICD10</td>
 		                <td width="1%"><b><%=item.getType().replaceAll("ICD10Code","")%></b></td>
-		                <td><b><%=MedwanQuery.getInstance().getCodeTran(item.getType().trim(),sWebLanguage)%> <%=item.getValue().trim()%>&nbsp;<i>G:<%=sGravity%>/C:<%=sCertainty%><%=POA.length()>0?" POA":""%><%=NC.length()>0?" N":""%><%=flags.length()==0?"":" ("+flags+")"%><%=userwarning %></i></b>
+		                <td><b><%=MedwanQuery.getInstance().getCodeTran(item.getType().trim(),sWebLanguage)%> <font color='red'><i><%=item.getValue().trim()%></i></font>&nbsp;<i>G:<%=sGravity%>/C:<%=sCertainty%><%=POA.length()>0?" POA":""%><%=NC.length()>0?" N":""%><%=flags.length()==0?"":" ("+flags+")"%><%=userwarning %></i></b>
 			              <input type='hidden' name='ICD10Code<%=item.getType().replaceAll("ICD10Code","")%>' value='<%=item.getValue().trim()%>'/>
 			              <input type='hidden' name='GravityICD10Code<%=item.getType().replaceAll("ICD10Code","")%>' value="<%=sGravity%>"/>
 			              <input type='hidden' name='CertaintyICD10Code<%=item.getType().replaceAll("ICD10Code","")%>' value="<%=sCertainty%>"/>

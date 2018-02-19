@@ -16,6 +16,9 @@
 		if(sInit.split(";").length>=4){
 			encounter.setManagerUID(sInit.split(";")[3]);
 		}
+		if(sInit.split(";").length>=5){
+			encounter.setSituation(sInit.split(";")[4]);
+		}
 		encounter.store();
 	}
 %>

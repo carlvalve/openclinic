@@ -192,32 +192,47 @@
   
   <%-- SET PRESTATION VARIABLE --%>
   function setPrestationVariable(uid,code,descr,type,price){
-  	price = prompt("<%=getTran(null,"web","enterprice",sWebLanguage)%>",price);
-    if("<%=sReturnFieldUid%>".length > 0){
-      window.opener.document.getElementsByName("<%=sReturnFieldUid%>")[0].value = uid;
-    }
-    if("<%=sReturnFieldCode%>".length > 0){
-      window.opener.document.getElementsByName("<%=sReturnFieldCode%>")[0].value = code;
-    }
-    if("<%=sReturnFieldDescr%>".length > 0){
-      window.opener.document.getElementsByName("<%=sReturnFieldDescr%>")[0].value = descr;
-    }
-    if("<%=sReturnFieldDescrHtml%>".length > 0){
-      window.opener.document.getElementById("<%=sReturnFieldDescrHtml%>").innerHTML = descr;
-    }
-    if("<%=sReturnFieldType%>".length > 0){
-      window.opener.document.getElementsByName("<%=sReturnFieldType%>")[0].value = type;
-    }
-    if("<%=sReturnFieldPrice%>".length > 0){
-      window.opener.document.getElementsByName("<%=sReturnFieldPrice%>")[0].value = price;
-    }
-	<%
-	    if(sFunctionVariable.length() > 0){
-	        out.print("window.opener."+sFunctionVariable+";");
+  	price2 = prompt("<%=getTran(null,"web","enterprice",sWebLanguage)%>",price);
+  	if(price*1.00>0 && price2*1.00>price*1.00){
+  		alert('<%=getTranNoLink("web","valuemustnotbehigherthan",sWebLanguage)%> '+price);
+  	}
+  	else if(price*1.00<0 && price2*1.00<price*1.00){
+  		alert('<%=getTranNoLink("web","valuemustnotbelowerthan",sWebLanguage)%> '+price);
+  	}
+  	else if(price*1.00<0 && price2*1.00>0){
+  		alert('<%=getTranNoLink("web","valuemustbenegative",sWebLanguage)%>');
+  	}
+  	else if(price*1.00>0 && price2*1.00<0){
+  		alert('<%=getTranNoLink("web","valuemustbepositive",sWebLanguage)%>');
+  	}
+  	else{
+  		price=price2;
+	    if("<%=sReturnFieldUid%>".length > 0){
+	      window.opener.document.getElementsByName("<%=sReturnFieldUid%>")[0].value = uid;
 	    }
-    %>
-
-    window.close();
+	    if("<%=sReturnFieldCode%>".length > 0){
+	      window.opener.document.getElementsByName("<%=sReturnFieldCode%>")[0].value = code;
+	    }
+	    if("<%=sReturnFieldDescr%>".length > 0){
+	      window.opener.document.getElementsByName("<%=sReturnFieldDescr%>")[0].value = descr;
+	    }
+	    if("<%=sReturnFieldDescrHtml%>".length > 0){
+	      window.opener.document.getElementById("<%=sReturnFieldDescrHtml%>").innerHTML = descr;
+	    }
+	    if("<%=sReturnFieldType%>".length > 0){
+	      window.opener.document.getElementsByName("<%=sReturnFieldType%>")[0].value = type;
+	    }
+	    if("<%=sReturnFieldPrice%>".length > 0){
+	      window.opener.document.getElementsByName("<%=sReturnFieldPrice%>")[0].value = price;
+	    }
+		<%
+		    if(sFunctionVariable.length() > 0){
+		        out.print("window.opener."+sFunctionVariable+";");
+		    }
+	    %>
+	
+	    window.close();
+  	}
   }
     
   window.setTimeout("document.getElementsByName('FindPrestationDescr')[0].focus();",300);

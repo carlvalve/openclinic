@@ -219,8 +219,36 @@
 		<label>MEDICAL IMAGING</label>
 	</result>
 	<result type='counter'>
-		<label style='bold'>Total images</label>
-		<filter type='pacs' periodfilter='true'>
+		<label style='bold'>Total patients served</label>
+		<filter type='pacspatients' periodfilter='true'>
+		</filter>
+	</result>
+	<result type='counter'>
+		<label style='italic'>Total studies</label>
+		<filter type='pacsstudy' periodfilter='true'>
+		</filter>
+	</result>
+	<result type='counter'>
+		<label style='italic'>Total series</label>
+		<filter type='pacsseries' periodfilter='true'>
+		</filter>
+	</result>
+	<result type="subtitle">
+		<label>OUTPATIENT PHARMACY</label>
+	</result>
+	<result type='counter'>
+		<label style='bold'>Total patients served</label>
+		<filter type='drugdispensing' periodfilter='true' pharmacies='1.13,1.14'>
+		</filter>
+	</result>
+	<result type='counter'>
+		<label style='italic'>Central pharmacy</label>
+		<filter type='drugdispensing' periodfilter='true' pharmacies='1.14'>
+		</filter>
+	</result>
+	<result type='counter'>
+		<label style='italic'>OPD pharmacy</label>
+		<filter type='drugdispensing' periodfilter='true' pharmacies='1.13'>
 		</filter>
 	</result>
 </report>

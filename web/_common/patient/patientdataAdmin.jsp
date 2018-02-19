@@ -85,11 +85,7 @@
 <%-- MAIN TABLE ----------------------------------------------------------------------------------%>
 <table width='100%' cellspacing="1" class="list" style="border-top:none;">
     <%=(
-         (
-            MedwanQuery.getInstance().getConfigInt("showAdminNativeCountry",1)==0?"":
-            setRow("Web","nativecountry",sNativeCountry,sWebLanguage)
-         )
-        +(
+        (
             MedwanQuery.getInstance().getConfigInt("showAdminLanguage",1)==0?"":
             setRow("Web","Language",sLanguage,sWebLanguage)
         )
@@ -107,11 +103,11 @@
             )
         +(
                 MedwanQuery.getInstance().getConfigInt("showAdminNativeCountry",1)==0?"":
-                setRow("Web","NativeCountry",sTracnetID,sWebLanguage)
+                setRow("Web","NativeCountry",sNativeCountry,sWebLanguage)
             )
         +(
                 MedwanQuery.getInstance().getConfigInt("showAdminNativeTown",1)==0?"":
-                setRow("Web","NativeTown",sTracnetID,sWebLanguage)
+                setRow("Web","NativeTown",sNativeTown,sWebLanguage)
             )
         +(
             MedwanQuery.getInstance().getConfigInt("showAdminComment1",1)==0?"":

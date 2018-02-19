@@ -2,6 +2,7 @@
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
 <%
+	boolean bWaitingList = checkString(request.getParameter("waitinglist")).equalsIgnoreCase("1");
 	boolean bHasInteractions = false;
 	try{	
 		SortedMap sm = null;
@@ -15,7 +16,7 @@
 			bHasInteractions = sm.size()>0;
 		}
 		else {
-			sm=Utils.getPatientDrugDrugInteractions(activePatient.personid);
+			sm=Utils.getPatientDrugDrugInteractions(activePatient.personid,bWaitingList);
 			bHasInteractions = sm.size()>0;
 		}
 	}

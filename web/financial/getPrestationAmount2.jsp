@@ -7,6 +7,7 @@
 	String sPrestationUIDs = checkString(request.getParameter("PrestationUIDs"));
 	String sDebetDate = checkString(request.getParameter("EditDate"));
 	java.util.Date dDebetDate=null;
+	boolean bCovered = false;
 	try{
 		dDebetDate=ScreenHelper.parseDate(sDebetDate);
 	}
@@ -77,13 +78,20 @@
 		                if(checkString(insurance.getInsurarUid()).equals(MedwanQuery.getInstance().getConfigString("MFP","$$$"))){
 		                    dPrice=prestation.getPrice();
 		                }
+		                bCovered = prestation.isCoveredInEncounter(encounter.getUid());
+		                if(bCovered){
+		                	dPrice=0;
+		                }
 		                baseInsurar=dPrice*quantity;
-	                    if(insurance.getInsurar()!=null && insurance.getInsurar().getNoSupplements()==0 && insurance.getInsurar().getCoverSupplements()==1){
+	                    if(!bCovered && insurance.getInsurar()!=null && insurance.getInsurar().getNoSupplements()==0 && insurance.getInsurar().getCoverSupplements()==1){
 	                    	dPrice+=prestation.getSupplement();
 	                    }
 		                double dInsuranceMaxPrice = prestation.getInsuranceTariff(insurance.getInsurar().getUid(),insurance.getInsuranceCategoryLetter());
 		                if(encounter!=null && encounter.getType().equalsIgnoreCase("admission") && prestation.getMfpAdmissionPercentage()>0){
 		                	dInsuranceMaxPrice = prestation.getInsuranceTariff(insurance.getInsurar().getUid(),"*H");
+		                }
+		                if(bCovered){
+		                	dInsuranceMaxPrice =0;
 		                }
 		                String sShare=checkString(prestation.getPatientShare(insurance)+"");
 		                if (sShare.length()>0){
@@ -103,7 +111,10 @@
 		        }
 		        else {
 		            dPatientAmount2=quantity * (prestation.getPrice("C")+prestation.getSupplement());
-	                dPatientAmount+=dPatientAmount2;
+	                bCovered = prestation.isCoveredInEncounter(encounter.getUid());
+	                if(!bCovered){
+	                	dPatientAmount+=dPatientAmount2;
+	                }
 		            dInsurarAmount2= 0;
 		        }
 		        //Now we have the patient share and the insurance share, let's calculate complementary insurances
@@ -156,7 +167,7 @@
 				if(!Prestation.checkMaximumReached(activePatient.personid, rule, quantity)){
 			      	prestationcontent+="<tr>";
 			        prestationcontent+="<td><input type='hidden' name='PPQ_"+prestation.getUid()+"' value='"+quantity+"'/>"+quantity+" x <input type='hidden' name='PPC_"+prestation.getUid()+"'/>"+checkString(prestation.getCode())+": "+prestation.getDescription()+"</td>";
-			        prestationcontent+="<td "+(sCoverageInsurance2.length()>0?"class='strikeonly'":"")+"><input type='hidden' name='PPP_"+prestation.getUid()+"' id='PPP_"+prestation.getUid()+"' value='"+pa+"'/><span id='TPPP_"+prestation.getUid()+"'>"+pa+"</span> "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>";
+			        prestationcontent+="<td "+(sCoverageInsurance2.length()>0?"class='strikeonly'":"")+"><input type='hidden' name='PPP_"+prestation.getUid()+"' id='PPP_"+prestation.getUid()+"' value='"+pa+"'/><span id='TPPP_"+prestation.getUid()+"'>"+pa+"</span> "+MedwanQuery.getInstance().getConfigParam("currency","€")+(bCovered?" <img src='"+sCONTEXTPATH+"/_img/icons/icon_free.gif' title='"+getTranNoLink("web","forfait",sWebLanguage)+"'/>":"")+"</td>";
 			        String sNegociate="";
 			        if(activeUser.getAccessRight("financial.negotiate.tariff.select") && insurance.getInsurar().getAllowTariffNegociations()==1){
 			        	sNegociate=" <img src='"+sCONTEXTPATH+"/_img/icons/icon_interactions.png' onclick='negotiate(\\\""+prestation.getUid()+"\\\")'/>";
@@ -354,13 +365,20 @@
 	                		e.printStackTrace();
 	                	}
 	                }
+	                bCovered = prestation.isCoveredInEncounter(encounter.getUid());
+	                if(bCovered){
+	                	dPrice=0;
+	                }
 	                baseInsurar=dPrice*quantity;
-	                if(insurance.getInsurar()!=null && insurance.getInsurar().getNoSupplements()==0 && insurance.getInsurar().getCoverSupplements()==1){
+	                if(!bCovered && insurance.getInsurar()!=null && insurance.getInsurar().getNoSupplements()==0 && insurance.getInsurar().getCoverSupplements()==1){
 	                	dPrice+=prestation.getSupplement();
 	                }
 	                double dInsuranceMaxPrice = prestation.getInsuranceTariff(insurance.getInsurar().getUid(),insurance.getInsuranceCategoryLetter());
 	                if(encounter!=null && encounter.getType().equalsIgnoreCase("admission") && prestation.getMfpAdmissionPercentage()>0){
 	                	dInsuranceMaxPrice = prestation.getInsuranceTariff(insurance.getInsurar().getUid(),"*H");
+	                }
+	                if(bCovered){
+	                	dInsuranceMaxPrice =0;
 	                }
 	                String sShare=checkString(prestation.getPatientShare(insurance)+"");
 	                if (sShare.length()>0){
@@ -377,7 +395,13 @@
 	            }
 	        }
 	        else {
-	            dPatientAmount=quantity * (prestation.getPrice("C")+prestation.getSupplement());
+                bCovered = prestation.isCoveredInEncounter(encounter.getUid());
+                if(bCovered){
+                	dPatientAmount=0;
+                }
+                else{
+                	dPatientAmount=quantity * (prestation.getPrice("C")+prestation.getSupplement());
+                }
 	            dInsurarAmount = 0;
 	        }
 	
@@ -444,7 +468,7 @@
 		        "</tr>";
 		        prestationcontent+="<tr>";
 		        prestationcontent+="<td><input type='hidden' name='PPC_"+prestation.getUid()+"' id='PPC_"+prestation.getUid()+"'/>"+checkString(prestation.getCode())+": "+prestation.getDescription()+"</td>";
-		        prestationcontent+="<td "+(sCoverageInsurance2.length()>0?"class='strikeonly'":"")+"><input type='hidden' name='PPP_"+prestation.getUid()+"' id='PPP_"+prestation.getUid()+"' value='"+pa+"'/><span id='TPPP_"+prestation.getUid()+"'>"+pa+"</span> "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>";
+		        prestationcontent+="<td "+(sCoverageInsurance2.length()>0?"class='strikeonly'":"")+"><input type='hidden' name='PPP_"+prestation.getUid()+"' id='PPP_"+prestation.getUid()+"' value='"+pa+"'/><span id='TPPP_"+prestation.getUid()+"'>"+pa+"</span> "+MedwanQuery.getInstance().getConfigParam("currency","€")+(bCovered?" <img src='"+sCONTEXTPATH+"/_img/icons/icon_free.gif' title='"+getTranNoLink("web","forfait",sWebLanguage)+"'/>":"")+"</td>";
 				String sNegociate="";
 		        if(activeUser.getAccessRight("financial.negotiate.tariff.select") && insurance.getInsurar().getAllowTariffNegociations()==1){
 		        	sNegociate=" <img src='"+sCONTEXTPATH+"/_img/icons/icon_interactions.png' onclick='negotiate(\\\""+prestation.getUid()+"\\\")'/>";
@@ -638,13 +662,20 @@
 		                if(checkString(insurance.getInsurarUid()).equals(MedwanQuery.getInstance().getConfigString("MFP","$$$"))){
 		                    dPrice=prestation.getPrice();
 		                }
+		                bCovered = prestation.isCoveredInEncounter(encounter.getUid());
+		                if(bCovered){
+		                	dPrice=0;
+		                }
 		                baseInsurar=dPrice*quantity;
-	                    if(insurance.getInsurar()!=null && insurance.getInsurar().getNoSupplements()==0 && insurance.getInsurar().getCoverSupplements()==1){
+	                    if(!bCovered && insurance.getInsurar()!=null && insurance.getInsurar().getNoSupplements()==0 && insurance.getInsurar().getCoverSupplements()==1){
 	                    	dPrice+=prestation.getSupplement();
 	                    }
 		                double dInsuranceMaxPrice = prestation.getInsuranceTariff(insurance.getInsurar().getUid(),insurance.getInsuranceCategoryLetter());
 		                if(encounter!=null && encounter.getType().equalsIgnoreCase("admission") && prestation.getMfpAdmissionPercentage()>0){
 		                	dInsuranceMaxPrice = prestation.getInsuranceTariff(insurance.getInsurar().getUid(),"*H");
+		                }
+		                if(bCovered){
+		                	dInsuranceMaxPrice =0;
 		                }
 		                String sShare=checkString(prestation.getPatientShare(insurance)+"");
 		                if (sShare.length()>0){
@@ -664,7 +695,10 @@
 		        }
 		        else {
 		            dPatientAmount2=quantity * (prestation.getPrice("C")+prestation.getSupplement());
-	                dPatientAmount+=dPatientAmount2;
+	                bCovered = prestation.isCoveredInEncounter(encounter.getUid());
+		            if(!bCovered){
+		                dPatientAmount+=dPatientAmount2;
+		            }
 		            dInsurarAmount2= 0;
 		        }
 		        //Now we have the patient share and the insurance share, let's calculate complementary insurances
@@ -716,7 +750,7 @@
 				if(!Prestation.checkMaximumReached(activePatient.personid, rule, quantity)){
 					prestationcontent+="<tr>";
 			        prestationcontent+="<td><input type='hidden' name='PPC_"+prestation.getUid()+"'/>"+checkString(prestation.getCode())+": "+prestation.getDescription()+"</td>";
-			        prestationcontent+="<td "+(sCoverageInsurance2.length()>0?"class='strikeonly'":"")+"><input type='hidden' name='PPP_"+prestation.getUid()+"' id='PPP_"+prestation.getUid()+"' value='"+pa+"'/><span id='TPPP_"+prestation.getUid()+"'>"+pa+"</span> "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>";
+			        prestationcontent+="<td "+(sCoverageInsurance2.length()>0?"class='strikeonly'":"")+"><input type='hidden' name='PPP_"+prestation.getUid()+"' id='PPP_"+prestation.getUid()+"' value='"+pa+"'/><span id='TPPP_"+prestation.getUid()+"'>"+pa+"</span> "+MedwanQuery.getInstance().getConfigParam("currency","€")+(bCovered?" <img src='"+sCONTEXTPATH+"/_img/icons/icon_free.gif' title='"+getTranNoLink("web","forfait",sWebLanguage)+"'/>":"")+"</td>";
 			        String sNegociate="";
 			        if(activeUser.getAccessRight("financial.negotiate.tariff.select") && insurance.getInsurar().getAllowTariffNegociations()==1){
 			        	sNegociate=" <img src='"+sCONTEXTPATH+"/_img/icons/icon_interactions.png' onclick='negotiate(\\\""+prestation.getUid()+"\\\")'/>";

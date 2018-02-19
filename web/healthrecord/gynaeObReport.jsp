@@ -2,7 +2,7 @@
                 java.util.*" %>
 <%@include file="/includes/validateUser.jsp" %>
 <%@page errorPage="/includes/error.jsp" %>
-<%=checkPermission("occup.surveillance", "select", activeUser)%>
+<%=checkPermission("occup.gynobechography", "select", activeUser)%>
 <script>
     <%-- ACTIVATE TAB --%>
     function activateTab(iTab) {

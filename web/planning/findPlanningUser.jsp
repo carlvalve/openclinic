@@ -369,7 +369,19 @@
   
   <%-- SAVE APPOINTMENT --%>
   function saveAppointment(){
-    if( $F("EditUserUID").length==0 || $F("appointmentDateDay").trim().length==0 ){
+	  <%
+	  	if(MedwanQuery.getInstance().getConfigInt("enableCCBRT",0)==1){
+	  		out.println("checkActivity();");
+	  	}
+	  	else {
+	  		out.println("saveValidatedAppointment();");
+	  	}
+	  %>
+  }
+ 
+	function saveValidatedAppointment(){
+
+	if( $F("EditUserUID").length==0 || $F("appointmentDateDay").trim().length==0 ){
       if($F("EditUserUID").length==0){
         $("EditUserUID").focus();
       }

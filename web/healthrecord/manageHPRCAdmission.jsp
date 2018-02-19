@@ -28,6 +28,16 @@
 				        </td>
 				        <td class="admin2">
 				            <input type="text" class="text" size="12" maxLength="10" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" id="trandate" OnBlur='checkDate(this)'> <script>writeTranDate();</script>
+							<!-- Add time section -->
+			                <%
+			                	java.util.Date date = ((TransactionVO)transaction).getUpdateTime();
+			                	if(date==null){
+			                		date=new java.util.Date();
+			                	}
+			                	String sTime=new SimpleDateFormat("HH:mm").format(date);
+			                %>
+			                <input type='text' class='text' size='5' maxLength='5' name='trantime' id='trantime' value='<%=sTime%>'/>
+			                <!-- End time section -->
 				        </td>
 				    </tr>
 				    
@@ -43,9 +53,6 @@
 				        <td class='admin2'>
 				            <textarea onKeyup="resizeTextarea(this,10);" <%=setRightClick("ITEM_TYPE_HPRC_DISEASEHISTORY")%> class="text" cols="50" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_DISEASEHISTORY" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_DISEASEHISTORY" property="value"/></textarea>
 				        </td>
-				    </tr>
-				    <tr>
-				        <td colspan="2" class='admin'><hr/></td>
 				    </tr>
 				    <tr class='admin'>
 				        <td colspan="2"><%=getTran(request,"web","antecedents",sWebLanguage)%>&nbsp;</td>
@@ -75,7 +82,8 @@
 				        </td>
 				    </tr>
 				    <tr>
-				        <td colspan="2" class='admin'><hr/></td>
+				        <td class='admin'>&nbsp;</td>
+				        <td class='admin2'>&nbsp;</td>
 				    </tr>
 				    <tr>
 				        <td width ="<%=sTDAdminWidth%>" class='admin'><%=getTran(request,"web","lifestyle",sWebLanguage)%>&nbsp;</td>
@@ -104,7 +112,7 @@
 	                </tr>
 	                <tr>
 			            <td class='admin' width ="<%=sTDAdminWidth%>"><%=getTran(request,"openclinic.chuk","temperature",sWebLanguage)%>&nbsp;(°C)</td>
-			            <td class='admin2'><input <%=setRightClickMini("[GENERAL.ANAMNESE]ITEM_TYPE_TEMPERATURE")%> id="temperature" class="text" type="text" size="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_TEMPERATURE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_TEMPERATURE" property="value"/>"/></td>
+			            <td class='admin2'><input <%=setRightClickMini("[GENERAL.ANAMNESE]ITEM_TYPE_TEMPERATURE")%> id="temperature" class="text" type="text" size="5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_TEMPERATURE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_TEMPERATURE" property="value"/>"/></td>
 			            <td class='admin'><%=getTran(request,"Web.Occup","medwan.healthrecord.cardial.frequence-cardiaque",sWebLanguage)%></td>
 			            <td class='admin2' nowrap>
 			                <input <%=setRightClick("ITEM_TYPE_CARDIAL_CLINICAL_EXAMINATION_HEARTH_FREQUENCY")%> type="text" class="text" size="3" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIAL_CLINICAL_EXAMINATION_HEARTH_FREQUENCY" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIAL_CLINICAL_EXAMINATION_HEARTH_FREQUENCY" property="value"/>" onBlur="if(isNumber(this)){if(!checkMinMaxOpen(30,220,this)){alertDialog('Web.Occup','medwan.common.unrealistic-value');}}"> /min
@@ -114,7 +122,7 @@
 	                </tr>
 	                <tr>
 			            <td class='admin' width ="<%=sTDAdminWidth%>"><%=getTran(request,"Web.Occup","medwan.healthrecord.biometry.weight",sWebLanguage)%>&nbsp;</td>
-			            <td class='admin2'><input <%=setRightClickMini("ITEM_TYPE_BIOMETRY_WEIGHT")%> id="weight" class="text" type="text" size="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BIOMETRY_WEIGHT" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BIOMETRY_WEIGHT" property="value"/>" onBlur="validateWeight(this);calculateBMI();"/></td>
+			            <td class='admin2'><input <%=setRightClickMini("ITEM_TYPE_BIOMETRY_WEIGHT")%> id="weight" class="text" type="text" size="5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BIOMETRY_WEIGHT" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BIOMETRY_WEIGHT" property="value"/>" onBlur="validateWeight(this);calculateBMI();"/></td>
 			            <td class="admin">
 			                <%=getTran(request,"Web.Occup","medwan.healthrecord.cardial.pression-arterielle",sWebLanguage)%>
 			            	<%=getTran(request,"Web.Occup","medwan.healthrecord.cardial.bras-droit",sWebLanguage)%>
@@ -127,7 +135,7 @@
 	                </tr>
 	                <tr>
 			            <td class='admin' width ="<%=sTDAdminWidth%>"><%=getTran(request,"Web.Occup","medwan.healthrecord.biometry.length",sWebLanguage)%>&nbsp;</td>
-			            <td class='admin2'><input <%=setRightClickMini("ITEM_TYPE_BIOMETRY_HEIGHT")%> class="text" type="text" size="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BIOMETRY_HEIGHT" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BIOMETRY_HEIGHT" property="value"/>" onBlur="validateHeight(this);calculateBMI();"/></td>
+			            <td class='admin2'><input <%=setRightClickMini("ITEM_TYPE_BIOMETRY_HEIGHT")%> class="text" type="text" size="5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BIOMETRY_HEIGHT" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BIOMETRY_HEIGHT" property="value"/>" onBlur="validateHeight(this);calculateBMI();"/></td>
 			            <td class="admin">
 			            	<%=getTran(request,"Web.Occup","medwan.healthrecord.cardial.pression-arterielle",sWebLanguage)%>
 			            	<%=getTran(request,"Web.Occup","medwan.healthrecord.cardial.bras-gauche",sWebLanguage)%>
@@ -139,7 +147,7 @@
 	                </tr>
 	                <tr>
 			            <td class='admin' width ="<%=sTDAdminWidth%>"><%=getTran(request,"Web.Occup","medwan.healthrecord.biometry.bmi",sWebLanguage)%>&nbsp;</td>
-			            <td class='admin2'><input tabindex="-1" class="text" type="text" size="10" readonly name="BMI"></td>
+			            <td class='admin2'><input tabindex="-1" class="text" type="text" size="5" readonly name="BMI"></td>
 			            <td class='admin'><%=getTran(request,"Web.Occup","medwan.healthrecord.respiratory.frequence-respiratoire",sWebLanguage)%></td>
 			            <td class='admin2' nowrap>
 			                <input <%=setRightClick("ITEM_TYPE_CARDIAL_CLINICAL_EXAMINATION_RESPIRATORY_FREQUENCY")%> type="text" class="text" size="3" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIAL_CLINICAL_EXAMINATION_RESPIRATORY_FREQUENCY" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CARDIAL_CLINICAL_EXAMINATION_RESPIRATORY_FREQUENCY" property="value"/>"> /min
@@ -148,11 +156,17 @@
 			            </td>
 	                </tr>
 	                <tr>
-			            <td class='admin' width ="<%=sTDAdminWidth%>"><%=getTran(request,"Web.Occup","medwan.healthrecord.weightforlength",sWebLanguage)%>&nbsp;</td>
-			            <td class='admin2'><input tabindex="-1" class="text" type="text" size="10" readonly name="WFL" id="WFL"></td>
+			            <td class='admin' width ="<%=sTDAdminWidth%>"><%=getTran(request,"Web.Occup","medwan.healthrecord.weightforlength",sWebLanguage)%>&nbsp;<img id="wflinfo" style='display: none' src="<c:url value='/_img/icons/icon_info.gif'/>"/></td>
+			            <td class='admin2'><input tabindex="-1" class="text" type="text" size="5" readonly name="WFL" id="WFL"></td>
 			            <td class='admin'><%=getTran(request,"Web.Occup","medwan.healthrecord.brachial.circumference",sWebLanguage)%></td>
 			            <td class='admin2' nowrap>
 			                <input <%=setRightClick("ITEM_TYPE_BRACHIAL_CIRCUMFERENCE")%> type="text" class="text" size="3" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BRACHIAL_CIRCUMFERENCE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BRACHIAL_CIRCUMFERENCE" property="value"/>"/> cm
+			            </td>
+	                </tr>
+	                <tr>
+			            <td class='admin' width ="<%=sTDAdminWidth%>"><%=getTran(request,"openclinic.chuk","sao2",sWebLanguage)%></td>
+			            <td class='admin2' colspan="3" nowrap>
+			                <input <%=setRightClick("[GENERAL.ANAMNESE]ITEM_TYPE_SATURATION")%> type="text" class="text" size="5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_SATURATION" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_SATURATION" property="value"/>"/> %
 			            </td>
 	                </tr>
 	                <tr class="admin">
@@ -246,6 +260,7 @@
 			  }	
 		  else {
 		    transactionForm.saveButton.disabled = true;
+		    document.getElementById('trandate').value+=' '+document.getElementById('trantime').value;
 		    <%
 		        SessionContainerWO sessionContainerWO = (SessionContainerWO)SessionContainerFactory.getInstance().getSessionContainerWO(request,SessionContainerWO.class.getName());
 		        out.print(takeOverTransaction(sessionContainerWO, activeUser,"document.transactionForm.submit();"));
@@ -318,14 +333,75 @@
         _WFL = (weightInput.value) / (heightInput.value);
       if (_BMI > 100 || _BMI < 5){
           document.getElementsByName('BMI')[0].value = "";
-          document.getElementsByName('WFL')[0].value = "";
       }
       else {
           document.getElementsByName('BMI')[0].value = Math.round(_BMI*10)/10;
-          document.getElementsByName('WFL')[0].value = Math.round(_WFL*100)/100;
+      }
+      if(_WFL>0){
+          document.getElementsByName('WFL')[0].value = _WFL.toFixed(2);
+    	  checkWeightForHeight(heightInput.value,weightInput.value);
+      }
+      else{
+          document.getElementsByName('WFL')[0].value = "";
       }
     }
   }
+	function checkWeightForHeight(height,weight){
+	      var today = new Date();
+	      var url= '<c:url value="/ikirezi/getWeightForHeight.jsp"/>?height='+height+'&weight='+weight+'&gender=<%=activePatient.gender%>&ts='+today;
+	      new Ajax.Request(url,{
+	          method: "POST",
+	          postBody: "",
+	          onSuccess: function(resp){
+	              var label = eval('('+resp.responseText+')');
+	    		  if(label.zindex>-999){
+	    			  if(label.zindex<-4){
+	    				  document.getElementById("WFL").className="darkredtext";
+	    				  document.getElementById("wflinfo").title="Z-index < -4: <%=getTranNoLink("web","severe.malnutrition",sWebLanguage).toUpperCase()%>";
+	    				  document.getElementById("wflinfo").style.display='';
+	    			  }
+	    			  else if(label.zindex<-3){
+	    				  document.getElementById("WFL").className="darkredtext";
+	    				  document.getElementById("wflinfo").title="Z-index = "+(label.zindex*1).toFixed(2)+": <%=getTranNoLink("web","severe.malnutrition",sWebLanguage).toUpperCase()%>";
+	    				  document.getElementById("wflinfo").style.display='';
+	    			  }
+	    			  else if(label.zindex<-2){
+	    				  document.getElementById("WFL").className="orangetext";
+	    				  document.getElementById("wflinfo").title="Z-index = "+(label.zindex*1).toFixed(2)+": <%=getTranNoLink("web","moderate.malnutrition",sWebLanguage).toUpperCase()%>";
+	    				  document.getElementById("wflinfo").style.display='';
+	    			  }
+	    			  else if(label.zindex<-1){
+	    				  document.getElementById("WFL").className="yellowtext";
+	    				  document.getElementById("wflinfo").title="Z-index = "+(label.zindex*1).toFixed(2)+": <%=getTranNoLink("web","light.malnutrition",sWebLanguage).toUpperCase()%>";
+	    				  document.getElementById("wflinfo").style.display='';
+	    			  }
+	    			  else if(label.zindex>2){
+	    				  document.getElementById("WFL").className="orangetext";
+	    				  document.getElementById("wflinfo").title="Z-index = "+(label.zindex*1).toFixed(2)+": <%=getTranNoLink("web","obesity",sWebLanguage).toUpperCase()%>";
+	    				  document.getElementById("wflinfo").style.display='';
+	    			  }
+	    			  else if(label.zindex>1){
+	    				  document.getElementById("WFL").className="yellowtext";
+	    				  document.getElementById("wflinfo").title="Z-index = "+(label.zindex*1).toFixed(2)+": <%=getTranNoLink("web","light.obesity",sWebLanguage).toUpperCase()%>";
+	    				  document.getElementById("wflinfo").style.display='';
+	    			  }
+	    			  else{
+	    				  document.getElementById("WFL").className="text";
+	    				  document.getElementById("wflinfo").style.display='none';
+	    			  }
+	    		  }
+  			  else{
+  				  document.getElementById("WFL").className="text";
+  				  document.getElementById("wflinfo").style.display='none';
+  			  }
+	          },
+	          onFailure: function(){
+	          }
+	      }
+		  );
+	  	}
+
+
   calculateBMI();
 
 </script>

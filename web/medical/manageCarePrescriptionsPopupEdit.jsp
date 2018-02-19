@@ -6,7 +6,7 @@
 <%@include file="/includes/validateUser.jsp"%>
 <%@page errorPage="/includes/error.jsp"%>
 <%=checkPermissionPopup("prescriptions.care","select",activeUser)%>
-
+<%=sJSSCRIPTS %>
 <%
     String sAction = checkString(request.getParameter("Action"));
 
@@ -18,6 +18,7 @@
            sEditDateEnd       = checkString(request.getParameter("EditDateEnd")),
            sEditTimeUnit      = checkString(request.getParameter("EditTimeUnit")),
            sEditTimeUnitCount = checkString(request.getParameter("EditTimeUnitCount")),
+           sEditComment = checkString(request.getParameter("EditComment")),
            sEditUnitsPerTimeUnit = checkString(request.getParameter("EditUnitsPerTimeUnit"));
 
     String  sTime1 = checkString(request.getParameter("time1")),
@@ -65,6 +66,7 @@
         Debug.println("sEditCareUid            : "+sEditCareUid);
         Debug.println("sEditDateBegin          : "+sEditDateBegin);
         Debug.println("sEditDateEnd            : "+sEditDateEnd);
+        Debug.println("sEditComment            : "+sEditComment);
         Debug.println("sEditTimeUnit           : "+sEditTimeUnit);
         Debug.println("sEditTimeUnitCount      : "+sEditTimeUnitCount);
         Debug.println("sEditPrescriberFullName : "+sEditPrescriberFullName+"\n");
@@ -74,7 +76,7 @@
     String msg = "", sSelectedPrescriberUid = "", sSelectedCareUid = "",
            sSelectedDateBegin = "", sSelectedDateEnd = "", sSelectedTimeUnit = "",
            sSelectedTimeUnitCount = "", sSelectedUnitsPerTimeUnit = "", 
-           sSelectedPrescriberFullName = "";
+           sSelectedPrescriberFullName = "", sSelectedComment="";
     
     //*********************************************************************************************
     //*** process actions *************************************************************************
@@ -86,6 +88,7 @@
         if(sEditPrescrUid.length()==0) sEditPrescrUid = "-1";
         CarePrescription prescr = new CarePrescription();
         prescr.setUid(sEditPrescrUid);
+        prescr.setComment(sEditComment);
         prescr.setPatientUid(activePatient.personid);
         prescr.setPrescriberUid(sEditPrescriberUid);
         prescr.setCareUid(sEditCareUid);
@@ -144,6 +147,7 @@
         }
 
         sEditPrescrUid = prescr.getUid();
+        sEditComment = prescr.getComment();
         sSelectedTimeUnit = checkString(prescr.getTimeUnit());
         sSelectedTimeUnitCount = prescr.getTimeUnitCount()+"";
         sSelectedUnitsPerTimeUnit = prescr.getUnitsPerTimeUnit()+"";
@@ -155,6 +159,7 @@
         // do not get data from DB, but show data that were allready on form
         sSelectedPrescriberUid = sEditPrescriberUid;
         sSelectedCareUid = sEditCareUid;
+        sSelectedComment = sEditComment;
         sSelectedDateBegin = sEditDateBegin;
         sSelectedDateEnd = sEditDateEnd;
         sSelectedTimeUnit = sEditTimeUnit;
@@ -180,6 +185,7 @@
             if(checkString(prescr.getCareUid()) != null){
                 sSelectedCareUid = prescr.getCareUid();
             }
+            sSelectedComment = checkString(prescr.getComment());
             
             // format begin date
             java.util.Date tmpDate = prescr.getBegin();
@@ -211,15 +217,7 @@
     }
     
     // only editable by prescriber
-    boolean editableByPrescriber = false;
-    if(activeUser.isAdmin()){
-    	editableByPrescriber = true; // always editable by administrator
-    }
-    else if(sEditPrescrUid.length() > 0){
-    	if(sSelectedPrescriberUid.equals(activeUser.userid)){
-    		editableByPrescriber = true;
-    	}
-    }
+    boolean editableByPrescriber = true;
     Debug.println("--> editableByPrescriber : "+editableByPrescriber);
     
     
@@ -272,6 +270,13 @@
                         </select>
 
                         <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="clearDescriptionRule();">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="admin"><%=getTran(request,"Web","comment",sWebLanguage)%>&nbsp;*&nbsp;</td>
+                    <td class="admin2">
+                        <%-- Units Per Time Unit --%>
+           				<textarea onKeyup="resizeTextarea(this,10);" class="text" rows="1" cols="50" name="EditComment" id="EditComment"><%=checkString(sSelectedComment)%></textarea>
                     </td>
                 </tr>
                 <%-- date begin --%>
@@ -334,17 +339,12 @@
                     <td class="admin"/>
                     <td class="admin2">
                         <%
-                            if(editableByPrescriber){
-		                        if(activeUser.getAccessRight("prescriptions.care.add") || activeUser.getAccessRight("prescriptions.care.edit")){
-		                            %><input class="button" type="button" name="saveButton" id="saveButton" value='<%=getTranNoLink("Web","save",sWebLanguage)%>' onclick="doSave();">&nbsp;<%
-		                        }
-		                        if((activeUser.getAccessRight("prescriptions.care.delete"))&&(sEditPrescrUid.length()>0)){
-		                            %><input class="button" type="button" name="deleteButton" value='<%=getTranNoLink("Web","delete",sWebLanguage)%>' onclick="doDelete('<%=sEditPrescrUid%>');">&nbsp;<%
-		                        }
-                            }
-                            else{
-                            	%><font color="red"><%=getTran(request,"web.occup","onlyEditableByPrescriber",sWebLanguage)%></font><%
-                            }
+	                        if(activeUser.getAccessRight("prescriptions.care.add") || activeUser.getAccessRight("prescriptions.care.edit")){
+	                            %><input class="button" type="button" name="saveButton" id="saveButton" value='<%=getTranNoLink("Web","save",sWebLanguage)%>' onclick="doSave();">&nbsp;<%
+	                        }
+	                        if((activeUser.getAccessRight("prescriptions.care.delete"))&&(sEditPrescrUid.length()>0)){
+	                            %><input class="button" type="button" name="deleteButton" value='<%=getTranNoLink("Web","delete",sWebLanguage)%>' onclick="doDelete('<%=sEditPrescrUid%>');">&nbsp;<%
+	                        }
                         %>
                         <input class="button" type="button" name="returnButton" value='<%=getTranNoLink("Web","backtooverview",sWebLanguage)%>' onclick="doBack();">
                     </td>
@@ -563,7 +563,8 @@
       window.location.href="<c:url value='/popup.jsp'/>?Page=medical/manageCarePrescriptionsPopup.jsp&ts="+new Date();
     }
   }
-  
+  resizeTextarea(document.getElementById('EditComment'),10);
+
   <%-- The following script is used to hide the calendar whenever you click the document. --%>
   <%-- When using it you should set the name of popup button or image to "popcal", otherwise the calendar won't show up. --%>
   document.onmousedown = function(e){
@@ -584,6 +585,5 @@
       gfPop3.fHideCal();
     }
   }
-</script>
-
-<%=writeJSButtons("transactionForm","saveButton")%>
+  </script>
+  <%=writeJSButtons("transactionForm","saveButton")%>

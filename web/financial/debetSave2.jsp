@@ -32,14 +32,10 @@
         		String sPatientAmount = request.getParameter("PPP_"+sPrestationUid);
         		String sInsurarAmount = request.getParameter("PPI_"+sPrestationUid);
 		        Debet debet = new Debet();
-		        System.out.println("before: "+sInsurarAmount);
 		        if(sInsurarAmount.indexOf(",")>-1){
 		        	sInsurarAmount=sInsurarAmount.replaceAll("\\.","");
 		        }
-		        System.out.println("before2: "+sInsurarAmount);
-		        System.out.println("before3: "+Double.parseDouble(sInsurarAmount.replaceAll(",",".")));
 		        debet.setInsurarAmount(Double.parseDouble(sInsurarAmount.replaceAll(",",".")));
-		        System.out.println("after: "+debet.getInsurarAmount());
 		        debet.setComment(sEditComment);
 		
 		        if ((!sEditDebetUID.equals(("-1")))&&(sEditDebetUID.length()>0)) {
@@ -91,7 +87,6 @@
 		        	sPatientAmount=sPatientAmount.replaceAll("\\.","");
 		        }
 	            debet.setAmount(Double.parseDouble(sPatientAmount.replaceAll(",",".")));
-		        System.out.println("after2: "+debet.getInsurarAmount());
 		        if(!debet.store()){
 		        	bSuccess=false;
 		        	debet.setUid("-1");
@@ -99,7 +94,6 @@
 		        else {
 		        	debets.add(debet);
 		        }
-		        System.out.println("after3: "+debet.getInsurarAmount());
         	}
         }
         e = request.getParameterNames();

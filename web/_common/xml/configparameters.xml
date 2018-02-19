@@ -995,9 +995,14 @@
 		<parameter name="archiveDocumentBarcodeSize" default="200" type="integer" unit="pixels"/>
 		<parameter name="archiveDocumentBarcodeColumns" default="2" type="integer" unit="columns"/>
 		<parameter name="archivingServerDocumentModificationTimeoutInMillis" default="60000" type="integer" unit="milliseconds"/>
+		<parameter name="scanDirectoryExcludedExtensions" default="part">
+			<description language="en">
+				Files with this extension will be disregarded by the archiving module and will NOT be moved to the error directory. These files will be reprocessed in every archiving run.
+			</description>
+		</parameter>
 		<parameter name="scanDirectoryMonitor_notScannableFileExtensions" default="">
 			<description language="en">
-				Files with this extension will be disregarded by the archiving module
+				Files with this extension will be disregarded by the archiving module and will be moved to the error directory
 			</description>
 		</parameter>
 		

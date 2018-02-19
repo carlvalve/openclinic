@@ -37,7 +37,7 @@
 
 <%!
     String sAPPTITLE = "Openclinic";
-    String sWEBTITLE = "Post-Factum - "+MedwanQuery.getInstance().getConfigString("edition").toUpperCase();
+    String sWEBTITLE = "Post-Factum - "+MedwanQuery.getInstance().getConfigString("edition","openclinic").toUpperCase();
     String sAPPDIR = "";
     String sAPPFULLDIR = "";
     String sBackgroundColor = "CEFFCE;";
@@ -1040,13 +1040,14 @@
 	//String sJSJQUERY = "<script src='"+sCONTEXTPATH+"/_common/_script/jquery-1.4.4.min.js'></script>";
     String sJSSCRIPTS = "<script src='"+sCONTEXTPATH+"/_common/_script/scripts.js'></script>";
     
-    String sJSCHARTJS  = "<script src='"+sCONTEXTPATH+"/_common/_script/chart.min.js'></script>";
+    String sJSCHARTJS  = "<script src='"+sCONTEXTPATH+"/_common/_script/Moment.js'></script><script src='"+sCONTEXTPATH+"/_common/_script/chart.js'></script><script src='"+sCONTEXTPATH+"/_common/_script/annotation.js'></script>";
     //String sJSEXCANVAS = "<!--[if IE]><script src='"+sCONTEXTPATH+"/_common/_script/excanvas.js'></script><![endif]-->";
     String sJSMORRIS   = "<script src='"+sCONTEXTPATH+"/_common/_script/morris.min.js'></script>";
     String sJSJQUERY   = "<script src='"+sCONTEXTPATH+"/_common/_script/jquery-1.8.2.min.js'></script><script src='"+sCONTEXTPATH+"/_common/_script/fixed_table_rc.js'></script>";
     String sJSFIXEDTABLE   = "<script src='"+sCONTEXTPATH+"/_common/_script/fixed_table_rc.js'></script>";
     String sJSRAPHAEL  = "<script src='"+sCONTEXTPATH+"/_common/_script/raphael-min.js'></script>";
     String sCANVAS  = "<script src='"+sCONTEXTPATH+"/_common/_script/canvas.js'></script>";
+    String sCKEDITOR  = "<script src='"+sCONTEXTPATH+"/_common/_script/ckeditor/ckeditor.js'></script>";
 
     // varia
     String sTDAdminWidth = "200";

@@ -12,14 +12,15 @@
 %>
 
 <form name="drugsOutForm" method="post">
-    <%=writeTableHeader("web","drugsoutbarcode",sWebLanguage," window.close();")%>
-
-    <table width="100%" class="list" cellpadding="0" cellspacing="1">        
+    <table width="100%" class="list" cellpadding="0" cellspacing="1">  
+    	<tr class='admin'>
+    		<td colspan='2'><%=getTran(request,"web","drugsoutbarcode",sWebLanguage) %>&nbsp;&nbsp;&nbsp;&nbsp;<span id="interactionswarning">&nbsp;</span></td>
+    	</tr>      
         <%-- SERVICE STOCK --%>
         <tr>
             <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","servicestock",sWebLanguage)%></td>
             <td class="admin2">
-                <select class='text' name="servicestock" id="servicestock" onchange="setDefaultPharmacy();doAdd('yes')">
+                <select class='text' name="servicestock" id="servicestock" onchange="setDefaultPharmacy();doAdd('yes');">
                     <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>
                     <%
                         String defaultPharmacy = (String)session.getAttribute("defaultPharmacy");
@@ -40,7 +41,7 @@
             <td class='admin'><%=getTran(request,"web","product",sWebLanguage)%></td>
             <td class='admin2'>
 		        <input type="hidden" name="EditProductUid" id="EditProductUid" value="">
-            	<input type='text' class='text' name='drugbarcode' id='drugbarcode' size='60' onkeyup='if(enterEvent(event,13)){doAdd("");document.getElementById("EditProductUid").value=""}'/>
+            	<input type='text' class='text' name='drugbarcode' id='drugbarcode' size='60' onkeyup='if(document.getElementById("EditProductUid").value.length>0 && enterEvent(event,13)){doAdd("");document.getElementById("EditProductUid").value=""}'/>
 				<div id="autocomplete_prescription" class="autocomple"></div>
             </td>
         </tr>
@@ -77,6 +78,31 @@
         </tr>
         <%-- COMMENT --%>
         <tr>
+            <td class='admin'><%=getTran(request,"web","prescriber",sWebLanguage)%></td>
+            <td class='admin2'>
+            	<select class='text' name='prescriber' id='prescriber'>
+            		<option/>
+            		<%
+            			Connection conn = MedwanQuery.getInstance().getAdminConnection();
+            			PreparedStatement ps = conn.prepareStatement("select distinct lastname,firstname,a.personid,userid from admin z,adminextends a,users b where z.personid=a.personid and a.personid=b.personid and b.stop is null and a.labelid='usergroup' and a.extendvalue='"+MedwanQuery.getInstance().getConfigString("physicianCategory", "192.0.0")+"' order by lastname,firstname");
+            			ResultSet rs = ps.executeQuery();
+            			while(rs.next()){
+            				String name = rs.getString("lastname").toUpperCase()+", "+rs.getString("firstname");
+            				if(rs.getString("userid").equalsIgnoreCase(activeUser.userid)){
+            					out.println("<option selected>"+name+"</option>");
+            				}
+            				else{
+            					out.println("<option>"+name+"</option>");
+            				}
+            			}
+            			rs.close();
+            			ps.close();
+            			conn.close();
+            		%>
+            	</select>
+            </td>
+        </tr>
+        <tr>
             <td class='admin'><%=getTran(request,"web","comment",sWebLanguage)%></td>
             <td class='admin2'><input type='text' class='text' name='comment' id='comment' size='60' value=''/></td>
         </tr>
@@ -85,13 +111,27 @@
         <tr>
             <td class='admin'>&nbsp;</td>
             <td class='admin'>
-                <input type='button' class="button" name='addbutton' id='addbutton' value='<%=getTranNoLink("web","add",sWebLanguage)%>' onclick="doAdd('');"/>&nbsp;&nbsp;&nbsp;
-                <input type='button' class="button" name='deliverbutton' id='deliverbutton' value='<%=getTranNoLink("web","deliver",sWebLanguage)%>' onclick="doDeliver('');"/>
-                <input type='button' class="button" name='invoicebutton' id='invoicebutton' value='<%=getTranNoLink("web","invoice",sWebLanguage)%>' onclick='window.opener.location.href="<c:url value="main.do?Page=financial/patientInvoiceEdit.jsp"/>";window.close();'/>
+            	<%if(activeUser.getAccessRight("fastdrugsprescription.add")){ %>
+                	<input type='button' class="button" name='addbutton' id='addbutton' value='<%=getTranNoLink("web","add",sWebLanguage)%>' onclick="doAdd('');"/>&nbsp;&nbsp;&nbsp;
+                <%} %>
+            	<%if(activeUser.getAccessRight("fastdrugsdelivery.add")){ %>
+	                <input type='button' class="button" name='deliverbutton' id='deliverbutton' value='<%=getTranNoLink("web","deliver",sWebLanguage)%>' onclick="doDeliver('');"/>
+                <%} %>
+            	<%if(activeUser.getAccessRight("financial.patientinvoice.add")){ %>
+	                <input type='button' class="button" name='invoicebutton' id='invoicebutton' value='<%=getTranNoLink("web","invoice",sWebLanguage)%>' onclick='window.opener.location.href="<c:url value="main.do?Page=financial/patientInvoiceEdit.jsp"/>";window.close();'/>
+                <%} %>
+            	<%if(activeUser.getAccessRight("prescriptions.drugs.select")){ %>
+	                <input type='button' class="button" name='prescriptionbutton' id='prescriptionbutton' value='<%=getTranNoLink("web","prescription",sWebLanguage)%>' onclick='printPaperPrescription();'/>
+                <%} %>
             </td>
         </tr>
     </table>    
 </form>
+<form name="printPrescriptionForm" id="printPrescriptionForm" method="post" action="<c:url value='/'/>medical/createPrescriptionPdf.jsp">
+    <input type="hidden" name="prescriptiondate" id="prescriptiondate" value="<%=ScreenHelper.stdDateFormat.format(new java.util.Date())%>"/>
+    <input type="hidden" name="prescription" id="prescription" value=""/>
+</form>
+
 
 <%-- SEARCH RESULTS (ajax) --%>
 <div name="divDrugsOut" id="divDrugsOut"></div>
@@ -111,13 +151,17 @@
 		alert('<%=getTranNoLink("web","no.product.specified",sWebLanguage)%>');
 		return;
 	}
+	else if(loadonly!='yes' && document.getElementById("servicestock").value.length==0){
+		alert('<%=getTranNoLink("web","no.servicestock.specified",sWebLanguage)%>');
+		return;
+	}
     var url = "<c:url value='/pharmacy/addDrugsOutBarcode.jsp'/>?loadonly="+loadonly+
               "&ServiceStock="+document.getElementById("servicestock").value+
               "&DrugUid="+document.getElementById("EditProductUid").value+
               "&DrugBarcode="+document.getElementById("drugbarcode").value+
               "&EncounterUid="+document.getElementById("EditEncounterUID").value+
               "&Quantity="+document.getElementById("quantity").value+
-              "&Comment="+document.getElementById("comment").value+
+              "&Comment="+document.getElementById("prescriber").value+(document.getElementById("prescriber").value.length>0 && document.getElementById("comment").value.length>0?", ":"")+document.getElementById("comment").value+
               "&ts="+new Date().getTime();
     new Ajax.Request(url,{
       method: "GET",
@@ -131,10 +175,10 @@
         else{
           if(label.drugs.length > 0){
             $("divDrugsOut").innerHTML = label.drugs;
-            if(label.drugs.indexOf("<NODELIVERY>")>-1){
+            if(document.getElementById('deliverbutton') &&label.drugs.indexOf("<NODELIVERY>")>-1){
             	document.getElementById('deliverbutton').style.visibility='hidden';
             }
-            else{
+            else if (document.getElementById('deliverbutton')){
             	document.getElementById('deliverbutton').style.visibility='visible';
             }
           }
@@ -142,12 +186,26 @@
         	  document.getElementById("drugbarcode").value = "";
         	  document.getElementById("EditProductUid").value = "";
           }
+          else if(document.getElementById("drugbarcode").value.length>0){
+        	  myautocompleter.activate();
+          }
         }
+        checkForInteractions();
       }
     });
     document.getElementById('drugbarcode').focus();  
   }
-
+  
+  function printPaperPrescription(){
+	  var elements = document.all;
+	  for(n=0;n<elements.length;n++){
+		  if(elements[n].id && elements[n].id.startsWith('drugname.')){
+			  document.getElementById('prescription').value+='R/ '+elements[n].innerHTML+"\n\n";
+		  }
+	  }
+	  document.getElementById('printPrescriptionForm').submit();
+  }
+  
   <%-- DO DELETE --%>
   function doDelete(listuid){
     var url = '<c:url value="/pharmacy/deleteDrugsOutBarcode.jsp"/>?listuid='+listuid+'&ts='+new Date();
@@ -163,14 +221,15 @@
         else{
           if(label.drugs.length > 0){
             $('divDrugsOut').innerHTML = label.drugs;
-            if(label.drugs.indexOf("<NODELIVERY>")>-1){
+            if(document.getElementById('deliverbutton') && label.drugs.indexOf("<NODELIVERY>")>-1){
             	document.getElementById('deliverbutton').style.visibility='hidden';
             }
-            else{
+            else if(document.getElementById('deliverbutton')){
             	document.getElementById('deliverbutton').style.visibility='visible';
             }
           }
         }
+        checkForInteractions();
       }
     });
     document.getElementById('drugbarcode').focus();
@@ -189,11 +248,12 @@
             window.setTimeout('doAdd("yes")',1000);
         }
         else{
-            $('divDrugsOut').innerHTML = label.drugs;
-            if(label.drugs.indexOf("<NODELIVERY>")>-1){
+            //$('divDrugsOut').innerHTML = label.drugs;
+            doAdd('yes');
+            if(document.getElementById('deliverbutton') && label.drugs.indexOf("<NODELIVERY>")>-1){
             	document.getElementById('deliverbutton').style.visibility='hidden';
             }
-            else{
+            else if(document.getElementById('deliverbutton')){
             	document.getElementById('deliverbutton').style.visibility='visible';
             }
         }
@@ -212,7 +272,7 @@
     });
   }
     
-	new Ajax.Autocompleter('drugbarcode','autocomplete_prescription','medical/ajax/getDrugs.jsp',{
+	var myautocompleter = new Ajax.Autocompleter('drugbarcode','autocomplete_prescription','medical/ajax/getDrugs.jsp',{
 		  minChars:1,
 		  method:'post',
 		  afterUpdateElement:afterAutoComplete,
@@ -239,6 +299,39 @@
     openPopup("/_common/search/searchEncounter.jsp&ts=<%=getTs()%>&VarCode="+encounterUidField+"&VarText="+encounterNameField+
     		  "&FindEncounterPatient=<%=activePatient.personid%>");
   }
+  function checkForInteractions(){
+	  	document.getElementById("interactionswarning").innerHTML="<img height='5px' src='<c:url value="/_img/themes/default/ajax-loader.gif"/>'/>";
+	    var url = "<c:url value=''/>pharmacy/popups/findRxNormDrugDrugInteractionsBoolean.jsp";
+	    var params = "waitinglist=1";
+	    new Ajax.Request(url,{
+	      method: "POST",
+	      parameters: params,
+	      onSuccess: function(resp){
+	        var interactions =  eval('('+resp.responseText+')');
+	        if(interactions.interactionsexist=='1'){
+	        	document.getElementById("interactionswarning").innerHTML="<a href='javascript:findInteractions();'><img src='<c:url value='/_img/icons/icon_warning.gif'/>' title='<%=getTranNoLink("web","prescription_has_interactions",sWebLanguage)%>'/><%=getTranNoLink("web","prescription_has_interactions",sWebLanguage)%>!</a>";
+	        }
+	        else {
+	        	document.getElementById("interactionswarning").innerHTML='&nbsp';
+	        }
+	      },
+		onFailure: function(resp){
+        	document.getElementById("interactionswarning").innerHTML='&nbsp';
+	      }
+	    });
+	  }
+
+  <%
+  	if(MedwanQuery.getInstance().getConfigInt("enableRxNorm",0)==1){
+  %>
+  		checkForInteractions();
+  <%
+  	}
+  %>
+  
+  function findInteractions(){
+	    openPopup("/pharmacy/popups/findRxNormDrugDrugInteractions.jsp&waitinglist=1&ts=<%=getTs()%>",800,600);
+	}
 
   doAdd('yes');
   document.getElementById('drugbarcode').focus();

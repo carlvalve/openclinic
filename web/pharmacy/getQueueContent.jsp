@@ -3,10 +3,19 @@
 <%@page errorPage="/includes/error.jsp"%>
 <td colspan='2'><table width='100%'>
 	<tr class='admin'>
-		<td width='35%' colspan='2'><%=getTran(request,"web","product",sWebLanguage) %></td>
-		<td width='15%'><%=getTran(request,"web","batch",sWebLanguage) %></td>
-		<td width='15%'><%=getTran(request,"web","quantity",sWebLanguage) %></td>
-		<td width='15%'><%=getTran(request,"web","level",sWebLanguage) %></td>
+	<% 
+		String unconfirmed = checkString(request.getParameter("unconfirmed"));
+		if(unconfirmed.equalsIgnoreCase("1")){%>
+			<td width='10%' colspan='2'><%=getTran(request,"web","date",sWebLanguage) %></td>
+			<td width='30%'><%=getTran(request,"web","product",sWebLanguage) %></td>
+		<%}
+		else{%>
+			<td width='40%' colspan='2'><%=getTran(request,"web","product",sWebLanguage) %></td>
+			<td width='10%'><%=getTran(request,"web","user",sWebLanguage) %></td>
+		<%}%>
+		<td width='10%'><%=getTran(request,"web","batch",sWebLanguage) %></td>
+		<td width='5%'><%=getTran(request,"web","quantity",sWebLanguage) %></td>
+		<td width='5%'><%=getTran(request,"web","level",sWebLanguage) %></td>
 		<td><%=getTran(request,"web","patient",sWebLanguage) %></td>
 	</tr>
 <%
@@ -14,15 +23,26 @@
 		String servicestockuid=checkString(request.getParameter("servicestockuid"));
 		System.out.println("servicestockuid="+servicestockuid);
 		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
-		String sSql="select * from oc_productstockoperations,oc_productstocks,adminview where"+
-					" oc_operation_date>=? and"+
-					" oc_operation_description like 'medicationdelivery%' and"+
-					" oc_operation_srcdesttype='patient' and"+
-					" personid=oc_operation_srcdestuid and"+
-					" oc_operation_deliverytime is null and"+
-					" oc_stock_objectid=replace(oc_operation_productstockuid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and"+
-					" oc_stock_servicestockuid=?"+
-					" order by oc_operation_date";
+		String sSql="";
+		if(unconfirmed.equalsIgnoreCase("1")){
+			sSql="select now() oc_operation_date,personid,lastname,firstname,oc_list_quantity oc_operation_unitschanged, oc_list_batchuid oc_operation_batchuid,oc_list_serverid oc_operation_serverid,oc_list_objectid oc_operation_objectid,oc_stock_serverid,oc_stock_objectid from oc_drugsoutlist,oc_productstocks,adminview where "+
+				" oc_stock_objectid=replace(oc_list_productstockuid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and"+
+				" '1900-01-01'<? and"+
+				" personid=oc_list_patientuid and"+
+				" oc_stock_servicestockuid=?"+
+				" order by lastname,firstname,oc_list_patientuid";
+		}
+		else{
+			sSql="select * from oc_productstockoperations,oc_productstocks,adminview where"+
+						" oc_operation_date>=? and"+
+						" oc_operation_description like 'medicationdelivery%' and"+
+						" oc_operation_srcdesttype='patient' and"+
+						" personid=oc_operation_srcdestuid and"+
+						" oc_operation_deliverytime is null and"+
+						" oc_stock_objectid=replace(oc_operation_productstockuid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and"+
+						" oc_stock_servicestockuid=?"+
+						" order by lastname,firstname,oc_operation_date";
+		}
 		PreparedStatement ps = conn.prepareStatement(sSql);
 		ps.setDate(1,new java.sql.Date(ScreenHelper.parseDate(ScreenHelper.getDate()).getTime()));
 		ps.setString(2,servicestockuid);
@@ -45,7 +65,15 @@
 				quantities.put(uid,0);
 			}
 			quantities.put(uid,((Integer)quantities.get(uid))+quantity);
-			queue.add(uid+";"+rs.getString("oc_operation_batchuid")+";"+quantity+";"+patient+";"+operationuid);
+			String date="?";
+			String userName="";
+			if(unconfirmed.equalsIgnoreCase("1")){
+				date=ScreenHelper.formatDate(rs.getDate("oc_operation_date"));
+			}
+			else{
+				userName=MedwanQuery.getInstance().getUserName(rs.getInt("oc_operation_updateuid"));
+			}
+			queue.add(uid+";"+rs.getString("oc_operation_batchuid")+";"+quantity+";"+patient+";"+operationuid+";"+date+";"+userName+";");
 		}
 		for(int n=0;n<queue.size();n++){
 			String queueItem = (String)queue.elementAt(n);
@@ -58,9 +86,21 @@
 					batchNumber=batch.getBatchNumber();
 				}
 				int quantity = Integer.parseInt(queueItem.split(";")[2]);
+				String date = queueItem.split(";")[5];
 				int level = stock.getLevel()+(Integer)quantities.get(queueItem.split(";")[0]);
 				String patient = queueItem.split(";")[3];
-				out.println("<tr><td class='admin' onmouseover=\"this.style.cursor='hand';\" onmouseout=\"this.style.cursor='default';\" ><img src='"+sCONTEXTPATH+"/_img/icons/icon_order.gif' onclick=\"deliverProduct('"+queueItem.split(";")[4]+"');\"/></td><td class='admin'><font style='font-size:14px'>"+productName+"</font></td><td class='admin2'><font style='font-size:14px'>"+batchNumber+"</font></td><td class='admin2'><font style='font-size:14px'>"+quantity+"</font></td><td class='admin2'><font style='font-size:14px'>"+level+"</font></td><td class='admin2'><font style='font-size:10px'>"+patient+"</font></td></tr>");
+				if(unconfirmed.equalsIgnoreCase("1")){
+					if(activeUser.getAccessRightNoSA("pharmacy.unconfirmedwaitinglist.delete")){
+						out.println("<tr><td class='admin' onmouseover=\"this.style.cursor='hand';\" onmouseout=\"this.style.cursor='default';\" ><img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.gif' onclick=\"deleteProduct('"+queueItem.split(";")[4]+"');\"/></td><td class='admin2'><font style='font-size:14px'>"+date+"</font></td><td class='admin2'><font style='font-size:14px'>"+productName+"</font></td><td class='admin2'><font style='font-size:14px'>"+batchNumber+"</font></td><td class='admin2'><font style='font-size:14px'>"+quantity+"</font></td><td class='admin2'><font style='font-size:14px'>"+level+"</font></td><td class='admin2'><font style='font-size:10px'>"+patient+"</font></td></tr>");
+					}
+					else{
+						out.println("<tr><td class='admin2' colspan='2'><font style='font-size:14px'>"+date+"</font></td><td class='admin'><font style='font-size:14px'>"+productName+"</font></td><td class='admin2'><font style='font-size:14px'>"+batchNumber+"</font></td><td class='admin2'><font style='font-size:14px'>"+quantity+"</font></td><td class='admin2'><font style='font-size:14px'>"+level+"</font></td><td class='admin2'><font style='font-size:10px'>"+patient+"</font></td></tr>");
+					}
+				}
+				else{
+					String userName=queueItem.split(";")[6];
+					out.println("<tr><td class='admin' onmouseover=\"this.style.cursor='hand';\" onmouseout=\"this.style.cursor='default';\" ><img src='"+sCONTEXTPATH+"/_img/icons/icon_order.gif' onclick=\"deliverProduct('"+queueItem.split(";")[4]+"');\"/></td><td class='admin'><font style='font-size:14px'>"+productName+"</font></td><td class='admin2'><font style='font-size:14px'>"+userName+"</font></td><td class='admin2'><font style='font-size:14px'>"+batchNumber+"</font></td><td class='admin2'><font style='font-size:14px'>"+quantity+"</font></td><td class='admin2'><font style='font-size:14px'>"+level+"</font></td><td class='admin2'><font style='font-size:10px'>"+patient+"</font></td></tr>");
+				}
 			}
 		}
 		rs.close();

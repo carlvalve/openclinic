@@ -1,0 +1,53 @@
+<treatments>
+	<treatment id='85'>
+		<refs>
+			<ref><![CDATA[<a target='_new' href='https://www.ncbi.nlm.nih.gov/pubmed/19136437'>Gottstein B, Pozio E, Nöckler K. Epidemiology, diagnosis, treatment and control of trichinellosis. Clin Microbiol Rev 2009;22:127-45</a>]]></ref>
+			<ref><![CDATA[<a target='_new' href='https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3311199'>Watt G, Silachamroon U. Areas of uncertainty in the management of human trichinellosis: a clinical perspective. Expert Rev Anti Infect Ther 2004;2:649-52. 14B</a>]]></ref>
+		</refs>
+		<![CDATA[
+			<li>Albendazole: 200 mg q12h po x 3 jours, suivi de 400 mg q12h po x 15 jours
+			<li>Mebendazole: 400 mg q8h po x 14 jours
+			<li>Prednisone 40 à 60 mg q24h x 3 à 5 jours, suivi d’un dosage dégressif
+		]]>
+	</treatment>
+	<treatment id='151'>
+		<refs>
+			<ref>M. Wéry, Int J Antimicrobial Agents, 4: 227-238, 1994</ref>
+			<ref>J. Pépin in Advances in Parasitology vol 33, 1994</ref>
+			<ref>M. Wéry, Int J Antimicrobial Agents, 4: 227-238, 1994</ref>
+		</refs>
+		<![CDATA[<li>Suramine (ITM): test avec 100 mg en perfusion. Le même jour 400 mg IV sur 4 h. 
+			<li>Deuxième jour: 500 mg/ 4 hours. Puis 1 g IV par semaine, 6 semaines. (Cave! insuffisance rénale, dermatite exfoliative).
+			<li>Traitement rapide: 1 g IV jour 1, 3, 6, 14, et 21.
+			<li>En cas de symptoms cérébraux, associez, melarsoprol et prednisone.
+		]]>
+	</treatment>
+	<treatment id='48'>
+		<refs>
+			<ref>Lambertucci et al. Trans. Royal Soc. Trop. Med. Hyg. 83:354;1989</ref>
+			<ref>Doherty et al. BMJ 313:1071-2;1996</ref>
+		</refs>
+		<![CDATA[
+			<li>Biltricide®, 2 x 20-30 mg/kg/j pendant 2-3 jours.
+			<li>Répétez après 3 à 6 mois, monodose 40mg/kg.
+			<li>Prednisone 20 mg/day pendant 3-5 jours. 		
+		]]>
+	</treatment>
+	<treatment id='38'>
+		<refs>
+			<ref>Hogan J1, Radhakrishnan J. The treatment of minimal change disease in adults. J Am Soc Nephrol. 2013 Apr;24(5):702-11.</ref>
+			<ref>Ulinski T1, Aoun B. New treatment strategies in idiopathic nephrotic syndrome. Minerva Pediatr. 2012 Apr;64(2):135-43.</ref>
+		</refs>
+		<![CDATA[
+			<li>Prednisone 60 mg/jour, 15 jours. Dosage dégressif.
+		]]>
+	</treatment>
+	<treatment id='13'>
+		<refs>
+			<ref>Adamolekun B1, Hiffler L1. A diagnosis and treatment gap for thiamine deficiency disorders in sub-Saharan Africa? Ann N Y Acad Sci. 2017 Oct 24. doi: 10.1111/nyas.13509.</ref>
+		</refs>
+		<![CDATA[
+			<li>Thiamine 3x250 mg IV/j pendant 3 jours, suivi de 300 mg/j per os pendant 2 semaines.
+		]]>
+	</treatment>
+</treatments>

@@ -17,6 +17,7 @@
            sFirstname       = checkString(request.getParameter("findFirstname")).toUpperCase(),
            sDateOfBirth     = checkString(request.getParameter("findDateOfBirth")),
            sDistrict        = checkString(request.getParameter("findDistrict")),
+           sSector        	= checkString(request.getParameter("findSector")),
            sUnit            = checkString(request.getParameter("findUnit"));
 
     String sAction  = checkString(request.getParameter("Action")),
@@ -35,6 +36,7 @@
         Debug.println("sFirstname   : "+sFirstname);
         Debug.println("sDateOfBirth : "+sDateOfBirth);
         Debug.println("sDistrict    : "+sDistrict);
+        Debug.println("sSector      : "+sSector);
         Debug.println("sUnit        : "+sUnit+"\n");
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,12 +57,12 @@
         } 
         else if(sUnit.length() > 0){
         	//sDateOfBirth = ScreenHelper.convertToEUDate(sDateOfBirth); // to match with EU-date in database
-            lResults = AdminPerson.getPatientsInEncounterServiceUID(simmatnew,sArchiveFileCode,snatreg,sName,sFirstname,sDateOfBirth,sUnit,sPersonID,sDistrict);
+            lResults = AdminPerson.getPatientsInEncounterServiceUID(simmatnew,sArchiveFileCode,snatreg,sName,sFirstname,sDateOfBirth,sUnit,sPersonID,sDistrict,sSector);
         } 
         else{
-            if((simmatnew+sArchiveFileCode+snatreg+sName+sFirstname+sDateOfBirth+sPersonID+sDistrict).length()>0){
+            if((simmatnew+sArchiveFileCode+snatreg+sName+sFirstname+sDateOfBirth+sPersonID+sDistrict+sSector).length()>0){
             	//sDateOfBirth = ScreenHelper.convertToEUDate(sDateOfBirth); // to match with EU-date in database
-            	lResults = AdminPerson.getAllPatients(simmatnew,sArchiveFileCode,snatreg,sName,sFirstname,sDateOfBirth,sPersonID,sDistrict,iMaxResultSet);
+            	lResults = AdminPerson.getAllPatients(simmatnew,sArchiveFileCode,snatreg,sName,sFirstname,sDateOfBirth,sPersonID,sDistrict,iMaxResultSet,sSector);
             }
             else {
             	lResults = new ArrayList();

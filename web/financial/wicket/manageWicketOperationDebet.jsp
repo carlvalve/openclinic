@@ -190,8 +190,9 @@
         
         <%-- BUTTONS --%>
         <%=ScreenHelper.setFormButtonsStart()%>
+        <%if(sEditWicketOperationUID.length()==0 || activeUser.getAccessRight("existingwicketdebet.edit")){ %>
             <input class='button' type="button" name="EditSaveButton" value='<%=getTranNoLink("Web","save",sWebLanguage)%>' onclick="doSave();">&nbsp;
-            <%
+            <%}
                 if(sEditWicketOperationUID.length()>0){
                     %><input class="button" type="button" name="buttonPrint" value='<%=getTranNoLink("Web","print",sWebLanguage)%>' onclick="doPrintPdf(document.getElementById('EditWicketOperationUID').value);"><%
                 }

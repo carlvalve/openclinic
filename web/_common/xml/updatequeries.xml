@@ -300,4 +300,10 @@
   	<Query id='QUERY.ocadmin.burundizipcodes.cibitoke' db='ocadmin' date='05/06/2017' dbserver='Microsoft SQL Server'>
 		update burundizipcodes set zipcode='BI.CI.CI',district='CIBITOKE' where zipcode='BI.BM.10';
   	</Query>
+  	<Query id='QUERY.openclinic.oclabelsexpand' db='openclinic' date='25/09/2017' dbserver='Microsoft SQL Server'>
+		alter table oc_labels alter column oc_label_value varchar(5000);
+  	</Query>
+  	<Query id='QUERY.openclinic.oclabelsexpand' db='openclinic' date='25/09/2017' dbserver='MySQL'>
+		alter table oc_labels modify oc_label_value varchar(5000);
+  	</Query>
 </Queries>

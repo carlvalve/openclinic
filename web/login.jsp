@@ -11,6 +11,7 @@
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/helper.jsp"%>
 <%@include file="/includes/SingletonContainer.jsp"%>
+
 <%
     response.setHeader("Content-Type","text/html; charset=ISO-8859-1");
 	session.setAttribute("javaPOSServer",checkString(request.getParameter("javaPOSServer")));
@@ -220,6 +221,18 @@
     <title><%=sWEBTITLE + " " + sTmpAPPTITLE%></title>
 </head>
 <body class="Geenscroll login">
+<script>
+	var newWin=window.open('checkPopup.jsp');
+	if(!newWin || newWin.closed || typeof newWin.closed=='undefined') 
+	{ 
+	     alert('<%=getTranNoLink("web","popupsblocked","en")%>');
+	}
+	else{
+		newWin.close();
+	}
+
+</script>
+
 <%
 	if("openinsurance".equalsIgnoreCase(MedwanQuery.getInstance().getConfigString("edition",""))){
         %><div id="loginopeninsurance"><%

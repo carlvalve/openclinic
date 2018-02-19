@@ -43,7 +43,7 @@
 		</tr>
 		<tr>
 			<td class="admin">datacenterPOP3Password</td>
-			<td class="admin2"><input type="text" size="80" name="datacenterPOP3Password" value="<%=MedwanQuery.getInstance().getConfigString("datacenterPOP3Password","")%>"/></td>
+			<td class="admin2"><input type="password" size="80" name="datacenterPOP3Password" value="<%=MedwanQuery.getInstance().getConfigString("datacenterPOP3Password","")%>"/></td>
 		</tr>
 		<tr>
 			<td class="admin">datacenterSMTPHost</td>

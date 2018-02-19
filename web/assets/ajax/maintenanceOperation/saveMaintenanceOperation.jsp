@@ -13,6 +13,12 @@
            sSupplier           = ScreenHelper.checkString(request.getParameter("supplier")),
            sResult             = ScreenHelper.checkString(request.getParameter("result")),
            sComment            = ScreenHelper.checkString(request.getParameter("comment")),
+           sComment1            = ScreenHelper.checkString(request.getParameter("comment1")),
+           sComment2            = ScreenHelper.checkString(request.getParameter("comment2")),
+           sComment3            = ScreenHelper.checkString(request.getParameter("comment3")),
+           sComment4            = ScreenHelper.checkString(request.getParameter("comment4")),
+           sComment5            = ScreenHelper.checkString(request.getParameter("comment5")),
+           sLockedBy            = checkString(request.getParameter("lockedby")),
            sNextDate           = ScreenHelper.checkString(request.getParameter("nextDate"));
         
     
@@ -48,10 +54,21 @@
     if(sDate.length() > 0){
         operation.date = ScreenHelper.stdDateFormat.parse(sDate);
     }
-    
+    try{
+    	operation.lockedBy=Integer.parseInt(sLockedBy);
+    }
+    catch(Exception e){
+    	operation.lockedBy=-1;
+    }
+
     operation.operator = sOperator;
     operation.result = sResult;
     operation.comment = sComment;
+    operation.comment1 = sComment1;
+    operation.comment2 = sComment2;
+    operation.comment3 = sComment3;
+    operation.comment4 = sComment4;
+    operation.comment5 = sComment5;
     operation.supplier = sSupplier;
     
     // nextDate

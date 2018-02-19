@@ -1,3 +1,4 @@
+<%@page import="be.openclinic.common.OC_Object"%>
 <%@ page import="be.mxs.common.util.db.*,be.mxs.common.util.system.*,java.sql.*" %>
 <%
     // prepare response
@@ -5,6 +6,17 @@
     response.setContentType("application/x-java-jnlp-file JNLP");
     response.setHeader("Content-disposition", "inline; filename="+MedwanQuery.getInstance().getConfigString("weasisJnlpFile","Weasis.jnlp"));
     String server=(request.getProtocol().toLowerCase().startsWith("https")?"https":"http")+"://"+ request.getServerName()+":"+request.getServerPort();
+	long sid=new java.util.Date().getTime();
+	long oid=new java.util.Random().nextInt();
+	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+	PreparedStatement ps = conn.prepareStatement("delete from oc_config where oc_key like 'wadouid.%' and updatetime<?");
+	ps.setTimestamp(1, new Timestamp(new java.util.Date().getTime()-120000));
+	ps.execute();
+	ps.close();
+	conn.close();
+	MedwanQuery.getInstance().reloadConfigValues();
+	String wadoid="wadouid."+sid+"."+oid;
+	MedwanQuery.getInstance().setConfigString(wadoid, request.getParameter("studyuid")+"@"+request.getParameter("seriesid"));
 %>
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE jnlp PUBLIC "-//Sun Microsystems, Inc//DTD JNLP Descriptor 6.0//EN" "<%=MedwanQuery.getInstance().getConfigString("templateSource")%>JNLP-6.0.dtd">
@@ -56,6 +68,6 @@
     <!-- ================================================================================================================= -->
   </resources>
   <application-desc main-class="org.weasis.launcher.WebstartLauncher">
-    <argument>$dicom:get -w <%=server %><%=request.getRequestURI().replaceAll(request.getServletPath(),"")%>/pacs/wadoQuery.jsp?studyuid=<%=request.getParameter("studyuid")%>&seriesid=<%=request.getParameter("seriesid")%></argument>
+    <argument>$dicom:get -w <%=server %><%=request.getRequestURI().replaceAll(request.getServletPath(),"")%>/pacs/wadoQuery.jsp?wadouid=<%=wadoid %></argument>
   </application-desc>
   </jnlp>

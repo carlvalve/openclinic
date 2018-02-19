@@ -22,7 +22,10 @@
 		<Menu labelid="salarycalculations" accessrights="hr.salarycalculations.select" url="/main.do?Page=hr/manage_salaryCalculations.jsp" employeeselected="true"/>
 	</Menu>
 	<Menu labelid="curative" accessrights="curative.select" patientselected="true" url="/main.do?Page=curative/index.jsp"/>
-	<Menu labelid="nursing" accessrights="nursing.select" patientselected="true" url="/main.do?Page=pharmacy/manageAdministrations.jsp"/>
+	<Menu labelid="nursing" patientselected="true">
+		<Menu labelid="nursingplan" accessrights="nursing.select" patientselected="true" url="/main.do?Page=nursing/manageAdministrations.jsp"/>
+		<Menu labelid="nursinggraph" accessrights="nursing.select" patientselected="true" url="/main.do?Page=nursing/manageVitalSignsGraph.jsp"/>
+	</Menu>
 	<Menu labelid="applications">
 		<Menu labelid="queuemanagement" accessrights="adt.queues.select">
 			<Menu accesskey="+" labelid="queues" accessrights="adt.queues.select" url="javascript:showQueues();void(0);"/>
@@ -164,7 +167,7 @@
 		<Menu labelid="sourceforge" url="javascript:showsourceforge();"/>
 		<Menu labelid="wiki" url="javascript:showwiki();"/>
 		<Menu labelid="versionhistory" url="javascript:showversionhistory();"/>
-		<Menu labelid="clinicalassistant" patientselected="true" accessrights="clinicalassistant.select" url="/main.do?Page=curative/clinicalAssistant.jsp"/>
+		<Menu labelid="clinicalassistant" patientselected="true" accessrights="clinicalassistant.select" url="/main.do?Page=curative/clinicalAssistant.jsp" activeencounter="true"/>
 	</Menu>
 	<!-- ######################### these are 'links' which are not to be displayed as a menu-item,      ########################## -->
 	<!-- ######################### but that are a choise (option) for user-defined-shortcut-icons.      ########################## -->

@@ -42,6 +42,7 @@
            sServiceUID = checkString(request.getParameter("serviceuid")),
            sResult   = checkString(request.getParameter("result"));
 
+
     // extra searchcriteria
     String sPeriodPerformedBegin = ScreenHelper.checkString(request.getParameter("periodPerformedBegin")),
            sPeriodPerformedEnd   = ScreenHelper.checkString(request.getParameter("periodPerformedEnd"));
@@ -82,7 +83,14 @@
             String sPlanName = getPlanName(operation.maintenanceplanUID);
             String nomenclature="";
             MaintenancePlan plan = operation.getMaintenancePlan();
-            boolean bAuthorized=true;
+    		boolean bLocked = operation.getObjectId()>-1 && ((operation.getLockedBy()>-1 && operation.getLockedBy()!=MedwanQuery.getInstance().getConfigInt("GMAOLocalServerId",-1)) || (operation.getLockedBy()==-1 && MedwanQuery.getInstance().getConfigInt("GMAOLocalServerId",-1)!=0));
+			System.out.println("bLocked for objectid "+operation.getObjectId()+" = "+bLocked);
+			System.out.println("operation.getObjectId()>-1 "+(operation.getObjectId()>-1));
+			System.out.println("(operation.getLockedBy()>-1 && operation.getLockedBy()!=MedwanQuery.getInstance().getConfigInt('GMAOLocalServerId',-1)) "+(operation.getLockedBy()>-1 && operation.getLockedBy()!=MedwanQuery.getInstance().getConfigInt("GMAOLocalServerId",-1)));
+			System.out.println("(operation.getLockedBy()==-1) "+(operation.getLockedBy()==-1));
+			System.out.println("(MedwanQuery.getInstance().getConfigInt('GMAOLocalServerId',-1)!=0) "+(MedwanQuery.getInstance().getConfigInt("GMAOLocalServerId",-1)!=0));
+			
+    		boolean bAuthorized=true;
             if(plan!=null){
             	nomenclature=plan.getAssetCode()+" - "+getTranNoLink("admin.nomenclature.asset",plan.getAssetNomenclature(),sWebLanguage);
                 Asset asset=plan.getAsset();
@@ -96,6 +104,7 @@
             
             hSort.put(operation.maintenanceplanUID+"="+operation.getUid(),
                       " onclick=\"displayMaintenanceOperation('"+operation.getUid()+"');\">"+
+               		  "<td class='hand'><img src='"+sCONTEXTPATH+"/_img/icons/icon_"+(bLocked?"locked":"unlocked")+".png'/></td>"+
                       "<td class='hand' style='padding-left:5px'>["+operation.getUid()+"]</td>"+
                       "<td class='hand' style='padding-left:5px'>"+nomenclature+(!bAuthorized?" <img src='"+sCONTEXTPATH+"/_img/icons/icon_forbidden.png'/>":"")+"</td>"+
                       "<td class='hand' style='padding-left:5px'>["+operation.maintenanceplanUID+"] "+sPlanName+"</td>"+
@@ -129,6 +138,7 @@
 <table width="100%" class="sortable" id="searchresults" cellspacing="1" style="border:none;">
     <%-- header --%>
     <tr class="admin" style="padding-left:1px;">    
+    	<td/>
         <td nowrap><%=HTMLEntities.htmlentities(getTran(request,"web","operation",sWebLanguage))%></td>
         <td nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.assets","nomenclature",sWebLanguage))%></td>
         <td nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.assets","maintenancePlan",sWebLanguage))%></td>

@@ -119,33 +119,169 @@
 			        <tr>
 			            <td class="admin" colspan="2"><%=getTran(request,"openclinic.chuk","observations",sWebLanguage)%></td>
 			            <td class="admin2">
-			                <textarea onKeyup="resizeTextarea(this,10);limitChars(this,255);" <%=setRightClick("ITEM_TYPE_OPERATION_PROTOCOL_OBSERVATION")%> class="text" cols="80" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_OBSERVATION" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_OBSERVATION" property="value"/></textarea>
+			                <textarea onKeyup="resizeTextarea(this,10);limitChars(this,5000);" <%=setRightClick("ITEM_TYPE_OPERATION_PROTOCOL_OBSERVATION")%> class="text" cols="80" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_OBSERVATION" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_OBSERVATION" property="value"/></textarea>
 			            </td>
 			        </tr>
-			
-			        <%-- SURGICAL ACT 1,2,3 --%>
-			        <tr>
-			            <td class="admin" colspan="2"><%=getTran(request,"openclinic.chuk","surgical.act",sWebLanguage)%></td>
-			            <td class="admin2">
-			            	<table cellpadding="0" cellspacing="0">
-			                <tr><td><select id="act1" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT1" property="itemId"/>]>.value">
-				            	<option/>
-				            	<%=ScreenHelper.writeSelect(request,"surgicalacts",(((TransactionVO)transaction).getItem("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT1")).getValue(),sWebLanguage,false,true) %>
-			                </select></td></tr>
-			                
-			                <tr><td><select id="act2" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT2" property="itemId"/>]>.value">
-				            	<option/>
-				            	<%=ScreenHelper.writeSelect(request,"surgicalacts",(((TransactionVO)transaction).getItem("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT2")).getValue(),sWebLanguage,false,true) %>
-			                </select></td></tr>
-			                
-			                <tr><td><select id="act3" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT3" property="itemId"/>]>.value">
-				            	<option/>
-				            	<%=ScreenHelper.writeSelect(request,"surgicalacts",(((TransactionVO)transaction).getItem("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT3")).getValue(),sWebLanguage,false,true) %>
-			                </select></td></tr>
-			                </table>
-			            </td>
-			        </tr>
-			
+					
+					<%	if(MedwanQuery.getInstance().getConfigInt("enableBurundi",0)==1){ %>
+				        <%-- SURGICAL ACT 1,2,3 --%>
+				        <tr>
+				            <td class="admin" colspan="2"><%=getTran(request,"openclinic.chuk","anesthesia.act",sWebLanguage)%></td>
+				            <td class="admin2">
+				            	<table width='100%'>
+					                <tr>
+					                	<td>
+					                		<select id="act1" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_ANESTHESIA_ACT1" property="itemId"/>]>.value">
+						            			<option/>
+						            			<%=ScreenHelper.writeSelect(request,"anesthesiaacts.mspls",(((TransactionVO)transaction).getItem("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_ANESTHESIA_ACT1")).getValue(),sWebLanguage,false,true) %>
+					                		</select>
+					                	</td>
+					                	<td>
+											<%=getTran(request,"web","planned",sWebLanguage) %>:
+				                            <input class="text" <%=setRightClick("ITEM_TYPE_OPERATION_PROTOCOL_ANESTHESIA_ACTPLANNED1")%> type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_ANESTHESIA_ACTPLANNED1" property="itemId"/>]>.value" value="medwan.common.true"
+				                            <mxs:propertyAccessorI18N name="transaction.items" scope="page"
+				                                                      compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_ANESTHESIA_ACTPLANNED1;value=medwan.common.true"
+				                                                      property="value" outputString="checked"/>><%=getTran(request,"web","yes",sWebLanguage) %>
+				                            <input class="text" <%=setRightClick("ITEM_TYPE_OPERATION_PROTOCOL_ANESTHESIA_ACTPLANNED1")%> type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_ANESTHESIA_ACTPLANNED1" property="itemId"/>]>.value" value="medwan.common.false"
+				                            <mxs:propertyAccessorI18N name="transaction.items" scope="page"
+				                                                      compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_ANESTHESIA_ACTPLANNED1;value=medwan.common.false"
+				                                                      property="value" outputString="checked"/>><%=getTran(request,"web","no",sWebLanguage) %>
+					                	</td>
+					                </tr>
+					                <tr>
+					                	<td>
+					                		<select id="act2" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_ANESTHESIA_ACT2" property="itemId"/>]>.value">
+						            			<option/>
+						            			<%=ScreenHelper.writeSelect(request,"anesthesiaacts.mspls",(((TransactionVO)transaction).getItem("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_ANESTHESIA_ACT2")).getValue(),sWebLanguage,false,true) %>
+					                		</select>
+					                	</td>
+					                	<td>
+											<%=getTran(request,"web","planned",sWebLanguage) %>:
+				                            <input class="text" <%=setRightClick("ITEM_TYPE_OPERATION_PROTOCOL_ANESTHESIA_ACTPLANNED2")%> type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_ANESTHESIA_ACTPLANNED2" property="itemId"/>]>.value" value="medwan.common.true"
+				                            <mxs:propertyAccessorI18N name="transaction.items" scope="page"
+				                                                      compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_ANESTHESIA_ACTPLANNED2;value=medwan.common.true"
+				                                                      property="value" outputString="checked"/>><%=getTran(request,"web","yes",sWebLanguage) %>
+				                            <input class="text" <%=setRightClick("ITEM_TYPE_OPERATION_PROTOCOL_ANESTHESIA_ACTPLANNED2")%> type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_ANESTHESIA_ACTPLANNED2" property="itemId"/>]>.value" value="medwan.common.false"
+				                            <mxs:propertyAccessorI18N name="transaction.items" scope="page"
+				                                                      compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_ANESTHESIA_ACTPLANNED2;value=medwan.common.false"
+				                                                      property="value" outputString="checked"/>><%=getTran(request,"web","no",sWebLanguage) %>
+					                	</td>
+					                </tr>
+					                <tr>
+					                	<td>
+					                		<select id="act3" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_ANESTHESIA_ACT3" property="itemId"/>]>.value">
+						            			<option/>
+						            			<%=ScreenHelper.writeSelect(request,"anesthesiaacts.mspls",(((TransactionVO)transaction).getItem("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_ANESTHESIA_ACT3")).getValue(),sWebLanguage,false,true) %>
+					                		</select>
+					                	</td>
+					                	<td>
+											<%=getTran(request,"web","planned",sWebLanguage) %>:
+				                            <input class="text" <%=setRightClick("ITEM_TYPE_OPERATION_PROTOCOL_ANESTHESIA_ACTPLANNED3")%> type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_ANESTHESIA_ACTPLANNED3" property="itemId"/>]>.value" value="medwan.common.true"
+				                            <mxs:propertyAccessorI18N name="transaction.items" scope="page"
+				                                                      compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_ANESTHESIA_ACTPLANNED3;value=medwan.common.true"
+				                                                      property="value" outputString="checked"/>><%=getTran(request,"web","yes",sWebLanguage) %>
+				                            <input class="text" <%=setRightClick("ITEM_TYPE_OPERATION_PROTOCOL_ANESTHESIA_ACTPLANNED3")%> type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_ANESTHESIA_ACTPLANNED3" property="itemId"/>]>.value" value="medwan.common.false"
+				                            <mxs:propertyAccessorI18N name="transaction.items" scope="page"
+				                                                      compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_ANESTHESIA_ACTPLANNED3;value=medwan.common.false"
+				                                                      property="value" outputString="checked"/>><%=getTran(request,"web","no",sWebLanguage) %>
+					                	</td>
+					                </tr>
+				                </table>
+				            </td>
+				        </tr>
+				        <tr>
+				            <td class="admin" colspan="2"><%=getTran(request,"openclinic.chuk","surgical.act",sWebLanguage)%></td>
+				            <td class="admin2">
+				            	<table  width='100%'>
+					                <tr>
+					                	<td>
+					                		<select id="act1" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT1" property="itemId"/>]>.value">
+						            			<option/>
+						            			<%=ScreenHelper.writeSelect(request,"surgicalacts.mspls",(((TransactionVO)transaction).getItem("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT1")).getValue(),sWebLanguage,false,true) %>
+					                		</select>
+					                	</td>
+					                	<td>
+											<%=getTran(request,"web","planned",sWebLanguage) %>:
+				                            <input class="text" <%=setRightClick("ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACTPLANNED1")%> type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACTPLANNED1" property="itemId"/>]>.value" value="medwan.common.true"
+				                            <mxs:propertyAccessorI18N name="transaction.items" scope="page"
+				                                                      compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACTPLANNED1;value=medwan.common.true"
+				                                                      property="value" outputString="checked"/>><%=getTran(request,"web","yes",sWebLanguage) %>
+				                            <input class="text" <%=setRightClick("ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACTPLANNED1")%> type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACTPLANNED1" property="itemId"/>]>.value" value="medwan.common.false"
+				                            <mxs:propertyAccessorI18N name="transaction.items" scope="page"
+				                                                      compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACTPLANNED1;value=medwan.common.false"
+				                                                      property="value" outputString="checked"/>><%=getTran(request,"web","no",sWebLanguage) %>
+					                	</td>
+					                </tr>
+					                <tr>
+					                	<td>
+					                		<select id="act2" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT2" property="itemId"/>]>.value">
+						            			<option/>
+						            			<%=ScreenHelper.writeSelect(request,"surgicalacts.mspls",(((TransactionVO)transaction).getItem("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT2")).getValue(),sWebLanguage,false,true) %>
+					                		</select>
+					                	</td>
+					                	<td>
+											<%=getTran(request,"web","planned",sWebLanguage) %>:
+				                            <input class="text" <%=setRightClick("ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACTPLANNED2")%> type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACTPLANNED2" property="itemId"/>]>.value" value="medwan.common.true"
+				                            <mxs:propertyAccessorI18N name="transaction.items" scope="page"
+				                                                      compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACTPLANNED2;value=medwan.common.true"
+				                                                      property="value" outputString="checked"/>><%=getTran(request,"web","yes",sWebLanguage) %>
+				                            <input class="text" <%=setRightClick("ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACTPLANNED2")%> type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACTPLANNED2" property="itemId"/>]>.value" value="medwan.common.false"
+				                            <mxs:propertyAccessorI18N name="transaction.items" scope="page"
+				                                                      compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACTPLANNED2;value=medwan.common.false"
+				                                                      property="value" outputString="checked"/>><%=getTran(request,"web","no",sWebLanguage) %>
+					                	</td>
+					                </tr>
+					                <tr>
+					                	<td>
+					                		<select id="act3" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT3" property="itemId"/>]>.value">
+						            			<option/>
+						            			<%=ScreenHelper.writeSelect(request,"surgicalacts.mspls",(((TransactionVO)transaction).getItem("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT3")).getValue(),sWebLanguage,false,true) %>
+					                		</select>
+					                	</td>
+					                	<td>
+											<%=getTran(request,"web","planned",sWebLanguage) %>:
+				                            <input class="text" <%=setRightClick("ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACTPLANNED3")%> type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACTPLANNED3" property="itemId"/>]>.value" value="medwan.common.true"
+				                            <mxs:propertyAccessorI18N name="transaction.items" scope="page"
+				                                                      compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACTPLANNED3;value=medwan.common.true"
+				                                                      property="value" outputString="checked"/>><%=getTran(request,"web","yes",sWebLanguage) %>
+				                            <input class="text" <%=setRightClick("ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACTPLANNED3")%> type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACTPLANNED3" property="itemId"/>]>.value" value="medwan.common.false"
+				                            <mxs:propertyAccessorI18N name="transaction.items" scope="page"
+				                                                      compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACTPLANNED3;value=medwan.common.false"
+				                                                      property="value" outputString="checked"/>><%=getTran(request,"web","no",sWebLanguage) %>
+					                	</td>
+					                </tr>
+				                </table>
+				            </td>
+				        </tr>
+					
+					<%	}
+						else{
+					%>
+				        <%-- SURGICAL ACT 1,2,3 --%>
+				        <tr>
+				            <td class="admin" colspan="2"><%=getTran(request,"openclinic.chuk","surgical.act",sWebLanguage)%></td>
+				            <td class="admin2">
+				            	<table cellpadding="0" cellspacing="0">
+				                <tr><td><select id="act1" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT1" property="itemId"/>]>.value">
+					            	<option/>
+					            	<%=ScreenHelper.writeSelect(request,"surgicalacts",(((TransactionVO)transaction).getItem("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT1")).getValue(),sWebLanguage,false,true) %>
+				                </select></td></tr>
+				                
+				                <tr><td><select id="act2" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT2" property="itemId"/>]>.value">
+					            	<option/>
+					            	<%=ScreenHelper.writeSelect(request,"surgicalacts",(((TransactionVO)transaction).getItem("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT2")).getValue(),sWebLanguage,false,true) %>
+				                </select></td></tr>
+				                
+				                <tr><td><select id="act3" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT3" property="itemId"/>]>.value">
+					            	<option/>
+					            	<%=ScreenHelper.writeSelect(request,"surgicalacts",(((TransactionVO)transaction).getItem("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT3")).getValue(),sWebLanguage,false,true) %>
+				                </select></td></tr>
+				                </table>
+				            </td>
+				        </tr>
+					<%
+						}
+					%>
 			        <%-- CLOSURE --%>
 			        <tr>
 			            <td class="admin" colspan="2"><%=getTran(request,"openclinic.chuk","closure",sWebLanguage)%></td>

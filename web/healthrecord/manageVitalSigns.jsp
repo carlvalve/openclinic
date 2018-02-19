@@ -89,6 +89,16 @@
             <td class="admin2">
                 <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" id="trandate" OnBlur='checkDate(this)'>
                 <script>writeTranDate();</script>
+				<!-- Add time section -->
+                <%
+                	java.util.Date date = ((TransactionVO)transaction).getUpdateTime();
+                	if(date==null){
+                		date=new java.util.Date();
+                	}
+                	String sTime=new SimpleDateFormat("HH:mm").format(date);
+                %>
+                <input type='text' class='text' size='5' maxLength='5' name='trantime' id='trantime' value='<%=sTime%>'/>
+                <!-- End time section -->
             </td>
         </tr>
                     <tr>
@@ -123,33 +133,41 @@
                         </td>
                     </tr>
                     <tr>
+                        <td class="admin"><%=getTran(request,"openclinic.chuk","sao2",sWebLanguage)%></td>
+                        <td colspan="3" class="admin2">
+                            <input type="text" class="text" <%=setRightClick("[GENERAL.ANAMNESE]ITEM_TYPE_SATURATION")%> name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_SATURATION" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_SATURATION" property="value"/>" onBlur="isNumber(this)" size="5"/> %
+                        </td>
+                    </tr>
+                    <tr>
                         <td class="admin"><%=getTran(request,"Web.Occup","Smoking",sWebLanguage)%></td>
+                        <% String sTobacco = ((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_TOBACCO_USAGE"); %>
                         <td class="admin2" colspan="3">
                             <select <%=setRightClick("[GENERAL.ANAMNESE]ITEM_TYPE_TOBACCO_USAGE")%> id="EditSmoking" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_TOBACCO_USAGE" property="itemId"/>]>.value" class="text">
                                 <option/>
-                                <option value="1">0</option>
-                                <option value="2">0 - 5</option>
-                                <option value="3">5 - 10</option>
-                                <option value="4">10 - 15</option>
-                                <option value="5">15 - 25</option>
-                                <option value="6">&gt; 25</option>
+                                <option value="1" <%=sTobacco.equals("1")?"selected":"" %>>0</option>
+                                <option value="2" <%=sTobacco.equals("2")?"selected":"" %>>0 - 5</option>
+                                <option value="3" <%=sTobacco.equals("3")?"selected":"" %>>5 - 10</option>
+                                <option value="4" <%=sTobacco.equals("4")?"selected":"" %>>10 - 15</option>
+                                <option value="5" <%=sTobacco.equals("5")?"selected":"" %>>15 - 25</option>
+                                <option value="6" <%=sTobacco.equals("6")?"selected":"" %>>&gt; 25</option>
                             </select>
                             &nbsp;&nbsp;<%=getTran(request,"Web.Occup","ADay",sWebLanguage)%>
                         </td>
                     </tr>
                     <tr>
+                        <% String sAlcohol = ((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_ALCOHOL_USAGE"); %>
                         <td class="admin"><%=getTran(request,"Web.Occup","medwan.healthrecord.psycho.alcohol",sWebLanguage)%></td>
                         <td class="admin2" colspan="3">
                             <select <%=setRightClick("[GENERAL.ANAMNESE]ITEM_TYPE_ALCOHOL_USAGE")%> id="EditAlcohol" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_ALCOHOL_USAGE" property="itemId"/>]>.value" class="text">
                                 <option></option>
-                                <option value="ce.alcohol.usage.none"><%=getTran(request,"Web.Occup","ce.alcohol.usage.none",sWebLanguage)%></option>
-                                <option value="ce.alcohol.usage.weekend"><%=getTran(request,"Web.Occup","ce.alcohol.usage.weekend",sWebLanguage)%></option>
-                                <option value="ce.alcohol.usage.social"><%=getTran(request,"Web.Occup","ce.alcohol.usage.social",sWebLanguage)%></option>
-                                <option value="ce.alcohol.usage.occasional"><%=getTran(request,"Web.Occup","ce.alcohol.usage.occasional",sWebLanguage)%></option>
-                                <option value="ce.alcohol.usage.1_a_day"><%=getTran(request,"Web.Occup","ce.alcohol.usage.1_a_day",sWebLanguage)%></option>
-                                <option value="ce.alcohol.usage.2_a_day"><%=getTran(request,"Web.Occup","ce.alcohol.usage.2_a_day",sWebLanguage)%></option>
-                                <option value="ce.alcohol.usage.3_a_day"><%=getTran(request,"Web.Occup","ce.alcohol.usage.3_a_day",sWebLanguage)%></option>
-                                <option value="ce.alcohol.usage.more_than_3_a_day"><%=getTran(request,"Web.Occup","ce.alcohol.usage.more_than_3_a_day",sWebLanguage)%></option>
+                                <option value="ce.alcohol.usage.none" <%=sAlcohol.equals("ce.alcohol.usage.none")?"selected":"" %>><%=getTran(request,"Web.Occup","ce.alcohol.usage.none",sWebLanguage)%></option>
+                                <option value="ce.alcohol.usage.weekend" <%=sAlcohol.equals("ce.alcohol.usage.weekend")?"selected":"" %>><%=getTran(request,"Web.Occup","ce.alcohol.usage.weekend",sWebLanguage)%></option>
+                                <option value="ce.alcohol.usage.social" <%=sAlcohol.equals("ce.alcohol.usage.social")?"selected":"" %>><%=getTran(request,"Web.Occup","ce.alcohol.usage.social",sWebLanguage)%></option>
+                                <option value="ce.alcohol.usage.occasional" <%=sAlcohol.equals("ce.alcohol.usage.occasional")?"selected":"" %>><%=getTran(request,"Web.Occup","ce.alcohol.usage.occasional",sWebLanguage)%></option>
+                                <option value="ce.alcohol.usage.1_a_day" <%=sAlcohol.equals("ce.alcohol.usage.1_a_day")?"selected":"" %>><%=getTran(request,"Web.Occup","ce.alcohol.usage.1_a_day",sWebLanguage)%></option>
+                                <option value="ce.alcohol.usage.2_a_day" <%=sAlcohol.equals("ce.alcohol.usage.2_a_day")?"selected":"" %>><%=getTran(request,"Web.Occup","ce.alcohol.usage.2_a_day",sWebLanguage)%></option>
+                                <option value="ce.alcohol.usage.3_a_day" <%=sAlcohol.equals("ce.alcohol.usage.3_a_day")?"selected":"" %>><%=getTran(request,"Web.Occup","ce.alcohol.usage.3_a_day",sWebLanguage)%></option>
+                                <option value="ce.alcohol.usage.more_than_3_a_day" <%=sAlcohol.equals("ce.alcohol.usage.more_than_3_a_day")?"selected":"" %>><%=getTran(request,"Web.Occup","ce.alcohol.usage.more_than_3_a_day",sWebLanguage)%></option>
                             </select>
                         </td>
                     </tr>
@@ -199,10 +217,26 @@
   }
   <%-- SUBMIT FORM --%>
   function submitForm(){
-    var temp = Form.findFirstElement(transactionForm); // for ff compatibility
-    document.getElementById("buttonsDiv").style.visibility = "hidden";
-    document.transactionForm.submit();
+	  if(document.getElementById('encounteruid').value==''){
+			alertDialogDirectText('<%=getTranNoLink("web","no.encounter.linked",sWebLanguage)%>');
+			searchEncounter();
+		  }	
+	  else {
+	    document.getElementById("buttonsDiv").style.visibility = "hidden";
+	    document.getElementById('trandate').value+=' '+document.getElementById('trantime').value;
+	    <%
+	        SessionContainerWO sessionContainerWO = (SessionContainerWO)SessionContainerFactory.getInstance().getSessionContainerWO(request,SessionContainerWO.class.getName());
+	        out.print(takeOverTransaction(sessionContainerWO, activeUser,"document.transactionForm.submit();"));
+	    %>
+	  }
+  }    
+  function searchEncounter(){
+      pu = openPopup("/_common/search/searchEncounter.jsp?ts=<%=getTs()%>&VarCode=currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID" property="itemId"/>]>.value&VarText=&FindEncounterPatient=<%=activePatient.personid%>");
   }
+  if(document.getElementById('encounteruid').value==''){
+	  alertDialogDirectText('<%=getTranNoLink("web","no.encounter.linked",sWebLanguage)%>');
+	  searchEncounter();
+  }	
 </script>
 
 <%=writeJSButtons("transactionForm","saveButton")%>

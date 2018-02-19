@@ -37,6 +37,11 @@
 			type=getTranNoLink("web","chronicmedication",sWebLanguage);
 			name=product.getCode()+" - "+ product.getName();
 		}
+		else if(type.equalsIgnoreCase("delivered")){
+			ProductStockOperation operation = ProductStockOperation.get(item.split(";")[1]);
+			type=getTranNoLink("web.manage","medicationdelivery",sWebLanguage);
+			name=operation.getDate()+": <b>"+ operation.getProductStock().getProduct().getName()+"</b>";
+		}
 		out.println("<tr><td class='admin'>"+type+"</td><td class='admin2'>"+name+"</td></tr>");
 	}
 	out.println("</table>");

@@ -152,6 +152,7 @@
                 || parameter.parameter.equalsIgnoreCase("remotepassword")
                 || parameter.parameter.equalsIgnoreCase("automaticorganizationidvalidation")
                 || parameter.parameter.equalsIgnoreCase("medicalcentercode")
+                || parameter.parameter.equalsIgnoreCase("training")
                 || parameter.parameter.equalsIgnoreCase("defaultserviceid")
                 || parameter.parameter.equalsIgnoreCase("userprofileid")
                 || parameter.parameter.equalsIgnoreCase("alias")
@@ -193,6 +194,7 @@
         else{
             if((thisUser.userid.trim().length() > 0) && (thisUser.password != null) && (thisUser.password.length > 0)){
                 // everything is ok
+                thisUser.stop = "";
             }
             else{
                 thisUser.password = thisUser.encrypt(sDefaultPassword);
@@ -471,6 +473,17 @@
                     <td class="admin2">
                         <input type='text' class='text' name='Editmedicalcentercode' id="medicalcentercode" value='<%=thisUser.getParameter("medicalcentercode").trim()%>' >
                         <span id="medicalCenterMsg"></span>
+                    </td>
+                </tr>
+                
+                <%-- training --%>
+                <tr>
+                    <td class="admin"><%=getTran(request,"Web.UserProfile","training",sWebLanguage)%></td>
+                    <td class="admin2">	
+                    	<select class='text' name='Edittraining' id='training'>
+                    		<option/>
+                    		<%=ScreenHelper.writeSelect(request, "userprofile.training", thisUser.getParameter("training").trim(), sWebLanguage) %>
+                    	</select>
                     </td>
                 </tr>
                 

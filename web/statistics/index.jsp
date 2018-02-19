@@ -196,6 +196,9 @@
                   writeTblChildWithCodeNoButton("javascript:downloadInvoicesSummary(\"hmk.invoices.list\",\"openclinic\");",getTran(request,"Web","statistics.download.invoicessummary",sWebLanguage))+
                   (MedwanQuery.getInstance().getConfigInt("enablePBFBurundi",0)==1?writeTblChildWithCodeNoButton("javascript:downloadPBFdocs(\"pbf.burundi.consultationslist\",\"openclinic\");",getTran(request,"Web","statistics.download.pbfburundi",sWebLanguage)):"")+
                   (MedwanQuery.getInstance().getConfigInt("enablePBFBurundi",0)==1?writeTblChildWithCodeNoButton("javascript:downloadPBFdocs(\"pbf.burundi.admissionslist\",\"openclinic\");",getTran(request,"Web","statistics.download.pbfburundi.admissions",sWebLanguage)):"")+
+                  (MedwanQuery.getInstance().getConfigInt("enablePBFBurundi",0)==1?writeTblChildWithCodeNoButton("javascript:downloadPBFdocsNoService(\"pbf.burundi.surgerylist\",\"openclinic\");",getTran(request,"Web","statistics.download.pbfburundi.surgerylist",sWebLanguage)):"")+
+                  (MedwanQuery.getInstance().getConfigInt("enablePBFBurundi",0)==1?writeTblChildWithCodeNoButton("javascript:downloadPBFdocsNoService(\"pbf.burundi.deliverieslist\",\"openclinic\");",getTran(request,"Web","statistics.download.pbfburundi.deliverieslist",sWebLanguage)):"")+
+                  (MedwanQuery.getInstance().getConfigInt("enablePBFBurundi",0)==1?writeTblChildWithCodeNoButton("javascript:downloadPBFdocsInsurer(\"insurer.userlist\",\"openclinic\");",getTran(request,"Web","statistics.download.insurer.userlist",sWebLanguage)):"")+
                   (MedwanQuery.getInstance().getConfigInt("enableMaliVaccinations",0)==1?writeTblChildWithCodeNoButton("javascript:downloadStats(\"vida\",\"stats\");",getTran(request,"Web","statistics.download.vida",sWebLanguage)):"")+
 			      (MedwanQuery.getInstance().getConfigInt("datacenterEnabled",0)==1?writeTblChildWithCodeNoButton("javascript:downloadDatacenterStats(\"service.income.list\",\"stats\");",getTran(request,"Web","statistics.download.serviceincomelist",sWebLanguage)):""));
         out.print(ScreenHelper.writeTblFooter()+"<br>");
@@ -274,6 +277,14 @@ function downloadPBFdocs(query,db){
     var URL = "/statistics/downloadPBFdocs.jsp&query="+query+"&db="+db+"&begin="+document.getElementsByName('begin')[0].value+"&end="+document.getElementsByName('end')[0].value;
 	openPopup(URL,400,300,"OpenClinic");
   }
+function downloadPBFdocsNoService(query,db){
+    var URL = "/statistics/downloadPBFdocs.jsp&noservice=yes&query="+query+"&db="+db+"&begin="+document.getElementsByName('begin')[0].value+"&end="+document.getElementsByName('end')[0].value;
+	openPopup(URL,400,300,"OpenClinic");
+  }
+function downloadPBFdocsInsurer(query,db){
+    var URL = "/statistics/downloadPBFdocs.jsp&noservice=yes&insurer=yes&query="+query+"&db="+db+"&begin="+document.getElementsByName('begin')[0].value+"&end="+document.getElementsByName('end')[0].value;
+	openPopup(URL,400,300,"OpenClinic");
+  }
 function downloadInvoicesSummary(query,db){
     var URL = "/statistics/downloadInvoicesSummary.jsp&query="+query+"&db="+db+"&begin="+document.getElementsByName('begin')[0].value+"&end="+document.getElementsByName('end')[0].value;
 	openPopup(URL,400,300,"OpenClinic");
@@ -323,7 +334,7 @@ function downloadTechnicalStats(query,db){
 	  }
   function dhis2report(){
       var URL="/statistics/createDHIS2Report.jsp";
-		openPopup(URL,400,300,"OpenClinic");
+		openPopup(URL,600,300,"OpenClinic");
 	  }
   function hospitalReport(){
     window.open("<c:url value='/statistics/printHospitalReportChapterSelection.jsp?'/>start="+document.getElementById('begin2').value+"&end="+document.getElementById('end2').value+"&ts=<%=getTs()%>");

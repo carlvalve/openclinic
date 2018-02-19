@@ -7,14 +7,14 @@
 <script src='<%=sCONTEXTPATH%>/_common/_script/stringFunctions.js'></script>
 <%=sJSSORTTABLE%>
 <%!
-    private StringBuffer addCategory(int iTotal,String sCategoryName,String sPrice,String sWebLanguage){
+    private StringBuffer addCategoryLine(int iTotal,String sCategoryName,String sPrice,String sWebLanguage){
         StringBuffer sTmp = new StringBuffer();
         sTmp.append("<tr id='rowCategory"+iTotal+"'>")
-             .append("<td class=\"admin2\">")
+             .append("<td class='admin2' width='40'>")
              .append("<a href='javascript:deleteCategory(rowCategory"+iTotal+")'><img src='" + sCONTEXTPATH + "/_img/icons/icon_delete.gif' alt='" + getTran(null,"Web.Occup","medwan.common.delete",sWebLanguage) + "' border='0'></a> ")
              .append("</td>")
-             .append("<td class='admin2'>&nbsp;" + getTranNoLink("insurance.types",sCategoryName,sWebLanguage) + "</td>")
-             .append("<td class='admin2'>&nbsp;" + sPrice + "</td>")
+             .append("<td class='admin2' width='25%'>&nbsp;" + getTranNoLink("insurance.types",sCategoryName,sWebLanguage) + "</td>")
+             .append("<td class='admin2' width='25%'>&nbsp;" + sPrice + "</td>")
              .append("<td class='admin2'>")
              .append("</td>")
             .append("</tr>");
@@ -342,7 +342,7 @@
                     aCategory = aCategories[i].split("=");
                     
                     if (aCategory.length==2){
-                        sCategoryHtml += addCategory(iCategoryTotal,aCategory[0],aCategory[1],sWebLanguage);
+                        sCategoryHtml += addCategoryLine(iCategoryTotal,aCategory[0],aCategory[1],sWebLanguage);
                         iCategoryTotal++;
                     }
                 }
@@ -369,12 +369,63 @@
                             <input type="text" class="text" name="EditPrestationCode" size="20" maxlength="50" value="<%=checkString(prestation.getCode())%>">
                         </td>
                     </tr>
-                    <tr>
-                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","code.alias",sWebLanguage)%></td>
-                        <td class="admin2">
-                            <input type="text" class="text" name="EditPrestationCodeAlias" size="80" maxlength="250" value="<%=prestation.getReferenceObject()==null?"":checkString(prestation.getReferenceObject().getObjectUid())%>">
-                        </td>
-                    </tr>
+                   	<% if(MedwanQuery.getInstance().getConfigInt("enableCCBRT",0)==1){ %>
+	                    <tr>
+	                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","code.alias",sWebLanguage)%></td>
+	                        <td class="admin2">
+                            	<input type="text" class="text" name="EditPrestationCodeAlias" size="80" maxlength="250" value="<%=prestation.getReferenceObject()==null?"":checkString(prestation.getReferenceObject().getObjectUid())%>">
+	                       </td>
+	                   </tr>
+                    <%} else if (MedwanQuery.getInstance().getConfigInt("automatedDebet",0)==1) { %>
+	                    <tr>
+	                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","code.alias",sWebLanguage)%></td>
+	                        <td class="admin2">
+		                    	<select name='EditPrestationCodeAlias' id='EditPrestationCodeAlias' class='text'>
+        		            		<option/>
+		                            <%
+		                            String sKey, sID, sSelected;
+		                            byte[] aData;
+		
+		                            Vector vResults = Examination.searchAllExaminations();
+		                            Iterator iter = vResults.iterator();
+		                            Hashtable hExaminations = new Hashtable();
+		                            Hashtable hResults;
+		
+		                            // get examinations
+		                            while (iter.hasNext()) {
+		                                hResults = (Hashtable) iter.next();
+		                                hExaminations.put(getTran(request,"examination", (String) hResults.get("id"), sWebLanguage), hResults.get("transactionType")+";"+hResults.get("id"));
+		                            }
+		
+		                            // sort examinations
+		                            Vector v = new Vector(hExaminations.keySet());
+		                            Collections.sort(v);
+		
+		                            Iterator it = v.iterator();
+		                            String sClass = "1";
+		                            Examination examination;
+		                            while (it.hasNext()) {
+		                                sKey = (String) it.next();
+		                                sID = (String) hExaminations.get(sKey);
+		                                sKey = getTran(request,"examination", sID.split(";")[1], sWebLanguage);
+		
+		                                // alternate row-style
+		                                if(sClass.equals("")) sClass = "1";
+		                                else                  sClass = "";
+		
+		                                sSelected = "";
+		
+		                                if (prestation.getReferenceObject()!=null && sID.split(";")[0].equals(prestation.getReferenceObject().getObjectUid())) {
+		                                    sSelected = " selected";
+		                                }
+		
+		                                %><option value="<%=sID.split(";")[0]%>"<%=sSelected%>><%=sKey%></option><%
+		                            }
+		                        %>
+		                    	</select>
+	                       </td>
+	                   </tr>
+                    <%} %>
                     <tr>
                         <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","code.nomenclature",sWebLanguage)%></td>
                         <td class="admin2">
@@ -559,7 +610,7 @@
 	                    <tr>
 	                        <td class="admin"><%=getTran(request,"web","mfppercentage",sWebLanguage)%></td>
 	                        <td class="admin2">
-	                            <input type="text" class="text" name="EditPrestationMfpPercentage" size="4" maxlength="3" value="<%=prestation.getMfpPercentage()%>" onKeyup="if(!isNumber(this)){this.value='';}">%
+	                            <input type="text" class="text" name="EditPrestationMfpPercentage" size="4" maxlength="6" value="<%=prestation.getMfpPercentage()%>" onKeyup="if(!isNumber(this)){this.value='';}">%
 	                        </td>
 	                    </tr>
                     <%
@@ -568,7 +619,7 @@
 		                    <tr>
 		                        <td class="admin"><%=getTran(request,"web","mfpadmissionpercentage",sWebLanguage)%></td>
 		                        <td class="admin2">
-		                            <input type="text" class="text" name="EditPrestationMfpAdmissionPercentage" size="4" maxlength="3" value="<%=prestation.getMfpAdmissionPercentage()%>" onKeyup="if(!isNumber(this)){this.value='';}">%
+		                            <input type="text" class="text" name="EditPrestationMfpAdmissionPercentage" size="4" maxlength="6" value="<%=prestation.getMfpAdmissionPercentage()%>" onKeyup="if(!isNumber(this)){this.value='';}">%
 		                        </td>
 		                    </tr>
                     <%
@@ -581,13 +632,13 @@
                     <tr>
                         <td class="admin"><%=getTran(request,"web","anesthesiapercentage",sWebLanguage)%></td>
                         <td class="admin2">
-                            <input type="text" class="text" name="EditPrestationAnesthesiaPercentage" size="4" maxlength="3" value="<%=prestation.getAnesthesiaPercentage()%>" onKeyup="if(!isNumber(this)){this.value='';}">%
+                            <input type="text" class="text" name="EditPrestationAnesthesiaPercentage" size="4" maxlength="6" value="<%=prestation.getAnesthesiaPercentage()%>" onKeyup="if(!isNumber(this)){this.value='';}">%
                         </td>
                     </tr>
                     <tr>
                         <td class="admin"><%=getTran(request,"web","anesthesiasupplementpercentage",sWebLanguage)%></td>
                         <td class="admin2">
-                            <input type="text" class="text" name="EditPrestationAnesthesiaSupplementPercentage" size="4" maxlength="3" value="<%=prestation.getAnesthesiaSupplementPercentage()%>" onKeyup="if(!isNumber(this)){this.value='';}">%
+                            <input type="text" class="text" name="EditPrestationAnesthesiaSupplementPercentage" size="4" maxlength="6" value="<%=prestation.getAnesthesiaSupplementPercentage()%>" onKeyup="if(!isNumber(this)){this.value='';}">%
                         </td>
                     </tr>
                     <%
@@ -668,19 +719,25 @@
                                 </tr>
                                 <tr>
                                     <td class="admin"/>
-                                    <td class="admin">
+                                    <td class="admin" width='25%'>
                                         <select name="EditCategoryName" class="text">
                                             <%=ScreenHelper.writeSelect(request,"insurance.types","",sWebLanguage)%>
                                         </select>
                                     </td>
-                                    <td class="admin">
+                                    <td class="admin" width='25%'>
                                         <input type="text" class="text" name="EditCategoryPrice" size="10" onKeyUp="if(!isNumber(this))this.value = '';"> <%=sCurrency%>
                                     </td>
                                     <td class="admin">
                                         <input type="button" class="button" name="addCategoryButton" value="<%=getTranNoLink("web","add",sWebLanguage)%>" onClick="addCategory();">&nbsp;
                                     </td>
                                 </tr>
-                                <%=sCategoryHtml%>
+                                <tr>
+                                	<td class='admin2' colspan='4'>
+                                		<table width='100%' id='categorytbl'>
+                                          <%=sCategoryHtml%>
+                                        </table>
+                                    </td>
+                                </tr>
                             </table>
                         </td>
                     </tr>
@@ -881,10 +938,10 @@
 
   function deleteCategory(rowid){
       if(yesnoDeleteDialog()){
-      	  sCategory = deleteRowFromArrayString(sCategory,rowid.id.substring(11,rowid.id.length));
-      	  tblCategories.deleteRow(rowid.rowIndex);
-      	clearCategoryFields();
-    }
+      	  sCategory = deleteRowFromArrayString(sCategory,rowid.rowIndex);
+      	  document.getElementById('categorytbl').deleteRow(rowid.rowIndex);
+      	  clearCategoryFields();
+    	}
   }
 
   function deleteRowFromArrayString(sArray,rowid){

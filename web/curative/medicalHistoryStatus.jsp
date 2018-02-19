@@ -58,7 +58,7 @@ try{
 
                                     <%-- HEADER --%>
                                     <tr class='gray'>
-                                        <td width='1%'>&nbsp;</td>
+                                        <td width='30'>&nbsp;</td>
                                         <td align="center" width='100'><%=getTran(request,"Web.Occup","medwan.common.date",sWebLanguage)%></td>
                                         <td align="center" width='42%'><%=getTran(request,"Web.Occup","medwan.common.contacttype",sWebLanguage)%></td>
                                         <td align="center" width='20%'><%=getTran(request,"Web.Occup","medwan.common.user",sWebLanguage)%></td>
@@ -89,25 +89,57 @@ try{
                                         </td>
                                     </tr>
                                     <%
-                                        Iterator transactions = new Vector().iterator();
+                                        Vector vTransactions = new Vector();
+                                    	Hashtable hTransactions = new Hashtable();
+                                    	HashSet hMasterTransactions = new HashSet();
                                         try{
                                             if ("1".equalsIgnoreCase(request.getParameter("showAll"))){
-                                                transactions = sessionContainerWO.getHealthRecordVO().getTransactions().iterator();
+                                                vTransactions = new Vector(sessionContainerWO.getHealthRecordVO().getTransactions());
                                             } 
                                             else {
-                                                transactions = sessionContainerWO.getTransactionsLimited().iterator();
+                                                vTransactions = new Vector(sessionContainerWO.getTransactionsLimited());
                                             }
                                         }
                                         catch(Exception e){
                                             e.printStackTrace();
                                         }
-
+                                        //Sort transactions
+                                        Iterator transactions = vTransactions.iterator();
+                                        SortedMap sTransactions = new TreeMap();
+										while(transactions.hasNext()){
+											TransactionVO transaction = (TransactionVO)transactions.next();
+											String key=new SimpleDateFormat("yyyyMMdd").format(transaction.getUpdateTime())+"."+transaction.getTransactionType()+"."+new SimpleDateFormat("yyyyMMddHHmm").format(transaction.getUpdateTime())+"."+Math.random();
+											sTransactions.put(key,transaction);
+										}
+										vTransactions = new Vector();
+										transactions = sTransactions.keySet().iterator();
+										while(transactions.hasNext()){
+											String key=(String)transactions.next();
+											TransactionVO transaction = (TransactionVO)sTransactions.get(key);
+											vTransactions.add(transaction);
+										}
+										Collections.reverse(vTransactions);
+                                        transactions = vTransactions.iterator();
+										while(transactions.hasNext()){
+											TransactionVO transaction = (TransactionVO)transactions.next();
+											String key=ScreenHelper.formatDate(transaction.getUpdateDateTime())+"."+transaction.getTransactionType();
+											if(hTransactions.get(key)!=null){
+												hTransactions.put(key,((Integer)hTransactions.get(key))+1);
+											}
+											else{
+												hTransactions.put(key,1);
+												hMasterTransactions.add(transaction.getServerId()+"."+transaction.getTransactionId());
+											}
+										}
+                                        
                                         String sClass, transactionType, sList = "", docType, servicecode;
                                         TransactionVO transactionVO;
                                         ItemVO contextItem, itemVO, item, encounteritem;
                                         Encounter encounter;
                                         Encounter activeEncounter;
 
+                                        transactions = vTransactions.iterator();
+                                        boolean bHiddenSectionOpened=false;
                                         while(transactions.hasNext()){
                                             transactionVO = (TransactionVO) transactions.next();
                                             contextItem = transactionVO.getContextItem();
@@ -133,17 +165,34 @@ try{
                                                     e.printStackTrace();
                                                 }
                                                 
-                                                // alternate row-styles
-                                                if(sList.equals("")) sList = "1";
-                                                else                 sList = "";
+                                                if(hMasterTransactions.contains(transactionVO.getServerId()+"."+transactionVO.getTransactionId())){
+	                                                // alternate row-styles
+	                                                if(sList.equals("")) sList = "1";
+	                                                else                 sList = "";
+                                                }	  
+
+                                                String key=ScreenHelper.formatDate(transactionVO.getUpdateDateTime())+"."+transactionVO.getTransactionType();
                                                 
-                                    			%>
-                                                    <tr id="<%=sClass%>" class="list<%=sClass+sList%>" >
-                                                        <td class="modal" onmouseover='this.style.cursor="hand"' onmouseout='this.style.cursor="default"' onclick="deltran(<%=transactionVO.getTransactionId()%>,<%=transactionVO.getServerId()%>,<%=transactionVO.getUser().getUserId()%>)">
-                                                            <img class='hand' src="<c:url value='/_img/icons/icon_delete.gif'/>" alt="<%=getTranNoLink("Web.Occup","medwan.common.delete",sWebLanguage)%>" border="0">
+                                                //If this is a new master line, close any opened slave lines
+                                                if(hMasterTransactions.contains(transactionVO.getServerId()+"."+transactionVO.getTransactionId())){
+                                                	if(bHiddenSectionOpened){
+                                                		out.println("</table></td></tr>");
+                                                		bHiddenSectionOpened=false;
+                                                	}
+                                                }
+                                            	out.println("<tr id='"+sClass+"' class='list"+(hMasterTransactions.contains(transactionVO.getServerId()+"."+transactionVO.getTransactionId())?sClass+sList:"Text2")+"' >");
+												%>
+	                                                    <td  width='30' class="modal" nowrap onmouseover='this.style.cursor="hand"' onmouseout='this.style.cursor="default"'>
+                                                            <img class='hand' src="<c:url value='/_img/icons/icon_delete.gif'/>" alt="<%=getTranNoLink("Web.Occup","medwan.common.delete",sWebLanguage)%>" border="0"  onclick="deltran(<%=transactionVO.getTransactionId()%>,<%=transactionVO.getServerId()%>,<%=transactionVO.getUser().getUserId()%>)">
+															<%
+			                                            	if(hMasterTransactions.contains(transactionVO.getServerId()+"."+transactionVO.getTransactionId()) && (Integer)hTransactions.get(key)>1){
+			                                                	//This is a master line with slaves
+			                                                	out.println("<img class='hand' height='12px' src='"+sCONTEXTPATH+"/_img/themes/default/plus.jpg' alt='"+getTranNoLink("Web.Occup","medwan.common.delete",sWebLanguage)+"' border='0' onclick='expandtran(\""+transactionVO.getServerId()+"."+transactionVO.getTransactionId()+"\",this)'/>");
+			                                                }
+			                                    			%>
                                                         </td>
-                                                        <td align="center"><%=ScreenHelper.formatDate(transactionVO.getUpdateTime())%></td>
-                                                        <td align="center">
+                                                        <td align="center" width='100'><%=hMasterTransactions.contains(transactionVO.getServerId()+"."+transactionVO.getTransactionId())?ScreenHelper.formatDate(transactionVO.getUpdateTime()):""%></td>
+                                                        <td align="center" width='42%'>
                                                             <%
                                                                 try {
                                                                     transactionType = transactionVO.getTransactionType();
@@ -249,10 +298,15 @@ try{
                                                                 }
                                                             %>
                                                         </td>
-                                                        <td align="center"><%=transactionVO.getUser()!=null?transactionVO.getUser().getPersonVO().getFirstname():""%>,&nbsp;<%=transactionVO.getUser()!=null?transactionVO.getUser().getPersonVO().getLastname():""%></td>
-                                                        <td align="center"><%=servicecode.length()>0?servicecode+": "+getTran(request,"service",servicecode,sWebLanguage):getTran(request,"service",contextItem!=null?contextItem.getValue():"",sWebLanguage)%></td>
+                                                        <td align="center" width='20%'><%=transactionVO.getUser()!=null?transactionVO.getUser().getPersonVO().getFirstname():""%>,&nbsp;<%=transactionVO.getUser()!=null?transactionVO.getUser().getPersonVO().getLastname():""%></td>
+                                                        <td align="center" width="*"><%=servicecode.length()>0?servicecode+": "+getTran(request,"service",servicecode,sWebLanguage):getTran(request,"service",contextItem!=null?contextItem.getValue():"",sWebLanguage)%></td>
                                                     </tr>
                                                 <%
+                                            	if(hMasterTransactions.contains(transactionVO.getServerId()+"."+transactionVO.getTransactionId()) && (Integer)hTransactions.get(key)>1){
+													//Create a hidden section
+													out.println("<tr id='expand."+transactionVO.getServerId()+"."+transactionVO.getTransactionId()+"' style='display: none'><td colspan='5'><table width='100%' cellspacing='0'>");
+													bHiddenSectionOpened=true;
+                                            	}
                                             }
                                         }
                                     %>
@@ -289,13 +343,24 @@ try{
         </tr>
     </form>
 </table>
-<form target="_newForm" name="uploadForm" action="<c:url value='/healthrecord/archiveDocumentUpload.jsp'/>" method="post" enctype="multipart/form-data">
+<form target="_tab" name="uploadForm" action="<c:url value='/healthrecord/archiveDocumentUpload.jsp'/>" method="post" enctype="multipart/form-data">
 	<input type='hidden' name='fileuploadid' id='fileuploadid'/>
 	<input type='hidden' name='uploadtransactionid' id='uploadtransactionid'/>
 	<input style='display: none' class="text" id='fileupload' name="filename" type="file" title=""  onchange="uploadFile();"/>
 </form>
 
 <script>
+function expandtran(id,tdobject){
+	if(document.getElementById("expand."+id).style.display=="none"){
+		document.getElementById("expand."+id).style.display="";
+		tdobject.src='<%=sCONTEXTPATH%>/_img/themes/default/minus.jpg';
+	}
+	else{
+		document.getElementById("expand."+id).style.display="none";
+		tdobject.src='<%=sCONTEXTPATH%>/_img/themes/default/plus.jpg';
+	}
+}
+
 function uploadFile(){
     if(uploadForm.filename.value.length>0){
       uploadForm.submit();

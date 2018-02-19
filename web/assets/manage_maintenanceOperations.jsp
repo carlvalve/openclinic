@@ -4,7 +4,7 @@
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
 <%@include file="../assets/includes/commonFunctions.jsp"%>
-<%=checkPermission("maintenanceoperations","edit",activeUser)%>
+<%=checkPermission("maintenanceoperations","select",activeUser)%>
 
 <%=sJSPROTOTYPE%>
 <%=sJSNUMBER%> 
@@ -40,8 +40,9 @@
     		serviceuid=asset.getServiceuid();
     	}
     }
+	serviceuid = checkString(activeUser.getParameter("serviceuid"));
 	if(serviceuid.length()==0){
-		serviceuid=activeUser.getParameter("defaultserviceid");
+		serviceuid=checkString((String)session.getAttribute("activeservice"));
 	}
     
     if(sAction.length()==0){
@@ -51,7 +52,6 @@
 			<input type='hidden' name='action' id='action' value=''/>
 			<input type='hidden' name='operationUID' id='operationUID' value=''/>
 		    <%=writeTableHeader("web.assets","maintenanceOperations",sWebLanguage,"")%>
-		                
 		    <table class="list" border="0" width="100%" cellspacing="1">
 		        <%-- search SERVICE --%>    
 		        <tr>     
@@ -124,7 +124,9 @@
 		            <td class="admin2" colspan="2">
 		                <input class="button" type="button" name="buttonSearch" id="buttonSearch" value="<%=getTranNoLink("web","search",sWebLanguage)%>" onclick="searchMaintenanceOperations();">&nbsp;
 		                <input class="button" type="button" name="buttonClear" id="buttonClear" value="<%=getTranNoLink("web","clear",sWebLanguage)%>" onclick="clearSearchFields();">&nbsp;
+						<%if(activeUser.getAccessRight("maintenanceoperations.add")){ %>
 		                <input class="button" type="button" name="buttonNew" id="buttonNew" value="<%=getTranNoLink("web","new",sWebLanguage)%>" onclick="newOperation();">&nbsp;
+						<%} %>
 		            </td>
 		        </tr>
 		    </table>
@@ -231,6 +233,7 @@
 
 <%
 	MaintenanceOperation operation = null;
+	boolean bLocked=false;
 	if(sAction.equalsIgnoreCase("new")){
 		operation = new MaintenanceOperation();
 		operation.setDate(new java.util.Date());
@@ -239,23 +242,31 @@
 		operation.setPeriodPerformedEnd(ScreenHelper.parseDate(request.getParameter("searchPeriodPerformedEnd")));
 		operation.setOperator(checkString(request.getParameter("searchOperator")));
 		operation.setNextDate(operation.getNextOperationDate());
+		if(MedwanQuery.getInstance().getConfigInt("GMAOLocalServerId",-1)>0){
+			operation.setLockedBy(MedwanQuery.getInstance().getConfigInt("GMAOLocalServerId",-1));
+		}
+		else{
+			operation.setLockedBy(-1);
+		}
 	}
 	else if(sAction.equalsIgnoreCase("edit")){
 		operation = MaintenanceOperation.get(sOperationUID);
 	}
 	
 	if(operation!=null){
+		bLocked = operation.getObjectId()>-1 && ((operation.getLockedBy()>-1 && operation.getLockedBy()!=MedwanQuery.getInstance().getConfigInt("GMAOLocalServerId",-1)) || (operation.getLockedBy()==-1 && MedwanQuery.getInstance().getConfigInt("GMAOLocalServerId",-1)!=0));
 %>
 	    <%=writeTableHeader("web.assets","maintenanceOperations",sWebLanguage,"")%>
 
 		<form name="EditForm" id="EditForm" method="POST">
 		    <input type="hidden" id="EditOperationUID" name="EditOperationUID" value="<%=operation.getUid()%>">
+			<input type='hidden' name='lockedby' id='lockedby' value='<%=operation.getLockedBy()%>'/>
 		                
 		    <table class="list" border="0" width="100%" cellspacing="1">
 		        <%-- MAINTENANCE PLAN (*) --%>
 		        <tr>
 		            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web.assets","maintenancePlan",sWebLanguage)%>&nbsp;*&nbsp;</td>
-		            <td class="admin2">
+		            <td class="admin2" colspan='3'>
 		                <input type="hidden" name="maintenancePlanUID" id="maintenancePlanUID" value="<%=operation.getMaintenanceplanUID()%>">
 		                <input type="text" class="text" id="maintenancePlanName" name="maintenancePlanName" size="50" readonly value="<%=operation.getMaintenancePlan().getName()%>">
 		                                   
@@ -269,7 +280,7 @@
 		        <%-- DATE (*) --%>
 		        <tr>
 		            <td class="admin"><%=getTran(request,"web.assets","date",sWebLanguage)%>&nbsp;*&nbsp;</td>
-		            <td class="admin2">
+		            <td class="admin2" colspan='3'>
 		                <%=writeDateField("date","EditForm",ScreenHelper.formatDate(operation.getDate()),sWebLanguage)%>
 		            </td>
 		        </tr> 
@@ -277,7 +288,7 @@
 		        <%-- OPERATOR (*) --%>
 		        <tr>
 		            <td class="admin"><%=getTran(request,"web.assets","operator",sWebLanguage)%>&nbsp;*&nbsp;</td>
-		            <td class="admin2">
+		            <td class="admin2" colspan='3'>
 		                <input type="text" class="text" id="operator" name="operator" size="40" maxLength="50" value="<%=operation.getOperator()%>">
 		            </td>
 		        </tr>      
@@ -310,7 +321,7 @@
 		        <%-- RESULT (*) --%>
 		        <tr>
 		            <td class="admin"><%=getTran(request,"web.assets","result",sWebLanguage)%>&nbsp;*&nbsp;</td>
-		            <td class="admin2">                
+		            <td class="admin2" colspan='3'>                
 		                <select class="text" id="result" name="result">
 		                    <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>
 		                    <%=ScreenHelper.writeSelect(request,"assets.maintenanceoperations.result",checkString(operation.getResult()),sWebLanguage)%>
@@ -321,25 +332,63 @@
 		        <%-- COMMENT --%>                
 		        <tr>
 		            <td class="admin"><%=getTran(request,"web","comment",sWebLanguage)%></td>
-		            <td class="admin2">
+		            <td class="admin2" colspan='3'>
 		                <textarea class="text" name="comment" id="comment" cols="80" rows="4" onKeyup="resizeTextarea(this,8);limitChars(this,255);"><%=operation.getComment() %></textarea>
 		            </td>
 		        </tr>
-		               
-		        <%-- NEXT DATE --%>
+		        		        <%-- NEXT DATE --%>
 		        <tr>
 		            <td class="admin"><%=getTran(request,"web.assets","nextMaintenanceDate",sWebLanguage)%></td>
-		            <td class="admin2">
+		            <td class="admin2" colspan='3'>
 		                <%=writeDateField("nextDate","EditForm",ScreenHelper.formatDate(operation.getNextDate()),sWebLanguage)%>
 		            </td>
 		        </tr>                    
 		            
+		        
+		        <tr class="admin"><td colspan="4"><%=getTran(request,"web","costs",sWebLanguage) %></td></tr>       
+		        <tr>
+		            <td class="admin"><%=getTran(request,"web.assets","transportcost",sWebLanguage)%></td>
+		            <td class="admin2">
+		                <input type="text" name="comment1" id="comment1" size="10" maxLength="10" value="<%=checkString(operation.getComment1())%>"  onKeyUp="isNumber(this);calculateCosts();" onBlur="if(isNumber(this))setDecimalLength(this,2,true);"> <%=MedwanQuery.getInstance().getConfigString("currency","EUR")%>
+		            </td>
+		            <td class="admin"><%=getTran(request,"web.assets","consumables",sWebLanguage)%></td>
+		            <td class="admin2">
+		                <input type="text" name="comment2" id="comment2" size="10" maxLength="10" value="<%=checkString(operation.getComment2())%>"  onKeyUp="isNumber(this);calculateCosts();" onBlur="if(isNumber(this))setDecimalLength(this,2,true);"> <%=MedwanQuery.getInstance().getConfigString("currency","EUR")%>
+		            </td>
+		        </tr>                
+		        <tr>
+		            <td class="admin"><%=getTran(request,"web.assets","externalfee",sWebLanguage)%></td>
+		            <td class="admin2">
+		                <input type="text" name="comment3" id="comment3" size="10" maxLength="10" value="<%=checkString(operation.getComment3())%>"  onKeyUp="isNumber(this);calculateCosts();" onBlur="if(isNumber(this))setDecimalLength(this,2,true);"> <%=MedwanQuery.getInstance().getConfigString("currency","EUR")%>
+		            </td>
+		            <td class="admin"><%=getTran(request,"web.assets","other",sWebLanguage)%></td>
+		            <td class="admin2">
+		                <input type="text" name="comment4" id="comment4" size="10" maxLength="10" value="<%=checkString(operation.getComment4())%>"  onKeyUp="isNumber(this);calculateCosts();" onBlur="if(isNumber(this))setDecimalLength(this,2,true);"> <%=MedwanQuery.getInstance().getConfigString("currency","EUR")%>
+		            </td>
+		        </tr>     
+		        <tr>
+		            <td class="admin"><%=getTran(request,"web.assets","total",sWebLanguage)%></td>
+		            <td class="admin2" colspan="3">
+		                <b><span id='totalcost'></span></b>
+		            </td>
+		        </tr>
+		        <script>
+		        	function calculateCosts(){
+		        		document.getElementById("totalcost").innerHTML=(document.getElementById("comment1").value*1+document.getElementById("comment2").value*1+document.getElementById("comment3").value*1+document.getElementById("comment4").value*1)+' <%=MedwanQuery.getInstance().getConfigString("currency","EUR")%>';
+		        	}
+		        	calculateCosts();
+		        </script>
+		               
 		        <%-- BUTTONS --%>
 		        <tr>     
 		            <td class="admin"/>
-		            <td class="admin2" colspan="2">
+		            <td class="admin2" colspan="3">
+						<%if(!bLocked && activeUser.getAccessRight("maintenanceoperations.edit")){ %>
 		                <input class="button" type="button" name="buttonSave" id="buttonSave" value="<%=getTranNoLink("web","save",sWebLanguage)%>" onclick="saveMaintenanceOperation();">&nbsp;
+						<%} %>
+						<%if(!bLocked && activeUser.getAccessRight("maintenanceoperations.delete")){ %>
 		                <input class="button" type="button" name="buttonDelete" id="buttonDelete" value="<%=getTranNoLink("web","delete",sWebLanguage)%>" onclick="deleteMaintenanceOperation();">&nbsp;
+						<%} %>
 		                <input class="button" type="button" name="buttonList" id="buttonList" value="<%=getTranNoLink("web","list",sWebLanguage)%>" onclick="listMaintenanceOperations();">&nbsp;
 		                <input class="button" type="button" name="buttonDocuments" id="buttonDocuments" value="<%=getTranNoLink("web","documents",sWebLanguage)%>" onclick="printWordDocuments();">&nbsp;
 		            </td>
@@ -407,6 +456,12 @@
                       "&supplier="+EditForm.supplier.value+
                       "&result="+EditForm.result.value+
                       "&comment="+EditForm.comment.value+
+                      "&comment1="+EditForm.comment1.value+
+                      "&comment2="+EditForm.comment2.value+
+                      "&comment3="+EditForm.comment3.value+
+                      "&comment4="+EditForm.comment4.value+
+                      //"&comment5="+EditForm.comment5.value+
+                      "&lockedby="+document.getElementById("lockedby").value+
                       "&nextDate="+EditForm.nextDate.value;
 
         var url = "<c:url value='/assets/ajax/maintenanceOperation/saveMaintenanceOperation.jsp'/>?ts="+new Date().getTime();

@@ -45,7 +45,7 @@
 						if(field.getName().equalsIgnoreCase("field")){
 							out.println("<tr><td class='admin'>"+field.elementText("name")+"</td>");
 							if(field.elementText("type").equalsIgnoreCase("text")){
-								out.println("<td class='admin2'><input class='text' type='text' name='fieldname_"+field.elementText("name")+"' size='40'/></td>");
+								out.println("<td class='admin2'><input class='text' type='text' name='fieldname_"+field.elementText("name")+"' size='40' value='"+(checkString(field.elementText("modifier")).equalsIgnoreCase("wildcard")?"%":"")+"'/></td>");
 							}
 							else if(field.elementText("type").equalsIgnoreCase("date")){
 								out.println("<td class='admin2'>"+ScreenHelper.writeDateField("fieldname_"+field.elementText("name"), "reportForm", "", true, true, sWebLanguage, sCONTEXTPATH)+"</td>");
@@ -88,7 +88,7 @@
 		var elements = document.all;
 		for(n=0;n<elements.length;n++){
 			if(elements[n].name && elements[n].name.indexOf("fieldname_")>-1){
-				parameters+="&"+elements[n].name+"="+elements[n].value;
+				parameters+="&"+elements[n].name+"="+elements[n].value.replace("%","%25");
 			}
 		}
 	    window.open("<c:url value='statistics/printJasperReport.jsp'/>?ts=<%=getTs()%>&"+parameters,"OpenClinic_Report","toolbar=no,status=yes,scrollbars=yes,resizable=yes,width=800,height=600,menubar=no");

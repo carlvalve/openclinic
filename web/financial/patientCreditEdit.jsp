@@ -340,7 +340,16 @@
 	    </tr>
 	    <tr>
 	        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"Web","date",sWebLanguage)%>&nbsp;*</td>
-	        <td class="admin2"><%=writeDateField("EditCreditDate","EditForm",sEditCreditDate,sWebLanguage)%></td>
+	        <td class="admin2">
+	        	<% 
+	        		if(activeUser.getAccessRightNoSA("financial.patientpaymentdate.edit")){
+	        			out.println(ScreenHelper.writeDateField("EditCreditDate","EditForm",sEditCreditDate,true,false,sWebLanguage,sCONTEXTPATH));
+	        		}
+	        		else{
+	        			out.println("<input type='text' class='text' size='10' readonly name='EditCreditDate' value='"+sEditCreditDate+"'/>");
+	        		}
+	        	%>
+	        </td>
 	    </tr>
         <tr>
             <td class="admin"><%=getTran(request,"web","invoice",sWebLanguage)%>&nbsp;</td>

@@ -46,6 +46,7 @@
             }
 
             // translate importance
+        	String sOrderForm="<a href=\"javascript:openOrderForm('"+checkString(order.getFormuid())+"');\">"+checkString(order.getFormuid())+"</a>";
             sImportance = checkString(order.getImportance());
             if(sImportance.length() > 0){
                 sImportance = getTran(null,"productorder.importance",sImportance,sWebLanguage);
@@ -60,6 +61,7 @@
                  .append("<td align='center'><img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.gif' border='0' title='"+deleteTran+"' onclick=\"doDelete('"+order.getUid()+"');\">")
                  .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">"+checkString(order.getDescription())+"</td>")
                  .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">"+sServiceStockName+"</td>")
+                 .append("<td>"+sOrderForm+"</td>")
                  .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">"+sProductName+"</td>")
                  .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">"+order.getPackagesOrdered()+"</td>")
                  .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">"+order.getPackagesDelivered()+"</td>")
@@ -133,6 +135,13 @@
             }
 
             // translate importance
+            String sOrderForm = checkString(order.getFormuid());
+            if(sOrderForm.length()==0){
+            	sOrderForm="<input onclick='canOrderForm();' type='checkbox' id='of."+order.getUid()+"'/>";
+            }
+            else{
+            	sOrderForm="<a href=\"javascript:openOrderForm('"+sOrderForm+"');\">"+sOrderForm+"</a>";
+            }
             sImportance = checkString(order.getImportance());
             if(sImportance.length() > 0){
                 sImportance = getTran(null,"productorder.importance",sImportance,sWebLanguage);
@@ -147,6 +156,7 @@
                  .append("<td><img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.gif' border='0' title='"+deleteTran+"' onclick=\"doDelete('"+order.getUid()+"');\">")
                  .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">"+checkString(order.getDescription())+"</td>")
                  .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">"+sServiceStockName+"</td>")
+                 .append("<td>"+sOrderForm+"</td>")
                  .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">"+sProductName+"</td>")
                  .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">"+order.getPackagesOrdered()+"</td>")
                  .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">"+order.getPackagesDelivered()+"</td>")
@@ -693,13 +703,13 @@ Debug.println("a");
 							<%} %>
                             <input type="button" class="button" name="clearButton" value="<%=getTranNoLink("Web","Clear",sWebLanguage)%>" onclick="clearSearchFields();">
                             <input type="button" class="button" name="searchComplementButton" value="<%=getTranNoLink("Web.manage",(displayDeliveredOrders?"undeliveredOrders":"deliveredOrders"),sWebLanguage)%>" onclick="doSearch(<%=!displayDeliveredOrders%>);">
-
                             <%-- since 2 --%>
                             <%if(displayUndeliveredOrders){ %>
                             <span id="sinceDiv" >
                                 <%=getTran(request,"Web","since",sWebLanguage)%>&nbsp;<%=ScreenHelper.writeDateField("FindDateDeliveredSince","transactionForm",sFindDateDeliveredSince,true,false,sWebLanguage,sCONTEXTPATH)%>
                             </span>
 							<%} %>
+							<input style="display: none" type="button" class="button" name="createOrderFormButton" id="createOrderFormButton" value="<%=getTranNoLink("web","createorderform",sWebLanguage) %>" onclick="createOrderForm();"/>
 
                             <%-- display message --%>
                             <span id="msgArea"><%=msg%></span>
@@ -758,6 +768,7 @@ Debug.println("a");
 	                            <td nowrap>&nbsp;</td>
 	                            <td><%=HTMLEntities.htmlentities(getTran(request,"Web","description",sWebLanguage))%></td>
 	                            <td><%=HTMLEntities.htmlentities(getTran(request,"Web","servicestock",sWebLanguage))%></td>
+	                            <td><%=HTMLEntities.htmlentities(getTran(request,"Web","orderform",sWebLanguage))%></td>
 	                            <td><%=HTMLEntities.htmlentities(getTran(request,"Web","product",sWebLanguage))%></td>
 	                            <td><%=HTMLEntities.htmlentities(getTran(request,"Web","packagesordered",sWebLanguage))%></td>
 	                            <td><%=HTMLEntities.htmlentities(getTran(request,"Web","packagesdelivered",sWebLanguage))%></td>
@@ -823,6 +834,7 @@ Debug.println("a");
 		                    <td nowrap>&nbsp;</td>
 		                    <td><%=HTMLEntities.htmlentities(getTran(request,"Web","description",sWebLanguage))%></td>
 		                    <td><%=HTMLEntities.htmlentities(getTran(request,"Web","servicestock",sWebLanguage))%></td>
+                            <td><%=HTMLEntities.htmlentities(getTran(request,"Web","orderform",sWebLanguage))%></td>
 		                    <td><%=HTMLEntities.htmlentities(getTran(request,"Web","product",sWebLanguage))%></td>
 		                    <td><%=HTMLEntities.htmlentities(getTran(request,"Web","packagesordered",sWebLanguage))%></td>
 		                    <td><%=HTMLEntities.htmlentities(getTran(request,"Web","packagesdelivered",sWebLanguage))%></td>
@@ -1184,6 +1196,78 @@ Debug.println("a");
   function doAdd(){
     transactionForm.EditOrderUid.value = "-1";
     doSave();
+  }
+  
+  function canOrderForm(){
+	  var bCanOrder=false;
+	  var elements = document.all;
+	  for(n=0;n<elements.length;n++){
+		  if(elements[n].id && elements[n].id.startsWith("of.") && elements[n].checked){
+			  bCanOrder=true;
+			  break;
+		  }
+	  }
+	  if(bCanOrder){
+		  document.getElementById('createOrderFormButton').style.display="";
+	  }
+	  else{
+		  document.getElementById('createOrderFormButton').style.display="none";
+	  }
+	  return bCanOrder;
+  }
+  
+  function createOrderForm(){
+	    var url = "<c:url value="/pharmacy/manageOrderForm.jsp"/>?ts="+new Date().getTime();
+	    Modalbox.show(url,{title:'<%=getTranNoLink("web","orderform",sWebLanguage)%>',width:400, height:400});
+  }
+
+  function openOrderForm(uid){
+	    var url = "<c:url value="/pharmacy/manageOrderForm.jsp"/>?uid="+uid+"&ts="+new Date().getTime();
+	    Modalbox.show(url,{title:'<%=getTranNoLink("web","orderform",sWebLanguage)%>',width:500, height:400});
+  }
+
+  function saveOrderForm(){
+	  //Een lijst maken van alle productstocks die aan orderform moeten verbonden worden en vervolgens saven
+	  var toSave="";
+	  var elements = document.all;
+	  for(n=0;n<elements.length;n++){
+		  if(elements[n].id && elements[n].id.startsWith("of.") && elements[n].checked){
+			  toSave+=elements[n].id.replace("of.","")+";";
+		  }
+	  }
+	  saveOrderFormFields(toSave);
+  }
+  
+  function saveOrderFormFields(fields){
+	    var params = 	'fields='+fields+
+						'&supplier='+document.getElementById('supplier').value+
+						'&date='+document.getElementById('date').value+
+						'&uid='+document.getElementById('uid').value+
+						'&supplierinvoice='+document.getElementById('supplierinvoice').value;
+	    var url = '<c:url value="/pharmacy/saveOrderForm.jsp"/>?ts='+new Date();
+		new Ajax.Request(url,{
+	      method: "POST",
+	      parameters: params,
+	      onSuccess: function(resp){
+	    	  Modalbox.hide();
+	    	  window.location.reload();
+	      },
+		  onFailure: function(resp){
+			  alert('error');
+	    	  Modalbox.hide();
+	    	  window.location.reload();
+	      }
+		});
+	}
+
+  function printMyOrderForm(orderformuid){
+      var url = "<c:url value='/pharmacy/printProductOrderForm.jsp'/>?orderformuid="+orderformuid+"&ts=<%=getTs()%>";
+      printwindow=window.open(url,"ProductOrderForm<%=new java.util.Date().getTime()%>","height=600,width=900,toolbar=yes,status=no,scrollbars=yes,resizable=yes,menubar=yes");
+  }
+
+  function printMyDeliveryForm(orderformuid){
+      var url = "<c:url value='/pharmacy/printProductDeliveryForm.jsp'/>?orderformuid="+orderformuid+"&ts=<%=getTs()%>";
+      printwindow=window.open(url,"ProductOrderForm<%=new java.util.Date().getTime()%>","height=600,width=900,toolbar=yes,status=no,scrollbars=yes,resizable=yes,menubar=yes");
   }
 
   <%-- DO SAVE --%>
@@ -1560,4 +1644,5 @@ Debug.println("a");
   <%-- close "search in progress"-popup that might still be open --%>
   var popup = window.open("","Searching","width=1,height=1");
   popup.close();
+  window.setTimeout("canOrderForm()",500);
 </script>

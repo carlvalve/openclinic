@@ -49,6 +49,21 @@
 			                                          property="value" outputString="checked"/>><label><%=getTran(request,"web","no",sWebLanguage) %></label>
 			            </td>
 			        </tr>
+		        	<tr>
+			            <td class="admin"><%=getTran(request,"web","ongoingtechnicalact",sWebLanguage)%>&nbsp;</td>
+                        <td class="admin2" colspan="3">
+                        	<%	if(MedwanQuery.getInstance().getConfigInt("enableBurundi",0)==1){ %>
+	                        	<select class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DECEASED_ACT" property="itemId"/>]>.value">
+	                        		<option value=''></option>
+	                        		<%=ScreenHelper.writeSelect(request,"dhis2nomenclature",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DECEASED_ACT"),sWebLanguage) %>
+	                        	</select>
+	                        <%	}
+                        		else {
+                        	%>
+                            <input type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DECEASED_ACT" property="itemId"/>]>.value" size="80" maxlength="250" value="<%=((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DECEASED_ACT")%>">
+                            <%	} %>
+                        </td>
+			        </tr>
 			        <tr>
 			            <td class="admin"><%=getTran(request,"web", "death.location", sWebLanguage)%></td>
 			            <td class="admin2">
