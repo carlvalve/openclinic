@@ -20,6 +20,7 @@ public class CarePrescription extends OC_Object{
     private String timeUnit; // (Hour|Day|Week|Month)
     private int timeUnitCount = -1;
     private double unitsPerTimeUnit = -1;
+    private String comment;
 
     // non-db data
     private String patientUid;
@@ -74,7 +75,15 @@ public class CarePrescription extends OC_Object{
         return begin;
     }
 
-    public void setBegin(Date begin) {
+    public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	public void setBegin(Date begin) {
         this.begin = begin;
     }
 
@@ -180,6 +189,7 @@ public class CarePrescription extends OC_Object{
                 careprescr.setUpdateDateTime(rs.getTimestamp("OC_CAREPRESCR_UPDATETIME"));
                 careprescr.setUpdateUser(ScreenHelper.checkString(rs.getString("OC_CAREPRESCR_UPDATEUID")));
                 careprescr.setVersion(rs.getInt("OC_CAREPRESCR_VERSION"));
+                careprescr.setComment(rs.getString("OC_CAREPRESCR_COMMENT"));
             }
             else{
                 throw new Exception("ERROR : CAREPRESCRIPTION "+prescrUid+" NOT FOUND");
@@ -234,8 +244,8 @@ public class CarePrescription extends OC_Object{
                 sSelect = "INSERT INTO OC_CAREPRESCRIPTIONS (OC_CAREPRESCR_SERVERID,OC_CAREPRESCR_OBJECTID,OC_CAREPRESCR_PATIENTUID,"+
                           "  OC_CAREPRESCR_PRESCRIBERUID,OC_CAREPRESCR_CAREUID,OC_CAREPRESCR_BEGIN,OC_CAREPRESCR_END,OC_CAREPRESCR_TIMEUNIT,"+
                           "  OC_CAREPRESCR_TIMEUNITCOUNT,OC_CAREPRESCR_UNITSPERTIMEUNIT,"+
-                          "  OC_CAREPRESCR_CREATETIME,OC_CAREPRESCR_UPDATETIME,OC_CAREPRESCR_UPDATEUID,OC_CAREPRESCR_VERSION)"+
-                          " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,1)";
+                          "  OC_CAREPRESCR_CREATETIME,OC_CAREPRESCR_UPDATETIME,OC_CAREPRESCR_UPDATEUID,OC_CAREPRESCR_VERSION,OC_CAREPRESCR_COMMENT)"+
+                          " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,1,?)";
 
                 ps = oc_conn.prepareStatement(sSelect);
 
@@ -271,6 +281,7 @@ public class CarePrescription extends OC_Object{
                 ps.setTimestamp(11,new Timestamp(new java.util.Date().getTime())); // now
                 ps.setTimestamp(12,new Timestamp(new java.util.Date().getTime())); // now
                 ps.setString(13,this.getUpdateUser());
+                ps.setString(14, this.getComment());
 
                 ps.executeUpdate();
             }
@@ -281,7 +292,8 @@ public class CarePrescription extends OC_Object{
                 sSelect = "UPDATE OC_CAREPRESCRIPTIONS SET OC_CAREPRESCR_PATIENTUID=?, OC_CAREPRESCR_PRESCRIBERUID=?,"+
                           "  OC_CAREPRESCR_CAREUID=?, OC_CAREPRESCR_BEGIN=?, OC_CAREPRESCR_END=?, OC_CAREPRESCR_TIMEUNIT=?,"+
                           "  OC_CAREPRESCR_TIMEUNITCOUNT=?, OC_CAREPRESCR_UNITSPERTIMEUNIT=?,"+
-                          "  OC_CAREPRESCR_UPDATETIME=?, OC_CAREPRESCR_UPDATEUID=?, OC_CAREPRESCR_VERSION=(OC_CAREPRESCR_VERSION+1)"+
+                          "  OC_CAREPRESCR_UPDATETIME=?, OC_CAREPRESCR_UPDATEUID=?, OC_CAREPRESCR_VERSION=(OC_CAREPRESCR_VERSION+1),"
+                          + "OC_CAREPRESCR_COMMENT=?"+
                           " WHERE OC_CAREPRESCR_SERVERID=? AND OC_CAREPRESCR_OBJECTID=?";
 
                 ps = oc_conn.prepareStatement(sSelect);
@@ -309,9 +321,10 @@ public class CarePrescription extends OC_Object{
                 // OBJECT variables
                 ps.setTimestamp(9,new Timestamp(new java.util.Date().getTime())); // now
                 ps.setString(10,this.getUpdateUser());
+                ps.setString(11,this.getComment());
 
-                ps.setInt(11,Integer.parseInt(this.getUid().substring(0,this.getUid().indexOf("."))));
-                ps.setInt(12,Integer.parseInt(this.getUid().substring(this.getUid().indexOf(".")+1)));
+                ps.setInt(12,Integer.parseInt(this.getUid().substring(0,this.getUid().indexOf("."))));
+                ps.setInt(13,Integer.parseInt(this.getUid().substring(this.getUid().indexOf(".")+1)));
 
                 ps.executeUpdate();
             }
@@ -507,23 +520,24 @@ public class CarePrescription extends OC_Object{
 
                 careprescr.setPatientUid(rs.getString("OC_CAREPRESCR_PATIENTUID"));
                 careprescr.setPrescriberUid(rs.getString("OC_CAREPRESCR_PRESCRIBERUID"));
-                careprescr.setCareUid(rs.getString("OC_PRESCR_PRODUCTUID"));
+                careprescr.setCareUid(rs.getString("OC_CAREPRESCR_PRODUCTUID"));
+                careprescr.setComment(rs.getString("OC_CAREPRESCR_COMMENT"));
 
-                java.util.Date tmpDate = rs.getDate("OC_PRESCR_BEGIN");
+                java.util.Date tmpDate = rs.getDate("OC_CAREPRESCR_BEGIN");
                 if(tmpDate!=null) careprescr.setBegin(tmpDate);
 
-                tmpDate = rs.getDate("OC_PRESCR_END");
+                tmpDate = rs.getDate("OC_CAREPRESCR_END");
                 if(tmpDate!=null) careprescr.setEnd(tmpDate);
 
-                careprescr.setTimeUnit(rs.getString("OC_PRESCR_TIMEUNIT"));
-                careprescr.setTimeUnitCount(rs.getInt("OC_PRESCR_TIMEUNITCOUNT"));
-                careprescr.setUnitsPerTimeUnit(rs.getDouble("OC_PRESCR_UNITSPERTIMEUNIT"));
+                careprescr.setTimeUnit(rs.getString("OC_CAREPRESCR_TIMEUNIT"));
+                careprescr.setTimeUnitCount(rs.getInt("OC_CAREPRESCR_TIMEUNITCOUNT"));
+                careprescr.setUnitsPerTimeUnit(rs.getDouble("OC_CAREPRESCR_UNITSPERTIMEUNIT"));
 
                 // object variables
-                careprescr.setCreateDateTime(rs.getTimestamp("OC_PRESCR_CREATETIME"));
-                careprescr.setUpdateDateTime(rs.getTimestamp("OC_PRESCR_UPDATETIME"));
-                careprescr.setUpdateUser(ScreenHelper.checkString(rs.getString("OC_PRESCR_UPDATEUID")));
-                careprescr.setVersion(rs.getInt("OC_PRESCR_VERSION"));
+                careprescr.setCreateDateTime(rs.getTimestamp("OC_CAREPRESCR_CREATETIME"));
+                careprescr.setUpdateDateTime(rs.getTimestamp("OC_CAREPRESCR_UPDATETIME"));
+                careprescr.setUpdateUser(ScreenHelper.checkString(rs.getString("OC_CAREPRESCR_UPDATEUID")));
+                careprescr.setVersion(rs.getInt("OC_CAREPRESCR_VERSION"));
 
                 activePrescriptions.add(careprescr);
             }
@@ -723,6 +737,7 @@ public class CarePrescription extends OC_Object{
                 careprescr.setPatientUid(rs.getString("OC_CAREPRESCR_PATIENTUID"));
                 careprescr.setPrescriberUid(rs.getString("OC_CAREPRESCR_PRESCRIBERUID"));
                 careprescr.setCareUid(rs.getString("OC_CAREPRESCR_CAREUID"));
+                careprescr.setComment(rs.getString("OC_CAREPRESCR_COMMENT"));
 
                 // begin date
                 java.util.Date tmpDate = rs.getDate("OC_CAREPRESCR_BEGIN");

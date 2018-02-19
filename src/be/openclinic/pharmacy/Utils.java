@@ -25,6 +25,7 @@ import be.mxs.common.util.system.RxNormInteraction;
 import be.mxs.common.util.system.ScreenHelper;
 import be.mxs.common.util.system.Translate;
 import be.openclinic.knowledge.ATCClass;
+import be.openclinic.medical.ChronicMedication;
 import be.openclinic.medical.Prescription;
 
 public class Utils {
@@ -198,10 +199,12 @@ public class Utils {
 										if(druginteractions.length()>0){
 											druginteractions+=" + ";
 										}
-										druginteractions+=Translate.translate("en", language,sourceConceptItem.elementText("name"),sourceConceptItem.elementText("name"));
+										String translation=Translate.translate("en", language,sourceConceptItem.elementText("name"),sourceConceptItem.elementText("name"));
+										druginteractions+=translation;
 									}
 								}
-								interactions.put(drugcodes,druginteractions+";"+Translate.translate("en",language,interactionPair.elementText("description"),interactionPair.elementText("description")));
+								String translation=Translate.translate("en",language,interactionPair.elementText("description"),interactionPair.elementText("description"));
+								interactions.put(drugcodes,druginteractions+";"+translation);
 							}
 						}
 					}
@@ -302,16 +305,64 @@ public class Utils {
 		}
 		return false;
 	}
-	
+
 	public static boolean patientHasDrugDrugInteractions(String personid){
+		return patientHasDrugDrugInteractions(personid, false);
+	}
+	
+	public static boolean patientHasDrugDrugInteractions(String personid,boolean bWaitinglist){
 		String rxcuis="";
 		//Find rxcuis from active patientmedication
 		Vector activePrescriptions = Prescription.getActivePrescriptions(personid);
 		for(int n=0;n<activePrescriptions.size();n++){
 			Prescription prescription=(Prescription)activePrescriptions.elementAt(n);
 			Product product = prescription.getProduct();
-			if(product!=null && product.getRxnormcode()!=null && product.getRxnormcode().length()>0){
+			if(product!=null && product.getRxnormcode()!=null && product.getRxnormcode().length()>0 && rxcuis.indexOf(product.getRxnormcode().replaceAll(";", "+")+"+")<0){
 				rxcuis+=product.getRxnormcode()+"+";
+			}
+		}
+		//Find rxcuis from delivered drugs
+		long day = 24*3600*1000;
+		Vector medicationHistory = ProductStockOperation.getPatientDeliveries(personid,new java.util.Date(new java.util.Date().getTime()-MedwanQuery.getInstance().getConfigInt("patientMedicationDeliveryHistoryDuration",14)*day), new java.util.Date(),"OC_OPERATION_DATE","DESC");
+		if(medicationHistory.size() > 0){
+	        ProductStockOperation operation;
+			for(int n=0; n<medicationHistory.size(); n++){
+				operation = (ProductStockOperation)medicationHistory.elementAt(n);
+				if(operation.getProductStock()!=null && operation.getProductStock().getProduct()!=null && rxcuis.indexOf(operation.getProductStock().getProduct().getRxnormcode().replaceAll(";", "+")+"+")<0){
+					rxcuis+=operation.getProductStock().getProduct().getRxnormcode().replaceAll(";", "+")+"+";
+				}
+			}
+		}
+		//Find rxuis from chronic medication
+        Vector chronicMedications = ChronicMedication.find(personid,"","","","OC_CHRONICMED_BEGIN","ASC");
+		if(chronicMedications.size() > 0){
+	        ChronicMedication medication;
+			for(int n=0; n<chronicMedications.size(); n++){
+				medication = (ChronicMedication)chronicMedications.elementAt(n);
+				if(medication.getProduct()!=null && rxcuis.indexOf(medication.getProduct().getRxnormcode().replaceAll(";", "+")+"+")<0){
+					rxcuis+=medication.getProduct().getRxnormcode().replaceAll(";", "+")+"+";
+				}
+			}
+		}
+		if(bWaitinglist){
+			try{
+				Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+				PreparedStatement ps = conn.prepareStatement("select * from oc_drugsoutlist where oc_list_patientuid=?");
+				ps.setString(1, personid);
+				ResultSet rs = ps.executeQuery();
+				while(rs.next()){
+					String productstockuid = rs.getString("oc_list_productstockuid");
+					ProductStock productStock = ProductStock.get(productstockuid);
+					if(productStock!=null && productStock.getProduct()!=null && rxcuis.indexOf(productStock.getProduct().getRxnormcode().replaceAll(";", "+")+"+")<0){
+						rxcuis+=productStock.getProduct().getRxnormcode().replaceAll(";", "+")+"+";
+					}
+				}
+				rs.close();
+				ps.close();
+				conn.close();
+			}
+			catch(Exception e){
+				
 			}
 		}
 		try{
@@ -343,22 +394,70 @@ public class Utils {
 		}
 		return false;
 	}
-	
+
 	public static SortedMap getPatientDrugDrugInteractions(String personid){
+		return getPatientDrugDrugInteractions(personid,false);
+	}
+
+	public static SortedMap getPatientDrugDrugInteractions(String personid,boolean bWaitinglist){
 		String rxcuis="";
 		//Find rxcuis from active patientmedication
 		Vector activePrescriptions = Prescription.findActive(personid,"","","","","","OC_PRESCR_BEGIN","DESC");
 		for(int n=0;n<activePrescriptions.size();n++){
 			Prescription prescription=(Prescription)activePrescriptions.elementAt(n);
 			Product product = prescription.getProduct();
-			if(product!=null && product.getRxnormcode()!=null && product.getRxnormcode().length()>0){
+			if(product!=null && product.getRxnormcode()!=null && product.getRxnormcode().length()>0 && rxcuis.indexOf(product.getRxnormcode().replaceAll(";", "+")+"+")<0){
 				rxcuis+=product.getRxnormcode().replaceAll(";", "+")+"+";
+			}
+		}
+		//Find rxcuis from delivered drugs
+		long day = 24*3600*1000;
+		Vector medicationHistory = ProductStockOperation.getPatientDeliveries(personid,new java.util.Date(new java.util.Date().getTime()-MedwanQuery.getInstance().getConfigInt("patientMedicationDeliveryHistoryDuration",14)*day), new java.util.Date(),"OC_OPERATION_DATE","DESC");
+		if(medicationHistory.size() > 0){
+	        ProductStockOperation operation;
+			for(int n=0; n<medicationHistory.size(); n++){
+				operation = (ProductStockOperation)medicationHistory.elementAt(n);
+				if(operation.getProductStock()!=null && operation.getProductStock().getProduct()!=null && operation.getProductStock().getProduct().getRxnormcode()!=null && rxcuis.indexOf(operation.getProductStock().getProduct().getRxnormcode().replaceAll(";", "+")+"+")<0){
+					rxcuis+=operation.getProductStock().getProduct().getRxnormcode().replaceAll(";", "+")+"+";
+				}
+			}
+		}
+		//Find rxuis from chronic medication
+        Vector chronicMedications = ChronicMedication.find(personid,"","","","OC_CHRONICMED_BEGIN","ASC");
+		if(chronicMedications.size() > 0){
+	        ChronicMedication medication;
+			for(int n=0; n<chronicMedications.size(); n++){
+				medication = (ChronicMedication)chronicMedications.elementAt(n);
+				if(medication.getProduct()!=null && medication.getProduct().getRxnormcode()!=null && rxcuis.indexOf(medication.getProduct().getRxnormcode().replaceAll(";", "+")+"+")<0){
+					rxcuis+=medication.getProduct().getRxnormcode().replaceAll(";", "+")+"+";
+				}
+			}
+		}
+		if(bWaitinglist){
+			try{
+				Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+				PreparedStatement ps = conn.prepareStatement("select * from oc_drugsoutlist where oc_list_patientuid=?");
+				ps.setString(1, personid);
+				ResultSet rs = ps.executeQuery();
+				while(rs.next()){
+					String productstockuid = rs.getString("oc_list_productstockuid");
+					ProductStock productStock = ProductStock.get(productstockuid);
+					if(productStock!=null && productStock.getProduct()!=null && productStock.getProduct().getRxnormcode()!=null && rxcuis.indexOf(productStock.getProduct().getRxnormcode().replaceAll(";", "+")+"+")<0){
+						rxcuis+=productStock.getProduct().getRxnormcode().replaceAll(";", "+")+"+";
+					}
+				}
+				rs.close();
+				ps.close();
+				conn.close();
+			}
+			catch(Exception e){
+				
 			}
 		}
 		return getDrugDrugInteractions(rxcuis);
 	}
 	
-	public static SortedMap getPatientDrugDrugInteractions(String personid,String language){
+	public static SortedMap getPatientDrugDrugInteractions(String personid,String language,boolean bWaitinglist){
 		language=language.toLowerCase();
 		String rxcuis="";
 		//Find rxcuis from active patientmedication
@@ -366,8 +465,52 @@ public class Utils {
 		for(int n=0;n<activePrescriptions.size();n++){
 			Prescription prescription=(Prescription)activePrescriptions.elementAt(n);
 			Product product = prescription.getProduct();
-			if(product!=null && product.getRxnormcode()!=null && product.getRxnormcode().length()>0){
+			if(product!=null && product.getRxnormcode()!=null && product.getRxnormcode().length()>0 && rxcuis.indexOf(product.getRxnormcode().replaceAll(";", "+")+"+")<0){
 				rxcuis+=product.getRxnormcode().replaceAll(";", "+")+"+";
+			}
+		}
+		//Find rxcuis from delivered drugs
+		long day = 24*3600*1000;
+		Vector medicationHistory = ProductStockOperation.getPatientDeliveries(personid,new java.util.Date(new java.util.Date().getTime()-MedwanQuery.getInstance().getConfigInt("patientMedicationDeliveryHistoryDuration",14)*day), new java.util.Date(),"OC_OPERATION_DATE","DESC");
+		if(medicationHistory.size() > 0){
+	        ProductStockOperation operation;
+			for(int n=0; n<medicationHistory.size(); n++){
+				operation = (ProductStockOperation)medicationHistory.elementAt(n);
+				if(operation.getProductStock()!=null && operation.getProductStock().getProduct()!=null && operation.getProductStock().getProduct().getRxnormcode()!=null && operation.getProductStock().getProduct().getRxnormcode().length()>0 && rxcuis.indexOf(operation.getProductStock().getProduct().getRxnormcode().replaceAll(";", "+")+"+")<0){
+					rxcuis+=operation.getProductStock().getProduct().getRxnormcode().replaceAll(";", "+")+"+";
+				}
+			}
+		}
+		//Find rxuis from chronic medication
+        Vector chronicMedications = ChronicMedication.find(personid,"","","","OC_CHRONICMED_BEGIN","ASC");
+		if(chronicMedications.size() > 0){
+	        ChronicMedication medication;
+			for(int n=0; n<chronicMedications.size(); n++){
+				medication = (ChronicMedication)chronicMedications.elementAt(n);
+				if(medication.getProduct()!=null && rxcuis.indexOf(medication.getProduct().getRxnormcode().replaceAll(";", "+")+"+")<0){
+					rxcuis+=medication.getProduct().getRxnormcode().replaceAll(";", "+")+"+";
+				}
+			}
+		}
+		if(bWaitinglist){
+			try{
+				Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+				PreparedStatement ps = conn.prepareStatement("select * from oc_drugsoutlist where oc_list_patientuid=?");
+				ps.setString(1, personid);
+				ResultSet rs = ps.executeQuery();
+				while(rs.next()){
+					String productstockuid = rs.getString("oc_list_productstockuid");
+					ProductStock productStock = ProductStock.get(productstockuid);
+					if(productStock!=null && productStock.getProduct()!=null && rxcuis.indexOf(productStock.getProduct().getRxnormcode().replaceAll(";", "+")+"+")<0){
+						rxcuis+=productStock.getProduct().getRxnormcode().replaceAll(";", "+")+"+";
+					}
+				}
+				rs.close();
+				ps.close();
+				conn.close();
+			}
+			catch(Exception e){
+				
 			}
 		}
 		return getDrugDrugInteractions(rxcuis, language);

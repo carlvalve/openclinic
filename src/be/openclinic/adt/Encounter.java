@@ -254,6 +254,39 @@ public class Encounter extends OC_Object {
     	return bHasTransactions;
     }
     
+    public boolean isNewCase(){
+    	return isNewCase(getUid());
+    }
+    
+    public static boolean isNewCase(String encounterUid){
+    	boolean bNewCase = false;
+    	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+    	try{
+    		PreparedStatement ps = conn.prepareStatement("select * from OC_RFE where OC_RFE_ENCOUNTERUID=?");
+    		ps.setString(1, encounterUid);
+    		ResultSet rs = ps.executeQuery();
+    		while (!bNewCase && rs.next()){
+    			String flags = rs.getString("OC_RFE_FLAGS");
+    			bNewCase=flags.contains("N");
+    		}
+    		rs.close();
+    		ps.close();
+    		if(!bNewCase){
+    			ps=conn.prepareStatement("select * from OC_DIAGNOSES where OC_DIAGNOSIS_ENCOUNTERUID=? and OC_DIAGNOSIS_NC=1");
+        		ps.setString(1, encounterUid);
+        		rs = ps.executeQuery();
+        		bNewCase=rs.next();
+        		rs.close();
+        		ps.close();
+    		}
+    		conn.close();
+    	}
+    	catch(Exception e){
+    		e.printStackTrace();
+    	}
+    	return bNewCase;
+    }
+
     public boolean discontinuedAccident(){
     	if(this.getCategories()!=null && this.getCategories().length()>0 && this.getCategories().indexOf("A")<0){
     		return false;
@@ -1067,7 +1100,7 @@ public class Encounter extends OC_Object {
                               "  AND OC_ENCOUNTER_SERVICEENDDATE IS NULL";
                 ps = conn.prepareStatement(sSql);
                 if(getTransferDate()==null){
-                    ps.setTimestamp(1,new Timestamp(new Date().getTime()));
+                    ps.setTimestamp(1,this.getEnd()!=null && this.getEnd().before(new Date())?new Timestamp(this.getEnd().getTime()):new Timestamp(new Date().getTime()));
                 } 
                 else{
                     ps.setTimestamp(1,new Timestamp(getTransferDate().getTime()));
@@ -1962,6 +1995,79 @@ public class Encounter extends OC_Object {
         }
 		
         return activeEncounter;
+    }
+    
+    public Hashtable getIkireziSymptoms(){
+    	Hashtable symptoms=new Hashtable();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection conn = null;
+        try{
+        	conn = MedwanQuery.getInstance().getOpenclinicConnection();
+        	ps=conn.prepareStatement("select * from OC_IKIREZISYMPTOMS where OC_SYMPTOM_ENCOUNTERUID=?");
+        	ps.setString(1, getUid());
+        	rs=ps.executeQuery();
+        	while(rs.next()){
+        		symptoms.put(rs.getString("OC_SYMPTOM_ID"), rs.getInt("OC_SYMPTOM_VALUE"));
+        	}
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                if(conn!=null) conn.close();
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        return symptoms;
+    }
+
+    public static Hashtable getIkireziSymptomLabels(String language){
+    	Hashtable symptoms=new Hashtable();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection conn = null;
+        try{
+        	conn = MedwanQuery.getInstance().getIkireziConnection();
+        	ps=conn.prepareStatement("select * from sym_lang");
+        	rs=ps.executeQuery();
+        	while(rs.next()){
+        		if(language.toLowerCase().startsWith("en")){
+        			symptoms.put(rs.getInt("nrs"), rs.getString("sympe"));
+        		}
+        		else if(language.toLowerCase().startsWith("f")){
+        			symptoms.put(rs.getInt("nrs"), rs.getString("sympf"));
+        		}
+        		else if(language.toLowerCase().startsWith("n")){
+        			symptoms.put(rs.getInt("nrs"), rs.getString("sympn"));
+        		}
+        		else if(language.toLowerCase().startsWith("p")){
+        			symptoms.put(rs.getInt("nrs"), rs.getString("sympp"));
+        		}
+        		else if(language.toLowerCase().startsWith("es")){
+        			symptoms.put(rs.getInt("nrs"), rs.getString("symps"));
+        		}
+        	}
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                if(conn!=null) conn.close();
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        return symptoms;
     }
 
     //--- GET ACTIVE ENCOUNTER --------------------------------------------------------------------

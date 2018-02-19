@@ -17,7 +17,7 @@ public class Db {
    public static Connection conn = null;
 
    public static void Connect() {
-      conn = MedwanQuery.getInstance().getIkireziConnection();
+	   conn = MedwanQuery.getInstance().getIkireziConnection();
    }
 
    public static void runsql(String mysql) {
@@ -28,7 +28,7 @@ public class Db {
          pst.close();
 
       } catch (SQLException ex) {
-         System.err.println("Error" + ex);
+         ex.printStackTrace();
       }
 
    }

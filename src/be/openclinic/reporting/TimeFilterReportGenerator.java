@@ -9,8 +9,20 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.mail.BodyPart;
+import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
 import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -19,6 +31,7 @@ import org.dom4j.io.SAXReader;
 import be.mxs.common.model.vo.healthrecord.ItemVO;
 import be.mxs.common.model.vo.healthrecord.TransactionVO;
 import be.mxs.common.util.db.MedwanQuery;
+import be.mxs.common.util.system.Debug;
 import be.mxs.common.util.system.Miscelaneous;
 import be.mxs.common.util.system.ScreenHelper;
 import be.mxs.common.util.tools.sendHtmlMail;
@@ -26,6 +39,72 @@ import uk.org.primrose.pool.PoolException;
 import uk.org.primrose.vendor.standalone.PrimroseLoader;
 
 public class TimeFilterReportGenerator {
+	
+	static public boolean sendEmailWithImages(String smtpServer, String sFrom, String sTo, String sSubject, String sMessage, String sImage) throws Exception{      		    	
+    	// * * The browser accesses these images just as if it were displaying an image in a Web page. Unfortunately, spammers have used this mechanism as a sneaky way to record who visits their site (and mark your email as valid). To protect your privacy, many Web-based (and other) email clients don't display images in HTML emails.
+		//	An alternative to placing absolute URLs to images in your HTML is to include the images as attachments to the email. The HTML can reference the image in an attachment by using the protocol prefix cid: plus the content-id of the attachment.      		       
+	    boolean bSuccess = false;    
+		try{
+			final String username = MedwanQuery.getInstance().getConfigString("mailbot.user","openclinic.mailrobot@ict4d.be");
+			final String password = MedwanQuery.getInstance().getConfigString("mailbot.password","Bigo4ever");
+
+			Properties props = new Properties();
+			props.put("mail.smtp.auth", "true");
+			props.put("mail.smtp.starttls.enable", "true");
+			props.put("mail.smtp.host", MedwanQuery.getInstance().getConfigString("mailbot.server","smtp.gmail.com"));
+			props.put("mail.smtp.port", MedwanQuery.getInstance().getConfigString("mailbot.port","587"));
+	        props.put("mail.smtp.user", username);
+	        props.put("mail.smtp.password", password);
+
+	        Session mailSession = Session.getInstance(props);
+
+	        mailSession.setDebug(MedwanQuery.getInstance().getConfigString("Debug").equalsIgnoreCase("On"));
+	        Transport transport = mailSession.getTransport("smtp");
+	
+	        MimeMessage message = new MimeMessage(mailSession);
+	        message.setSubject(sSubject);
+	        message.setFrom(new InternetAddress(sFrom,MedwanQuery.getInstance().getConfigString("mailbot.fromname","OpenClinic Mailbot")));	  
+	        message.setReplyTo(new InternetAddress[] {new InternetAddress(MedwanQuery.getInstance().getConfigString("mailbot.replyto","openclinic.mailrobot@ict4d.be"))});
+	        message.setSentDate(new java.util.Date());
+	        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(sTo,false));
+	
+	        // This HTML mail have to 2 part, the BODY and the embedded image       
+	        MimeMultipart multipart = new MimeMultipart("related");
+	
+	        // first part  (the html)
+	        BodyPart messageBodyPart = new MimeBodyPart();		
+	        String htmlText = sMessage;	    
+	        message.setHeader("content-type", "text/html; charset=ISO-8859-1"); 
+	        messageBodyPart.setContent(htmlText, "text/html");
+	
+	        // add it
+	        multipart.addBodyPart(messageBodyPart);
+	        
+	        if(new java.io.File(sImage).exists()){
+		        // second part (the image)
+		        messageBodyPart = new MimeBodyPart();
+		        DataSource fds = new FileDataSource(sImage);
+		        messageBodyPart.setDataHandler(new DataHandler(fds));
+		        messageBodyPart.setHeader("Content-ID","<image_logo>");
+		
+		        // add it
+		        multipart.addBodyPart(messageBodyPart);
+	        }
+	
+	        // put everything together
+	        message.setContent(multipart);
+	
+	        transport.connect(MedwanQuery.getInstance().getConfigString("mailbot.server","smtp.gmail.com"),username,password);
+	        transport.sendMessage(message,
+	        message.getRecipients(Message.RecipientType.TO));
+	        transport.close();
+	        bSuccess=true;
+	    }
+	    catch(Exception e){
+	    	Debug.print(e.getMessage());
+	    }
+		return bSuccess;
+	}
 	
 	public static void main(String[] args) {
     	try {
@@ -40,8 +119,9 @@ public class TimeFilterReportGenerator {
 				String[] destinations= args[4].split(";");
 				for(int n=0;n<destinations.length;n++){
 					if(destinations[n].length()>0){
-						String sLogo = MedwanQuery.getInstance().getConfigString("reportLogo","/projects/openclinic/_img/projectlogo.jpg");	
-						sendHtmlMail.sendEmailWithImages(args[2], args[3], destinations[n], MedwanQuery.getInstance().getConfigString("quickStatsMailSubject","OpenClinic GA QuicStats"), sb.toString(),sLogo);
+						String sLogo = MedwanQuery.getInstance().getConfigString("reportLogo","/var/tomcat/webapps/openclinic/_img/projectlogo.jpg");	
+						sendEmailWithImages(args[2], args[3], destinations[n], MedwanQuery.getInstance().getConfigString("quickStatsMailSubject","OpenClinic GA QuickStats"), sb.toString(),sLogo);
+						Debug.println("Message sent");
 					}
 				}
 			} catch (Exception e) {
@@ -49,6 +129,7 @@ public class TimeFilterReportGenerator {
 				e.printStackTrace();
 			}
 		}
+		Debug.println("End of TimeFilter procedure");
 		System.exit(0);
 	}
 	
@@ -242,6 +323,7 @@ public class TimeFilterReportGenerator {
 					Iterator filters = result.elementIterator("filter");
 					while(filters.hasNext()){
 						Element filter = (Element)filters.next();
+						System.out.println("Handling filter type: "+filter.attributeValue("type"));
 						///////////////////////////////////////////////
 						// Encounter filter
 						///////////////////////////////////////////////
@@ -1556,6 +1638,136 @@ public class TimeFilterReportGenerator {
 								rs=ps.executeQuery();
 								while(rs.next()){
 									String uid = rs.getString("oc_pacs_filename");
+									if(rows.get(uid)==null){
+										rows.put(uid,new Hashtable());
+									}
+								}
+								rs.close();
+								ps.close();
+							}
+						}
+						///////////////////////////////////////////////
+						// PACS filter
+						///////////////////////////////////////////////
+						else if(filter.attributeValue("type").equalsIgnoreCase("pacspatients")){
+							if(bFirstFilter){
+								bFirstFilter=false;
+								//We must create a select query
+								String sSelect="select distinct healthrecordid from OC_PACS,items i,transactions t where 1=1 AND value=oc_pacs_studyuid and i.transactionid=t.transactionid";
+								Vector parameters = new Vector();
+								if(filter.attributeValue("periodfilter").equalsIgnoreCase("true")){
+									sSelect+=	" AND OC_PACS_UPDATETIME>=?"+
+												" AND OC_PACS_UPDATETIME<?";
+									parameters.add(new java.sql.Date(ScreenHelper.parseDate(begin).getTime()));
+									parameters.add(new java.sql.Date(ScreenHelper.parseDate(end).getTime()));
+								}
+								ps=conn.prepareStatement(sSelect);
+								for(int n=0;n<parameters.size();n++){
+									Object p = parameters.elementAt(n);
+									setParameter(p, ps, n);
+								}
+								rs=ps.executeQuery();
+								while(rs.next()){
+									String uid = rs.getString("healthrecordid");
+									if(rows.get(uid)==null){
+										rows.put(uid,new Hashtable());
+									}
+								}
+								rs.close();
+								ps.close();
+							}
+						}
+						///////////////////////////////////////////////
+						// PACS STUDY filter
+						///////////////////////////////////////////////
+						else if(filter.attributeValue("type").equalsIgnoreCase("pacsstudy")){
+							if(bFirstFilter){
+								bFirstFilter=false;
+								//We must create a select query
+								String sSelect="select distinct oc_pacs_studyuid from OC_PACS where 1=1";
+								Vector parameters = new Vector();
+								if(filter.attributeValue("periodfilter").equalsIgnoreCase("true")){
+									sSelect+=	" AND OC_PACS_UPDATETIME>=?"+
+												" AND OC_PACS_UPDATETIME<?";
+									parameters.add(new java.sql.Date(ScreenHelper.parseDate(begin).getTime()));
+									parameters.add(new java.sql.Date(ScreenHelper.parseDate(end).getTime()));
+								}
+								ps=conn.prepareStatement(sSelect);
+								for(int n=0;n<parameters.size();n++){
+									Object p = parameters.elementAt(n);
+									setParameter(p, ps, n);
+								}
+								rs=ps.executeQuery();
+								while(rs.next()){
+									String uid = rs.getString("oc_pacs_studyuid");
+									if(rows.get(uid)==null){
+										rows.put(uid,new Hashtable());
+									}
+								}
+								rs.close();
+								ps.close();
+							}
+						}
+						///////////////////////////////////////////////
+						// PACS SERIES filter
+						///////////////////////////////////////////////
+						else if(filter.attributeValue("type").equalsIgnoreCase("pacsseries")){
+							if(bFirstFilter){
+								bFirstFilter=false;
+								//We must create a select query
+								String sSelect="select distinct oc_pacs_studyuid,oc_pacs_series from OC_PACS where 1=1";
+								Vector parameters = new Vector();
+								if(filter.attributeValue("periodfilter").equalsIgnoreCase("true")){
+									sSelect+=	" AND OC_PACS_UPDATETIME>=?"+
+												" AND OC_PACS_UPDATETIME<?";
+									parameters.add(new java.sql.Date(ScreenHelper.parseDate(begin).getTime()));
+									parameters.add(new java.sql.Date(ScreenHelper.parseDate(end).getTime()));
+								}
+								ps=conn.prepareStatement(sSelect);
+								for(int n=0;n<parameters.size();n++){
+									Object p = parameters.elementAt(n);
+									setParameter(p, ps, n);
+								}
+								rs=ps.executeQuery();
+								while(rs.next()){
+									String uid = rs.getString("oc_pacs_studyuid")+"."+rs.getString("oc_pacs_series");
+									if(rows.get(uid)==null){
+										rows.put(uid,new Hashtable());
+									}
+								}
+								rs.close();
+								ps.close();
+							}
+						}
+						///////////////////////////////////////////////
+						// DRUGS DISPENSING FILTER
+						///////////////////////////////////////////////
+						else if(filter.attributeValue("type").equalsIgnoreCase("drugdispensing")){
+							if(bFirstFilter){
+								bFirstFilter=false;
+								//We must create a select query
+								String pharmacies = "''";
+								String[] par = ScreenHelper.checkString(filter.attributeValue("pharmacies")).split(",");
+								for(int n=0;n<par.length;n++){
+									pharmacies+=",'"+par[n]+"'";
+								}
+								String sSelect="select * from oc_productstockoperations,oc_productstocks where oc_operation_description = 'medicationdelivery.1' and oc_operation_srcdesttype = 'patient' and oc_stock_objectid=replace(oc_operation_productstockuid,'1.','')";
+								Vector parameters = new Vector();
+								if(filter.attributeValue("periodfilter").equalsIgnoreCase("true")){
+									sSelect+=	" AND OC_OPERATION_DATE>=?"+
+												" AND OC_OPERATION_DATE<?"+
+												" AND OC_STOCK_SERVICESTOCKUID in ("+pharmacies+")";
+									parameters.add(new java.sql.Date(ScreenHelper.parseDate(begin).getTime()));
+									parameters.add(new java.sql.Date(ScreenHelper.parseDate(end).getTime()));
+								}
+								ps=conn.prepareStatement(sSelect);
+								for(int n=0;n<parameters.size();n++){
+									Object p = parameters.elementAt(n);
+									setParameter(p, ps, n);
+								}
+								rs=ps.executeQuery();
+								while(rs.next()){
+									String uid = rs.getString("oc_operation_encounteruid");
 									if(rows.get(uid)==null){
 										rows.put(uid,new Hashtable());
 									}

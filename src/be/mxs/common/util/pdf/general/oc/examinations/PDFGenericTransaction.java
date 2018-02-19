@@ -1,14 +1,19 @@
 package be.mxs.common.util.pdf.general.oc.examinations;
 
 import be.mxs.common.model.vo.healthrecord.ItemVO;
+import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.pdf.general.PDFGeneralBasic;
 import be.mxs.common.util.system.ScreenHelper;
 import be.openclinic.system.TransactionItem;
 
 import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.tool.xml.ElementList;
+import com.itextpdf.tool.xml.XMLWorkerHelper;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Element;
 import com.itextpdf.text.Phrase;
+import com.itextpdf.text.html.simpleparser.HTMLWorker;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Font;
 import java.util.Iterator;
@@ -43,6 +48,7 @@ public class PDFGenericTransaction extends PDFGeneralBasic {
             }
             
             String activekey="";
+
             iterator = sorteditems.keySet().iterator();
             while(iterator.hasNext()){
             	String key = (String)iterator.next();
@@ -68,7 +74,15 @@ public class PDFGenericTransaction extends PDFGeneralBasic {
                 table.addCell(cell);
 
                 // itemValue
-                cell = new PdfPCell(new Phrase(getTran("web.occup",item.getValue()),FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)7*fontSizePercentage/100.0),Font.NORMAL)));
+                if(!item.getType().contains(MedwanQuery.getInstance().getConfigString("htmlItems","_JOURNAL"))){
+	                cell = new PdfPCell(new Phrase(getTran("web.occup",item.getValue()),FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)7*fontSizePercentage/100.0),Font.NORMAL)));
+                }
+                else{
+                    ElementList list = XMLWorkerHelper.parseToElementList(item.getValue(), null);
+                    for (Element element : list) {
+                        cell.addElement(element);
+                    }
+                }
                 cell.setColspan(3);
                 cell.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
                 cell.setBorder(PdfPCell.BOX);

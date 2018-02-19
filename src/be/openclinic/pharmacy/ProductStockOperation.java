@@ -1444,7 +1444,7 @@ public class ProductStockOperation extends OC_Object{
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
             String sSelect = "SELECT * FROM OC_PRODUCTSTOCKOPERATIONS"+
-                             " WHERE OC_OPERATION_PRODUCTSTOCKUID='"+productStockUid+"' ORDER BY OC_OPERATION_DATE,OC_OPERATION_CREATETIME";
+                             " WHERE OC_OPERATION_PRODUCTSTOCKUID='"+productStockUid+"' ORDER BY "+MedwanQuery.getInstance().convert("date","OC_OPERATION_DATE")+",OC_OPERATION_CREATETIME";
 
             // execute
             ps=oc_conn.prepareStatement(sSelect);

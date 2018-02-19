@@ -2,6 +2,7 @@ package be.openclinic.finance;
 
 import be.openclinic.common.OC_Object;
 import be.openclinic.common.ObjectReference;
+import net.admin.AdminPerson;
 import be.openclinic.adt.Encounter;
 import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.system.Debug;
@@ -313,9 +314,24 @@ public class DebetTransaction extends OC_Object implements Comparable{
                 this.setUid(ids[0]+"."+ids[1]);
             }
             if(ids.length == 2){
+               //First find default insurance for patient
+               Insurance defaultInsurance = Insurance.getDefaultInsuranceForPatient(getEncounter().getPatientUID());
+               //Now calculate patient and insurer share
+               System.out.println("encounter="+getEncounter());
+               System.out.println("patient="+getEncounter().getPatientUID());
+               System.out.println("insurance="+defaultInsurance);
+               System.out.println("patientshare="+defaultInsurance.getPatientShare());
+               double patientamount=defaultInsurance.getPatientShare()*this.getAmount()/100;
+               double insuraramount = this.getAmount()-patientamount;
+               double extrainsuraramount=0;
+               if(ScreenHelper.checkString(defaultInsurance.getExtraInsurarUid()).length()>0){
+            	   extrainsuraramount=patientamount;
+            	   patientamount=0;
+               }
                sSelect = " INSERT INTO OC_DEBETS (" +
                                                   " OC_DEBET_SERVERID," +
                                                   " OC_DEBET_OBJECTID," +
+                                                  " OC_DEBET_QUANTITY," +
                                                   " OC_DEBET_AMOUNT," +
                                                   " OC_DEBET_BALANCEUID," +
                                                   " OC_DEBET_DATE," +
@@ -329,13 +345,19 @@ public class DebetTransaction extends OC_Object implements Comparable{
                                                   " OC_DEBET_CREATETIME," +
                                                   " OC_DEBET_UPDATETIME," +
                                                   " OC_DEBET_UPDATEUID," +
-                                                  " OC_DEBET_VERSION" +
+                                                  " OC_DEBET_VERSION," +
+                                                  " OC_DEBET_INSURARAMOUNT," +
+                                                  " OC_DEBET_EXTRAINSURARAMOUNT," +
+                                                  " OC_DEBET_EXTRAINSURARUID," +
+                                                  " OC_DEBET_INSURANCEUID," +
+                                                  " OC_DEBET_SERVICEUID," +
+                                                  " OC_DEBET_CREDITED" +
                                                 ") " +
-                         " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                         " VALUES(?,?,1,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0)";
                 ps = oc_conn.prepareStatement(sSelect);
                 ps.setInt(1,Integer.parseInt(ids[0]));
                 ps.setInt(2,Integer.parseInt(ids[1]));
-                ps.setDouble(3,this.getAmount());
+                ps.setDouble(3,patientamount);
                 ps.setString(4,this.getBalanceUID()!=null?this.getBalanceUID():this.getBalance().getUid());
                 ps.setTimestamp(5,new Timestamp(this.getDate().getTime()));
                 ps.setString(6,this.getDescription());
@@ -359,6 +381,11 @@ public class DebetTransaction extends OC_Object implements Comparable{
                 ps.setTimestamp(14,new Timestamp(this.getUpdateDateTime().getTime()));
                 ps.setString(15,this.getUpdateUser());
                 ps.setInt(16,iVersion);
+                ps.setDouble(17, insuraramount);
+                ps.setDouble(18, extrainsuraramount);
+                ps.setString(19,ScreenHelper.checkString(defaultInsurance.getExtraInsurarUid()));
+                ps.setString(20,ScreenHelper.checkString(defaultInsurance.getUid()));
+                ps.setString(21,this.getEncounter().getServiceUID());
                 ps.executeUpdate();
                 ps.close();
             }

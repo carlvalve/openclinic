@@ -57,7 +57,6 @@ public class ArchiveDocument extends OC_Object implements Comparable {
 	public String storageName;
 	public java.util.Date deleteDate;
 	
-	
 	//--- CONSTRUCTOR -----------------------------------------------------------------------------
 	public ArchiveDocument(){
 		// empty
@@ -155,7 +154,7 @@ public class ArchiveDocument extends OC_Object implements Comparable {
 			String sSql = "UPDATE arch_documents SET arch_document_title = ?, arch_document_description = ?, arch_document_category = ?,"+
 			              "  arch_document_author = ?, arch_document_date = ?, arch_document_destination = ?, arch_document_reference = ?,"+
 			              "  arch_document_personid = ?, arch_document_storagename = ?,"+
-			              "  arch_document_updatetime = ?, arch_document_updateid = ?"+
+			              "  arch_document_updatetime = ?, arch_document_updateid = ?, arch_document_tran_serverid="+(MedwanQuery.getInstance().getConfigInt("GMAOLocalServerId",-1)>0?"-1":null)+
 			              " WHERE arch_document_serverid = ? AND arch_document_objectid = ?";			
 			try{
 				ps = conn.prepareStatement(sSql);

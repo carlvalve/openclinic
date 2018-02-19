@@ -20,6 +20,7 @@ import org.dcm4che2.data.DicomObject;
 import org.dcm4che2.data.Tag;
 import org.dcm4che2.data.VR;
 
+import be.dpms.medwan.common.model.vo.authentication.UserVO;
 import be.mxs.common.model.vo.IdentifierFactory;
 import be.mxs.common.model.vo.healthrecord.ItemContextVO;
 import be.mxs.common.model.vo.healthrecord.ItemVO;
@@ -201,22 +202,44 @@ public class ScanDirectoryMonitor implements Runnable{
 	        	Debug.println(" ScannableFiles in 'scanDirectoryMonitor_dirFrom' : "+scannableFiles.length);
 	        	for(int i=0; i<scannableFiles.length; i++){
 	        		File file = (File)scannableFiles[i];
-	        		long lastSize=0;
-	        		boolean bSkip=!isFileUnlocked(file);
+	        		boolean bSkip=false;
+        			String[] scanDirectoryExcludedExtensions=MedwanQuery.getInstance().getConfigString("scanDirectoryExcludedExtensions",".part").split(";");
+        			for(int n=0;n<scanDirectoryExcludedExtensions.length;n++){
+        				if(file.getName().endsWith(scanDirectoryExcludedExtensions[n])){
+        					bSkip=true;
+        					break;
+        				}
+        			}
 	        		if(bSkip){
-	        			Debug.println("Skipping file "+file.getName()+" because a process may still be writing to it.");
+	        			Debug.println("Skipping file "+file.getName()+" because a process may still be writing to it (excluded file extension).");
 	        			skippedFilesInRun++;
 	        		}
 	        		else {
-		        		int result = storeFileInDB(file,(i+1));
-		        		
-		        	    if(result > 0){
-		        	    	acceptedFilesInRun++;
-		        	    }
-		        	    else if(result < 0){
-		        	    	faultyFilesInRun++;
-		        	    }
-	        	    	files.remove(file.getName());
+		        		//Check if filesize is still changing
+		        		long lastSize=file.length();
+	        			Thread.sleep(5000);
+		        		if(file.length()!=lastSize){
+		        			Debug.println("Skipping file "+file.getName()+" because a process may still be writing to it (file size changed during last 5 seconds).");
+		        			skippedFilesInRun++;
+		        		}
+		        		else{
+			        		bSkip=!isFileUnlocked(file);
+			        		if(bSkip){
+			        			Debug.println("Skipping file "+file.getName()+" because a process may still be writing to it (file is locked).");
+			        			skippedFilesInRun++;
+			        		}
+			        		else {
+			        			int result = storeFileInDB(file,(i+1));
+				        		
+				        	    if(result > 0){
+				        	    	acceptedFilesInRun++;
+				        	    }
+				        	    else if(result < 0){
+				        	    	faultyFilesInRun++;
+				        	    }
+			        	    	files.remove(file.getName());
+			        		}
+		        		}
 	        		}
 	        	}
 
@@ -342,7 +365,7 @@ public class ScanDirectoryMonitor implements Runnable{
 		        	if(!forced){	
 		        		//*** CONDITIONAL READ ******************************************
 			        	// check existence of archive-document
-			        	ArchiveDocument existingDoc = ArchiveDocument.get(sUDI);
+			        	ArchiveDocument existingDoc = ArchiveDocument.get((file.getName().startsWith("-")?"-":"")+sUDI);
 		        		if(existingDoc!=null){
 				        	// check existence of linked file
 		        			if(existingDoc.storageName.length() > 0){
@@ -370,7 +393,7 @@ public class ScanDirectoryMonitor implements Runnable{
 			        			//*** ARCH_DOC FOUND, WITHOUT REGISTERED LINKED FILE ***
 				        	    Debug.println("INFO : An archive-document with UDI '"+existingDoc.udi+"' exists and it has no linked file."+
 			        		                  " --> saved incoming file as file for the archive-document");
-				        	    acceptIncomingFile(sUDI,file);
+				        	    acceptIncomingFile((file.getName().startsWith("-")?"-":"")+sUDI,file);
 				        	    return 1; // acc
 			        		}
 		        		}
@@ -511,7 +534,11 @@ public class ScanDirectoryMonitor implements Runnable{
 			    			transaction.setServerId(MedwanQuery.getInstance().getConfigInt("serverId",1));
 			    			transaction.setTransactionType("be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_PACS");
 			    			transaction.setUpdateTime(new SimpleDateFormat("yyyyMMdd").parse(obj.getString(Tag.StudyDate)));
-			    			transaction.setUser(MedwanQuery.getInstance().getUser(MedwanQuery.getInstance().getConfigString("defaultPACSuser","4")));
+			    			UserVO user = MedwanQuery.getInstance().getUser(MedwanQuery.getInstance().getConfigString("defaultPACSuser","4"));
+			    			if(user==null){
+			    				MedwanQuery.getInstance().getUser("4");
+			    			}
+			    			transaction.setUser(user);
 			    			transaction.setVersion(1);
 			    			transaction.setItems(new Vector());
 			    			ItemContextVO itemContextVO = new ItemContextVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), "", "");

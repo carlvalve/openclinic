@@ -1208,6 +1208,7 @@ public interface IConstants {
     //----- Alerts ---------------------------------------------------------------------------------------------------
     public static final String ITEM_TYPE_ALERTS_LABEL    = IConstants_PREFIX + "ITEM_TYPE_ALERTS_LABEL";
     public static final String ITEM_TYPE_ALERTS_DESCRIPTION    = IConstants_PREFIX + "ITEM_TYPE_ALERTS_DESCRIPTION";
+    public static final String ITEM_TYPE_ALERTS_ALLERGY    = IConstants_PREFIX + "ITEM_TYPE_ALERTS_ALLERGY";
     public static final String ITEM_TYPE_ALERTS_EXPIRATION_DATE    = IConstants_PREFIX + "ITEM_TYPE_ALERTS_EXPIRATION_DATE";
 
     //----- WorkplaceVisitsAndOtherActivities -----------------------------------------------------------------------------------------------

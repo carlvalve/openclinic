@@ -66,7 +66,6 @@ public class SMTPSender extends Sender {
         }
         catch(MessagingException e){
         	Debug.println(e.getMessage());
-        	e.printStackTrace();
         } catch (NumberFormatException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

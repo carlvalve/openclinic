@@ -71,8 +71,10 @@ public class BeanModifier {
                 Object parameterObject;
 
                 if ( ( parameterTypes[0].isAssignableFrom( java.util.Date.class ) ) || ( parameterTypes[0].isAssignableFrom( java.sql.Date.class ) ) ) {
-
                     SimpleDateFormat simpleDateFormat = ScreenHelper.stdDateFormat;
+                	if(value.length()>10){
+                		simpleDateFormat = ScreenHelper.fullDateFormat;
+                	}
                     java.util.Date dateValue = simpleDateFormat.parse(value);
 
                     parameterObject = new java.util.Date(dateValue.getTime());

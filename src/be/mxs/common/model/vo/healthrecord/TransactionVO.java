@@ -13,6 +13,7 @@ import be.openclinic.finance.Prestation;
 import org.dom4j.Element;
 
 import java.io.Serializable;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -333,17 +334,27 @@ public class TransactionVO extends IObjectReference implements Serializable, IId
     
     //--- SET UPDATE TIME -------------------------------------------------------------------------
     public void setUpdateTime(String sDate) {
-	  String sSeparator = "/";
-	  if (sDate.indexOf(sSeparator)<1){
-	    sSeparator = "-";
-	  }
-      int iDay = Integer.parseInt(sDate.substring(0,sDate.indexOf(sSeparator)));
-   	  int iMonth = Integer.parseInt(sDate.substring(sDate.indexOf(sSeparator)+1,sDate.lastIndexOf(sSeparator)));
-      int iYear = Integer.parseInt(sDate.substring(sDate.lastIndexOf(sSeparator)+1, sDate.lastIndexOf(sSeparator)+5));
-      Calendar c = Calendar.getInstance();
-      c.set(iYear, iMonth-1, iDay);
-
-      this.updateTime = new java.sql.Date(c.getTimeInMillis());
+    	SimpleDateFormat format = ScreenHelper.stdDateFormat;
+    	if(sDate.length()>10){
+    		format = ScreenHelper.fullDateFormat;
+	    	try {
+				this.updateTime = format.parse(sDate);
+			} catch (ParseException e) {
+		    	try {
+					this.updateTime = ScreenHelper.stdDateFormat.parse(sDate.substring(0, 10));
+				} catch (ParseException f) {
+					f.printStackTrace();
+				}
+			}
+    	}
+    	else{
+	    	try {
+				this.updateTime = format.parse(sDate);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
     }
 
     public void setUpdateTime(Date updateTime) {

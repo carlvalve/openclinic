@@ -764,6 +764,19 @@ public class Insurance extends OC_Object {
 		return vInsurance;
     }
     
+    public static String getActiveInsurance(String sPatientUID,String sInsurarUID){
+    	if(sInsurarUID!=null && sInsurarUID.length()>0){
+	    	Vector activeInsurances = getCurrentInsurances(sPatientUID);
+	    	for(int n=0;n<activeInsurances.size();n++){
+	    		Insurance insurance = (Insurance)activeInsurances.elementAt(n);
+	    		if(insurance.getInsurarUid().equalsIgnoreCase(sInsurarUID)){
+	    			return insurance.getUid();
+	    		}
+	    	}
+    	}
+    	return null;
+    }
+    
     //--- GET CURRENT INSURANCES ------------------------------------------------------------------
     public static Vector getCurrentInsurances(String sPatientUID){
         PreparedStatement ps = null;
@@ -873,6 +886,10 @@ public class Insurance extends OC_Object {
                 insurance.setDefaultInsurance(rs.getInt("OC_INSURANCE_DEFAULT"));
                 insurance.setMembercategory(ScreenHelper.checkString(rs.getString("OC_INSURANCE_MEMBERCATEGORY")));
                 insurance.setFamilycode(ScreenHelper.checkString(rs.getString("OC_INSURANCE_FAMILYCODE")));
+
+                if(insurance.getInsuranceCategory()!=null && insurance.getInsuranceCategory().getPatientShare()!=null && insurance.getInsuranceCategory().getPatientShare().length()>0){
+                	insurance.setPatientShare(Integer.parseInt(insurance.getInsuranceCategory().getPatientShare()));
+                }
 
                 vInsurances.addElement(insurance);
             }
@@ -1005,15 +1022,20 @@ public class Insurance extends OC_Object {
 
     //--- GET DEFAULT INSURANCE FOR PATIENT -------------------------------------------------------
     public static Insurance getDefaultInsuranceForPatient(String sPatientUID){
+    	Insurance defaultInsurance=null;
     	Vector insurances = Insurance.selectInsurances(sPatientUID, "");
     	for(int n=0;n<insurances.size();n++){
     		Insurance insurance = (Insurance)insurances.elementAt(n);
     		if(insurance.getDefaultInsurance()==1){
-    			return insurance;
+    			defaultInsurance=insurance;
+    			break;
+    		}
+    		if(n==0){
+    			defaultInsurance=insurance;
     		}
     	}
     	
-    	return null;
+    	return defaultInsurance;
     }
     
     //--- GET MOST INTERSTING INSURANCE FOR PATIENT (1) -------------------------------------------

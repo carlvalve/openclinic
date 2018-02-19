@@ -255,9 +255,8 @@ public class PDFCalendarGenerator extends PDFBasic {
             else {
             	t.addCell(createEmptyCell(10));
             }
-
-            table.addCell(t);
             if(MedwanQuery.getInstance().getConfigInt("enableExtendedCalendarInformation",0)==1){
+
                 t.addCell(this.createBorderlessCell(5));
                 String s = ScreenHelper.checkString(appointment.getDescription());
                 if(ScreenHelper.checkString(appointment.getComment()).length()>0){
@@ -292,9 +291,8 @@ public class PDFCalendarGenerator extends PDFBasic {
         		}
                 t.addCell(this.createBorderlessCell(s,15));
                 t.addCell(this.createBorderlessCell(User.getFullUserName(appointment.getUserUID()),15));
-            	
             }
-           
+            table.addCell(t);
         } catch (Exception e) {
             //  Debug.printProjectErr(e,Thread.currentThread().getStackTrace());
             e.printStackTrace();

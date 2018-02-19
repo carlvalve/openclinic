@@ -1,23 +1,43 @@
 package be.openclinic.assets;
 
+import be.openclinic.archiving.ArchiveDocument;
 import be.openclinic.common.OC_Object;
 import be.openclinic.util.Nomenclature;
 import net.admin.Service;
 import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.system.Debug;
+import be.mxs.common.util.system.HTMLEntities;
 import be.mxs.common.util.system.ScreenHelper;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.StringReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
@@ -81,10 +101,739 @@ public class Asset extends OC_Object {
     public java.util.Date saleDate;
     public double saleValue;
     public String saleClient;
+    public int lockedBy;
     
-    // search-criteria
+    public java.util.Date lockeddate;
+    
+    public java.util.Date getLockeddate() {
+		return lockeddate;
+	}
+
+	public void setLockeddate(java.util.Date lockeddate) {
+		this.lockeddate = lockeddate;
+	}
+
+	public int getLockedBy() {
+		return lockedBy;
+	}
+
+	public void setLockedBy(int lockedBy) {
+		this.lockedBy = lockedBy;
+	}
+	
+	public static String convertNegativeIds(String xml){
+		String s = "";
+        SAXReader reader = new SAXReader(false);
+		try {
+            Document document = reader.read(new StringReader(xml.toString()));
+            Element rootElement = document.getRootElement(); //gmao
+            Iterator iElements = rootElement.elementIterator();
+            while(iElements.hasNext()){
+            	Element eElement = (Element)iElements.next();
+            	if(eElement.getName().equalsIgnoreCase("asset")){
+            		eElement.addAttribute("newid", MedwanQuery.getInstance().getOpenclinicCounter("OC_ASSETS")+"");
+            	}
+            	else if(eElement.getName().equalsIgnoreCase("maintenanceplan")){
+            		eElement.addAttribute("newid", MedwanQuery.getInstance().getOpenclinicCounter("OC_MAINTENANCEPLANS")+"");
+            	}
+            	else if(eElement.getName().equalsIgnoreCase("maintenanceoperation")){
+            		eElement.addAttribute("newid", MedwanQuery.getInstance().getOpenclinicCounter("OC_MAINTENANCEOPERATIONS")+"");
+            	}
+            	else if(eElement.getName().equalsIgnoreCase("assetcomponent")){
+            		eElement.addAttribute("newid", MedwanQuery.getInstance().getOpenclinicCounter("ComponentObjectId")+"");
+            	}
+            	else if(eElement.getName().equalsIgnoreCase("document")){
+            		int newid=MedwanQuery.getInstance().getOpenclinicCounter("ARCH_DOCUMENTS");
+            		String newudi=ArchiveDocument.generateUDI(newid);
+            		eElement.addAttribute("newid", newid+"");
+            		eElement.addAttribute("newudi", newudi+"");
+            		eElement.addAttribute("newfile", eElement.attributeValue("oldfile").replaceAll(eElement.attributeValue("udi"), newudi));
+            	}
+            }
+            s=document.asXML();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return s;
+	}
+	
+	public static boolean checkOutAssetsForService(String serviceid, int serverid){
+		boolean bSuccess=true;
+		String allChildren=Service.getChildIdsAsString(serviceid);
+    	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+    	Connection conna = MedwanQuery.getInstance().getAdminConnection();
+    	try{
+    		PreparedStatement psa = conna.prepareStatement("update services set defaultcontext=? where serviceid in("+allChildren+")");
+    		psa.setString(1, serverid+"");
+    		psa.execute();
+    		psa.close();
+    		conna.close();
+    		MedwanQuery.getInstance().services.clear();
+    		PreparedStatement ps = conn.prepareStatement("select * from oc_assets where oc_asset_service in ("+allChildren+")");
+    		ResultSet rs = ps.executeQuery();
+    		while(rs.next()){
+    			Asset.checkOutAsset(rs.getInt("oc_asset_serverid")+"."+rs.getInt("oc_asset_objectid"),serverid);
+    		}
+    		rs.close();
+    		ps.close();
+    		conn.close();
+    	}
+    	catch(Exception e){
+    		bSuccess=false;
+    		e.printStackTrace();
+    	}
+    	return bSuccess;
+	}
+	public static void checkOutAsset(String uid) throws NumberFormatException, SQLException{
+		checkOutAsset(uid,MedwanQuery.getInstance().getConfigInt("GMAOLocalServerId",100));
+	}
+	public static void checkOutAsset(String uid, int serverid) throws NumberFormatException, SQLException{
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		PreparedStatement ps = conn.prepareStatement("update oc_assets set oc_asset_lockedby=?,oc_asset_lockeddate=? where oc_asset_serverid=? and oc_asset_objectid=?");
+		ps.setInt(1, serverid);
+		ps.setTimestamp(2, new java.sql.Timestamp(new java.util.Date().getTime()));
+		ps.setInt(3, Integer.parseInt(uid.split("\\.")[0]));
+		ps.setInt(4, Integer.parseInt(uid.split("\\.")[1]));
+		ps.execute();
+		ps.close();
+		ps = conn.prepareStatement("update oc_maintenanceplans set oc_maintenanceplan_lockedby=? where oc_maintenanceplan_assetuid=?");
+		ps.setInt(1, serverid);
+		ps.setString(2, uid);
+		ps.execute();
+		ps.close();
+		ps = conn.prepareStatement("update oc_maintenanceoperations,oc_maintenanceplans set oc_maintenanceoperation_lockedby=oc_maintenanceplan_lockedby"
+				+ " where oc_maintenanceplan_objectid=replace(oc_maintenanceoperation_maintenanceplanuid,'"+MedwanQuery.getInstance().getConfigInt("serverId")+".','') and"
+				+ " oc_maintenanceplan_assetuid=?");
+		ps.setString(1, uid);
+		ps.execute();
+		ps.close();
+		conn.close();
+	}
+	
+	public static void checkInAssetsForService(String serviceid, int serverid){
+		String allChildren=Service.getChildIdsAsString(serviceid);
+    	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+    	try{
+    		PreparedStatement ps = conn.prepareStatement("select * from oc_assets where oc_asset_service in ("+allChildren+")");
+    		ResultSet rs = ps.executeQuery();
+    		while(rs.next()){
+    			Asset.checkInAsset(rs.getInt("oc_asset_serverid")+"."+rs.getInt("oc_asset_objectid"),serverid);
+    		}
+    		rs.close();
+    		ps.close();
+    		conn.close();
+    	}
+    	catch(Exception e){
+    		e.printStackTrace();
+    	}
+	}
+	public static void checkInAssetsForServerId(int serverid){
+    	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+    	Connection conna = MedwanQuery.getInstance().getAdminConnection();
+    	try{
+    		PreparedStatement psa = conna.prepareStatement("update services set defaultcontext='' where defaultcontext=?");
+    		psa.setString(1, serverid+"");
+    		psa.execute();
+    		psa.close();
+    		conna.close();
+    		MedwanQuery.getInstance().services.clear();
+    		PreparedStatement ps = conn.prepareStatement("select distinct oc_asset_serverid,oc_asset_objectid from oc_assets where oc_asset_lockedby=? or "
+    				+ " exists (select * from oc_maintenanceplans where oc_maintenanceplan_lockedby=? and oc_maintenanceplan_assetuid=oc_asset_serverid"+MedwanQuery.getInstance().concatSign()+"'.'"+MedwanQuery.getInstance().concatSign()+"oc_asset_objectid) or"
+    				+ " exists (select * from oc_maintenanceoperations,oc_maintenanceplans  where oc_maintenanceoperation_maintenanceplanuid=oc_maintenanceplan_serverid"+MedwanQuery.getInstance().concatSign()+"'.'"+MedwanQuery.getInstance().concatSign()+"oc_maintenanceplan_objectid and oc_maintenanceoperation_lockedby=? and oc_maintenanceplan_assetuid=oc_asset_serverid"+MedwanQuery.getInstance().concatSign()+"'.'"+MedwanQuery.getInstance().concatSign()+"oc_asset_objectid)");
+    		ps.setInt(1, serverid);
+    		ps.setInt(2, serverid);
+    		ps.setInt(3, serverid);
+    		ResultSet rs = ps.executeQuery();
+    		while(rs.next()){
+    			Asset.checkInAsset(rs.getInt("oc_asset_serverid")+"."+rs.getInt("oc_asset_objectid"),serverid);
+    		}
+    		rs.close();
+    		ps.close();
+    		conn.close();
+    	}
+    	catch(Exception e){
+    		e.printStackTrace();
+    	}
+	}
+	public static void checkInAsset(String uid){
+		checkInAsset(uid,MedwanQuery.getInstance().getConfigInt("GMAOLocalServerId",100));
+	}
+	public static void checkInAsset(String uid, int serverid){
+    	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+    	try{
+    		PreparedStatement ps = conn.prepareStatement("update oc_assets set oc_asset_lockedby=-1,oc_asset_lockeddate=null where oc_asset_serverid=? and oc_asset_objectid=?");
+    		ps.setInt(1, Integer.parseInt(uid.split("\\.")[0]));
+    		ps.setInt(2, Integer.parseInt(uid.split("\\.")[1]));
+    		ps.execute();
+    		ps.close();
+    		ps = conn.prepareStatement("update oc_maintenanceplans set oc_maintenanceplan_lockedby=-1 where oc_maintenanceplan_assetuid=?");
+    		ps.setString(1, uid);
+    		ps.execute();
+    		ps.close();
+    		ps = conn.prepareStatement("update oc_maintenanceoperations,oc_maintenanceplans set oc_maintenanceoperation_lockedby=-1"
+    				+ " where oc_maintenanceplan_objectid=replace(oc_maintenanceoperation_maintenanceplanuid,'"+MedwanQuery.getInstance().getConfigInt("serverId")+".','') and"
+    				+ " oc_maintenanceplan_assetuid=?");
+    		ps.setString(1, uid);
+    		ps.execute();
+    		ps.close();
+    		conn.close();
+    	}
+    	catch(Exception e){
+    		e.printStackTrace();
+    	}
+	}
+	
+	public static StringBuffer toXmlForService(String serviceid){
+		StringBuffer xml = new StringBuffer();
+		xml.append("<gmao>");
+		String allChildren=Service.getChildIdsAsString(serviceid);
+    	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+    	try{
+    		PreparedStatement ps = conn.prepareStatement("select * from oc_assets where oc_asset_service in ("+allChildren+")");
+    		ResultSet rs = ps.executeQuery();
+    		while(rs.next()){
+    			xml.append(Asset.toXml(rs.getInt("oc_asset_serverid")+"."+rs.getInt("oc_asset_objectid")));
+    		}
+    		rs.close();
+    		ps.close();
+    		conn.close();
+    	}
+    	catch(Exception e){
+    		e.printStackTrace();
+    	}
+		xml.append("</gmao>");
+		return xml;
+	}
+	
+	public static StringBuffer toXmlForServiceUnlocked(String serviceid){
+		StringBuffer xml = new StringBuffer();
+		xml.append("<gmao>");
+		String allChildren=Service.getChildIdsAsString(serviceid);
+    	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+    	try{
+    		PreparedStatement ps = conn.prepareStatement("select * from oc_assets where oc_asset_service in ("+allChildren+") and (oc_asset_lockedby is null or oc_asset_lockedby<0)");
+    		ResultSet rs = ps.executeQuery();
+    		while(rs.next()){
+    			xml.append(Asset.toXml(rs.getInt("oc_asset_serverid")+"."+rs.getInt("oc_asset_objectid")));
+    		}
+    		rs.close();
+    		ps.close();
+    		conn.close();
+    	}
+    	catch(Exception e){
+    		e.printStackTrace();
+    	}
+		xml.append("</gmao>");
+		return xml;
+	}
+	
+	public static void checkOutForService(String serviceid){
+		String allChildren=Service.getChildIdsAsString(serviceid);
+    	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+    	try{
+    		PreparedStatement ps = conn.prepareStatement("select * from oc_assets where oc_asset_service in ("+allChildren+")");
+    		ResultSet rs = ps.executeQuery();
+    		while(rs.next()){
+    			Asset.checkOutAsset(rs.getInt("oc_asset_serverid")+"."+rs.getInt("oc_asset_objectid"));
+    		}
+    		rs.close();
+    		ps.close();
+    		conn.close();
+    	}
+    	catch(Exception e){
+    		e.printStackTrace();
+    	}
+	}
+	
+	public static Vector getCheckedOutAssetUids(){
+		Vector uids = new Vector();
+    	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+    	try{
+    		PreparedStatement ps = conn.prepareStatement("select distinct oc_asset_serverid,oc_asset_objectid from oc_assets where oc_asset_lockedby=? or "
+    				+ " exists (select * from oc_maintenanceplans where oc_maintenanceplan_lockedby=? and oc_maintenanceplan_assetuid=oc_asset_serverid"+MedwanQuery.getInstance().concatSign()+"'.'"+MedwanQuery.getInstance().concatSign()+"oc_asset_objectid) or"
+    				+ " exists (select * from oc_maintenanceoperations,oc_maintenanceplans  where oc_maintenanceoperation_maintenanceplanuid=oc_maintenanceplan_serverid"+MedwanQuery.getInstance().concatSign()+"'.'"+MedwanQuery.getInstance().concatSign()+"oc_maintenanceplan_objectid and oc_maintenanceoperation_lockedby=? and oc_maintenanceplan_assetuid=oc_asset_serverid"+MedwanQuery.getInstance().concatSign()+"'.'"+MedwanQuery.getInstance().concatSign()+"oc_asset_objectid)");
+    		ps.setInt(1, MedwanQuery.getInstance().getConfigInt("GMAOLocalServerId",100));
+    		ps.setInt(2, MedwanQuery.getInstance().getConfigInt("GMAOLocalServerId",100));
+    		ps.setInt(3, MedwanQuery.getInstance().getConfigInt("GMAOLocalServerId",100));
+    		ResultSet rs = ps.executeQuery();
+    		while(rs.next()){
+    			uids.add(rs.getInt("oc_asset_serverid")+"."+rs.getInt("oc_asset_objectid"));
+    		}
+    		rs.close();
+    		ps.close();
+    		conn.close();
+    	}
+    	catch(Exception e){
+    		e.printStackTrace();
+    	}
+		return uids;
+	}
+	
+	public static boolean hasNegativeIds(){
+		boolean bHasNegativeIds = false;
+    	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+    	try{
+    		PreparedStatement ps = conn.prepareStatement("select (select count(*) from oc_assets where oc_asset_objectid<0)+"
+    				+ "(select count(*) from arch_documents where arch_document_category in ('asset','maintenanceplan') and arch_document_objectid<0 and arch_document_storagename is not null and arch_document_storagename<>'')+"
+    				+ "(select count(*) from oc_maintenanceplans where oc_maintenanceplan_objectid<0)+"
+    				+ "(select count(*) from oc_maintenanceoperations where oc_maintenanceoperation_objectid<0)+"
+    				+ "(select count(*) from oc_assetcomponents where oc_component_objectid<0) total");
+    		ResultSet rs = ps.executeQuery();
+    		if(rs.next()){
+    			bHasNegativeIds=rs.getInt("total")>0;
+    		}
+    		rs.close();
+    		ps.close();
+    		conn.close();
+    	}
+    	catch(Exception e){
+    		e.printStackTrace();
+    	}
+		return bHasNegativeIds;
+	}
+	
+	public static boolean updateNegativeIds(String xml){
+		boolean bSuccess=true;
+        SAXReader reader = new SAXReader(false);
+    	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		try {
+            Document document = reader.read(new StringReader(xml.toString()));
+            Element rootElement = document.getRootElement(); //gmao
+            Iterator iElements = rootElement.elementIterator();
+            while(iElements.hasNext()){
+            	Element eElement = (Element)iElements.next();
+            	if(eElement.getName().equalsIgnoreCase("asset")){
+            		PreparedStatement ps = conn.prepareStatement("update oc_assets set oc_asset_objectid=? where oc_asset_objectid=?");
+            		ps.setInt(1, Integer.parseInt(eElement.attributeValue("newid")));
+            		ps.setInt(2, Integer.parseInt(eElement.attributeValue("objectid")));
+            		ps.execute();
+            		ps.close();
+            		ps = conn.prepareStatement("update oc_maintenanceplans set oc_maintenanceplan_assetuid=? where oc_maintenanceplan_assetuid=?");
+            		ps.setString(1, "1."+eElement.attributeValue("newid"));
+            		ps.setString(2, "1."+eElement.attributeValue("objectid"));
+            		ps.execute();
+            		ps.close();
+            		ps = conn.prepareStatement("update oc_assetcomponents set oc_component_assetuid=? where oc_component_assetuid=?");
+            		ps.setString(1, "1."+eElement.attributeValue("newid"));
+            		ps.setString(2, "1."+eElement.attributeValue("objectid"));
+            		ps.execute();
+            		ps.close();
+            		ps = conn.prepareStatement("update arch_documents set arch_document_reference=replace(arch_document_reference,?,?) where arch_document_reference = 'asset.1."+eElement.attributeValue("objectid")+"'");
+            		ps.setString(1, "1."+eElement.attributeValue("objectid"));
+            		ps.setString(2, "1."+eElement.attributeValue("newid"));
+            		ps.execute();
+            		ps.close();
+            	}
+            	else if(eElement.getName().equalsIgnoreCase("maintenanceplan")){
+            		PreparedStatement ps = conn.prepareStatement("update oc_maintenanceplans set oc_maintenanceplan_objectid=? where oc_maintenanceplan_objectid=?");
+            		ps.setInt(1, Integer.parseInt(eElement.attributeValue("newid")));
+            		ps.setInt(2, Integer.parseInt(eElement.attributeValue("objectid")));
+            		ps.execute();
+            		ps.close();
+            		ps = conn.prepareStatement("update oc_maintenanceoperations set oc_maintenanceoperation_maintenanceplanuid=? where oc_maintenanceoperation_maintenanceplanuid=?");
+            		ps.setString(1, "1."+eElement.attributeValue("newid"));
+            		ps.setString(2, "1."+eElement.attributeValue("objectid"));
+            		ps.execute();
+            		ps.close();
+            		ps = conn.prepareStatement("update arch_documents set arch_document_reference=replace(arch_document_reference,?,?) where arch_document_reference = 'maintenanceplan.1."+eElement.attributeValue("objectid")+"'");
+            		ps.setString(1, "1."+eElement.attributeValue("objectid"));
+            		ps.setString(2, "1."+eElement.attributeValue("newid"));
+            		ps.execute();
+            		ps.close();
+            	}
+            	else if(eElement.getName().equalsIgnoreCase("maintenanceoperation")){
+            		PreparedStatement ps = conn.prepareStatement("update oc_maintenanceoperations set oc_maintenanceoperation_objectid=? where oc_maintenanceoperation_objectid=?");
+            		ps.setInt(1, Integer.parseInt(eElement.attributeValue("newid")));
+            		ps.setInt(2, Integer.parseInt(eElement.attributeValue("objectid")));
+            		ps.execute();
+            		ps.close();
+            	}
+            	else if(eElement.getName().equalsIgnoreCase("assetcomponent")){
+            		PreparedStatement ps = conn.prepareStatement("update oc_assetcomponents set oc_component_objectid=? where oc_component_objectid=?");
+            		ps.setInt(1, Integer.parseInt(eElement.attributeValue("newid")));
+            		ps.setInt(2, Integer.parseInt(eElement.attributeValue("objectid")));
+            		ps.execute();
+            		ps.close();
+            	}
+            	else if(eElement.getName().equalsIgnoreCase("document")){
+            		PreparedStatement ps = conn.prepareStatement("update arch_documents set arch_document_udi=?,arch_document_storagename=replace(arch_document_storagename,?,?),arch_document_objectid=? where arch_document_objectid=?");
+            		ps.setString(1, eElement.attributeValue("newudi"));
+            		ps.setString(2, eElement.attributeValue("udi"));
+            		ps.setString(3, eElement.attributeValue("newudi"));
+            		ps.setInt(4, Integer.parseInt(eElement.attributeValue("newid")));
+            		ps.setInt(5, Integer.parseInt(eElement.attributeValue("objectid")));
+            		ps.execute();
+            		ps.close();
+            		//We must also update the physical filename on disk
+    				String sFileStore=MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_basePath")+"/"+MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_dirTo")+"/";
+    				Debug.println("Moving file from "+sFileStore+eElement.attributeValue("oldfile")+" to "+sFileStore+eElement.attributeValue("newfile"));
+    				try{
+    					FileUtils.moveFile(new File(sFileStore+eElement.attributeValue("oldfile")), new File(sFileStore+eElement.attributeValue("newfile")));
+    				}
+    				catch(Exception e){
+    					e.printStackTrace();
+    				}
+    				if(new File(sFileStore+eElement.attributeValue("newfile")).exists()){
+    					Debug.println("Move successful");
+    				}
+    				else{
+    					Debug.println("ERROR moving file");
+    				}
+            	}
+            }
+            conn.close();
+		} catch (Exception e) {
+			bSuccess=false;
+			e.printStackTrace();
+		}
+		return bSuccess;
+	}
+	
+	public static boolean sendDocumentsToServer(){
+		boolean bSuccess = true;
+        SAXReader reader = new SAXReader(false);
+    	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		CloseableHttpClient client = HttpClients.createDefault();
+		try {
+			PreparedStatement ps = conn.prepareStatement("select * from arch_documents where arch_document_storagename is not null and arch_document_storagename<>'' and arch_document_tran_serverid=-1 and arch_document_objectid>-1");
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+        		String sStorageName=rs.getString("arch_document_storagename");
+        		String sFilename=MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_basePath")+"/"+MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_dirTo")+"/"+sStorageName;
+        		File file = new File(sFilename);
+        		if(file.exists()){
+            		HttpPost post = new HttpPost(MedwanQuery.getInstance().getConfigString("GMAOCentralServer","http://localhost/openclinic")+"/assets/storeDocument.jsp");
+            		MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+            		builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+            		builder.addBinaryBody("filename", file, ContentType.DEFAULT_BINARY, sFilename);
+            		String sFolder = "";
+            		if(sStorageName.contains("/")){
+            			sFolder=sStorageName.substring(0,sStorageName.lastIndexOf("/"))+"/";
+            		}
+            		builder.addTextBody("folder", sFolder, ContentType.DEFAULT_BINARY);
+            		HttpEntity entity = builder.build();
+            		post.setEntity(entity);
+            		HttpResponse r = client.execute(post);
+            	    String xmlIn=new BasicResponseHandler().handleResponse(r);
+            	    if(xmlIn.contains("<OK>")){
+            	    	Debug.println("File successuflly sent");
+            	    	PreparedStatement ps2 = conn.prepareStatement("update arch_documents set arch_document_tran_serverid=null where arch_document_objectid=?");
+            	    	ps2.setInt(1, rs.getInt("arch_document_objectid"));
+            	    	ps2.execute();
+            	    	ps2.close();
+            	    }
+        		}
+        		else{
+            		Debug.println("File does not exist on local machine!!");
+        	    	PreparedStatement ps2 = conn.prepareStatement("update arch_documents set arch_document_tran_serverid=null where arch_document_objectid=?");
+        	    	ps2.setInt(1, rs.getInt("arch_document_objectid"));
+        	    	ps2.execute();
+        	    	ps2.close();
+        		}
+            }
+			rs.close();
+			ps.close();
+            conn.close();
+		} catch (Exception e) {
+			bSuccess=false;
+			e.printStackTrace();
+		}
+		return bSuccess;
+	}
+	
+	public static StringBuffer getNegativeIds(){
+		StringBuffer xml = new StringBuffer();
+		xml.append("<gmao>");
+    	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		try{
+    		PreparedStatement ps = conn.prepareStatement("select * from oc_assets where oc_asset_objectid<0");
+    		ResultSet rs =ps.executeQuery();
+    		while(rs.next()){
+    			xml.append("<asset objectid='"+rs.getInt("oc_asset_objectid")+"'/>");
+    		}
+    		rs.close();
+    		ps.close();
+    		ps = conn.prepareStatement("select * from oc_maintenanceplans where oc_maintenanceplan_objectid<0");
+    		rs =ps.executeQuery();
+    		while(rs.next()){
+    			xml.append("<maintenanceplan objectid='"+rs.getInt("oc_maintenanceplan_objectid")+"'/>");
+    		}
+    		rs.close();
+    		ps.close();
+    		ps = conn.prepareStatement("select * from oc_maintenanceoperations where oc_maintenanceoperation_objectid<0");
+    		rs =ps.executeQuery();
+    		while(rs.next()){
+    			xml.append("<maintenanceoperation objectid='"+rs.getInt("oc_maintenanceoperation_objectid")+"'/>");
+    		}
+    		rs.close();
+    		ps.close();
+    		ps = conn.prepareStatement("select * from oc_assetcomponents where oc_component_objectid<0");
+    		rs =ps.executeQuery();
+    		while(rs.next()){
+    			xml.append("<assetcomponent objectid='"+rs.getInt("oc_component_objectid")+"'/>");
+    		}
+    		rs.close();
+    		ps.close();
+    		ps = conn.prepareStatement("select * from arch_documents where arch_document_category in ('asset','maintenanceplan') and arch_document_objectid<0 and arch_document_storagename is not null and arch_document_storagename<>''");
+    		rs =ps.executeQuery();
+    		while(rs.next()){
+    			xml.append("<document oldfile='"+rs.getString("arch_document_storagename")+"' udi='"+rs.getString("arch_document_udi")+"' objectid='"+rs.getString("arch_document_objectid")+"'/>");
+    		}
+    		rs.close();
+    		ps.close();
+			conn.close();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		xml.append("</gmao>");
+		return xml;
+	}
+
+	// search-criteria
     public java.util.Date purchasePeriodBegin, purchasePeriodEnd;
     
+    public static void updateAsset(Element eAsset) throws Exception{
+    	int serverid = Integer.parseInt(eAsset.attributeValue("serverid"));
+    	int objectid = Integer.parseInt(eAsset.attributeValue("objectid"));
+    	java.util.Date updatetime = new SimpleDateFormat("yyyyMMddHHmmssSSS").parse(eAsset.element("updatetime").getTextTrim());
+    	//First we check if this asset record has been changed
+    	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		PreparedStatement ps = conn.prepareStatement("select * from oc_assets where oc_asset_serverid=? and oc_asset_objectid=? and oc_asset_updatetime=?");
+		ps.setInt(1, serverid);
+		ps.setInt(2, objectid);
+		ps.setTimestamp(3, new java.sql.Timestamp(updatetime.getTime()));
+		ResultSet rs =ps.executeQuery();
+		if(!rs.next()){
+			//The record has changed. Let's update it
+    		rs.close();
+    		ps.close();
+			ps = conn.prepareStatement("select * from oc_assets where oc_asset_serverid=? and oc_asset_objectid=?");
+    		ps.setInt(1, serverid);
+    		ps.setInt(2, objectid);
+    		rs =ps.executeQuery();
+    		if(!rs.next()){
+    			//The record does not exist yet, create it
+    			rs.close();
+    			ps.close();
+    			ps = conn.prepareStatement("insert into oc_assets(oc_asset_serverid,oc_asset_objectid) values(?,?)");
+        		ps.setInt(1, serverid);
+        		ps.setInt(2, objectid);
+    			ps.execute();
+    		}
+			Asset asset = new Asset();
+			asset.setUid(serverid+"."+objectid);
+			asset.setServerId(serverid);
+			asset.setObjectId(objectid);
+			asset.setAccountingCode(eAsset.element("accountingcode")==null?"":eAsset.element("accountingcode").getText());
+			asset.setAnnuity(eAsset.element("annuity")==null?"":eAsset.element("annuity").getText());
+			asset.setAssetType(eAsset.element("type")==null?"":eAsset.element("type").getText());
+			asset.setCharacteristics(eAsset.element("characteristics")==null?"":eAsset.element("characteristics").getText());
+			asset.setCode(eAsset.element("code")==null?"":eAsset.element("code").getText());
+			asset.setComment1(eAsset.element("comment1")==null?"":eAsset.element("comment1").getText());
+			asset.setComment2(eAsset.element("comment2")==null?"":eAsset.element("comment2").getText());
+			asset.setComment3(eAsset.element("comment3")==null?"":eAsset.element("comment3").getText());
+			asset.setComment4(eAsset.element("comment4")==null?"":eAsset.element("comment4").getText());
+			asset.setComment5(eAsset.element("comment5")==null?"":eAsset.element("comment5").getText());
+			asset.setComment6(eAsset.element("comment6")==null?"":eAsset.element("comment6").getText());
+			asset.setComment7(eAsset.element("comment7")==null?"":eAsset.element("comment7").getText());
+			asset.setComment8(eAsset.element("comment8")==null?"":eAsset.element("comment8").getText());
+			asset.setComment9(eAsset.element("comment9")==null?"":eAsset.element("comment9").getText());
+			asset.setComment10(eAsset.element("comment10")==null?"":eAsset.element("comment10").getText());
+			asset.setComment11(eAsset.element("comment11")==null?"":eAsset.element("comment11").getText());
+			asset.setComment12(eAsset.element("comment12")==null?"":eAsset.element("comment12").getText());
+			asset.setComment13(eAsset.element("comment13")==null?"":eAsset.element("comment13").getText());
+			asset.setComment14(eAsset.element("comment14")==null?"":eAsset.element("comment14").getText());
+			asset.setComment15(eAsset.element("comment15")==null?"":eAsset.element("comment15").getText());
+			asset.setComment16(eAsset.element("comment16")==null?"":eAsset.element("comment16").getText());
+			asset.setComment17(eAsset.element("comment17")==null?"":eAsset.element("comment17").getText());
+			asset.setComment18(eAsset.element("comment18")==null?"":eAsset.element("comment18").getText());
+			asset.setComment19(eAsset.element("comment19")==null?"":eAsset.element("comment19").getText());
+			asset.setComment20(eAsset.element("comment20")==null?"":eAsset.element("comment20").getText());
+			asset.setDescription(eAsset.element("description")==null?"":eAsset.element("description").getText());
+			asset.setGains(eAsset.element("gains")==null?"":eAsset.element("gains").getText());
+			asset.setGmdncode(eAsset.element("gmdncode")==null?"":eAsset.element("gmdncode").getText());
+			asset.setLoanAmount(Double.parseDouble(eAsset.element("loanamount")==null?"0":eAsset.element("loanamount").getText()));
+			asset.setLoanComment(eAsset.element("loancomment")==null?"":eAsset.element("loancomment").getText());
+			asset.setLoanDate(eAsset.element("loandate")==null?null:new SimpleDateFormat("yyyyMMddHHmmssSSSS").parse(eAsset.element("loandate").getText()));
+			asset.setLoanDocuments(eAsset.element("loandocuments")==null?"":eAsset.element("loandocuments").getText());
+			asset.setLoanInterestRate(eAsset.element("loaninterestrate")==null?"":eAsset.element("loaninterestrate").getText());
+			asset.setLoanReimbursementPlan(eAsset.element("loanreimbursementplan")==null?"":eAsset.element("loanreimbursementplan").getText());
+			asset.setLockedBy(Integer.parseInt(eAsset.element("lockedby")==null?"0":eAsset.element("lockedby").getText()));
+			asset.setLockeddate(eAsset.element("lockeddate")==null?null:new SimpleDateFormat("yyyyMMddHHmmssSSSS").parse(eAsset.element("lockeddate").getText()));
+			asset.setLosses(eAsset.element("losses")==null?"":eAsset.element("losses").getText());
+			asset.setNomenclature(eAsset.element("nomenclature")==null?"":eAsset.element("nomenclature").getText());
+			asset.setParentUid(eAsset.element("parentuid")==null?"":eAsset.element("parentuid").getText());
+			asset.setPurchaseDate(eAsset.element("purchasedate")==null?null:new SimpleDateFormat("yyyyMMddHHmmssSSSS").parse(eAsset.element("purchasedate").getText()));
+			asset.setPurchaseDocuments(eAsset.element("purchasedocuments")==null?"":eAsset.element("purchasedocuments").getText());
+			asset.setPurchasePrice(Double.parseDouble(eAsset.element("purchaseprice")==null?"0":eAsset.element("purchaseprice").getText()));
+			asset.setQuantity(Integer.parseInt(eAsset.element("quantity")==null?"0":eAsset.element("quantity").getText()));
+			asset.setReceiptBy(eAsset.element("purchasereceiptby")==null?"":eAsset.element("purchasereceiptby").getText());
+			asset.setSaleClient(eAsset.element("saleclient")==null?"":eAsset.element("saleclient").getText());
+			asset.setSaleValue(Double.parseDouble(eAsset.element("salevalue")==null?"0":eAsset.element("salevalue").getText()));
+			asset.setServiceuid(eAsset.element("service")==null?"":eAsset.element("service").getText());
+			asset.setSerialnumber(eAsset.element("serial")==null?"":eAsset.element("serial").getText());
+			asset.setSupplierUid(eAsset.element("supplieruid")==null?"":eAsset.element("supplieruid").getText());
+			asset.setUpdateDateTime(updatetime);
+			asset.setWriteOffMethod(eAsset.element("writeoffmethod")==null?"":eAsset.element("writeoffmethod").getText());
+			asset.setWriteOffPeriod(Integer.parseInt(eAsset.element("writeoffperiod")==null?"0":eAsset.element("writeoffperiod").getText()));
+			asset.store(eAsset.element("updateid")==null?"":eAsset.element("updateid").getText());
+			//Remove existing components
+			rs.close();
+			ps.close();
+			ps = conn.prepareStatement("delete from oc_assetcomponents where oc_component_assetuid=?");
+			ps.setString(1, asset.getUid());
+			ps.execute();
+			//Add components from XML
+	    	Iterator iComponents = eAsset.element("components").elementIterator("component");
+	    	while(iComponents.hasNext()){
+	    		Element eComponent = (Element)iComponents.next();
+				ps.close();
+				ps = conn.prepareStatement("insert into oc_assetcomponents(oc_component_assetuid,oc_component_nomenclature,oc_component_type,oc_component_characteristics,oc_component_status,oc_component_objectid) values (?,?,?,?,?,?)");
+				ps.setString(1, asset.getUid());
+				ps.setString(2, eComponent.element("nomenclature")==null?"":eComponent.element("nomenclature").getText());
+				ps.setString(3, eComponent.element("type")==null?"":eComponent.element("type").getText());
+				ps.setString(4, eComponent.element("characteristics")==null?"":eComponent.element("characteristics").getText());
+				ps.setString(5, eComponent.element("status")==null?"":eComponent.element("status").getText());
+				ps.setString(6, eComponent.element("objectid")==null?"":eComponent.element("objectid").getText());
+				ps.execute();
+	    	}
+			//Add documents from XML
+	    	Iterator iDocuments = eAsset.element("documents").elementIterator("document");
+	    	while(iDocuments.hasNext()){
+	    		Element eDocument = (Element)iDocuments.next();
+	    		//First we check if the document already exists
+	    		Debug.println("Received document UDI="+eDocument.elementText("udi"));
+	    		rs.close();
+	    		ps.close();
+	    		ps=conn.prepareStatement("select * from arch_documents where arch_document_udi=?");
+	    		ps.setString(1, eDocument.elementText("udi"));
+	    		rs=ps.executeQuery();
+	    		if(!rs.next()){
+	    			//Insert the file record in arch_documents
+    	    		Debug.println("Insert in arch_documents document UDI="+eDocument.elementText("udi"));
+	    			rs.close();
+    				ps.close();
+    				ps = conn.prepareStatement("insert into arch_documents(arch_document_serverid,"
+    						+ "arch_document_objectid,"
+    						+ "arch_document_udi,"
+    						+ "arch_document_title,"
+    						+ "arch_document_description,"
+    						+ "arch_document_category,"
+    						+ "arch_document_author,"
+    						+ "arch_document_date,"
+    						+ "arch_document_destination,"
+    						+ "arch_document_reference,"
+    						+ "arch_document_personid,"
+    						+ "arch_document_storagename,"
+    						+ "arch_document_tran_serverid,"
+    						+ "arch_document_tran_transactionid,"
+    						+ "arch_document_deletedate,"
+    						+ "arch_document_updatetime,"
+    						+ "arch_document_updateid) "
+    						+ "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+    				ps.setString(1, eDocument.element("serverid")==null?"":eDocument.element("serverid").getText());
+    				ps.setString(2, eDocument.element("objectid")==null?"":eDocument.element("objectid").getText());
+    				ps.setString(3, eDocument.element("udi")==null?"":eDocument.element("udi").getText());
+    				ps.setString(4, eDocument.element("title")==null?"":eDocument.element("title").getText());
+    				ps.setString(5, eDocument.element("description")==null?"":eDocument.element("description").getText());
+    				ps.setString(6, eDocument.element("category")==null?"":eDocument.element("category").getText());
+    				ps.setString(7, eDocument.element("author")==null?"":eDocument.element("author").getText());
+        			ps.setTimestamp(8, eDocument.element("date")==null?null:new java.sql.Timestamp(new SimpleDateFormat("yyyyMMddHHmmssSSSS").parse(eDocument.element("date").getText()).getTime()));
+    				ps.setString(9, eDocument.element("destination")==null?"":eDocument.element("destination").getText());
+    				ps.setString(10, eDocument.element("reference")==null?"":eDocument.element("reference").getText());
+    				ps.setString(11, eDocument.element("personid")==null?"":eDocument.element("personid").getText());
+    				ps.setString(12, eDocument.element("storagename")==null?"":eDocument.element("storagename").getText());
+    				ps.setString(13, eDocument.element("tran_serverid")==null?"":eDocument.element("tran_serverid").getText());
+    				ps.setString(14, eDocument.element("tran_transactionid")==null?"":eDocument.element("tran_transactionid").getText());
+        			ps.setTimestamp(15, eDocument.element("deletedate")==null?null:new java.sql.Timestamp(new SimpleDateFormat("yyyyMMddHHmmssSSSS").parse(eDocument.element("deletedate").getText()).getTime()));
+        			ps.setTimestamp(16, eDocument.element("updatetime")==null?null:new java.sql.Timestamp(new SimpleDateFormat("yyyyMMddHHmmssSSSS").parse(eDocument.element("updatetime").getText()).getTime()));
+    				ps.setString(17, eDocument.element("updateid")==null?"":eDocument.element("updateid").getText());
+    				ps.execute();
+	    		}
+	    		//If this is a remote machine, then try to download the document from the server
+	    		//If this is the server, document must be separately uploaded by the remote machine
+	    		if(MedwanQuery.getInstance().getConfigInt("GMAOLocalServerId",-1)>0){
+    				String sFilename=MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_basePath")+"/"+MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_dirTo")+"/"+eDocument.elementText("storagename");
+    				Debug.println("Checking existence of file "+sFilename);
+    	    		File file = new File(sFilename);
+    	    		if(!file.exists()){
+        	    		Debug.println("File does not exist, downloading... ");
+        				//Now get the file from the server and store it locally
+        				String sServerDocumentStore=MedwanQuery.getInstance().getConfigString("GMAOCentralServerDocumentStore","http://localhost/openclinic/scan/to");
+        				saveUrl(sFilename, sServerDocumentStore+"/"+eDocument.elementText("storagename"));
+        	    		Debug.println("Checking existence after download of file "+sFilename);
+	    	    		if(!file.exists()){
+	        	    		Debug.println("File exists");
+	    	    		}
+	    	    		else{
+	        	    		Debug.println("File still does not exist!!!");
+	    	    		}
+    	    		}
+	    		}
+	    	}
+		}
+		rs.close();
+		ps.close();
+		conn.close();
+		Iterator iPlans = eAsset.element("maintenanceplans").elementIterator("maintenanceplan");
+    	while(iPlans.hasNext()){
+    		Element ePlan = (Element)iPlans.next();
+    		try{
+    			MaintenancePlan.updateMaintenanceplan(ePlan);
+        	}
+        	catch(Exception a){
+        		a.printStackTrace();
+        	}
+    	}
+    }
+    
+    public static void saveUrl(final String filename, final String urlString)
+            throws MalformedURLException, IOException {
+        BufferedInputStream in = null;
+        FileOutputStream fout = null;
+        String folder = filename.replaceAll("\\\\","/").substring(0,filename.lastIndexOf("/"));
+        if(!new File(folder).exists()){
+        	new File(folder).mkdirs();
+        }
+        try {
+            in = new BufferedInputStream(new URL(urlString).openStream());
+            fout = new FileOutputStream(filename);
+
+            final byte data[] = new byte[1024];
+            int count;
+            while ((count = in.read(data, 0, 1024)) != -1) {
+                fout.write(data, 0, count);
+            }
+        } finally {
+            if (in != null) {
+                in.close();
+            }
+            if (fout != null) {
+                fout.close();
+            }
+        }
+    }
+    
+    public static boolean storeXml(StringBuffer xml) throws DocumentException{
+    	boolean bSuccess = true;
+    	//For each od thes assets, maintenanceplans and maintenanceoperations, 
+    	//store only if the updatetime has changed (if the record has been modified)
+        SAXReader reader = new SAXReader(false);
+        Document document = reader.read(new StringReader(xml.toString()));
+        Element rootElement = document.getRootElement(); //gmao
+        Iterator iAssets = rootElement.elementIterator("asset");
+        while(iAssets.hasNext()){
+        	Element eAsset = (Element)iAssets.next();
+        	try{
+        		updateAsset(eAsset);
+        	}
+        	catch(Exception a){
+        		a.printStackTrace();
+        	}
+        }
+		return bSuccess;
+    }
     
     //--- CONSTRUCTOR ---
     public Asset(){
@@ -146,6 +895,203 @@ public class Asset extends OC_Object {
         comment18="";
         comment19="";
         comment20="";
+        
+        lockedBy=-1;
+        lockeddate=null;
+    }
+    
+    public static void addTagString(StringBuffer xml,String tag,ResultSet rs) throws SQLException{
+		String s = rs.getString("oc_asset_"+tag);
+		if(ScreenHelper.checkString(s).length()>0){
+			//xml.append("<"+tag+"><![CDATA["+HTMLEntities.htmlentities(s)+"]]></"+tag+">");
+			xml.append("<"+tag+">"+HTMLEntities.xmlencode(s)+"</"+tag+">");
+		}
+    }
+    
+    public static void addTagBinaryString(StringBuffer xml,String tag,ResultSet rs) throws SQLException{
+		String s = rs.getString("oc_asset_"+tag);
+		if(ScreenHelper.checkString(s).length()>0){
+			xml.append("<"+tag+"><![CDATA["+HTMLEntities.xmlencode(s)+"]]></"+tag+">");
+		}
+    }
+    
+    public static void addTagDate(StringBuffer xml,String tag,ResultSet rs) throws SQLException{
+    	try{
+	    	java.util.Date d = rs.getTimestamp("oc_asset_"+tag);
+	    	if(d!=null){
+	    		xml.append("<"+tag+">"+new SimpleDateFormat("yyyyMMddHHmmssSSS").format(d)+"</"+tag+">");
+	    	}
+    	}
+    	catch(Exception e){}
+    }
+    
+    public static void addComponentTagString(StringBuffer xml,String tag,ResultSet rs) throws SQLException{
+		String s = rs.getString("oc_component_"+tag);
+		if(ScreenHelper.checkString(s).length()>0){
+			//xml.append("<"+tag+"><![CDATA["+HTMLEntities.htmlentities(s)+"]]></"+tag+">");
+			xml.append("<"+tag+">"+HTMLEntities.xmlencode(s)+"</"+tag+">");
+		}
+    }
+    
+    public static void addComponentTagDate(StringBuffer xml,String tag,ResultSet rs) throws SQLException{
+    	try{
+    		java.util.Date d = rs.getTimestamp("oc_component_"+tag);
+	    	if(d!=null){
+	    		xml.append("<"+tag+">"+new SimpleDateFormat("yyyyMMddHHmmssSSS").format(d)+"</"+tag+">");
+	    	}
+		}
+		catch(Exception e){}
+    }
+    
+    public static void addDocumentTagString(StringBuffer xml,String tag,ResultSet rs) throws SQLException{
+		String s = rs.getString("arch_document_"+tag);
+		if(ScreenHelper.checkString(s).length()>0){
+			//xml.append("<"+tag+"><![CDATA["+HTMLEntities.htmlentities(s)+"]]></"+tag+">");
+			xml.append("<"+tag+">"+HTMLEntities.xmlencode(s)+"</"+tag+">");
+		}
+    }
+    
+    public static void addDocumentTagDate(StringBuffer xml,String tag,ResultSet rs) throws SQLException{
+    	try{
+    		java.util.Date d = rs.getTimestamp("arch_document_"+tag);
+	    	if(d!=null){
+	    		xml.append("<"+tag+">"+new SimpleDateFormat("yyyyMMddHHmmssSSS").format(d)+"</"+tag+">");
+	    	}
+    	}
+    	catch(Exception e){}
+    }
+    
+    public static StringBuffer toXml(String uid){
+    	StringBuffer xml = new StringBuffer();
+    	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+    	try{
+    		PreparedStatement ps = conn.prepareStatement("select * from oc_assets where oc_asset_serverid=? and oc_asset_objectid=? and oc_asset_objectid>-1");
+    		ps.setInt(1, Integer.parseInt(uid.split("\\.")[0]));
+    		ps.setInt(2, Integer.parseInt(uid.split("\\.")[1]));
+    		ResultSet rs = ps.executeQuery();
+    		if(rs.next()){
+    			xml.append("<asset serverid='"+rs.getInt("oc_asset_serverid")+"' objectid='"+rs.getInt("oc_asset_objectid")+"'>");
+    			addTagString(xml,"code",rs);
+    			addTagString(xml,"parentuid",rs);
+    			addTagString(xml,"description",rs);
+    			addTagString(xml,"serial",rs);
+    			addTagString(xml,"quantity",rs);
+    			addTagString(xml,"type",rs);
+    			addTagString(xml,"supplieruid",rs);
+    			addTagDate(xml,"purchasedate",rs);
+    			addTagString(xml,"purchaseprice",rs);
+    			addTagString(xml,"purchasereceiptby",rs);
+    			addTagString(xml,"purchasedocs",rs);
+    			addTagString(xml,"writeoffmethod",rs);
+    			addTagString(xml,"writeoffperiod",rs);
+    			addTagString(xml,"annuity",rs);
+    			addTagBinaryString(xml,"characteristics",rs);
+    			addTagString(xml,"accountingcode",rs);
+    			addTagString(xml,"gains",rs);
+    			addTagString(xml,"losses",rs);
+    			addTagDate(xml,"loandate",rs);
+    			addTagString(xml,"loanamount",rs);
+    			addTagString(xml,"loaninterestrate",rs);
+    			addTagString(xml,"loanreimbursementplan",rs);
+    			addTagBinaryString(xml,"loancomment",rs);
+    			addTagString(xml,"loandocs",rs);
+    			addTagDate(xml,"saledate",rs);
+    			addTagString(xml,"salevalue",rs);
+    			addTagString(xml,"saleclient",rs);
+    			addTagDate(xml,"updatetime",rs);
+    			addTagString(xml,"updateid",rs);
+    			addTagString(xml,"gmdncode",rs);
+    			addTagString(xml,"service",rs);
+    			addTagString(xml,"nomenclature",rs);
+    			addTagBinaryString(xml,"comment1",rs);
+    			addTagBinaryString(xml,"comment2",rs);
+    			addTagBinaryString(xml,"comment3",rs);
+    			addTagBinaryString(xml,"comment4",rs);
+    			addTagBinaryString(xml,"comment5",rs);
+    			addTagBinaryString(xml,"comment6",rs);
+    			addTagBinaryString(xml,"comment7",rs);
+    			addTagBinaryString(xml,"comment8",rs);
+    			addTagBinaryString(xml,"comment9",rs);
+    			addTagBinaryString(xml,"comment10",rs);
+    			addTagBinaryString(xml,"comment11",rs);
+    			addTagBinaryString(xml,"comment12",rs);
+    			addTagBinaryString(xml,"comment13",rs);
+    			addTagBinaryString(xml,"comment14",rs);
+    			addTagBinaryString(xml,"comment15",rs);
+    			addTagBinaryString(xml,"comment16",rs);
+    			addTagBinaryString(xml,"comment17",rs);
+    			addTagBinaryString(xml,"comment18",rs);
+    			addTagBinaryString(xml,"comment19",rs);
+    			addTagBinaryString(xml,"comment20",rs);
+    			addTagString(xml,"lockedby",rs);
+    			addTagDate(xml,"lockeddate",rs);
+    			//Now add the components
+    			xml.append("<components>");
+    			rs.close();
+    			ps.close();
+    			ps = conn.prepareStatement("select * from oc_assetcomponents where oc_component_assetuid=? and oc_component_objectid>-1");
+    			ps.setString(1, uid);
+    			rs = ps.executeQuery();
+    			while(rs.next()){
+    				xml.append("<component>");
+    				addComponentTagString(xml, "assetuid", rs);
+    				addComponentTagString(xml, "nomenclature", rs);
+    				addComponentTagString(xml, "type", rs);
+    				addComponentTagString(xml, "characteristics", rs);
+    				addComponentTagString(xml, "status", rs);
+    				addComponentTagString(xml, "objectid", rs);
+    				xml.append("</component>");
+    			}
+    			xml.append("</components>");
+    			//Now add the documents
+    			xml.append("<documents>");
+    			rs.close();
+    			ps.close();
+    			ps = conn.prepareStatement("select * from arch_documents where arch_document_objectid>-1 and arch_document_storagename is not null and arch_document_storagename<>'' and arch_document_category='asset' and arch_document_reference='asset."+uid+"'");
+    			rs = ps.executeQuery();
+    			while(rs.next()){
+    				xml.append("<document>");
+    				addDocumentTagString(xml, "serverid", rs);
+    				addDocumentTagString(xml, "objectid", rs);
+    				addDocumentTagString(xml, "udi", rs);
+    				addDocumentTagString(xml, "title", rs);
+    				addDocumentTagString(xml, "description", rs);
+    				addDocumentTagString(xml, "category", rs);
+    				addDocumentTagString(xml, "author", rs);
+    				addDocumentTagDate(xml, "date", rs);
+    				addDocumentTagString(xml, "destination", rs);
+    				addDocumentTagString(xml, "reference", rs);
+    				addDocumentTagString(xml, "personid", rs);
+    				addDocumentTagString(xml, "storagename", rs);
+    				addDocumentTagString(xml, "tran_serverid", rs);
+    				addDocumentTagString(xml, "tran_transactionid", rs);
+    				addDocumentTagDate(xml, "deletedate", rs);
+    				addDocumentTagDate(xml, "updatetime", rs);
+    				addDocumentTagString(xml, "updateid", rs);
+    				xml.append("</document>");
+    			}
+    			xml.append("</documents>");
+    			//Now add the maintenanceplans
+    			xml.append("<maintenanceplans>");
+    			rs.close();
+    			ps.close();
+    			ps = conn.prepareStatement("select * from oc_maintenanceplans where oc_maintenanceplan_assetuid=? and oc_maintenanceplan_objectid>-1");
+    			ps.setString(1, uid);
+    			rs = ps.executeQuery();
+    			while(rs.next()){
+    				xml.append(MaintenancePlan.toXml(rs.getString("oc_maintenanceplan_serverid")+"."+rs.getString("oc_maintenanceplan_objectid")));
+    			}
+    			xml.append("</maintenanceplans>");
+    			xml.append("</asset>");
+    		}
+    		rs.close();
+    		ps.close();
+        	conn.close();
+    	}
+    	catch(Exception e){
+    		e.printStackTrace();
+    	}
+    	return xml;
     }
     
     public String getComponentsString(String sWebLanguage){
@@ -778,12 +1724,12 @@ public class Asset extends OC_Object {
                        + "OC_ASSET_NOMENCLATURE,OC_ASSET_COMMENT1,OC_ASSET_COMMENT2,OC_ASSET_COMMENT3,OC_ASSET_COMMENT4,OC_ASSET_COMMENT5"
                        + ",OC_ASSET_COMMENT6,OC_ASSET_COMMENT7,OC_ASSET_COMMENT8,OC_ASSET_COMMENT9,OC_ASSET_COMMENT10,OC_ASSET_COMMENT11"
                        + ",OC_ASSET_COMMENT12,OC_ASSET_COMMENT13,OC_ASSET_COMMENT14,OC_ASSET_COMMENT15,OC_ASSET_COMMENT16,OC_ASSET_COMMENT17"
-                       + ",OC_ASSET_COMMENT18,OC_ASSET_COMMENT19,OC_ASSET_COMMENT20,OC_ASSET_SERVICE)"+
-                       " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"; // 31
+                       + ",OC_ASSET_COMMENT18,OC_ASSET_COMMENT19,OC_ASSET_COMMENT20,OC_ASSET_SERVICE,OC_ASSET_LOCKEDBY,OC_ASSET_LOCKEDDATE)"+
+                       " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"; // 31
                 ps = oc_conn.prepareStatement(sSql);
                 
                 int serverId = MedwanQuery.getInstance().getConfigInt("serverId"),
-                    objectId = MedwanQuery.getInstance().getOpenclinicCounter("OC_ASSETS");
+                    objectId = MedwanQuery.getInstance().getOpenclinicCounter("OC_ASSETS",-100000);
                 this.setUid(serverId+"."+objectId);
                                 
                 int psIdx = 1;
@@ -868,7 +1814,9 @@ public class Asset extends OC_Object {
                 ps.setString(psIdx++,comment18);
                 ps.setString(psIdx++,comment19);
                 ps.setString(psIdx++,comment20);
-                ps.setString(psIdx,serviceuid);
+                ps.setString(psIdx++,serviceuid);
+                ps.setInt(psIdx++,lockedBy);
+                ps.setTimestamp(psIdx++,lockeddate==null?null:new Timestamp(lockeddate.getTime()));
 
                 ps.executeUpdate();
             } 
@@ -887,7 +1835,7 @@ public class Asset extends OC_Object {
                        "  , OC_ASSET_COMMENT5=?, OC_ASSET_COMMENT6=?, OC_ASSET_COMMENT7=?, OC_ASSET_COMMENT8=?, OC_ASSET_COMMENT9=?"+
                        "  , OC_ASSET_COMMENT10=?, OC_ASSET_COMMENT11=?, OC_ASSET_COMMENT12=?, OC_ASSET_COMMENT13=?, OC_ASSET_COMMENT14=?"+
                        "  , OC_ASSET_COMMENT15=?, OC_ASSET_COMMENT16=?, OC_ASSET_COMMENT17=?, OC_ASSET_COMMENT18=?, OC_ASSET_COMMENT19=?"+
-                       "  , OC_ASSET_COMMENT20=?, OC_ASSET_SERVICE=?"+// update-info
+                       "  , OC_ASSET_COMMENT20=?, OC_ASSET_SERVICE=?, OC_ASSET_LOCKEDBY=?, OC_ASSET_LOCKEDDATE=?"+// update-info
                        " WHERE (OC_ASSET_SERVERID = ? AND OC_ASSET_OBJECTID = ?)"; // identification
                 ps = oc_conn.prepareStatement(sSql);
 
@@ -972,6 +1920,8 @@ public class Asset extends OC_Object {
                 ps.setString(psIdx++,comment19);
                 ps.setString(psIdx++,comment20);
                 ps.setString(psIdx++,serviceuid);
+                ps.setInt(psIdx++,lockedBy);
+                ps.setTimestamp(psIdx++,lockeddate==null?null:new Timestamp(lockeddate.getTime()));
                 
                 // where
                 ps.setInt(psIdx++,Integer.parseInt(getUid().substring(0,getUid().indexOf("."))));
@@ -1121,6 +2071,8 @@ public class Asset extends OC_Object {
                 asset.setComment19(rs.getString("OC_ASSET_COMMENT19"));
                 asset.setComment20(rs.getString("OC_ASSET_COMMENT20"));
                 asset.setServiceuid(rs.getString("OC_ASSET_SERVICE"));
+                asset.setLockedBy(rs.getInt("OC_ASSET_LOCKEDBY"));
+                asset.setLockeddate(rs.getTimestamp("OC_ASSET_LOCKEDDATE"));
             }
         }
         catch(Exception e){
@@ -1190,7 +2142,7 @@ public class Asset extends OC_Object {
                 sSql+= " AND EXISTS (select * from OC_ASSETCOMPONENTS where OC_COMPONENT_ASSETUID=OC_ASSET_SERVERID||'.'||OC_ASSET_OBJECTID and OC_COMPONENT_NOMENCLATURE like '"+(ScreenHelper.checkString(findItem.comment15).length()==0?"%":findItem.comment15)+"' and OC_COMPONENT_STATUS='"+findItem.comment16+"')";
             }
             if(ScreenHelper.checkString(findItem.supplierUid).length() > 0){
-                sSql+= " AND OC_ASSET_SUPPLIERUID = '"+findItem.supplierUid+"'";
+                sSql+= " AND OC_ASSET_SUPPLIERUID like '%"+findItem.supplierUid+"%'";
             }
 
             // purchase date
@@ -1283,6 +2235,8 @@ public class Asset extends OC_Object {
                 asset.setComment19(rs.getString("OC_ASSET_COMMENT19"));
                 asset.setComment20(rs.getString("OC_ASSET_COMMENT20"));
                 asset.setServiceuid(rs.getString("OC_ASSET_SERVICE"));
+                asset.setLockedBy(rs.getInt("OC_ASSET_LOCKEDBY"));
+                asset.setLockeddate(rs.getTimestamp("OC_ASSET_LOCKEDDATE"));
                 
                 foundObjects.add(asset);
             }

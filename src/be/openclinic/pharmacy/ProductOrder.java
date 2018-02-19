@@ -35,8 +35,17 @@ public class ProductOrder extends OC_Object{
     private int processed;
     private String comment;
     private String productionorderuid;
+    private String formuid;
 
-    public String getProductionorderuid() {
+    public String getFormuid() {
+		return formuid;
+	}
+
+	public void setFormuid(String formuid) {
+		this.formuid = formuid;
+	}
+
+	public String getProductionorderuid() {
 		return productionorderuid;
 	}
 
@@ -314,6 +323,7 @@ public class ProductOrder extends OC_Object{
                 order.setProcessed(rs.getInt("OC_ORDER_PROCESSED"));
                 order.setComment(rs.getString("OC_ORDER_COMMENT"));
                 order.setProductionorderuid(rs.getString("OC_ORDER_PRODUCTIONORDERUID"));
+                order.setFormuid(rs.getString("OC_ORDER_FORMUID"));
             }
             else{
                 throw new Exception("ERROR : PRODUCTORDER "+orderUid+" NOT FOUND");
@@ -368,8 +378,8 @@ public class ProductOrder extends OC_Object{
                           "  OC_ORDER_PACKAGESDELIVERED, OC_ORDER_DATEORDERED, OC_ORDER_DATEDELIVERYDUE,"+
                           "  OC_ORDER_DATEDELIVERED, OC_ORDER_IMPORTANCE,"+
                           "  OC_ORDER_CREATETIME, OC_ORDER_UPDATETIME, OC_ORDER_UPDATEUID, OC_ORDER_VERSION, OC_ORDER_STATUS,"
-                          + "OC_ORDER_FROM,OC_ORDER_PROCESSED,OC_ORDER_COMMENT,OC_ORDER_PRODUCTIONORDERUID)"+
-                          " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,1,?,?,?,?,?)";
+                          + "OC_ORDER_FROM,OC_ORDER_PROCESSED,OC_ORDER_COMMENT,OC_ORDER_PRODUCTIONORDERUID,OC_ORDER_FORMUID)"+
+                          " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,1,?,?,?,?,?,?)";
 
                 ps = oc_conn.prepareStatement(sSelect);
 
@@ -411,6 +421,7 @@ public class ProductOrder extends OC_Object{
                 ps.setInt(16, this.getProcessed());
                 ps.setString(17, this.getComment());
                 ps.setString(18, this.getProductionorderuid());
+                ps.setString(19, this.getFormuid());
 
                 ps.executeUpdate();
             }
@@ -424,7 +435,7 @@ public class ProductOrder extends OC_Object{
                               "  OC_ORDER_PACKAGESDELIVERED=?, OC_ORDER_DATEORDERED=?, OC_ORDER_DATEDELIVERYDUE=?,"+
                               "  OC_ORDER_DATEDELIVERED=?, OC_ORDER_IMPORTANCE=?,"+
                               "  OC_ORDER_UPDATETIME=?, OC_ORDER_UPDATEUID=?, OC_ORDER_VERSION=(OC_ORDER_VERSION+1), OC_ORDER_STATUS=?,"
-                              + "OC_ORDER_FROM=?,OC_ORDER_PROCESSED=?,OC_ORDER_COMMENT=?,OC_ORDER_PRODUCTIONORDERUID=?"+
+                              + "OC_ORDER_FROM=?,OC_ORDER_PROCESSED=?,OC_ORDER_COMMENT=?,OC_ORDER_PRODUCTIONORDERUID=?, OC_ORDER_FORMUID=?"+
                               " WHERE OC_ORDER_SERVERID=? AND OC_ORDER_OBJECTID=?";
 
                     ps = oc_conn.prepareStatement(sSelect);
@@ -458,8 +469,9 @@ public class ProductOrder extends OC_Object{
                     ps.setInt(13, this.getProcessed());
                     ps.setString(14, this.getComment());
                     ps.setString(15, this.getProductionorderuid());
-                    ps.setInt(16,Integer.parseInt(this.getUid().substring(0,this.getUid().indexOf("."))));
-                    ps.setInt(17,Integer.parseInt(this.getUid().substring(this.getUid().indexOf(".")+1)));
+                    ps.setString(16, this.getFormuid());
+                    ps.setInt(17,Integer.parseInt(this.getUid().substring(0,this.getUid().indexOf("."))));
+                    ps.setInt(18,Integer.parseInt(this.getUid().substring(this.getUid().indexOf(".")+1)));
 
                     ps.executeUpdate();
                 }

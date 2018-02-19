@@ -1123,6 +1123,63 @@ public class PatientInvoice extends Invoice {
     //--- STORE -----------------------------------------------------------------------------------
     public boolean store(){
         boolean bStored = true;
+        AdminPerson patient = getPatient();
+    	//Remove any drug reimbursement deliveries from invoice
+        if(MedwanQuery.getInstance().getConfigString("bloodDonorCostReductionPrestationUid","").length()>0){
+	    	Vector debets = Debet.getPatientDebetsToInvoice(getPatientUid());
+	    	for(int n=0;n<debets.size();n++){
+	    		Debet debet = (Debet)debets.elementAt(n);
+	    		if(debet.getPrestationUid().equalsIgnoreCase(MedwanQuery.getInstance().getConfigString("bloodDonorCostReductionPrestationUid",""))){
+	    			Debet.delete(debet.getUid());
+	    			System.out.println("deleted debet "+debet.getUid());
+	    		}
+	    	}
+        	debets = getDebets();
+	    	for(int n=0;n<debets.size();n++){
+	    		Debet debet = (Debet)debets.elementAt(n);
+	    		if(debet.getPrestationUid().equalsIgnoreCase(MedwanQuery.getInstance().getConfigString("bloodDonorCostReductionPrestationUid",""))){
+	    			Debet.delete(debet.getUid());
+	    			debets.remove(n);
+	    			break;
+	    		}
+	    	}
+            String bloodDonorInsuranceUid=Insurance.getActiveInsurance(getPatientUid(), MedwanQuery.getInstance().getConfigString("bloodDonorInsurance"));
+	        if(bloodDonorInsuranceUid!=null){
+	        	String encounteruid="";
+	        	double eligibledebets =0;
+	        	String eligiblefamilies=MedwanQuery.getInstance().getConfigString("bloodDonorCostReductionEligibleDebetFamilies","PHA");
+	        	debets = getDebetsForInsurance(bloodDonorInsuranceUid);
+	        	for(int n=0;n<debets.size();n++){
+	        		Debet debet = (Debet)debets.elementAt(n);
+	        		if(eligiblefamilies.contains(debet.getPrestation().getReferenceObject().getObjectType())){
+	        			eligibledebets+=debet.getAmount();
+	        			encounteruid=debet.getEncounterUid();
+	        		}
+	        	}
+	        	if(eligibledebets>0){
+	        		//We must add the cost reduction debet
+	        		if(eligibledebets>Double.parseDouble(MedwanQuery.getInstance().getConfigString("bloodDonorCostReductionMaximum","2"))){
+	        			eligibledebets=Double.parseDouble(MedwanQuery.getInstance().getConfigString("bloodDonorCostReductionMaximum","2"));
+	        		}
+	        		Debet debet = new Debet();
+	        		debet.setAmount(-eligibledebets);
+	        		debet.setCreateDateTime(new java.util.Date());
+	        		debet.setDate(new java.util.Date());
+	        		debet.setEncounterUid(encounteruid);
+	        		debet.setExtraInsurarAmount(0);
+	        		debet.setInsuranceUid(bloodDonorInsuranceUid);
+	        		debet.setInsurarAmount(0);
+	        		debet.setPrestationUid(MedwanQuery.getInstance().getConfigString("bloodDonorCostReductionPrestationUid",""));
+	        		debet.setQuantity(1);
+	        		debet.setUpdateUser(getUpdateUser());
+	        		debet.setUpdateDateTime(getUpdateDateTime());
+	        		debet.setVersion(1);
+	        		debet.setPatientInvoiceUid(getUid());
+	        		debet.store();
+	        		getDebets().add(debet);
+	        	}
+	        }
+        }
         String ids[];
         int iVersion = 1;
         PreparedStatement ps = null;

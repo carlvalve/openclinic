@@ -135,8 +135,10 @@ public class ExportNHIFEClaims {
     		//Search for all closed patient invoices for this insurer in the specified period
     		HashSet zeroInvoices=new HashSet();
     		if(sConcatSign.equalsIgnoreCase("||")){
-	    		sSql="select distinct b.*,OC_INSURANCE_NR from oc_debets a, oc_patientinvoices b, oc_insurances c where"
+	    		sSql="select distinct b.*,OC_INSURANCE_NR from oc_debets a, oc_patientinvoices b, oc_insurances c, oc_prestations d where"
 	    				+ " oc_debet_patientinvoiceuid='1.'||oc_patientinvoice_objectid and"
+	    				+ " oc_prestation_objectid=replace(oc_debet_prestationuid,'1.','') and"
+	    				+ " (oc_prestation_nomenclature is not null and oc_prestation_nomenclature<>'') and"
 	    				+ " oc_patientinvoice_date>=? and"
 	    				+ " oc_patientinvoice_date<? and"
 	    				+ " oc_patientinvoice_status='closed' and"
@@ -148,7 +150,7 @@ public class ExportNHIFEClaims {
     			sSql="select oc_patientinvoice_objectid from oc_patientinvoices where "
 	    				+ " oc_patientinvoice_date>=? and"
 	    				+ " oc_patientinvoice_date<? and"
-    					+ "(select sum(oc_debet_amount+oc_debet_insuraramount+oc_debet_extrainsuraramount) total from oc_debets where oc_debet_patientinvoiceuid='1.'+convert(varchar,oc_patientinvoice_objectid))<=0";
+    					+ "(select sum(oc_debet_amount+oc_debet_insuraramount+oc_debet_extrainsuraramount) total from oc_debets,oc_prestations where oc_prestation_objectid=replace(oc_debet_prestationuid,'1.','') and (oc_prestation_nomenclature is not null and oc_prestation_nomenclature<>'') and oc_debet_patientinvoiceuid='1.'+convert(varchar,oc_patientinvoice_objectid))<=0";
     			ps = conn2.prepareStatement(sSql);
         		ps.setDate(1, new java.sql.Date(dBegin.getTime()));
         		ps.setDate(2, new java.sql.Date(dEnd.getTime()));
@@ -158,8 +160,10 @@ public class ExportNHIFEClaims {
         		}
         		rs.close();
         		ps.close();
-	    		sSql="select distinct b.*,a.oc_debet_encounteruid,OC_INSURANCE_NR,oc_insurance_insuraruid from oc_debets a, oc_patientinvoices b, oc_insurances c where"
+	    		sSql="select distinct b.*,a.oc_debet_encounteruid,OC_INSURANCE_NR,oc_insurance_insuraruid from oc_debets a, oc_patientinvoices b, oc_insurances c, oc_prestations d where"
 	    				+ " oc_debet_patientinvoiceuid='1.'+convert(varchar,oc_patientinvoice_objectid) and"
+	    				+ " oc_prestation_objectid=replace(oc_debet_prestationuid,'1.','') and"
+	    				+ " (oc_prestation_nomenclature is not null and oc_prestation_nomenclature<>'') and"
 	    				+ " oc_patientinvoice_date>=? and"
 	    				+ " oc_patientinvoice_date<? and"
 	    				+ " oc_patientinvoice_status='closed' and"
