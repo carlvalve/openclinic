@@ -22,6 +22,8 @@ import be.mxs.webapp.wl.session.SessionContainerFactory;
 import be.openclinic.adt.Encounter;
 import be.openclinic.finance.Debet;
 import be.openclinic.finance.PatientInvoice;
+import be.openclinic.finance.Prestation;
+import net.admin.AdminPerson;
 import net.admin.AdminPrivateContact;
 import net.admin.Service;
 import net.admin.User;
@@ -44,6 +46,8 @@ public class PharmacyReports {
 		reportline+="THEORETICAL_VALUE;";
 		reportline+="PHYSICAL;";
 		reportline+="PHYSICAL_VALUE;";
+		reportline+="SALES;";
+		reportline+="SALES_VALUE;";
 		reportline+="MISSING;";
 		reportline+="OVERSTOCK;\r\n";
 		report.add(reportline);
@@ -88,6 +92,21 @@ public class PharmacyReports {
 		 			reportline+=((initiallevel+in-out)*pump)+";";
 		 			reportline+=";";
 		 			reportline+=";";
+		 			if(stock.getProduct().getPrestationcode()!=null){
+		 				Prestation prestation = Prestation.get(stock.getProduct().getPrestationcode());
+		 				if(prestation!=null && prestation.getPrice()>0){
+		 					reportline+=ScreenHelper.getPriceFormat(prestation.getPrice())+";";
+		 					reportline+=ScreenHelper.getPriceFormat(prestation.getPrice()*(initiallevel+in-out))+";";
+		 				}
+			 			else{
+				 			reportline+=";";
+				 			reportline+=";";
+			 			}
+		 			}
+		 			else{
+			 			reportline+=";";
+			 			reportline+=";";
+		 			}
 		 			reportline+=";";
 		 			reportline+=";\n";
 		 			report.add(reportline);
@@ -205,6 +224,7 @@ public class PharmacyReports {
 		reportline+="TOTAL;";
 		reportline+="COST CENTER;";
 		reportline+="ISSUED TO;";
+		reportline+="PATIENT ID;";
 		reportline+="LOCATION;";
 		reportline+="GROUP DESCRIPTION;";
 		reportline+="GROUP CATGEORY;\r\n";
@@ -250,6 +270,7 @@ public class PharmacyReports {
 							reportline+=";";
 						}
 						reportline+=ScreenHelper.getTranNoLink("productstockoperation.medicationdelivery", operation.getDescription(), language)+";";
+						reportline+=operation.getSourceDestination().getObjectUid()+";";
 						reportline+=operation.getProductStock().getServiceStock().getName()+";";
 						reportline+=ScreenHelper.getTranNoLink("product.productgroup",product.getProductGroup(),language)+";";
 						reportline+=ScreenHelper.getTranNoLink("drug.category",product.getProductSubGroup(),language)+";\n";
@@ -295,7 +316,7 @@ public class PharmacyReports {
 						reportline+=productStock.getProduct().getName()+";";
 						reportline+=level+";";
 						reportline+=cost+";";
-						reportline+=level*cost+";";
+						reportline+=(level<0?0:level)*cost+";";
 						reportline+=productStock.getMinimumLevel()+";";
 						reportline+=productStock.getTotalUnitsOutForPeriod(operations,Miscelaneous.addMonthsToDate(date,-1),date)+";";
 						reportline+=productStock.getTotalUnitsOutForPeriod(operations,Miscelaneous.addMonthsToDate(date,-3),date)+";";
@@ -393,7 +414,10 @@ public class PharmacyReports {
 		reportline+="ESTIMATED DELIVERY;";
 		reportline+="TECHNICIAN NAME;";
 		reportline+="SHOP NAME;";
-		reportline+="P/O CLOSED;\r\n";
+		reportline+="P/O CLOSED;";
+		reportline+="IP NUMBER;";
+		reportline+="PATIENT NAME;";
+		reportline+="PHONE NUMBER;\r\n";
 		report.add(reportline);
 		ServiceStock serviceStock = ServiceStock.get(serviceStockUid);
 		if(serviceStock!=null && serviceStock.hasValidUid()){
@@ -474,7 +498,15 @@ public class PharmacyReports {
 									}
 									reportline+=ScreenHelper.getTranNoLink("productiontechnician",productionOrder.getTechnician(),language)+";";
 									reportline+=ScreenHelper.getTranNoLink("productiondestination",productionOrder.getDestination(),language)+";";
-									reportline+=ScreenHelper.formatDate(productionOrder.getCloseDateTime());
+									reportline+=ScreenHelper.formatDate(productionOrder.getCloseDateTime())+";";
+									reportline+=productionOrder.getPatientUid()+";";
+									AdminPerson person = AdminPerson.getAdminPerson(productionOrder.getPatientUid()+"");
+									if(person!=null){
+										reportline+=person.getFullName()+";";
+										if(person.getActivePrivate()!=null){
+											reportline+=person.getActivePrivate().telephone+";";
+										}
+									}
 									report.add(reportline+"\r\n");
 								}
 							}

@@ -325,6 +325,10 @@ public class PDFPatientInvoiceReceiptGeneratorCPLR extends PDFInvoiceGenerator {
 	        cell = createValueCell(ScreenHelper.getTran(null,"web","total.extrainsurar",sPrintLanguage)+": "+priceFormat.format(totalextrainsurardebet), 25,new Double(7*scaleFactor).intValue(),Font.NORMAL);
 	        cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 	        table.addCell(cell);
+	        //Solde patient
+	        cell = createValueCell(ScreenHelper.getTran(null,"web","balance",sPrintLanguage)+": "+priceFormat.format(totalDebet-totalCredit), 50,new Double(7*scaleFactor).intValue(),Font.NORMAL);
+	        cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+	        table.addCell(cell);
 
 	        cell=createValueCell("",50);
 	        cell.setBorder(PdfPCell.NO_BORDER);

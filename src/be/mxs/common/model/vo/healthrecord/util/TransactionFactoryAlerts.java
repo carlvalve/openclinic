@@ -18,6 +18,7 @@ public class TransactionFactoryAlerts extends TransactionFactory {
         Vector items = new Vector();
         items.add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), IConstants.ITEM_TYPE_ALERTS_LABEL,"",new Date(),itemContextVO));
         items.add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), IConstants.ITEM_TYPE_ALERTS_DESCRIPTION,"",new Date(),itemContextVO));
+        items.add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), IConstants.ITEM_TYPE_ALERTS_ALLERGY,"",new Date(),itemContextVO));
         items.add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), IConstants.ITEM_TYPE_ALERTS_EXPIRATION_DATE,"",new Date(),itemContextVO));
 
         return new TransactionVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()),IConstants.TRANSACTION_TYPE_ALERT,new Date(),new Date(),IConstants.TRANSACTION_STATUS_CLOSED, userVO,items);

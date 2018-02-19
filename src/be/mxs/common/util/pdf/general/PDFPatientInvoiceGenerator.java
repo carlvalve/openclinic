@@ -420,6 +420,8 @@ public class PDFPatientInvoiceGenerator extends PDFInvoiceGenerator {
         }
         receiptTable.addCell(createValueCell(getTran("web","prestations"),10,8,Font.BOLD));
         int nLines=2;
+        //Summarize debets contant
+        SortedMap debetlines = new TreeMap();
         for(int n=0;n<debets.size();n++){
             Debet debet = (Debet)debets.elementAt(n);
             String extraInsurar="";
@@ -432,6 +434,15 @@ public class PDFPatientInvoiceGenerator extends PDFInvoiceGenerator {
                     }
                 }
             }
+            String debetline = " x  ["+debet.getPrestation().getCode()+"] "+debet.getPrestation().getDescription()+extraInsurar;
+            if(debetlines.get(debetline)==null){
+            	debetlines.put(debetline, 0);
+            }
+            debetlines.put(debetline, (Integer)debetlines.get(debetline)+debet.getQuantity());
+        }
+        Iterator iDebets = debetlines.keySet().iterator();
+        while(iDebets.hasNext()){
+        	String debetline = (String)iDebets.next();
         	if(nLines==0){
                 receiptTable.addCell(createEmptyCell(10));
                 nLines=1;
@@ -442,9 +453,9 @@ public class PDFPatientInvoiceGenerator extends PDFInvoiceGenerator {
         	else {
         		nLines=1;
         	}
-            receiptTable.addCell(createValueCell(debet.getQuantity()+" x  ["+debet.getPrestation().getCode()+"] "+debet.getPrestation().getDescription()+extraInsurar,20,7,Font.NORMAL));
+            receiptTable.addCell(createValueCell(debetlines.get(debetline)+debetline,20,7,Font.NORMAL));
         }
-        receiptTable.addCell(createEmptyCell(50-((debets.size() % 2)*20)));
+        receiptTable.addCell(createEmptyCell(50-((debetlines.size() % 2)*20)));
         receiptTable.addCell(createEmptyCell(50));
         receiptTable.addCell(createCell(createValueCell(" "),50,PdfPCell.ALIGN_CENTER,PdfPCell.BOTTOM));
         receiptTable.addCell(createEmptyCell(50));
@@ -788,7 +799,8 @@ public class PDFPatientInvoiceGenerator extends PDFInvoiceGenerator {
         table.addCell(createLabelCell(getTran("system.manage","categoryinsurarshare"),2));
         cell = createValueCell(":   "+(insurar.getUid().equalsIgnoreCase(MedwanQuery.getInstance().getConfigString("MFP",""))?MedwanQuery.getInstance().getConfigString("MFPInsurarShares",(100-patientShare)+""):(100-patientShare)+"")+" %",2);
         table.addCell(cell);
-        table.addCell(createEmptyCell(3));
+        table.addCell(createLabelCell(getTran("insurance","memberimmat"),1));
+        table.addCell(createValueCell(":   "+insurance.getMemberImmat(),2));
 
         //*** ROW 3 ***
         // insurance category

@@ -756,7 +756,19 @@ public class UpdateSystem implements Runnable {
 	                    			String localcontext = request.getProtocol().split("/")[0].toLowerCase()+"://localhost:"+request.getServerPort()+request.getContextPath();
 	                    			String key=configelement.attributeValue("key");
 	                    			String value=configelement.attributeValue("value")+"";
-	                    			MedwanQuery.getInstance().setConfigString(key.replaceAll("\\$setupdir\\$", setupdir).replaceAll("\\$context\\$", context).replaceAll("\\$localcontext\\$", localcontext).replaceAll("\\$minicontext\\$", minicontext).replaceAll("\\$project\\$", MedwanQuery.getInstance().getConfigString("defaultProject","oc")),value.replaceAll("\\$setupdir\\$", setupdir).replaceAll("\\$context\\$", context).replaceAll("\\$localcontext\\$", localcontext).replaceAll("\\$minicontext\\$", minicontext).replaceAll("\\$project\\$", MedwanQuery.getInstance().getConfigString("defaultProject","oc")));
+	                    			String configkey=key.replaceAll("\\$setupdir\\$", setupdir).replaceAll("\\$context\\$", context).replaceAll("\\$localcontext\\$", localcontext).replaceAll("\\$minicontext\\$", minicontext).replaceAll("\\$project\\$", MedwanQuery.getInstance().getConfigString("defaultProject","oc"));
+	                    			String configvalue=value.replaceAll("\\$setupdir\\$", setupdir).replaceAll("\\$context\\$", context).replaceAll("\\$localcontext\\$", localcontext).replaceAll("\\$minicontext\\$", minicontext).replaceAll("\\$project\\$", MedwanQuery.getInstance().getConfigString("defaultProject","oc"));
+	                    			MedwanQuery.getInstance().setConfigString(configkey,configvalue);
+	                    			if(ScreenHelper.checkString(configelement.attributeValue("mkdir")).equalsIgnoreCase("true")){
+	                    				try{
+		                    				if(!new java.io.File(configvalue).exists()){
+		                    					new java.io.File(configvalue).mkdirs();
+		                    				}
+	                    				}
+	                    				catch(Exception io){
+	                    					io.printStackTrace();
+	                    				}
+	                    			}
 	                    		}
 	                    		else if(configelement.getName().equalsIgnoreCase("labels")){
 	                    			//This is a label list 

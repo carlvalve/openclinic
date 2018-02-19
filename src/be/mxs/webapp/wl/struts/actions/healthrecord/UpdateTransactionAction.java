@@ -24,6 +24,7 @@ import be.openclinic.archiving.ArchiveDocument;
 import be.openclinic.common.ObjectReference;
 import be.openclinic.finance.Debet;
 import be.openclinic.finance.Prestation;
+import be.openclinic.knowledge.Ikirezi;
 import be.openclinic.medical.Diagnosis;
 import be.openclinic.medical.LabAnalysis;
 import be.openclinic.medical.RequestedLabAnalysis;
@@ -538,6 +539,31 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
                     	}
                     }
                     
+                    //If IKIREZI linked items exist in the transaction, store their content in Ikirezi
+                    invoiceItems = returnedTransactionVO.getItems();
+                    iInvoiceItems = invoiceItems.iterator();
+                    String encounteruid=returnedTransactionVO.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID");
+                    if(encounteruid.length()>0){
+	                    while(iInvoiceItems.hasNext()){
+	                    	ItemVO itemVO = (ItemVO)iInvoiceItems.next();
+	                    	if(itemVO.getType().contains("ITEM_TYPE_FUNCTIONALSIGNS_IDS")||
+	                    		itemVO.getType().contains("ITEM_TYPE_INSPECTION_IDS")||
+	                    		itemVO.getType().contains("ITEM_TYPE_PALPATION_IDS")||
+	                    		itemVO.getType().contains("ITEM_TYPE_HEARTAUSCULTATION_IDS")||
+	                    		itemVO.getType().contains("ITEM_TYPE_LUNGAUSCULTATION_IDS")){
+	                    		String[] inspectionids = ScreenHelper.checkString(itemVO.getValue()).split(";");
+	                    		for(int n=0;n<inspectionids.length;n++){
+	                    			if(inspectionids[n].split("\\$").length>1){
+		                    			String id = inspectionids[n].split("\\$")[1];
+		                    			if(id.split("\\.").length>1){
+		                    				String ikireziId=id.split("\\.")[1];
+		                    				Ikirezi.storeSymptom(encounteruid, ikireziId, "1",sessionContainerWO.getUserVO().userId);
+		                    			}
+	                    			}
+	                    		}
+	                    	}
+	                    }
+                    }
 
                     //Delete diagnoses from OC_DIAGNOSES and ADD all+new again
                     Diagnosis.deleteDiagnosesByReferenceUID(returnedTransactionVO.getServerId()+"."+returnedTransactionVO.getTransactionId(),"Transaction");

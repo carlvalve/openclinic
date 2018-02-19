@@ -30,6 +30,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
@@ -43,6 +44,39 @@ public class ScreenHelper {
     
     static{
     	reloadDateFormats();
+    }
+    
+    public static long nightsBetween(java.util.Date begin,java.util.Date end){
+    	long nights = 0;
+    	if(!formatDate(begin).equals(formatDate(end)) && end.after(begin)){
+    		nights=TimeUnit.DAYS.convert(end.getTime()-begin.getTime(), TimeUnit.MILLISECONDS);
+    	}
+    	return nights;
+    }
+    
+    public static java.util.Date getPreviousMonthBegin(){
+    	return getPreviousMonthBegin(new java.util.Date());
+    }
+    public static java.util.Date getPreviousMonthBegin(java.util.Date date){
+    	try{
+	        String firstdayPreviousMonth="01/"+new SimpleDateFormat("MM/yyyy").format(new java.util.Date(ScreenHelper.parseDate("01/"+new SimpleDateFormat("MM/yyyy").format(date)).getTime()-100));
+	        return new SimpleDateFormat("dd/MM/yyyy").parse(firstdayPreviousMonth);
+    	}
+    	catch(Exception e){
+    		return null;
+    	}
+    }
+    public static java.util.Date getPreviousMonthEnd(){
+    	return getPreviousMonthEnd(new java.util.Date());
+    }
+    public static java.util.Date getPreviousMonthEnd(java.util.Date date){
+    	try{
+	    	String lastdayPreviousMonth=ScreenHelper.stdDateFormat.format(new java.util.Date(ScreenHelper.parseDate("01/"+new SimpleDateFormat("MM/yyyy").format(date)).getTime()-100));
+	        return new SimpleDateFormat("dd/MM/yyyy").parse(lastdayPreviousMonth);
+    	}
+    	catch(Exception e){
+    		return null;
+    	}
     }
     
     public static String createDrawingDiv(HttpServletRequest request,String name, String itemtype, Object transaction,String image){
@@ -1273,6 +1307,35 @@ public static String removeAccents(String sTest){
     }
 
     //--- SET ADMIN PRIVATE CONTACT ---------------------------------------------------------------
+    public static String setGuineaAdminPrivateContact(AdminPrivateContact apc, String sLanguage){
+        String sCountry = "&nbsp;";
+        if(checkString(apc.country).trim().length()>0){
+            sCountry = getTran(null,"Country",apc.country,sLanguage);
+        }
+
+        String sProvince = "&nbsp;";
+        if(checkString(apc.province).trim().length()>0){
+            sProvince = getTran(null,"province",apc.province,sLanguage);
+        }
+        
+        return(
+            setRow("Web.admin","addresschangesince",apc.begin,sLanguage)+
+            setRow("Web","region",apc.sanitarydistrict,sLanguage)+
+            setRow("Web","prefecture",apc.district,sLanguage)+
+            setRow("Web","subprefecture",apc.sector,sLanguage)+
+            setRow("Web","address",apc.address,sLanguage)+
+            setRow("Web","postcode",apc.zipcode,sLanguage)+
+            setRow("Web","country",sCountry,sLanguage)+
+            setRow("Web","email",apc.email,sLanguage)+
+            setRow("Web","telephone",apc.telephone,sLanguage)+
+            setRow("Web","mobile",apc.mobile,sLanguage)+
+            setRow("Web","function",apc.businessfunction,sLanguage)+
+            setRow("Web","business",apc.business,sLanguage)+
+            setRow("Web","comment",apc.comment,sLanguage)
+        );
+    }
+
+    //--- SET ADMIN PRIVATE CONTACT ---------------------------------------------------------------
     public static String setOpenclinicAdminPrivateContact(AdminPrivateContact apc, String sLanguage){
         String sCountry = "&nbsp;";
         if(checkString(apc.country).trim().length()>0){
@@ -1365,15 +1428,15 @@ public static String removeAccents(String sTest){
         return(
             setRow("Web.admin","addresschangesince",apc.begin,sLanguage)+
             setRow("Web","address",apc.address,sLanguage)+
+            setRow("Web","province",apc.district,sLanguage)+
+            setRow("Web","community",apc.sector,sLanguage)+
+            setRow("Web","hill_quarter",apc.city,sLanguage)+
             setRow("Web","zipcode",apc.zipcode,sLanguage)+
             setRow("Web","country",sCountry,sLanguage)+
             setRow("Web","email",apc.email,sLanguage)+
             setRow("Web","telephone",apc.telephone,sLanguage)+
             setRow("Web","mobile",apc.mobile,sLanguage)+
-            setRow("Web","province",apc.district,sLanguage)+
-            setRow("Web","community",apc.sector,sLanguage)+
             setRow("Web","cell",apc.cell,sLanguage)+
-            setRow("Web","city",apc.city,sLanguage)+
             setRow("Web","function",apc.businessfunction,sLanguage)+
             setRow("Web","business",apc.business,sLanguage)+
             setRow("Web","comment",apc.comment,sLanguage)
@@ -1445,8 +1508,8 @@ public static String removeAccents(String sTest){
         }
         
         return "<input type='text' maxlength='10' class='text' id='"+sName+"' name='"+sName+"' value='"+sValue+"' size='12' onblur='if(!checkDate(this)"+sExtraCondition+"){dateError(this);}else{"+sExtraOnBlur+"}'>"+
-               "&nbsp;<img name='popcal' style='vertical-align:-1px;' onclick='gfPop"+gfPopType+".fPopCalendar(document."+sForm+"."+sName+");return false;' src='"+sCONTEXTDIR+"/_img/icons/icon_agenda.gif' alt='"+HTMLEntities.htmlentities(getTran(null,"Web","Select",sWebLanguage))+"'></a>"+
-               "&nbsp;<img class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_compose.gif' alt='"+getTranNoLink("Web","PutToday",sWebLanguage)+"' onclick='getToday(document."+sForm+"."+sName+");'>";
+               "&nbsp;<img height='16px' name='popcal' style='vertical-align:-1px;' onclick='gfPop"+gfPopType+".fPopCalendar(document."+sForm+"."+sName+");return false;' src='"+sCONTEXTDIR+"/_img/icons/icon_agenda.gif' alt='"+HTMLEntities.htmlentities(getTran(null,"Web","Select",sWebLanguage))+"'></a>"+
+               "&nbsp;<img height='16px' class='link' src='"+sCONTEXTDIR+"/_img/icons/icon_compose.gif' alt='"+getTranNoLink("Web","PutToday",sWebLanguage)+"' onclick='getToday(document."+sForm+"."+sName+");'>";
     }
     
     //--- WRITE DATE FIELD WITH DELETE ------------------------------------------------------------
@@ -1555,7 +1618,7 @@ public static String removeAccents(String sTest){
 
                 if(jsAlert.length() > 0){
                     String sMessage = getTranNoLink("web","nopermission",activeUser==null || activeUser.person==null?"en":activeUser.person.language);
-                    jsAlert = "<script>"+(screenIsPopup?"window.close();":"window.history.go(-1);")+
+                    jsAlert = "<script>"+
                                "var popupUrl = '"+sAPPFULLDIR+"/_common/search/okPopup.jsp?ts="+getTs()+"&labelValue="+sMessage;
 
                     // display permission when in Debug mode
@@ -1564,7 +1627,8 @@ public static String removeAccents(String sTest){
                     jsAlert+=  "';"+
                                "var modalities = 'dialogWidth:266px;dialogHeight:143px;center:yes;scrollbars:no;resizable:no;status:no;location:no;';"+
                                "var answer = (window.showModalDialog)?window.showModalDialog(popupUrl,\"\",modalities):window.confirm(\""+sMessage+"\");"+
-                              "</script>";
+                               (screenIsPopup?"window.close();":"window.history.go(-1);")+
+                               "</script>";
                 }
             }
         }
@@ -3510,6 +3574,7 @@ public static String removeAccents(String sTest){
     //--- CHECK SPECIAL CHARACTERS ----------------------------------------------------------------
     // this function is used by DBSynchroniser and AdminPerson
     public static String checkSpecialCharacters(String sTest){
+    	sTest = sTest.toLowerCase();
         sTest = sTest.replaceAll("'","");
         sTest = sTest.replaceAll(" ","");
         sTest = sTest.replaceAll("-","");
@@ -3577,7 +3642,7 @@ public static String removeAccents(String sTest){
 
             rs = ps.executeQuery();
             while(rs.next()){
-                serviceContexts.put(rs.getString("serviceid"),rs.getString("defaultcontext"));
+                serviceContexts.put(rs.getString("serviceid")+"",rs.getString("defaultcontext")+"");
             }
         }
         catch(Exception e){

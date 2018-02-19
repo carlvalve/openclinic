@@ -239,6 +239,12 @@ public class Product extends OC_Object implements Comparable {
     	if(count > 0){
     		price = totalprice/count;
     	}
+    	else{
+    		String sLastPrice=Pointer.getLastPointer("drugprice."+getUid()+".", new java.util.Date(new java.util.Date().getTime()-year));
+    		if(sLastPrice.length()>0){
+    			price=Double.parseDouble(sLastPrice.split(";")[1]);
+    		}
+    	}
     	lastYearsAverage=price;
     	return price;
     }
@@ -274,6 +280,12 @@ public class Product extends OC_Object implements Comparable {
     	}
     	if(count>0){
     		price=totalprice/count;
+    	}
+    	else{
+    		String sLastPrice=Pointer.getLastPointer("drugprice."+getUid()+".", new java.util.Date(date.getTime()-year));
+    		if(sLastPrice.length()>0){
+    			price=Double.parseDouble(sLastPrice.split(";")[1]);
+    		}
     	}
 		lastYearAverages.put(date, price);
     	return price;
@@ -1101,6 +1113,47 @@ public class Product extends OC_Object implements Comparable {
             ps.setInt(1,Integer.parseInt(productUid.substring(0,productUid.indexOf("."))));
             ps.setInt(2,Integer.parseInt(productUid.substring(productUid.indexOf(".")+1)));
             ps.executeUpdate();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if(ps!=null) ps.close();
+                oc_conn.close();
+            }
+            catch(SQLException se){
+                se.printStackTrace();
+            }
+        }
+        MedwanQuery.getInstance().getObjectCache().removeObject("product",productUid);
+    }
+
+    //--- DELETE ----------------------------------------------------------------------------------
+    public static void moveToHistory(String productUid){
+        PreparedStatement ps = null;
+
+        Connection oc_conn = MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+            String sSelect = "INSERT INTO OC_PRODUCTS_HISTORY(OC_PRODUCT_SERVERID,OC_PRODUCT_OBJECTID,"+
+                    "  OC_PRODUCT_NAME,OC_PRODUCT_UNIT,OC_PRODUCT_UNITPRICE,OC_PRODUCT_PACKAGEUNITS,"+
+                    "  OC_PRODUCT_MINORDERPACKAGES,OC_PRODUCT_SUPPLIERUID,OC_PRODUCT_TIMEUNIT,"+
+                    "  OC_PRODUCT_TIMEUNITCOUNT,OC_PRODUCT_UNITSPERTIMEUNIT,OC_PRODUCT_PRODUCTGROUP,"+
+                    "  OC_PRODUCT_CREATETIME,OC_PRODUCT_UPDATETIME,OC_PRODUCT_UPDATEUID,OC_PRODUCT_VERSION,OC_PRODUCT_PRESCRIPTIONINFO,"+
+                    "  OC_PRODUCT_BARCODE,OC_PRODUCT_PRESTATIONCODE,OC_PRODUCT_PRESTATIONQUANTITY,OC_PRODUCT_MARGIN,OC_PRODUCT_APPLYLOWERPRICES,"+
+                    "  OC_PRODUCT_AUTOMATICINVOICING,OC_PRODUCT_PRODUCTSUBGROUP,OC_PRODUCT_ATCCODE,OC_PRODUCT_TOTALUNITS,OC_PRODUCT_RXNORMCODE,OC_PRODUCT_CODE) "
+                    + "SELECT OC_PRODUCT_SERVERID,OC_PRODUCT_OBJECTID,"+
+                    "  OC_PRODUCT_NAME,OC_PRODUCT_UNIT,OC_PRODUCT_UNITPRICE,OC_PRODUCT_PACKAGEUNITS,"+
+                    "  OC_PRODUCT_MINORDERPACKAGES,OC_PRODUCT_SUPPLIERUID,OC_PRODUCT_TIMEUNIT,"+
+                    "  OC_PRODUCT_TIMEUNITCOUNT,OC_PRODUCT_UNITSPERTIMEUNIT,OC_PRODUCT_PRODUCTGROUP,"+
+                    "  OC_PRODUCT_CREATETIME,OC_PRODUCT_UPDATETIME,OC_PRODUCT_UPDATEUID,OC_PRODUCT_VERSION,OC_PRODUCT_PRESCRIPTIONINFO,"+
+                    "  OC_PRODUCT_BARCODE,OC_PRODUCT_PRESTATIONCODE,OC_PRODUCT_PRESTATIONQUANTITY,OC_PRODUCT_MARGIN,OC_PRODUCT_APPLYLOWERPRICES,"+
+                    "  OC_PRODUCT_AUTOMATICINVOICING,OC_PRODUCT_PRODUCTSUBGROUP,OC_PRODUCT_ATCCODE,OC_PRODUCT_TOTALUNITS,OC_PRODUCT_RXNORMCODE,OC_PRODUCT_CODE FROM OC_PRODUCTS WHERE OC_PRODUCT_SERVERID = ? AND OC_PRODUCT_OBJECTID = ?";
+              ps = oc_conn.prepareStatement(sSelect);
+              ps.setInt(1,Integer.parseInt(productUid.split("\\.")[0]));
+              ps.setInt(2,Integer.parseInt(productUid.split("\\.")[1]));
+              ps.executeUpdate();
+              delete(productUid);
         }
         catch(Exception e){
             e.printStackTrace();

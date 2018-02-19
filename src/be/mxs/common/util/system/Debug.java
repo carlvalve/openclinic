@@ -31,6 +31,10 @@ public class Debug {
         }
     }
 
+    public static void forcedPrintln(String sText){
+        System.out.println("["+timeFormat.format(new java.util.Date())+"] : "+sText);
+    }
+    
     //--- PRINT -----------------------------------------------------------------------------------
     public static void print(String sText){
         if(enabled){

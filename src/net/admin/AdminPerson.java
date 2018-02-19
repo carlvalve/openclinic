@@ -1953,6 +1953,10 @@ public class AdminPerson extends OC_Object{
     }
 
     public static List getPatientsInEncounterServiceUID(String simmatnew,String sArchiveFileCode,String snatreg,String sName,String sFirstname,String sDateOfBirth,String sEncounterServiceUID, String sPersonID, String sDistrict){
+    	return getPatientsInEncounterServiceUID(simmatnew, sArchiveFileCode, snatreg, sName, sFirstname, sDateOfBirth, sEncounterServiceUID, sPersonID, sDistrict, "");
+    }
+    
+    public static List getPatientsInEncounterServiceUID(String simmatnew,String sArchiveFileCode,String snatreg,String sName,String sFirstname,String sDateOfBirth,String sEncounterServiceUID, String sPersonID, String sDistrict, String sSector){
         PreparedStatement ps = null;
         ResultSet rs = null;
 
@@ -2022,6 +2026,12 @@ public class AdminPerson extends OC_Object{
         if(sDistrict.trim().length()>0){
             sSQLFrom+=",PrivateView v ";
             sSQLWhere+=" a.personid=v.personid AND v.district = '"+sDistrict+"' AND";
+        }
+        if(sSector.trim().length()>0){
+            if(sDistrict.trim().length()==0){
+            	sSQLFrom+=",PrivateView v ";
+            }
+            sSQLWhere+=" a.personid=v.personid AND v.sector = '"+sSector+"' AND";
         }
         try{
             if (sSQLWhere.trim().length()>0) {
@@ -2212,6 +2222,10 @@ public class AdminPerson extends OC_Object{
         return lResultList;
     }
     public static List getAllPatients(String simmatnew,String sArchiveFileCode,String snatreg,String sName,String sFirstname,String sDateOfBirth, String sPersonID, String sDistrict, int iMaxResults){
+    	return getAllPatients(simmatnew, sArchiveFileCode, snatreg, sName, sFirstname, sDateOfBirth, sPersonID, sDistrict,iMaxResults,"");
+    }
+    
+    public static List getAllPatients(String simmatnew,String sArchiveFileCode,String snatreg,String sName,String sFirstname,String sDateOfBirth, String sPersonID, String sDistrict, int iMaxResults,String sSector){
         PreparedStatement ps = null;
         ResultSet rs = null;
         //Vector vResults = new Vector();
@@ -2243,6 +2257,13 @@ public class AdminPerson extends OC_Object{
         if (sDistrict.trim().length()>0){
             sSQLFrom += ", AdminPrivate p";
             sSQLWhere += " p.personid = a.personid AND district = '"+sDistrict+"' AND";
+        }
+
+        if (sSector.trim().length()>0){
+        	if(sDistrict.trim().length()==0){
+        		sSQLFrom += ", AdminPrivate p";
+        	}
+            sSQLWhere += " p.personid = a.personid AND sector = '"+sSector+"' AND";
         }
 
         sName = ScreenHelper.normalizeSpecialCharacters(sName);

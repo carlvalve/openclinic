@@ -966,16 +966,9 @@ public class ServiceStock extends OC_Object{
         Connection oc_conn = MedwanQuery.getInstance().getOpenclinicConnection();
         try{
             String sSelect = "SELECT OC_STOCK_SERVERID, OC_STOCK_OBJECTID FROM OC_PRODUCTSTOCKS"+
-                             " WHERE (OC_STOCK_END < ? OR OC_STOCK_END IS NULL)"+
-                             "  AND OC_STOCK_SERVICESTOCKUID = ?";
+                             "  WHERE OC_STOCK_SERVICESTOCKUID = ?";
             ps = oc_conn.prepareStatement(sSelect);
-
-            // set stock-end-date with hour and minutes = 0
-            Calendar today = new GregorianCalendar();
-            today.setTime(new java.util.Date());
-            today.set(today.get(Calendar.YEAR),today.get(Calendar.MONTH),today.get(Calendar.DATE),0,0,0);
-            ps.setTimestamp(1,new Timestamp(today.getTimeInMillis()));
-            ps.setString(2,this.getUid());
+            ps.setString(1,this.getUid());
 
             // execute
             rs = ps.executeQuery();

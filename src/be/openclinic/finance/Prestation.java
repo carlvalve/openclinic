@@ -1,9 +1,9 @@
 package be.openclinic.finance;
 
-import be.openclinic.common.OC_Object;
 import be.openclinic.common.ObjectReference;
 import be.openclinic.pharmacy.ProductStock;
 import be.openclinic.common.IObjectReference;
+import be.openclinic.common.OC_Object;
 import be.openclinic.adt.Encounter;
 import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.system.Debug;
@@ -15,6 +15,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -41,10 +42,83 @@ public class Prestation extends OC_Object{
     private String serviceUid;
     private String nomenclature;
     private String dhis2code;
+    public  HashSet includedPrestations;
     
     public String getDhis2code() {
 		return dhis2code;
 	}
+
+    public void loadIncludedPrestations(){
+		includedPrestations = new HashSet();
+		//Load all prestationuids linked to this insurer
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+            String sQuery = "SELECT a.* FROM OC_FORFAITPRESTATIONS a,OC_PRESTATIONS b"+
+                            " WHERE OC_FORFAITPRESTATION_FORFAITUID=? and"
+                            + " OC_PRESTATION_OBJECTID=replace(OC_FORFAITPRESTATION_PRESTATIONUID,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','')"
+                            		+ " ORDER by OC_PRESTATION_DESCRIPTION";
+            ps = oc_conn.prepareStatement(sQuery);
+            ps.setString(1,getUid());
+            rs = ps.executeQuery();
+            while(rs.next()){
+            	includedPrestations.add(rs.getString("OC_FORFAITPRESTATION_PRESTATIONUID"));
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                oc_conn.close();
+            }
+            catch(SQLException e){
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    public HashSet getIncludedPrestations(){
+   		loadIncludedPrestations();
+    	return includedPrestations;
+    }
+    
+    public boolean isCoveredInEncounter(String encounterUid){
+        boolean bIsCovered=false;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+            String sQuery = "select count(*) total from oc_debets d,oc_forfaitprestations p where "
+            		+ " p.oc_forfaitprestation_forfaituid=d.oc_debet_prestationuid and"
+            		+ " d.oc_debet_encounteruid=? and"
+            		+ " p.oc_forfaitprestation_prestationuid=?";
+            ps = oc_conn.prepareStatement(sQuery);
+            ps.setString(1,encounterUid);
+            ps.setString(2,getUid());
+            rs = ps.executeQuery();
+            if(rs.next()){
+            	bIsCovered=rs.getInt("total")>0;
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                oc_conn.close();
+            }
+            catch(SQLException e){
+                e.printStackTrace();
+            }
+        }
+        return bIsCovered;
+    }
 
 	public void setDhis2code(String dhis2code) {
 		this.dhis2code = dhis2code;
@@ -1868,6 +1942,41 @@ public class Prestation extends OC_Object{
         return prestations;
     }
 
+    //--- GET PRESTATIONS BY CODE -----------------------------------------------------------------
+    public static Vector getPrestationsByReferenceUid(String prestationCode){
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Vector prestations = new Vector();
+
+        Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+            String sSql = "SELECT * FROM OC_PRESTATIONS"+
+                          " WHERE "+MedwanQuery.getInstance().getConfigString("charindexFunction","charindex")+"(OC_PRESTATION_REFUID,?)>1";
+            ps = oc_conn.prepareStatement(sSql);
+            ps.setString(1,prestationCode);
+            rs = ps.executeQuery();
+
+            while(rs.next()){
+                prestations.add(Prestation.get(rs.getString("OC_PRESTATION_SERVERID")+"."+rs.getString("OC_PRESTATION_OBJECTID")));
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                oc_conn.close();
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        return prestations;
+    }
+
     //--- REGISTER PRESTATION AS DEBET TRANSACTION ------------------------------------------------
     public void registerPrestationAsDebetTransaction(String balanceuid, Date date, String encounterid, ObjectReference supplier, 
     		                                         ObjectReference ref, String userid, String patientuid){
@@ -1891,7 +2000,7 @@ public class Prestation extends OC_Object{
         
         DebetTransaction debetTransaction = new DebetTransaction();
         debetTransaction.setDate(date);
-        debetTransaction.setAmount(this.price);
+        debetTransaction.setAmount(this.getPrice(Insurance.getDefaultInsuranceForPatient(patientuid).getInsurar().getType()));
         debetTransaction.setBalance(balance);
         debetTransaction.setDescription(this.getDescription());
         if(encounterid==null){
@@ -1915,7 +2024,7 @@ public class Prestation extends OC_Object{
     		                                                  Date date, String encounterid, ObjectReference supplier,
     		                                                  ObjectReference ref, String userid, String patientuid){
         Debug.println("Looking for "+prestationCode);
-        Vector prestations = getPrestationsByCode(prestationCode);
+        Vector prestations = getPrestationsByReferenceUid(prestationCode);
         Prestation prestation;
         for(int n=0; n<prestations.size(); n++){
             prestation = (Prestation)prestations.elementAt(n);

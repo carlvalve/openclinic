@@ -1,5 +1,8 @@
 package be.openclinic.knowledge;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -19,6 +22,7 @@ import be.openclinic.medical.Prescription;
 import be.openclinic.medical.Problem;
 import be.openclinic.medical.ReasonForEncounter;
 import be.openclinic.pharmacy.Product;
+import be.openclinic.pharmacy.ProductStockOperation;
 
 public class ClinicalAssistant {
 	
@@ -28,6 +32,34 @@ public class ClinicalAssistant {
 	
 	public static Vector getDrugDrugInteractionsForEncounter(String encounterUid, int minimumSeverity){
 		return DrugDrugInteraction.getInteractionsBetweenATCCodes(getATCClassesForEncounter(encounterUid),minimumSeverity);
+	}
+	
+	public static HashSet getAllergyATCForPatient(String personid){
+		HashSet allergyatc = new HashSet();
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		try{
+			PreparedStatement ps = conn.prepareStatement("select * from healthrecord a,transactions b,items c where a.personid=? and a.healthrecordid=b.healthrecordid and b.transactiontype='be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_ALERT' and b.transactionid=c.transactionid and c.type='be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ALERTS_ALLERGY'");
+			ps.setInt(1, Integer.parseInt(personid));
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				String allergy = rs.getString("value");
+				PreparedStatement ps2 = conn.prepareStatement("select * from OC_ALLERGIES where OC_ALLERGY_ID=?");
+				ps2.setString(1, allergy);
+				ResultSet rs2 = ps2.executeQuery();
+				while(rs2.next()){
+					allergyatc.add(allergy+";"+rs2.getString("OC_ALLERGY_ATC"));
+				}
+				rs2.close();
+				ps2.close();
+			}
+			rs.close();
+			ps.close();
+			conn.close();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return allergyatc;
 	}
 	
 	public static Vector getContraIndicationsForEncounter(String encounterUid){
@@ -129,6 +161,18 @@ public class ClinicalAssistant {
 					items.add("chronic;"+product.getUid());
 				}
 			}
+			//Step 4: find ATC classes linked to recently delivered medication
+			long day = 24*3600*1000;
+			Vector medicationHistory = ProductStockOperation.getPatientDeliveries(encounter.getPatientUID(),new java.util.Date(new java.util.Date().getTime()-MedwanQuery.getInstance().getConfigInt("patientMedicationDeliveryHistoryDuration",14)*day), new java.util.Date(),"OC_OPERATION_DATE","DESC");
+			if(medicationHistory.size() > 0){
+		        ProductStockOperation operation;
+				for(int n=0; n<medicationHistory.size(); n++){
+					operation = (ProductStockOperation)medicationHistory.elementAt(n);
+					if(operation.getProductStock()!=null && operation.getProductStock().getProduct()!=null && operation.getProductStock().getProduct().getAtccode()!=null && operation.getProductStock().getProduct().getAtccode().equalsIgnoreCase(atccode)){
+						items.add("delivered;"+operation.getUid());
+					}
+				}
+			}
 
 		}
 		return items;
@@ -148,7 +192,7 @@ public class ClinicalAssistant {
 		// TODO: potentially only keep prescriptions with detected overlap
 		//*****************************************************************
 		
-		Vector prescriptions = Prescription.find("", "", "", ScreenHelper.formatDate(encounter.getBegin()), encounter.getEnd()==null?ScreenHelper.formatDate(new java.util.Date()):ScreenHelper.formatDate(encounter.getEnd()), "", "", "");
+		Vector prescriptions = Prescription.find(encounter.getPatientUID(), "", "", ScreenHelper.formatDate(encounter.getBegin()), encounter.getEnd()==null?ScreenHelper.formatDate(new java.util.Date()):ScreenHelper.formatDate(encounter.getEnd()), "", "", "");
 		for(int n=0;n<prescriptions.size();n++){
 			Prescription prescription = (Prescription)prescriptions.elementAt(n);
 			Product product = prescription.getProduct();
@@ -175,6 +219,18 @@ public class ClinicalAssistant {
 			if(product!=null && ScreenHelper.checkString(product.getAtccode()).length()>0){
 				//This is an active ATC code, add it to the list
 				hAtcClasses.put(product.getAtccode(), ATCClass.get(product.getAtccode()));
+			}
+		}
+		//Step 4: find ATC classes linked to recently delivered medication
+		long day = 24*3600*1000;
+		Vector medicationHistory = ProductStockOperation.getPatientDeliveries(encounter.getPatientUID(),new java.util.Date(new java.util.Date().getTime()-MedwanQuery.getInstance().getConfigInt("patientMedicationDeliveryHistoryDuration",14)*day), new java.util.Date(),"OC_OPERATION_DATE","DESC");
+		if(medicationHistory.size() > 0){
+	        ProductStockOperation operation;
+			for(int n=0; n<medicationHistory.size(); n++){
+				operation = (ProductStockOperation)medicationHistory.elementAt(n);
+				if(operation.getProductStock()!=null && operation.getProductStock().getProduct()!=null && operation.getProductStock().getProduct().getAtccode()!=null && operation.getProductStock().getProduct().getAtccode().length()>0){
+					hAtcClasses.put(operation.getProductStock().getProduct().getAtccode(), ATCClass.get(operation.getProductStock().getProduct().getAtccode()));
+				}
 			}
 		}
 		

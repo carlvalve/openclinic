@@ -239,6 +239,67 @@ public class ProductStock extends OC_Object implements Comparable {
         return level-getExpiredProducts();
     }
     
+	public static void updateId(String sql,String keepid,String deleteid){
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		try{
+			PreparedStatement ps=conn.prepareStatement(sql);
+			ps.setString(1, keepid);
+			ps.setString(2, deleteid);
+			ps.execute();
+			ps.close();
+			conn.close();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+	public static void mergeProducts(){
+        Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+        try {
+            String sQuery = "select count(*),oc_stock_productuid,oc_stock_servicestockuid from oc_productstocks" +
+                    " group by oc_stock_productuid,oc_stock_servicestockuid having count(*)>1";
+            PreparedStatement ps = oc_conn.prepareStatement(sQuery);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String productuid = rs.getString("oc_stock_productuid");
+                String servivicestockuid = rs.getString("oc_stock_servicestockuid");
+                Vector products = ProductStock.find(servivicestockuid, productuid, "", "", "", "", "", "", "", "", "", "oc_stock_productuid", "asc");
+                ProductStock remainingProductStock=null;
+                for(int n=0;n<products.size();n++){
+                	if(n==0){
+                		remainingProductStock=(ProductStock)products.elementAt(n);
+                	}
+                	else{
+                		ProductStock p = (ProductStock)products.elementAt(n);
+                		//First move the remaining products to the remaining stock
+                		remainingProductStock.setLevel(remainingProductStock.getLevel()+p.getLevel());
+                		remainingProductStock.store();
+                		//Now update any existing references to this productstock
+        				updateId("update oc_batches set OC_BATCH_PRODUCTSTOCKUID=? where OC_BATCH_PRODUCTSTOCKUID=?",remainingProductStock.getUid(),p.getUid());
+        				updateId("update OC_PRODUCTSTOCKOPERATIONS set OC_OPERATION_PRODUCTSTOCKUID=? where OC_OPERATION_PRODUCTSTOCKUID=?",remainingProductStock.getUid(),p.getUid());
+        				updateId("update OC_PRODUCTIONORDERMATERIALS set OC_MATERIAL_PRODUCTSTOCKUID=? where OC_MATERIAL_PRODUCTSTOCKUID=?",remainingProductStock.getUid(),p.getUid());
+        				updateId("update OC_PRODUCTORDERS set OC_ORDER_PRODUCTSTOCKUID=? where OC_ORDER_PRODUCTSTOCKUID=?",remainingProductStock.getUid(),p.getUid());
+        				updateId("update OC_USERPRODUCTS set OC_PRODUCT_PRODUCTSTOCKUID=? where OC_PRODUCT_PRODUCTSTOCKUID=?",remainingProductStock.getUid(),p.getUid());
+        				updateId("update oc_drugsoutlist set oc_list_productstockuid=? where oc_list_productstockuid=?",remainingProductStock.getUid(),p.getUid());
+        				ProductStock.delete(p.getUid());
+                	}
+                }
+            }
+            rs.close();
+            ps.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+			oc_conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
     public int getReceivedForProductionOrder(String productionOrderId){
     	int netReceived=0;
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
@@ -537,12 +598,12 @@ public class ProductStock extends OC_Object implements Comparable {
                 else ps.setNull(questionMarkIdx++, Types.TIMESTAMP);
 
                 // default importance
-                if (this.getDefaultImportance().length() > 0)
+                if (this.getDefaultImportance()!=null && this.getDefaultImportance().length() > 0)
                     ps.setString(questionMarkIdx++, this.getDefaultImportance());
                 else ps.setNull(questionMarkIdx++, Types.VARCHAR);
 
                 // supplier
-                if (this.getSupplierUid().length() > 0) ps.setString(questionMarkIdx++, this.getSupplierUid());
+                if (this.getSupplierUid()!=null && this.getSupplierUid().length() > 0) ps.setString(questionMarkIdx++, this.getSupplierUid());
                 else ps.setNull(questionMarkIdx++, Types.VARCHAR);
 
                 // OBJECT variables

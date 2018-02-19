@@ -26,6 +26,7 @@ import be.mxs.common.util.system.HTMLEntities;
 import be.mxs.common.util.system.UpdateSystem;
 import be.openclinic.adt.Planning;
 import be.openclinic.adt.Queue;
+import be.openclinic.knowledge.Ikirezi;
 
 public class Monitor implements Runnable{
 	Thread thread;
@@ -186,9 +187,22 @@ public class Monitor implements Runnable{
     		} catch (Exception e) {
     			e.printStackTrace();
     		}
+            //Clean ikirezitables
+            try {
+    			Date dLastIkireziClean = new SimpleDateFormat("yyyyMMddHHmmss").parse(MedwanQuery.getInstance().getConfigString("lastIkireziClean","19000101010000"));
+    			long interval = MedwanQuery.getInstance().getConfigInt("ikireziCleanInterval",3600*1000); //default = once an hour
+    			if(new java.util.Date().getTime()-dLastIkireziClean.getTime()>interval){
+    				Ikirezi.purgeSessions();
+    				MedwanQuery.getInstance().setConfigString("lastIkireziClean",new SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date()));
+    			}
+    		} catch (Exception e) {
+    			e.printStackTrace();
+    		}
         }
         catch (Exception e) {
-            e.printStackTrace();
+        	if(Debug.enabled){
+        		e.printStackTrace();
+        	}
         }
 	}
 	

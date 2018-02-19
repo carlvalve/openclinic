@@ -18,6 +18,8 @@ import org.glassfish.jersey.SslConfigurator;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 
+import be.mxs.common.util.db.MedwanQuery;
+
 /**
  * @author loic
  * Stores information about the DHIS2 server.
@@ -138,6 +140,10 @@ public class DHIS2Server
      
         // preparing the SSL connection
         SslConfigurator sslConfig = SslConfigurator.newInstance();
+        sslConfig.trustStoreFile(MedwanQuery.getInstance().getConfigString("dhis2_truststore","/temp/keystore"));
+        sslConfig.trustStorePassword(MedwanQuery.getInstance().getConfigString("dhis2_truststore_pass","changeme"));
+        sslConfig.keyStoreFile(MedwanQuery.getInstance().getConfigString("dhis2_truststore","/temp/keystore"));
+        sslConfig.keyPassword(MedwanQuery.getInstance().getConfigString("dhis2_truststore_pass","changeme"));
         // the following options might need to be added if required by the servers settings
         // values are given as examples, and have to be generated depending on the instances
             //.trustStoreFile("C:\\Users\\loic.BXL\\dhis2\\truststore\\OCDHIS2.truststore")
@@ -151,7 +157,7 @@ public class DHIS2Server
         
         Client client = ClientBuilder.newBuilder().sslContext(sslContext).build();
         client.property(ClientProperties.CONNECT_TIMEOUT, 10000);
-        client.property(ClientProperties.READ_TIMEOUT, 10000);
+        client.property(ClientProperties.READ_TIMEOUT, 60000);
         
         // authentication
         // see jersey.java.net/apidocs/2.17/jersey/org/glassfish/jersey/client/authentication/HttpAuthenticationFeature.html

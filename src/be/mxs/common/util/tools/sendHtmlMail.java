@@ -87,7 +87,8 @@ public class sendHtmlMail {
 	        props.setProperty("mail.transport.protocol", "smtp");
 	        props.setProperty("mail.host", smtpServer); //props.setProperty("mail.user", "myuser"); //props.setProperty("mail.password", "mypwd");
 	
-	        Session mailSession = Session.getDefaultInstance(props, null);
+	        //Session mailSession = Session.getDefaultInstance(props, null);
+	        Session mailSession = Session.getInstance(props);
 	        mailSession.setDebug(MedwanQuery.getInstance().getConfigString("Debug").equalsIgnoreCase("On"));
 	        Transport transport = mailSession.getTransport();
 	

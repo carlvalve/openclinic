@@ -10,6 +10,7 @@ import java.util.Vector;
 
 import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.system.Debug;
+import be.mxs.common.util.system.Pointer;
 import be.mxs.common.util.system.ScreenHelper;
 import be.openclinic.common.OC_Object;
 import be.openclinic.finance.Debet;
@@ -215,7 +216,8 @@ public class ProductionOrder extends OC_Object{
 	    		Debug.println("CANNOT CLOSE: insufficient raw materials stock level ("+key+")");
 				return false;
 			}
-			if(MedwanQuery.getInstance().getConfigInt("enableCCBRTProductionOrderMecanism",0)==1 && nLinked<nQuantity && !user.getAccessRightNoSA("pharmacy.overridelinkedmaterialsrequirement.select")){
+			if(MedwanQuery.getInstance().getConfigInt("enableCCBRTProductionOrderMecanism",0)==1 && Pointer.getPointer("nowarehouseorder."+getTargetProductStock().getProduct().getUid()).length()==0 && nLinked<nQuantity && !user.getAccessRightNoSA("pharmacy.overridelinkedmaterialsrequirement.select")){
+	    		Debug.println("CANNOT CLOSE: missing linked raw materials ("+key+")");
 				return false;
 			}
 		} 
@@ -646,6 +648,9 @@ public class ProductionOrder extends OC_Object{
 	}
 	public String getTargetProductStockUid() {
 		return targetProductStockUid;
+	}
+	public ProductStock getTargetProductStock() {
+		return ProductStock.get(targetProductStockUid);
 	}
 	public void setTargetProductStockUid(String targetProductStockUid) {
 		this.targetProductStockUid = targetProductStockUid;

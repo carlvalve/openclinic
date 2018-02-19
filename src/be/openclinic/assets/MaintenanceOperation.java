@@ -7,6 +7,7 @@ import be.mxs.common.util.system.Debug;
 import be.mxs.common.util.system.ScreenHelper;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.io.StringReader;
@@ -31,7 +32,165 @@ public class MaintenanceOperation extends OC_Object {
     public String supplier; // 255
 	public String result; // 50
     public String comment; // 255
-    public java.util.Date nextDate;
+    public String comment1; // 255
+    public String comment2; // 255
+    public String comment3; // 255
+    public String comment4; // 255
+    public String comment5; // 255
+    public int lockedBy;
+    
+    public int getLockedBy() {
+		return lockedBy;
+	}
+
+	public void setLockedBy(int lockedBy) {
+		this.lockedBy = lockedBy;
+	}
+
+    public static void updateMaintenanceoperation(Element eOperation) throws Exception{
+    	int serverid = Integer.parseInt(eOperation.attributeValue("serverid"));
+    	int objectid = Integer.parseInt(eOperation.attributeValue("objectid"));
+    	java.util.Date updatetime = new SimpleDateFormat("yyyyMMddHHmmssSSS").parse(eOperation.element("updatetime").getTextTrim());
+    	//First we check if this maintenanceplan record has been changed
+    	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		PreparedStatement ps = conn.prepareStatement("select * from oc_maintenanceoperations where oc_maintenanceoperation_serverid=? and oc_maintenanceoperation_objectid=? and oc_maintenanceoperation_updatetime=?");
+		ps.setInt(1, serverid);
+		ps.setInt(2, objectid);
+		ps.setTimestamp(3, new java.sql.Timestamp(updatetime.getTime()));
+		ResultSet rs =ps.executeQuery();
+		if(!rs.next()){
+			//The record has changed. Let's update it
+    		rs.close();
+    		ps.close();
+			ps = conn.prepareStatement("select * from oc_maintenanceoperations where oc_maintenanceoperation_serverid=? and oc_maintenanceoperation_objectid=?");
+    		ps.setInt(1, serverid);
+    		ps.setInt(2, objectid);
+    		rs =ps.executeQuery();
+    		if(!rs.next()){
+    			//The record does not exist yet, create it
+    			rs.close();
+    			ps.close();
+    			ps = conn.prepareStatement("insert into oc_maintenanceoperations(oc_maintenanceoperation_serverid,oc_maintenanceoperation_objectid) values(?,?)");
+        		ps.setInt(1, serverid);
+        		ps.setInt(2, objectid);
+    			ps.execute();
+    		}
+			MaintenanceOperation operation = new MaintenanceOperation();
+			operation.setUid(serverid+"."+objectid);
+			operation.setServerId(serverid);
+			operation.setObjectId(objectid);
+			operation.setComment1(eOperation.element("comment1")==null?"":eOperation.element("comment1").getText());
+			operation.setComment2(eOperation.element("comment2")==null?"":eOperation.element("comment2").getText());
+			operation.setComment3(eOperation.element("comment3")==null?"":eOperation.element("comment3").getText());
+			operation.setComment4(eOperation.element("comment4")==null?"":eOperation.element("comment4").getText());
+			operation.setComment5(eOperation.element("comment5")==null?"":eOperation.element("comment5").getText());
+			operation.setDate(eOperation.element("date")==null?null:new SimpleDateFormat("yyyyMMddHHmmssSSSS").parse(eOperation.element("date").getText()));
+			operation.setLockedBy(Integer.parseInt(eOperation.element("lockedby")==null?"0":eOperation.element("lockedby").getText()));
+			operation.setMaintenanceplanUID(eOperation.element("maintenanceplanuid")==null?"":eOperation.element("maintenanceplanuid").getText());
+			operation.setNextDate(eOperation.element("nextdate")==null?null:new SimpleDateFormat("yyyyMMddHHmmssSSSS").parse(eOperation.element("nextdate").getText()));
+			operation.setOperator(eOperation.element("operator")==null?"":eOperation.element("operator").getText());
+			operation.setResult(eOperation.element("result")==null?"":eOperation.element("result").getText());
+			operation.setSupplier(eOperation.element("supplier")==null?"":eOperation.element("supplier").getText());
+			operation.store(eOperation.element("updateid")==null?"":eOperation.element("updateid").getText());
+		}
+		rs.close();
+		ps.close();
+		conn.close();
+    }
+
+    public static void addTagString(StringBuffer xml,String tag,ResultSet rs) throws SQLException{
+		String s = rs.getString("oc_maintenanceoperation_"+tag);
+		if(ScreenHelper.checkString(s).length()>0){
+			xml.append("<"+tag+"><![CDATA["+s+"]]></"+tag+">");
+		}
+    }
+    
+    public static void addTagDate(StringBuffer xml,String tag,ResultSet rs) throws SQLException{
+    	java.util.Date d = rs.getTimestamp("oc_maintenanceoperation_"+tag);
+    	if(d!=null){
+    		xml.append("<"+tag+">"+new SimpleDateFormat("yyyyMMddHHmmssSSS").format(d)+"</"+tag+">");
+    	}
+    }
+    
+    public static StringBuffer toXml(String uid){
+    	StringBuffer xml = new StringBuffer();
+    	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+    	try{
+    		PreparedStatement ps = conn.prepareStatement("select * from oc_maintenanceoperations where oc_maintenanceoperation_serverid=? and oc_maintenanceoperation_objectid=? and oc_maintenanceoperation_objectid>-1");
+    		ps.setInt(1, Integer.parseInt(uid.split("\\.")[0]));
+    		ps.setInt(2, Integer.parseInt(uid.split("\\.")[1]));
+    		ResultSet rs = ps.executeQuery();
+    		if(rs.next()){
+    			xml.append("<maintenanceoperation serverid='"+rs.getInt("oc_maintenanceoperation_serverid")+"' objectid='"+rs.getInt("oc_maintenanceoperation_objectid")+"'>");
+    			addTagString(xml,"name",rs);
+    			addTagString(xml,"maintenanceplanuid",rs);
+    			addTagDate(xml,"date",rs);
+    			addTagString(xml,"operator",rs);
+    			addTagString(xml,"result",rs);
+    			addTagString(xml,"comment",rs);
+    			addTagDate(xml,"nextdate",rs);
+    			addTagDate(xml,"updatetime",rs);
+    			addTagString(xml,"updateid",rs);
+    			addTagString(xml,"supplier",rs);
+    			addTagString(xml,"comment1",rs);
+    			addTagString(xml,"comment2",rs);
+    			addTagString(xml,"comment3",rs);
+    			addTagString(xml,"comment4",rs);
+    			addTagString(xml,"comment5",rs);
+    			addTagString(xml,"lockedby",rs);
+    			xml.append("</maintenanceoperation>");
+    		}
+    		rs.close();
+    		ps.close();
+        	conn.close();
+    	}
+    	catch(Exception e){
+    		e.printStackTrace();
+    	}
+    	return xml;
+    }
+    
+    public String getComment1() {
+		return comment1;
+	}
+
+	public void setComment1(String comment1) {
+		this.comment1 = comment1;
+	}
+
+	public String getComment2() {
+		return comment2;
+	}
+
+	public void setComment2(String comment2) {
+		this.comment2 = comment2;
+	}
+
+	public String getComment3() {
+		return comment3;
+	}
+
+	public void setComment3(String comment3) {
+		this.comment3 = comment3;
+	}
+
+	public String getComment4() {
+		return comment4;
+	}
+
+	public void setComment4(String comment4) {
+		this.comment4 = comment4;
+	}
+
+	public String getComment5() {
+		return comment5;
+	}
+
+	public void setComment5(String comment5) {
+		this.comment5 = comment5;
+	}
+
+	public java.util.Date nextDate;
     
     // extra search-criteria
     public java.util.Date periodPerformedBegin;
@@ -149,6 +308,7 @@ public class MaintenanceOperation extends OC_Object {
         
         periodPerformedBegin = null;
         periodPerformedEnd = null;
+        lockedBy=-1;
     }
         
     //--- STORE -----------------------------------------------------------------------------------
@@ -166,12 +326,13 @@ public class MaintenanceOperation extends OC_Object {
                 sSql = "INSERT INTO OC_MAINTENANCEOPERATIONS(OC_MAINTENANCEOPERATION_SERVERID,OC_MAINTENANCEOPERATION_OBJECTID,"+
                        "  OC_MAINTENANCEOPERATION_MAINTENANCEPLANUID,OC_MAINTENANCEOPERATION_DATE,OC_MAINTENANCEOPERATION_OPERATOR,"+
                 	   "  OC_MAINTENANCEOPERATION_RESULT,OC_MAINTENANCEOPERATION_COMMENT,OC_MAINTENANCEOPERATION_NEXTDATE,OC_MAINTENANCEOPERATION_SUPPLIER,"+
-                       "  OC_MAINTENANCEOPERATION_UPDATETIME,OC_MAINTENANCEOPERATION_UPDATEID)"+
-                       " VALUES(?,?,?,?,?,?,?,?,?,?,?)"; // 10 
+                       "  OC_MAINTENANCEOPERATION_UPDATETIME,OC_MAINTENANCEOPERATION_UPDATEID,OC_MAINTENANCEOPERATION_COMMENT1,OC_MAINTENANCEOPERATION_COMMENT2,"
+                       + "OC_MAINTENANCEOPERATION_COMMENT3,OC_MAINTENANCEOPERATION_COMMENT4,OC_MAINTENANCEOPERATION_COMMENT5,OC_MAINTENANCEOPERATION_LOCKEDBY)"+
+                       " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"; // 10 
                 ps = oc_conn.prepareStatement(sSql);
                 
                 int serverId = MedwanQuery.getInstance().getConfigInt("serverId"),
-                    objectId = MedwanQuery.getInstance().getOpenclinicCounter("OC_MAINTENANCEOPERATIONS");
+                    objectId = MedwanQuery.getInstance().getOpenclinicCounter("OC_MAINTENANCEOPERATIONS",-100000);
                 this.setUid(serverId+"."+objectId);
                                 
                 int psIdx = 1;
@@ -195,7 +356,13 @@ public class MaintenanceOperation extends OC_Object {
                 
                 // update-info
                 ps.setTimestamp(psIdx++,new Timestamp(new java.util.Date().getTime())); // now
-                ps.setString(psIdx,userUid);
+                ps.setString(psIdx++,userUid);
+                ps.setString(psIdx++,comment1);
+                ps.setString(psIdx++,comment2);
+                ps.setString(psIdx++,comment3);
+                ps.setString(psIdx++,comment4);
+                ps.setString(psIdx++,comment5);
+                ps.setInt(psIdx++,lockedBy);
                 
                 ps.executeUpdate();
             } 
@@ -204,7 +371,8 @@ public class MaintenanceOperation extends OC_Object {
                 sSql = "UPDATE OC_MAINTENANCEOPERATIONS SET"+
                        "  OC_MAINTENANCEOPERATION_MAINTENANCEPLANUID = ?, OC_MAINTENANCEOPERATION_DATE = ?,OC_MAINTENANCEOPERATION_OPERATOR = ?,"+
                 	   "  OC_MAINTENANCEOPERATION_RESULT = ?, OC_MAINTENANCEOPERATION_COMMENT = ?, OC_MAINTENANCEOPERATION_NEXTDATE = ?, OC_MAINTENANCEOPERATION_SUPPLIER=?,"+
-                       "  OC_MAINTENANCEOPERATION_UPDATETIME = ?, OC_MAINTENANCEOPERATION_UPDATEID = ?"+ // update-info
+                       "  OC_MAINTENANCEOPERATION_UPDATETIME = ?, OC_MAINTENANCEOPERATION_UPDATEID = ?, OC_MAINTENANCEOPERATION_COMMENT1=?, OC_MAINTENANCEOPERATION_COMMENT2=?,"
+                       + " OC_MAINTENANCEOPERATION_COMMENT3=?, OC_MAINTENANCEOPERATION_COMMENT4=?, OC_MAINTENANCEOPERATION_COMMENT5=?, OC_MAINTENANCEOPERATION_LOCKEDBY=?"+ // update-info
                        " WHERE (OC_MAINTENANCEOPERATION_SERVERID = ? AND OC_MAINTENANCEOPERATION_OBJECTID = ?)"; // identification
                 ps = oc_conn.prepareStatement(sSql);
 
@@ -227,6 +395,12 @@ public class MaintenanceOperation extends OC_Object {
                 // update-info
                 ps.setTimestamp(psIdx++,new Timestamp(new java.util.Date().getTime())); // now
                 ps.setString(psIdx++,userUid);
+                ps.setString(psIdx++,comment1);
+                ps.setString(psIdx++,comment2);
+                ps.setString(psIdx++,comment3);
+                ps.setString(psIdx++,comment4);
+                ps.setString(psIdx++,comment5);
+                ps.setInt(psIdx++,lockedBy);
                 
                 // where
                 ps.setInt(psIdx++,Integer.parseInt(getUid().substring(0,getUid().indexOf("."))));
@@ -407,6 +581,12 @@ public class MaintenanceOperation extends OC_Object {
                 operation.operator           = ScreenHelper.checkString(rs.getString("OC_MAINTENANCEOPERATION_OPERATOR"));
                 operation.result             = ScreenHelper.checkString(rs.getString("OC_MAINTENANCEOPERATION_RESULT"));
                 operation.comment            = ScreenHelper.checkString(rs.getString("OC_MAINTENANCEOPERATION_COMMENT"));
+                operation.comment1            = ScreenHelper.checkString(rs.getString("OC_MAINTENANCEOPERATION_COMMENT1"));
+                operation.comment2            = ScreenHelper.checkString(rs.getString("OC_MAINTENANCEOPERATION_COMMENT2"));
+                operation.comment3            = ScreenHelper.checkString(rs.getString("OC_MAINTENANCEOPERATION_COMMENT3"));
+                operation.comment4            = ScreenHelper.checkString(rs.getString("OC_MAINTENANCEOPERATION_COMMENT4"));
+                operation.comment5            = ScreenHelper.checkString(rs.getString("OC_MAINTENANCEOPERATION_COMMENT5"));
+                operation.lockedBy            = rs.getInt("OC_MAINTENANCEOPERATION_LOCKEDBY");
                 operation.supplier            = ScreenHelper.checkString(rs.getString("OC_MAINTENANCEOPERATION_SUPPLIER"));
                 operation.nextDate           = rs.getDate("OC_MAINTENANCEOPERATION_NEXTDATE");
                 
@@ -478,9 +658,9 @@ public class MaintenanceOperation extends OC_Object {
                 sSql+= " AND OC_MAINTENANCEOPERATION_RESULT = '"+findItem.result+"'";
             }
             
-            sSql+= " ORDER BY OC_MAINTENANCEOPERATION_MAINTENANCEPLANUID ASC";
+            sSql+= " ORDER BY OC_MAINTENANCEOPERATION_MAINTENANCEPLANUID ASC,OC_MAINTENANCEOPERATION_DATE ASC";
             
-            System.out.println(sSql);
+            System.out.println("SQL: "+sSql);
             ps = oc_conn.prepareStatement(sSql);
             
                         
@@ -499,8 +679,14 @@ public class MaintenanceOperation extends OC_Object {
                 operation.operator           = ScreenHelper.checkString(rs.getString("OC_MAINTENANCEOPERATION_OPERATOR"));
                 operation.result             = ScreenHelper.checkString(rs.getString("OC_MAINTENANCEOPERATION_RESULT"));
                 operation.comment            = ScreenHelper.checkString(rs.getString("OC_MAINTENANCEOPERATION_COMMENT"));
+                operation.comment1            = ScreenHelper.checkString(rs.getString("OC_MAINTENANCEOPERATION_COMMENT1"));
+                operation.comment2            = ScreenHelper.checkString(rs.getString("OC_MAINTENANCEOPERATION_COMMENT2"));
+                operation.comment3            = ScreenHelper.checkString(rs.getString("OC_MAINTENANCEOPERATION_COMMENT3"));
+                operation.comment4            = ScreenHelper.checkString(rs.getString("OC_MAINTENANCEOPERATION_COMMENT4"));
+                operation.comment5            = ScreenHelper.checkString(rs.getString("OC_MAINTENANCEOPERATION_COMMENT5"));
                 operation.nextDate           = rs.getDate("OC_MAINTENANCEOPERATION_NEXTDATE");
                 operation.supplier           = ScreenHelper.checkString(rs.getString("OC_MAINTENANCEOPERATION_SUPPLIER"));
+                operation.lockedBy            = rs.getInt("OC_MAINTENANCEOPERATION_LOCKEDBY");
                
                 // update-info
                 operation.setUpdateDateTime(rs.getTimestamp("OC_MAINTENANCEOPERATION_UPDATETIME"));
