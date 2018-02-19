@@ -43,7 +43,15 @@
                             sComment = " ("+sComment+")";
                         }
                     }
-
+                    
+                    itemVO = transactionVO.getItem("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ALERTS_ALLERGY");
+                    if(itemVO!=null){
+                        String sAllergy = checkString(itemVO.getValue());
+                        if(sAllergy.length() > 0){
+                        	sLabel += " ["+getTran(request,"web","allergy",sWebLanguage)+"] "+ScreenHelper.getTranDb("allergy",sAllergy.trim(),sWebLanguage);
+                        }
+                    }
+                    
                     %>
                         <tr>
                             <td width='*'>

@@ -1,6 +1,30 @@
 <%@ page import="be.mxs.common.util.system.HTMLEntities" %>
+<%@page import="sun.misc.*"%>
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
+<%!
+    //--- ENCODE ----------------------------------------------------------------------------------
+    public String encode(String sValue) {
+        BASE64Encoder encoder = new BASE64Encoder();
+        return encoder.encodeBuffer(sValue.getBytes());
+    }
+
+    //--- DECODE ----------------------------------------------------------------------------------
+    public String decode(String sValue) {
+        String sReturn = "";
+        BASE64Decoder decoder = new BASE64Decoder();
+
+        try {
+            sReturn = new String(decoder.decodeBuffer(sValue));
+        }
+        catch (Exception e) {
+            Debug.println("User decoding error: "+e.getMessage());
+        }
+
+        return sReturn;
+    }
+%>
+
 <%
     String editOldLabelID   = checkString(request.getParameter("EditOldLabelID")).toLowerCase(),
            editOldLabelType = checkString(request.getParameter("EditOldLabelType")).toLowerCase();
@@ -18,7 +42,7 @@
 
         if (label!=null){
             sEditShowlink = label.showLink;
-            sValue = HTMLEntities.htmlentities(label.value.replaceAll("\n","<BR>").replaceAll("\r",""));
+            sValue = label.value.replaceAll("\n","<BR>").replaceAll("\r","");
         }
         else {
             sValue = "";

@@ -294,9 +294,8 @@
       gfPop3.fHideCal();
     }
   }
-
   if(document.layers) document.captureEvents(Event.MOUSEDOWN);
-  resizeMe();
+  window.setTimeout('resizeMe();',200);
 </script>
 <%-- End Floating layer -------------------------------------------------------------------------%>
 <body style="margin:2px;" onload="resizeMe();">

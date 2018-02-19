@@ -70,6 +70,15 @@
 	function searchPrestations(){
 	    ajaxChangeSearchResults("_common/search/searchByAjax/searchInsurarPrestationsShow.jsp",SearchForm);
 	}
+	
+	function selectchecks(){
+		var els = document.all;
+		for(n=0;n<els.length;n++){
+			if(els[n].type && els[n].type=='checkbox' && !els[n].checked){
+				els[n].checked=true;
+			}
+		}
+	}
 
   <%-- AJAX CHANGE SEARCH RESULTS --%>
   function ajaxChangeSearchResults(urlForm,SearchForm,moreParams){

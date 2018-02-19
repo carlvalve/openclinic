@@ -666,7 +666,7 @@
     if(sAction.equals("showDetails") || sAction.equals("showDetailsAfterUpdateReject")){
 	    if(editableByPrescriber){
 	        // existing prescription : display saveButton with save-label
-	        if((prescr==null || (prescr!=null && prescr.getDeliveredQuantity()==0)) && (activeUser.getAccessRight("prescriptions.drugs.add") || activeUser.getAccessRight("prescriptions.drugs.edit"))){
+	        if(prescr==null || (activeUser.getAccessRight("prescriptions.drugs.add") || activeUser.getAccessRight("prescriptions.drugs.edit"))){
 	            %><input class="button" type="button" name="saveButton" id="saveButton" value='<%=getTranNoLink("Web","save",sWebLanguage)%>' onclick="doSave();">&nbsp;<%
 	        }
 	        if((prescr==null || (prescr!=null && prescr.getDeliveredQuantity()==0)) && activeUser.getAccessRight("prescriptions.drugs.delete")){
@@ -1389,7 +1389,7 @@ function doBack(){
   reloadOpener();
 </script>
 <script>
-	new Ajax.Autocompleter('EditProductName','autocomplete_prescription','medical/ajax/getDrugs.jsp',{
+	new Ajax.Autocompleter('EditProductName','autocomplete_prescription','medical/ajax/getDrugs.jsp?serviceStockUid=NONE',{
 	  minChars:1,
 	  method:'post',
 	  afterUpdateElement:afterAutoComplete,

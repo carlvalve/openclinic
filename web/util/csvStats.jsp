@@ -398,14 +398,15 @@
     }
 	//*** 6 - DEBETS *****************************************************
     else if("debet.list".equalsIgnoreCase(sQueryType)){
-        query = "select oc_debet_date as DATE, lastname as NOM, firstname as PRENOM, oc_prestation_description as PRESTATION,"+
+        query = "select oc_debet_date as DATE, personid PERSONID, lastname as NOM, firstname as PRENOM, dateofbirth DATE_NAISSANCE, '#'||oc_insurance_insuraruid as MOD_PAIEMENT,oc_prestation_description as PRESTATION,"+
     			" oc_prestation_reftype as FAMILY, oc_prestation_invoicegroup as INVOICEGROUP,"+
                 "  oc_debet_quantity as QUANTITE,"+MedwanQuery.getInstance().convert("int","oc_debet_amount")+" as PATIENT,"+
                    MedwanQuery.getInstance().convert("int","oc_debet_insuraramount")+" as ASSUREUR, oc_label_value as SERVICE,"+
                 "  oc_debet_credited as ANNULE,replace(oc_debet_patientinvoiceuid,'1.','') as FACT_PATIENT, oc_encounter_type as ENCOUNTER_TYPE"+
-        		" from oc_debets, oc_encounters, adminview, oc_prestations, servicesview, oc_labels"+
+        		" from oc_debets, oc_encounters, adminview, oc_prestations, servicesview, oc_labels, oc_insurances"+
         		"  where oc_encounter_objectid = replace(oc_debet_encounteruid,'1.','')"+
-        		"   and oc_prestation_objectid = replace(oc_debet_prestationuid,'1.','')"+
+         		"   and oc_prestation_objectid = replace(oc_debet_prestationuid,'1.','')"+
+           		"   and oc_insurance_objectid = replace(oc_debet_insuranceuid,'1.','')"+
         		"   and serviceid = oc_debet_serviceuid"+
         		"   and oc_label_type = 'service'"+
         		"   and oc_label_id = serviceid"+
@@ -545,6 +546,326 @@
     	}
     }
 	//*** 7 - INVOICES ***************************************************
+    else if("pbf.burundi.surgerylist".equalsIgnoreCase(sQueryType)){
+        try{
+	    	Connection loc_conn = MedwanQuery.getInstance().getLongOpenclinicConnection();
+			StringBuffer sResult = new StringBuffer();
+			long l = 24*3600*1000;
+			java.util.Date beginDate = ScreenHelper.parseDate(request.getParameter("begin"));
+			java.util.Date endDate = ScreenHelper.parseDate(request.getParameter("end"));
+			endDate.setTime(endDate.getTime()+l);
+			query = " select a.dateofbirth,t.serverid,t.transactionid,a.personid,a.lastname,a.firstname from transactions t, healthrecord h, adminview a where t.healthrecordid=h.healthrecordid and h.personid=a.personid and"+
+					" t.transactiontype='be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_OPERATION_PROTOCOL' and"+
+					" t.updatetime>=? and t.updatetime<? order by t.updatetime";
+			Debug.println(query);
+			PreparedStatement ps = loc_conn.prepareStatement(query);
+			ps.setTimestamp(1, new Timestamp(beginDate.getTime()));
+			ps.setTimestamp(2, new Timestamp(endDate.getTime()));
+			ResultSet rs = ps.executeQuery();
+			int counter = 1;
+		    response.setContentType("application/octet-stream; charset=windows-1252");
+		    response.setHeader("Content-Disposition", "Attachment;Filename=\"OpenClinicStatistic"+new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())+".csv\"");
+		    
+		    ServletOutputStream os = response.getOutputStream();
+		    
+		    // header
+			sResult.append("DATE;PATIENTID;NAME;FIRSTNAME;AGE;BIRTHDATE;PROCEDURE;ANESTHESIA;SURGEON\r\n");
+			while(rs.next()){
+				int serverid = rs.getInt("serverid");
+				int transactionid = rs.getInt("transactionid");
+				java.util.Date dateofbirth = rs.getDate("dateofbirth");
+				String age = "";
+				try{
+					int a = AdminPerson.getAge(dateofbirth);
+					if(a<1){
+						age = "0->11m";
+					}
+					else if(a<5){
+						age = "12->59m";
+					}
+					else if(a<10){
+						age = "5->9";
+					}
+					else if(a<10){
+						age = "5->9";
+					}
+					else if(a<15){
+						age = "10->14";
+					}
+					else if(a<20){
+						age = "15->19";
+					}
+					else if(a<25){
+						age = "20->24";
+					}
+					else if(a<50){
+						age = "25->49";
+					}
+					else {
+						age = "50+";
+					}
+				}
+				catch(Exception e){
+					// empty
+				}
+				TransactionVO transaction = MedwanQuery.getInstance().loadTransaction(serverid, transactionid);
+				if(transaction!=null){
+					if(transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT1").length()>0){
+						sResult.append(ScreenHelper.formatDate(transaction.getUpdateTime())+";");
+						sResult.append(rs.getInt("personid")+";");
+						sResult.append(rs.getString("lastname").toUpperCase()+";");
+						sResult.append(rs.getString("firstname").toUpperCase()+";");
+						sResult.append(age+";");
+						sResult.append(ScreenHelper.formatDate(dateofbirth)+";");
+						sResult.append(ScreenHelper.removeAccents(getTranNoLink("surgicalacts.mspls",transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT1"),sWebLanguage)).toUpperCase()+";");
+						sResult.append(ScreenHelper.removeAccents(getTranNoLink("anesthesiaacts.mspls",transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_ANESTHESIA_ACT1"),sWebLanguage)).toUpperCase()+";");
+						sResult.append(ScreenHelper.removeAccents(transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGEONS")).replaceAll("\n",", ").replaceAll("\r","")+";");
+						sResult.append("\r\n");
+					}
+					if(transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT2").length()>0){
+						sResult.append(ScreenHelper.formatDate(transaction.getUpdateTime())+";");
+						sResult.append(rs.getInt("personid")+";");
+						sResult.append(rs.getString("lastname").toUpperCase()+";");
+						sResult.append(rs.getString("firstname").toUpperCase()+";");
+						sResult.append(age+";");
+						sResult.append(ScreenHelper.formatDate(dateofbirth)+";");
+						sResult.append(ScreenHelper.removeAccents(getTranNoLink("surgicalacts.mspls",transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT2"),sWebLanguage)).toUpperCase()+";");
+						sResult.append(ScreenHelper.removeAccents(getTranNoLink("anesthesiaacts.mspls",transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_ANESTHESIA_ACT2"),sWebLanguage)).toUpperCase()+";");
+						sResult.append(ScreenHelper.removeAccents(transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGEONS")).replaceAll("\n",", ").replaceAll("\r","")+";");
+						sResult.append("\r\n");
+					}
+					if(transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT3").length()>0){
+						sResult.append(ScreenHelper.formatDate(transaction.getUpdateTime())+";");
+						sResult.append(rs.getInt("personid")+";");
+						sResult.append(rs.getString("lastname").toUpperCase()+";");
+						sResult.append(rs.getString("firstname").toUpperCase()+";");
+						sResult.append(age+";");
+						sResult.append(ScreenHelper.formatDate(dateofbirth)+";");
+						sResult.append(ScreenHelper.removeAccents(getTranNoLink("surgicalacts.mspls",transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT3"),sWebLanguage)).toUpperCase()+";");
+						sResult.append(ScreenHelper.removeAccents(getTranNoLink("anesthesiaacts.mspls",transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_ANESTHESIA_ACT3"),sWebLanguage)).toUpperCase()+";");
+						sResult.append(ScreenHelper.removeAccents(transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGEONS")).replaceAll("\n",", ").replaceAll("\r","")+";");
+						sResult.append("\r\n");
+					}
+				}
+			}
+		    
+		    byte[]b = sResult.toString().getBytes();
+	        for(int n=0; n<b.length; n++){
+	            os.write(b[n]);
+	        }
+	        os.flush();
+			rs.close();
+			ps.close();
+			
+			loc_conn.close();
+	        os.close();
+	        done=true;
+        }
+        catch(Exception z){
+        	z.printStackTrace();
+        }
+    }
+    else if("pbf.burundi.deliverieslist".equalsIgnoreCase(sQueryType)){
+        try{
+	    	Connection loc_conn = MedwanQuery.getInstance().getLongOpenclinicConnection();
+			StringBuffer sResult = new StringBuffer();
+			long l = 24*3600*1000;
+			java.util.Date beginDate = ScreenHelper.parseDate(request.getParameter("begin"));
+			java.util.Date endDate = ScreenHelper.parseDate(request.getParameter("end"));
+			endDate.setTime(endDate.getTime()+l);
+			query = " select a.dateofbirth,t.serverid,t.transactionid,a.personid,a.lastname,a.firstname from transactions t, healthrecord h, adminview a where t.healthrecordid=h.healthrecordid and h.personid=a.personid and"+
+					" t.transactiontype='be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_DELIVERY_MSPLS' and"+
+					" t.updatetime>=? and t.updatetime<? order by t.updatetime";
+			Debug.println(query);
+			PreparedStatement ps = loc_conn.prepareStatement(query);
+			ps.setTimestamp(1, new Timestamp(beginDate.getTime()));
+			ps.setTimestamp(2, new Timestamp(endDate.getTime()));
+			ResultSet rs = ps.executeQuery();
+			int counter = 1;
+		    response.setContentType("application/octet-stream; charset=windows-1252");
+		    response.setHeader("Content-Disposition", "Attachment;Filename=\"OpenClinicStatistic"+new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())+".csv\"");
+		    
+		    ServletOutputStream os = response.getOutputStream();
+		    
+		    // header
+			sResult.append("DATE;DELIVERY;PATIENTID;NAME;FIRSTNAME;AGE;BIRTHDATE;DELIVERYTYPE\r\n");
+			while(rs.next()){
+				int serverid = rs.getInt("serverid");
+				int transactionid = rs.getInt("transactionid");
+				TransactionVO transaction = MedwanQuery.getInstance().loadTransaction(serverid, transactionid);
+				if(transaction!=null){
+					sResult.append(ScreenHelper.formatDate(transaction.getUpdateTime())+";");
+					sResult.append(checkString(transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_REANIMATION_DATE"))+";");
+					sResult.append(rs.getInt("personid")+";");
+					sResult.append(rs.getString("lastname").toUpperCase()+";");
+					sResult.append(rs.getString("firstname").toUpperCase()+";");
+					java.util.Date dateofbirth = rs.getDate("dateofbirth");
+					String age = "";
+					try{
+						int a = AdminPerson.getAge(dateofbirth);
+						if(a<1){
+							age = "0->11m";
+						}
+						else if(a<5){
+							age = "12->59m";
+						}
+						else if(a<10){
+							age = "5->9";
+						}
+						else if(a<10){
+							age = "5->9";
+						}
+						else if(a<15){
+							age = "10->14";
+						}
+						else if(a<20){
+							age = "15->19";
+						}
+						else if(a<25){
+							age = "20->24";
+						}
+						else if(a<50){
+							age = "25->49";
+						}
+						else {
+							age = "50+";
+						}
+					}
+					catch(Exception e){
+						// empty
+					}
+					sResult.append(age+";");
+					sResult.append(ScreenHelper.formatDate(dateofbirth)+";");
+					String sType="?";
+					if(transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_DELIVERYTYPE_DYSTOCIC").equalsIgnoreCase("medwan.common.true")){
+						sType=getTranNoLink("openclinic.chuk", "openclinic.common.dystocic", sWebLanguage);
+					}
+					if(transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_DELIVERYTYPE_EUSTOCIC").equalsIgnoreCase("medwan.common.true")){
+						sType=getTranNoLink("openclinic.chuk", "openclinic.common.eutocic", sWebLanguage);
+					}
+					sResult.append(sType+";");
+					sResult.append("\r\n");
+				}
+			}
+		    
+		    byte[]b = sResult.toString().getBytes();
+	        for(int n=0; n<b.length; n++){
+	            os.write(b[n]);
+	        }
+	        os.flush();
+			rs.close();
+			ps.close();
+			
+			loc_conn.close();
+	        os.close();
+	        done=true;
+        }
+        catch(Exception z){
+        	z.printStackTrace();
+        }
+    }
+    else if("insurer.userlist".equalsIgnoreCase(sQueryType)){
+        try{
+	    	Connection loc_conn = MedwanQuery.getInstance().getLongOpenclinicConnection();
+			StringBuffer sResult = new StringBuffer();
+			long l = 24*3600*1000;
+			java.util.Date beginDate = ScreenHelper.parseDate(request.getParameter("begin"));
+			java.util.Date endDate = ScreenHelper.parseDate(request.getParameter("end"));
+			String insurer = checkString(request.getParameter("insureruid"));
+			endDate.setTime(endDate.getTime()+l);
+			query = "select dateofbirth,gender,oc_patientinvoice_date,personid,lastname,firstname,(select max(oc_encounter_serviceuid) from oc_encounters_view v where v.oc_encounter_objectid=e.oc_encounter_objectid) oc_encounter_serviceuid,oc_insurance_nr,"+
+					" oc_patientinvoice_objectid,sum(oc_debet_insuraramount) insuraramount,sum(oc_debet_amount) patientamount"+
+					" from oc_patientinvoices i,adminview a, oc_debets d,oc_encounters e,oc_insurances s"+
+					" where"+
+					" i.oc_patientinvoice_patientuid=a.personid and"+
+					" d.oc_debet_patientinvoiceuid=i.oc_patientinvoice_serverid||'.'||i.oc_patientinvoice_objectid and"+
+					" e.oc_encounter_objectid=replace(d.oc_debet_encounteruid,'1.','') and"+
+					" s.oc_insurance_objectid=replace(oc_debet_insuranceuid,'1.','') and"+
+					" s.oc_insurance_insuraruid=? and"+
+					" i.oc_patientinvoice_date>=? and i.oc_patientinvoice_date<?"+
+					" group by dateofbirth,gender,oc_patientinvoice_date,personid,lastname,firstname,oc_encounter_serviceuid,oc_insurance_nr,oc_patientinvoice_objectid"+
+					" order by oc_patientinvoice_date,personid";
+			Debug.println(query);
+			PreparedStatement ps = loc_conn.prepareStatement(query);
+			ps.setString(1,insurer);
+			ps.setTimestamp(2, new Timestamp(beginDate.getTime()));
+			ps.setTimestamp(3, new Timestamp(endDate.getTime()));
+			ResultSet rs = ps.executeQuery();
+			int counter = 1;
+		    response.setContentType("application/octet-stream; charset=windows-1252");
+		    response.setHeader("Content-Disposition", "Attachment;Filename=\"OpenClinicStatistic"+new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())+".csv\"");
+		    
+		    ServletOutputStream os = response.getOutputStream();
+		    
+		    // header
+			sResult.append("DATE;PATIENTID;NAME;FIRSTNAME;AGE;BIRTHDATE;GENDER;DEPARTMENT;MEMBERNR;INVOICENR;PATIENTAMOUNT;INSURERAMOUNT\r\n");
+			while(rs.next()){
+				sResult.append(ScreenHelper.formatDate(rs.getDate("oc_patientinvoice_date"))+";");
+				sResult.append(rs.getInt("personid")+";");
+				sResult.append(rs.getString("lastname").toUpperCase()+";");
+				sResult.append(rs.getString("firstname").toUpperCase()+";");
+				java.util.Date dateofbirth = rs.getDate("dateofbirth");
+				String age = "";
+				try{
+					int a = AdminPerson.getAge(dateofbirth);
+					if(a<1){
+						age = "0->11m";
+					}
+					else if(a<5){
+						age = "12->59m";
+					}
+					else if(a<10){
+						age = "5->9";
+					}
+					else if(a<10){
+						age = "5->9";
+					}
+					else if(a<15){
+						age = "10->14";
+					}
+					else if(a<20){
+						age = "15->19";
+					}
+					else if(a<25){
+						age = "20->24";
+					}
+					else if(a<50){
+						age = "25->49";
+					}
+					else {
+						age = "50+";
+					}
+				}
+				catch(Exception e){
+					// empty
+				}
+				sResult.append(age+";");
+				sResult.append(ScreenHelper.formatDate(dateofbirth)+";");
+				sResult.append(rs.getString("gender")+";");
+				sResult.append(rs.getString("oc_encounter_serviceuid")+";");
+				sResult.append(rs.getString("oc_insurance_nr")+";");
+				sResult.append(rs.getString("oc_patientinvoice_objectid")+";");
+				sResult.append(rs.getString("patientamount")+";");
+				sResult.append(rs.getString("insuraramount")+";");
+				sResult.append("\r\n");
+			}
+		    
+		    byte[]b = sResult.toString().getBytes();
+	        for(int n=0; n<b.length; n++){
+	            os.write(b[n]);
+	        }
+	        os.flush();
+			rs.close();
+			ps.close();
+			
+			loc_conn.close();
+	        os.close();
+	        done=true;
+        }
+        catch(Exception z){
+        	z.printStackTrace();
+        }
+    }
     else if("pbf.burundi.consultationslist".equalsIgnoreCase(sQueryType)){
         try{
     	Connection loc_conn = MedwanQuery.getInstance().getLongOpenclinicConnection();
@@ -564,8 +885,7 @@
 		
 		String childServices = Service.getChildIdsAsString(service);
 
-		// search all the invoices from this period     
-		query = "select a.oc_encounter_serviceuid,a.oc_encounter_objectid,a.oc_encounter_serverid,a.oc_encounter_begindate,b.personid,b.firstname,b.lastname,b.gender,b.dateofbirth,b.comment5,c.address,c.sector,c.cell,c.district,c.city from oc_encounters_view a,adminview b,privateview c where"+
+		query = "select a.oc_encounter_serviceuid,a.oc_encounter_situation,a.oc_encounter_objectid,a.oc_encounter_serverid,a.oc_encounter_begindate,b.personid,b.firstname,b.lastname,b.gender,b.dateofbirth,b.comment5,c.address,c.sector,c.cell,c.district,c.city from oc_encounters_view a,adminview b,privateview c where"+
 		        " a.oc_encounter_patientuid=b.personid and"+
 				" b.personid=c.personid and"+
 				" a.oc_encounter_type in ("+encountertypes+") and"+
@@ -585,7 +905,7 @@
 	    ServletOutputStream os = response.getOutputStream();
 	    
 	    // header
-		sResult.append("DEPARTMENT;DATE;PATIENTID;FIRSTNAME;NAME;GENDER;AGE;BIRTHDATE;FAMILY_CHIEF;ADDRESS;PROVINCE;CITY;HILL;DOCTOR;ICD10;DIAGNOSIS/RFE*;TREATMENT\r\n");
+		sResult.append("DEPARTMENT;DATE;SITUATION;PATIENTID;FIRSTNAME;NAME;GENDER;AGE;BIRTHDATE;FAMILY_CHIEF;ADDRESS;PROVINCE;CITY;HILL;DOCTOR;ICD10;DIAGNOSIS/RFE*;TREATMENT;STATUS;PREGNANCYDURATION\r\n");
 	    
     	byte[] b = sResult.toString().getBytes();
         for(int n=0; n<b.length; n++){
@@ -608,6 +928,7 @@
 			sResult = new StringBuffer();
 			sResult.append(getTranNoLink("service",checkString(rs.getString("oc_encounter_serviceuid")),sWebLanguage)+";");
 			sResult.append(ScreenHelper.formatDate(rs.getDate("oc_encounter_begindate"))+";");
+			sResult.append(ScreenHelper.getTranNoLink("encounter.situation",rs.getString("oc_encounter_situation"),sWebLanguage)+";");
 			sResult.append(rs.getString("personid")+";");
 			sResult.append(ScreenHelper.removeAccents(rs.getString("firstname").toUpperCase()).replaceAll("´", "'").replaceAll("`", "'")+";");
 			sResult.append(ScreenHelper.removeAccents(rs.getString("lastname").toUpperCase()).replaceAll("´", "'").replaceAll("`", "'")+";");
@@ -744,6 +1065,20 @@
 			for(int n=0;n<treatments.size();n++){
 				ItemVO item = (ItemVO)treatments.elementAt(n);
 				sResult.append(ScreenHelper.removeAccents(item.getValue()).replaceAll("´", "'").replaceAll("`", "'").toUpperCase().replaceAll("\n", ", ").replaceAll("\r", "")+" ");
+			}
+			sResult.append(";");
+			//Add Status here
+			treatments = MedwanQuery.getInstance().getEncounterItems(encounterServerId+"."+encounterObjectId, "be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RMH_PATIENTTYPE2");
+			for(int n=0;n<treatments.size();n++){
+				ItemVO item = (ItemVO)treatments.elementAt(n);
+				sResult.append(getTranNoLink("outpatient.type2",item.getValue(),sWebLanguage)+" ");
+			}
+			sResult.append(";");
+			//Add Pregnancy duration here
+			treatments = MedwanQuery.getInstance().getEncounterItems(encounterServerId+"."+encounterObjectId, "be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_AGE");
+			if(treatments.size()>0){
+				ItemVO item = (ItemVO)treatments.elementAt(0);
+				sResult.append(item.getValue()+" ");
 			}
 			sResult.append("\r\n");
 	    	b = sResult.toString().getBytes();
@@ -999,7 +1334,11 @@
 			String patientid = checkString(rs.getString("oc_encounter_patientuid"));
 			sResult.append(patientid+";");		
 			
-			java.util.Date dob = rs.getDate("dateofbirth");
+			java.util.Date dob = null;
+			try{
+				dob=rs.getDate("dateofbirth");
+			}
+			catch(Exception e){}
 			sResult.append(dob==null?";":new SimpleDateFormat("MM/yyyy").format(dob)+";");			
 			sResult.append(checkString(rs.getString("gender"))+";");		
 		

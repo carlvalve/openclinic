@@ -7,6 +7,7 @@
 	String sEnd=request.getParameter("end");
 %>
 <table width='100%'>
+	<%if(!checkString(request.getParameter("noservice")).equalsIgnoreCase("yes")){ %>
 	<tr>
 		<td class='admin'><%=getTran(request,"web","service",sWebLanguage) %></td>
 		<td class='admin2'>
@@ -17,7 +18,25 @@
              <img src='_img/icons/icon_delete.gif' class='link' alt='<%=getTranNoLink("Web","clear",sWebLanguage)%>' onclick='clearService();'>
 		</td>
 	</tr>
-<% 	if(checkString(request.getParameter("query")).equalsIgnoreCase("pbf.burundi.consultationslist")){%>
+<% 	}
+	else{
+%>
+             <input type="hidden" name="doctor" id='doctor' value="">
+             <input type='hidden' name='service' id='service' value=''>
+<%
+	}
+	if(checkString(request.getParameter("insurer")).equalsIgnoreCase("yes")){ %>
+	<tr>
+		<td class='admin'><%=getTran(request,"web","insurer",sWebLanguage) %></td>
+		<td class='admin2'>
+            <input type="hidden" name="EditInsurarUID" id="EditInsurarUID" value="">
+            <input type="text" class="text" readonly name="EditInsurarText" id="EditInsurarText" value="" size="40">
+            <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchInsurar();">
+            <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="doClearInsurar()">
+		</td>
+	</tr>
+<% 	}
+	if(checkString(request.getParameter("query")).equalsIgnoreCase("pbf.burundi.consultationslist")){%>
 	<tr>
 		<td class='admin'><%=getTran(request,"web","physician",sWebLanguage) %></td>
 		<td class='admin2'>
@@ -64,6 +83,9 @@
 		if(document.getElementById('diagsfreetext') && document.getElementById('diagsfreetext').checked) {
 			url+="&diagsfreetext="+document.getElementById('diagsfreetext').value;
 		}
+		if(document.getElementById('EditInsurarUID') && document.getElementById('EditInsurarUID').value.length>0) {
+			url+="&insureruid="+document.getElementById('EditInsurarUID').value;
+		}
 		window.open(url);
 		window.close();
 	}
@@ -83,5 +105,15 @@
 	  openPopup("/_common/search/searchUser.jsp&ts=<%=getTs()%>&ReturnUserID="+managerUidField+"&ReturnName="+managerNameField+"&displayImmatNew=no");
 	  document.getElementById('doctorname').focus();
 	}
+
+	function searchInsurar(){
+	  openPopup("/_common/search/searchInsurar.jsp&ts=<%=getTs()%>&ReturnFieldInsurarUid=EditInsurarUID&ReturnFieldInsurarName=EditInsurarText&PopupHeight=500&PopupWith=500");
+	}
+
+	function doClearInsurar(){
+	  document.getElementById('EditInsurarUID').value = "";
+	  document.getElementById('EditInsurarText').value = "";
+	}
+
 
 </script>

@@ -26,6 +26,23 @@
     String sFindDate = checkString(request.getParameter("FindDate"));
 %>
 <script>
+	function checkActivity(){
+		var today = new Date();
+		var url= '<c:url value="/planning/ajax/checkActivity.jsp"/>?activityname='+document.getElementById('EditContactName').value.split('&').join('')+'&prestationuid='+document.getElementById('EditContactUID').value+'&ts='+today;
+		new Ajax.Request(url,{
+		method: "POST",
+		   parameters: "",
+		   onSuccess: function(resp){
+			   if(resp.responseText.indexOf("<OK>")<0){
+				   alert('<%=getTranNoLink("web","invalidactivity",sWebLanguage)%>');
+				   document.getElementById('EditContactName').focus();
+			   }
+			   else{
+				   saveValidatedAppointment();
+				}
+			}
+		});
+	}
 var dateFormat = "<%=ScreenHelper.stdDateFormat.toPattern()%>";
 
 var ClientMsg = Class.create();

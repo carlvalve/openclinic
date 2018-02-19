@@ -31,6 +31,17 @@
             </td>
         </tr>
         
+        <%-- allergy --%>
+        <tr>
+            <td class='admin'><%=getTran(request,"Web.Occup","medwan.common.allergy",sWebLanguage)%>&nbsp;</td>
+            <td class='admin2'>
+				<select class='text' name='currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ALERTS_ALLERGY" property="itemId"/>]>.value'>
+					<option/>
+					<%=ScreenHelper.writeSelect(request, "allergy", ((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ALERTS_ALLERGY"), sWebLanguage) %>
+				</select>
+            </td>
+        </tr>
+        
         <%-- expiration date --%>
         <tr>
             <td class='admin'><%=getTran(request,"Web.Occup","medwan.common.expiration-date",sWebLanguage)%>&nbsp;</td>

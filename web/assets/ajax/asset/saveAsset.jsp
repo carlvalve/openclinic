@@ -188,6 +188,7 @@
            sAccountingCode    = checkString(request.getParameter("accountingCode")),
            sGains             = checkString(request.getParameter("gains")),
            sLosses            = checkString(request.getParameter("losses")),
+           sLockedBy            = checkString(request.getParameter("lockedby")),
            sComment1            = checkString(request.getParameter("comment1")),
            sComment2            = checkString(request.getParameter("comment2")),
            sComment3            = checkString(request.getParameter("comment3")),
@@ -312,6 +313,12 @@
     sDescription = sDescription.replaceAll("\r","");
     sDescription = sDescription.replaceAll("\r\n","<br>");
     asset.description = sDescription.replaceAll("\n","<br>");
+    try{
+    	asset.lockedBy=Integer.parseInt(sLockedBy);
+    }
+    catch(Exception e){
+    	asset.lockedBy=-1;
+    }
     
     asset.serialnumber = sSerialnumber;
     if(sQuantity.length() > 0){
@@ -400,13 +407,6 @@
     	if(checkString(request.getParameter("newasset")).equals("1")){
     		asset.setDefaultMaintenancePlans();
     	}
-    	//now remove unlinked components
-   		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
-		PreparedStatement ps = conn.prepareStatement("delete from oc_assetcomponents where oc_component_assetuid=? and oc_component_nomenclature not in "+"('"+asset.getComment15().replaceAll(";", "','")+" ')");
-		ps.setString(1, asset.getUid());
-		ps.execute();
-		ps.close();
-		conn.close();
         sMessage = "<font color='green'>"+getTranNoLink("web","dataIsSaved",sWebLanguage)+"</font>";
     }
     else{

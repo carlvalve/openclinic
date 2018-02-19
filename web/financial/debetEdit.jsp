@@ -932,6 +932,7 @@ sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
               var label = eval('('+resp.responseText+')');
     		  document.getElementById('EditDebetServiceUid').value=label.uid;
     		  document.getElementById('EditDebetServiceName').value=label.name;
+    		  changePrestation(false);
           },
           onFailure: function(){
               $('divMessage').innerHTML = "Error in function validateServiceUid() => AJAX";
@@ -1019,7 +1020,7 @@ sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
 
   function checkAdmissionDaysInvoiced(){
 	  <%
-	  	if(activeEncounter!=null && activeEncounter.getType().equalsIgnoreCase("admission") && Encounter.getAccountedAccomodationDays(activeEncounter.getUid())<activeEncounter.getDurationInDays()){	
+	  	if(activeEncounter!=null && MedwanQuery.getInstance().getConfigInt("warnForUninvoicedAdmissionDays",1)==1 && activeEncounter.getType().equalsIgnoreCase("admission") && Encounter.getAccountedAccomodationDays(activeEncounter.getUid())<activeEncounter.getDurationInDays()){	
 	  		Prestation pStay=null;
             if (activeEncounter.getService()!=null && activeEncounter.getService().stayprestationuid!=null) {
             	pStay = Prestation.get(activeEncounter.getService().stayprestationuid);

@@ -105,7 +105,8 @@
            sEditApplyLowerPrices = checkString(request.getParameter("EditApplyLowerPrices")),
            sEditAutomaticInvoicing = checkString(request.getParameter("EditAutomaticInvoicing")),
            sEditProductGroup     = checkString(request.getParameter("EditProductGroup")),
-		   sEditProductSubGroup  = checkString(request.getParameter("EditProductSubGroup"));
+   		   sEditProductSubGroup  = checkString(request.getParameter("EditProductSubGroup")),
+		   sEditNoWarehouseOrder  = checkString(request.getParameter("EditNoWarehouseOrder"));
     String sEditProductSubGroupDescr = "";
 
     String  sTime1 = checkString(request.getParameter("time1")),
@@ -236,7 +237,13 @@
         if(sEditMargin.length() > 0) product.setMargin(Double.parseDouble(sEditMargin));
 		if(sEditApplyLowerPrices.length()>0) product.setApplyLowerPrices(Integer.parseInt(sEditApplyLowerPrices)==1);
 		if(sEditAutomaticInvoicing.length()>0) product.setAutomaticInvoicing(Integer.parseInt(sEditAutomaticInvoicing)==1);
-       
+		if(sEditNoWarehouseOrder.length()>0) {
+			Pointer.storePointer("nowarehouseorder."+sEditProductUid, "1");
+		}
+		else{
+			Pointer.deletePointers("nowarehouseorder."+sEditProductUid);
+		}
+		
 		// does product exist ?
         String existingProductUid = product.exists();
         boolean productExists = existingProductUid.length() > 0;
@@ -651,6 +658,9 @@
                         <td class="admin" width="<%=sTDAdminWidth%>" nowrap><%=getTran(request,"Web","productCode",sWebLanguage)%> *</td>
                         <td class="admin2">
                             <input class="text" type="text" name="EditProductCode" id="EditProductCode" size="<%=sTextWidth%>" maxLength="255" value="<%=sSelectedProductCode%>">
+                            <%if(activeUser.getAccessRight("pharmacy.mergeproducts.select") && sSelectedProductCode.trim().length()>0 && Product.findWithCode(sSelectedProductCode, "", "", "", "", "", "", "", "", "OC_PRODUCT_CODE", "ASC").size()>1){%>
+                            	<input type='button' class='button' name='mergebutton' id='mergebutton' value='<%=getTranNoLink("web","merge",sWebLanguage) %>' onclick='mergeproducts()'/> <div id='mergediv'/>
+                            <%} %>
                         </td>
                     </tr>
                     
@@ -907,6 +917,14 @@
                             <input type="checkbox" class="hand" name="EditApplyLowerPrices" value="1" <%=sSelectedApplyLowerPrices.equalsIgnoreCase("1")?"checked":"" %>>
                         </td>
                     </tr>
+                    <%if(MedwanQuery.getInstance().getConfigInt("enableCCBRTProductionOrderMecanism",0)==1){%>
+                    <tr>
+                        <td class="admin" nowrap><%=getTran(request,"Web","nowarehouseorder",sWebLanguage)%></td>
+                        <td class="admin2">
+                            <input type="checkbox" class="hand" name="EditNoWarehouseOrder" value="1" <%=Pointer.getPointer("nowarehouseorder."+sEditProductUid).length()>0?"checked":"" %>>
+                        </td>
+                    </tr>
+                    <%} %>
                     
                     <%-- EDIT BUTTONS --%>
                     <tr>
@@ -1273,21 +1291,25 @@
 
   <%-- UPDATE DRUG CATEGORY PARENTS --%>
   function updateDrugCategoryParents(code){
-    document.getElementById('drugcategorydiv').innerHTML = "<img src='<%=sCONTEXTPATH%>/_img/themes/<%=sUserTheme%>/ajax-loader.gif'/><br/>Loading..";
-    
-    var params = 'code='+code+'&language=<%=sWebLanguage%>';
-    var url = '<c:url value="/pharmacy/updateDrugCategoryParents.jsp"/>?ts='+new Date();
-	new Ajax.Request(url,{
-      method: "GET",
-      parameters: params,
-      onSuccess: function(resp){
-        $('drugcategorydiv').innerHTML = resp.responseText;
-      },
-	  onFailure: function(resp){
-	    $('drugcategorydiv').innerHTML = "";
-      }
-	});
-  }
+	    document.getElementById('drugcategorydiv').innerHTML = "<img src='<%=sCONTEXTPATH%>/_img/themes/<%=sUserTheme%>/ajax-loader.gif'/><br/>Loading..";
+	    
+	    var params = 'code='+code+'&language=<%=sWebLanguage%>';
+	    var url = '<c:url value="/pharmacy/updateDrugCategoryParents.jsp"/>?ts='+new Date();
+		new Ajax.Request(url,{
+	      method: "GET",
+	      parameters: params,
+	      onSuccess: function(resp){
+	        $('drugcategorydiv').innerHTML = resp.responseText;
+	      },
+		  onFailure: function(resp){
+		    $('drugcategorydiv').innerHTML = "";
+	      }
+		});
+	  }
+
+  function mergeproducts(){
+	    openPopup("/pharmacy/mergeProducts.jsp&ts=<%=getTs()%>&productUid=<%=sEditProductUid%>",400,300);
+	  }
 
   if(document.getElementById('EditProductSubGroup')!=null){
     window.setTimeout("updateDrugCategoryParents(document.getElementById('EditProductSubGroup').value)",500);

@@ -3,6 +3,7 @@
 <%@include file="/includes/validateUser.jsp"%>
 <form name="transactionForm" method="post">
 	<%
+		boolean bWaitinglist = checkString(request.getParameter("waitinglist")).equalsIgnoreCase("1");
 		SortedMap codes=null;
 		if(checkString(request.getParameter("key")).length()>0){
 	%>
@@ -26,7 +27,7 @@
 			codes=Utils.getDrugDrugInteractions(key,sWebLanguage);
 		}
 		else {
-			codes=Utils.getPatientDrugDrugInteractions(activePatient.personid,sWebLanguage);
+			codes=Utils.getPatientDrugDrugInteractions(activePatient.personid,sWebLanguage,bWaitinglist);
 		}
 		Iterator i = codes.keySet().iterator();
 		int counter=0;
@@ -35,8 +36,8 @@
 			String code = (String)codes.get(drugcodes);
 			%>
 			<tr>
-				<td class='admin'><%=code.split(";")[0]%></td>
-				<td class='admin2' valign='top'><%=code.split(";")[1]%></td>
+				<td class='admin'><%=HTMLEntities.htmlentities(code.split(";")[0])%></td>
+				<td class='admin2' valign='top'><%=HTMLEntities.htmlentities(code.split(";")[1])%></td>
 			</tr>
 			
 			<%	

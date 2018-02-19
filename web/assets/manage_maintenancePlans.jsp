@@ -3,7 +3,7 @@
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
 <%@include file="../assets/includes/commonFunctions.jsp"%>
-<%=checkPermission("maintenanceplans","edit",activeUser)%>
+<%=checkPermission("maintenanceplans","select",activeUser)%>
 
 <%=sJSPROTOTYPE%>
 <%=sJSNUMBER%> 
@@ -34,6 +34,7 @@
     }
     
     MaintenancePlan plan = null;
+    boolean bLocked=false;
     if(sAction.length()==0){
 %>            
 		
@@ -79,9 +80,10 @@
 		                    
 		        <%-- search BUTTONS --%>
 	            <%
-	            	if(serviceuid.length()==0){
-	            		serviceuid=activeUser.getParameter("defaultserviceid");
-	            	}
+	        	serviceuid = checkString(activeUser.getParameter("serviceuid"));
+	        	if(serviceuid.length()==0){
+	        		serviceuid=checkString((String)session.getAttribute("activeservice"));
+	        	}
 	            %>
 		        <tr>     
 		            <td class="admin"><%=getTran(request,"web","service",sWebLanguage)%>&nbsp;</td>
@@ -95,7 +97,9 @@
 		            <td class="admin2">
 		                <input class="button" type="button" name="buttonSearch" id="buttonSearch" value="<%=getTranNoLink("web","search",sWebLanguage)%>" onclick="searchMaintenancePlans();">&nbsp;
 		                <input class="button" type="button" name="buttonClear" id="buttonClear" value="<%=getTranNoLink("web","clear",sWebLanguage)%>" onclick="clearSearchFields();">&nbsp;
+						<%if(activeUser.getAccessRight("maintenanceplans.add")){ %>
 		                <input class="button" type="button" name="buttonNew" id="buttonNew" value="<%=getTranNoLink("web","new",sWebLanguage)%>" onclick="newPlan();">&nbsp;
+						<%} %>
 		            </td>
 		        </tr>
 		    </table>
@@ -162,6 +166,12 @@
     else if(sAction.equalsIgnoreCase("new")){
     	plan = new MaintenancePlan();
     	plan.setUid("-1");
+		if(MedwanQuery.getInstance().getConfigInt("GMAOLocalServerId",-1)>0){
+			plan.setLockedBy(MedwanQuery.getInstance().getConfigInt("GMAOLocalServerId",-1));
+		}
+		else{
+			plan.setLockedBy(-1);
+		}
     	plan.store(activeUser.userid);
     	sEditPlanUID=plan.getUid();
     	plan.setAssetUID(checkString(request.getParameter("assetUID")));
@@ -173,10 +183,12 @@
     	plan.setPlanManager(checkString(request.getParameter("planManager")));
     }
     if(plan!=null){
+		bLocked = plan.getObjectId()>-1 && ((plan.getLockedBy()>-1 && plan.getLockedBy()!=MedwanQuery.getInstance().getConfigInt("GMAOLocalServerId",-1)) || (plan.getLockedBy()==-1 && MedwanQuery.getInstance().getConfigInt("GMAOLocalServerId",-1)!=0));
 %>
 
 		<form name="EditForm" id="EditForm" method="POST">
 		    <input type="hidden" id="action" name="action" value="">
+			<input type='hidden' name='lockedby' id='lockedby' value='<%=plan.getLockedBy()%>'/>
 		    <input type="hidden" id="EditPlanUID" name="EditPlanUID" value="<%=plan.getUid()%>">
 		    <%=writeTableHeader("web.assets","maintenancePlans",sWebLanguage,"")%>
 		                
@@ -195,7 +207,7 @@
 		            </td>
 		            <td class="admin"><%=getTran(request,"web.assets","type",sWebLanguage)%>&nbsp;</td>
 		            <td class="admin2">
-		            	<select class='text' name='type' id='type' onchange="loadDefaultMaintenancePlan()">
+		            	<select class='text' name='type' id='type'>
 		            		<option/>
 		            		<%=ScreenHelper.writeSelect(request, "maintenanceplan.type", checkString(plan.getType()), sWebLanguage) %>
 		            	</select>
@@ -233,8 +245,12 @@
 		        <%-- endDate --%>
 		        <tr>
 		            <td class="admin"><%=getTran(request,"web.assets","endDate",sWebLanguage)%>&nbsp;</td>
-		            <td class="admin2" colspan="3">
+		            <td class="admin2">
 		                <%=writeDateField("endDate","EditForm",ScreenHelper.formatDate(plan.getEndDate()),sWebLanguage)%>
+		            </td>
+		            <td class="admin">ID&nbsp;</td>
+		            <td class="admin2">
+		                <%=plan.getUid()%>
 		            </td>
 		        </tr>  
 		             
@@ -282,8 +298,7 @@
 		            	<%
 		            		String instructions=checkString(plan.getInstructions());
 		            	%>
-		                <textarea class="text" name="instructions" id="instructions" cols="80" rows="4" onKeyup="resizeTextarea(this,8);"><%=instructions %></textarea>
-		                <a href='javascript:loadDefaultMaintenancePlan()'><%=getTran(request,"web","default",sWebLanguage) %></a>
+		                <textarea class="text" name="instructions" id="instructions" cols="120" rows="4" onKeyup="resizeTextarea(this,10);"><%=instructions %></textarea>
 		            </td>
 		        </tr>                
 		        <tr class="admin"><td colspan="4"><%=getTran(request,"web","costs",sWebLanguage) %></td></tr>       
@@ -323,7 +338,9 @@
 			        <%-- DOCUMENTS (multi-add) --%>   
 		            <td class="admin" nowrap>
 		            	<%=getTran(request,"web.assets","documents",sWebLanguage)%>&nbsp;
-		            	<img src='<%=sCONTEXTPATH %>/_img/icons/icon_add.gif' onclick="addDocument()"/>
+						<%if(!bLocked && activeUser.getAccessRight("assets.edit")){ %>
+			            	<img src='<%=sCONTEXTPATH %>/_img/icons/icon_add.gif' onclick="addDocument('<%=plan.getUid()%>')"/>
+			            <%} %>
 		            </td>
 		            <td class="admin2" colspan="2">
 		            	<div id='documentsDiv'></div>
@@ -337,15 +354,23 @@
 		        <tr>     
 		            <td class="admin"/>
 		            <td class="admin2" colspan="3">
+						<%if(!bLocked && activeUser.getAccessRight("maintenanceplans.edit")){ %>
 		                <input class="button" type="button" name="buttonSave" id="buttonSave" value="<%=getTranNoLink("web","save",sWebLanguage)%>" onclick="saveMaintenancePlan();">&nbsp;
+						<%} %>
+						<%if(!bLocked && activeUser.getAccessRight("maintenanceplans.delete")){ %>
 		                <input class="button" type="button" name="buttonDelete" id="buttonDelete" value="<%=getTranNoLink("web","delete",sWebLanguage)%>" onclick="deleteMaintenancePlan();">&nbsp;
+						<%} %>
 		                <input class="button" type="button" name="buttonOperations" id="buttonOperations" value="<%=getTranNoLink("web","operations",sWebLanguage)%>" onclick="showOperations();">&nbsp;
 		                <input class="button" type="button" name="buttonList" id="buttonList" value="<%=getTranNoLink("web","list",sWebLanguage)%>" onclick="showList();">&nbsp;
 		                <input class="button" type="button" name="buttonDocuments" id="buttonDocuments" value="<%=getTranNoLink("web","documents",sWebLanguage)%>" onclick="printWordDocuments();">&nbsp;
 						<%
-							if(activeUser.getAccessRight("assets.defaultmaintenanceplans.select")){
+							if(activeUser.getAccessRight("assets.defaultmaintenanceplans.add")){
 						%>
 		                <input class="button" type="button" name="buttonAddDefault" id="buttonAddDefault" value="<%=getTranNoLink("web","adddefault",sWebLanguage)%>" onclick="addDefault();">&nbsp;
+						<%
+							}
+							if(activeUser.getAccessRight("assets.defaultmaintenanceplans.select")){
+						%>
 		                <input class="button" type="button" name="buttonViewDefault" id="buttonViewDefault" value="<%=getTranNoLink("web","viewdefault",sWebLanguage)%>" onclick="viewDefault();">&nbsp;
 						<%
 							}
@@ -363,8 +388,8 @@
     }
 %>
 <script>
-	function addDocument(){
-  		openPopup("/assets/addDocument.jsp&ts=<%=getTs()%>&PopupHeight=200&PopupWidth=500&maintenanceplanuid=<%=sEditPlanUID%>");
+	function addDocument(uid){
+  		openPopup("/assets/addDocument.jsp&ts=<%=getTs()%>&PopupHeight=200&PopupWidth=500&maintenanceplanuid="+uid);
   	}
 	
 	<%-- LOAD (all) ASSETS --%>
@@ -402,24 +427,24 @@
 	}
 	
 	function addDefault(){
-		if(EditForm.assetUID.value==''){
+		if(document.getElementById('assetUID').value==''){
 			alert('<%=getTranNoLink("web","assetnotspecified",sWebLanguage)%>');
 		}
 		else if(window.confirm('<%=getTranNoLink("web","areyousure",sWebLanguage)%>')){
-	        var sParams = "EditPlanUID="+EditForm.EditPlanUID.value+
-            "&name="+EditForm.name.value+
-            "&assetUID="+EditForm.assetUID.value+
-            "&startDate="+EditForm.startDate.value+
-            "&endDate="+EditForm.endDate.value+
-            "&frequency="+EditForm.frequency.value+
-            "&operator="+EditForm.operator.value+
-            "&planManager="+EditForm.planManager.value+
-            "&type="+EditForm.type.value+
-            "&comment1="+EditForm.comment1.value+
-            "&comment2="+EditForm.comment2.value+
-            "&comment3="+EditForm.comment3.value+
-            "&comment4="+EditForm.comment4.value+
-            "&comment5="+EditForm.comment5.value+
+	        var sParams = "EditPlanUID="+document.getElementById('EditPlanUID').value+
+            "&name="+document.getElementById('name').value+
+            "&assetUID="+document.getElementById('assetUID').value+
+            "&startDate="+document.getElementById('startDate').value+
+            "&endDate="+document.getElementById('endDate').value+
+            "&frequency="+document.getElementById('frequency').value+
+            "&operator="+document.getElementById('operator').value+
+            "&planManager="+document.getElementById('planManager').value+
+            "&type="+document.getElementById('type').value+
+            "&comment1="+document.getElementById('comment1').value+
+            "&comment2="+document.getElementById('comment2').value+
+            "&comment3="+document.getElementById('comment3').value+
+            "&comment4="+document.getElementById('comment4').value+
+            "&comment5="+document.getElementById('comment5').value+
             /*
             "&comment6="+EditForm.comment6.value+
             "&comment7="+EditForm.comment7.value+
@@ -427,7 +452,7 @@
             "&comment9="+EditForm.comment9.value+
             "&comment10="+EditForm.comment10.value+
             */
-            "&instructions="+EditForm.instructions.value;
+            "&instructions="+document.getElementById('instructions').value.replace(new RegExp("'", 'g'), '´').replace(new RegExp('"', 'g'), '´');
 		    var url = "<c:url value='/assets/ajax/maintenancePlan/addDefault.jsp'/>?ts="+new Date().getTime();
 		    new Ajax.Request(url,{
 		      method: "POST",
@@ -437,7 +462,7 @@
 		        	  viewDefault();
 		    	  }
 		    	  else if(resp.responseText.indexOf("NOK-300")>0){
-		    		  alert('<%=getTranNoLink("web","assetnotspecified",sWebLanguage)%>');
+		    		  alert('NOK-300 <%=getTranNoLink("web","assetnotspecified",sWebLanguage)%>');
 		    	  }
 		      },
 		    });
@@ -530,6 +555,7 @@
                       "&comment9="+EditForm.comment9.value+
                       "&comment10="+EditForm.comment10.value+
                       */
+                      "&lockedby="+document.getElementById("lockedby").value+
                       "&instructions="+EditForm.instructions.value;
 
         var url = "<c:url value='/assets/ajax/maintenancePlan/saveMaintenancePlan.jsp'/>?ts="+new Date().getTime();
@@ -601,29 +627,37 @@
   }
 
   <%-- LOAD MAINTENANCEPLANS --%>
-  function loadDefaultMaintenancePlan(){
-		if(document.getElementById("nomenclaturecode").value.length>0){
-		    var url = "<c:url value='/assets/ajax/maintenancePlan/loadDefaultMaintenancePlan.jsp'/>?ts="+new Date().getTime();
-		    new Ajax.Request(url,{
-		      method: "GET",
-		      parameters: "code="+document.getElementById("nomenclaturecode").value+
-		      			  "&type="+document.getElementById("type").value,
-		      onSuccess: function(resp){
-		          var data = eval("("+resp.responseText+")");
-		          var instructions = data.instructions;
-		    	  if(instructions.trim().length>0 && confirm('<%=getTranNoLink("web.asset","loaddefaultinstructions",sWebLanguage)%>')){
-			          while(instructions.indexOf("<br/>")>-1){
-			        	  instructions=instructions.replace("<br/>","\n")
-			          }
-			          $("instructions").value = instructions;
-			          $("frequency").value = data.frequency;
-		    	  }
-		      },
-		      onFailure: function(resp){
-		        $("divMessage").innerHTML = "Error in 'assets/ajax/maintenancePlan/loadDefaultMaintenancePlan.jsp' : "+resp.responseText.trim();
-		      }
-		    });
-		}
+  function loadDefaultMaintenancePlan(uid){
+	    var url = "<c:url value='/assets/ajax/maintenancePlan/loadDefaultMaintenancePlan.jsp'/>?ts="+new Date().getTime();
+	    new Ajax.Request(url,{
+	      method: "GET",
+	      parameters: "uid="+uid,
+	      onSuccess: function(resp){
+	          var data = eval("("+resp.responseText+")");
+	          EditForm.name.value=data.name;
+              EditForm.frequency.value=data.frequency;
+              EditForm.operator.value=data.operator;
+              EditForm.planManager.value=data.planmanager;
+              EditForm.type.value=data.type;
+              EditForm.comment1.value=data.comment1;
+              EditForm.comment2.value=data.comment2;
+              EditForm.comment3.value=data.comment3;
+              EditForm.comment4.value=data.comment4;
+              EditForm.comment5.value=data.comment5;
+              /*
+              "&comment6="+EditForm.comment6.value+
+              "&comment7="+EditForm.comment7.value+
+              "&comment8="+EditForm.comment8.value+
+              "&comment9="+EditForm.comment9.value+
+              "&comment10="+EditForm.comment10.value+
+              */
+              EditForm.instructions.value=data.instructions.replace(new RegExp('<br>', 'g'), '\n');
+              resizeTextarea(EditForm.instructions,10);
+	      },
+	      onFailure: function(resp){
+	        $("divMessage").innerHTML = "Error in 'assets/ajax/maintenancePlan/loadDefaultMaintenancePlan.jsp' : "+resp.responseText.trim();
+	      }
+	    });
   	}
   <%-- LOAD MAINTENANCEPLANS --%>
   function loadNomenclature(){
@@ -636,7 +670,6 @@
 		          var data = eval("("+resp.responseText+")");
 		          $("nomenclaturecode").value = data.nomenclaturecode;
 		          $("nomenclature").value = unhtmlEntities(data.nomenclaturecode+" - "+data.nomenclature);
-		          loadDefaultMaintenancePlan();
 		      },
 		      onFailure: function(resp){
 		        $("divMessage").innerHTML = "Error in 'assets/ajax/maintenancePlan/loadNomenclature.jsp' : "+resp.responseText.trim();

@@ -35,7 +35,8 @@ Modalbox.Methods = {
 		params: {},
 		method: 'get',
 		autoFocusing: true,
-		aspnet: false
+		aspnet: false,
+		hidefunction: ''
 	},
 	_options: new Object,
 

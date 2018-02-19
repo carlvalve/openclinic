@@ -6,63 +6,77 @@
     if((activePatient!=null)&&(request.getParameter("SavePatientEditForm")==null)) {
     %>
 <script>
-    function changeDistrict(){
-      var today = new Date();
+	function changeRegion(){
+	    var today = new Date();
+	
+	    var url= path + '/_common/search/searchByAjax/getDistrictsByRegion.jsp?ts=' + today;
+	    new Ajax.Request(url,{
+	            method: "POST",
+	            postBody: '&FindRegion='+document.getElementById("PDistrict").value,
+	            onSuccess: function(resp){
+	                var sDistricts = resp.responseText;
+	
+	                if (sDistricts.length>0){
+	                    var aDistricts = sDistricts.split("$");
+	                    $('PSector').options.length=1;
+	                    $('PZipcode').value = "";
+	                    for(var i=0; i<aDistricts.length; i++){
+	                    	aDistricts[i] = aDistricts[i].replace(/^\s+/,'');
+	                    	aDistricts[i] = aDistricts[i].replace(/\s+$/,'');
+	
+	                        if ((aDistricts[i].length>0)&&(aDistricts[i]!=" ")){
+	                            $("PSector").options[i] = new Option(aDistricts[i], aDistricts[i]);
+	                        }
+	                    }
+	                }
+	            },
+	            onFailure: function(){
+	            }
+	        }
+	    );
+	  }
 
-      var url= path + '/_common/search/searchByAjax/getCitiesByDistrict.jsp?ts=' + today;
-      new Ajax.Request(url,{
-              method: "POST",
-              postBody: 'FindDistrict=' + document.getElementById("PDistrict").value,
-              onSuccess: function(resp){
-                  var sCities = resp.responseText;
-
-                  if (sCities.length>0){
-                      var aCities = sCities.split("$");
-                      $('PSector').options.length=1;
-                      $('PZipcode').value = "";
-                      for(var i=0; i<aCities.length; i++){
-                          aCities[i] = aCities[i].replace(/^\s+/,'');
-                          aCities[i] = aCities[i].replace(/\s+$/,'');
-
-                          if ((aCities[i].length>0)&&(aCities[i]!=" ")){
-                              $("PSector").options[i] = new Option(aCities[i], aCities[i]);
-                          }
-                      }
-                  }
-              },
-              onFailure: function(){
-              }
-          }
-      );
-    }
-
-    function changeSector(){
+	function changeDistrict(){
+	    var today = new Date();
+	
+	    var url= path + '/_common/search/searchByAjax/getCitiesByDistrictAndRegion.jsp?ts=' + today;
+	    new Ajax.Request(url,{
+	            method: "POST",
+	            postBody: 'FindDistrict=' + document.getElementById("PSector").value+'&FindRegion='+document.getElementById("PDistrict").value,
+	            onSuccess: function(resp){
+	                var sCities = resp.responseText;
+	
+	                if (sCities.length>0){
+	                    var aCities = sCities.split("$");
+	                    $('PCity').options.length=1;
+	                    $('PZipcode').value = "";
+	                    for(var i=0; i<aCities.length; i++){
+	                        aCities[i] = aCities[i].replace(/^\s+/,'');
+	                        aCities[i] = aCities[i].replace(/\s+$/,'');
+	
+	                        if ((aCities[i].length>0)&&(aCities[i]!=" ")){
+	                            $("PCity").options[i] = new Option(aCities[i], aCities[i]);
+	                        }
+	                    }
+	                }
+	            },
+	            onFailure: function(){
+	            }
+	        }
+	    );
+	  }
+	
+    function changeCity(){
         var today = new Date();
 
-        var url= path + '/_common/search/searchByAjax/getZipcodeByCityAndDistrict.jsp?ts=' + today;
+        var url= path + '/_common/search/searchByAjax/getZipcodeByCityAndDistrictAndRegion.jsp?ts=' + today;
         new Ajax.Request(url,{
                 method: "POST",
-                postBody: 'FindDistrict=' + document.getElementById("PDistrict").value+'&FindCity='+ document.getElementById("PSector").value
+                postBody: 'FindRegion=' + document.getElementById("PDistrict").value+'&FindDistrict=' + document.getElementById("PSector").value+'&FindCity='+ document.getElementById("PCity").value
             ,
                 onSuccess: function(resp){
                     var zipcode = resp.responseText;
                     $("PZipcode").value = zipcode;
-                    var prov=zipcode.substring(zipcode.indexOf("0"),zipcode.indexOf("0")+2);
-                    if(prov=="01"){
-                        setProvince("vk");
-                    }
-                    else if(prov=="02"){
-                        setProvince("south");
-                    }
-                    else if(prov=="03"){
-                        setProvince("west");
-                    }
-                    else if(prov=="04"){
-                        setProvince("north");
-                    }
-                    else if(prov=="05"){
-                        setProvince("east");
-                    }
                 },
                 onFailure: function(){
                 }
@@ -113,8 +127,25 @@
         }
         sBeginDate+= "</td></tr>";
 
-        String sDistricts = "<select class='text' id='PDistrict' name='PDistrict' onchange='changeDistrict();'><option/>";
-        Vector vDistricts = Zipcode.getDistricts(MedwanQuery.getInstance().getConfigString("zipcodetable","RwandaZipcodes"));
+        String sRegions = "<select class='text' id='PDistrict' name='PDistrict' onchange='changeRegion();'><option/>";
+        Vector vRegions = Zipcode.getRegions(MedwanQuery.getInstance().getConfigString("zipcodetable","RwandaZipcodes"));
+        Collections.sort(vRegions);
+        String sTmpRegion;
+        boolean bRegionSelected = false;
+        for (int i=0;i<vRegions.size();i++){
+            sTmpRegion = (String)vRegions.elementAt(i);
+
+            sRegions += "<option value='"+sTmpRegion+"'";
+
+            if (sTmpRegion.equalsIgnoreCase(apc.district)){
+                sRegions+=" selected";
+                bRegionSelected = true;
+            }
+            sRegions += ">"+sTmpRegion+"</option>";
+        }
+
+        String sDistricts = "<select class='text' id='PSector' name='PSector' onchange='changeDistrict();'><option/>";
+        Vector vDistricts = Zipcode.getDistricts(apc.district,MedwanQuery.getInstance().getConfigString("zipcodetable","RwandaZipcodes"));
         Collections.sort(vDistricts);
         String sTmpDistrict;
         boolean bDistrictSelected = false;
@@ -123,7 +154,7 @@
 
             sDistricts += "<option value='"+sTmpDistrict+"'";
 
-            if (sTmpDistrict.equalsIgnoreCase(apc.district)){
+            if (sTmpDistrict.equalsIgnoreCase(apc.sector)){
                 sDistricts+=" selected";
                 bDistrictSelected = true;
             }
@@ -131,12 +162,12 @@
         }
 
         if ((!bDistrictSelected)&&(checkString(apc.district).length()>0)){
-            sDistricts += "<option value='"+checkString(apc.district)+"' selected>"+checkString(apc.district)+"</option>";
+            sDistricts += "<option value='"+checkString(apc.sector)+"' selected>"+checkString(apc.sector)+"</option>";
         }
         sDistricts += "</select>";
 
-        String sCities = "<select class='text' id='PSector' name='PSector' onchange='changeSector()'><option/>";
-        Vector vCities = Zipcode.getCities(apc.district,MedwanQuery.getInstance().getConfigString("zipcodetable","RwandaZipcodes"));
+        String sCities = "<select class='text' id='PCity' name='PCity' onchange='changeCity();'><option/>";
+        Vector vCities = Zipcode.getCities(apc.district,apc.sector,MedwanQuery.getInstance().getConfigString("zipcodetable","RwandaZipcodes"));
         Collections.sort(vCities);
         String sTmpCity;
         boolean bCitySelected = false;
@@ -145,7 +176,7 @@
 
             sCities += "<option value='"+sTmpCity+"'";
 
-            if (sTmpCity.equalsIgnoreCase(apc.sector)){
+            if (sTmpCity.equalsIgnoreCase(apc.city)){
                 sCities+=" selected";
                 bCitySelected = true;
             }
@@ -159,10 +190,9 @@
 
         out.print(sBeginDate
             +inputRow("Web","address","PAddress","AdminPrivate",apc.address,"T",true, true,sWebLanguage)
-//            +inputRow("Web","district","PDistrict","AdminPrivate",apc.district,"T",true,false,sWebLanguage)
-            +"<tr><td class='admin'>"+getTran(request,"web","province",sWebLanguage)+"</td><td class='admin2'>"+sDistricts+"</td></tr>"
-//            +inputRow("Web","city","PCity","AdminPrivate",apc.city,"T",true, true,sWebLanguage)
-            +"<tr><td class='admin'>"+getTran(request,"web","community",sWebLanguage)+"</td><td class='admin2'>"+sCities+"</td></tr>"
+            +"<tr><td class='admin'>"+getTran(request,"web","province",sWebLanguage)+"</td><td class='admin2'>"+sRegions+"</td></tr>"
+            +"<tr><td class='admin'>"+getTran(request,"web","community",sWebLanguage)+"</td><td class='admin2'>"+sDistricts+"</td></tr>"
+            +"<tr><td class='admin'>"+getTran(request,"web","hill_quarter",sWebLanguage)+"</td><td class='admin2'>"+sCities+"</td></tr>"
             +inputRow("Web","zipcode","PZipcode","AdminPrivate",apc.zipcode,"T",false,false,sWebLanguage)
             +writeCountry(apc.country,"PCountry","AdminPrivate","PCountryDescription",true, "Country",sWebLanguage)
             +inputRow("Web","email","PEmail","AdminPrivate",apc.email,"T",true,false,sWebLanguage)
@@ -172,7 +202,6 @@
             //+"<tr><td class='admin'>"+getTran(request,"web","province",sWebLanguage)+"</td><td class='admin2'><select class='text' name='PProvince' id='PProvince'><option/>"
                 //+ScreenHelper.writeSelect(request,"province",apc.province,sWebLanguage,false,true)
                 //+"</select></td></tr>"
-            +inputRow("Web","city","PCity","AdminPrivate",apc.city,"T",true,false,sWebLanguage)
             +inputRow("Web","cell","PCell","AdminPrivate",apc.cell,"T",true,false,sWebLanguage)
             +inputRow("Web","function","PFunction","AdminPrivate",apc.businessfunction,"T",true,false,sWebLanguage)
             +inputRow("Web","business","PBusiness","AdminPrivate",apc.business,"T",true,false,sWebLanguage)
@@ -197,8 +226,8 @@
       document.all["PProvince"].value = "";
       document.getElementById("PDistrict").value = "";
       document.getElementById("PSector").value = "";
+      document.getElementById("PCity").value = "";
       document.all["PCell"].value = "";
-      document.all["PCity"].value = "";
       document.all["PFunction"].value = "";
       document.all["PBusiness"].value = "";
       document.all["PComment"].value = "";
@@ -220,7 +249,11 @@
       if(!validEmailAddress(PatientEditForm.PEmail.value)){
         maySubmit = false;
         displayGenericAlert = false;
-        alertDialog("web","invalidEmailaddress");
+
+        var popupUrl = "<c:url value="/popup.jsp"/>?Page=_common/search/okPopup.jsp&ts=999999999&labelType=Web&labelID=invalidemailaddress";
+        var modalities = "dialogWidth:266px;dialogHeight:163px;center:yes;scrollbars:no;resizable:no;status:no;location:no;";
+        (window.showModalDialog)?window.showModalDialog(popupUrl,"",modalities):window.confirm("<%=getTranNoLink("web","invalidemailaddress",sWebLanguage)%>");
+
         activateTab('AdminPrivate');
         PatientEditForm.PEmail.focus();
       }
@@ -252,7 +285,7 @@
   }
 
   var path = '<c:url value="/"/>';
-
+  
 </script>
 <%
     }

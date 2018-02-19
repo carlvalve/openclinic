@@ -13,16 +13,19 @@
 			String type    = checkString(request.getParameter("FastEncounterType."+n)),
 			       origin  = checkString(request.getParameter("FastEncounterOrigin."+n)),
 			       service = checkString(request.getParameter("FastEncounterService."+n)),
-			       manager = checkString(request.getParameter("FastEncounterManager."+n));
+				   manager = checkString(request.getParameter("FastEncounterManager."+n)),
+			       situation = checkString(request.getParameter("FastEncounterSituation."+n));
 			
 			String s = "";
 			if(type.length()>0 && origin.length()>0 && service.length()>0){
 				s = type+";"+origin+";"+service;
 				if(manager.length() > 0){
 					s+= ";"+manager;
+					if(situation.length()>0){
+						s+=";"+situation;
+					}
 				}
 			}
-			
 			MedwanQuery.getInstance().setConfigString("quickConsult"+n+"."+activeUser.userid,s);
 		}
 
@@ -51,6 +54,7 @@
 			<td><%=getTran(request,"web","origin",sWebLanguage)%></td>
 			<td><%=getTran(request,"web","service",sWebLanguage)%></td>
 			<td><%=getTran(request,"web","manager",sWebLanguage)%></td>
+			<td><%=getTran(request,"web","situation",sWebLanguage)%></td>
 		</tr>
 		
 	    <%-- FAST ENCOUNTER 1 -------------------------------------------------------------------%>
@@ -93,6 +97,12 @@
 	            <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("web","select",sWebLanguage)%>" onclick="searchManager('FastEncounterManager.1','FastEncounterManagerName.1');">
 	            <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("web","clear",sWebLanguage)%>" onclick="document.getElementById('FastEncounterManager.1').value='';document.getElementById('FastEncounterManagerName.1').value='';">
 	        </td>
+		    <td class='admin2'>
+	            <select class="text" name="FastEncounterSituation.1">
+	                <option/>
+	                <%=ScreenHelper.writeSelect(request,"encounter.situation",fastencounter.split(";").length>4?fastencounter.split(";")[4]:"",sWebLanguage)%>
+	            </select>
+			</td>
 		</tr>
 		
 	    <%-- FAST ENCOUNTER 2 -------------------------------------------------------------------%>
@@ -133,6 +143,12 @@
 	            <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("web","select",sWebLanguage)%>" onclick="searchManager('FastEncounterManager.2','FastEncounterManagerName.2');">
 	            <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("web","clear",sWebLanguage)%>" onclick="document.getElementById('FastEncounterManager.2').value='';document.getElementById('FastEncounterManagerName.2').value='';">
 	        </td>
+		    <td class='admin2'>
+	            <select class="text" name="FastEncounterSituation.2">
+	                <option/>
+	                <%=ScreenHelper.writeSelect(request,"encounter.situation",fastencounter.split(";").length>4?fastencounter.split(";")[4]:"",sWebLanguage)%>
+	            </select>
+			</td>
 	    </tr>
 	    
 	    <%-- FAST ENCOUNTER 3 -------------------------------------------------------------------%>
@@ -176,6 +192,12 @@
 	            <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("web","select",sWebLanguage)%>" onclick="searchManager('FastEncounterManager.3','FastEncounterManagerName.3');">
 	            <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("web","clear",sWebLanguage)%>" onclick="document.getElementById('FastEncounterManager.3').value='';document.getElementById('FastEncounterManagerName.3').value='';">
 	        </td>
+		    <td class='admin2'>
+	            <select class="text" name="FastEncounterSituation.3">
+	                <option/>
+	                <%=ScreenHelper.writeSelect(request,"encounter.situation",fastencounter.split(";").length>4?fastencounter.split(";")[4]:"",sWebLanguage)%>
+	            </select>
+			</td>
 	    </tr>
 	    
 	    <%-- FAST ENCOUNTER 4 -------------------------------------------------------------------%>
@@ -216,6 +238,12 @@
 	            <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("web","select",sWebLanguage)%>" onclick="searchManager('FastEncounterManager.4','FastEncounterManagerName.4');">
 	            <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("web","clear",sWebLanguage)%>" onclick="document.getElementById('FastEncounterManager.4').value='';document.getElementById('FastEncounterManagerName.4').value='';">
 	        </td>
+		    <td class='admin2'>
+	            <select class="text" name="FastEncounterSituation.4">
+	                <option/>
+	                <%=ScreenHelper.writeSelect(request,"encounter.situation",fastencounter.split(";").length>4?fastencounter.split(";")[4]:"",sWebLanguage)%>
+	            </select>
+			</td>
 	    </tr>
 	    
 	    <%-- FAST ENCOUNTER 5 -------------------------------------------------------------------%>
@@ -256,6 +284,12 @@
 	            <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("web","select",sWebLanguage)%>" onclick="searchManager('FastEncounterManager.5','FastEncounterManagerName.5');">
 	            <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("web","clear",sWebLanguage)%>" onclick="document.getElementById('FastEncounterManager.5').value='';document.getElementById('FastEncounterManagerName.5').value='';">
 	        </td>
+		    <td class='admin2'>
+	            <select class="text" name="FastEncounterSituation.5">
+	                <option/>
+	                <%=ScreenHelper.writeSelect(request,"encounter.situation",fastencounter.split(";").length>4?fastencounter.split(";")[4]:"",sWebLanguage)%>
+	            </select>
+			</td>
 	    </tr>	
 	</table>
 	

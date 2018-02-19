@@ -1,25 +1,18 @@
 function pageResize(){
-  if(ie){
-    var rcts = document.getElementById("Juist").getClientRects();
-    var headerH = rcts[0].top;
-    document.getElementById("Juist").style.height = document.body.clientHeight - headerH;
-    if(hasScrollbar()){
-      document.getElementById("holder").style.width = document.body.clientWidth - 1;
-      document.getElementById("Juist").style.width = document.body.clientWidth - 2;
-      document.getElementById("mijn").style.width = document.getElementById("Juist").offsetWidth - 17;
-    }
-    else{
-      document.getElementById("holder").style.width = document.body.clientWidth - 1;
-      document.getElementById("Juist").style.width = document.body.clientWidth - 2;
-      document.getElementById("mijn").style.width = document.getElementById("Juist").offsetWidth;
-    }
-  }
-  else{
-    var divHeight = document.getElementById("body").offsetHeight - (document.getElementById("menu").offsetHeight+document.getElementById("header").offsetHeight+5);
-    document.getElementById("Juist").style.height = divHeight+"px";
-  }
-    
-  resizeSearchFields();
+	var rcts = document.getElementById("Juist").getClientRects();
+	var headerH = rcts[0].top;
+	document.getElementById("Juist").style.height = document.body.clientHeight - headerH;
+	if(hasScrollbar()){
+	  document.getElementById("holder").style.width = document.body.clientWidth - 1;
+	  document.getElementById("Juist").style.width = document.body.clientWidth - 2;
+	  document.getElementById("mijn").style.width = document.getElementById("Juist").offsetWidth - 17;
+	}
+	else{
+	  document.getElementById("holder").style.width = document.body.clientWidth - 1;
+	  document.getElementById("Juist").style.width = document.body.clientWidth - 2;
+	  document.getElementById("mijn").style.width = document.getElementById("Juist").offsetWidth;
+	}
+	resizeSearchFields();
 }
 
 function resizeAllTextareas(maxRows){

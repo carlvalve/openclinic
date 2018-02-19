@@ -459,21 +459,6 @@ Chart.defaults.global.scaleSteps = 10;
 Chart.defaults.global.scaleStepWidth = 10;
 Chart.defaults.global.scaleStartValue = -100;
 
-var options = {
-  scaleShowGridLines : true,
-  scaleGridLineColor : "rgba(0,0,0,.05)",
-  scaleGridLineWidth : 1,
-  bezierCurve : true,
-  bezierCurveTension : 0.2,
-  pointDot : true,
-  pointDotRadius : 3,
-  pointDotStrokeWidth : 1,
-  pointHitDetectionRadius : 16,
-  datasetStroke : true,
-  datasetStrokeWidth : 2,
-  datasetFill : true   
-};
-
 window.onload = function(){
   //***** MAIN *****
   var data = {
@@ -481,11 +466,8 @@ window.onload = function(){
     datasets: [
       {
         label: "RE",
-        fillColor: "rgba(250,250,250,0)",
-        strokeColor: "#CC3333",
-        pointColor: "#CC3333",
-	    pointHighlightStroke: "#CC3333",
-        pointStrokeColor: "#fff",
+        borderColor: "#CC3333",
+        fill: false,
 	    data: [getSliderValue("freqSliderR0125"),
 	           getSliderValue("freqSliderR0250"),
 	           getSliderValue("freqSliderR0500"),
@@ -496,140 +478,133 @@ window.onload = function(){
       },
       {
         label: "LE",
-        fillColor: "rgba(250,250,250,0)",
-        strokeColor: "#0000AA",
-        pointColor: "#0000AA",
-	    pointHighlightStroke: "#0000AA",
-        pointStrokeColor: "#fff",
-	    data: [getSliderValue("freqSliderL0125"),
-	           getSliderValue("freqSliderL0250"),
-	           getSliderValue("freqSliderL0500"),
-	           getSliderValue("freqSliderL1000"),
-	           getSliderValue("freqSliderL2000"),
-	           getSliderValue("freqSliderL4000"),
-	           getSliderValue("freqSliderL8000")]
-      },
-      {
-        label: "RE Bony",
-        fillColor: "rgba(250,250,250,0)",
-        strokeColor: "#000000",
-        pointColor: "#000000",
-  	    pointHighlightStroke: "#000000",
-        pointStrokeColor: "#fff",
-	    data: [getSliderValue("freqSliderRb0125"),
-	           getSliderValue("freqSliderRb0250"),
-	           getSliderValue("freqSliderRb0500"),
-	           getSliderValue("freqSliderRb1000"),
-	           getSliderValue("freqSliderRb2000"),
-	           getSliderValue("freqSliderRb4000"),
-	           getSliderValue("freqSliderRb8000")]
-      },
-      {
-        label: "LE Bony",
-        fillColor: "rgba(250,250,250,0)",
-        strokeColor: "#8000AA",
-        pointColor: "#8000AA",
-    	pointHighlightStroke: "#8000AA",
-        pointStrokeColor: "#fff",
-	    data: [getSliderValue("freqSliderLb0125"),
-	           getSliderValue("freqSliderLb0250"),
-	           getSliderValue("freqSliderLb0500"),
-	           getSliderValue("freqSliderLb1000"),
-	           getSliderValue("freqSliderLb2000"),
-	           getSliderValue("freqSliderLb4000"),
-	           getSliderValue("freqSliderLb8000")]
-      },
-	  {
-  	    label: "Normal",
-  	    fillColor: "rgba(250,250,250,0)",
-  	    strokeColor: "#00AA00",
-  	    pointColor: "#00AA00",
-  	    pointHighlightStroke: "#00AA00",
-  	    pointStrokeColor: "#fff",
-  	    data: [-1*<%=Math.round(hearingLoss.getLoss0125()*1e3)/1e3%>,
-  	           -1*<%=Math.round(hearingLoss.getLoss0250()*1e3)/1e3%>,
-  	           -1*<%=Math.round(hearingLoss.getLoss0500()*1e3)/1e3%>,
-  	           -1*<%=Math.round(hearingLoss.getLoss1000()*1e3)/1e3%>,
-  	           -1*<%=Math.round(hearingLoss.getLoss2000()*1e3)/1e3%>,
-  	           -1*<%=Math.round(hearingLoss.getLoss4000()*1e3)/1e3%>,
-  	           -1*<%=Math.round(hearingLoss.getLoss8000()*1e3)/1e3%>]
-        }
-    ]
+        borderColor: "#0000AA",
+        fill: false,
+  	    data: [getSliderValue("freqSliderL0125"),
+  	           getSliderValue("freqSliderL0250"),
+  	           getSliderValue("freqSliderL0500"),
+  	           getSliderValue("freqSliderL1000"),
+  	           getSliderValue("freqSliderL2000"),
+  	           getSliderValue("freqSliderL4000"),
+  	           getSliderValue("freqSliderL8000")]
+        },
+        {
+            label: "RE Bony",
+            borderColor: "#000000",
+            fill: false,
+    	    data: [getSliderValue("freqSliderRb0125"),
+    	           getSliderValue("freqSliderRb0250"),
+    	           getSliderValue("freqSliderRb0500"),
+    	           getSliderValue("freqSliderRb1000"),
+    	           getSliderValue("freqSliderRb2000"),
+    	           getSliderValue("freqSliderRb4000"),
+    	           getSliderValue("freqSliderRb8000")]
+          },
+          {
+            label: "LE Bony",
+            borderColor: "#8000AA",
+            fill: false,
+    	    data: [getSliderValue("freqSliderLb0125"),
+    	           getSliderValue("freqSliderLb0250"),
+    	           getSliderValue("freqSliderLb0500"),
+    	           getSliderValue("freqSliderLb1000"),
+    	           getSliderValue("freqSliderLb2000"),
+    	           getSliderValue("freqSliderLb4000"),
+    	           getSliderValue("freqSliderLb8000")]
+          },
+    	  {
+      	    label: "Normal",
+      	    borderColor: "#00AA00",
+            fill: false,
+      	    data: [-1*<%=Math.round(hearingLoss.getLoss0125()*1e3)/1e3%>,
+      	           -1*<%=Math.round(hearingLoss.getLoss0250()*1e3)/1e3%>,
+      	           -1*<%=Math.round(hearingLoss.getLoss0500()*1e3)/1e3%>,
+      	           -1*<%=Math.round(hearingLoss.getLoss1000()*1e3)/1e3%>,
+      	           -1*<%=Math.round(hearingLoss.getLoss2000()*1e3)/1e3%>,
+      	           -1*<%=Math.round(hearingLoss.getLoss4000()*1e3)/1e3%>,
+      	           -1*<%=Math.round(hearingLoss.getLoss8000()*1e3)/1e3%>]
+            }    ]
   };	  
 
-  var ctx = document.getElementById("diagMain").getContext("2d");		
-  diagMain = new Chart(ctx).Line(data,options);
-		
-  //***** HIST *****
-  var data = {
-    labels: ["125","250","500","1k","2k","4k","8k"],
-	datasets: [
-      {
-        label: "RE history",
-        fillColor: "rgba(250,250,250,0)",
-        strokeColor: "#CC3333",
-        pointColor: "#CC3333",
-  	    pointHighlightStroke: "#CC3333",
-        pointStrokeColor: "#fff",
- 	    data: [null,null,null,null,null,null,null]
-      },
-      {
-        label: "LE history",
-        fillColor: "rgba(250,250,250,0)",
-        strokeColor: "#0000AA",
-        pointColor: "#0000AA",
-  	    pointHighlightStroke: "#0000AA",
-        pointStrokeColor: "#fff",
- 	    data: [null,null,null,null,null,null,null]
-      },
-      {
-        label: "RE Bony history",
-        fillColor: "rgba(250,250,250,0)",
-        strokeColor: "#000000",
-        pointColor: "#000000",
-        pointHighlightStroke: "#000000",
-        pointStrokeColor: "#fff",
- 	    data: [null,null,null,null,null,null,null]
-      },
-      {
-        label: "LE Bony history",
-        fillColor: "rgba(250,250,250,0)",
-        strokeColor: "#8000AA",
-        pointColor: "#8000AA",
-      	pointHighlightStroke: "#8000AA",
-        pointStrokeColor: "#fff",
- 	    data: [null,null,null,null,null,null,null]
-      }
-    ]
-  };	  
+	var ctx = document.getElementById("diagMain").getContext("2d");		
 
-  var options = {
-	showTooltips : false,
-	animation : false,
-	scaleOverride : true,
-	scaleSteps : 10,
-	scaleStepWidth : 10,
-	scaleStartValue : -100,
-	
-    scaleShowGridLines : true,
-    scaleGridLineColor : "rgba(0,0,0,.05)",
-    scaleGridLineWidth : 1,
-    bezierCurve : true,
-    bezierCurveTension : 0.2,
-    pointDot : true,
-    pointDotRadius : 2,
-    pointDotStrokeWidth : 1,
-    pointHitDetectionRadius : 12,
-    datasetStroke : true,
-    datasetStrokeWidth : 1,
-    datasetFill : true   
-  };
-  
-  var ctx = document.getElementById("diagHist").getContext("2d");		
-  diagHist = new Chart(ctx).Line(data,options);
-  
-  displayHistories();
+	diagMain = new Chart(ctx, {
+	    type: 'line',
+	    data: data,
+	    options: {	
+	    	spanGaps: true,
+	        legend: {
+	            display: false
+	        },
+	        scales: {
+	        	yAxes: [{
+	        		ticks: {
+		        		min: -100,
+		        		max: 0,	
+		        		stepSize: 10,
+	        		}
+	        	}],
+	        },
+	    },
+	});
+
 }
+
+//***** HIST *****
+var data = {
+  labels: ["125","250","500","1k","2k","4k","8k"],
+	datasets: [
+    {
+      label: "RE history",
+      borderColor: "#CC3333",
+      fill: false,
+	    data: [null,null,null,null,null,null,null]
+    },
+    {
+      label: "LE history",
+      borderColor: "#0000AA",
+      fill: false,
+	    data: [null,null,null,null,null,null,null]
+    },
+    {
+      label: "RE Bony history",
+      borderColor: "#000000",
+      fill: false,
+	    data: [null,null,null,null,null,null,null]
+    },
+    {
+      label: "LE Bony history",
+      borderColor: "#8000AA",
+      fill: false,
+	    data: [null,null,null,null,null,null,null]
+    }
+  ]
+};	  
+
+var ctx = document.getElementById("diagHist").getContext("2d");		
+
+diagHist = new Chart(ctx, {
+    type: 'line',
+    data: data,
+    options: {	
+    	spanGaps: true,
+        legend: {
+            display: false
+        },
+        scales: {
+        	yAxes: [{
+        		ticks: {
+	        		min: -100,
+	        		max: 0,	
+	        		stepSize: 10,
+        		}
+        	}],
+        },
+    },
+});
+
+displayHistories();
+
 
 <%-- GET SLIDER VALUE --%>
 function getSliderValue(sliderId){
@@ -656,15 +631,13 @@ function setDiag(freqSlider){
   var sFreq = freqSlider.id.substring(("freqSlider").length+1);
 
   var possibleFreqs = ["0125","0250","0500","1000","2000","4000","8000"];
-  var diagram = eval("diagMain");
-  
   for(var i=0; i<possibleFreqs.length; i++){
     if(freqSlider.id.toLowerCase()==("freqSlider"+sLorR+(sBony=="b"?"b":"")+possibleFreqs[i]).toLowerCase()){
-      diagram.datasets[getDataSetIdx(sLorR,sBony)].points[i].value = getSliderValue(freqSlider.id);    
+      diagMain.data.datasets[getDataSetIdx(sLorR,sBony)].data[i] = getSliderValue(freqSlider.id);    
     }
   }
 
-  diagram.update();
+  diagMain.update();
 }
 
 <%-- GET DATASET IDX --%>
@@ -700,11 +673,11 @@ function displayHistories(){
 
 <%-- HIDE HISTORY --%>
 function hideHistory(){  
-  for(var i=0; i<diagHist.datasets[1].points.length; i++){
-    diagHist.datasets[0].points[i].value = null;
-	diagHist.datasets[1].points[i].value = null;
-	diagHist.datasets[2].points[i].value = null;
-	diagHist.datasets[3].points[i].value = null;
+  for(var i=0; i<diagHist.datasets[1].data.length; i++){
+    diagHist.data.datasets[0].data[i] = null;
+	diagHist.data.datasets[1].data[i] = null;
+	diagHist.data.datasets[2].data[i] = null;
+	diagHist.data.datasets[3].data[i] = null;
   }
   diagHist.update();
 }
@@ -721,14 +694,14 @@ function displayHistory(sItemPrefix){
     var tmpValue = getHist(sItemPrefix+"_"+possibleFreqs[i]);
     if(tmpValue.length > 0){
       if(tmpValue=="-"){
-        diagHist.datasets[idx].points[i].value = null;
+        diagHist.data.datasets[idx].data[i] = null;
       }
       else{
-    	diagHist.datasets[idx].points[i].value = -1*tmpValue;
+    	diagHist.data.datasets[idx].data[i] = -1*tmpValue;
       }
     }
     else{
-      diagHist.datasets[idx].points[i].value = null;
+      diagHist.data.datasets[idx].data[i] = null;
     }
   }  
   diagHist.update();

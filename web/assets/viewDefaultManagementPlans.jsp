@@ -14,8 +14,15 @@
 		String uid=rs.getString("oc_maintenanceplan_uid");
 		sResult.append("<tr>");
 		sResult.append("<td class='admin' nowrap width='1%'>");
-		sResult.append("<img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.gif' onclick='deleteDefault(\""+uid+"\")'/>");
-		sResult.append(uid+"</td><td class='admin2'>"+rs.getString("oc_maintenanceplan_name")+"</td><td class='admin2' nowrap width='1%'>"+getTran(request,"maintenanceplan.frequency",rs.getString("oc_maintenanceplan_frequency"),sWebLanguage)+"</td></tr>");		
+		if(activeUser.getAccessRight("assets.defaultmaintenanceplans.delete")){
+			sResult.append("<img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.gif' onclick='deleteDefault(\""+uid+"\")'/>");
+		}
+		if(activeUser.getAccessRight("maintenanceplans.edit")){
+			sResult.append("</td><td class='admin2'><a href='javascript:selectDefault("+uid+")'>"+rs.getString("oc_maintenanceplan_name")+"</a></td><td class='admin2' nowrap width='1%'>"+getTran(request,"maintenanceplan.frequency",rs.getString("oc_maintenanceplan_frequency"),sWebLanguage)+"</td></tr>");		
+		}
+		else{
+			sResult.append("</td><td class='admin2'>"+rs.getString("oc_maintenanceplan_name")+"</td><td class='admin2' nowrap width='1%'>"+getTran(request,"maintenanceplan.frequency",rs.getString("oc_maintenanceplan_frequency"),sWebLanguage)+"</td></tr>");		
+		}
 	}
 %>
 	<tr class='admin'>
@@ -37,6 +44,13 @@
 		    	onFailure: function(resp){
 		    	}
 		  	});
+		}
+	}
+	
+	function selectDefault(uid){
+		if(window.confirm('<%=getTranNoLink("web","areyousuretoloadmodel",sWebLanguage)%>')){
+			window.opener.loadDefaultMaintenancePlan(uid);
+			window.close();
 		}
 	}
 </script>

@@ -1,6 +1,6 @@
 <%@include file="/includes/validateUser.jsp"%>
 <%@page errorPage="/includes/error.jsp"%>
-<%=checkPermission("occup.emg","select",activeUser)%>
+<%=checkPermission("occup.kirapreop","select",activeUser)%>
 
 <form id="transactionForm" name="transactionForm" method="POST" action='<c:url value="/healthrecord/updateTransaction.do"/>?ts=<%=getTs()%>'>
     <bean:define id="transaction" name="be.mxs.webapp.wl.session.SessionContainerFactory.WO_SESSION_CONTAINER" property="currentTransactionVO"/>
@@ -385,7 +385,7 @@
     
     <%-- BUTTONS --%>
     <%=ScreenHelper.alignButtonsStart()%>                    
-	    <%=getButtonsHtml(request,activeUser,activePatient,"occup.emg",sWebLanguage)%>
+	    <%=getButtonsHtml(request,activeUser,activePatient,"occup.kirapreop",sWebLanguage)%>
     <%=ScreenHelper.alignButtonsStop()%>
 			                
     <%=ScreenHelper.contextFooter(request)%>

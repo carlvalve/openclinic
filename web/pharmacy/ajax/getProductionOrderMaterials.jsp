@@ -1,5 +1,5 @@
 <%@page import="be.openclinic.finance.*"%>
-<%@page import="be.openclinic.pharmacy.*"%>
+<%@page import="be.openclinic.pharmacy.*,be.mxs.common.util.system.*"%>
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
 <%
@@ -32,11 +32,12 @@
 		out.println("<td class='admin'>"+ScreenHelper.getTran(request,"web","unit",sWebLanguage)+"</td>");
 		if(order.getCloseDateTime()==null){
 			out.println("<td class='admin'>"+ScreenHelper.getTran(request,"web","available",sWebLanguage)+"</td>");
-			if(MedwanQuery.getInstance().getConfigInt("enableCCBRTProductionOrderMecanism",0)==1){
+			if(MedwanQuery.getInstance().getConfigInt("enableCCBRTProductionOrderMecanism",0)==1 ){
 				out.println("<td class='admin'>"+ScreenHelper.getTran(request,"web","linked",sWebLanguage)+"</td>");
 			}
 		}
 		out.println("</tr>");
+		ProductStock targetProductStock = ProductStock.get(order.getTargetProductStockUid());
 		Enumeration eProducts = productstocks.keys();
 		while(eProducts.hasMoreElements()){
 			String key = (String)eProducts.nextElement();
@@ -53,9 +54,9 @@
 			out.println("<td class='admin2'>"+productunit+"</td>");
 			if(order.getCloseDateTime()==null){
 				out.println("<td class='admin2'>"+productStock.getLevel()+"</td>");
-				int nLinked=productStock.getReceivedForProductionOrder(productionOrderId);
 				if(MedwanQuery.getInstance().getConfigInt("enableCCBRTProductionOrderMecanism",0)==1){
-					out.println("<td class='admin2'>"+nLinked+(nQuantity<=nLinked?"":" <img height='12px' src='"+sCONTEXTPATH+"/_img/icons/icon_forbidden.png' title='"+getTranNoLink("web","linkedquantitytoolow",sWebLanguage)+"'/>")+"</td>");
+					int nLinked=productStock.getReceivedForProductionOrder(productionOrderId);
+					out.println("<td class='admin2'>"+nLinked+(Pointer.getPointer("nowarehouseorder."+targetProductStock.getProductUid()).length()>0 || nQuantity<=nLinked?"":" <img height='12px' src='"+sCONTEXTPATH+"/_img/icons/icon_forbidden.png' title='"+getTranNoLink("web","linkedquantitytoolow",sWebLanguage)+"'/>")+"</td>");
 				}
 			}
 			out.println("</tr>");

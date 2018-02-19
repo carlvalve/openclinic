@@ -18,22 +18,31 @@
 	ps.setString(1,activePatient.personid);
 	ResultSet rs = ps.executeQuery();
 	int count = 0;
+	int prescriptionid = MedwanQuery.getInstance().getOpenclinicCounter("OC_PRESCRIPTIONS");
 	
 	while(rs.next()){
+		String sBatchUid=checkString(rs.getString("OC_LIST_BATCHUID"));
+		int nQuantity=rs.getInt("OC_LIST_QUANTITY");
+		if(sBatchUid.length()>0){
+			Batch batch = Batch.get(sBatchUid);
+			if(batch.getLevel()<nQuantity){
+				continue;
+			}
+		}
 		// Create stock operation
 		ProductStockOperation operation = new ProductStockOperation();
-		
 		operation.setUid("-1");
-		operation.setBatchUid(rs.getString("OC_LIST_BATCHUID"));
+		operation.setBatchUid(sBatchUid);
 		operation.setDate(new java.util.Date()); // now
 		operation.setDescription(MedwanQuery.getInstance().getConfigString("medicationDeliveryToPatientDescription","medicationdelivery.1"));
 		operation.setProductStockUid(rs.getString("OC_LIST_PRODUCTSTOCKUID"));
 		operation.setSourceDestination(new ObjectReference("patient",activePatient.personid));
-		operation.setUnitsChanged(rs.getInt("OC_LIST_QUANTITY"));
+		operation.setUnitsChanged(nQuantity);
 		operation.setComment(checkString(rs.getString("OC_LIST_COMMENT")));
 		operation.setUpdateDateTime(new java.util.Date());
 		operation.setUpdateUser(activeUser.userid);
 		operation.setVersion(1);
+		operation.setPrescriptionUid(prescriptionid+"");
 		operation.setEncounterUID(checkString(rs.getString("OC_LIST_ENCOUNTERUID")));
 		
 		operation.store();

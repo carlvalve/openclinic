@@ -53,9 +53,9 @@
         // display label in row
         foundLabels.append("<tr class='list"+sClass+"'>")
                     .append("<td class='hand' onclick=\"setLabel('"+sLabelType+"','"+sLabelID+"');\">"+sLabelType+"</td>")
-                    .append("<td class='hand' onclick=\"setLabel('"+sLabelType+"','"+sLabelID+"');\">"+HTMLEntities.htmlentities(sLabelID)+"</td>")
-                    .append("<td class='hand' onclick=\"setLabel('"+sLabelType+"','"+sLabelID+"');\">"+HTMLEntities.htmlentities(getTran(null,"web.language",sLabelLang,sWebLanguage))+"</td>")
-                    .append("<td class='hand' onclick=\"setLabel('"+sLabelType+"','"+sLabelID+"');\">"+HTMLEntities.htmlentities(sLabelValue)+"</td>")
+                    .append("<td class='hand' onclick=\"setLabel('"+sLabelType+"','"+sLabelID+"');\">&nbsp;"+HTMLEntities.htmlentities(sLabelID)+"</td>")
+                    .append("<td class='hand' onclick=\"setLabel('"+sLabelType+"','"+sLabelID+"');\">&nbsp;"+HTMLEntities.htmlentities(getTran(null,"web.language",sLabelLang,sWebLanguage))+"</td>")
+                    .append("<td class='hand' onclick=\"setLabel('"+sLabelType+"','"+sLabelID+"');\">&nbsp;"+HTMLEntities.htmlentities(sLabelValue)+"</td>")
                    .append("</tr>");
 
         recsFound++;

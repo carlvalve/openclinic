@@ -6,56 +6,44 @@
 <%@include file="../../../assets/includes/commonFunctions.jsp"%>
 <table width='100%'>
 	<%
-		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
-		PreparedStatement ps=null;
-		ResultSet rs = null;
-		String assetuid = checkString(request.getParameter("assetuid"));
-		System.out.println("assetuid="+assetuid);
-	    String[] sComponents = checkString(request.getParameter("components")).split(";");
-	    SortedSet comps = new TreeSet();
-		for(int n=0;n<sComponents.length;n++){
-			comps.add(sComponents[n]);
-		}
-		Iterator iComps=comps.iterator();
-		while(iComps.hasNext()){
-			Nomenclature nomenclature = Nomenclature.get("assetcomponent", (String)iComps.next());
-			if(nomenclature!=null){
-				out.println("<tr>");
-				out.println("<td valign='bottom'><img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.gif' onclick='deleteComponent(\""+nomenclature.getId()+"\")'/> <img src='"+sCONTEXTPATH+"/_img/icons/icon_edit.gif' onclick='editComponent(\""+assetuid+"."+nomenclature.getId()+"\")'/>"+nomenclature.getId()+" "+nomenclature.getFullyQualifiedName(sWebLanguage)+"</td>");
-				//Insert component details here
-				ps = conn.prepareStatement("select * from oc_assetcomponents where oc_component_assetuid=? and oc_component_nomenclature=?");
+		try{
+			Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+			PreparedStatement ps=null;
+			ResultSet rs = null;
+			String assetuid = checkString(request.getParameter("assetuid"));
+			if(assetuid.length()>0){
+				Asset asset = Asset.get(assetuid);
+				boolean bLocked = asset.getObjectId()>-1 && ((asset.getLockedBy()>-1 && asset.getLockedBy()!=MedwanQuery.getInstance().getConfigInt("GMAOLocalServerId",-1)) || (asset.getLockedBy()==-1 && MedwanQuery.getInstance().getConfigInt("GMAOLocalServerId",-1)!=0));
+				ps = conn.prepareStatement("select * from oc_assetcomponents where oc_component_assetuid=? order by oc_component_nomenclature,oc_component_objectid");
 				ps.setString(1,assetuid);
-				ps.setString(2,nomenclature.getId());
 				rs = ps.executeQuery();
 				String type="",status="",characteristics="";
 				while(rs.next()){
-					if(type.indexOf(checkString(rs.getString("oc_component_type")))<0){
-						if(type.length()>0){
-							type+=", ";
-						}
-						type+=checkString(rs.getString("oc_component_type"));
-					}
+					out.println("<tr>");
+					Nomenclature nomenclature = Nomenclature.get("assetcomponent",rs.getString("oc_component_nomenclature"));
+					out.println("<td valign='bottom' width='1%' nowrap>"+(!bLocked && activeUser.getAccessRight("assets.edit")?"<img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.gif' onclick='deleteComponent(\""+assetuid+"."+rs.getString("oc_component_objectid")+"."+rs.getString("oc_component_nomenclature")+"\")'/> <img src='"+sCONTEXTPATH+"/_img/icons/icon_edit.gif' onclick='editComponent(\""+assetuid+"."+rs.getString("oc_component_objectid")+"."+rs.getString("oc_component_nomenclature")+"\")'/>":"")+rs.getString("oc_component_nomenclature")+" "+nomenclature.getFullyQualifiedName(sWebLanguage)+"</td>");
+					type=checkString(rs.getString("oc_component_type"));
 					status=checkString(rs.getString("oc_component_status"));
-					if(characteristics.indexOf(checkString(rs.getString("oc_component_characteristics")))<0){
-						if(characteristics.length()>0){
-							characteristics+=", ";
-						}
-						characteristics+=checkString(rs.getString("oc_component_characteristics"));
+					characteristics=checkString(rs.getString("oc_component_characteristics"));
+					System.out.println("C.1");
+					if(type.length()>0){
+						out.println("<td  valign='bottom' width='5%'>&nbsp;</td>");
+						out.println("<td  valign='bottom'><b>"+type+"</b></td>");
+						out.println("<td  valign='bottom' nowrap><b>"+getTran(request,"component.status",status,sWebLanguage)+"</b></td>");
+						out.println("<td  valign='bottom' ><b>"+characteristics+"</b></td>");
 					}
-				}
-				if(type.length()>0){
-					out.println("<td  valign='bottom'><b>"+type+"</b></td>");
-					out.println("<td  valign='bottom' nowrap><b>"+getTran(request,"component.status",status,sWebLanguage)+"</b></td>");
-					out.println("<td  valign='bottom' ><b>"+characteristics+"</b></td>");
-				}
-				else{
-					out.println("<td colspan='3'/>");
+					else{
+						out.println("<td colspan='3'/>");
+					}
+					out.println("</tr>");
 				}
 				rs.close();
 				ps.close();
-				out.println("</tr>");
 			}
+			conn.close();
 		}
-		conn.close();
+		catch(Exception e){
+			e.printStackTrace();
+		}
 	%>
 </table>

@@ -312,6 +312,256 @@
 		                f.delete();
 						message="<h3>"+lines+" " +getTran(request,"web","records.loaded",sWebLanguage)+"</h3>";
 					}
+					else if(mrequest.getParameter("filetype").equalsIgnoreCase("stockscsv")){
+		                File f = new File(upBean.getFolderstore()+"/"+sFileName);
+						BufferedReader reader = new BufferedReader(new FileReader(f));
+						lines=0;
+						Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+						PreparedStatement ps=null;
+						ResultSet rs=null;
+						while(reader.ready()){
+							String[] line = reader.readLine().split(";");
+							String code = line[0];
+							System.out.println("code="+code);
+							String name = line[1];
+							System.out.println("name="+name);
+							String form = line[2];
+							System.out.println("form="+form);
+							String dispensingQuantity = line[3];
+							System.out.println("dispensingQuantity="+dispensingQuantity);
+							int nDispensingQuantity=1;
+							try{
+								nDispensingQuantity=Integer.parseInt(dispensingQuantity);
+							}
+							catch(Exception e){
+								e.printStackTrace();
+							}
+							String stockName = line [4];
+							System.out.println("stockName="+stockName);
+							String stockLevel = line.length>5?line[5]:"0";
+							int nStockLevel=0;
+							try{
+								nStockLevel=Integer.parseInt(stockLevel);
+							}
+							catch(Exception e){
+								e.printStackTrace();
+							}
+							String stockMinLevel = line.length>6?line[6]:"0";
+							int nStockMinLevel=0;
+							try{
+								nStockMinLevel=Integer.parseInt(stockMinLevel);
+							}
+							catch(Exception e){
+								e.printStackTrace();
+							}
+							String stockMaxLevel = line.length>7?line[7]:"0";
+							int nStockMaxLevel=0;
+							try{
+								nStockMaxLevel=Integer.parseInt(stockMaxLevel);
+							}
+							catch(Exception e){
+								e.printStackTrace();
+							}
+							String group = line.length>8?line[8]:"";
+							String category = line.length>9?line[9]:"";
+							//Check 1: verify if a product with this code already exists. 
+							Product product = null;
+							Vector products = Product.findWithCode(code, "", "", "", "", "", "", "", "", "OC_PRODUCT_CODE", "");
+							if(products.size()>0){
+								System.out.println("1");
+								//Product exists, use it
+								product = (Product)products.elementAt(0);
+							}
+							else{
+								System.out.println("2");
+								//Create the product
+								product = new Product();
+								product.setUid("-1");
+								product.setCode(code);
+								product.setName(name);
+								if(form.trim().length()>0){
+									System.out.println("3");
+									//Check the presentation form of the product
+									ps=conn.prepareStatement("select * from oc_labels where oc_label_type='product.unit' and oc_label_id=?");
+									ps.setString(1,form);
+									rs=ps.executeQuery();
+									if(!rs.next()){
+										System.out.println("4");
+										rs.close();
+										ps.close();
+										ps=conn.prepareStatement("select * from oc_labels where oc_label_type='product.unit' and oc_label_value=?");
+										ps.setString(1,form);
+										rs=ps.executeQuery();
+										if(rs.next()){
+											System.out.println("5");
+											form=rs.getString("oc_label_id");
+										}
+										else{
+											System.out.println("6");
+											//Create the presentation form
+											Label label = new Label();
+											label.id = ScreenHelper.checkSpecialCharacters(form);
+											label.language=sWebLanguage;
+											label.showLink="1";
+											label.type="product.unit";
+											label.updateUserId=activeUser.userid;
+											label.value=form;
+											label.saveToDB();
+											form=ScreenHelper.checkSpecialCharacters(form);
+										}
+									}
+									rs.close();
+									ps.close();
+								}
+								System.out.println("7");
+								product.setUnit(form);
+								product.setPackageUnits(nDispensingQuantity);
+								product.setCreateDateTime(new java.util.Date());
+								product.setMinimumOrderPackages(1);
+								if(group.trim().length()>0){
+									System.out.println("8");
+									//Check the group of the product
+									ps=conn.prepareStatement("select * from oc_labels where oc_label_type='product.productgroup' and oc_label_id=?");
+									ps.setString(1,group);
+									rs=ps.executeQuery();
+									if(!rs.next()){
+										rs.close();
+										ps.close();
+										ps=conn.prepareStatement("select * from oc_labels where oc_label_type='product.productgroup' and oc_label_value=?");
+										ps.setString(1,group);
+										rs=ps.executeQuery();
+										if(rs.next()){
+											group=rs.getString("oc_label_id");
+										}
+										else{
+											//Create the product group
+											Label label = new Label();
+											label.id = ScreenHelper.checkSpecialCharacters(group);
+											label.language=sWebLanguage;
+											label.showLink="1";
+											label.type="product.productgroup";
+											label.updateUserId=activeUser.userid;
+											label.value=group;
+											label.saveToDB();
+											group=ScreenHelper.checkSpecialCharacters(group);
+										}
+									}
+									rs.close();
+									ps.close();
+								}
+								System.out.println("9");
+								product.setProductGroup(group);
+								if(category.trim().length()>0){
+									//Check the group of the product
+									ps=conn.prepareStatement("select * from oc_labels where oc_label_type='drug.category' and oc_label_id=?");
+									ps.setString(1,category);
+									rs=ps.executeQuery();
+									if(!rs.next()){
+										rs.close();
+										ps.close();
+										ps=conn.prepareStatement("select * from oc_labels where oc_label_type='drug.category' and oc_label_value=?");
+										ps.setString(1,category);
+										rs=ps.executeQuery();
+										if(rs.next()){
+											category=rs.getString("oc_label_id");
+										}
+										else{
+											//Create the product group
+											Label label = new Label();
+											label.id = ScreenHelper.checkSpecialCharacters(category);
+											label.language=sWebLanguage;
+											label.showLink="1";
+											label.type="drug.category";
+											label.updateUserId=activeUser.userid;
+											label.value=category;
+											label.saveToDB();
+											category=ScreenHelper.checkSpecialCharacters(category);
+										}
+									}
+									rs.close();
+									ps.close();
+								}
+								product.setProductSubGroup(category);
+								product.setUid("-1");
+								product.setUnitPrice(0);
+								product.setUpdateUser(activeUser.userid);
+								product.setVersion(1);
+								product.store();
+							}
+							System.out.println("10");
+							//Now we are sure we have the product
+							//Check the servicestock
+							ServiceStock stock = null;
+							Vector stocks = ServiceStock.find(stockName, "", "", "", "", "", "OC_STOCK_NAME", "");
+							if(stocks.size()>0){
+								System.out.println("11");
+								stock = (ServiceStock)stocks.elementAt(0);
+							}
+							else{
+								System.out.println("12");
+								//Create a new servicestock. By default the active user is the owner
+								stock = new ServiceStock();
+								stock.setVersion(1);
+								stock.setUid("-1");
+								stock.addAuthorizedUser(activeUser);
+								stock.setBegin(new java.util.Date());
+								stock.setCreateDateTime(new java.util.Date());
+								stock.setHidden(0);
+								stock.setServiceUid("?	");
+								stock.setDefaultSupplierUid("");
+								stock.setName(stockName);
+								stock.setOrderPeriodInMonths(1);
+								stock.setStockManagerUid(activeUser.userid);
+								stock.setUpdateUser(activeUser.userid);
+								stock.store();
+							}
+							System.out.println("13");
+							//Now we have the servicestock
+							//check if the productstock exists
+							ProductStock productStock = null;
+							Vector productStocks = ProductStock.find(stock.getUid(), product.getUid(), "", "", "", "", "", "", "", "", "", "OC_STOCK_OBJECTID", "");
+							if(productStocks.size()>0){
+								System.out.println("14");
+								//Remove existing productstock from the service stock
+								productStock = (ProductStock)productStocks.elementAt(0);
+								productStock.setServiceStockUid("-"+productStock.getServiceStockUid());
+								productStock.store();
+							}
+							System.out.println("15");
+							//Create new productstock
+							productStock = new ProductStock();
+							productStock.setUid("-1");
+							productStock.setVersion(1);
+							productStock.setBegin(new java.util.Date());
+							productStock.setCreateDateTime(new java.util.Date());
+							productStock.setDefaultImportance(MedwanQuery.getInstance().getConfigString("productStockDefaultImportance","type1native"));
+							productStock.setLevel(nStockLevel);
+							productStock.setMinimumLevel(nStockMinLevel);
+							productStock.setMaximumLevel(nStockMaxLevel);
+							productStock.setOrderLevel(nStockMinLevel+(nStockMaxLevel-nStockMinLevel)/3);
+							productStock.setProductUid(product.getUid());
+							productStock.setServiceStockUid(stock.getUid());
+							productStock.setUpdateUser(activeUser.userid);
+							productStock.store();
+							System.out.println("16");
+							//Now create an incoming transaction to justify the actual stocklevel
+							ProductStockOperation operation = new ProductStockOperation();
+							operation.setUid("-1");
+							operation.setVersion(1);
+							operation.setComment("Init");
+							operation.setCreateDateTime(new java.util.Date());
+							operation.setDate(new java.util.Date());
+							operation.setDescription("medicationreceipt.3");
+							operation.setProductStockUid(productStock.getUid());
+							operation.setSourceDestination(new ObjectReference("",""));
+							operation.setReceiveComment("INIT");
+							operation.setUnitsReceived(nStockLevel);
+							operation.setUpdateUser(activeUser.userid);
+							operation.store();
+							System.out.println("17");
+						}
+						conn.close();
+					}
 					else if(mrequest.getParameter("filetype").equalsIgnoreCase("pharmacyloadcsv")){
 						//Imports can only be done to the central warehouse in OpenClinic
 						if(MedwanQuery.getInstance().getConfigString("PEXOpenClinicServiceStock","").length()==0){
@@ -423,6 +673,7 @@
 												productStock.setSupplierUid("");
 												productStock.store();
 											}
+											String batchuid="";
 											//Now we are sure that the product stock exists. Let's check if the batch exists
 											if(pex_batch.length()>0){
 												Batch batch = Batch.getByBatchNumber(productStock.getUid(), pex_batch);
@@ -443,6 +694,7 @@
 													batch.setComment("");
 													batch.store();
 												}
+												batchuid=batch.getUid();
 											}
 											//We can now create an incoming transaction for this product stock
 											ProductStockOperation receiptOperation = new ProductStockOperation();
@@ -451,7 +703,7 @@
 												receiptOperation.setBatchEnd(new SimpleDateFormat(sDateFormat).parse(pex_expires));
 											}
 											catch(Exception e){}
-											receiptOperation.setBatchNumber(pex_batch);
+											receiptOperation.setBatchUid(batchuid);
 											receiptOperation.setDate(new SimpleDateFormat(sDateFormat).parse(pex_date));
 											receiptOperation.setDescription("medicationreceipt.4");
 											receiptOperation.setProductStockUid(productStock.getUid());
@@ -491,6 +743,56 @@
 				                message="<h3>"+lines+" " +getTran(request,"web","records.loaded",sWebLanguage)+"</h3>";
 							}
 						}
+					}
+					else if(mrequest.getParameter("filetype").equalsIgnoreCase("keywordsxml")){
+						ObjectCacheFactory.getInstance().resetObjectCache();
+						Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+						//Read file as a keywords xml file
+		                File f = new File(upBean.getFolderstore()+"/"+sFileName);
+						BufferedReader br = new BufferedReader(new FileReader(f));
+						SAXReader reader=new SAXReader(false);
+						org.dom4j.Document document=reader.read(br);
+						Element root = document.getRootElement();
+						Iterator domains = root.elementIterator("domain");
+						while(domains.hasNext()){
+							Element domain = (Element)domains.next();
+							String labeltype = domain.attributeValue("id");
+							PreparedStatement ps = conn.prepareStatement("update oc_labels set oc_label_value='/'"+MedwanQuery.getInstance().concatSign()+"oc_label_value where oc_label_type=? and oc_label_value not like '/%'");
+							ps.setString(1,labeltype);
+							ps.execute();
+							ps.close();
+							Iterator keywords = domain.elementIterator("keyword");
+							while(keywords.hasNext()){
+								Element keyword = (Element)keywords.next();
+								String labelid = keyword.attributeValue("id");
+								if(checkString(keyword.attributeValue("ikirezi")).length()>0){
+									labelid+="."+keyword.attributeValue("ikirezi");
+								}
+								Iterator terms = keyword.elementIterator("term");
+								while(terms.hasNext()){
+									Element term = (Element)terms.next();
+									String language = term.attributeValue("language");
+									String value = HTMLEntities.unhtmlentities(term.getTextTrim());
+									ps = conn.prepareStatement("delete from oc_labels where oc_label_type=? and oc_label_id=? and oc_label_language=?");
+									ps.setString(1,labeltype);
+									ps.setString(2,labelid);
+									ps.setString(3,language);
+									ps.execute();
+									ps.close();
+									ps = conn.prepareStatement("insert into oc_labels(oc_label_type,oc_label_id,oc_label_language,oc_label_value,oc_label_showlink,oc_label_updatetime,oc_label_updateuserid) values(?,?,?,?,1,?,?)");
+									ps.setString(1,labeltype);
+									ps.setString(2,labelid);
+									ps.setString(3,language);
+									ps.setString(4,value);
+									ps.setTimestamp(5,new Timestamp(new java.util.Date().getTime()));
+									ps.setString(6,activeUser.userid);
+									ps.execute();
+									ps.close();
+								}
+							}
+						}
+						conn.close();
+						reloadSingleton(session);
 					}
 					else if(mrequest.getParameter("filetype").equalsIgnoreCase("labxml")){
 						if(mrequest.getParameter("erase")!=null){
@@ -734,8 +1036,10 @@
 						<option value="servicescsv"><%=getTran(request,"web","services.csv",sWebLanguage)%></option>
 						<option value="labelscsv"><%=getTran(request,"web","labels.csv",sWebLanguage)%></option>
 						<option value="userscsv"><%=getTran(request,"web","userscsv",sWebLanguage)%></option>
+						<option value="stockscsv"><%=getTran(request,"web","stockscsv",sWebLanguage)%></option>
 						<option value="labxml"><%=getTran(request,"web","lab.xml",sWebLanguage)%></option>
 						<option value="drugsxml"><%=getTran(request,"web","drugs.xml",sWebLanguage)%></option>
+						<option value="keywordsxml"><%=getTran(request,"web","keywords.xml",sWebLanguage)%></option>
 					<%} %>
 					<option value="pharmacyloadcsv"><%=getTran(request,"web","pharmacyload.csv",sWebLanguage)%></option>
 				</select>
@@ -766,6 +1070,9 @@
 		}
 		else if(document.getElementById("filetype").value=="userscsv"){
 			document.getElementById("structure").innerHTML="Required structure (* are mandatory):<br/><b>Name* ; Firstname* ; DateofBirth (yyyy-mm-dd)* ; Gender (M/F)* ; Profile*, Language (FR/EN/NL/PT/ES)*</b>";
+		}
+		else if(document.getElementById("filetype").value=="stockscsv"){
+			document.getElementById("structure").innerHTML="Required structure (* are mandatory):<br/><b>Code* ; Drugname* ; Form* ; Dispensing quantity*, Stock*, Stock level, Minimum level, Maximum level, Group, Category</b>";
 		}
 		else {
 			document.getElementById("structure").innerHTML="";

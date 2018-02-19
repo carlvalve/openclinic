@@ -56,6 +56,17 @@
 			out.println("<tr><td>"+getTran(request,"web","total",sWebLanguage)+"</td><td class='admin2right'><b>"+(totalActive+totalStock)+"</b></td></tr>");
 			out.println("</table><hr/>");
 		}
+		if(totalStock>0){
+			//There is remaining unbatched stock
+			out.println(getTran(request,"web","unbatched.stock",sWebLanguage)+":");
+			if(activeUser.getAccessRight("pharmacy.modifybatchoperations.select")){
+				out.println("<table width='100%'><tr><td class='admin2'>"+getTran(request,"web","total",sWebLanguage)+"</td><td class='admin2right'><b><a href='javascript:createBatch(\""+productStockUid+"\")'>"+totalStock+"</a></b></td></tr>");
+			}
+			else{
+				out.println("<table width='100%'><tr><td class='admin2'>"+getTran(request,"web","total",sWebLanguage)+"</td><td class='admin2right'><b>"+totalStock+"</b></td></tr>");
+			}
+			out.println("</table><hr/>");
+		}
 		if(sExpiredBatches.length()>0){
 			out.println(getTran(request,"web","expired.batches",sWebLanguage)+":");
 			out.println("<table width='100%'><tr class='admin'><th>"+getTran(request,"web","batchnumber",sWebLanguage)+"</th><th>"+getTran(request,"web","level",sWebLanguage)+"</th><th>"+
@@ -97,4 +108,7 @@
 	function refreshlist(){
 		transactionForm.submit();
 	}
+	  function createBatch(productstockuid){
+		    openPopup("pharmacy/popups/createBatch.jsp&productStockUid="+productstockuid+"&ts=<%=getTs()%>",400,300);
+		  }
 </script>

@@ -3,7 +3,7 @@
                 java.util.Calendar"%>
 <%@include file="/includes/validateUser.jsp"%>
 <%@page errorPage="/includes/error.jsp"%>
-<%=checkPermission("pharmacy.productstockfiche","all",activeUser)%>
+<%=checkPermission("pharmacy.viewproductstockfiches","select",activeUser)%>
 <%=sJSSORTTABLE%>
 
 <%

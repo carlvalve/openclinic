@@ -65,7 +65,6 @@
 						    <tr class="admin">
 						      <td align="center">
 						      	<a href="javascript:openPopup('healthrecord/findRFE.jsp&PopupWidth=700&PopupHeight=400&field=rfe&encounterUid=<%=activeEncounterUid%>&ts=<%=getTs()%>',700,400);void(0);"><%=getTran(request,"openclinic.chuk","rfe",sWebLanguage)%> <%=getTran(request,"Web.Occup","ICPC-2",sWebLanguage)%>/<%=getTran(request,"Web.Occup","ICD-10",sWebLanguage)%></a>
-				            	<a href="javascript:doPanorama();"><img src="<c:url value='/_img/icons/icon_panorama.gif'/>" class="link" title="<%=getTranNoLink("ikirezi","panorama",sWebLanguage)%>" style="vertical-align:-4px;"></a>
 						      </td>
 						    </tr>
 						    <tr>
@@ -76,7 +75,6 @@
 				%>
             </table>
             <div style="padding-top:2px;"/>
-				
 			<table class="list" width="100%" cellspacing="1">
 			    <tr class="admin">
 			        <td align="center"><a href="javascript:openPopup('healthrecord/findICPC.jsp&AuthorUID='+(document.getElementById('diagnosisUser')?document.getElementById('diagnosisUser').value:'')+'&ts=<%=getTs()%>&patientuid=<%=activePatient.personid %>');void(0);"><%=getTran(request,"openclinic.chuk","diagnostic.document",sWebLanguage)%> <%=getTran(request,"Web.Occup","ICPC-2",sWebLanguage)%>/<%=getTran(request,"Web.Occup","ICD-10",sWebLanguage)%></a></td>
@@ -133,7 +131,7 @@
 						     			   <td width="1%" nowrap><img src="<c:url value='/_img/icons/icon_delete.gif'/>" class="link" onclick="deleteDiagnosis(ICPCCode<%=item.getItemId()%>);"/></td>
 						                   <td width="1%">ICPC</td>
 						                   <td width="1%"><b><%=item.getType().replaceAll("ICPCCode","")%></b></td>
-						                   <td><b><%=MedwanQuery.getInstance().getCodeTran(item.getType().trim(),sWebLanguage)%> <%=item.getValue().trim()%>&nbsp;<i>G:<%=sGravity%>/C:<%=sCertainty%><%=POA.length()>0?" POA":""%><%=NC.length()>0?" N":""%><%=flags.length()==0?"":" ("+flags+")" %><%=userwarning %></i></b>
+						                   <td><b><%=MedwanQuery.getInstance().getCodeTran(item.getType().trim(),sWebLanguage)%> <font color='red'><i><%=item.getValue().trim()%></i></font>&nbsp;<i>G:<%=sGravity%>/C:<%=sCertainty%><%=POA.length()>0?" POA":""%><%=NC.length()>0?" N":""%><%=flags.length()==0?"":" ("+flags+")" %><%=userwarning %></i></b>
 						                     <input type='hidden' name='ICPCCode<%=item.getType().replaceAll("ICPCCode","")%>' value="<%=item.getValue().trim()%>"/>
 						                     <input type='hidden' name='GravityICPCCode<%=item.getType().replaceAll("ICPCCode","")%>' value="<%=sGravity%>"/>
 						                     <input type='hidden' name='CertaintyICPCCode<%=item.getType().replaceAll("ICPCCode","")%>' value="<%=sCertainty%>"/>
@@ -181,7 +179,7 @@
 						                   <td width="1%" nowrap><img src='<c:url value="/_img/icons/icon_delete.gif"/>' class="link" onclick="deleteDiagnosis(ICD10Code<%=item.getItemId()%>);"/></td>
 						                   <td width="1%">ICD10</td>
 						                   <td width="1%"><b><%=item.getType().replaceAll("ICD10Code","")%></b></td>
-						                   <td><b><%=MedwanQuery.getInstance().getCodeTran(item.getType().trim(),sWebLanguage)%> <%=item.getValue().trim()%>&nbsp;<i>G:<%=sGravity%>/C:<%=sCertainty%><%=POA.length()>0?" POA":""%><%=NC.length()>0?" N":""%><%=flags.length()==0?"":" ("+flags+")" %><%=userwarning %></i></b>
+						                   <td><b><%=MedwanQuery.getInstance().getCodeTran(item.getType().trim(),sWebLanguage)%> <font color='red'><i><%=item.getValue().trim()%></i></font>&nbsp;<i>G:<%=sGravity%>/C:<%=sCertainty%><%=POA.length()>0?" POA":""%><%=NC.length()>0?" N":""%><%=flags.length()==0?"":" ("+flags+")" %><%=userwarning %></i></b>
 						                     <input type='hidden' name='ICD10Code<%=item.getType().replaceAll("ICD10Code","")%>' value='<%=item.getValue().trim()%>'/>
 						                     <input type='hidden' name='GravityICD10Code<%=item.getType().replaceAll("ICD10Code","")%>' value="<%=sGravity%>"/>
 						                     <input type='hidden' name='CertaintyICD10Code<%=item.getType().replaceAll("ICD10Code","")%>' value="<%=sCertainty%>"/>
@@ -200,10 +198,6 @@
 				    </td>
 			    </tr>
 			</table>
-		</td>
-		
-		<%-- RIGHT COLUMN ---------------------------------------------------%>
-		<td width="50%" style="vertical-align:top;">
 		  <table class="list" width="100%" cellspacing="1">
 			<tr class="admin">
 			  <td align="center"><%=getTran(request,"openclinic.chuk","contact.diagnoses",sWebLanguage)%> <%=getTran(request,"Web.Occup","ICPC-2",sWebLanguage)%>/<%=getTran(request,"Web.Occup","ICD-10",sWebLanguage)%></td>
@@ -246,6 +240,21 @@
 		    </td>
           </tr>
 		</table>
+		</td>
+		
+		<%-- RIGHT COLUMN ---------------------------------------------------%>
+		<td width="50%" style="vertical-align:top;">
+			<table class="list" width="100%" cellspacing="0" cellpadding="2">
+		      <tr class="admin">
+			    <td align="center"><%=getTran(request,"web","ikirezi",sWebLanguage)%>
+	            	<a href="javascript:doPanorama('<%=activeEncounterUid%>');"><img src="<c:url value='/_img/icons/icon_panorama.gif'/>" class="link" title="<%=getTranNoLink("ikirezi","panorama",sWebLanguage)%>" style="vertical-align:-4px;"></a>
+	            	<a href="javascript:doClinicalPathways('<%=activeEncounterUid%>');"><%=getTran(request,"web","spt",sWebLanguage)%></a>
+			    </td>
+			  </tr>
+			  <tr id='ikirezi'>
+			  </tr>
+			</table>
+            <div style="padding-top:2px;"></div>
       </td>
   </tr>
 </table>
@@ -259,6 +268,18 @@
     }
   }
   
+  function loadIkirezi(){
+      var params = 'encounteruid=<%=activeEncounterUid%>';
+	  var url= '<c:url value="/healthrecord/ajax/loadIkirezi.jsp"/>?ts='+new Date();
+      new Ajax.Request(url,{
+        method: "POST",
+        parameters: params,
+        onSuccess: function(resp){
+          document.getElementById('ikirezi').innerHTML=resp.responseText;
+        }
+      });
+  }
+
   function deleteRFE(serverid,objectid){
       if(yesnoDeleteDialog()){
       var params = "serverid="+serverid+"&objectid="+objectid+"&encounterUid=<%=activeEncounterUid%>&language=<%=sWebLanguage%>";
@@ -272,4 +293,7 @@
       });
     }
   }
+  
+  window.setTimeout("loadIkirezi();",500);
+
 </script>

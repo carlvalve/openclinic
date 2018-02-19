@@ -31,6 +31,7 @@
 	String sAction = checkString(request.getParameter("Action"));
 
 	String sPopup    = checkString(request.getParameter("Popup")),
+		   sRefresh    = checkString(request.getParameter("ReloadParent")),
 	       sReadOnly = checkString(request.getParameter("ReadOnly"));
 
     String sEditEncounterUID = checkString(request.getParameter("EditEncounterUID")),
@@ -293,8 +294,10 @@
         if(sPopup.equalsIgnoreCase("yes")){
             %>
             <script>
+            <%if(!"no".equalsIgnoreCase(sRefresh)){%>
               var o = window.opener;
               o.location.reload();
+            <%}%>
               window.close();
             </script>
             <%
@@ -331,7 +334,7 @@
             sEditEncounterServiceName = "";
         }else{
             sEditEncounterService = checkString(tmpEncounter.getService().code);
-            sEditEncounterServiceName = checkString(getTran(request,"Service",tmpEncounter.getService().code,sWebLanguage));
+            sEditEncounterServiceName = checkString(getTran(request,"service",tmpEncounter.getService().code,sWebLanguage));
         }
         
         if(tmpEncounter.getDestination()==null || checkString(tmpEncounter.getDestination().code).length()==0){
@@ -483,8 +486,8 @@
         <tr>
             <td class="admin"><%=getTran(request,"web","manager",sWebLanguage)%> <%=MedwanQuery.getInstance().getConfigInt("encounterWardManagerMandatory",0)==1?"*":"" %></td>
             <td class="admin2">
-                <input type="hidden" name="EditEncounterManager" value="<%=sEditEncounterManager%>">
-                <input class="text" type="text" name="EditEncounterManagerName" readonly size="<%=sTextWidth%>" value="<%=sEditEncounterManagerName%>">
+                <input type="hidden" name="EditEncounterManager" id="EditEncounterManager" value="<%=sEditEncounterManager%>">
+                <input class="text" type="text" name="EditEncounterManagerName" id="EditEncounterManagerName" readonly size="<%=sTextWidth%>" value="<%=sEditEncounterManagerName%>">
                
                 <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTran(null,"web","select",sWebLanguage)%>" onclick="searchManager('EditEncounterManager','EditEncounterManagerName');">
                 <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran(null,"web","clear",sWebLanguage)%>" onclick="EditEncounterForm.EditEncounterManager.value='';EditEncounterForm.EditEncounterManagerName.value='';">
@@ -504,8 +507,8 @@
        <tr id="Bed" style="visibility:visible;">
             <td class="admin"><%=getTran(request,"web","bed",sWebLanguage)%></td>
             <td class='admin2'>
-                <input type="hidden" name="EditEncounterBed" value="<%=sEditEncounterBed%>" onchange="setBedButton();">
-                <input class="text" type="text" name="EditEncounterBedName" size="<%=sTextWidth%>" value="<%=sEditEncounterBedName%>" readonly>
+                <input type="hidden" name="EditEncounterBed" id="EditEncounterBed" value="<%=sEditEncounterBed%>" onchange="setBedButton();">
+                <input class="text" type="text" name="EditEncounterBedName" id="EditEncounterBedName" size="<%=sTextWidth%>" value="<%=sEditEncounterBedName%>" readonly>
                
                 <img src="<c:url value="/_img/icons/icon_search.gif"/>" id="SearchBedButton" class="link" alt="<%=getTran(null,"web","select",sWebLanguage)%>" onclick="searchBed('EditEncounterBed','EditEncounterBedName');">
                 <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran(null,"web","clear",sWebLanguage)%>" onclick="EditEncounterForm.EditEncounterBed.value='';EditEncounterForm.EditEncounterBedName.value='';">
@@ -561,9 +564,14 @@
         
         <%-- SITUATION --%>
         <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","situation",sWebLanguage)%></td>
+            <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","situation",sWebLanguage)+(MedwanQuery.getInstance().getConfigInt("encounterSituationMandatory",0)==1?" *":"")%></td>
             <td class="admin2">
-                <select class="text" name="EditEncounterSituation" style="vertical-align:top;">
+                <select class="text" name="EditEncounterSituation" id="EditEncounterSituation" style="vertical-align:top;">
+                	<%
+                		if(MedwanQuery.getInstance().getConfigInt("encounterSituationMandatory",0)==1){
+                			out.println("<option/>");
+                		}
+                	%>
                     <%=ScreenHelper.writeSelectUnsorted(request,"encounter.situation",sEditEncounterSituation,sWebLanguage)%>
                 </select>
             </td>
@@ -708,6 +716,7 @@
         <%-- hidden fields --%>
         <input type="hidden" name="Action" value="">
         <input type="hidden" name="CloseActiveEncounter" value="">
+        <input type="hidden" name="ReloadParent" value="<%=sRefresh%>">
         <input type="hidden" name="Popup" value="<%=sPopup%>">
         <input type="hidden" name="EditEncounterUID" value="<%=sEditEncounterUID%>">
         <input type="hidden" id="maxTransferDate" value="<%=sMaxTransferDate%>">
@@ -879,6 +888,10 @@
       alertDialog("web","no_encounter_service");
       EditEncounterForm.EditEncounterServiceName.focus();
     }
+    else if('<%=MedwanQuery.getInstance().getConfigInt("encounterSituationMandatory",0)%>'==1 && EditEncounterForm.EditEncounterSituation.value==""){
+        alertDialog("web","encounter_situation_mandatory");
+        EditEncounterForm.EditEncounterSituation.focus();
+    }
     else if('<%=MedwanQuery.getInstance().getConfigInt("encounterWardManagerMandatory",0)%>'==1 && EditEncounterForm.EditEncounterManager.value==""){
         alertDialog("web","encounter_manager_mandatory");
         EditEncounterForm.EditEncounterManager.focus();
@@ -1010,6 +1023,12 @@
   <%-- CHECK ENCOUNTER TYPE --%>
   <%-- display inputfields according to encounter type --%>
   function checkEncounterType(){
+		//if(document.getElementById("EditEncounterService")) document.getElementById("EditEncounterService").value='';
+		//if(document.getElementById("EditEncounterServiceName")) document.getElementById("EditEncounterServiceName").value='';
+		if(document.getElementById("EditEncounterManager")) document.getElementById("EditEncounterManager").value='';
+		if(document.getElementById("EditEncounterManagerName")) document.getElementById("EditEncounterManagerName").value='';
+		if(document.getElementById("EditEncounterBed")) document.getElementById("EditEncounterBed").value='';
+		if(document.getElementById("EditEncounterBedName")) document.getElementById("EditEncounterBedName").value='';
     if(EditEncounterForm.EditEncounterType.value=="admission"){
       //document.getElementById("Service").style.display = "block";
       show("Bed");

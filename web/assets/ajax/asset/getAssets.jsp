@@ -22,6 +22,10 @@
            sPurchasePeriodBegin = checkString(request.getParameter("purchasePeriodBegin")),
            sPurchasePeriodEnd   = checkString(request.getParameter("purchasePeriodEnd"));
     
+	if(checkString(request.getParameter("serviceuid")).length()>0){
+		session.setAttribute("activeservice", request.getParameter("serviceuid"));
+	}
+
     /// DEBUG /////////////////////////////////////////////////////////////////////////////////////
     if(Debug.enabled){
         Debug.println("\n******************* assets/ajax/asset/getAssets.jsp *******************");
@@ -75,16 +79,29 @@
             if(!bAuthorized && !activeUser.isAdmin()){
             	continue;
             }
-
+    		boolean bLocked = asset.getObjectId()>-1 && ((asset.getLockedBy()>-1 && asset.getLockedBy()!=MedwanQuery.getInstance().getConfigInt("GMAOLocalServerId",-1)) || (asset.getLockedBy()==-1 && MedwanQuery.getInstance().getConfigInt("GMAOLocalServerId",-1)!=0));
+			
+    		String pd = "";
+    		try{
+    			pd=ScreenHelper.formatDate(asset.purchaseDate);
+    		}
+    		catch(Exception e){}
+    		String ud = "";
+    		try{
+    			ud=ScreenHelper.formatDate(asset.getUpdateDateTime());
+    		}
+    		catch(Exception e){}
             hSort.put(asset.code+"="+asset.getUid(),
                       " onclick=\"displayAsset('"+asset.getUid()+"');\">"+
+            		  "<td class='hand'><img src='"+sCONTEXTPATH+"/_img/icons/icon_"+(bLocked?"locked":"unlocked")+".png'/></td>"+
                       "<td class='hand'>["+asset.getUid()+"] "+asset.code+"</td>"+
                       "<td class='hand'>"+asset.description+"</td>"+
                       "<td class='hand' width='1px' nowrap>"+checkString(asset.nomenclature)+"</td>"+
                       "<td class='hand'>"+getTranNoLink("admin.nomenclature.asset", asset.nomenclature,sWebLanguage)+"</td>"+
-                      "<td class='hand'>"+getTranNoLink("service",asset.serviceuid,sWebLanguage)+(!bAuthorized?" <img src='"+sCONTEXTPATH+"/_img/icons/icon_forbidden.png'/>":"")+"</td>"+
+                      "<td class='hand'>"+asset.serviceuid+" - "+getTranNoLink("service",asset.serviceuid,sWebLanguage)+(!bAuthorized?" <img src='"+sCONTEXTPATH+"/_img/icons/icon_forbidden.png'/>":"")+"</td>"+
                       "<td class='hand'>"+getTranNoLink("assets.status",checkString(asset.comment9),sWebLanguage)+"</td>"+
-                      "<td class='hand'>"+ScreenHelper.formatDate(asset.purchaseDate)+"</td>"+
+                      "<td class='hand'>"+pd+"</td>"+
+                      "<td class='hand'>"+ud+"</td>"+
                       (sShowInactive.equalsIgnoreCase("true")?"<td class='hand'>"+ScreenHelper.formatDate(asset.saleDate)+"</td>":"")+
                      "</tr>");
             if(i>MedwanQuery.getInstance().getConfigInt("maxAssetRecords",100)){
@@ -123,6 +140,7 @@
 <table width="100%" class="sortable" id="searchresults" cellspacing="1" style="border:none;">
     <%-- header --%>
     <tr class="admin" style="padding-left:1px;">    
+        <td/>
         <td nowrap><asc><%=HTMLEntities.htmlentities(getTran(request,"web","code",sWebLanguage))%></asc></td>
         <td nowrap><asc><%=HTMLEntities.htmlentities(getTran(request,"web","name",sWebLanguage))%></asc></td>
         <td nowrap><%=HTMLEntities.htmlentities(getTran(request,"web","nomenclature",sWebLanguage))%></td>
@@ -130,6 +148,7 @@
         <td nowrap><%=HTMLEntities.htmlentities(getTran(request,"web","service",sWebLanguage))%></td>
         <td nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.assets","status",sWebLanguage))%></td>
         <td nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.assets","purchaseDate",sWebLanguage))%></td>
+        <td nowrap><%=HTMLEntities.htmlentities(getTran(request,"gmao","updatetime",sWebLanguage))%></td>
         <%
         	if(sShowInactive.equalsIgnoreCase("true")){
         %>

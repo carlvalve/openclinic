@@ -5,13 +5,15 @@
 <%@include file="../assets/includes/commonFunctions.jsp"%>
 <%
 	String componentuid = checkString(request.getParameter("componentuid"));
-	System.out.println("deleting"+componentuid);
 	String assetuid=componentuid.split("\\.")[0]+"."+componentuid.split("\\.")[1];
-	String nomenclature = componentuid.replaceAll(assetuid+".", "");
+	int objectid = Integer.parseInt(componentuid.split("\\.")[2]);
+	String nomenclature = componentuid.replaceAll(assetuid+"."+objectid+".", "");
 	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
-	PreparedStatement ps = conn.prepareStatement("delete from oc_assetcomponents where oc_component_assetuid=? and oc_component_nomenclature=?");
+	System.out.println("delete from oc_assetcomponents where oc_component_assetuid='"+assetuid+"' and oc_component_nomenclature='"+nomenclature+"' and oc_component_objectid="+objectid);
+	PreparedStatement ps = conn.prepareStatement("delete from oc_assetcomponents where oc_component_assetuid=? and oc_component_nomenclature=? and oc_component_objectid=?");
 	ps.setString(1, assetuid);
 	ps.setString(2, nomenclature);
+	ps.setInt(3,objectid);
 	ps.execute();
 	ps.close();
 %>

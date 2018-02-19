@@ -37,13 +37,6 @@
     <en>Lab request</en> 
   </Row>  
   <Row> 
-    <id>1006</id>  
-    <class>ophtalmology</class>  
-    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_OPHTALMOLOGY</transactiontype>  
-    <fr>Examen de la vision</fr>  
-    <en>Vision examiniation</en> 
-  </Row>  
-  <Row> 
     <id>1007</id>  
     <class>general.medicine</class>  
     <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_URINE_EXAMINATION</transactiontype>  
@@ -1514,5 +1507,82 @@
     <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CNTS_BLOODREQUEST</transactiontype>  
     <fr>Demande de sang</fr>  
     <en>Blood request</en> 
+  </Row>  
+  <Row> 
+    <id>1145</id>  
+    <class>gynecology</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_DELIVERY_MSPLS</transactiontype>  
+    <fr>Accouchement (modèle MSPLS)</fr>  
+    <en>Delivery (MSPLS model)</en> 
+  </Row>  
+  <Row> 
+    <id>1146</id>  
+    <class>sst</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_SST_ADMISSION</transactiontype>  
+    <fr>Hospitalisation SST</fr>  
+    <en>Admission malnutrition ward</en> 
+  </Row>  
+  <Row> 
+    <id>1147</id>  
+    <class>sst</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_SST_DISCHARGE</transactiontype>  
+    <fr>Sortie SST</fr>  
+    <en>Discharge malnutrition ward</en> 
+  </Row>  
+  <Row> 
+    <id>1148</id>  
+    <class>sst</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_SST_FOLLOWUP</transactiontype>  
+    <fr>Suivi SST</fr>  
+    <en>Follow-up malnutrition</en> 
+  </Row>  
+  <Row> 
+    <id>1149</id>  
+    <class>mspls</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_DEATH_AUDIT</transactiontype>  
+    <fr>Audit de décès</fr>  
+    <en>Death audit</en> 
+  </Row>  
+  <Row> 
+    <id>1150</id>  
+    <class>mspls</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_GITEGA_CONSULTATION</transactiontype>  
+    <fr>Consultation externe (modèle Gitega)</fr>  
+    <en>Outpatient consultation (type Gitega)</en> 
+  </Row>  
+  <Row> 
+    <id>1151</id>  
+    <class>gynecology</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_OBREPORT</transactiontype>  
+    <fr>Echographie gynécologique</fr>  
+    <en>Gynaecology ultrasound examination</en> 
+  </Row>  
+  <Row> 
+    <id>1153</id>  
+    <class>ccbrt</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CCBRT_CATARACT</transactiontype>  
+    <fr>Traitement de cataracte</fr>  
+    <en>Cataract treatment</en> 
+  </Row>  
+  <Row> 
+    <id>1154</id>  
+    <class>general.medicine</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_JOURNAL</transactiontype>  
+    <fr>Notes cliniques</fr>  
+    <en>Clinical notes</en> 
+  </Row>  
+  <Row> 
+    <id>1155</id>  
+    <class>ccbrt</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CCBRT_CLUBFOOT</transactiontype>  
+    <fr>Traitement de pied bot</fr>  
+    <en>Clubfoot assessment and treatment</en> 
+  </Row>  
+  <Row> 
+    <id>1156</id>  
+    <class>ccbrt</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CCBRT_CLUBFOOT_FOLLOWUP</transactiontype>  
+    <fr>Traitement de pied bot - fiche de suivi</fr>  
+    <en>Clubfoot assessment and treatment - follow up</en> 
   </Row>  
 </Examinations>

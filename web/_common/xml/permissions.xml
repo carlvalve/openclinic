@@ -116,6 +116,17 @@
         <permission type="examination" id="1136">occup.kirapreop</permission>
         <permission type="examination" id="1137">occup.kiraneuropsy</permission>
         <permission type="examination" id="1143">mspls.registry.deliveries</permission>
+        <permission type="examination" id="1144">occup.cnts.bloodrequest</permission>
+        <permission type="examination" id="1146">occup.sstadmission</permission>
+        <permission type="examination" id="1147">occup.sstdischarge</permission>
+        <permission type="examination" id="1148">occup.sstfollowup</permission>
+        <permission type="examination" id="1149">occup.death.audit</permission>
+        <permission type="examination" id="1150">occup.gitegaoutpatientfile</permission>
+        <permission type="examination" id="1151">occup.gynobechography</permission>
+        <permission type="examination" id="1153">occup.ccbrt.cataract</permission>
+        <permission type="examination" id="1154">occup.journal</permission>
+        <permission type="examination" id="1155">occup.ccbrt.clubfoot</permission>
+        <permission type="examination" id="1156">occup.ccbrt.clubfootfollowup</permission>
     </application>
     <application type="Web" id="newexaminations">
         <permission type="web" id="globalexaminations">examinations.global</permission>
@@ -199,6 +210,7 @@
         <permission type="web" id="medicationschema">medication.medicationschema</permission>
     </application>
     <application type="Web" id="financial">
+        <permission type="web" id="financial.patientpaymentdate">financial.patientpaymentdate</permission>
         <permission type="web" id="financial.patientinvoice.overrideprintrestrictions">financial.patientinvoice.overrideprintrestrictions</permission>
         <permission type="web" id="financial.closeantedatedinvoice">financial.closeantedatedinvoice</permission>
         <permission type="web" id="needsapprovalrights">financial.insurerapproval</permission>
@@ -213,6 +225,7 @@
         <permission type="balance" id="balancehistory">financial.balancehistory</permission>
         <permission type="balance" id="addDebet">financial.debettransaction</permission>
         <permission type="balance" id="addCredit">financial.credittransaction</permission>
+        <permission type="web" id="existingwicketdebet">existingwicketdebet</permission>
         <permission type="web" id="financial.wicketoperation">financial.wicketoperation</permission>
         <permission type="web" id="patientCreditEdit">financial.patientcreditedit</permission>
         <permission type="web" id="insurarCreditEdit">financial.insurarcreditedit</permission>
@@ -272,7 +285,9 @@
         <permission type="web" id="maintenanceoperations">maintenanceoperations</permission>
         <permission type="web" id="assets">assets</permission>
         <permission type="web" id="maintenanceplans">maintenanceplans</permission>
+        <permission type="web" id="assets.defaultmaintenanceplans">assets.defaultmaintenanceplans</permission>
         <permission type="web" id="remoteassets">remoteassets</permission>
+        <permission type="web" id="assetsynchronization">gmao.synchronisation</permission>
     </application>
     <application type="Web" id="system">
         <permission type="web" id="system.os">system.os</permission>
@@ -307,6 +322,11 @@
         <permission type="web" id="devices">system.devices</permission>
     </application>
     <application type="Web" id="pharmacy">
+    	<permission type="web" id="pharmacy.mergeproducts">pharmacy.mergeproducts</permission>
+    	<permission type="web" id="pharmacy.modifybatchoperations">pharmacy.modifybatchoperations</permission>
+    	<permission type="web" id="fastdrugsprescription">fastdrugsprescription</permission>
+    	<permission type="web" id="fastdrugsdelivery">fastdrugsdelivery</permission>
+    	<permission type="web" id="pharmacy.unconfirmedwaitinglist">pharmacy.unconfirmedwaitinglist</permission>
     	<permission type="web" id="pharmacy.issueproductsinpast">pharmacy.issueproductsinpast</permission>
     	<permission type="web" id="pharmacy.updateinventory">pharmacy.updateinventory</permission>
     	<permission type="web" id="pharmacy.production.deliverwhendebt">pharmacy.production.deliverwhendebt</permission>

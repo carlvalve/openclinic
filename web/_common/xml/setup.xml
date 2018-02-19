@@ -424,6 +424,27 @@
 		</labels>
 		<project>sn</project>
 	</country>
+	<country code="gn">
+		<config key="currency" value="GNF"/>
+		<config key="currencyPdf" value="GNF"/>
+		<config key="countrycode" value="GN"/>
+		<config key="DefaultCountry" value="GN"/>
+		<config key="defaultSearchCountry" value="GUIN"/>
+		<config key="zipcodetable" value="guineazipcodes"/>
+		<config key="DefaultLanguage" value="fr"/>
+		<config key="PatientLanguages" value="fr,en"/>
+		<config key="supportedLanguages" value="fr,en"/>
+		<config key="mxsref" value="BE"/>
+		<config key="projectref" value="vub"/>
+		<config key="priceFormat" value="#0"/>
+		<config key="priceFormatInsurar" value="#0"/>
+		<config key="currencyDecimals" value="0"/>
+		<labels type="professional.council.url">
+		</labels>
+		<labels type="professional.councils">
+		</labels>
+		<project>gn</project>
+	</country>
 	<os code="windows">
 		<config key="DocumentsFolder" value="$setupdir$documents"/>
 		<config key="fingerprintBinDirectory" value="$setupdir$web-inf/lib"/>
@@ -431,9 +452,10 @@
 		<config key="localProjectPath" value="$setupdir$"/>
 		<config key="templateDirectory" value="$setupdir$_common/xml"/>
 		<config key="projectLogo" value="$setupdir$_img/projectlogo.jpg"/>
+		<config key="scanDirectoryMonitor_basePath" value="$setupdir$scan"/>
 		<config key="tmpDir" value="/temp"/>
-		<config key="tmpDirectory" value="/temp"/>
-		<config key="tempDirectory" value="/temp"/>
+		<config key="tmpDirectory" value="/temp" mkdir="true"/>
+		<config key="tempDirectory" value="/temp" mkdir="true"/>
 		<config key="DocumentsURL" value="$localcontext$/documents/"/>
 		<config key="datacenterTemplateSource" value="$localcontext$/_common/xml/"/>
 		<config key="imageSource" value="$localcontext$"/>
@@ -448,9 +470,10 @@
 		<config key="localProjectPath" value="$setupdir$"/>
 		<config key="templateDirectory" value="$setupdir$_common/xml"/>
 		<config key="projectLogo" value="$setupdir$_img/projectlogo.jpg"/>
+		<config key="scanDirectoryMonitor_basePath" value="$setupdir$scan"/>
 		<config key="tmpDir" value="/tmp"/>
-		<config key="tmpDirectory" value="/tmp"/>
-		<config key="tempDirectory" value="/tmp"/>
+		<config key="tmpDirectory" value="/tmp" mkdir="true"/>
+		<config key="tempDirectory" value="/tmp" mkdir="true"/>
 		<config key="DocumentsURL" value="$localcontext$/documents/"/>
 		<config key="datacenterTemplateSource" value="$localcontext$/_common/xml/"/>
 		<config key="imageSource" value="$localcontext$"/>

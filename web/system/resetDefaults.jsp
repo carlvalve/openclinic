@@ -8,6 +8,8 @@
 	String admindb=request.getParameter("admindb");
 	String openclinicdb=request.getParameter("openclinicdb");
 	String mxsref=request.getParameter("mxsref");
+	String edition = request.getParameter("edition");
+	MedwanQuery.getInstance().setConfigString("edition", edition);
 	if(mxsref==null){
 		mxsref= MedwanQuery.getInstance().getConfigString("mxsref","be");
 	}
@@ -110,6 +112,7 @@
 					<option value='ga' <%="ga".equals(country)?"selected":""%>><%=getTran(request,"country","ga",sWebLanguage).toUpperCase() %></option>
 					<option value='sn' <%="sn".equals(country)?"selected":""%>><%=getTran(request,"country","sn",sWebLanguage).toUpperCase() %></option>
 					<option value='et' <%="et".equals(country)?"selected":""%>><%=getTran(request,"country","et",sWebLanguage).toUpperCase() %></option>
+					<option value='gn' <%="gn".equals(country)?"selected":""%>><%=getTran(request,"country","gn",sWebLanguage).toUpperCase() %></option>
 				</select>
 			</td>
 		</tr>
@@ -214,11 +217,25 @@
 			%>
 			<td class='admin'><%=getTran(request,"web","itemvaluesize",sWebLanguage)%>&nbsp</td>
 			<td class='admin2'>
-				<select name='itemvaluesize' id ='itemvaluesize'>
+				<select name='itemvaluesize' id ='itemvaluesize' class='text'>
 					<option value='255' <%=nSize==255?"selected":"" %>>255</option>
 					<option value='1000' <%=nSize==1000?"selected":"" %>>1000</option>
 					<option value='3000' <%=nSize==3000?"selected":"" %>>3000</option>
 					<option value='5000' <%=nSize==5000?"selected":"" %>>5000</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<%
+				String sEdition=MedwanQuery.getInstance().getConfigString("edition","openclinic");
+			%>
+			<td class='admin'><%=getTran(request,"web","edition",sWebLanguage)%>&nbsp</td>
+			<td class='admin2'>
+				<select name='edition' id ='edition' class='text'>
+					<option value='openclinic' <%=sEdition.equals("openclinic")?"selected":"" %>>openclinic</option>
+					<option value='openpharmacy' <%=sEdition.equals("openpharmacy")?"selected":"" %>>openpharmacy</option>
+					<option value='openinsurance' <%=sEdition.equals("openinsurance")?"selected":"" %>>openinsurance</option>
+					<option value='gmao' <%=sEdition.equals("gmao")?"selected":"" %>>gmao</option>
 				</select>
 			</td>
 		</tr>

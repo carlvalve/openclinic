@@ -81,7 +81,7 @@
                              " *labprofiles*activitycodes*worktime*patientsharecoverageinsurance*patientsharecoverageinsurance2*"+
                              " *urgency.origin*encountertype*prestation.type*product.productgroup*"+
                              " *insurance.types*labanalysis.group*drug.category*planningresource*systemmessages*product.unit*credit.type*wicketcredit.type*"+
-                             " *productstockoperation.sourcedestinationtype*queue*anonymousqueue*costcenter*"; // default
+                             " *productstockoperation.sourcedestinationtype*queue*anonymousqueue*costcenter*ikirezi.functional.signs*"; // default
     }
     excludedLabelTypes+=MedwanQuery.getInstance().getConfigString("excludedLabelTypes","").replaceAll(",","*")+"*";
     excludedLabelTypes = excludedLabelTypes.toLowerCase();
@@ -488,7 +488,12 @@
                                 labelValue = checkString(rs.getString("OC_LABEL_VALUE"));
                                 if(labelValue.length()==0) labelValue = "<font color='red'>[empty]</font>";
 
-                                updateTime = ScreenHelper.getSQLDate(rs.getDate("OC_LABEL_UPDATETIME"));
+                                try{
+                                	updateTime = ScreenHelper.getSQLDate(rs.getDate("OC_LABEL_UPDATETIME"));
+                                }
+                                catch(Exception e){
+                                	updateTime="01/01/1900";
+                                }
                                 labelCount++;
 
                                 // alternate row-class

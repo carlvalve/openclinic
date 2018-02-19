@@ -30,7 +30,10 @@
 			TransactionVO tran =(TransactionVO)pacstransorted.get(key);
 			%>
 				<tr>
-					<td class="admin"><%=tran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYDATE") %></td>
+					<td class="admin">
+						<input class='text' type='checkbox' id='cb.<%=tran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYUID")%>_<%=tran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_SERIESID")%>'/>
+						<%=tran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYDATE") %>
+					</td>
 					<td class="admin2"><a href='javascript: view("<%=tran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYUID")%>","<%=tran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_SERIESID")%>");'><%=tran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYUID") %></a></td>
 					<td class="admin2"><%=tran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_MODALITY") %></td>
 					<td class="admin2"><%=tran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_SERIESID") %></td>
@@ -44,9 +47,30 @@
 	}
 %>
 </table>
+<input type='button' class='button' name='viewselected' value='<%=getTranNoLink("web","viewselected",sWebLanguage) %>' onclick='viewselected()'/>
 
 <script>
 
+function viewselected(){
+	var studies='';
+	var series='';
+	var elements=document.getElementsByTagName("*");
+	for(n=0;n<elements.length;n++){
+		if(elements[n].id && elements[n].id.startsWith("cb.") && elements[n].checked){
+			if(studies.length>0){
+				studies+="_";
+				series+="_";
+			}
+			studies+=elements[n].id.split('_')[0].substring(3);
+			series+=elements[n].id.split('_')[1];
+		}
+	}
+	if(studies.length>0){
+	    var url = "<c:url value='/pacs/viewStudy.jsp'/>?studyuid="+studies+"&seriesid="+series;
+	    window.open(url);
+	    window.setTimeout("window.close();","2000");
+	}
+}
 function view(studyuid,seriesid){
     var url = "<c:url value='/pacs/viewStudy.jsp'/>?studyuid="+studyuid+"&seriesid="+seriesid;
     window.open(url);

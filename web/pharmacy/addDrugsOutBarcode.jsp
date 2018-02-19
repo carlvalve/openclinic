@@ -244,12 +244,14 @@
 				int nBatch=rs.getInt("OC_LIST_QUANTITY");
 				drugs+= "<tr>"+
 				         "<td class='admin2'>"+
+				         (activeUser.getAccessRight("fastdrugsprescription.delete")?
 				          "<a href='javascript:doDelete(\\\""+rs.getInt("OC_LIST_SERVERID")+"."+rs.getInt("OC_LIST_OBJECTID")+"\\\");'>"+
-				           "<img src='_img/icons/icon_delete.gif' class='link' title='"+getTranNoLink("web","delete",sWebLanguage)+"'/></a>"+
+				           "<img src='_img/icons/icon_delete.gif' class='link' title='"+getTranNoLink("web","delete",sWebLanguage)+"'/></a>"
+				          :"")+
 				         "</td>"+
 				         "<td class='admin2'>"+stock.getUid()+"</td>"+
 				         "<td class='admin2'><b>"+stock.getProduct().getCode()+"</b></td>"+
-				         "<td class='admin2'><b>"+stock.getProduct().getName()+"</b>"+stocklabel+"</td>"+
+				         "<td class='admin2'><b><span id='drugname."+stock.getUid()+"'>"+stock.getProduct().getName()+"</span></b>"+stocklabel+"</td>"+
 				         "<td class='admin2'><b>"+nBatch+"</b></td>"+
 				         "<td class='admin2'>"+sBatch+"</td>"+
 				         "<td class='admin2'>"+level+(level<nBatch?" <NODELIVERY><img src='"+sCONTEXTPATH+"/_img/icons/icon_forbidden.png'/>":"")+"</td>"+

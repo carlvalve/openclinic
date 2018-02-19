@@ -80,7 +80,7 @@
     <%-- INCLUDE PAGE --%>
     <tr>
         <td colspan="2" height="100%" style="vertical-align:top;" class="white">
-            <div class="content" id="Juist" height="100%">
+            <div class="content" id="Juist" width="100%" height="100%">
                 <a name="topp">&nbsp;</a>
                 <table width="100%" border="0" id="mijn" cellpadding="0" cellspacing="1" style="padding-left:1px;">
                     <tr>

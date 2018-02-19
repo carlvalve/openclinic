@@ -1,5 +1,4 @@
-<%@page import="be.openclinic.pharmacy.ProductOrder,
-                be.openclinic.pharmacy.ProductStock,
+<%@page import="be.openclinic.pharmacy.*,
                 java.util.Vector,
                 java.util.Hashtable,
                 java.util.Collections" %>
@@ -58,9 +57,6 @@
                     sServiceStockName = productStock.getServiceStock().getName();
                     sSupplierUid = checkString(productStock.getSupplierUid());
                     if (sSupplierUid.length() == 0) {
-                        sSupplierUid = checkString(productStock.getProduct().getSupplierUid());
-                    }
-                    if (sSupplierUid.length() == 0) {
                         sSupplierUid = checkString(productStock.getServiceStock().getDefaultSupplierUid());
                     }
                 }
@@ -110,16 +106,20 @@
         for (int i = 0; i < supplierUids.size(); i++) {
             sSupplierUid = (String) supplierUids.get(i);
             ordersOfOneSupplier = (Vector) ordersPerSupplier.get(sSupplierUid);
-            Service company = Service.getService(sSupplierUid);
+            ServiceStock company = ServiceStock.get(sSupplierUid);
             String warning ="";
+            String companyName=sSupplierUid;
             if(company==null){
             	warning=" <font color='red'>"+getTran(null,"web","unknownsupplier",sWebLanguage)+"</font>";
+            }
+            else{
+            	companyName=company.getName();
             }
 
             // Supplier sub-title
             html.append("<tr id='headerOfSupplier_" + i + "' title='" + showOrdersTran + "'>")
                     .append(" <td class='titleadmin' width='22' onClick=\"toggleOrdersDiv('" + i + "');\" style='text-align:center;'>&nbsp;<img id='img_" + i + "' src='" + sCONTEXTPATH + "/_img/themes/default/plus.jpg' class='link'></td>")
-                    .append(" <td class='titleadmin' width='80%' onClick=\"toggleOrdersDiv('" + i + "');\">&nbsp;&nbsp;" + getTran(null,"service", sSupplierUid, sWebLanguage) + " (" + ordersOfOneSupplier.size() + " " + ordersTran + ")"+warning+"</td>")
+                    .append(" <td class='titleadmin' width='80%' onClick=\"toggleOrdersDiv('" + i + "');\">&nbsp;&nbsp;" + companyName + " (" + ordersOfOneSupplier.size() + " " + ordersTran + ")"+warning+"</td>")
                     .append(" <td class='titleadmin' width='20%' onClick='' style='font-weight:normal;'>")
                     .append("   <a href=\"javascript:checkAll('" + sSupplierUid + "',true);\">" + getTran(null,"web.manage.checkdb", "CheckAll", sWebLanguage) + "</a>")
                     .append("   <a href=\"javascript:checkAll('" + sSupplierUid + "',false);\">" + getTran(null,"web.manage.checkdb", "UncheckAll", sWebLanguage) + "</a>")

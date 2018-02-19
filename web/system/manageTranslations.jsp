@@ -175,7 +175,7 @@
             tokenizer = new StringTokenizer(supportedLanguages,",");
             while(tokenizer.hasMoreTokens()){
                 tmpLang = tokenizer.nextToken();
-                out.print("transactionForm.EditLabelValue"+tmpLang.toUpperCase()+".value=label.EditLabelValue"+tmpLang.toUpperCase()+".htmlEntities();");
+                out.print("transactionForm.EditLabelValue"+tmpLang.toUpperCase()+".value=label.EditLabelValue"+tmpLang.toUpperCase()+";");
             }
         %>
         $('EditShowLink').value = label.editShowLink;
@@ -247,8 +247,8 @@
 		  <tr>
 		      <td class="admin"><%=getTran(null,"Web.Translations","Label",sWebLanguage)+" "+tmpLang.toUpperCase()%></td>
 		      <td class="admin2">
-		          <textarea name="EditLabelValue<%=tmpLang.toUpperCase()%>" class="normal" rows="4" cols="80" onKeyDown="textCounter(this,document.transactionForm.remLen<%=tmpLang.toUpperCase()%>,250)" onKeyUp="textCounter(this,document.transactionForm.remLen<%=tmpLang.toUpperCase()%>,250);resizeTextarea(this,10);"><%=getTranNoLink(editLabelType,editLabelID,tmpLang)%></textarea>
-		          <input readonly type="text" class="text" name="remLen<%=tmpLang.toUpperCase()%>" size="3" value="250">
+		          <textarea name="EditLabelValue<%=tmpLang.toUpperCase()%>" class="normal" rows="4" cols="80" onKeyDown="textCounter(this,document.transactionForm.remLen<%=tmpLang.toUpperCase()%>,5000)" onKeyUp="textCounter(this,document.transactionForm.remLen<%=tmpLang.toUpperCase()%>,5000);resizeTextarea(this,10);"><%=getTranNoLink(editLabelType,editLabelID,tmpLang)%></textarea>
+		          <input readonly type="text" class="text" name="remLen<%=tmpLang.toUpperCase()%>" size="3" value="5000">
 		      </td>
 		  </tr>
         <%
@@ -297,7 +297,7 @@
 	    tokenizer = new StringTokenizer(supportedLanguages,",");
 	    while(tokenizer.hasMoreTokens()){
 	        tmpLang = tokenizer.nextToken();
-	        out.print("textCounter(transactionForm.EditLabelValue"+tmpLang.toUpperCase()+",transactionForm.remLen,250);");
+	        out.print("textCounter(transactionForm.EditLabelValue"+tmpLang.toUpperCase()+",transactionForm.remLen,5000);");
 	    }
     %>
     transactionForm.EditLabelType.focus();

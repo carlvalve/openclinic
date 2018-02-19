@@ -192,7 +192,7 @@
 		<input type='hidden' name='mandatoryReferenceInsurers' id='mandatoryReferenceInsurers' value='<%=mandatoryReferenceInsurers %>'/>
 		<input type='hidden' name='mandatoryOtherReferenceInsurers' id='mandatoryOtherReferenceInsurers' value='<%=mandatoryOtherReferenceInsurers %>'/>
 	    <%=writeTableHeader("web","patientInvoiceEdit",sWebLanguage,"")%>
-	    <table class="menu" width="100%">
+	    <table id='table1' class="menu" width="100%">
 	        <tr>
 	            <td width="<%=sTDAdminWidth%>"><%=getTran(request,"web.finance","invoiceid",sWebLanguage)%></td>
 	            <td>
@@ -216,9 +216,9 @@
 	<div id="divOpenPatientInvoices" class="searchResults" style="height:120px;"></div>
 	<script>
 		window.onresize = function(event) {
-			document.getElementById("divOpenPatientInvoices").style.width=document.body.clientWidth-19;
+			window.location.reload();
 		};
-		document.getElementById("divOpenPatientInvoices").style.width=document.body.clientWidth-19;
+		document.getElementById("divOpenPatientInvoices").style.width=document.body.clientWidth-25;
 	    function searchPatientInvoice(){
 	        openPopup("/_common/search/searchPatientInvoice.jsp&FindInvoicePatient=<%=sPatientId%>&doFunction=doFind()&ReturnFieldInvoiceNr=FindPatientInvoiceUID&FindInvoicePatientId=<%=sPatientId%>&Action=search&header=false&PopupHeight=420&ts=<%=getTs()%>");
 	    }
@@ -240,27 +240,41 @@
 	        FindForm.FindPatientInvoiceUID.value='';
 	        FindForm.FindPatientInvoiceUID.focus();
 	    }
+	    
+	    function showHistory(){
+		    openPopup("/financial/showPatientInvoiceHistory.jsp&ts=<%=getTs()%>&invoiceuid="+document.getElementById('EditInvoiceUID').value,500,200);
+	    }
 	</script>
 	<form name='EditForm' id="EditForm" method='POST'>
-	    <table class='list' border='0' width='100%' cellspacing='1'>
+	    <table id='table2' class='list' border='0' width='100%' cellspacing='1'>
 	        <tr>
 	            <td class="admin" nowrap rowspan="2"><%=getTran(request,"web.finance","invoiceid",sWebLanguage)%></td>
 	            <td class="admin2" rowspan="2">
-	                <input type="hidden" id="EditInvoiceUID" name="EditInvoiceUID" value="<%=checkString(patientInvoice.getInvoiceUid())%>">
-	                <input type="text" class="text" readonly id="EditInvoiceUIDText" name="EditInvoiceUIDText" value="<%=sPatientInvoiceID%>">
-	                <%
-	                	if(checkString(patientInvoice.getNumber()).length()>0 && !patientInvoice.getInvoiceUid().equalsIgnoreCase(patientInvoice.getInvoiceNumber())){
-	                		out.print("("+patientInvoice.getInvoiceNumber()+")");
-	                	}
-	                	if(checkString(patientInvoice.getInvoiceUid()).length()==0 && MedwanQuery.getInstance().getConfigString("multiplePatientInvoiceSeries","").length()>0){
-	                		String[] invoiceSeries = MedwanQuery.getInstance().getConfigString("multiplePatientInvoiceSeries").split(";");
-	                		out.println("<input type='radio' class='text' name='invoiceseries' value='0'/>"+getTran(request,"web","internal",sWebLanguage));
-	                		for(int n=0;n<invoiceSeries.length;n++){
-	                    		out.println("<input type='radio' class='text' name='invoiceseries' value='"+invoiceSeries[n]+"'/>"+invoiceSeries[n]);
-	                		}
-	                	}
-	
-	                %>
+	            	<table>
+	            		<tr>
+	            			<td>
+				                <input type="hidden" id="EditInvoiceUID" name="EditInvoiceUID" value="<%=checkString(patientInvoice.getInvoiceUid())%>">
+				                <input type="text" class="text" readonly id="EditInvoiceUIDText" name="EditInvoiceUIDText" value="<%=sPatientInvoiceID%>">
+				            </td> 
+			                <%
+			                	if(checkString(patientInvoice.getNumber()).length()>0 && !patientInvoice.getInvoiceUid().equalsIgnoreCase(patientInvoice.getInvoiceNumber())){
+			                		out.print("<td nowrap>("+patientInvoice.getInvoiceNumber()+")</td>");
+			                	}
+			                	if(checkString(patientInvoice.getInvoiceUid()).length()==0 && MedwanQuery.getInstance().getConfigString("multiplePatientInvoiceSeries","").length()>0){
+			                		out.println("<td>");
+			                		String[] invoiceSeries = MedwanQuery.getInstance().getConfigString("multiplePatientInvoiceSeries").split(";");
+			                		out.println("<input type='radio' class='text' name='invoiceseries' value='0'/>"+getTran(request,"web","internal",sWebLanguage));
+			                		for(int n=0;n<invoiceSeries.length;n++){
+			                    		out.println("<input type='radio' class='text' name='invoiceseries' value='"+invoiceSeries[n]+"'/>"+invoiceSeries[n]);
+			                		}
+			                		out.println("</td>");
+			                	}
+			                	if(patientInvoice.hasValidUid()){
+			                		out.println("<td>"+getTran(request,"web","lastmodification",sWebLanguage)+" <b>"+new SimpleDateFormat("dd/MM/yyyy HH:mm").format(patientInvoice.getUpdateDateTime())+"</b> "+getTran(request,"web","by",sWebLanguage)+" <b>"+User.getFullUserName(patientInvoice.getUpdateUser()).toUpperCase()+"</b>"+(patientInvoice.getVersion()<=1?"":" <img src='"+sCONTEXTPATH+"/_img/icons/icon_history2.gif' onclick='showHistory();'>")+"</td>");
+			                	}
+			                %>
+			            </tr>
+			        </table>
 	            </td>
 	            <td class="admin" nowrap>
 	            	<%=getTran(request,"web.finance","insurarreference",sWebLanguage)%>
@@ -568,7 +582,7 @@
            	}
         %>
         <tr>
-            <td class='admin' nowrap><%=getTran(request,"web.finance","prestations",sWebLanguage)%></td>
+            <td class='admin' nowrap<%=getTran(request,"web.finance","prestations",sWebLanguage)%>></td>
             <td class='admin2' colspan='3'>
                 <div style="height:120px;"class="searchResults" id="patientInvoiceDebets" name="patientInvoiceDebets" >
                 </div>
@@ -698,7 +712,7 @@
                         <input class="button" type="button" name="buttonPrint" value='<%=getTranNoLink("Web","print.receipt",sWebLanguage)%>' onclick="doPrintPatientReceipt('<%=patientInvoice.getUid()%>');">
                         <%
                         	}
-                        	if(!isInsuranceAgent && MedwanQuery.getInstance().getConfigInt("	",1)==1){
+                        	if(!isInsuranceAgent && MedwanQuery.getInstance().getConfigInt("printPDFreceiptenabled",1)==1){
                         %>
                         <input accesskey="I" class="button" type="button" name="buttonPrint" value='<%=getTranNoLink("Web","print.receipt.pdf",sWebLanguage)%>' onclick="doPrintPatientReceiptPdf('<%=patientInvoice.getUid()%>');">
                         <%

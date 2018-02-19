@@ -24,6 +24,7 @@
            sComment8            = checkString(request.getParameter("comment8")),
            sComment9            = checkString(request.getParameter("comment9")),
            sComment10            = checkString(request.getParameter("comment10")),
+           sLockedBy            = checkString(request.getParameter("lockedby")),
            sPlanManager    = ScreenHelper.checkString(request.getParameter("planManager")),
            sInstructions   = ScreenHelper.checkString(request.getParameter("instructions"));
 
@@ -81,6 +82,12 @@
     }
     else{
     	plan.endDate=null;
+    }
+    try{
+    	plan.lockedBy=Integer.parseInt(sLockedBy);
+    }
+    catch(Exception e){
+    	plan.lockedBy=-1;
     }
 
     plan.frequency = sFrequency;

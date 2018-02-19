@@ -21,6 +21,6 @@
     String sLabel = ScreenHelper.getTranNoLink(sLabelType,sLabelId,sLabelLang);
 %>    
 {
-"label":"<%=HTMLEntities.htmlentities(sLabel)%>",
+"label":"<%=sLabel%>",
 "language":"<%=sLabelLang%>"
 }

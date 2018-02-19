@@ -38,6 +38,7 @@
            sServiceUid	 = checkString(request.getParameter("serviceuid")),
            sOperator = checkString(request.getParameter("operator"));
 
+
     /// DEBUG /////////////////////////////////////////////////////////////////////////////////////
     if(Debug.enabled){
         Debug.println("\n********** assets/ajax/maintenancePlan/getMaintenancePlans.jsp *********");
@@ -72,6 +73,7 @@
             if(sShowInactive.equalsIgnoreCase("false") && plan.isInactive()){
             	continue;
             }
+    		boolean bLocked = plan.getObjectId()>-1 && ((plan.getLockedBy()>-1 && plan.getLockedBy()!=MedwanQuery.getInstance().getConfigInt("GMAOLocalServerId",-1)) || (plan.getLockedBy()==-1 && MedwanQuery.getInstance().getConfigInt("GMAOLocalServerId",-1)!=0));
             boolean bAuthorized=true;
             if(asset!=null){
 	            bAuthorized=asset.isAuthorizedUser(activeUser.userid);
@@ -85,8 +87,10 @@
             }
             hSort.put(plan.name+"="+plan.getUid(),
                       " onclick=\"displayMaintenancePlan('"+plan.getUid()+"');\">"+
+               		  "<td class='hand'><img src='"+sCONTEXTPATH+"/_img/icons/icon_"+(bLocked?"locked":"unlocked")+".png'/></td>"+
                       "<td class='hand' style='padding-left:5px'>["+plan.assetUID+"] "+getAssetCode(plan.assetUID)+"</td>"+
                       "<td class='hand' style='padding-left:5px'>"+getTranNoLink("admin.nomenclature.asset",checkString(plan.getAssetNomenclature()),sWebLanguage)+(!bAuthorized?" <img src='"+sCONTEXTPATH+"/_img/icons/icon_forbidden.png'/>":"")+"</td>"+
+                      "<td class='hand' style='padding-left:5px'>"+(plan.getAsset()==null?"":"<i>"+plan.getAsset().getServiceuid().toUpperCase()+"</i> - <b>"+getTranNoLink("service",checkString(plan.getAsset().getServiceuid()),sWebLanguage))+"</b></td>"+
                       "<td class='hand' style='padding-left:5px'>"+getTranNoLink("maintenanceplan.type",checkString(plan.getType()),sWebLanguage)+"</td>"+
                       "<td class='hand' style='padding-left:5px'>"+checkString(plan.getName())+"</td>"+
                       "<td class='hand' style='padding-left:5px'>"+(plan.startDate!=null?ScreenHelper.stdDateFormat.format(plan.startDate):"")+"</td>"+
@@ -120,8 +124,10 @@
 <table width="100%" class="sortable" id="searchresults" cellspacing="1" style="border:none;">
     <%-- header --%>
     <tr class="admin" style="padding-left:1px;">    
+		<td/>
         <td nowrap><asc><%=HTMLEntities.htmlentities(getTran(request,"web.assets","asset",sWebLanguage))%></asc></td>
         <td nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.assets","nomenclature",sWebLanguage))%></td>
+        <td nowrap><%=HTMLEntities.htmlentities(getTran(request,"web","service",sWebLanguage))%></td>
         <td nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.assets","type",sWebLanguage))%></td>
         <td nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.assets","name",sWebLanguage))%></td>
         <td nowrap><%=HTMLEntities.htmlentities(getTran(request,"web.assets","startDate",sWebLanguage))%></td>

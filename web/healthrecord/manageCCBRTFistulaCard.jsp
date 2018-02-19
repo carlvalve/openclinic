@@ -45,7 +45,7 @@
             <td class="admin2">
 	            <select id="patientoccupation" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VVF_OCCUPATION" property="itemId"/>]>.value">
 	               	<option/>
-	            	<%=ScreenHelper.writeSelect(request,"vvf.occupation",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VVF_OCCUPATION"),sWebLanguage,false,true) %>
+	            	<%=ScreenHelper.writeSelect(request,"vvf.causes",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VVF_OCCUPATION"),sWebLanguage,false,true) %>
 	            </select>
             </td>
             <td class="admin"><%=getTran(request,"ccbrt","educationofpartner",sWebLanguage)%>&nbsp;</td>
@@ -339,19 +339,6 @@
            	</td>
         </tr>
 		<tr>
-            <td class="admin"><%=getTran(request,"ccbrt","primarydiagnosis",sWebLanguage)%>&nbsp;</td>
-        	<td class="admin2">
-               	<select id="primarydiagnosis" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VVF_PRIMARYDIAGNOSIS" property="itemId"/>]>.value">
-               		<option/>
-            		<%=ScreenHelper.writeSelect(request,"vvf.primarydiagnosis",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VVF_PRIMARYDIAGNOSIS"),sWebLanguage,false,true) %>
-               	</select>
-           	</td>
-            <td class="admin"><%=getTran(request,"ccbrt","plan",sWebLanguage)%>&nbsp;</td>
-        	<td class="admin2">
-	            <textarea onKeyup="this.value=this.value.toUpperCase();resizeTextarea(this,10);" id="plan" class="text" cols="40" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VVF_PLAN" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VVF_PLAN" translate="false" property="value"/></textarea>
-           	</td>
-        </tr>
-		<tr>
             <td class="admin"><%=getTran(request,"ccbrt","lastpreviousrepair",sWebLanguage)%>&nbsp;</td>
         	<td class="admin2">
                	<select id="lastpreviousrepair" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VVF_LASTPREVIOUSREPAIR" property="itemId"/>]>.value">
@@ -421,15 +408,8 @@
             </td>
         </tr>
 		<tr>
-            <td class="admin"><%=getTran(request,"ccbrt","outcomeoperation",sWebLanguage)%>&nbsp;</td>
-        	<td class="admin2">
-               	<select id="outcomeoperation" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VVF_OUTCOMEOPERATION" property="itemId"/>]>.value">
-               		<option/>
-            		<%=ScreenHelper.writeSelect(request,"vvf.outcomeoperation",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VVF_OUTCOMEOPERATION"),sWebLanguage,false,true) %>
-               	</select>
-           	</td>
             <td class="admin"><%=getTran(request,"ccbrt","followup6months",sWebLanguage)%>&nbsp;</td>
-        	<td class="admin2">
+        	<td class="admin2" colspan='3'>
         		<table width='100%'>
         			<tr>
         				<td>
@@ -438,21 +418,88 @@
 			            		<%=ScreenHelper.writeSelect(request,"vvf.followup6months",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VVF_FOLLOWUP6MONTHS"),sWebLanguage,false,true) %>
 			               	</select>
 			            </td>
-			        </tr>
-        			<tr>
         				<td>
 							<input type="checkbox" class="hand" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VVF_FOLLOWUPNOCOMPLICATIONS" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VVF_FOLLOWUPNOCOMPLICATIONS;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><%=getTran(request,"ccbrt","nocomplications",sWebLanguage)%>
 			            </td>
-			        </tr>
-        			<tr>
         				<td>
 							<input type="checkbox" class="hand" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VVF_FOLLOWUPOTHER" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VVF_FOLLOWUPOTHER;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"/><%=getTran(request,"ccbrt","other",sWebLanguage)%>
 				            <textarea onKeyup="this.value=this.value.toUpperCase();resizeTextarea(this,10);" id="comment" class="text" rows="1" cols="30" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VVF_FOLLOWUPOTHERTEXT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VVF_FOLLOWUPOTHERTEXT" translate="false" property="value"/></textarea>
 			            </td>
 			        </tr>
 			    </table>
+			</td>
+		</tr>
+		<tr class="admin">
+			<td colspan="4"><%=getTran(request,"ccbrt","surgeryandprocedure",sWebLanguage)%>&nbsp;</td>
+		</tr>
+		<tr>
+            <td class="admin"><%=getTran(request,"ccbrt","primarydiagnosis",sWebLanguage)%>&nbsp;</td>
+        	<td class="admin2">
+               	<select id="primarydiagnosis" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VVF_PRIMARYDIAGNOSIS" property="itemId"/>]>.value">
+               		<option/>
+            		<%=ScreenHelper.writeSelect(request,"vvf.primarydiagnosis",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VVF_PRIMARYDIAGNOSIS"),sWebLanguage,false,true) %>
+               	</select>
            	</td>
+            <td class="admin"><%=getTran(request,"ccbrt","primaryprocedure",sWebLanguage)%>&nbsp;</td>
+        	<td class="admin2">
+               	<select id="primaryprocedure" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VVF_PRIMARYPROCEDURE" property="itemId"/>]>.value">
+               		<option/>
+            		<%=ScreenHelper.writeSelect(request,"vvf.primaryprocedure",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VVF_PRIMARYPROCEDURE"),sWebLanguage,false,true) %>
+               	</select>
         </tr>
+		<tr>
+            <td class="admin"><%=getTran(request,"ccbrt","secondarydiagnosis",sWebLanguage)%>&nbsp;</td>
+        	<td class="admin2">
+               	<select id="secondarydiagnosis" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VVF_SECONDARYDIAGNOSIS" property="itemId"/>]>.value">
+               		<option/>
+            		<%=ScreenHelper.writeSelect(request,"vvf.primarydiagnosis",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VVF_SECONDARYDIAGNOSIS"),sWebLanguage,false,true) %>
+               	</select>
+           	</td>
+			<td class="admin"><%=getTran(request,"ccbrt","secondaryprocedure",sWebLanguage)%>&nbsp;</td>
+        	<td class="admin2">
+               	<select id="secondaryprocedure" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VVF_SECONDARYPROCEDURE" property="itemId"/>]>.value">
+               		<option/>
+            		<%=ScreenHelper.writeSelect(request,"vvf.primaryprocedure",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VVF_SECONDARYPROCEDURE"),sWebLanguage,false,true) %>
+               	</select>
+        </tr>
+		<tr>
+            <td class="admin"><%=getTran(request,"ccbrt","surgerydifficulty",sWebLanguage)%>&nbsp;</td>
+        	<td class="admin2">
+               	<select id="surgerydifficulty" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VVF_SURGERYDIFFICULTY" property="itemId"/>]>.value">
+               		<option/>
+            		<%=ScreenHelper.writeSelect(request,"vvf.difficulty",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VVF_SURGERYDIFFICULTY"),sWebLanguage,false,true) %>
+               	</select>
+           	</td>
+			<td class="admin"><%=getTran(request,"ccbrt","outcomeoperation",sWebLanguage)%>&nbsp;</td>
+        	<td class="admin2">
+               	<select id="outcomeoperation" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VVF_OUTCOMEOPERATION" property="itemId"/>]>.value">
+               		<option/>
+            		<%=ScreenHelper.writeSelect(request,"vvf.outcomeoperation",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VVF_OUTCOMEOPERATION"),sWebLanguage,false,true) %>
+               	</select>
+           	</td>
+		</tr>
+		<tr>
+            <td class="admin"><%=getTran(request,"ccbrt","surgeryincharge",sWebLanguage)%>&nbsp;</td>
+            <td colspan='4' class='admin2'>
+               	<select id="surgeonincharge" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VVF_SURGEONINCHARGE" property="itemId"/>]>.value">
+               		<option/>
+               		<%
+               			String u = checkString(((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VVF_SURGEONINCHARGE"));
+               			Connection conn = MedwanQuery.getInstance().getAdminConnection();
+               			PreparedStatement ps = conn.prepareStatement("select  a.personid, a.lastname, a.firstname, u.userid from admin a, users u,userparameters p"+
+               														" where a.personid = u.personid and u.userid = p.userid and p.parameter='training' and"+ 
+               														" p.value = 'surgeon'");
+               			ResultSet rs = ps.executeQuery();
+               			while(rs.next()){
+               				out.println("<option value='"+rs.getString("userid")+"' "+(u.equalsIgnoreCase(rs.getString("userid"))?"selected":"")+">"+rs.getString("lastname").toUpperCase()+", "+rs.getString("firstname")+"</option>");
+               			}
+               			rs.close();
+               			ps.close();
+               			conn.close();
+               		%>
+               	</select>
+            </td>
+		</tr>
         <tr>
             <td class="admin" width="<%=sTDAdminWidth%>">&nbsp;</td>
             <td class="admin2" colspan="3">

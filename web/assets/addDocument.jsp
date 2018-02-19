@@ -34,13 +34,18 @@
 		                //We creëren een nieuw archiving document
 		             	String sSql = "INSERT INTO arch_documents (arch_document_serverid, arch_document_objectid, arch_document_udi,"+
 		              	"  arch_document_title, arch_document_category,arch_document_date, arch_document_reference,"+
-			  	        "  arch_document_updatetime, arch_document_updateid)"+
-		                " VALUES (?,?,?,?,?,?,?,?,?)";		
+			  	        "  arch_document_updatetime, arch_document_updateid,arch_document_tran_serverid)"+
+		                " VALUES (?,?,?,?,?,?,?,?,?,-1)";		
 		                Connection conn=MedwanQuery.getInstance().getOpenclinicConnection();
 		                PreparedStatement ps = conn.prepareStatement(sSql);
 		                ps.setInt(1,MedwanQuery.getInstance().getConfigInt("serverId",1));
-		                int objectId=MedwanQuery.getInstance().getOpenclinicCounter("ARCH_DOCUMENTS");
-		                sUDI=ArchiveDocument.generateUDI(objectId);
+		                int objectId=MedwanQuery.getInstance().getOpenclinicCounter("ARCH_DOCUMENTS",-100000);
+		                if(objectId<0){
+		                	sUDI="-"+ArchiveDocument.generateUDI(-objectId);
+		                }
+		                else{
+		                	sUDI=ArchiveDocument.generateUDI(objectId);
+		                }
 		                ps.setInt(2,objectId);
 		                ps.setString(3,sUDI);
 		                ps.setString(4,mrequest.getParameter("name"));
@@ -71,9 +76,14 @@
 		                Connection conn=MedwanQuery.getInstance().getOpenclinicConnection();
 		                PreparedStatement ps = conn.prepareStatement(sSql);
 		                ps.setInt(1,MedwanQuery.getInstance().getConfigInt("serverId",1));
-		                int objectId=MedwanQuery.getInstance().getOpenclinicCounter("ARCH_DOCUMENTS");
-		                sUDI=ArchiveDocument.generateUDI(objectId);
-		                ps.setInt(2,objectId);
+		                int objectId=MedwanQuery.getInstance().getOpenclinicCounter("ARCH_DOCUMENTS",-100000);
+		                if(objectId<0){
+		                	sUDI="-"+ArchiveDocument.generateUDI(-objectId);
+		                }
+		                else{
+		                	sUDI=ArchiveDocument.generateUDI(objectId);
+		                }
+						ps.setInt(2,objectId);
 		                ps.setString(3,sUDI);
 		                ps.setString(4,mrequest.getParameter("name"));
 		                ps.setString(5,"asset");
@@ -92,13 +102,18 @@
 		                //We creëren een nieuw archiving document
 		             	String sSql = "INSERT INTO arch_documents (arch_document_serverid, arch_document_objectid, arch_document_udi,"+
 		              	"  arch_document_title, arch_document_category,arch_document_date, arch_document_reference,"+
-			  	        "  arch_document_updatetime, arch_document_updateid)"+
-		                " VALUES (?,?,?,?,?,?,?,?,?)";		
+			  	        "  arch_document_updatetime, arch_document_updateid,arch_document_tran_serverid)"+
+		                " VALUES (?,?,?,?,?,?,?,?,?,-1)";		
 		                Connection conn=MedwanQuery.getInstance().getOpenclinicConnection();
 		                PreparedStatement ps = conn.prepareStatement(sSql);
 		                ps.setInt(1,MedwanQuery.getInstance().getConfigInt("serverId",1));
-		                int objectId=MedwanQuery.getInstance().getOpenclinicCounter("ARCH_DOCUMENTS");
-		                sUDI=ArchiveDocument.generateUDI(objectId);
+		                int objectId=MedwanQuery.getInstance().getOpenclinicCounter("ARCH_DOCUMENTS",-100000);
+		                if(objectId<0){
+		                	sUDI="-"+ArchiveDocument.generateUDI(-objectId);
+		                }
+		                else{
+		                	sUDI=ArchiveDocument.generateUDI(objectId);
+		                }
 		                ps.setInt(2,objectId);
 		                ps.setString(3,sUDI);
 		                ps.setString(4,mrequest.getParameter("name"));
@@ -129,8 +144,13 @@
 		                Connection conn=MedwanQuery.getInstance().getOpenclinicConnection();
 		                PreparedStatement ps = conn.prepareStatement(sSql);
 		                ps.setInt(1,MedwanQuery.getInstance().getConfigInt("serverId",1));
-		                int objectId=MedwanQuery.getInstance().getOpenclinicCounter("ARCH_DOCUMENTS");
-		                sUDI=ArchiveDocument.generateUDI(objectId);
+		                int objectId=MedwanQuery.getInstance().getOpenclinicCounter("ARCH_DOCUMENTS",-100000);
+		                if(objectId<0){
+		                	sUDI="-"+ArchiveDocument.generateUDI(-objectId);
+		                }
+		                else{
+		                	sUDI=ArchiveDocument.generateUDI(objectId);
+		                }
 		                ps.setInt(2,objectId);
 		                ps.setString(3,sUDI);
 		                ps.setString(4,mrequest.getParameter("name"));

@@ -220,7 +220,7 @@
 
     	String sServiceSuffix = "";
     	if(activeUser.activeService.code.length() > 0){
-    		sServiceSuffix = "("+getTran(request,"Service",activeUser.activeService.code,sWebLanguage)+")";
+    		sServiceSuffix = " ("+getTran(request,"Service",activeUser.activeService.code,sWebLanguage)+")";
     	}
     	
 	    %>

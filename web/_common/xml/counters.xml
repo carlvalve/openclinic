@@ -69,8 +69,10 @@
     <counter name="HR_SALARY" table="HR_SALARIES" field="HR_SALARY_OBJECTID" bd='openclinic'/>
     <counter name="HR_SKILL" table="HR_SKILLS" field="HR_SKILL_OBJECTID" bd='openclinic'/>
     <counter name="OC_ASSETS" table="OC_ASSETS" field="OC_ASSET_OBJECTID" bd='openclinic'/>
+    <counter name="ComponentObjectId" table="OC_ASSETCOMPONENTS" field="OC_COMPONENT_OBJECTID" bd='openclinic'/>
     <counter name="OC_MAINTENANCEPLANS" table="OC_MAINTENANCEPLANS" field="OC_MAINTENANCEPLAN_OBJECTID" bd='openclinic'/>
     <counter name="OC_MAINTENANCEOPERATIONS" table="OC_MAINTENANCEOPERATIONS" field="OC_MAINTENANCEOPERATION_OBJECTID" bd='openclinic'/>
     <counter name="OC_PRODUCTIONORDERMATERIAL_ID" table="OC_PRODUCTIONORDERMATERIALS" field="OC_MATERIAL_ID" bd='openclinic'/>
+    <counter name="ARCH_DOCUMENTS" table="ARCH_DOCUMENTS" field="ARCH_DOCUMENT_OBJECTID" bd='openclinic'/>
 	
 </counters>

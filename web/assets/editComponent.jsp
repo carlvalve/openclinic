@@ -6,14 +6,16 @@
 <%
 	String componentuid = checkString(request.getParameter("componentuid"));
 	String assetuid=componentuid.split("\\.")[0]+"."+componentuid.split("\\.")[1];
-	String nomenclature = componentuid.replaceAll(assetuid+".", "");
+	int objectid = Integer.parseInt(componentuid.split("\\.")[2]);
+	String nomenclature = componentuid.replaceAll(assetuid+"."+objectid+".", "");
 	String type="";
 	String status="";
 	String characteristics="";
 	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
-	PreparedStatement ps = conn.prepareStatement("select * from oc_assetcomponents where oc_component_assetuid=? and oc_component_nomenclature=?");
-	ps.setString(1,assetuid);
-	ps.setString(2,nomenclature);
+	PreparedStatement ps = conn.prepareStatement("select * from oc_assetcomponents where oc_component_objectid=? and oc_component_assetuid=? and oc_component_nomenclature=?");
+	ps.setInt(1,objectid);
+	ps.setString(2,assetuid);
+	ps.setString(3,nomenclature);
 	ResultSet rs = ps.executeQuery();
 	while(rs.next()){
 		if(type.indexOf(checkString(rs.getString("oc_component_type")))<0){
@@ -38,18 +40,20 @@
 		type=request.getParameter("type");
 		status=request.getParameter("status");
 		characteristics=request.getParameter("characteristics");
-		ps = conn.prepareStatement("delete from oc_assetcomponents where oc_component_assetuid=? and oc_component_nomenclature=?");
+		ps = conn.prepareStatement("delete from oc_assetcomponents where oc_component_assetuid=? and oc_component_nomenclature=? and oc_component_objectid=?");
 		ps.setString(1, assetuid);
 		ps.setString(2, nomenclature);
+		ps.setInt(3,objectid);
 		ps.execute();
 		ps.close();
-		ps = conn.prepareStatement("insert into oc_assetcomponents(oc_component_assetuid,oc_component_nomenclature,oc_component_type,oc_component_status,oc_component_characteristics) "+
-				" values(?,?,?,?,?)");
+		ps = conn.prepareStatement("insert into oc_assetcomponents(oc_component_assetuid,oc_component_nomenclature,oc_component_type,oc_component_status,oc_component_characteristics,oc_component_objectid) "+
+				" values(?,?,?,?,?,?)");
 		ps.setString(1, assetuid);
 		ps.setString(2, nomenclature);
 		ps.setString(3, type);
 		ps.setString(4, status);
 		ps.setString(5, characteristics);
+		ps.setInt(6, objectid);
 		ps.execute();
 		ps.close();
 		conn.close();
