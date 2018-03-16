@@ -1,6 +1,7 @@
 package ocdhis2;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import javax.servlet.jsp.JspWriter;
 import javax.ws.rs.core.Response;
 import javax.xml.bind.JAXBException;
 
@@ -52,12 +54,24 @@ public class DHIS2Helper {
 	}
 	
 	public static void sendToServer(DataValueSet dataValueSet,String dataSetName){
+		sendToServer(dataValueSet,dataSetName,null);
+	}
+	public static void sendToServer(DataValueSet dataValueSet,String dataSetName, JspWriter jspWriter){
 		String DHIS2_SERVER_URI = MedwanQuery.getInstance().getConfigString("dhis2_server_uri","https://dhis.snis.bi");
 		String DHIS2_SERVER_BASE_API = MedwanQuery.getInstance().getConfigString("dhis2_server_api","/api");
 		String DHIS2_SERVER_PORT = MedwanQuery.getInstance().getConfigString("dhis2_server_port","443");
 		String OC_DHIS2_USER_NAME = MedwanQuery.getInstance().getConfigString("dhis2_server_username","fverbeke");
 		String OC_DHIS2_USER_PWD = MedwanQuery.getInstance().getConfigString("dhis2_server_pwd","nopass");
         DHIS2Server server = new DHIS2Server(DHIS2_SERVER_URI, DHIS2_SERVER_BASE_API, DHIS2_SERVER_PORT);
+		try {
+			if(jspWriter!=null){
+				jspWriter.print("Transmitting <b>"+dataValueSet.toXMLString().length()+" bytes</b> for data set <b>["+dataSetName+"]</b> to "+DHIS2_SERVER_URI+"... <script>document.body.scrollTop = document.body.scrollHeight;</script>");
+				jspWriter.flush();
+			}
+		} catch (IOException | JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         server.setUserName(OC_DHIS2_USER_NAME);
         server.setUserPassword(OC_DHIS2_USER_PWD);
         
@@ -66,6 +80,15 @@ public class DHIS2Helper {
             Response postResponse = server.sendToServer(dataValueSet);
             System.out.println("Status: " + postResponse.getStatus());
             System.out.println("Content: " + postResponse.getStatusInfo().getReasonPhrase());
+    		try {
+    			if(jspWriter!=null){
+	    			jspWriter.print("<b>"+postResponse.getStatusInfo().getReasonPhrase()+"</b><br/>");
+	    			jspWriter.flush();
+    			}
+    		} catch (IOException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
             
             if(postResponse.hasEntity())
             {
@@ -79,6 +102,15 @@ public class DHIS2Helper {
         }
         catch (Exception e)
         {
+    		try {
+    			if(jspWriter!=null){
+	    			jspWriter.print("<b>ERROR</b><br/>");
+	    			jspWriter.flush();
+    			}
+    		} catch (IOException e2) {
+    			// TODO Auto-generated catch block
+    			e2.printStackTrace();
+    		}
             bSuccess=false;
             sError+="<p/><img onclick='if(document.getElementById(\"error."+dataValueSet.getDataSet()+"\").style.display==\"\"){document.getElementById(\"error."+dataValueSet.getDataSet()+"\").style.display=\"none\";}else{document.getElementById(\"error."+dataValueSet.getDataSet()+"\").style.display=\"\";};' src='"+MedwanQuery.getInstance().getConfigString("imageSource","")+"/_img/icons/icon_error.gif'> <b>"+dataSetName+": <font color='red'>"+e.getMessage()+" [<i>"+ScreenHelper.getTranNoLink("dhis2error",e.getMessage().hashCode()+"","en")+"</i>]</font></b><span id='error."+dataValueSet.getDataSet()+"' style='display:none'><br/>";
             StackTraceElement[] trace = e.getStackTrace();

@@ -526,6 +526,31 @@ public class UpdateSystem implements Runnable {
                 TransactionItem.addTransactionItem(objTI);
             }
     	}
+        Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+        	PreparedStatement ps = conn.prepareStatement("drop table if exists ti");
+        	ps.execute();
+        	ps.close();
+        	ps=conn.prepareStatement("create table ti like transactionitems");
+        	ps.execute();
+        	ps.close();
+        	ps=conn.prepareStatement("insert into ti select distinct * from transactionitems");
+        	ps.execute();
+        	ps.close();
+        	ps=conn.prepareStatement("delete from transactionitems");
+        	ps.execute();
+        	ps.close();
+        	ps=conn.prepareStatement("insert into transactionitems select * from ti");
+        	ps.execute();
+        	ps.close();
+        	ps=conn.prepareStatement("drop table ti");
+        	ps.execute();
+        	ps.close();
+        	conn.close();
+        }
+        catch(Exception r){
+        	r.printStackTrace();
+        }
 		System.out.println(new SimpleDateFormat("HH:mm:ss.SSS").format(new java.util.Date())+": end updatetransactionitems");
 	}
 	

@@ -29,6 +29,15 @@ public class Translate {
 	}
 	
 	public static String translate(String sourcelanguage,String targetlanguage,String text,String sErrorValue){
+		//First test if target language is different from source language
+		if(sourcelanguage.equalsIgnoreCase(targetlanguage)){
+			return text;
+		}
+		//Then test if the requested translation has not been retrieved yet before
+		String sTranslation = Pointer.getPointer((sourcelanguage+"."+targetlanguage+"."+text.hashCode()+"."+text.length()).toLowerCase());
+		if(sTranslation.length()>0){
+			return sTranslation;
+		}
 		String s=text;
 		try{
 			HttpClient client = new HttpClient();
@@ -67,7 +76,9 @@ public class Translate {
 					while(languages.hasNext()){
 							Element language=(Element)languages.next();
 							if(language.attributeValue("lang").toLowerCase().startsWith(targetlanguage.toLowerCase())){
-								return language.elementText("seg");
+								sTranslation = language.elementText("seg");
+								Pointer.storePointer((sourcelanguage+"."+targetlanguage+"."+text.hashCode()+"."+text.length()).toLowerCase(), sTranslation);
+								return sTranslation;
 							}
 					}
 				}

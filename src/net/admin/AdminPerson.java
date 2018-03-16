@@ -2152,7 +2152,7 @@ public class AdminPerson extends OC_Object{
         }
 
         if (sDateOfBirth.trim().length()==10) {
-            if (sDateOfBirth.indexOf("/")>0) {
+            if (sDateOfBirth.replaceAll("-","/").indexOf("/")>0) {
                 sSQLWhere += " dateofbirth = ? AND";
             }
             else {

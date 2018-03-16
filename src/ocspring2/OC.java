@@ -186,15 +186,15 @@ public class OC {
 	    	  diseaselabel="e.ziekf";
 	      }
 	      else if(language.equalsIgnoreCase("nl")){
-	    	  symptomlabel="s.sympn";
+	    	  symptomlabel="sl.sympn";
 	    	  diseaselabel="e.ziekn";
 	      }
 	      else if(language.equalsIgnoreCase("es")){
-	    	  symptomlabel="s.symps";
+	    	  symptomlabel="sl.symps";
 	    	  diseaselabel="e.zieks";
 	      }
 	      else if(language.equalsIgnoreCase("pt")){
-	    	  symptomlabel="s.sympp";
+	    	  symptomlabel="sl.sympp";
 	    	  diseaselabel="e.ziekp";
 	      }
 	      

@@ -804,6 +804,8 @@ public class MedwanQuery {
                     result = rs.getString("labelnl");
                 } else if(sLanguage.toLowerCase().startsWith("f")){
                     result = rs.getString("labelfr");
+                } else if(sLanguage.toLowerCase().equalsIgnoreCase("es")){
+                    result = rs.getString("labeles");
                 } else if(sLanguage.toLowerCase().startsWith("e") || sLanguage.toLowerCase().startsWith("p")){
                     result = rs.getString("labelen");
                 } else{
@@ -858,26 +860,27 @@ public class MedwanQuery {
     
     public void setConfigString(String oc_key, String oc_value){
         Connection connection;
-        try{
-            connection = getOpenclinicConnection();
-
-            // delete
-            PreparedStatement ps = connection.prepareStatement("delete from OC_Config where oc_key=?");
-            ps.setString(1, oc_key);
-            ps.execute();
-            ps.close();
-            // insert
-            ps = connection.prepareStatement("insert into OC_Config(oc_key,oc_value,updatetime) values(?,?,?)");
-            ps.setString(1, oc_key);
-            ps.setString(2, oc_value);
-            ps.setTimestamp(3, new Timestamp(new java.util.Date().getTime()));
-            ps.execute();
-            ps.close();
-            config.put(oc_key, oc_value);
-            connection.close();
-        }
-        catch(Exception e){
-            e.printStackTrace();
+        if(oc_key!=null){
+	        try{
+	            connection = getOpenclinicConnection();
+	            // delete
+	            PreparedStatement ps = connection.prepareStatement("delete from OC_Config where oc_key=?");
+	            ps.setString(1, oc_key);
+	            ps.execute();
+	            ps.close();
+	            // insert
+	            ps = connection.prepareStatement("insert into OC_Config(oc_key,oc_value,updatetime) values(?,?,?)");
+	            ps.setString(1, oc_key);
+	            ps.setString(2, oc_value);
+	            ps.setTimestamp(3, new Timestamp(new java.util.Date().getTime()));
+	            ps.execute();
+	            ps.close();
+	            config.put(oc_key, oc_value==null?"":oc_value);
+	            connection.close();
+	        }
+	        catch(Exception e){
+	            e.printStackTrace();
+	        }
         }
     }
     
@@ -1163,6 +1166,29 @@ public class MedwanQuery {
             }
             Debug.println("*** Labels in cache : "+labelsCache.size());
         }
+    }
+    
+    public SortedMap getLabels(String type,String lang){
+    	SortedMap l = new TreeMap();
+        type = type.toLowerCase();
+        lang = lang.toLowerCase();
+        if(labels!=null){
+            Hashtable langHashtable = MedwanQuery.getInstance().getLabels();
+            if(langHashtable != null){
+	            Hashtable typeHashtable = (Hashtable) langHashtable.get(lang.toLowerCase());
+	            if(typeHashtable != null){
+	                Hashtable idHashtable = (Hashtable) typeHashtable.get(type.toLowerCase());
+	                if(idHashtable!=null){
+		            	Enumeration e = idHashtable.keys();
+		            	while(e.hasMoreElements()){
+		            		String key = (String)e.nextElement();
+		            		l.put(key, ((Label)idHashtable.get(key)).value);
+		            	}
+	                }
+	            }
+            }
+        }
+       	return l;
     }
     
     //--- GET LABEL -------------------------------------------------------------------------------
@@ -2711,6 +2737,9 @@ public class MedwanQuery {
         if(language.equalsIgnoreCase("EN")){
             language = "E";
         }
+        if(language.equalsIgnoreCase("ES")){
+            language = "S";
+        }
         if(language.equalsIgnoreCase("NL")){
             language = "N";
         }
@@ -2719,6 +2748,9 @@ public class MedwanQuery {
         }
         if(language.equalsIgnoreCase("N")){
             label = "labelnl";
+        }
+        if(language.equalsIgnoreCase("S")){
+            label = "labeles";
         }
         
         //First find all keywords
@@ -3067,6 +3099,9 @@ public class MedwanQuery {
         String label = "labelen";
         if(language.equalsIgnoreCase("f") || language.equalsIgnoreCase("fr")){
             label = "labelfr";
+        }
+        else if(language.equalsIgnoreCase("s") || language.equalsIgnoreCase("es")){
+            label = "labeles";
         }
         else if(language.equalsIgnoreCase("n") || language.equalsIgnoreCase("nl")){
             label = "labelnl";
@@ -3986,7 +4021,7 @@ public class MedwanQuery {
 	        	String sSql="select i.* from items i,items i2, transactions t, oc_encounters e, healthrecord h"
 	        			+ " where "
 	        			+ " e.oc_encounter_objectid=? and"
-	        			+ " h.personid=e.oc_encounter_patientuid and"
+	        			+ " h.personid="+MedwanQuery.getInstance().convert("int", "e.oc_encounter_patientuid")+" and"
 	        			+ " t.healthrecordid=h.healthrecordid and"
 	        			+ " i2.serverid=t.serverid and"
 	        			+ " i2.transactionid=t.transactionid and"
@@ -4032,6 +4067,68 @@ public class MedwanQuery {
         	e.printStackTrace();
         }
         return bHasItem;	
+    }
+    
+    public int countItems(String encounterUid,String itemType,String itemValue){
+        int itemcount=0;
+        Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+        	String[] types = itemType.split(";");
+        	String[] values = itemValue.split(";");
+        	String sSql="select count(distinct i.itemid) total from items i,items i2, transactions t, oc_encounters e, healthrecord h"
+        			+ " where "
+        			+ " e.oc_encounter_objectid=? and"
+        			+ " h.personid=e.oc_encounter_patientuid and"
+        			+ " t.healthrecordid=h.healthrecordid and"
+        			+ " i2.serverid=t.serverid and"
+        			+ " i2.transactionid=t.transactionid and"
+        			+ " i2.type='be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID' and"
+        			+ " i2.value=? and"
+					+ " i.serverid=t.serverid and"
+					+ " i.transactionid=t.transactionid and (0=1";
+        	for(int n=0;n<types.length;n++){
+        			sSql+= " OR (i.type=?";
+    	        	if(values.length>n && values[n].length()>0){
+    	        		if(values[n].startsWith("{lessthan}")){
+    	        			sSql+=" and i.value<?";
+    	        		}
+    	        		else if(values[n].startsWith("{morethan}")){
+    	        			sSql+=" and i.value>?";
+    	        		}
+    	        		else{
+    	        			sSql+=" and i.value=?";
+    	        		}
+    	        	}
+    	        	else{
+    	        		sSql+=" and 1=?";
+    	        	}
+    	        	sSql+=")";
+        	}
+        	sSql+=")";
+        	PreparedStatement ps = conn.prepareStatement(sSql);
+        	ps.setInt(1, Integer.parseInt(encounterUid.split("\\.")[1]));
+        	ps.setString(2, encounterUid);
+        	for(int n=0;n<types.length;n++){
+	        	ps.setString(3+n*2, types[n]);
+	        	if(values.length>n && values[n].length()>0){
+	        		ps.setString(4+n*2, values[n].replaceAll("\\{lessthan\\}","").replaceAll("\\{morethan\\}",""));
+	        	}
+	        	else{
+	        		ps.setInt(4+n*2, 1);
+	        	}
+        	}
+        	ResultSet rs = ps.executeQuery();
+        	if(rs.next()){
+        		itemcount=rs.getInt("total");
+        	}
+        	rs.close();
+        	ps.close();
+        	conn.close();
+        }
+        catch(Exception e){
+        	e.printStackTrace();
+        }
+        return itemcount;	
     }
     
     //--- GET ITEM --------------------------------------------------------------------------------
@@ -4517,6 +4614,86 @@ public class MedwanQuery {
         if(transactionVO!=null){
             return transactionVO;
         }
+        Connection OccupdbConnection;
+        try{
+            OccupdbConnection = getOpenclinicConnection();
+            String sItemType;
+            String sSql = "SELECT c.start,c.stop,d.*,a.transactionType,a.creationDate,a.updateTime as ut,a.ts,a.status,a.userId,b.*,a.healthRecordId"+
+                          "  from Transactions a,Items b,UsersView c,AdminView d"+
+            		      "   where a.userId=c.userid"+
+                          "    and c.personid=d.personid"+
+            		      "    and a.transactionId=b.transactionId"+
+                          "    and a.serverid=b.serverid"+
+            		      "    and a.serverid=?"+
+                          "    and a.transactionId=?"+
+                          "  order by b.priority";
+            PreparedStatement Occupstatement = OccupdbConnection.prepareStatement(sSql);
+            Occupstatement.setInt(1, serverId);
+            Occupstatement.setInt(2, transactionId);
+            ResultSet Occuprs = Occupstatement.executeQuery();
+            boolean bInitialized = false;
+            String transactionType, userid;
+            Date creationDate, updateTime, dateBegin, dateEnd, dateStart,timestamp;
+            int status, version, versionserverid;
+            UserVO userVO;
+            ItemContextVO itemContextVO;
+            while (Occuprs.next()){
+                if(!bInitialized){
+                    transactionType = Occuprs.getString("transactionType");
+                    Debug.println("Initializing transactionId="+transactionId+" ("+transactionType+")");
+                    
+                    creationDate = new Date(Occuprs.getTimestamp("creationDate").getTime());
+                    updateTime = new Date(Occuprs.getTimestamp("ut").getTime());
+                    timestamp = new Date(Occuprs.getTimestamp("ts").getTime());
+                    status = Occuprs.getInt("status");
+                    version = Occuprs.getInt("version");
+                    versionserverid = Occuprs.getInt("versionserverid");
+                    userid = Occuprs.getString("userId");
+                    transactionVO = new TransactionVO();
+                    transactionVO.setUpdateDateTime(updateTime);
+                    transactionVO.setUpdateTime(updateTime);
+                    transactionVO.setServerId(serverId);
+                    transactionVO.setTransactionId(transactionId);
+                    transactionVO.setTransactionType(transactionType);
+                    transactionVO.setCreationDate(creationDate);
+                    transactionVO.setStatus(status);
+                    transactionVO.setItems(new Vector());
+                    transactionVO.setVersion(version);
+                    transactionVO.setVersionServerId(versionserverid);
+                    transactionVO.setTimestamp(timestamp);
+                    //transactionVO = new TransactionVO(new Integer(transactionId), transactionType, creationDate, updateTime, status, null, new Vector(), serverId, version, versionserverid, timestamp);
+                    transactionVO.setHealthrecordId(Occuprs.getInt("healthRecordId"));
+                    dateBegin = null;
+                    dateEnd = null;
+                    dateStart = Occuprs.getDate("start");
+                    if(dateStart!=null){
+                        dateBegin = new Date(dateStart.getTime());
+                    }
+                    if(Occuprs.getDate("stop")!=null){
+                        dateEnd = new Date(Occuprs.getDate("stop").getTime());
+                    }
+                    userVO = new UserVO(new Integer(userid), "", dateBegin, dateEnd, new PersonVO(Occuprs.getString("natreg"), Occuprs.getString("immatold"), Occuprs.getString("immatnew"), Occuprs.getString("candidate"), Occuprs.getString("lastname"), Occuprs.getString("firstname"), Occuprs.getString("gender"), Occuprs.getString("language"), new Integer(Occuprs.getInt("personid"))));
+                    transactionVO.setUser(userVO);
+                    bInitialized = true;
+                }
+                itemContextVO = new ItemContextVO(new Integer(IdentifierFactory.getInstance().getTemporaryNewIdentifier()), "", "");
+                sItemType = Occuprs.getString("type");
+                transactionVO.getItems().add(new ItemVO(new Integer(Occuprs.getInt("itemId")), sItemType, Occuprs.getString("value"), Occuprs.getTimestamp("date"), itemContextVO, Occuprs.getInt("priority")));
+            }
+            Occuprs.close();
+            Occupstatement.close();
+            OccupdbConnection.close();
+
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        MedwanQuery.getInstance().getObjectCache().putObject("transaction",transactionVO);
+        return transactionVO;
+    }
+
+    //--- LOAD TRANSACTION ------------------------------------------------------------------------
+    public TransactionVO loadTransactionNoCache(int serverId, int transactionId){
+        TransactionVO transactionVO = null;
         Connection OccupdbConnection;
         try{
             OccupdbConnection = getOpenclinicConnection();
@@ -6972,6 +7149,37 @@ public class MedwanQuery {
             ResultSet Occuprs;
             for(Occuprs = Occupstatement.executeQuery(); Occuprs.next();){
                 transactionList.add(loadTransaction(Occuprs.getInt("serverid"),Occuprs.getInt("transactionId")));
+            }
+            Occuprs.close();
+            Occupstatement.close();
+            OccupdbConnection.close();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        
+        return transactionList;
+    }
+
+    public Vector getTransactionsByTypeBetween(String transactionType,java.util.Date begin, java.util.Date end){
+        Vector transactionList = new Vector();
+        Connection OccupdbConnection;
+        String sSql = "SELECT a.* FROM Transactions a, Healthrecord b"+
+                      " WHERE a.healthRecordId = b.healthRecordId"+
+                      "  AND transactionType = ?"+
+                      "  AND updateTime >= ?"+
+                      "  AND updateTime < ?"+
+        		      " ORDER BY updateTime DESC";
+        
+        try{
+            OccupdbConnection = getOpenclinicConnection();
+            PreparedStatement Occupstatement = OccupdbConnection.prepareStatement(sSql);
+            Occupstatement.setString(1, transactionType);
+            Occupstatement.setTimestamp(2, new java.sql.Timestamp(begin.getTime()));
+            Occupstatement.setTimestamp(3, new java.sql.Timestamp(end.getTime()));
+            ResultSet Occuprs;
+            for(Occuprs = Occupstatement.executeQuery(); Occuprs.next();){
+                transactionList.add(loadTransactionNoCache(Occuprs.getInt("serverid"),Occuprs.getInt("transactionId")));
             }
             Occuprs.close();
             Occupstatement.close();

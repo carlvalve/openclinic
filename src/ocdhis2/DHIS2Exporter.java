@@ -257,6 +257,15 @@ public class DHIS2Exporter {
 		}
 		Element root = dhis2document.getRootElement();
 		//Step 1: make a list of all dataset types that are needed
+		try {
+			if(jspWriter!=null){
+				jspWriter.print("Making list of dataset types... ");
+				jspWriter.flush();
+			}
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
 		Vector datasetTypes = new Vector();
 		List iDatasets = root.elements("dataset");
 		for(int n=0; n<iDatasets.size();n++){
@@ -266,6 +275,14 @@ public class DHIS2Exporter {
 					datasetTypes.add(dataset.attributeValue("type").toLowerCase());
 				}
 			}
+		}
+		try {
+			if(jspWriter!=null){
+				jspWriter.print("done<br/>Prepare exports... ");
+				jspWriter.flush();
+			}
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
 		//Step 2: iterate through all dataset types and export all datasets for each type
 		Vector diagnosisItems = new Vector();
@@ -286,6 +303,14 @@ public class DHIS2Exporter {
 			else if(datasetType.equalsIgnoreCase("technicalactivity")){
 				technicalActivityItems=loadTechnicalActivities();
 			}
+		}
+		try {
+			if(jspWriter!=null){
+				jspWriter.print("done<br/>");
+				jspWriter.flush();
+			}
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
 		iDatasets = root.elements("dataset");
 		int nTotalSets=iDatasets.size();
@@ -693,7 +718,7 @@ public class DHIS2Exporter {
 			}
 			//Send message to DHIS2 server
 			if(exportFormat.equalsIgnoreCase("dhis2server")){
-				DHIS2Helper.sendToServer(dataValueSet,dataset.attributeValue("label"));
+				DHIS2Helper.sendToServer(dataValueSet,dataset.attributeValue("label"),jspWriter);
 			}
 			else if(exportFormat.equalsIgnoreCase("html")){
 				html.append(DHIS2Helper.toHtml(dataValueSet,"default",language,dataset.attributeValue("label")));
@@ -968,7 +993,7 @@ public class DHIS2Exporter {
 			}
 			//Send message to DHIS2 server
 			if(exportFormat.equalsIgnoreCase("dhis2server")){
-				DHIS2Helper.sendToServer(dataValueSet,dataset.attributeValue("label"));
+				DHIS2Helper.sendToServer(dataValueSet,dataset.attributeValue("label"),jspWriter);
 			}
 			else if(exportFormat.equalsIgnoreCase("html")){
 				html.append(DHIS2Helper.toHtml(dataValueSet,"default",language,dataset.attributeValue("label")));
@@ -1079,7 +1104,7 @@ public class DHIS2Exporter {
 			}
 			//Send message to DHIS2 server
 			if(exportFormat.equalsIgnoreCase("dhis2server")){
-				DHIS2Helper.sendToServer(dataValueSet,dataset.attributeValue("label"));
+				DHIS2Helper.sendToServer(dataValueSet,dataset.attributeValue("label"),jspWriter);
 			}
 			else if(exportFormat.equalsIgnoreCase("html")){
 				html.append(DHIS2Helper.toHtml(dataValueSet,"default",language,dataset.attributeValue("label")));
@@ -1263,7 +1288,7 @@ public class DHIS2Exporter {
 			}
 			//Send message to DHIS2 server
 			if(exportFormat.equalsIgnoreCase("dhis2server")){
-				DHIS2Helper.sendToServer(dataValueSet,dataset.attributeValue("label"));
+				DHIS2Helper.sendToServer(dataValueSet,dataset.attributeValue("label"),jspWriter);
 			}
 			else if(exportFormat.equalsIgnoreCase("html")){
 				html.append(DHIS2Helper.toHtml(dataValueSet,"default",language,dataset.attributeValue("label")));
@@ -1360,7 +1385,7 @@ public class DHIS2Exporter {
 			}
 			//Send message to DHIS2 server
 			if(exportFormat.equalsIgnoreCase("dhis2server")){
-				DHIS2Helper.sendToServer(dataValueSet,dataset.attributeValue("label"));
+				DHIS2Helper.sendToServer(dataValueSet,dataset.attributeValue("label"),jspWriter);
 			}
 			else if(exportFormat.equalsIgnoreCase("html")){
 				html.append(DHIS2Helper.toHtml(dataValueSet,"default",language,dataset.attributeValue("label")));
@@ -2045,15 +2070,15 @@ public class DHIS2Exporter {
 		Iterator i = dataset.element("dataelements").elementIterator("dataelement");
 		while(i.hasNext()){
 			Element dataelement = (Element)i.next();
-			long uidcounter=0;
+			HashSet uniqueexams = new HashSet();
 			for(int n=0;n<items.size();n++){
 				String item = (String)items.elementAt(n);
 				if(inArray(item.split(";")[3].toLowerCase(), dataelement.attributeValue("code").toLowerCase())){
-					uidcounter++;
+					uniqueexams.add(item.split(";")[5]);
 				}
 			}
-			if(MedwanQuery.getInstance().getConfigInt("cleanDHIS2DataSets",0)==0 && uidcounter>0){
-				dataValueSet.getDataValues().add(new DataValue(dataelement.attributeValue("uid"),dataelement.attributeValue("categoryoptionuid")!=null?dataelement.attributeValue("categoryoptionuid"):categoryOptionUid,uidcounter+"",""));
+			if(MedwanQuery.getInstance().getConfigInt("cleanDHIS2DataSets",0)==0 && uniqueexams.size()>0){
+				dataValueSet.getDataValues().add(new DataValue(dataelement.attributeValue("uid"),dataelement.attributeValue("categoryoptionuid")!=null?dataelement.attributeValue("categoryoptionuid"):categoryOptionUid,uniqueexams.size()+"",""));
 			}
 			else if(MedwanQuery.getInstance().getConfigInt("sendFullDHIS2DataSets",0)==1) {
 				System.out.println("adding empty "+dataelement.attributeValue("uid")+" - "+dataelement.attributeValue("categoryoptionuid"));
@@ -2179,6 +2204,9 @@ public class DHIS2Exporter {
 															continue;
 														}
 													}
+													else{
+														continue;
+													}
 												}
 												catch(Exception r){
 													r.printStackTrace();
@@ -2195,6 +2223,9 @@ public class DHIS2Exporter {
 															continue;
 														}
 													}
+													else{
+														continue;
+													}
 												}
 												catch(Exception r){
 													r.printStackTrace();
@@ -2210,6 +2241,9 @@ public class DHIS2Exporter {
 														if(value-othervalue!=Double.parseDouble(dataelement.attributeValue("comparetoitem").split(";")[1])){
 															continue;
 														}
+													}
+													else{
+														continue;
 													}
 												}
 												catch(Exception r){
@@ -2315,6 +2349,31 @@ public class DHIS2Exporter {
 											uidcounter++;
 										}
 									}										
+								}
+								else if(ScreenHelper.checkString(dataelement.attributeValue("missing")).equalsIgnoreCase("1")){
+									boolean bExists = false;
+									Iterator iItems = dataelement.elementIterator("item");
+									while(iItems.hasNext()){
+										Element missingItem = (Element)iItems.next();
+										ItemVO itemVO=MedwanQuery.getInstance().getItem(MedwanQuery.getInstance().getConfigInt("serverId"), Integer.parseInt(item.split(";")[11]), missingItem.attributeValue("itemtype"));
+										if(itemVO!=null && ScreenHelper.checkString(itemVO.getValue()).length()>0){
+											bExists=true;
+											break;
+										}
+									}
+									if(bExists){
+										continue;
+									}
+									if(ScreenHelper.checkString(dataelement.attributeValue("unique")).equalsIgnoreCase("patients")){
+										uids.put(item.split(";")[0],1);
+									}
+									else if(ScreenHelper.checkString(dataelement.attributeValue("unique")).equalsIgnoreCase("encounters")){
+										uids.put(item.split(";")[1],1);
+									}
+									else if(ScreenHelper.checkString(dataelement.attributeValue("unique")).equalsIgnoreCase("transactions")){
+										uids.put(item.split(";")[11],1);
+									}
+									uidcounter++;
 								}
 								else{
 									if(ScreenHelper.checkString(dataelement.attributeValue("unique")).equalsIgnoreCase("patients")){
@@ -2584,6 +2643,12 @@ public class DHIS2Exporter {
 								if(tItem==null || tItem.getValue()==null || tItem.getValue().length()==0){
 									continue;
 								}
+								else if(ScreenHelper.checkString(dataelement.attributeValue("outputItemValue")).length()>0){
+									String matchval=ScreenHelper.checkString(dataelement.attributeValue("outputItemValue"));
+									if(!tItem.getValue().equalsIgnoreCase(matchval)){
+										continue;
+									}
+								}
 								else if(ScreenHelper.checkString(dataelement.attributeValue("outputItemValueIn")).length()>0){
 									String matchvalin=ScreenHelper.checkString(dataelement.attributeValue("outputItemValueIn"));
 									if(matchvalin.length()>0){
@@ -2598,7 +2663,7 @@ public class DHIS2Exporter {
 									}
 								}
 								else{
-									int value = 0;
+									double value = 0;
 									if(ScreenHelper.checkString(dataelement.attributeValue("value")).length()>0){
 										value=new Double(Double.parseDouble(ScreenHelper.checkString(dataelement.attributeValue("value")))).intValue();
 									}
@@ -2645,6 +2710,66 @@ public class DHIS2Exporter {
 												continue;
 											}
 										}
+										if(ScreenHelper.checkString(dataelement.attributeValue("comparetoitem")).length()>0){
+											//Evaluate conditions comparing to other items
+											if(ScreenHelper.checkString(dataelement.attributeValue("comparetoitem")).startsWith("equals;")){
+												try{
+													value=Double.parseDouble(tItem.getValue());
+													ItemVO otheritem =MedwanQuery.getInstance().getItem(Integer.parseInt(item.split(";")[10]), Integer.parseInt(item.split(";")[11]), dataelement.attributeValue("comparetoitem").split(";")[1]);
+													if(otheritem!=null){
+														double othervalue=Double.parseDouble(otheritem.getValue());
+														if(value!=othervalue){
+															continue;
+														}
+													}
+													else{
+														continue;
+													}
+												}
+												catch(Exception r){
+													r.printStackTrace();
+													continue;
+												}
+											}
+											else if(ScreenHelper.checkString(dataelement.attributeValue("comparetoitem")).startsWith("greaterthannotzero;")){
+												try{
+													value=Double.parseDouble(tItem.getValue());
+													ItemVO otheritem =MedwanQuery.getInstance().getItem(Integer.parseInt(item.split(";")[10]), Integer.parseInt(item.split(";")[11]), dataelement.attributeValue("comparetoitem").split(";")[1]);
+													if(otheritem!=null){
+														double othervalue=Double.parseDouble(otheritem.getValue());
+														if(value<=othervalue || othervalue==0){
+															continue;
+														}
+													}
+													else{
+														continue;
+													}
+												}
+												catch(Exception r){
+													r.printStackTrace();
+													continue;
+												}
+											}
+											else if(ScreenHelper.checkString(dataelement.attributeValue("comparetoitem")).startsWith("minusequals;")){
+												try{
+													value=Double.parseDouble(tItem.getValue());
+													ItemVO otheritem =MedwanQuery.getInstance().getItem(Integer.parseInt(item.split(";")[10]), Integer.parseInt(item.split(";")[11]), dataelement.attributeValue("comparetoitem").split(";")[2]);
+													if(otheritem!=null){
+														double othervalue=Double.parseDouble(otheritem.getValue());
+														if(value-othervalue!=Double.parseDouble(dataelement.attributeValue("comparetoitem").split(";")[1])){
+															continue;
+														}
+													}
+													else{
+														continue;
+													}
+												}
+												catch(Exception r){
+													r.printStackTrace();
+													continue;
+												}
+											}
+										}
 									}
 								}
 							}
@@ -2676,6 +2801,21 @@ public class DHIS2Exporter {
 									}
 								}
 								if(nFound<nNeeded){
+									continue;
+								}
+							}
+							else if(ScreenHelper.checkString(dataelement.attributeValue("missing")).equalsIgnoreCase("1")){
+								boolean bExists = false;
+								Iterator iItems = dataelement.elementIterator("item");
+								while(iItems.hasNext()){
+									Element missingItem = (Element)iItems.next();
+									ItemVO itemVO=MedwanQuery.getInstance().getItem(MedwanQuery.getInstance().getConfigInt("serverId"), Integer.parseInt(item.split(";")[11]), missingItem.attributeValue("itemtype"));
+									if(itemVO!=null && ScreenHelper.checkString(itemVO.getValue()).length()>0){
+										bExists=true;
+										break;
+									}
+								}
+								if(bExists){
 									continue;
 								}
 							}
@@ -3085,9 +3225,9 @@ public class DHIS2Exporter {
 		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
 		try{
 			String sSql = 	"select a.personid,gender,dateofbirth,oc_encounter_begindate,oc_encounter_enddate,'dead' as oc_encounter_outcome,"
-							+ " oc_encounter_type,oc_encounter_origin,oc_encounter_objectid,oc_encounter_serviceuid,e.value,e.type,e.serverid,"
+							+ " oc_encounter_type,oc_encounter_origin,oc_encounter_objectid,(select max(oc_encounter_serviceuid) from oc_encounters_view where oc_encounter_serverid=b.oc_encounter_serverid and oc_encounter_objectid=b.oc_encounter_objectid and convert(oc_encounter_begindate,date)<=d.updatetime and convert(oc_encounter_enddate,date)>=d.updatetime) as oc_encounter_serviceuid,e.value,e.type,e.serverid,"
 							+ " e.transactionid,oc_encounter_situation,oc_encounter_begindate,oc_encounter_enddate"
-							+ " from adminview a,oc_encounters_view b,healthrecord c,transactions d, items e, items f"
+							+ " from adminview a,oc_encounters b,healthrecord c,transactions d, items e, items f"
 							+ " where"
 							+ " a.personid=b.oc_encounter_patientuid and"
 							+ " (d.updatetime>=? and d.updatetime<?) and"
@@ -3104,8 +3244,18 @@ public class DHIS2Exporter {
 			PreparedStatement ps = conn.prepareStatement(sSql);
 			ps.setDate(1, new java.sql.Date(begin.getTime()));
 			ps.setDate(2, new java.sql.Date(end.getTime()));
-			ps.setString(3, ScreenHelper.checkString(dataset.attributeValue("transactiontype"))+"%");
-			ps.setString(4, ScreenHelper.checkString(dataset.attributeValue("itemtype"))+"%");
+			if(ScreenHelper.checkString(dataset.attributeValue("exacttransactiontype")).equalsIgnoreCase("1")){
+				ps.setString(3, ScreenHelper.checkString(dataset.attributeValue("transactiontype")));
+			}
+			else{
+				ps.setString(3, ScreenHelper.checkString(dataset.attributeValue("transactiontype"))+"%");
+			}
+			if(ScreenHelper.checkString(dataset.attributeValue("exactitemtype")).equalsIgnoreCase("1")){
+				ps.setString(4, ScreenHelper.checkString(dataset.attributeValue("itemtype")));
+			}
+			else{
+				ps.setString(4, ScreenHelper.checkString(dataset.attributeValue("itemtype"))+"%");
+			}
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()){
 				String item = rs.getString("personid")+";"
@@ -3122,7 +3272,7 @@ public class DHIS2Exporter {
 						+rs.getString("transactionid")+";"
 						+rs.getString("oc_encounter_situation")+";"
 						+new SimpleDateFormat("yyyyMMddHHmm").format(rs.getTimestamp("oc_encounter_begindate"))+";"
-						+new SimpleDateFormat("yyyyMMddHHmm").format(rs.getTimestamp("oc_encounter_enddate"))+";";
+						+new SimpleDateFormat("yyyyMMddHHmm").format(rs.getTimestamp("oc_encounter_enddate")==null?new java.util.Date():rs.getTimestamp("oc_encounter_enddate"))+";";
 				Debug.println(item);
 				if(minval.length()>0){
 					try{
