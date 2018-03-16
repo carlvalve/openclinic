@@ -39,6 +39,18 @@ try{
 		encounter = Encounter.get((String)request.getParameter("encounteruid"));
 	}
 	if(encounter !=null){
+		if(checkString(request.getParameter("init")).length()>0){
+			Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+			PreparedStatement ps = conn.prepareStatement("insert into oc_ikireziactions(oc_action_id, oc_action_encounteruid, oc_action_data, oc_action_uid, oc_action_updatetime) values(?,?,?,?,?)");
+			ps.setInt(1,MedwanQuery.getInstance().getOpenclinicCounter("IKIREZI_ACTION"));
+			ps.setString(2,encounter.getUid());
+			ps.setString(3,"init."+request.getParameter("init"));
+			ps.setInt(4,Integer.parseInt(activeUser.userid));
+			ps.setTimestamp(5, new Timestamp(new java.util.Date().getTime()));
+			ps.execute();
+			ps.close();
+			conn.close();
+		}
 		ikireziSymptoms = encounter.getIkireziSymptoms();
 	}
 

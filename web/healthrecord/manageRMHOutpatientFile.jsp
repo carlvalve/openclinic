@@ -164,7 +164,7 @@
 			            	<%
 			            		Encounter activeEncounter = Encounter.getActiveEncounter(activePatient.personid);
 			            		if(activeEncounter!=null && checkString(activeEncounter.getOutcome()).length()>0){
-			            			out.println(getTran(request,"encounter.outcome",activeEncounter.getOutcome(),sWebLanguage)+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+			            			out.println(getTran(request,MedwanQuery.getInstance().getConfigString("encounterOutcomeType","encounter.outcome"),activeEncounter.getOutcome(),sWebLanguage)+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
 			            		}
 			            	%>
 			            	<a href='javascript:openEncounter()'><%=getTran(request,"web","editencounter",sWebLanguage) %></a>

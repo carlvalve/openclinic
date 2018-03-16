@@ -1,3 +1,4 @@
+<%@page import="be.openclinic.adt.Encounter.EncounterService"%>
 <%@include file="/includes/validateUser.jsp"%>
 <%@page errorPage="/includes/error.jsp"%>
 <%=sJSCHARTJS%>
@@ -26,10 +27,29 @@
 	<table width='100%'>
 		<tr class='admin'><td colspan='2'><%=getTran(request,"web","nursinggraph",sWebLanguage) %></td></tr>
 		<tr>
-			<td class='admin' colspan='2'>
+			<td class='admin'>
 				<%=getTran(request,"web","start",sWebLanguage) %>: <%=ScreenHelper.writeDateField("graphBegin", "transactionForm", ScreenHelper.formatDate(dBegin), true, false, sWebLanguage, sCONTEXTPATH) %>
 				&nbsp;&nbsp;<%=getTran(request,"web","end",sWebLanguage) %>: <%=ScreenHelper.writeDateField("graphEnd", "transactionForm", ScreenHelper.formatDate(dEnd), true, false, sWebLanguage, sCONTEXTPATH) %>
 				&nbsp;&nbsp;<input class='button' type='submit' name='submitButton' value='<%=getTranNoLink("web","update",sWebLanguage) %>'/>
+			</td>
+			<td class='admin'>
+				<select class='text' name='encounters' id='encounters' onchange='selectActiveEncounter()'>
+					<option/>
+					<%
+						Vector encounters = Encounter.selectEncountersUnique("", "", "", "", "", "", "", "", activePatient.personid, "oc_encounter_begindate DESC");
+						for(int n=0;n<encounters.size();n++){
+							Encounter encounter = (Encounter)encounters.elementAt(n);
+							Vector encounters2 = Encounter.selectEncounters(encounter.getUid().split("\\.")[0], encounter.getUid().split("\\.")[1], "", "", "", "", "", "", "", "oc_encounter_begindate");
+							Encounter encounter2 = (Encounter)encounters2.elementAt(0);
+							java.util.Date dEncounterEnd = new java.util.Date();
+							if(encounter.getEnd()!=null){
+								dEncounterEnd=encounter.getEnd();
+							}
+							boolean bSelected=ScreenHelper.formatDate(encounter.getBegin()).equalsIgnoreCase(ScreenHelper.formatDate(dBegin)) && ScreenHelper.formatDate(dEncounterEnd).equalsIgnoreCase(ScreenHelper.formatDate(dEnd));
+							out.print("<option "+(bSelected?"selected":"")+" value='"+ScreenHelper.formatDate(encounter.getBegin())+";"+ScreenHelper.formatDate(dEncounterEnd)+"'>"+ScreenHelper.formatDate(encounter.getBegin())+" - "+ScreenHelper.formatDate(dEncounterEnd)+" ["+getTranNoLink("encountertype",encounter.getType(),sWebLanguage)+"]: "+getTranNoLink("service",encounter2.getServiceUID(),sWebLanguage)+"</option>");
+						}
+					%>
+				</select>
 			</td>
 		</tr>
 		<tr>
@@ -266,4 +286,12 @@
 		});
 	}
 	
+	function selectActiveEncounter(){
+		var activeencounteruid=document.getElementById('encounters').value;
+		if(activeencounteruid.length>0){
+			document.getElementById('graphBegin').value=activeencounteruid.split(";")[0];
+			document.getElementById('graphEnd').value=activeencounteruid.split(";")[1];
+			transactionForm.submit();
+		}
+	}
 </script>

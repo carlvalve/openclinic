@@ -60,7 +60,9 @@
 %>
 <form name="transactionForm" method="post">
 	<input type='text' class='text' size='80' name='key' value='<%=key%>'/>
-	<input type='submit' name='submit' value='<%=getTran(null,"web","find",sWebLanguage) %>'/>
+	<input type='submit' name='dosubmit' value='<%=getTran(null,"web","find",sWebLanguage) %>'/>
+	&nbsp;&nbsp;&nbsp;&nbsp;
+	<input type='checkbox' name='cbtranslate' value='1' <%=checkString(request.getParameter("cbtranslate")).equalsIgnoreCase("1")?"checked":"" %> onchange='transactionForm.submit();'/><%=getTran(request,"web.language",sWebLanguage,sWebLanguage) %>
 	
 	<table width="100%">
 		<tr class='admin'>
@@ -77,7 +79,7 @@
 			%>
 			<tr>
 				<td class='admin'><%=code.split(";")[0]%></td>
-				<td class='admin2' valign='top'><%=code.split(";")[1]%></td>
+				<td class='admin2' valign='top'><%=Translate.translate("en",checkString(request.getParameter("cbtranslate")).equalsIgnoreCase("1")?sWebLanguage:"en",code.split(";")[1])%></td>
 			</tr>
 			
 			<%	

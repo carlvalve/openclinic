@@ -451,10 +451,10 @@
 	  var w = 800;
 	  var h = 600;
 	  if(uid){
-		  openPopup("/ikirezi/panorama.jsp&encounteruid="+uid+"&ts=<%=getTs()%>",w,h).focus();
+		  openPopup("/ikirezi/panorama.jsp&init=1&encounteruid="+uid+"&ts=<%=getTs()%>",w,h).focus();
 	  }
 	  else{
-		  openPopup("/ikirezi/panorama.jsp&ts=<%=getTs()%>",w,h).focus();
+		  openPopup("/ikirezi/panorama.jsp&init=1&ts=<%=getTs()%>",w,h).focus();
 	  }
   }
 	    

@@ -96,7 +96,7 @@
     if(MedwanQuery.getInstance().getConfigInt("autoCloseVisits", 1)==1 && !MedwanQuery.getInstance().getConfigString("lastAutoCloseVisits","").equals(new SimpleDateFormat("yyyyMMdd").format(new java.util.Date()))){
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
-            String sSQL = "update oc_encounters set oc_encounter_enddate =oc_encounter_begindate where oc_encounter_type='visit' and oc_encounter_enddate is null and oc_encounter_begindate<"+MedwanQuery.getInstance().getConfigString("dateFunction");
+            String sSQL = "update oc_encounters set oc_encounter_enddate =oc_encounter_begindate,oc_encounter_outcome='missing' where oc_encounter_type='visit' and oc_encounter_enddate is null and oc_encounter_begindate<"+MedwanQuery.getInstance().getConfigString("dateFunction");
             PreparedStatement ps = oc_conn.prepareStatement(sSQL);
             ps.execute();
             ps.close();
@@ -222,14 +222,20 @@
 </head>
 <body class="Geenscroll login">
 <script>
-	var newWin=window.open('checkPopup.jsp');
-	if(!newWin || newWin.closed || typeof newWin.closed=='undefined') 
-	{ 
-	     alert('<%=getTranNoLink("web","popupsblocked","en")%>');
+	function checkPopupsEnabled(){
+		var newWin=window.open("checkPopup.jsp","","width=1,height=1");
+		if(!newWin || newWin.closed || typeof newWin.closed=='undefined') 
+		{ 
+		     alert('<%=getTranNoLink("web","popupsblocked","en")%>');
+		}
+		if(newWin){
+			newWin.close();
+		}
 	}
-	else{
-		newWin.close();
-	}
+	
+    if(window.parent.location.href.indexOf("/login.jsp")>-1){
+    	checkPopupsEnabled();
+    }
 
 </script>
 
@@ -354,6 +360,9 @@
     changeInputColor();
     $("entranceform").login.focus();
   });
+  
+  
+
   
   function readFingerprint(){
     <%

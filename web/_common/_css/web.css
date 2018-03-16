@@ -5,7 +5,7 @@ div.content {
  margin:0;
  border:0 solid black;
  padding:0;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  overflow-x:auto;
  width:100%;
  height:100%;
@@ -279,7 +279,7 @@ div.version{
  width:200px;
  height:10px;
  font-size:8px;
- font-family:Verdana;
+ font-family: Raleway, Geneva, sans-serif;
  color:#777;
  text-align:right;
  padding-right:15px;
@@ -331,7 +331,7 @@ table.list {
 }
 
 tr.admin {
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-weight:bolder;
  text-align:left;
  text-indent:5px;
@@ -348,7 +348,7 @@ tr.admin {
 }
 
 tr.adminng {
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-weight:bolder;
  text-align:left;
  text-indent:5px;
@@ -360,7 +360,7 @@ tr.adminng {
 }
 
 tr.adminnogradient {
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-weight:bolder;
  text-align:left;
  text-indent:5px;
@@ -389,7 +389,7 @@ td.longTitle {
 
 TD.admin {
  color:#505050;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:10px;
  font-weight:bolder;
  text-align:left;
@@ -400,9 +400,19 @@ TD.admin {
  line-height:22px;
 }
 
+TD.mobileadmin {
+ color:#505050;
+ font-family: Raleway, Geneva, sans-serif;
+ font-weight:bolder;
+ text-align:center;
+ padding:10px;
+ border-left:5px solid #C3D9FF;
+ background-color:#C3D9FF;
+}
+
 TD.bigadmin {
  color:#505050;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:16px;
  font-weight:bolder;
  text-align:center;
@@ -415,7 +425,7 @@ TD.bigadmin {
 
 TD.admincentered {
  color:#505050;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:10px;
  font-weight:bolder;
  text-align:center;
@@ -429,7 +439,7 @@ TD.admincentered {
 
 TD.admingrey {
  color: #F0F0F0;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:10px;
  font-weight:bolder;
  text-align:left;
@@ -442,7 +452,7 @@ TD.admingrey {
 
 td.admin2 {
  color:#505050;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:10px;
  font-weight:normal;
  text-align:left;
@@ -451,10 +461,23 @@ td.admin2 {
  vertical-align:middle;
  background-color:#DEEAFF;
 }
+	
+td.mobileadmin2 {
+ color:#505050;
+ font-family: Raleway, Geneva, sans-serif;
+ font-size:10px;
+ font-weight:normal;
+ text-align:left;
+ padding-top:10px;
+ padding-bottom:10px;
+ border-left:5px solid #DEEAFF;
+ vertical-align:middle;
+ background-color:#DEEAFF;
+}
 
 td.admin3 {
  color:#505050;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:10px;
  font-weight:normal;
  text-align:left;
@@ -466,7 +489,7 @@ td.admin3 {
 
 td.adminred {
  color:black;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:10px;
  font-weight:normal;
  text-align:left;
@@ -478,7 +501,7 @@ td.adminred {
 
 td.admin2right {
  color:#505050;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:10px;
  font-weight:normal;
  text-align:right;
@@ -489,7 +512,7 @@ td.admin2right {
 
 td.titleadmin {
  color:#505050;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:11px;
  font-weight:bold;
  text-align:left;
@@ -500,7 +523,7 @@ td.titleadmin {
 }
 
 .clinical {
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:10px;
  font-weight:bolder;
  text-align:left;
@@ -512,7 +535,7 @@ td.titleadmin {
 
 .strikelist {
  color:#5e5e5e;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:10px;
  font-weight:normal;
  text-align:left;
@@ -526,7 +549,7 @@ td.titleadmin {
 
 tr.list {
  color:#333;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:10px;
  font-weight:normal;
  text-align:left;
@@ -539,7 +562,7 @@ tr.list {
 
 tr.listText {
  color:Gray;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:10px;
  font-weight:normal;
  text-align:left;
@@ -549,11 +572,13 @@ tr.listText {
  background-color:#E8F1FF;
  font-style:italic;
  height:20px;
+ padding:1px;
+ text-indent:0px;
 }
 
 tr.listbold {
  color:#333;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:10px;
  font-weight:bolder;
  text-align:left;
@@ -562,11 +587,13 @@ tr.listbold {
  border:none;
  background-color:#DDEDFF;
  height:20px;
+ padding:1px;
+ text-indent:0px;
 }
 
 tr.listbold1 {
  color:#333;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:10px;
  font-weight:bolder;
  text-align:left;
@@ -580,7 +607,7 @@ tr.listbold1 {
 tr.listDisabled {
  font-style:italic;
  color:#5e5e5e;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:10px;
  font-weight:normal;
  text-align:left;
@@ -593,7 +620,7 @@ tr.listDisabled {
 
 tr.list_select {
  color:#333;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:10px;
  font-weight:normal;
  text-align:left;
@@ -614,7 +641,7 @@ td.image {
 
 tr.list_selectbold {
  color:#333;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:10px;
  font-weight:bolder;
  text-align:left;
@@ -627,7 +654,7 @@ tr.list_selectbold {
 
 tr.list_select2 {
  color:#333;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:9px;
  font-weight:normal;
  text-align:left;
@@ -658,7 +685,7 @@ td.tabselected {
 
 A.menuItem:link {
  color:#000;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:10px;
  font-weight:normal;
  text-decoration:none;
@@ -675,7 +702,7 @@ A.flat {
 
 A.menuItem:visited {
  color:#000;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:10px;
  font-weight:normal;
  text-decoration:none;
@@ -686,7 +713,7 @@ A.menuItem:visited {
 
 A.menuItem:active {
  color:#000;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:10px;
  font-weight:normal;
  text-decoration:none;
@@ -697,7 +724,7 @@ A.menuItem:active {
 
 A.menuItem:hover {
  color:#000;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:10px;
  font-weight:normal;
  border:1px solid #A6A6A6;
@@ -717,7 +744,7 @@ A.menuItem:hover {
 
 TD.menuItemGreen {
  color:#333;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:11px;
  font-weight:normal;
  background-color:#99cc99;
@@ -745,7 +772,7 @@ TD.menuItemGreen {
 TR.red {
  background-color:#ff9999;
  color:#333;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:10px;
  font-weight:normal;
  text-align:left;
@@ -758,7 +785,7 @@ TR.red {
 TR.green {
  background-color:#9ECAA9;
  color:#333;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:10px;
  font-weight:normal;
  text-align:left;
@@ -770,7 +797,7 @@ TR.green {
 
 TR.gray {
  color:#333;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:10px;
  font-weight:normal;
  text-align:left;
@@ -780,6 +807,7 @@ TR.gray {
  height:22px;
  line-height:22px;
  background:url(../../_img/themes/default/trgray_bg.gif) repeat-x;
+ text-indent:0px;
 }
 
 TR.gray td {
@@ -788,7 +816,7 @@ TR.gray td {
 
 A.underlined:active {
  color:black;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:9px;
  font-weight:bold;
  text-decoration:underline;
@@ -796,7 +824,7 @@ A.underlined:active {
 
 A.underlined:visited {
  color:black;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:9px;
  font-weight:bold;
  text-decoration:underline;
@@ -804,7 +832,7 @@ A.underlined:visited {
 
 A.underlined:link {
  color:black;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:9px;
  font-weight:bold;
  text-decoration:underline;
@@ -813,7 +841,7 @@ A.underlined:link {
 
 A.underlined:hover {
  color:black;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:9px;
  font-weight:bold;
  text-decoration:none;
@@ -824,10 +852,9 @@ A.underlined:hover {
 
 /*OTHERS*/
 body {
- margin: 0;
- padding: 0;
+ margin: 0px;
  color:#333;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:10px;
  background-color:#fff;
 }
@@ -839,7 +866,7 @@ hr {
 }
 
 td {
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
 }
 
 /*hyperlinks*/
@@ -851,7 +878,7 @@ A {
 
 A.menu:link {
  color:#000;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:11px;
  font-weight:normal;
  text-decoration:none;
@@ -860,7 +887,7 @@ A.menu:link {
 
 A.menu:visited {
  color:#000;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:11px;
  font-weight:normal;
  text-decoration:none;
@@ -868,7 +895,7 @@ A.menu:visited {
 
 A.menu:active {
  color:#000;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:11px;
  font-weight:normal;
  text-decoration:none;
@@ -876,7 +903,7 @@ A.menu:active {
 
 A.menu:hover {
  color:#000;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:11px;
  font-weight:normal;
  text-decoration:underline;
@@ -914,7 +941,7 @@ INPUT.text {
  COLOR:black;
  height:18px;
  background:url("../../_img/themes/default/back_input.png") no-repeat ;
- FONT-FAMILY:arial, sans-serif; 
+ font-family: Raleway, Geneva, sans-serif; 
 }
 
 .strike {
@@ -932,7 +959,7 @@ INPUT.greytext {
  height:18px;
  BACKGROUND:lightgrey;
  COLOR:black;
- FONT-FAMILY:arial, sans-serif; 
+ font-family: Raleway, Geneva, sans-serif; 
 }
 	
 INPUT.redtext {
@@ -941,7 +968,7 @@ INPUT.redtext {
  height:18px;
  background-color:#FF7F50;
  COLOR:black;
- FONT-FAMILY:arial, sans-serif; 
+ font-family: Raleway, Geneva, sans-serif; 
 }
 	
 INPUT.darkredtext {
@@ -950,7 +977,7 @@ INPUT.darkredtext {
  height:18px;
  background-color:red;
  COLOR:white;
- FONT-FAMILY:arial, sans-serif; 
+ font-family: Raleway, Geneva, sans-serif; 
 }
 	
 INPUT.orangetext {
@@ -959,7 +986,7 @@ INPUT.orangetext {
  height:18px;
  background-color: orange;
  COLOR:black;
- FONT-FAMILY:arial, sans-serif; 
+ font-family: Raleway, Geneva, sans-serif; 
 }
 	
 INPUT.yellowtext {
@@ -968,7 +995,7 @@ INPUT.yellowtext {
  height:18px;
  background-color: yellow;
  COLOR:black;
- FONT-FAMILY:arial, sans-serif; 
+ font-family: Raleway, Geneva, sans-serif; 
 }
 	
 INPUT.normal {
@@ -977,7 +1004,7 @@ INPUT.normal {
  BACKGROUND:#fff;
  COLOR:black;
  height:18px;
- FONT-FAMILY:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  background:url("../../_img/themes/default/back_input.png") no-repeat;
 }
 
@@ -993,7 +1020,7 @@ INPUT.barcode {
  BACKGROUND:#fff;
  COLOR:black;
  height:28px;
- FONT-FAMILY:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
 }
 
 INPUT.checkbox {
@@ -1001,7 +1028,7 @@ INPUT.checkbox {
  FONT-SIZE:10px;
  BACKGROUND:#fff;
  COLOR:black;
- FONT-FAMILY:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  border-style:none;
 }
 
@@ -1011,7 +1038,7 @@ INPUT.textred {
  BACKGROUND:#fff;
  COLOR:black;
  height:18px;
- FONT-FAMILY:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  background-color:#ff9999;
 }
 
@@ -1021,7 +1048,7 @@ INPUT.readonly {
  BACKGROUND:#eee;
  COLOR:black;
  height:18px;
- FONT-FAMILY:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  background-color:lightgrey;
 }
 
@@ -1031,7 +1058,7 @@ INPUT.textyellow {
  BACKGROUND:#fff;
  COLOR:black;
  height:18px;
- FONT-FAMILY:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  background:url("../../_img/themes/default/back_input_hover.png") no-repeat;
 }
 
@@ -1041,7 +1068,7 @@ INPUT.selected {
  COLOR:black;
  height:18px;
  background:#FFFFCC;
- FONT-FAMILY:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  background:url("../../_img/themes/default/back_input_hover.png") no-repeat;
 }
 
@@ -1051,7 +1078,7 @@ INPUT.bold {
  BACKGROUND:#fff;
  COLOR:black;
  height:18px;
- FONT-FAMILY:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  background:url("../../_img/themes/default/back_input.png") no-repeat;
 }
 
@@ -1060,7 +1087,7 @@ INPUT.selected_bold {
  FONT-SIZE:9px;
  height:18px;
  COLOR:black;
- FONT-FAMILY:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  background:url("../../_img/themes/default/back_input_hover.png") no-repeat;
 }
 
@@ -1068,7 +1095,7 @@ TEXTAREA.text {
  FONT-WEIGHT:normal;
  FONT-SIZE:11px;
  COLOR:black;
- FONT-FAMILY:arial, helvetica;
+ font-family: Raleway, Geneva, sans-serif;
  background:url("../../_img/themes/default/back_input.png") no-repeat white;
  resize:both;
 }
@@ -1077,7 +1104,7 @@ TEXTAREA.redbox {
  FONT-WEIGHT:normal;
  FONT-SIZE:11px;
  COLOR:black;
- FONT-FAMILY:arial, helvetica;
+ font-family: Raleway, Geneva, sans-serif;
  resize:both;
 }
 
@@ -1085,7 +1112,7 @@ TEXTAREA.selected {
  FONT-WEIGHT:normal;
  FONT-SIZE:11px;
  COLOR:black;
- FONT-FAMILY:arial, helvetica;
+ font-family: Raleway, Geneva, sans-serif;
  background:url("../../_img/themes/default/back_input_hover.png") no-repeat white;
  resize:both;
 }
@@ -1094,7 +1121,7 @@ TEXTAREA.normal {
  FONT-WEIGHT:normal;
  FONT-SIZE:11px;
  COLOR:black;
- FONT-FAMILY:arial, helvetica;
+ font-family: Raleway, Geneva, sans-serif;
  background:url("../../_img/themes/default/back_input.png") no-repeat white;
  resize:both;
 }
@@ -1105,7 +1132,7 @@ SELECT.text {
  COLOR:black;
  line-height:20px;
  height:18px;
- FONT-FAMILY:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  background:url("../../_img/themes/default/back_input.png") no-repeat ;
 }
 
@@ -1115,13 +1142,13 @@ SELECT.selected {
  COLOR:black;
  height:18px;
  line-height:20px;
- FONT-FAMILY:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  background:url("../../_img/themes/default/back_input_hover.png") no-repeat ;
 }
 
 button.button {
  padding-bottom:3px;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:10px;
  font-weight:normal;
  color:#505050;
@@ -1168,7 +1195,7 @@ TEXTAREA {
 
 input.button {
  padding-bottom:2px;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:10px;
  font-weight:normal;
  color:#505050;
@@ -1183,7 +1210,7 @@ input.button {
 
 input.redbutton {
  padding-bottom:2px;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:10px;
  font-weight:normal;
  color:white;
@@ -1196,7 +1223,7 @@ input.redbutton {
 
 input.bigbutton {
  padding-bottom:2px;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:20px;
  font-weight:normal;
  color:black;
@@ -1208,7 +1235,7 @@ input.bigbutton {
 
 input.hiddenredbutton {
  padding-bottom:2px;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:10px;
  font-weight:normal;
  color:white;
@@ -1285,7 +1312,7 @@ td.arrow {
 
 TR.list { 
  color:#333;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:10px;
  font-weight:normal;
  text-align:left;
@@ -1298,7 +1325,7 @@ TR.list {
 
 TR.list1 {
  color:#333;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:10px;
  font-weight:normal;
  text-align:left;
@@ -1312,7 +1339,7 @@ TR.list1 {
 TR.listDisabled1 {
  font-style:italic;
  color:gray;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:10px;
  font-weight:normal;
  text-align:left;
@@ -1326,7 +1353,7 @@ TR.listDisabled1 {
 TR.listText1 {
  font-style:italic;
  color:Gray;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:10px;
  font-weight:normal;
  text-align:left;
@@ -1334,13 +1361,13 @@ TR.listText1 {
  height:20px;
  border:none;
  padding:1px;
- text-indent:5px;
+ text-indent:0px;
 }
 
 TR.listText2 {
  font-style:italic;
  color:blue;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:10px;
  font-weight:normal;
  text-align:left;
@@ -1353,7 +1380,7 @@ TR.listText2 {
 
 TD.text {
  color:#333;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:9px;
  font-weight:normal;
  text-align:left;
@@ -1365,7 +1392,7 @@ TD.text {
 
 TD.textnoindent {
  color:#333;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:9px;
  font-weight:normal;
  text-align:left;
@@ -1376,7 +1403,7 @@ TD.textnoindent {
 
 TD.textRed {
  color:#333;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:9px;
  font-weight:normal;
  text-align:left;
@@ -1388,7 +1415,7 @@ TD.textRed {
 
 TR.Label {
  color:#333;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:9px;
  font-weight:bolder;
  text-align:left;
@@ -1399,7 +1426,7 @@ TR.Label {
 
 TR.Label2 {
  color:#333;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:9px;
  font-weight:bold;
  text-align:left;
@@ -1409,7 +1436,7 @@ TR.Label2 {
 
 TR.Label3 {
  color:#333;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:9px;
  font-weight:normal;
  text-align:left;
@@ -1419,7 +1446,7 @@ TR.Label3 {
 
 TR.White {
  color:#333;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:9px;
  font-weight:bold;
  text-align:left;
@@ -1439,7 +1466,7 @@ td#tableHeaderTitle {
 
 div.title {
  font-size:11px;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  background-color:#ddd;
  padding:3px;
 }
@@ -1455,14 +1482,14 @@ table.menu {
 div.search {
  border:1px solid black;
  padding:2px;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  width:99%;
 }
 
 div.searchResults {
  border:1px solid #ccc;
  padding:0;
- font-family:'arial', sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  width:99%;
  overflow:auto;
  min-height:100px;
@@ -1483,7 +1510,7 @@ div.searchResults {
  background-color:menu;
  z-index:100;
  visibility:hidden;
- font-family:Arial, Helvetica, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  font-size:8pt;
  border:1px solid buttonface;
  border:2 outset buttonhighlight;
@@ -1499,7 +1526,7 @@ INPUT.modified {
  FONT-SIZE:10px;
  BORDER-COLOR:darkblue;
  COLOR:black;
- FONT-FAMILY:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  BORDER-STYLE:solid;
  -moz-appearance:none;
 }
@@ -1509,7 +1536,7 @@ TEXTAREA.modified {
  FONT-SIZE:11px;
  border-color:darkblue;
  COLOR:black;
- FONT-FAMILY:arial, helvetica;
+ font-family: Raleway, Geneva, sans-serif;
  BORDER-STYLE:solid;
 }
 
@@ -1518,7 +1545,7 @@ SELECT.modified {
  FONT-SIZE:10px;
  BACKGROUND:darkblue;
  COLOR:yellow;
- FONT-FAMILY:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  BORDER-STYLE:groove;
 }
 
@@ -1639,7 +1666,7 @@ div.autocompletiondiv {
 ul#autocompletion .selected {
  background:#4874A6;
  color:white;
- font-family:arial, sans-serif;
+ font-family: Raleway, Geneva, sans-serif;
  cursor:pointer;
 }
 

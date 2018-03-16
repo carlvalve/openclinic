@@ -33,7 +33,6 @@
 
             // Hier worden de geselecteerde ICPC-codes getoond
             if (keywords.length() > 0) {
-                Vector codes = MedwanQuery.getInstance().findICD10Codes(request.getParameter("keywords"), sWebLanguage);
                 ICPCCode code;
 
         %><tbody class="hand"><%

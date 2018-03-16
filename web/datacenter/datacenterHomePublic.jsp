@@ -226,7 +226,7 @@
 
 					output.append("<tr style='padding:0px;' bgcolor='#dddddd'>")
 					       .append("<td colspan='1' width='25%' nowrap>")
-					        .append("<img src='"+sCONTEXTPATH+"/_img/icons/icon_plus.png' style='vertical-align:-3px;' id='plus_"+countryIdx+"' onClick=\"toggleSites('"+sCountryCode+"','"+countryIdx+"');\"/> <b>"+(sCountryCode.equals("B")?"BE":sCountryCode)+" - "+sCountryName+"</b>")
+					        .append("<img src='"+sCONTEXTPATH+"/_img/icons/icon_plus.png' style='vertical-align:-3px;' id='plus_"+countryIdx+"' onclick=\"toggleSites('"+sCountryCode+"','"+countryIdx+"');\"/> <b>"+(sCountryCode.equals("B")?"BE":sCountryCode)+" - "+sCountryName+"</b>")
 					       .append("</td>")
 					       .append("<td align='right' width='15%'>"+countSites(countries,sCountryCode)+" "+getTran(request,"web","sites",sWebLanguage)+" "+getTran(request,"web","datacenter.in",sWebLanguage).toLowerCase()+" "+countCities(countries,sCountryCode)+" "+getTran(request,"web","cities",sWebLanguage)+"</td>")
 					       .append("<td align='right' width='10%'>"+deci.format(countryTotal.patients)+"</td>")
@@ -249,44 +249,44 @@
 				              "<td colspan='1' width='1%' nowrap><b><font color='white'>"+getTran(request,"web","total",sWebLanguage)+"</font></b></td>"+
 				              "<td>"+
 				                "<font color='white'><b>"+summarySite.id+" "+getTran(request,"web","sites",sWebLanguage)+" "+getTran(request,"web","datacenter.in",sWebLanguage).toLowerCase()+" "+countries.size()+" "+getTran(request,"web","countries",sWebLanguage)+"</b><br>"+
-						          " [<a style='color:white;' href='javascript:void(0);' onClick=\"openGISMap('"+summarySite.id+"','sites','clusterer');\">GIS</a>]&nbsp;"+
-						          " [<a style='color:white;' href='javascript:void(0);' onClick=\"openGISMap('"+summarySite.id+"','sites','mapChart');\">GISmap</a>]"+
+						          " [<a style='color:white;' href='javascript:void(0);' onclick=\"openGISMap('"+summarySite.id+"','sites','clusterer');\">GIS</a>]&nbsp;"+
+						          " [<a style='color:white;' href='javascript:void(0);' onclick=\"openGISMap('"+summarySite.id+"','sites','mapChart');\">GISmap</a>]"+
 				                "</font>"+
 				              "</td>"+
 				              "<td>"+
 				                "<font color='white'><b>"+getTran(request,"web","patients",sWebLanguage)+"</b><br>"+
-				                  " [<a style='color:white;' href='javascript:void(0);' onClick=\"openGISMap('"+summarySite.id+"','patients','clusterer');\">GIS</a>]&nbsp;"+
-						          " [<a style='color:white;' href='javascript:void(0);' onClick=\"openGISMap('"+summarySite.id+"','patients','mapChart');\">GISmap</a>]"+
+				                  " [<a style='color:white;' href='javascript:void(0);' onclick=\"openGISMap('"+summarySite.id+"','patients','clusterer');\">GIS</a>]&nbsp;"+
+						          " [<a style='color:white;' href='javascript:void(0);' onclick=\"openGISMap('"+summarySite.id+"','patients','mapChart');\">GISmap</a>]"+
 				                "</font>"+
 				              "</td>"+
 				              "<td>"+
 				                "<font color='white'><b>"+getTran(request,"web","outpatients",sWebLanguage)+"</b><br>"+
-				                  " [<a style='color:white;' href='javascript:void(0);' onClick=\"openGISMap('"+summarySite.id+"','outpatients','clusterer');\">GIS</a>]&nbsp;"+
-						          " [<a style='color:white;' href='javascript:void(0);' onClick=\"openGISMap('"+summarySite.id+"','outpatients','mapChart');\">GISmap</a>]"+
+				                  " [<a style='color:white;' href='javascript:void(0);' onclick=\"openGISMap('"+summarySite.id+"','outpatients','clusterer');\">GIS</a>]&nbsp;"+
+						          " [<a style='color:white;' href='javascript:void(0);' onclick=\"openGISMap('"+summarySite.id+"','outpatients','mapChart');\">GISmap</a>]"+
 				                "</font>"+
 				              "</td>"+
 				              "<td>"+
 				                "<font color='white'><b>"+getTran(request,"web","admissions",sWebLanguage)+"</b><br>"+
-				                  " [<a style='color:white;' href='javascript:void(0);' onClick=\"openGISMap('"+summarySite.id+"','admissions','clusterer');\">GIS</a>]&nbsp;"+
-						          " [<a style='color:white;' href='javascript:void(0);' onClick=\"openGISMap('"+summarySite.id+"','admissions','mapChart');\">GISmap</a>]"+
+				                  " [<a style='color:white;' href='javascript:void(0);' onclick=\"openGISMap('"+summarySite.id+"','admissions','clusterer');\">GIS</a>]&nbsp;"+
+						          " [<a style='color:white;' href='javascript:void(0);' onclick=\"openGISMap('"+summarySite.id+"','admissions','mapChart');\">GISmap</a>]"+
 				                "</font>"+
 				              "</td>"+
 				              "<td>"+
 				                "<font color='white'><b>"+getTran(request,"web","labanalyses",sWebLanguage)+"</b><br>"+
-				                  " [<a style='color:white;' href='javascript:void(0);' onClick=\"openGISMap('"+summarySite.id+"','labanalyses','clusterer');\">GIS</a>]&nbsp;"+
-						          " [<a style='color:white;' href='javascript:void(0);' onClick=\"openGISMap('"+summarySite.id+"','labanalyses','mapChart');\">GISmap</a>]"+
+				                  " [<a style='color:white;' href='javascript:void(0);' onclick=\"openGISMap('"+summarySite.id+"','labanalyses','clusterer');\">GIS</a>]&nbsp;"+
+						          " [<a style='color:white;' href='javascript:void(0);' onclick=\"openGISMap('"+summarySite.id+"','labanalyses','mapChart');\">GISmap</a>]"+
 				                "</font>"+
 				              "</td>"+
 				              "<td>"+
 				                "<font color='white'><b>"+getTran(request,"web","invoices",sWebLanguage)+"</b><br>"+
-				                  " [<a style='color:white;' href='javascript:void(0);' onClick=\"openGISMap('"+summarySite.id+"','invoices','clusterer');\">GIS</a>]&nbsp;"+
-						          " [<a style='color:white;' href='javascript:void(0);' onClick=\"openGISMap('"+summarySite.id+"','invoices','mapChart');\">GISmap</a>]"+
+				                  " [<a style='color:white;' href='javascript:void(0);' onclick=\"openGISMap('"+summarySite.id+"','invoices','clusterer');\">GIS</a>]&nbsp;"+
+						          " [<a style='color:white;' href='javascript:void(0);' onclick=\"openGISMap('"+summarySite.id+"','invoices','mapChart');\">GISmap</a>]"+
 				                "</font>"+
 				              "</td>"+
 				              "<td>"+
 				                "<font color='white'><b>"+getTran(request,"web","debets",sWebLanguage)+"</b><br>"+
-				                  " [<a style='color:white;' href='javascript:void(0);' onClick=\"openGISMap('"+summarySite.id+"','debets','clusterer');\">GIS</a>]&nbsp;"+
-						          " [<a style='color:white;' href='javascript:void(0);' onClick=\"openGISMap('"+summarySite.id+"','debets','mapChart');\">GISmap</a>]"+
+				                  " [<a style='color:white;' href='javascript:void(0);' onclick=\"openGISMap('"+summarySite.id+"','debets','clusterer');\">GIS</a>]&nbsp;"+
+						          " [<a style='color:white;' href='javascript:void(0);' onclick=\"openGISMap('"+summarySite.id+"','debets','mapChart');\">GISmap</a>]"+
 				                "</font>"+
 				              "</td>"+
 				            "</tr>");

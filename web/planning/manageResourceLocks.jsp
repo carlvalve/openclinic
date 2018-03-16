@@ -51,7 +51,7 @@
                 <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTran(null,"web","clear",sWebLanguage)%>" onclick="transactionForm.service.value='';transactionForm.servicename.value='';">
             </td>
 			<td class='admin' nowrap>
-				<input type='button' class='button' name='addButton' id='addButton' value='<%=getTran(null,"web","lock",sWebLanguage) %>' onclick='saveResourceLock();'/>
+				<input type='button' class='button' name='addButton' id='addButton' value='<%=getTranNoLink("web","lock",sWebLanguage) %>' onclick='saveResourceLock();'/>
 				<input type='button' class='button' name='exitButton' id='exitButton' value='<%=getTran(null,"web","close",sWebLanguage) %>' onclick='window.close();'/>
 			</td>
 		</tr>

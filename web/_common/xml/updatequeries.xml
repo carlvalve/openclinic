@@ -306,4 +306,10 @@
   	<Query id='QUERY.openclinic.oclabelsexpand' db='openclinic' date='25/09/2017' dbserver='MySQL'>
 		alter table oc_labels modify oc_label_value varchar(5000);
   	</Query>
+  	<Query id='QUERY.openclinic.ocpointersexpand' db='openclinic' date='09/03/2018' dbserver='Microsoft SQL Server'>
+		alter table oc_pointers alter column oc_pointer_value varchar(5000);
+  	</Query>
+  	<Query id='QUERY.openclinic.ocpointersexpand' db='openclinic' date='09/03/2018' dbserver='MySQL'>
+		alter table oc_pointers modify oc_pointer_value varchar(5000);
+  	</Query>
 </Queries>

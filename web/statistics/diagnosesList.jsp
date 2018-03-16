@@ -61,7 +61,7 @@
 			    <tr class="gray">
 			        <td><%=getTran(request,"web","patient",sWebLanguage)%></td>
 			        <td><%=getTran(request,"web","service",sWebLanguage)%></td>
-			        <td colspan="3"><%=getTran(request,"web","diagnoses",sWebLanguage)%></td>
+			        <td colspan="4"><%=getTran(request,"web","diagnoses",sWebLanguage)%></td>
 			    </tr>
 	    <%
 
@@ -114,7 +114,7 @@
                 }
                 
                 if(name.length() > 0){
-                    out.print("<tr><td colspan='5'><hr/></td></tr>");
+                    out.print("<tr><td colspan='6'><hr/></td></tr>");
                 }
                 else{
                     name = "</td><td>";
@@ -144,7 +144,7 @@
 			        <td class="admin2"><b><%=patientcounter%></b></td>
 			        <td class="admin2">&nbsp;</td>
 			        <td class="admin2"><%=getTran(request,"web","total.diagnosis",sWebLanguage)%></td>
-			        <td class="admin2"><b><%=diagnosiscounter%></b></td>
+			        <td class="admin2" colspan='2'><b><%=diagnosiscounter%></b></td>
 			    </tr>
 		    </table>
 	

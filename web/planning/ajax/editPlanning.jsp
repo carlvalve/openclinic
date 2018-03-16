@@ -504,7 +504,7 @@
 			            	String sActivity = "";
 			            	if(planning.getContact()!=null){
 			            		Prestation p = Prestation.get(planning.getContact().getObjectUid());
-			            		if(p!=null){
+			            		if(p!=null && ScreenHelper.checkString(p.getCode()).length()>0){
 			            			sActivity=ScreenHelper.checkString(p.getCode()).toUpperCase()+" - "+p.getDescription();
 			            		}
 			            	}

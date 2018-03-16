@@ -111,7 +111,7 @@
 	                    <td align="center" colspan="4"><%=getTran(request,"Web.Occup","nurseexamination",sWebLanguage)%></td>
 	                </tr>
 	                <tr>
-			            <td class='admin' width ="<%=sTDAdminWidth%>"><%=getTran(request,"openclinic.chuk","temperature",sWebLanguage)%>&nbsp;(°C)</td>
+			            <td class='admin'><%=getTran(request,"openclinic.chuk","temperature",sWebLanguage)%>&nbsp;(°C)</td>
 			            <td class='admin2'><input <%=setRightClickMini("[GENERAL.ANAMNESE]ITEM_TYPE_TEMPERATURE")%> id="temperature" class="text" type="text" size="5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_TEMPERATURE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_TEMPERATURE" property="value"/>"/></td>
 			            <td class='admin'><%=getTran(request,"Web.Occup","medwan.healthrecord.cardial.frequence-cardiaque",sWebLanguage)%></td>
 			            <td class='admin2' nowrap>
@@ -121,7 +121,7 @@
 			            </td>
 	                </tr>
 	                <tr>
-			            <td class='admin' width ="<%=sTDAdminWidth%>"><%=getTran(request,"Web.Occup","medwan.healthrecord.biometry.weight",sWebLanguage)%>&nbsp;</td>
+			            <td class='admin'><%=getTran(request,"Web.Occup","medwan.healthrecord.biometry.weight",sWebLanguage)%>&nbsp;</td>
 			            <td class='admin2'><input <%=setRightClickMini("ITEM_TYPE_BIOMETRY_WEIGHT")%> id="weight" class="text" type="text" size="5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BIOMETRY_WEIGHT" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BIOMETRY_WEIGHT" property="value"/>" onBlur="validateWeight(this);calculateBMI();"/></td>
 			            <td class="admin">
 			                <%=getTran(request,"Web.Occup","medwan.healthrecord.cardial.pression-arterielle",sWebLanguage)%>
@@ -134,7 +134,7 @@
 			            </td>
 	                </tr>
 	                <tr>
-			            <td class='admin' width ="<%=sTDAdminWidth%>"><%=getTran(request,"Web.Occup","medwan.healthrecord.biometry.length",sWebLanguage)%>&nbsp;</td>
+			            <td class='admin'><%=getTran(request,"Web.Occup","medwan.healthrecord.biometry.length",sWebLanguage)%>&nbsp;</td>
 			            <td class='admin2'><input <%=setRightClickMini("ITEM_TYPE_BIOMETRY_HEIGHT")%> class="text" type="text" size="5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BIOMETRY_HEIGHT" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BIOMETRY_HEIGHT" property="value"/>" onBlur="validateHeight(this);calculateBMI();"/></td>
 			            <td class="admin">
 			            	<%=getTran(request,"Web.Occup","medwan.healthrecord.cardial.pression-arterielle",sWebLanguage)%>
@@ -146,7 +146,7 @@
 			            </td>
 	                </tr>
 	                <tr>
-			            <td class='admin' width ="<%=sTDAdminWidth%>"><%=getTran(request,"Web.Occup","medwan.healthrecord.biometry.bmi",sWebLanguage)%>&nbsp;</td>
+			            <td class='admin'><%=getTran(request,"Web.Occup","medwan.healthrecord.biometry.bmi",sWebLanguage)%>&nbsp;</td>
 			            <td class='admin2'><input tabindex="-1" class="text" type="text" size="5" readonly name="BMI"></td>
 			            <td class='admin'><%=getTran(request,"Web.Occup","medwan.healthrecord.respiratory.frequence-respiratoire",sWebLanguage)%></td>
 			            <td class='admin2' nowrap>
@@ -156,7 +156,7 @@
 			            </td>
 	                </tr>
 	                <tr>
-			            <td class='admin' width ="<%=sTDAdminWidth%>"><%=getTran(request,"Web.Occup","medwan.healthrecord.weightforlength",sWebLanguage)%>&nbsp;<img id="wflinfo" style='display: none' src="<c:url value='/_img/icons/icon_info.gif'/>"/></td>
+			            <td class='admin'><%=getTran(request,"Web.Occup","medwan.healthrecord.weightforlength",sWebLanguage)%>&nbsp;<img id="wflinfo" style='display: none' src="<c:url value='/_img/icons/icon_info.gif'/>"/></td>
 			            <td class='admin2'><input tabindex="-1" class="text" type="text" size="5" readonly name="WFL" id="WFL"></td>
 			            <td class='admin'><%=getTran(request,"Web.Occup","medwan.healthrecord.brachial.circumference",sWebLanguage)%></td>
 			            <td class='admin2' nowrap>
@@ -164,7 +164,7 @@
 			            </td>
 	                </tr>
 	                <tr>
-			            <td class='admin' width ="<%=sTDAdminWidth%>"><%=getTran(request,"openclinic.chuk","sao2",sWebLanguage)%></td>
+			            <td class='admin'><%=getTran(request,"openclinic.chuk","sao2",sWebLanguage)%></td>
 			            <td class='admin2' colspan="3" nowrap>
 			                <input <%=setRightClick("[GENERAL.ANAMNESE]ITEM_TYPE_SATURATION")%> type="text" class="text" size="5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_SATURATION" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_SATURATION" property="value"/>"/> %
 			            </td>
@@ -173,37 +173,37 @@
 	                    <td align="center" colspan="4"><%=getTran(request,"web","physicalexamination",sWebLanguage)%></td>
 	                </tr>
 				    <tr>
-				        <td width ="<%=sTDAdminWidth%>" class='admin'> - <%=getTran(request,"web","inspection",sWebLanguage)%>&nbsp;</td>
+				        <td class='admin'> - <%=getTran(request,"web","inspection",sWebLanguage)%>&nbsp;</td>
 				        <td class='admin2' colspan="3">
 				            <textarea onKeyup="resizeTextarea(this,10);" <%=setRightClick("ITEM_TYPE_HPRC_INSPECTION")%> class="text" cols="50" rows="1" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_INSPECTION" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_INSPECTION" property="value"/></textarea>
 				        </td>
 				    </tr>
 				    <tr>
-				        <td width ="<%=sTDAdminWidth%>" class='admin'> - <%=getTran(request,"web","palpation",sWebLanguage)%>&nbsp;</td>
+				        <td class='admin'> - <%=getTran(request,"web","palpation",sWebLanguage)%>&nbsp;</td>
 				        <td class='admin2' colspan="3">
 				            <textarea onKeyup="resizeTextarea(this,10);" <%=setRightClick("ITEM_TYPE_HPRC_PALPATION")%> class="text" cols="50" rows="1" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_PALPATION" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_PALPATION" property="value"/></textarea>
 				        </td>
 				    </tr>
 				    <tr>
-				        <td width ="<%=sTDAdminWidth%>" class='admin'> - <%=getTran(request,"web","percussion",sWebLanguage)%>&nbsp;</td>
+				        <td class='admin'> - <%=getTran(request,"web","percussion",sWebLanguage)%>&nbsp;</td>
 				        <td class='admin2' colspan="3">
 				            <textarea onKeyup="resizeTextarea(this,10);" <%=setRightClick("ITEM_TYPE_HPRC_PERCUSSION")%> class="text" cols="50" rows="1" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_PERCUSSION" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_PERCUSSION" property="value"/></textarea>
 				        </td>
 				    </tr>
 				    <tr>
-				        <td width ="<%=sTDAdminWidth%>" class='admin'> - <%=getTran(request,"web","auscultation",sWebLanguage)%>&nbsp;</td>
+				        <td class='admin'> - <%=getTran(request,"web","auscultation",sWebLanguage)%>&nbsp;</td>
 				        <td class='admin2' colspan="3">
 				            <textarea onKeyup="resizeTextarea(this,10);" <%=setRightClick("ITEM_TYPE_HPRC_AUSCULTATION")%> class="text" cols="50" rows="1" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_AUSCULTATION" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_AUSCULTATION" property="value"/></textarea>
 				        </td>
 				    </tr>
 				    <tr>
-				        <td width ="<%=sTDAdminWidth%>" class='admin'> - <%=getTran(request,"web","summary",sWebLanguage)%>&nbsp;</td>
+				        <td class='admin'> - <%=getTran(request,"web","summary",sWebLanguage)%>&nbsp;</td>
 				        <td class='admin2' colspan="3">
 				            <textarea onKeyup="resizeTextarea(this,10);" <%=setRightClick("ITEM_TYPE_HPRC_SUMMARY")%> class="text" cols="50" rows="1" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_SUMMARY" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_SUMMARY" property="value"/></textarea>
 				        </td>
 				    </tr>
 				    <tr>
-				        <td width ="<%=sTDAdminWidth%>" class='admin'> - <%=getTran(request,"web","diagnosis",sWebLanguage)%>&nbsp;</td>
+				        <td class='admin'> - <%=getTran(request,"web","diagnosis",sWebLanguage)%>&nbsp;</td>
 				        <td class='admin2' colspan="3">
 				            <textarea onKeyup="resizeTextarea(this,10);" <%=setRightClick("ITEM_TYPE_HPRC_DIAGNOSIS")%> class="text" cols="50" rows="1" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_DIAGNOSIS" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_DIAGNOSIS" property="value"/></textarea>
 				        </td>
@@ -212,25 +212,25 @@
 	                    <td align="center" colspan="4"><%=getTran(request,"web","other",sWebLanguage)%></td>
 	                </tr>
 				    <tr>
-				        <td width ="<%=sTDAdminWidth%>" class='admin'> - <%=getTran(request,"web","complementaryexaminations",sWebLanguage)%>&nbsp;</td>
+				        <td class='admin'> - <%=getTran(request,"web","complementaryexaminations",sWebLanguage)%>&nbsp;</td>
 				        <td class='admin2' colspan="3">
 				            <textarea onKeyup="resizeTextarea(this,10);" <%=setRightClick("ITEM_TYPE_HPRC_EXAMINATIONS")%> class="text" cols="50" rows="1" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_EXAMINATIONS" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_EXAMINATIONS" property="value"/></textarea>
 				        </td>
 				    </tr>
 				    <tr>
-				        <td width ="<%=sTDAdminWidth%>" class='admin'> - <%=getTran(request,"web","treatment",sWebLanguage)%>&nbsp;</td>
+				        <td class='admin'> - <%=getTran(request,"web","treatment",sWebLanguage)%>&nbsp;</td>
 				        <td class='admin2' colspan="3">
 				            <textarea onKeyup="resizeTextarea(this,10);" <%=setRightClick("ITEM_TYPE_HPRC_TREATMENT")%> class="text" cols="50" rows="1" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_TREATMENT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_TREATMENT" property="value"/></textarea>
 				        </td>
 				    </tr>
 				    <tr>
-				        <td width ="<%=sTDAdminWidth%>" class='admin'> - <%=getTran(request,"web","hprccomment",sWebLanguage)%>&nbsp;</td>
+				        <td class='admin'> - <%=getTran(request,"web","hprccomment",sWebLanguage)%>&nbsp;</td>
 				        <td class='admin2' colspan="3">
 				            <textarea onKeyup="resizeTextarea(this,10);" <%=setRightClick("ITEM_TYPE_HPRC_COMMENT")%> class="text" cols="50" rows="1" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_COMMENT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_COMMENT" property="value"/></textarea>
 				        </td>
 				    </tr>
 				    <tr>
-				        <td width ="<%=sTDAdminWidth%>" class='admin'> - <%=getTran(request,"web","integration",sWebLanguage)%>&nbsp;</td>
+				        <td class='admin'> - <%=getTran(request,"web","integration",sWebLanguage)%>&nbsp;</td>
 				        <td class='admin2' colspan="3">
 							<select class='text' name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_INTEGRATION" property="itemId"/>]>.value">
 								<option/>

@@ -176,8 +176,14 @@
 			<td class="admin">
 	               <%=getTran(request,"gynecology", "otheracts", sWebLanguage)%>
 			</td>
-			<td colspan="3" class='admin2'>
+			<td class='admin2'>
        				<textarea onKeyup="resizeTextarea(this,10);" <%=setRightClick("ITEM_TYPE_DELIVERY_OTHERACTS")%> class="text" rows="1" cols="50" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_OTHERACTS" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_OTHERACTS" property="value"/></textarea>
+			</td>
+			<td class="admin">
+	               <%=getTran(request,"gynecology", "description", sWebLanguage)%>
+			</td>
+			<td class='admin2'>
+       				<textarea onKeyup="resizeTextarea(this,10);" <%=setRightClick("ITEM_TYPE_DELIVERY_DESCRIPTION")%> class="text" rows="1" cols="50" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_DESCRIPTION" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_DESCRIPTION" property="value"/></textarea>
 			</td>
 		</tr>
  		<tr>
@@ -492,6 +498,10 @@
     <%-- DIAGNOSES --%>
     <%ScreenHelper.setIncludePage(customerInclude("healthrecord/diagnosesEncodingWide.jsp"),pageContext);%>
 <script>
+	if(document.getElementById('deliverydate').value.length==0){
+		  document.getElementById('deliverydate').value=document.getElementById('trandate').value;
+		  document.getElementById('deliverydatefield').value=document.getElementById('trandate').value;
+	}
     function calculateapgar(){
          if(document.getElementById("coeur1").value=="-1" || document.getElementById("resp1").value=="-1" || document.getElementById("tonus1").value=="-1" || document.getElementById("refl1").value=="-1" || document.getElementById("color1").value=="-1"){
 	         document.getElementById("total1").value="?";

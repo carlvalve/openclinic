@@ -33,7 +33,7 @@
 		method: "POST",
 		   parameters: "",
 		   onSuccess: function(resp){
-			   if(resp.responseText.indexOf("<OK>")<0){
+			   if(document.getElementById('EditContactName').value.length>0 && resp.responseText.indexOf("<OK>")<0){
 				   alert('<%=getTranNoLink("web","invalidactivity",sWebLanguage)%>');
 				   document.getElementById('EditContactName').focus();
 			   }

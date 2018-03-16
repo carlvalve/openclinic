@@ -16,7 +16,7 @@
     
     <script>
       function initBarcode2(){
-	    window.open("zxing://scan/?ret=<%="http://"+request.getServerName()+request.getRequestURI().replaceAll(request.getServletPath(),"")%>/mobile/searchPatient.jsp\?action=search%26patientpersonid={CODE}")
+	    window.open("zxing://scan/?ret=<%="http://"+request.getServerName()+":"+request.getServerPort()+request.getRequestURI().replaceAll(request.getServletPath(),"")%>/mobile/searchPatient.jsp\?action=search%26patientpersonid={CODE}")
       }
 	</script>
 </head>

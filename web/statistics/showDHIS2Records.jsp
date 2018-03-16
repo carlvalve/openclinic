@@ -2,7 +2,7 @@
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
 <table width='100%'>
-	<tr class='admin'><td colspan="2"><%=getTran(request,"web","dhis2patientrecords",sWebLanguage) %></td></tr>
+	<tr class='admin'><td colspan="3"><%=getTran(request,"web","dhis2patientrecords",sWebLanguage) %></td></tr>
 <%
 	try{
 		long day = 24*3600*1000;
@@ -21,7 +21,8 @@
 		String[] records=exporter.showRecords(dataelement, option,attributeoption).split(";");
 		for(int n=0;n<records.length;n++){
 			String personid=records[n];
-			out.println("<tr><td class='admin'><a href='"+sCONTEXTPATH+"/main.do?Page=curative/index.jsp&PersonID="+personid+"'>"+personid+"</a></td><td class='admin2'/>"+(checkString(personid).length()>0?AdminPerson.getFullName(personid):"?")+"</td></tr>");
+			AdminPerson p = AdminPerson.getAdminPerson(personid);
+			out.println("<tr><td class='admin'>"+(n+1)+". <a href='"+sCONTEXTPATH+"/main.do?Page=curative/index.jsp&PersonID="+personid+"'>"+personid+"</a></td><td class='admin2'/>"+(p!=null?p.getFullName():"?")+"</td><td class='admin2'/>"+(p!=null?p.dateOfBirth:"?")+"</td></tr>");
 		}
 	}
 	catch(Exception e){

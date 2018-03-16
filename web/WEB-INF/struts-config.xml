@@ -24,8 +24,6 @@
 
   <!-- ========== Global Forward Definitions ============================== -->
   <global-forwards>
-    <forward name="login"               path="/login.do"/>
-
   </global-forwards>
 
 

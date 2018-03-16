@@ -306,18 +306,27 @@
                 
                 // select active contact
                 String activeEncounterUid = "";
+                String linkedService="";
                 ItemVO oldItemVO = transactionVO.getItem("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID");
                 if(oldItemVO!=null && oldItemVO.getValue().length() > 0){
                 	activeEncounterUid = oldItemVO.getValue();
+                	Encounter activeEnc = Encounter.get(activeEncounterUid);
+					if(activeEnc!=null){
+	                	linkedService=getTranNoLink("service",activeEnc.getServiceUID(),language);
+					}
                 }
                 else{
 	                AdminPerson activePatient = (AdminPerson)request.getSession().getAttribute("activePatient");
 	                Encounter activeEnc = Encounter.getActiveEncounterOnDate(new Timestamp(transactionVO.getUpdateTime().getTime()),activePatient.personid);
 	                if(activeEnc!=null){
 	                	activeEncounterUid=activeEnc.getUid();
+	                	linkedService=getTranNoLink("service",activeEnc.getServiceUID(),language);
 	                }
                 }
-                result+= "&nbsp;<input type='hidden' name='currentTransactionVO.items.<ItemVO[hashCode="+(oldItemVO!=null?oldItemVO.getItemId():IdentifierFactory.getInstance().getTemporaryNewIdentifier())+ "]>.value' id='encounteruid' value='"+activeEncounterUid+"'/>";
+                result+= "&nbsp;<input type='hidden' name='currentTransactionVO.items.<ItemVO[hashCode="+(oldItemVO!=null?oldItemVO.getItemId():IdentifierFactory.getInstance().getTemporaryNewIdentifier())+ "]>.value' id='encounteruid' value='"+activeEncounterUid+"' onchange='updatelinkedservice()'/>";
+				if(activeEncounterUid.length()>0){
+					result+=" <a href='javascript:searchEncounter();'><span id='linkedservice'>["+linkedService+"]</span></a>";
+				}
             }
             result+= "</td>";
 
@@ -357,6 +366,17 @@
                  "</tr>"+
                 "</table>"+
                 "<div id='content-details' style='display:none'></div>"+
+                "<script>function updatelinkedservice(){"+
+                        "var today = new Date();"+
+                        "var url= '"+sCONTEXTPATH+"/util/getServiceName.jsp?encounteruid='+document.getElementById('encounteruid').value+'&ts='+today;"+
+                        "new Ajax.Request(url,{"+
+                        "method: 'POST',"+
+                        "parameters: '',"+
+                        "onSuccess: function(resp){"+
+                        "document.getElementById('linkedservice').innerHTML='['+resp.responseText.trim()+']';"+
+                        "}"+
+                        "});"+
+                "}</script>"+
                 "<script>document.getElementById('ctxt').onchange();</script>";
 
         return result;
@@ -971,7 +991,8 @@
     // stylesheets
     String sCSSPRINT         = "<link href='"+sCONTEXTPATH+"/_common/_css/print.css' rel='stylesheet' type='text/css'>";
     String sCSSNORMAL        = "<link href='"+sCONTEXTPATH+"/_common/_css/web"+(sUserTheme.equals("default")?"":"_"+sUserTheme)+".css' rel='stylesheet' type='text/css'>"+
-                               "<link href='"+sCONTEXTPATH+"/"+sAPPDIR+"/_common/_css/web"+(sUserTheme.equals("default")?"":"_"+sUserTheme)+".css' rel='stylesheet' type='text/css'>";
+                               "<link href='"+sCONTEXTPATH+"/"+sAPPDIR+"/_common/_css/web"+(sUserTheme.equals("default")?"":"_"+sUserTheme)+".css' rel='stylesheet' type='text/css'>"+
+    						   "<link href='"+sCONTEXTPATH+"/_common/_css/raleway.css' rel='stylesheet'>";
     String sCSSDEFAULT       = "<link href='"+sCONTEXTPATH+"/_common/_css/web.css' rel='stylesheet' type='text/css'>"+
                                "<link href='"+sCONTEXTPATH+"/"+sAPPDIR+"/_common/_css/web.css' rel='stylesheet' type='text/css'>";
     String sCSSRTEDITOR      = "<link href='"+sCONTEXTPATH+"/_common/_css/rteditor.css' rel='stylesheet' type='text/css'>";
