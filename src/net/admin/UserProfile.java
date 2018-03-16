@@ -57,6 +57,17 @@ public class UserProfile {
     	return null;
     }
 
+    public static UserProfile getUserProfileById(int id){
+    	Vector userprofiles = getUserProfiles();
+    	for(int n=0;n<userprofiles.size();n++){
+    		UserProfile profile = (UserProfile)userprofiles.elementAt(n);
+    		if(profile.getUserprofileid()==id){
+    			return profile;
+    		}
+    	}
+    	return null;
+    }
+
     public static Vector getUserProfiles(){
         PreparedStatement ps = null;
         ResultSet rs = null;

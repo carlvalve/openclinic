@@ -713,8 +713,13 @@ public class MaintenancePlan extends OC_Object {
                 else{
                     ps.setDate(psIdx++,null);
                 }
+                int nFrequency=0;
+                try{
+                	nFrequency=Integer.parseInt(frequency);
+                }
+                catch(Exception r){}
                 
-                ps.setString(psIdx++,frequency);
+                ps.setInt(psIdx++,nFrequency);
                 ps.setString(psIdx++,operator);
                 ps.setString(psIdx++,planManager);
                 ps.setString(psIdx++,instructions);

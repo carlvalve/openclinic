@@ -1901,7 +1901,10 @@ public class TimeFilterReportGenerator {
 				Iterator elements = value.elementIterator("element");
 				while(elements.hasNext()){
 					Element element = (Element)elements.next();
+					System.out.println("s="+s+"*");
+					System.out.println("element.getText()="+element.getText()+"*");
 					if(s.startsWith(element.getText())){
+						System.out.println("yes");
 						bReturn = true;
 						break;
 					}
@@ -2472,6 +2475,7 @@ public class TimeFilterReportGenerator {
 				}
 			}
 			sSelect+="("+values+")";
+			System.out.println("sSelect="+sSelect);
 		}
 		return sSelect;
 	}

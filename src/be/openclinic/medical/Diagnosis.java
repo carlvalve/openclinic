@@ -668,6 +668,9 @@ public class Diagnosis extends OC_Object{
         if(language.equalsIgnoreCase("F") || language.equalsIgnoreCase("FR")){
             label = "labelfr";
         }
+        if(language.equalsIgnoreCase("S") || language.equalsIgnoreCase("ES")){
+            label = "labeles";
+        }
         if(language.equalsIgnoreCase("N") || language.equalsIgnoreCase("NL")){
             label = "labelnl";
         }
