@@ -2,14 +2,13 @@
 <%@include file="/includes/validateUser.jsp"%>
 <%@ page import="be.mxs.common.util.db.*,be.mxs.common.util.system.*,java.sql.*" %>
 <%
-	Hashtable objects = MedwanQuery.getInstance().getObjectCache().getObjects();
-	out.println("object = "+objects.get("wado."+request.getParameter("id"))+"<br/>");
-	Hashtable objectcounts = new Hashtable();
-	Enumeration e = objects.keys();
-	while(e.hasMoreElements()){
-		String key = ((String)e.nextElement());
-		if(key.startsWith("wado")){
-			out.println(key+"<br/>");
-		}
+	SAXReader reader = new SAXReader(false);
+	Document document = reader.read(new URL("file:///c:/tmp/dataElements.xml"));
+	Element root = document.getRootElement();
+	Iterator dataelements = root.element("dataElements").elementIterator("dataElement");
+	while(dataelements.hasNext()){
+		Element dataelement = (Element)dataelements.next();
+		out.println("<dataelement code='"+dataelement.element("displayName").getText().replaceAll("2017-Nb deces-","").split(" ")[0] +"' uid='"+dataelement.attributeValue("id")+"'/>");
 	}
+
 %>

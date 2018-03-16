@@ -1,11 +1,60 @@
 <dhis2>
+	<dataset label="QUALCHECK - Fiche 1 - Contrôle de qualité des données des fiches d'activité globale de service" type="title" color="red" uid="--1--"/>
+	<dataset label="QUALCHECK - Fiche 1 - Données manquantes dans les fiches d'audit de décès" type="item" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_DEATH_AUDIT" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID" uid="--1--">
+		<categoryOptionCombo type="default">
+			<option uid="tlPNWKJ0XWx" name="Valeur"/>
+		</categoryOptionCombo>
+		<dataelements>
+			<dataelement unique="patients" uid="4" missing="1" label="Indication si femme enceinte">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DECEASED_PREGNANTWOMEN"/>
+			</dataelement>
+		</dataelements>
+	</dataset>
+	<dataset label="QUALCHECK - Fiche 1 - Evolutions manquantes dans les contacts de consultation" type="encounter"  encountertype="visit" outgoing="1" uid="--1--">
+		<categoryOptionCombo type="outcome">
+			<option uid="0" value="missing" name="Manquant"/>
+			<option uid="1" value="" name="Vide"/>
+		</categoryOptionCombo>
+		<dataelements>
+			<dataelement unique="encounters" uid="0" label="Nombre de consultations clôturées sans evolution"/>
+		</dataelements>
+	</dataset>
+	<dataset label="QUALCHECK - Fiche 8 - Contrôle de qualité des données des fiches d'accouchement" type="title" color="red" uid="--8--"/>
+	<dataset label="QUALCHECK - Fiche 8 - Données manquantes dans les fiches d'accouchement" type="item" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_DELIVERY_MSPLS" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID" uid="--8--">
+		<categoryOptionCombo type="default">
+			<option uid="tlPNWKJ0XWx" name="Valeur"/>
+		</categoryOptionCombo>
+		<dataelements>
+			<dataelement unique="patients" uid="0" missing="1" label="Date de naissance du nouveau-né 1">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_REANIMATION_DATE"/>
+			</dataelement>
+			<dataelement unique="patients" uid="1" missing="1" label="Type d'accouchement (Eutocique/dystocique)">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_DELIVERYTYPE_EUSTOCIC"/>
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_DELIVERYTYPE_DYSTOCIC"/>
+			</dataelement>
+			<dataelement unique="patients" uid="2" missing="1" label="Accouchement réalisé par">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_PERFORMEDBY"/>
+			</dataelement>
+			<dataelement unique="patients" uid="3" missing="1" label="Né vivant - mort-né">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILDALIVE"/>
+			</dataelement>
+		</dataelements>
+	</dataset>
+	<dataset label="QUALCHECK - Fiche 8 - Accouchements chez des hommes" notitle="1" type="item" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_DELIVERY_MSPLS" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID" uid="--8--">
+		<categoryOptionCombo type="agegender">
+			<option uid="U8aCp07FOkl" min="0" max="999" gender="m" name="Homme"/>
+		</categoryOptionCombo>
+		<dataelements>
+			<dataelement unique="patients" uid="4" label="Accouchements chez des hommes"/>
+		</dataelements>
+	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 1 - Activité globale du service" type="title" uid="t0l2PgK57xs"/>
 	<dataset label="DSNIS-HOP - Fiche 1 - Activité globale du service - entrées" type="encounter" encountertype="admission" incoming="1" uid="t0l2PgK57xs">
 		<categoryOptionCombo type="origin">
 			<option uid="dBEOeLVuNXW" value="other|residence" name="Non-référés"/>
 			<option uid="XQxobLpM71T" value="healthcenter" name="Référés par CdS"/>
 			<option uid="tYIvBZGH9zh" value="otherhospital" name="Référés par autre hôpital"/>
-			<option uid="CfZTmDwZUh7" value="hospital.consultation" name="Transfert interne depuis consultation"/>
+			<option uid="fEu2DsBnZ7U" value="hospital.consultation" name="Transfert interne depuis consultation"/>
 			<option uid="ZVk1JwxWf95" value="hospital" name="Transfert interne autre service"/>
 		</categoryOptionCombo>
 		<attributeOptionCombo type="department">
@@ -187,14 +236,14 @@
 			<option uid="doPjh110E5L" min="1" max="5" gender="f" name="12-59 mois F"/>
 			<option uid="ZnADwj3WJxA" min="5" max="10" gender="m" name="5-9 ans M"/>
 			<option uid="d8byzbZCTQv" min="5" max="10" gender="f" name="5-9 ans F"/>
-			<option uid="o7tOOvN2Nk0" min="10" max="15" gender="m" name="10-14 ans M"/>
+			<option uid="WKQUkZScRMI" min="10" max="15" gender="m" name="10-14 ans M"/>
 			<option uid="t3eEbkLledV" min="10" max="15" gender="f" name="10-14 ans F"/>
 			<option uid="oRYY0iFxFAP" min="15" max="20" gender="m" name="15-19 ans M"/>
 			<option uid="QLFbCYqXnp4" min="15" max="20" gender="f" name="15-19 ans F"/>
 			<option uid="vRsGs2BkCuf" min="20" max="25" gender="m" name="20-24 ans M"/>
 			<option uid="qKufGd49w2h" min="20" max="25" gender="f" name="20-24 ans F"/>
 			<option uid="B2OAvaBt6c9" min="25" max="50" gender="m" name="25-49 ans M"/>
-			<option uid="JmsSA826ihd" min="25" max="50" gender="f" name="25-49 ans F"/>
+			<option uid="iJGtuR2ejzG" min="25" max="50" gender="f" name="25-49 ans F"/>
 			<option uid="n9JJszURcmn" min="50" max="999" gender="m" name=">=50 ans M"/>
 			<option uid="DXR8GpeXGTk" min="50" max="999" gender="f" name=">=50 ans F"/>
 		</categoryOptionCombo>
@@ -223,1237 +272,1237 @@
 			<option uid="aoiI4JUR1eT" value="neo" name="Neonatologie"/>
 		</attributeOptionCombo>
 		<dataelements>
-			<dataelement code="A00" uid="j5MuhjZASOo"/>
-			<dataelement code="A01" uid="MvmfNiAwy1p"/>
-			<dataelement code="A02.1" uid="pDYLoInC3TG"/>
-			<dataelement code="A02" uid="XBFFh0rox6o"/>
-			<dataelement code="A03" uid="qxn9kPXwcfx"/>
-			<dataelement code="A04" uid="zAfuMtshMcQ"/>
-			<dataelement code="A05.9,A05" uid="braMk3ZSyKD"/>
-			<dataelement code="A06" uid="Ek06QIcLjKb"/>
-			<dataelement code="A09,A07,A08" uid="Qx57KQVqLbw"/>
-			<dataelement code="A15.0" uid="R1A0zTF4nGx"/>
-			<dataelement code="A15" uid="uohji03sf0z"/>
-			<dataelement code="A16.0,A16" uid="rX5ZO50drbk"/>
-			<dataelement code="A16.5" uid="IVpA5y0iX45"/>
-			<dataelement code="A17.0,A17" uid="hIRMY8g0vDN"/>
-			<dataelement code="A18.3" uid="EFxqoHUKHYV"/>
-			<dataelement code="A18.8,A18" uid="xUVqINYgd94"/>
-			<dataelement code="A19" uid="ljn9R5PfXna"/>
-			<dataelement code="A20" uid="zHUzifcngKe"/>
-			<dataelement code="A21" uid="m5WzywkyOOZ"/>
-			<dataelement code="A22" uid="J5Iluw2b4hX"/>
-			<dataelement code="A30" uid="Dk3J4GqgZlV"/>
-			<dataelement code="A31" uid="LrX5Fd1mBX2"/>
-			<dataelement code="A32.1" uid="tHDHgUdl48B"/>
-			<dataelement code="A32" uid="qCERDsR3uUB"/>
-			<dataelement code="A33" uid="Fq2X9WRfIWE"/>
-			<dataelement code="A34" uid="dMm9zknlk05"/>
-			<dataelement code="A35" uid="nKAGCGunGTD"/>
-			<dataelement code="A36" uid="le5qwBBI5ev"/>
-			<dataelement code="A37" uid="KlsZNlBzQHZ"/>
-			<dataelement code="A39.5" uid="oJJVQw8b8rU"/>
-			<dataelement code="A39" uid="Z2agcVhXMm7"/>
-			<dataelement code="A40" uid="RCDQ5btaAoC"/>
-			<dataelement code="A41.3" uid="H8sf5kAjaqm"/>
-			<dataelement code="A41" uid="L4V2SwJlbEj"/>
-			<dataelement code="A42" uid="M8Hz3g85WAC"/>
-			<dataelement code="A46" uid="GrR457JFjp4"/>
-			<dataelement code="A48,A49" uid="W0ukI897LZO"/>
-			<dataelement code="A50" uid="B6UJN8SERr6"/>
-			<dataelement code="A54" uid="ZAzL7IOv8fK"/>
-			<dataelement code="A55" uid="RiA4aYK7U2j"/>
-			<dataelement code="A56" uid="mgbB9CwLdMD"/>
-			<dataelement code="A57" uid="jaHZplh2S1U"/>
-			<dataelement code="A59.0,A59" uid="JFnP2TR75yk"/>
-			<dataelement code="A60" uid="fEXnJEcmLXh"/>
-			<dataelement code="A63.0" uid="RdgOhOQGx81"/>
-			<dataelement code="A63,A64" uid="s7wmdVEbpsA"/>
-			<dataelement code="A65" uid="MO91O7x1nVi"/>
-			<dataelement code="A69.0" uid="kT7G6zTLdCE"/>
-			<dataelement code="A69" uid="vG07jGVTIab"/>
-			<dataelement code="A70" uid="DO4IvGDqtYt"/>
-			<dataelement code="A71" uid="ZN7tVV5JjHV"/>
-			<dataelement code="A74.0" uid="n2BqsqNmVjw"/>
-			<dataelement code="A74" uid="SLuHEkuftPJ"/>
-			<dataelement code="A75" uid="Is0M380G2Y3"/>
-			<dataelement code="A80" uid="YXgdktqmngu"/>
-			<dataelement code="A82" uid="EBexsBV50EE"/>
-			<dataelement code="A85.0" uid="foXXcz6B9xB"/>
-			<dataelement code="A87" uid="akFHDH8xqTc"/>
-			<dataelement code="A88,A83,A84,A85,A86,A89" uid="yV9oOkpFABL"/>
-			<dataelement code="A98.4" uid="zCYrCf0YGd7"/>
-			<dataelement code="A98,A90,A91,A92,A93,A94,A95,A96,A97,A99" uid="KR2ksteIHTw"/>
-			<dataelement code="B00.0" uid="Mx8LE5tPHFW"/>
-			<dataelement code="B00.5" uid="nm4cF0LJdne"/>
-			<dataelement code="B00" uid="DK7z48KFnwI"/>
-			<dataelement code="B01" uid="RYi52tYjzSE"/>
-			<dataelement code="B02" uid="UiOmN31Vic3"/>
-			<dataelement code="B03" uid="dS58JDE9Fqs"/>
-			<dataelement code="B05" uid="rbbyKwxOdeI"/>
-			<dataelement code="B06" uid="NJ68J5jeM4A"/>
-			<dataelement code="B07" uid="RLGJadka1LN"/>
-			<dataelement code="B08.1" uid="XKgW2ELQKXi"/>
-			<dataelement code="B08.5" uid="osihzIVun0l"/>
-			<dataelement code="B08,B09" uid="gv3w8fzCvkC"/>
-			<dataelement code="B15" uid="EIpBg04wvkj"/>
-			<dataelement code="B16" uid="tUus9A2vyRW"/>
-			<dataelement code="B17.1" uid="DqsvUWhQp7N"/>
-			<dataelement code="B18" uid="kHp0wWBlB5i"/>
-			<dataelement code="B20" uid="M7kGwX7sWod"/>
-			<dataelement code="B21.0" uid="wL034iDIsJs"/>
-			<dataelement code="B21" uid="IxUIcb2VIgG"/>
-			<dataelement code="B22.0" uid="OnFf36l2vzn"/>
-			<dataelement code="B22" uid="GVn0bcTzpWG"/>
-			<dataelement code="B23.0" uid="kjvPf1nmNxp"/>
-			<dataelement code="B23,B24" uid="dNLYLnEUhwy"/>
-			<dataelement code="B25" uid="LPlShW6jcGJ"/>
-			<dataelement code="B26" uid="qhwa8BUctoD"/>
-			<dataelement code="B27" uid="qporYfQY3j8"/>
-			<dataelement code="B35" uid="Ox7kD5EQgQu"/>
-			<dataelement code="B37.2" uid="Cc8Lu57hv94"/>
-			<dataelement code="B37.3" uid="fKD2t0kGmfc"/>
-			<dataelement code="B37.4" uid="bxFVuCQyhWx"/>
-			<dataelement code="B37" uid="pnaIFxvUkwJ"/>
-			<dataelement code="B38" uid="xWQl04sCGDM"/>
-			<dataelement code="B45.1" uid="iHWQMVLdPtr"/>
-			<dataelement code="B45" uid="jXUhlwRiwiO"/>
-			<dataelement code="B50.0" uid="c6GCkHE0Feh"/>
-			<dataelement code="B50" uid="B9KO90o3CSH"/>
-			<dataelement code="B53,B51,B52" uid="WQyV8S4KxkO"/>
-			<dataelement code="B58" uid="H7a21yUdoCI"/>
-			<dataelement code="B65" uid="fEfTYPMvn1U"/>
-			<dataelement code="B68" uid="g44JlkxTgPV"/>
-			<dataelement code="B73" uid="TsyySKklgjY"/>
-			<dataelement code="B77" uid="oZNhAavE3WQ"/>
-			<dataelement code="B80" uid="MTxXxmkLTS1"/>
-			<dataelement code="B85" uid="dm1cTdLucbv"/>
-			<dataelement code="B86" uid="raHs7TxGBHv"/>
-			<dataelement code="B87" uid="wZCQl6yT2Ru"/>
-			<dataelement code="B88" uid="q3k6Apslh8O"/>
-			<dataelement code="B90" uid="uIVBfdPvaMm"/>
-			<dataelement code="B91" uid="xBkTyU2gtMH"/>
-			<dataelement code="B94" uid="SWaM7TuFsex"/>
-			<dataelement code="B99,A24,A25,A26,A27,A28,A38,A43,A44,A51,A52,A53,A58,A66,A67,A68,A77,A78,A79,A81,B04,B17,B19,B30,B33,B34,B36,B39,B40,B41,B42,B43,B44,B46,B47,B48,B49,B54,B55,B56,B57,B59,B60,B64,B66,B67,B69,B70,B71,B72,B74,B75,B76,B78,B79,B81,B82,B83,B89,B92,B95,B96,B97" uid="ZTrkeoTsVWv"/>
-			<dataelement code="C00" uid="OnK4ocoNmyY"/>
-			<dataelement code="C01" uid="g0EDFYE0CwE"/>
-			<dataelement code="C02" uid="meygA9f98jY"/>
-			<dataelement code="C03" uid="MQPb3ZmNRd5"/>
-			<dataelement code="C04" uid="QRjqnJVXX32"/>
-			<dataelement code="C05" uid="pwrgjkR6UHe"/>
-			<dataelement code="C07" uid="miOfh8tffrB"/>
-			<dataelement code="C14.0" uid="mLZAOAV5l6t"/>
-			<dataelement code="C15" uid="dAIEAQwWsDa"/>
-			<dataelement code="C16" uid="vkTaiK0lt7o"/>
-			<dataelement code="C17" uid="YJSfr9d282y"/>
-			<dataelement code="C18" uid="qwh7EZcUMjq"/>
-			<dataelement code="C19" uid="xH5nRtsWxOY"/>
-			<dataelement code="C20" uid="aRPT8TSbOvZ"/>
-			<dataelement code="C21" uid="Tp5Trx9Oh5u"/>
-			<dataelement code="C22.0" uid="APoGg549kaG"/>
-			<dataelement code="C22.9" uid="PKhl4jBJ5x9"/>
-			<dataelement code="C23" uid="Qa3B1eSJzd7"/>
-			<dataelement code="C24" uid="epdy04myFp7"/>
-			<dataelement code="C25" uid="PYWWz9FgIlg"/>
-			<dataelement code="C26" uid="Ew0PIxLenOF"/>
-			<dataelement code="C30" uid="ZNOAruwudB3"/>
-			<dataelement code="C32" uid="xOi1dpwNuDi"/>
-			<dataelement code="C33" uid="EQKkBAMf1xD"/>
-			<dataelement code="C38" uid="w5Zx574tiYC"/>
-			<dataelement code="C40" uid="iblE9nkcbOa"/>
-			<dataelement code="C41" uid="vQPq9JVyVAW"/>
-			<dataelement code="C43" uid="GhzKJ4NvFO1"/>
-			<dataelement code="C44" uid="TYyCliCGVbR"/>
-			<dataelement code="C45" uid="mbtF4AKPLpL"/>
-			<dataelement code="C46" uid="qYvdZgZqTk7"/>
-			<dataelement code="C47" uid="KsOszOZlMM5"/>
-			<dataelement code="C48" uid="gnaaDdzuYtE"/>
-			<dataelement code="C50" uid="P7FemHdUEi8"/>
-			<dataelement code="C51" uid="q95TbnRPiT1"/>
-			<dataelement code="C52" uid="oSeK2jvx1qL"/>
-			<dataelement code="C53" uid="llD929sEVXV"/>
-			<dataelement code="C54" uid="EaSOI61U6kG"/>
-			<dataelement code="C56" uid="wzcXl4Tdzo9"/>
-			<dataelement code="C58" uid="dlWMDrcdw6Y"/>
-			<dataelement code="C60" uid="CxoRTYwiTOX"/>
-			<dataelement code="C61" uid="p6s9SnLvPln"/>
-			<dataelement code="C62" uid="FojZEJ63hAF"/>
-			<dataelement code="C64" uid="Ef9J5ndqtk7"/>
-			<dataelement code="C67" uid="EpULOlE4DrC"/>
-			<dataelement code="C69" uid="TnUviPgqGh6"/>
-			<dataelement code="C70" uid="RVTHUurHZyj"/>
-			<dataelement code="C71" uid="mvRixvICjnr"/>
-			<dataelement code="C72" uid="BFEjPcxQaTF"/>
-			<dataelement code="C73" uid="FLQWbLbAbyb"/>
-			<dataelement code="C74" uid="dIelCvzQBqH"/>
-			<dataelement code="C77" uid="bUJlrpkYwoo"/>
-			<dataelement code="C78" uid="GX7oYRpB3t8"/>
-			<dataelement code="C79" uid="neq8uXCZF80"/>
-			<dataelement code="C80" uid="PLVwKZwm04R"/>
-			<dataelement code="C81" uid="rrpNO1hBQyW"/>
-			<dataelement code="C82" uid="BoP0DIXa7Zs"/>
-			<dataelement code="C83.7" uid="quWI9gqm18D"/>
-			<dataelement code="C83" uid="q8EWdeclGJL"/>
-			<dataelement code="C84" uid="MBA4xYCfV85"/>
-			<dataelement code="C85" uid="lwKviwmcSHJ"/>
-			<dataelement code="C90" uid="vqeszzaecgZ"/>
-			<dataelement code="C91" uid="T5Y74jihflu"/>
-			<dataelement code="C92" uid="FuY9Lum98gG"/>
-			<dataelement code="C93" uid="ealOqDMxyHg"/>
-			<dataelement code="C96" uid="DTOdiFPFLLD"/>
-			<dataelement code="D00" uid="qUpt3tfYpwC"/>
-			<dataelement code="D02" uid="coUfBVsW1Lx"/>
-			<dataelement code="D03" uid="odRTQKQGTmz"/>
-			<dataelement code="D04" uid="K7bUMQb47so"/>
-			<dataelement code="D05" uid="kM2LLB7diIO"/>
-			<dataelement code="D06" uid="Sje80ZnIMej"/>
-			<dataelement code="D07" uid="Sk8YwY3khIz"/>
-			<dataelement code="D09" uid="eNcndvafEdA"/>
-			<dataelement code="D10" uid="dj98vTbEMiZ"/>
-			<dataelement code="D11" uid="da9zaMimlZY"/>
-			<dataelement code="D12" uid="pJYdSWE0Cw5"/>
-			<dataelement code="D13" uid="xLqFjbSFVYR"/>
-			<dataelement code="D14" uid="HE0DXEkTDhp"/>
-			<dataelement code="D15" uid="Zfo3ebpsYe3"/>
-			<dataelement code="D16" uid="hXhqilanrmc"/>
-			<dataelement code="D17" uid="oWn2cG6NflE"/>
-			<dataelement code="D18" uid="EJngLnrgP4b"/>
-			<dataelement code="D21" uid="B4vTSIl3zxK"/>
-			<dataelement code="D22" uid="sgmfsti8NZ8"/>
-			<dataelement code="D23" uid="WJkwI2R0FFS"/>
-			<dataelement code="D24" uid="tfWwVNtzljj"/>
-			<dataelement code="D25" uid="Qd7adt25vA1"/>
-			<dataelement code="D27" uid="NYvJnVYIiXi"/>
-			<dataelement code="D28" uid="GIxbSI0WzwP"/>
-			<dataelement code="D29" uid="QA7n2PC6zGl"/>
-			<dataelement code="D30" uid="j1V9ptBeXyS"/>
-			<dataelement code="D31" uid="eVJ1bOrS0Bt"/>
-			<dataelement code="D32" uid="Ophek8eTZWI"/>
-			<dataelement code="D33" uid="KMbDppXgEZ1"/>
-			<dataelement code="D34" uid="OCJXKDFWPDT"/>
-			<dataelement code="D35" uid="I85nMbT4gK1"/>
-			<dataelement code="D36" uid="An0pLRy6lBk"/>
-			<dataelement code="D39" uid="jrs47etxXnH"/>
-			<dataelement code="D40" uid="yxMfKCNf5sK"/>
-			<dataelement code="D44" uid="dB1a1PlcxcE"/>
-			<dataelement code="D45" uid="zOovgYuIZ2Y"/>
-			<dataelement code="D46" uid="g1YG8WPiOcR"/>
-			<dataelement code="D50.0" uid="Vlo8W6WUli4"/>
-			<dataelement code="D50.9" uid="qYhrnYbDXqc"/>
-			<dataelement code="D50" uid="qxpAIi2XD7b"/>
-			<dataelement code="D51" uid="jeqhWp6XnB4"/>
-			<dataelement code="D52" uid="Tnqfpm7EQ2c"/>
-			<dataelement code="D53" uid="Mdmi4zc7eCX"/>
-			<dataelement code="D55.0" uid="GJhvGkEnUw0"/>
-			<dataelement code="D55" uid="bnm0mUrlRQm"/>
-			<dataelement code="D56.1" uid="zwKbsDL4hrP"/>
-			<dataelement code="D56" uid="pxdTTwnO9dr"/>
-			<dataelement code="D57.0" uid="lzd4ozBpKN5"/>
-			<dataelement code="D58.8" uid="qFHAekOskXJ"/>
-			<dataelement code="D59" uid="eErhi6RNYSP"/>
-			<dataelement code="D61.0" uid="SFUFXVyLtsa"/>
-			<dataelement code="D61.1" uid="cxP2PlJDBvc"/>
-			<dataelement code="D61.2" uid="PwGhGvnBFFN"/>
-			<dataelement code="D61.3" uid="Cl2jJ5TqNwU"/>
-			<dataelement code="D61" uid="sFoVzdmMnwM"/>
-			<dataelement code="D63.0" uid="rUVs2LuoLsz"/>
-			<dataelement code="D63.8" uid="Hns9DYPNTgF"/>
-			<dataelement code="D63" uid="Xt9t89L7QMG"/>
-			<dataelement code="D65" uid="kUE8djqzgWe"/>
-			<dataelement code="D69.6" uid="DWDGylDqhIl"/>
-			<dataelement code="D69" uid="pxJOuWzL0CW"/>
-			<dataelement code="D70" uid="fXjhB3PQQmP"/>
-			<dataelement code="D73.2" uid="BUaCgFNMaFc"/>
-			<dataelement code="D75.1" uid="FRla5bNqXd5"/>
-			<dataelement code="D75" uid="DW9E2Wscw54"/>
-			<dataelement code="D80" uid="Ar0lG6UbAY7"/>
-			<dataelement code="D84.9" uid="BApHxaCmoVy"/>
-			<dataelement code="D84" uid="GUXcn8LsXCS"/>
-			<dataelement code="D86" uid="hQxdQadNhwz"/>
-			<dataelement code="E00" uid="KvjeorUl0gZ"/>
-			<dataelement code="E01.0" uid="ixQYaEXDQgG"/>
-			<dataelement code="E03" uid="znJ3tx4e2IC"/>
-			<dataelement code="E04" uid="lihQtRm7tOn"/>
-			<dataelement code="E05" uid="EA4jC9IoBsF"/>
-			<dataelement code="E06.0" uid="cKNppv9SCYJ"/>
-			<dataelement code="E06.1" uid="ZWyjJmipTd5"/>
-			<dataelement code="E06" uid="h5RH9NdMKZ4"/>
-			<dataelement code="E07" uid="K8eABHd40YJ"/>
-			<dataelement code="E10.6" uid="YRBZy6rAxvy"/>
-			<dataelement code="E10" uid="UJGflld17OM"/>
-			<dataelement code="E11.6" uid="wBLOYxdieqP"/>
-			<dataelement code="E11" uid="nZ7otC94Bo9"/>
-			<dataelement code="E12" uid="eXDFpfK9e6n"/>
-			<dataelement code="E15" uid="nEYFQkmyvLd"/>
-			<dataelement code="E16.0" uid="H4MoGQGZ187"/>
-			<dataelement code="E16.1" uid="Ha4qNVOuSBq"/>
-			<dataelement code="E20" uid="QMKMmXwhf4o"/>
-			<dataelement code="E22" uid="tgnnFy6JWI3"/>
-			<dataelement code="E24" uid="nJfxP2NhIPz"/>
-			<dataelement code="E28" uid="npbXyRBlSAL"/>
-			<dataelement code="E29" uid="zP2oz4GpaPv"/>
-			<dataelement code="E30" uid="epP1Xed7BAH"/>
-			<dataelement code="E31" uid="ibOONWpZjwx"/>
-			<dataelement code="E34.3" uid="z2C5QxI9vNw"/>
-			<dataelement code="E34" uid="SIxLTtmIovq"/>
-			<dataelement code="E40" uid="ZjJyntQg8Gt"/>
-			<dataelement code="E41" uid="S87F2VoHaxk"/>
-			<dataelement code="E43" uid="xgJ24ilTfx5"/>
-			<dataelement code="E44" uid="vRIVZPQjHns"/>
-			<dataelement code="E51" uid="XGBxtSq8kGa"/>
-			<dataelement code="E63.1" uid="SJxmx9Tt5NA"/>
-			<dataelement code="E63" uid="g0hELb4LlOU"/>
-			<dataelement code="E65" uid="oiy9JyYWE1L"/>
-			<dataelement code="E66.9" uid="tRtGvdZXuTL"/>
-			<dataelement code="E73" uid="q9czU2KRrb7"/>
-			<dataelement code="E78" uid="bVnKUvp5NQ0"/>
-			<dataelement code="E84" uid="wotzoT3zDv2"/>
-			<dataelement code="E85" uid="spc7qvCeK7C"/>
-			<dataelement code="E86" uid="ekXLu0vhXnv"/>
-			<dataelement code="E87.2" uid="szhVXUIUymI"/>
-			<dataelement code="E87" uid="uTtuTKjZ9Vj"/>
-			<dataelement code="E89" uid="PGeUfsbN2bB"/>
-			<dataelement code="F00" uid="pkMAxpvbGIP"/>
-			<dataelement code="F03" uid="bKzzLq9ebvg"/>
-			<dataelement code="F04" uid="epG5KmTMc8J"/>
-			<dataelement code="F05" uid="n2sBV69m7dh"/>
-			<dataelement code="F09" uid="UOsBJY2Ue59"/>
-			<dataelement code="F10" uid="hUIP9wjuc3n"/>
-			<dataelement code="F11" uid="XGyDDFBRDME"/>
-			<dataelement code="F12" uid="NC5dTKNLmRu"/>
-			<dataelement code="F17" uid="F3v8YIUU5Mb"/>
-			<dataelement code="F20" uid="iPILBNGNjvf"/>
-			<dataelement code="F23" uid="MQYUJvc8G0L"/>
-			<dataelement code="F25" uid="IjL04p0blVL"/>
-			<dataelement code="F30" uid="uBf84CgySMP"/>
-			<dataelement code="F31" uid="lqcWv7cPaCk"/>
-			<dataelement code="F32" uid="Wh00PGvislU"/>
-			<dataelement code="F34" uid="mrusRc3HIx3"/>
-			<dataelement code="F38" uid="L44yM3fdgWH"/>
-			<dataelement code="F40" uid="WFwDQBxDZkw"/>
-			<dataelement code="F41" uid="gi46TqpSXEp"/>
-			<dataelement code="F42" uid="AJzJ18ESzXo"/>
-			<dataelement code="F43" uid="e6tY19SA7IX"/>
-			<dataelement code="F44" uid="KVVfKr6Cu7u"/>
-			<dataelement code="F45" uid="lm5I4gZDFY5"/>
-			<dataelement code="F48" uid="slsnjvRN5KF"/>
-			<dataelement code="F50.0" uid="WF66plK6Hvj"/>
-			<dataelement code="F50.1" uid="uSNHeyWHVnc"/>
-			<dataelement code="F50.5" uid="D01ObaDEnhq"/>
-			<dataelement code="F50.8" uid="kUNkMkZDrnk"/>
-			<dataelement code="F50" uid="c6dmvtISlHc"/>
-			<dataelement code="F51" uid="S9Ef1ycNwbr"/>
-			<dataelement code="F52.0" uid="cZoHNlRmVCO"/>
-			<dataelement code="F52.1" uid="Uj7jZy10BnO"/>
-			<dataelement code="F52.2?" uid="Bc1wcDVY3aC"/>
-			<dataelement code="F52.3" uid="wUbFaHLaQ9G"/>
-			<dataelement code="F52.4" uid="vLKL5qz21ae"/>
-			<dataelement code="F52.5" uid="ddwEP40tOan"/>
-			<dataelement code="F52.6" uid="eIadQIThBT2"/>
-			<dataelement code="F52.7?" uid="PLcJHLHBRRO"/>
-			<dataelement code="F52.8" uid="LT9SOLVjD0Q"/>
-			<dataelement code="F52.9" uid="GeeKOoFQuKB"/>
-			<dataelement code="F52" uid="u2k6FJUogH9"/>
-			<dataelement code="F53" uid="jBrhOZJZX5e"/>
-			<dataelement code="F54" uid="KHDWu84FzxB"/>
-			<dataelement code="F55" uid="GCt2jwUiEBY"/>
-			<dataelement code="F60" uid="QDJBOWLoU5c"/>
-			<dataelement code="F63.0" uid="kRNM0kGihBV"/>
-			<dataelement code="F63.1" uid="D29ywyUFEzq"/>
-			<dataelement code="F63.3" uid="otZDk7hzqLh"/>
-			<dataelement code="F63" uid="iDlUmcA1X9r"/>
-			<dataelement code="F64" uid="JK5nekH4iJM"/>
-			<dataelement code="F65" uid="QLmc4aq2nRo"/>
-			<dataelement code="F70" uid="A9caMOWfwdb"/>
-			<dataelement code="F71" uid="nJkNT8Tu1NO"/>
-			<dataelement code="F80" uid="sKnKGId2qPq"/>
-			<dataelement code="F84" uid="haUjwCebqKW"/>
-			<dataelement code="F90" uid="yg8VeYY7huC"/>
-			<dataelement code="F91" uid="VStoUhSkfm5"/>
-			<dataelement code="F92" uid="AnyJCXcbYVW"/>
-			<dataelement code="F95" uid="R6bXdHnkl2K"/>
-			<dataelement code="F98.0" uid="CqBC9K1U3EH"/>
-			<dataelement code="F98.2" uid="kCmEEAyU8RG"/>
-			<dataelement code="F98.5" uid="hJLmPSjnMcC"/>
-			<dataelement code="F98" uid="LjEYL6abBfr"/>
-			<dataelement code="F99" uid="hEac89CKWoW"/>
-			<dataelement code="G00.0" uid="SlniqIQJQ65"/>
-			<dataelement code="G00.1" uid="ZwAuk7t6h23"/>
-			<dataelement code="G00.9" uid="M6Ao1ueRV54"/>
-			<dataelement code="G03.0" uid="jMhLFNscJUc"/>
-			<dataelement code="G04" uid="N7HF8oifdR7"/>
-			<dataelement code="G06" uid="km2ATXoZZKS"/>
-			<dataelement code="G20" uid="tReTaQQbjEf"/>
-			<dataelement code="G21.0" uid="UO8RPRQ8cGm"/>
-			<dataelement code="G21" uid="imHUSZybrWt"/>
-			<dataelement code="G25.0" uid="VtnW4JIf9wH"/>
-			<dataelement code="G25" uid="N7aTxrx5PWz"/>
-			<dataelement code="G30" uid="fhoQF6sE7jn"/>
-			<dataelement code="G35" uid="c5J49snF8PJ"/>
-			<dataelement code="G40" uid="hvuYKT4GmnM"/>
-			<dataelement code="G43" uid="qe6cEfTBZL2"/>
-			<dataelement code="G44.0" uid="TVnaETv3Eun"/>
-			<dataelement code="G44.1" uid="T7Q79NdCXPb"/>
-			<dataelement code="G44.2" uid="huw6gP9hW8v"/>
-			<dataelement code="G44.3" uid="uBBlFlqT3ZU"/>
-			<dataelement code="G44" uid="ssqGbR7zOct"/>
-			<dataelement code="G45" uid="EbbvqDTinKl"/>
-			<dataelement code="G47" uid="kPQ1fimhM0V"/>
-			<dataelement code="G50.1" uid="ca5smPfApMS"/>
-			<dataelement code="G51" uid="G3rn2CLtQFR"/>
-			<dataelement code="G52" uid="u1iYULlEA4P"/>
-			<dataelement code="G54" uid="madNqA9bs6W"/>
-			<dataelement code="G56.0" uid="gJHAjtnNcFC"/>
-			<dataelement code="G56" uid="c1LkO9Td3jD"/>
-			<dataelement code="G58" uid="tvDKuXf8Mts"/>
-			<dataelement code="G71" uid="VUXPnHNAY3F"/>
-			<dataelement code="G80" uid="CURH3K7lvcJ"/>
-			<dataelement code="G81" uid="EoLA3nuAZIQ"/>
-			<dataelement code="G82" uid="kNVbu11PoxS"/>
-			<dataelement code="G83" uid="Yf0GN7oxcOL"/>
-			<dataelement code="G91" uid="qpnRPve1SG7"/>
-			<dataelement code="G93.3" uid="PfYnrSfxViH"/>
-			<dataelement code="G93" uid="xr0bc1gEKh6"/>
-			<dataelement code="G97.8" uid="ySQmsrXxD20"/>
-			<dataelement code="G97" uid="JAhvJC6vQGi"/>
-			<dataelement code="H00" uid="E91HH0p1SVN"/>
-			<dataelement code="H01" uid="hslHXAy6aYo"/>
-			<dataelement code="H02" uid="iWXuQsFlyJr"/>
-			<dataelement code="H04" uid="mPtUgKypiLJ"/>
-			<dataelement code="H06" uid="Uh6oVfPSxvy"/>
-			<dataelement code="H10" uid="SiXd1TrT5oh"/>
-			<dataelement code="H11.0" uid="T6QZD5jfGyY"/>
-			<dataelement code="H11.3" uid="pMHLASpBthw"/>
-			<dataelement code="H11" uid="JjKixEh8GUs"/>
-			<dataelement code="H15" uid="dmQBsQQ0DeM"/>
-			<dataelement code="H16" uid="xVsSuZZAq6q"/>
-			<dataelement code="H17" uid="hdxBTb0NcSc"/>
-			<dataelement code="H18" uid="s0FIk950Ubp"/>
-			<dataelement code="H20" uid="KFphO4CqKr5"/>
-			<dataelement code="H25" uid="Of7RL33xFvL"/>
-			<dataelement code="H26" uid="SOGRNKA3ixk"/>
-			<dataelement code="H27" uid="MqJCRAWJazh"/>
-			<dataelement code="H30" uid="pztfQtPf5PI"/>
-			<dataelement code="H32" uid="yIrDFUFfwnA"/>
-			<dataelement code="H33" uid="Q3I9vVIV3kM"/>
-			<dataelement code="H34" uid="BqmwggBrTGj"/>
-			<dataelement code="H35" uid="p0XkrXu7baj"/>
-			<dataelement code="H36" uid="EvgbmNicGBB"/>
-			<dataelement code="H40" uid="GSpZ3TSWu1s"/>
-			<dataelement code="H43" uid="geO8cJVFJO2"/>
-			<dataelement code="H44" uid="N3Lv11B8C5P"/>
-			<dataelement code="H46" uid="iO1WGOK3cQr"/>
-			<dataelement code="H47" uid="L0RFJnjrRrm"/>
-			<dataelement code="H49" uid="Sr1PtRusaZt"/>
-			<dataelement code="H50" uid="hEibXGxiM0M"/>
-			<dataelement code="H51" uid="gP9nZGrCYvk"/>
-			<dataelement code="H52" uid="SCYpWef23t7"/>
-			<dataelement code="H53" uid="Hooxp1rmG2O"/>
-			<dataelement code="H54" uid="YvOrTcKTqtV"/>
-			<dataelement code="H55" uid="jwkIPsJXHbk"/>
-			<dataelement code="H57" uid="crRh6YyPKBu"/>
-			<dataelement code="H59" uid="kgroJEHzByb"/>
-			<dataelement code="H60" uid="QT6GoCItox4"/>
-			<dataelement code="H61" uid="V842zYAX5W8"/>
-			<dataelement code="H62" uid="pCXrSkWJLiP"/>
-			<dataelement code="H65" uid="U570jW5IOpr"/>
-			<dataelement code="H66" uid="vihfKJfgYTK"/>
-			<dataelement code="H67" uid="A8zLpbRmNJl"/>
-			<dataelement code="H68" uid="mcVwfjIOMlH"/>
-			<dataelement code="H70" uid="qHtU7LHoBIe"/>
-			<dataelement code="H71" uid="VcT4PlIzg0w"/>
-			<dataelement code="H72" uid="M18UkOTQmEb"/>
-			<dataelement code="H74" uid="hZwvWLvAmqj"/>
-			<dataelement code="H80" uid="O0IwBk9jwWe"/>
-			<dataelement code="H81" uid="V0pWr1J2dtw"/>
-			<dataelement code="H83" uid="FEhHEEzHoRM"/>
-			<dataelement code="H90" uid="SBBsbw5qOMM"/>
-			<dataelement code="H91" uid="CrKf3TQkmU2"/>
-			<dataelement code="H92" uid="kHoakNYGGP2"/>
-			<dataelement code="H93" uid="IMfkLNyo01U"/>
-			<dataelement code="H95" uid="U7yGQfQDSs1"/>
-			<dataelement code="I00" uid="oE1NqooTFPi"/>
-			<dataelement code="I09.8" uid="iIerM1xasmh"/>
-			<dataelement code="I10" uid="v0xpKU7KzVE"/>
-			<dataelement code="I11" uid="oai7f9rvVHP"/>
-			<dataelement code="I13.9" uid="BkGVoXq2O3V"/>
-			<dataelement code="I13" uid="mScxWamRCNe"/>
-			<dataelement code="I15" uid="KKWdpnISd4u"/>
-			<dataelement code="I20.9" uid="LNYIKkL4KQK"/>
-			<dataelement code="I21" uid="bn6MUVItB4F"/>
-			<dataelement code="I24.1" uid="d6bFoS2dEFD"/>
-			<dataelement code="I24" uid="Ay22rIv4NSv"/>
-			<dataelement code="I25.5" uid="LuGp3KrIVxj"/>
-			<dataelement code="I26.9" uid="hTqCVReevBk"/>
-			<dataelement code="I26" uid="dezul6oFRhO"/>
-			<dataelement code="I27.9" uid="CdHGUMkjf7S"/>
-			<dataelement code="I27" uid="etOAB3OIEnp"/>
-			<dataelement code="I28" uid="wLqDdcaGPoU"/>
-			<dataelement code="I30.0" uid="oo1TyAbRwqN"/>
-			<dataelement code="I31" uid="CkYbRK7Zpr5"/>
-			<dataelement code="I33" uid="cBAhExwkgCI"/>
-			<dataelement code="I34" uid="sOYafH6a8qQ"/>
-			<dataelement code="I40" uid="TE3MG0pldwI"/>
-			<dataelement code="I42" uid="TzHcJcofjWY"/>
-			<dataelement code="I44" uid="O6d26OIgkfx"/>
-			<dataelement code="I45.8" uid="N2w1OLcvF2S"/>
-			<dataelement code="I46" uid="Wd9xKcE7zJD"/>
-			<dataelement code="I47" uid="UmbAf9tCyvk"/>
-			<dataelement code="I48" uid="CeNAhpCm5ms"/>
-			<dataelement code="I49" uid="wxGRYvAjCeU"/>
-			<dataelement code="I50.0" uid="Ac8LqynW9ET"/>
-			<dataelement code="I50.1" uid="zwnRRylMooz"/>
-			<dataelement code="I50.9" uid="vBipKEvpaK7"/>
-			<dataelement code="I50" uid="EIDvWThxLLD"/>
-			<dataelement code="I51" uid="DmyPCsGGTpj"/>
-			<dataelement code="I60" uid="SbuDSCFSv4B"/>
-			<dataelement code="I61.0" uid="e6CNBLakzb7"/>
-			<dataelement code="I61.9" uid="QewJmeXnFFi"/>
-			<dataelement code="I61" uid="zWdUJVAp7n8"/>
-			<dataelement code="I62" uid="SQNNUOnksFE"/>
-			<dataelement code="I63" uid="qOg9G57tNls"/>
-			<dataelement code="I64" uid="Nwr3JpgXUWE"/>
-			<dataelement code="I65" uid="Q8w87t9IvtR"/>
-			<dataelement code="I67" uid="B6adoY6Mc0L"/>
-			<dataelement code="I69" uid="Wd9wwfE2Jpw"/>
-			<dataelement code="I70" uid="RbNqzuozN3V"/>
-			<dataelement code="I71" uid="u4Lb4WDJWru"/>
-			<dataelement code="I73" uid="ZjbjbHQt8BJ"/>
-			<dataelement code="I74" uid="o5mvswqb0lh"/>
-			<dataelement code="I77" uid="vyt31FhGOjT"/>
-			<dataelement code="I78" uid="G7hYDyq0ixh"/>
-			<dataelement code="I80" uid="QpFfV1012So"/>
-			<dataelement code="I81" uid="bK7jQn5TbXj"/>
-			<dataelement code="I83" uid="DWCFefng6wh"/>
-			<dataelement code="I84" uid="juF9Hfuyc9m"/>
-			<dataelement code="I85" uid="n10yuapYOcP"/>
-			<dataelement code="I88" uid="WHJMpeuWZb2"/>
-			<dataelement code="I95" uid="joJggwS3fh2"/>
-			<dataelement code="I98" uid="L9wlf9rjplk"/>
-			<dataelement code="J00" uid="qZkSVXvhRJE"/>
-			<dataelement code="J01" uid="xGaTZT3FjS4"/>
-			<dataelement code="J02" uid="B00w7myOCJg"/>
-			<dataelement code="J03" uid="m5gfL9HlqhZ"/>
-			<dataelement code="J04" uid="eIxdVVTaVIF"/>
-			<dataelement code="J05.0" uid="r9dDZYnK1mE"/>
-			<dataelement code="J05.1" uid="QYbWyOCMowS"/>
-			<dataelement code="J05" uid="TDgdz1amiIR"/>
-			<dataelement code="J10" uid="LB7oCM52VZa"/>
-			<dataelement code="J11.1" uid="xz5OmcTx0U2"/>
-			<dataelement code="J11.8" uid="uo5VAfIXNQT"/>
-			<dataelement code="J12.9" uid="XjYPquGhnla"/>
-			<dataelement code="J12" uid="q7tbD6NbBxL"/>
-			<dataelement code="J15.9" uid="l3b8HsZRtAp"/>
-			<dataelement code="J15,J13,J14" uid="vZ3kXBTExju"/>
-			<dataelement code="J17.0" uid="ib5HvjSwev4"/>
-			<dataelement code="J17.3" uid="xeqsgE46E2x"/>
-			<dataelement code="J17.8" uid="kxGE5lqaq81"/>
-			<dataelement code="J17" uid="X9AGFnOqEhi"/>
-			<dataelement code="J18.0" uid="IVrSPKiOQ5V"/>
-			<dataelement code="J18.9" uid="U45IGSQjJEd"/>
-			<dataelement code="J20" uid="pnz8jMqrJxo"/>
-			<dataelement code="J21.9" uid="oxPmaxPl4vP"/>
-			<dataelement code="J30" uid="vB6aJk3xbCk"/>
-			<dataelement code="J32" uid="Ib12DrY9LLR"/>
-			<dataelement code="J33" uid="wlnnOOE5QCA"/>
-			<dataelement code="J34.0" uid="eTDx2kNMqWm"/>
-			<dataelement code="J34.1" uid="XmEVVCGnRiH"/>
-			<dataelement code="J34" uid="H9VJp41RGdI"/>
-			<dataelement code="J35" uid="zq0laPcVYGi"/>
-			<dataelement code="J36" uid="NfzbTfJmvIB"/>
-			<dataelement code="J37" uid="UCO6zkUDRGM"/>
-			<dataelement code="J39" uid="Bwra9ug0VWL"/>
-			<dataelement code="J40" uid="XnwdDvNIkMF"/>
-			<dataelement code="J42" uid="lQwEbuh14Tw"/>
-			<dataelement code="J43.0" uid="cTIkt1haojH"/>
-			<dataelement code="J43" uid="Ev7x4lJXffE"/>
-			<dataelement code="J44" uid="A3YN33flXJz"/>
-			<dataelement code="J45" uid="n8wmfCHEEGr"/>
-			<dataelement code="J47" uid="UA8Kss5Bh1T"/>
-			<dataelement code="J60" uid="blu2EQ2XYOH"/>
-			<dataelement code="J61" uid="kSPjnrpauhE"/>
-			<dataelement code="J68" uid="a0TLMVlXoMH"/>
-			<dataelement code="J69" uid="Uwq4w6rSRlD"/>
-			<dataelement code="J85" uid="zcMqSJzyH2J"/>
-			<dataelement code="J86" uid="pcqvLGXLORc"/>
-			<dataelement code="J90" uid="vstJAAGbVmf"/>
-			<dataelement code="J92" uid="klxiTJrZEXm"/>
-			<dataelement code="J93" uid="JuSzaI44GN9"/>
-			<dataelement code="J94.2" uid="vxydyfGGWF0"/>
-			<dataelement code="J94" uid="R4rzQhyzvxG"/>
-			<dataelement code="J96.0" uid="YA4OzcvLGxl"/>
-			<dataelement code="J96.1" uid="OOgGdNvRqsp"/>
-			<dataelement code="J96.9" uid="TMiZAhVtcwC"/>
-			<dataelement code="J98" uid="tc7z1TP4IJ3"/>
-			<dataelement code="K00.0" uid="TQwVNEuMToW"/>
-			<dataelement code="K00.7" uid="iXr6N4vMtnA"/>
-			<dataelement code="K00" uid="hJQD7k0LIf5"/>
-			<dataelement code="K02" uid="tCPR8SaAnPi"/>
-			<dataelement code="K05" uid="t6xSfpZqrEn"/>
-			<dataelement code="K07.6" uid="tIjkRGvwwAf"/>
-			<dataelement code="K07" uid="BxD0Y0tlPub"/>
-			<dataelement code="K09" uid="gfODiRISiU0"/>
-			<dataelement code="K11" uid="hydgv3TFLEW"/>
-			<dataelement code="K13" uid="DPQk1uXBQgE"/>
-			<dataelement code="K14" uid="xCF8DnxMGYe"/>
-			<dataelement code="K20" uid="ds3s6puqUF7"/>
-			<dataelement code="K21" uid="C5uwKmuTkm3"/>
-			<dataelement code="K25" uid="tlHzwQBAMNb"/>
-			<dataelement code="K26" uid="DL1C3eFJCE8"/>
-			<dataelement code="K27" uid="q02dHuC2CYz"/>
-			<dataelement code="K29" uid="Jh3LVTc7MLz"/>
-			<dataelement code="K31.0" uid="fc3KDz5nPvn"/>
-			<dataelement code="K31" uid="HjwXZAYKlx0"/>
-			<dataelement code="K35" uid="gFmqZICBGNc"/>
-			<dataelement code="K36" uid="Q4RDkSWcJbY"/>
-			<dataelement code="K40" uid="Pi8akwfW9Bj"/>
-			<dataelement code="K41" uid="vNcZmCknYSr"/>
-			<dataelement code="K42" uid="p8AhrV4GARm"/>
-			<dataelement code="K43" uid="n2Dpgzttxrj"/>
-			<dataelement code="K44" uid="vPmaMnuAr0d"/>
-			<dataelement code="K50" uid="QzUfKOHJSPC"/>
-			<dataelement code="K51" uid="KW8onWmeA45"/>
-			<dataelement code="K52" uid="iAHUAoYpQSA"/>
-			<dataelement code="K55" uid="IhNdXKoOitm"/>
-			<dataelement code="K56.4" uid="ncOITIF6p3c"/>
-			<dataelement code="K56" uid="I3OnI0mU9Gq"/>
-			<dataelement code="K57" uid="DIFRmZPShwm"/>
-			<dataelement code="K58" uid="eczahXm8frX"/>
-			<dataelement code="K59" uid="TXDcQReJyte"/>
-			<dataelement code="K60" uid="hjjiO8ol74G"/>
-			<dataelement code="K62.5" uid="PZfueUn8OdX"/>
-			<dataelement code="K62" uid="E6aKnnjkXIz"/>
-			<dataelement code="K63" uid="dsPzRLtDJK3"/>
-			<dataelement code="K65" uid="hJGwnA5IbQZ"/>
-			<dataelement code="K70" uid="BH0JdFW36Mp"/>
-			<dataelement code="K71" uid="Mqtqb7x3GqR"/>
-			<dataelement code="K72.0" uid="ZEKEw9hlF6w"/>
-			<dataelement code="K72.1" uid="DVM7x9rSsSF"/>
-			<dataelement code="K72.9" uid="Y6g3uWczpuw"/>
-			<dataelement code="K72" uid="avLaSuoJBKJ"/>
-			<dataelement code="K73" uid="tHwMLfChKej"/>
-			<dataelement code="K74" uid="qKyg00Vv4G8"/>
-			<dataelement code="K76" uid="jxPZgQBAVV4"/>
-			<dataelement code="K80" uid="cN0IEzyL0jZ"/>
-			<dataelement code="K81" uid="aiUYaMRZmAy"/>
-			<dataelement code="K82" uid="T4JJvcvwUiC"/>
-			<dataelement code="K85" uid="IBTMxtvdor4"/>
-			<dataelement code="K86" uid="SpAuuORuetI"/>
-			<dataelement code="K87" uid="rF3r9NQY2T7"/>
-			<dataelement code="K90.9" uid="Dk0bgwFQpEk"/>
-			<dataelement code="K90" uid="IbsUUkalxSB"/>
-			<dataelement code="K91.4" uid="ZhEDwF8Pahr"/>
-			<dataelement code="K91" uid="Eb3dugli5Zq"/>
-			<dataelement code="K92.0" uid="Yvb3ExwyXsq"/>
-			<dataelement code="K92.1" uid="E417kdwJFqw"/>
-			<dataelement code="K92" uid="mfFyJlBCdjJ"/>
-			<dataelement code="L00" uid="NeBpH6Z5sZo"/>
-			<dataelement code="L01" uid="jI5J4PrMIqg"/>
-			<dataelement code="L02" uid="c2hffFa6ulE"/>
-			<dataelement code="L03" uid="GTdIB5LyjEz"/>
-			<dataelement code="L04" uid="aHyHI2ZyClv"/>
-			<dataelement code="L05" uid="cOLGBfgOmBb"/>
-			<dataelement code="L08" uid="CYcrtXv2Bn8"/>
-			<dataelement code="L10" uid="TTrIecpOJiA"/>
-			<dataelement code="L11" uid="AoT8UzXHj7c"/>
-			<dataelement code="L13" uid="cQwt86wmuZ5"/>
-			<dataelement code="L20" uid="kEElIw9XrwB"/>
-			<dataelement code="L21" uid="tlLkS4oniUI"/>
-			<dataelement code="L22" uid="ChAUzpwr2JV"/>
-			<dataelement code="L23" uid="ldk9eKepXl1"/>
-			<dataelement code="L25.0" uid="Xy5cVBmc9MG"/>
-			<dataelement code="L25" uid="Se6CKfFpSOz"/>
-			<dataelement code="L26" uid="mFiAN27k6LR"/>
-			<dataelement code="L29" uid="LkYIhDMkykJ"/>
-			<dataelement code="L30.1" uid="mryXhK8cXwY"/>
-			<dataelement code="L30" uid="V8d57YOkaXd"/>
-			<dataelement code="L40" uid="PL3fmcvBlte"/>
-			<dataelement code="L41" uid="jVQpsxHGOBE"/>
-			<dataelement code="L42" uid="vs7L3FDAH1v"/>
-			<dataelement code="L43" uid="NEoMOz5HLjD"/>
-			<dataelement code="L50" uid="rVUzgySTVLB"/>
-			<dataelement code="L51" uid="wpfHr3OmhZT"/>
-			<dataelement code="L52" uid="pNEfUqX9jqQ"/>
-			<dataelement code="L53" uid="KzHyCJy0ctN"/>
-			<dataelement code="L55" uid="TcLnvykpA0x"/>
-			<dataelement code="L60.0" uid="FOs5vxsTVnP"/>
-			<dataelement code="L60.1" uid="QXBWSnJu8B2"/>
-			<dataelement code="L60.8" uid="VWbW0OfwXcd"/>
-			<dataelement code="L60" uid="lngL3umJdlX"/>
-			<dataelement code="L63" uid="t93nOG4PIxc"/>
-			<dataelement code="L64" uid="bg4iNfL3hRV"/>
-			<dataelement code="L68" uid="ZCcc6QcRvpk"/>
-			<dataelement code="L70" uid="vZ1QJbOCIJy"/>
-			<dataelement code="L72" uid="LCNkJOP2jHT"/>
-			<dataelement code="L73" uid="FKY2El2lBkR"/>
-			<dataelement code="L74" uid="DpSHIaNuGzW"/>
-			<dataelement code="L80" uid="KqClPtAYVxZ"/>
-			<dataelement code="L81" uid="FZ0OcIjwWrY"/>
-			<dataelement code="L82" uid="LWYG4IRRrWp"/>
-			<dataelement code="L84" uid="aTnfejU2wac"/>
-			<dataelement code="L85" uid="PTv0aifMaKE"/>
-			<dataelement code="L89" uid="mJBIA5NKqt1"/>
-			<dataelement code="L90" uid="duFG32JRe13"/>
-			<dataelement code="L91" uid="RCD2xuNS5EC"/>
-			<dataelement code="L92" uid="vUTrVFiShn9"/>
-			<dataelement code="L93" uid="TGTBxfKbwp0"/>
-			<dataelement code="L95" uid="xzg0H7mk2yb"/>
-			<dataelement code="L97" uid="zg0rt6hZcv0"/>
-			<dataelement code="M00" uid="MYAvc6rEIkm"/>
-			<dataelement code="M01" uid="E0QlR1h6HzL"/>
-			<dataelement code="M05" uid="kor41DmDfYE"/>
-			<dataelement code="M06" uid="He6w6bgOSzX"/>
-			<dataelement code="M08" uid="cTKyO3YMe4y"/>
-			<dataelement code="M10" uid="oQVyVOYXG7p"/>
-			<dataelement code="M11" uid="Y9l2LsXdrYB"/>
-			<dataelement code="M15" uid="MkL39GWDFoC"/>
-			<dataelement code="M16" uid="ZDH9HhwsGWG"/>
-			<dataelement code="M17" uid="YR0K0PGmwrQ"/>
-			<dataelement code="M19" uid="GibDkGTTzTV"/>
-			<dataelement code="M20" uid="oVXZUXjwv8e"/>
-			<dataelement code="M21" uid="ut5DLtCv4vF"/>
-			<dataelement code="M22" uid="cSovIE249Ds"/>
-			<dataelement code="M23" uid="XUfiEKWlCaM"/>
-			<dataelement code="M24" uid="i2WOGHAIi6F"/>
-			<dataelement code="M25.4" uid="hZvv3MFJp7p"/>
-			<dataelement code="M25.5" uid="tJZtKY6uYEB"/>
-			<dataelement code="M25" uid="tkhKjlpS8iz"/>
-			<dataelement code="M30" uid="XRhgbYMrW75"/>
-			<dataelement code="M31" uid="qIWtwTY0nbb"/>
-			<dataelement code="M32" uid="tSwD7cedamF"/>
-			<dataelement code="M33" uid="CYCENYtQR0L"/>
-			<dataelement code="M34" uid="snDcJ9cDlz0"/>
-			<dataelement code="M35" uid="WO7asJ6pdcU"/>
-			<dataelement code="M40" uid="YKjvt2ldxmD"/>
-			<dataelement code="M41" uid="nVYcckojwJ6"/>
-			<dataelement code="M42" uid="fdpp2zqavjX"/>
-			<dataelement code="M43" uid="AiPDtWoTY5i"/>
-			<dataelement code="M45" uid="g5uohK0pciq"/>
-			<dataelement code="M47" uid="yUGALIYeTKE"/>
-			<dataelement code="M48" uid="mrFRDv3dD7g"/>
-			<dataelement code="M49" uid="n0NHdb1oRVb"/>
-			<dataelement code="M50" uid="vwNIhuf9DSv"/>
-			<dataelement code="M51" uid="aKxciJDigQh"/>
-			<dataelement code="M53" uid="iPcQR0r7Uyz"/>
-			<dataelement code="M54" uid="z1ZAsvRwmFK"/>
-			<dataelement code="M60" uid="C8hgJWZUeht"/>
-			<dataelement code="M62.5" uid="PTUWatAf5Kc"/>
-			<dataelement code="M62" uid="ef38qOKCmL9"/>
-			<dataelement code="M65" uid="bitYxITU6fu"/>
-			<dataelement code="M66" uid="ttLsmZDezbg"/>
-			<dataelement code="M75" uid="gKrAQvVHMwR"/>
-			<dataelement code="M77" uid="sVw76PcmqlO"/>
-			<dataelement code="M79.5" uid="d3lB01GCI4O"/>
-			<dataelement code="M79" uid="prlwuwPwv9u"/>
-			<dataelement code="M80" uid="t31RZklk8Po"/>
-			<dataelement code="M81" uid="TOOrLxkrnSC"/>
-			<dataelement code="M82" uid="vIOljTqfrbQ"/>
-			<dataelement code="M84" uid="iHCtHQGrHJP"/>
-			<dataelement code="M85" uid="WnQXOrlZ8Rm"/>
-			<dataelement code="M86" uid="uLGnRXw2vVy"/>
-			<dataelement code="M87" uid="HoNrxRrzyBN"/>
-			<dataelement code="M95" uid="oPZZheXkmD2"/>
-			<dataelement code="M96" uid="EBwkjAf9JGi"/>
-			<dataelement code="M99" uid="SXFsxUmQS5A"/>
-			<dataelement code="N00" uid="p2UUrWhescU"/>
-			<dataelement code="N02" uid="WjRkPuYZ3SP"/>
-			<dataelement code="N04" uid="tY8qCA3YI1R"/>
-			<dataelement code="N10" uid="WjVvYe9O7qJ"/>
-			<dataelement code="N13" uid="oGOKmwP50fj"/>
-			<dataelement code="N14" uid="eYlEd3OkuJs"/>
-			<dataelement code="N15.1" uid="Jix1KdgUSRz"/>
-			<dataelement code="N15" uid="CWiV4W8OJpi"/>
-			<dataelement code="N17" uid="slsfYuYyPCu"/>
-			<dataelement code="N18.0" uid="OWDHuBsfoSH"/>
-			<dataelement code="N18" uid="r9M2lDgmtyU"/>
-			<dataelement code="N20" uid="q7vV9DvdalI"/>
-			<dataelement code="N21" uid="azFjQQGyxvF"/>
-			<dataelement code="N22" uid="j9ZrsMKCm83"/>
-			<dataelement code="N23" uid="ivMWd4aMWUD"/>
-			<dataelement code="N28" uid="Xv0bnuE7CNI"/>
-			<dataelement code="N30" uid="AhtI5voJZSq"/>
-			<dataelement code="N31" uid="KqO91I40R8E"/>
-			<dataelement code="N32" uid="dfc9SskHdQ5"/>
-			<dataelement code="N34" uid="FuBbAoSefa8"/>
-			<dataelement code="N35" uid="zjdoixnC4Qy"/>
-			<dataelement code="N36" uid="FgrlBOLJ5qF"/>
-			<dataelement code="N39" uid="u3BDPwsL5jq"/>
-			<dataelement code="N40" uid="pXwkfSvKAqT"/>
-			<dataelement code="N41" uid="KMBmxkUwjBK"/>
-			<dataelement code="N42" uid="PnuxZiDaKhR"/>
-			<dataelement code="N43" uid="XenfezFrDHN"/>
-			<dataelement code="N44" uid="tZ6zQGjZkn5"/>
-			<dataelement code="N45" uid="DO7wnkArlzX"/>
-			<dataelement code="N46" uid="yl25J9FDMxT"/>
-			<dataelement code="N47" uid="fFtCesYzxdS"/>
-			<dataelement code="N48.3" uid="Ho8mFY947ih"/>
-			<dataelement code="N48.4" uid="opeF0zjLe54"/>
-			<dataelement code="N48" uid="Vqsx8zQLWPN"/>
-			<dataelement code="N49" uid="K5daC7lbSc3"/>
-			<dataelement code="N50" uid="UJD3l2LWnCO"/>
-			<dataelement code="N60" uid="UflunSa0s4F"/>
-			<dataelement code="N61" uid="KVLJ5L4HgEE"/>
-			<dataelement code="N62" uid="yLqzpRrs0Ao"/>
-			<dataelement code="N63" uid="Euird4vvdqd"/>
-			<dataelement code="N64" uid="RpPC9plcsWl"/>
-			<dataelement code="N70" uid="JnzvUdsDk3Y"/>
-			<dataelement code="N71" uid="wUdM9azOwEj"/>
-			<dataelement code="N72" uid="bko23vHrJzi"/>
-			<dataelement code="N73" uid="nQga747RROd"/>
-			<dataelement code="N75" uid="IyzR5h42UEW"/>
-			<dataelement code="N76" uid="K8rOmK8BANL"/>
-			<dataelement code="N80" uid="NZcMmukzniM"/>
-			<dataelement code="N81" uid="iEljtDFq8sG"/>
-			<dataelement code="N82" uid="DTmpjHR3NZz"/>
-			<dataelement code="N83" uid="d50eeSCESIS"/>
-			<dataelement code="N84" uid="KRaE7IrS8Jk"/>
-			<dataelement code="N85" uid="kbldAFXFxcP"/>
-			<dataelement code="N86" uid="D2KxmlN3H6u"/>
-			<dataelement code="N87" uid="kHaEj8mCWSz"/>
-			<dataelement code="N88" uid="G1TUA1A8NVU"/>
-			<dataelement code="N89" uid="pAEfsIHdj3B"/>
-			<dataelement code="N90" uid="K44igQy1CbA"/>
-			<dataelement code="N91" uid="MWLFYdS7QeC"/>
-			<dataelement code="N92" uid="TLp8FdVBliQ"/>
-			<dataelement code="N94.0" uid="CSp3aZJ9cpw"/>
-			<dataelement code="N94.1" uid="iVZTIp5G0hV"/>
-			<dataelement code="N94.2" uid="YWpntPWNnXa"/>
-			<dataelement code="N94.3" uid="pwsSxOOXkG4"/>
-			<dataelement code="N94.4" uid="lYynQr4p8GE"/>
-			<dataelement code="N94.5" uid="LbTtyyPnZlV"/>
-			<dataelement code="N94" uid="cYVUAPbHLjB"/>
-			<dataelement code="N95" uid="AwZXeSJ9jCv"/>
-			<dataelement code="N96" uid="KXyEtaqMWG1"/>
-			<dataelement code="N97" uid="fzwqyrLkm99"/>
-			<dataelement code="N99" uid="LRGXal7fL8e"/>
-			<dataelement code="O00" uid="jgqb4u4tJ1S"/>
-			<dataelement code="O01" uid="RPFaCliUacT"/>
-			<dataelement code="O02" uid="ONPWQl5wqcK"/>
-			<dataelement code="O03" uid="A25kXD4q1j3"/>
-			<dataelement code="O04" uid="bQXTQ6a9tJe"/>
-			<dataelement code="O06" uid="ErHbZXa89lG"/>
-			<dataelement code="O07" uid="C4eKW4v09ne"/>
-			<dataelement code="O08" uid="W4UpRLPwSCI"/>
-			<dataelement code="O10" uid="f6DVktm0Wj3"/>
-			<dataelement code="O11" uid="Y8rT2npjwYw"/>
-			<dataelement code="O12" uid="cxfMDL8V4gQ"/>
-			<dataelement code="O13" uid="TapHNMLP9MC"/>
-			<dataelement code="O14.0" uid="wl5I5xGUQuh"/>
-			<dataelement code="O14.1" uid="QXPhjQOkLUf"/>
-			<dataelement code="O14" uid="ALzf3V2Z9Cv"/>
-			<dataelement code="O15" uid="iS8Nj1DWQhc"/>
-			<dataelement code="O20" uid="EtKARhNiJEX"/>
-			<dataelement code="O21" uid="usZXs4Rx57T"/>
-			<dataelement code="O22" uid="anrI9mcNbD7"/>
-			<dataelement code="O23" uid="u7fOLV12F3m"/>
-			<dataelement code="O24" uid="M3mMXGe7x7K"/>
-			<dataelement code="O25" uid="fhDO5xfpzRz"/>
-			<dataelement code="O26" uid="f8XEfLkJ7o6"/>
-			<dataelement code="O28" uid="yyRkJT61vfK"/>
-			<dataelement code="O29" uid="BnjbE4S7LSV"/>
-			<dataelement code="O30" uid="mcWSOqn3ZKe"/>
-			<dataelement code="O31" uid="wZjCbSdXnC5"/>
-			<dataelement code="O32" uid="Hf7yg5ohosq"/>
-			<dataelement code="O33" uid="Rvhew9Q5Nib"/>
-			<dataelement code="O34" uid="Q1228nTmxFA"/>
-			<dataelement code="O35" uid="ufTv8VRjvy0"/>
-			<dataelement code="O36" uid="CnuCkGerqA8"/>
-			<dataelement code="O40" uid="DIlnTvfFoaH"/>
-			<dataelement code="O41" uid="bvwHkNbL8FL"/>
-			<dataelement code="O42" uid="CGthf710KZk"/>
-			<dataelement code="O43" uid="Pyp1qPDPYaV"/>
-			<dataelement code="O44" uid="o9P80iEbFxo"/>
-			<dataelement code="O45" uid="UpTcU4mhUsG"/>
-			<dataelement code="O46" uid="FYDNVrCBbS1"/>
-			<dataelement code="O47" uid="l5UOUz9VRoo"/>
-			<dataelement code="O48" uid="oXPqut7PTwO"/>
-			<dataelement code="O60" uid="x4d0bkf82K8"/>
-			<dataelement code="O61" uid="HwyNzO6Qm5J"/>
-			<dataelement code="O62" uid="TkoLgWF8XFj"/>
-			<dataelement code="O63" uid="o8edwY2NkoB"/>
-			<dataelement code="O64" uid="DMDbkVCpLgF"/>
-			<dataelement code="O65" uid="kv9XfjHXUSd"/>
-			<dataelement code="O66" uid="YPDyZaeeDl0"/>
-			<dataelement code="O67" uid="jyaiHGD2o4d"/>
-			<dataelement code="O68" uid="S8ehbp12fws"/>
-			<dataelement code="O69" uid="d9TotyQLqQz"/>
-			<dataelement code="O70" uid="DkIIFSCVmiL"/>
-			<dataelement code="O71.1" uid="o5IVRdkhjAe"/>
-			<dataelement code="O71" uid="W6zkmMqjtRj"/>
-			<dataelement code="O72" uid="lwPXUOFmtXQ"/>
-			<dataelement code="O73" uid="drfrvUQ1THw"/>
-			<dataelement code="O74" uid="nvi7y7HkHt1"/>
-			<dataelement code="O75" uid="V4Tw1GENsoa"/>
-			<dataelement code="O80" uid="uR1KXWkBDWt"/>
-			<dataelement code="O81" uid="mwN8wtnPyHO"/>
-			<dataelement code="O82" uid="gatal7nf6aT"/>
-			<dataelement code="O83" uid="vQsCzyErHy0"/>
-			<dataelement code="O84.0" uid="qu2eRkB9QbU"/>
-			<dataelement code="O84.1" uid="IlKPsKb9J7c"/>
-			<dataelement code="O84.2" uid="bpFb7IlewQ2"/>
-			<dataelement code="O84.8" uid="xBWWpYfH8HN"/>
-			<dataelement code="O84" uid="jZJQX7YP1op"/>
-			<dataelement code="O85" uid="lS7XNe0Ojl8"/>
-			<dataelement code="O86" uid="dAFjiY1Q8UH"/>
-			<dataelement code="O87" uid="JLxoqUXI0NR"/>
-			<dataelement code="O88" uid="VDmH2KWzlwU"/>
-			<dataelement code="O89" uid="apRd9a3YhBn"/>
-			<dataelement code="O90" uid="pz6Fcs36k1R"/>
-			<dataelement code="O91" uid="LInEYh4HtyH"/>
-			<dataelement code="O92" uid="bQ8dP77akNU"/>
-			<dataelement code="O94" uid="FeW5WGN7dLL"/>
-			<dataelement code="O95" uid="JRuzxp3ZUm5"/>
-			<dataelement code="O96" uid="WswJztwVgni"/>
-			<dataelement code="O97" uid="bDCxgfx887b"/>
-			<dataelement code="O98" uid="SI9XUXgzSzW"/>
-			<dataelement code="O99.0" uid="U9fPveo7w5f"/>
-			<dataelement code="O99" uid="Wi5xm8BU58z"/>
-			<dataelement code="P00.8" uid="HUSIrU3bHMI"/>
-			<dataelement code="P00" uid="arVEBNEhKXM"/>
-			<dataelement code="P03" uid="FfKNfuYzBff"/>
-			<dataelement code="P05" uid="sqJYKz5zWRd"/>
-			<dataelement code="P07" uid="YwYLbayFIs8"/>
-			<dataelement code="P08" uid="oW2gk20Hzh4"/>
-			<dataelement code="P10" uid="s7o58r6Hshb"/>
-			<dataelement code="P14" uid="lwaLWo89t55"/>
-			<dataelement code="P15.9" uid="kWL41kLiemt"/>
-			<dataelement code="P20" uid="JGpiokdOl67"/>
-			<dataelement code="P21" uid="kA8RiEjJU77"/>
-			<dataelement code="P22" uid="UYV4whErn5x"/>
-			<dataelement code="P24.0" uid="O3JgBOdZ9XZ"/>
-			<dataelement code="P24.8" uid="QSdOsMKTHqv"/>
-			<dataelement code="P24" uid="FsI3bJlWMNk"/>
-			<dataelement code="P28" uid="jrgQ0uNJXRF"/>
-			<dataelement code="P29" uid="X37kJvWuwJB"/>
-			<dataelement code="P35" uid="fEjI5mBBRJJ"/>
-			<dataelement code="P36" uid="MpCrbyUNxR0"/>
-			<dataelement code="P38" uid="FBEiTaWVpEe"/>
-			<dataelement code="P50" uid="DUpb6ROFno2"/>
-			<dataelement code="P55" uid="ELWhpoBWBHX"/>
-			<dataelement code="P57" uid="opoe5vCqeoM"/>
-			<dataelement code="P59" uid="BtyMsUD5SOE"/>
-			<dataelement code="P60" uid="TH0nrHwR8jX"/>
-			<dataelement code="P61" uid="xwogJPvquJk"/>
-			<dataelement code="P70" uid="TTgIoH1tdEN"/>
-			<dataelement code="P71" uid="al2Fw4v9xqM"/>
-			<dataelement code="P74" uid="TKL8zbPVkq0"/>
-			<dataelement code="P80" uid="GQKbBWnwh02"/>
-			<dataelement code="P91" uid="ZJS5EeXDPS3"/>
-			<dataelement code="P92" uid="XQgyLPHekE0"/>
-			<dataelement code="Q00" uid="llRsHcq9f2l"/>
-			<dataelement code="Q03" uid="a9GVMfKCQ86"/>
-			<dataelement code="Q05" uid="Rzeyxkulw6W"/>
-			<dataelement code="Q10" uid="zO8Y81HBZ0K"/>
-			<dataelement code="Q16" uid="raiqR5NKl4q"/>
-			<dataelement code="Q18" uid="YOlRg6b36TP"/>
-			<dataelement code="Q20" uid="RmyZlmkJ9wv"/>
-			<dataelement code="Q25" uid="MVC4IdjKaya"/>
-			<dataelement code="Q30" uid="JoW8Kcv0R5I"/>
-			<dataelement code="Q31" uid="of3Yyth7CXh"/>
-			<dataelement code="Q35" uid="IDbM4W0Siwz"/>
-			<dataelement code="Q36" uid="JyJeyWpOcbU"/>
-			<dataelement code="Q37" uid="IvP27wFDwhj"/>
-			<dataelement code="Q38" uid="aVfnKBFeULf"/>
-			<dataelement code="Q39" uid="wJDg5ERtzHn"/>
-			<dataelement code="Q40.0" uid="KaInBv5z4T4"/>
-			<dataelement code="Q40.1" uid="S7lNAv2CFcM"/>
-			<dataelement code="Q40?" uid="Q7N9MuOXz2X"/>
-			<dataelement code="Q41?" uid="htil2G2T5nW"/>
-			<dataelement code="Q42.2" uid="GBTyiSRff9u"/>
-			<dataelement code="Q42.3" uid="hk8l7gY60zk"/>
-			<dataelement code="Q42" uid="RVOWxGTSz37"/>
-			<dataelement code="Q43.0" uid="fnoqh6xL4wA"/>
-			<dataelement code="Q43.1" uid="CIpB4BZDcnd"/>
-			<dataelement code="Q43" uid="JG4JVjaeJ43"/>
-			<dataelement code="Q44" uid="V7jzm7ej4v8"/>
-			<dataelement code="Q45" uid="RYUc6pLaCfL"/>
-			<dataelement code="Q50" uid="hIWCZfVmZll"/>
-			<dataelement code="Q51" uid="FyTWJBn0vz3"/>
-			<dataelement code="Q52.0" uid="oOKNjvNp3eu"/>
-			<dataelement code="Q52.3" uid="Ysa4GFxUnM2"/>
-			<dataelement code="Q52" uid="GrO8JXZmFA0"/>
-			<dataelement code="Q53" uid="dTxIMhwqvxl"/>
-			<dataelement code="Q54" uid="OgkB20i64XB"/>
-			<dataelement code="Q56" uid="aeW6YOAOcFn"/>
-			<dataelement code="Q60" uid="S2WnESOqriT"/>
-			<dataelement code="Q61" uid="f2VZBHjEqkZ"/>
-			<dataelement code="Q65" uid="ey46rud2cHS"/>
-			<dataelement code="Q66" uid="P8cTxQrKzvY"/>
-			<dataelement code="Q67" uid="ghJ19rOpr4o"/>
-			<dataelement code="Q68" uid="j84w1KFtfOA"/>
-			<dataelement code="Q69" uid="eQ6Qj9V9k5Q"/>
-			<dataelement code="Q79" uid="IsmhOUiRjIE"/>
-			<dataelement code="Q89" uid="mm9Bx6qmDcG"/>
-			<dataelement code="Q90" uid="CGCdkRySM6h"/>
-			<dataelement code="R00.0" uid="CGNLPDYzKf3"/>
-			<dataelement code="R00.8" uid="P8BkG2J6B6M"/>
-			<dataelement code="R00" uid="dhup78N5cHk"/>
-			<dataelement code="R01" uid="qfb39I9gMHy"/>
-			<dataelement code="R02" uid="zZyiU4lZDtP"/>
-			<dataelement code="R03" uid="cxQlyGEL1EF"/>
-			<dataelement code="R04.0" uid="IrCdQgE8xLR"/>
-			<dataelement code="R04.2" uid="F445njja0m8"/>
-			<dataelement code="R04" uid="yjLmMY8OScY"/>
-			<dataelement code="R06" uid="doUK9of4OgY"/>
-			<dataelement code="R07" uid="ylbHZxgTfoi"/>
-			<dataelement code="R09" uid="RFiPNjHNhFz"/>
-			<dataelement code="R10" uid="daxh9aUAmCY"/>
-			<dataelement code="R11" uid="Fqk4ydNXI65"/>
-			<dataelement code="R12" uid="CY7dGiWiqQF"/>
-			<dataelement code="R13" uid="fnUeWHeRT8c"/>
-			<dataelement code="R14" uid="NaxFadJRbER"/>
-			<dataelement code="R15" uid="KmAabphAZ8f"/>
-			<dataelement code="R16" uid="DpuZNGC0y0g"/>
-			<dataelement code="R17" uid="fJP6EzG9W2c"/>
-			<dataelement code="R18" uid="Kh5TQfOzS2L"/>
-			<dataelement code="R19" uid="Yw29XEu5bLL"/>
-			<dataelement code="R20" uid="ehinutFZ75l"/>
-			<dataelement code="R21" uid="PYKR0jfHOhA"/>
-			<dataelement code="R22" uid="s0Vdtxt8M96"/>
-			<dataelement code="R23" uid="LsAB9AnLsIj"/>
-			<dataelement code="R26" uid="rxewX76TTuB"/>
-			<dataelement code="R29" uid="eSNoJNNfJV8"/>
-			<dataelement code="R30" uid="uwO5zSkG1Aq"/>
-			<dataelement code="R31" uid="nGprJJmqQXb"/>
-			<dataelement code="R32" uid="huVaAynwmcK"/>
-			<dataelement code="R33" uid="UpAcuE6FqUc"/>
-			<dataelement code="R34" uid="fyhg5kGoqCK"/>
-			<dataelement code="R35" uid="rG5yDvnv7Cw"/>
-			<dataelement code="R36" uid="kS9JWG1YWzm"/>
-			<dataelement code="R39" uid="Vfns7eVodlg"/>
-			<dataelement code="R40" uid="b65RaPIerax"/>
-			<dataelement code="R41" uid="eG7rNq0QAa9"/>
-			<dataelement code="R42" uid="a0JgMczWVDy"/>
-			<dataelement code="R43" uid="yZ8AQaBd7MG"/>
-			<dataelement code="R44" uid="Ml5cEvzMeRR"/>
-			<dataelement code="R45" uid="GWtUfy1ZnyC"/>
-			<dataelement code="R46" uid="e3v7RlOlTs7"/>
-			<dataelement code="R47" uid="kxqgA33Yjvz"/>
-			<dataelement code="R49" uid="fW8jE4IKO1z"/>
-			<dataelement code="R50" uid="Z6ecG09aaq9"/>
-			<dataelement code="R51" uid="WbGV76RaW8d"/>
-			<dataelement code="R52" uid="zlZb6xuYvRO"/>
-			<dataelement code="R53" uid="uLlk7S15q5b"/>
-			<dataelement code="R54" uid="aARoB83DhTg"/>
-			<dataelement code="R55" uid="OCV6AfNxhUM"/>
-			<dataelement code="R56" uid="gUyPXaOaWxW"/>
-			<dataelement code="R57" uid="P94vOzSFuqx"/>
-			<dataelement code="R58" uid="lp7AW30yiIJ"/>
-			<dataelement code="R59" uid="KaCoNjE4YFP"/>
-			<dataelement code="R60" uid="MRvL42mFBDB"/>
-			<dataelement code="R61" uid="H5xMa1SE7XA"/>
-			<dataelement code="R62" uid="tX9Zo1KY7dS"/>
-			<dataelement code="R63" uid="Zx5XabciiVw"/>
-			<dataelement code="R64" uid="hFcCgp3z6wd"/>
-			<dataelement code="R68" uid="P95C14Y1fWh"/>
-			<dataelement code="R69" uid="PyGBNdZRgep"/>
-			<dataelement code="R71" uid="qy28f8lFc6Y"/>
-			<dataelement code="R73" uid="Owsr9BawNsk"/>
-			<dataelement code="R75" uid="zo0wFB9jWTy"/>
-			<dataelement code="R80" uid="WBzi8Y85rQM"/>
-			<dataelement code="R83" uid="hqgPntRGXxC"/>
-			<dataelement code="R90" uid="uc56TeZhGv8"/>
-			<dataelement code="R94" uid="F6nkUFcutS4"/>
-			<dataelement code="R95" uid="XZjSADG6M7h"/>
-			<dataelement code="S00" uid="BDxQiVXDtdS"/>
-			<dataelement code="S01" uid="YLhg600ZXan"/>
-			<dataelement code="S02" uid="NxQMXHRXjS5"/>
-			<dataelement code="S03" uid="HV9Oc2KBgay"/>
-			<dataelement code="S04" uid="rQFByR0S0nR"/>
-			<dataelement code="S05" uid="iatODw2IPlr"/>
-			<dataelement code="S06" uid="QHpNR9lcB2J"/>
-			<dataelement code="S07" uid="gxqGe1ptR4Y"/>
-			<dataelement code="S08" uid="cN1JaDgp7El"/>
-			<dataelement code="S11" uid="Un0Ot5wssVu"/>
-			<dataelement code="S12" uid="wPtVBmgLxIs"/>
-			<dataelement code="S13" uid="tZKZm1XXQzi"/>
-			<dataelement code="S17" uid="OYAFGms1FT2"/>
-			<dataelement code="S30" uid="DaXeIqojPAb"/>
-			<dataelement code="S31.4" uid="CyIKx9LVhKz"/>
-			<dataelement code="S31" uid="zeyxhIe3h7J"/>
-			<dataelement code="S36" uid="Ec82UdaWrNa"/>
-			<dataelement code="S37.0" uid="bPJzu8z0Pkj"/>
-			<dataelement code="S37" uid="egZFT2sVsfc"/>
-			<dataelement code="S52" uid="RuvcUTKziyn"/>
-			<dataelement code="S53" uid="HilxnJFCBQr"/>
-			<dataelement code="S54" uid="M3PB3EB4ZeI"/>
-			<dataelement code="S58" uid="Iu3uldHkK7N"/>
-			<dataelement code="S60" uid="DksjujhqTpt"/>
-			<dataelement code="S61" uid="txACE4BBX5Z"/>
-			<dataelement code="S62" uid="qalnjkPaDFy"/>
-			<dataelement code="S64" uid="IXgP8AlwXYI"/>
-			<dataelement code="S65" uid="mU0LE1a9vJQ"/>
-			<dataelement code="S66" uid="BhgxHSy9Ufc"/>
-			<dataelement code="S67" uid="I3PefvLrcUB"/>
-			<dataelement code="S68" uid="q1BORHNvSwJ"/>
-			<dataelement code="S70" uid="SXYG2OqrvZ1"/>
-			<dataelement code="S71" uid="Uqg45eYyaH4"/>
-			<dataelement code="S72" uid="PVJERyUUVEJ"/>
-			<dataelement code="S73" uid="aCeOhLedb3f"/>
-			<dataelement code="S74" uid="pJHLXDmTmWx"/>
-			<dataelement code="S75" uid="itoaBpSUEkZ"/>
-			<dataelement code="S76" uid="rED4P3e3RvD"/>
-			<dataelement code="S77" uid="ZObF7rJLYku"/>
-			<dataelement code="S78" uid="CM7r4m9kPp3"/>
-			<dataelement code="S79" uid="o81SivPrwVB"/>
-			<dataelement code="S80" uid="mL1spmD16gf"/>
-			<dataelement code="S81" uid="vbeLLNWOz4n"/>
-			<dataelement code="S82" uid="YGHW3kOuBkK"/>
-			<dataelement code="S83.2" uid="wGgNJ1MKspY"/>
-			<dataelement code="S83" uid="kLolPEC0kjy"/>
-			<dataelement code="S84" uid="bgmlZ5z5cus"/>
-			<dataelement code="S85" uid="iwH5LILPqnB"/>
-			<dataelement code="S86" uid="xh9VULZTRdO"/>
-			<dataelement code="S87" uid="IaPKoUslfgk"/>
-			<dataelement code="S88" uid="VxxPSMKdB4T"/>
-			<dataelement code="S89" uid="P5NAjl5ivBI"/>
-			<dataelement code="S90" uid="XGy8XLEy0bb"/>
-			<dataelement code="S91" uid="bPpM9nrS4M3"/>
-			<dataelement code="S92" uid="A86bwq9JsEV"/>
-			<dataelement code="S93" uid="lArhotxv09p"/>
-			<dataelement code="S95" uid="WHpmobh3zZK"/>
-			<dataelement code="S96" uid="TLF5qjmAXU4"/>
-			<dataelement code="S97" uid="EZJYm8SKNRt"/>
-			<dataelement code="S98" uid="JIGhwm27j7L"/>
-			<dataelement code="T00" uid="mAkBaKtdNhz"/>
-			<dataelement code="T01" uid="tojK7vMuBE2"/>
-			<dataelement code="T02" uid="lI8wy6SVnk8"/>
-			<dataelement code="T04" uid="DJ9Vv795E9V"/>
-			<dataelement code="T05" uid="XBt1qXNOcjO"/>
-			<dataelement code="T08" uid="hjX2qDAHJIk"/>
-			<dataelement code="T14" uid="LDQwwDCs5Lw"/>
-			<dataelement code="T15" uid="YrAJBoiSPDY"/>
-			<dataelement code="T16" uid="uzLIfHy4JiL"/>
-			<dataelement code="T17" uid="yKqgVMrgkfV"/>
-			<dataelement code="T18" uid="U6uQgzNGlRd"/>
-			<dataelement code="T19" uid="UC5l0YvEG4w"/>
-			<dataelement code="T20" uid="PXNL5oA2ghK"/>
-			<dataelement code="T21" uid="I1h0emvsTrA"/>
-			<dataelement code="T22" uid="YRKsPqccYin"/>
-			<dataelement code="T23" uid="VIFxX5zn8HM"/>
-			<dataelement code="T24" uid="qNy3Uj77pu9"/>
-			<dataelement code="T25" uid="AXUEf4YTsUr"/>
-			<dataelement code="T30" uid="sUiOu2QNdJa"/>
-			<dataelement code="T32" uid="cEWRbTrDfZr"/>
-			<dataelement code="T36" uid="X4YybKdrZTZ"/>
-			<dataelement code="T37" uid="dqoT5R20Sfd"/>
-			<dataelement code="T38" uid="MirINoLPKgC"/>
-			<dataelement code="T41" uid="Rvzsgiy35KU"/>
-			<dataelement code="T42" uid="uwth3FexNr4"/>
-			<dataelement code="T43" uid="TjfR1SqcA3p"/>
-			<dataelement code="T44" uid="z9NVB1McpgM"/>
-			<dataelement code="T45" uid="lwsUmSPOdAE"/>
-			<dataelement code="T46" uid="wFlPD7tJEyt"/>
-			<dataelement code="T50" uid="j8H9scnbCOs"/>
-			<dataelement code="T51" uid="KNMXMXtfLea"/>
-			<dataelement code="T53" uid="vrR5mcvB7S8"/>
-			<dataelement code="T54" uid="ohHQcr12Eym"/>
-			<dataelement code="T55" uid="xn9MSwyn08W"/>
-			<dataelement code="T58" uid="ajfikk6fNHU"/>
-			<dataelement code="T60" uid="sxtv78JG6jR"/>
-			<dataelement code="T62" uid="cTsdGBDzQBf"/>
-			<dataelement code="T63" uid="qbMksQJ2WqE"/>
-			<dataelement code="T66" uid="P6h4IsJHAM6"/>
-			<dataelement code="T67" uid="uOeI6HytmNL"/>
-			<dataelement code="T70" uid="D3LfySVbUKj"/>
-			<dataelement code="T71" uid="HMUanElZTOc"/>
-			<dataelement code="T73" uid="LRXCLRj3owG"/>
-			<dataelement code="T74.0" uid="Fnvp0VcutMM"/>
-			<dataelement code="T74.1" uid="musZKal3ILo"/>
-			<dataelement code="T74.2" uid="A0sbvIrPa64"/>
-			<dataelement code="T74.3" uid="zRcoYmqnnqy"/>
-			<dataelement code="T74" uid="KCambnwKnxe"/>
-			<dataelement code="T75" uid="HVVQvUcOLMb"/>
-			<dataelement code="T78" uid="ROy1MZGKYRh"/>
-			<dataelement code="T79" uid="nku7rBwYXhX"/>
-			<dataelement code="T80" uid="HUeHcey5AtJ"/>
-			<dataelement code="T81" uid="JCXa4j9kNn5"/>
-			<dataelement code="T82" uid="cL9APRyOVxw"/>
-			<dataelement code="T84" uid="a8uXnMsnxtQ"/>
-			<dataelement code="T86" uid="iEaFsAIVeCl"/>
-			<dataelement code="T87" uid="N5josdBLaiK"/>
-			<dataelement code="T88" uid="uKw6NzBDrQG"/>
-			<dataelement code="T90" uid="PXwt4uuSigz"/>
-			<dataelement code="T91" uid="GAaaAhuL8mK"/>
-			<dataelement code="T92" uid="srpzjuvWh9Q"/>
-			<dataelement code="T93" uid="d1K7magTDav"/>
-			<dataelement code="T94" uid="GRKJHrduh6t"/>
-			<dataelement code="T95" uid="u4lWEPeXDM5"/>
-			<dataelement code="T96" uid="MDZLwlJRJka"/>
-			<dataelement code="U80?" uid="LTVB5XvjHY2"/>
-			<dataelement code="U81" uid="aCAowveOnWV"/>
-			<dataelement code="U88?" uid="Po92argglsd"/>
-			<dataelement code="U89" uid="xQ7ubVx9Pu1"/>
-			<dataelement code="V99" uid="TCLnPuiRoPs"/>
-			<dataelement code="W19" uid="KpGTYSU5Fwo"/>
-			<dataelement code="W22" uid="gkXdtgAASNB"/>
-			<dataelement code="W49" uid="xvAWJM1XwmA"/>
-			<dataelement code="W51" uid="Dk8AfkqTZfL"/>
-			<dataelement code="W54" uid="ng4wc6rTRA6"/>
-			<dataelement code="W74" uid="r8iaGG5JI2E"/>
-			<dataelement code="W87" uid="k8eVtyvm36Z"/>
-			<dataelement code="X09" uid="pxjUCfEbGha"/>
-			<dataelement code="X20" uid="IxO0aqrtkDP"/>
-			<dataelement code="X30" uid="duIOsDUxcPf"/>
-			<dataelement code="X34" uid="Jhtagq1s6AB"/>
-			<dataelement code="X44" uid="c26egU9PmMh"/>
-			<dataelement code="X49" uid="qy3IuusoL3H"/>
-			<dataelement code="X59" uid="SL89yfMTfX4"/>
-			<dataelement code="X69" uid="sitAJf8jxEs"/>
-			<dataelement code="X70" uid="kOnwcD7rN3F"/>
-			<dataelement code="X71" uid="FAlWcymjyh0"/>
-			<dataelement code="X76" uid="Qhg1CMsuJaQ"/>
-			<dataelement code="X95" uid="M29wxy99i5w"/>
-			<dataelement code="X98" uid="w51auvqElGj"/>
-			<dataelement code="X99" uid="z72JU637pu9"/>
-			<dataelement code="Y00" uid="bibDC0nsYVD"/>
-			<dataelement code="Y07" uid="B1DWMTSBWvs"/>
-			<dataelement code="Y08" uid="UOCStFU9PXN"/>
-			<dataelement code="Y09" uid="au4IhFRNWZ5"/>
-			<dataelement code="Y12" uid="Gt4zgOPNWtb"/>
-			<dataelement code="Y15" uid="t7bgaivoTrX"/>
-			<dataelement code="Y34" uid="qJPgGLu31QX"/>
-			<dataelement code="Y35" uid="TDgCs25WcqT"/>
-			<dataelement code="Y36" uid="nNe1NNeajp6"/>
-			<dataelement code="Y62" uid="uMYDSoBTnjY"/>
-			<dataelement code="Z00" uid="RldLdv7xhu6"/>
-			<dataelement code="Z01" uid="ptyAR8uzPX7"/>
-			<dataelement code="Z02" uid="M9Rw2UBSmlC"/>
-			<dataelement code="Z03" uid="dUyHdoX0wpJ"/>
-			<dataelement code="Z04" uid="vMjAttroUV7"/>
-			<dataelement code="Z08" uid="B5owLOZkVzE"/>
-			<dataelement code="Z10" uid="BSVH9zPrpNg"/>
-			<dataelement code="Z11" uid="Cl30YyZ3GY1"/>
-			<dataelement code="Z20" uid="LIyKDbeh3gC"/>
-			<dataelement code="Z30" uid="hPQsUuPABwc"/>
-			<dataelement code="Z31" uid="BtjH8n9E8IM"/>
-			<dataelement code="Z32" uid="F0utZ1fe1IB"/>
-			<dataelement code="Z34" uid="QweJFlSqdFO"/>
-			<dataelement code="Z40" uid="ATiXHKPLX55"/>
-			<dataelement code="Z41" uid="qcE71n4zhKr"/>
-			<dataelement code="Z42" uid="KHZ7NPWG1Vv"/>
-			<dataelement code="Z43" uid="M7krtuQ4nhM"/>
-			<dataelement code="Z46" uid="zTlez7bSl33"/>
-			<dataelement code="Z55" uid="tfF1NTjAn68"/>
-			<dataelement code="Z56" uid="qjthbQ7SU7w"/>
-			<dataelement code="Z58" uid="B1fPb4Dc2T7"/>
-			<dataelement code="Z59" uid="WtKlGcVt73l"/>
-			<dataelement code="Z60" uid="o0zJSQ7eYjo"/>
-			<dataelement code="Z63" uid="Ptz8O2bMqTt"/>
-			<dataelement code="Z64" uid="uDuXieqS4sj"/>
-			<dataelement code="Z65" uid="Wv3RkUQxYZi"/>
-			<dataelement code="Z70" uid="KUyqKCNEc79"/>
-			<dataelement code="Z71" uid="IaBlLaVYqPr"/>
-			<dataelement code="Z72.0" uid="ycMDUnrR5Z9"/>
-			<dataelement code="Z72" uid="XH57G0rsA37"/>
-			<dataelement code="Z73" uid="V90oZYoSYtY"/>
-			<dataelement code="Z74" uid="HDuMyVoUm7H"/>
-			<dataelement code="Z75" uid="XKdtLqt8x4h"/>
-			<dataelement code="Z80" uid="EFcYIeZjXn4"/>
-			<dataelement code="Z82" uid="hDY1e915Nqb"/>
-			<dataelement code="Z91" uid="lrlRpF6jue1"/>
-			<dataelement code="Z93" uid="ckKUAAIE6dw"/>
-			<dataelement code="Z99" uid="zhcLgVKDw45"/>
+	<dataelement code='A00' uid='xdVwmyDnriG'/>
+	<dataelement code='A01' uid='pMrOijWV3jj'/>
+	<dataelement code='A02.1' uid='ajs5ZmH5TOA'/>
+	<dataelement code='A02' uid='QfxQJ5Xfkru'/>
+	<dataelement code='A03' uid='x5GdDPYMg39'/>
+	<dataelement code='A04' uid='MXcDPPNFPZf'/>
+	<dataelement code='A05.9' uid='si9Kp9qCDRc'/>
+	<dataelement code='A06' uid='tJVoNTZTD0I'/>
+	<dataelement code='A09' uid='BTPxUr0SDzq'/>
+	<dataelement code='A15.0' uid='oCeY4JuGFJO'/>
+	<dataelement code='A15' uid='Md2UXZ7BDCy'/>
+	<dataelement code='A16.0' uid='A4LWk15iXPD'/>
+	<dataelement code='A16.5' uid='rhph7rrVYI7'/>
+	<dataelement code='A17.0' uid='EK5P1R0q8Wp'/>
+	<dataelement code='A18.3' uid='j6ABAqmnioe'/>
+	<dataelement code='A18.8' uid='V3DlGP5IrkN'/>
+	<dataelement code='A19' uid='XlAwCy9D6a6'/>
+	<dataelement code='A20' uid='CvCuAWRIWUh'/>
+	<dataelement code='A21' uid='S9TJ0cdOSjo'/>
+	<dataelement code='A22' uid='JCvc2bf3J63'/>
+	<dataelement code='A30' uid='Nt7FvrtwClM'/>
+	<dataelement code='A31' uid='VYdmQsAZPLx'/>
+	<dataelement code='A32.1' uid='zfz3bf42xZs'/>
+	<dataelement code='A32' uid='V4QEAZIbRVE'/>
+	<dataelement code='A33' uid='ldJhFLDOcZJ'/>
+	<dataelement code='A34' uid='VshFch9xoPB'/>
+	<dataelement code='A35' uid='UrPFsKNBWVq'/>
+	<dataelement code='A36' uid='cMXDB81XnG0'/>
+	<dataelement code='A37' uid='HNx9kena8cR'/>
+	<dataelement code='A39.5' uid='FyIQFBLQwDo'/>
+	<dataelement code='A39' uid='L1DYFvs7NMc'/>
+	<dataelement code='A40' uid='rjk2TKRgWJD'/>
+	<dataelement code='A41.3' uid='s0dV7jWmA9k'/>
+	<dataelement code='A41' uid='o6UB22p7vrS'/>
+	<dataelement code='A42' uid='ogq7EvwANu8'/>
+	<dataelement code='A46' uid='ldHLosQm9dN'/>
+	<dataelement code='A48' uid='brh0CdVlam0'/>
+	<dataelement code='A50' uid='dX71ooUsFf6'/>
+	<dataelement code='A54' uid='IsnwPK2NpvF'/>
+	<dataelement code='A55' uid='PmNeaORb5MJ'/>
+	<dataelement code='A56' uid='j9cLxQtlKFI'/>
+	<dataelement code='A57' uid='psrx6aO6aE5'/>
+	<dataelement code='A59.0' uid='YwxNndRkbse'/>
+	<dataelement code='A60' uid='fNVk78bWlxZ'/>
+	<dataelement code='A63.0' uid='jmwlehads0G'/>
+	<dataelement code='A63' uid='UdCkTZatKEj'/>
+	<dataelement code='A65' uid='JUU2SnztWnS'/>
+	<dataelement code='A69.0' uid='L6jlRp1mLF0'/>
+	<dataelement code='A69' uid='tzrh5Oupz65'/>
+	<dataelement code='A70' uid='Bcb7hhkoGjI'/>
+	<dataelement code='A71' uid='gt6Sj20dy5y'/>
+	<dataelement code='A74.0' uid='f2yY6pR4IJN'/>
+	<dataelement code='A74' uid='n5YHVI9omSq'/>
+	<dataelement code='A75' uid='jrcoP9lWdwC'/>
+	<dataelement code='A80' uid='Tw6Z1xyAqhE'/>
+	<dataelement code='A82' uid='zKkUf4FZKNU'/>
+	<dataelement code='A85.0' uid='idshwYqClAa'/>
+	<dataelement code='A87' uid='msPIu2fhWtP'/>
+	<dataelement code='A88' uid='FXa1HSfy5zh'/>
+	<dataelement code='A98.4' uid='By5bS5Sd8hv'/>
+	<dataelement code='A98' uid='CPpJlOTFCBt'/>
+	<dataelement code='B00.0' uid='Zev0tyzB1f6'/>
+	<dataelement code='B00.5' uid='mYzYuTCUX5n'/>
+	<dataelement code='B00' uid='lFAhkdh1Pvy'/>
+	<dataelement code='B01' uid='g1gjUzb0WQj'/>
+	<dataelement code='B02' uid='gjDyVdyASPV'/>
+	<dataelement code='B03' uid='JyJL0D6ygJl'/>
+	<dataelement code='B05' uid='Vklu7Q9N0L0'/>
+	<dataelement code='B06' uid='NDQ97KxkOnX'/>
+	<dataelement code='B07' uid='gjbw00S6miX'/>
+	<dataelement code='B08.1' uid='WDyugVrsiop'/>
+	<dataelement code='B08.5' uid='i7ksVZbzeSg'/>
+	<dataelement code='B08' uid='APSuZJAXZs6'/>
+	<dataelement code='B15' uid='Ag441NgR72I'/>
+	<dataelement code='B16' uid='UGt5GN1vzKg'/>
+	<dataelement code='B17.1' uid='kLWeqtV2vfM'/>
+	<dataelement code='B18' uid='gvsbG4avCF3'/>
+	<dataelement code='B20' uid='ir0SAU4k7BE'/>
+	<dataelement code='B21.0' uid='QJLnvpNUoSz'/>
+	<dataelement code='B21' uid='cOcLzG3Xinz'/>
+	<dataelement code='B22.0' uid='IBLiYcSNach'/>
+	<dataelement code='B22' uid='ug1MJIZywzH'/>
+	<dataelement code='B23.0' uid='pcyWbTfbJQX'/>
+	<dataelement code='B23' uid='xi92p5mqSb3'/>
+	<dataelement code='B25' uid='DnsDFdu4e9L'/>
+	<dataelement code='B26' uid='Vj57xhjMHki'/>
+	<dataelement code='B27' uid='Hq6OdFKQpni'/>
+	<dataelement code='B35' uid='hJYmAN1vdIm'/>
+	<dataelement code='B37.2' uid='TYiiK53hBvb'/>
+	<dataelement code='B37.3' uid='uUWUWvkBdm0'/>
+	<dataelement code='B37.4' uid='cmLiDnBMf2T'/>
+	<dataelement code='B37' uid='jVh8nrh1dxd'/>
+	<dataelement code='B38' uid='iWAvtEV4Qx9'/>
+	<dataelement code='B45.1' uid='kKRKbDVC0Uw'/>
+	<dataelement code='B45' uid='b8uMBpu2wRP'/>
+	<dataelement code='B50.0' uid='fb7fVzHxY31'/>
+	<dataelement code='B50' uid='WIQK1frFOO4'/>
+	<dataelement code='B53' uid='fCWj21YmNoU'/>
+	<dataelement code='B58' uid='zvaSHuwPTGc'/>
+	<dataelement code='B65' uid='gRTMf6PQkwO'/>
+	<dataelement code='B68' uid='JnnUmf42J75'/>
+	<dataelement code='B73' uid='tMa7mmZXMzR'/>
+	<dataelement code='B77' uid='w01Egj3bbaa'/>
+	<dataelement code='B80' uid='dn3YsSlMZFJ'/>
+	<dataelement code='B85' uid='R0wQ0uT4c58'/>
+	<dataelement code='B86' uid='pSn89umxJDo'/>
+	<dataelement code='B87' uid='Ve34g20iPav'/>
+	<dataelement code='B881' uid='cMvqg9o8Gam'/>
+	<dataelement code='B90' uid='iJn9DlR1UFx'/>
+	<dataelement code='B91' uid='dqTb3RqsZud'/>
+	<dataelement code='B949' uid='ycKEVqKokBG'/>
+	<dataelement code='B99' uid='wSZ4TE9u4QB'/>
+	<dataelement code='C00' uid='OnK4ocoNmyY'/>
+	<dataelement code='C01' uid='g0EDFYE0CwE'/>
+	<dataelement code='C02' uid='meygA9f98jY'/>
+	<dataelement code='C03' uid='MQPb3ZmNRd5'/>
+	<dataelement code='C04' uid='QRjqnJVXX32'/>
+	<dataelement code='C05' uid='pwrgjkR6UHe'/>
+	<dataelement code='C07' uid='miOfh8tffrB'/>
+	<dataelement code='C14.0' uid='mLZAOAV5l6t'/>
+	<dataelement code='C15' uid='dAIEAQwWsDa'/>
+	<dataelement code='C16' uid='vkTaiK0lt7o'/>
+	<dataelement code='C17' uid='YJSfr9d282y'/>
+	<dataelement code='C18' uid='qwh7EZcUMjq'/>
+	<dataelement code='C19' uid='xH5nRtsWxOY'/>
+	<dataelement code='C20' uid='aRPT8TSbOvZ'/>
+	<dataelement code='C21' uid='Tp5Trx9Oh5u'/>
+	<dataelement code='C22.0' uid='APoGg549kaG'/>
+	<dataelement code='C22.9' uid='PKhl4jBJ5x9'/>
+	<dataelement code='C23' uid='Qa3B1eSJzd7'/>
+	<dataelement code='C' uid='epdy04myFp7'/>
+	<dataelement code='C25' uid='PYWWz9FgIlg'/>
+	<dataelement code='C26' uid='Ew0PIxLenOF'/>
+	<dataelement code='C30' uid='ZNOAruwudB3'/>
+	<dataelement code='C32' uid='xOi1dpwNuDi'/>
+	<dataelement code='C33' uid='EQKkBAMf1xD'/>
+	<dataelement code='C38' uid='w5Zx574tiYC'/>
+	<dataelement code='C40' uid='iblE9nkcbOa'/>
+	<dataelement code='C41' uid='vQPq9JVyVAW'/>
+	<dataelement code='C43' uid='GhzKJ4NvFO1'/>
+	<dataelement code='C44' uid='TYyCliCGVbR'/>
+	<dataelement code='C45' uid='mbtF4AKPLpL'/>
+	<dataelement code='C46' uid='qYvdZgZqTk7'/>
+	<dataelement code='C47' uid='KsOszOZlMM5'/>
+	<dataelement code='C48' uid='gnaaDdzuYtE'/>
+	<dataelement code='C50' uid='P7FemHdUEi8'/>
+	<dataelement code='C51' uid='q95TbnRPiT1'/>
+	<dataelement code='C52' uid='oSeK2jvx1qL'/>
+	<dataelement code='C53' uid='llD929sEVXV'/>
+	<dataelement code='C54' uid='EaSOI61U6kG'/>
+	<dataelement code='C56' uid='wzcXl4Tdzo9'/>
+	<dataelement code='C58' uid='dlWMDrcdw6Y'/>
+	<dataelement code='C60' uid='CxoRTYwiTOX'/>
+	<dataelement code='C61' uid='p6s9SnLvPln'/>
+	<dataelement code='C62' uid='FojZEJ63hAF'/>
+	<dataelement code='C64' uid='Ef9J5ndqtk7'/>
+	<dataelement code='C67' uid='EpULOlE4DrC'/>
+	<dataelement code='C69' uid='TnUviPgqGh6'/>
+	<dataelement code='C70' uid='RVTHUurHZyj'/>
+	<dataelement code='C71' uid='mvRixvICjnr'/>
+	<dataelement code='C72' uid='BFEjPcxQaTF'/>
+	<dataelement code='C73' uid='FLQWbLbAbyb'/>
+	<dataelement code='C74' uid='dIelCvzQBqH'/>
+	<dataelement code='C77' uid='bUJlrpkYwoo'/>
+	<dataelement code='C78' uid='GX7oYRpB3t8'/>
+	<dataelement code='C79' uid='neq8uXCZF80'/>
+	<dataelement code='C80' uid='PLVwKZwm04R'/>
+	<dataelement code='C81' uid='rrpNO1hBQyW'/>
+	<dataelement code='C82' uid='BoP0DIXa7Zs'/>
+	<dataelement code='C83.7' uid='quWI9gqm18D'/>
+	<dataelement code='C83' uid='q8EWdeclGJL'/>
+	<dataelement code='C84' uid='MBA4xYCfV85'/>
+	<dataelement code='C85' uid='lwKviwmcSHJ'/>
+	<dataelement code='C90' uid='vqeszzaecgZ'/>
+	<dataelement code='C91' uid='T5Y74jihflu'/>
+	<dataelement code='C92' uid='FuY9Lum98gG'/>
+	<dataelement code='C93' uid='ealOqDMxyHg'/>
+	<dataelement code='C96' uid='DTOdiFPFLLD'/>
+	<dataelement code='D00' uid='qUpt3tfYpwC'/>
+	<dataelement code='D02' uid='coUfBVsW1Lx'/>
+	<dataelement code='D03' uid='odRTQKQGTmz'/>
+	<dataelement code='D04' uid='K7bUMQb47so'/>
+	<dataelement code='D05' uid='kM2LLB7diIO'/>
+	<dataelement code='D06' uid='Sje80ZnIMej'/>
+	<dataelement code='D07' uid='Sk8YwY3khIz'/>
+	<dataelement code='D09' uid='eNcndvafEdA'/>
+	<dataelement code='D10' uid='dj98vTbEMiZ'/>
+	<dataelement code='D11' uid='da9zaMimlZY'/>
+	<dataelement code='D12' uid='pJYdSWE0Cw5'/>
+	<dataelement code='D13' uid='xLqFjbSFVYR'/>
+	<dataelement code='D14' uid='HE0DXEkTDhp'/>
+	<dataelement code='D15' uid='Zfo3ebpsYe3'/>
+	<dataelement code='D16' uid='hXhqilanrmc'/>
+	<dataelement code='D17' uid='oWn2cG6NflE'/>
+	<dataelement code='D18' uid='EJngLnrgP4b'/>
+	<dataelement code='D21' uid='B4vTSIl3zxK'/>
+	<dataelement code='D22' uid='sgmfsti8NZ8'/>
+	<dataelement code='D23' uid='WJkwI2R0FFS'/>
+	<dataelement code='D24' uid='tfWwVNtzljj'/>
+	<dataelement code='D25' uid='Qd7adt25vA1'/>
+	<dataelement code='D27' uid='NYvJnVYIiXi'/>
+	<dataelement code='D28' uid='GIxbSI0WzwP'/>
+	<dataelement code='D29' uid='QA7n2PC6zGl'/>
+	<dataelement code='D30' uid='j1V9ptBeXyS'/>
+	<dataelement code='D31' uid='eVJ1bOrS0Bt'/>
+	<dataelement code='D32' uid='Ophek8eTZWI'/>
+	<dataelement code='D33' uid='KMbDppXgEZ1'/>
+	<dataelement code='D34' uid='OCJXKDFWPDT'/>
+	<dataelement code='D35' uid='I85nMbT4gK1'/>
+	<dataelement code='D36' uid='An0pLRy6lBk'/>
+	<dataelement code='D39' uid='jrs47etxXnH'/>
+	<dataelement code='D40' uid='yxMfKCNf5sK'/>
+	<dataelement code='D44' uid='dB1a1PlcxcE'/>
+	<dataelement code='D45' uid='zOovgYuIZ2Y'/>
+	<dataelement code='D46' uid='g1YG8WPiOcR'/>
+	<dataelement code='D50.0' uid='Vlo8W6WUli4'/>
+	<dataelement code='D50.9' uid='qYhrnYbDXqc'/>
+	<dataelement code='D50' uid='qxpAIi2XD7b'/>
+	<dataelement code='D51' uid='jeqhWp6XnB4'/>
+	<dataelement code='D52' uid='Tnqfpm7EQ2c'/>
+	<dataelement code='D53' uid='Mdmi4zc7eCX'/>
+	<dataelement code='D55.0' uid='GJhvGkEnUw0'/>
+	<dataelement code='D55' uid='bnm0mUrlRQm'/>
+	<dataelement code='D56.1' uid='zwKbsDL4hrP'/>
+	<dataelement code='D56' uid='pxdTTwnO9dr'/>
+	<dataelement code='D57.0' uid='lzd4ozBpKN5'/>
+	<dataelement code='D58.8' uid='qFHAekOskXJ'/>
+	<dataelement code='D59' uid='eErhi6RNYSP'/>
+	<dataelement code='D61.0' uid='SFUFXVyLtsa'/>
+	<dataelement code='D61.1' uid='cxP2PlJDBvc'/>
+	<dataelement code='D61.2' uid='PwGhGvnBFFN'/>
+	<dataelement code='D61.3' uid='Cl2jJ5TqNwU'/>
+	<dataelement code='D61' uid='sFoVzdmMnwM'/>
+	<dataelement code='D63.0' uid='rUVs2LuoLsz'/>
+	<dataelement code='D63.8' uid='Hns9DYPNTgF'/>
+	<dataelement code='D63' uid='Xt9t89L7QMG'/>
+	<dataelement code='D65' uid='kUE8djqzgWe'/>
+	<dataelement code='D69.6' uid='DWDGylDqhIl'/>
+	<dataelement code='D69' uid='pxJOuWzL0CW'/>
+	<dataelement code='D70' uid='fXjhB3PQQmP'/>
+	<dataelement code='D73.2' uid='BUaCgFNMaFc'/>
+	<dataelement code='D75.1' uid='FRla5bNqXd5'/>
+	<dataelement code='D75' uid='DW9E2Wscw54'/>
+	<dataelement code='D80' uid='Ar0lG6UbAY7'/>
+	<dataelement code='D84.9' uid='BApHxaCmoVy'/>
+	<dataelement code='D84' uid='GUXcn8LsXCS'/>
+	<dataelement code='D86' uid='hQxdQadNhwz'/>
+	<dataelement code='E00' uid='KvjeorUl0gZ'/>
+	<dataelement code='E01.0' uid='ixQYaEXDQgG'/>
+	<dataelement code='E03' uid='znJ3tx4e2IC'/>
+	<dataelement code='E04' uid='lihQtRm7tOn'/>
+	<dataelement code='E05' uid='EA4jC9IoBsF'/>
+	<dataelement code='E06.0' uid='cKNppv9SCYJ'/>
+	<dataelement code='E06.1' uid='ZWyjJmipTd5'/>
+	<dataelement code='E06' uid='h5RH9NdMKZ4'/>
+	<dataelement code='E07' uid='K8eABHd40YJ'/>
+	<dataelement code='E10.6' uid='YRBZy6rAxvy'/>
+	<dataelement code='E10' uid='UJGflld17OM'/>
+	<dataelement code='E11.6' uid='wBLOYxdieqP'/>
+	<dataelement code='E11' uid='nZ7otC94Bo9'/>
+	<dataelement code='E12' uid='eXDFpfK9e6n'/>
+	<dataelement code='E15' uid='nEYFQkmyvLd'/>
+	<dataelement code='E16.0' uid='H4MoGQGZ187'/>
+	<dataelement code='E16.1' uid='Ha4qNVOuSBq'/>
+	<dataelement code='E20' uid='QMKMmXwhf4o'/>
+	<dataelement code='E22' uid='tgnnFy6JWI3'/>
+	<dataelement code='E24' uid='nJfxP2NhIPz'/>
+	<dataelement code='E28' uid='npbXyRBlSAL'/>
+	<dataelement code='E29' uid='zP2oz4GpaPv'/>
+	<dataelement code='E30' uid='epP1Xed7BAH'/>
+	<dataelement code='E31' uid='ibOONWpZjwx'/>
+	<dataelement code='E34.3' uid='z2C5QxI9vNw'/>
+	<dataelement code='E34' uid='SIxLTtmIovq'/>
+	<dataelement code='E40' uid='ZjJyntQg8Gt'/>
+	<dataelement code='E41' uid='S87F2VoHaxk'/>
+	<dataelement code='E43' uid='xgJ24ilTfx5'/>
+	<dataelement code='E44' uid='vRIVZPQjHns'/>
+	<dataelement code='E51' uid='XGBxtSq8kGa'/>
+	<dataelement code='E63.1' uid='SJxmx9Tt5NA'/>
+	<dataelement code='E63' uid='g0hELb4LlOU'/>
+	<dataelement code='E65' uid='oiy9JyYWE1L'/>
+	<dataelement code='E66.9' uid='tRtGvdZXuTL'/>
+	<dataelement code='E73' uid='q9czU2KRrb7'/>
+	<dataelement code='E78' uid='bVnKUvp5NQ0'/>
+	<dataelement code='E84' uid='wotzoT3zDv2'/>
+	<dataelement code='E85' uid='spc7qvCeK7C'/>
+	<dataelement code='E86' uid='ekXLu0vhXnv'/>
+	<dataelement code='E87.2' uid='szhVXUIUymI'/>
+	<dataelement code='E87' uid='uTtuTKjZ9Vj'/>
+	<dataelement code='E89' uid='PGeUfsbN2bB'/>
+	<dataelement code='F00' uid='pkMAxpvbGIP'/>
+	<dataelement code='F03' uid='bKzzLq9ebvg'/>
+	<dataelement code='F04' uid='epG5KmTMc8J'/>
+	<dataelement code='F05' uid='n2sBV69m7dh'/>
+	<dataelement code='F09' uid='UOsBJY2Ue59'/>
+	<dataelement code='F10' uid='hUIP9wjuc3n'/>
+	<dataelement code='F11' uid='XGyDDFBRDME'/>
+	<dataelement code='F12' uid='NC5dTKNLmRu'/>
+	<dataelement code='F17' uid='F3v8YIUU5Mb'/>
+	<dataelement code='F20' uid='iPILBNGNjvf'/>
+	<dataelement code='F23' uid='MQYUJvc8G0L'/>
+	<dataelement code='F25' uid='IjL04p0blVL'/>
+	<dataelement code='F30' uid='uBf84CgySMP'/>
+	<dataelement code='F31' uid='lqcWv7cPaCk'/>
+	<dataelement code='F32' uid='Wh00PGvislU'/>
+	<dataelement code='F34' uid='mrusRc3HIx3'/>
+	<dataelement code='F38' uid='L44yM3fdgWH'/>
+	<dataelement code='F40' uid='WFwDQBxDZkw'/>
+	<dataelement code='F41' uid='gi46TqpSXEp'/>
+	<dataelement code='F42' uid='AJzJ18ESzXo'/>
+	<dataelement code='F43' uid='e6tY19SA7IX'/>
+	<dataelement code='F44' uid='KVVfKr6Cu7u'/>
+	<dataelement code='F45' uid='lm5I4gZDFY5'/>
+	<dataelement code='F48' uid='slsnjvRN5KF'/>
+	<dataelement code='F50.0' uid='WF66plK6Hvj'/>
+	<dataelement code='F50.1' uid='uSNHeyWHVnc'/>
+	<dataelement code='F50.5' uid='D01ObaDEnhq'/>
+	<dataelement code='F50.8' uid='kUNkMkZDrnk'/>
+	<dataelement code='F50' uid='c6dmvtISlHc'/>
+	<dataelement code='F51' uid='S9Ef1ycNwbr'/>
+	<dataelement code='F52.0' uid='cZoHNlRmVCO'/>
+	<dataelement code='F52.1' uid='Uj7jZy10BnO'/>
+	<dataelement code='F52.2?' uid='Bc1wcDVY3aC'/>
+	<dataelement code='F52.3' uid='wUbFaHLaQ9G'/>
+	<dataelement code='F52.4' uid='vLKL5qz21ae'/>
+	<dataelement code='F52.5' uid='ddwEP40tOan'/>
+	<dataelement code='F52.6' uid='eIadQIThBT2'/>
+	<dataelement code='F52.7?' uid='PLcJHLHBRRO'/>
+	<dataelement code='F52.8' uid='LT9SOLVjD0Q'/>
+	<dataelement code='F52.9' uid='GeeKOoFQuKB'/>
+	<dataelement code='F52' uid='u2k6FJUogH9'/>
+	<dataelement code='F53' uid='jBrhOZJZX5e'/>
+	<dataelement code='F54' uid='KHDWu84FzxB'/>
+	<dataelement code='F55' uid='GCt2jwUiEBY'/>
+	<dataelement code='F60' uid='QDJBOWLoU5c'/>
+	<dataelement code='F63.0' uid='kRNM0kGihBV'/>
+	<dataelement code='F63.1' uid='D29ywyUFEzq'/>
+	<dataelement code='F63.3' uid='otZDk7hzqLh'/>
+	<dataelement code='F63' uid='iDlUmcA1X9r'/>
+	<dataelement code='F64' uid='JK5nekH4iJM'/>
+	<dataelement code='F65' uid='QLmc4aq2nRo'/>
+	<dataelement code='F70' uid='A9caMOWfwdb'/>
+	<dataelement code='F71' uid='nJkNT8Tu1NO'/>
+	<dataelement code='F80' uid='sKnKGId2qPq'/>
+	<dataelement code='F84' uid='haUjwCebqKW'/>
+	<dataelement code='F90' uid='yg8VeYY7huC'/>
+	<dataelement code='F91' uid='VStoUhSkfm5'/>
+	<dataelement code='F92' uid='AnyJCXcbYVW'/>
+	<dataelement code='F95' uid='R6bXdHnkl2K'/>
+	<dataelement code='F98.0' uid='CqBC9K1U3EH'/>
+	<dataelement code='F98.2' uid='kCmEEAyU8RG'/>
+	<dataelement code='F98.5' uid='hJLmPSjnMcC'/>
+	<dataelement code='F98' uid='LjEYL6abBfr'/>
+	<dataelement code='F99' uid='hEac89CKWoW'/>
+	<dataelement code='G00.0' uid='SlniqIQJQ65'/>
+	<dataelement code='G00.1' uid='ZwAuk7t6h23'/>
+	<dataelement code='G00.9' uid='M6Ao1ueRV54'/>
+	<dataelement code='G03.0' uid='jMhLFNscJUc'/>
+	<dataelement code='G04' uid='N7HF8oifdR7'/>
+	<dataelement code='G06' uid='km2ATXoZZKS'/>
+	<dataelement code='G20' uid='tReTaQQbjEf'/>
+	<dataelement code='G21.0' uid='UO8RPRQ8cGm'/>
+	<dataelement code='G21' uid='imHUSZybrWt'/>
+	<dataelement code='G25.0' uid='VtnW4JIf9wH'/>
+	<dataelement code='G25' uid='N7aTxrx5PWz'/>
+	<dataelement code='G30' uid='fhoQF6sE7jn'/>
+	<dataelement code='G35' uid='c5J49snF8PJ'/>
+	<dataelement code='G40' uid='hvuYKT4GmnM'/>
+	<dataelement code='G43' uid='qe6cEfTBZL2'/>
+	<dataelement code='G44.0' uid='TVnaETv3Eun'/>
+	<dataelement code='G44.1' uid='T7Q79NdCXPb'/>
+	<dataelement code='G44.2' uid='huw6gP9hW8v'/>
+	<dataelement code='G44.3' uid='uBBlFlqT3ZU'/>
+	<dataelement code='G44' uid='ssqGbR7zOct'/>
+	<dataelement code='G45' uid='EbbvqDTinKl'/>
+	<dataelement code='G47' uid='kPQ1fimhM0V'/>
+	<dataelement code='G50.1' uid='ca5smPfApMS'/>
+	<dataelement code='G51' uid='G3rn2CLtQFR'/>
+	<dataelement code='G52' uid='u1iYULlEA4P'/>
+	<dataelement code='G54' uid='madNqA9bs6W'/>
+	<dataelement code='G56.0' uid='gJHAjtnNcFC'/>
+	<dataelement code='G56' uid='c1LkO9Td3jD'/>
+	<dataelement code='G58' uid='tvDKuXf8Mts'/>
+	<dataelement code='G71' uid='VUXPnHNAY3F'/>
+	<dataelement code='G80' uid='CURH3K7lvcJ'/>
+	<dataelement code='G81' uid='EoLA3nuAZIQ'/>
+	<dataelement code='G82' uid='kNVbu11PoxS'/>
+	<dataelement code='G83' uid='Yf0GN7oxcOL'/>
+	<dataelement code='G91' uid='qpnRPve1SG7'/>
+	<dataelement code='G93.3' uid='PfYnrSfxViH'/>
+	<dataelement code='G93' uid='xr0bc1gEKh6'/>
+	<dataelement code='G97.8' uid='ySQmsrXxD20'/>
+	<dataelement code='G97' uid='JAhvJC6vQGi'/>
+	<dataelement code='H00' uid='E91HH0p1SVN'/>
+	<dataelement code='H01' uid='hslHXAy6aYo'/>
+	<dataelement code='H02' uid='iWXuQsFlyJr'/>
+	<dataelement code='H04' uid='mPtUgKypiLJ'/>
+	<dataelement code='H06' uid='Uh6oVfPSxvy'/>
+	<dataelement code='H10' uid='SiXd1TrT5oh'/>
+	<dataelement code='H11.0' uid='T6QZD5jfGyY'/>
+	<dataelement code='H11.3' uid='pMHLASpBthw'/>
+	<dataelement code='H11' uid='JjKixEh8GUs'/>
+	<dataelement code='H15' uid='dmQBsQQ0DeM'/>
+	<dataelement code='H16' uid='xVsSuZZAq6q'/>
+	<dataelement code='H17' uid='hdxBTb0NcSc'/>
+	<dataelement code='H18' uid='s0FIk950Ubp'/>
+	<dataelement code='H20' uid='KFphO4CqKr5'/>
+	<dataelement code='H25' uid='Of7RL33xFvL'/>
+	<dataelement code='H26' uid='SOGRNKA3ixk'/>
+	<dataelement code='H27' uid='MqJCRAWJazh'/>
+	<dataelement code='H30' uid='pztfQtPf5PI'/>
+	<dataelement code='H32' uid='yIrDFUFfwnA'/>
+	<dataelement code='H33' uid='Q3I9vVIV3kM'/>
+	<dataelement code='H34' uid='BqmwggBrTGj'/>
+	<dataelement code='H35' uid='p0XkrXu7baj'/>
+	<dataelement code='H36' uid='EvgbmNicGBB'/>
+	<dataelement code='H40' uid='GSpZ3TSWu1s'/>
+	<dataelement code='H43' uid='geO8cJVFJO2'/>
+	<dataelement code='H44' uid='N3Lv11B8C5P'/>
+	<dataelement code='H46' uid='iO1WGOK3cQr'/>
+	<dataelement code='H47' uid='L0RFJnjrRrm'/>
+	<dataelement code='H49' uid='Sr1PtRusaZt'/>
+	<dataelement code='H50' uid='hEibXGxiM0M'/>
+	<dataelement code='H51' uid='gP9nZGrCYvk'/>
+	<dataelement code='H52' uid='SCYpWef23t7'/>
+	<dataelement code='H53' uid='Hooxp1rmG2O'/>
+	<dataelement code='H54' uid='YvOrTcKTqtV'/>
+	<dataelement code='H55' uid='jwkIPsJXHbk'/>
+	<dataelement code='H57' uid='crRh6YyPKBu'/>
+	<dataelement code='H59' uid='kgroJEHzByb'/>
+	<dataelement code='H60' uid='QT6GoCItox4'/>
+	<dataelement code='H61' uid='V842zYAX5W8'/>
+	<dataelement code='H62' uid='pCXrSkWJLiP'/>
+	<dataelement code='H65' uid='U570jW5IOpr'/>
+	<dataelement code='H66' uid='vihfKJfgYTK'/>
+	<dataelement code='H67' uid='A8zLpbRmNJl'/>
+	<dataelement code='H68' uid='mcVwfjIOMlH'/>
+	<dataelement code='H70' uid='qHtU7LHoBIe'/>
+	<dataelement code='H71' uid='VcT4PlIzg0w'/>
+	<dataelement code='H72' uid='M18UkOTQmEb'/>
+	<dataelement code='H74' uid='hZwvWLvAmqj'/>
+	<dataelement code='H80' uid='O0IwBk9jwWe'/>
+	<dataelement code='H81' uid='V0pWr1J2dtw'/>
+	<dataelement code='H83' uid='FEhHEEzHoRM'/>
+	<dataelement code='H90' uid='SBBsbw5qOMM'/>
+	<dataelement code='H91' uid='CrKf3TQkmU2'/>
+	<dataelement code='H92' uid='kHoakNYGGP2'/>
+	<dataelement code='H93' uid='IMfkLNyo01U'/>
+	<dataelement code='H95' uid='U7yGQfQDSs1'/>
+	<dataelement code='I00' uid='oE1NqooTFPi'/>
+	<dataelement code='I09.8' uid='iIerM1xasmh'/>
+	<dataelement code='I10' uid='v0xpKU7KzVE'/>
+	<dataelement code='I11' uid='oai7f9rvVHP'/>
+	<dataelement code='I13.9' uid='BkGVoXq2O3V'/>
+	<dataelement code='I13' uid='mScxWamRCNe'/>
+	<dataelement code='I15' uid='KKWdpnISd4u'/>
+	<dataelement code='I20.9' uid='LNYIKkL4KQK'/>
+	<dataelement code='I21' uid='bn6MUVItB4F'/>
+	<dataelement code='I24.1' uid='d6bFoS2dEFD'/>
+	<dataelement code='I24' uid='Ay22rIv4NSv'/>
+	<dataelement code='I25.5' uid='LuGp3KrIVxj'/>
+	<dataelement code='I26.9' uid='hTqCVReevBk'/>
+	<dataelement code='I26' uid='dezul6oFRhO'/>
+	<dataelement code='I27.9' uid='CdHGUMkjf7S'/>
+	<dataelement code='I27' uid='etOAB3OIEnp'/>
+	<dataelement code='I28' uid='wLqDdcaGPoU'/>
+	<dataelement code='I30.0' uid='oo1TyAbRwqN'/>
+	<dataelement code='I31' uid='CkYbRK7Zpr5'/>
+	<dataelement code='I33' uid='cBAhExwkgCI'/>
+	<dataelement code='I34' uid='sOYafH6a8qQ'/>
+	<dataelement code='I40' uid='TE3MG0pldwI'/>
+	<dataelement code='I42' uid='TzHcJcofjWY'/>
+	<dataelement code='I44' uid='O6d26OIgkfx'/>
+	<dataelement code='I45.8' uid='N2w1OLcvF2S'/>
+	<dataelement code='I46' uid='Wd9xKcE7zJD'/>
+	<dataelement code='I47' uid='UmbAf9tCyvk'/>
+	<dataelement code='I48' uid='CeNAhpCm5ms'/>
+	<dataelement code='I49' uid='wxGRYvAjCeU'/>
+	<dataelement code='I50.0' uid='Ac8LqynW9ET'/>
+	<dataelement code='I50.1' uid='zwnRRylMooz'/>
+	<dataelement code='I50.9' uid='vBipKEvpaK7'/>
+	<dataelement code='I50' uid='EIDvWThxLLD'/>
+	<dataelement code='I51' uid='DmyPCsGGTpj'/>
+	<dataelement code='I60' uid='SbuDSCFSv4B'/>
+	<dataelement code='I61.0' uid='e6CNBLakzb7'/>
+	<dataelement code='I61.9' uid='QewJmeXnFFi'/>
+	<dataelement code='I61' uid='zWdUJVAp7n8'/>
+	<dataelement code='I62' uid='SQNNUOnksFE'/>
+	<dataelement code='I63' uid='qOg9G57tNls'/>
+	<dataelement code='I64' uid='Nwr3JpgXUWE'/>
+	<dataelement code='I65' uid='Q8w87t9IvtR'/>
+	<dataelement code='I67' uid='B6adoY6Mc0L'/>
+	<dataelement code='I69' uid='Wd9wwfE2Jpw'/>
+	<dataelement code='I70' uid='RbNqzuozN3V'/>
+	<dataelement code='I71' uid='u4Lb4WDJWru'/>
+	<dataelement code='I73' uid='ZjbjbHQt8BJ'/>
+	<dataelement code='I74' uid='o5mvswqb0lh'/>
+	<dataelement code='I77' uid='vyt31FhGOjT'/>
+	<dataelement code='I78' uid='G7hYDyq0ixh'/>
+	<dataelement code='I80' uid='QpFfV1012So'/>
+	<dataelement code='I81' uid='bK7jQn5TbXj'/>
+	<dataelement code='I83' uid='DWCFefng6wh'/>
+	<dataelement code='I84' uid='juF9Hfuyc9m'/>
+	<dataelement code='I85' uid='n10yuapYOcP'/>
+	<dataelement code='I88' uid='WHJMpeuWZb2'/>
+	<dataelement code='I95' uid='joJggwS3fh2'/>
+	<dataelement code='I98' uid='L9wlf9rjplk'/>
+	<dataelement code='J00' uid='qZkSVXvhRJE'/>
+	<dataelement code='J01' uid='xGaTZT3FjS4'/>
+	<dataelement code='J02' uid='B00w7myOCJg'/>
+	<dataelement code='J03' uid='m5gfL9HlqhZ'/>
+	<dataelement code='J04' uid='eIxdVVTaVIF'/>
+	<dataelement code='J05.0' uid='r9dDZYnK1mE'/>
+	<dataelement code='J05.1' uid='QYbWyOCMowS'/>
+	<dataelement code='J05' uid='TDgdz1amiIR'/>
+	<dataelement code='J10' uid='LB7oCM52VZa'/>
+	<dataelement code='J11.1' uid='xz5OmcTx0U2'/>
+	<dataelement code='J11.8' uid='uo5VAfIXNQT'/>
+	<dataelement code='J12.9' uid='XjYPquGhnla'/>
+	<dataelement code='J12' uid='q7tbD6NbBxL'/>
+	<dataelement code='J15.9' uid='l3b8HsZRtAp'/>
+	<dataelement code='J15' uid='vZ3kXBTExju'/>
+	<dataelement code='J17.0' uid='ib5HvjSwev4'/>
+	<dataelement code='J17.3' uid='xeqsgE46E2x'/>
+	<dataelement code='J17.8' uid='kxGE5lqaq81'/>
+	<dataelement code='J17' uid='X9AGFnOqEhi'/>
+	<dataelement code='J18.0' uid='IVrSPKiOQ5V'/>
+	<dataelement code='J18.9' uid='U45IGSQjJEd'/>
+	<dataelement code='J20' uid='pnz8jMqrJxo'/>
+	<dataelement code='J21.9' uid='oxPmaxPl4vP'/>
+	<dataelement code='J30' uid='vB6aJk3xbCk'/>
+	<dataelement code='J32' uid='Ib12DrY9LLR'/>
+	<dataelement code='J33' uid='wlnnOOE5QCA'/>
+	<dataelement code='J34.0' uid='eTDx2kNMqWm'/>
+	<dataelement code='J34.1' uid='XmEVVCGnRiH'/>
+	<dataelement code='J34' uid='H9VJp41RGdI'/>
+	<dataelement code='J35' uid='zq0laPcVYGi'/>
+	<dataelement code='J36' uid='NfzbTfJmvIB'/>
+	<dataelement code='J37' uid='UCO6zkUDRGM'/>
+	<dataelement code='J39' uid='Bwra9ug0VWL'/>
+	<dataelement code='J40' uid='XnwdDvNIkMF'/>
+	<dataelement code='J42' uid='lQwEbuh14Tw'/>
+	<dataelement code='J43.0' uid='cTIkt1haojH'/>
+	<dataelement code='J43' uid='Ev7x4lJXffE'/>
+	<dataelement code='J44' uid='A3YN33flXJz'/>
+	<dataelement code='J45' uid='n8wmfCHEEGr'/>
+	<dataelement code='J47' uid='UA8Kss5Bh1T'/>
+	<dataelement code='J60' uid='blu2EQ2XYOH'/>
+	<dataelement code='J61' uid='kSPjnrpauhE'/>
+	<dataelement code='J68' uid='a0TLMVlXoMH'/>
+	<dataelement code='J69' uid='Uwq4w6rSRlD'/>
+	<dataelement code='J85' uid='zcMqSJzyH2J'/>
+	<dataelement code='J86' uid='pcqvLGXLORc'/>
+	<dataelement code='J90' uid='vstJAAGbVmf'/>
+	<dataelement code='J92' uid='klxiTJrZEXm'/>
+	<dataelement code='J93' uid='JuSzaI44GN9'/>
+	<dataelement code='J94.2' uid='vxydyfGGWF0'/>
+	<dataelement code='J94' uid='R4rzQhyzvxG'/>
+	<dataelement code='J96.0' uid='YA4OzcvLGxl'/>
+	<dataelement code='J96.1' uid='OOgGdNvRqsp'/>
+	<dataelement code='J96.9' uid='TMiZAhVtcwC'/>
+	<dataelement code='J98' uid='tc7z1TP4IJ3'/>
+	<dataelement code='K00.0' uid='TQwVNEuMToW'/>
+	<dataelement code='K00.7' uid='iXr6N4vMtnA'/>
+	<dataelement code='K00' uid='hJQD7k0LIf5'/>
+	<dataelement code='K02' uid='tCPR8SaAnPi'/>
+	<dataelement code='K05' uid='t6xSfpZqrEn'/>
+	<dataelement code='K07.6' uid='tIjkRGvwwAf'/>
+	<dataelement code='K07' uid='BxD0Y0tlPub'/>
+	<dataelement code='K09' uid='gfODiRISiU0'/>
+	<dataelement code='K11' uid='hydgv3TFLEW'/>
+	<dataelement code='K13' uid='DPQk1uXBQgE'/>
+	<dataelement code='K14' uid='xCF8DnxMGYe'/>
+	<dataelement code='K20' uid='ds3s6puqUF7'/>
+	<dataelement code='K21' uid='C5uwKmuTkm3'/>
+	<dataelement code='K25' uid='tlHzwQBAMNb'/>
+	<dataelement code='K26' uid='DL1C3eFJCE8'/>
+	<dataelement code='K27' uid='q02dHuC2CYz'/>
+	<dataelement code='K29' uid='Jh3LVTc7MLz'/>
+	<dataelement code='K31.0' uid='fc3KDz5nPvn'/>
+	<dataelement code='K31' uid='HjwXZAYKlx0'/>
+	<dataelement code='K35' uid='gFmqZICBGNc'/>
+	<dataelement code='K36' uid='Q4RDkSWcJbY'/>
+	<dataelement code='K40' uid='Pi8akwfW9Bj'/>
+	<dataelement code='K41' uid='vNcZmCknYSr'/>
+	<dataelement code='K42' uid='p8AhrV4GARm'/>
+	<dataelement code='K43' uid='n2Dpgzttxrj'/>
+	<dataelement code='K44' uid='vPmaMnuAr0d'/>
+	<dataelement code='K50' uid='QzUfKOHJSPC'/>
+	<dataelement code='K51' uid='KW8onWmeA45'/>
+	<dataelement code='K52' uid='iAHUAoYpQSA'/>
+	<dataelement code='K55' uid='IhNdXKoOitm'/>
+	<dataelement code='K56.4' uid='ncOITIF6p3c'/>
+	<dataelement code='K56' uid='I3OnI0mU9Gq'/>
+	<dataelement code='K57' uid='DIFRmZPShwm'/>
+	<dataelement code='K58' uid='eczahXm8frX'/>
+	<dataelement code='K59' uid='TXDcQReJyte'/>
+	<dataelement code='K60' uid='hjjiO8ol74G'/>
+	<dataelement code='K62.5' uid='PZfueUn8OdX'/>
+	<dataelement code='K62' uid='E6aKnnjkXIz'/>
+	<dataelement code='K63' uid='dsPzRLtDJK3'/>
+	<dataelement code='K65' uid='hJGwnA5IbQZ'/>
+	<dataelement code='K70' uid='BH0JdFW36Mp'/>
+	<dataelement code='K71' uid='Mqtqb7x3GqR'/>
+	<dataelement code='K72.0' uid='ZEKEw9hlF6w'/>
+	<dataelement code='K72.1' uid='DVM7x9rSsSF'/>
+	<dataelement code='K72.9' uid='Y6g3uWczpuw'/>
+	<dataelement code='K72' uid='avLaSuoJBKJ'/>
+	<dataelement code='K73' uid='tHwMLfChKej'/>
+	<dataelement code='K74' uid='qKyg00Vv4G8'/>
+	<dataelement code='K76' uid='jxPZgQBAVV4'/>
+	<dataelement code='K80' uid='cN0IEzyL0jZ'/>
+	<dataelement code='K81' uid='aiUYaMRZmAy'/>
+	<dataelement code='K82' uid='T4JJvcvwUiC'/>
+	<dataelement code='K85' uid='IBTMxtvdor4'/>
+	<dataelement code='K86' uid='SpAuuORuetI'/>
+	<dataelement code='K87' uid='rF3r9NQY2T7'/>
+	<dataelement code='K90.9' uid='Dk0bgwFQpEk'/>
+	<dataelement code='K90' uid='IbsUUkalxSB'/>
+	<dataelement code='K91.4' uid='ZhEDwF8Pahr'/>
+	<dataelement code='K91' uid='Eb3dugli5Zq'/>
+	<dataelement code='K92.0' uid='Yvb3ExwyXsq'/>
+	<dataelement code='K92.1' uid='E417kdwJFqw'/>
+	<dataelement code='K92' uid='mfFyJlBCdjJ'/>
+	<dataelement code='L00' uid='NeBpH6Z5sZo'/>
+	<dataelement code='L01' uid='jI5J4PrMIqg'/>
+	<dataelement code='L02' uid='c2hffFa6ulE'/>
+	<dataelement code='L03' uid='GTdIB5LyjEz'/>
+	<dataelement code='L04' uid='aHyHI2ZyClv'/>
+	<dataelement code='L05' uid='cOLGBfgOmBb'/>
+	<dataelement code='L08' uid='CYcrtXv2Bn8'/>
+	<dataelement code='L10' uid='TTrIecpOJiA'/>
+	<dataelement code='L11' uid='AoT8UzXHj7c'/>
+	<dataelement code='L13' uid='cQwt86wmuZ5'/>
+	<dataelement code='L20' uid='kEElIw9XrwB'/>
+	<dataelement code='L21' uid='tlLkS4oniUI'/>
+	<dataelement code='L22' uid='ChAUzpwr2JV'/>
+	<dataelement code='L23' uid='ldk9eKepXl1'/>
+	<dataelement code='L25.0' uid='Xy5cVBmc9MG'/>
+	<dataelement code='L25' uid='Se6CKfFpSOz'/>
+	<dataelement code='L26' uid='mFiAN27k6LR'/>
+	<dataelement code='L29' uid='LkYIhDMkykJ'/>
+	<dataelement code='L30.1' uid='mryXhK8cXwY'/>
+	<dataelement code='L30' uid='V8d57YOkaXd'/>
+	<dataelement code='L40' uid='PL3fmcvBlte'/>
+	<dataelement code='L41' uid='jVQpsxHGOBE'/>
+	<dataelement code='L42' uid='vs7L3FDAH1v'/>
+	<dataelement code='L43' uid='NEoMOz5HLjD'/>
+	<dataelement code='L50' uid='rVUzgySTVLB'/>
+	<dataelement code='L51' uid='wpfHr3OmhZT'/>
+	<dataelement code='L52' uid='pNEfUqX9jqQ'/>
+	<dataelement code='L53' uid='KzHyCJy0ctN'/>
+	<dataelement code='L55' uid='TcLnvykpA0x'/>
+	<dataelement code='L60.0' uid='FOs5vxsTVnP'/>
+	<dataelement code='L60.1' uid='QXBWSnJu8B2'/>
+	<dataelement code='L60.8' uid='VWbW0OfwXcd'/>
+	<dataelement code='L60' uid='lngL3umJdlX'/>
+	<dataelement code='L63' uid='t93nOG4PIxc'/>
+	<dataelement code='L64' uid='bg4iNfL3hRV'/>
+	<dataelement code='L68' uid='ZCcc6QcRvpk'/>
+	<dataelement code='L70' uid='vZ1QJbOCIJy'/>
+	<dataelement code='L72' uid='LCNkJOP2jHT'/>
+	<dataelement code='L73' uid='FKY2El2lBkR'/>
+	<dataelement code='L74' uid='DpSHIaNuGzW'/>
+	<dataelement code='L80' uid='KqClPtAYVxZ'/>
+	<dataelement code='L81' uid='FZ0OcIjwWrY'/>
+	<dataelement code='L82' uid='LWYG4IRRrWp'/>
+	<dataelement code='L84' uid='aTnfejU2wac'/>
+	<dataelement code='L85' uid='PTv0aifMaKE'/>
+	<dataelement code='L89' uid='mJBIA5NKqt1'/>
+	<dataelement code='L90' uid='duFG32JRe13'/>
+	<dataelement code='L91' uid='RCD2xuNS5EC'/>
+	<dataelement code='L92' uid='vUTrVFiShn9'/>
+	<dataelement code='L93' uid='TGTBxfKbwp0'/>
+	<dataelement code='L95' uid='xzg0H7mk2yb'/>
+	<dataelement code='L97' uid='zg0rt6hZcv0'/>
+	<dataelement code='M00' uid='MYAvc6rEIkm'/>
+	<dataelement code='M01' uid='E0QlR1h6HzL'/>
+	<dataelement code='M05' uid='kor41DmDfYE'/>
+	<dataelement code='M06' uid='He6w6bgOSzX'/>
+	<dataelement code='M08' uid='cTKyO3YMe4y'/>
+	<dataelement code='M10' uid='oQVyVOYXG7p'/>
+	<dataelement code='M11' uid='Y9l2LsXdrYB'/>
+	<dataelement code='M15' uid='MkL39GWDFoC'/>
+	<dataelement code='M16' uid='ZDH9HhwsGWG'/>
+	<dataelement code='M17' uid='YR0K0PGmwrQ'/>
+	<dataelement code='M19' uid='GibDkGTTzTV'/>
+	<dataelement code='M20' uid='oVXZUXjwv8e'/>
+	<dataelement code='M21' uid='ut5DLtCv4vF'/>
+	<dataelement code='M22' uid='cSovIE249Ds'/>
+	<dataelement code='M23' uid='XUfiEKWlCaM'/>
+	<dataelement code='M24' uid='i2WOGHAIi6F'/>
+	<dataelement code='M25.4' uid='hZvv3MFJp7p'/>
+	<dataelement code='M25.5' uid='tJZtKY6uYEB'/>
+	<dataelement code='M25' uid='tkhKjlpS8iz'/>
+	<dataelement code='M30' uid='XRhgbYMrW75'/>
+	<dataelement code='M31' uid='qIWtwTY0nbb'/>
+	<dataelement code='M32' uid='tSwD7cedamF'/>
+	<dataelement code='M33' uid='CYCENYtQR0L'/>
+	<dataelement code='M34' uid='snDcJ9cDlz0'/>
+	<dataelement code='M35' uid='WO7asJ6pdcU'/>
+	<dataelement code='M40' uid='YKjvt2ldxmD'/>
+	<dataelement code='M41' uid='nVYcckojwJ6'/>
+	<dataelement code='M42' uid='fdpp2zqavjX'/>
+	<dataelement code='M43' uid='AiPDtWoTY5i'/>
+	<dataelement code='M45' uid='g5uohK0pciq'/>
+	<dataelement code='M47' uid='yUGALIYeTKE'/>
+	<dataelement code='M48' uid='mrFRDv3dD7g'/>
+	<dataelement code='M49' uid='n0NHdb1oRVb'/>
+	<dataelement code='M50' uid='vwNIhuf9DSv'/>
+	<dataelement code='M51' uid='aKxciJDigQh'/>
+	<dataelement code='M53' uid='iPcQR0r7Uyz'/>
+	<dataelement code='M54' uid='z1ZAsvRwmFK'/>
+	<dataelement code='M60' uid='C8hgJWZUeht'/>
+	<dataelement code='M62.5' uid='PTUWatAf5Kc'/>
+	<dataelement code='M62' uid='ef38qOKCmL9'/>
+	<dataelement code='M65' uid='bitYxITU6fu'/>
+	<dataelement code='M66' uid='ttLsmZDezbg'/>
+	<dataelement code='M75' uid='gKrAQvVHMwR'/>
+	<dataelement code='M77' uid='sVw76PcmqlO'/>
+	<dataelement code='M79.5' uid='d3lB01GCI4O'/>
+	<dataelement code='M79' uid='prlwuwPwv9u'/>
+	<dataelement code='M80' uid='t31RZklk8Po'/>
+	<dataelement code='M81' uid='TOOrLxkrnSC'/>
+	<dataelement code='M82' uid='vIOljTqfrbQ'/>
+	<dataelement code='M84' uid='iHCtHQGrHJP'/>
+	<dataelement code='M85' uid='WnQXOrlZ8Rm'/>
+	<dataelement code='M86' uid='uLGnRXw2vVy'/>
+	<dataelement code='M87' uid='HoNrxRrzyBN'/>
+	<dataelement code='M95' uid='oPZZheXkmD2'/>
+	<dataelement code='M96' uid='EBwkjAf9JGi'/>
+	<dataelement code='M99' uid='SXFsxUmQS5A'/>
+	<dataelement code='N00' uid='p2UUrWhescU'/>
+	<dataelement code='N02' uid='WjRkPuYZ3SP'/>
+	<dataelement code='N04' uid='tY8qCA3YI1R'/>
+	<dataelement code='N10' uid='WjVvYe9O7qJ'/>
+	<dataelement code='N13' uid='oGOKmwP50fj'/>
+	<dataelement code='N14' uid='eYlEd3OkuJs'/>
+	<dataelement code='N15.1' uid='Jix1KdgUSRz'/>
+	<dataelement code='N15' uid='CWiV4W8OJpi'/>
+	<dataelement code='N17' uid='slsfYuYyPCu'/>
+	<dataelement code='N18.0' uid='OWDHuBsfoSH'/>
+	<dataelement code='N18' uid='r9M2lDgmtyU'/>
+	<dataelement code='N20' uid='q7vV9DvdalI'/>
+	<dataelement code='N21' uid='azFjQQGyxvF'/>
+	<dataelement code='N22' uid='j9ZrsMKCm83'/>
+	<dataelement code='N23' uid='ivMWd4aMWUD'/>
+	<dataelement code='N28' uid='Xv0bnuE7CNI'/>
+	<dataelement code='N30' uid='AhtI5voJZSq'/>
+	<dataelement code='N31' uid='KqO91I40R8E'/>
+	<dataelement code='N32' uid='dfc9SskHdQ5'/>
+	<dataelement code='N34' uid='FuBbAoSefa8'/>
+	<dataelement code='N35' uid='zjdoixnC4Qy'/>
+	<dataelement code='N36' uid='FgrlBOLJ5qF'/>
+	<dataelement code='N39' uid='u3BDPwsL5jq'/>
+	<dataelement code='N40' uid='pXwkfSvKAqT'/>
+	<dataelement code='N41' uid='KMBmxkUwjBK'/>
+	<dataelement code='N42' uid='PnuxZiDaKhR'/>
+	<dataelement code='N43' uid='XenfezFrDHN'/>
+	<dataelement code='N44' uid='tZ6zQGjZkn5'/>
+	<dataelement code='N45' uid='DO7wnkArlzX'/>
+	<dataelement code='N46' uid='yl25J9FDMxT'/>
+	<dataelement code='N47' uid='fFtCesYzxdS'/>
+	<dataelement code='N48.3' uid='Ho8mFY947ih'/>
+	<dataelement code='N48.4' uid='opeF0zjLe54'/>
+	<dataelement code='N48' uid='Vqsx8zQLWPN'/>
+	<dataelement code='N49' uid='K5daC7lbSc3'/>
+	<dataelement code='N50' uid='UJD3l2LWnCO'/>
+	<dataelement code='N60' uid='UflunSa0s4F'/>
+	<dataelement code='N61' uid='KVLJ5L4HgEE'/>
+	<dataelement code='N62' uid='yLqzpRrs0Ao'/>
+	<dataelement code='N63' uid='Euird4vvdqd'/>
+	<dataelement code='N64' uid='RpPC9plcsWl'/>
+	<dataelement code='N70' uid='JnzvUdsDk3Y'/>
+	<dataelement code='N71' uid='wUdM9azOwEj'/>
+	<dataelement code='N72' uid='bko23vHrJzi'/>
+	<dataelement code='N73' uid='nQga747RROd'/>
+	<dataelement code='N75' uid='IyzR5h42UEW'/>
+	<dataelement code='N76' uid='K8rOmK8BANL'/>
+	<dataelement code='N80' uid='NZcMmukzniM'/>
+	<dataelement code='N81' uid='iEljtDFq8sG'/>
+	<dataelement code='N82' uid='DTmpjHR3NZz'/>
+	<dataelement code='N83' uid='d50eeSCESIS'/>
+	<dataelement code='N84' uid='KRaE7IrS8Jk'/>
+	<dataelement code='N85' uid='kbldAFXFxcP'/>
+	<dataelement code='N86' uid='D2KxmlN3H6u'/>
+	<dataelement code='N87' uid='kHaEj8mCWSz'/>
+	<dataelement code='N88' uid='G1TUA1A8NVU'/>
+	<dataelement code='N89' uid='pAEfsIHdj3B'/>
+	<dataelement code='N90' uid='K44igQy1CbA'/>
+	<dataelement code='N91' uid='MWLFYdS7QeC'/>
+	<dataelement code='N92' uid='TLp8FdVBliQ'/>
+	<dataelement code='N94.0' uid='CSp3aZJ9cpw'/>
+	<dataelement code='N94.1' uid='iVZTIp5G0hV'/>
+	<dataelement code='N94.2' uid='YWpntPWNnXa'/>
+	<dataelement code='N94.3' uid='pwsSxOOXkG4'/>
+	<dataelement code='N94.4' uid='lYynQr4p8GE'/>
+	<dataelement code='N94.5' uid='LbTtyyPnZlV'/>
+	<dataelement code='N94' uid='cYVUAPbHLjB'/>
+	<dataelement code='N95' uid='AwZXeSJ9jCv'/>
+	<dataelement code='N96' uid='KXyEtaqMWG1'/>
+	<dataelement code='N97' uid='fzwqyrLkm99'/>
+	<dataelement code='N99' uid='LRGXal7fL8e'/>
+	<dataelement code='O00' uid='jgqb4u4tJ1S'/>
+	<dataelement code='O01' uid='RPFaCliUacT'/>
+	<dataelement code='O02' uid='ONPWQl5wqcK'/>
+	<dataelement code='O03' uid='A25kXD4q1j3'/>
+	<dataelement code='O04' uid='bQXTQ6a9tJe'/>
+	<dataelement code='O06' uid='ErHbZXa89lG'/>
+	<dataelement code='O07' uid='C4eKW4v09ne'/>
+	<dataelement code='O08' uid='W4UpRLPwSCI'/>
+	<dataelement code='O10' uid='f6DVktm0Wj3'/>
+	<dataelement code='O11' uid='Y8rT2npjwYw'/>
+	<dataelement code='O12' uid='cxfMDL8V4gQ'/>
+	<dataelement code='O13' uid='TapHNMLP9MC'/>
+	<dataelement code='O14.0' uid='wl5I5xGUQuh'/>
+	<dataelement code='O14.1' uid='QXPhjQOkLUf'/>
+	<dataelement code='O14' uid='ALzf3V2Z9Cv'/>
+	<dataelement code='O15' uid='iS8Nj1DWQhc'/>
+	<dataelement code='O20' uid='EtKARhNiJEX'/>
+	<dataelement code='O21' uid='usZXs4Rx57T'/>
+	<dataelement code='O22' uid='anrI9mcNbD7'/>
+	<dataelement code='O23' uid='u7fOLV12F3m'/>
+	<dataelement code='O24' uid='M3mMXGe7x7K'/>
+	<dataelement code='O25' uid='fhDO5xfpzRz'/>
+	<dataelement code='O26' uid='f8XEfLkJ7o6'/>
+	<dataelement code='O28' uid='yyRkJT61vfK'/>
+	<dataelement code='O29' uid='BnjbE4S7LSV'/>
+	<dataelement code='O30' uid='mcWSOqn3ZKe'/>
+	<dataelement code='O31' uid='wZjCbSdXnC5'/>
+	<dataelement code='O32' uid='Hf7yg5ohosq'/>
+	<dataelement code='O33' uid='Rvhew9Q5Nib'/>
+	<dataelement code='O34' uid='Q1228nTmxFA'/>
+	<dataelement code='O35' uid='ufTv8VRjvy0'/>
+	<dataelement code='O36' uid='CnuCkGerqA8'/>
+	<dataelement code='O40' uid='DIlnTvfFoaH'/>
+	<dataelement code='O41' uid='bvwHkNbL8FL'/>
+	<dataelement code='O42' uid='CGthf710KZk'/>
+	<dataelement code='O43' uid='Pyp1qPDPYaV'/>
+	<dataelement code='O44' uid='o9P80iEbFxo'/>
+	<dataelement code='O45' uid='UpTcU4mhUsG'/>
+	<dataelement code='O46' uid='FYDNVrCBbS1'/>
+	<dataelement code='O47' uid='l5UOUz9VRoo'/>
+	<dataelement code='O48' uid='oXPqut7PTwO'/>
+	<dataelement code='O60' uid='x4d0bkf82K8'/>
+	<dataelement code='O61' uid='HwyNzO6Qm5J'/>
+	<dataelement code='O62' uid='TkoLgWF8XFj'/>
+	<dataelement code='O63' uid='o8edwY2NkoB'/>
+	<dataelement code='O64' uid='DMDbkVCpLgF'/>
+	<dataelement code='O65' uid='kv9XfjHXUSd'/>
+	<dataelement code='O66' uid='YPDyZaeeDl0'/>
+	<dataelement code='O67' uid='jyaiHGD2o4d'/>
+	<dataelement code='O68' uid='S8ehbp12fws'/>
+	<dataelement code='O69' uid='d9TotyQLqQz'/>
+	<dataelement code='O70' uid='DkIIFSCVmiL'/>
+	<dataelement code='O71.1' uid='o5IVRdkhjAe'/>
+	<dataelement code='O71' uid='W6zkmMqjtRj'/>
+	<dataelement code='O72' uid='lwPXUOFmtXQ'/>
+	<dataelement code='O73' uid='drfrvUQ1THw'/>
+	<dataelement code='O74' uid='nvi7y7HkHt1'/>
+	<dataelement code='O75' uid='V4Tw1GENsoa'/>
+	<dataelement code='O80' uid='uR1KXWkBDWt'/>
+	<dataelement code='O81' uid='mwN8wtnPyHO'/>
+	<dataelement code='O82' uid='gatal7nf6aT'/>
+	<dataelement code='O83' uid='vQsCzyErHy0'/>
+	<dataelement code='O84.0' uid='qu2eRkB9QbU'/>
+	<dataelement code='O84.1' uid='IlKPsKb9J7c'/>
+	<dataelement code='O84.2' uid='bpFb7IlewQ2'/>
+	<dataelement code='O84.8' uid='xBWWpYfH8HN'/>
+	<dataelement code='O84' uid='jZJQX7YP1op'/>
+	<dataelement code='O85' uid='lS7XNe0Ojl8'/>
+	<dataelement code='O86' uid='dAFjiY1Q8UH'/>
+	<dataelement code='O87' uid='JLxoqUXI0NR'/>
+	<dataelement code='O88' uid='VDmH2KWzlwU'/>
+	<dataelement code='O89' uid='apRd9a3YhBn'/>
+	<dataelement code='O90' uid='pz6Fcs36k1R'/>
+	<dataelement code='O91' uid='LInEYh4HtyH'/>
+	<dataelement code='O92' uid='bQ8dP77akNU'/>
+	<dataelement code='O94' uid='FeW5WGN7dLL'/>
+	<dataelement code='O95' uid='JRuzxp3ZUm5'/>
+	<dataelement code='O96' uid='WswJztwVgni'/>
+	<dataelement code='O97' uid='bDCxgfx887b'/>
+	<dataelement code='O98' uid='SI9XUXgzSzW'/>
+	<dataelement code='O99.0' uid='U9fPveo7w5f'/>
+	<dataelement code='O99' uid='Wi5xm8BU58z'/>
+	<dataelement code='P00.8' uid='HUSIrU3bHMI'/>
+	<dataelement code='P00' uid='arVEBNEhKXM'/>
+	<dataelement code='P03' uid='FfKNfuYzBff'/>
+	<dataelement code='P05' uid='sqJYKz5zWRd'/>
+	<dataelement code='P07' uid='YwYLbayFIs8'/>
+	<dataelement code='P08' uid='oW2gk20Hzh4'/>
+	<dataelement code='P10' uid='s7o58r6Hshb'/>
+	<dataelement code='P14' uid='lwaLWo89t55'/>
+	<dataelement code='P15.9' uid='kWL41kLiemt'/>
+	<dataelement code='P20' uid='JGpiokdOl67'/>
+	<dataelement code='P21' uid='kA8RiEjJU77'/>
+	<dataelement code='P22' uid='UYV4whErn5x'/>
+	<dataelement code='P24.0' uid='O3JgBOdZ9XZ'/>
+	<dataelement code='P24.8' uid='QSdOsMKTHqv'/>
+	<dataelement code='P24' uid='FsI3bJlWMNk'/>
+	<dataelement code='P28' uid='jrgQ0uNJXRF'/>
+	<dataelement code='P29' uid='X37kJvWuwJB'/>
+	<dataelement code='P35' uid='fEjI5mBBRJJ'/>
+	<dataelement code='P36' uid='MpCrbyUNxR0'/>
+	<dataelement code='P38' uid='FBEiTaWVpEe'/>
+	<dataelement code='P50' uid='DUpb6ROFno2'/>
+	<dataelement code='P55' uid='ELWhpoBWBHX'/>
+	<dataelement code='P57' uid='opoe5vCqeoM'/>
+	<dataelement code='P59' uid='BtyMsUD5SOE'/>
+	<dataelement code='P60' uid='TH0nrHwR8jX'/>
+	<dataelement code='P61' uid='xwogJPvquJk'/>
+	<dataelement code='P70' uid='TTgIoH1tdEN'/>
+	<dataelement code='P71' uid='al2Fw4v9xqM'/>
+	<dataelement code='P74' uid='TKL8zbPVkq0'/>
+	<dataelement code='P80' uid='GQKbBWnwh02'/>
+	<dataelement code='P91' uid='ZJS5EeXDPS3'/>
+	<dataelement code='P92' uid='XQgyLPHekE0'/>
+	<dataelement code='Q00' uid='llRsHcq9f2l'/>
+	<dataelement code='Q03' uid='a9GVMfKCQ86'/>
+	<dataelement code='Q05' uid='Rzeyxkulw6W'/>
+	<dataelement code='Q10' uid='zO8Y81HBZ0K'/>
+	<dataelement code='Q16' uid='raiqR5NKl4q'/>
+	<dataelement code='Q18' uid='YOlRg6b36TP'/>
+	<dataelement code='Q20' uid='RmyZlmkJ9wv'/>
+	<dataelement code='Q25' uid='MVC4IdjKaya'/>
+	<dataelement code='Q30' uid='JoW8Kcv0R5I'/>
+	<dataelement code='Q31' uid='of3Yyth7CXh'/>
+	<dataelement code='Q35' uid='IDbM4W0Siwz'/>
+	<dataelement code='Q36' uid='JyJeyWpOcbU'/>
+	<dataelement code='Q37' uid='IvP27wFDwhj'/>
+	<dataelement code='Q38' uid='aVfnKBFeULf'/>
+	<dataelement code='Q39' uid='wJDg5ERtzHn'/>
+	<dataelement code='Q40.0' uid='KaInBv5z4T4'/>
+	<dataelement code='Q40.1' uid='S7lNAv2CFcM'/>
+	<dataelement code='Q40?' uid='Q7N9MuOXz2X'/>
+	<dataelement code='Q41?' uid='htil2G2T5nW'/>
+	<dataelement code='Q42.2' uid='GBTyiSRff9u'/>
+	<dataelement code='Q42.3' uid='hk8l7gY60zk'/>
+	<dataelement code='Q42' uid='RVOWxGTSz37'/>
+	<dataelement code='Q43.0' uid='fnoqh6xL4wA'/>
+	<dataelement code='Q43.1' uid='CIpB4BZDcnd'/>
+	<dataelement code='Q43' uid='JG4JVjaeJ43'/>
+	<dataelement code='Q44' uid='V7jzm7ej4v8'/>
+	<dataelement code='Q45' uid='RYUc6pLaCfL'/>
+	<dataelement code='Q50' uid='hIWCZfVmZll'/>
+	<dataelement code='Q51' uid='FyTWJBn0vz3'/>
+	<dataelement code='Q52.0' uid='oOKNjvNp3eu'/>
+	<dataelement code='Q52.3' uid='Ysa4GFxUnM2'/>
+	<dataelement code='Q52' uid='GrO8JXZmFA0'/>
+	<dataelement code='Q53' uid='dTxIMhwqvxl'/>
+	<dataelement code='Q54' uid='OgkB20i64XB'/>
+	<dataelement code='Q56' uid='aeW6YOAOcFn'/>
+	<dataelement code='Q60' uid='S2WnESOqriT'/>
+	<dataelement code='Q61' uid='f2VZBHjEqkZ'/>
+	<dataelement code='Q65' uid='ey46rud2cHS'/>
+	<dataelement code='Q66' uid='P8cTxQrKzvY'/>
+	<dataelement code='Q67' uid='ghJ19rOpr4o'/>
+	<dataelement code='Q68' uid='j84w1KFtfOA'/>
+	<dataelement code='Q69' uid='eQ6Qj9V9k5Q'/>
+	<dataelement code='Q79' uid='IsmhOUiRjIE'/>
+	<dataelement code='Q89' uid='mm9Bx6qmDcG'/>
+	<dataelement code='Q90' uid='CGCdkRySM6h'/>
+	<dataelement code='R00.0' uid='CGNLPDYzKf3'/>
+	<dataelement code='R00.8' uid='P8BkG2J6B6M'/>
+	<dataelement code='R00' uid='dhup78N5cHk'/>
+	<dataelement code='R01' uid='qfb39I9gMHy'/>
+	<dataelement code='R02' uid='zZyiU4lZDtP'/>
+	<dataelement code='R03' uid='cxQlyGEL1EF'/>
+	<dataelement code='R04.0' uid='IrCdQgE8xLR'/>
+	<dataelement code='R04.2' uid='F445njja0m8'/>
+	<dataelement code='R04' uid='yjLmMY8OScY'/>
+	<dataelement code='R06' uid='doUK9of4OgY'/>
+	<dataelement code='R07' uid='ylbHZxgTfoi'/>
+	<dataelement code='R09' uid='RFiPNjHNhFz'/>
+	<dataelement code='R10' uid='daxh9aUAmCY'/>
+	<dataelement code='R11' uid='Fqk4ydNXI65'/>
+	<dataelement code='R12' uid='CY7dGiWiqQF'/>
+	<dataelement code='R13' uid='fnUeWHeRT8c'/>
+	<dataelement code='R14' uid='NaxFadJRbER'/>
+	<dataelement code='R15' uid='KmAabphAZ8f'/>
+	<dataelement code='R16' uid='DpuZNGC0y0g'/>
+	<dataelement code='R17' uid='fJP6EzG9W2c'/>
+	<dataelement code='R18' uid='Kh5TQfOzS2L'/>
+	<dataelement code='R19' uid='Yw29XEu5bLL'/>
+	<dataelement code='R20' uid='ehinutFZ75l'/>
+	<dataelement code='R21' uid='PYKR0jfHOhA'/>
+	<dataelement code='R22' uid='s0Vdtxt8M96'/>
+	<dataelement code='R23' uid='LsAB9AnLsIj'/>
+	<dataelement code='R26' uid='rxewX76TTuB'/>
+	<dataelement code='R29' uid='eSNoJNNfJV8'/>
+	<dataelement code='R30' uid='uwO5zSkG1Aq'/>
+	<dataelement code='R31' uid='nGprJJmqQXb'/>
+	<dataelement code='R32' uid='huVaAynwmcK'/>
+	<dataelement code='R33' uid='UpAcuE6FqUc'/>
+	<dataelement code='R34' uid='fyhg5kGoqCK'/>
+	<dataelement code='R35' uid='rG5yDvnv7Cw'/>
+	<dataelement code='R36' uid='kS9JWG1YWzm'/>
+	<dataelement code='R39' uid='Vfns7eVodlg'/>
+	<dataelement code='R40' uid='b65RaPIerax'/>
+	<dataelement code='R41' uid='eG7rNq0QAa9'/>
+	<dataelement code='R42' uid='a0JgMczWVDy'/>
+	<dataelement code='R43' uid='yZ8AQaBd7MG'/>
+	<dataelement code='R44' uid='Ml5cEvzMeRR'/>
+	<dataelement code='R45' uid='GWtUfy1ZnyC'/>
+	<dataelement code='R46' uid='e3v7RlOlTs7'/>
+	<dataelement code='R47' uid='kxqgA33Yjvz'/>
+	<dataelement code='R49' uid='fW8jE4IKO1z'/>
+	<dataelement code='R50' uid='Z6ecG09aaq9'/>
+	<dataelement code='R51' uid='WbGV76RaW8d'/>
+	<dataelement code='R52' uid='zlZb6xuYvRO'/>
+	<dataelement code='R53' uid='uLlk7S15q5b'/>
+	<dataelement code='R54' uid='aARoB83DhTg'/>
+	<dataelement code='R55' uid='OCV6AfNxhUM'/>
+	<dataelement code='R56' uid='gUyPXaOaWxW'/>
+	<dataelement code='R57' uid='P94vOzSFuqx'/>
+	<dataelement code='R58' uid='lp7AW30yiIJ'/>
+	<dataelement code='R59' uid='KaCoNjE4YFP'/>
+	<dataelement code='R60' uid='MRvL42mFBDB'/>
+	<dataelement code='R61' uid='H5xMa1SE7XA'/>
+	<dataelement code='R62' uid='tX9Zo1KY7dS'/>
+	<dataelement code='R63' uid='Zx5XabciiVw'/>
+	<dataelement code='R64' uid='hFcCgp3z6wd'/>
+	<dataelement code='R68' uid='P95C14Y1fWh'/>
+	<dataelement code='R69' uid='PyGBNdZRgep'/>
+	<dataelement code='R71' uid='qy28f8lFc6Y'/>
+	<dataelement code='R73' uid='Owsr9BawNsk'/>
+	<dataelement code='R75' uid='zo0wFB9jWTy'/>
+	<dataelement code='R80' uid='WBzi8Y85rQM'/>
+	<dataelement code='R83' uid='hqgPntRGXxC'/>
+	<dataelement code='R90' uid='uc56TeZhGv8'/>
+	<dataelement code='R94' uid='F6nkUFcutS4'/>
+	<dataelement code='R95' uid='XZjSADG6M7h'/>
+	<dataelement code='S00' uid='BDxQiVXDtdS'/>
+	<dataelement code='S01' uid='YLhg600ZXan'/>
+	<dataelement code='S02' uid='NxQMXHRXjS5'/>
+	<dataelement code='S03' uid='HV9Oc2KBgay'/>
+	<dataelement code='S04' uid='rQFByR0S0nR'/>
+	<dataelement code='S05' uid='iatODw2IPlr'/>
+	<dataelement code='S06' uid='QHpNR9lcB2J'/>
+	<dataelement code='S07' uid='gxqGe1ptR4Y'/>
+	<dataelement code='S08' uid='cN1JaDgp7El'/>
+	<dataelement code='S11' uid='Un0Ot5wssVu'/>
+	<dataelement code='S12' uid='wPtVBmgLxIs'/>
+	<dataelement code='S13' uid='tZKZm1XXQzi'/>
+	<dataelement code='S17' uid='OYAFGms1FT2'/>
+	<dataelement code='S30' uid='DaXeIqojPAb'/>
+	<dataelement code='S31.4' uid='CyIKx9LVhKz'/>
+	<dataelement code='S31' uid='zeyxhIe3h7J'/>
+	<dataelement code='S36' uid='Ec82UdaWrNa'/>
+	<dataelement code='S37.0' uid='bPJzu8z0Pkj'/>
+	<dataelement code='S37' uid='egZFT2sVsfc'/>
+	<dataelement code='S52' uid='RuvcUTKziyn'/>
+	<dataelement code='S53' uid='HilxnJFCBQr'/>
+	<dataelement code='S54' uid='M3PB3EB4ZeI'/>
+	<dataelement code='S58' uid='Iu3uldHkK7N'/>
+	<dataelement code='S60' uid='DksjujhqTpt'/>
+	<dataelement code='S61' uid='txACE4BBX5Z'/>
+	<dataelement code='S62' uid='qalnjkPaDFy'/>
+	<dataelement code='S64' uid='IXgP8AlwXYI'/>
+	<dataelement code='S65' uid='mU0LE1a9vJQ'/>
+	<dataelement code='S66' uid='BhgxHSy9Ufc'/>
+	<dataelement code='S67' uid='I3PefvLrcUB'/>
+	<dataelement code='S68' uid='q1BORHNvSwJ'/>
+	<dataelement code='S70' uid='SXYG2OqrvZ1'/>
+	<dataelement code='S71' uid='Uqg45eYyaH4'/>
+	<dataelement code='S72' uid='PVJERyUUVEJ'/>
+	<dataelement code='S73' uid='aCeOhLedb3f'/>
+	<dataelement code='S74' uid='pJHLXDmTmWx'/>
+	<dataelement code='S75' uid='itoaBpSUEkZ'/>
+	<dataelement code='S76' uid='rED4P3e3RvD'/>
+	<dataelement code='S77' uid='ZObF7rJLYku'/>
+	<dataelement code='S78' uid='CM7r4m9kPp3'/>
+	<dataelement code='S79' uid='o81SivPrwVB'/>
+	<dataelement code='S80' uid='mL1spmD16gf'/>
+	<dataelement code='S81' uid='vbeLLNWOz4n'/>
+	<dataelement code='S82' uid='YGHW3kOuBkK'/>
+	<dataelement code='S83.2' uid='wGgNJ1MKspY'/>
+	<dataelement code='S83' uid='kLolPEC0kjy'/>
+	<dataelement code='S84' uid='bgmlZ5z5cus'/>
+	<dataelement code='S85' uid='iwH5LILPqnB'/>
+	<dataelement code='S86' uid='xh9VULZTRdO'/>
+	<dataelement code='S87' uid='IaPKoUslfgk'/>
+	<dataelement code='S88' uid='VxxPSMKdB4T'/>
+	<dataelement code='S89' uid='P5NAjl5ivBI'/>
+	<dataelement code='S90' uid='XGy8XLEy0bb'/>
+	<dataelement code='S91' uid='bPpM9nrS4M3'/>
+	<dataelement code='S92' uid='A86bwq9JsEV'/>
+	<dataelement code='S93' uid='lArhotxv09p'/>
+	<dataelement code='S95' uid='WHpmobh3zZK'/>
+	<dataelement code='S96' uid='TLF5qjmAXU4'/>
+	<dataelement code='S97' uid='EZJYm8SKNRt'/>
+	<dataelement code='S98' uid='JIGhwm27j7L'/>
+	<dataelement code='T00' uid='mAkBaKtdNhz'/>
+	<dataelement code='T01' uid='tojK7vMuBE2'/>
+	<dataelement code='T02' uid='lI8wy6SVnk8'/>
+	<dataelement code='T04' uid='DJ9Vv795E9V'/>
+	<dataelement code='T05' uid='XBt1qXNOcjO'/>
+	<dataelement code='T08' uid='hjX2qDAHJIk'/>
+	<dataelement code='T14' uid='LDQwwDCs5Lw'/>
+	<dataelement code='T15' uid='YrAJBoiSPDY'/>
+	<dataelement code='T16' uid='uzLIfHy4JiL'/>
+	<dataelement code='T17' uid='yKqgVMrgkfV'/>
+	<dataelement code='T18' uid='U6uQgzNGlRd'/>
+	<dataelement code='T19' uid='UC5l0YvEG4w'/>
+	<dataelement code='T20' uid='PXNL5oA2ghK'/>
+	<dataelement code='T21' uid='I1h0emvsTrA'/>
+	<dataelement code='T22' uid='YRKsPqccYin'/>
+	<dataelement code='T23' uid='VIFxX5zn8HM'/>
+	<dataelement code='T24' uid='qNy3Uj77pu9'/>
+	<dataelement code='T25' uid='AXUEf4YTsUr'/>
+	<dataelement code='T30' uid='sUiOu2QNdJa'/>
+	<dataelement code='T32' uid='cEWRbTrDfZr'/>
+	<dataelement code='T36' uid='X4YybKdrZTZ'/>
+	<dataelement code='T37' uid='dqoT5R20Sfd'/>
+	<dataelement code='T38' uid='MirINoLPKgC'/>
+	<dataelement code='T41' uid='Rvzsgiy35KU'/>
+	<dataelement code='T42' uid='uwth3FexNr4'/>
+	<dataelement code='T43' uid='TjfR1SqcA3p'/>
+	<dataelement code='T44' uid='z9NVB1McpgM'/>
+	<dataelement code='T45' uid='lwsUmSPOdAE'/>
+	<dataelement code='T46' uid='wFlPD7tJEyt'/>
+	<dataelement code='T50' uid='j8H9scnbCOs'/>
+	<dataelement code='T51' uid='KNMXMXtfLea'/>
+	<dataelement code='T53' uid='vrR5mcvB7S8'/>
+	<dataelement code='T54' uid='ohHQcr12Eym'/>
+	<dataelement code='T55' uid='xn9MSwyn08W'/>
+	<dataelement code='T58' uid='ajfikk6fNHU'/>
+	<dataelement code='T60' uid='sxtv78JG6jR'/>
+	<dataelement code='T62' uid='cTsdGBDzQBf'/>
+	<dataelement code='T63' uid='qbMksQJ2WqE'/>
+	<dataelement code='T66' uid='P6h4IsJHAM6'/>
+	<dataelement code='T67' uid='uOeI6HytmNL'/>
+	<dataelement code='T70' uid='D3LfySVbUKj'/>
+	<dataelement code='T71' uid='HMUanElZTOc'/>
+	<dataelement code='T73' uid='LRXCLRj3owG'/>
+	<dataelement code='T74.0' uid='Fnvp0VcutMM'/>
+	<dataelement code='T74.1' uid='musZKal3ILo'/>
+	<dataelement code='T74.2' uid='A0sbvIrPa64'/>
+	<dataelement code='T74.3' uid='zRcoYmqnnqy'/>
+	<dataelement code='T74' uid='KCambnwKnxe'/>
+	<dataelement code='T75' uid='HVVQvUcOLMb'/>
+	<dataelement code='T78' uid='ROy1MZGKYRh'/>
+	<dataelement code='T79' uid='nku7rBwYXhX'/>
+	<dataelement code='T80' uid='HUeHcey5AtJ'/>
+	<dataelement code='T81' uid='JCXa4j9kNn5'/>
+	<dataelement code='T82' uid='cL9APRyOVxw'/>
+	<dataelement code='T84' uid='a8uXnMsnxtQ'/>
+	<dataelement code='T86' uid='iEaFsAIVeCl'/>
+	<dataelement code='T87' uid='N5josdBLaiK'/>
+	<dataelement code='T88' uid='uKw6NzBDrQG'/>
+	<dataelement code='T90' uid='PXwt4uuSigz'/>
+	<dataelement code='T91' uid='GAaaAhuL8mK'/>
+	<dataelement code='T92' uid='srpzjuvWh9Q'/>
+	<dataelement code='T93' uid='d1K7magTDav'/>
+	<dataelement code='T94' uid='GRKJHrduh6t'/>
+	<dataelement code='T95' uid='u4lWEPeXDM5'/>
+	<dataelement code='T96' uid='MDZLwlJRJka'/>
+	<dataelement code='U80?' uid='LTVB5XvjHY2'/>
+	<dataelement code='U81' uid='aCAowveOnWV'/>
+	<dataelement code='U88?' uid='Po92argglsd'/>
+	<dataelement code='U89' uid='xQ7ubVx9Pu1'/>
+	<dataelement code='V99' uid='TCLnPuiRoPs'/>
+	<dataelement code='W19' uid='KpGTYSU5Fwo'/>
+	<dataelement code='W22' uid='gkXdtgAASNB'/>
+	<dataelement code='W49' uid='xvAWJM1XwmA'/>
+	<dataelement code='W51' uid='Dk8AfkqTZfL'/>
+	<dataelement code='W54' uid='ng4wc6rTRA6'/>
+	<dataelement code='W74' uid='r8iaGG5JI2E'/>
+	<dataelement code='W87' uid='k8eVtyvm36Z'/>
+	<dataelement code='X09' uid='pxjUCfEbGha'/>
+	<dataelement code='X20' uid='IxO0aqrtkDP'/>
+	<dataelement code='X30' uid='duIOsDUxcPf'/>
+	<dataelement code='X34' uid='Jhtagq1s6AB'/>
+	<dataelement code='X44' uid='c26egU9PmMh'/>
+	<dataelement code='X49' uid='qy3IuusoL3H'/>
+	<dataelement code='X59' uid='SL89yfMTfX4'/>
+	<dataelement code='X69' uid='sitAJf8jxEs'/>
+	<dataelement code='X70' uid='kOnwcD7rN3F'/>
+	<dataelement code='X71' uid='FAlWcymjyh0'/>
+	<dataelement code='X76' uid='Qhg1CMsuJaQ'/>
+	<dataelement code='X95' uid='M29wxy99i5w'/>
+	<dataelement code='X98' uid='w51auvqElGj'/>
+	<dataelement code='X99' uid='z72JU637pu9'/>
+	<dataelement code='Y00' uid='bibDC0nsYVD'/>
+	<dataelement code='Y07' uid='B1DWMTSBWvs'/>
+	<dataelement code='Y08' uid='UOCStFU9PXN'/>
+	<dataelement code='Y09' uid='au4IhFRNWZ5'/>
+	<dataelement code='Y12' uid='Gt4zgOPNWtb'/>
+	<dataelement code='Y15' uid='t7bgaivoTrX'/>
+	<dataelement code='Y34' uid='qJPgGLu31QX'/>
+	<dataelement code='Y35' uid='TDgCs25WcqT'/>
+	<dataelement code='Y36' uid='nNe1NNeajp6'/>
+	<dataelement code='Y62' uid='uMYDSoBTnjY'/>
+	<dataelement code='Z00' uid='RldLdv7xhu6'/>
+	<dataelement code='Z01' uid='ptyAR8uzPX7'/>
+	<dataelement code='Z02' uid='M9Rw2UBSmlC'/>
+	<dataelement code='Z03' uid='dUyHdoX0wpJ'/>
+	<dataelement code='Z04' uid='vMjAttroUV7'/>
+	<dataelement code='Z08' uid='B5owLOZkVzE'/>
+	<dataelement code='Z10' uid='BSVH9zPrpNg'/>
+	<dataelement code='Z11' uid='Cl30YyZ3GY1'/>
+	<dataelement code='Z20' uid='LIyKDbeh3gC'/>
+	<dataelement code='Z30' uid='hPQsUuPABwc'/>
+	<dataelement code='Z31' uid='BtjH8n9E8IM'/>
+	<dataelement code='Z32' uid='F0utZ1fe1IB'/>
+	<dataelement code='Z34' uid='QweJFlSqdFO'/>
+	<dataelement code='Z40' uid='ATiXHKPLX55'/>
+	<dataelement code='Z41' uid='qcE71n4zhKr'/>
+	<dataelement code='Z42' uid='KHZ7NPWG1Vv'/>
+	<dataelement code='Z43' uid='M7krtuQ4nhM'/>
+	<dataelement code='Z46' uid='zTlez7bSl33'/>
+	<dataelement code='Z55' uid='tfF1NTjAn68'/>
+	<dataelement code='Z56' uid='qjthbQ7SU7w'/>
+	<dataelement code='Z58' uid='B1fPb4Dc2T7'/>
+	<dataelement code='Z59' uid='WtKlGcVt73l'/>
+	<dataelement code='Z60' uid='o0zJSQ7eYjo'/>
+	<dataelement code='Z63' uid='Ptz8O2bMqTt'/>
+	<dataelement code='Z64' uid='uDuXieqS4sj'/>
+	<dataelement code='Z65' uid='Wv3RkUQxYZi'/>
+	<dataelement code='Z70' uid='KUyqKCNEc79'/>
+	<dataelement code='Z71' uid='IaBlLaVYqPr'/>
+	<dataelement code='Z72.0' uid='ycMDUnrR5Z9'/>
+	<dataelement code='Z72' uid='XH57G0rsA37'/>
+	<dataelement code='Z73' uid='V90oZYoSYtY'/>
+	<dataelement code='Z74' uid='HDuMyVoUm7H'/>
+	<dataelement code='Z75' uid='XKdtLqt8x4h'/>
+	<dataelement code='Z80' uid='EFcYIeZjXn4'/>
+	<dataelement code='Z82' uid='hDY1e915Nqb'/>
+	<dataelement code='Z91' uid='lrlRpF6jue1'/>
+	<dataelement code='Z93' uid='ckKUAAIE6dw'/>
+	<dataelement code='Z99' uid='zhcLgVKDw45'/>
 		</dataelements>
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 3 - Notification des diagnostics principaux à la sortie" type="diagnosis" outgoing="1" classification="icd10" uid="yORodXXBQkr">
@@ -1464,14 +1513,14 @@
 			<option uid="doPjh110E5L" min="1" max="5" gender="f" name="12-59 mois F"/>
 			<option uid="ZnADwj3WJxA" min="5" max="10" gender="m" name="5-9 ans M"/>
 			<option uid="d8byzbZCTQv" min="5" max="10" gender="f" name="5-9 ans F"/>
-			<option uid="o7tOOvN2Nk0" min="10" max="15" gender="m" name="10-14 ans M"/>
+			<option uid="WKQUkZScRMI" min="10" max="15" gender="m" name="10-14 ans M"/>
 			<option uid="t3eEbkLledV" min="10" max="15" gender="f" name="10-14 ans F"/>
 			<option uid="oRYY0iFxFAP" min="15" max="20" gender="m" name="15-19 ans M"/>
 			<option uid="QLFbCYqXnp4" min="15" max="20" gender="f" name="15-19 ans F"/>
 			<option uid="vRsGs2BkCuf" min="20" max="25" gender="m" name="20-24 ans M"/>
 			<option uid="qKufGd49w2h" min="20" max="25" gender="f" name="20-24 ans F"/>
 			<option uid="B2OAvaBt6c9" min="25" max="50" gender="m" name="25-49 ans M"/>
-			<option uid="JmsSA826ihd" min="25" max="50" gender="f" name="25-49 ans F"/>
+			<option uid="iJGtuR2ejzG" min="25" max="50" gender="f" name="25-49 ans F"/>
 			<option uid="n9JJszURcmn" min="50" max="999" gender="m" name=">=50 ans M"/>
 			<option uid="DXR8GpeXGTk" min="50" max="999" gender="f" name=">=50 ans F"/>
 		</categoryOptionCombo>
@@ -1489,10 +1538,7 @@
 			<option uid="wwHgrZO6zDo" value="ped" name="Pediatrie"/>
 			<option uid="K2NB3wohC7J" value="psy" name="Sante mentale"/>
 			<option uid="Wb6sKpCExtW" value="urg" name="Urgences"/>
-			<option uid="zWgQnhKJFUF" value="vih" name="VIH"/>
 			<option uid="egaUFbq5aH5" value="bds" name="Banque de sang"/>
-			<option uid="QofoKeSFRwH" value="blc" name="Bloc operatoire"/>
-			<option uid="JKi9Yvys9d9" value="the" name="Stabilisation therapeutique - SST"/>
 			<option uid="x6xXtykShw1" value="pfa" name="Planning familial"/>
 			<option uid="fZAOOp3vfJz" value="lab" name="Labo"/>
 			<option uid="eLH7iKE6aQu" value="ima" name="Imagerie"/>
@@ -3356,14 +3402,14 @@
 			<option uid="doPjh110E5L" min="1" max="5" gender="f" name="12-59 mois F"/>
 			<option uid="ZnADwj3WJxA" min="5" max="10" gender="m" name="5-9 ans M"/>
 			<option uid="d8byzbZCTQv" min="5" max="10" gender="f" name="5-9 ans F"/>
-			<option uid="o7tOOvN2Nk0" min="10" max="15" gender="m" name="10-14 ans M"/>
+			<option uid="WKQUkZScRMI" min="10" max="15" gender="m" name="10-14 ans M"/>
 			<option uid="t3eEbkLledV" min="10" max="15" gender="f" name="10-14 ans F"/>
 			<option uid="oRYY0iFxFAP" min="15" max="20" gender="m" name="15-19 ans M"/>
 			<option uid="QLFbCYqXnp4" min="15" max="20" gender="f" name="15-19 ans F"/>
 			<option uid="vRsGs2BkCuf" min="20" max="25" gender="m" name="20-24 ans M"/>
 			<option uid="qKufGd49w2h" min="20" max="25" gender="f" name="20-24 ans F"/>
 			<option uid="B2OAvaBt6c9" min="25" max="50" gender="m" name="25-49 ans M"/>
-			<option uid="JmsSA826ihd" min="25" max="50" gender="f" name="25-49 ans F"/>
+			<option uid="iJGtuR2ejzG" min="25" max="50" gender="f" name="25-49 ans F"/>
 			<option uid="n9JJszURcmn" min="50" max="999" gender="m" name=">=50 ans M"/>
 			<option uid="DXR8GpeXGTk" min="50" max="999" gender="f" name=">=50 ans F"/>
 		</categoryOptionCombo>
@@ -3391,14 +3437,14 @@
 			<option uid="doPjh110E5L" min="1" max="5" gender="f" name="12-59 mois F"/>
 			<option uid="ZnADwj3WJxA" min="5" max="10" gender="m" name="5-9 ans M"/>
 			<option uid="d8byzbZCTQv" min="5" max="10" gender="f" name="5-9 ans F"/>
-			<option uid="o7tOOvN2Nk0" min="10" max="15" gender="m" name="10-14 ans M"/>
+			<option uid="WKQUkZScRMI" min="10" max="15" gender="m" name="10-14 ans M"/>
 			<option uid="t3eEbkLledV" min="10" max="15" gender="f" name="10-14 ans F"/>
 			<option uid="oRYY0iFxFAP" min="15" max="20" gender="m" name="15-19 ans M"/>
 			<option uid="QLFbCYqXnp4" min="15" max="20" gender="f" name="15-19 ans F"/>
 			<option uid="vRsGs2BkCuf" min="20" max="25" gender="m" name="20-24 ans M"/>
 			<option uid="qKufGd49w2h" min="20" max="25" gender="f" name="20-24 ans F"/>
 			<option uid="B2OAvaBt6c9" min="25" max="50" gender="m" name="25-49 ans M"/>
-			<option uid="JmsSA826ihd" min="25" max="50" gender="f" name="25-49 ans F"/>
+			<option uid="iJGtuR2ejzG" min="25" max="50" gender="f" name="25-49 ans F"/>
 			<option uid="n9JJszURcmn" min="50" max="999" gender="m" name=">=50 ans M"/>
 			<option uid="DXR8GpeXGTk" min="50" max="999" gender="f" name=">=50 ans F"/>
 		</categoryOptionCombo>
@@ -3443,7 +3489,7 @@
 			<dataelement code="HS99" label="HS99 - Autres examens hémato/sérologiques" uid="c0L2ggGJyVw"/>
 		</dataelements>
 	</dataset>
-	<dataset label="DSNIS-HOP - Fiche 7 - Activité globale des urgences" type="item" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RMH_PATIENTTYPE" uid="x1bjdExzUxs">
+	<dataset label="DSNIS-HOP - Fiche 7 - Activité globale des urgences" type="item" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RMH_PATIENTTYPE" exactitemtype="1" uid="x1bjdExzUxs">
 		<attributeOptionCombo type="department">
 			<option uid="GKkUPluq2QJ" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
@@ -3457,7 +3503,7 @@
 		</dataelements>
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 8 - Maternité" type="title" uid="WMGqhLQn0Il"/>
-	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (nombre accouchements par qualification et provenance)" type="encounter" incoming="1" uid="WMGqhLQn0Il">
+	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (nombre accouchements par qualification et provenance)" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_DELIVERY_MSPLS" type="item"  itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_REANIMATION_DATE" exactitemtype="1" uid="WMGqhLQn0Il">
 		<categoryOptionCombo type="zone">
 			<option uid="jJI2P34k15f" value="1" name="District"/>
 			<option uid="aLlY2l4ARNc" value="2" name="Hors district"/>
@@ -3465,13 +3511,13 @@
 			<option uid="EhUhIaHNrVz" value="4" name="Hors Burundi"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement calculate="itemCount" uid="tEtMeklU5rR" label="Par médecin">
-				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_REANIMATION_DATE"/>
+			<dataelement unique="patients" calculate="itemCount" uid="tEtMeklU5rR" label="Par médecin">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_PERFORMEDBY" itemvalue="1"/>
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_REANIMATION_DATE"/>
 			</dataelement>
 		</dataelements>
 	</dataset>
-	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (nombre accouchements par sage-femme et provenance)" notitle="1" type="encounter" incoming="1" uid="WMGqhLQn0Il">
+	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (nombre accouchements par sage-femme et provenance)" notitle="1"  transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_DELIVERY_MSPLS" type="item"  itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_REANIMATION_DATE" exactitemtype="1" uid="WMGqhLQn0Il">
 		<categoryOptionCombo type="zone">
 			<option uid="u6hW37fP9NT" value="1" name="District"/>
 			<option uid="r7R8TD4NJki" value="2" name="Hors district"/>
@@ -3479,13 +3525,13 @@
 			<option uid="iXpnbtexJPk" value="4" name="Hors Burundi"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement calculate="itemCount" uid="tEtMeklU5rR" label="Par sage-femme">
-				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_REANIMATION_DATE"/>
+			<dataelement unique="patients" calculate="itemCount" uid="tEtMeklU5rR" label="Par sage-femme">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_PERFORMEDBY" itemvalue="2"/>
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_REANIMATION_DATE"/>
 			</dataelement>
 		</dataelements>
 	</dataset>
-	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (nombre accouchements par infirmière et provenance)" notitle="1" type="encounter" incoming="1" uid="WMGqhLQn0Il">
+	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (nombre accouchements par infirmière et provenance)" notitle="1"  transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_DELIVERY_MSPLS" type="item"  itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_REANIMATION_DATE" exactitemtype="1" uid="WMGqhLQn0Il">
 		<categoryOptionCombo type="zone">
 			<option uid="MPnSCB1aGau" value="1" name="District"/>
 			<option uid="tjGRrQgPuak" value="2" name="Hors district"/>
@@ -3493,13 +3539,13 @@
 			<option uid="iXpnbtexJPk" value="4" name="Hors Burundi"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement calculate="itemCount" uid="tEtMeklU5rR" label="Par infirmière">
-				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_REANIMATION_DATE"/>
+			<dataelement unique="patients" calculate="itemCount" uid="tEtMeklU5rR" label="Par infirmière">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_PERFORMEDBY" itemvalue="3"/>
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_REANIMATION_DATE"/>
 			</dataelement>
 		</dataelements>
 	</dataset>
-	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (nombre accouchements par autre personne et provenance)" notitle="1" type="encounter" incoming="1" uid="WMGqhLQn0Il">
+	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (nombre accouchements par autre personne et provenance)" notitle="1"  transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_DELIVERY_MSPLS" type="item"  itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_REANIMATION_DATE" exactitemtype="1" uid="WMGqhLQn0Il">
 		<categoryOptionCombo type="zone">
 			<option uid="mRZgvyfH32f" value="1" name="District"/>
 			<option uid="LuN4K6nrbuL" value="2" name="Hors district"/>
@@ -3507,13 +3553,13 @@
 			<option uid="LQISqPJCUJH" value="4" name="Hors Burundi"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement calculate="itemCount" uid="tEtMeklU5rR" label="Par autre personne">
-				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_REANIMATION_DATE"/>
+			<dataelement unique="patients" calculate="itemCount" uid="tEtMeklU5rR" label="Par autre personne">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_PERFORMEDBY" itemvalue="4"/>
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_REANIMATION_DATE"/>
 			</dataelement>
 		</dataelements>
 	</dataset>
-	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (nombre accouchements par âge)" type="encounter" incoming="1" uid="WMGqhLQn0Il">
+	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (nombre accouchements par âge)"  transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_DELIVERY_MSPLS" type="item"  itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_REANIMATION_DATE" exactitemtype="1"  uid="WMGqhLQn0Il">
 		<categoryOptionCombo type="age">
 			<option uid="LSc3yHFnyXy" min="10" max="15" name="10-14 ans"/>
 			<option uid="aBwE08HeLYw" min="15" max="20" name="15-19 ans"/>
@@ -3522,12 +3568,12 @@
 			<option uid="LjzRme3MI8s" min="50" max="999" name=">=50 ans"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement calculate="itemCount" uid="bQ35Yi7YiPQ" label="Nombre accouchements">
+			<dataelement unique="patients" calculate="itemCount" uid="bQ35Yi7YiPQ" label="Nombre accouchements">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_REANIMATION_DATE"/>
 			</dataelement>
 		</dataelements>
 	</dataset>
-	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (nombre accouchements par type)" type="encounter" incoming="1" uid="WMGqhLQn0Il">
+	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (nombre accouchements par type)"  transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_DELIVERY_MSPLS" type="item"  itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_REANIMATION_DATE" exactitemtype="1"  uid="WMGqhLQn0Il">
 		<categoryOptionCombo type="default">
 			<option uid="GKkUPluq2QJ" name="Nombre d'accouchements"/>
 		</categoryOptionCombo>
@@ -3540,7 +3586,7 @@
 			</dataelement>
 		</dataelements>
 	</dataset>
-	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (accouchements avec...)" type="encounter" incoming="1" uid="WMGqhLQn0Il">
+	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (accouchements avec...)"  transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_DELIVERY_MSPLS" type="item"  itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_REANIMATION_DATE" exactitemtype="1"  uid="WMGqhLQn0Il">
 		<categoryOptionCombo type="default">
 			<option uid="GKkUPluq2QJ" name="Nombre d'accouchements"/>
 		</categoryOptionCombo>
@@ -3564,6 +3610,11 @@
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_PERINEALTEAR" itemvalue="medwan.common.true"/>
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_VAGINALTEAR" itemvalue="medwan.common.true"/>
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_COLLARTEAR" itemvalue="medwan.common.true"/>
+			</dataelement>
+			<dataelement calculate="itemCount" unique="patients" uid="gs0gvAYs4N7" label="Eclampsie">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_ECLAMPSIA" itemvalue="medwan.common.true"/>
+			</dataelement>
+			<dataelement calculate="itemCount" unique="patients" uid="QWMJPXJosZD" label="Rupture utérine">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_UTERUSTEAR" itemvalue="medwan.common.true"/>
 			</dataelement>
 			<dataelement calculate="itemCount" unique="patients" uid="h2tl8PBq9Ps" label="Ventouse">
@@ -3580,7 +3631,7 @@
 			</dataelement>
 		</dataelements>
 	</dataset>
-	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (indications des césariennes)" type="encounter" incoming="1" uid="WMGqhLQn0Il">
+	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (indications des césariennes)"  transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_DELIVERY_MSPLS" type="item"  itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_REANIMATION_DATE" exactitemtype="1"  uid="WMGqhLQn0Il">
 		<categoryOptionCombo type="default">
 			<option uid="GKkUPluq2QJ" name="Nombre"/>
 		</categoryOptionCombo>
@@ -3614,95 +3665,95 @@
 			</dataelement>
 		</dataelements>
 	</dataset>
-	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (issues accouchement - naissances vivantes)" type="encounter" incoming="1" uid="WMGqhLQn0Il">
+	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (issues accouchement - naissances vivantes)"  transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_DELIVERY_MSPLS" type="item"  itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_REANIMATION_DATE" exactitemtype="1"  uid="WMGqhLQn0Il">
 		<categoryOptionCombo type="default">
 			<option uid="MLUsXG5RM6g" name="Homme"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement calculate="itemCount" unique="patients" itemsneeded="1" countall="1" uid="SFTpvzIq0P5" label="Naissances vivantes">
+			<dataelement calculate="itemCount" unique="transactions" itemsneeded="1" countall="1" uid="SFTpvzIq0P5" label="Naissances vivantes - hommes">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILDALIVE;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_GENDER" itemvalue="openclinic.common.bornalive;male"/>
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILDALIVE2;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_GENDER2" itemvalue="openclinic.common.bornalive;male"/>
 			</dataelement>
 		</dataelements>
 	</dataset>
-	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (issues accouchement - naissances vivantes" type="encounter" incoming="1" uid="WMGqhLQn0Il">
+	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (issues accouchement - naissances vivantes)|2" notitle="1"  transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_DELIVERY_MSPLS" type="item"  itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_REANIMATION_DATE" exactitemtype="1"  uid="WMGqhLQn0Il">
 		<categoryOptionCombo type="default">
 			<option uid="XPJfNX1Dagi" name="Femme"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement calculate="itemCount" unique="patients" itemsneeded="1" countall="1" uid="SFTpvzIq0P5" label="Naissances vivantes">
+			<dataelement calculate="itemCount" unique="transactions" itemsneeded="1" countall="1" uid="SFTpvzIq0P5" label="Naissances vivantes - femmes">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILDALIVE;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_GENDER" itemvalue="openclinic.common.bornalive;female"/>
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILDALIVE2;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_GENDER2" itemvalue="openclinic.common.bornalive;female"/>
 			</dataelement>
 		</dataelements>
 	</dataset>
-	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (issues accouchement - morts-nés)" type="encounter" incoming="1" uid="WMGqhLQn0Il">
+	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (issues accouchement - morts-nés) - Hommes"  transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_DELIVERY_MSPLS" type="item"  itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_REANIMATION_DATE" exactitemtype="1" uid="WMGqhLQn0Il">
 		<categoryOptionCombo type="default">
 			<option uid="rRv5lzv8RHR" name="Homme"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement calculate="itemCount" unique="patients" itemsneeded="1" countall="1" uid="e1abJ5ezYzK" label="Frais BCF+ à l'arrivée">
+			<dataelement calculate="itemCount" itemsneeded="1" countall="1" uid="e1abJ5ezYzK" label="Frais BCF+ à l'arrivée">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILDALIVE;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_GENDER;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_DEAD_TYPE;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_EXAM_BCF" itemvalue="openclinic.common.borndead;male;gynaeco.dead_type_frais;+"/>
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILDALIVE2;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_GENDER2;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_DEAD_TYPE2;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_EXAM_BCF" itemvalue="openclinic.common.borndead;male;gynaeco.dead_type_frais;+"/>
 			</dataelement>
 		</dataelements>
 	</dataset>
-	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (issues accouchement - morts-nés)|2" notitle="1" type="encounter" incoming="1" uid="WMGqhLQn0Il">
+	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (issues accouchement - morts-nés) - Hommes|2" notitle="1"  transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_DELIVERY_MSPLS" type="item"  itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_REANIMATION_DATE" exactitemtype="1"  uid="WMGqhLQn0Il">
 		<categoryOptionCombo type="default">
 			<option uid="v8tz7a17GMD" name="Homme"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement calculate="itemCount" unique="patients" itemsneeded="1" countall="1" uid="e1abJ5ezYzK" label="Frais BCF- à l'arrivée">
+			<dataelement calculate="itemCount" itemsneeded="1" countall="1" uid="e1abJ5ezYzK" label="Frais BCF- à l'arrivée">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILDALIVE;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_GENDER;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_DEAD_TYPE;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_EXAM_BCF" itemvalue="openclinic.common.borndead;male;gynaeco.dead_type_frais;-"/>
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILDALIVE2;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_GENDER2;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_DEAD_TYPE2;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_EXAM_BCF" itemvalue="openclinic.common.borndead;male;gynaeco.dead_type_frais;-"/>
 			</dataelement>
 		</dataelements>
 	</dataset>
-	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (issues accouchement - morts-nés)|3" notitle="1" type="encounter" incoming="1" uid="WMGqhLQn0Il">
+	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (issues accouchement - morts-nés) - Hommes|3" notitle="1"  transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_DELIVERY_MSPLS" type="item"  itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_REANIMATION_DATE" exactitemtype="1"  uid="WMGqhLQn0Il">
 		<categoryOptionCombo type="default">
 			<option uid="sikjCi2nnLC" name="Homme"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement calculate="itemCount" unique="patients" itemsneeded="1" countall="1" uid="e1abJ5ezYzK" label="Macérés">
+			<dataelement calculate="itemCount" itemsneeded="1" countall="1" uid="e1abJ5ezYzK" label="Macérés">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILDALIVE;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_GENDER;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_DEAD_TYPE" itemvalue="openclinic.common.borndead;male;gynaeco.dead_type_macere"/>
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILDALIVE2;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_GENDER2;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_DEAD_TYPE2" itemvalue="openclinic.common.borndead;male;gynaeco.dead_type_macere"/>
 			</dataelement>
 		</dataelements>
 	</dataset>
-	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (issues accouchement - morts-nés)|4" notitle="1" type="encounter" incoming="1" uid="WMGqhLQn0Il">
+	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (issues accouchement - morts-nés) - Femmes"  transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_DELIVERY_MSPLS" type="item"  itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_REANIMATION_DATE" exactitemtype="1"  uid="WMGqhLQn0Il">
 		<categoryOptionCombo type="default">
 			<option uid="xitUt81qjB9" name="Femme"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement calculate="itemCount" unique="patients" itemsneeded="1" countall="1" uid="e1abJ5ezYzK" label="Frais BCF+ à l'arrivée">
+			<dataelement calculate="itemCount" itemsneeded="1" countall="1" uid="e1abJ5ezYzK" label="Frais BCF+ à l'arrivée">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILDALIVE;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_GENDER;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_DEAD_TYPE;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_EXAM_BCF" itemvalue="openclinic.common.borndead;female;gynaeco.dead_type_frais;+"/>
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILDALIVE2;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_GENDER2;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_DEAD_TYPE2;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_EXAM_BCF" itemvalue="openclinic.common.borndead;female;gynaeco.dead_type_frais;+"/>
 			</dataelement>
 		</dataelements>
 	</dataset>
-	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (issues accouchement - morts-nés)|5" notitle="1" type="encounter" incoming="1" uid="WMGqhLQn0Il">
+	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (issues accouchement - morts-nés) - Femmes|5" notitle="1"  transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_DELIVERY_MSPLS" type="item"  itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_REANIMATION_DATE" exactitemtype="1"  uid="WMGqhLQn0Il">
 		<categoryOptionCombo type="default">
 			<option uid="xJM59XMLVFQ" name="Femme"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement calculate="itemCount" unique="patients" itemsneeded="1" countall="1" uid="e1abJ5ezYzK" label="Frais BCF- à l'arrivée">
+			<dataelement calculate="itemCount" itemsneeded="1" countall="1" uid="e1abJ5ezYzK" label="Frais BCF- à l'arrivée">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILDALIVE;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_GENDER;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_DEAD_TYPE;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_EXAM_BCF" itemvalue="openclinic.common.borndead;female;gynaeco.dead_type_frais;-"/>
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILDALIVE2;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_GENDER2;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_DEAD_TYPE2;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_EXAM_BCF" itemvalue="openclinic.common.borndead;female;gynaeco.dead_type_frais;-"/>
 			</dataelement>
 		</dataelements>
 	</dataset>
-	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (issues accouchement - morts-nés)|6" notitle="1" type="encounter" incoming="1" uid="WMGqhLQn0Il">
+	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (issues accouchement - morts-nés) - Femmes|6" notitle="1"  transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_DELIVERY_MSPLS" type="item"  itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_REANIMATION_DATE" exactitemtype="1" uid="WMGqhLQn0Il">
 		<categoryOptionCombo type="default">
 			<option uid="nb907WOaZcZ" name="Femme"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement calculate="itemCount" unique="patients" itemsneeded="1" countall="1" uid="e1abJ5ezYzK" label="Macérés">
+			<dataelement calculate="itemCount" itemsneeded="1" countall="1" uid="e1abJ5ezYzK" label="Macérés">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILDALIVE;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_GENDER;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_DEAD_TYPE" itemvalue="openclinic.common.borndead;female;gynaeco.dead_type_macere"/>
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILDALIVE2;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_GENDER2;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_DEAD_TYPE2" itemvalue="openclinic.common.borndead;female;gynaeco.dead_type_macere"/>
 			</dataelement>
 		</dataelements>
 	</dataset>
-	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (spécificités accouchements)" type="encounter" incoming="1" uid="WMGqhLQn0Il">
+	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (spécificités accouchements)"  transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_DELIVERY_MSPLS" type="item"  itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_REANIMATION_DATE" exactitemtype="1"  uid="WMGqhLQn0Il">
 		<categoryOptionCombo type="default">
 			<option uid="GKkUPluq2QJ" name="Nombre d'accouchements"/>
 		</categoryOptionCombo>

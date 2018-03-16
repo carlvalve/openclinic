@@ -10,7 +10,7 @@
     	<td width='50%'>
 			<div style="border: 0px solid black; height:200px; width:400px;"><canvas id="diagFoetalHeartRythm"></canvas></div>
 		</td>
-		<td width='50%'>
+		<td width='50%' valign='top'>
 			<table width='100%'>
 				<tr>
 					<td width='1%' nowrap>
@@ -37,7 +37,7 @@
     	<td width='50%'>
 			<div style="border: 0px solid black; height:100px; width:400px;"><canvas style="border: 0px solid black; height:100px; width:400px;" id="diagAmnion"></canvas></div>
 		</td>
-		<td width='50%'>
+		<td width='50%' valign='top'>
 			<table width='100%'>
 				<tr>
 					<td width='1%' nowrap>
@@ -85,10 +85,61 @@
 		</td>
     </tr>
     <tr>
+    	<td width='50%'>
+			<div style="border: 0px solid black; height:100px; width:400px;"><canvas style="border: 0px solid black; height:100px; width:400px;" id="diagDrugs"></canvas></div>
+		</td>
+		<td width='50%' valign='top'>
+			<table width='100%'>
+				<tr>
+					<td width='1%' nowrap>
+						<%=getTran(request,"web","druggraph",sWebLanguage) %>: 
+					</td>
+					<td width='1%' nowrap>
+						<select id='drugDays1' class='text'/>
+						<input type='hidden' name='currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_PARTOGRAMME_DRUGS1" property="itemId"/>]>.value' value='<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_PARTOGRAMME_DRUGS1" property="value"/>' id='drugData1'/>
+					</td>
+					<td width='1%' nowrap>
+						<%=getTran(request,"web.occup","time",sWebLanguage) %> <input type='text' class='text' value='' id='drugHour1' size='2'/> : <input value='' type='text' class='text' id='drugMinutes1' size='2'/>
+					</td>
+					<td width='1%' nowrap>
+						<%=getTran(request,"web","value",sWebLanguage) %> 
+						<select class='text' id='drugValue1'>
+							<%=ScreenHelper.writeSelect(request, "partogramme.drug", "", sWebLanguage) %>
+						</select>
+					</td>
+					<td width="*">
+						<input type='button' class='button' value='<%=getTranNoLink("web","add",sWebLanguage) %>' onclick='addMeasurement(drugChart,"drugDays1","drugHour1","drugMinutes1","drugValue1","drugData1","drugData1","drugData2",0,100,1.5,0.5);'/>
+					</td>
+				</tr>
+				<tr>
+					<td width='1%' nowrap>
+						<%=getTran(request,"web","druggraph",sWebLanguage) %>: 
+					</td>
+					<td width='1%' nowrap>
+						<select id='drugDays2' class='text'/>
+						<input type='hidden' name='currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_PARTOGRAMME_DRUGS2" property="itemId"/>]>.value' value='<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_PARTOGRAMME_DRUGS2" property="value"/>' id='drugData2'/>
+					</td>
+					<td width='1%' nowrap>
+						<%=getTran(request,"web.occup","time",sWebLanguage) %> <input type='text' class='text' value='' id='drugHour2' size='2'/> : <input value='' type='text' class='text' id='drugMinutes2' size='2'/>
+					</td>
+					<td width='1%' nowrap>
+						<%=getTran(request,"web","value",sWebLanguage) %> 
+						<select class='text' id='drugValue2'>
+							<%=ScreenHelper.writeSelect(request, "partogramme.drug", "", sWebLanguage) %>
+						</select>
+					</td>
+					<td width="*">
+						<input type='button' class='button' value='<%=getTranNoLink("web","add",sWebLanguage) %>' onclick='addMeasurement(drugChart,"drugDays2","drugHour2","drugMinutes2","drugValue2","drugData2","drugData1","drugData2",0,100,1.5,0.5);'/>
+					</td>
+				</tr>
+			</table>
+		</td>
+    </tr>
+    <tr>
     	<td>
 			<div style="border: 0px solid black; height:200px; width:400px;"><canvas id="diagDilatation"></canvas></div>
 		</td>
-		<td>
+		<td valign='top'>
 			<table width='100%'>
 				<tr>
 					<td width='1%' nowrap>
@@ -133,7 +184,7 @@
     	<td width='50%'>
 			<div style="border: 0px solid black; height:150px; width:400px;"><canvas style="border: 0px solid black; height:150px; width:400px;" id="diagContractions"></canvas></div>
 		</td>
-		<td width='50%'>
+		<td width='50%' valign='top'>
 			<table width='100%'>
 				<tr>
 					<td width='1%' nowrap>
@@ -169,7 +220,7 @@
     	<td width='50%'>
 			<div style="border: 0px solid black; height:100px; width:400px;"><canvas style="border: 0px solid black; height:100px; width:400px;" id="diagOxytocine"></canvas></div>
 		</td>
-		<td width='50%'>
+		<td width='50%' valign='top'>
 			<table width='100%'>
 				<tr>
 					<td width='1%' nowrap>
@@ -214,7 +265,7 @@
     	<td>
 			<div style="border: 0px solid black; height:200px; width:400px;"><canvas id="diagHeartrate"></canvas></div>
 		</td>
-		<td>
+		<td valign='top'>
 			<table width='100%'>
 				<tr>
 					<td width='1%' nowrap>
@@ -241,7 +292,7 @@
     	<td>
 			<div style="border: 0px solid black; height:200px; width:400px;"><canvas id="diagBP"></canvas></div>
 		</td>
-		<td>
+		<td valign='top'>
 			<table width='100%'>
 				<tr>
 					<td width='1%' nowrap>
@@ -269,7 +320,7 @@
     	<td>
 			<div style="border: 0px solid black; height:200px; width:400px;"><canvas id="diagTemp"></canvas></div>
 		</td>
-		<td>
+		<td valign='top'>
 			<table width='100%'>
 				<tr>
 					<td width='1%' nowrap>
@@ -341,6 +392,7 @@ Chart.plugins.register({
 var fhrChart;
 var dilChart;
 var amnionChart;
+var drugChart;
 var contrChart;
 var oxyChart;
 var hrChart;
@@ -352,23 +404,15 @@ var hour = 60*minute;
 var day = 24*hour;
 var timeFormat = 'h';
 var pointlabels=[
-             	'I',  //0
-            	'C',  //1
-            	'M',  //2
-            	'S',  //3
-            	'5/5',  //4
-            	'4/5',  //5
-            	'3/5',  //6
-            	'2/5',  //7
-            	'1/5',  //8
-            	'0/5',  //9
-            	'yellow',  //10
-            	'green',  //11
-            	'blue',  //12
-            	'lightgrey',  //13
-				'LA', //14
-				'T', //15
-            	];
+<%
+	SortedMap s = MedwanQuery.getInstance().getLabels("partogramme.pointlabel", sWebLanguage);
+	Iterator i = s.keySet().iterator();
+	while(i.hasNext()){
+		String key = (String)i.next();
+		out.println("'"+s.get(key)+"',");
+	}
+%>
+           	];
 
 window.onload = function(){
 	updateGraphs();
@@ -378,6 +422,7 @@ function updateGraphs(){
 	drawFoetalHeartRythmGraph();
 	drawDilatationGraph();
 	drawAmnionGraph();
+	drawDrugGraph();
 	drawContractionsGraph();
 	drawOxyGraph();
 	drawHeartrateGraph();
@@ -387,8 +432,8 @@ function updateGraphs(){
 
 function setTimes(){
 	newDate=new Date();
-	var h = newDate.getHours();
-	var m = newDate.getMinutes();
+	var h = ("00"+newDate.getHours()).substr(("00"+newDate.getHours()).length-2);
+	var m = ("00"+newDate.getMinutes()).substr(("00"+newDate.getMinutes()).length-2);
 	if(newDate.getTime()<getStartDate().getTime() || newDate.getTime()>getStartDate().getTime()+12*hour){
 		h='';
 		m='';
@@ -401,6 +446,10 @@ function setTimes(){
 	document.getElementById('engMinutes').value=m;
 	document.getElementById('amnionHour').value=h;
 	document.getElementById('amnionMinutes').value=m;
+	document.getElementById('drugHour1').value=h;
+	document.getElementById('drugMinutes1').value=m;
+	document.getElementById('drugHour2').value=h;
+	document.getElementById('drugMinutes2').value=m;
 	document.getElementById('headHour').value=h;
 	document.getElementById('headMinutes').value=m;
 	document.getElementById('contrHour').value=h;
@@ -411,6 +460,8 @@ function setTimes(){
 	document.getElementById('dropMinutes').value=m;
 	document.getElementById('hrHour').value=h;
 	document.getElementById('hrMinutes').value=m;
+	document.getElementById('bpHour').value=h;
+	document.getElementById('bpMinutes').value=m;
 	document.getElementById('tempHour').value=h;
 	document.getElementById('tempMinutes').value=m;
 }
@@ -535,7 +586,7 @@ function sort(id){
 }
 
 function getStartDate(){
-	var s = document.getElementById('trandate').value;
+	var s = document.getElementById('deliverydate').value;
 	var startyear = s.substring(6,11);
 	var startmonth = s.substring(3,5)*1-1;
 	var startday = s.substring(0,2);
@@ -572,6 +623,37 @@ function drawAmnionGraph(){
 	           	},
    	];
 	amnionChart=drawGraph(amnionChart,'diagAmnion','amnionDays,headDays','amnionData,headData',0,2,1,cannotations,ds,1.5,0.5);
+}
+
+function drawDrugGraph(){
+	var cannotations = [];
+	var ds= [
+	        	{
+	               	label: '<%=getTranNoLink("web","druggraph",sWebLanguage)%>',
+	         		showLabels: true,
+	         		translate: true,
+	         		backgroundColor: 'blue',
+	         		fill: false,
+	                showLine: false,
+	                pointStyle: 'triangle',
+	                radius: 5,
+	                displayticks: false,
+	               	data: []
+	           	},
+	           	{
+	               	label: '<%=getTranNoLink("web","druggraph",sWebLanguage)%>',
+	         		showLabels: true,
+	         		translate: true,
+	         		backgroundColor: 'red',
+	         		fill: false,
+	                showLine: false,
+	                pointStyle: 'rect',
+	                radius: 5,
+	                displayticks: false,
+	               	data: []
+	           	},
+   	];
+	drugChart=drawGraph(drugChart,'diagDrugs','drugDays1,drugDays2','drugData1,drugData2',0,2,1,cannotations,ds,1.5,0.5);
 }
 
 function drawOxyGraph(){
@@ -846,6 +928,6 @@ function drawGraph(cChart,canvasid,daysids,dataids,cMin,cMax,cStep,cAnnotations,
 }
 
 setTimes();
-window.setInterval("setTimes();",60000);
+//window.setInterval("setTimes();",60000);
 
 </script>

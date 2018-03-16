@@ -4,11 +4,11 @@
         <%-- ###################################### WORK ######################################--%> <%-- DATE --%>
         <tr>
             <td class="admin">
-                <a href="javascript:openHistoryPopup();" title="<%=getTranNoLink("Web.Occup","History",sWebLanguage)%>">...</a>&nbsp;<%=getTran(request,"Web.Occup", "medwan.common.date", sWebLanguage)%>
+                <%=getTran(request,"Web.Occup", "medwan.common.date", sWebLanguage)%>
             </td>
             <td class="admin2">
-                <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" id="trandate" OnBlur='checkDate(this);calculateGestAge();' onchange='calculateGestAge();' onKeyUp='calculateGestAge()'>
-                <script>writeTranDate();</script>
+            	<input type='hidden' id='deliverydatefield' name='currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_DELIVERYDATE" property="itemId"/>]>.value' value='<%=((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_DELIVERYDATE")%>'/>
+            	<%=ScreenHelper.writeDateField("deliverydate", "transactionForm", ((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_DELIVERYDATE"), true, false, sWebLanguage, sCONTEXTPATH,"document.getElementById(\"deliverydatefield\").value=this.value;updateGraphs();")%>
             </td>
             <td class="admin" rowspan="5"><%=getTran(request,"openclinic.chuk", "deliverytype", sWebLanguage)%></td>
             <td rowspan="5" bgcolor="#EBF3F7">

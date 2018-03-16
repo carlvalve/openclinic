@@ -76,7 +76,7 @@
                 <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="document.getElementById('EditEncounterUID').value='';document.getElementById('EditEncounterName').value='';">
             </td>
         </tr>
-        <%-- COMMENT --%>
+        <%-- PRESCRIBER --%>
         <tr>
             <td class='admin'><%=getTran(request,"web","prescriber",sWebLanguage)%></td>
             <td class='admin2'>

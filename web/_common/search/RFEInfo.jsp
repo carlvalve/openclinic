@@ -44,7 +44,7 @@
         
         <!-- Diagnose label, equivalent -->
         <tr>
-            <td class="admin"><%=sType.equalsIgnoreCase("icpc")?"ICD10":"ICPC"%>*</td>
+            <td class="admin"><%=sType.equalsIgnoreCase("icpc")?getTran(request,"web","ICD10",sWebLanguage):getTran(request,"web","ICPC",sWebLanguage)%>*</td>
             <td class="admin2">
                 <%
                     String sFindCode = sCode;

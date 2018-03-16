@@ -2,17 +2,23 @@
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
 <style>
-.progress_bar {
-  height: 6px;
-  background:url(../../_img/themes/default/tradmin_bg.gif) no-repeat #4975A7;
-  width: 0%;
-  -moz-transition: all 4s ease;
-  -moz-transition-delay: 1s;
-  -webkit-transition: all 4s ease;
-  -webkit-transition-delay: 1s;
-  transition: all 4s ease;
-  transition-delay: 1s;
-}
+	.progress_bar {
+	  position:fixed;
+	  top: 0;
+	  height: 6px;
+	  background:url(../../_img/themes/default/tradmin_bg.gif) no-repeat #4975A7;
+	  width: 0%;
+	  -moz-transition: all 4s ease;
+	  -moz-transition-delay: 1s;
+	  -webkit-transition: all 4s ease;
+	  -webkit-transition-delay: 1s;
+	  transition: all 4s ease;
+	  transition-delay: 1s;
+	}
+	
+	body {
+	     padding-top: 10px; 
+	}
 </style>
 <%
 	String uids = checkString(request.getParameter("uids"));
@@ -33,12 +39,13 @@
 			exporter.setJspWriter(out);
 			out.println("<div id='progressBar' class='progress_bar'></div><script>document.getElementById('progressBar').style.width='0%';</script>");
 			out.flush();
+			
 			if(exporter.export("dhis2server")){
 				Thread.sleep(4000);
-				out.println("<font style='font-size: 16px; font-weight: bold'>"+getTran(request,"web","successfultransmission",sWebLanguage)+"</font>");
+				out.println("<font style='font-size: 16px; font-weight: bold'><br/>"+getTran(request,"web","successfultransmission",sWebLanguage)+"</font><script>document.body.scrollTop = document.body.scrollHeight;</script>");
 			}
 			else{
-				out.println("Error sending data to DHIS2!<p/>"+DHIS2Helper.sError);
+				out.println("Error sending data to DHIS2!<p/>"+DHIS2Helper.sError+"<script>document.body.scrollTop = document.body.scrollHeight;</script>");
 			}
 		}
 		else if(format.equalsIgnoreCase("dhis2serverdelete")){
@@ -46,10 +53,10 @@
 			out.println("<div id='progressBar' class='progress_bar'></div>");
 			if(exporter.export("dhis2serverdelete")){
 				Thread.sleep(5000);
-				out.println("<font style='font-size: 16px; font-weight: bold'>"+getTran(request,"web","successfultransmission",sWebLanguage)+"</font>");
+				out.println("<font style='font-size: 16px; font-weight: bold'>"+getTran(request,"web","successfultransmission",sWebLanguage)+"</font><script>document.body.scrollTop = document.body.scrollHeight;</script>");
 			}
 			else{
-				out.println("Error sending data to DHIS2!<p/>"+DHIS2Helper.sError);
+				out.println("Error sending data to DHIS2!<p/>"+DHIS2Helper.sError+"<script>document.body.scrollTop = document.body.scrollHeight;</script>");
 			}
 		}
 		else{

@@ -51,7 +51,7 @@
 				while(i.hasNext()){
 					Element dataset = (Element)i.next();
 					if(!uids.contains(dataset.attributeValue("uid"))){
-						out.println("<tr><td class='admin'><input type='checkbox' name='uid."+dataset.attributeValue("uid")+"'/> "+ScreenHelper.checkString(dataset.attributeValue("label"))+"</td></tr>");
+						out.println("<tr><td class='admin'><input type='checkbox' name='uid."+dataset.attributeValue("uid")+"'/> <font "+(checkString(dataset.attributeValue("color")).length()>0?"color='"+dataset.attributeValue("color")+"'":"")+">"+ScreenHelper.checkString(dataset.attributeValue("label"))+"</font></td></tr>");
 						uids.add(dataset.attributeValue("uid"));
 					}
 				}

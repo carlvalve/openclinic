@@ -256,7 +256,7 @@
        	
           function initBarcode2(){
         	if(mobilecheck()){
-        	  window.open("zxing://scan/?ret=<%="http://"+request.getServerName()+request.getRequestURI().replaceAll(request.getServletPath(), "") %>/main.do\?Page=curative/index.jsp%26PersonID={CODE}")
+        	  window.open("zxing://scan/?ret=<%="http://"+request.getServerName()+":"+request.getServerPort()+request.getRequestURI().replaceAll(request.getServletPath(), "") %>/main.do\?Page=curative/index.jsp%26PersonID={CODE}")
         	}
         	else{
         	  initBarcode();
@@ -280,10 +280,10 @@
 		        if(activePatient!=null && activeUser.getAccessRight("labos.patientlaboresults.select") && activePatient.hasLabRequests()){
 		            %><input type='button' accesskey=':' onclick="clickMenuItem('javascript:searchLab();');" style='display: none'/><img class="link" onclick="clickMenuItem('javascript:searchLab();');" title="<%=getTranNoLink("Web","labresults",sWebLanguage)%>" src="<c:url value='/_img/icons/icon_labo.png'/>"/><%
 		        }
-		        %><img class="link" onclick="clickMenuItem('<c:url value="/mobile/patientMenu.jsp"/>');" border='0' src="<c:url value='/_img/icons/icon_mobile.gif'/>" title="<%=getTranNoLink("web","mobile.interface",sWebLanguage)%>"/>&nbsp;<%
+		        %><img class="link" onclick="clickMenuItem('<c:url value="/html5/getPatient.jsp?searchpersonid="/><%=activePatient.personid %>');" border='0' src="<c:url value='/_img/icons/icon_mobile.gif'/>" title="<%=getTranNoLink("web","mobile.interface",sWebLanguage)%>"/>&nbsp;<%
 			}
 			else{
-                %><img class="link" onclick="clickMenuItem('<c:url value="/mobile/searchPatient.jsp"/>');" border='0' src="<c:url value='/_img/icons/icon_mobile.gif'/>" title="<%=getTranNoLink("web","mobile.interface",sWebLanguage)%>"/>&nbsp;<%
+                %><img class="link" onclick="clickMenuItem('<c:url value="/html5/findPatient.jsp"/>');" border='0' src="<c:url value='/_img/icons/icon_mobile.gif'/>" title="<%=getTranNoLink("web","mobile.interface",sWebLanguage)%>"/>&nbsp;<%
 			}
         
         if(bMenu && activeUser.getAccessRight("labos.fastresults.select")){

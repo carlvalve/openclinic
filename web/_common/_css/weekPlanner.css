@@ -22,7 +22,7 @@ div.today {
 
 .calendarContentTime, .spacer {
   text-align: center;
-  font-family: arial;
+  font-family: Raleway, Geneva, sans-serif;
   font-size: 28px;
   line-height: 50px;
   height: 55px; /* Height of hour rows */
@@ -101,7 +101,7 @@ div.today {
   float: left;
   background: #ECF5FF;
   text-align: center;
-  font-family: sans-serif;
+  font-family: Raleway, Geneva, sans-serif;
   font-weight: bold;
   height: 20px;
   font-size: 11px;
@@ -178,13 +178,13 @@ div.weekScheduler_appointment_info {
 .weekScheduler_appointment_textarea {
 /* Textarea where you edit appointments */
   font-size: 12px;
-  font-family: arial;
+  font-family: Raleway, Geneva, sans-serif;
   color: black;
 }
 
 .weekScheduler_appointment_txt {
   font-size: 9px;
-  font-family: arial;
+  font-family: Raleway, Geneva, sans-serif;
   padding: 2px;
   text-align: left;
   padding-top: 3px;

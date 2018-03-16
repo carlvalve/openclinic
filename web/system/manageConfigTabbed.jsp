@@ -191,7 +191,7 @@
                     <%-- MISCELANEOUS --------------------------------------------%>
                     <table width="100%" cellspacing="1" class="list">
                         <%=writeHeader(sWebLanguage)%>
-
+<%System.out.println(1); %>
                         <%=writeTextfield("admindbName")%>
                         <%=writeTextfield("availableProjects")%>
                         <%=writeRadio("BackButtonDisabled","true","",sWebLanguage)%>
@@ -255,6 +255,7 @@
                     <%-- DEVICES -------------------------------------------------%>
                     <table width="100%" cellspacing="1" class="list">
                         <%=writeHeader(sWebLanguage)%>
+<%System.out.println(2); %>
 
                         <%=writeTextfield("spiroBankDirectory")%>
                         <%=writeRadio("spiroBankEnabled","1","",sWebLanguage)%>
@@ -293,17 +294,23 @@
                     <%-- PWD -----------------------------------------------------%>
                     <table width="100%" cellspacing="1" class="list">
                         <%=writeHeader(sWebLanguage)%>
+<%System.out.println(3); %>
 
                         <%=writeNumberfield("PasswordAvailability")%>
+<%System.out.println(3); %>
                         <%=writeNumberfield("PasswordMinimumCharacters")%>
+<%System.out.println(3); %>
                         <%=writeNumberfield("PasswordNoticeTime")%>
+<%System.out.println(3); %>
                         <%=writeNumberfield("PasswordNotReusablePasswords")%>
+<%System.out.println(3.1); %>
                         
                         <%=writeRadio("PasswordObligedLetters","on","",sWebLanguage)%>
                         <%=writeRadio("PasswordObligedLowerCase","on","",sWebLanguage)%>
                         <%=writeRadio("PasswordObligedNumbers","on","",sWebLanguage)%>
                         <%=writeRadio("PasswordObligedUppercase","on","",sWebLanguage)%>
                         <%=writeRadio("PasswordObligedAlfanumerics","on","",sWebLanguage)%>
+<%System.out.println(3.2); %>
 
                         <% focusFields.add("PasswordAvailability"); %>
                     </table>
@@ -315,6 +322,7 @@
                     <%-- FUSION --------------------------------------------------%>
                     <table width="100%" cellspacing="1" class="list">
                         <%=writeHeader(sWebLanguage)%>
+<%System.out.println(3.3); %>
 
                         <%=writeTextfield("tmpDir")%>
                         <%=writeTextfield("tmpDirectory")%>
@@ -329,6 +337,7 @@
                     <%-- INTRUSION -----------------------------------------------%>
                     <table width="100%" cellspacing="1" class="list">
                         <%=writeHeader(sWebLanguage)%>
+<%System.out.println(4); %>
 
                         <%=writeNumberfield("IPIntrusion_MaxIntrusionsAllowedAtLevel1")%>
                         <%=writeNumberfield("IPIntrusion_MaxIntrusionsAllowedAtLevel2")%>
@@ -354,6 +363,7 @@
                     <%-- INTRUSION -----------------------------------------------%>
                     <table width="100%" cellspacing="1" class="list">
                         <%=writeHeader(sWebLanguage)%>
+<%System.out.println(5); %>
 
                         <%=writeTextfield("lastNotifiedLabResult","")%>
                         <%=writeTextfield("defaultBrokerLanguage",sWebLanguage)%>
