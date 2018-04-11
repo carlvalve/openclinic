@@ -279,9 +279,15 @@
 		        
 		        <%-- DATE (*) --%>
 		        <tr>
-		            <td class="admin"><%=getTran(request,"web.assets","date",sWebLanguage)%>&nbsp;*&nbsp;</td>
+		            <td class="admin"><%=getTran(request,"web.assets","dateintervention",sWebLanguage)%>&nbsp;*&nbsp;</td>
 		            <td class="admin2" colspan='3'>
 		                <%=writeDateField("date","EditForm",ScreenHelper.formatDate(operation.getDate()),sWebLanguage)%>
+		            </td>
+		        </tr> 
+		        <tr>
+		            <td class="admin"><%=getTran(request,"web.assets","enddate",sWebLanguage)%></td>
+		            <td class="admin2" colspan='3'>
+		                <%=writeDateField("comment5","EditForm",operation.getComment5(),sWebLanguage)%>
 		            </td>
 		        </tr> 
 		            
@@ -460,7 +466,7 @@
                       "&comment2="+EditForm.comment2.value+
                       "&comment3="+EditForm.comment3.value+
                       "&comment4="+EditForm.comment4.value+
-                      //"&comment5="+EditForm.comment5.value+
+                      "&comment5="+EditForm.comment5.value+
                       "&lockedby="+document.getElementById("lockedby").value+
                       "&nextDate="+EditForm.nextDate.value;
 

@@ -13,9 +13,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <%@include file="/includes/validateUser.jsp"%>
 <%
+	int patientuid = Integer.parseInt(request.getParameter("patientuid"));
+	activePatient = AdminPerson.getAdminPerson(patientuid+"");
+	session.setAttribute("activePatient",activePatient);
     if(activeUser==null || activePatient==null){
     	System.out.println("Redirecting");
-        out.println("<script>window.location.href='login.jsp';</script>");
+        out.println("<script>window.location.href='/html5/login.jsp';</script>");
         out.flush();
     }
     else{
@@ -55,7 +58,6 @@
 	}
 %>
 <%
-	int patientuid = Integer.parseInt(request.getParameter("patientuid"));
 	int transactionid = Integer.parseInt(request.getParameter("transactionid"));
 	int serverid = Integer.parseInt(request.getParameter("serverid"));
     PersonVO person = MedwanQuery.getInstance().getPerson(patientuid + "");
@@ -129,9 +131,9 @@
 			<table width='100%'>
 				<tr>
 					<td colspan='2' style='font-size:8vw;text-align: right'>
-						<img onclick="window.location.href='../html5/getPatient.jsp?searchpersonid=<%=activePatient.personid %>'" src='<%=sCONTEXTPATH%>/_img/icons/mobile/patient.png'/>
+						<img onclick="window.location.href='../html5/getPatient.jsp?searchpersonid=<%=person.personId %>'" src='<%=sCONTEXTPATH%>/_img/icons/mobile/patient.png'/>
 						<img onclick="window.location.href='../html5/findPatient.jsp'" src='<%=sCONTEXTPATH%>/_img/icons/mobile/find.png'/>
-						<img onclick="window.location.reload()" src='<%=sCONTEXTPATH%>/_img/icons/mobile/refresh.png'/>
+						<img onclick="window.location.href='mobileMeasurements.jsp" src='<%=sCONTEXTPATH%>/_img/icons/mobile/refresh.png'/>
 						<img onclick="window.location.href='../html5/welcome.jsp'" src='<%=sCONTEXTPATH%>/_img/icons/mobile/home.png'/>
 					</td>
 				</tr>
@@ -245,10 +247,16 @@
 				<tr>
 					<td class='mobileadmin2' style='font-size:6vw;'><%=getTranNoLink("web","druggraph",sWebLanguage) %></td>
 					<td class='mobileadmin2'>
-						<select name='drugs' style='font-size:3vw;'>
+						<select name='drugs' id='drugs' style='font-size:3vw;'>
 							<option/>
 							<%=ScreenHelper.writeSelect(request, "partogramme.drug", "", sWebLanguage) %>
 						</select>
+						<script>
+							var drugs=document.getElementById("drugs").options;
+							for(n=0;n<drugs.length;n++){
+								drugs[n].style='font-size:3vw;';
+							}
+						</script>
 					</td>
 				</tr>
 				<tr>
@@ -307,13 +315,13 @@
 			<script>
 				d=new Date();
 				document.getElementById('datetime').value=d.getTime();
-				d=new Date(d.getTime()+d.getTimezoneOffset()*60*1000);
+				d=new Date(d.getTime());
 				document.getElementById('datetimespan').innerHTML=d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear()+" "+("0"+d.getHours()).substr(("0"+d.getHours()).length-2)+":"+("0"+d.getMinutes()).substr(("0"+d.getMinutes()).length-2);
 				
 				function timeDown(){
 					document.getElementById('datetime').value=document.getElementById('datetime').value*1-60000;
 					d=new Date(document.getElementById('datetime').value*1);
-					d=new Date(d.getTime()+d.getTimezoneOffset()*60*1000);
+					d=new Date(d.getTime());
 					document.getElementById('datetimespan').innerHTML=d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear()+" "+("0"+d.getHours()).substr(("0"+d.getHours()).length-2)+":"+("0"+d.getMinutes()).substr(("0"+d.getMinutes()).length-2);
 				}
 				

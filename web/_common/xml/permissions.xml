@@ -127,6 +127,8 @@
         <permission type="examination" id="1154">occup.journal</permission>
         <permission type="examination" id="1155">occup.ccbrt.clubfoot</permission>
         <permission type="examination" id="1156">occup.ccbrt.clubfootfollowup</permission>
+        <permission type="examination" id="1157">occup.ccbrt.eyesurgery</permission>
+        <permission type="examination" id="1158">occup.ccbrt.surgery</permission>
     </application>
     <application type="Web" id="newexaminations">
         <permission type="web" id="globalexaminations">examinations.global</permission>
@@ -325,6 +327,7 @@
     	<permission type="web" id="pharmacy.mergeproducts">pharmacy.mergeproducts</permission>
     	<permission type="web" id="pharmacy.modifybatchoperations">pharmacy.modifybatchoperations</permission>
     	<permission type="web" id="fastdrugsprescription">fastdrugsprescription</permission>
+    	<permission type="web" id="fastdrugsprescription.selectprescriber">fastdrugsprescription.selectprescriber</permission>
     	<permission type="web" id="fastdrugsdelivery">fastdrugsdelivery</permission>
     	<permission type="web" id="pharmacy.unconfirmedwaitinglist">pharmacy.unconfirmedwaitinglist</permission>
     	<permission type="web" id="pharmacy.issueproductsinpast">pharmacy.issueproductsinpast</permission>

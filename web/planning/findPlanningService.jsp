@@ -550,7 +550,7 @@ function closeDeadWindow(){
   	        var resp = request.responseText.trim();
   	        if(resp.length>0){
   	        	var duration = resp.split(":")[0];
-  	        	if((document.getElementById('appointmentDateEndHour').value != resp.split(":")[1] || document.getElementById('appointmentDateEndMinutes').value != resp.split(":")[2] ) && window.confirm('<%=getTranNoLink("web","set.appointmentduration.to",sWebLanguage)%> '+duration+' <%=getTranNoLink("web","minutes",sWebLanguage)%>?')){
+  	        	if(duration>0 && (document.getElementById('appointmentDateEndHour').value != resp.split(":")[1] || document.getElementById('appointmentDateEndMinutes').value != resp.split(":")[2] ) && window.confirm('<%=getTranNoLink("web","set.appointmentduration.to",sWebLanguage)%> '+duration+' <%=getTranNoLink("web","minutes",sWebLanguage)%>?')){
 	  	        	document.getElementById('appointmentDateEndHour').value = resp.split(":")[1];
 	  	        	document.getElementById('appointmentDateEndMinutes').value = resp.split(":")[2];
   	        	}

@@ -19,23 +19,25 @@
 				rs = ps.executeQuery();
 				String type="",status="",characteristics="";
 				while(rs.next()){
-					out.println("<tr>");
 					Nomenclature nomenclature = Nomenclature.get("assetcomponent",rs.getString("oc_component_nomenclature"));
-					out.println("<td valign='bottom' width='1%' nowrap>"+(!bLocked && activeUser.getAccessRight("assets.edit")?"<img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.gif' onclick='deleteComponent(\""+assetuid+"."+rs.getString("oc_component_objectid")+"."+rs.getString("oc_component_nomenclature")+"\")'/> <img src='"+sCONTEXTPATH+"/_img/icons/icon_edit.gif' onclick='editComponent(\""+assetuid+"."+rs.getString("oc_component_objectid")+"."+rs.getString("oc_component_nomenclature")+"\")'/>":"")+rs.getString("oc_component_nomenclature")+" "+nomenclature.getFullyQualifiedName(sWebLanguage)+"</td>");
-					type=checkString(rs.getString("oc_component_type"));
-					status=checkString(rs.getString("oc_component_status"));
-					characteristics=checkString(rs.getString("oc_component_characteristics"));
-					System.out.println("C.1");
-					if(type.length()>0){
-						out.println("<td  valign='bottom' width='5%'>&nbsp;</td>");
-						out.println("<td  valign='bottom'><b>"+type+"</b></td>");
-						out.println("<td  valign='bottom' nowrap><b>"+getTran(request,"component.status",status,sWebLanguage)+"</b></td>");
-						out.println("<td  valign='bottom' ><b>"+characteristics+"</b></td>");
+					if(nomenclature!=null){
+						out.println("<tr>");
+						out.println("<td valign='bottom' width='1%' nowrap>"+(!bLocked && activeUser.getAccessRight("assets.edit")?"<img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.gif' onclick='deleteComponent(\""+assetuid+"."+rs.getString("oc_component_objectid")+"."+rs.getString("oc_component_nomenclature")+"\")'/> <img src='"+sCONTEXTPATH+"/_img/icons/icon_edit.gif' onclick='editComponent(\""+assetuid+"."+rs.getString("oc_component_objectid")+"."+rs.getString("oc_component_nomenclature")+"\")'/>":"")+rs.getString("oc_component_nomenclature")+" "+nomenclature.getFullyQualifiedName(sWebLanguage)+"</td>");
+						type=checkString(rs.getString("oc_component_type"));
+						status=checkString(rs.getString("oc_component_status"));
+						characteristics=checkString(rs.getString("oc_component_characteristics"));
+						System.out.println("C.1");
+						if(type.length()>0){
+							out.println("<td  valign='bottom' width='5%'>&nbsp;</td>");
+							out.println("<td  valign='bottom'><b>"+type+"</b></td>");
+							out.println("<td  valign='bottom' nowrap><b>"+getTran(request,"component.status",status,sWebLanguage)+"</b></td>");
+							out.println("<td  valign='bottom' ><b>"+characteristics+"</b></td>");
+						}
+						else{
+							out.println("<td colspan='3'/>");
+						}
+						out.println("</tr>");
 					}
-					else{
-						out.println("<td colspan='3'/>");
-					}
-					out.println("</tr>");
 				}
 				rs.close();
 				ps.close();

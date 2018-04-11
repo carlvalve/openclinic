@@ -67,4 +67,9 @@
 	}
 	
 	window.setTimeout("loadQueueContent()",500);
+
+	function selectPatient(personid){
+		window.opener.location.href='<%=sCONTEXTPATH%>/main.do?Page=curative/index.jsp&PersonID='+personid;
+		window.close();
+	}
 </script>

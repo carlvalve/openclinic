@@ -24,9 +24,6 @@
 		while(rs.next()){
 			String uid=rs.getString("OC_PRESTATION_SERVERID")+"."+rs.getString("OC_PRESTATION_OBJECTID");
 			String descr=checkString(rs.getString("OC_PRESTATION_DESCRIPTION")).toUpperCase();
-			if(descr.length()>40){
-				descr=descr.substring(0,40);
-			}
         	out.write("<li><b>"+HTMLEntities.htmlentities((checkString(rs.getString("OC_PRESTATION_CODE")).toUpperCase()+" -          ").substring(0,10)+""+descr)+"</b>");
             out.write("<span style='display:none'>|"+uid+"-idcache</span>");
             out.write("</li>");

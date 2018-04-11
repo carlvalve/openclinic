@@ -489,7 +489,7 @@
             
             <table width="100%" class="list" cellspacing="1">
                 <tr class="admin">
-                    <td align="center"><%=getTran(request,"Web.Occup","medwan.healthrecord.medication",sWebLanguage)%></td>
+                    <td align="center"><%=getTran(request,"Web.Occup","medwan.healthrecord.medication",sWebLanguage)%> (<a href="javascript:openPopup('medical/managePrescriptionsPopup.jsp&amp;Action=showDetailsNew&amp;Close=true&amp;findProduct=true',650,430,'medication');void(0);"><%=getTran(request,"web","medications",sWebLanguage)%></a>)</td>
                 </tr>
                 <tr>
                     <td>
@@ -526,7 +526,7 @@
                     </td>
                 </tr>
                 <tr class="admin">
-                    <td align="center"><%=getTran(request,"curative","medication.paperprescriptions",sWebLanguage)%> (<%=ScreenHelper.stdDateFormat.format(((TransactionVO)transaction).getUpdateTime())%>)</td>
+                    <td align="center"><%=getTran(request,"curative","medication.paperprescriptions",sWebLanguage)%> (<%=ScreenHelper.stdDateFormat.format(((TransactionVO)transaction).getUpdateTime())%>) (<a href="javascript:openPopup('medical/managePrescriptionForm.jsp&amp;skipEmpty=1',650,430,'medication');void(0);"><%=getTran(request,"web","medicationpaperprescription",sWebLanguage)%></a>)</td>
                 </tr>
                 <%
                     Vector paperprescriptions = PaperPrescription.find(activePatient.personid,"",ScreenHelper.stdDateFormat.format(((TransactionVO)transaction).getUpdateTime()),ScreenHelper.stdDateFormat.format(((TransactionVO)transaction).getUpdateTime()),"","DESC");
@@ -550,10 +550,13 @@
                         }
                         out.print("</table></td></tr>");
                     }
+                    else{
+                        out.print("<tr><td><table width='100%'>");
+                        // no records found
+                        %><%=getTran(request,"web","noactiveprescriptionsfound",sWebLanguage)%><br><%
+                        out.print("</table></td></tr>");
+                    }
                 %>
-                <tr>
-                    <td><a href="javascript:openPopup('medical/managePrescriptionForm.jsp&amp;skipEmpty=1',650,430,'medication');void(0);"><%=getTran(request,"web","medicationpaperprescription",sWebLanguage)%></a></td>
-                </tr>
             </table>
         </td>
     </tr>

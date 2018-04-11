@@ -294,7 +294,7 @@
 		        <%-- GMDNCODE --%>
 	            <td class="admin" ><%=getTran(request,"web","nomenclature",sWebLanguage)%> *</td>
 	            <td class="admin2" colspan="3">
-	                <input class="greytext" type="text" readonly size="15" name="FindNomenclatureCode" id="FindNomenclatureCode" value="<%=checkString(asset.getNomenclature())%>" onchange="checkDefaultMaintenancePlans();">&nbsp;
+	                <input class="greytext" type="text" readonly size="15" name="FindNomenclatureCode" id="FindNomenclatureCode" value="<%=checkString(asset.getNomenclature())%>" onchange="checkDefaultMaintenancePlans();validateLabels()">&nbsp;
 	                <input type="text" class="text" readonly id="nomenclature" name="nomenclature" size="60" maxLength="110" value="<%=getTranNoLink("admin.nomenclature.asset",checkString(asset.getNomenclature()),sWebLanguage)%>">
 	                <img src="<c:url value="/_img/icons/icon_search.gif"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchNomenclature('FindNomenclatureCode','nomenclature');">
 	                <img src="<c:url value="/_img/icons/icon_delete.gif"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="EditForm.FindNomenclatureCode.value='';EditForm.nomenclature.value='';">
@@ -344,12 +344,12 @@
 	        
 	        <%-- SERIAL NUMBER --%>
 	        <tr>
-	            <td class="admin"><%=getTran(request,"web.assets","serialnumber",sWebLanguage)%>&nbsp;</td>
+	            <td class="admin" id="serialnumber_label"><%=getTran(request,"web.assets","serialnumber",sWebLanguage)%>&nbsp;</td>
 	            <td class="admin2">
 	                <input type="text" class="text" id="serialnumber" name="serialnumber" size="20" maxLength="30" value="<%=checkString(asset.getSerialnumber())%>">
 	            </td>
 		        <%-- QUANTITY (*) --%>
-	            <td class="admin"><%=getTran(request,"web.assets","quantity",sWebLanguage)%>&nbsp;*&nbsp;</td>
+	            <td class="admin" id="quantity_label"><%=getTran(request,"web.assets","quantity",sWebLanguage)%>&nbsp;*&nbsp;</td>
 	            <td class="admin2">
 	                <input type="text" class="text" id="quantity" name="quantity" size="8" maxLength="8" value="<%=asset.getQuantity()>0?asset.getQuantity():1%>" onKeyUp="isNumber(this);" onBlur="if(isNumber(this))setDecimalLength(this,2,true);">
 	            </td>
@@ -484,7 +484,7 @@
 			</tr>     
 	        <%-- SUPPLIER --%>
 	        <tr>
-	            <td class="admin"><%=getTran(request,"web.assets","supplier",sWebLanguage)%>&nbsp;</td>
+	            <td class="admin" id="supplier_label"><%=getTran(request,"web.assets","supplier",sWebLanguage)%>&nbsp;</td>
 	            <td class="admin2" nowrap>
 	                <input type="text" class="text" id="supplierUID" name="supplierUID" size="30" maxLength="50" value="<%=checkString(asset.getSupplierUid())%>">
 	            	<!-- Structured field
@@ -2686,6 +2686,21 @@
     editLDRowid = rowid;
     EditForm.ButtonUpdateLD.disabled = false;
   }
+  
+  function validateLabels(){
+	  if(document.getElementById("FindNomenclatureCode").value.startsWith("E")){
+		  document.getElementById("serialnumber_label").innerHTML='<%=getTranNoLink("gmao","serialnumber",sWebLanguage)%>';
+		  document.getElementById("quantity_label").innerHTML='<%=getTranNoLink("gmao","quantity",sWebLanguage)%>';
+		  document.getElementById("supplier_label").innerHTML='<%=getTranNoLink("gmao","supplier",sWebLanguage)%>';
+	  }
+	  else if(document.getElementById("FindNomenclatureCode").value.startsWith("I")){
+		  document.getElementById("serialnumber_label").innerHTML='<%=getTranNoLink("gmao","cadasternumber",sWebLanguage)%>';
+		  document.getElementById("quantity_label").innerHTML='<%=getTranNoLink("gmao","surface",sWebLanguage)%>';
+		  document.getElementById("supplier_label").innerHTML='<%=getTranNoLink("gmao","enterprise",sWebLanguage)%>';
+	  }
+  }
+  
+  validateLabels();
   
   resizeAllTextareas(8);
   //checkDefaultMaintenancePlans();

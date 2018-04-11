@@ -1585,4 +1585,18 @@
     <fr>Traitement de pied bot - fiche de suivi</fr>  
     <en>Clubfoot assessment and treatment - follow up</en> 
   </Row>  
+  <Row> 
+    <id>1157</id>  
+    <class>ccbrt</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CCBRT_EYESURGERYREPORT</transactiontype>  
+    <fr>Rapport opératoire ophtalmologique (CCBRT)</fr>  
+    <en>Eye surgery report (CCBRT)</en> 
+  </Row>  
+  <Row> 
+    <id>1158</id>  
+    <class>ccbrt</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CCBRT_SURGERYREPORT</transactiontype>  
+    <fr>Rapport opératoire (CCBRT)</fr>  
+    <en>Surgery report (CCBRT)</en> 
+  </Row>  
 </Examinations>

@@ -70,6 +70,7 @@
         <url-pattern>*.do</url-pattern>
     </filter-mapping>
 
+	
     <filter-mapping>
         <filter-name>requestControlFilter</filter-name>
         <url-pattern>*.jsp</url-pattern>

@@ -1,6 +1,7 @@
 <%@page import="be.openclinic.pharmacy.PharmacyReports"%>
 <%@include file="/includes/validateUser.jsp"%>
 <%@page errorPage="/includes/error.jsp"%><%
+try{
 	String report = request.getParameter("report");
 	String serviceStockUid = request.getParameter("servicestockuid");
 	java.util.Date date = ScreenHelper.parseDate(request.getParameter("date"));
@@ -93,4 +94,8 @@
     }
     os.flush();
     os.close();
+}
+catch(Exception e){
+	e.printStackTrace();
+}
 %>

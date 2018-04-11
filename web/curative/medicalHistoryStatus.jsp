@@ -267,7 +267,7 @@ try{
                                                                                 <%=getTran(request,"web.occup",transactionType,sWebLanguage)%>
                                                                                 <%
 	                                                                                String sSeriesID = transactionVO.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_SERIESID");
-	                                                                                String sDescription = transactionVO.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYDESCRIPTION");
+	                                                                                String sDescription = transactionVO.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYDESCRIPTION")+" "+transactionVO.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_MODALITY");
                                                                                     %>(<%=sSeriesID%> - <%=sDescription %>)<%
                                                                                 %>
                                                                             </a>

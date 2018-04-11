@@ -91,8 +91,8 @@
             				if(rs.getString("userid").equalsIgnoreCase(activeUser.userid)){
             					out.println("<option selected>"+name+"</option>");
             				}
-            				else{
-            					out.println("<option>"+name+"</option>");
+            				else if(activeUser.getAccessRightNoSA("fastdrugsprescription.selectprescriber.add")){
+            					out.println("<option >"+name+"</option>");
             				}
             			}
             			rs.close();
@@ -164,7 +164,7 @@
               "&Comment="+document.getElementById("prescriber").value+(document.getElementById("prescriber").value.length>0 && document.getElementById("comment").value.length>0?", ":"")+document.getElementById("comment").value+
               "&ts="+new Date().getTime();
     new Ajax.Request(url,{
-      method: "GET",
+      method: "POST",
       parameters: "",
       onSuccess: function(resp){
         var label = eval('('+resp.responseText+')');

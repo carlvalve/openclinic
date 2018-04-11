@@ -25,7 +25,7 @@
 		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
 		String sSql="";
 		if(unconfirmed.equalsIgnoreCase("1")){
-			sSql="select now() oc_operation_date,personid,lastname,firstname,oc_list_quantity oc_operation_unitschanged, oc_list_batchuid oc_operation_batchuid,oc_list_serverid oc_operation_serverid,oc_list_objectid oc_operation_objectid,oc_stock_serverid,oc_stock_objectid from oc_drugsoutlist,oc_productstocks,adminview where "+
+			sSql="select "+MedwanQuery.getInstance().getConfigString("dateFunction","now()")+" oc_operation_date,personid,lastname,firstname,oc_list_quantity oc_operation_unitschanged, oc_list_batchuid oc_operation_batchuid,oc_list_serverid oc_operation_serverid,oc_list_objectid oc_operation_objectid,oc_stock_serverid,oc_stock_objectid from oc_drugsoutlist,oc_productstocks,adminview where "+
 				" oc_stock_objectid=replace(oc_list_productstockuid,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','') and"+
 				" '1900-01-01'<? and"+
 				" personid=oc_list_patientuid and"+
@@ -73,7 +73,7 @@
 			else{
 				userName=MedwanQuery.getInstance().getUserName(rs.getInt("oc_operation_updateuid"));
 			}
-			queue.add(uid+";"+rs.getString("oc_operation_batchuid")+";"+quantity+";"+patient+";"+operationuid+";"+date+";"+userName+";");
+			queue.add(uid+";"+rs.getString("oc_operation_batchuid")+";"+quantity+";"+patient+";"+operationuid+";"+date+";"+userName+";"+personid+";");
 		}
 		for(int n=0;n<queue.size();n++){
 			String queueItem = (String)queue.elementAt(n);
@@ -89,12 +89,13 @@
 				String date = queueItem.split(";")[5];
 				int level = stock.getLevel()+(Integer)quantities.get(queueItem.split(";")[0]);
 				String patient = queueItem.split(";")[3];
+				String personid=queueItem.split(";")[7];
 				if(unconfirmed.equalsIgnoreCase("1")){
 					if(activeUser.getAccessRightNoSA("pharmacy.unconfirmedwaitinglist.delete")){
-						out.println("<tr><td class='admin' onmouseover=\"this.style.cursor='hand';\" onmouseout=\"this.style.cursor='default';\" ><img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.gif' onclick=\"deleteProduct('"+queueItem.split(";")[4]+"');\"/></td><td class='admin2'><font style='font-size:14px'>"+date+"</font></td><td class='admin2'><font style='font-size:14px'>"+productName+"</font></td><td class='admin2'><font style='font-size:14px'>"+batchNumber+"</font></td><td class='admin2'><font style='font-size:14px'>"+quantity+"</font></td><td class='admin2'><font style='font-size:14px'>"+level+"</font></td><td class='admin2'><font style='font-size:10px'>"+patient+"</font></td></tr>");
+						out.println("<tr><td class='admin' onmouseover=\"this.style.cursor='hand';\" onmouseout=\"this.style.cursor='default';\" nowrap ><img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.gif' onclick=\"deleteProduct('"+queueItem.split(";")[4]+"');\"/></td><td class='admin2'><font style='font-size:14px'>< "+date+"</font></td><td class='admin2'><font style='font-size:14px'>"+productName+"</font></td><td class='admin2'><font style='font-size:14px'>"+batchNumber+"</font></td><td class='admin2'><font style='font-size:14px'>"+quantity+"</font></td><td class='admin2'><font style='font-size:14px'>"+level+"</font></td><td class='admin2'><font style='font-size:10px'><a href='javascript:selectPatient("+personid+");'>"+patient+"</a></font></td></tr>");
 					}
 					else{
-						out.println("<tr><td class='admin2' colspan='2'><font style='font-size:14px'>"+date+"</font></td><td class='admin'><font style='font-size:14px'>"+productName+"</font></td><td class='admin2'><font style='font-size:14px'>"+batchNumber+"</font></td><td class='admin2'><font style='font-size:14px'>"+quantity+"</font></td><td class='admin2'><font style='font-size:14px'>"+level+"</font></td><td class='admin2'><font style='font-size:10px'>"+patient+"</font></td></tr>");
+						out.println("<tr><td class='admin2' colspan='2' nowrap><font style='font-size:14px'>< "+date+"</font></td><td class='admin'><font style='font-size:14px'>"+productName+"</font></td><td class='admin2'><font style='font-size:14px'>"+batchNumber+"</font></td><td class='admin2'><font style='font-size:14px'>"+quantity+"</font></td><td class='admin2'><font style='font-size:14px'>"+level+"</font></td><td class='admin2'><font style='font-size:10px'><a href='javascript:selectPatient("+personid+");'>"+patient+"</a></font></td></tr>");
 					}
 				}
 				else{

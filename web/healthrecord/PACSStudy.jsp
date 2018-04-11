@@ -27,6 +27,9 @@
                 <input type="text" class="text" size="12" maxLength="10" value="<mxs:propertyAccessorI18N name="transaction" scope="page" property="updateTime" formatType="date"/>" name="currentTransactionVO.<TransactionVO[hashCode=<bean:write name="transaction" scope="page" property="transactionId"/>]>.updateTime" id="trandate" OnBlur="checkDate(this);">
                 <script>writeTranDate();</script>
             </td>
+            <td class='admin2' rowspan='10' width='30%'>
+            	<center><img style='max-width: 300px; max-height: 300px' src='<%=sCONTEXTPATH %>/pacs/getDICOMJpeg.jsp?excludefromFilter=1&uid=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYUID" property="value"/>;<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_SERIESID" property="value"/>'/></center>
+            </td>
         </tr>
         
         <%-- studyuid --%>

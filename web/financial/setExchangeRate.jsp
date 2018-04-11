@@ -2,6 +2,7 @@
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
 <%
+try{
 	String sDate=checkString(request.getParameter("erdate"));
 	if(sDate.length()==0){
 		sDate=ScreenHelper.getDate();
@@ -31,7 +32,7 @@
 		</tr>
 		<tr>
 			<td class='admin'><%=getTran(request,"web","exchangerate",sWebLanguage) %></td>
-			<td class='admin2'><input type='text' class='text' name='errate' id='errate' size='15' value='<%=sRate%>'/><%=MedwanQuery.getInstance().getConfigString("currency","") %> <span id='existingrate'></span></td>
+			<td class='admin2'><input type='text' class='text' name='errate' id='errate' size='20' value='<%=sRate%>'/> <%=MedwanQuery.getInstance().getConfigString("currency","") %></td>
 		</tr>
 	</table>
 	<input type='submit' name='submit' value='<%=getTran(null,"web","save",sWebLanguage) %>'/>
@@ -55,3 +56,9 @@
 	}
 	checkrate();
 </script>
+<%
+}
+catch(Exception e){
+	e.printStackTrace();
+}
+%>

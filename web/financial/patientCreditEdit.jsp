@@ -55,6 +55,7 @@
            sEditCreditEncUid     = checkString(request.getParameter("EditCreditEncounterUid")),
            sEditCreditDescr      = checkString(request.getParameter("EditCreditDescription")),
        	   sEditBalance          = checkString(request.getParameter("EditBalance")),
+      	   sEditCreditCurrency   = checkString(request.getParameter("EditCreditCurrency")),
            sEditCreditWicketUid  = checkString(request.getParameter("EditCreditWicketUid"));
 
     /// DEBUG /////////////////////////////////////////////////////////////////////////////////////
@@ -69,6 +70,7 @@
         Debug.println("sEditCreditType       : "+sEditCreditType);
         Debug.println("sEditCreditEncUid     : "+sEditCreditEncUid);
         Debug.println("sEditCreditDescr      : "+sEditCreditDescr);
+        Debug.println("sEditCreditCurrency   : "+sEditCreditCurrency);
         Debug.println("sEditCreditWicketUid  : "+sEditCreditWicketUid+"\n");
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -112,6 +114,7 @@
         credit.setComment(sEditCreditDescr);
         credit.setUpdateDateTime(ScreenHelper.getSQLDate(getDate()));
         credit.setUpdateUser(activeUser.userid);
+        credit.setCurrency(sEditCreditCurrency);
         credit.setPatientUid(MedwanQuery.getInstance().getConfigString("serverId")+"."+adminPerson.personid);
         credit.store();
 
@@ -154,6 +157,7 @@
 
             wicketCredit.setUpdateDateTime(getSQLTime());
             wicketCredit.setUpdateUser(activeUser.userid);
+            wicketCredit.setCurrency(sEditCreditCurrency);
 
             wicketCredit.store();
 
@@ -218,6 +222,7 @@
         sEditCreditInvoiceNr  = sEditCreditInvoiceUid.substring(sEditCreditInvoiceUid.indexOf(".")+1);
         sEditCreditAmount     = Double.toString(credit.getAmount());
         sEditCreditDescr      = credit.getComment();
+        sEditCreditCurrency   = credit.getCurrency();
         sEditCreditType       = credit.getType();
 
         // encounter
@@ -259,6 +264,7 @@
         sEditCreditEncName    = "";
         sEditCreditType       = MedwanQuery.getInstance().getConfigString("defaultPatientCreditType","patient.payment");
         sEditCreditDescr      = "";
+        sEditCreditCurrency   = "";
 
         // active encounter as default
         encounter = Encounter.getActiveEncounter(adminPerson.personid);
@@ -368,13 +374,14 @@
                 <input type="hidden" name="EditCreditMaxAmount">
                 <%if(MedwanQuery.getInstance().getConfigString("AlternateCurrency","").length()>0){ 
                 %>
-	                <input class="text" type="text" name="EditCreditAmount" id="EditCreditAmount" value="<%=sEditCreditAmount.length()==0?"0":sEditCreditAmount%>" size="14" maxLength="13" onKeyUp="isNumberNegativeAllowed(this);checkAlternate();" onBlur="checkForMaxAmount(this);">&nbsp;<%=MedwanQuery.getInstance().getConfigParam("currency","€")%>
-	                &nbsp;&nbsp;<input class="text" type="text" name="EditAlternateCreditAmount" id="EditAlternateCreditAmount" value="<%=sEditCreditAmount.length()==0?"0":new DecimalFormat(MedwanQuery.getInstance().getConfigString("AlternateCurrencyPriceFormat","# ##0.00")).format(Double.parseDouble(sEditCreditAmount)/ExportSAP_AR_INV.getExchangeRate(MedwanQuery.getInstance().getConfigString("AlternateCurrency"), new java.util.Date()))%>" size="14" maxLength="13" onKeyUp="isNumberNegativeAllowed(this);checkPrimary();" onBlur="checkForMaxAmount(this);">&nbsp;<%=MedwanQuery.getInstance().getConfigString("AlternateCurrency")%>
+	                <input class='text' type='radio' name='EditCreditCurrency' value='<%=MedwanQuery.getInstance().getConfigParam("currency","€")%>' <%=checkString(sEditCreditCurrency).length()==0 || MedwanQuery.getInstance().getConfigParam("currency","€").equalsIgnoreCase(sEditCreditCurrency)?"checked":""%>/><input class="text" type="text" name="EditCreditAmount" id="EditCreditAmount" value="<%=sEditCreditAmount.length()==0?"0":sEditCreditAmount%>" size="14" maxLength="13" onKeyUp="isNumberNegativeAllowed(this);checkAlternate();" onBlur="checkForMaxAmount(this);">&nbsp;<%=MedwanQuery.getInstance().getConfigParam("currency","€")%>
+	                &nbsp;&nbsp;<input class='text' type='radio' name='EditCreditCurrency' value='<%=MedwanQuery.getInstance().getConfigParam("AlternateCurrency","€")%>' <%=MedwanQuery.getInstance().getConfigParam("AlternateCurrency","€").equalsIgnoreCase(sEditCreditCurrency)?"checked":""%>/><input class="text" type="text" name="EditAlternateCreditAmount" id="EditAlternateCreditAmount" value="<%=sEditCreditAmount.length()==0?"0":new DecimalFormat(MedwanQuery.getInstance().getConfigString("AlternateCurrencyPriceFormat","# ##0.00")).format(Double.parseDouble(sEditCreditAmount)/ExportSAP_AR_INV.getExchangeRate(MedwanQuery.getInstance().getConfigString("AlternateCurrency"), new java.util.Date()))%>" size="14" maxLength="13" onKeyUp="isNumberNegativeAllowed(this);checkPrimary();" onBlur="checkForMaxAmount(this);">&nbsp;<%=MedwanQuery.getInstance().getConfigString("AlternateCurrency")%>
             	<%}
                  else {
                  %>
 	                <input class="text" type="text" name="EditCreditAmount" value="<%=sEditCreditAmount%>" size="10" maxLength="9" onKeyUp="isNumberNegativeAllowed(this);" onBlur="checkForMaxAmount(this);">&nbsp;<%=MedwanQuery.getInstance().getConfigParam("currency","€")%>
 	                <input type='hidden' name='EditAlternateCreditAmount'/>
+	                <input type='hidden' name='EditCreditCurrency' value='<%=MedwanQuery.getInstance().getConfigParam("currency","€")%>'/>
                  <%
                  }
                  %>
@@ -664,13 +671,14 @@
 	%>
   }
 
-  function selectCredit(creditUid,creditDate,amount,type,encUid,encName,descr, invoiceUid,wicketuid){
+  function selectCredit(creditUid,creditDate,amount,type,encUid,encName,descr, invoiceUid,wicketuid,encCur){
     EditForm.EditCreditWicketUid.value=wicketuid;
     EditForm.EditCreditUid.value = creditUid;
     EditForm.EditCreditDate.value = creditDate;
     EditForm.EditCreditAmount.value = amount;
     EditForm.EditCreditType.value = type;
     EditForm.EditCreditEncounterUid.value = encUid;
+    EditForm.EditCreditCurrency.value = encCur;
     EditForm.EditCreditEncounterName.value = encName;
     EditForm.EditCreditDescription.value = replaceAll(descr,"<br>","\r\n");
     EditForm.EditCreditInvoiceUid.value = invoiceUid;
@@ -708,6 +716,7 @@
     EditForm.EditCreditInvoiceUid.value = "";
     EditForm.EditCreditInvoiceNr.value = "";
     EditForm.EditCreditAmount.value = "";
+    EditForm.EditCreditCurrency.value = "";
     EditForm.EditAlternateCreditAmount.value = "";
     EditForm.EditCreditType.value = "<%=MedwanQuery.getInstance().getConfigString("defaultPatientCreditType","patient.payment")%>";
 

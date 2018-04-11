@@ -1,3 +1,6 @@
+<%@page import="be.mxs.common.util.system.Picture,
+                java.io.File,
+                java.io.FileOutputStream"%>
 <%@page import="be.openclinic.finance.Insurance"%>
 <%@page import="be.dpms.medwan.common.model.vo.administration.PersonVO"%>
 <%@page import="be.dpms.medwan.common.model.vo.occupationalmedicine.ExaminationVO"%>
@@ -44,6 +47,32 @@
 						%>
 					</td>
 				</tr>
+				<%
+				    boolean pictureExists = Picture.exists(Integer.parseInt(activePatient.personid));
+				    if(pictureExists){
+				        Picture picture = new Picture(Integer.parseInt(activePatient.personid));
+				        
+				        try{
+				        	String sDocumentsFolder = MedwanQuery.getInstance().getConfigString("DocumentsFolder","c:/projects/openclinic/documents");
+				            File file = new File(sDocumentsFolder+"/"+activeUser.userid+".jpg");
+				            FileOutputStream fileOutputStream = new FileOutputStream(file);
+				            fileOutputStream.write(picture.getPicture());
+				            fileOutputStream.close();
+				            
+				            // extra row and cell for picture
+				            %>
+								<tr>
+									<td colspan='2' style='text-align:center;padding:10px;max-width:160px'>
+										<img border="0" style='max-width:100%' src='<c:url value="/"/>documents/<%=activeUser.userid%>.jpg?ts=<%=getTs()%>'/>
+									</td>
+								</tr>
+				            <%
+				        }
+				        catch(Exception e){
+				        	pictureExists = false;
+				        }
+				    }
+				%>
 				<tr>
 					<td colspan='2' style='font-size:6vw;font-weight: bolder;text-align: center;background-color:#C3D9FF;padding:10px'><%=getTranNoLink("web","admindata",sWebLanguage) %></td>
 				</tr>

@@ -72,10 +72,10 @@
 				<tr>
 					<td style='font-size:8vw;text-align: left'></td>
 					<td style='font-size:8vw;text-align: right'>
-						<img onclick="window.location.href='../html5/getPatient.jsp?searchpersonid=<%=activePatient.personid %>'" src='<%=sCONTEXTPATH%>/_img/icons/mobile/patient.png'/>
-						<img onclick="window.location.href='../html5/findPatient.jsp'" src='<%=sCONTEXTPATH%>/_img/icons/mobile/find.png'/>
-						<img onclick="window.location.reload()" src='<%=sCONTEXTPATH%>/_img/icons/mobile/refresh.png'/>
-						<img onclick="window.location.href='../html5/welcome.jsp'" src='<%=sCONTEXTPATH%>/_img/icons/mobile/home.png'/>
+						<img onclick="window.location.href='getPatient.jsp?searchpersonid=<%=activePatient.personid %>'" src='<%=sCONTEXTPATH%>/_img/icons/mobile/patient.png'/>
+						<img onclick="window.location.href='findPatient.jsp'" src='<%=sCONTEXTPATH%>/_img/icons/mobile/find.png'/>
+						<img onclick="window.location.href='getVaccinations.jsp" src='<%=sCONTEXTPATH%>/_img/icons/mobile/refresh.png'/>
+						<img onclick="window.location.href='welcome.jsp'" src='<%=sCONTEXTPATH%>/_img/icons/mobile/home.png'/>
 					</td>
 				</tr>
 				<tr>
@@ -120,7 +120,7 @@
 				<tr>
 					<td class='mobileadmin2' style='font-size:6vw'><%=getTranNoLink("web","type",sWebLanguage) %></td>
 					<td class='mobileadmin2' style='font-size:6vw'>
-						<select name='vaccintype' id='vaccintype' style='font-size:6vw;align: left;padding:10px' onchange='updatestatus();'>
+						<select name='vaccintype' id='vaccintype' style='font-size:6vw' onchange='updatestatus();'>
 							<option/>
 							<%
 								if(vaccinfo!=null){
