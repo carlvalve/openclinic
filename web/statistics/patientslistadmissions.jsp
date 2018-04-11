@@ -29,24 +29,25 @@
     }
     
 	String sql = "select firstname,lastname,dateofbirth,oc_encounter_begindate,"+
-	             "  oc_encounter_serviceuid,oc_encounter_objectid,personid"+
-				 " from adminview a, oc_encounters_view b"+
+	             "  (select max(oc_encounter_serviceuid) from oc_encounter_services c where c.oc_encounter_serverid=b.oc_encounter_serverid and c.oc_encounter_objectid = b.oc_encounter_objectid and c.oc_encounter_serviceuid like ?) oc_encounter_serviceuid,oc_encounter_objectid,personid"+
+				 " from adminview a, oc_encounters b"+
 				 "  where a.personid = b.oc_encounter_patientuid"+
 				 "   and oc_encounter_begindate >= ?"+
 				 "   and oc_encounter_begindate <= ?"+
 				 "   and oc_encounter_type = 'admission'"+ // difference
-				 "   and oc_encounter_serviceuid like ?"+
+				 "   and  exists(select * from oc_encounter_services c where c.oc_encounter_serverid=b.oc_encounter_serverid and c.oc_encounter_objectid = b.oc_encounter_objectid and c.oc_encounter_serviceuid like ?)"+
 				 "  order by oc_encounter_objectid";
     Debug.println("sql : "+sql);
 	Hashtable insurars = new Hashtable();
     Connection oc_conn = MedwanQuery.getInstance().getOpenclinicConnection();
 	PreparedStatement ps = oc_conn.prepareStatement(sql);
-	ps.setDate(1,new java.sql.Date(ScreenHelper.parseDate(sStart).getTime()));
+	ps.setString(1,checkString(request.getParameter("statserviceid"))+"%");
+	ps.setDate(2,new java.sql.Date(ScreenHelper.parseDate(sStart).getTime()));
 	long l = 24*3600*1000-1;
 	java.util.Date endDate = ScreenHelper.parseDate(sEnd);
 	endDate.setTime(endDate.getTime()+l);
-	ps.setTimestamp(2,new java.sql.Timestamp(endDate.getTime()));
-	ps.setString(3,checkString(request.getParameter("statserviceid"))+"%");
+	ps.setTimestamp(3,new java.sql.Timestamp(endDate.getTime()));
+	ps.setString(4,checkString(request.getParameter("statserviceid"))+"%");
 	ResultSet rs = ps.executeQuery();
 	
 	int counter = 0, encounteruid = 0;

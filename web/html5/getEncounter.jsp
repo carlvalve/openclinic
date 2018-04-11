@@ -33,9 +33,9 @@
 			<table width='100%'>
 				<tr>
 					<td colspan='2' style='font-size:8vw;text-align: right'>
-						<img onclick="window.location.href='../html5/getPatient.jsp?searchpersonid=<%=activePatient.personid %>'" src='<%=sCONTEXTPATH%>/_img/icons/mobile/patient.png'/>
-						<img onclick="window.location.href='../html5/findPatient.jsp'" src='<%=sCONTEXTPATH%>/_img/icons/mobile/find.png'/>
-						<img onclick="window.location.reload()" src='<%=sCONTEXTPATH%>/_img/icons/mobile/refresh.png'/>
+						<img onclick="window.location.href='getPatient.jsp?searchpersonid=<%=activePatient.personid %>'" src='<%=sCONTEXTPATH%>/_img/icons/mobile/patient.png'/>
+						<img onclick="window.location.href='findPatient.jsp'" src='<%=sCONTEXTPATH%>/_img/icons/mobile/find.png'/>
+						<img onclick="window.location.href='getEncounter.jsp'" src='<%=sCONTEXTPATH%>/_img/icons/mobile/refresh.png'/>
 						<img onclick="window.location.href='../html5/welcome.jsp'" src='<%=sCONTEXTPATH%>/_img/icons/mobile/home.png'/>
 					</td>
 				</tr>
@@ -64,6 +64,10 @@
 				<tr>
 					<td class='mobileadmin2' style='font-size:6vw'><%=getTranNoLink("web","origin",sWebLanguage) %></td>
 					<td class='mobileadmin2' style='font-size:6vw;font-weight: bold'><%=getTranNoLink("urgency.origin",encounter.getOrigin(),sWebLanguage)%></td>
+				</tr>
+				<tr>
+					<td class='mobileadmin2' style='font-size:6vw'><%=getTranNoLink("web","situation",sWebLanguage) %></td>
+					<td class='mobileadmin2' style='font-size:6vw;font-weight: bold'><%=getTranNoLink("encounter.situation",encounter.getSituation(),sWebLanguage)%></td>
 				</tr>
 			<%
 				String reasons = ReasonForEncounter.getReasonsForEncounterAsText(encounter.getUid(), sWebLanguage);

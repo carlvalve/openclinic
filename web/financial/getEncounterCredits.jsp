@@ -64,7 +64,7 @@
 
                         hSort.put(credit.getDate().getTime()+"="+credit.getUid(),
                         		   (!credit.getType().equalsIgnoreCase("reduction") || activeUser.getAccessRight("financial.invoicereduction.select")?
-                                   " onclick=\"selectCredit('"+credit.getUid()+"','"+ScreenHelper.formatDate(credit.getDate())+"','"+credit.getAmount()+"','"+credit.getType()+"','"+credit.getEncounterUid()+"','"+HTMLEntities.htmlentities(sEncounterName)+"','"+HTMLEntities.htmlentities(ScreenHelper.checkString(credit.getComment()).replaceAll("'","´").replaceAll("\r\n","<br>"))+"','"+checkString(credit.getInvoiceUid())+"','"+wicketUid+"');\">":
+                                   " onclick=\"selectCredit('"+credit.getUid()+"','"+ScreenHelper.formatDate(credit.getDate())+"','"+credit.getAmount()+"','"+credit.getType()+"','"+credit.getEncounterUid()+"','"+HTMLEntities.htmlentities(sEncounterName)+"','"+HTMLEntities.htmlentities(ScreenHelper.checkString(credit.getComment()).replaceAll("'","´").replaceAll("\r\n","<br>"))+"','"+checkString(credit.getInvoiceUid())+"','"+wicketUid+"','"+checkString(credit.getCurrency())+"');\">":
                                    " onclick='alert(\""+ScreenHelper.getTranNoLink("web","nopermission",sWebLanguage)+"\")'>")+
                                    "<td><b>"+credit.getUid().split("\\.")[1]+"</b>&nbsp;</td>"+
                                    "<td>"+ScreenHelper.formatDate(credit.getDate())+"</td>"+

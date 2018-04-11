@@ -1,3 +1,4 @@
+<%@page import="be.mxs.common.util.io.ExportSAP_AR_INV"%>
 <%@page import="be.openclinic.finance.*,
                 java.util.Hashtable,
                 java.util.Vector,
@@ -43,14 +44,15 @@
         }
     }
 
-    String sWicketBalance = "", sWicketDebetTotal = "", sWicketCreditTotal = "";
+    String sWicketBalance = "", sWicketDebetTotal = "", sWicketCreditTotal = "", sWicketAlternateCreditTotal = "";
     Hashtable hDebets  = new Hashtable(),
               hCredits = new Hashtable();
     StringBuffer sDebetsHtml  = new StringBuffer(),
                  sCreditsHtml = new StringBuffer();
-    double dCreditsTotal = 0, dDebetsTotal = 0;
+    double dCreditsTotal = 0, dDebetsTotal = 0, dAlternateCreditsTotal=0;
     Wicket wicket = null;
     DecimalFormat priceFormat = new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#,##0.00"));
+    String sAlternateCurrency = MedwanQuery.getInstance().getConfigString("AlternateCurrency","");
 
     //*** SEARCH **********************************************************************************
     if(sAction.equals("search")){
@@ -92,7 +94,7 @@
             sDebetsHtml.append("<tr class='list"+sClass+"'>")
                         .append("<td>"+ScreenHelper.stdDateFormat.format(debet.getOperationDate())+"</td>")
                         .append("<td>"+checkString(debet.getUid())+"</td>")
-                        .append("<td style='text-align:right;'>"+priceFormat.format(debet.getAmount())+"&nbsp;&nbsp;</td>")
+                        .append("<td>"+priceFormat.format(debet.getAmount())+"&nbsp;&nbsp;</td>")
                         .append("<td>"+getTranNoLink("debet.type",debet.getOperationType(),sWebLanguage)+"</td>")
                         .append("<td>"+ScreenHelper.getFullUserName(Integer.toString(debet.getUserUID()))+"</td>")
                         .append("<td>"+debet.getComment()+"</td>")
@@ -121,11 +123,16 @@
             if(credit.getUserUID()!=Integer.parseInt(credit.getUpdateUser())){
             	sModify=" ! "+getTran(request,"web","modified.by",sWebLanguage)+" "+ScreenHelper.getFullUserName(credit.getUpdateUser())+" "+getTran(request,"web","on",sWebLanguage)+" "+ScreenHelper.fullDateFormat.format(credit.getUpdateDateTime());
             }
+	        String sAlternateValue="";
+	        if(sAlternateCurrency.length()>0 && checkString(credit.getCurrency()).equalsIgnoreCase(sAlternateCurrency)){
+	        	sAlternateValue=" <b>("+new DecimalFormat(MedwanQuery.getInstance().getConfigString("AlternateCurrencyPriceFormat","# ##0.00")).format(credit.getAmount()/ExportSAP_AR_INV.getExchangeRate(sAlternateCurrency, credit.getOperationDate()))+" "+sAlternateCurrency+")</b>";
+	        	dAlternateCreditsTotal+=credit.getAmount();
+	        }
 
             sCreditsHtml.append("<tr class='list"+sClass+"'>")
                          .append("<td>"+ScreenHelper.stdDateFormat.format(credit.getOperationDate())+"</td>")
                          .append("<td>"+checkString(credit.getUid())+"</td>")
-                         .append("<td style='text-align:right;'>"+priceFormat.format(credit.getAmount())+"&nbsp;&nbsp;</td>")
+                         .append("<td>"+priceFormat.format(credit.getAmount())+sAlternateValue+"&nbsp;&nbsp;</td>")
                          .append("<td>"+getTranNoLink("credit.type",credit.getOperationType(),sWebLanguage)+"</td>")
                          .append("<td>"+ScreenHelper.getFullUserName(Integer.toString(credit.getUserUID()))+"</td>")
                          .append("<td>"+credit.getComment()+sModify+"</td>")
@@ -134,7 +141,10 @@
             dCreditsTotal+= credit.getAmount();
         }
 
-        sWicketCreditTotal = priceFormat.format(dCreditsTotal);
+        sWicketCreditTotal = priceFormat.format(dCreditsTotal-dAlternateCreditsTotal);
+        if(dAlternateCreditsTotal>0){
+        	sWicketAlternateCreditTotal = new DecimalFormat(MedwanQuery.getInstance().getConfigString("AlternateCurrencyPriceFormat","# ##0.00")).format(dAlternateCreditsTotal/ExportSAP_AR_INV.getExchangeRate(sAlternateCurrency, ScreenHelper.parseDate(sFindWicketFromDate)));
+        }
 
         // calculate saldo for specified period
         sWicketBalance = priceFormat.format(dCreditsTotal-dDebetsTotal);
@@ -244,12 +254,12 @@
                                         <table width="100%" cellspacing="0" cellpadding="0" class="sortable" id="searchresults" style="border:none;">
                                             <%-- HEADER --%>
                                             <tr class="admin">
-                                                <td width="120"><<%=sSortDir%>><%=getTranNoLink("wicket","operation_date",sWebLanguage)%></<%=sSortDir%>></td>
-                                                <td width="1%">ID</td>
-                                                <td width="140" style="text-align:right;"><%=getTranNoLink("wicket","amount",sWebLanguage)%> <%=MedwanQuery.getInstance().getConfigParam("currency","€")%></td>
-                                                <td width="20%"><%=getTranNoLink("wicket","type",sWebLanguage)%></td>
-                                                <td width="20%"><%=getTranNoLink("wicket","user",sWebLanguage)%></td>
-                                                <td width="*"><%=getTranNoLink("wicket","comment",sWebLanguage)%></td>
+                                                <td><<%=sSortDir%>><%=getTranNoLink("wicket","operation_date",sWebLanguage)%></<%=sSortDir%>></td>
+                                                <td>ID</td>
+                                                <td><%=getTranNoLink("wicket","amount",sWebLanguage)%> <%=MedwanQuery.getInstance().getConfigParam("currency","€")%></td>
+                                                <td><%=getTranNoLink("wicket","type",sWebLanguage)%></td>
+                                                <td><%=getTranNoLink("wicket","user",sWebLanguage)%></td>
+                                                <td><%=getTranNoLink("wicket","comment",sWebLanguage)%></td>
                                             </tr>
 
                                             <%=sDebetsHtml%>
@@ -303,12 +313,12 @@
                                         <table width="100%" cellspacing="0" cellpadding="0" class="sortable" id="searchresults2" style="border:none;">
                                             <%-- HEADER --%>
                                             <tr class="admin">
-                                                <td width="120"><<%=sSortDir%>><%=getTranNoLink("wicket","operation_date",sWebLanguage)%></<%=sSortDir%>></td>
-                                                <td width="1%">ID</td>
-                                                <td width="140" style="text-align:right;"><%=getTranNoLink("wicket","amount",sWebLanguage)%> <%=MedwanQuery.getInstance().getConfigParam("currency","€")%></td>
-                                                <td width="20%"><%=getTranNoLink("wicket","type",sWebLanguage)%></td>
-                                                <td width="20%"><%=getTranNoLink("wicket","user",sWebLanguage)%></td>
-                                                <td width="*"><%=getTranNoLink("wicket","comment",sWebLanguage)%></td>
+                                                <td><<%=sSortDir%>><%=getTranNoLink("wicket","operation_date",sWebLanguage)%></<%=sSortDir%>></td>
+                                                <td>ID</td>
+                                                <td><%=getTranNoLink("wicket","amount",sWebLanguage)%> <%=MedwanQuery.getInstance().getConfigParam("currency","€")%></td>
+                                                <td><%=getTranNoLink("wicket","type",sWebLanguage)%></td>
+                                                <td><%=getTranNoLink("wicket","user",sWebLanguage)%></td>
+                                                <td><%=getTranNoLink("wicket","comment",sWebLanguage)%></td>
                                             </tr>
 
                                             <%=sCreditsHtml%>
@@ -336,6 +346,13 @@
                                                 <td width="150" style="text-align:right;height:20px;border-top:1px solid black;"><%=sWicketCreditTotal%>&nbsp;</td>
                                                 <td width="150" style="height:20px;">&nbsp;<%=MedwanQuery.getInstance().getConfigParam("currency","€")%></td>
                                              </tr>
+                                             <%if(sWicketAlternateCreditTotal.length()>0){ %>
+	                                            <tr>
+	                                                <td width="120" style="text-align:right;height:20px;">+</td>
+	                                                <td width="150" style="text-align:right;height:20px;"><%=sWicketAlternateCreditTotal%>&nbsp;</td>
+	                                                <td width="150" style="height:20px;">&nbsp;<%=sAlternateCurrency%></td>
+	                                             </tr>
+                                             <%} %>
                                         </table>
                                     </div>
                                 </td>

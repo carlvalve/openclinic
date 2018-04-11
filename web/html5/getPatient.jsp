@@ -64,7 +64,7 @@
 			<%	}
 			else{
 			%>
-			<tr>
+			<tr onclick="window.location.href='createEncounter.jsp';">
 				<td style='font-size:6vw;text-align:right;padding:10px'>
 					<img style='opacity:0.3' src='<%=sCONTEXTPATH%>/_img/icons/mobile/encounter.png'/>
 				</td>

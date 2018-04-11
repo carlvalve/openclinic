@@ -124,21 +124,12 @@
   <a href="mailto:antim@sante.gov.ml">antim@sante.gov.ml</a><%
             }
             else{
-	        	if(MedwanQuery.getInstance().getConfigString("projectref","").equalsIgnoreCase("vub")){
-		        %>
-			        <img src="_img/flags/vub.png" height="20px" alt="Vrije Universiteit Brussel"/>
-			        <a href="http://bisi.vub.ac.be" target="_new"><b>VUB - ICT4Development</b></a>
-			        <BR/>Laarbeeklaan 103, B-1090 Brussel, +32(2)477.44.30 <a href="mailto:info@ict4development.org">info@ict4development.org</a>
-		        <% 
-	        	}
-	        	else {
-	        		%>
-			        <img src="_img/flags/belgiumflag.jpg" height="10px" width="20px" alt="Belgium"/>
-			        <b>Post-Factum bvba</b>
-			        <BR/> Pastoriestraat 58, 3370 Boutersem Belgium Tel: +32 16 721047 -
-			        <a href="mailto:info@post-factum.be">info@post-factum.be</a>
-			        <%
-	        	}
+        		%>
+		        <img src="_img/flags/pf.gif" height="16px" width="20px" alt="Post-Factum"/>
+		        <b>Post-Factum bvba</b>
+		        <BR/> Pastoriestraat 58, 3370 Boutersem Belgium -
+		        <a href="mailto:info@post-factum.be">info@post-factum.be</a>
+		        <%
             }
         %>
     </div>

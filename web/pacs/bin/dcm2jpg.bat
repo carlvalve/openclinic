@@ -53,21 +53,25 @@ set JAVA=%JAVA_HOME%\bin\java
 
 :SKIP_SET_JAVA_HOME
 
-set CP=%DCM4CHE_HOME%\etc\
+rem set CP=%DCM4CHE_HOME%\etc\
 set CP=%CP%;%DCM4CHE_HOME%\lib\%MAIN_JAR%
 set CP=%CP%;%DCM4CHE_HOME%\lib\dcm4che-core-2.0.29.jar
 set CP=%CP%;%DCM4CHE_HOME%\lib\dcm4che-image-2.0.29.jar
 set CP=%CP%;%DCM4CHE_HOME%\lib\dcm4che-imageio-2.0.29.jar
-set CP=%CP%;%DCM4CHE_HOME%\lib\dcm4che-imageio-rle-2.0.29.jar
+rem set CP=%CP%;%DCM4CHE_HOME%\lib\dcm4che-imageio-rle-2.0.29.jar
 set CP=%CP%;%DCM4CHE_HOME%\lib\slf4j-log4j12-1.6.1.jar
 set CP=%CP%;%DCM4CHE_HOME%\lib\slf4j-api-1.6.1.jar
 set CP=%CP%;%DCM4CHE_HOME%\lib\log4j-1.2.16.jar
 set CP=%CP%;%DCM4CHE_HOME%\lib\commons-cli-1.2.jar
+set CP=%CP%;%DCM4CHE_HOME%\lib\jai-imageio-core-1.2.1.jar
 
 if "%JIIO_LIB%" == "" goto :SKIP_SET_JIIO_CLASSPATH
 
-set CP=%JIIO_LIB%\jai_imageio.jar;%JIIO_LIB%\clibwrapper_jiio.jar;%CP%
+rem set CP=%JIIO_LIB%\jai_imageio.jar;%JIIO_LIB%\clibwrapper_jiio.jar;%CP%
 
 :SKIP_SET_JIIO_CLASSPATH
+
+"%JAVA%" -version
+echo "%CP%"
 
 "%JAVA%" %JAVA_OPTS% -cp "%CP%" %MAIN_CLASS% %ARGS%

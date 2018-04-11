@@ -6,6 +6,7 @@
 	String prestationuid=checkString(request.getParameter("prestationuid"));
 	String activity=checkString(request.getParameter("activityname")).split("-")[0].trim()+" - "+checkString(request.getParameter("activityname")).replaceAll(checkString(request.getParameter("activityname")).split("-")[0]+"-","").trim();
 	Prestation p = Prestation.get(prestationuid);
+	
 	if(p!=null && p.hasValidUid() && (p.getCode().toUpperCase()+" - "+p.getDescription().replaceAll("\\&","")).equalsIgnoreCase(activity)){
 		sResult="<OK>";
 	}

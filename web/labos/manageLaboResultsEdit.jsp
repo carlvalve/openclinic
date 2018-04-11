@@ -90,6 +90,8 @@
                 String value = request.getParameter(name);
                 RequestedLabAnalysis.updateValue(Integer.parseInt(v[1]), Integer.parseInt(v[2]), v[3], value,Integer.parseInt(activeUser.userid));
                 RequestedLabAnalysis.setModifiedFinalValidation(Integer.parseInt(v[1]), Integer.parseInt(v[2]), Integer.parseInt(activeUser.userid), "'"+v[3]+"'",value);
+                RequestedLabAnalysis requestedLabAnalysis = RequestedLabAnalysis.get(Integer.parseInt(v[1]), Integer.parseInt(v[2]), v[3]);
+                requestedLabAnalysis.calculateModifier();
             } 
             else if (name.startsWith("resultreference.")) {
             	RequestedLabAnalysis.setScanResultForReference(name.replaceAll("resultreference.", ""));
@@ -173,6 +175,7 @@
 			if(analysis!=null && analysis.getEditor().equalsIgnoreCase("calculated")){
 				continue;
 			}
+            requestedLabAnalysis.calculateModifier();
             if (groups.get(MedwanQuery.getInstance().getLabel("labanalysis.group", requestedLabAnalysis.getLabgroup(), sWebLanguage)) == null) {
                 groups.put(MedwanQuery.getInstance().getLabel("labanalysis.group", requestedLabAnalysis.getLabgroup(), sWebLanguage), new Hashtable());
             }

@@ -196,22 +196,11 @@
 	</result>
 	<result type='counter'>
 		<label style='bold'>Total lab orders</label>
-		<filter type='encounter' periodfilter='true' unique='encounteruid'>
-			<output>encounteruid</output>
-			<output>patientuid</output>
-			<select/>
-		</filter>
 		<filter type='transaction' periodfilter='true'>
 			<select>
-				<field name='patientuid'>
-					<value type='variable' compare='equals'>patientuid</value>
-				</field>
 				<field name='transactiontype'>
 					<value type='constant' compare='equals'>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_LAB_REQUEST</value>
 				</field>
-				<item type='be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID'>
-					<value type='variable' compare='equals'>encounteruid</value>
-				</item>
 			</select>
 		</filter>
 	</result>

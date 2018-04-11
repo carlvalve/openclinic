@@ -485,7 +485,8 @@ Modalbox.Methods = {
 
 	_setPosition: function(){
 		$(this.MBwindow).setStyle({left: (($(this.MBoverlay).getWidth() - $(this.MBwindow).getWidth()) / 2 ) + "px"});
-		$(this.MBwindow).setStyle({top: (($(this.MBoverlay).getHeight() - $(this.MBwindow).getHeight()) / 2 ) + "px"});
+		//$(this.MBwindow).setStyle({top: (($(this.MBoverlay).getHeight() - $(this.MBwindow).getHeight()) / 2 ) + "px"});
+		$(this.MBwindow).setStyle({top: "5px"});
 	},
 
 	_setWidthAndPosition: function(){
