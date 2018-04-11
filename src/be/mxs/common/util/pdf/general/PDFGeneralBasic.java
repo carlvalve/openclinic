@@ -109,8 +109,8 @@ public abstract class PDFGeneralBasic extends PDFBasic {
             doc.add(new Paragraph(" "));
 
             // transaction date
-            cell = new PdfPCell(new Paragraph(dateFormat.format(transactionVO.getUpdateTime()),FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)8*fontSizePercentage/100.0),Font.ITALIC)));
-            cell.setColspan(1);
+            cell = new PdfPCell(new Paragraph(dateFormat.format(transactionVO.getUpdateTime()),FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)MedwanQuery.getInstance().getConfigInt("transactionTitleFontSize",8)*fontSizePercentage/100.0),Font.ITALIC)));
+            cell.setColspan(2);
             cell.setBorder(PdfPCell.BOX);
             cell.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
             cell.setBorderColor(innerBorderColor);
@@ -118,7 +118,7 @@ public abstract class PDFGeneralBasic extends PDFBasic {
             headerTable.addCell(cell);
 
             // transaction type
-            cell = new PdfPCell(new Paragraph(getTran("Web.Occup",transactionVO.getTransactionType()).toUpperCase(),FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)8*fontSizePercentage/100.0),Font.ITALIC)));
+            cell = new PdfPCell(new Paragraph(getTran("Web.Occup",transactionVO.getTransactionType()).toUpperCase(),FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)MedwanQuery.getInstance().getConfigInt("transactionTitleFontSize",8)*fontSizePercentage/100.0),Font.ITALIC)));
             cell.setColspan(5);
             cell.setBorder(PdfPCell.BOX);
             cell.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
@@ -135,8 +135,8 @@ public abstract class PDFGeneralBasic extends PDFBasic {
             		service=encounter.getService();
             	}
             }
-            cell = new PdfPCell(new Paragraph(service!=null?service.getLabel(sPrintLanguage):"",FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)8*fontSizePercentage/100.0),Font.ITALIC)));
-            cell.setColspan(4);
+            cell = new PdfPCell(new Paragraph(service!=null?service.getLabel(sPrintLanguage):"",FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)MedwanQuery.getInstance().getConfigInt("transactionTitleFontSize",8)*fontSizePercentage/100.0),Font.ITALIC)));
+            cell.setColspan(3);
             cell.setBorder(PdfPCell.BOX);
             cell.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
             cell.setBorderColor(innerBorderColor);
@@ -144,7 +144,7 @@ public abstract class PDFGeneralBasic extends PDFBasic {
             headerTable.addCell(cell);
 
             // name of user who registered the transaction
-            cell = new PdfPCell(new Paragraph(getTran("web.occup","medwan.common.user").toUpperCase(),FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)7*fontSizePercentage/100.0),Font.NORMAL)));
+            cell = new PdfPCell(new Paragraph(getTran("web.occup","medwan.common.user").toUpperCase(),FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)MedwanQuery.getInstance().getConfigInt("transactionTextFontSize",7)*fontSizePercentage/100.0),Font.NORMAL)));
             cell.setColspan(4);
             cell.setBorder(PdfPCell.BOX);
             cell.setVerticalAlignment(PdfPCell.ALIGN_LEFT);
@@ -156,7 +156,7 @@ public abstract class PDFGeneralBasic extends PDFBasic {
             if(registeringUser!=null){
             	username = registeringUser.person.getFullName();
             }
-            cell = new PdfPCell(new Paragraph(username,FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)7*fontSizePercentage/100.0),Font.NORMAL)));
+            cell = new PdfPCell(new Paragraph(username,FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)MedwanQuery.getInstance().getConfigInt("transactionTextFontSize",7)*fontSizePercentage/100.0),Font.NORMAL)));
             cell.setColspan(6);
             cell.setBorder(PdfPCell.BOX);
             cell.setVerticalAlignment(PdfPCell.ALIGN_LEFT);

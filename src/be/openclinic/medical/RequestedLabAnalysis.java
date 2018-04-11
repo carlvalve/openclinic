@@ -303,9 +303,61 @@ public class RequestedLabAnalysis {
     }
 
     public String getResultModifier(){
+    	if(getResultValue().length()>0 && (this.resultModifier==null || this.resultModifier.length()==0)){
+    		calculateModifier();
+    	}
         return this.resultModifier;
     }
+    
+    public void calculateModifier(){
+   		setResultModifier("");
+		LabAnalysis analysis = LabAnalysis.getLabAnalysisByLabcode(getAnalysisCode());
+		if(analysis!=null && analysis.getEditor().contains("numeric")){
+        	//We proberen na te gaan of de waarde buiten de grenzen valt
+        	try{
+                double iResult = Double.parseDouble(getResultValue().replaceAll(",", "\\."));
+                double iMin = Double.parseDouble(getResultRefMin().replaceAll(",", "\\."));
+                double iMax = Double.parseDouble(getResultRefMax().replaceAll(",", "\\."));
 
+                String normal="";
+                
+                if ((iResult >= iMin)&&(iResult <= iMax)){
+                    normal = "n";
+                }
+                else {
+                    double iAverage = (iMax-iMin);
+
+                    if (iResult > iMax+iAverage*2){
+                        normal = "+++";
+                    }
+                    else if (iResult > iMax + iAverage){
+                        normal = "++";
+                    }
+                    else if (iResult > iMax){
+                        normal = "+";
+                    }
+                    else if (iResult < iMin - iAverage*2){
+                        normal = "---";
+                    }
+                    else if (iResult < iMin - iAverage){
+                        normal = "--";
+                    }
+                    else if (iResult < iMin){
+                        normal = "-";
+                    }
+                }
+                setResultModifier(normal);
+                System.out.println("Storing "+this.getResultModifier());
+                this.store();
+                System.out.println("Stored "+this.getResultModifier());
+        	}
+        	catch(Exception e2){
+        		//e2.printStackTrace();
+        	}
+		}
+	
+    }
+    
     //--- RESULT PROVISIONAK -------------------------------------------------------------------------
     public void setResultProvisional(String value){
         this.resultProvisional = value;
@@ -1170,7 +1222,7 @@ public class RequestedLabAnalysis {
     }
 
     public void store(boolean objectExists){
-        PreparedStatement ps = null;
+    	PreparedStatement ps = null;
         String sSelect;
 
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
@@ -1690,6 +1742,7 @@ public class RequestedLabAnalysis {
                     labAnalysis.requestUserId   = ScreenHelper.checkString(rs.getString("userId"));
                     labAnalysis.updatetime = rs.getTimestamp("updatetime");
                     labAnalysis.requestDate   = rs.getTimestamp("requestdatetime");
+                    labAnalysis.finalvalidationdatetime   = rs.getTimestamp("finalvalidationdatetime");
                     labAnalysis.resultProvisional   = ScreenHelper.checkString(rs.getString("resultprovisional"));
 
                     // result date
@@ -2445,5 +2498,6 @@ public class RequestedLabAnalysis {
     	  }
     	  return false;
       }
+      
       
 }

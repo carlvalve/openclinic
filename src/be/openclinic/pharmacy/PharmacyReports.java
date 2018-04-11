@@ -77,9 +77,9 @@ public class PharmacyReports {
 	 			if(initiallevel!=0 || in!=0 || out!=0){
 	 				reportline="";
 		 			//Nu printen we de gegevens van de productstock
-		 			reportline+=(stock.getProduct()==null?"":stock.getProduct().getCode())+";";
-		 			reportline+=(stock.getProduct()==null?"":stock.getProduct().getName())+";";
-		 			reportline+=(stock.getProduct()==null?"":ScreenHelper.getTranNoLink("product.unit",stock.getProduct().getUnit(),language))+";";
+		 			reportline+=(stock.getProduct()==null?stock.getProductUid():stock.getProduct().getCode())+";";
+		 			reportline+=(stock.getProduct()==null?"?":stock.getProduct().getName())+";";
+		 			reportline+=(stock.getProduct()==null?"?":ScreenHelper.getTranNoLink("product.unit",stock.getProduct().getUnit(),language))+";";
 		 			reportline+=initiallevel+";";
 		 			reportline+=in+";";
 		 			reportline+=out+";";
@@ -92,7 +92,7 @@ public class PharmacyReports {
 		 			reportline+=((initiallevel+in-out)*pump)+";";
 		 			reportline+=";";
 		 			reportline+=";";
-		 			if(stock.getProduct().getPrestationcode()!=null){
+		 			if(stock.getProduct()!=null && stock.getProduct().getPrestationcode()!=null){
 		 				Prestation prestation = Prestation.get(stock.getProduct().getPrestationcode());
 		 				if(prestation!=null && prestation.getPrice()>0){
 		 					reportline+=ScreenHelper.getPriceFormat(prestation.getPrice())+";";

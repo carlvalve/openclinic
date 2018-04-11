@@ -189,12 +189,17 @@ public class TimeFilterReportGenerator {
 					Element filter = result.element("filter");
 					if(filter.attributeValue("type").equalsIgnoreCase("encounter")){
 						//We must create a select query
-						String sSelect="select sum("+MedwanQuery.getInstance().datediff("day", "oc_encounter_begindate", "oc_encounter_enddate")+") as duration from oc_encounters_view"+
+						String sSelect="select sum("+MedwanQuery.getInstance().datediff("day", "oc_encounter_begindate", "oc_encounter_enddate")+") as duration from oc_encounters_view2"+
 									   " where 1=1";
 						Vector parameters = new Vector();
 						if(filter.attributeValue("periodfilter").equalsIgnoreCase("true")){
-							sSelect+=" AND OC_ENCOUNTER_BEGINDATE>=?"+
-									" AND OC_ENCOUNTER_BEGINDATE<?";
+							sSelect+=" AND OC_ENCOUNTER_STARTDATE>=?"+
+									" AND OC_ENCOUNTER_STARTDATE<?"+
+									" AND OC_ENCOUNTER_BEGINDATE>=?"+
+									" AND OC_ENCOUNTER_BEGINDATE<?"
+									;
+							parameters.add(new java.sql.Date(ScreenHelper.parseDate(begin).getTime()));
+							parameters.add(new java.sql.Date(ScreenHelper.parseDate(end).getTime()));
 							parameters.add(new java.sql.Date(ScreenHelper.parseDate(begin).getTime()));
 							parameters.add(new java.sql.Date(ScreenHelper.parseDate(end).getTime()));
 						}
@@ -335,8 +340,13 @@ public class TimeFilterReportGenerator {
 								String sSelect="select * from OC_ENCOUNTERS_VIEW where 1=1";
 								Vector parameters = new Vector();
 								if(filter.attributeValue("periodfilter").equalsIgnoreCase("true")){
-									sSelect+=" AND OC_ENCOUNTER_BEGINDATE>=?"+
-											" AND OC_ENCOUNTER_BEGINDATE<?";
+									sSelect+=" AND OC_ENCOUNTER_STARTDATE>=?"+
+											" AND OC_ENCOUNTER_STARTDATE<?"+
+											" AND OC_ENCOUNTER_BEGINDATE>=?"+
+											" AND OC_ENCOUNTER_BEGINDATE<?"
+											;
+									parameters.add(new java.sql.Date(ScreenHelper.parseDate(begin).getTime()));
+									parameters.add(new java.sql.Date(ScreenHelper.parseDate(end).getTime()));
 									parameters.add(new java.sql.Date(ScreenHelper.parseDate(begin).getTime()));
 									parameters.add(new java.sql.Date(ScreenHelper.parseDate(end).getTime()));
 								}
@@ -470,8 +480,13 @@ public class TimeFilterReportGenerator {
 									String sSelect="select * from OC_ENCOUNTERS_VIEW where 1=1";
 									Vector parameters = new Vector();
 									if(filter.attributeValue("periodfilter").equalsIgnoreCase("true")){
-										sSelect+=" AND OC_ENCOUNTER_BEGINDATE>=?"+
-												" AND OC_ENCOUNTER_BEGINDATE<?";
+										sSelect+=" AND OC_ENCOUNTER_STARTDATE>=?"+
+												" AND OC_ENCOUNTER_STARTDATE<?"+
+												" AND OC_ENCOUNTER_BEGINDATE>=?"+
+												" AND OC_ENCOUNTER_BEGINDATE<?"
+												;
+										parameters.add(new java.sql.Date(ScreenHelper.parseDate(begin).getTime()));
+										parameters.add(new java.sql.Date(ScreenHelper.parseDate(end).getTime()));
 										parameters.add(new java.sql.Date(ScreenHelper.parseDate(begin).getTime()));
 										parameters.add(new java.sql.Date(ScreenHelper.parseDate(end).getTime()));
 									}
@@ -1901,10 +1916,7 @@ public class TimeFilterReportGenerator {
 				Iterator elements = value.elementIterator("element");
 				while(elements.hasNext()){
 					Element element = (Element)elements.next();
-					System.out.println("s="+s+"*");
-					System.out.println("element.getText()="+element.getText()+"*");
 					if(s.startsWith(element.getText())){
-						System.out.println("yes");
 						bReturn = true;
 						break;
 					}
@@ -2475,7 +2487,6 @@ public class TimeFilterReportGenerator {
 				}
 			}
 			sSelect+="("+values+")";
-			System.out.println("sSelect="+sSelect);
 		}
 		return sSelect;
 	}

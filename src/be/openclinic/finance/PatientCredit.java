@@ -23,8 +23,17 @@ public class PatientCredit extends OC_Object {
     private Encounter encounter;
     private String comment;
     private String sPatientUid;
+    private String currency;
 
-    public AdminPerson getPatient(){
+    public String getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(String currency) {
+		this.currency = currency;
+	}
+
+	public AdminPerson getPatient(){
     	return getEncounter().getPatient();
 	}
 
@@ -134,6 +143,7 @@ public class PatientCredit extends OC_Object {
                         patientcredit.setUpdateDateTime(rs.getTimestamp("OC_PATIENTCREDIT_UPDATETIME"));
                         patientcredit.setUpdateUser(rs.getString("OC_PATIENTCREDIT_UPDATEUID"));
                         patientcredit.setVersion(rs.getInt("OC_PATIENTCREDIT_VERSION"));
+                        patientcredit.setCurrency(rs.getString("OC_PATIENTCREDIT_CURRENCY"));
                     }
                 }
                 catch(Exception e){
@@ -323,6 +333,7 @@ public class PatientCredit extends OC_Object {
                          "  OC_PATIENTCREDIT_COMMENT = ?," +
                          "  OC_PATIENTCREDIT_UPDATETIME = ?," +
                          "  OC_PATIENTCREDIT_UPDATEUID = ?," +
+                         "  OC_PATIENTCREDIT_CURRENCY = ?," +
                          "  OC_PATIENTCREDIT_VERSION = OC_PATIENTCREDIT_VERSION+1" +
                          " WHERE OC_PATIENTCREDIT_SERVERID = ? AND OC_PATIENTCREDIT_OBJECTID = ?";
                 ps = oc_conn.prepareStatement(sQuery);
@@ -334,8 +345,9 @@ public class PatientCredit extends OC_Object {
                 ps.setString(6,this.getComment());
                 ps.setTimestamp(7,new java.sql.Timestamp(new Date().getTime())); // now
                 ps.setString(8,this.getUpdateUser());
-                ps.setInt(9,Integer.parseInt(ids[0]));
-                ps.setInt(10,Integer.parseInt(ids[1]));
+                ps.setString(9,this.getCurrency());
+                ps.setInt(10,Integer.parseInt(ids[0]));
+                ps.setInt(11,Integer.parseInt(ids[1]));
                 ps.execute();
                 ps.close();
             }
@@ -353,9 +365,10 @@ public class PatientCredit extends OC_Object {
                          "  OC_PATIENTCREDIT_CREATETIME," +
                          "  OC_PATIENTCREDIT_UPDATETIME," +
                          "  OC_PATIENTCREDIT_UPDATEUID," +
+                         "  OC_PATIENTCREDIT_CURRENCY," +
                          "  OC_PATIENTCREDIT_VERSION" +
                          " )"+
-                         " VALUES(?,?,?,?,?,?,?,?,?,?,?,1)";
+                         " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,1)";
                 ps = oc_conn.prepareStatement(sQuery);
                 while(!MedwanQuery.getInstance().validateNewOpenclinicCounter("OC_PATIENTCREDITS","OC_PATIENTCREDIT_OBJECTID",ids[1])){
                     ids[1] = MedwanQuery.getInstance().getOpenclinicCounter("OC_PATIENTCREDITS") + "";
@@ -371,6 +384,7 @@ public class PatientCredit extends OC_Object {
                 ps.setTimestamp(9,new java.sql.Timestamp(new Date().getTime())); // now
                 ps.setTimestamp(10,new java.sql.Timestamp(new Date().getTime())); // now
                 ps.setString(11,this.getUpdateUser());
+                ps.setString(12,this.getCurrency());
                 ps.execute();
                 ps.close();
                 this.setUid(Integer.parseInt(ids[0])+"."+Integer.parseInt(ids[1]));

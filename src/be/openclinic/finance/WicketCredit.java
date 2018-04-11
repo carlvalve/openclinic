@@ -27,8 +27,17 @@ public class WicketCredit extends OC_Object{
     private StringBuffer comment;
     private ObjectReference referenceObject;
     private String invoiceUID;
+    private String currency;
 
-    public String getInvoiceUID() {
+    public String getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(String currency) {
+		this.currency = currency;
+	}
+
+	public String getInvoiceUID() {
         return invoiceUID;
     }
 
@@ -144,6 +153,7 @@ public class WicketCredit extends OC_Object{
                         wicketOps.setReferenceObject(or);
                         wicketOps.setVersion(rs.getInt("OC_WICKET_CREDIT_VERSION"));
                         wicketOps.setInvoiceUID(rs.getString("OC_WICKET_CREDIT_INVOICEUID"));
+                        wicketOps.setCurrency(rs.getString("OC_WICKET_CREDIT_CURRENCY"));
                     }
                     rs.close();
                     ps.close();
@@ -195,6 +205,7 @@ public class WicketCredit extends OC_Object{
                 wicketCredit.setVersion(rs.getInt("OC_WICKET_CREDIT_VERSION"));
                 wicketCredit.setUserUID(rs.getInt("OC_WICKET_CREDIT_USERUID"));
                 wicketCredit.setInvoiceUID(rs.getString("OC_WICKET_CREDIT_INVOICEUID"));
+                wicketCredit.setCurrency(rs.getString("OC_WICKET_CREDIT_CURRENCY"));
 
                 // reference
                 ObjectReference or = new ObjectReference();
@@ -251,6 +262,7 @@ public class WicketCredit extends OC_Object{
                 wicketCredit.setVersion(rs.getInt("OC_WICKET_CREDIT_VERSION"));
                 wicketCredit.setUserUID(rs.getInt("OC_WICKET_CREDIT_USERUID"));
                 wicketCredit.setInvoiceUID(rs.getString("OC_WICKET_CREDIT_INVOICEUID"));
+                wicketCredit.setCurrency(rs.getString("OC_WICKET_CREDIT_CURRENCY"));
 
                 // reference
                 ObjectReference or = new ObjectReference();
@@ -319,7 +331,8 @@ public class WicketCredit extends OC_Object{
                                      " OC_WICKET_CREDIT_UPDATETIME," +
                                      " OC_WICKET_CREDIT_UPDATEUID,"  +
                                      " OC_WICKET_CREDIT_VERSION," +
-                                     " OC_WICKET_CREDIT_INVOICEUID" +
+                                     " OC_WICKET_CREDIT_INVOICEUID," +
+                                     " OC_WICKET_CREDIT_CURRENCY" +
                               " FROM OC_WICKET_CREDITS  WHERE OC_WICKET_CREDIT_SERVERID = ? AND OC_WICKET_CREDIT_OBJECTID = ?";
                     ps = oc_conn.prepareStatement(sInsert);
                     ps.setInt(1,Integer.parseInt(ids[0]));
@@ -355,9 +368,10 @@ public class WicketCredit extends OC_Object{
                           " OC_WICKET_CREDIT_UPDATETIME," +
                           " OC_WICKET_CREDIT_UPDATEUID,"  +
                           " OC_WICKET_CREDIT_VERSION," +
-                          " OC_WICKET_CREDIT_INVOICEUID" +
+                          " OC_WICKET_CREDIT_INVOICEUID," +
+                          " OC_WICKET_CREDIT_CURRENCY" +
                           ") " +
-                          " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                          " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
                 ps = oc_conn.prepareStatement(sInsert);
                 ps.setInt(1,Integer.parseInt(ids[0]));
@@ -381,6 +395,7 @@ public class WicketCredit extends OC_Object{
                 ps.setString(13,this.getUpdateUser());
                 ps.setInt(14,iVersion);
                 ps.setString(15,this.getInvoiceUID());
+                ps.setString(16,this.getCurrency());
                 ps.executeUpdate();
                 ps.close();
                 this.setUid(ids[0] + "." + ids[1]);
@@ -461,6 +476,7 @@ public class WicketCredit extends OC_Object{
                 wicketOps.setReferenceObject(or);
                 wicketOps.setVersion(rs.getInt("OC_WICKET_CREDIT_VERSION"));
                 wicketOps.setInvoiceUID(rs.getString("OC_WICKET_CREDIT_INVOICEUID"));
+                wicketOps.setCurrency(rs.getString("OC_WICKET_CREDIT_CURRENCY"));
 
                 vWicketOps.addElement(wicketOps);
             }
@@ -517,6 +533,7 @@ public class WicketCredit extends OC_Object{
                 wicketOp.setReferenceObject(or);
                 wicketOp.setVersion(rs.getInt("OC_WICKET_CREDIT_VERSION"));
                 wicketOp.setInvoiceUID(rs.getString("OC_WICKET_CREDIT_INVOICEUID"));
+                wicketOp.setCurrency(rs.getString("OC_WICKET_CREDIT_CURRENCY"));
 
                 vWicketOps.addElement(wicketOp);
             }
@@ -618,7 +635,8 @@ public class WicketCredit extends OC_Object{
                                      " OC_WICKET_CREDIT_UPDATETIME," +
                                      " OC_WICKET_CREDIT_UPDATEUID,"  +
                                      " OC_WICKET_CREDIT_VERSION," +
-                                     " OC_WICKET_CREDIT_INVOICEUID" +
+                                     " OC_WICKET_CREDIT_INVOICEUID," +
+                                     " OC_WICKET_CREDIT_CURRENCY" +
                               " FROM OC_WICKET_CREDITS " +
                               " WHERE OC_WICKET_CREDIT_SERVERID = ?" +
                               " AND OC_WICKET_CREDIT_OBJECTID = ?";

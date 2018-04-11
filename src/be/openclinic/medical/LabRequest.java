@@ -1,6 +1,7 @@
 package be.openclinic.medical;
 
 import be.mxs.common.util.db.MedwanQuery;
+import be.mxs.common.util.io.ResetQueues;
 import be.mxs.common.util.system.ScreenHelper;
 import be.openclinic.adt.Encounter;
 
@@ -409,6 +410,8 @@ public class LabRequest {
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
                 RequestedLabAnalysis requestedLabAnalysis = new RequestedLabAnalysis();
+                requestedLabAnalysis.setServerId(rs.getInt("serverid")+"");
+                requestedLabAnalysis.setTransactionId(rs.getInt("transactionid")+"");
                 requestedLabAnalysis.setLabgroup(rs.getString("labgroup"));
                 requestedLabAnalysis.setAnalysisCode(rs.getString("analysiscode"));
                 requestedLabAnalysis.setComment(getComment());

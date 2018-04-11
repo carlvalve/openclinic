@@ -713,6 +713,73 @@ public class Prescription extends OC_Object{
         return activePrescriptions;
     }
 
+    public static Vector getActivePrescriptions(String patientuid,int latencyInDays){
+        Vector activePrescriptions = new Vector();
+        Prescription prescr;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+            String sSelect = "SELECT * FROM OC_PRESCRIPTIONS"+
+                             " WHERE OC_PRESCR_PATIENTUID = ?"+
+            		         "  AND (OC_PRESCR_END IS NULL OR OC_PRESCR_END >= ?) ORDER by OC_PRESCR_END DESC";
+            ps = oc_conn.prepareStatement(sSelect);
+            ps.setString(1,patientuid);
+            latencyInDays*=24*3600;
+        	Timestamp ts = new Timestamp(ScreenHelper.parseDate(ScreenHelper.stdDateFormat.format(new java.util.Date())).getTime()-latencyInDays);
+            ps.setTimestamp(2,ts);
+            rs = ps.executeQuery();
+
+            // get data from DB
+            while(rs.next()){
+                prescr = new Prescription();
+                prescr.setUid(rs.getString("OC_PRESCR_SERVERID")+"."+rs.getString("OC_PRESCR_OBJECTID"));
+
+                prescr.setPatientUid(rs.getString("OC_PRESCR_PATIENTUID"));
+                prescr.setPrescriberUid(rs.getString("OC_PRESCR_PRESCRIBERUID"));
+                prescr.setProductUid(rs.getString("OC_PRESCR_PRODUCTUID"));
+                prescr.setSupplyingServiceUid(rs.getString("OC_PRESCR_SUPPLYINGSERVICEUID"));
+                prescr.setServiceStockUid(rs.getString("OC_PRESCR_SERVICESTOCKUID"));
+                prescr.setRequiredPackages(rs.getInt("OC_PRESCR_REQUIREDPACKAGES"));
+
+                java.util.Date tmpDate = rs.getDate("OC_PRESCR_BEGIN");
+                if(tmpDate!=null) prescr.setBegin(tmpDate);
+
+                tmpDate = rs.getDate("OC_PRESCR_END");
+                if(tmpDate!=null) prescr.setEnd(tmpDate);
+
+                prescr.setTimeUnit(rs.getString("OC_PRESCR_TIMEUNIT"));
+                prescr.setTimeUnitCount(rs.getInt("OC_PRESCR_TIMEUNITCOUNT"));
+                prescr.setUnitsPerTimeUnit(rs.getDouble("OC_PRESCR_UNITSPERTIMEUNIT"));
+
+                // object variables
+                prescr.setCreateDateTime(rs.getTimestamp("OC_PRESCR_CREATETIME"));
+                prescr.setUpdateDateTime(rs.getTimestamp("OC_PRESCR_UPDATETIME"));
+                prescr.setUpdateUser(ScreenHelper.checkString(rs.getString("OC_PRESCR_UPDATEUID")));
+                prescr.setAuthorization(ScreenHelper.checkString(rs.getString("OC_PRESCR_AUTHORIZATION")));
+                prescr.setVersion(rs.getInt("OC_PRESCR_VERSION"));
+
+                activePrescriptions.add(prescr);
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                oc_conn.close();
+            }
+            catch(SQLException se){
+                se.printStackTrace();
+            }
+        }
+
+        return activePrescriptions;
+    }
+
     //--- FIND ------------------------------------------------------------------------------------
     public static Vector find(String sFindPatientUid, String sFindPrescriberUid, String sFindProductUid,
                               String sFindDateBegin, String sFindDateEnd, String sFindSupplyingServiceUid,

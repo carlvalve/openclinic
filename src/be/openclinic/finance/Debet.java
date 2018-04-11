@@ -3260,15 +3260,20 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
     }
     
     public static void createAutomaticDebetByAlias(String uid, String personid,String alias,String userid,long notExistingSince){
+        createAutomaticDebetByAlias(uid, personid,alias,userid,notExistingSince,1);
+    }
+    public static void createAutomaticDebetByAlias(String uid, String personid,String alias,String userid,long notExistingSince,int quantity){
     	Connection conn=MedwanQuery.getInstance().getOpenclinicConnection();
     	try{
     		String sQuery="select * from OC_PRESTATIONS where ';'||OC_PRESTATION_REFUID||';' LIKE '%;"+alias+";%'";
     		PreparedStatement ps = conn.prepareStatement(sQuery);
     		ResultSet rs = ps.executeQuery();
     		while(rs.next()){
+        		Debug.println("AUTOINVOICING step 2");
     			String prestationUid=rs.getString("OC_PRESTATION_SERVERID")+"."+rs.getString("OC_PRESTATION_OBJECTID");
     	    	if(!Debet.existsRecent(prestationUid,personid,notExistingSince)){
-        			createAutomaticDebet(uid, personid, prestationUid, new java.util.Date(), 1,userid);
+            		Debug.println("AUTOINVOICING step 3");
+        			createAutomaticDebet(uid, personid, prestationUid, new java.util.Date(), quantity,userid);
     	    	}
     		}
     		rs.close();
@@ -3441,16 +3446,21 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
         String type="";
         Insurance insurance=null;
         insurance = Insurance.getMostInterestingInsuranceForPatient(personid);
+		Debug.println("AUTOINVOICING step 4");
         if(insurance!=null){
+    		Debug.println("AUTOINVOICING step 5");
 	        String sCoverageInsurance=ScreenHelper.checkString(insurance.getExtraInsurarUid());
 	        String sCoverageInsurance2=ScreenHelper.checkString(insurance.getExtraInsurarUid2());
 	        Prestation prestation = Prestation.get(prestationUid);
 	        double dPatientAmount=0,dInsurarAmount=0,dExtraInsurarAmount=0,dExtraInsurarAmount2=0;
 			InsuranceRule rule = insurance==null?null:Prestation.getInsuranceRule(prestationUid, insurance.getInsurarUid());
 	        if(!Prestation.checkMaximumReached(personid, rule, quantity) && encounter!=null && prestation!=null && insurance!=null && insurance.getInsurar()!=null && prestation.isVisibleFor(insurance.getInsurar(),encounter.getService())){
+        		Debug.println("AUTOINVOICING step 6");
 		        if (insurance != null) {
+            		Debug.println("AUTOINVOICING step 7");
 		            type = insurance.getType();
 		            if (prestation != null) {
+                		Debug.println("AUTOINVOICING step 8");
 		                double dPrice = prestation.getPrice(type);
 		                if(insurance.getInsurar()!=null && insurance.getInsurar().getNoSupplements()==0 && insurance.getInsurar().getCoverSupplements()==1){
 		                	dPrice+=prestation.getSupplement();
@@ -3603,6 +3613,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
 		    	        debet.setVersion(1);
 		    	        debet.store();
 		    	        //Now that we have stored the debet, let's store a reference to it
+                		Debug.println("AUTOINVOICING store POINTER "+uid);
 		    	        Pointer.storePointer(uid,debet.getUid());
 		        	}
 		        }

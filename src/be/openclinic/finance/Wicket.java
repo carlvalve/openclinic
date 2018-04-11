@@ -933,6 +933,7 @@ public class Wicket extends OC_Object{
 
                 wicket.setVersion(rs.getInt("OC_WICKET_CREDIT_VERSION"));
                 wicket.setInvoiceUID(rs.getString("OC_WICKET_CREDIT_INVOICEUID"));
+                wicket.setCurrency(rs.getString("OC_WICKET_CREDIT_CURRENCY"));
                 vResults.addElement(wicket);
             }
         }

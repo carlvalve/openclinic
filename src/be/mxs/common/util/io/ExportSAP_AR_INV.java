@@ -28,7 +28,7 @@ import uk.org.primrose.vendor.standalone.PrimroseLoader;
 public class ExportSAP_AR_INV {
 
 	public static void setExchangeRate(String currency,String date,String exchangerate){
-		setExchangeRate(currency, ScreenHelper.getSQLDate(date), Double.parseDouble(exchangerate));
+		setExchangeRate(currency, ScreenHelper.getSQLDate(date), Double.parseDouble(exchangerate.replaceAll(",", ".")));
 	}
 	
 	public static void setExchangeRate(String currency,java.util.Date date,double exchangerate){
