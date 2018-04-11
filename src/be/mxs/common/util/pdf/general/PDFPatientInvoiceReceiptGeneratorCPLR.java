@@ -6,6 +6,7 @@ import com.itextpdf.text.*;
 import java.util.*;
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 
 import be.mxs.common.util.system.Miscelaneous;
@@ -14,6 +15,7 @@ import be.mxs.common.util.system.Debug;
 import be.mxs.common.util.system.HTMLEntities;
 import be.mxs.common.util.system.ScreenHelper;
 import be.mxs.common.util.db.MedwanQuery;
+import be.mxs.common.util.io.ExportSAP_AR_INV;
 import be.openclinic.finance.*;
 import be.openclinic.adt.Encounter;
 import net.admin.*;
@@ -301,7 +303,7 @@ public class PDFPatientInvoiceReceiptGeneratorCPLR extends PDFInvoiceGenerator {
 	        cell=createValueCell("",50);
 	        cell.setBorder(PdfPCell.BOTTOM);
 	        table.addCell(cell);
-	        
+
 	        //Total général
 	        cell = createValueCell(ScreenHelper.getTran(null,"web","total.general",sPrintLanguage), 25,new Double(7*scaleFactor).intValue(),Font.NORMAL);
 	        cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
@@ -310,7 +312,12 @@ public class PDFPatientInvoiceReceiptGeneratorCPLR extends PDFInvoiceGenerator {
 	        cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 	        table.addCell(cell);
 	        //Total patient
-	        cell = createValueCell(ScreenHelper.getTran(null,"web","total.patient",sPrintLanguage)+": "+priceFormat.format(totalDebet), 25,new Double(7*scaleFactor).intValue(),Font.NORMAL);
+	        String sAlternateCurrency = MedwanQuery.getInstance().getConfigString("AlternateCurrency","");
+	        String sAlternateValue="";
+	        if(sAlternateCurrency.length()>0){
+	        	sAlternateValue=" ("+new DecimalFormat(MedwanQuery.getInstance().getConfigString("AlternateCurrencyPriceFormat","# ##0.00")).format(totalDebet/ExportSAP_AR_INV.getExchangeRate(sAlternateCurrency, invoice.getDate()))+" "+sAlternateCurrency+")";
+	        }
+	        cell = createValueCell(ScreenHelper.getTran(null,"web","total.patient",sPrintLanguage)+": "+priceFormat.format(totalDebet)+sAlternateValue, 25,new Double(7*scaleFactor).intValue(),Font.NORMAL);
 	        cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
 	        table.addCell(cell);
 	        //Total assureur
@@ -318,7 +325,10 @@ public class PDFPatientInvoiceReceiptGeneratorCPLR extends PDFInvoiceGenerator {
 	        cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 	        table.addCell(cell);
 	        //Payé patient
-	        cell = createValueCell(ScreenHelper.getTran(null,"web","payments",sPrintLanguage)+": "+priceFormat.format(totalCredit), 25,new Double(7*scaleFactor).intValue(),Font.NORMAL);
+	        if(sAlternateCurrency.length()>0){
+	        	sAlternateValue=" ("+new DecimalFormat(MedwanQuery.getInstance().getConfigString("AlternateCurrencyPriceFormat","# ##0.00")).format(totalCredit/ExportSAP_AR_INV.getExchangeRate(sAlternateCurrency, invoice.getDate()))+" "+sAlternateCurrency+")";
+	        }
+	        cell = createValueCell(ScreenHelper.getTran(null,"web","payments",sPrintLanguage)+": "+priceFormat.format(totalCredit)+sAlternateValue, 25,new Double(7*scaleFactor).intValue(),Font.NORMAL);
 	        cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
 	        table.addCell(cell);
 	        //Total assureur complémentaire

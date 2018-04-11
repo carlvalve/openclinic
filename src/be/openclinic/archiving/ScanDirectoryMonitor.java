@@ -217,9 +217,9 @@ public class ScanDirectoryMonitor implements Runnable{
 	        		else {
 		        		//Check if filesize is still changing
 		        		long lastSize=file.length();
-	        			Thread.sleep(5000);
+	        			Thread.sleep(MedwanQuery.getInstance().getConfigInt("ScanDirectoryFileLockSleepTime",5000));
 		        		if(file.length()!=lastSize){
-		        			Debug.println("Skipping file "+file.getName()+" because a process may still be writing to it (file size changed during last 5 seconds).");
+		        			Debug.println("Skipping file "+file.getName()+" because a process may still be writing to it (file size changed from "+lastSize+" to "+file.length()+" bytes during last 5 seconds).");
 		        			skippedFilesInRun++;
 		        		}
 		        		else{
@@ -469,7 +469,7 @@ public class ScanDirectoryMonitor implements Runnable{
 		// Find out if the file is a valid DICOM file
 		//****************************************************************************
 		int err=0;
-    	DicomObject obj = Dicom.getDicomObject(file);
+    	DicomObject obj = Dicom.getDicomObjectNoPixels(file);
     	Debug.println("DICOM object: "+obj);
     	if(obj!=null){
         	Debug.println("Patient ID: "+obj.getString(Tag.PatientID));
@@ -502,7 +502,7 @@ public class ScanDirectoryMonitor implements Runnable{
 		    		}
 		    		String sequence=obj.getString(Tag.InstanceNumber);
 		    		if(sequence==null || sequence.trim().length()==0){
-		    			sequence=file.getName();
+		    			sequence="1";
 		    		}
 		    		//First check if file does not exist yet, do nothing if it exists 
 		    		ps =conn.prepareStatement("select * from OC_PACS where OC_PACS_STUDYUID=? and OC_PACS_SERIES=? and OC_PACS_SEQUENCE=?");
@@ -589,9 +589,12 @@ public class ScanDirectoryMonitor implements Runnable{
 	
 			    		String filename=ArchiveDocument.generateUDI(MedwanQuery.getInstance().getOpenclinicCounter("ARCH_DOCUMENTS"));
 		    			filename = acceptIncomingDICOMFile(filename, file);
-		    			
 		    			ps=conn.prepareStatement("insert into OC_PACS(OC_PACS_STUDYUID,OC_PACS_SERIES,OC_PACS_SEQUENCE,OC_PACS_FILENAME,OC_PACS_UPDATETIME) values(?,?,?,?,?)");
-			    		ps.setString(1, studyUid);
+		    			System.out.println("studyUid="+studyUid);
+		    			System.out.println("seriesUid="+seriesUid);
+		    			System.out.println("sequence="+sequence);
+		    			System.out.println("filename="+filename);
+		    			ps.setString(1, studyUid);
 			    		ps.setString(2, seriesUid);
 			    		ps.setString(3, sequence);
 			    		ps.setString(4, filename);

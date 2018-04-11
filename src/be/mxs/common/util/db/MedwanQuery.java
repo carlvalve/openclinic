@@ -4161,7 +4161,7 @@ public class MedwanQuery {
         Connection OccupdbConnection;
         try{
             OccupdbConnection = getOpenclinicConnection();
-            PreparedStatement Occupstatement = OccupdbConnection.prepareStatement("SELECT * from Items i,Transactions t,Healthrecord h where h.personid=? and h.healthrecordid=t.healthrecordid and t.serverid=i.serverid and t.transactionid=i.transactionid and t.updatetime>=? and t.updatetime<=? and i.type in ("+itemTypes+") order by t.updatetime");
+            PreparedStatement Occupstatement = OccupdbConnection.prepareStatement("SELECT * from Items i,Transactions t,Healthrecord h where h.personid=? and h.healthrecordid=t.healthrecordid and t.serverid=i.serverid and t.transactionid=i.transactionid and t.updatetime>=? and t.updatetime<=? and i.type in ("+itemTypes+") order by t.updatetime,t.ts");
             Occupstatement.setInt(1, personid);
             Occupstatement.setTimestamp(2, new java.sql.Timestamp(begin.getTime()));
             Occupstatement.setTimestamp(3, new java.sql.Timestamp(end.getTime()));

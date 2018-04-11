@@ -7,6 +7,7 @@ package be.dpms.medwan.webapp.wl.servlets.filters;
  * http://www.opensource.org/licenses/artistic-license.php
  */
 
+import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.system.Debug;
 import be.dpms.medwan.common.model.IConstants;
 
@@ -142,6 +143,7 @@ public class RequestControlFilter implements Filter
         // Put this request in the queue and wait
         enqueueRequest( httpRequest );
         if( !waitForRelease( httpRequest ) ){
+            Debug.println(httpRequest.getRequestURI()+" abandoned");
           // this request was replaced in the queue by another request,
           // so it need not be processed
           return;
@@ -319,6 +321,9 @@ public class RequestControlFilter implements Filter
    */
   private boolean isFilteredRequest(HttpServletRequest request)
   {
+	if(request.getParameter("excludeFromFilter")!=null){
+		return false;
+	}
     // iterate through the exclude patterns.  If one matches this path,
     // then the request is excluded.
     String path = request.getRequestURI();

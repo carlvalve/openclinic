@@ -21,6 +21,7 @@ import be.mxs.common.util.system.Miscelaneous;
 import be.mxs.common.util.system.Debug;
 import be.mxs.common.util.system.ScreenHelper;
 import be.mxs.common.util.db.MedwanQuery;
+import be.mxs.common.util.io.ExportSAP_AR_INV;
 import be.openclinic.finance.*;
 import net.admin.*;
 
@@ -355,7 +356,7 @@ public class PDFWicketOverViewGenerator extends PDFBasic {
         // get credits for specified wicket
         Vector vCredits = Wicket.getCredits(wicket.getUid(),sWicketFromDate,sWicketToDate,"OC_WICKET_CREDIT_UPDATETIME","ASC");
         if(vCredits.size() > 0){
-            double total = 0;
+            double total = 0, alternatetotal=0;
 
             // header
             table.addCell(createUnderlinedCell("#",5));
@@ -379,6 +380,7 @@ public class PDFWicketOverViewGenerator extends PDFBasic {
                 }
                 includedInvoices.add(credit.getInvoiceUID());
                 total+= amounts[0];
+                alternatetotal+=amounts[2];
                 ventilateIncome(ventilatedIncome,ventilatedIncomePerService,credit);
             }
 
@@ -391,6 +393,18 @@ public class PDFWicketOverViewGenerator extends PDFBasic {
             table.addCell(createEmptyCell(25));
             table.addCell(createTotalPriceCell(totalinsurars,45));
             table.addCell(createEmptyCell(40));
+
+            String sAlternate = "";
+            if(alternatetotal>0){
+    	        String sAlternateCurrency = MedwanQuery.getInstance().getConfigString("AlternateCurrency","");
+    	        if(sAlternateCurrency.length()>0){
+    	        	sAlternate="("+ScreenHelper.getPriceFormat(total-alternatetotal)+" "+MedwanQuery.getInstance().getConfigString("currency","")+" + "+new DecimalFormat(MedwanQuery.getInstance().getConfigString("AlternateCurrencyPriceFormat","# ##0.00")).format(alternatetotal/ExportSAP_AR_INV.getExchangeRate(sAlternateCurrency, ScreenHelper.parseDate(sWicketFromDate)))+" "+sAlternateCurrency+")";
+    	            table.addCell(createEmptyCell(20));
+    	            table.addCell(createLabelCell(sAlternate,45));
+    	            table.addCell(createEmptyCell(45));
+    	            table.addCell(createEmptyCell(40));
+    	        }
+            }
 
             table.addCell(createEmptyCell(150));
             table.addCell(createBoldLabelCell(getTran("web","credit.ventilation"),150));
@@ -465,6 +479,7 @@ public class PDFWicketOverViewGenerator extends PDFBasic {
     //--- PRINT CREDIT (payment) ------------------------------------------------------------------
     private double[] printCredit(PdfPTable wicketTable, WicketCredit credit,int counter){
     	double ti=0;
+    	double alternate =0;
         String sCreditDate = stdDateFormat.format(credit.getOperationDate());
         double CreditAmount = credit.getAmount();
         String sCreditType = ScreenHelper.getTranNoLink("credit.type",credit.getOperationType(),sPrintLanguage),
@@ -507,9 +522,15 @@ public class PDFWicketOverViewGenerator extends PDFBasic {
         wicketTable.addCell(createMiniValueCell(sCreditType,25));
         wicketTable.addCell(createMiniValueCell(sCreditUser,45));
         wicketTable.addCell(createMiniValueCell(sCreditComment,40));
-        double[] amounts =new double[2];
+        double[] amounts =new double[3];
         amounts[0]=CreditAmount;
         amounts[1]=ti;
+        if(ScreenHelper.checkString(credit.getCurrency()).length()==0 || credit.getCurrency().equalsIgnoreCase(MedwanQuery.getInstance().getConfigString("currency",""))){
+        	amounts[2]=0;
+        }
+        else{
+        	amounts[2]=CreditAmount;
+        }
         return amounts;
     }
 

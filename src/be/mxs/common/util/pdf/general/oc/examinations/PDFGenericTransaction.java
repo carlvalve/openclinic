@@ -55,7 +55,7 @@ public class PDFGenericTransaction extends PDFGeneralBasic {
             	if(!activekey.equalsIgnoreCase(key.split(";")[0])){
             		//Print title
             		if(key.split(";")[0].length()>0 || activekey.length()>0){
-	                    cell = new PdfPCell(new Phrase(getTran(transactionVO.getTransactionType(),key.split(";")[0]).toUpperCase(),FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)9*fontSizePercentage/100.0),Font.BOLD)));
+	                    cell = new PdfPCell(new Phrase(getTran(transactionVO.getTransactionType(),key.split(";")[0]).toUpperCase(),FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)MedwanQuery.getInstance().getConfigInt("transactionTitleFontSize",9)*fontSizePercentage/100.0),Font.BOLD)));
 	                    cell.setColspan(5);
 	                    cell.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
 	                    cell.setBorder(PdfPCell.BOX);
@@ -66,7 +66,7 @@ public class PDFGenericTransaction extends PDFGeneralBasic {
             	}
             	item = (ItemVO)sorteditems.get(key);
                 // itemType
-                cell = new PdfPCell(new Phrase(getTran("web.occup",item.getType()).toUpperCase(),FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)7*fontSizePercentage/100.0),Font.NORMAL)));
+                cell = new PdfPCell(new Phrase(getTran("web.occup",item.getType()).toUpperCase(),FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)MedwanQuery.getInstance().getConfigInt("transactionTextFontSize",7)*fontSizePercentage/100.0),Font.NORMAL)));
                 cell.setColspan(2);
                 cell.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
                 cell.setBorder(PdfPCell.BOX);
@@ -75,7 +75,7 @@ public class PDFGenericTransaction extends PDFGeneralBasic {
 
                 // itemValue
                 if(!item.getType().contains(MedwanQuery.getInstance().getConfigString("htmlItems","_JOURNAL"))){
-	                cell = new PdfPCell(new Phrase(getTran("web.occup",item.getValue()),FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)7*fontSizePercentage/100.0),Font.NORMAL)));
+	                cell = new PdfPCell(new Phrase(getTran("web.occup",item.getValue()),FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)MedwanQuery.getInstance().getConfigInt("transactionTextFontSize",7)*fontSizePercentage/100.0),Font.NORMAL)));
                 }
                 else{
                     ElementList list = XMLWorkerHelper.parseToElementList(item.getValue(), null);

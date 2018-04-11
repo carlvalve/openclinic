@@ -6,6 +6,7 @@ import com.itextpdf.text.*;
 import java.util.*;
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 
 import be.mxs.common.util.system.Miscelaneous;
@@ -14,6 +15,7 @@ import be.mxs.common.util.system.Debug;
 import be.mxs.common.util.system.HTMLEntities;
 import be.mxs.common.util.system.ScreenHelper;
 import be.mxs.common.util.db.MedwanQuery;
+import be.mxs.common.util.io.ExportSAP_AR_INV;
 import be.openclinic.finance.*;
 import be.openclinic.adt.Encounter;
 import net.admin.*;
@@ -141,7 +143,12 @@ public class PDFPatientPaymentReceiptGenerator extends PDFInvoiceGenerator {
             cell = createValueCell(ScreenHelper.getTran(null,"credit.type", credit.getType(),sPrintLanguage), 40,new Double(7*scaleFactor).intValue(),Font.NORMAL);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
             table.addCell(cell);
-            cell = createValueCell(priceFormat.format(credit.getAmount()), 10,new Double(7*scaleFactor).intValue(),Font.NORMAL);
+	        String sAlternateValue="";
+	        String sAlternateCurrency = MedwanQuery.getInstance().getConfigString("AlternateCurrency","");
+	        if(sAlternateCurrency.length()>0){
+	        	sAlternateValue="\n("+new DecimalFormat(MedwanQuery.getInstance().getConfigString("AlternateCurrencyPriceFormat","# ##0.00")).format(credit.getAmount()/ExportSAP_AR_INV.getExchangeRate(sAlternateCurrency, credit.getDate()))+" "+sAlternateCurrency+")";
+	        }
+            cell = createValueCell(priceFormat.format(credit.getAmount())+sAlternateValue, 10,new Double(7*scaleFactor).intValue(),Font.NORMAL);
             cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
             table.addCell(cell);
             cell = createValueCell(ScreenHelper.checkString(credit.getComment()), 50,new Double(7*scaleFactor).intValue(),Font.NORMAL);

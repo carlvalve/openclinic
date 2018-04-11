@@ -777,14 +777,25 @@ public class GeneralPDFCreator extends PDFCreator {
         imgCell.setColspan(3);            
         table.addCell(imgCell);
         
-        Image barcodeImg = PdfBarcode.getBarcode("0"+person.personid, docWriter);            
+        Image barcodeImg = PdfBarcode.getBarcode("0"+person.personid, docWriter);   
+        PdfPTable table2 = new PdfPTable(1);
         cell = new PdfPCell(barcodeImg);
         cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
         cell.setBorder(PdfPCell.NO_BORDER);
         cell.setPadding(2);
+        cell.setColspan(1);
+        table2.addCell(cell);
+        if(MedwanQuery.getInstance().getConfigString("preferredBarcodeType","Code39").equalsIgnoreCase("QRCode")){
+        	cell=new PdfPCell(new Paragraph(person.personid,FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)10*fontSizePercentage/100.0),Font.NORMAL)));
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+            cell.setBorder(PdfPCell.NO_BORDER);
+        	table2.addCell(cell);
+        }
+        cell = new PdfPCell(table2);
+        cell.setBorder(PdfPCell.NO_BORDER);
         cell.setColspan(5);
         table.addCell(cell);
-        
+
         // hospital ref (horizontal line)
         cell = createLabel(getTran("web","cardHospitalRef"),8,20,Font.NORMAL);
         cell.setBorder(PdfPCell.TOP);
