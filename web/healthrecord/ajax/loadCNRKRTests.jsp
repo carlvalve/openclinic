@@ -1,0 +1,47 @@
+<%@include file="/includes/validateUser.jsp"%>
+<%
+	Set tests = new TreeSet();
+	tests.add(checkString(request.getParameter("test1")));
+	tests.add(checkString(request.getParameter("test2")));
+	tests.add(checkString(request.getParameter("test3")));
+	tests.add(checkString(request.getParameter("test4")));
+	if(tests.contains("1.1")){
+		ScreenHelper.setIncludePage(customerInclude("healthrecord/manageCNRKRKineTestPASS.jsp"),pageContext);
+	}
+	if(tests.contains("1.2")){
+		ScreenHelper.setIncludePage(customerInclude("healthrecord/manageCNRKRKineTestACTIVLIM.jsp"),pageContext);
+	}
+	if(tests.contains("1.3")){
+		ScreenHelper.setIncludePage(customerInclude("healthrecord/manageCNRKRKineTestMMSE.jsp"),pageContext);
+	}
+	if(tests.contains("1.4")){
+		ScreenHelper.setIncludePage(customerInclude("healthrecord/manageCNRKRKineTestBBS.jsp"),pageContext);
+	}
+	if(tests.contains("2.1")){
+		ScreenHelper.setIncludePage(customerInclude("healthrecord/manageCNRKRKineTestABILHAND.jsp"),pageContext);
+	}
+	if(tests.contains("2.2")){
+		ScreenHelper.setIncludePage(customerInclude("healthrecord/manageCNRKRKineTestABILOCO.jsp"),pageContext);
+	}
+	if(tests.contains("3.1")){
+		ScreenHelper.setIncludePage(customerInclude("healthrecord/manageCNRKRKineTestStartBack.jsp"),pageContext);
+	}
+	if(tests.contains("3.2")){
+		ScreenHelper.setIncludePage(customerInclude("healthrecord/manageCNRKRKineTestEIFEL.jsp"),pageContext);
+	}
+	if(tests.contains("3.3")){
+		ScreenHelper.setIncludePage(customerInclude("healthrecord/manageCNRKRKineTestOSWESTRY.jsp"),pageContext);
+	}
+	if(tests.contains("3.4")){
+		ScreenHelper.setIncludePage(customerInclude("healthrecord/manageCNRKRKineTestTampaEKT.jsp"),pageContext);
+	}
+	if(tests.contains("4.1")){
+		ScreenHelper.setIncludePage(customerInclude("healthrecord/manageCNRKRKineTestKOOS.jsp"),pageContext);
+	}
+	if(tests.contains("4.2")){
+		ScreenHelper.setIncludePage(customerInclude("healthrecord/manageCNRKRKineTestHOOS.jsp"),pageContext);
+	}
+	if(tests.contains("5.1")){
+		ScreenHelper.setIncludePage(customerInclude("healthrecord/manageCNRKRKineTestSF36.jsp"),pageContext);
+	}
+%>
