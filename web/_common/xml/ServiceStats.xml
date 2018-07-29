@@ -1,5 +1,0 @@
-<servicestats>
-    <servicestat serviceuid="INT">
-        <item type="be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_SUBJECTIVE"/>
-    </servicestat>
-</servicestats>
