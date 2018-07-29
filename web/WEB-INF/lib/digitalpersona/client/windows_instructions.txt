@@ -1,3 +1,0 @@
-On 64-bit windows system:
-- 64-bit libraries (dlls) go into c:\windows\system32
-- 32-bit libraries (dlls) go into c:\windows\syswow64
