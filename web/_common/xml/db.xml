@@ -4913,6 +4913,7 @@
             <column name="unavailable" dbtype="int"  javatype="integer"/>
             <column name="prestationcode" dbtype="varchar"  javatype="string"  size="50"/>
             <column name="procedureuid" dbtype="varchar"  javatype="string"  size="50"/>
+            <column name="section" dbtype="varchar"  javatype="string"  size="50"/>
 		</columns>
 		<indexes>
 			<index name="labanalysis_labID">
@@ -5242,18 +5243,6 @@
 			(c.OC_LABEL_LANGUAGE = 'en')
 		</sql>
 	</view>
-	<view name="FunctionsView" db="ocadmin" drop="1">
-		<sql>
-			create view FunctionsView
-			as
-			select workid,functionid,functiontype,labeltype,labelid,labelnl,labelfr,labelen from AdminFunctions,Labels
-			where
-			Labels.labeltype='Function' and
-			Labels.labelid = AdminFunctions.functionid and
-            AdminFunctions.deletetime is null
-		</sql>
-	</view>
-
 	<view name="PrivateView" db="ocadmin" drop="1">
 		<sql>
 			create view PrivateView as
@@ -6735,20 +6724,6 @@
 			select OC_INSURARINVOICE_OBJECTID as OC_INVOICE_OBJECTID from OC_INSURARINVOICES
 			union
 			select OC_INSURARINVOICE_OBJECTID as OC_INVOICE_OBJECTID from OC_EXTRAINSURARINVOICES	
-        </sql>
-	</view>
-	<view name="LabelsView" db="openclinic" drop="1">
-        <sql db="Microsoft SQL Server">
-            create view LabelsView as select * from @admin@..Labels
-        </sql>
-        <sql db="MySQL">
-            create view LabelsView as select * from @admin@.Labels
-        </sql>
-        <sql db="Adaptive Server Enterprise">
-            create view LabelsView as select * from admin..Labels
-        </sql>
-        <sql db="Cache">
-            create view LabelsView as select * from Labels
         </sql>
 	</view>
     <view name="LastConvocation" db="openclinic" drop="1">

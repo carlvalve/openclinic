@@ -255,7 +255,7 @@
 	      </td>
 	  </tr>
 	</table>
-<%} %>
+<%}%>
 <script>
   <%-- do find --%>
   function doFind(){
@@ -443,7 +443,7 @@
         <%}else{ %>
         	<input type='hidden' name='EditLabelType' id='EditLabelType' value='<%=editLabelType%>'/>
         	<input type='hidden' name='EditLabelID' id='EditLabelID' value='<%=editLabelID%>'/>
-        	<input type='hidden' name='EditLabelLang' value='<%=sWebLanguage%>'/>
+        	<input type='hidden' name='EditLabelLang' id='EditLabelLang' value='<%=sWebLanguage%>'/>
         	<input type='hidden' name='EditShowLink' value='<%=editShowLink%>'/>
         	<input type='hidden' name='Mode' id='Mode' value='mini'/>
         <%} %>

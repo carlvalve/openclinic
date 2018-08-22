@@ -145,7 +145,7 @@
 						<select id='musscle.upperright.value' class='text'>
 							<%=ScreenHelper.writeSelect(request, "cnrkr.muscles.values", "", sWebLanguage) %>
 						</select>
-						<img onload='showDivValues("ITEM_TYPE_CNRKR_KINE_ASSESSMENT_REUMATOLOGY2_MUSCTESTING_UPPERRIGHT","musscle.upperright")' src='<%=sCONTEXTPATH %>/_img/icons/icon_plus.png' onclick='addDivValue("ITEM_TYPE_CNRKR_KINE_ASSESSMENT_REUMATOLOGY2_MUSCTESTING_UPPERRIGHT","musscle.upperright","musscle.upperright.value")'/>
+						<img id='img_ITEM_TYPE_CNRKR_KINE_ASSESSMENT_REUMATOLOGY2_MUSCTESTING_UPPERRIGHT' onload='this.onplay()' onplay='showDivValues("ITEM_TYPE_CNRKR_KINE_ASSESSMENT_REUMATOLOGY2_MUSCTESTING_UPPERRIGHT","musscle.upperright")' src='<%=sCONTEXTPATH %>/_img/icons/icon_plus.png' onclick='addDivValue("ITEM_TYPE_CNRKR_KINE_ASSESSMENT_REUMATOLOGY2_MUSCTESTING_UPPERRIGHT","musscle.upperright","musscle.upperright.value")'/>
 						<%=ScreenHelper.writeDefaultHiddenInput((TransactionVO)transaction, "ITEM_TYPE_CNRKR_KINE_ASSESSMENT_REUMATOLOGY2_MUSCTESTING_UPPERRIGHT") %>
 						<span id='div_ITEM_TYPE_CNRKR_KINE_ASSESSMENT_REUMATOLOGY2_MUSCTESTING_UPPERRIGHT'></span>
 					</td>
@@ -157,7 +157,7 @@
 						<select id='musscle.upperleft.value' class='text'>
 							<%=ScreenHelper.writeSelect(request, "cnrkr.muscles.values", "", sWebLanguage) %>
 						</select>
-						<img onload='showDivValues("ITEM_TYPE_CNRKR_KINE_ASSESSMENT_REUMATOLOGY2_MUSCTESTING_UPPERLEFT","musscle.upperleft")' src='<%=sCONTEXTPATH %>/_img/icons/icon_plus.png' onclick='addDivValue("ITEM_TYPE_CNRKR_KINE_ASSESSMENT_REUMATOLOGY2_MUSCTESTING_UPPERLEFT","musscle.upperleft","musscle.upperleft.value")'/>
+						<img id='img_ITEM_TYPE_CNRKR_KINE_ASSESSMENT_REUMATOLOGY2_MUSCTESTING_UPPERLEFT' onload='this.onplay()' onplay='showDivValues("ITEM_TYPE_CNRKR_KINE_ASSESSMENT_REUMATOLOGY2_MUSCTESTING_UPPERLEFT","musscle.upperleft")' src='<%=sCONTEXTPATH %>/_img/icons/icon_plus.png' onclick='addDivValue("ITEM_TYPE_CNRKR_KINE_ASSESSMENT_REUMATOLOGY2_MUSCTESTING_UPPERLEFT","musscle.upperleft","musscle.upperleft.value")'/>
 						<%=ScreenHelper.writeDefaultHiddenInput((TransactionVO)transaction, "ITEM_TYPE_CNRKR_KINE_ASSESSMENT_REUMATOLOGY2_MUSCTESTING_UPPERLEFT") %>
 						<span id='div_ITEM_TYPE_CNRKR_KINE_ASSESSMENT_REUMATOLOGY2_MUSCTESTING_UPPERLEFT'></span>
 					</td>
@@ -169,7 +169,7 @@
 						<select id='musscle.lowerright.value' class='text'>
 							<%=ScreenHelper.writeSelect(request, "cnrkr.muscles.values", "", sWebLanguage) %>
 						</select>
-						<img onload='showDivValues("ITEM_TYPE_CNRKR_KINE_ASSESSMENT_REUMATOLOGY2_MUSCTESTING_LOWERRIGHT","musscle.lowerright")' src='<%=sCONTEXTPATH %>/_img/icons/icon_plus.png' onclick='addDivValue("ITEM_TYPE_CNRKR_KINE_ASSESSMENT_REUMATOLOGY2_MUSCTESTING_LOWERRIGHT","musscle.lowerright","musscle.lowerright.value")'/>
+						<img id='img_ITEM_TYPE_CNRKR_KINE_ASSESSMENT_REUMATOLOGY2_MUSCTESTING_LOWERRIGHT' onload='this.onplay()' onplay='showDivValues("ITEM_TYPE_CNRKR_KINE_ASSESSMENT_REUMATOLOGY2_MUSCTESTING_LOWERRIGHT","musscle.lowerright")' src='<%=sCONTEXTPATH %>/_img/icons/icon_plus.png' onclick='addDivValue("ITEM_TYPE_CNRKR_KINE_ASSESSMENT_REUMATOLOGY2_MUSCTESTING_LOWERRIGHT","musscle.lowerright","musscle.lowerright.value")'/>
 						<%=ScreenHelper.writeDefaultHiddenInput((TransactionVO)transaction, "ITEM_TYPE_CNRKR_KINE_ASSESSMENT_REUMATOLOGY2_MUSCTESTING_LOWERRIGHT") %>
 						<span id='div_ITEM_TYPE_CNRKR_KINE_ASSESSMENT_REUMATOLOGY2_MUSCTESTING_LOWERRIGHT'></span>
 					</td>
@@ -181,7 +181,7 @@
 						<select id='musscle.lowerleft.value' class='text'>
 							<%=ScreenHelper.writeSelect(request, "cnrkr.muscles.values", "", sWebLanguage) %>
 						</select>
-						<img onload='showDivValues("ITEM_TYPE_CNRKR_KINE_ASSESSMENT_REUMATOLOGY2_MUSCTESTING_LOWERLEFT","musscle.lowerleft")' src='<%=sCONTEXTPATH %>/_img/icons/icon_plus.png' onclick='addDivValue("ITEM_TYPE_CNRKR_KINE_ASSESSMENT_REUMATOLOGY2_MUSCTESTING_LOWERLEFT","musscle.lowerleft","musscle.lowerleft.value")'/>
+						<img id='img_ITEM_TYPE_CNRKR_KINE_ASSESSMENT_REUMATOLOGY2_MUSCTESTING_LOWERLEFT' onload='this.onplay()' onplay='showDivValues("ITEM_TYPE_CNRKR_KINE_ASSESSMENT_REUMATOLOGY2_MUSCTESTING_LOWERLEFT","musscle.lowerleft")' src='<%=sCONTEXTPATH %>/_img/icons/icon_plus.png' onclick='addDivValue("ITEM_TYPE_CNRKR_KINE_ASSESSMENT_REUMATOLOGY2_MUSCTESTING_LOWERLEFT","musscle.lowerleft","musscle.lowerleft.value")'/>
 						<%=ScreenHelper.writeDefaultHiddenInput((TransactionVO)transaction, "ITEM_TYPE_CNRKR_KINE_ASSESSMENT_REUMATOLOGY2_MUSCTESTING_LOWERLEFT") %>
 						<span id='div_ITEM_TYPE_CNRKR_KINE_ASSESSMENT_REUMATOLOGY2_MUSCTESTING_LOWERLEFT'></span>
 					</td>
@@ -193,7 +193,7 @@
 						<select id='musscle.trunc.value' class='text'>
 							<%=ScreenHelper.writeSelect(request, "cnrkr.muscles.values", "", sWebLanguage) %>
 						</select>
-						<img onload='showDivValues("ITEM_TYPE_CNRKR_KINE_ASSESSMENT_REUMATOLOGY2_MUSCTESTING_TRUNC","musscle.trunc");' src='<%=sCONTEXTPATH %>/_img/icons/icon_plus.png' onclick='addDivValue("ITEM_TYPE_CNRKR_KINE_ASSESSMENT_REUMATOLOGY2_MUSCTESTING_TRUNC","musscle.trunc","musscle.trunc.value")'/>
+						<img id='img_ITEM_TYPE_CNRKR_KINE_ASSESSMENT_REUMATOLOGY2_MUSCTESTING_TRUNC' onload='this.onplay()' onplay='showDivValues("ITEM_TYPE_CNRKR_KINE_ASSESSMENT_REUMATOLOGY2_MUSCTESTING_TRUNC","musscle.trunc");' src='<%=sCONTEXTPATH %>/_img/icons/icon_plus.png' onclick='addDivValue("ITEM_TYPE_CNRKR_KINE_ASSESSMENT_REUMATOLOGY2_MUSCTESTING_TRUNC","musscle.trunc","musscle.trunc.value")'/>
 						<%=ScreenHelper.writeDefaultHiddenInput((TransactionVO)transaction, "ITEM_TYPE_CNRKR_KINE_ASSESSMENT_REUMATOLOGY2_MUSCTESTING_TRUNC") %>
 						<span id='div_ITEM_TYPE_CNRKR_KINE_ASSESSMENT_REUMATOLOGY2_MUSCTESTING_TRUNC'></span>
 					</td>

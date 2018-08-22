@@ -388,6 +388,9 @@
 
   <%-- ADD KEYWORD --%>
   function addKeyword(id,label,destinationidfield,destinationtextfield){
+	while(document.getElementById(destinationtextfield).innerHTML.indexOf('&nbsp;')>-1){
+		document.getElementById(destinationtextfield).innerHTML=document.getElementById(destinationtextfield).innerHTML.replace('&nbsp;','');
+	}
 	var ids = document.getElementById(destinationidfield).value;
 	if((ids+";").indexOf(id+";")<=-1){
 	  document.getElementById(destinationidfield).value = ids+";"+id;
@@ -398,7 +401,7 @@
 	    }
 	  }
 	  
-	  document.getElementById(destinationtextfield).innerHTML+= "<a href='javascript:deleteKeyword(\""+destinationidfield+"\",\""+destinationtextfield+"\",\""+id+"\");'><img width='8' src='<c:url value="/_img/themes/default/erase.png"/>' class='link' style='vertical-align:-1px'/></a> <b>"+label+"</b> | ";
+	  document.getElementById(destinationtextfield).innerHTML+= "<span style='white-space: nowrap;'><a href='javascript:deleteKeyword(\""+destinationidfield+"\",\""+destinationtextfield+"\",\""+id+"\");'><img width='8' src='<c:url value="/_img/themes/default/erase.png"/>' class='link' style='vertical-align:-1px'/></a> <b>"+label+"</b></span> | ";
 	}
   }
 

@@ -84,7 +84,7 @@
         while(groupsIterator.hasNext()){
             String groupname = (String)groupsIterator.next();
             out.print("<tr class='admin'>"+
-                       "<td colspan='"+(requestList.size()+9)+"'><b>"+MedwanQuery.getInstance().getLabel("labanalysis.group",groupname,sWebLanguage)+"</b></td>"+
+                       "<td colspan='"+(requestList.size()+9)+"'><b>"+MedwanQuery.getInstance().getLabel("labanalysis.group",groupname,sWebLanguage).toUpperCase()+"</b></td>"+
                       "</tr>");
             
             Hashtable analysisList = (Hashtable)groups.get(groupname);
@@ -98,7 +98,9 @@
                 LabAnalysis analysis = LabAnalysis.getLabAnalysisByLabcode(analysisCode);
                 if(analysis!=null){
                     c = analysis.getLabId()+"";
-                    u = " ("+analysis.getUnit()+")";
+                    if(checkString(analysis.getUnit()).length()>0){
+                    	u = " ("+analysis.getUnit()+")";
+                    }
                     
                     String min = analysis.getResultRefMin(activePatient.gender,activePatient.getAge());
                     try{
@@ -117,8 +119,26 @@
                     catch(Exception e){
                     	// empty
                     }
-                    
-                    refs = " ["+min+"-"+max+"]";
+                    if(min.length()>0 || max.length()>0){
+                    	//Reference values come from Analysis table
+                    	refs = " ["+min+"-"+max+"]";
+                    }
+                    else{
+                    	//Reference values come from RequestedLabanalyses table
+                        requestsIterator = requestList.keySet().iterator();
+                        while(requestsIterator.hasNext()){
+                            labRequest = (LabRequest)requestList.get(requestsIterator.next());
+                            RequestedLabAnalysis requestedLabAnalysis=(RequestedLabAnalysis)labRequest.getAnalyses().get(analysisCode);
+                            if(requestedLabAnalysis!=null){
+                            	min=requestedLabAnalysis.getResultRefMin();
+                            	max=requestedLabAnalysis.getResultRefMax();
+                                if(min.length()>0 || max.length()>0){
+                                	refs = " ["+min+"-"+max+"]";
+                                	break;
+                                }
+                            }
+                        }
+                    }
                 }
                 
                 requestsIterator = requestList.keySet().iterator();
@@ -130,7 +150,7 @@
                     if(activeUser.getAccessRight("labos.modifyvalidatedresults.select") && (requestedLabAnalysis.getTechnicalvalidation()>0 || requestedLabAnalysis.getFinalvalidation()>0)){
                     	sEdit = "<img src='"+sCONTEXTPATH+"/_img/icons/icon_edit.png' onclick='reactivate("+labRequest.getServerid()+","+labRequest.getTransactionid()+",\""+requestedLabAnalysis.getAnalysisCode()+"\")'/>";
                     }
-                    out.print("<tr bgcolor='#FFFCD6'><td width='25%' nowrap>"+sEdit+" <b>"+MedwanQuery.getInstance().getLabel("labanalysis",c,sWebLanguage)+" "+u+refs+"</b></td>");
+                    out.print("<tr bgcolor='#FFFCD6'><td width='25%' nowrap>"+sEdit+" <b>"+MedwanQuery.getInstance().getLabel("labanalysis",c,sWebLanguage)+" </b><i>"+u+refs+"</i></td>");
                   
                     String result = (requestedLabAnalysis!=null?requestedLabAnalysis.getFinalvalidation()>0 && requestedLabAnalysis.getResultValue().length()>0?analysis.getLimitedVisibility()>0 && !activeUser.getAccessRight("labos.limitedvisibility.select")?getTran(request,"web","invisible",sWebLanguage):requestedLabAnalysis.getResultValue()+(checkString(requestedLabAnalysis.getResultComment()).length()>0?"<br/>"+requestedLabAnalysis.getResultComment():""):"?":"");
                 	if(analysis.getEditor().equalsIgnoreCase("calculated")){
@@ -227,7 +247,7 @@
 
                     boolean bAbnormal = (result.length()>0 && !result.equalsIgnoreCase("?") && abnormal.toLowerCase().indexOf("*"+checkString(requestedLabAnalysis.getResultModifier()).toLowerCase()+"*")>-1);
                     
-                     out.print("<td nowrap"+(bAbnormal?" bgcolor='#FF8C68'":"")+">"+result+(bAbnormal?" "+checkString(requestedLabAnalysis.getResultModifier().toUpperCase()):"")+"</td>");
+                     out.print("<td nowrap>"+result+(bAbnormal?" <img height='14px' title='["+checkString(requestedLabAnalysis.getResultRefMin())+" - "+checkString(requestedLabAnalysis.getResultRefMax())+"] "+getTranNoLink("web","valueoutofrange",sWebLanguage)+": "+checkString(requestedLabAnalysis.getResultModifier().toUpperCase())+"' style='vertical-align: middle' src='"+sCONTEXTPATH+"/_img/icons/icon_warning.gif'/>":"")+"</td>");
                      out.print("<td>"+(requestedLabAnalysis!=null && requestedLabAnalysis.getSampler()>0?MedwanQuery.getInstance().getUserName(requestedLabAnalysis.getSampler()):"")+"</td>");
                      out.print("<td>"+(requestedLabAnalysis!=null && requestedLabAnalysis.getSampletakendatetime()!=null?ScreenHelper.formatDate(requestedLabAnalysis.getSampletakendatetime(),ScreenHelper.fullDateFormat):"")+"</td>");
                      out.print("<td>"+(requestedLabAnalysis!=null && requestedLabAnalysis.getSamplereceptiondatetime()!=null?ScreenHelper.formatDate(requestedLabAnalysis.getSamplereceptiondatetime(),ScreenHelper.fullDateFormat):"")+"</td>");

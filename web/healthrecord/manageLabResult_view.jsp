@@ -111,7 +111,7 @@
             String groupname = (String)groupsIterator.next();
             Hashtable analysisList = (Hashtable)groups.get(groupname);
             out.print("<tr>"+
-                       "<td class='color color"+i+"' rowspan='"+(analysisList.size())+"'><b>"+MedwanQuery.getInstance().getLabel("labanalysis.group",groupname,sWebLanguage)+"</b></td>");
+                       "<td class='color color"+i+"' rowspan='"+(analysisList.size())+"'><b>"+MedwanQuery.getInstance().getLabel("labanalysis.group",groupname,sWebLanguage).toUpperCase()+"</b></td>");
             HashSet scanshandeled = new HashSet();
             Hashtable scans = new Hashtable();
 
@@ -127,9 +127,11 @@
                 LabAnalysis analysis = LabAnalysis.getLabAnalysisByLabcode(analysisCode);
                 if(analysis!=null){
                     c = analysis.getLabId()+"";
-                    u = " ("+analysis.getUnit()+")";
+                    if(checkString(analysis.getUnit()).length()>0){
+                    	u = " ("+analysis.getUnit()+")";
+                    }
                     
-                    String min=null;
+                    String min="";
                     try{
                     	min = analysis.getResultRefMin(activePatient.gender,new Double(MedwanQuery.getInstance().getNrMonths(ScreenHelper.parseDate(activePatient.dateOfBirth), new java.util.Date())).intValue());
                         float f = Float.parseFloat(min.replace(",","."));
@@ -139,7 +141,7 @@
                     	//Debug.println(e.getMessage());
                     }
                     
-                    String max=null;
+                    String max="";
                     try{
                     	max = analysis.getResultRefMax(activePatient.gender,new Double(MedwanQuery.getInstance().getNrMonths(ScreenHelper.parseDate(activePatient.dateOfBirth), new java.util.Date())).intValue());
                         float f = Float.parseFloat(max.replace(",","."));
@@ -148,12 +150,31 @@
                     catch(Exception e){
                     	//e.printStackTrace();
                     }
-               
-                    refs = " ["+min+"-"+max+"]";
+                    
+                    if(min.length()>0 || max.length()>0){
+                    	//Reference values come from Analysis table
+                    	refs = " ["+min+"-"+max+"]";
+                    }
+                    else{
+                    	//Reference values come from RequestedLabanalyses table
+                        requestsIterator = requestList.keySet().iterator();
+                        while(requestsIterator.hasNext()){
+                            LabRequest labRequest = (LabRequest)requestList.get(requestsIterator.next());
+                            RequestedLabAnalysis requestedLabAnalysis=(RequestedLabAnalysis)labRequest.getAnalyses().get(analysisCode);
+                            if(requestedLabAnalysis!=null){
+                            	min=requestedLabAnalysis.getResultRefMin();
+                            	max=requestedLabAnalysis.getResultRefMax();
+                                if(min.length()>0 || max.length()>0){
+                                	refs = " ["+min+"-"+max+"]";
+                                	break;
+                                }
+                            }
+                        }
+                    }
                 }
                 
                 out.print("<td class='color color"+i+"' width='1%'>"+analysisCode+"</td>"+
-                          "<td class='color color"+i+"'><b>"+LabAnalysis.labelForCode(analysisCode,sWebLanguage)+" "+u+refs+"</b></td>");
+                          "<td class='color color"+i+"'><b>"+LabAnalysis.labelForCode(analysisCode,sWebLanguage)+" </b><i>"+u+refs+"</i></td>");
                 
                 requestsIterator = requestList.keySet().iterator();
                 while(requestsIterator.hasNext()){
@@ -256,7 +277,7 @@
                     }
                     
                     boolean bAbnormal = (result.length()>0 && !result.equalsIgnoreCase("?") && abnormal.toLowerCase().indexOf("*"+checkString(requestedLabAnalysis.getResultModifier()).toLowerCase()+"*")>-1);
-                    out.print("<td class='color color"+i+"'>"+result+(bAbnormal?" "+checkString(requestedLabAnalysis.getResultModifier().toUpperCase()):"")+"</td>");
+                    out.print("<td class='color color"+i+"'>"+result+(bAbnormal?" <img height='14px' title='["+checkString(requestedLabAnalysis.getResultRefMin())+" - "+checkString(requestedLabAnalysis.getResultRefMax())+"] "+getTranNoLink("web","valueoutofrange",sWebLanguage)+": "+checkString(requestedLabAnalysis.getResultModifier().toUpperCase())+"' style='vertical-align: middle' src='"+sCONTEXTPATH+"/_img/icons/icon_warning.gif'/>":"")+"</td>");
                 }
 				//Todo: add link to unvalidate result and then remove image
                 out.print("</tr>");
@@ -272,7 +293,7 @@
     window.moveTo((screen.width-w)/2,(screen.height-h)/2)
   }
   function showRequest(serverid,transactionid){
-    window.open("<c:url value='/labos/manageLabResult_view.jsp'/>?ts=<%=getTs()%>&show."+serverid+"."+transactionid+"=1","Popup"+new Date().getTime(),"toolbar=no,status=yes,scrollbars=yes,resizable=yes,width=800,height=600,menubar=no");
+    	window.open("<c:url value='/labos/manageLabResult_view.jsp'/>?ts=<%=getTs()%>&show."+serverid+"."+transactionid+"=1","Popup"+new Date().getTime(),"toolbar=no,status=yes,scrollbars=yes,resizable=yes,width=800,height=600,menubar=no");
   }
   function printRequest(serverid,transactionid){
 	    window.open("<c:url value='/labos/createLabResultsPdf.jsp'/>?ts=<%=getTs()%>&print."+serverid+"."+transactionid+"=1","Popup"+new Date().getTime(),"toolbar=no,status=yes,scrollbars=yes,resizable=yes,width=800,height=600,menubar=no");
