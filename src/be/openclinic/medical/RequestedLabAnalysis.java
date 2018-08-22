@@ -766,6 +766,7 @@ public class RequestedLabAnalysis {
     }
 
     public void setResultRefMax(String resultRefMax) {
+    	this.resultRefMax=resultRefMax;
         try{
             this.resultRefMax = new DecimalFormat("#.#####").format(Double.parseDouble(resultRefMax));
         }
@@ -805,12 +806,12 @@ public class RequestedLabAnalysis {
     }
 
     public void setResultRefMin(String resultRefMin) {
-        this.resultRefMin="";
+        this.resultRefMin=resultRefMin;
         try{
             this.resultRefMin = new DecimalFormat("#.#####").format(Double.parseDouble(resultRefMin));
         }
         catch(Exception e){
-
+        	
         }
     }
 

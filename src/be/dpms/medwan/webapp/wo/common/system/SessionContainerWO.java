@@ -449,6 +449,17 @@ public class SessionContainerWO extends be.mxs.webapp.wo.common.system.SessionCo
                         actualItems = getCurrentTransactionVO().getItems().iterator();
                         while (actualItems.hasNext()){
                             actualItem = (ItemVO)actualItems.next();
+                            //Eerst verifiëren of dit item niet is uitgesloten van historiek
+                            boolean bExcluded=false;
+                            String[] excludedHistoryItems = MedwanQuery.getInstance().getConfigString("excludedHistoryitems","be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_KINE_TEST").split(";");
+                            for(int n=0;n<excludedHistoryItems.length && !bExcluded;n++){
+                            	if(actualItem.getType().startsWith(excludedHistoryItems[n])){
+                            		bExcluded=true;
+                            	}
+                            }
+                            if(bExcluded){
+                            	continue;
+                            }
                             if (actualItem.getType().equals(item.getType())){
                                 itemValue = item.getValue();
                                 // We controleren of er nog bijkomende itemtypes moeten worden geladen
@@ -466,7 +477,30 @@ public class SessionContainerWO extends be.mxs.webapp.wo.common.system.SessionCo
                                         }
                                     }
                                 }
-                                html += "<input type='hidden' name='PreviousValue_currentTransactionVO.items.<ItemVO[hashCode="+actualItem.getItemId()+"]>.value' value='"+itemValue.replaceAll("\\'","´")+"'/>";
+                            	String typeroot = item.getType().substring(ScreenHelper.ITEM_PREFIX.length());
+                                html += "<input type='hidden' name='PreviousValue_currentTransactionVO.items.<ItemVO[hashCode="+actualItem.getItemId()+"]>.value' id='REF"+typeroot+"' value='"+itemValue.replaceAll("\\'","´")+"'/>";
+                                if(item.getType().endsWith("CODES") && item.getValue().length()>0){
+                                	typeroot = typeroot.substring(0, typeroot.length()-5);
+                                	String idsField = typeroot+"CODES";
+                                	String textField = typeroot+"IDS";
+                        			StringBuffer sKeywords = new StringBuffer();
+                                	String[] ids = item.getValue().split(";");
+                        			String keyword = "";
+                        			String language = getUserVO().getPersonVO().language;
+                        			html +="<script>";
+                        			for(int n=0; n<ids.length; n++){
+                        				if(ids[n].split("\\$").length==2){
+                        					keyword = ScreenHelper.getTran(null,ids[n].split("\\$")[0],ids[n].split("\\$")[1] , language);
+                        					html += "var kk_"+Math.abs(actualItem.getItemId())+"_"+n+"='"+idsField+"~"+textField+"~"+ids[n]+"~kk_"+Math.abs(actualItem.getItemId())+"_"+n+"';";
+                        					sKeywords.append("<a href=\"javascript:deleteKeywordCoded(kk_"+Math.abs(actualItem.getItemId())+"_"+n+");\">")
+                        					   .append("<img width=\"8\" src=\""+MedwanQuery.getInstance().getConfigString("imageSource","http://localhost/openclinic")+"/_img/themes/default/erase.png\" class=\"link\" style=\"vertical-align:-1px\"/>")
+                        					  .append("</a>")
+                        					  .append("&nbsp;<b>").append(keyword.startsWith("/")?keyword.substring(1):keyword).append("</b> | ");
+                        				}
+                        			}
+                        			html +="</script>";
+                        			html += "<input type='hidden' name='PreviousDivValue_currentTransactionVO.items.<ItemVO[hashCode="+actualItem.getItemId()+"]>.value' id='REF"+textField+"' value='"+sKeywords+"'/>";
+                                }
                                 if(getCurrentTransactionVO().getTransactionId()<=0){
 	                                String repeat=(String)historyItems.get(actualItem.getType());
 	                                if(repeat!=null){

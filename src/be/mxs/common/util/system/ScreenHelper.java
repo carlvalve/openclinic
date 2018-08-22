@@ -2339,10 +2339,10 @@ public static String removeAccents(String sTest){
 				if(ids[n].split("\\$").length==2){
 					keyword = getTran(null,ids[n].split("\\$")[0],ids[n].split("\\$")[1] , language);
 					
-					sHTML.append("<a href='javascript:deleteKeyword(\"").append(idsField).append("\",\"").append(textField).append("\",\"").append(ids[n]).append("\");'>")
+					sHTML.append("<span style='white-space: nowrap;'><a href='javascript:deleteKeyword(\"").append(idsField).append("\",\"").append(textField).append("\",\"").append(ids[n]).append("\");'>")
 					   .append("<img width='8' src='"+contextpath+"/_img/themes/default/erase.png' class='link' style='vertical-align:-1px'/>")
 					  .append("</a>")
-					  .append("&nbsp;<b>").append(keyword.startsWith("/")?keyword.substring(1):keyword).append("</b> | ");
+					  .append("&nbsp;<b>").append(keyword.startsWith("/")?keyword.substring(1):keyword).append("</b></span> | ");
 				}
 			}
 		}
@@ -3024,18 +3024,60 @@ public static String removeAccents(String sTest){
 
         // previous
         defaults += ((SessionContainerWO)SessionContainerFactory.getInstance().getSessionContainerWO( request , SessionContainerWO.class.getName())).getItemPreviousHTML();
-        defaults += "<script>function loadPrevious(){"
-                    +"for(n=0;n<document.all.length;n++){"
-                    +"if(document.getElementsByName('PreviousValue_'+document.all[n].name).length>0){"
-                    +"if(document.all[n].type=='text'){document.all[n].value=document.getElementsByName('PreviousValue_'+document.all[n].name)[0].value;document.all[n].className='modified'}"
-                    +"else if(document.all[n].type=='textarea'){document.all[n].value=document.getElementsByName('PreviousValue_'+document.all[n].name)[0].value;document.all[n].className='modified'}"
-                    +"else if(document.all[n].type=='radio' && document.all[n].value==document.getElementsByName('PreviousValue_'+document.all[n].name)[0].value){document.all[n].checked=true;document.all[n].className='modified'}"
-                    +"else if(document.all[n].type=='checkbox' && document.all[n].value==document.getElementsByName('PreviousValue_'+document.all[n].name)[0].value){document.all[n].checked=true;document.all[n].className='modified'}"
-                    +"else if(document.all[n].type=='select-one'){for(m=0;m<document.all[n].options.length;m++){if(document.all[n].options[m].value==document.getElementsByName('PreviousValue_'+document.all[n].name)[0].value){document.all[n].selectedIndex=m;document.all[n].className='modified'}}}"
-                    +"}"
-                    +"}"
-                    +"document.getElementById('ie5menu').style.visibility = 'hidden';}</script>";
+        String loadPreviousScript="<script>"+
+					"function loadPrevious(){"+
+					  "for(n=0;n<document.all.length;n++){"+
+					    "if(document.getElementsByName('PreviousDivValue_'+document.all[n].name).length>0){"+
+					      "var divcontent=document.getElementsByName('PreviousDivValue_'+document.all[n].name)[0].value;"+
+					      "document.getElementById(document.getElementsByName('PreviousDivValue_'+document.all[n].name)[0].id.substring(3)).className='modified';"+
+					      "document.getElementById(document.getElementsByName('PreviousDivValue_'+document.all[n].name)[0].id.substring(3)).innerHTML=divcontent;"+
+					    "}"+
+					    "if(document.getElementsByName('PreviousValue_'+document.all[n].name).length>0){"+
+					      "if(document.all[n].type=='text'){"+
+					        "document.all[n].value=document.getElementsByName('PreviousValue_'+document.all[n].name)[0].value;"+
+					        "document.all[n].className='modified';"+
+					      "}"+
+					      "else if(document.all[n].type=='hidden'){"+
+					        "document.all[n].value=document.getElementsByName('PreviousValue_'+document.all[n].name)[0].value;"+
+						"valuesArray=document.all[n].value.split(';');"+
+					        "for(q=0;q<valuesArray.length;q++){"+
+						  "refElement = document.getElementById(document.getElementsByName('PreviousValue_'+document.all[n].name)[0].id.substring(3)+'.'+valuesArray[q]);"+
+					          "if(refElement && (refElement.type=='checkbox' || refElement.type=='radio') && refElement.checked==false){"+
+					            "refElement.checked=true;"+
+					            "refElement.className='modified';"+
+					          "}"+
+					        "}"+
+					        "refElement=document.getElementById('img_'+document.getElementsByName('PreviousValue_'+document.all[n].name)[0].id.substring(3));"+
+						"if(refElement && refElement.onplay){"+
+					          "window.setTimeout('refElement.onplay();',200);"+
+					        "}"+
+					      "}"+
+					      "else if(document.all[n].type=='textarea'){"+
+					        "document.all[n].value=document.getElementsByName('PreviousValue_'+document.all[n].name)[0].value;"+
+					        "document.all[n].className='modified';"+
+					      "}"+
+					      "else if(document.all[n].type=='radio' && document.all[n].value==document.getElementsByName('PreviousValue_'+document.all[n].name)[0].value){"+
+					        "document.all[n].checked=true;"+
+					        "document.all[n].className='modified';"+
+					      "}"+
+					      "else if(document.all[n].type=='checkbox' && document.all[n].value==document.getElementsByName('PreviousValue_'+document.all[n].name)[0].value){"+
+					          "document.all[n].checked=true;"+
+					          "document.all[n].className='modified';"+
+					      "}"+
+					      "else if(document.all[n].type=='select-one'){"+
+					        "for(m=0;m<document.all[n].options.length;m++){"+
+					          "if(document.all[n].options[m].value==document.getElementsByName('PreviousValue_'+document.all[n].name)[0].value){"+
+					            "document.all[n].selectedIndex=m;document.all[n].className='modified';"+
+					          "}"+
+					        "}"+
+					      "}"+
+					    "}"+
+					  "}"+
+					  "document.getElementById('ie5menu').style.visibility = 'hidden';"+
+					"}"+
+					"</script>";
 
+        defaults += MedwanQuery.getInstance().getConfigString("scriptLoadPrevious",loadPreviousScript);
         // previous context
         defaults += ((SessionContainerWO)SessionContainerFactory.getInstance().getSessionContainerWO( request , SessionContainerWO.class.getName())).getItemPreviousContextHTML();
         defaults += "<script>function loadPreviousContext(){"
