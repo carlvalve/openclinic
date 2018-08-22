@@ -200,7 +200,8 @@
                   (MedwanQuery.getInstance().getConfigInt("enablePBFBurundi",0)==1?writeTblChildWithCodeNoButton("javascript:downloadPBFdocsNoService(\"pbf.burundi.deliverieslist\",\"openclinic\");",getTran(request,"Web","statistics.download.pbfburundi.deliverieslist",sWebLanguage)):"")+
                   (MedwanQuery.getInstance().getConfigInt("enablePBFBurundi",0)==1?writeTblChildWithCodeNoButton("javascript:downloadPBFdocsInsurer(\"insurer.userlist\",\"openclinic\");",getTran(request,"Web","statistics.download.insurer.userlist",sWebLanguage)):"")+
                   (MedwanQuery.getInstance().getConfigInt("enableMaliVaccinations",0)==1?writeTblChildWithCodeNoButton("javascript:downloadStats(\"vida\",\"stats\");",getTran(request,"Web","statistics.download.vida",sWebLanguage)):"")+
-                  (MedwanQuery.getInstance().getConfigInt("enableCNRKR",0)==1?writeTblChildWithCodeNoButton("javascript:downloadPBFdocs(\"cnrkr.burundi.consultationslist\",\"openclinic\");",getTran(request,"Web","cnrkr.activitylist",sWebLanguage)):"")+
+                  (MedwanQuery.getInstance().getConfigInt("enableCNRKR",0)==1?writeTblChildWithCodeNoButton("javascript:downloadStats(\"cnrkr.burundi.consultationslist\",\"openclinic\");",getTran(request,"Web","cnrkr.consultation.activitylist",sWebLanguage)):"")+
+                  (MedwanQuery.getInstance().getConfigInt("enableCNRKR",0)==1?writeTblChildWithCodeNoButton("javascript:downloadStats(\"cnrkr.burundi.kinelist\",\"openclinic\");",getTran(request,"Web","cnrkr.kine.activitylist",sWebLanguage)):"")+
 			      (MedwanQuery.getInstance().getConfigInt("datacenterEnabled",0)==1?writeTblChildWithCodeNoButton("javascript:downloadDatacenterStats(\"service.income.list\",\"stats\");",getTran(request,"Web","statistics.download.serviceincomelist",sWebLanguage)):""));
         out.print(ScreenHelper.writeTblFooter()+"<br>");
 

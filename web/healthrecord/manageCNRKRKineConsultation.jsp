@@ -28,6 +28,18 @@
 	            <table class="list" cellspacing="1" cellpadding="0" width="100%">
 	                <%-- MEDICAL SUMMARY --------------------------------------------------------------------%>
 			       <tr class="admin" style="padding:0px;">
+			           <td colspan="3"><%=getTran(request,"web","general",sWebLanguage)%></td>
+			       </tr>
+			       <tr>
+			           <td class="admin"><%=getTran(request,"web","cardtype",sWebLanguage)%></td>
+			           <td class="admin2" colspan='2'>
+				            <select <%=setRightClick(session,"ITEM_TYPE_CNRKR_KINE_CARDTYPE")%> id="cardtype" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_KINE_CARDTYPE" property="itemId"/>]>.value">
+				               	<option/>
+				            	<%=ScreenHelper.writeSelect(request,"cardtype",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_KINE_CARDTYPE"),sWebLanguage,false,false) %>
+				            </select>
+			           </td>
+			       </tr>
+			       <tr class="admin" style="padding:0px;">
 			           <td colspan="3"><%=getTran(request,"web","anamnesis",sWebLanguage)%></td>
 			       </tr>
 			       <tr>

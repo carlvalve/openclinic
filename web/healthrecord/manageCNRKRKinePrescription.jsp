@@ -32,7 +32,28 @@
 	if(medTran!=null){
 		medTranDate=ScreenHelper.formatDate(medTran.getUpdateTime());
 		medTranInstructions="<i>"+ScreenHelper.formatDate(medTran.getUpdateTime())+" ("+MedwanQuery.getInstance().getUserName(medTran.getUser().userId)+")</i>: <b>"+checkString(medTran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_INSTRUCTIONS"))+"</b>";
-		medTranDiagnosis=checkString(medTran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_WORKINGDIAGNOSIS"));
+		medTranDiagnosis="";
+		if(checkString(medTran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY")).length()>0){
+			medTranDiagnosis+=getTranNoLink("cnrkr.pathology",checkString(medTran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY")),sWebLanguage);
+		};
+		if(checkString(medTran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY2")).length()>0){
+			if(medTranDiagnosis.length()>0){
+				medTranDiagnosis+="<br/>";
+			}
+			medTranDiagnosis+=getTranNoLink("cnrkr.pathology",checkString(medTran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY2")),sWebLanguage);
+		};
+		if(checkString(medTran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY3")).length()>0){
+			if(medTranDiagnosis.length()>0){
+				medTranDiagnosis+="<br/>";
+			}
+			medTranDiagnosis+=getTranNoLink("cnrkr.pathology",checkString(medTran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY3")),sWebLanguage);
+		};
+		if(checkString(medTran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY4")).length()>0){
+			if(medTranDiagnosis.length()>0){
+				medTranDiagnosis+="<br/>";
+			}
+			medTranDiagnosis+=getTranNoLink("cnrkr.pathology",checkString(medTran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY4")),sWebLanguage);
+		};
 		medTranNumberOfSessions=checkString(medTran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_SESSIONS"));
 		medTranFrequency=checkString(medTran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_FREQUENCY"));
 		medTranDuration=checkString(medTran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_SESSIONDURATION"));

@@ -145,7 +145,7 @@
     </tr>
     <%-- RESULT MODIFIER --%>
     <tr>
-        <td class="admin"><%=getTran(request,"Web.manage","labanalysis.cols.resultmodifier",sWebLanguage)%></td>
+        <td class="admin"><%=getTran(request,"Web.manage","labanalysis.cols.refrange",sWebLanguage)%></td>
         <td class="admin2">
             <%
                 if(editable){
@@ -157,7 +157,7 @@
                     <%
                 }
                 else{
-                    %><%=getTran(request,"labanalysis.resultmodifier",analysis.getResultModifier(),sWebLanguage)%><%
+                    %><%=analysis.getResultModifier()%><%
                 }
             %>
         </td>

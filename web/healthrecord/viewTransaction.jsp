@@ -321,7 +321,7 @@
         );
       }
     </script>
-
+	<input type='hidden' id='referenceTransactionUid' value='<%=showTransaction.getServerId()+"."+showTransaction.getTransactionId()%>'/>
     <%
        	if(noBackButton){
             %>

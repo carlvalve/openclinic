@@ -74,7 +74,335 @@
                 "  (select max(oc_label_value) from oc_labels,privateview where oc_label_type='province' and oc_label_id=province and personid=a.personid and oc_label_language='"+sWebLanguage+"') as location2"+
                 " from adminview a";
     }
-	//*** 2.a - Vida ***************************************************
+	//*** CNRKR kiné report ***************************************************
+    else if("cnrkr.burundi.kinelist".equalsIgnoreCase(sQueryType)){
+    	query = "select t.serverid,t.transactionid,a.personid from transactions t, items i, healthrecord h, adminview a where t.healthrecordid=h.healthrecordid and h.personid=a.personid and t.transactiontype='be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CNRKR_KINE' and"+
+    			" i.serverid=t.serverid and"+
+    			" i.transactionid=t.transactionid and"+
+    			" i.type='be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_KINE_CLOSINGDATE' and"+
+    			" length(i.value)=10 and"+
+    			" STR_TO_DATE(i.value, '%d/%m/%Y')>=? and"+
+    			" STR_TO_DATE(i.value, '%d/%m/%Y')<?"+
+    			" order by t.updatetime";
+    	StringBuffer sResult = new StringBuffer();
+    	sResult.append("DATE DEBUT;DATE FIN;NOM;PRENOM;PATIENTID;SEXE;AGE;ETAT CIVIL;PROVINCE;COMMUNE;GROUPE DE PATHOLOGIE;ACTES DE TRAITEMENT;RESULTATS;KINESITHERAPEUTE\n");
+    	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+    	PreparedStatement ps = conn.prepareStatement(query);
+    	ps.setDate(1,new java.sql.Date(ScreenHelper.parseDate(request.getParameter("begin")).getTime()));
+    	ps.setDate(2,new java.sql.Date(ScreenHelper.parseDate(request.getParameter("end")).getTime()));
+    	ResultSet rs = ps.executeQuery();
+    	while(rs.next()){
+    		int serverid = rs.getInt("serverid");
+    		int transactionid = rs.getInt("transactionid");
+    		TransactionVO transaction = MedwanQuery.getInstance().loadTransaction(serverid, transactionid);
+    		if(transaction!=null && transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_KINE_CARDTYPE").equalsIgnoreCase("2")){
+    			sResult.append(ScreenHelper.formatDate(transaction.getUpdateTime())+";");
+    			sResult.append(transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_KINE_CLOSINGDATE")+";");
+    			AdminPerson patient = AdminPerson.getAdminPerson(rs.getString("personid"));
+    			if(patient!=null){
+    				sResult.append(patient.lastname.toUpperCase()+";");
+    				sResult.append(patient.firstname.toUpperCase()+";");
+    				sResult.append(patient.personid+";");
+    				sResult.append(patient.gender.toUpperCase()+";");
+    				try{
+	    				int age = patient.getAgeInMonths();
+	    				if(age<60){
+	    					sResult.append(" 0-5;");
+	    				}
+	    				else if(age<120){
+	    					sResult.append(" 5-10;");
+	    				}
+	    				else if(age<240){
+	    					sResult.append(" 10-20;");
+	    				}
+	    				else if(age<360){
+	    					sResult.append(" 20-30;");
+	    				}
+	    				else if(age<480){
+	    					sResult.append(" 30-40;");
+	    				}
+	    				else if(age<600){
+	    					sResult.append(" 40-50;");
+	    				}
+	    				else if(age<720){
+	    					sResult.append(" 50-60;");
+	    				}
+	    				else if(age<840){
+	    					sResult.append(" 60-70;");
+	    				}
+	    				else{
+	    					sResult.append(" 70+;");
+	    				}
+    				}
+    				catch(Exception ae){
+    					sResult.append(";");
+    				}
+    				sResult.append(ScreenHelper.getTranNoLink("civil.status",patient.comment2,sWebLanguage)+";");
+    				if(patient.getActivePrivate()!=null){
+    					sResult.append(patient.getActivePrivate().district+";");
+    					sResult.append(patient.getActivePrivate().sector+";");
+    				}
+    				else{
+    					sResult.append(";;");
+    				}
+    			}
+    			else{
+    				sResult.append(";;;;;;;;");
+    			}
+    			sResult.append(ScreenHelper.getTranNoLink("cnrkr.diagnosticacts",transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_KINE_DIAGNOSTICACTS"),sWebLanguage)+";");
+    			String[] treatments = transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_KINE_TREATMENTS").split("£");
+    			Hashtable hTreatments = new Hashtable();
+    			for(int n=0;n<treatments.length;n++){
+    				for(int i=1;i<11;i++){
+    					if(treatments[n].split(";").length>i && treatments[n].split(";")[i].length()>0){
+    						if(hTreatments.get(treatments[n].split(";")[i])==null){
+    							hTreatments.put(treatments[n].split(";")[i],1);
+    						}
+    						else{
+    							hTreatments.put(treatments[n].split(";")[i],(Integer)hTreatments.get(treatments[n].split(";")[i])+1);
+    						}
+    					}
+    				}
+    			}
+    			Enumeration eTreatments = hTreatments.keys();
+    			boolean bInit=false;
+    			while(eTreatments.hasMoreElements()){
+    				String key = (String)eTreatments.nextElement();
+    				if(bInit){
+    					sResult.append(", ");
+    				}
+    				sResult.append(hTreatments.get(key)+" x "+ScreenHelper.getTranNoLink("cnrkr.acts",key,sWebLanguage));
+    				bInit=true;
+    			}
+    			sResult.append(";");
+    			sResult.append(ScreenHelper.getTranNoLink("kine.outcome",transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_KINE_REPORTOUTCOME"),sWebLanguage)+";");
+    			try{
+    				sResult.append(transaction.getUser().getPersonVO().getFullName()+";\r\n");
+    			}
+    			catch(Exception ea){
+    				sResult.append(";\r\n");
+    			}
+    		}
+    	}
+    	rs.close();
+    	ps.close();
+        conn.close();
+	    response.setContentType("application/octet-stream; charset=windows-1252");
+	    response.setHeader("Content-Disposition", "Attachment;Filename=\"OpenClinicStatistic"+new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())+".csv\"");
+	    ServletOutputStream os = response.getOutputStream();
+
+    	byte[] b = sResult.toString().getBytes();
+        for(int n=0; n<b.length; n++){
+            os.write(b[n]);
+        }
+        os.flush();
+        os.close();
+        done=true;
+    }
+	//*** CNRKR consultations report ***************************************************
+    else if("cnrkr.burundi.consultationslist".equalsIgnoreCase(sQueryType)){
+    	query="select t.serverid,t.transactionid,a.personid from transactions t, healthrecord h, adminview a where a.personid=h.personid and t.healthrecordid=h.healthrecordid and t.updatetime>=? and t.updatetime<? and t.transactiontype='be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CNRKR_CONSULTATION'";
+    	StringBuffer sResult = new StringBuffer();
+    	sResult.append("DATE;NOM;PRENOM;PATIENTID;SEXE;AGE;ETAT CIVIL;PROVINCE;COMMUNE;PATHOLOGIE;GROUPE DE PATHOLOGIE;CISP-2/CIM10;NOM DU DIAGNOSTIC (CISP-2/CIM10);MEDECIN;REEDUCATION;\n");
+    	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+    	PreparedStatement ps = conn.prepareStatement(query);
+    	ps.setDate(1,new java.sql.Date(ScreenHelper.parseDate(request.getParameter("begin")).getTime()));
+    	ps.setDate(2,new java.sql.Date(ScreenHelper.parseDate(request.getParameter("end")).getTime()));
+    	ResultSet rs = ps.executeQuery();
+    	while(rs.next()){
+    		int serverid = rs.getInt("serverid");
+    		int transactionid = rs.getInt("transactionid");
+    		TransactionVO transaction = MedwanQuery.getInstance().loadTransaction(serverid, transactionid);
+    		if(transaction!=null){
+    			sResult.append(ScreenHelper.formatDate(transaction.getUpdateTime())+";");
+    			AdminPerson patient = AdminPerson.getAdminPerson(rs.getString("personid"));
+    			if(patient!=null){
+    				sResult.append(patient.lastname.toUpperCase()+";");
+    				sResult.append(patient.firstname.toUpperCase()+";");
+    				sResult.append(patient.personid+";");
+    				sResult.append(patient.gender.toUpperCase()+";");
+    				try{
+	    				int age = patient.getAgeInMonths();
+	    				if(age<60){
+	    					sResult.append(" 0-5;");
+	    				}
+	    				else if(age<120){
+	    					sResult.append(" 5-10;");
+	    				}
+	    				else if(age<240){
+	    					sResult.append(" 10-20;");
+	    				}
+	    				else if(age<360){
+	    					sResult.append(" 20-30;");
+	    				}
+	    				else if(age<480){
+	    					sResult.append(" 30-40;");
+	    				}
+	    				else if(age<600){
+	    					sResult.append(" 40-50;");
+	    				}
+	    				else if(age<720){
+	    					sResult.append(" 50-60;");
+	    				}
+	    				else if(age<840){
+	    					sResult.append(" 60-70;");
+	    				}
+	    				else{
+	    					sResult.append(" 70+;");
+	    				}
+    				}
+    				catch(Exception ae){
+    					sResult.append(";");
+    				}
+    				sResult.append(ScreenHelper.getTranNoLink("civil.status",patient.comment2,sWebLanguage)+";");
+    				if(patient.getActivePrivate()!=null){
+    					sResult.append(patient.getActivePrivate().district+";");
+    					sResult.append(patient.getActivePrivate().sector+";");
+    				}
+    				else{
+    					sResult.append(";;");
+    				}
+    			}
+    			else{
+    				sResult.append(";;;;;;;;");
+    			}
+    			HashSet icdcodes = new HashSet();
+    			boolean bInit=false;
+    			if(transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY").length()>0){
+    				sResult.append(ScreenHelper.getTranNoLink("cnrkr.pathology",transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY"),sWebLanguage).split(";")[0]);
+    				if(!ScreenHelper.getTranNoLink("cnrkr.icdmap",transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY"),"fr").equals(transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY"))){
+    					icdcodes.add(ScreenHelper.getTranNoLink("cnrkr.icdmap",transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY"),"fr"));
+    				}
+    				bInit=true;
+    			}
+    			if(transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY2").length()>0){
+    				if(bInit){
+    					sResult.append(", ");
+    				}
+    				else{
+        				bInit=true;
+    				}
+    				sResult.append(ScreenHelper.getTranNoLink("cnrkr.pathology",transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY2"),sWebLanguage).split(";")[0]);
+    				if(!ScreenHelper.getTranNoLink("cnrkr.icdmap",transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY2"),"fr").equals(transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY2"))){
+    					icdcodes.add(ScreenHelper.getTranNoLink("cnrkr.icdmap",transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY2"),"fr"));
+    				}
+    			}
+    			if(transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY3").length()>0){
+    				if(bInit){
+    					sResult.append(", ");
+    				}
+    				else{
+        				bInit=true;
+    				}
+    				sResult.append(ScreenHelper.getTranNoLink("cnrkr.pathology",transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY3"),sWebLanguage).split(";")[0]);
+    				if(!ScreenHelper.getTranNoLink("cnrkr.icdmap",transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY3"),"fr").equals(transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY3"))){
+    					icdcodes.add(ScreenHelper.getTranNoLink("cnrkr.icdmap",transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY3"),"fr"));
+    				}
+    			}
+    			if(transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY4").length()>0){
+    				if(bInit){
+    					sResult.append(", ");
+    				}
+    				else{
+        				bInit=true;
+    				}
+    				sResult.append(ScreenHelper.getTranNoLink("cnrkr.pathology",transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY4"),sWebLanguage).split(";")[0]);
+    				if(!ScreenHelper.getTranNoLink("cnrkr.icdmap",transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY4"),"fr").equals(transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY4"))){
+    					icdcodes.add(ScreenHelper.getTranNoLink("cnrkr.icdmap",transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY4"),"fr"));
+    				}
+    			}
+    			sResult.append(";");
+    			bInit=false;
+    			if(transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY").split("\\.")[0].length()>0){
+    				sResult.append(ScreenHelper.getTranNoLink("cnrkr.pathology",ScreenHelper.checkString(transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY")).split("\\.")[0],sWebLanguage).split(";")[0]);
+    				bInit=true;
+    			}
+    			if(transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY2").split("\\.")[0].length()>0){
+    				if(bInit){
+    					sResult.append(", ");
+    				}
+    				else{
+        				bInit=true;
+    				}
+    				sResult.append(ScreenHelper.getTranNoLink("cnrkr.pathology",ScreenHelper.checkString(transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY2")).split("\\.")[0],sWebLanguage).split(";")[0]);
+    			}
+    			if(transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY3").split("\\.")[0].length()>0){
+    				if(bInit){
+    					sResult.append(", ");
+    				}
+    				else{
+        				bInit=true;
+    				}
+    				sResult.append(ScreenHelper.getTranNoLink("cnrkr.pathology",ScreenHelper.checkString(transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY3")).split("\\.")[0],sWebLanguage).split(";")[0]);
+    			}
+    			if(transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY4").split("\\.")[0].length()>0){
+    				if(bInit){
+    					sResult.append(", ");
+    				}
+    				else{
+        				bInit=true;
+    				}
+    				sResult.append(ScreenHelper.getTranNoLink("cnrkr.pathology",ScreenHelper.checkString(transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_PATHOLOGY4")).split("\\.")[0],sWebLanguage).split(";")[0]);
+    			}
+    			sResult.append(";");
+    			//We voegen ook nog alle geregistreerde icd10 codes voor dit consult toe
+    			Collection items = transaction.getItems();
+    			Iterator iItems = items.iterator();
+    			while(iItems.hasNext()){
+    				ItemVO item = (ItemVO)iItems.next();
+    				if(item.getType().startsWith("ICD10Code")){
+    					icdcodes.add(item.getType().replaceAll("ICD10Code",""));
+    				}
+    			}
+				Iterator iIcd = icdcodes.iterator();
+				bInit=false;
+				while(iIcd.hasNext()){
+    				if(bInit){
+    					sResult.append(", ");
+    				}
+    				else{
+        				bInit=true;
+    				}
+    				sResult.append(iIcd.next());
+				}
+				sResult.append(";");
+				iIcd = icdcodes.iterator();
+				bInit=false;
+				while(iIcd.hasNext()){
+    				if(bInit){
+    					sResult.append(", ");
+    				}
+    				else{
+        				bInit=true;
+    				}
+    				sResult.append(MedwanQuery.getInstance().getCodeTran("icd10code"+iIcd.next(), sWebLanguage) );
+				}
+				sResult.append(";");
+    			try{
+    				sResult.append(transaction.getUser().getPersonVO().getFullName()+";");
+    			}
+    			catch(Exception ea){
+    				sResult.append(";");
+    			}
+    			sResult.append(ScreenHelper.getTranNoLink("cnrkr.reeducation",transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_REEDUCATION"),sWebLanguage)+";\r\n");
+    		}
+    	}
+    	rs.close();
+    	ps.close();
+        conn.close();
+	    response.setContentType("application/octet-stream; charset=windows-1252");
+	    response.setHeader("Content-Disposition", "Attachment;Filename=\"OpenClinicStatistic"+new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())+".csv\"");
+	    ServletOutputStream os = response.getOutputStream();
+
+    	byte[] b = sResult.toString().getBytes();
+        for(int n=0; n<b.length; n++){
+            os.write(b[n]);
+        }
+        os.flush();
+        os.close();
+        done=true;
+    }
+   	//*** 2.a - Vida ***************************************************
     else if("vida".equalsIgnoreCase(sQueryType)){
         Hashtable vaccins = new Hashtable();
         Hashtable comments = new Hashtable();

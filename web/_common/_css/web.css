@@ -842,7 +842,30 @@ TR.red {
  font-weight:normal;
  text-align:left;
  padding:1px;
- text-indent:5px;
+ border:none;
+ height:20px;
+}
+
+TR.redbold {
+ background-color:#ff9999;
+ color:#333;
+ font-family: Verdana, Geneva, sans-serif;
+ font-size:10px;
+ font-weight:bold;
+ text-align:left;
+ padding:1px;
+ border:none;
+ height:20px;
+}
+
+TR.inactive {
+ background-color:white;
+ color:gray;
+ font-family: Verdana, Geneva, sans-serif;
+ font-size:10px;
+ font-weight:normal;
+ text-align:left;
+ padding:1px;
  border:none;
  height:20px;
 }
@@ -855,7 +878,6 @@ TR.green {
  font-weight:normal;
  text-align:left;
  padding:1px;
- text-indent:5px;
  border:none;
  height:20px;
 }
@@ -1388,6 +1410,19 @@ TR.list {
  height:20px;
 }
 
+TR.listbold { 
+ color:#333;
+ font-family: Verdana, Geneva, sans-serif;
+ font-size:10px;
+ font-weight:bold;
+ text-align:left;
+ background-color:#fff;
+ border:solid 5px #fff;
+ padding:1px;
+ border:none;
+ height:20px;
+}
+
 TR.list1 {
  color:#333;
  font-family: Verdana, Geneva, sans-serif;
@@ -1586,7 +1621,7 @@ hr.popup {
  height:1px;
 }
 
-INPUT.modified {
+INPUT.modified[type=text] {
  FONT-WEIGHT:normal;
  FONT-SIZE:10px;
  BORDER-COLOR:darkblue;
@@ -1594,6 +1629,28 @@ INPUT.modified {
  font-family: Verdana, Geneva, sans-serif;
  BORDER-STYLE:solid;
  -moz-appearance:none;
+}
+
+INPUT.modified[type=checkbox] {
+ FONT-WEIGHT:normal;
+ FONT-SIZE:10px;
+ BORDER-COLOR:darkblue;
+ COLOR:black;
+ font-family: Verdana, Geneva, sans-serif;
+ BORDER-STYLE: dotted;
+ -moz-appearance:none;
+ outline: 2px solid darkblue;
+}
+
+DIV.modified {
+ FONT-WEIGHT:normal;
+ FONT-SIZE:10px;
+ BORDER-COLOR:darkblue;
+ COLOR:black;
+ font-family: Verdana, Geneva, sans-serif;
+ BORDER-STYLE:dotted;
+ -moz-appearance:none;
+ BORDER-WIDTH: 1px;
 }
 
 TEXTAREA.modified {

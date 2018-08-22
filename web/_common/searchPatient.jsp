@@ -73,7 +73,7 @@
         
         <%-- row 1 --%>
         <tr>
-            <td align="right" nowrap width="55"><%=getTran(request,"Web","Name",sWebLanguage)%>&nbsp;</td>
+            <td align="right" nowrap width="55"><%=getTran(request,"Web","LastName",sWebLanguage)%>&nbsp;</td>
             <td>
                 <input id="ac2" autocomplete="off" class='<%=setFocus("Name",sDefaultFocus)%>' type='text' style='text-transform:uppercase' name='findName' value="<%=sName%>" size='25' onblur='limitLength(this);'>
                 <div id="ac2update" class="autocompletiondiv" style="display:none;"></div>

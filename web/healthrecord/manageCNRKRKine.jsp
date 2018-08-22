@@ -10,7 +10,7 @@
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
 
-<%=checkPermission("cnrkr.neuromuscular", "select",activeUser)%>
+<%=checkPermission("cnrkr.kine", "select",activeUser)%>
 
 <script>
 	function selectKeywords(destinationidfield,destinationtextfield,labeltype,divid,titleid,keyid,mousey){	
@@ -75,6 +75,9 @@
 
   <%-- ADD KEYWORD --%>
   function addKeyword(id,label,destinationidfield,destinationtextfield){
+	while(document.getElementById(destinationtextfield).innerHTML.indexOf('&nbsp;')>-1){
+		document.getElementById(destinationtextfield).innerHTML=document.getElementById(destinationtextfield).innerHTML.replace('&nbsp;','');
+	}
 	var ids = document.getElementById(destinationidfield).value;
 	if((ids+";").indexOf(id+";")<=-1){
 	  document.getElementById(destinationidfield).value = ids+";"+id;
@@ -85,7 +88,7 @@
 	    }
 	  }
 	  
-	  document.getElementById(destinationtextfield).innerHTML+= "<a href='javascript:deleteKeyword(\""+destinationidfield+"\",\""+destinationtextfield+"\",\""+id+"\");'><img width='8' src='<c:url value="/_img/themes/default/erase.png"/>' class='link' style='vertical-align:-1px'/></a> <b>"+label+"</b> | ";
+	  document.getElementById(destinationtextfield).innerHTML+= "<span style='white-space: nowrap;'><a href='javascript:deleteKeyword(\""+destinationidfield+"\",\""+destinationtextfield+"\",\""+id+"\");'><img width='8' src='<c:url value="/_img/themes/default/erase.png"/>' class='link' style='vertical-align:-1px'/></a> <b>"+label+"</b></span> | ";
 	}
   }
 
@@ -109,9 +112,36 @@
   }
 
   <%-- DELETE KEYWORD --%>
+  function deleteKeywordCoded(kw){
+	  destinationidfield=kw.split("\~")[0];
+	  destinationtextfield=kw.split("\~")[1];
+	  id=kw.split("\~")[2];
+	  keyname=kw.split("\~")[3];
+	  
+		var newids = "";
+		var ids = document.getElementById(destinationidfield).value.split(";");
+		for(n=0; n<ids.length; n++){
+		  if(ids[n].indexOf("$")>-1){
+			if(id!=ids[n]){
+			  newids+= ids[n]+";";
+			}
+		  }
+		}
+		
+		document.getElementById(destinationidfield).value = newids;
+		var newlabels = "";
+		var labels = document.getElementById(destinationtextfield).innerHTML.split(" | ");
+	    for(n=0;n<labels.length;n++){
+		  if(labels[n].trim().length>0 && labels[n].indexOf(keyname)<=-1){
+		    newlabels+=labels[n]+" | ";
+		  }
+		}
+	    
+		document.getElementById(destinationtextfield).innerHTML = newlabels;
+  }
+
   function deleteKeyword(destinationidfield,destinationtextfield,id){
 	var newids = "";
-	
 	var ids = document.getElementById(destinationidfield).value.split(";");
 	for(n=0; n<ids.length; n++){
 	  if(ids[n].indexOf("$")>-1){
@@ -783,7 +813,11 @@
 	      openPopup("/_common/search/searchEncounter.jsp&ts=<%=getTs()%>&VarCode=currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID" property="itemId"/>]>.value&VarText=&FindEncounterPatient=<%=activePatient.personid%>");
 	  }
 	function loadAssessment(activate){
-    	var params = "assessmenttype="+document.getElementById("ITEM_TYPE_CNRKR_KINE_DIAGNOSTICACTS").value;
+    	var referenceTransactionUid='';
+    	if(document.getElementById('referenceTransactionUid')){
+    		referenceTransactionUid=document.getElementById('referenceTransactionUid').value;
+    	}
+    	var params = "assessmenttype="+document.getElementById("ITEM_TYPE_CNRKR_KINE_DIAGNOSTICACTS").value+"&referenceTransactionUid="+referenceTransactionUid;
 		if(!(document.getElementById('activeAssessment').value==params)){
 	    	var url = '<c:url value="/healthrecord/ajax/loadCNRKRAssessment.jsp"/>?ts='+new Date().getTime();
 			new Ajax.Request(url,{
@@ -849,10 +883,15 @@
 <script>
 
 	function loadTests(activate){
+    	var referenceTransactionUid='';
+    	if(document.getElementById('referenceTransactionUid')){
+    		referenceTransactionUid=document.getElementById('referenceTransactionUid').value;
+    	}
     	var params = "test1="+document.getElementById("ITEM_TYPE_CNRKR_KINE_TEST1_code").value+
 					 "&test2="+document.getElementById("ITEM_TYPE_CNRKR_KINE_TEST2_code").value+
 					 "&test3="+document.getElementById("ITEM_TYPE_CNRKR_KINE_TEST3_code").value+
-					 "&test4="+document.getElementById("ITEM_TYPE_CNRKR_KINE_TEST4_code").value
+					 "&test4="+document.getElementById("ITEM_TYPE_CNRKR_KINE_TEST4_code").value+
+					 "&referenceTransactionUid="+referenceTransactionUid
     				 ;
 		if(!(document.getElementById('activeTest').value==params)){
 			var url = '<c:url value="/healthrecord/ajax/loadCNRKRTests.jsp"/>?ts='+new Date().getTime();

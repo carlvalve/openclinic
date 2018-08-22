@@ -273,6 +273,20 @@ try{
                                                                             </a>
                                                                         <%
                                                                     }
+                                                                    else if(transactionType.equalsIgnoreCase("be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CNRKR_KINE")){
+                                                                    	transactionVO.preload();
+                                                                        %>
+                                                                            <a href="<c:url value='/healthrecord/editTransaction.do'/>?be.mxs.healthrecord.createTransaction.transactionType=<%=transactionType%>&be.mxs.healthrecord.transaction_id=<%=transactionVO.getTransactionId()%>&be.mxs.healthrecord.server_id=<%=transactionVO.getServerId()%>&ts=<%=getTs()%>" onMouseOver="window.status='';return true;">
+                                                                                <%=getTran(request,"web.occup",transactionType,sWebLanguage)%>
+                                                                                <%
+	                                                                                String type = transactionVO.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_KINE_CARDTYPE");
+                                                                                	if(type.length()>0){
+	                                                                                    %> [<%=getTranNoLink("cardtype",type,sWebLanguage)%>]<%
+                                                                                	}
+                                                                                %>
+                                                                            </a>
+                                                                        <%
+                                                                    }
                                                                     // no Document
                                                                     else{
                                                                         %>

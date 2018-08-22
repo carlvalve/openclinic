@@ -36,6 +36,7 @@
            sShortTimeValue = "",
            sPrestationCode = "",
            sLabGroup = "",
+           sLabSection = "",
            sAlertValue = "",
            sPrestationType = "",
            sEditor="",
@@ -144,6 +145,7 @@
             sShortTimeValue = checkString(request.getParameter("EditShortTimeValue"));
             sPrestationCode = checkString(request.getParameter("EditPrestationCode"));
             sLabGroup = checkString(request.getParameter("EditLabGroup"));
+            sLabSection = checkString(request.getParameter("EditLabSection"));
             sProcedure = checkString(request.getParameter("EditLabProcedure"));
             sEditor=checkString(request.getParameter("EditLabEditor"));
             sEditorParameters=checkString(request.getParameter("EditLabEditorParameters"));
@@ -212,6 +214,7 @@
                 labAnalysis.setMedidoccode(sMedidoccode);
                 labAnalysis.setDhis2code(sDhis2code);
                 labAnalysis.setLabgroup(sLabGroup);
+                labAnalysis.setSection(sLabSection);
                 labAnalysis.setComment(sComment);
                 labAnalysis.setUpdateuserid(Integer.parseInt(activeUser.userid));
                 labAnalysis.setUpdatetime(getSQLTime());
@@ -347,6 +350,7 @@
             sLabCodeOther  = labAnalysis.getLabcodeother();
             sProcedure     = labAnalysis.getProcedureUid();
             sLabGroup      = labAnalysis.getLabgroup();
+            sLabSection    = labAnalysis.getSection();
             nEditUnavailable=labAnalysis.getUnavailable();
             nEditLimitedVisibility=labAnalysis.getLimitedVisibility();
             sEditor			=labAnalysis.getEditor();
@@ -449,6 +453,7 @@
                 sDhis2code    = checkString(labAnalysis.getDhis2code());
                 sComment        = checkString(labAnalysis.getComment());
                 sLabGroup       = checkString(labAnalysis.getLabgroup());
+                sLabSection     = checkString(labAnalysis.getSection());
                 sLabCodeOther   = checkString(labAnalysis.getLabcodeother());
                 sAlertValue     = checkString(labAnalysis.getAlertvalue());
                 sLimitValue     = checkString(labAnalysis.getLimitvalue());
@@ -752,6 +757,16 @@
       <select type="text" class="text" name="EditLabGroup">
         <option><%=getTranNoLink("web","choose",sWebLanguage)%></option>
         <%=ScreenHelper.writeSelect(request,"labanalysis.group",sLabGroup,sWebLanguage)%>
+      </select>
+    </td>
+  </tr>
+  <%-- LAB SECTION --%>
+  <tr>
+    <td class="admin"><%=getTran(request,"Web.manage","labanalysis.cols.section",sWebLanguage)%></td>
+    <td class="admin2">
+      <select type="text" class="text" name="EditLabSection">
+        <option><%=getTranNoLink("web","choose",sWebLanguage)%></option>
+        <%=ScreenHelper.writeSelect(request,"labanalysis.section",sLabSection,sWebLanguage)%>
       </select>
     </td>
   </tr>

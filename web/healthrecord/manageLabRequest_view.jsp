@@ -20,35 +20,41 @@
     //--- ADD LABANALYSIS -------------------------------------------------------------------------
     private String addLA(int iTotal, String serverId, String transactionId, String sCode, String sType,
                          String sLabel, String sComment, String sMonster, String sResultValue,
-                         String sResultModifier, String sWebLanguage){
+                         String sResultModifier, String sResultRefMin, String sResultRefMax, String sWebLanguage){
         // translate comment
         if(sComment.trim().length() > 0){
             sComment = getTranNoLink("web.analysis",sComment,sWebLanguage);
         }
 
-        // alternate row-style; red when empty resultModifier
+        // alternate row-style; 
         String sClass;
-        if(sResultModifier.length()==0){
-            sClass = "red";
+        String abnormal = MedwanQuery.getInstance().getConfigString("abnormalModifiers","*+*++*+++*-*--*---*h*hh*hhh*l*ll*lll*");
+        boolean bAbnormal = (sResultValue.length()>0 && !sResultValue.equalsIgnoreCase("?") && abnormal.toLowerCase().indexOf("*"+checkString(sResultModifier).toLowerCase()+"*")>-1);
+        if(bAbnormal){
+        	//red when abnormal
+            sClass = "redbold";
+        }
+        else if(sResultValue.equalsIgnoreCase("?") || checkString(sResultValue).length()==0){
+        	//grey when waiting 
+            sClass = "listDisabled1";
         }
         else{
-            if(iTotal%2==0) sClass = "";
-            else            sClass = "list";
+            sClass = "listbold";
         }
 
         String detailsTran = getTran(null,"web","showDetails",sWebLanguage);
         StringBuffer buf = new StringBuffer();
         buf.append("<tr id='rowLA"+iTotal+"' class='"+sClass+"' title='"+detailsTran+"' onmouseover=\"this.style.cursor='hand';\" onmouseout=\"this.style.cursor='default';\">")
-            .append("<td width='1%' nowrap align='center'>")
-             .append("<img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.png' onclick=\"deleteLA(rowLA"+iTotal+",'"+sMonster+"');\" class='link' alt='").append(getTranNoLink("Web","delete",sWebLanguage)).append("'>")
+            .append("<td width='1%' nowrap style='text-align: right'>")
+             .append("<img style='text-align: right' src='"+sCONTEXTPATH+"/_img/icons/icon_delete.png' onclick=\"deleteLA(rowLA"+iTotal+",'"+sMonster+"');\" title='").append(getTranNoLink("Web","delete",sWebLanguage)).append("'>")
             .append("</td>")
             .append("<td onClick=\"showResultDetails('"+serverId+"','"+transactionId+"','"+sCode+"');\">&nbsp;"+sCode+"</td>")
             .append("<td onClick=\"showResultDetails('"+serverId+"','"+transactionId+"','"+sCode+"');\">&nbsp;"+sType+"</td>")
             .append("<td onClick=\"showResultDetails('"+serverId+"','"+transactionId+"','"+sCode+"');\">&nbsp;"+sLabel+"</td>")
+            .append("<td onClick=\"showResultDetails('"+serverId+"','"+transactionId+"','"+sCode+"');\">&nbsp;"+sResultValue+"</td>")
+            .append("<td onClick=\"showResultDetails('"+serverId+"','"+transactionId+"','"+sCode+"');\">&nbsp;"+(checkString(sResultRefMin).length()==0 && checkString(sResultRefMax).length()==0?"":"["+checkString(sResultRefMin)+(checkString(sResultRefMin).length()*checkString(sResultRefMax).length()>0?" - ":"")+checkString(sResultRefMax)+"] ")+checkString(sResultModifier)+"</td>")
             .append("<td onClick=\"showResultDetails('"+serverId+"','"+transactionId+"','"+sCode+"');\">&nbsp;"+sComment+"</td>")
             .append("<td onClick=\"showResultDetails('"+serverId+"','"+transactionId+"','"+sCode+"');\">&nbsp;"+getTran(null,"labanalysis.monster",sMonster,sWebLanguage)+"</td>")
-            .append("<td onClick=\"showResultDetails('"+serverId+"','"+transactionId+"','"+sCode+"');\">&nbsp;"+sResultValue+"</td>")
-            .append("<td onClick=\"showResultDetails('"+serverId+"','"+transactionId+"','"+sCode+"');\">&nbsp;"+(sResultModifier.length()>0?getTran(null,"labanalysis.resultmodifier",sResultModifier,sWebLanguage):"")+"</td>")
            .append("</tr>");
 
         return buf.toString();
@@ -78,7 +84,7 @@
 <%
     // variables
     String sTmpCode, sTmpComment, sTmpModifier, sTmpResultUnit, sTmpResultValue, sTmpResult,
-            sTmpType = "", sTmpLabel = "", sTmpMonster = "", sTmpServerId, sTmpTransactionId;
+            sTmpType = "", sTmpLabel = "", sTmpMonster = "", sTmpRefMin="", sTmpRefMax="", sTmpServerId, sTmpTransactionId;
     StringBuffer sScriptsToExecute = new StringBuffer();
     TransactionVO tran = (TransactionVO)transaction;
     Hashtable labAnalyses = new Hashtable();
@@ -106,6 +112,9 @@
         sTmpModifier = labAnalysis.getResultModifier();
         sTmpResultUnit = getTranNoLink("labanalysis.resultunit", labAnalysis.getResultUnit(), sWebLanguage);
         sTmpResult = "";
+        sTmpRefMin = labAnalysis.getResultRefMin();
+        sTmpRefMax = labAnalysis.getResultRefMax();
+        
         // get resultvalue
         if(labAnalysis.getFinalvalidation()>0){
             sTmpResultValue = labAnalysis.getResultValue();
@@ -203,7 +212,7 @@
 
         // compose sLA
         sLA += "rowLA"+iTotal+"="+sTmpCode+"£"+sTmpComment+"$";
-        sDivLA += addLA(iTotal, sTmpServerId, sTmpTransactionId, sTmpCode, sTmpType, sTmpLabel, sTmpComment, sTmpMonster, sTmpResult, sTmpModifier, sWebLanguage);
+        sDivLA += addLA(iTotal, sTmpServerId, sTmpTransactionId, sTmpCode, sTmpType, sTmpLabel, sTmpComment, sTmpMonster, sTmpResult, sTmpModifier, sTmpRefMin, sTmpRefMax, sWebLanguage);
         sScriptsToExecute.append("addToMonsterList('"+(sTmpMonster.length()>0?getTranNoLink("labanalysis.monster",sTmpMonster,sWebLanguage):"")+"');");
         iTotal++;
     }
@@ -242,15 +251,15 @@
         <td width="18"></td>
 
         <%-- default data --%>
-        <td width="80"><%=getTran(request,"Web.manage","labanalysis.cols.code",sWebLanguage)%></td>
-        <td width="80"><%=getTran(request,"Web.manage","labanalysis.cols.type",sWebLanguage)%></td>
-        <td width="200"><%=getTran(request,"Web.manage","labanalysis.cols.name",sWebLanguage)%></td>
-        <td width="150"><%=getTran(request,"Web.manage","labanalysis.cols.comment",sWebLanguage)%></td>
-        <td width="200"><%=getTran(request,"Web.manage","labanalysis.cols.monster",sWebLanguage)%></td>
+        <td><%=getTran(request,"Web.manage","labanalysis.cols.code",sWebLanguage)%></td>
+        <td><%=getTran(request,"Web.manage","labanalysis.cols.type",sWebLanguage)%></td>
+        <td><%=getTran(request,"Web.manage","labanalysis.cols.name",sWebLanguage)%></td>
 
         <%-- result data --%>
-        <td width="100"><%=getTran(request,"Web.manage","labanalysis.cols.resultvalue",sWebLanguage)%></td>
-        <td width="100"><%=getTran(request,"Web.manage","labanalysis.cols.resultmodifier",sWebLanguage)%></td>
+        <td><%=getTran(request,"Web.manage","labanalysis.cols.resultvalue",sWebLanguage)%></td>
+        <td><%=getTran(request,"Web.manage","labanalysis.cols.refrange",sWebLanguage)%></td>
+        <td><%=getTran(request,"Web.manage","labanalysis.cols.comment",sWebLanguage)%></td>
+        <td><%=getTran(request,"Web.manage","labanalysis.cols.monster",sWebLanguage)%></td>
     </tr>
 
     <%-- chosen LabAnalysis --%>
@@ -279,6 +288,10 @@
             <a href="javascript:setCurrentTime('hour');">
                 <img src="<c:url value="/_img/icons/icon_compose.png"/>" class="link" style='vertical-align:bottom' title="<%=getTranNoLink("web","currenttime",sWebLanguage)%>" border="0"/>
             </a>
+            <%if(!activePatient.gender.equalsIgnoreCase("m")){ %>
+	        &nbsp;&nbsp;&nbsp;<input type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_LAB_PREGNANT" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_LAB_PREGNANT;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"> <%=getTran(request,"web","patient.pregnant",sWebLanguage)%>
+	        <%}%>
+	        &nbsp;&nbsp;&nbsp;<input type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_LAB_EXTERNAL" property="itemId"/>]>.value" <mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_LAB_EXTERNAL;value=medwan.common.true" property="value" outputString="checked"/> value="medwan.common.true"> <%=getTran(request,"web","patient.externe",sWebLanguage)%>
         </td>
     </tr>
 
@@ -477,7 +490,7 @@
   
   <%-- SHOW REQUEST --%>
   function showRequest(serverid,transactionid){
-    window.open("<c:url value='/labos/manageLabResult_view.jsp'/>?ts=<%=getTs()%>&show."+serverid+"."+transactionid+"=1","Popup"+new Date().getTime(),"toolbar=no,status=yes,scrollbars=yes,resizable=yes,width=800,height=600,menubar=no");
+    window.open("<c:url value='/labos/manageLabResult_view.jsp'/>?ts=<%=getTs()%>&show."+serverid+"."+transactionid+"=1","Popup"+new Date().getTime(),"toolbar=no,status=yes,scrollbars=yes,resizable=yes,width=1024,height=600,menubar=no");
   }
 
   <%
