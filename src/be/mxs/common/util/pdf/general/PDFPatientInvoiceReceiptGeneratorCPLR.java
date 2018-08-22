@@ -152,12 +152,6 @@ public class PDFPatientInvoiceReceiptGeneratorCPLR extends PDFInvoiceGenerator {
 		            totalextrainsurardebet+=debet.getExtraInsurarAmount();
 	            }
 	        }
-	        //If associated clinicians have been registered, then show them
-	        String clinicians=invoice.getCliniciansAsString();
-	        if(clinicians.length()>0){
-	            table.addCell(createValueCell(getTran("web","clinician"),15,new Double(7*scaleFactor).intValue(),Font.NORMAL));
-	            table.addCell(createBoldLabelCell(clinicians,35,new Double(7*scaleFactor).intValue()));
-	        }
 
 			//Create the receipt content
 			int receiptid=MedwanQuery.getInstance().getOpenclinicCounter("RECEIPT");

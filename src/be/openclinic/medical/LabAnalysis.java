@@ -45,8 +45,17 @@ public class LabAnalysis {
     private LabProcedure procedure;
     private int historydays;
     private int historyvalues;
+    private String section;
 
-    public String getDhis2code() {
+    public String getSection() {
+		return section;
+	}
+
+	public void setSection(String section) {
+		this.section = section;
+	}
+
+	public String getDhis2code() {
 		return dhis2code;
 	}
 
@@ -346,6 +355,7 @@ public class LabAnalysis {
                 objLabAnalysis.setProcedureUid(ScreenHelper.checkString(rs.getString("procedureuid")));
                 objLabAnalysis.setHistorydays(rs.getInt("historydays"));
                 objLabAnalysis.setHistoryvalues(rs.getInt("historyvalues"));
+                objLabAnalysis.setSection(ScreenHelper.checkString(rs.getString("section")));
 
                 hLabAnalysis.put(objLabAnalysis.getLabcode(),objLabAnalysis);
             }
@@ -374,7 +384,7 @@ public class LabAnalysis {
 
         String sLowerCode = ScreenHelper.getConfigParam("lowerCompare","labcode");
 
-        String sSelect = "SELECT a.historydays,a.historyvalues,a.unavailable,limitedvisibility,a.labID, a.labtype, a.labcode, a.labcodeother, OC_LABEL_VALUE AS name,a.editor,a.editorparameters,a.medidoccode,a.dhis2code,a.prestationcode,a.procedureuid" +
+        String sSelect = "SELECT a.section,a.historydays,a.historyvalues,a.unavailable,limitedvisibility,a.labID, a.labtype, a.labcode, a.labcodeother, OC_LABEL_VALUE AS name,a.editor,a.editorparameters,a.medidoccode,a.dhis2code,a.prestationcode,a.procedureuid" +
                 " FROM LabAnalysis a, OC_LABELS l" +
                 " WHERE a.deletetime IS NULL" +
                 "  AND l.OC_LABEL_TYPE = 'labanalysis'" +
@@ -410,6 +420,7 @@ public class LabAnalysis {
                 objLabAnalysis.setProcedureUid(ScreenHelper.checkString(rs.getString("procedureuid")));
                 objLabAnalysis.setHistorydays(rs.getInt("historydays"));
                 objLabAnalysis.setHistoryvalues(rs.getInt("historyvalues"));
+                objLabAnalysis.setSection(ScreenHelper.checkString(rs.getString("section")));
 
                 hLabAnalysis.add(objLabAnalysis);
             }
@@ -438,7 +449,7 @@ public class LabAnalysis {
 
         Hashtable hLabAnalysis = new Hashtable();
 
-        String sSelect = " SELECT a.historydays,a.historyvalues,a.unavailable,limitedvisibility,a.labID, a.labtype, a.labcode, a.labcodeother, OC_LABEL_VALUE AS name,a.editor,a.editorparameters,a.prestationcode,a.procedureuid" +
+        String sSelect = " SELECT a.section,a.historydays,a.historyvalues,a.unavailable,limitedvisibility,a.labID, a.labtype, a.labcode, a.labcodeother, OC_LABEL_VALUE AS name,a.editor,a.editorparameters,a.prestationcode,a.procedureuid" +
                          " FROM LabAnalysis a, OC_LABELS l" +
                          " WHERE a.deletetime IS NULL" +
                          "  AND l.OC_LABEL_TYPE = 'labanalysis'" +
@@ -472,6 +483,7 @@ public class LabAnalysis {
                 objLabAnalysis.setProcedureUid(ScreenHelper.checkString(rs.getString("procedureuid")));
                 objLabAnalysis.setHistorydays(rs.getInt("historydays"));
                 objLabAnalysis.setHistoryvalues(rs.getInt("historyvalues"));
+                objLabAnalysis.setSection(ScreenHelper.checkString(rs.getString("section")));
                 sName = ScreenHelper.checkString(rs.getString("name"));
                 hLabAnalysis.put(sName,objLabAnalysis);
             }
@@ -503,7 +515,7 @@ public class LabAnalysis {
                lowerLabelType  = ScreenHelper.getConfigParam("lowerCompare","l.OC_LABEL_TYPE");
 
         if(sSearchProfileID.equals("")){
-            sQuery.append("SELECT a.historydays,a.historyvalues,a.unavailable,limitedvisibility,a.labID,a.labtype AS type,a.labcode AS code,OC_LABEL_VALUE AS name,");
+            sQuery.append("SELECT a.section,a.historydays,a.historyvalues,a.unavailable,limitedvisibility,a.labID,a.labtype AS type,a.labcode AS code,OC_LABEL_VALUE AS name,");
             sQuery.append(" a.labcodeother,'' AS comment,a.monster,a.editor,a.editorparameters,a.medidoccode,a.dhis2code,a.prestationcode,a.procedureuid");
             sQuery.append(" FROM LabAnalysis a, OC_LABELS l ");
 
@@ -531,7 +543,7 @@ public class LabAnalysis {
 
         }
         else{
-            sQuery.append("SELECT DISTINCT(a.labID),a.historydays,a.historyvalues,a.unavailable,limitedvisibility,a.medidoccode,a.dhis2code,a.editor,a.editorparameters,a.labtype AS type,a.labcode AS code,OC_LABEL_VALUE AS name,")
+            sQuery.append("SELECT DISTINCT(a.labID),a.section,a.historydays,a.historyvalues,a.unavailable,limitedvisibility,a.medidoccode,a.dhis2code,a.editor,a.editorparameters,a.labtype AS type,a.labcode AS code,OC_LABEL_VALUE AS name,")
                   .append(" a.labcodeother,lpa.comment AS comment,a.monster,a.prestationcode,a.procedureuid")
                   .append(" FROM LabAnalysis a, OC_LABELS l, LabProfilesAnalysis lpa ");
 
@@ -590,6 +602,7 @@ public class LabAnalysis {
                 objLabAnalysis.setProcedureUid(ScreenHelper.checkString(rs.getString("procedureuid")));
                 objLabAnalysis.setHistorydays(rs.getInt("historydays"));
                 objLabAnalysis.setHistoryvalues(rs.getInt("historyvalues"));
+                objLabAnalysis.setSection(ScreenHelper.checkString(rs.getString("section")));
 
                 hLabAnalysis.add(objLabAnalysis);
             }
@@ -679,7 +692,7 @@ public class LabAnalysis {
 
         String lowerLabelType = ScreenHelper.getConfigParam("lowerCompare", "l.OC_LABEL_TYPE");
 
-        sQuery.append("SELECT a.historydays,a.historyvalues,a.unavailable,limitedvisibility,a.labID,a.labtype AS type,a.labcode AS code,OC_LABEL_VALUE AS name,")
+        sQuery.append("SELECT a.section,a.historydays,a.historyvalues,a.unavailable,limitedvisibility,a.labID,a.labtype AS type,a.labcode AS code,OC_LABEL_VALUE AS name,")
                 .append("  a.labcodeother,lpa.comment AS comment,a.monster,a.editor,a.editorparameters,a.prestationcode,a.procedureuid")
                 .append(" FROM LabAnalysis a, OC_LABELS l, LabProfilesAnalysis lpa");
 
@@ -724,6 +737,7 @@ public class LabAnalysis {
                 objLabAnalysis.setHistorydays(rs.getInt("historydays"));
                 objLabAnalysis.setHistoryvalues(rs.getInt("historyvalues"));
                 sName  = ScreenHelper.checkString(rs.getString("name"));
+                objLabAnalysis.setSection(ScreenHelper.checkString(rs.getString("section")));
 
                 hLabAnalysis.add(objLabAnalysis);
             }
@@ -826,8 +840,8 @@ public class LabAnalysis {
 
         String sInsert = " INSERT INTO LabAnalysis(labID,labcode,labtype,monster,biomonitoring," +
                          "  medidoccode,labgroup,comment,updateuserid,updatetime,deletetime,labcodeother," +
-                         "  limitvalue,shorttimevalue,unit,alertvalue,unavailable,editor,editorparameters,limitedvisibility,prestationcode,procedureuid,historydays,historyvalues,dhis2code)" +
-                         " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                         "  limitvalue,shorttimevalue,unit,alertvalue,unavailable,editor,editorparameters,limitedvisibility,prestationcode,procedureuid,historydays,historyvalues,dhis2code,section)" +
+                         " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
@@ -858,6 +872,7 @@ public class LabAnalysis {
             ps.setInt(23,this.getHistorydays());
             ps.setInt(24,this.getHistoryvalues());
             ps.setString(25, this.getDhis2code());
+            ps.setString(26, this.getSection());
             
             ps.executeUpdate();
             ps.close();
@@ -879,7 +894,7 @@ public class LabAnalysis {
         String sUpdate =" UPDATE LabAnalysis SET" +
                         "  labID=?, labcode=?, labtype=?, monster=?, biomonitoring=?, medidoccode=?," +
                         "  labgroup=?, comment=?, updateuserid=?, updatetime=?, deletetime=?, labcodeother=?," +
-                        "  limitvalue=?, shorttimevalue=?, unit=?, alertvalue=?, unavailable=?,editor=?,editorparameters=?,limitedvisibility=?,prestationcode=?,procedureuid=?,historydays=?,historyvalues=?, dhis2code=?" +
+                        "  limitvalue=?, shorttimevalue=?, unit=?, alertvalue=?, unavailable=?,editor=?,editorparameters=?,limitedvisibility=?,prestationcode=?,procedureuid=?,historydays=?,historyvalues=?, dhis2code=?, section=?" +
                         " WHERE labID = ?  and deletetime is null";
 
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
@@ -911,7 +926,8 @@ public class LabAnalysis {
             ps.setInt(23,this.getHistorydays());
             ps.setInt(24,this.getHistoryvalues());
             ps.setString(25, this.getDhis2code());
-            ps.setInt(26,this.getLabId());
+            ps.setString(26, this.getSection());
+            ps.setInt(27,this.getLabId());
             ps.executeUpdate();
             ps.close();
         }catch(Exception e){
@@ -961,7 +977,7 @@ public class LabAnalysis {
         String lowerLabCode   = MedwanQuery.getInstance().getConfigParam("lowerCompare","labcode"),
                lowerLabelType = MedwanQuery.getInstance().getConfigParam("lowerCompare","OC_LABEL_TYPE");
 
-        String sSelect = "SELECT historydays,historyvalues,unavailable,limitedvisibility,labID,labtype,labcode,monster,biomonitoring,medidoccode,dhis2code,labcodeother,labgroup,editor,editorparameters,prestationcode,procedureuid"+
+        String sSelect = "SELECT section,historydays,historyvalues,unavailable,limitedvisibility,labID,labtype,labcode,monster,biomonitoring,medidoccode,dhis2code,labcodeother,labgroup,editor,editorparameters,prestationcode,procedureuid"+
                   " FROM LabAnalysis a, OC_LABELS b"+
                   " WHERE "+ MedwanQuery.getInstance().convert("varchar(255)","a.labID")+" = b.OC_LABEL_ID"+
                   "  AND "+lowerLabelType+" = '"+sLabLabelType+"'"+
@@ -999,6 +1015,7 @@ public class LabAnalysis {
                 objLabAnalysis.setProcedureUid(ScreenHelper.checkString(rs.getString("procedureuid")));
                 objLabAnalysis.setHistorydays(rs.getInt("historydays"));
                 objLabAnalysis.setHistoryvalues(rs.getInt("historyvalues"));
+                objLabAnalysis.setSection(ScreenHelper.checkString(rs.getString("section")));
 
                 vAnalyses.addElement(objLabAnalysis);
             }
@@ -1092,6 +1109,7 @@ public class LabAnalysis {
                 objLabAnalysis.setProcedureUid(ScreenHelper.checkString(rs.getString("procedureuid")));
                 objLabAnalysis.setHistorydays(rs.getInt("historydays"));
                 objLabAnalysis.setHistoryvalues(rs.getInt("historyvalues"));
+                objLabAnalysis.setSection(ScreenHelper.checkString(rs.getString("section")));
             }
             rs.close();
             ps.close();
@@ -1148,6 +1166,7 @@ public class LabAnalysis {
                 objLabAnalysis.setProcedureUid(ScreenHelper.checkString(rs.getString("procedureuid")));
                 objLabAnalysis.setHistorydays(rs.getInt("historydays"));
                 objLabAnalysis.setHistoryvalues(rs.getInt("historyvalues"));
+                objLabAnalysis.setSection(ScreenHelper.checkString(rs.getString("section")));
             }
             rs.close();
             ps.close();
