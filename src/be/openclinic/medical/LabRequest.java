@@ -335,7 +335,7 @@ public class LabRequest {
     public LabRequest(int serverid,int transactionid){
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
-            String sQuery="select distinct d.language,a.serverid,a.transactionid,a.patientid,d.gender,d.firstname,d.lastname,b.userid,d.dateofbirth,b.updatetime from RequestedLabAnalyses a, Transactions b, AdminView d where a.serverid=b.serverid and a.transactionId=b.transactionId and a.patientid=d.personid and a.serverid=? and a.transactionid=?";
+            String sQuery="select distinct d.language,a.serverid,a.transactionid,a.patientid,d.gender,d.firstname,d.lastname,b.userid,d.dateofbirth,b.updatetime,b.creationdate from RequestedLabAnalyses a, Transactions b, AdminView d where a.serverid=b.serverid and a.transactionId=b.transactionId and a.patientid=d.personid and a.serverid=? and a.transactionid=?";
             PreparedStatement ps = oc_conn.prepareStatement(sQuery);
             ps.setInt(1,serverid);
             ps.setInt(2,transactionid);
@@ -351,7 +351,7 @@ public class LabRequest {
                 setPersonid(rs.getInt("patientid"));
                 setPatientgender(rs.getString("gender"));
                 setPatientname(rs.getString("firstname")+" "+rs.getString("lastname"));
-                setRequestdate(rs.getTimestamp("updatetime"));
+                setRequestdate(rs.getTimestamp("creationdate"));
                 setUserid(rs.getInt("userid"));
                 setPatientdateofbirth(rs.getDate("dateofbirth"));
                 Encounter encounter = Encounter.getActiveEncounter(getPersonid()+"");

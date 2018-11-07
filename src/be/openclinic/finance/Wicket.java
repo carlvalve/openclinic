@@ -29,6 +29,9 @@ public class Wicket extends OC_Object{
     private String authorizedUsersId;
 
     public Service getService() {
+    	if(service==null && serviceUID!=null){
+    		service=Service.getService(serviceUID);
+    	}
         return service;
     }
 

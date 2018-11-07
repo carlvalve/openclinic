@@ -522,6 +522,10 @@ public class TransactionVO extends IObjectReference implements Serializable, IId
         else if(this.getTransactionType().equalsIgnoreCase(ScreenHelper.ITEM_PREFIX+"TRANSACTION_TYPE_CNRKR_KINE")){
             items.add(MedwanQuery.getInstance().getItem(serverId,transactionId,ScreenHelper.ITEM_PREFIX+"ITEM_TYPE_CNRKR_KINE_CARDTYPE"));
         }
+        // PEDIATRIC TRIAGE
+        else if(this.getTransactionType().equalsIgnoreCase(ScreenHelper.ITEM_PREFIX+"TRANSACTION_TYPE_PEDIATRIC_TRIAGE")){
+            items.add(MedwanQuery.getInstance().getItem(serverId,transactionId,ScreenHelper.ITEM_PREFIX+"ITEM_TYPE_TRIAGE_PRIORITY"));
+        }
         // MIR2 (rx)
         else if(this.getTransactionType().equalsIgnoreCase(IConstants.TRANSACTION_TYPE_MIR2)){
             items.add(MedwanQuery.getInstance().getItem(serverId,transactionId,ScreenHelper.ITEM_PREFIX+"ITEM_TYPE_MIR2_SCREEN_FIXED_UNIT"));

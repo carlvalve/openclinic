@@ -4,6 +4,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -35,22 +36,40 @@ public class PreLoader implements Runnable{
 	}
 	
 	public void run() {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
         try{
         	isActive=true;
-        	Connection conn = MedwanQuery.getInstance().getLongOpenclinicConnection();
-        	PreparedStatement ps = conn.prepareStatement("select distinct oc_stock_productuid from oc_productstocks");
-        	ResultSet rs = ps.executeQuery();
+        	conn = MedwanQuery.getInstance().getLongOpenclinicConnection();
+        	ps = conn.prepareStatement("select distinct oc_stock_productuid from oc_productstocks");
+        	rs = ps.executeQuery();
         	while(rs.next()){
-        		Product product = Product.get(rs.getString("oc_stock_productuid"));
-        		if(product!=null){
-        			double d = product.getLastYearsAveragePrice(ScreenHelper.endOfDay(new java.util.Date()));
-        			d = product.getLooseLastYearsAveragePrice(ScreenHelper.endOfDay(new java.util.Date()));
+        		try{
+        			Double dTest = Double.parseDouble(rs.getString("oc_stock_productuid"));
+            		Product product = Product.get(rs.getString("oc_stock_productuid"));
+            		if(product!=null){
+            			double d = product.getLastYearsAveragePrice(ScreenHelper.endOfDay(new java.util.Date()));
+            			d = product.getLooseLastYearsAveragePrice(ScreenHelper.endOfDay(new java.util.Date()));
+            		}
         		}
+        		catch(Exception de){}
         	}
         }
         catch (Exception e) {
 			e.printStackTrace();
 		}
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                conn.close();
+
+            }
+            catch(SQLException se){
+                se.printStackTrace();
+            }
+        }
 	}
 	
 }

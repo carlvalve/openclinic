@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
 import javax.servlet.ServletOutputStream;
 
 import org.dcm4che2.data.DicomObject;
@@ -99,6 +100,16 @@ public class Dicom {
 	    	ImageIO.scanForPlugins();
             Dcm2Jpg dcm2jpg= new Dcm2Jpg();           
             dcm2jpg.convert(source, destination);         
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+	}
+	
+	public static void convertDicomToJpegThumbnail(File source, ServletOutputStream destination, ImageReader reader){
+	    try{
+            Dcm2Jpg dcm2jpg= new Dcm2Jpg();       
+            dcm2jpg.setImageQuality(MedwanQuery.getInstance().getConfigInt("DICOMThumbnailQuality",10));
+            dcm2jpg.convert(source, destination,reader);         
         } catch(Exception e){
             e.printStackTrace();
         }

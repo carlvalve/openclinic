@@ -35,6 +35,7 @@ public class Prescription extends OC_Object{
     private ServiceStock serviceStock;
     private int requiredPackages = -1;
     private String authorization;
+    private String diagnosisUid;
 
     public String getAuthorization() {
 		return authorization;
@@ -52,7 +53,15 @@ public class Prescription extends OC_Object{
     private String serviceStockUid;
 
 
-    //--- PATIENT ---------------------------------------------------------------------------------
+    public String getDiagnosisUid() {
+		return diagnosisUid;
+	}
+
+	public void setDiagnosisUid(String diagnosisUid) {
+		this.diagnosisUid = diagnosisUid;
+	}
+
+	//--- PATIENT ---------------------------------------------------------------------------------
     public AdminPerson getPatient() {
         if(patientUid!=null && patientUid.length() > 0){
             if(patient==null){
@@ -284,6 +293,7 @@ public class Prescription extends OC_Object{
                 prescr.setUpdateUser(ScreenHelper.checkString(rs.getString("OC_PRESCR_UPDATEUID")));
                 prescr.setVersion(rs.getInt("OC_PRESCR_VERSION"));
                 prescr.setAuthorization(rs.getString("OC_PRESCR_AUTHORIZATION"));
+                prescr.setDiagnosisUid(rs.getString("OC_PRESCR_DIAGNOSISUID"));
             }
             else{
                 throw new Exception("ERROR : PRESCRIPTION "+prescrUid+" NOT FOUND");
@@ -339,8 +349,8 @@ public class Prescription extends OC_Object{
                           "  OC_PRESCR_PRESCRIBERUID,OC_PRESCR_PRODUCTUID,OC_PRESCR_BEGIN,OC_PRESCR_END,OC_PRESCR_TIMEUNIT,"+
                           "  OC_PRESCR_TIMEUNITCOUNT,OC_PRESCR_UNITSPERTIMEUNIT,OC_PRESCR_SUPPLYINGSERVICEUID,"+
                           "  OC_PRESCR_SERVICESTOCKUID,OC_PRESCR_REQUIREDPACKAGES,"+
-                          "  OC_PRESCR_CREATETIME,OC_PRESCR_UPDATETIME,OC_PRESCR_UPDATEUID,OC_PRESCR_VERSION,OC_PRESCR_AUTHORIZATION)"+
-                          " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,1,?)";
+                          "  OC_PRESCR_CREATETIME,OC_PRESCR_UPDATETIME,OC_PRESCR_UPDATEUID,OC_PRESCR_VERSION,OC_PRESCR_AUTHORIZATION,OC_PRESCR_DIAGNOSISUID)"+
+                          " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,1,?,?)";
 
                 ps = oc_conn.prepareStatement(sSelect);
 
@@ -385,6 +395,7 @@ public class Prescription extends OC_Object{
                 ps.setTimestamp(15,new Timestamp(new java.util.Date().getTime())); // now
                 ps.setString(16,this.getUpdateUser());
                 ps.setString(17, this.getAuthorization());
+                ps.setString(18, getDiagnosisUid());
 
                 ps.executeUpdate();
             }
@@ -397,7 +408,7 @@ public class Prescription extends OC_Object{
                               "  OC_PRESCR_PRODUCTUID=?, OC_PRESCR_BEGIN=?, OC_PRESCR_END=?, OC_PRESCR_TIMEUNIT=?,"+
                               "  OC_PRESCR_TIMEUNITCOUNT=?, OC_PRESCR_UNITSPERTIMEUNIT=?, OC_PRESCR_SUPPLYINGSERVICEUID=?,"+
                               "  OC_PRESCR_SERVICESTOCKUID=?, OC_PRESCR_REQUIREDPACKAGES=?,"+
-                              "  OC_PRESCR_UPDATETIME=?, OC_PRESCR_UPDATEUID=?, OC_PRESCR_VERSION=(OC_PRESCR_VERSION+1), OC_PRESCR_AUTHORIZATION=?"+
+                              "  OC_PRESCR_UPDATETIME=?, OC_PRESCR_UPDATEUID=?, OC_PRESCR_VERSION=(OC_PRESCR_VERSION+1), OC_PRESCR_AUTHORIZATION=?, OC_PRESCR_DIAGNOSISUID=?"+
                               " WHERE OC_PRESCR_SERVERID=? AND OC_PRESCR_OBJECTID=?";
 
                     ps = oc_conn.prepareStatement(sSelect);
@@ -434,9 +445,10 @@ public class Prescription extends OC_Object{
                     ps.setTimestamp(12,new Timestamp(new java.util.Date().getTime())); // now
                     ps.setString(13,this.getUpdateUser());
                     ps.setString(14, this.getAuthorization());
+                    ps.setString(15, this.getDiagnosisUid());
 
-                    ps.setInt(15,Integer.parseInt(this.getUid().substring(0,this.getUid().indexOf("."))));
-                    ps.setInt(16,Integer.parseInt(this.getUid().substring(this.getUid().indexOf(".")+1)));
+                    ps.setInt(16,Integer.parseInt(this.getUid().substring(0,this.getUid().indexOf("."))));
+                    ps.setInt(17,Integer.parseInt(this.getUid().substring(this.getUid().indexOf(".")+1)));
 
                     ps.executeUpdate();
                 }
@@ -690,6 +702,7 @@ public class Prescription extends OC_Object{
                 prescr.setUpdateDateTime(rs.getTimestamp("OC_PRESCR_UPDATETIME"));
                 prescr.setUpdateUser(ScreenHelper.checkString(rs.getString("OC_PRESCR_UPDATEUID")));
                 prescr.setAuthorization(ScreenHelper.checkString(rs.getString("OC_PRESCR_AUTHORIZATION")));
+                prescr.setDiagnosisUid(ScreenHelper.checkString(rs.getString("OC_PRESCR_DIAGNOSISUID")));
                 prescr.setVersion(rs.getInt("OC_PRESCR_VERSION"));
 
                 activePrescriptions.add(prescr);
@@ -757,6 +770,7 @@ public class Prescription extends OC_Object{
                 prescr.setUpdateDateTime(rs.getTimestamp("OC_PRESCR_UPDATETIME"));
                 prescr.setUpdateUser(ScreenHelper.checkString(rs.getString("OC_PRESCR_UPDATEUID")));
                 prescr.setAuthorization(ScreenHelper.checkString(rs.getString("OC_PRESCR_AUTHORIZATION")));
+                prescr.setDiagnosisUid(ScreenHelper.checkString(rs.getString("OC_PRESCR_DIAGNOSISUID")));
                 prescr.setVersion(rs.getInt("OC_PRESCR_VERSION"));
 
                 activePrescriptions.add(prescr);
@@ -1116,6 +1130,7 @@ public class Prescription extends OC_Object{
                 prescr.setUpdateUser(ScreenHelper.checkString(rs.getString("OC_PRESCR_UPDATEUID")));
                 prescr.setVersion(rs.getInt("OC_PRESCR_VERSION"));
                 prescr.setAuthorization(ScreenHelper.checkString(rs.getString("OC_PRESCR_AUTHORIZATION")));
+                prescr.setDiagnosisUid(ScreenHelper.checkString(rs.getString("OC_PRESCR_DIAGNOSISUID")));
 
                 vPrescriptions.addElement(prescr);
             }

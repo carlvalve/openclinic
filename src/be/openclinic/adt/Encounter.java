@@ -53,8 +53,169 @@ public class Encounter extends OC_Object {
     private String categories;
     private int newcase;
     private String etiology;
+    private String modifiers;
 
-    public int getNewcase(){
+	public String getModifiers() {
+		return modifiers;
+	}
+
+	public void setModifiers(String modifiers) {
+		this.modifiers = modifiers;
+	}
+
+	public String getEscortName(){
+		String n="";
+		if(getModifiers()!=null){
+			try{
+				n=getModifiers().split(";")[0];
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return n;
+	}
+
+	public void setEscortName(String n){
+		setModifier(0,n+"");
+	}
+	
+	public String getEscortPhone(){
+		String n="";
+		if(getModifiers()!=null){
+			try{
+				n=getModifiers().split(";")[1];
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return n;
+	}
+
+	public void setEscortPhone(String n){
+		setModifier(1,n+"");
+	}
+	
+	public String getComment(){
+		String n="";
+		if(getModifiers()!=null){
+			try{
+				n=getModifiers().split(";")[2];
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return n;
+	}
+
+	public void setComment(String n){
+		setModifier(2,n+"");
+	}
+	
+	public String getReferenceSheet(){
+		String n="";
+		if(getModifiers()!=null){
+			try{
+				n=getModifiers().split(";")[3];
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return n;
+	}
+
+	public void setReferenceSheet(String n){
+		setModifier(3,n+"");
+	}
+	
+	public String getCounterReference(){
+		String n="";
+		if(getModifiers()!=null){
+			try{
+				n=getModifiers().split(";")[4];
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return n;
+	}
+
+	public void setCounterReference(String n){
+		setModifier(4,n+"");
+	}
+	
+	public String getCounterReferenceSheet(){
+		String n="";
+		if(getModifiers()!=null){
+			try{
+				n=getModifiers().split(";")[5];
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return n;
+	}
+
+	public void setCounterReferenceSheet(String n){
+		setModifier(5,n+"");
+	}
+	
+	public String getCareModality(){
+		String n="";
+		if(getModifiers()!=null){
+			try{
+				n=getModifiers().split(";")[6];
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return n;
+	}
+
+	public void setCareModality(String n){
+		setModifier(6,n+"");
+	}
+	
+	public String getCareType(){
+		String n="";
+		if(getModifiers()!=null){
+			try{
+				n=getModifiers().split(";")[7];
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return n;
+	}
+
+	public void setCareType(String n){
+		setModifier(7,n+"");
+	}
+	
+	public void setModifier(int index,String value){
+		if(getModifiers()==null){
+			setModifiers("");
+		}
+		String[] m = getModifiers().split(";");
+		if(m.length<=index){
+			setModifiers(getModifiers()+"; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;".substring(0,(index+1-m.length)*2));
+			m = getModifiers().split(";");
+		}
+		m[index]=value;
+		modifiers="";
+		for(int n=0;n<m.length;n++){
+			modifiers+=m[n]+";";
+		}
+	}
+	
+	public int getNewcase(){
 		return newcase;
 	}
 
@@ -920,16 +1081,13 @@ public class Encounter extends OC_Object {
 
     //--- GET MANAGER -----------------------------------------------------------------------------
     public User getManager(){
-        if(this.manager==null){
-            User tmpUser = new User();
-            if(this.managerUID!=null && this.managerUID.length() > 0){
-                boolean bCheck = tmpUser.initialize(Integer.parseInt(this.managerUID));
-                if(bCheck){
-                    this.setManager(tmpUser);
-                }
-            } else{
-                this.manager = null;
-            }
+        if(this.manager==null && this.managerUID!=null && this.managerUID.length() > 0){
+        	try{
+        		manager=User.get(Integer.parseInt(this.managerUID));
+        	}
+        	catch(Exception e){
+        		e.printStackTrace();
+        	}
         }
         return manager;
     }
@@ -1446,6 +1604,7 @@ public class Encounter extends OC_Object {
                         encounter.setCategories(ScreenHelper.checkString(rs.getString("OC_ENCOUNTER_CATEGORIES")));
                         encounter.setNewcase(rs.getInt("OC_ENCOUNTER_NEWCASE"));
                         encounter.setEtiology(rs.getString("OC_ENCOUNTER_ETIOLOGY"));
+                        encounter.setModifiers(rs.getString("OC_ENCOUNTER_MODIFIERS"));
                         
 
                         // find the most recent service for this encounter
@@ -1570,7 +1729,8 @@ public class Encounter extends OC_Object {
 	                          "OC_ENCOUNTER_SITUATION,"+
 	                          "OC_ENCOUNTER_CATEGORIES, "+
 	                          "OC_ENCOUNTER_NEWCASE, "+
-	                          "OC_ENCOUNTER_ETIOLOGY) "+
+	                          "OC_ENCOUNTER_ETIOLOGY, "+
+	                          "OC_ENCOUNTER_MODIFIERS) "+
 	                          " SELECT OC_ENCOUNTER_SERVERID,"+
 	                          " OC_ENCOUNTER_OBJECTID,"+
 	                          " OC_ENCOUNTER_TYPE,"+
@@ -1587,7 +1747,8 @@ public class Encounter extends OC_Object {
 	                          " OC_ENCOUNTER_SITUATION,"+
 	                          " OC_ENCOUNTER_CATEGORIES,"+
 	                          " OC_ENCOUNTER_NEWCASE,"+
-	                          " OC_ENCOUNTER_ETIOLOGY"+
+	                          " OC_ENCOUNTER_ETIOLOGY,"+
+	                          " OC_ENCOUNTER_MODIFIERS"+
 	                          " FROM OC_ENCOUNTERS "+
 	                          " WHERE OC_ENCOUNTER_SERVERID = ?"+
 	                          " AND OC_ENCOUNTER_OBJECTID = ?";
@@ -1631,9 +1792,10 @@ public class Encounter extends OC_Object {
                           " OC_ENCOUNTER_SITUATION,"+
                           " OC_ENCOUNTER_CATEGORIES,"+
                           " OC_ENCOUNTER_NEWCASE,"+
-                          " OC_ENCOUNTER_ETIOLOGY"+
+                          " OC_ENCOUNTER_ETIOLOGY,"+
+                          " OC_ENCOUNTER_MODIFIERS"+
                           ") "+
-                          " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                          " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                 ps = conn.prepareStatement(sInsert);
                 ps.setInt(1,Integer.parseInt(ids[0]));
                 while(!MedwanQuery.getInstance().validateNewOpenclinicCounter("OC_ENCOUNTERS","OC_ENCOUNTER_OBJECTID",ids[1])){
@@ -1670,6 +1832,7 @@ public class Encounter extends OC_Object {
                 ps.setString(15,this.getCategories());
                 ps.setInt(16, getNewcase());
                 ps.setString(17, getEtiology());
+                ps.setString(18, getModifiers());
                 ps.executeUpdate();
                 ps.close();
                 
@@ -1846,7 +2009,8 @@ public class Encounter extends OC_Object {
                               "OC_ENCOUNTER_SITUATION,"+
 	                          "OC_ENCOUNTER_CATEGORIES, "+
 	                          "OC_ENCOUNTER_NEWCASE, "+
-	                          "OC_ENCOUNTER_ETIOLOGY) "+
+	                          "OC_ENCOUNTER_ETIOLOGY, "+
+	                          "OC_ENCOUNTER_MODIFIERS) "+
 	                          " SELECT OC_ENCOUNTER_SERVERID,"+
 	                          " OC_ENCOUNTER_OBJECTID,"+
 	                          " OC_ENCOUNTER_TYPE,"+
@@ -1863,7 +2027,8 @@ public class Encounter extends OC_Object {
 	                          " OC_ENCOUNTER_SITUATION,"+
 	                          " OC_ENCOUNTER_CATEGORIES,"+
 	                          " OC_ENCOUNTER_NEWCASE,"+
-	                          " OC_ENCOUNTER_ETIOLOGY"+
+	                          " OC_ENCOUNTER_ETIOLOGY, "+
+	                          " OC_ENCOUNTER_MODIFIERS"+
                               " FROM OC_ENCOUNTERS "+
                               "  WHERE OC_ENCOUNTER_SERVERID = ?"+
                               "   AND OC_ENCOUNTER_OBJECTID = ?";
@@ -1906,9 +2071,10 @@ public class Encounter extends OC_Object {
                           " OC_ENCOUNTER_SITUATION,"+
                           " OC_ENCOUNTER_CATEGORIES,"+
                           " OC_ENCOUNTER_NEWCASE,"+
-                          " OC_ENCOUNTER_ETIOLOGY"+
+                          " OC_ENCOUNTER_ETIOLOGY,"+
+                          " OC_ENCOUNTER_MODIFIERS"+
                           ") "+
-                          " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                          " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                 ps = conn.prepareStatement(sInsert);
                 ps.setInt(1,Integer.parseInt(ids[0]));
                 while(!MedwanQuery.getInstance().validateNewOpenclinicCounter("OC_ENCOUNTERS","OC_ENCOUNTER_OBJECTID",ids[1])){
@@ -1946,6 +2112,7 @@ public class Encounter extends OC_Object {
                 ps.setString(15,this.getCategories());
                 ps.setInt(16, getNewcase());
                 ps.setString(17, getEtiology());
+                ps.setString(18, getModifiers());
                 ps.executeUpdate();
                 ps.close();
                 
@@ -2203,6 +2370,7 @@ public class Encounter extends OC_Object {
                     encounter.setCategories(ScreenHelper.checkString(rs.getString("OC_ENCOUNTER_CATEGORIES")));
                     encounter.setNewcase(rs.getInt("OC_ENCOUNTER_NEWCASE"));
                     encounter.setEtiology(rs.getString("OC_ENCOUNTER_ETIOLOGY"));
+                    encounter.setModifiers(rs.getString("OC_ENCOUNTER_MODIFIERS"));
                     
                     // find the most recent service for this encounter
                     EncounterService encounterService = encounter.getLastEncounterService();
@@ -2275,6 +2443,7 @@ public class Encounter extends OC_Object {
                     encounter.setCategories(ScreenHelper.checkString(rs.getString("OC_ENCOUNTER_CATEGORIES")));
                     encounter.setNewcase(rs.getInt("OC_ENCOUNTER_NEWCASE"));
                     encounter.setEtiology(rs.getString("OC_ENCOUNTER_ETIOLOGY"));
+                    encounter.setModifiers(rs.getString("OC_ENCOUNTER_MODIFIERS"));
                    
                     // find the most recent service for this encounter
                     EncounterService encounterService = encounter.getLastEncounterService();
@@ -2513,6 +2682,16 @@ public class Encounter extends OC_Object {
 	                    eTmp.setCategories(sTmp);
 	                }
 	                
+	                sTmp = ScreenHelper.checkString(rs.getString("OC_ENCOUNTER_ETIOLOGY"));
+	                if(sTmp.length() > 0){
+	                    eTmp.setEtiology(sTmp);
+	                }
+	                
+	                sTmp = ScreenHelper.checkString(rs.getString("OC_ENCOUNTER_MODIFIERS"));
+	                if(sTmp.length() > 0){
+	                    eTmp.setModifiers(sTmp);
+	                }
+	                
 	                eTmp.setUpdateUser(ScreenHelper.checkString(rs.getString("OC_ENCOUNTER_UPDATEUID")));
 	
 	                vEncounters.addElement(eTmp);
@@ -2656,6 +2835,16 @@ public class Encounter extends OC_Object {
                 sTmp = ScreenHelper.checkString(rs.getString("OC_ENCOUNTER_CATEGORIES"));
                 if(sTmp.length() > 0){
                     eTmp.setCategories(sTmp);
+                }
+                
+                sTmp = ScreenHelper.checkString(rs.getString("OC_ENCOUNTER_ETIOLOGY"));
+                if(sTmp.length() > 0){
+                    eTmp.setEtiology(sTmp);
+                }
+                
+                sTmp = ScreenHelper.checkString(rs.getString("OC_ENCOUNTER_MODIFIERS"));
+                if(sTmp.length() > 0){
+                    eTmp.setModifiers(sTmp);
                 }
                 
                 sTmp = ScreenHelper.checkString(rs.getString("OC_ENCOUNTER_UPDATEUID"));
@@ -2808,6 +2997,16 @@ public class Encounter extends OC_Object {
                 if(sTmp.length() > 0){
                     eTmp.destinationUID = sTmp;
                 }
+                sTmp = ScreenHelper.checkString(rs.getString("OC_ENCOUNTER_ETIOLOGY"));
+                if(sTmp.length() > 0){
+                    eTmp.setEtiology(sTmp);
+                }
+                
+                sTmp = ScreenHelper.checkString(rs.getString("OC_ENCOUNTER_MODIFIERS"));
+                if(sTmp.length() > 0){
+                    eTmp.setModifiers(sTmp);
+                }
+                
                 sTmp = ScreenHelper.checkString(rs.getString("OC_ENCOUNTER_SERVERID"));
                 String sTmp1 = ScreenHelper.checkString(rs.getString("OC_ENCOUNTER_OBJECTID"));
                 if(sTmp.length() > 0 && sTmp1.length() > 0){
@@ -3057,6 +3256,16 @@ public class Encounter extends OC_Object {
                 sTmp = ScreenHelper.checkString(rs.getString("OC_ENCOUNTER_CATEGORIES"));
                 if(sTmp.length() > 0){
                     eTmp.setCategories(sTmp);
+                }
+                
+                sTmp = ScreenHelper.checkString(rs.getString("OC_ENCOUNTER_ETIOLOGY"));
+                if(sTmp.length() > 0){
+                    eTmp.setEtiology(sTmp);
+                }
+                
+                sTmp = ScreenHelper.checkString(rs.getString("OC_ENCOUNTER_MODIFIERS"));
+                if(sTmp.length() > 0){
+                    eTmp.setModifiers(sTmp);
                 }
                 
                 vEncounters.addElement(eTmp);

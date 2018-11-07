@@ -477,6 +477,9 @@ public class SessionContainerWO extends be.mxs.webapp.wo.common.system.SessionCo
                                         }
                                     }
                                 }
+                                if(item.getType().length()<=ScreenHelper.ITEM_PREFIX.length()){
+                                	continue;
+                                }
                             	String typeroot = item.getType().substring(ScreenHelper.ITEM_PREFIX.length());
                                 html += "<input type='hidden' name='PreviousValue_currentTransactionVO.items.<ItemVO[hashCode="+actualItem.getItemId()+"]>.value' id='REF"+typeroot+"' value='"+itemValue.replaceAll("\\'","´")+"'/>";
                                 if(item.getType().endsWith("CODES") && item.getValue().length()>0){

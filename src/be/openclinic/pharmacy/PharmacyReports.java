@@ -640,7 +640,7 @@ public class PharmacyReports {
 				PatientInvoice invoice = PatientInvoice.get(rs.getString("oc_patientinvoice_serverid")+"."+rs.getString("oc_patientinvoice_objectid"));
 				double patientamount = rs.getDouble("oc_debet_amount");
 				double insuraramount = rs.getDouble("oc_debet_insuraramount")+rs.getDouble("oc_debet_extrainsuraramount");
-				double quantity = rs.getInt("oc_debet_quantity");
+				double quantity = rs.getDouble("oc_debet_quantity");
 				double paidamount=0;
 				if(invoice.getPatientAmount()>0){
 					paidamount=patientamount*invoice.getAmountPaid()/invoice.getPatientAmount();

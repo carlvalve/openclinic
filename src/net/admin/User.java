@@ -113,7 +113,7 @@ public class User extends OC_Object {
                               " FROM oc_debets"+
                               "  WHERE OC_DEBET_DATE > ?"+
                 		      "   AND OC_DEBET_UPDATEUID = ?"+
-                              " GROUP BY OC_DEBET_PRESTATIONUID";
+                              " GROUP BY OC_DEBET_PRESTATIONUID order by total DESC";
                 ps = conn.prepareStatement(sSql);
                 
                 int year = Integer.parseInt(new SimpleDateFormat("yyyy").format(new java.util.Date()))-1;
@@ -738,6 +738,12 @@ public class User extends OC_Object {
     	Connection conn = MedwanQuery.getInstance().getAdminConnection();
     	boolean bReturn = updateParameter(parameter,conn);
     	ScreenHelper.closeQuietly(conn,null,null);
+    	for(int n=0;n<parameters.size();n++){
+    		Parameter param = (Parameter)parameters.elementAt(n);
+    		if(param.parameter.equalsIgnoreCase(parameter.parameter)){
+    			param.value=parameter.value;
+    		}
+    	}
     	return bReturn;
     }
 

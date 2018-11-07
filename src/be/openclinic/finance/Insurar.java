@@ -328,6 +328,23 @@ public class Insurar extends OC_Object {
 		setModifier(12,n+"");
 	}
 	
+	public String getAccreditationMechanism(){
+		String n="";
+		if(getModifiers()!=null){
+			try{
+				n=getModifiers().split(";")[13];
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return n;
+	}
+
+	public void setAccreditationMechanism(String s){
+		setModifier(13,s);
+	}
+	
 	public void setModifier(int index,String value){
 		if(getModifiers()==null){
 			setModifiers("");

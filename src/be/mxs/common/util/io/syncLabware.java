@@ -249,7 +249,7 @@ public class syncLabware {
 					    									+ "finalvalidationdatetime=?,"
 					    									+ "technicalvalidationdatetime=?,"
 					    									+ "resultrefmin=?,"
-					    									+ "resultrefmax=?"
+					    									+ "resultrefmax=?,"
 					    									+ "resultmodifier=?"
 					    									+ " where patientid=? and transactionid=? and analysiscode=?");
 					    		ps2.setString(1,LW_TEST_RESULT);

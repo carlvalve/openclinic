@@ -1049,7 +1049,7 @@ public class InsurarInvoice extends Invoice {
                 debet.setInsurarInvoiceUid(rs.getString("OC_DEBET_INSURARINVOICEUID"));
                 debet.setComment(rs.getString("OC_DEBET_COMMENT"));
                 debet.setCredited(rs.getInt("OC_DEBET_CREDITED"));
-                debet.setQuantity(rs.getInt("OC_DEBET_QUANTITY"));
+                debet.setQuantity(rs.getDouble("OC_DEBET_QUANTITY"));
                 debet.setServiceUid(rs.getString("OC_DEBET_SERVICEUID"));
                 debet.setPatientName(rs.getString("lastname")+", "+rs.getString("firstname"));
                 debet.setPatientbirthdate(ScreenHelper.formatDate(rs.getDate("dateofbirth")));
@@ -1191,7 +1191,7 @@ public class InsurarInvoice extends Invoice {
                 debet.setPatientInvoiceUid(rs.getString("OC_DEBET_PATIENTINVOICEUID"));
                 debet.setInsurarInvoiceUid(rs.getString("OC_DEBET_INSURARINVOICEUID"));
                 debet.setCredited(rs.getInt("OC_DEBET_CREDITED"));
-                debet.setQuantity(rs.getInt("OC_DEBET_QUANTITY"));
+                debet.setQuantity(rs.getDouble("OC_DEBET_QUANTITY"));
                 debet.setServiceUid(rs.getString("OC_DEBET_SERVICEUID"));
                 debet.setUpdateUser(rs.getString("OC_DEBET_UPDATEUID"));
                 debet.setPatientName(rs.getString("lastname")+", "+rs.getString("firstname"));
@@ -1319,7 +1319,7 @@ public class InsurarInvoice extends Invoice {
                 debet.setInsurarInvoiceUid(rs.getString("OC_DEBET_INSURARINVOICEUID"));
                 debet.setComment(rs.getString("OC_DEBET_COMMENT"));
                 debet.setCredited(rs.getInt("OC_DEBET_CREDITED"));
-                debet.setQuantity(rs.getInt("OC_DEBET_QUANTITY"));
+                debet.setQuantity(rs.getDouble("OC_DEBET_QUANTITY"));
                 debet.setUpdateUser(rs.getString("OC_DEBET_UPDATEUID"));
                 debet.setServiceUid(rs.getString("OC_DEBET_SERVICEUID"));
                 debet.setPatientName(rs.getString("lastname")+", "+rs.getString("firstname"));

@@ -184,7 +184,7 @@ public class RxNormInteraction {
 		try{
 			ps=conn.prepareStatement("INSERT INTO OC_RXNORMINTERACTIONS(OC_RXNORMINTERACTION_KEY,OC_RXNORMINTERACTION_VALUE,OC_RXNORMINTERACTION_UPDATETIME) values(?,?,?)");
 			ps.setString(1, key);
-			ps.setString(2, value);
+			ps.setString(2, value.replaceAll("&#39;", "´"));
 			ps.setTimestamp(3, new java.sql.Timestamp(new java.util.Date().getTime()));
 			ps.execute();
 			ps.close();
@@ -201,7 +201,7 @@ public class RxNormInteraction {
 		try{
 			ps=conn.prepareStatement("INSERT INTO OC_RXNORMINTERACTIONS(OC_RXNORMINTERACTION_KEY,OC_RXNORMINTERACTION_VALUE,OC_RXNORMINTERACTION_UPDATETIME) values(?,?,?)");
 			ps.setString(1, key);
-			ps.setString(2, value);
+			ps.setString(2, value.replaceAll("&#39;", "´"));
 			ps.setTimestamp(3, new java.sql.Timestamp(updatetime.getTime()));
 			ps.execute();
 			ps.close();
@@ -225,7 +225,7 @@ public class RxNormInteraction {
 				ps.close();
 				ps=conn.prepareStatement("INSERT INTO OC_RXNORMINTERACTIONS(OC_RXNORMINTERACTION_KEY,OC_RXNORMINTERACTION_VALUE,OC_RXNORMINTERACTION_UPDATETIME) values(?,?,?)");
 				ps.setString(1, key);
-				ps.setString(2, value);
+				ps.setString(2, value.replaceAll("&#39;", "´"));
 				ps.setTimestamp(3, new java.sql.Timestamp(updatetime.getTime()));
 				ps.execute();
 				ps.close();

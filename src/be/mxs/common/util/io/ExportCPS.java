@@ -29,10 +29,10 @@ import be.mxs.common.util.system.ScreenHelper;
 public class ExportCPS {
 	
 	private static class CPSData{
-		public int m0_11m,m1_4y,m5_9y,m10_14y,m15_25y,m26plus,f0_11m,f1_4y,f5_9y,f10_14y,f15_25y,f26plus;
+		public double m0_11m,m1_4y,m5_9y,m10_14y,m15_25y,m26plus,f0_11m,f1_4y,f5_9y,f10_14y,f15_25y,f26plus;
 		String serviceuid,prestationcode,prestationname,prestationnomenclature;
 		
-		public int getTotal(){
+		public double getTotal(){
 			return m0_11m+m1_4y+m5_9y+m10_14y+m15_25y+m26plus+f0_11m+f1_4y+f5_9y+f10_14y+f15_25y+f26plus;
 		}
 	}
@@ -151,42 +151,42 @@ public class ExportCPS {
 					age = AdminPerson.getYearsBetween(rs.getDate("dateofbirth"), nextMonthDate);
 					if(rs.getString("gender").equalsIgnoreCase("m")){
 						if(age<1){
-							data.m0_11m+=rs.getInt("oc_debet_quantity");
+							data.m0_11m+=rs.getDouble("oc_debet_quantity");
 						}
 						else if(age<5){
-							data.m1_4y+=rs.getInt("oc_debet_quantity");
+							data.m1_4y+=rs.getDouble("oc_debet_quantity");
 						}
 						else if(age<10){
-							data.m5_9y+=rs.getInt("oc_debet_quantity");
+							data.m5_9y+=rs.getDouble("oc_debet_quantity");
 						}
 						else if(age<15){
-							data.m10_14y+=rs.getInt("oc_debet_quantity");
+							data.m10_14y+=rs.getDouble("oc_debet_quantity");
 						}
 						else if(age<26){
-							data.m15_25y+=rs.getInt("oc_debet_quantity");
+							data.m15_25y+=rs.getDouble("oc_debet_quantity");
 						}
 						else{
-							data.m26plus+=rs.getInt("oc_debet_quantity");
+							data.m26plus+=rs.getDouble("oc_debet_quantity");
 						}
 					}
 					else {
 						if(age<1){
-							data.f0_11m+=rs.getInt("oc_debet_quantity");
+							data.f0_11m+=rs.getDouble("oc_debet_quantity");
 						}
 						else if(age<5){
-							data.f1_4y+=rs.getInt("oc_debet_quantity");
+							data.f1_4y+=rs.getDouble("oc_debet_quantity");
 						}
 						else if(age<10){
-							data.f5_9y+=rs.getInt("oc_debet_quantity");
+							data.f5_9y+=rs.getDouble("oc_debet_quantity");
 						}
 						else if(age<15){
-							data.f10_14y+=rs.getInt("oc_debet_quantity");
+							data.f10_14y+=rs.getDouble("oc_debet_quantity");
 						}
 						else if(age<26){
-							data.f15_25y+=rs.getInt("oc_debet_quantity");
+							data.f15_25y+=rs.getDouble("oc_debet_quantity");
 						}
 						else{
-							data.f26plus+=rs.getInt("oc_debet_quantity");
+							data.f26plus+=rs.getDouble("oc_debet_quantity");
 						}
 					}
 					hRows.put(key, data);
@@ -386,42 +386,42 @@ public class ExportCPS {
 					age = AdminPerson.getYearsBetween(rs.getDate("dateofbirth"), nextMonthDate);
 					if(rs.getString("gender").equalsIgnoreCase("m")){
 						if(age<1){
-							data.m0_11m+=rs.getInt("oc_debet_quantity");
+							data.m0_11m+=rs.getDouble("oc_debet_quantity");
 						}
 						else if(age<5){
-							data.m1_4y+=rs.getInt("oc_debet_quantity");
+							data.m1_4y+=rs.getDouble("oc_debet_quantity");
 						}
 						else if(age<10){
-							data.m5_9y+=rs.getInt("oc_debet_quantity");
+							data.m5_9y+=rs.getDouble("oc_debet_quantity");
 						}
 						else if(age<15){
-							data.m10_14y+=rs.getInt("oc_debet_quantity");
+							data.m10_14y+=rs.getDouble("oc_debet_quantity");
 						}
 						else if(age<26){
-							data.m15_25y+=rs.getInt("oc_debet_quantity");
+							data.m15_25y+=rs.getDouble("oc_debet_quantity");
 						}
 						else{
-							data.m26plus+=rs.getInt("oc_debet_quantity");
+							data.m26plus+=rs.getDouble("oc_debet_quantity");
 						}
 					}
 					else {
 						if(age<1){
-							data.f0_11m+=rs.getInt("oc_debet_quantity");
+							data.f0_11m+=rs.getDouble("oc_debet_quantity");
 						}
 						else if(age<5){
-							data.f1_4y+=rs.getInt("oc_debet_quantity");
+							data.f1_4y+=rs.getDouble("oc_debet_quantity");
 						}
 						else if(age<10){
-							data.f5_9y+=rs.getInt("oc_debet_quantity");
+							data.f5_9y+=rs.getDouble("oc_debet_quantity");
 						}
 						else if(age<15){
-							data.f10_14y+=rs.getInt("oc_debet_quantity");
+							data.f10_14y+=rs.getDouble("oc_debet_quantity");
 						}
 						else if(age<26){
-							data.f15_25y+=rs.getInt("oc_debet_quantity");
+							data.f15_25y+=rs.getDouble("oc_debet_quantity");
 						}
 						else{
-							data.f26plus+=rs.getInt("oc_debet_quantity");
+							data.f26plus+=rs.getDouble("oc_debet_quantity");
 						}
 					}
 					hRows.put(key, data);

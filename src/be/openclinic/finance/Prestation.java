@@ -42,9 +42,18 @@ public class Prestation extends OC_Object{
     private String serviceUid;
     private String nomenclature;
     private String dhis2code;
+    private String keywords;
     public  HashSet includedPrestations;
     
-    public String getDhis2code() {
+    public String getKeywords() {
+		return keywords;
+	}
+
+	public void setKeywords(String keywords) {
+		this.keywords = keywords;
+	}
+
+	public String getDhis2code() {
 		return dhis2code;
 	}
 
@@ -561,10 +570,10 @@ public class Prestation extends OC_Object{
     public String getPriceFormatted(String category){
     	String s = (getSupplement()!=0?"<b>(+"+getSupplement()+")</b>":"");
     	if (price==getPrice(category)){
-            return "<b>"+price+"</b> "+s;
+            return "<b>"+ScreenHelper.getPriceFormat(price)+"</b> "+s;
         }
         else{
-            return price+s;
+            return ScreenHelper.getPriceFormat(price)+s;
         }
     }
 
@@ -683,7 +692,7 @@ public class Prestation extends OC_Object{
     	return rule;
     }
     
-    public static boolean checkMaximumReached(String patientUid,InsuranceRule rule, int quantity){
+    public static boolean checkMaximumReached(String patientUid,InsuranceRule rule, double quantity){
     	boolean bMaximumReached=false;
     	if(rule!=null){
 	    	long time = (long)rule.getDays()*24*3600*1000;
@@ -766,6 +775,7 @@ public class Prestation extends OC_Object{
                 prestation.setServiceUid(rs.getString("OC_PRESTATION_SERVICEUID"));
                 prestation.setNomenclature(rs.getString("OC_PRESTATION_NOMENCLATURE"));
                 prestation.setDhis2code(rs.getString("OC_PRESTATION_DHIS2CODE"));
+                prestation.setKeywords(rs.getString("OC_PRESTATION_KEYWORDS"));
                 prestations.add(prestation);
     		}
     		rs.close();
@@ -1036,7 +1046,7 @@ public class Prestation extends OC_Object{
 	                    if(cats[n].split("=")[0].equalsIgnoreCase(category)){
 	                        categoriesFormatted+= "<b>";
 	                    }
-	                    categoriesFormatted+= cats[n].split("=")[0].toUpperCase()+": "+cats[n].split("=")[1];
+	                    categoriesFormatted+= cats[n].split("=")[0].toUpperCase()+": "+ScreenHelper.getPriceFormat(Double.parseDouble(cats[n].split("=")[1]));
 	                    if(cats[n].split("=")[0].equalsIgnoreCase(category)){
 	                        categoriesFormatted+= "</b>";
 	                    }
@@ -1150,6 +1160,7 @@ public class Prestation extends OC_Object{
                         prestation.setServiceUid(rs.getString("OC_PRESTATION_SERVICEUID"));
                         prestation.setNomenclature(rs.getString("OC_PRESTATION_NOMENCLATURE"));
                         prestation.setDhis2code(rs.getString("OC_PRESTATION_DHIS2CODE"));
+                        prestation.setKeywords(rs.getString("OC_PRESTATION_KEYWORDS"));
                     }
                 }
             }
@@ -1237,6 +1248,7 @@ public class Prestation extends OC_Object{
                         prestation.setServiceUid(rs.getString("OC_PRESTATION_SERVICEUID"));
                         prestation.setNomenclature(rs.getString("OC_PRESTATION_NOMENCLATURE"));
                         prestation.setDhis2code(rs.getString("OC_PRESTATION_DHIS2CODE"));
+                        prestation.setKeywords(rs.getString("OC_PRESTATION_KEYWORDS"));
                     }
                     else{
                     	prestation = Prestation.get(uid);
@@ -1351,6 +1363,7 @@ public class Prestation extends OC_Object{
                 prestation.setServiceUid(rs.getString("OC_PRESTATION_SERVICEUID"));
                 prestation.setNomenclature(rs.getString("OC_PRESTATION_NOMENCLATURE"));
                 prestation.setDhis2code(rs.getString("OC_PRESTATION_DHIS2CODE"));
+                prestation.setKeywords(rs.getString("OC_PRESTATION_KEYWORDS"));
                 allPrestations.put(prestation.getCode(),prestation);
             }
         }
@@ -1419,6 +1432,7 @@ public class Prestation extends OC_Object{
                     prestation.setServiceUid(rs.getString("OC_PRESTATION_SERVICEUID"));
                     prestation.setNomenclature(rs.getString("OC_PRESTATION_NOMENCLATURE"));
                     prestation.setDhis2code(rs.getString("OC_PRESTATION_DHIS2CODE"));
+                    prestation.setKeywords(rs.getString("OC_PRESTATION_KEYWORDS"));
                 }
             }
             catch(Exception e){
@@ -1595,6 +1609,7 @@ public class Prestation extends OC_Object{
                 prestation.setServiceUid(rs.getString("OC_PRESTATION_SERVICEUID"));
                 prestation.setNomenclature(rs.getString("OC_PRESTATION_NOMENCLATURE"));
                 prestation.setDhis2code(rs.getString("OC_PRESTATION_DHIS2CODE"));
+                prestation.setKeywords(rs.getString("OC_PRESTATION_KEYWORDS"));
 
                 prestations.add(prestation);
             }
@@ -1618,7 +1633,12 @@ public class Prestation extends OC_Object{
 
     //--- SEARCH ACTIVE PRESTATIONS ---------------------------------------------------------------
     public static Vector searchActivePrestations(String sPrestationCode, String sPrestationDescr, String sPrestationType,
-                                                 String sPrestationPrice, String sPrestationRefUid, String sPrestationSort){
+            String sPrestationPrice, String sPrestationRefUid, String sPrestationSort){
+    	return searchActivePrestations(sPrestationCode, sPrestationDescr,  sPrestationType,
+                 sPrestationPrice,  sPrestationRefUid,  sPrestationSort, "");
+    }
+    public static Vector searchActivePrestations(String sPrestationCode, String sPrestationDescr, String sPrestationType,
+                                                 String sPrestationPrice, String sPrestationRefUid, String sPrestationSort, String sPrestationKeywords){
         Vector prestations = new Vector();
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -1631,7 +1651,7 @@ public class Prestation extends OC_Object{
                 sSql+= " (OC_PRESTATION_CODE like ? OR UPPER(OC_PRESTATION_CODE) LIKE ?) AND";
             }
             if(sPrestationDescr.length() > 0){
-                sSql+= " (OC_PRESTATION_DESCRIPTION LIKE ? OR UPPER(OC_PRESTATION_DESCRIPTION) LIKE ?) AND";
+                sSql+= " (OC_PRESTATION_DESCRIPTION LIKE ? OR UPPER(OC_PRESTATION_DESCRIPTION) LIKE ? ) AND";
             }
             if(sPrestationType.length() > 0){
                 sSql+= " OC_PRESTATION_TYPE = ? AND";
@@ -1641,6 +1661,10 @@ public class Prestation extends OC_Object{
             }
             if(sPrestationRefUid.length() > 0){
                 sSql+= " OC_PRESTATION_REFUID LIKE ? AND";
+            }
+
+            if(sPrestationKeywords.length() > 0){
+                sSql+= " OC_PRESTATION_KEYWORDS = ? AND";
             }
 
             // remove last AND
@@ -1674,7 +1698,8 @@ public class Prestation extends OC_Object{
                 
             	ps.setFloat(qmIdx++,fPrice);
             }
-            if(sPrestationRefUid.length() > 0) ps.setString(qmIdx,sPrestationRefUid+"%");
+            if(sPrestationRefUid.length() > 0) ps.setString(qmIdx++,sPrestationRefUid+"%");
+            if(sPrestationKeywords.length() > 0) ps.setString(qmIdx,sPrestationKeywords);
 
             // execute query
             rs = ps.executeQuery();
@@ -1712,6 +1737,7 @@ public class Prestation extends OC_Object{
                 prestation.setServiceUid(rs.getString("OC_PRESTATION_SERVICEUID"));
                 prestation.setNomenclature(rs.getString("OC_PRESTATION_NOMENCLATURE"));
                 prestation.setDhis2code(rs.getString("OC_PRESTATION_DHIS2CODE"));
+                prestation.setKeywords(rs.getString("OC_PRESTATION_KEYWORDS"));
 
                 prestations.add(prestation);
             }
@@ -1752,13 +1778,15 @@ public class Prestation extends OC_Object{
                 			"OC_PRESTATION_REFUID,OC_PRESTATION_UPDATETIME,OC_PRESTATION_UPDATEUID,OC_PRESTATION_VERSION,OC_PRESTATION_TYPE,OC_PRESTATION_CATEGORIES,"+
                 			"OC_PRESTATION_MFPPERCENTAGE,OC_PRESTATION_INVOICEGROUP,OC_PRESTATION_RENEWALINTERVAL,OC_PRESTATION_COVERAGEPLAN,OC_PRESTATION_COVERAGEPLANCATEGORY,"+
                 			"OC_PRESTATION_VARIABLEPRICE,OC_PRESTATION_INACTIVE,OC_PRESTATION_PERFORMERUID,OC_PRESTATION_SUPPLEMENT,OC_PRESTATION_CLASS,"+
-                			"OC_PRESTATION_MODIFIERS,OC_PRESTATION_SERVICEUID,OC_PRESTATION_SERVERID,OC_PRESTATION_OBJECTID,OC_PRESTATION_CREATETIME,OC_PRESTATION_NOMENCLATURE,OC_PRESTATION_DHIS2CODE) "+
+                			"OC_PRESTATION_MODIFIERS,OC_PRESTATION_SERVICEUID,OC_PRESTATION_SERVERID,OC_PRESTATION_OBJECTID,OC_PRESTATION_CREATETIME,OC_PRESTATION_NOMENCLATURE,"+
+                			"OC_PRESTATION_DHIS2CODE,OC_PRESTATION_KEYWORDS) "+
                 			""+
                 			"select OC_PRESTATION_CODE,OC_PRESTATION_DESCRIPTION,OC_PRESTATION_PRICE,OC_PRESTATION_REFTYPE,"+
                 			"OC_PRESTATION_REFUID,OC_PRESTATION_UPDATETIME,OC_PRESTATION_UPDATEUID,OC_PRESTATION_VERSION,OC_PRESTATION_TYPE,OC_PRESTATION_CATEGORIES,"+
                 			"OC_PRESTATION_MFPPERCENTAGE,OC_PRESTATION_INVOICEGROUP,OC_PRESTATION_RENEWALINTERVAL,OC_PRESTATION_COVERAGEPLAN,OC_PRESTATION_COVERAGEPLANCATEGORY,"+
                 			"OC_PRESTATION_VARIABLEPRICE,OC_PRESTATION_INACTIVE,OC_PRESTATION_PERFORMERUID,OC_PRESTATION_SUPPLEMENT,OC_PRESTATION_CLASS,"+
-                			"OC_PRESTATION_MODIFIERS,OC_PRESTATION_SERVICEUID,OC_PRESTATION_SERVERID,OC_PRESTATION_OBJECTID,OC_PRESTATION_CREATETIME,OC_PRESTATION_NOMENCLATURE,OC_PRESTATION_DHIS2CODE from OC_PRESTATIONS where "+
+                			"OC_PRESTATION_MODIFIERS,OC_PRESTATION_SERVICEUID,OC_PRESTATION_SERVERID,OC_PRESTATION_OBJECTID,OC_PRESTATION_CREATETIME,OC_PRESTATION_NOMENCLATURE,"+
+                			"OC_PRESTATION_DHIS2CODE,OC_PRESTATION_KEYWORDS from OC_PRESTATIONS where "+
                 			"OC_PRESTATION_SERVERID=? and OC_PRESTATION_OBJECTID=?";
                 	ps = oc_conn.prepareStatement(sSql);
                 	ps.setInt(1,Integer.parseInt(ids[0]));
@@ -1827,8 +1855,10 @@ public class Prestation extends OC_Object{
                    "  OC_PRESTATION_MODIFIERS,"+
                    "  OC_PRESTATION_SERVICEUID,"+
                    "  OC_PRESTATION_NOMENCLATURE,"+
-                   "  OC_PRESTATION_DHIS2CODE)"+
-                   " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                   "  OC_PRESTATION_DHIS2CODE,"+
+                   "  OC_PRESTATION_KEYWORDS"+
+                   ")"+
+                   " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             ps = oc_conn.prepareStatement(sSql);
             ps.setInt(1,Integer.parseInt(ids[0]));
             ps.setInt(2,Integer.parseInt(ids[1]));
@@ -1857,6 +1887,7 @@ public class Prestation extends OC_Object{
             ps.setString(25, this.getServiceUid());
             ps.setString(26, this.getNomenclature());
             ps.setString(27, this.getDhis2code());
+            ps.setString(28, this.getKeywords());
             ps.executeUpdate();
             ps.close();
             
@@ -1942,6 +1973,7 @@ public class Prestation extends OC_Object{
         return prestations;
     }
 
+
     //--- GET PRESTATIONS BY CODE -----------------------------------------------------------------
     public static Vector getPrestationsByReferenceUid(String prestationCode){
         PreparedStatement ps = null;
@@ -1952,6 +1984,76 @@ public class Prestation extends OC_Object{
         try{
             String sSql = "SELECT * FROM OC_PRESTATIONS"+
                           " WHERE "+MedwanQuery.getInstance().getConfigString("charindexFunction","charindex")+"(OC_PRESTATION_REFUID,?)>1";
+            ps = oc_conn.prepareStatement(sSql);
+            ps.setString(1,prestationCode);
+            rs = ps.executeQuery();
+
+            while(rs.next()){
+                prestations.add(Prestation.get(rs.getString("OC_PRESTATION_SERVERID")+"."+rs.getString("OC_PRESTATION_OBJECTID")));
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                oc_conn.close();
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        return prestations;
+    }
+
+    //--- GET PRESTATIONS BY CODE -----------------------------------------------------------------
+    public static Vector getPrestationsByNomenclature(String prestationCode){
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Vector prestations = new Vector();
+
+        Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+            String sSql = "SELECT * FROM OC_PRESTATIONS"+
+                          " WHERE OC_PRESTATION_NOMENCLATURE=?";
+            ps = oc_conn.prepareStatement(sSql);
+            ps.setString(1,prestationCode);
+            rs = ps.executeQuery();
+
+            while(rs.next()){
+                prestations.add(Prestation.get(rs.getString("OC_PRESTATION_SERVERID")+"."+rs.getString("OC_PRESTATION_OBJECTID")));
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                oc_conn.close();
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        return prestations;
+    }
+
+    //--- GET PRESTATIONS BY CODE -----------------------------------------------------------------
+    public static Vector getPrestationsByCodeAlias(String prestationCode){
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Vector prestations = new Vector();
+
+        Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+            String sSql = "SELECT * FROM OC_PRESTATIONS"+
+                          " WHERE OC_PRESTATION_REFUID=?";
             ps = oc_conn.prepareStatement(sSql);
             ps.setString(1,prestationCode);
             rs = ps.executeQuery();

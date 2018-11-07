@@ -7,7 +7,7 @@ public class LocalDebet {
 		String prestationName;
 		double patientAmount;
 		double insurerAmount;
-		int quantity;
+		double quantity;
 		String uid;
 		java.util.Date date;
 }
