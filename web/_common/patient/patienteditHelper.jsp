@@ -34,6 +34,17 @@
             }
             sReturn += ">";
         }
+        else if(sTypeContent.toUpperCase().equals("TA")){
+            sReturn+= "<textarea  onKeyup='resizeTextarea(this,10);limitChars(this,5000);' class='text' name='"+sFieldName+"' id='"+sFieldName+"' cols='60'";
+            if(!bEditable){
+                sReturn+=" readonly ";
+            }
+
+            if(bUpperCase){
+                sReturn+=" style='text-transform: uppercase' ";
+            }
+            sReturn += ">"+sValue.trim()+"</textarea>";
+        }
         else if(sTypeContent.toUpperCase().equals("N")){
             sReturn+= "<input class='text' type='text' name='"+sFieldName+"' id='"+sFieldName+"' value=\""+sValue.trim()+"\" size='"+sTextWidth+"' onKeyUp='limitLength(this,125);'";
             if(!bEditable){
@@ -66,6 +77,11 @@
         // only allow past dates
         else if (sTypeContent.equalsIgnoreCase("Dp-")) {
             sReturn += ScreenHelper.writeDateFieldWithoutToday(sFieldName,"PatientEditForm",sValue,true,false,sWebLanguage,sCONTEXTPATH);
+        }
+        else if (sTypeContent.toUpperCase().startsWith("S:")) {
+        	sReturn += "<select class='text' name='"+sFieldName+"' id='"+sFieldName+"'><option/>";
+        	sReturn += ScreenHelper.writeSelect(request, sTypeContent.substring(2), sValue, sWebLanguage);
+        	sReturn += "</select>";
         }
         else if (sTypeContent.toUpperCase().equals("B")) {
             sReturn+=("<input class='text' type='text' name='"+sFieldName+"' id='"+sFieldName+"' value=\""+sValue.trim()+"\" size='12' onblur='checkBegin(this, \""+sValue.trim()+"\")'>"

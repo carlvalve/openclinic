@@ -66,6 +66,7 @@
 	   	   sEditInsurarInvoiceCommentMandatory  = checkString(request.getParameter("EditInsurarInvoiceCommentMandatory")),
     	   sEditInsurarUseLimitedPrestationsList  = checkString(request.getParameter("EditInsurarUseLimitedPrestationsList")),
 	   	   sEditInsurarAccountingCode  = checkString(request.getParameter("EditInsurarAccountingCode")),
+	   	   sEditInsurarAccreditationMechanism  = checkString(request.getParameter("EditInsurarAccreditationMechanism")),
            sEditInsurarType     = checkString(request.getParameter("EditInsurarType"));
     
     /// DEBUG /////////////////////////////////////////////////////////////////////////////////////
@@ -126,6 +127,7 @@
     	else if(sEditAcceptationNeeded.length()==0){
     		MedwanQuery.getInstance().setConfigString("InsuranceAgentAcceptationNeededFor",MedwanQuery.getInstance().getConfigString("InsuranceAgentAcceptationNeededFor","").replaceAll("\\*"+sEditInsurarId.replaceAll("\\.","\\\\.")+"\\*", ""));
     	}
+    	insurar.setAccreditationMechanism(sEditInsurarAccreditationMechanism);
 
         insurar.setName(checkString(request.getParameter("EditInsurarName")));
         insurar.setContact(checkString(request.getParameter("EditInsurarContact")));
@@ -576,6 +578,15 @@
                         <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"system.manage","allowedreductions",sWebLanguage)%></td>
                         <td class="admin2">
                             <input type="text" class="text" name="EditInsurarAllowedReductions" size="50" maxChars="255" value="<%=checkString(insurar.getAllowedReductions())%>">%
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="admin"><%=getTran(request,"web","accreditationmechanism",sWebLanguage)%></td>
+                        <td class="admin2">
+                            <select class="text" name="EditInsurarAccreditationMechanism">
+                                <option value=""></option>
+                                <%=ScreenHelper.writeSelect(request,"insurance.accreditationmechanisms",checkString(insurar.getAccreditationMechanism()),sWebLanguage)%>
+                            </select>
                         </td>
                     </tr>
                     <tr>

@@ -15,8 +15,11 @@
     <tr class="admin">
         <td>
             <%=getTran(request,"curative","insurance.status.title",sWebLanguage)%>&nbsp;
-            <a href="<c:url value='/main.jsp'/>?Page=financial/insurance/historyInsurances.jsp&ts=<%=getTs()%>"><img height='16px' style='vertical-align: middle' src="<c:url value='/_img/icons/icon_history.png'/>" class="link" alt="<%=getTranNoLink("web","historyinsurances",sWebLanguage)%>" style="vertical-align:-4px;"></a>
-            <a href="<c:url value='/main.jsp'/>?Page=financial/insurance/editInsurance.jsp&ts=<%=getTs()%>"><img height='16px' style='vertical-align: middle' src="<c:url value='/_img/icons/icon_newpage.png'/>" class="link" alt="<%=getTranNoLink("web","newinsurance",sWebLanguage)%>" style="vertical-align:-4px;"></a>
+            <a href="<c:url value='/main.jsp'/>?Page=financial/insurance/historyInsurances.jsp&ts=<%=getTs()%>"><img height='16px' style='vertical-align: middle' src="<c:url value='/_img/icons/icon_history.png'/>" class="link" title="<%=getTranNoLink("web","historyinsurances",sWebLanguage)%>" style="vertical-align:-4px;"></a>
+            <a href="<c:url value='/main.jsp'/>?Page=financial/insurance/editInsurance.jsp&ts=<%=getTs()%>"><img height='16px' style='vertical-align: middle' src="<c:url value='/_img/icons/icon_newpage.png'/>" class="link" title="<%=getTranNoLink("web","newinsurance",sWebLanguage)%>" style="vertical-align:-4px;"></a>
+            <%if(Insurance.getActiveInsurance(activePatient.personid, MedwanQuery.getInstance().getConfigString("SIS","1.29"))!=null){ %>
+	            <a href="<c:url value='/main.jsp'/>?Page=financial/fuaEdit.jsp&ts=<%=getTs()%>"><img height='16px' style='vertical-align: middle' src="<c:url value='/_img/icons/icon_fua.png'/>" class="link" title="<%=getTranNoLink("web","fua",sWebLanguage)%>" style="vertical-align:-4px;"></a>
+	        <%} %>
         </td>
     </tr>
     <%

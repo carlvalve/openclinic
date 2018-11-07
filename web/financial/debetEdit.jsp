@@ -1,3 +1,4 @@
+<%@page import="be.openclinic.medical.Diagnosis"%>
 <%@ page import="be.openclinic.finance.*,be.openclinic.adt.Encounter,java.util.*" %>
 <%@ page import="java.util.Date" %>
 <%@page errorPage="/includes/error.jsp"%>
@@ -288,14 +289,20 @@ sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
                 <input type="hidden" name="tmpPrestationName">
                 <input type="hidden" name="tmpPrestationPrice"/>
                 <input type="hidden" name="EditPrestationUID" value="<%=debet.getPrestationUid()%>">
+                <%
+					Prestation prestation = debet.getPrestation();
+                	String sTitle="";
+                	if(prestation!=null && checkString(prestation.getDescription()).length()>60){
+                		sTitle=prestation.getDescription();
+                	}
+                
+                %>
 
-                <select class="text" name="EditPrestationName" id="EditPrestationName" onchange="document.getElementById('EditPrestationGroup').value='';changePrestation(false)">
+                <select title='<%=sTitle %>' class="text" name="EditPrestationName" id="EditPrestationName" onclick="this.title=this.options[this.selectedIndex].title" onchange="document.getElementById('EditPrestationGroup').value='';changePrestation(false);">
                     <option/>
                     <%
-						Prestation prestation = debet.getPrestation();
-
                         if (prestation!=null){
-                            out.print("<option selected value='"+checkString(prestation.getUid())+"'>"+checkString(prestation.getCode())+": "+checkString(prestation.getDescription())+"</option>");
+                            out.print("<option title='"+sTitle+"' selected value='"+checkString(prestation.getUid())+"'>"+checkString(prestation.getCode())+": "+checkString(prestation.getDescription(),60)+"</option>");
                         }
 
                         Vector vPopularPrestations = activeUser.getTopPopularPrestations(50);
@@ -308,13 +315,17 @@ sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
                                     prestation = Prestation.get(sPrestationUid);
 
                                     if (prestation!=null && prestation.getInactive()==0 && prestation.getDescription()!=null && prestation.getDescription().trim().length()>0 && !(debet.getPrestation()!=null && prestation.getUid().equals(debet.getPrestation().getUid()))){
-                                        out.print("<option value='"+checkString(prestation.getUid())+"'");
+                                    	sTitle="";
+                                    	if(checkString(prestation.getDescription()).length()>60){
+                                    		sTitle=prestation.getDescription();
+                                    	}
+                                        out.print("<option title='"+sTitle+"' value='"+checkString(prestation.getUid())+"'");
 
                                         if ((debet.getPrestationUid()!=null)&&(prestation!=null)&&(prestation.getUid()!=null)&&(prestation.getUid().equals(debet.getPrestationUid()))){
                                             out.print(" selected");
                                         }
 
-                                        out.print(">"+checkString(prestation.getCode())+": "+checkString(prestation.getDescription())+"</option>");
+                                        out.print(">"+checkString(prestation.getCode())+": "+checkString(prestation.getDescription(),60)+"</option>");
                                         total++;
                                         if(total>10){
                                         	break;
@@ -424,6 +435,30 @@ sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
                <img src="<c:url value="/_img/icons/icon_search.png"/>" class="link" alt="<%=getTran(null,"Web","select",sWebLanguage)%>" onclick="alertcontinuity();searchService('EditDebetServiceUid','EditDebetServiceName');">
            </td>
        </tr>
+		<tr>
+		    <td class="admin" nowrap><%=getTran(request,"Web","indication",sWebLanguage)%>&nbsp;</td>
+		    <td class="admin2">
+		    	<select class='text' name='EditDiagnosis' id='EditDiagnosis'>
+		    		<option/>
+		    		<%
+		    			Encounter encounter = null;
+		    			if(debet!=null && checkString(debet.getEncounterUid()).length()>0){
+		    				encounter=debet.getEncounter();
+		    			}
+		    			else{
+		    				encounter = Encounter.getActiveEncounter(activePatient.personid);
+		    			}
+		    			if(encounter!=null && encounter.hasValidUid()){
+		    				Vector diagnoses = Diagnosis.selectDiagnoses("", "", encounter.getUid(), "", "", "", "", "", "", "", "", "icd10", "OC_DIAGNOSIS_GRAVITY DESC");
+		    				for(int n=0;n<diagnoses.size();n++){
+		    					Diagnosis diagnosis = (Diagnosis)diagnoses.elementAt(n);
+		    					out.println("<option "+(diagnosis.getUid().equalsIgnoreCase(debet.getDiagnosisUid())?"selected":"")+" value='"+diagnosis.getUid()+"'>"+diagnosis.getCode()+" - "+diagnosis.getLabel(sWebLanguage)+"</option>");
+		    				}
+		    			}
+		    		%>
+		    	</select>
+		    </td>
+		</tr>
         <tr>
             <td class='admin'><%=getTran(request,"web","invoicingcareprovider",sWebLanguage)+(MedwanQuery.getInstance().getConfigInt("invoicingCareProviderMandatory",0)==1?"*":"")%></td>
             <td class='admin2'>
@@ -873,6 +908,7 @@ sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
                           +'&EditComment=' + EditForm.EditComment.value
                           +'&EditQuantity=' + EditForm.EditQuantity.value
                           +'&EditExtraInsurarUID=' + EditForm.coverageinsurance.value
+                          +'&EditDiagnosis=' + EditForm.EditDiagnosis.value
                           <%
 	  		               	if(MedwanQuery.getInstance().getConfigInt("enableComplementaryInsurance2",0)==1){
     			   	       %>
@@ -914,7 +950,7 @@ sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
 			return;
 		}
 		if(document.getElementById("EditInsuranceUID").value.length>0){
-		    openPopup("/financial/quicklist.jsp&ts=<%=getTs()%>&EditInsuranceUID="+document.getElementById("EditInsuranceUID").value+"&PopupHeight=600&PopupWidth=800");
+		    openPopup("/financial/quicklist.jsp&ts=<%=getTs()%>&EditInsuranceUID="+document.getElementById("EditInsuranceUID").value+"&PopupHeight=600&PopupWidth=1024");
 		}
 	}
 	
@@ -953,7 +989,7 @@ sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
         if(insuranceuid==''){
         	insuranceuid='?';
         }
-        openPopup("/_common/search/searchPrestation.jsp&ts=<%=getTs()%>&ReturnFieldUid=tmpPrestationUID&ReturnFieldDescr=tmpPrestationName&ReturnFieldPrice=tmpPrestationPrice&doFunction=changeTmpPrestation()&doFunctionVariable=changeTmpPrestationVariable()&checkInsurance="+insuranceuid+"&encounteruid="+EditForm.EditEncounterUID.value);
+        openPopup("/_common/search/searchPrestation.jsp&ts=<%=getTs()%>&PopupWidth=800&ReturnFieldUid=tmpPrestationUID&ReturnFieldDescr=tmpPrestationName&ReturnFieldPrice=tmpPrestationPrice&doFunction=changeTmpPrestation()&doFunctionVariable=changeTmpPrestationVariable()&checkInsurance="+insuranceuid+"&encounteruid="+EditForm.EditEncounterUID.value);
     }
 
     function doCredit(){
@@ -966,6 +1002,7 @@ sEditGroupIdx = checkString(request.getParameter("EditGroupIdx"));
     function changeTmpPrestation(){
         if (EditForm.tmpPrestationUID.value.length>0){
             EditForm.EditPrestationUID.value = EditForm.tmpPrestationUID.value;
+            EditForm.EditPrestationName.title=EditForm.tmpPrestationName.title;
             EditForm.EditPrestationName.options[EditForm.EditPrestationName.options.length-1].text = EditForm.tmpPrestationName.value;
             EditForm.EditPrestationName.options[EditForm.EditPrestationName.options.length-1].value = EditForm.tmpPrestationUID.value;
             EditForm.EditPrestationName.options[EditForm.EditPrestationName.options.length-1].selected = true;

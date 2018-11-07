@@ -2,7 +2,7 @@
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
 
-<%=checkPermission("occupophtalmology","select",activeUser)%>
+<%=checkPermission("occup.ccbrt.entexamination","select",activeUser)%>
 
 <form name="transactionForm" id="transactionForm" method="POST" action='<c:url value="/healthrecord/updateTransaction.do"/>?ts=<%=getTs()%>'>
     <bean:define id="transaction" name="be.mxs.webapp.wl.session.SessionContainerFactory.WO_SESSION_CONTAINER" property="currentTransactionVO"/>
@@ -582,7 +582,7 @@
         
     <%-- BUTTONS --%>
     <%=ScreenHelper.alignButtonsStart()%>
-        <%=getButtonsHtml(request,activeUser,activePatient,"occupophtalmology",sWebLanguage)%>
+        <%=getButtonsHtml(request,activeUser,activePatient,"occup.ccbrt.entexamination",sWebLanguage)%>
     <%=ScreenHelper.alignButtonsStop()%>
 
     <%=ScreenHelper.contextFooter(request)%>

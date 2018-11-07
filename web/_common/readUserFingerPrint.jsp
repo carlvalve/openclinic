@@ -1,4 +1,13 @@
 <%@include file="/includes/helper.jsp"%>
+<%
+	//Clear fingerprint call id
+	session.setAttribute("fingerprintid", "");
+	session.setAttribute("fingerprintimage", "");
+	MedwanQuery.setSession(session,new User());
+
+	//Call local fingerprint reader
+	
+%>
 <head>
     <%=sCSSNORMAL%>
     <%=sJSPROTOTYPE%>
@@ -38,11 +47,13 @@
 		</td>
 	</tr>
 </table>
+<IFRAME style="display:none" name="hidden-form"></IFRAME>
 
 <script>
+	var reads=0;
 
 	function doRead(){
-		var url = '<c:url value="/_common/dp/readUserFingerPrint.jsp"/>?ts='+new Date().getTime();
+		var url = '<c:url value="/_common/dp/readUserFingerPrintSecugen.jsp"/>?ts='+new Date().getTime();
 		new Ajax.Request(url,{
 		  	method: "POST",
 		  	postBody: '',
@@ -52,37 +63,51 @@
 		    		document.getElementById("fingerprintImage").src = '<c:url value="/_img/fingerprintImageSmall.jpg"/>';
 					selectUser(s.userid,s.password);
 			    }
-			    else{
+			    else if(s.success==0){
 		    		document.getElementById("fingerprintImage").src = '<c:url value="/_img/fingerprintImageSmallWrong.jpg"/>';
-		    		window.setTimeout("doDetect()",2000);
+			        if(reads<5){
+			    		window.open("<%=sCONTEXTPATH%>/util/startFingerPrintReader.jsp","hidden-form");
+			    		window.setTimeout("doRead()",1000);
+			    		reads++;
+			        }
+			        else{
+			        	window.close();
+			        }
 		    	}
+			    else{
+		    		window.setTimeout("doRead()",1000);
+			    }
 		  	},
 		  	onFailure: function(){
 	    		document.getElementById("fingerprintImage").src = '<c:url value="/_img/fingerprintImageSmallWrong.jpg"/>';
+	    		window.setTimeout("doRead()",1000);
 		  	}
 		});
 	}
 
 	function doDetect(){
-		var parameters= '';
+		var parameters='';
 		document.getElementById("fingerprintImage").src = '<c:url value="/_img/fingerprintImageSmallNoPrint.jpg"/>';
-		var url = '<c:url value="/_common/dp/detectFingerPrintReader.jsp"/>?ts='+new Date().getTime();
+		var url = '<c:url value="/_common/dp/detectFingerPrintReaderSecugen.jsp"/>?ts='+new Date().getTime();
 		new Ajax.Request(url,{
 		  	method: "POST",
 		  	postBody: parameters,
 		  	onSuccess: function(resp){
 			    var s=eval('('+resp.responseText+')');
-			    if(s.model!=''){
-			    	document.getElementById('readerID').innerHTML = '<%=getTranNoLink("web","digital.persona.reader.detected","en")%>:<br/><b>'+s.model+"</b>";
+			    if(s.serial!=''){
+			    	document.getElementById('readerID').innerHTML = '<%=getTranNoLink("web","fingerprint.reader.detected","en")%>:<br/><b>'+s.serial+"</b>";
+			    	reads=1;
+			    	doRead();
+			        window.open("<%=sCONTEXTPATH%>/util/startFingerPrintReader.jsp","hidden-form");
 			    }
 			    else{
-				    document.getElementById('readerID').innerHTML = '<%=getTranNoLink("web","no.reader","en")%>';
-				    window.setTimeout("doDetect()",5000);
+				    document.getElementById('readerID').innerHTML = '<%=getTranNoLink("web","detecting.reader","en")%>';
+				    window.setTimeout("doDetect()",1000);
 			    }
 		  	},
 		  	onFailure: function(){
-			    document.getElementById('readerID').innerHTML = '<%=getTranNoLink("web","no.reader","en")%>';
-			    window.setTimeout("doDetect()",5000);
+			    document.getElementById('readerID').innerHTML = '<%=getTranNoLink("web","detecting.reader","en")%>';
+			    window.setTimeout("doDetect()",1000);
 		  	}
 		});
 	}
@@ -92,6 +117,6 @@
 		window.close();
 	}
 
+    window.open("<%=sCONTEXTPATH%>/util/initializeFingerPrintReader.jsp","hidden-form");
 	doDetect();
-	doRead();
 </script>

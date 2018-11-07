@@ -513,7 +513,7 @@
                     <td class="admin2">
                         <select class="text" name="EditServiceInscode" id="EditServiceInscode">
                         	<option value=""></option>
-                        	<%=ScreenHelper.writeSelect(request,"dhis2services", service.inscode, sWebLanguage) %>
+                        	<%=ScreenHelper.writeSelect(request,"dhis2services", service.inscode, sWebLanguage,false,true,60) %>
                         </select>
                     </td>
                 </tr>

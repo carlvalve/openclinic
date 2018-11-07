@@ -439,6 +439,66 @@ td.longTitle {
  padding-left:5px;
 }
 
+.triagelarge {
+ font-weight:bolder;
+ font-size: 12px;
+ color: black;
+ font-family: Verdana, Geneva, sans-serif;
+ padding:1px;
+ border-left:5px solid #DEEAFF;
+ vertical-align:middle;
+ background-color:#DEEAFF;
+}
+
+td.triagelarge2 {
+ font-weight:bolder;
+ font-size: 12px;
+ color: black;
+ font-family: Verdana, Geneva, sans-serif;
+ padding:1px;
+ border-left:5px solid #DEEAFF;
+ border-bottom: 0.5px solid white;
+ vertical-align:middle;
+ background-color:#DEEAFF;
+}
+
+.blink_text {
+
+    animation:1s blinker linear infinite;
+    -webkit-animation:1s blinker linear infinite;
+    -moz-animation:1s blinker linear infinite;
+}
+
+@-moz-keyframes blinker {  
+ 0% { opacity: 1.0; }
+ 50% { opacity: 0.0; }
+ 100% { opacity: 1.0; }
+ }
+
+@-webkit-keyframes blinker {  
+ 0% { opacity: 1.0; }
+ 50% { opacity: 0.0; }
+ 100% { opacity: 1.0; }
+ }
+
+@keyframes blinker {  
+ 0% { opacity: 1.0; }
+ 50% { opacity: 0.0; }
+ 100% { opacity: 1.0; }
+ }
+
+td.triageverylarge {
+ font-weight:bolder;
+ font-size: 16px;
+ color: black;
+ font-family: Verdana, Geneva, sans-serif;
+ padding:1px;
+ border-left:5px solid #DEEAFF;
+ border-bottom: 0.5px solid white;
+ vertical-align:middle;
+ background-color:#DEEAFF;
+}
+
 TD.mobileadmin {
  color:#505050;
  font-family: Verdana, Geneva, sans-serif;
@@ -476,6 +536,20 @@ TD.admincentered {
  line-height:22px;
 }
 
+TD.adminright {
+ color: black;
+ font-family: Verdana, Geneva, sans-serif;
+ font-size:10px;
+ font-weight:normal;
+ text-align:right;
+ vertical-align:middle;
+ padding:3px;
+ text-indent:5px;
+ background-color:#C3D9FF;
+ height:22px;
+ line-height:22px;
+}
+
 TD.admingrey {
  color: #F0F0F0;
  font-family: Verdana, Geneva, sans-serif;
@@ -494,6 +568,19 @@ td.admin2 {
  font-family: Verdana, Geneva, sans-serif;
  font-size:10px;
  font-weight:normal;
+ text-align:left;
+ padding:1px;
+ border-left:5px solid #DEEAFF;
+ border-bottom: 0.5px solid white;
+ vertical-align:middle;
+ background-color:#DEEAFF;
+}
+	
+td.admin2bold {
+ color: black;
+ font-family: Verdana, Geneva, sans-serif;
+ font-size:10px;
+ font-weight:bolder;
  text-align:left;
  padding:1px;
  border-left:5px solid #DEEAFF;

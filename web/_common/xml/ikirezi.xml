@@ -84,6 +84,7 @@
 	
 	<!-- ICD-10 codes generated from ICPC -->
 	
+	<mapping icd10='A09' id='13'/>
 	<mapping icd10='R19.0' id='152'/>
 	<mapping icd10='M25.6' id='5'/>
 	<mapping icd10='M25.4' id='5'/>

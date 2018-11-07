@@ -156,7 +156,13 @@
                 <textarea onKeyup="resizeTextarea(this,10);limitChars(this,4995);" <%=setRightClick(session,"ITEM_TYPE_OPERATION_PROTOCOL_CARE")%> class="text" cols="100" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_CARE" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_CARE" property="value"/></textarea>
             </td>
         </tr>
-
+        <!- DRAWING ITEM-->
+        <tr>
+            <td class="admin"  colspan='2'><%=getTran(request,"web","diagram",sWebLanguage) %></td>
+        	<td class='admin2'>
+				<%=ScreenHelper.createDrawingDiv(request, "canvasDiv", "be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OCDRAWING", transaction,MedwanQuery.getInstance().getConfigString("defaultGynecologyDiagram","/_img/mammae.png"),"gynecology.image") %>
+        	</td>
+        </tr>
         <%-- REMARKS --%>
         <tr>
             <td class="admin" colspan="2"><%=getTran(request,"openclinic.chuk","remarks",sWebLanguage)%></td>

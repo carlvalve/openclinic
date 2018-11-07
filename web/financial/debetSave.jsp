@@ -17,12 +17,12 @@
         String sEditComment = checkString(request.getParameter("EditComment"));
         String sEditCredit = checkString(request.getParameter("EditCredit"));
         String sEditQuantity = checkString(request.getParameter("EditQuantity"));
+        String sEditDiagnosis = checkString(request.getParameter("EditDiagnosis"));
         String sEditExtraInsurarUID = checkString(request.getParameter("EditExtraInsurarUID"));
 
         Debet debet = new Debet();
-        System.out.println("before: "+Double.parseDouble(sEditInsurarAmount.replaceAll(",",".")));
         debet.setInsurarAmount(Double.parseDouble(sEditInsurarAmount.replaceAll(",",".")));
-        System.out.println("after: "+debet.getInsurarAmount());
+        System.out.println("diagnosis: "+sEditDiagnosis);
         debet.setComment(sEditComment);
 
         if ((!sEditDebetUID.equals(("-1")))&&(sEditDebetUID.length()>0)) {
@@ -34,7 +34,7 @@
         if(sEditQuantity.length()==0){
             sEditQuantity="1";
         }
-        debet.setQuantity(Integer.parseInt(sEditQuantity));
+        debet.setQuantity(Double.parseDouble(sEditQuantity));
 
         debet.setCredited(Integer.parseInt(sEditCredit));
         debet.setDate(ScreenHelper.getSQLDate(sEditDate));
@@ -47,6 +47,7 @@
         debet.setUid(sEditDebetUID);
         debet.setUpdateDateTime(ScreenHelper.getSQLDate(getDate()));
         debet.setUpdateUser(activeUser.userid);
+        debet.setDiagnosisUid(sEditDiagnosis);
         debet.setExtraInsurarUid(sEditExtraInsurarUID);
         if (sEditExtraInsurarUID.length()>0){
             debet.setAmount(0);

@@ -433,7 +433,6 @@
 	                %><input class="button" type="button" name="EditSaveButton" value='<%=getTranNoLink("Web","save",sWebLanguage)%>' onclick="doSave();">&nbsp;<%
 	        	}
 	        %>
-
             <input class="button" type="button" name="Backbutton" value='<%=getTranNoLink("Web","Back",sWebLanguage)%>' onclick="doSearchBack();">
             <input class="button" type="button" name="Accreditationbutton" id="Accreditationbutton" value='<%=getTranNoLink("Web","accreditation",sWebLanguage)%>' onclick="checkInsuranceAuthorization(true);">
         <%=ScreenHelper.setFormButtonsStop()%>
@@ -454,7 +453,7 @@
   }
 
   <%-- CHECK INSURANCE AUTHORISATION --%>
-  function checkInsuranceAuthorization(force){
+  function checkInsuranceAuthorization(force,ignorewarnings){
 	$('authorization').innerHTML = "<td class='admin'><td class='admin2'><img src='<c:url value="_img/themes/default/ajax-loader.gif"/>'/></td>"
     var params = "insuraruid="+EditInsuranceForm.EditInsurarUID.value+
                  "&personid=<%=activePatient.personid%>"+
@@ -462,6 +461,14 @@
                  "&userid=<%=activeUser.userid%>";
 	if(force){
 		params+="&forceautorization=true";
+	}                 
+	if(ignorewarnings){
+		if(window.confirm('<%=getTranNoLink("web","areyousuretoignorewarning",sWebLanguage)%>')){
+			params+="&ignorewarnings=true";
+		}
+		else{
+			return;	
+		}
 	}                 
     var url= '<c:url value="/financial/checkInsuranceAuthorization.jsp"/>?ts='+new Date();
     new Ajax.Request(url,{

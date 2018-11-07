@@ -213,7 +213,6 @@
   function selectProduct(productUid,productName,productUnit,unitsPerTimeUnit,
 		                 productSupplierUid,productSupplierName,unitsPerPackage,productStockUid,productTotalUnits){
     var closeWindow = true;
-
     window.opener.document.getElementsByName("<%=sReturnProductUidField%>")[0].value = productUid;
     window.opener.document.getElementsByName("<%=sReturnProductNameField%>")[0].value = productName;
 	<%
@@ -232,7 +231,7 @@
 			  }
 			<%
 		}
-	
+
 		// Set ServiceStock
 		// Is patient admitted?
 		String serviceStockUid = "", serviceStockName = "";
@@ -280,7 +279,7 @@
 			<%
 		}
 	%>
-	
+
 	// CLEAR SupplyingService
     var suppServUidField  = window.opener.document.getElementsByName("EditSupplyingServiceUid")[0],
         suppServNameField = window.opener.document.getElementsByName("EditSupplyingServiceUid")[0];
@@ -324,11 +323,11 @@ if(sReturnUnitsPerPackageField.length() > 0){
 	
 	    window.opener.document.getElementsByName("<%=sReturnUnitsPerPackageField%>")[0].value = unitsPerPackage;
 	    isNumber(window.opener.document.getElementsByName("<%=sReturnUnitsPerTimeUnitField%>")[0]);
-	
-	    if(window.opener.calculatePackagesNeeded!=null){
+
+	    if(window.opener.calculatePackagesNeeded){
 	      window.opener.calculatePackagesNeeded();
 	    }
-	    if(window.opener.calculatePrescriptionPeriod!=null){
+	    if(window.opener.calculatePrescriptionPeriod){
 	      window.opener.calculatePrescriptionPeriod();
 	    }
 	<%

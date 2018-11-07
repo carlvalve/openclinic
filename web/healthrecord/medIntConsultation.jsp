@@ -177,7 +177,7 @@
 	        addFami();
 	      }
 	    }
-	
+
 	    // check persoonlijk-fields for content
 	    if (isAtLeastOneChirurgieFieldFilled()){
 	      if(maySubmit){
@@ -196,7 +196,7 @@
 	        addLetsels();
 	      }
 	    }
-	
+
 	//Summary
 	    document.getElementsByName('currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_SUBJECTIVE1" property="itemId"/>]>.value')[0].value = document.getElementsByName('currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_SUBJECTIVE" property="itemId"/>]>.value')[0].value.substring(250,500);
 	    document.getElementsByName('currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_SUBJECTIVE2" property="itemId"/>]>.value')[0].value = document.getElementsByName('currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_SUBJECTIVE" property="itemId"/>]>.value')[0].value.substring(500,750);
@@ -272,6 +272,7 @@
 	    document.getElementsByName("currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CE_MEDISCHE_ANTECEDENTEN3" property="itemId"/>]>.value")[0].value = sChirurgie.substring(500,750);
 	    document.getElementsByName("currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CE_MEDISCHE_ANTECEDENTEN4" property="itemId"/>]>.value")[0].value = sChirurgie.substring(750,1000);
 	    document.getElementsByName("currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CE_MEDISCHE_ANTECEDENTEN5" property="itemId"/>]>.value")[0].value = sChirurgie.substring(1000,1250);
+	    <%if(MedwanQuery.getInstance().getConfigInt("enableCCBRT",0)==0){ %>
 	
 	    while (sLetsels.indexOf("rowLetsels")>-1){
 	      sTmpBegin = sLetsels.substring(sLetsels.indexOf("rowLetsels"));
@@ -284,7 +285,8 @@
 	    document.getElementsByName("currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CE_LETSELS3" property="itemId"/>]>.value")[0].value = sLetsels.substring(500,750);
 	    document.getElementsByName("currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CE_LETSELS4" property="itemId"/>]>.value")[0].value = sLetsels.substring(750,1000);
 	    document.getElementsByName("currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CE_LETSELS5" property="itemId"/>]>.value")[0].value = sLetsels.substring(1000,1250);
-	
+		<%}%>
+
 	    while (sHeelkunde.indexOf("rowHeelkunde")>-1){
 	      sTmpBegin = sHeelkunde.substring(sHeelkunde.indexOf("rowHeelkunde"));
 	      sTmpEnd = sTmpBegin.substring(sTmpBegin.indexOf("=")+1);

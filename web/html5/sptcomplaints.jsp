@@ -1,3 +1,4 @@
+<%@page import="be.mxs.common.util.system.Pointer"%>
 <%@page import="org.dom4j.io.SAXReader,
 				java.awt.*,java.awt.image.*,be.openclinic.adt.*,
                 java.net.URL,
@@ -10,6 +11,26 @@
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
 <%!
+	String serializeSptSigns(Hashtable signs){
+		String s="";
+		Enumeration eS = signs.keys();
+		while(eS.hasMoreElements()){
+			String key = (String)eS.nextElement();
+			s+=(key+"="+signs.get(key)+";");
+		}
+		return s;
+	}
+	
+	Hashtable unSerializeSigns(String signs){
+		Hashtable st = new Hashtable();
+		for(int n=0;n<signs.split(";").length;n++){
+			if(signs.split(";")[n].split("=").length>1){
+				st.put(signs.split(";")[n].split("=")[0],signs.split(";")[n].split("=")[1]);
+			}
+		}
+		return st;
+	}
+	
 	boolean checkArguments(Element element, Hashtable signs){
 		int nPositive=0;
 		Iterator arguments = element.elementIterator("arguments");
@@ -163,13 +184,34 @@
 	<body>
 		<table width='100%'>
 			<tr>
-				<td style='font-size:8vw;text-align: left'></td>
-				<td style='font-size:8vw;text-align: right'>
+				<td id='toptable' style='font-size:5vw;text-align: left'>
+					<%
+						if(activePatient !=null && activePatient.lastname.length()>0){
+							out.println("["+activePatient.personid+"] "+activePatient.getFullName());
+						}
+					%>
+				</td>
+				<td style='font-size:8vw;text-align: right' nowrap>
 					<img onclick="window.location.reload()" src='<%=sCONTEXTPATH%>/_img/icons/mobile/refresh.png'/>
 					<img onclick="window.location.href='../html5/welcome.jsp'" src='<%=sCONTEXTPATH%>/_img/icons/mobile/home.png'/>
 				</td>
 			</tr>
 		<%
+		Hashtable sptSigns = (Hashtable)session.getAttribute("sptconcepts");
+		String sptPointer = "";
+		if(activePatient!=null){
+			sptPointer = Pointer.getPointer("activespt."+activePatient.personid);
+			if(!checkString(request.getParameter("sptaction")).equalsIgnoreCase("loadspt") && sptSigns==null && !checkString(request.getParameter("doreset")).equalsIgnoreCase("reset")){
+				sptSigns=new Hashtable();
+				if(sptPointer.length()>0){
+					out.println("<script>");
+					out.println("window.location.href='sptcomplaintsExisting.jsp';");
+					out.println("</script>");
+					out.flush();
+				}
+			}
+		}
+
 		session.setAttribute(sAPPTITLE+"WebLanguage","fr");
 		String gender=checkString(request.getParameter("gender"));	
 		int age=240;
@@ -177,89 +219,123 @@
 			age=Integer.parseInt(checkString(request.getParameter("age")));
 		}
 		catch(Exception e){}
-			//Initialize sptconcepts
-			Hashtable sptSigns = (Hashtable)session.getAttribute("sptconcepts");
-			if(sptSigns==null){
-				sptSigns=new Hashtable();
+		//Initialize sptconcepts
+		if(sptSigns==null){
+			sptSigns=new Hashtable();
+		}
+		if(checkString(request.getParameter("doreset")).equalsIgnoreCase("reset")){
+			if(activePatient!=null){
+				Pointer.deletePointers("activespt."+activePatient.personid);
 			}
-			Hashtable signs = new Hashtable();
-			signs.put("spt",sptSigns);
-			//Then collect patient specific parameters
-			Hashtable patientSigns = new Hashtable();
+			sptSigns=new Hashtable();
+			session.setAttribute("sptconcepts",sptSigns);
+			session.setAttribute("spt",new Hashtable());
+		}
+		Hashtable signs = new Hashtable();
+		signs.put("spt",sptSigns);
+		//Then collect patient specific parameters
+		Hashtable patientSigns = new Hashtable();
+		if(activePatient!=null){
+			if(activePatient.getAgeInMonths()<12){
+				patientSigns.put("ageinmonths",1);
+				age=1;
+			}
+			else if(activePatient.getAgeInMonths()<60){
+				patientSigns.put("ageinmonths",24);
+				age=24;
+			}
+			else if(activePatient.getAgeInMonths()<180){
+				patientSigns.put("ageinmonths",120);
+				age=120;
+			}
+			else {
+				patientSigns.put("ageinmonths",240);
+				age=240;
+			}
+			patientSigns.put("gender",activePatient.gender);
+			gender=activePatient.gender;
+		}
+		else{
 			patientSigns.put("ageinmonths",age);
 			patientSigns.put("gender",gender);
-			signs.put("patient",patientSigns);
-			session.setAttribute("sptpatient",patientSigns);
-		
-			if(checkString(request.getParameter("sptaction")).equalsIgnoreCase("reset")){
-				sptSigns=new Hashtable();
-				session.setAttribute("sptconcepts",sptSigns);
-				session.setAttribute("spt",new Hashtable());
+		}
+		signs.put("patient",patientSigns);
+		session.setAttribute("sptpatient",patientSigns);
+	
+		if(checkString(request.getParameter("sptaction")).equalsIgnoreCase("loadspt")){
+			if(sptPointer.length()>0){
+				sptSigns=unSerializeSigns(sptPointer);
+				System.out.println("pointer spt = "+sptPointer);
 			}
-			else if(checkString(request.getParameter("sptaction")).equalsIgnoreCase("spt")){
-				//First clear all spt concepts
-				sptSigns=new Hashtable();
-				String sDoc = request.getParameter("doc");
-				SAXReader reader = new SAXReader(false);
-				Document document = reader.read(new URL(sDoc));
-				Element root = document.getRootElement();
-				Element complaints = root.element("complaints");
-				if(complaints!=null){
-					Iterator sections = complaints.elementIterator("section");
-					while(sections.hasNext()){
-						Element section = (Element)sections.next();
-						Iterator concepts = section.elementIterator("concept");
-						while(concepts.hasNext()){
-							Element concept = (Element)concepts.next();
-							sptSigns.remove(concept.attributeValue("id"));
-						}
+			//Store spt concepts in session
+			session.setAttribute("sptconcepts", sptSigns);
+			out.println("<script>window.location.href='"+sCONTEXTPATH+"/html5/spt.jsp';</script>");
+			out.flush();
+		}
+		else if(checkString(request.getParameter("sptaction")).equalsIgnoreCase("spt")){
+			//First clear all spt concepts
+			//sptSigns=new Hashtable();
+			String sDoc = request.getParameter("doc");
+			SAXReader reader = new SAXReader(false);
+			Document document = reader.read(new URL(sDoc));
+			Element root = document.getRootElement();
+			Element complaints = root.element("complaints");
+			if(complaints!=null){
+				Iterator sections = complaints.elementIterator("section");
+				while(sections.hasNext()){
+					Element section = (Element)sections.next();
+					Iterator concepts = section.elementIterator("concept");
+					while(concepts.hasNext()){
+						Element concept = (Element)concepts.next();
+						//sptSigns.remove(concept.attributeValue("id"));
 					}
 				}
-				//Add selected spt concepts
-				Enumeration parameters = request.getParameterNames();
-				while(parameters.hasMoreElements()){
-					String parameterName = (String)parameters.nextElement();
-					if(parameterName.startsWith("concept.") && request.getParameter(parameterName).length()>0){
-						sptSigns.put(parameterName.replaceAll("concept.",""),request.getParameter(parameterName));
-					}
-				}
-				//Store spt concepts in session
-				session.setAttribute("sptconcepts", sptSigns);
-				out.println("<script>window.location.href='"+sCONTEXTPATH+"/html5/spt.jsp';</script>");
-				out.flush();
 			}
-			else if(checkString(request.getParameter("sptaction")).equalsIgnoreCase("patient")){
-				//First clear all spt concepts
-				sptSigns=new Hashtable();
-				String sDoc = request.getParameter("doc");
-				SAXReader reader = new SAXReader(false);
-				Document document = reader.read(new URL(sDoc));
-				Element root = document.getRootElement();
-				Element complaints = root.element("complaints");
-				if(complaints!=null){
-					Iterator sections = complaints.elementIterator("section");
-					while(sections.hasNext()){
-						Element section = (Element)sections.next();
-						Iterator concepts = section.elementIterator("concept");
-						while(concepts.hasNext()){
-							Element concept = (Element)concepts.next();
-							sptSigns.remove(concept.attributeValue("id"));
-						}
-					}
+			//Add selected spt concepts
+			Enumeration parameters = request.getParameterNames();
+			while(parameters.hasMoreElements()){
+				String parameterName = (String)parameters.nextElement();
+				if(parameterName.startsWith("concept.") && request.getParameter(parameterName).length()>0){
+					sptSigns.put(parameterName.replaceAll("concept.",""),request.getParameter(parameterName));
 				}
-				//Add selected spt concepts
-				Enumeration parameters = request.getParameterNames();
-				while(parameters.hasMoreElements()){
-					String parameterName = (String)parameters.nextElement();
-					if(parameterName.startsWith("concept.") && request.getParameter(parameterName).length()>0){
-						sptSigns.put(parameterName.replaceAll("concept.",""),request.getParameter(parameterName));
-					}
-				}
-				//Store spt concepts in session
-				session.setAttribute("sptconcepts", sptSigns);
 			}
+			//Store spt concepts in session
+			session.setAttribute("sptconcepts", sptSigns);
+			out.println("<script>window.location.href='"+sCONTEXTPATH+"/html5/spt.jsp';</script>");
+			out.flush();
+		}
+		else if(checkString(request.getParameter("sptaction")).equalsIgnoreCase("patient")){
+			//First clear all spt concepts
+			sptSigns=new Hashtable();
+			String sDoc = request.getParameter("doc");
+			SAXReader reader = new SAXReader(false);
+			Document document = reader.read(new URL(sDoc));
+			Element root = document.getRootElement();
+			Element complaints = root.element("complaints");
+			if(complaints!=null){
+				Iterator sections = complaints.elementIterator("section");
+				while(sections.hasNext()){
+					Element section = (Element)sections.next();
+					Iterator concepts = section.elementIterator("concept");
+					while(concepts.hasNext()){
+						Element concept = (Element)concepts.next();
+						sptSigns.remove(concept.attributeValue("id"));
+					}
+				}
+			}
+			//Add selected spt concepts
+			Enumeration parameters = request.getParameterNames();
+			while(parameters.hasMoreElements()){
+				String parameterName = (String)parameters.nextElement();
+				if(parameterName.startsWith("concept.") && request.getParameter(parameterName).length()>0){
+					sptSigns.put(parameterName.replaceAll("concept.",""),request.getParameter(parameterName));
+				}
+			}
+			//Store spt concepts in session
+			session.setAttribute("sptconcepts", sptSigns);
+		}
 		%>
-		<form name='transactionForm' method='post'>
+		<form name='transactionForm' id='transactionForm' method='post'>
 			<input type='hidden' name='doc' value='<%=request.getParameter("doc")%>'/>
 			<input type='hidden' name='sptaction' id='sptaction'/>
 			<table width='100%'>
@@ -270,9 +346,9 @@
 			Document document = reader.read(new URL(sDoc));
 			Element root = document.getRootElement();
 			out.println("<tr><td class='mobileadmin' style='font-size:6vw;' colspan='"+(cols*2)+"'>"+getLabel(root,sWebLanguage)+"</td></tr>");
-			out.println("<tr><td class='mobileadmin' style='font-size:6vw;' colspan='"+(cols*2)+"'><img src='"+sCONTEXTPATH+"/_img/icons/mobile/knowledge.png' onclick='document.getElementById(\"sptaction\").value=\"spt\";transactionForm.submit();'/>&nbsp;&nbsp;&nbsp;&nbsp;<img src='"+sCONTEXTPATH+"/_img/icons/mobile/delete.png' onclick='document.getElementById(\"sptaction\").value=\"reset\";transactionForm.submit();'/></td></tr>");
-			out.println("<tr><td class='mobileadmin' colspan='"+(cols)+"'><select style='font-size:6vw;' name='age' onchange='document.getElementById(\"sptaction\").value=\"patient\";transactionForm.submit();'><option style='font-size:6vw;' value='1' "+(age==1?"selected":"")+"><12m</option><option style='font-size:6vw;' value='24' "+(age==24?"selected":"")+">12m-60m</option><option style='font-size:6vw;' value='120' "+(age==120?"selected":"")+">5-15y</option><option style='font-size:6vw;' value='240' "+(age==240?"selected":"")+">>15y</option></select></td>");
-			out.println("<td class='mobileadmin' colspan='"+(cols)+"'><select style='font-size:6vw;' name='gender' onchange='document.getElementById(\"sptaction\").value=\"patient\";transactionForm.submit();'><option style='font-size:6vw;' value='m' "+(gender.equals("m")?"selected":"")+">M</option><option style='font-size:6vw;' value='f' "+(gender.equals("f")?"selected":"")+">F</option></select></td></tr>");
+			//out.println("<tr><td class='mobileadmin' style='font-size:6vw;' colspan='"+(cols*2)+"'><img src='"+sCONTEXTPATH+"/_img/icons/mobile/knowledge.png' onclick='document.getElementById(\"sptaction\").value=\"spt\";transactionForm.submit();'/>&nbsp;&nbsp;&nbsp;&nbsp;<img src='"+sCONTEXTPATH+"/_img/icons/mobile/delete.png' onclick='document.getElementById(\"sptaction\").value=\"reset\";transactionForm.submit();'/></td></tr>");
+			out.println("<tr><td class='mobileadmin' colspan='"+(cols)+"'><select style='font-size:6vw;' name='age' onchange='document.getElementById(\"sptaction\").value=\"patient\";transactionForm.submit();'><option style='font-size:6vw;' value='1' "+(age==1?"selected":"")+"><12m</option><option style='font-size:6vw;' value='24' "+(age==24?"selected":"")+">12m-60m</option><option style='font-size:6vw;' value='120' "+(age==120?"selected":"")+">5-12y</option><option style='font-size:6vw;' value='240' "+(age==240?"selected":"")+">>=12y</option></select></td>");
+			out.println("<td class='mobileadmin' colspan='"+(cols)+"'><select style='font-size:6vw;' name='gender' onchange='document.getElementById(\"sptaction\").value=\"patient\";transactionForm.submit();'><option style='font-size:6vw;' value='m' "+(gender.equalsIgnoreCase("m")?"selected":"")+">M</option><option style='font-size:6vw;' value='f' "+(gender.equalsIgnoreCase("f")?"selected":"")+">F</option></select></td></tr>");
 			Element complaints = root.element("complaints");
 			if(complaints!=null){
 				Iterator sections = complaints.elementIterator("section");
@@ -283,14 +359,21 @@
 					int counter=0;
 					while(concepts.hasNext()){
 						Element concept = (Element)concepts.next();
-						if(counter % cols ==0){
-							out.println("<tr valign='top'>");
-						}
 						if(checkArguments(concept, signs)){
-							out.println("<td width='1%'><input style='transform: scale(1.5);' name='concept."+concept.attributeValue("id")+"' type='checkbox' value='"+concept.attributeValue("value")+"' "+(checkString((String)sptSigns.get(concept.attributeValue("id"))).equalsIgnoreCase(concept.attributeValue("value"))?"checked":"")+"/></td><td width='"+(100/cols-1)+"%' style='font-size:5vw;'>"+getLabel(concept,sWebLanguage)+"</td>");
+							if(counter % cols ==0){
+								out.println("<tr valign='top'>");
+							}
+							if(checkString((String)sptSigns.get(concept.attributeValue("id"))).equalsIgnoreCase(concept.attributeValue("value"))){
+								out.println("<td onclick='document.getElementById(\"doreset\").value=\"\";document.getElementById(\"selectedconcept\").value=\""+concept.attributeValue("value")+"\";document.getElementById(\"selectedconcept\").name=\"concept."+concept.attributeValue("id")+"\";document.getElementById(\"sptaction\").value=\"spt\";transactionForm.submit();' style='text-align: center;vertical-align: middle;background-color: #004369;font-size:5vw;padding: 15px;color: yellow;font-weight: bolder' colspan='2' width='50%'>"+getLabel(concept,sWebLanguage)+"</td>");
+							}
+							else{
+								out.println("<td onclick='document.getElementById(\"doreset\").value=\"reset\";document.getElementById(\"selectedconcept\").value=\""+concept.attributeValue("value")+"\";document.getElementById(\"selectedconcept\").name=\"concept."+concept.attributeValue("id")+"\";document.getElementById(\"sptaction\").value=\"spt\";transactionForm.submit();' style='text-align: center;vertical-align: middle;background-color: #004369;font-size:5vw;padding: 15px;color: #C3D9FF' colspan='2' width='50%'>"+getLabel(concept,sWebLanguage)+"</td>");
+							}
+							//out.println("<td width='1%'><input style='transform: scale(1.5);' name='concept."+concept.attributeValue("id")+"' type='checkbox' value='"+concept.attributeValue("value")+"' "+(checkString((String)sptSigns.get(concept.attributeValue("id"))).equalsIgnoreCase(concept.attributeValue("value"))?"checked":"")+"/></td><td width='"+(100/cols-1)+"%' style='font-size:5vw;'>"+getLabel(concept,sWebLanguage)+"</td>");
 						}
 						else{
-							out.println("<td width='1%'><input style='transform: scale(1.5);' disabled type='checkbox'/></td><td width='"+(100/cols-1)+"%' style='font-size:5vw;color: lightgrey'>"+getLabel(concept,sWebLanguage)+"</td>");
+							continue;
+							//out.println("<td width='1%'><input style='transform: scale(1.5);' disabled type='checkbox'/></td><td width='"+(100/cols-1)+"%' style='font-size:5vw;color: lightgrey'>"+getLabel(concept,sWebLanguage)+"</td>");
 						}
 						if(counter % cols ==cols-1){
 							out.println("</tr>");
@@ -304,6 +387,12 @@
 			}
 		%>
 			</table>
+			<input id='selectedconcept' type='hidden'/>
+			<input id='doreset' name='doreset' type='hidden'/>
 		</form>	
 	</body>
 </html>
+
+<script>
+document.getElementById("toptable").scrollIntoView();
+</script>

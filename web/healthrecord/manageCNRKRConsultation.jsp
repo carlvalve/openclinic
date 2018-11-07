@@ -85,13 +85,16 @@
             <td><%ScreenHelper.setIncludePage(customerInclude("healthrecord/manageCNRKRConsultationCongenital.jsp"),pageContext);%></td>
         </tr>
     </table>
-
+    
     <%-- BUTTONS --%>
     <%=ScreenHelper.alignButtonsStart()%>
         <%=getButtonsHtml(request,activeUser,activePatient,"cnrkr.consultation",sWebLanguage)%>     
     <%=ScreenHelper.alignButtonsStop()%>
 
     <%=ScreenHelper.contextFooter(request)%>
+    <table width='100%' cellspacinf='0'>
+    	<tr><td><center><img height='80px' src='<c:url value="/_img/apefepartners.png"/>'/></center></td></tr>
+    </table>
 </form>
 
 <script>

@@ -100,13 +100,23 @@
         <tr>
             <td class="admin"></td>
             <td class="admin2">
-                <input type='button' name='view' value='<%=getTran(null,"web","view",sWebLanguage)%>' onclick="viewstudy()"/>
+				<%	if(MedwanQuery.getInstance().getConfigInt("enableRemoteWeasis", 1)==1){ %>
+		                <input type='button' name='view' value='<%=getTranNoLink("web","view",sWebLanguage)%>' onclick="viewstudy()"/>
+				<%
+					}
+					if(MedwanQuery.getInstance().getConfigInt("enableLocalWeasis", 0)==1){
+				%>
+		                <input type='button' name='view' value='<%=getTranNoLink("web","viewlocal",sWebLanguage)%>' onclick="viewstudylocal()"/>
+				<%
+					}
+				%>
             </td>
         </tr>
         
     </table>
 
 </form>
+<IFRAME style="display:none" name="hidden-form"></IFRAME>
 
 <script>  
   
@@ -123,7 +133,12 @@
   
   function viewstudy(){
       var url = "<c:url value='/pacs/viewStudy.jsp'/>?studyuid=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYUID" property="value"/>&seriesid=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_SERIESID" property="value"/>";
-      window.open(url);
+      window.open(url,"hidden-form");
+  }
+
+  function viewstudylocal(){
+      var url = "<c:url value='/pacs/viewStudyLocal.jsp'/>?studyuid=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYUID" property="value"/>&seriesid=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_SERIESID" property="value"/>";
+      window.open(url,"hidden-form");
   }
 
 </script>

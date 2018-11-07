@@ -21,6 +21,7 @@
         String sEditExtraInsurarUID2 = checkString(request.getParameter("EditExtraInsurarUID2"));
         String sEditCareProvider = checkString(request.getParameter("EditCareProvider"));
         String sEditServiceUid = checkString(request.getParameter("EditServiceUid"));
+        String sEditDiagnosis = checkString(request.getParameter("EditDiagnosis"));
         String sEditExtraInsurarAmount="",sEditExtraInsurarAmount2="";
 		boolean bSuccess=true;
 		Vector debets = new Vector();
@@ -51,7 +52,7 @@
 		        if(sEditQuantity.length()==0){
 		            sEditQuantity="1";
 		        }
-		        debet.setQuantity(Integer.parseInt(sEditQuantity));
+		        debet.setQuantity(Double.parseDouble(sEditQuantity));
 		
 		        debet.setCredited(Integer.parseInt(sEditCredit));
 		        debet.setDate(ScreenHelper.getSQLDate(sEditDate));
@@ -62,6 +63,7 @@
 		        debet.setServiceUid(debet.determineServiceUidWithoutEncounterValidation(sEditServiceUid));
 		        debet.setEncounterUid(sEditEncounterUID);
 		        debet.setSupplierUid(sEditSupplierUID);
+		        debet.setDiagnosisUid(sEditDiagnosis);
 		        debet.setUid(sEditDebetUID);
 		        debet.setUpdateDateTime(ScreenHelper.getSQLDate(getDate()));
 		        debet.setUpdateUser(activeUser.userid);

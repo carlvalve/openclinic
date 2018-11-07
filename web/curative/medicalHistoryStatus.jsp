@@ -267,7 +267,7 @@ try{
                                                                                 <%=getTran(request,"web.occup",transactionType,sWebLanguage)%>
                                                                                 <%
 	                                                                                String sSeriesID = transactionVO.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_SERIESID");
-	                                                                                String sDescription = transactionVO.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYDESCRIPTION")+" "+transactionVO.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_MODALITY");
+	                                                                                String sDescription = "<b>"+transactionVO.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYDESCRIPTION")+"</b> "+transactionVO.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_MODALITY");
                                                                                     %>(<%=sSeriesID%> - <%=sDescription %>)<%
                                                                                 %>
                                                                             </a>
@@ -282,6 +282,20 @@ try{
 	                                                                                String type = transactionVO.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNRKR_KINE_CARDTYPE");
                                                                                 	if(type.length()>0){
 	                                                                                    %> [<%=getTranNoLink("cardtype",type,sWebLanguage)%>]<%
+                                                                                	}
+                                                                                %>
+                                                                            </a>
+                                                                        <%
+                                                                    }
+                                                                    else if(transactionType.equalsIgnoreCase("be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_PEDIATRIC_TRIAGE")){
+                                                                    	transactionVO.preload();
+                                                                        %>
+                                                                            <a href="<c:url value='/healthrecord/editTransaction.do'/>?be.mxs.healthrecord.createTransaction.transactionType=<%=transactionType%>&be.mxs.healthrecord.transaction_id=<%=transactionVO.getTransactionId()%>&be.mxs.healthrecord.server_id=<%=transactionVO.getServerId()%>&ts=<%=getTs()%>" onMouseOver="window.status='';return true;">
+                                                                                <%=getTran(request,"web.occup",transactionType,sWebLanguage)%>
+                                                                                <%
+	                                                                                String type = transactionVO.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRIAGE_PRIORITY");
+                                                                                	if(type.length()>0){
+	                                                                                    %> [<b><%=getTran(request,"triage","priority",sWebLanguage)+" "+type%></b>]<%
                                                                                 	}
                                                                                 %>
                                                                             </a>

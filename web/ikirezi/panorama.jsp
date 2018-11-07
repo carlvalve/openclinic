@@ -479,7 +479,7 @@ try{
 
 		//Ikirezi interface
 		//Make Ikirezi call
-		HashSet diseases = new HashSet();
+		SortedSet diseases = new TreeSet();
 		Vector resp = new Vector();
 		resp = Ikirezi.getDiagnoses(vSigns,sWebLanguage);
 		System.out.println(new SimpleDateFormat("HH:mm:ss:SSS").format(new java.util.Date())+"5.0");
@@ -508,7 +508,6 @@ try{
 		while(i.hasNext()){
 			String d = (String)i.next();
 			//Calculate diagnostic completeness
-		System.out.println(new SimpleDateFormat("HH:mm:ss:SSS").format(new java.util.Date())+"7");
 			double nConfirm=0,nExclude=0,nConfirmed=0,nExcluded=0,nTotal=0;
 			for(int q=0;q<resp.size();q++){
 				Vector v = (Vector)resp.elementAt(q);
@@ -547,8 +546,8 @@ try{
 		document.getElementById("ikirezi").height=window.innerHeight-20;
 		document.getElementById("ikirezi").width=window.innerWidth-20;
 		var POINTS = <%=diseases.size()%>;
-		if(POINTS>10){
-			POINTS=10;
+		if(POINTS><%=MedwanQuery.getInstance().getConfigInt("maximumIkireziPanoramaDiagnoses",20)%>){
+			POINTS=<%=MedwanQuery.getInstance().getConfigInt("maximumIkireziPanoramaDiagnoses",20)%>;
 		}
 		var radius = 200;
 		var boxWidth=80/zoom;

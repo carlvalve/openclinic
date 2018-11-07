@@ -6,7 +6,7 @@
 <%
 	String sPageContent = "";
 	HttpClient client = new HttpClient();
-	String url = MedwanQuery.getInstance().getConfigString("detectFingerPrintReader.jsp","http://localhost/openclinic/_common/dp/detectFingerPrintReaderRemote.jsp");
+	String url = MedwanQuery.getInstance().getConfigString("detectFingerPrintReader.jsp","http://localhost/openclinic/_common/dp/detectFingerPrintReaderSecugen.jsp");
 	GetMethod method = new GetMethod(url);
 	client.executeMethod(method);
 	out.print(method.getResponseBodyAsString());

@@ -1,3 +1,4 @@
+<%@page import="be.openclinic.medical.Diagnosis"%>
 <%@page import="java.text.SimpleDateFormat,
                 be.openclinic.pharmacy.Product,
                 be.openclinic.medical.Prescription,
@@ -214,6 +215,7 @@
            sEditSupplyingServiceUid = checkString(request.getParameter("EditSupplyingServiceUid")),
            sEditServiceStockUid     = checkString(request.getParameter("EditServiceStockUid")),
            sEditAuthorization       = checkString(request.getParameter("EditAuthorization")),
+           sEditDiagnosis       = checkString(request.getParameter("EditDiagnosis")),
            sDispensingStockUID  = checkString(request.getParameter("DispensingStockUID")),
            sEditRequiredPackages    = checkString(request.getParameter("EditRequiredPackages"));
     
@@ -283,6 +285,7 @@
         Debug.println("sEditProductName          : "+sEditProductName);
         Debug.println("sEditSupplyingServiceName : "+sEditSupplyingServiceName);
         Debug.println("sEditAuthorization        : "+sEditAuthorization);
+        Debug.println("sEditDiagnosis            : "+sEditDiagnosis);
         Debug.println("sEditRequiredPackages     : "+sEditRequiredPackages+"\n");
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -292,7 +295,7 @@
            sSelectedUnitsPerTimeUnit = "", sSelectedSupplyingServiceUid = "", sSelectedProductUnit = "",
            sSelectedPrescriberFullName = "", sSelectedProductName = "", sSelectedSupplyingServiceName = "",
            sSelectedServiceStockUid = "", sSelectedServiceStockName = "", sSelectedRequiredPackages = "",
-           sSelectedAuthorization="";
+           sSelectedAuthorization="",sSelectedDiagnosis="";
 
     // variables
     int foundPrescrCount;
@@ -316,6 +319,8 @@
         prescr.setProductUid(sEditProductUid);
         prescr.setTimeUnit(sEditTimeUnit);
         prescr.setAuthorization(sEditAuthorization);
+        prescr.setDiagnosisUid(sEditDiagnosis);
+        
         if(sEditDateBegin.length() > 0) prescr.setBegin(ScreenHelper.parseDate(sEditDateBegin));
         if(sEditDateEnd.length() > 0) prescr.setEnd(ScreenHelper.parseDate(sEditDateEnd));
         if(sEditTimeUnitCount.length() > 0) prescr.setTimeUnitCount(Integer.parseInt(sEditTimeUnitCount));
@@ -448,6 +453,7 @@
                 sSelectedRequiredPackages = prescr.getRequiredPackages()+"";
                 sSelectedPrescriberUid = prescr.getPrescriberUid();
                 sSelectedAuthorization = checkString(prescr.getAuthorization());
+                sSelectedDiagnosis = checkString(prescr.getDiagnosisUid());
 
                 // afgeleide data
 	          	Connection ad_conn = MedwanQuery.getInstance().getAdminConnection();
@@ -494,6 +500,7 @@
             sSelectedServiceStockUid = sEditServiceStockUid;
             sSelectedRequiredPackages = sEditRequiredPackages;
             sSelectedAuthorization = sEditAuthorization;
+            sSelectedDiagnosis = sEditDiagnosis;
 
             // afgeleide data
             sSelectedPrescriberFullName = sEditPrescriberFullName;
@@ -676,6 +683,26 @@
     <td class="admin" nowrap><%=getTran(request,"Web","authorizedreceiver",sWebLanguage)%>&nbsp;</td>
     <td class="admin2">
         <input class="text" type="text" name="EditAuthorization" size="<%=sTextWidth%>" value="<%=sSelectedAuthorization%>">
+    </td>
+</tr>
+
+<%-- Diagnosis --%>
+<tr>
+    <td class="admin" nowrap><%=getTran(request,"Web","indication",sWebLanguage)%>&nbsp;</td>
+    <td class="admin2">
+    	<select class='text' name='EditDiagnosis' id='EditDiagnosis'>
+    		<option/>
+    		<%
+    			Encounter encounter = Encounter.getActiveEncounter(activePatient.personid);
+    			if(encounter!=null && encounter.hasValidUid()){
+    				Vector diagnoses = Diagnosis.selectDiagnoses("", "", encounter.getUid(), "", "", "", "", "", "", "", "", "icd10", "OC_DIAGNOSIS_GRAVITY DESC");
+    				for(int n=0;n<diagnoses.size();n++){
+    					Diagnosis diagnosis = (Diagnosis)diagnoses.elementAt(n);
+    					out.println("<option "+(diagnosis.getUid().equalsIgnoreCase(sSelectedDiagnosis)?"selected":"")+" value='"+diagnosis.getUid()+"'>"+diagnosis.getCode()+" - "+diagnosis.getLabel(sWebLanguage)+"</option>");
+    				}
+    			}
+    		%>
+    	</select>
     </td>
 </tr>
 
@@ -867,12 +894,14 @@ function calculateEndDate(){
 	    calculatePackagesNeeded();
 	}
 }
+</script>
+<script>
+
 <%-- CALCULATE PACKAGES NEEDED --%>
 function calculatePackagesNeeded(displayAlert){
-  if(transactionForm.UnitsPerPackage.value.length > 0 && transactionForm.UnitsPerPackage.value!="0"){
+	if(transactionForm.UnitsPerPackage.value.length > 0 && transactionForm.UnitsPerPackage.value!="0"){
     var dateBegin = transactionForm.EditDateBegin.value,
         dateEnd   = transactionForm.EditDateEnd.value;
-
     if(dateBegin.length > 0 && dateEnd.length > 0){
       if(!isEndDateBeforeBeginDate()){
         var unitsPerPackage = transactionForm.UnitsPerPackage.value;
@@ -926,7 +955,8 @@ function calculatePackagesNeeded(displayAlert){
   }
   calculateNumberOfDays();
 }
-
+</script>
+<script>
 <%-- DISPLAY "END BEFORE BEGIN" ALERT --%>
 function displayEndBeforeBeginAlert(){
   if(transactionForm.EditDateEnd.value.length > 0){
@@ -1572,6 +1602,7 @@ function doBack(){
 	        document.getElementById("EditRequiredPackages").value=product.totalunits;
 	        document.getElementById("EditPrescriberUid").value=product.prescriberuid;
 	        document.getElementById("EditPrescriberFullName").value=product.prescribername;
+	        document.getElementById("EditDiagnosis").value=product.diagnosis;
 	        document.getElementById("productmsg").innerHTML='';
 	        if(product.levels.indexOf("0/")==0){
 	        	document.getElementById("productmsg").innerHTML=document.getElementById("productmsg").innerHTML+"<br/><img src='<c:url value="/"/>_img/icons/icon_warning.gif'/><%=getTran(request,"web","nodistributionstock",sWebLanguage)%>";

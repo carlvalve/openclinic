@@ -30,7 +30,7 @@
 	<body>
 		<form name='transactionForm' method='post'>
 			<input type='hidden' name='formaction' id='formaction'/>
-			<table width='100%'>
+			<table width='100%' cellpadding='0' cellspacing='0'>
 			<%
 			
 			%>
@@ -98,14 +98,14 @@
 									out.println("<td style='text-align: center;font-size: 6vw;'><img src='"+sCONTEXTPATH+"/_img/icons/mobile/right.png' onclick='loadImage(document.getElementById(\"skipImages\").value*1+1);'/></td>");
 									out.println("</tr>");
 									if(total>1){
-										out.println("<tr><td colspan='2' class='mobileadmin2'><center><input style='width: 80%' id='skipImages' type='range' min='0' max='"+(total-1)+"' step='1' value='"+(skipImages)+"' onmouseup='loadImage(this.value*1);' ontouchend='loadImage(this.value*1);'/></center></td><td><img id='playimage' src='"+sCONTEXTPATH+"/_img/icons/mobile/play.png' onclick='activeimage=document.getElementById(\"skipImages\").value;togglePlay();'/></td></tr>");
+										out.println("<tr><td class='mobileadmin2'><center><input style='width: 80%' id='skipImages' type='range' min='0' max='"+(total-1)+"' step='1' value='"+(skipImages)+"' onmouseup='loadImage(this.value*1);' ontouchend='loadImage(this.value*1);'/></center></td><td><img id='playimage' src='"+sCONTEXTPATH+"/_img/icons/mobile/play.png' onclick='activeimage=document.getElementById(\"skipImages\").value;togglePlay();'/></td></tr>");
 									}
 									out.println("</table></td></tr>");
 									out.println("<tr>");
 									out.println("<td colspan='2' style='text-align: center;'><img id='imagetag' style='max-width: 100%' src='"+sCONTEXTPATH+"/documents/"+filename+"'/></td>");
 									out.println("</tr>");
 									out.println("<tr>");
-									out.println("<td colspan='2' class='mobileadmin2' style='text-align: left;font-size: 4vw'>"+getTran(request,"web","studyuid",sWebLanguage)+": "+rs.getString("OC_PACS_STUDYUID")+"</td>");
+									out.println("<td colspan='2' class='mobileadmin2' style='text-align: left;font-size: 3vw'>"+getTran(request,"web","studyuid",sWebLanguage)+": "+rs.getString("OC_PACS_STUDYUID")+"</td>");
 									out.println("</tr>");
 								}
 							}

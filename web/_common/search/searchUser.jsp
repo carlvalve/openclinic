@@ -31,7 +31,7 @@
     <table width="100%" cellspacing="0" cellpadding="0" class="menu">
         <tr height="25">
             <%-- lastname --%>
-            <td class="admin2"><%=getTran(request,"Web","name",sWebLanguage)%>&nbsp;</td>
+            <td class="admin2"><%=getTran(request,"Web","lastname",sWebLanguage)%>&nbsp;</td>
             <td class="admin2">
                 <input type="text" class="text" name="FindLastname" id="FindLastname" size="28" maxLength="255" value="<%=sFindLastname%>" >
             </td>

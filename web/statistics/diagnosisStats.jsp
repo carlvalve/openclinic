@@ -261,7 +261,7 @@
                     </tr>
                     <%
             		System.out.println(6);
-                        if(true || !diagnosisStats.equals(mainStats)){
+                        if(!diagnosisStats.equals(mainStats)){
                     %>
                         <tr>
                             <td colspan="4">
@@ -343,17 +343,22 @@
                         </a>
                     </td>
                     <%
+                	int dead = 0;
+                	try{
+                		dead=diagnosisStats.getDiagnosisDead();
+                	}
+                	catch(Exception e){e.printStackTrace();};
                         if(!diagnosisStats.equals(mainStats)){
                             %>
                             <td><%=deciComma.format(new Double(diagnosisStats.getDiagnosisAllCases()).doubleValue()*100.0/diagnosisStats.getTotalContacts())%>%</td>
                             <td><%=(contacttype.equalsIgnoreCase("visit")?"</td><td>":diagnosisStats.getDiagnosisTotalDuration()+"</td><td>"+deciComma.format(new Double(diagnosisStats.getDiagnosisTotalDuration().intValue()).doubleValue()*100.0/diagnosisStats.getTotalDuration()))%>%</td>
-                            <td><%=(contacttype.equalsIgnoreCase("visit")?"</td><td>":diagnosisStats.getDiagnosisDead()+"</td><td>"+deciComma.format(new Double(diagnosisStats.getDiagnosisDead().intValue()).doubleValue()*100.0/diagnosisStats.getDiagnosisAllCases())+"%</td><td>"+deciComma.format(new Double(diagnosisStats.getDiagnosisDead().intValue()).doubleValue()*100.0/totalDead))%>%</td>
+                            <td><%=(contacttype.equalsIgnoreCase("visit")?"</td><td>":dead+"</td><td>"+deciComma.format(new Double(dead).doubleValue()*100.0/diagnosisStats.getDiagnosisAllCases())+"%</td><td>"+deciComma.format(new Double(dead).doubleValue()*100.0/totalDead))%>%</td>
                             <%
                         }
                         else{
                             %>
                             <td colspan="3"></td>
-                            <td><%=(contacttype.equalsIgnoreCase("visit")?"":diagnosisStats.getDiagnosisDead()+"</td><td>"+deciComma.format(new Double(diagnosisStats.getDiagnosisDead().intValue()).doubleValue()*100.0/diagnosisStats.getDiagnosisAllCases()) )%>%</td>
+                            <td><%=(contacttype.equalsIgnoreCase("visit")?"":dead+"</td><td>"+deciComma.format(new Double(dead).doubleValue()*100.0/diagnosisStats.getDiagnosisAllCases()) )%>%</td>
                             <%
                         }
                     %>

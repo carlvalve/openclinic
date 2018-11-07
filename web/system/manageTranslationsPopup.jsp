@@ -615,7 +615,7 @@
   
   function dotranslate(){
       var today = new Date();
-      var url= '<c:url value="/system/getTranslation.jsp"/>?sourcelanguage=en&targetlanguage='+document.getElementById('EditLabelLang').value+'&labeltype='+document.getElementById('EditLabelType').value+'&labelid='+document.getElementById('EditLabelID').value+'&ts='+today;
+      var url= '<c:url value="/system/getTranslation.jsp"/>?sourcelanguage=<%=MedwanQuery.getInstance().getConfigString("baseTranslationLanguage",sWebLanguage)%>&targetlanguage='+document.getElementById('EditLabelLang').value+'&labeltype='+document.getElementById('EditLabelType').value+'&labelid='+document.getElementById('EditLabelID').value+'&ts='+today;
       new Ajax.Request(url,{
           method: "POST",
           postBody: "",

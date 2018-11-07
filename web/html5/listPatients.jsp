@@ -51,9 +51,10 @@
 					Iterator iPatients = patients.iterator();
 					while(iPatients.hasNext() && n<20){
 						AdminPerson person = (AdminPerson)iPatients.next();
-						out.println("<tr onclick='window.location.href=\"getPatient.jsp?searchpersonid="+person.personid+"\"'>");
-						out.println("<td class='mobileadmin2' style='font-size:6vw'>"+person.personid+"</td>");
-						out.println("<td class='mobileadmin2' style='font-size:6vw'>"+person.getFullName().toUpperCase()+"</td>");
+						String[] s = AdminPrivateContact.getPrivateDetails(person.personid, new String[10]);
+						out.println("<tr>");
+						out.println("<td class='mobileadmin2' style='font-size:6vw'>"+person.personid+"<br/><img onclick='window.location.href=\"../html5/editPatient.jsp?personid="+person.personid+"\"' src='"+sCONTEXTPATH+"/_img/icons/mobile/edit.png'/></td>");
+						out.println("<td onclick='window.location.href=\"getPatient.jsp?searchpersonid="+person.personid+"\"' class='mobileadmin2' style='font-size:6vw'>"+person.getFullName().toUpperCase()+"<span style='font-size: 4vw'><br/>"+person.dateOfBirth+"&nbsp;&nbsp;"+checkString(s[3])+"</span></td>");
 						out.println("</tr>");
 						n++;
 					}

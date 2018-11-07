@@ -1,4 +1,11 @@
 <%@include file="/includes/validateUser.jsp"%>
+<%
+	//Clear fingerprint call id
+	session.setAttribute("fingerprintid", "");
+	session.setAttribute("fingerprintimage", "");
+	session.removeAttribute("fingerprintjpg");
+	MedwanQuery.setSession(session,new User());
+%>
 
 <form name="frmEnrollFingerPrint" method="post">
     <%=writeTableHeader("web","enrollFingerPrint",sWebLanguage)%>
@@ -21,7 +28,7 @@
     </table>
     
     <%=ScreenHelper.alignButtonsStart()%>
-        <input type="button" class="button" name="enrollButton" value="<%=getTranNoLink("web","read",sWebLanguage)%>" onclick="doRead()"/>
+        <input type="button" class="button" name="enrollButton" value="<%=getTranNoLink("web","read",sWebLanguage)%>" onclick="doRead(true)"/>
         <input type="button" class="button" name="buttonClose" value="<%=getTranNoLink("web","close",sWebLanguage)%>" onclick="window.close()"/>
     <%=ScreenHelper.alignButtonsStop()%>
     
@@ -48,21 +55,25 @@
     </table>
     <br>
 </form>
+<IFRAME style="display:none" name="hidden-form"></IFRAME>
 
 <script>
 	
-	var ncounter;
+	var ncounter=0;
 	
-	function doRead(){
-		countAttempts(0);
-		ncounter=0;
+	function doRead(bInit){
+		if(bInit){
+		    window.open("<%=sCONTEXTPATH%>/util/startFingerPrintReader.jsp","hidden-form");
+			ncounter=0;
+		}
+		ncounter++;
 		document.getElementById("clock").innerHTML="<img src='<%=sCONTEXTPATH%>/_img/themes/default/ajax-loader.gif'/>";
 		var r = 'L';
-	      if(document.getElementById('righthand').checked){
+	    if(document.getElementById('righthand').checked){
 	        r = 'R';
-	      }
+	    }
 	    var parameters= 'rightleft='+r+'&finger='+frmEnrollFingerPrint.finger.value;		
-		var url = '<c:url value="/_common/dp/enrollFingerPrint.jsp"/>?ts='+new Date().getTime();
+		var url = '<c:url value="/_common/dp/enrollFingerPrintSecugen.jsp"/>?init='+bInit+'&ts='+new Date().getTime();
 		new Ajax.Request(url,{
 		  	method: "POST",
 		  	postBody: parameters,
@@ -71,12 +82,16 @@
 			    if(s.success==1){
 				    document.getElementById("clock").innerHTML="";
 			    	document.getElementById('readerID').innerHTML = '<h4><%=getTranNoLink("web","enrollment_succeeded",sWebLanguage)%></h4>';
+			    	document.getElementById('fingerprintImage').src='<%=sCONTEXTPATH%>/util/getActiveFingerprintJpg.jsp';
+			    	window.setTimeout("doDetect()",3000);
 			    }
-			    else{
+			    else if(s.success==0 || ncounter>10){
 				    document.getElementById("clock").innerHTML="";
 			    	document.getElementById('readerID').innerHTML = '<h4><%=getTranNoLink("web","enrollment_failed",sWebLanguage)%></h4>';
 			    }
-			    window.setTimeout("doDetect()",5000);
+			    else{
+			    	window.setTimeout("doRead()",1000);
+			    }
 		  	},
 		  	onFailure: function(){
 		  		alert("error");
@@ -84,61 +99,31 @@
 		});
 	}
 	
-	
-	function countAttempts(n){
-		var parameters= '';
-		if(n>-1){
-			parameters = 'initiate='+n;
-		}
-		document.getElementById("fingerprintImage").src = '<c:url value="/_img/fingerprintImageSmallNoPrint.jpg"/>';
-		var url = '<c:url value="/_common/dp/countEnrollAttempts.jsp"/>?ts='+new Date().getTime();
-		new Ajax.Request(url,{
-		  	method: "POST",
-		  	postBody: parameters,
-		  	onSuccess: function(resp){
-			    var s=eval('('+resp.responseText+')');
-			    if(s.count>-1){
-			    	document.getElementById('readerID').innerHTML = '<%=getTranNoLink("web","enroll.fingerprint",sWebLanguage)%>: <font style="font-size: 20px" color="red">'+s.count+'</font></span>';
-			    	if(s.count>ncounter){
-			    		document.getElementById("fingerprintImage").src = '<c:url value="/_img/fingerprintImageSmall.jpg"/>';
-			    		ncounter=s.count*1;
-			    	}
-			    	window.setTimeout("countAttempts(-1)",1000);          
-			    }
-			    else{
-			    	//doDetect();
-			    }
-		  	},
-		  	onFailure: function(){
-		  		alert("error counting attempts");
-		  	}
-		});
-	}
-	
 	function doDetect(){
-		var parameters= '';
-		var url = '<c:url value="/_common/dp/detectFingerPrintReader.jsp"/>?ts='+new Date().getTime();
+		document.getElementById('fingerprintImage').src="<c:url value="/_img/fingerprintImageSmallNoPrint.jpg"/>";
+		var parameters='';
+		var url = '<c:url value="/_common/dp/detectFingerPrintReaderSecugen.jsp"/>?ts='+new Date().getTime();
 		new Ajax.Request(url,{
 		  	method: "POST",
 		  	postBody: parameters,
 		  	onSuccess: function(resp){
-			    document.getElementById("clock").innerHTML="";
 			    var s=eval('('+resp.responseText+')');
-			    if(s.model!=''){
-			    	document.getElementById('readerID').innerHTML = '<%=getTranNoLink("web","digital.persona.reader.detected",sWebLanguage)%>:<br/><b>'+s.model+"</b>";
+			    if(s.serial!=''){
+			    	document.getElementById('readerID').innerHTML = '<%=getTranNoLink("web","fingerprint.reader.detected","en")%>:<br/><b>'+s.serial+"</b>";
 			    }
 			    else{
-				    document.getElementById('readerID').innerHTML = '<%=getTranNoLink("web","no.reader",sWebLanguage)%>';
-				    window.setTimeout("doDetect()",5000);
+				    document.getElementById('readerID').innerHTML = '<%=getTranNoLink("web","detecting.reader","en")%>';
+				    window.setTimeout("doDetect()",1000);
 			    }
 		  	},
 		  	onFailure: function(){
-			    document.getElementById('readerID').innerHTML = '<%=getTranNoLink("web","no.reader",sWebLanguage)%>';
-			    window.setTimeout("doDetect()",5000);
+			    document.getElementById('readerID').innerHTML = '<%=getTranNoLink("web","detecting.reader","en")%>';
+			    window.setTimeout("doDetect()",1000);
 		  	}
 		});
 	}
 	
+    window.open("<%=sCONTEXTPATH%>/util/initializeFingerPrintReader.jsp","hidden-form");
 	doDetect();
 
 </script>

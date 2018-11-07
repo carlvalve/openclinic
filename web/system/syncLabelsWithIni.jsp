@@ -46,6 +46,18 @@
 
         return iniProps;
     }
+    //--- GET PROPERTY FILE -----------------------------------------------------------------------
+    private void setPropertyFile(Properties iniProps,String sFilename) {
+        FileOutputStream iniOs;
+        // create ini file if they do not exist
+        try {
+            iniOs = new FileOutputStream(sAPPFULLDIR + sFilename);
+            iniProps.store(iniOs, "");
+        }
+        catch (Exception e) {
+            if (Debug.enabled) Debug.println(e.getMessage());
+        }
+    }
 %>
 <%
     String action = checkString(request.getParameter("action"));
@@ -56,6 +68,7 @@
            findLabelID    = checkString(request.getParameter("FindLabelID")),
            findLabelLang  = checkString(request.getParameter("FindLabelLang")),
            findLabelValue = checkString(request.getParameter("FindLabelValue")),
+           findEraseType = checkString(request.getParameter("FindEraseType")),
            findLabelDate  = checkString(request.getParameter("FindLabelDate"));
 
     // what ini-file to use
@@ -194,6 +207,13 @@
         <td class="admin2"><%=excludedLabelTypes%></td>
     </tr>
     
+    <tr>
+        <td class="admin">&nbsp;<%=getTran(request,"Web.Translations","erasetype",sWebLanguage)%></td>
+        <td class="admin2">
+            <input type="text" class="text" name="FindEraseType" value="<%=findEraseType%>" size="<%=sTextWidth%>">&nbsp;&nbsp;
+        </td>
+    </tr>
+
     <%-- BUTTONS --%>
     <tr>
         <td class="admin">&nbsp;</td>
@@ -212,6 +232,34 @@
     String labelValue,
            labelUniqueKey = null,
            updateTime;
+	//First see if we have have to remove types from ini first
+	if(dataDirection.equals("dbToIni")){
+	    Properties iniProps = getPropertyFile(INIFILENAME);
+	    Enumeration e = iniProps.keys();
+	    while(e.hasMoreElements()){
+	        String paramName = (String)e.nextElement();
+			for(int n=0;n<findEraseType.split(",").length;n++){
+				if(paramName.startsWith(findEraseType.split(",")[n]+"$")){
+					iniProps.remove(paramName);
+					System.out.println("resetting "+paramName);
+				}
+	        }
+	    }
+	    setPropertyFile(iniProps, INIFILENAME);
+	    reloadSingleton(session);
+	}
+	else if(dataDirection.equalsIgnoreCase("iniToDb")){
+		for(int n=0;n<findEraseType.split(",").length;n++){
+			loc_conn = MedwanQuery.getInstance().getOpenclinicConnection();
+			ps = loc_conn.prepareStatement("delete from oc_labels where oc_label_type=?");
+			ps.setString(1, findEraseType.split(",")[n]);
+			ps.execute();
+			ps.close();
+			loc_conn.close();
+	    }
+	    reloadSingleton(session);
+	}
+	
 
     //#############################################################################################
     //### INSERT ##################################################################################
@@ -222,6 +270,7 @@
         String insertMsg = getTran(request,"Web","DataIsSaved",sWebLanguage);
 
         if(dataDirection.equals("dbToIni")){
+        	
             // ADD TO INI FILE
             try{
                 FileWriter csvWriter = new FileWriter(sAPPFULLDIR+INIFILENAME,true);
@@ -421,6 +470,7 @@
                 <%
                     int labelCount = 0, invalidLabelCount = 0;
                     Properties iniProps = getPropertyFile(INIFILENAME);
+                    System.out.println("INIFILENAME="+sAPPFULLDIR+INIFILENAME);
 
                     //*** In DB, not in ini (DB TO INI) *******************************************
                     if(dataDirection.equals("dbToIni")){

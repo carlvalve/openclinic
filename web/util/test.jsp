@@ -1,5 +1,4 @@
-<%@ page import="be.mxs.common.util.io.*" %>
-<%@include file="/includes/validateUser.jsp"%>
+<%@page import="be.openclinic.archiving.*"%>
 <%
-	out.println("solar system = "+GoogleTranslate.translate(MedwanQuery.getInstance().getConfigString("googleTranslateKey","AIzaSyAPk18gciaKdwl3Z2rmFSog4ZwBbmfhByg"), "en", "es", "solar system"));
+	DcmSnd.sendTest("OCPX", "production.ccbrt.hnrw.org", 10555, "C:/GoogleDrive/projects/openclinicnew/web/scan/to/B/test.dcm");
 %>

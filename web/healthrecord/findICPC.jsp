@@ -27,7 +27,7 @@ String sEncounterUid = checkString(request.getParameter("EncounterUid"));
         </tr>
     </table>
 </div>
-<%-- End Floating layer --------------------------------------------------------------------------%>
+<%-- End Floating layer ---------------------------------------------------------	-----------------%>
 <form name="icpcForm" method="post" onSubmit="doFind();">
     <table class='menu' width='100%' cellspacing="0">
         <tr>

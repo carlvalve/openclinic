@@ -3,7 +3,7 @@
 
 <%
 	try{
-		org.apache.commons.io.FileUtils.writeStringToFile(new java.io.File("/var/reboot/shutdown.sem"), "ok");
+		org.apache.commons.io.FileUtils.writeStringToFile(new java.io.File(MedwanQuery.getInstance().getConfigString("shutdown.semaphore","/backups/doshutdown")), "ok");
 	}
 	catch(Exception e){
 		e.printStackTrace();

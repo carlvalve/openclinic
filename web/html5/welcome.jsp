@@ -1,3 +1,9 @@
+<%
+if(MedwanQuery.getInstance().getConfigString("mobile.edition","").equalsIgnoreCase("spt")){
+	out.println("<script>window.location.href='welcomespt.jsp';</script>");
+	out.flush();
+}
+%>
 <!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <head>

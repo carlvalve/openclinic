@@ -621,10 +621,12 @@ function addLetsels(){
 }
 
 function isAtLeastOneLetselsFieldFilled(){
-  if(document.getElementById("transactionForm").LetselsDate.value!="") return true;
-  if(document.getElementById("transactionForm").LetselsDescription.value!="") return true;
-  if(document.getElementById("transactionForm").LetselsBI.value!="") return true;
-  return false;
+    <%if(MedwanQuery.getInstance().getConfigInt("enableCCBRT",0)==0){ %>
+	  if(document.getElementById("transactionForm").LetselsDate.value!="") return true;
+	  if(document.getElementById("transactionForm").LetselsDescription.value!="") return true;
+	  if(document.getElementById("transactionForm").LetselsBI.value!="") return true;
+	<%}%>
+	  return false;
 }
 
 function deleteLetsels(rowid){

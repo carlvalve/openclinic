@@ -175,7 +175,7 @@
             
 	<%-- BUTTONS --%>
 	<%=ScreenHelper.alignButtonsStart()%>
-	    <%=getButtonsHtml(request,activeUser,activePatient,"occup.ccbrt.eyeregistry",sWebLanguage)%>
+	    <%=getButtonsHtml(request,activeUser,activePatient,"occup.ccbrt.ophtalmologyConsultation",sWebLanguage)%>
 	<%=ScreenHelper.alignButtonsStop()%>
 	
     <%=ScreenHelper.contextFooter(request)%>

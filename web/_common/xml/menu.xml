@@ -81,6 +81,10 @@
 			<Menu labelid="insurarCreditEdit" accessrights="financial.insurarcreditedit.select" url="/main.do?Page=financial/insurarCreditEdit.jsp"/>
 			<Menu labelid="extrainsurarCreditEdit" accessrights="financial.insurarcreditedit.select" url="/main.do?Page=financial/extraInsurarCreditEdit.jsp"/>
 			<Menu accesskey="=" labelid="debetEdit" patientselected="true" accessrights="financial.debet.select" url="/main.do?Page=financial/debetEdit.jsp"/>
+			<Menu labelid="fuaedit" accessrights="financial.fua.edit" enableparameter="enableSIS" >
+				<Menu labelid="patientfua" patientselected="true" enableparameter="enableSIS" accessrights="financial.fua.edit" url="/main.do?Page=financial/fuaEdit.jsp&amp;list=1"/>
+				<Menu labelid="userfua" enableparameter="enableSIS" accessrights="financial.fua.edit" url="/main.do?Page=financial/fuaEdit.jsp&amp;list=2"/>
+			</Menu>
 			<Menu labelid="patientInvoiceEdit" patientselected="true" accessrights="financial.patientinvoice.edit" url="/main.do?Page=financial/patientInvoiceEdit.jsp"/>
 			<Menu labelid="consolidatedPatientInvoiceEdit" patientselected="true" accessrights="financial.consolidatedpatientinvoice.edit" url="/main.do?Page=financial/manageSummaryInvoices.jsp"/>
 			<Menu labelid="insuranceInvoiceEdit" accessrights="financial.insuranceinvoice.edit" url="/main.do?Page=financial/insuranceInvoiceEdit.jsp"/>
