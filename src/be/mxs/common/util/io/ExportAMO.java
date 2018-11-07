@@ -102,7 +102,8 @@ public class ExportAMO {
 			
 
 			boolean hasdata = false;
-			int totalprice=0,totalamo=0,countdebets=0,price,amo,quantity;
+			int totalprice=0,totalamo=0,countdebets=0,price,amo;
+			double quantity;
 			String personid="";
 			java.util.Date debetdate;
 			while(rs.next()){
@@ -119,7 +120,7 @@ public class ExportAMO {
 				totalprice+=price;
 				amo=rs.getInt("oc_debet_insuraramount");
 				totalamo+=amo;
-				quantity=rs.getInt("oc_debet_quantity");
+				quantity=rs.getDouble("oc_debet_quantity");
 				countdebets+=quantity;
 				personid=rs.getString("oc_encounter_patientuid");
 				debetdate=rs.getDate("oc_debet_date");

@@ -125,6 +125,19 @@ public class AdminPerson extends OC_Object{
         checkArchiveFileCode = false;
     }
     
+    public String getLastnameFather(){
+    	return lastname.replaceAll(ScreenHelper.checkString(middlename), "").trim();
+    }
+    
+    public String getLastnameMother(){
+    	return ScreenHelper.checkString(middlename).trim();
+    }
+    
+    public void setLastnames(String lastnamefather, String lastnamemother){
+    	lastname = lastnamefather+" "+lastnamemother;
+    	middlename = lastnamemother;
+    }
+    
     private String xe(String s){
     	return HTMLEntities.xmlencode(ScreenHelper.checkString(s));
     }
@@ -1122,7 +1135,7 @@ public class AdminPerson extends OC_Object{
                     hSelect.put(" comment3 = ? ",this.comment3);
                     hSelect.put(" comment4 = ? ",this.comment4);
                     hSelect.put(" comment5 = ? ",this.comment5);
-                    hSelect.put(" middlename = ? ",sMiddlename);
+                    hSelect.put(" middlename = ? ",this.middlename);
                     hSelect.put(" enddate = ? ",this.end);
                     hSelect.put(" begindate = ? ",this.begin);
 

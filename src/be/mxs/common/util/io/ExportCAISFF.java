@@ -124,7 +124,7 @@ public class ExportCAISFF {
 		    			debet.patientAmount=rs2.getDouble("OC_DEBET_AMOUNT");
 		    			debet.prestationCode=rs2.getString("OC_PRESTATION_CODE");
 		    			debet.prestationName=rs2.getString("OC_PRESTATION_DESCRIPTION");
-		    			debet.quantity=rs2.getInt("OC_DEBET_QUANTITY");
+		    			debet.quantity=rs2.getDouble("OC_DEBET_QUANTITY");
 		    			debet.uid=rs2.getString("OC_DEBET_OBJECTID");
 		    			debet.date=rs2.getDate("OC_DEBET_DATE");
 		    			debets.add(debet);

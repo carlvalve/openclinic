@@ -183,6 +183,41 @@ public class Dcm2Jpg {
             } else {
                 encodeByImageIO(bi, dest);
             }
+        }
+        catch(Exception e){
+        	e.printStackTrace();
+        } finally {
+            CloseUtils.safeClose(iis);
+        }
+    }
+    
+    public void convert(File src, ServletOutputStream dest, ImageReader reader) throws IOException {
+        DicomImageReadParam param = 
+            (DicomImageReadParam) reader.getDefaultReadParam();
+        param.setWindowCenter(center);
+        param.setWindowWidth(width);
+        param.setVoiLutFunction(vlutFct);
+        param.setPresentationState(prState);
+        param.setPValue2Gray(pval2gray);
+        param.setAutoWindowing(autoWindowing);
+        ImageInputStream iis = ImageIO.createImageInputStream(src);
+        BufferedImage bi;  
+        try {
+            reader.setInput(iis, false);
+            bi = reader.read(frame - 1, param);
+            if (bi == null) {
+                System.out.println("\nError: " + src + " - couldn't read!");
+                return;
+            }
+            imageWriterClassname="*";
+            if (imageWriterClassname == null) {
+                encodeByJPEGEncoder(bi, dest);
+            } else {
+                encodeByImageIO(bi, dest);
+            }
+        }
+        catch(Exception e){
+        	e.printStackTrace();
         } finally {
             CloseUtils.safeClose(iis);
         }
@@ -204,7 +239,7 @@ public class Dcm2Jpg {
         }
     }
 
-    private void encodeByJPEGEncoder(BufferedImage bi, ServletOutputStream dest) throws ImageFormatException, IOException {
+    private void encodeByJPEGEncoder(BufferedImage bi, ServletOutputStream dest) {
         try {
             JPEGImageEncoder enc = JPEGCodec.createJPEGEncoder(dest);
             if (imageQuality != null) {

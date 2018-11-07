@@ -68,6 +68,47 @@ public class OC_Object {
     }
     
     public boolean hasValidUid(){
-    	return getUid()!=null && getUid().split("\\.").length==2;
+    	return getUid()!=null && getUid().split("\\.").length==2 && getServerId()!=-1 && getObjectId()!=-1;
     }
+    
+    public static boolean isValidUid(String uid){
+    	return uid!=null && uid.split("\\.").length==2 && getServerId(uid)!=-1 && getObjectId(uid)!=-1;
+    }
+    
+    public int getObjectId(){
+    	try{
+    		return Integer.parseInt(uid.split("\\.")[1]);
+    	}
+    	catch(Exception e){
+    		return -1;
+    	}
+    }
+
+    public int getServerId(){
+    	try{
+    		return Integer.parseInt(uid.split("\\.")[0]);
+    	}
+    	catch(Exception e){
+    		return -1;
+    	}
+    }
+    
+    public static int getObjectId(String uid){
+    	try{
+    		return Integer.parseInt(uid.split("\\.")[1]);
+    	}
+    	catch(Exception e){
+    		return -1;
+    	}
+    }
+
+    public static int getServerId(String uid){
+    	try{
+    		return Integer.parseInt(uid.split("\\.")[0]);
+    	}
+    	catch(Exception e){
+    		return -1;
+    	}
+    }
+
 }

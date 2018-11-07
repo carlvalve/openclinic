@@ -687,7 +687,7 @@ public class CoveragePlanInvoice extends Invoice {
                 debet.setInsurarInvoiceUid(rs.getString("OC_DEBET_INSURARINVOICEUID"));
                 debet.setComment(rs.getString("OC_DEBET_COMMENT"));
                 debet.setCredited(rs.getInt("OC_DEBET_CREDITED"));
-                debet.setQuantity(rs.getInt("OC_DEBET_QUANTITY"));
+                debet.setQuantity(rs.getDouble("OC_DEBET_QUANTITY"));
                 debet.setPatientName(rs.getString("lastname")+", "+rs.getString("firstname"));
 
                 //*********************
@@ -801,7 +801,7 @@ public class CoveragePlanInvoice extends Invoice {
                 debet.setInsurarInvoiceUid(rs.getString("OC_DEBET_INSURARINVOICEUID"));
                 debet.setComment(rs.getString("OC_DEBET_COMMENT"));
                 debet.setCredited(rs.getInt("OC_DEBET_CREDITED"));
-                debet.setQuantity(rs.getInt("OC_DEBET_QUANTITY"));
+                debet.setQuantity(rs.getDouble("OC_DEBET_QUANTITY"));
                 debet.setPatientName(rs.getString("lastname")+", "+rs.getString("firstname"));
 
                 //*********************
@@ -916,7 +916,7 @@ public class CoveragePlanInvoice extends Invoice {
                 debet.setInsurarInvoiceUid(rs.getString("OC_DEBET_INSURARINVOICEUID"));
                 debet.setComment(rs.getString("OC_DEBET_COMMENT"));
                 debet.setCredited(rs.getInt("OC_DEBET_CREDITED"));
-                debet.setQuantity(rs.getInt("OC_DEBET_QUANTITY"));
+                debet.setQuantity(rs.getDouble("OC_DEBET_QUANTITY"));
                 debet.setPatientName(rs.getString("lastname")+", "+rs.getString("firstname"));
 
                 //*********************
@@ -1031,7 +1031,7 @@ public class CoveragePlanInvoice extends Invoice {
                 debet.setInsurarInvoiceUid(rs.getString("OC_DEBET_INSURARINVOICEUID"));
                 debet.setComment(rs.getString("OC_DEBET_COMMENT"));
                 debet.setCredited(rs.getInt("OC_DEBET_CREDITED"));
-                debet.setQuantity(rs.getInt("OC_DEBET_QUANTITY"));
+                debet.setQuantity(rs.getDouble("OC_DEBET_QUANTITY"));
                 debet.setPatientName(rs.getString("lastname")+", "+rs.getString("firstname"));
 
                 //*********************

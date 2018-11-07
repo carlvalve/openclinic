@@ -463,6 +463,8 @@ public class ArchiveDocument extends OC_Object implements Comparable {
 	        sSql+= " AND "+MedwanQuery.getInstance().getConfigString("lengthFunction","len")+"(ARCH_DOCUMENT_STORAGENAME) > 0";
 		}
 		
+		System.out.println("sSQL="+sSql);
+		System.out.println("UDI"+sUDI);
 		try{
 			ps = conn.prepareStatement(sSql);
 			ps.setString(1,sUDI);

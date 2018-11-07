@@ -26,4 +26,22 @@ public class SIS {
 		}
 		return r;
 	}
+	
+	public static ResultQueryAsegurado getAffiliationInformationFromDNI(String dni){
+		Service1 service = new Service1();
+		Service1Soap soap = service.getService1Soap();
+		String autorization = soap.getSession(MedwanQuery.getInstance().getConfigString("sis.username","OPENCLINIC"), MedwanQuery.getInstance().getConfigString("sis.password","123456"));
+		try{
+			autorization = Long.parseLong(autorization)+"";
+		}
+		catch(Exception e){
+			autorization="0";
+		}
+		ResultQueryAsegurado r = soap.consultarAfiliadoFuaE(1, autorization, MedwanQuery.getInstance().getConfigString("sis.senderdni","02424160"), "1", dni, "", "", "", "");
+		if(!autorization.equalsIgnoreCase("0")){
+			r.setResultado(autorization);
+		}
+		return r;
+	}
+	
 }

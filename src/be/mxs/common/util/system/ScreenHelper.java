@@ -2355,9 +2355,13 @@ public static String removeAccents(String sTest){
 		return sHTMLValue;
 	}
     //--- WRITE SELECT (SORTED) -------------------------------------------------------------------
-   public static String writeSelect(HttpServletRequest request,String sLabelType, String sSelected,String sWebLanguage){
-       return writeSelect(request,sLabelType,sSelected,sWebLanguage,false,true);
-   }
+	   public static String writeSelect(HttpServletRequest request,String sLabelType, String sSelected,String sWebLanguage){
+	       return writeSelect(request,sLabelType,sSelected,sWebLanguage,false,true);
+	   }
+
+	   public static String writeSelect(HttpServletRequest request,String sLabelType, String sSelected,String sWebLanguage,int maxSize){
+	       return writeSelect(request,sLabelType,sSelected,sWebLanguage,false,true, maxSize);
+	   }
 
    //--- WRITE SELECT (SORTED) -------------------------------------------------------------------
   public static String writeSelectWithStyle(HttpServletRequest request,String sLabelType, String sSelected,String sWebLanguage, String sStyle){
@@ -2514,6 +2518,84 @@ public static String removeAccents(String sTest){
                     }
                     else{
                         sOptions+= ">"+sLabelValue+"</option>";
+                    }
+                }
+            }
+        }
+        if(request!=null && checkString((String)request.getSession().getAttribute("editmode")).equalsIgnoreCase("1")){
+        	String optionUid = sLabelType+"."+new SimpleDateFormat("mmssSSS").format(new java.util.Date());
+        	sOptions+="<option style='display: none' id='"+optionUid+"'>test</option>";
+        	sOptions+="<script>";
+        	sOptions+="myselect=document.getElementById('"+optionUid+"').parentElement;";
+        	sOptions+="myselect.style='border:2px solid black; border-style: dotted';";
+        	sOptions+="myselect.onclick=function(){window.open('"+request.getRequestURI().replaceAll(request.getServletPath(),"")+"/popup.jsp?Page=system/manageTranslations.jsp&FindLabelType="+sLabelType+"&find=1','popup','toolbar=no,status=yes,scrollbars=yes,resizable=yes,width=800,height=500,menubar=no');return false;};";
+        	sOptions+="</script>";
+        }
+
+        return sOptions;
+    }
+
+    public static String writeSelect(HttpServletRequest request,String sLabelType, String sSelected, String sWebLanguage, boolean showLabelID, boolean sorted, int maxSize){
+        String sOptions = "";
+        Label label;
+        Iterator it;
+
+        Hashtable labelTypes = (Hashtable)MedwanQuery.getInstance().getLabels().get(sWebLanguage.toLowerCase());
+        if(labelTypes!=null){
+            Hashtable labelIds = (Hashtable)labelTypes.get(sLabelType.toLowerCase());
+
+            if(labelIds!=null){
+                Enumeration idsEnum = labelIds.elements();
+                Hashtable hSelected = new Hashtable();
+
+                if(sorted){
+                    // sorted on value
+                    while(idsEnum.hasMoreElements()){
+                        label = (Label)idsEnum.nextElement();
+                        hSelected.put(label.value,label.id);
+                    }
+                }
+                else{
+                    // sorted on id
+                    while(idsEnum.hasMoreElements()){
+                        label = (Label)idsEnum.nextElement();
+                        hSelected.put(label.id,label.value);
+                    }
+                }
+
+                // sort on keys :
+                //  when sorted (on value), key = labelValue
+                //  when !sorted (sorted on id), key = labelID
+                Vector keys = new Vector(hSelected.keySet());
+                Collections.sort(keys);
+                it = keys.iterator();
+
+                // to html
+                String sLabelValue, sLabelID;
+                while(it.hasNext()){
+                    if(sorted){
+                        sLabelValue = (String)it.next();
+                        sLabelID = (String)hSelected.get(sLabelValue);
+                    }
+                    else{
+                        sLabelID = (String)it.next();
+                        sLabelValue = (String)hSelected.get(sLabelID);
+                    }
+
+                    sOptions+= "<option value='"+sLabelID+"'";
+                    if(sLabelID.toLowerCase().equals(sSelected.toLowerCase())){
+                        sOptions+= " selected";
+                    }
+                    
+                    String sTitle="";
+                    if(sLabelValue.length()>maxSize){
+                    	sTitle="title='"+sLabelValue+"'";
+                    }
+                    if(showLabelID){
+                        sOptions+= " "+sTitle+">"+checkString(sLabelValue,maxSize)+" ("+sLabelID+")</option>";
+                    }
+                    else{
+                        sOptions+= " "+sTitle+">"+checkString(sLabelValue,maxSize)+"</option>";
                     }
                 }
             }
@@ -2803,6 +2885,21 @@ public static String removeAccents(String sTest){
         return sString;
     }
 
+    //--- CHECK STRING ----------------------------------------------------------------------------
+    public static String checkString(String sString, int maxSize){
+        // om geen 'null' weer te geven
+        if((sString==null)||(sString.toLowerCase().equals("null"))){
+            return "";
+        }
+        else{
+            sString = sString.trim();
+            if(sString.length()>maxSize){
+            	sString=sString.substring(0,maxSize-3)+"...";
+            }
+        }
+        return sString;
+    }
+
     public static String checkString(String sString, String defaultValue){
         // om geen 'null' weer te geven
         if((sString==null)||(sString.toLowerCase().equals("null"))){
@@ -2810,6 +2907,20 @@ public static String removeAccents(String sTest){
         }
         else{
             sString = sString.trim();
+        }
+        return sString;
+    }
+
+    public static String checkString(String sString, String defaultValue, int maxSize){
+        // om geen 'null' weer te geven
+        if((sString==null)||(sString.toLowerCase().equals("null"))){
+            return defaultValue;
+        }
+        else{
+            sString = sString.trim();
+            if(sString.length()>maxSize-3){
+            	sString=sString.substring(0,maxSize-3)+"...";
+            }
         }
         return sString;
     }
@@ -4386,6 +4497,39 @@ public static String removeAccents(String sTest){
     		}
     	}
     	return"";
+    }
+    
+    public static String writeAutocompleteLabelField(String sName, int nSize, String sLabelType, String sSelectFunction){
+    	StringBuffer s = new StringBuffer();
+    	s.append("<input type='hidden' name='"+sName+"id' id='"+sName+"id' value=''>\n");
+    	s.append("<input type='text' class='text' name='"+sName+"' id='"+sName+"' size='"+nSize+"' value=''>\n");
+    	s.append("<div id='autocomplete_"+sName+"' class='autocomple'></div>\n");
+    	s.append("<script>\n");
+    	s.append("  new Ajax.Autocompleter('"+sName+"','autocomplete_"+sName+"','util/getAutoLabels.jsp?labeltype="+sLabelType+"',{\n");
+    	s.append("    minChars:1,\n");
+    	s.append("    method:'post',");
+    	s.append("    afterUpdateElement:afterAutoComplete,\n");
+    	s.append("    callback:composeCallbackURL\n");
+    	s.append("  });\n");
+    	s.append("  function afterAutoComplete(field,item){\n");
+    	s.append("    var name= item.innerHTML.substring(0,item.innerHTML.indexOf('<span'));\n");
+    	s.append("    var id = item.innerHTML.substring(item.innerHTML.substring(item.innerHTML.indexOf('<span')));\n");
+    	s.append("    id=id.substring(id.indexOf('>')+1);\n");
+    	s.append("    id=id.substring(0,id.indexOf('-idcache'));\n");
+    	s.append("    document.getElementById('"+sName+"id').value = id;\n");
+    	s.append("    document.getElementById('"+sName+"').value=name;\n");
+    	s.append("    "+sSelectFunction+";\n");
+    	s.append("  }\n");
+    	s.append("  function composeCallbackURL(field,item){\n");
+    	s.append("    var url = '';\n");
+    	s.append("    if(field.id=='"+sName+"'){\n");
+    	s.append("      url = 'findcode='+field.value;\n");
+    	s.append("    }\n");
+    	s.append("    return url;\n");
+    	s.append("  }\n");
+    	s.append("</script>");
+    	
+    	return s.toString();
     }
     
     //--- IS LIKE ---------------------------------------------------------------------------------

@@ -113,4 +113,31 @@ public class Indication {
 	public static Vector getIndicationsForICD10Code(String icd10code){
 		return IndicationGroup.getIndicationsForICD10Code(icd10code);
 	}
+	
+	public static boolean isATCCodeIndicatedForICD10Code(String atc,String icd10){
+		boolean bIndicated=false;
+		String sql="select * from oc_drugindications a,oc_drugindicationlinks b, oc_drugindicationgroups c"+
+				" where"+
+				" a.oc_drugindication_atccode=? and"+
+				" a.oc_drugindication_code = b.oc_drugindicationlink_code and"+
+				" b.oc_drugindicationlink_groupcode=c.oc_drugindicationgroup_code and"+
+				" c.oc_drugindicationgroup_icd10codemin<=? and"+
+				" c.oc_drugindicationgroup_icd10codemax>=?";
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		try{
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, atc);
+			ps.setString(2, icd10);
+			ps.setString(3, icd10);
+			ResultSet rs = ps.executeQuery();
+			bIndicated = rs.next();
+			rs.close();
+			ps.close();
+			conn.close();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return bIndicated;
+	}
 }

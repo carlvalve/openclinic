@@ -39,7 +39,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
     private String patientid;
     private String patientgender;
     private String patientbirthdate;
-    private int quantity;
+    private double quantity;
     private String extraInsurarUid;
     private String extraInsurarInvoiceUid;
     private double extraInsurarAmount;
@@ -53,9 +53,16 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
     private String extraInsurarInvoiceUid2;
     private String serviceUid;
     private Service service;
+    private String diagnosisUid;
     
     
-    public String getServiceUid() {
+    public String getDiagnosisUid() {
+		return diagnosisUid;
+	}
+	public void setDiagnosisUid(String diagnosisUid) {
+		this.diagnosisUid = diagnosisUid;
+	}
+	public String getServiceUid() {
 		return serviceUid;
 	}
 	public void setServiceUid(String serviceUid) {
@@ -130,10 +137,10 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
     public void setExtraInsurarInvoiceUid(String extraInsurarInvoiceUid) {
         this.extraInsurarInvoiceUid = extraInsurarInvoiceUid;
     }
-    public int getQuantity() {
+    public double getQuantity() {
         return quantity;
     }
-    public void setQuantity(int quantity) {
+    public void setQuantity(double quantity) {
         this.quantity = quantity;
     }
     //--- COMPARE TO ------------------------------------------------------------------------------
@@ -411,7 +418,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                         debet.insurarInvoiceUid = rs.getString("OC_DEBET_INSURARINVOICEUID");
                         debet.comment = rs.getString("OC_DEBET_COMMENT");
                         debet.credited = rs.getInt("OC_DEBET_CREDITED");
-                        debet.quantity = rs.getInt("OC_DEBET_QUANTITY");
+                        debet.quantity = rs.getDouble("OC_DEBET_QUANTITY");
                         debet.extraInsurarUid = rs.getString("OC_DEBET_EXTRAINSURARUID");
                         debet.extraInsurarInvoiceUid = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID");
                         debet.extraInsurarAmount = rs.getDouble("OC_DEBET_EXTRAINSURARAMOUNT");
@@ -426,6 +433,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                         debet.extraInsurarUid2 = rs.getString("OC_DEBET_EXTRAINSURARUID2");
                         debet.extraInsurarInvoiceUid2 = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID2");
                         debet.serviceUid = rs.getString("OC_DEBET_SERVICEUID");
+                        debet.diagnosisUid = rs.getString("OC_DEBET_SUPPLIERTYPE");
                     }
                 }
                 catch (Exception e) {
@@ -526,9 +534,10 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                         " OC_DEBET_REFUID," +
                         " OC_DEBET_EXTRAINSURARUID2," +
                         " OC_DEBET_EXTRAINSURARINVOICEUID2," +
-                        " OC_DEBET_SERVICEUID" +
+                        " OC_DEBET_SERVICEUID," +
+                        " OC_DEBET_SUPPLIERTYPE" +
                         ") " +
-                        " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                        " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                 ps = oc_conn.prepareStatement(sSelect);
                 while (!MedwanQuery.getInstance().validateNewOpenclinicCounter("OC_DEBETS", "OC_DEBET_OBJECTID", ids[1])) {
                     ids[1] = MedwanQuery.getInstance().getOpenclinicCounter("OC_DEBETS") + "";
@@ -568,7 +577,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 ps.setString(15, this.getUpdateUser());
                 ps.setInt(16, iVersion);
                 ps.setDouble(17, this.getInsurarAmount());
-                ps.setInt(18, this.getQuantity());
+                ps.setDouble(18, this.getQuantity());
                 ps.setString(19, ScreenHelper.checkString(this.getExtraInsurarUid()));
                 ps.setString(20, ScreenHelper.checkString(this.getExtraInsurarInvoiceUid()));
                 ps.setDouble(21, this.getExtraInsurarAmount());
@@ -582,6 +591,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 	this.setServiceUid(this.getEncounter().getServiceUID());
                 }
                 ps.setString(28, ScreenHelper.checkString(this.getServiceUid()));
+                ps.setString(29, ScreenHelper.checkString(this.getDiagnosisUid()));
                 ps.executeUpdate();
                 ps.close();
                 if(this.getCredited()==1 && this.getRefUid()!=null && this.getRefUid().length()>0){
@@ -860,7 +870,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 debet.insurarInvoiceUid = rs.getString("OC_DEBET_INSURARINVOICEUID");
                 debet.comment = rs.getString("OC_DEBET_COMMENT");
                 debet.credited = rs.getInt("OC_DEBET_CREDITED");
-                debet.quantity = rs.getInt("OC_DEBET_QUANTITY");
+                debet.quantity = rs.getDouble("OC_DEBET_QUANTITY");
                 debet.extraInsurarUid = rs.getString("OC_DEBET_EXTRAINSURARUID");
                 debet.extraInsurarInvoiceUid = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID");
                 debet.extraInsurarAmount = rs.getDouble("OC_DEBET_EXTRAINSURARAMOUNT");
@@ -875,6 +885,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 debet.extraInsurarUid2 = rs.getString("OC_DEBET_EXTRAINSURARUID2");
                 debet.extraInsurarInvoiceUid2 = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID2");
                 debet.serviceUid = rs.getString("OC_DEBET_SERVICEUID");
+                debet.diagnosisUid = rs.getString("OC_DEBET_SUPPLIERTYPE");
                 MedwanQuery.getInstance().getObjectCache().putObject("debet", debet);
                 vDebets.add(debet);
             }
@@ -1062,7 +1073,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 debet.insurarInvoiceUid = rs.getString("OC_DEBET_INSURARINVOICEUID");
                 debet.comment = rs.getString("OC_DEBET_COMMENT");
                 debet.credited = rs.getInt("OC_DEBET_CREDITED");
-                debet.quantity = rs.getInt("OC_DEBET_QUANTITY");
+                debet.quantity = rs.getDouble("OC_DEBET_QUANTITY");
                 debet.extraInsurarUid = rs.getString("OC_DEBET_EXTRAINSURARUID");
                 debet.extraInsurarInvoiceUid = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID");
                 debet.extraInsurarAmount = rs.getDouble("OC_DEBET_EXTRAINSURARAMOUNT");
@@ -1076,6 +1087,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 debet.extraInsurarUid2 = rs.getString("OC_DEBET_EXTRAINSURARUID2");
                 debet.extraInsurarInvoiceUid2 = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID2");
                 debet.serviceUid = rs.getString("OC_DEBET_SERVICEUID");
+                debet.diagnosisUid = rs.getString("OC_DEBET_SUPPLIERTYPE");
 
                 //*********************
                 //add Encounter object
@@ -1125,6 +1137,169 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 prestation.setVersion(rs.getInt("OC_PRESTATION_VERSION"));
                 prestation.setType(rs.getString("OC_PRESTATION_TYPE"));
                 prestation.setPrestationClass(rs.getString("OC_PRESTATION_CLASS"));
+                debet.setPrestation(prestation);
+
+                //*********************
+                //add Patient name
+                //*********************
+                debet.setPatientName(ScreenHelper.checkString(rs.getString("lastname")) + " " + ScreenHelper.checkString(rs.getString("firstname")));
+                debet.setPatientbirthdate(ScreenHelper.formatDate(rs.getDate("dateofbirth")));
+                debet.setPatientgender(rs.getString("gender"));
+                debet.setPatientid(rs.getString("personid"));
+                MedwanQuery.getInstance().getObjectCache().putObject("debet", debet);
+                vUnassignedDebets.add(debet);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            Debug.println("OpenClinic => Debet.java => getUnassignedInsurarDebets => " + e.getMessage() + " = " + sSelect);
+        }
+        finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                loc_conn.close();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return vUnassignedDebets;
+    }
+    
+    public static Vector getUnassignedInsurarDebets(String sInsurarUid, String sEncounterUid) {
+		String sisids="";
+		String[] ids = sInsurarUid.split(",");
+		for(int n = 0;n<ids.length;n++){
+			if(sisids.length()>0){
+				sisids+=",";
+			}
+			sisids+="'"+ids[n]+"'";
+		}
+        String sSelect = "";
+        Insurar insurar = Insurar.get(sInsurarUid);
+        boolean bBaseInvoicingOnPatientInvoiceDate=(insurar!=null && insurar.getIncludeAllPatientInvoiceDebets()==1);
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Vector vUnassignedDebets = new Vector();
+        String serverid = MedwanQuery.getInstance().getConfigString("serverId") + ".";
+        Connection loc_conn=MedwanQuery.getInstance().getLongOpenclinicConnection();
+        try {
+            sSelect = "SELECT d.*,e.*,p.*,a.* FROM OC_DEBETS d, OC_INSURANCES i, OC_ENCOUNTERS e, adminview a, OC_PRESTATIONS p"
+                    + " WHERE i.OC_INSURANCE_INSURARUID in ("+sisids+")"
+                    + " AND d.OC_DEBET_ENCOUNTERUID=?"
+                    + " AND d.OC_DEBET_CREDITED=0"
+                    + " AND " + MedwanQuery.getInstance().convert("int", "replace(d.OC_DEBET_INSURANCEUID,'" + serverid + "','')") + " = i.oc_insurance_objectid"
+                    + " AND " + MedwanQuery.getInstance().convert("int", "replace(d.OC_DEBET_ENCOUNTERUID,'" + serverid + "','')") + " = e.oc_encounter_objectid"
+                    + " AND (d.OC_DEBET_PATIENTINVOICEUID is not NULL and d.OC_DEBET_PATIENTINVOICEUID <> '')"
+                    + " AND (d.OC_DEBET_INSURARINVOICEUID = ' ' or d.OC_DEBET_INSURARINVOICEUID is null)"
+                    + " AND " + MedwanQuery.getInstance().convert("int", "replace(d.OC_DEBET_PRESTATIONUID,'" + serverid + "','')") + "=p.OC_PRESTATION_OBJECTID"
+                    + " AND " + MedwanQuery.getInstance().convert("int", "e.OC_ENCOUNTER_PATIENTUID") + "=a.personid" 
+                    + " ORDER BY d.OC_DEBET_DATE";
+            if(bBaseInvoicingOnPatientInvoiceDate){
+                sSelect = "SELECT d.*,e.*,p.*,a.*,pi.OC_PATIENTINVOICE_DATE FROM OC_DEBETS d, OC_INSURANCES i, OC_ENCOUNTERS e, adminview a, OC_PRESTATIONS p, OC_PATIENTINVOICES pi"
+                        + " WHERE i.OC_INSURANCE_INSURARUID in ("+sisids+")"
+                        + " AND d.OC_DEBET_ENCOUNTERUID=?"
+                        + " AND d.OC_DEBET_CREDITED=0"
+                        + " AND " + MedwanQuery.getInstance().convert("int", "replace(d.OC_DEBET_INSURANCEUID,'" + serverid + "','')") + " = i.oc_insurance_objectid"
+                        + " AND " + MedwanQuery.getInstance().convert("int", "replace(d.OC_DEBET_ENCOUNTERUID,'" + serverid + "','')") + " = e.oc_encounter_objectid"
+                        + " AND d.OC_DEBET_PATIENTINVOICEUID='"+serverid+"'"+MedwanQuery.getInstance().concatSign()+MedwanQuery.getInstance().convert("varchar", "pi.OC_PATIENTINVOICE_OBJECTID")
+                        + " AND (d.OC_DEBET_INSURARINVOICEUID = ' ' or d.OC_DEBET_INSURARINVOICEUID is null)"
+                        + " AND " + MedwanQuery.getInstance().convert("int", "replace(d.OC_DEBET_PRESTATIONUID,'" + serverid + "','')") + "=p.OC_PRESTATION_OBJECTID"
+                        + " AND " + MedwanQuery.getInstance().convert("int", "e.OC_ENCOUNTER_PATIENTUID") + "=a.personid" 
+                        + " ORDER BY OC_PATIENTINVOICE_DATE,d.OC_DEBET_DATE";
+            }
+            ps = loc_conn.prepareStatement(sSelect);
+            ps.setString(1, sEncounterUid);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Debet debet = new Debet();
+                debet.setUid(rs.getString("OC_DEBET_SERVERID") + "." + rs.getString("OC_DEBET_OBJECTID"));
+                if(bBaseInvoicingOnPatientInvoiceDate){
+                	debet.setDate(rs.getTimestamp("OC_PATIENTINVOICE_DATE"));
+                    debet.setCreateDateTime(rs.getTimestamp("OC_DEBET_DATE"));
+                }
+                else {
+                	debet.setDate(rs.getTimestamp("OC_DEBET_DATE"));
+                    debet.setCreateDateTime(rs.getTimestamp("OC_DEBET_CREATETIME"));
+                }
+                debet.setAmount(rs.getDouble("OC_DEBET_AMOUNT"));
+                debet.setInsurarAmount(rs.getDouble("OC_DEBET_INSURARAMOUNT"));
+                debet.insuranceUid = rs.getString("OC_DEBET_INSURANCEUID");
+                debet.prestationUid = rs.getString("OC_DEBET_PRESTATIONUID");
+                debet.encounterUid = rs.getString("OC_DEBET_ENCOUNTERUID");
+                debet.supplierUid = rs.getString("OC_DEBET_SUPPLIERUID");
+                debet.patientInvoiceUid = rs.getString("OC_DEBET_PATIENTINVOICEUID");
+                debet.insurarInvoiceUid = rs.getString("OC_DEBET_INSURARINVOICEUID");
+                debet.comment = rs.getString("OC_DEBET_COMMENT");
+                debet.credited = rs.getInt("OC_DEBET_CREDITED");
+                debet.quantity = rs.getDouble("OC_DEBET_QUANTITY");
+                debet.extraInsurarUid = rs.getString("OC_DEBET_EXTRAINSURARUID");
+                debet.extraInsurarInvoiceUid = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID");
+                debet.extraInsurarAmount = rs.getDouble("OC_DEBET_EXTRAINSURARAMOUNT");
+                debet.setUpdateDateTime(rs.getTimestamp("OC_DEBET_UPDATETIME"));
+                debet.setUpdateUser(rs.getString("OC_DEBET_UPDATEUID"));
+                debet.setVersion(rs.getInt("OC_DEBET_VERSION"));
+                debet.setRenewalInterval(rs.getInt("OC_DEBET_RENEWALINTERVAL"));
+                debet.setRenewalDate(rs.getTimestamp("OC_DEBET_RENEWALDATE"));
+                debet.setPerformeruid(rs.getString("OC_DEBET_PERFORMERUID"));
+                debet.setRefUid(rs.getString("OC_DEBET_REFUID"));
+                debet.extraInsurarUid2 = rs.getString("OC_DEBET_EXTRAINSURARUID2");
+                debet.extraInsurarInvoiceUid2 = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID2");
+                debet.serviceUid = rs.getString("OC_DEBET_SERVICEUID");
+                debet.diagnosisUid = rs.getString("OC_DEBET_SUPPLIERTYPE");
+
+                //*********************
+                //add Encounter object
+                //*********************
+                Encounter encounter = new Encounter();
+                encounter.setPatientUID(ScreenHelper.checkString(rs.getString("OC_ENCOUNTER_PATIENTUID")));
+                encounter.setDestinationUID(ScreenHelper.checkString(rs.getString("OC_ENCOUNTER_DESTINATIONUID")));
+                encounter.setUid(ScreenHelper.checkString(rs.getString("OC_ENCOUNTER_SERVERID")) + "." + ScreenHelper.checkString(rs.getString("OC_ENCOUNTER_OBJECTID")));
+                encounter.setCreateDateTime(rs.getTimestamp("OC_ENCOUNTER_CREATETIME"));
+                encounter.setUpdateDateTime(rs.getTimestamp("OC_ENCOUNTER_UPDATETIME"));
+                encounter.setUpdateUser(ScreenHelper.checkString(rs.getString("OC_ENCOUNTER_UPDATEUID")));
+                encounter.setVersion(rs.getInt("OC_ENCOUNTER_VERSION"));
+                encounter.setBegin(rs.getTimestamp("OC_ENCOUNTER_BEGINDATE"));
+                encounter.setEnd(rs.getTimestamp("OC_ENCOUNTER_ENDDATE"));
+                encounter.setType(ScreenHelper.checkString(rs.getString("OC_ENCOUNTER_TYPE")));
+                encounter.setOutcome(ScreenHelper.checkString(rs.getString("OC_ENCOUNTER_OUTCOME")));
+                encounter.setOrigin(ScreenHelper.checkString(rs.getString("OC_ENCOUNTER_ORIGIN")));
+                encounter.setSituation(ScreenHelper.checkString(rs.getString("OC_ENCOUNTER_SITUATION")));
+                encounter.setCategories(ScreenHelper.checkString(rs.getString("OC_ENCOUNTER_CATEGORIES")));
+                encounter.setServiceUID(debet.getServiceUid());
+                encounter.setModifiers(ScreenHelper.checkString(rs.getString("OC_ENCOUNTER_MODIFIERS")));
+                /*
+                //Now find the most recent service for this encounter
+                EncounterService encounterService = encounter.getLastEncounterService();
+                if (encounterService != null) {
+                    encounter.setManagerUID(encounterService.managerUID);
+                    encounter.setBedUID(encounterService.bedUID);
+                }
+                */
+                debet.setEncounter(encounter);
+
+                //*********************
+                //add Prestation object
+                //*********************
+                Prestation prestation = new Prestation();
+                prestation.setUid(rs.getString("OC_PRESTATION_SERVERID") + "." + rs.getString("OC_PRESTATION_OBJECTID"));
+                prestation.setCode(rs.getString("OC_PRESTATION_CODE"));
+                prestation.setModifiers(rs.getString("OC_PRESTATION_MODIFIERS"));
+                prestation.setDescription(rs.getString("OC_PRESTATION_DESCRIPTION"));
+                prestation.setPrice(rs.getDouble("OC_PRESTATION_PRICE"));
+                prestation.setCategories(rs.getString("OC_PRESTATION_CATEGORIES"));
+                ObjectReference or = new ObjectReference();
+                or.setObjectType(rs.getString("OC_PRESTATION_REFTYPE"));
+                or.setObjectUid(rs.getString("OC_PRESTATION_REFUID"));
+                prestation.setReferenceObject(or);
+                prestation.setCreateDateTime(rs.getTimestamp("OC_PRESTATION_CREATETIME"));
+                prestation.setUpdateDateTime(rs.getTimestamp("OC_PRESTATION_UPDATETIME"));
+                prestation.setUpdateUser(rs.getString("OC_PRESTATION_UPDATEUID"));
+                prestation.setVersion(rs.getInt("OC_PRESTATION_VERSION"));
+                prestation.setType(rs.getString("OC_PRESTATION_TYPE"));
+                prestation.setPrestationClass(rs.getString("OC_PRESTATION_CLASS"));
+                prestation.setNomenclature(rs.getString("OC_PRESTATION_NOMENCLATURE"));
                 debet.setPrestation(prestation);
 
                 //*********************
@@ -1221,7 +1396,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 debet.insurarInvoiceUid = rs.getString("OC_DEBET_INSURARINVOICEUID");
                 debet.comment = rs.getString("OC_DEBET_COMMENT");
                 debet.credited = rs.getInt("OC_DEBET_CREDITED");
-                debet.quantity = rs.getInt("OC_DEBET_QUANTITY");
+                debet.quantity = rs.getDouble("OC_DEBET_QUANTITY");
                 debet.extraInsurarUid = rs.getString("OC_DEBET_EXTRAINSURARUID");
                 debet.extraInsurarInvoiceUid = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID");
                 debet.extraInsurarAmount = rs.getDouble("OC_DEBET_EXTRAINSURARAMOUNT");
@@ -1235,6 +1410,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 debet.extraInsurarUid2 = rs.getString("OC_DEBET_EXTRAINSURARUID2");
                 debet.extraInsurarInvoiceUid2 = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID2");
                 debet.serviceUid = rs.getString("OC_DEBET_SERVICEUID");
+                debet.diagnosisUid = rs.getString("OC_DEBET_SUPPLIERTYPE");
 
                 //*********************
                 //add Encounter object
@@ -1379,7 +1555,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 debet.insurarInvoiceUid = rs.getString("OC_DEBET_INSURARINVOICEUID");
                 debet.comment = rs.getString("OC_DEBET_COMMENT");
                 debet.credited = rs.getInt("OC_DEBET_CREDITED");
-                debet.quantity = rs.getInt("OC_DEBET_QUANTITY");
+                debet.quantity = rs.getDouble("OC_DEBET_QUANTITY");
                 debet.extraInsurarUid = rs.getString("OC_DEBET_EXTRAINSURARUID");
                 debet.extraInsurarInvoiceUid = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID");
                 debet.extraInsurarAmount = rs.getDouble("OC_DEBET_EXTRAINSURARAMOUNT");
@@ -1393,6 +1569,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 debet.extraInsurarUid2 = rs.getString("OC_DEBET_EXTRAINSURARUID2");
                 debet.extraInsurarInvoiceUid2 = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID2");
                 debet.serviceUid = rs.getString("OC_DEBET_SERVICEUID");
+                debet.diagnosisUid = rs.getString("OC_DEBET_SUPPLIERTYPE");
 
                 //*********************
                 //add Encounter object
@@ -1509,7 +1686,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 debet.insurarInvoiceUid = rs.getString("OC_DEBET_INSURARINVOICEUID");
                 debet.comment = rs.getString("OC_DEBET_COMMENT");
                 debet.credited = rs.getInt("OC_DEBET_CREDITED");
-                debet.quantity = rs.getInt("OC_DEBET_QUANTITY");
+                debet.quantity = rs.getDouble("OC_DEBET_QUANTITY");
                 debet.extraInsurarUid = rs.getString("OC_DEBET_EXTRAINSURARUID");
                 debet.extraInsurarInvoiceUid = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID");
                 debet.extraInsurarAmount = rs.getDouble("OC_DEBET_EXTRAINSURARAMOUNT");
@@ -1524,6 +1701,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 debet.extraInsurarUid2 = rs.getString("OC_DEBET_EXTRAINSURARUID2");
                 debet.extraInsurarInvoiceUid2 = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID2");
                 debet.serviceUid = rs.getString("OC_DEBET_SERVICEUID");
+                debet.diagnosisUid = rs.getString("OC_DEBET_SUPPLIERTYPE");
 
                 //*********************
                 //add Encounter object
@@ -1648,7 +1826,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 debet.insurarInvoiceUid = rs.getString("OC_DEBET_INSURARINVOICEUID");
                 debet.comment = rs.getString("OC_DEBET_COMMENT");
                 debet.credited = rs.getInt("OC_DEBET_CREDITED");
-                debet.quantity = rs.getInt("OC_DEBET_QUANTITY");
+                debet.quantity = rs.getDouble("OC_DEBET_QUANTITY");
                 debet.extraInsurarUid = rs.getString("OC_DEBET_EXTRAINSURARUID");
                 debet.extraInsurarInvoiceUid = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID");
                 debet.extraInsurarAmount = rs.getDouble("OC_DEBET_EXTRAINSURARAMOUNT");
@@ -1663,6 +1841,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 debet.extraInsurarUid2 = rs.getString("OC_DEBET_EXTRAINSURARUID2");
                 debet.extraInsurarInvoiceUid2 = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID2");
                 debet.serviceUid = rs.getString("OC_DEBET_SERVICEUID");
+                debet.diagnosisUid = rs.getString("OC_DEBET_SUPPLIERTYPE");
 
                 //*********************
                 //add Encounter object
@@ -1781,7 +1960,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 debet.insurarInvoiceUid = rs.getString("OC_DEBET_INSURARINVOICEUID");
                 debet.comment = rs.getString("OC_DEBET_COMMENT");
                 debet.credited = rs.getInt("OC_DEBET_CREDITED");
-                debet.quantity = rs.getInt("OC_DEBET_QUANTITY");
+                debet.quantity = rs.getDouble("OC_DEBET_QUANTITY");
                 debet.extraInsurarUid = rs.getString("OC_DEBET_EXTRAINSURARUID");
                 debet.extraInsurarInvoiceUid = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID");
                 debet.extraInsurarAmount = rs.getDouble("OC_DEBET_EXTRAINSURARAMOUNT");
@@ -1796,6 +1975,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 debet.extraInsurarUid2 = rs.getString("OC_DEBET_EXTRAINSURARUID2");
                 debet.extraInsurarInvoiceUid2 = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID2");
                 debet.serviceUid = rs.getString("OC_DEBET_SERVICEUID");
+                debet.diagnosisUid = rs.getString("OC_DEBET_SUPPLIERTYPE");
 
                 //*********************
                 //add Encounter object
@@ -1912,7 +2092,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 debet.insurarInvoiceUid = rs.getString("OC_DEBET_INSURARINVOICEUID");
                 debet.comment = rs.getString("OC_DEBET_COMMENT");
                 debet.credited = rs.getInt("OC_DEBET_CREDITED");
-                debet.quantity = rs.getInt("OC_DEBET_QUANTITY");
+                debet.quantity = rs.getDouble("OC_DEBET_QUANTITY");
                 debet.extraInsurarUid = rs.getString("OC_DEBET_EXTRAINSURARUID");
                 debet.extraInsurarInvoiceUid = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID");
                 debet.extraInsurarAmount = rs.getDouble("OC_DEBET_EXTRAINSURARAMOUNT");
@@ -1927,6 +2107,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 debet.extraInsurarUid2 = rs.getString("OC_DEBET_EXTRAINSURARUID2");
                 debet.extraInsurarInvoiceUid2 = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID2");
                 debet.serviceUid = rs.getString("OC_DEBET_SERVICEUID");
+                debet.diagnosisUid = rs.getString("OC_DEBET_SUPPLIERTYPE");
 
                 //*********************
                 //add Encounter object
@@ -2045,7 +2226,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 debet.insurarInvoiceUid = rs.getString("OC_DEBET_INSURARINVOICEUID");
                 debet.comment = rs.getString("OC_DEBET_COMMENT");
                 debet.credited = rs.getInt("OC_DEBET_CREDITED");
-                debet.quantity = rs.getInt("OC_DEBET_QUANTITY");
+                debet.quantity = rs.getDouble("OC_DEBET_QUANTITY");
                 debet.extraInsurarUid = rs.getString("OC_DEBET_EXTRAINSURARUID");
                 debet.extraInsurarInvoiceUid = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID");
                 debet.extraInsurarAmount = rs.getDouble("OC_DEBET_EXTRAINSURARAMOUNT");
@@ -2060,6 +2241,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 debet.extraInsurarUid2 = rs.getString("OC_DEBET_EXTRAINSURARUID2");
                 debet.extraInsurarInvoiceUid2 = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID2");
                 debet.serviceUid = rs.getString("OC_DEBET_SERVICEUID");
+                debet.diagnosisUid = rs.getString("OC_DEBET_SUPPLIERTYPE");
 
                 //*********************
                 //add Encounter object
@@ -2164,7 +2346,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 debet.insurarInvoiceUid = rs.getString("OC_DEBET_INSURARINVOICEUID");
                 debet.comment = rs.getString("OC_DEBET_COMMENT");
                 debet.credited = rs.getInt("OC_DEBET_CREDITED");
-                debet.quantity = rs.getInt("OC_DEBET_QUANTITY");
+                debet.quantity = rs.getDouble("OC_DEBET_QUANTITY");
                 debet.extraInsurarUid = rs.getString("OC_DEBET_EXTRAINSURARUID");
                 debet.extraInsurarInvoiceUid = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID");
                 debet.extraInsurarAmount = rs.getDouble("OC_DEBET_EXTRAINSURARAMOUNT");
@@ -2179,6 +2361,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 debet.extraInsurarUid2 = rs.getString("OC_DEBET_EXTRAINSURARUID2");
                 debet.extraInsurarInvoiceUid2 = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID2");
                 debet.serviceUid = rs.getString("OC_DEBET_SERVICEUID");
+                debet.diagnosisUid = rs.getString("OC_DEBET_SUPPLIERTYPE");
                 MedwanQuery.getInstance().getObjectCache().putObject("debet", debet);
                 vDebets.add(debet);
             }
@@ -2230,7 +2413,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 debet.insurarInvoiceUid = rs.getString("OC_DEBET_INSURARINVOICEUID");
                 debet.comment = rs.getString("OC_DEBET_COMMENT");
                 debet.credited = rs.getInt("OC_DEBET_CREDITED");
-                debet.quantity = rs.getInt("OC_DEBET_QUANTITY");
+                debet.quantity = rs.getDouble("OC_DEBET_QUANTITY");
                 debet.extraInsurarUid = rs.getString("OC_DEBET_EXTRAINSURARUID");
                 debet.extraInsurarInvoiceUid = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID");
                 debet.extraInsurarAmount = rs.getDouble("OC_DEBET_EXTRAINSURARAMOUNT");
@@ -2245,6 +2428,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 debet.extraInsurarInvoiceUid2 = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID2");
                 debet.serviceUid = rs.getString("OC_DEBET_SERVICEUID");
                 debet.setRefUid(rs.getString("OC_DEBET_REFUID"));
+                debet.diagnosisUid = rs.getString("OC_DEBET_SUPPLIERTYPE");
 
                 //*********************
                 //add Encounter object
@@ -2356,7 +2540,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 debet.insurarInvoiceUid = rs.getString("OC_DEBET_INSURARINVOICEUID");
                 debet.comment = rs.getString("OC_DEBET_COMMENT");
                 debet.credited = rs.getInt("OC_DEBET_CREDITED");
-                debet.quantity = rs.getInt("OC_DEBET_QUANTITY");
+                debet.quantity = rs.getDouble("OC_DEBET_QUANTITY");
                 debet.extraInsurarUid = rs.getString("OC_DEBET_EXTRAINSURARUID");
                 debet.extraInsurarInvoiceUid = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID");
                 debet.extraInsurarAmount = rs.getDouble("OC_DEBET_EXTRAINSURARAMOUNT");
@@ -2371,6 +2555,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 debet.extraInsurarUid2 = rs.getString("OC_DEBET_EXTRAINSURARUID2");
                 debet.extraInsurarInvoiceUid2 = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID2");
                 debet.serviceUid = rs.getString("OC_DEBET_SERVICEUID");
+                debet.diagnosisUid = rs.getString("OC_DEBET_SUPPLIERTYPE");
 
                 //*********************
                 //add Encounter object
@@ -2480,7 +2665,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 debet.insurarInvoiceUid = rs.getString("OC_DEBET_INSURARINVOICEUID");
                 debet.comment = rs.getString("OC_DEBET_COMMENT");
                 debet.credited = rs.getInt("OC_DEBET_CREDITED");
-                debet.quantity = rs.getInt("OC_DEBET_QUANTITY");
+                debet.quantity = rs.getDouble("OC_DEBET_QUANTITY");
                 debet.extraInsurarUid = rs.getString("OC_DEBET_EXTRAINSURARUID");
                 debet.extraInsurarInvoiceUid = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID");
                 debet.extraInsurarAmount = rs.getDouble("OC_DEBET_EXTRAINSURARAMOUNT");
@@ -2495,6 +2680,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 debet.extraInsurarUid2 = rs.getString("OC_DEBET_EXTRAINSURARUID2");
                 debet.extraInsurarInvoiceUid2 = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID2");
                 debet.serviceUid = rs.getString("OC_DEBET_SERVICEUID");
+                debet.diagnosisUid = rs.getString("OC_DEBET_SUPPLIERTYPE");
 
                 //*********************
                 //add Encounter object
@@ -2599,7 +2785,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 debet.insurarInvoiceUid = rs.getString("OC_DEBET_INSURARINVOICEUID");
                 debet.comment = rs.getString("OC_DEBET_COMMENT");
                 debet.credited = rs.getInt("OC_DEBET_CREDITED");
-                debet.quantity = rs.getInt("OC_DEBET_QUANTITY");
+                debet.quantity = rs.getDouble("OC_DEBET_QUANTITY");
                 debet.extraInsurarUid = rs.getString("OC_DEBET_EXTRAINSURARUID");
                 debet.extraInsurarInvoiceUid = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID");
                 debet.extraInsurarAmount = rs.getDouble("OC_DEBET_EXTRAINSURARAMOUNT");
@@ -2614,6 +2800,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 debet.extraInsurarUid2 = rs.getString("OC_DEBET_EXTRAINSURARUID2");
                 debet.extraInsurarInvoiceUid2 = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID2");
                 debet.serviceUid = rs.getString("OC_DEBET_SERVICEUID");
+                debet.diagnosisUid = rs.getString("OC_DEBET_SUPPLIERTYPE");
                 MedwanQuery.getInstance().getObjectCache().putObject("debet", debet);
                 vDebets.add(debet);
             }
@@ -2660,7 +2847,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 debet.insurarInvoiceUid = rs.getString("OC_DEBET_INSURARINVOICEUID");
                 debet.comment = rs.getString("OC_DEBET_COMMENT");
                 debet.credited = rs.getInt("OC_DEBET_CREDITED");
-                debet.quantity = rs.getInt("OC_DEBET_QUANTITY");
+                debet.quantity = rs.getDouble("OC_DEBET_QUANTITY");
                 debet.extraInsurarUid = rs.getString("OC_DEBET_EXTRAINSURARUID");
                 debet.extraInsurarInvoiceUid = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID");
                 debet.extraInsurarAmount = rs.getDouble("OC_DEBET_EXTRAINSURARAMOUNT");
@@ -2675,6 +2862,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 debet.extraInsurarUid2 = rs.getString("OC_DEBET_EXTRAINSURARUID2");
                 debet.extraInsurarInvoiceUid2 = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID2");
                 debet.serviceUid = rs.getString("OC_DEBET_SERVICEUID");
+                debet.diagnosisUid = rs.getString("OC_DEBET_SUPPLIERTYPE");
                 MedwanQuery.getInstance().getObjectCache().putObject("debet", debet);
                 vDebets.add(debet);
             }
@@ -2963,7 +3151,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
             }
             rs = ps.executeQuery();
             while (rs.next()) {
-                vUnassignedDebets.add(rs.getInt("oc_debet_quantity")+"x "+rs.getString("OC_PRESTATION_CODE") + ": " + rs.getString("OC_PRESTATION_DESCRIPTION")+";"+rs.getString("OC_PRESTATION_INVOICEGROUP")+";"+rs.getString("OC_DEBET_OBJECTID"));
+                vUnassignedDebets.add(rs.getDouble("OC_DEBET_QUANTITY")+"x "+rs.getString("OC_PRESTATION_CODE") + ": " + rs.getString("OC_PRESTATION_DESCRIPTION")+";"+rs.getString("OC_PRESTATION_INVOICEGROUP")+";"+rs.getString("OC_DEBET_OBJECTID"));
             }
         }
         catch (Exception e) {
@@ -3027,7 +3215,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
             }
             rs = ps.executeQuery();
             while (rs.next()) {
-                vUnassignedDebets.add("<b>"+ScreenHelper.getSQLDate(rs.getDate("oc_debet_date"))+"</b>: "+ rs.getInt("oc_debet_quantity")+"x "+rs.getString("OC_PRESTATION_CODE") + " (" + rs.getString("OC_PRESTATION_DESCRIPTION")+")"+";"+rs.getString("OC_PRESTATION_INVOICEGROUP")+";"+rs.getString("OC_DEBET_OBJECTID"));
+                vUnassignedDebets.add("<b>"+ScreenHelper.getSQLDate(rs.getDate("oc_debet_date"))+"</b>: "+ rs.getDouble("OC_DEBET_QUANTITY")+"x "+rs.getString("OC_PRESTATION_CODE") + " (" + rs.getString("OC_PRESTATION_DESCRIPTION")+")"+";"+rs.getString("OC_PRESTATION_INVOICEGROUP")+";"+rs.getString("OC_DEBET_OBJECTID"));
             }
         }
         catch (Exception e) {

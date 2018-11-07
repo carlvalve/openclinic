@@ -2939,6 +2939,10 @@ public class MedwanQuery {
         return visit;
     }
     
+    public int getServerId(){
+    	return MedwanQuery.getInstance().getConfigInt("serverId");
+    }
+    
     //--- GET SERVICE -----------------------------------------------------------------------------
     public Service getService(String serviceId){
         Service service = new Service();
@@ -3901,7 +3905,7 @@ public class MedwanQuery {
         
         countersInUse.remove(name);
         if(usedCounters.get(name)!=null && newCounter <= ((Integer) usedCounters.get(name)).intValue()){
-            newCounter = getOpenclinicCounter(name);
+            newCounter = getOpenclinicCounter(name,((Integer) usedCounters.get(name)).intValue()+1);
         }
         usedCounters.put(name, new Integer(newCounter));
         
@@ -4364,6 +4368,30 @@ public class MedwanQuery {
         }
         return itemVO;
     }
+    //--- GET LAST ITEM VO (2) --------------------------------------------------------------------
+    public ItemVO getLastItemVOAfter(int personId, String itemType, java.util.Date dAfter){
+        ItemVO itemVO = null;
+        Connection OccupdbConnection;
+        try{
+            OccupdbConnection = getOpenclinicConnection();
+            PreparedStatement Occupstatement = OccupdbConnection.prepareStatement("SELECT * from Transactions a,Items b, Healthrecord c where a.healthRecordId=c.healthRecordId and c.personId=? and a.transactionId=b.transactionId and a.serverid=b.serverid and b.type = ? and a.updatetime>=? order by a.creationDate DESC,itemId DESC");
+            Occupstatement.setInt(1, personId);
+            Occupstatement.setString(2, itemType);
+            Occupstatement.setTimestamp(3, new java.sql.Timestamp(dAfter.getTime()));
+            ResultSet Occuprs = Occupstatement.executeQuery();
+            if(Occuprs.next()){
+                ItemContextVO itemContextVO = new ItemContextVO(new Integer(IdentifierFactory.getInstance().getTemporaryNewIdentifier()), "", "");
+                itemVO = new ItemVO(new Integer(Occuprs.getInt("itemId")), Occuprs.getString("type"), Occuprs.getString("value"), Occuprs.getDate("date"), itemContextVO);
+            }
+            Occuprs.close();
+            Occupstatement.close();
+            OccupdbConnection.close();
+
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return itemVO;
+    }
     public String getLastItemValue(int personId, String itemType){
         ItemVO item = getLastItemVO(personId, itemType);
         if(item!=null){
@@ -4373,6 +4401,13 @@ public class MedwanQuery {
     }
     public String getLastItemValue(int personId, String itemType, java.util.Date dBefore){
         ItemVO item = getLastItemVO(personId, itemType,dBefore);
+        if(item!=null){
+            return item.getValue();
+        }
+        return "";
+    }
+    public String getLastItemValueAfter(int personId, String itemType, java.util.Date dAfter){
+        ItemVO item = getLastItemVOAfter(personId, itemType,dAfter);
         if(item!=null){
             return item.getValue();
         }
@@ -6629,15 +6664,31 @@ public class MedwanQuery {
         Connection OccupdbConnection;
         try{
             OccupdbConnection = getOpenclinicConnection();
-            PreparedStatement ps = OccupdbConnection.prepareStatement("select b.itemId,a.updateTime,b."+getConfigString("valueColumn")+",b.serverid from Transactions a,Items b where a.healthRecordId=? and a.serverid=b.serverid and a.transactionId=b.transactionId and b.type=? order by updateTime DESC");
+            String types = "'"+itemType+"','"+itemType+"1','"+itemType+"2','"+itemType+"3','"+itemType+"4','"+itemType+"5','"+itemType+"6','"+itemType+"7'";
+            PreparedStatement ps = OccupdbConnection.prepareStatement("select b.transactionid,b.itemId,b.type,a.updateTime,b."+getConfigString("valueColumn")+",b.serverid from Transactions a,Items b where a.healthRecordId=? and a.serverid=b.serverid and a.transactionId=b.transactionId and b.type in ("+types+") order by updateTime DESC,transactionid,type ");
             ps.setInt(1, healthRecordId);
-            ps.setString(2, itemType);
             ResultSet rs = ps.executeQuery();
             ItemVO historyItem;
+            int n = -1,serverid=0;
+            String value="";
+            Date updatetime=null;
             while (rs.next()){
-                historyItem = new ItemVO(new Integer(rs.getInt("itemId")), itemType, rs.getString("value"), new java.util.Date(rs.getDate("updateTime").getTime()), null);
-                historyItem.setServerId(rs.getInt("serverid"));
-                hs.add(historyItem);
+            	int itemid=rs.getInt("itemId");
+            	serverid=rs.getInt("serverid");
+            	updatetime=rs.getDate("updateTime");
+            	if(n>-1 && rs.getString("type").equalsIgnoreCase(itemType) && n!=itemid){
+                    historyItem = new ItemVO(new Integer(rs.getInt("itemId")), itemType, value, new java.util.Date(updatetime.getTime()), null);
+                    historyItem.setServerId(serverid);
+                    hs.add(historyItem);
+                    value="";
+            	}
+            	n=itemid;
+            	value=value+rs.getString("value");
+            }
+            if(n>-1){
+	            historyItem = new ItemVO(new Integer(n), itemType, value, new java.util.Date(updatetime.getTime()), null);
+	            historyItem.setServerId(serverid);
+	            hs.add(historyItem);
             }
             rs.close();
             ps.close();

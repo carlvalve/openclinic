@@ -846,7 +846,7 @@ public class ExtraInsurarInvoice extends Invoice {
                 debet.setInsurarInvoiceUid(rs.getString("OC_DEBET_INSURARINVOICEUID"));
                 debet.setComment(rs.getString("OC_DEBET_COMMENT"));
                 debet.setCredited(rs.getInt("OC_DEBET_CREDITED"));
-                debet.setQuantity(rs.getInt("OC_DEBET_QUANTITY"));
+                debet.setQuantity(rs.getDouble("OC_DEBET_QUANTITY"));
                 debet.setExtraInsurarAmount(rs.getDouble("OC_DEBET_EXTRAINSURARAMOUNT"));
                 debet.setExtraInsurarInvoiceUid(rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID"));
                 debet.setExtraInsurarUid(rs.getString("OC_DEBET_EXTRAINSURARUID"));
@@ -970,7 +970,7 @@ public class ExtraInsurarInvoice extends Invoice {
                 debet.setInsurarInvoiceUid(rs.getString("OC_DEBET_INSURARINVOICEUID"));
                 debet.setComment(rs.getString("OC_DEBET_COMMENT"));
                 debet.setCredited(rs.getInt("OC_DEBET_CREDITED"));
-                debet.setQuantity(rs.getInt("OC_DEBET_QUANTITY"));
+                debet.setQuantity(rs.getDouble("OC_DEBET_QUANTITY"));
                 debet.setServiceUid(rs.getString("OC_DEBET_SERVICEUID"));
                 debet.setUpdateUser(rs.getString("OC_DEBET_UPDATEUID"));
                 debet.setPatientName(rs.getString("lastname")+", "+rs.getString("firstname"));
@@ -1095,7 +1095,7 @@ public class ExtraInsurarInvoice extends Invoice {
                 debet.setInsurarInvoiceUid(rs.getString("OC_DEBET_INSURARINVOICEUID"));
                 debet.setComment(rs.getString("OC_DEBET_COMMENT"));
                 debet.setCredited(rs.getInt("OC_DEBET_CREDITED"));
-                debet.setQuantity(rs.getInt("OC_DEBET_QUANTITY"));
+                debet.setQuantity(rs.getDouble("OC_DEBET_QUANTITY"));
                 debet.setExtraInsurarAmount(rs.getDouble("OC_DEBET_EXTRAINSURARAMOUNT"));
                 debet.setExtraInsurarInvoiceUid(rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID"));
                 debet.setExtraInsurarUid(rs.getString("OC_DEBET_EXTRAINSURARUID"));

@@ -347,9 +347,7 @@ public class RequestedLabAnalysis {
                     }
                 }
                 setResultModifier(normal);
-                System.out.println("Storing "+this.getResultModifier());
                 this.store();
-                System.out.println("Stored "+this.getResultModifier());
         	}
         	catch(Exception e2){
         		//e2.printStackTrace();

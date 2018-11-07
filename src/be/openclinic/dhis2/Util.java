@@ -64,7 +64,7 @@ public class Util {
 	  char[] passphrase = password.toCharArray();
 
 	  File file = new File(keystore);
-	  Debug.println("Loading KeyStore " + file + "...");
+	  System.out.println("Loading KeyStore " + file + "...");
 	  InputStream in = new FileInputStream(file);
 	  KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
 	  ks.load(in, passphrase);
@@ -79,44 +79,44 @@ public class Util {
 	  context.init(null, new TrustManager[] {tm}, null);
 	  SSLSocketFactory factory = context.getSocketFactory();
 
-	  Debug.println("Opening connection to " + host + ":" + port + "...");
+	  System.out.println("Opening connection to " + host + ":" + port + "...");
 	  SSLSocket socket = (SSLSocket)factory.createSocket(host, port);
 	  socket.setSoTimeout(10000);
 	  try {
-		  Debug.println("Starting SSL handshake...");
+		  System.out.println("Starting SSL handshake...");
 	      socket.startHandshake();
 	      socket.close();
-	      Debug.println("");
-	      Debug.println("No errors, certificate is already trusted");
+	      System.out.println("");
+	      System.out.println("No errors, certificate is already trusted");
 	  } catch (SSLException e) {
-		  Debug.println("");
+		  System.out.println("");
 	      //e.printStackTrace(Debug);
 	  }
 
 	  X509Certificate[] chain = tm.chain;
 	  if (chain == null) {
-		  Debug.println("Could not obtain server certificate chain");
+		  System.out.println("Could not obtain server certificate chain");
 	      return;
 	  }
 
 	  BufferedReader reader =
 	    new BufferedReader(new InputStreamReader(System.in));
 
-	  Debug.println("");
-	  Debug.println("Server sent " + chain.length + " certificate(s):");
-	  Debug.println("");
+	  System.out.println("");
+	  System.out.println("Server sent " + chain.length + " certificate(s):");
+	  System.out.println("");
 	  MessageDigest sha1 = MessageDigest.getInstance("SHA1");
 	  MessageDigest md5 = MessageDigest.getInstance("MD5");
 	  for (int i = 0; i < chain.length; i++) {
 	      X509Certificate cert = chain[i];
-	      Debug.println
+	      System.out.println
 	        (" " + (i + 1) + " Subject " + cert.getSubjectDN());
-	      Debug.println("   Issuer  " + cert.getIssuerDN());
+	      System.out.println("   Issuer  " + cert.getIssuerDN());
 	      sha1.update(cert.getEncoded());
-	      Debug.println("   sha1    " + toHexString(sha1.digest()));
+	      System.out.println("   sha1    " + toHexString(sha1.digest()));
 	      md5.update(cert.getEncoded());
-	      Debug.println("   md5     " + toHexString(md5.digest()));
-	      Debug.println("");
+	      System.out.println("   md5     " + toHexString(md5.digest()));
+	      System.out.println("");
 		  String alias = host + "-" + (i + 1);
 		  //Check if this certificate already exists
 		  boolean bExists = false;
@@ -133,7 +133,7 @@ public class Util {
 					  }
 					  else{
 						  //The existing certificate is more recent or equal, keep it
-						  Debug.println("Certificate with public key "+existingCert.getPublicKey()+" already exists in "+keystore);
+						  System.out.println("Certificate with public key "+existingCert.getPublicKey()+" already exists in "+keystore);
 						  bExists=true;
 					  }
 				  }
@@ -147,10 +147,10 @@ public class Util {
 			  FileOutputStream out = new FileOutputStream(keystore);
 			  ks.store(out, passphrase);
 			  out.close();
-			  Debug.println("");
-			  Debug.println(cert+"");
-			  Debug.println("");
-			  Debug.println
+			  System.out.println("");
+			  System.out.println(cert+"");
+			  System.out.println("");
+			  System.out.println
 			    ("Added certificate to keystore "+keystore+" using alias '"
 			    + alias + "'");
 		  }

@@ -207,7 +207,7 @@ public class Utils {
 								}
 								//String translation=Translate.translate("en",language,interactionPair.elementText("description"),interactionPair.elementText("description"));
 								String translation=GoogleTranslate.translate(MedwanQuery.getInstance().getConfigString("googleTranslateKey","AIzaSyAPk18gciaKdwl3Z2rmFSog4ZwBbmfhByg"),"en", language,interactionPair.elementText("description"));
-								interactions.put(drugcodes,druginteractions+";"+translation);
+								interactions.put(drugcodes,druginteractions.replaceAll("&#39;", "´")+";"+translation.replaceAll("&#39;", "´"));
 							}
 						}
 					}

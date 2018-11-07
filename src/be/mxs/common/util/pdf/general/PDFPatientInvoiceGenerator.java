@@ -436,9 +436,9 @@ public class PDFPatientInvoiceGenerator extends PDFInvoiceGenerator {
             }
             String debetline = " x  ["+debet.getPrestation().getCode()+"] "+debet.getPrestation().getDescription()+extraInsurar;
             if(debetlines.get(debetline)==null){
-            	debetlines.put(debetline, 0);
+            	debetlines.put(debetline, (double)0);
             }
-            debetlines.put(debetline, (Integer)debetlines.get(debetline)+debet.getQuantity());
+            debetlines.put(debetline, (Double)debetlines.get(debetline)+debet.getQuantity());
         }
         Iterator iDebets = debetlines.keySet().iterator();
         while(iDebets.hasNext()){

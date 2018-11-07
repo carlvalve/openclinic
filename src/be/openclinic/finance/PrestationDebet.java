@@ -29,7 +29,7 @@ public class PrestationDebet extends OC_Object implements Comparable {
     private String comment;
     private int credited;
     private String patientName;
-    private int quantity;
+    private double quantity;
     private String extraInsurarUid;
     private String extraInsurarInvoiceUid;
     private double extraInsurarAmount;
@@ -90,10 +90,10 @@ public class PrestationDebet extends OC_Object implements Comparable {
     public void setExtraInsurarInvoiceUid(String extraInsurarInvoiceUid) {
         this.extraInsurarInvoiceUid = extraInsurarInvoiceUid;
     }
-    public int getQuantity() {
+    public double getQuantity() {
         return quantity;
     }
-    public void setQuantity(int quantity) {
+    public void setQuantity(double quantity) {
         this.quantity = quantity;
     }
     //--- COMPARE TO ------------------------------------------------------------------------------
@@ -283,7 +283,7 @@ public class PrestationDebet extends OC_Object implements Comparable {
                         debet.insurarInvoiceUid = rs.getString("OC_DEBET_INSURARINVOICEUID");
                         debet.comment = rs.getString("OC_DEBET_COMMENT");
                         debet.credited = rs.getInt("OC_DEBET_CREDITED");
-                        debet.quantity = rs.getInt("OC_DEBET_QUANTITY");
+                        debet.quantity = rs.getDouble("OC_DEBET_QUANTITY");
                         debet.extraInsurarUid = rs.getString("OC_DEBET_EXTRAINSURARUID");
                         debet.extraInsurarInvoiceUid = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID");
                         debet.extraInsurarAmount = rs.getDouble("OC_DEBET_EXTRAINSURARAMOUNT");
@@ -423,7 +423,7 @@ public class PrestationDebet extends OC_Object implements Comparable {
                 ps.setString(15, this.getUpdateUser());
                 ps.setInt(16, iVersion);
                 ps.setDouble(17, this.getInsurarAmount());
-                ps.setInt(18, this.getQuantity());
+                ps.setDouble(18, this.getQuantity());
                 ps.setString(19, this.getExtraInsurarUid());
                 ps.setString(20, this.getExtraInsurarInvoiceUid());
                 ps.setDouble(21, this.getExtraInsurarAmount());
@@ -516,7 +516,7 @@ public class PrestationDebet extends OC_Object implements Comparable {
                 debet.insurarInvoiceUid = rs.getString("OC_DEBET_INSURARINVOICEUID");
                 debet.comment = rs.getString("OC_DEBET_COMMENT");
                 debet.credited = rs.getInt("OC_DEBET_CREDITED");
-                debet.quantity = rs.getInt("OC_DEBET_QUANTITY");
+                debet.quantity = rs.getDouble("OC_DEBET_QUANTITY");
                 debet.extraInsurarUid = rs.getString("OC_DEBET_EXTRAINSURARUID");
                 debet.extraInsurarInvoiceUid = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID");
                 debet.extraInsurarAmount = rs.getDouble("OC_DEBET_EXTRAINSURARAMOUNT");
@@ -576,7 +576,7 @@ public class PrestationDebet extends OC_Object implements Comparable {
                 debet.insurarInvoiceUid = rs.getString("OC_DEBET_INSURARINVOICEUID");
                 debet.comment = rs.getString("OC_DEBET_COMMENT");
                 debet.credited = rs.getInt("OC_DEBET_CREDITED");
-                debet.quantity = rs.getInt("OC_DEBET_QUANTITY");
+                debet.quantity = rs.getDouble("OC_DEBET_QUANTITY");
                 debet.extraInsurarUid = rs.getString("OC_DEBET_EXTRAINSURARUID");
                 debet.extraInsurarInvoiceUid = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID");
                 debet.extraInsurarAmount = rs.getDouble("OC_DEBET_EXTRAINSURARAMOUNT");
@@ -687,7 +687,7 @@ public class PrestationDebet extends OC_Object implements Comparable {
                 debet.insurarInvoiceUid = rs.getString("OC_DEBET_INSURARINVOICEUID");
                 debet.comment = rs.getString("OC_DEBET_COMMENT");
                 debet.credited = rs.getInt("OC_DEBET_CREDITED");
-                debet.quantity = rs.getInt("OC_DEBET_QUANTITY");
+                debet.quantity = rs.getDouble("OC_DEBET_QUANTITY");
                 debet.extraInsurarUid = rs.getString("OC_DEBET_EXTRAINSURARUID");
                 debet.extraInsurarInvoiceUid = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID");
                 debet.extraInsurarAmount = rs.getDouble("OC_DEBET_EXTRAINSURARAMOUNT");
@@ -840,7 +840,7 @@ public class PrestationDebet extends OC_Object implements Comparable {
                 debet.insurarInvoiceUid = rs.getString("OC_DEBET_INSURARINVOICEUID");
                 debet.comment = rs.getString("OC_DEBET_COMMENT");
                 debet.credited = rs.getInt("OC_DEBET_CREDITED");
-                debet.quantity = rs.getInt("OC_DEBET_QUANTITY");
+                debet.quantity = rs.getDouble("OC_DEBET_QUANTITY");
                 debet.extraInsurarUid = rs.getString("OC_DEBET_EXTRAINSURARUID");
                 debet.extraInsurarInvoiceUid = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID");
                 debet.extraInsurarAmount = rs.getDouble("OC_DEBET_EXTRAINSURARAMOUNT");
@@ -959,7 +959,7 @@ public class PrestationDebet extends OC_Object implements Comparable {
                 debet.insurarInvoiceUid = rs.getString("OC_DEBET_INSURARINVOICEUID");
                 debet.comment = rs.getString("OC_DEBET_COMMENT");
                 debet.credited = rs.getInt("OC_DEBET_CREDITED");
-                debet.quantity = rs.getInt("OC_DEBET_QUANTITY");
+                debet.quantity = rs.getDouble("OC_DEBET_QUANTITY");
                 debet.extraInsurarUid = rs.getString("OC_DEBET_EXTRAINSURARUID");
                 debet.extraInsurarInvoiceUid = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID");
                 debet.extraInsurarAmount = rs.getDouble("OC_DEBET_EXTRAINSURARAMOUNT");
@@ -1060,7 +1060,7 @@ public class PrestationDebet extends OC_Object implements Comparable {
                 debet.insurarInvoiceUid = rs.getString("OC_DEBET_INSURARINVOICEUID");
                 debet.comment = rs.getString("OC_DEBET_COMMENT");
                 debet.credited = rs.getInt("OC_DEBET_CREDITED");
-                debet.quantity = rs.getInt("OC_DEBET_QUANTITY");
+                debet.quantity = rs.getDouble("OC_DEBET_QUANTITY");
                 debet.extraInsurarUid = rs.getString("OC_DEBET_EXTRAINSURARUID");
                 debet.extraInsurarInvoiceUid = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID");
                 debet.extraInsurarAmount = rs.getDouble("OC_DEBET_EXTRAINSURARAMOUNT");
@@ -1120,7 +1120,7 @@ public class PrestationDebet extends OC_Object implements Comparable {
                 debet.insurarInvoiceUid = rs.getString("OC_DEBET_INSURARINVOICEUID");
                 debet.comment = rs.getString("OC_DEBET_COMMENT");
                 debet.credited = rs.getInt("OC_DEBET_CREDITED");
-                debet.quantity = rs.getInt("OC_DEBET_QUANTITY");
+                debet.quantity = rs.getDouble("OC_DEBET_QUANTITY");
                 debet.extraInsurarUid = rs.getString("OC_DEBET_EXTRAINSURARUID");
                 debet.extraInsurarInvoiceUid = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID");
                 debet.extraInsurarAmount = rs.getDouble("OC_DEBET_EXTRAINSURARAMOUNT");
@@ -1226,7 +1226,7 @@ public class PrestationDebet extends OC_Object implements Comparable {
                 debet.insurarInvoiceUid = rs.getString("OC_DEBET_INSURARINVOICEUID");
                 debet.comment = rs.getString("OC_DEBET_COMMENT");
                 debet.credited = rs.getInt("OC_DEBET_CREDITED");
-                debet.quantity = rs.getInt("OC_DEBET_QUANTITY");
+                debet.quantity = rs.getDouble("OC_DEBET_QUANTITY");
                 debet.extraInsurarUid = rs.getString("OC_DEBET_EXTRAINSURARUID");
                 debet.extraInsurarInvoiceUid = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID");
                 debet.extraInsurarAmount = rs.getDouble("OC_DEBET_EXTRAINSURARAMOUNT");
@@ -1327,7 +1327,7 @@ public class PrestationDebet extends OC_Object implements Comparable {
                 debet.insurarInvoiceUid = rs.getString("OC_DEBET_INSURARINVOICEUID");
                 debet.comment = rs.getString("OC_DEBET_COMMENT");
                 debet.credited = rs.getInt("OC_DEBET_CREDITED");
-                debet.quantity = rs.getInt("OC_DEBET_QUANTITY");
+                debet.quantity = rs.getDouble("OC_DEBET_QUANTITY");
                 debet.extraInsurarUid = rs.getString("OC_DEBET_EXTRAINSURARUID");
                 debet.extraInsurarInvoiceUid = rs.getString("OC_DEBET_EXTRAINSURARINVOICEUID");
                 debet.extraInsurarAmount = rs.getDouble("OC_DEBET_EXTRAINSURARAMOUNT");
@@ -1611,7 +1611,7 @@ public class PrestationDebet extends OC_Object implements Comparable {
 	            	debet.setInsuranceUid(rs.getString("OC_DEBET_INSURANCEUID"));
 	            	debet.setInsurarAmount(rs.getDouble("OC_DEBET_INSURARAMOUNT"));
 	            	debet.setPrestationUid(rs.getString("OC_DEBET_PRESTATIONUID"));
-	            	debet.setQuantity(rs.getInt("OC_DEBET_QUANTITY"));
+	            	debet.setQuantity(rs.getDouble("OC_DEBET_QUANTITY"));
 	            	debet.setRenewalInterval(rs.getInt("OC_DEBET_RENEWALINTERVAL"));
 	                debet.setServiceUid(rs.getString("OC_DEBET_SERVICEUID"));
 	            	debet.setUpdateDateTime(new java.util.Date());

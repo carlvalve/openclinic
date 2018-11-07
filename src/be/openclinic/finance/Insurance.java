@@ -7,6 +7,8 @@ import be.mxs.common.util.system.ScreenHelper;
 import be.openclinic.adt.Encounter;
 import be.openclinic.common.OC_Object;
 import net.admin.AdminPerson;
+import pe.gob.sis.Acreditacion;
+import pe.gob.sis.SIS_Object;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -104,6 +106,23 @@ public class Insurance extends OC_Object {
     	if(MedwanQuery.getInstance().getConfigString("InsuranceAgentAuthorizationNeededFor","").indexOf("*"+this.getInsurarUid()+"*")<=-1){
     		bAuthorized= true;
     	}
+    	else if(MedwanQuery.getInstance().getConfigInt("peruEnabled",0)==1){
+    		long day = 24*3600*1000;
+    		SIS_Object acreditacion = Acreditacion.getLast(Integer.parseInt(this.getPatientUID()));
+    		if(acreditacion!=null){
+    			SimpleDateFormat deci = new SimpleDateFormat("yyyyMMddHHmmss");
+    			java.util.Date dValidUntil = new java.util.Date(acreditacion.getValueTimestamp(32).getTime()+day);
+    			if(dValidUntil.after(new java.util.Date())){
+    				bAuthorized = true;
+    			}
+    			else if(MedwanQuery.getInstance().getConfigInt("enableAccreditationValidityPerEncounter",0)==1){
+    				Encounter activeEncounter = Encounter.getActiveEncounter(this.getPatientUID());
+    				if(activeEncounter!=null){
+    					bAuthorized = dValidUntil.after(activeEncounter.getBegin());
+    				}
+    			}
+    		}
+    	}
     	else{
 			Vector pointers = Pointer.getPointers("AUTH."+this.getInsurarUid()+"."+this.getPatientUID()+"."+new SimpleDateFormat("yyyyMM").format(new java.util.Date()));
 	    	for(int n=0; n<pointers.size() && !bAuthorized; n++){
@@ -119,6 +138,12 @@ public class Insurance extends OC_Object {
 	    		if(dValidUntil.after(new java.util.Date())){
 	    			// Still valid!
 	    			bAuthorized=true;
+	    		}
+	    		else if(MedwanQuery.getInstance().getConfigInt("enableAccreditationValidityPerEncounter",0)==1){
+	    			Encounter activeEncounter = Encounter.getActiveEncounter(this.getPatientUID());
+	    			if(activeEncounter!=null){
+	    				bAuthorized = dValidUntil.after(activeEncounter.getBegin());
+	    			}
 	    		}
 	    	}
     	}
@@ -559,7 +584,7 @@ public class Insurance extends OC_Object {
                 ps.setString(5,this.getType());
                 ps.setTimestamp(6,this.getStart());
                 ps.setTimestamp(7,this.getStop());
-                ps.setString(8,this.getComment().toString());
+                ps.setString(8,this.getComment()==null?"":this.getComment().toString());
 
                 ps.setTimestamp(9,new Timestamp(this.getCreateDateTime().getTime()));
                 ps.setTimestamp(10,new Timestamp(this.getUpdateDateTime().getTime()));
