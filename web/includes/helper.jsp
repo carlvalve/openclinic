@@ -64,6 +64,14 @@
         return ScreenHelper.checkString(sString,defaultValue);
     }
 
+    public String checkString(String sString,int maxSize){
+        return ScreenHelper.checkString(sString, maxSize);
+    }
+
+    public String checkString(String sString, String defaultValue,int maxSize){
+        return ScreenHelper.checkString(sString,defaultValue, maxSize);
+    }
+
     //--- GET DATE --------------------------------------------------------------------------------
     public String getDate(){
         return ScreenHelper.getDate();
@@ -1087,6 +1095,7 @@
     String sJSRAPHAEL  = "<script src='"+sCONTEXTPATH+"/_common/_script/raphael-min.js'></script>";
     String sCANVAS  = "<script src='"+sCONTEXTPATH+"/_common/_script/canvas.js'></script>";
     String sCKEDITOR  = "<script src='"+sCONTEXTPATH+"/_common/_script/ckeditor/ckeditor.js'></script>";
+    String sJSIFRAMERESIZER  = "<script src='"+sCONTEXTPATH+"/_common/_script/iframeResizer.js'></script>";
 
     // varia
     String sTDAdminWidth = "200";

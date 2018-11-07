@@ -28,7 +28,7 @@
     if(sQuantity.length()==0){
         sQuantity="0";
     }
-    int quantity=Integer.parseInt(sQuantity);
+    double quantity=Double.parseDouble(sQuantity);
     Insurance bestInsurance = null;
     double baseInsurar=0;
     Debet debet=null;

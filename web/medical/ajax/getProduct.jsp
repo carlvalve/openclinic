@@ -1,10 +1,10 @@
-<%@page import="java.util.*,be.openclinic.pharmacy.*,
+<%@page import="java.util.*,be.openclinic.pharmacy.*,be.openclinic.knowledge.*,be.openclinic.medical.*,
                 be.mxs.common.util.system.*"%>
 <%@include file="/includes/validateUser.jsp"%>
                 
 <%
-	System.out.println("getting product...");
 	Product product=null;
+	String diagnosisuid="";
 	int quantity=0;
 	if(request.getParameter("productUid")!=null){
 		product = Product.get(request.getParameter("productUid"));
@@ -14,6 +14,19 @@
 		product = productStock.getProduct();
 		if(productStock.getLevel()>0){
 			quantity=productStock.getLevel();
+		}
+	}
+	if(product!=null && ScreenHelper.checkString(product.getAtccode()).length()>0){
+		Encounter encounter = Encounter.getActiveEncounter(activePatient.personid);
+		if(encounter!=null && encounter.hasValidUid()){
+			Vector diagnoses = Diagnosis.selectDiagnoses("", "", encounter.getUid(), "", "", "", "", "", "", "", "", "icd10", "OC_DIAGNOSIS_GRAVITY DESC");
+			for(int n=0;n<diagnoses.size();n++){
+				Diagnosis diagnosis = (Diagnosis)diagnoses.elementAt(n);
+				if(Indication.isATCCodeIndicatedForICD10Code(product.getAtccode(), diagnosis.getCode())){
+					diagnosisuid = diagnosis.getUid();
+					break;
+				}
+			}
 		}
 	}
 	
@@ -31,5 +44,6 @@
 	"quantity": "<%=quantity %>",
 	"packageunits": "<%=product.getPackageUnits()>0?product.getPackageUnits():1 %>",
 	"productunit": "<%=getTran(request,"product.unit",product.getUnit(),sWebLanguage) %>",
+	"diagnosis": "<%=diagnosisuid %>",
 	"schema": "<%=ProductSchema.getProductSchema(product.getUid()).asString() %>"
 }

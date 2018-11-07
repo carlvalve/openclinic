@@ -1,4 +1,4 @@
-<pathways>
+<pathways domain="bi.spt" version="1">
 	<label language="fr"><![CDATA[Stratégies plainte-traitement du MSPLS - Burundi]]></label>
 	<pathway complaint="drh.1" value="yes">
 		<label language="fr"><![CDATA[A.1 Stratégie diarrhée chez l'adulte]]></label>
@@ -115,7 +115,7 @@
 					<treatment id="drh9"/>
 				</node>
 				<node>
-					<label language="fr"><![CDATA[Présence de vers]]></label>
+					<label language="fr"><![CDATA[Pas de présence de vers ou amibes]]></label>
 					<argument type="spt" id="drh.9" value="no"/>
 					<argument type="spt" id="drh.10" value="no"/>
 					<treatment id="drh10"/>
@@ -340,7 +340,7 @@
 				</node>
 				<node>
 					<!-- Négatif -->
-					<label language="fr"><![CDATA[Négatif]]></label>
+					<label language="fr"><![CDATA[Examens de selles négatif]]></label>
 					<argument type="spt" id="drhe.7" value="no"/>
 					<argument type="spt" id="drhe.8" value="no"/>
 					<treatment id="drhe10.0"/>
@@ -360,7 +360,7 @@
 			</node>
 			<node>
 				<!-- Examen de selles disponible? -->
-				<label language="fr"><![CDATA[Examen de selles disponible]]></label>
+				<label language="fr"><![CDATA[Examen de selles pas disponible]]></label>
 				<argument type="spt" id="drhe.6" value="no"/>
 				<treatment id="drhe12.0"/>
 				<node>
@@ -702,7 +702,7 @@
 				</node>
 				<node>
 					<!-- Ne vomit pas du sang -->
-					<label language="fr"><![CDATA[Ne vomit du sang]]></label>
+					<label language="fr"><![CDATA[Ne vomit pas du sang]]></label>
 					<argument type="spt" id="vom.2" value="no"/>
 					<node>
 						<!-- Masse palpée -->
@@ -878,7 +878,7 @@
 				</node>
 				<node>
 					<!-- Pas de masse palpée -->
-					<label language="fr"><![CDATA[Pas de masse palpée]]></label>
+					<label language="fr"><![CDATA[Pas de masse hépatique palpée]]></label>
 					<argument type="spt" id="hep.3" value="no"/>
 					<node>
 						<!-- Fièvre -->
@@ -1459,7 +1459,7 @@
 									</node>
 									<node>
 										<!-- Pas d'amélioration après 3 jours -->
-										<label language="fr"><![CDATA[Pas d'amélioration après Jours]]></label>
+										<label language="fr"><![CDATA[Pas d'amélioration après 3 jours]]></label>
 										<argument type="spt" id="dpn.10" value="no"/>
 										<treatment id="dpn7"/>
 									</node>
@@ -1706,7 +1706,7 @@
 						<treatment id="tuxc2.0"/>
 						<node>
 							<!-- Frottis positif -->
-							<label language="fr"><![CDATA[Frottis négatif]]></label>
+							<label language="fr"><![CDATA[Frottis positif]]></label>
 							<argument type="spt" id="tuxc.5" value="positive"/>
 							<treatment id="tuxc2"/>
 						</node>
@@ -1750,7 +1750,7 @@
 				</node>
 				<node>
 					<!-- Pas productive -->
-					<label language="fr"><![CDATA[Pas productive]]></label>
+					<label language="fr"><![CDATA[Toux pas productive]]></label>
 					<argument type="spt" id="tuxc.3" value="no"/>
 					<treatment id="tuxc7.0"/>
 					<node>
@@ -2715,7 +2715,7 @@
 		</excludes>
 		<label language="fr"><![CDATA[C.3 Stratégie pertes rouges sans grossesse]]></label>
 		<node>
-			<label language="fr"><![CDATA[Pertes rouges sans grossess]]></label>
+			<label language="fr"><![CDATA[Pertes rouges sans grossesse]]></label>
 			<argument type="spt" id="gynr.1" value="yes"/>
 			<node>
 				<!-- Ménopause confirmée -->
@@ -2769,13 +2769,13 @@
 						<argument type="spt" id="gynr.4" value="no"/>
 						<node>
 							<!-- Effets secondaires contraception -->
-							<label language="fr"><![CDATA[Effets secondaires contraception]]></label>
+							<label language="fr"><![CDATA[Effets secondaires de contraception]]></label>
 							<argument type="spt" id="gynr.6" value="yes"/>
 							<treatment id="gynr5"/>
 						</node>
 						<node>
 							<!-- Pas d'effets secondaires contraception -->
-							<label language="fr"><![CDATA[Pas d'effets secondaires contraception]]></label>
+							<label language="fr"><![CDATA[Pas d'effets secondaires de contraception]]></label>
 							<argument type="spt" id="gynr.6" value="no"/>
 							<node>
 								<!-- Problème de stérilité -->
@@ -2846,7 +2846,7 @@
 				</node>
 				<node>
 					<!-- Pas d'coulement à l'examen -->
-					<label language="fr"><![CDATA[Ecoulement à l'examen]]></label>
+					<label language="fr"><![CDATA[Pas d'écoulement à l'examen]]></label>
 					<argument type="spt" id="gynb.4" value="no"/>
 					<node>
 						<!-- Prurit -->
@@ -2921,14 +2921,14 @@
 				<label language="fr"><![CDATA[Pas de globe vésical]]></label>
 				<argument type="spt" id="bash.2" value="no"/>
 				<node>
-					<!-- Absence d'émission d'urines &gt; 24h -->
-					<label language="fr"><![CDATA[Emission d'urines &lt; 24h]]></label>
+					<!-- Absence d'émission d'urines &lt; 24h -->
+					<label language="fr"><![CDATA[Pas d'émission d'urines &gt;= 24h]]></label>
 					<argument type="spt" id="uri.4" value="no"/>
 					<treatment id="uri3"/>
 				</node>
 				<node>
 					<!-- Emission d'urines &lt;= 24h -->
-					<label language="fr"><![CDATA[Pas d'émission d'urines &gt;= 24h]]></label>
+					<label language="fr"><![CDATA[Emission d'urines &lt;= 24h]]></label>
 					<argument type="spt" id="uri.4" value="yes"/>
 					<node>
 						<!-- Hématurie -->
@@ -3050,8 +3050,8 @@
 					<treatment id="scro2"/>
 				</node>
 				<node>
-					<!-- Tuméfaction inguino-scrotale réductible ou non-douloureuse -->
-					<label language="fr"><![CDATA[Tuméfaction inguino-scrotale réductible ou non-douloureuse]]></label>
+					<!-- Pas de tuméfaction inguino-scrotale réductible ou non-douloureuse -->
+					<label language="fr"><![CDATA[Pas de tuméfaction inguino-scrotale réductible ou non-douloureuse]]></label>
 					<argument type="spt" id="scro.3" value="no"/>
 					<node>
 						<!-- Fièvre -->
@@ -3517,7 +3517,7 @@
 						</node>
 						<node>
 							<!-- Pas d'ulcère avec prurit entre orteils -->
-							<label language="fr"><![CDATA[Pas d'ulcère avec prurit entre orteils]]></label>
+							<label language="fr"><![CDATA[Ulcère sans prurit entre orteils]]></label>
 							<argument type="spt" id="ulc.7" value="no"/>
 							<treatment id="ulc8"/>
 						</node>
@@ -3920,7 +3920,7 @@
 		</node>
 	</pathway>
 	<pathway complaint="cef.1" value="yes">
-		<label language="fr"><![CDATA[E.2 Stratégie céphalées et/ou vertige]]></label>
+		<label language="fr"><![CDATA[E.2 Stratégie céphalées et/ou vertiges]]></label>
 		<node>
 			<label language="fr"><![CDATA[Céphalées et/ou vertiges]]></label>
 			<argument type="spt" id="cef.1" value="yes"/>
@@ -4717,12 +4717,12 @@
 				<label language="fr"><![CDATA[Pas de brûlure chimique au chaux vive]]></label>
 				<argument type="spt" id="oet.2" value="no"/>
 				<node>
-					<label language="fr"><![CDATA[Brûlure chimique (eau de javel, betterie)]]></label>
+					<label language="fr"><![CDATA[Brûlure chimique (eau de javel, batterie)]]></label>
 					<argument type="spt" id="oet.3" value="yes"/>
 					<treatment id="oet2"/>
 				</node>
 				<node>
-					<label language="fr"><![CDATA[Pas de brûlure chimique (eau de javel, betterie)]]></label>
+					<label language="fr"><![CDATA[Pas de brûlure chimique (eau de javel, batterie)]]></label>
 					<argument type="spt" id="oet.3" value="no"/>
 					<node>
 						<label language="fr"><![CDATA[]]>Plaie par objet pointu</label>
@@ -5047,7 +5047,7 @@
 					<treatment id="oed1"/>
 				</node>
 				<node>
-					<label language="fr"><![CDATA[Pas de dyspnée, troubles cardiaques]]></label>
+					<label language="fr"><![CDATA[Pas de dyspnée et troubles cardiaques]]></label>
 					<arguments select="all">
 						<argument type="spt" id="oed.3" value="no"/>
 						<argument type="spt" id="oed.4" value="no"/>
@@ -6915,7 +6915,7 @@
 		</treatment>
 		<treatment id="ppp6.0">
 			<document id="13"/>
-			<label language="fr"><![CDATA[Voir Fiche Technique Paludisme<br/>Amoxicilline 500mg 2x 2gél/j pendant 10 jours<br/>Paracétamol 500mg 3x 2cp/j pendant 3 jours<br/>Métronisazole 250mg 3x 2cp/j pendant 7 jours<br/>Sel de fer 200mg 3x 1cp/j pendant 60 jours<br/>Toilette avec chlorexidine<br/>Insister sur un rendez-vous dans 3 jours]]></label>
+			<label language="fr"><![CDATA[Voir Fiche Technique Paludisme<br/>Amoxicilline 500mg 2x 2gél/j pendant 10 jours<br/>Paracétamol 500mg 3x 2cp/j pendant 3 jours<br/>Métronidazole 250mg 3x 2cp/j pendant 7 jours<br/>Sel de fer 200mg 3x 1cp/j pendant 60 jours<br/>Toilette avec chlorexidine<br/>Insister sur un rendez-vous dans 3 jours]]></label>
 		</treatment>
 		<treatment id="ppp6"/>
 		<treatment id="ppp7">
@@ -7522,7 +7522,7 @@
 			<label language="fr"><![CDATA[Référer en urgence<br/>Paracétamol 500mg 1 x 2cp]]></label>
 		</treatment>
 		<treatment id="ict3.0">
-			<document id="2"/>
+			<document id="13"/>
 			<label language="fr"><![CDATA[Voir Fiche Technique Paludisme<br/>Paracétamol 500mg 2x 2cp/j pendant 3 jours]]></label>
 		</treatment>
 		<treatment id="ict3"/>
@@ -8050,9 +8050,6 @@
 		<concept id="tro.1" values="yes,no">
 			<label language="fr"><![CDATA[
 				Traumatisme ouvert
-			]]></label>
-			<label language="es"><![CDATA[
-				Trauma abierto
 			]]></label>
 		</concept>
 		<concept id="tro.2" values="yes,no">
@@ -10642,9 +10639,6 @@
 			<concept id="tro.1" value="yes">
 				<label language="fr"><![CDATA[
 					Traumatisme ouvert
-				]]></label>
-				<label language="es"><![CDATA[
-					Trauma abierto
 				]]></label>
 			</concept>
 			<concept id="trf.1" value="yes">

@@ -256,7 +256,8 @@
             <td>
                 <%
                     hMenu = new Hashtable();	              
-                    hMenu.put(getTran(request,"web.manage","manageDoubleScannedDocuments",sWebLanguage),"main.do?Page=system/manageDoubleScannedDocuments.jsp"); idx++;
+                hMenu.put(getTran(request,"web.manage","emulatepacsmodality",sWebLanguage),"main.do?Page=pacs/emulateModality.jsp"); idx++;
+                hMenu.put(getTran(request,"web.manage","manageDoubleScannedDocuments",sWebLanguage),"main.do?Page=system/manageDoubleScannedDocuments.jsp"); idx++;
                     if(activePatient!=null){
                         hMenu.put(getTran(request,"web.manage","listArchiveDocuments",sWebLanguage),"main.do?Page=archiving/listArchiveDocuments.jsp"); idx++;
                     }

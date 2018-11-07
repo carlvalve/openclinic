@@ -132,6 +132,10 @@
         <permission type="examination" id="1159">occup.ccbrt.surgeryconsultation</permission>
         <permission type="examination" id="1160">occup.ccbrt.optometrist</permission>
         <permission type="examination" id="1161">occup.ccbrt.imagingrequest</permission>
+        <permission type="examination" id="1162">occup.ccbrt.cataractfollowup</permission>
+        <permission type="examination" id="1163">occup.ccbrt.entexamination</permission>
+        <permission type="examination" id="1164">occup.ccbrt.ophtalmologyConsultation</permission>
+        <permission type="examination" id="1165">pediatric.triage</permission>
     </application>
     <application type="Web" id="newexaminations">
         <permission type="web" id="globalexaminations">examinations.global</permission>
@@ -238,6 +242,8 @@
         <permission type="web" id="insurarCreditEdit">financial.insurarcreditedit</permission>
         <permission type="web" id="debeteedit">financial.debet</permission>
         <permission type="web" id="patientInvoiceEdit">financial.patientinvoice</permission>
+        <permission type="web" id="fuaEdit">financial.fua</permission>
+        <permission type="web" id="fuaSign">financial.fuasign</permission>
         <permission type="web" id="financial.reopensummaryinvoice">financial.reopensummaryinvoice</permission>
         <permission type="web" id="consolidatedPatientInvoiceEdit">financial.consolidatedpatientinvoice</permission>
         <permission type="web" id="insuranceInvoiceEdit">financial.insuranceinvoice</permission>

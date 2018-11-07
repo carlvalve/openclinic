@@ -335,7 +335,7 @@
                 <tr>
                     <td class="admin"><%=getTran(request,"Web.Occup","medwan.healthrecord.anamnese.general.subjective",sWebLanguage)%></td>
                     <td colspan="3" class="admin2">
-                        <textarea rows="1" onKeyup="resizeTextarea(this,10);" <%=setRightClick(session,"[GENERAL.ANAMNESE]ITEM_TYPE_SUBJECTIVE")%> class="text" cols="75" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_SUBJECTIVE" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_SUBJECTIVE" property="value"/><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_SUBJECTIVE1" property="value"/><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_SUBJECTIVE2" property="value"/><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_SUBJECTIVE3" property="value"/><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_SUBJECTIVE4" property="value"/><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_SUBJECTIVE5" property="value"/><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_SUBJECTIVE6" property="value"/><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_SUBJECTIVE7" property="value"/></textarea>
+                        <textarea id='ttt' rows="1" onKeyup="resizeTextarea(this,10);" <%=setRightClick(session,"[GENERAL.ANAMNESE]ITEM_TYPE_SUBJECTIVE")%> class="text" cols="75" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_SUBJECTIVE" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_SUBJECTIVE" property="value"/><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_SUBJECTIVE1" property="value"/><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_SUBJECTIVE2" property="value"/><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_SUBJECTIVE3" property="value"/><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_SUBJECTIVE4" property="value"/><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_SUBJECTIVE5" property="value"/><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_SUBJECTIVE6" property="value"/><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_SUBJECTIVE7" property="value"/></textarea>
                         <input type="hidden" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_SUBJECTIVE1" property="itemId"/>]>.value">
                         <input type="hidden" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_SUBJECTIVE2" property="itemId"/>]>.value">
                         <input type="hidden" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_SUBJECTIVE3" property="itemId"/>]>.value">
@@ -406,7 +406,7 @@
                 </tr>
                 <tr>
                     <td class="admin">
-                        <%=getTran(request,"web","breast-examination",sWebLanguage)%>
+                        <%=getTran(request,"web","breast-uterus-examination",sWebLanguage)%>
                         <img id="trBreastsS" name="trBreastsS" src="<c:url value='/_img/icons/icon_plus.png'/>" onclick="showD('divBreasts','trBreastsS','trBreastsH');">
                         <img id="trBreastsH" name="trBreastsH" src="<c:url value='/_img/icons/icon_minus.png'/>" onclick="hideD('divBreasts','trBreastsS','trBreastsH');" style="display:none">
                     </td>
@@ -422,7 +422,7 @@
 
                         <input type="hidden" id="EditCoordinates" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BREAST_EXAMINATION_COORDINATES" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BREAST_EXAMINATION_COORDINATES" property="value"/>">
                         <div id="divBreasts" name="divBreasts" style="display:none">
-							<%=ScreenHelper.createDrawingDiv(request, "canvasDiv", "be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OCDRAWING", transaction,"/_img/mammae.png") %>
+							<%=ScreenHelper.createDrawingDiv(request, "canvasDiv", "be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OCDRAWING", transaction,MedwanQuery.getInstance().getConfigString("defaultGynecologyDiagram","/_img/mammae.png"),"gynecology.image") %>
 							<script>
 								if(outlineImage.src.indexOf("data:")==0){
 									document.getElementById('divBreasts').style.display='';
@@ -530,7 +530,7 @@
                 <tr>
                     <td class="admin"><%=getTran(request,"gynaeco", "date.dr", sWebLanguage)%></td>
                     <td class="admin2">
-                        <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DATE_DR" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DATE_DR" property="value" formatType="date"/>" id="drdate" onblur='checkDate(this);calculateGestAge();clearDr()' onchange='calculateGestAge();' onfocus='calculateGestAge();' onkeyup='calculateGestAge();'/>
+                        <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DATE_DR" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DATE_DR" property="value" formatType="date"/>" id="drdate" onblur='checkDate(this);calculateGestAge();clearDr()' onfocus='calculateGestAge();'/>
                         <script>writeMyDate("drdate", "<c:url value="/_img/icons/icon_agenda.png"/>", "<%=getTran(null,"Web","PutToday",sWebLanguage)%>");</script>
                         <input id="agedatedrshow" type="text" class="text" size="5"> <%=getTran(request,"web", "weeks.abr", sWebLanguage)%> <%=getTran(request,"web", "delivery.date", sWebLanguage)%>:
                         <input id="agedatedr" <%=setRightClick(session,"ITEM_TYPE_DELIVERY_AGE_DATE_DR")%> type="hidden" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_AGE_DATE_DR" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_AGE_DATE_DR" property="value"/>" > 
@@ -540,9 +540,9 @@
                 <tr>
                     <td class="admin"><%=getTran(request,"gynaeco", "date.echography", sWebLanguage)%></td>
                     <td class="admin2">
-                        <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DATE_ECHO" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DATE_ECHO" property="value" formatType="date"/>" id="echodate" onBlur='checkDate(this);calculateGestAge();' onchange='calculateGestAge();' onkeyup='calculateGestAge();'/>
+                        <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DATE_ECHO" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DATE_ECHO" property="value" formatType="date"/>" id="echodate" onBlur='checkDate(this);calculateGestAge();'/>
                         <script>writeMyDate("echodate", "<c:url value="/_img/icons/icon_agenda.png"/>", "<%=getTran(null,"Web","PutToday",sWebLanguage)%>");</script>
-                        <input type="text" class="text" size="5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_AGE_ECHOGRAPHY" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_AGE_ECHOGRAPHY" property="value"/>" id="agedateechomanual" onblur="isGestAge(this);calculateGestAge();" onchange='isGestAge(this);calculateGestAge();' onkeyup="isGestAge(this);calculateGestAge();"> <%=getTran(request,"web", "weeks.abr", sWebLanguage)%> <%=getTran(request,"web", "delivery.date", sWebLanguage)%>:
+                        <input type="text" class="text" size="5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_AGE_ECHOGRAPHY" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_AGE_ECHOGRAPHY" property="value"/>" id="agedateechomanual" onblur="isGestAge(this);calculateGestAge();" > <%=getTran(request,"web", "weeks.abr", sWebLanguage)%> <%=getTran(request,"web", "delivery.date", sWebLanguage)%>:
                         <input id='agedateecho' type='hidden'/>
                         <input id="echodeldate" <%=setRightClick(session,"ITEM_TYPE_DELIVERY_DATE_ECHOGRAPHY")%> type="text" class="text" size="12" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_DATE_ECHOGRAPHY" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_DATE_ECHOGRAPHY" property="value"/>" onblur="checkDate(this);">
 						<BR/>
@@ -721,24 +721,37 @@
     }
   }
 
+  function makedate(s){
+	  var date = new Date();
+	  var parts = s.split("/");
+	  date.setDate(1);
+	  date.setMonth(parts[1]-1);
+	  date.setYear(parts[2]);
+      var day=24*3600*1000;
+      date.setTime(date.getTime()+(parts[0]-1)*day);
+      return date;
+  }
+  
+  function leftpad(s, pad, len){
+	  while(s.length<len){
+		 s=pad+s;
+	  }
+	  return s;
+  }
+  
   function calculateGestAge(){
-    var trandate = new Date();
+	document.getElementById("agedatedrshow").value="";
     var d1 = document.getElementById('trandate').value.split("/");
 
     if(d1.length == 3){
-      // actual transaction date
-      trandate.setDate(d1[0]);
-      trandate.setMonth(d1[1] - 1);
-      trandate.setFullYear(d1[2]);
-      var lmdate = new Date();
+      var trandate = makedate(document.getElementById('trandate').value);
       d1 = document.getElementById('drdate').value.split("/");
       // calculate delivery date based on last menstruation date
-      if (d1.length == 3) {
+      if (d1.length == 3 && d1[2].length==4) {
         // last menstruation date
-        lmdate.setDate(d1[0]);
-        lmdate.setMonth(d1[1] - 1);
-        lmdate.setFullYear(d1[2]);
-
+        var lmdate = makedate(document.getElementById('drdate').value);
+		var sdate = leftpad(lmdate.getDate()+"","0",2)+"/"+leftpad((lmdate.getMonth()+1)+"","0",2)+"/"+lmdate.getFullYear();
+        document.getElementById('drdate').value=sdate;
         //Calculate number of weeks elapsed between last menstruation date and actual transaction date 
         var timeElapsed = trandate.getTime() - lmdate.getTime();
         timeElapsed = timeElapsed / (1000 * 3600 * 24 * 7);

@@ -33,7 +33,6 @@
 	String url = MedwanQuery.getInstance().getConfigString("readFingerPrint.jsp","http://localhost/openclinic/_common/dp/readFingerPrintRemote.jsp");
 	GetMethod method = new GetMethod(url);
 	client.executeMethod(method);
-	//out.print(method.getResponseBodyAsString());
 	String sSuccess="0";
 	String sUserId="-1";
 	long password=0;

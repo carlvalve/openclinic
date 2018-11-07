@@ -21,11 +21,12 @@
                sGender = checkString(request.getParameter("Gender")),
                sNativeCountry = checkString(request.getParameter("NativeCountry")),
                sNativeTown = checkString(request.getParameter("NativeTown")),
+               sPersonType = checkString(request.getParameter("PersonType")),
                sComment = checkString(request.getParameter("Comment")),
                sComment3 = checkString(request.getParameter("Comment3")),
                sComment4 = checkString(request.getParameter("Comment4")),
                sComment5 = checkString(request.getParameter("Comment5")),
-               sMiddleName = checkString(request.getParameter("MiddleName")),
+               sMiddleName = checkString(request.getParameter("Middlename")),
                sComment1 = checkString(request.getParameter("Comment1")),
                sCivilStatus = checkString(request.getParameter("CivilStatus")),
                sTracnetID = checkString(request.getParameter("TracnetID")),
@@ -96,6 +97,7 @@
 	        Debug.println("\n**************** _common/patient/patientEditSave.jsp ***************");
 	        Debug.println("sName        : "+sName);
 	        Debug.println("sFirstname   : "+sFirstname);
+	        Debug.println("sMiddlename   : "+sMiddleName);
 	        Debug.println("sDateOfBirth : "+sDateOfBirth);
 	        Debug.println("sImmatNew    : "+sImmatNew);
 	        Debug.println("sNatReg      : "+sNatReg+"\n");
@@ -115,12 +117,18 @@
             String sPersonID = activePatient.personid;
 
             activePatient = new AdminPerson();
-            activePatient.lastname = sName.trim().toUpperCase();
+            if(MedwanQuery.getInstance().getConfigInt("enableDoubleFamilyNames",0)==1){
+                activePatient.setLastnames(sName.trim().toUpperCase(),sMiddleName.trim().toUpperCase());
+            }
+            else{
+            	activePatient.lastname = sName.trim().toUpperCase();
+            }
             activePatient.firstname = sFirstname.trim().toUpperCase();
             activePatient.dateOfBirth = sDateOfBirth.trim();
             activePatient.updateuserid = activeUser.userid;
             activePatient.nativeCountry = sNativeCountry;
             activePatient.nativeTown = sNativeTown;
+            activePatient.personType = sPersonType;
             AdminID aID;
 			if(sUpdateTime.length()>0){
 				try{
@@ -179,7 +187,7 @@
             activePatient.comment4 = sComment4;
             activePatient.comment5 = sComment5;
             activePatient.adminextends.put("vip",sVip);
-            activePatient.middlename=sMiddleName;
+            activePatient.middlename=sMiddleName.toUpperCase();
             if (sFatherName.trim().length() > 0) {
                 activePatient.adminextends.put("fathername", sFatherName);
             }

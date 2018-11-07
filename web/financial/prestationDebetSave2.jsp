@@ -39,7 +39,7 @@
 		        if(sEditQuantity.length()==0){
 		            sEditQuantity="1";
 		        }
-		        debet.setQuantity(Integer.parseInt(sEditQuantity));
+		        debet.setQuantity(Double.parseDouble(sEditQuantity));
 
 		        debet.setCredited(Integer.parseInt(sEditCredit));
 		        debet.setDate(ScreenHelper.getSQLDate(sEditDate));

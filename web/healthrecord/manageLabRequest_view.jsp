@@ -757,7 +757,7 @@
                  "&existinganalyses="+transactionForm.selectedLabCodes.value;
     var url = '<c:url value="/labos/getLabAnalyses.jsp"/>?ts='+new Date();
 	new Ajax.Request(url,{
-	  method: "GET",
+	  method: "POST",
       parameters: params,
       onSuccess: function(resp){
         var label = eval('('+resp.responseText+')');

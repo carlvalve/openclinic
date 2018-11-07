@@ -39,6 +39,9 @@
            sEditEncounterBegin = checkString(request.getParameter("EditEncounterBegin")),
            sEditEncounterBeginHour = checkString(request.getParameter("EditEncounterBeginHour")),
            sEditEncounterEnd = checkString(request.getParameter("EditEncounterEnd")),
+           sEditEncounterEscortName = checkString(request.getParameter("EditEncounterEscortName")),
+           sEditEncounterEscortPhone = checkString(request.getParameter("EditEncounterEscortPhone")),
+           sEditEncounterComment = checkString(request.getParameter("EditEncounterComment")),
            sEditEncounterReference = checkString(request.getParameter("EditEncounterReference")),
            sEditEncounterEndHour = checkString(request.getParameter("EditEncounterEndHour")),
            sEditEncounterCategories = checkString(request.getParameter("EditEncounterCategories"));
@@ -150,6 +153,9 @@
 		if(MedwanQuery.getInstance().getConfigInt("enableEncounterReference",0)==1){
 			tmpEncounter.setEtiology(sEditEncounterReference);
 		}
+		tmpEncounter.setEscortName(sEditEncounterEscortName);
+		tmpEncounter.setEscortPhone(sEditEncounterEscortPhone);
+		tmpEncounter.setComment(sEditEncounterComment);
 
         Service tmpService, tmpDestination;
         Bed tmpBed = null;
@@ -321,6 +327,9 @@
         sEditEncounterBegin = checkString(ScreenHelper.stdDateFormat.format(tmpEncounter.getBegin()));
         sEditEncounterBeginHour = checkString(ScreenHelper.hourFormat.format(tmpEncounter.getBegin()));
 		sEditEncounterReference = checkString(tmpEncounter.getEtiology());
+		sEditEncounterEscortName = checkString(tmpEncounter.getEscortName());
+		sEditEncounterEscortPhone = checkString(tmpEncounter.getEscortPhone());
+		sEditEncounterComment = checkString(tmpEncounter.getComment());
         
         if(tmpEncounter.getEnd()==null){
             sEditEncounterEnd = "";
@@ -588,6 +597,16 @@
             </td>
         </tr>
         
+        <%-- ACCOMPANIED BY --%>
+        <tr id="Reference" style="visibility:visible;">
+            <td class="admin"><%=getTran(request,"web","accompaniedby",sWebLanguage)%></td>
+            <td class='admin2'>
+				<input type='text' class='text' size='40' id='EditEncounterEscortName' name='EditEncounterEscortName' value='<%=sEditEncounterEscortName %>'/>
+				&nbsp;&nbsp;&nbsp;&nbsp;<%=getTran(request,"web","phone",sWebLanguage)%>:
+				<input type='text' class='text' size='20' id='EditEncounterEscortPhone' name='EditEncounterEscortPhone' value='<%=sEditEncounterEscortPhone	 %>'/>
+            </td>
+        </tr>
+
         <%-- DESTINATION --%>
         <tr id="Destination" style="visibility:visible;">
             <td class="admin"><%=getTran(request,"web","destination",sWebLanguage)%></td>
@@ -1023,25 +1042,16 @@
   <%-- CHECK ENCOUNTER TYPE --%>
   <%-- display inputfields according to encounter type --%>
   function checkEncounterType(){
-		//if(document.getElementById("EditEncounterService")) document.getElementById("EditEncounterService").value='';
-		//if(document.getElementById("EditEncounterServiceName")) document.getElementById("EditEncounterServiceName").value='';
-		if(document.getElementById("EditEncounterManager")) document.getElementById("EditEncounterManager").value='';
-		if(document.getElementById("EditEncounterManagerName")) document.getElementById("EditEncounterManagerName").value='';
-		if(document.getElementById("EditEncounterBed")) document.getElementById("EditEncounterBed").value='';
-		if(document.getElementById("EditEncounterBedName")) document.getElementById("EditEncounterBedName").value='';
     if(EditEncounterForm.EditEncounterType.value=="admission"){
-      //document.getElementById("Service").style.display = "block";
       show("Bed");
       show("alreadyAccountedAccomodation");
       show("internaltransfers");
       calculateAccomodationDates();
     }
     else{
-      EditEncounterForm.EditEncounterBed.value="";
-      EditEncounterForm.EditEncounterBedName.value="";
+		if(document.getElementById("EditEncounterBed")) document.getElementById("EditEncounterBed").value='';
+		if(document.getElementById("EditEncounterBedName")) document.getElementById("EditEncounterBedName").value='';
       setBedButton();
-      
-      //document.getElementById("Service").style.display = "none";
       hide("Bed");
       document.getElementsByName('DoAccountAccomodationDays')[0].checked=false;
       hide("notAccountedAccomodation");

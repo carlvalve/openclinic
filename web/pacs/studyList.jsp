@@ -49,7 +49,18 @@
 	}
 %>
 </table>
-<input type='button' class='button' name='viewselected' value='<%=getTranNoLink("web","viewselected",sWebLanguage) %>' onclick='viewselected()'/>
+<IFRAME style="display:none" name="hidden-form"></IFRAME>
+
+<%	if(MedwanQuery.getInstance().getConfigInt("enableRemoteWeasis", 1)==1){ %>
+		<input type='button' class='button' name='viewselected' value='<%=getTranNoLink("web","viewselected",sWebLanguage) %>' onclick='viewselected()'/>
+<%
+	}
+	if(MedwanQuery.getInstance().getConfigInt("enableLocalWeasis", 0)==1){
+%>
+		<input type='button' class='button' name='viewselectedlocal' value='<%=getTranNoLink("web","viewselectedlocal",sWebLanguage) %>' onclick='viewselectedlocal()'/>
+<%
+	}
+%>
 
 <script>
 
@@ -69,14 +80,47 @@ function viewselected(){
 	}
 	if(studies.length>0){
 	    var url = "<c:url value='/pacs/viewStudy.jsp'/>?studyuid="+studies+"&seriesid="+series;
-	    window.open(url);
-	    window.setTimeout("window.close();","2000");
+	    window.open(url,"hidden-form");
+	    //window.setTimeout("window.close();","2000");
 	}
 }
+
+function viewselectedlocal(){
+	var studies='';
+	var series='';
+	var elements=document.getElementsByTagName("*");
+	for(n=0;n<elements.length;n++){
+		if(elements[n].id && elements[n].id.startsWith("cb.") && elements[n].checked){
+			if(studies.length>0){
+				studies+="_";
+				series+="_";
+			}
+			studies+=elements[n].id.split('_')[0].substring(3);
+			series+=elements[n].id.split('_')[1];
+		}
+	}
+	if(studies.length>0){
+	    var url = "<c:url value='/pacs/viewStudyLocal.jsp'/>?studyuid="+studies+"&seriesid="+series;
+	    window.open(url,"hidden-form");
+	    //window.setTimeout("window.close();","2000");
+	}
+}
+
 function view(studyuid,seriesid){
-    var url = "<c:url value='/pacs/viewStudy.jsp'/>?studyuid="+studyuid+"&seriesid="+seriesid;
-    window.open(url);
-    window.setTimeout("window.close();","2000");
+	<%
+		if(MedwanQuery.getInstance().getConfigInt("enableRemoteWeasis", 1)==1){
+	%>
+    	var url = "<c:url value='/pacs/viewStudy.jsp'/>?studyuid="+studyuid+"&seriesid="+seriesid;
+    <%
+		}
+		else{
+    %>
+		var url = "<c:url value='/pacs/viewStudyLocal.jsp'/>?studyuid="+studyuid+"&seriesid="+seriesid;
+    <%
+		}
+    %>
+    window.open(url,"hidden-form");
+    //window.setTimeout("window.close();","2000");
 }
 
 </script>

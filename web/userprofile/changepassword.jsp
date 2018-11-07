@@ -48,6 +48,15 @@
                 <%=writeTableHeader("Web.UserProfile","changePassword",sWebLanguage," doBack();")%>
                 
                 <table width="100%" cellspacing="1" cellpadding="0" class="list">
+                    <tr>
+                        <td class="admin"><%=getTran(request,"Web.UserProfile","passwordvaliduntil",sWebLanguage)%></td>
+                        <td class="admin2"><b><%
+                       		long passwordavailability = MedwanQuery.getInstance().getConfigInt("PasswordAvailability");
+                        	long day = 24*3600*1000;
+                        	long pwdChangeDate = Long.parseLong(activeUser.getParameter("pwdChangeDate"));
+                        	out.print(ScreenHelper.formatDate(new java.util.Date(pwdChangeDate+passwordavailability*day),ScreenHelper.fullDateFormat));
+						%></b></td>
+                    </tr>
                     <%-- OldPassword --%>
                     <tr>
                         <td class="admin"><%=getTranNoLink("Web.UserProfile","PutOldPassword",sWebLanguage)%></td>

@@ -23,6 +23,11 @@
 	    sessionContainerWO.setHealthRecordVO(MedwanQuery.getInstance().loadHealthRecord(person, null, sessionContainerWO));
 	}
 	catch(Exception e){}
+	if(MedwanQuery.getInstance().getConfigString("mobile.edition","").equalsIgnoreCase("spt")){
+		session.removeAttribute("sptconcepts");
+		out.println("<script>window.location.href='"+sCONTEXTPATH+"/html5/sptcomplaints.jsp?doc="+MedwanQuery.getInstance().getConfigString("templateSource")+MedwanQuery.getInstance().getConfigString("clinicalPathwayFiles","pathways.bi.xml")+"';</script>");
+		out.flush();
+	}
 %>
 <%=sCSSNORMAL %>
 <title><%=getTran(request,"web","patientfile",sWebLanguage) %></title>

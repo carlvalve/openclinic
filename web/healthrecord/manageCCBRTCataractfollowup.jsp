@@ -215,7 +215,7 @@
             
 	<%-- BUTTONS --%>
 	<%=ScreenHelper.alignButtonsStart()%>
-	    <%=getButtonsHtml(request,activeUser,activePatient,"occup.ccbrt.orthoregistry",sWebLanguage)%>
+	    <%=getButtonsHtml(request,activeUser,activePatient,"occup.ccbrt.cataractfollowup",sWebLanguage)%>
 	<%=ScreenHelper.alignButtonsStop()%>
 	
     <%=ScreenHelper.contextFooter(request)%>

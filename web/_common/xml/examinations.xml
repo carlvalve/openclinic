@@ -1687,11 +1687,19 @@
     <es>Seguimento de ETN (CCBRT)</es>  
   </Row>  
   <Row> 
-    <id>1163</id>  
+    <id>1164</id>  
     <class>ccbrt</class>  
     <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CCBRT_OPHTALMOLOGYCONSULTATION</transactiontype>  
     <fr>Consultation ophtalmologie (CCBRT)</fr>  
     <en>Ophtalmology consultation (CCBRT)</en> 
     <es>Consulta en oftalmología (CCBRT)</es>  
+  </Row>  
+  <Row> 
+    <id>1165</id>  
+    <class>pediatrics</class>  
+    <transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_PEDIATRIC_TRIAGE</transactiontype>  
+    <fr>Triage pédiatrique (CPTAS)</fr>  
+    <en>Pediatric triage (CPTAS)</en> 
+    <es>Triaje pediatrico (CPTAS)</es>  
   </Row>  
 </Examinations>

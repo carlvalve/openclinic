@@ -312,4 +312,8 @@
   	<Query id='QUERY.openclinic.ocpointersexpand' db='openclinic' date='09/03/2018' dbserver='MySQL'>
 		alter table oc_pointers modify oc_pointer_value varchar(5000);
   	</Query>
+  	<Query id='QUERY.openclinic.adminexpand' db='ocadmin' date='09/09/2018' dbserver='MySQL'>
+		alter table admin modify comment varchar(5000);
+		alter table adminhistory modify comment varchar(5000);
+  	</Query>
 </Queries>

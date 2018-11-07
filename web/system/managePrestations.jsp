@@ -24,6 +24,9 @@
 %>
 <%
     String sAction = checkString(request.getParameter("Action"));
+	if(sAction.length()==0){
+		sAction = checkString(request.getParameter("AutoAction"));
+	}
     String sCurrency = MedwanQuery.getInstance().getConfigParam("currency","€");
     String msg = "";
     String sCategory = "";
@@ -61,6 +64,7 @@
            sEditPrestationServiceUid = checkString(request.getParameter("EditPrestationServiceUid")),
            sEditPrestationNomenclature = checkString(request.getParameter("EditPrestationNomenclature")),
            sEditPrestationDHIS2Code = checkString(request.getParameter("EditPrestationDHIS2Code")),
+           sEditPrestationKeywords = checkString(request.getParameter("EditPrestationKeywords")),
            sEditPrestationProductionOrder = checkString(request.getParameter("EditPrestationProductionOrder")),
            sEditPrestationProductionOrderPaymentLevel = checkString(request.getParameter("EditPrestationProductionOrderPaymentLevel")),
            sEditPrestationProductionOrderPrescription = checkString(request.getParameter("EditPrestationProductionOrderPrescription")),
@@ -207,6 +211,7 @@
         prestation.setNomenclature(sEditPrestationNomenclature);
         prestation.setCostCenter(sEditPrestationCostcenter);
         prestation.setDhis2code(sEditPrestationDHIS2Code);
+        prestation.setKeywords(sEditPrestationKeywords);
         prestation.setProductionOrder(sEditPrestationProductionOrder);
         prestation.setProductionOrderPaymentLevel(new Double(Double.parseDouble(sEditPrestationProductionOrderPaymentLevel)).intValue());
         prestation.setProductionOrderPrescription(new Double(Double.parseDouble(sEditPrestationProductionOrderPrescription)).intValue());
@@ -222,6 +227,10 @@
         sEditPrestationUid = prestation.getUid();
         msg = getTran(request,"web","dataIsSaved",sWebLanguage);
         sAction = "search";
+        if(checkString(request.getParameter("AutoAction")).length()>0){
+        	out.println("<script>window.opener.location.reload();window.close();</script>");
+        	out.flush();
+        }
     }
     //--- DELETE ----------------------------------------------------------------------------------
     else if(sAction.equals("delete")){
@@ -233,7 +242,7 @@
     // keydown
     String sOnKeyDown, sBackFunction;
     if(sAction.equals("edit") || sAction.equals("new")){
-        sOnKeyDown = "onkeydown='if(enterEvent(event,13)){savePrestation();}'";
+        sOnKeyDown = "";
         sBackFunction = "doBack();";
     }
     else{
@@ -383,6 +392,15 @@
                             <input type="text" class="text" name="EditPrestationNomenclature" size="80" maxlength="250" value="<%=checkString(prestation.getNomenclature())%>">
                         </td>
                     </tr>
+                    <tr>
+                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","keywords",sWebLanguage)%></td>
+                        <td class="admin2">
+                        	<select class="text" name="EditPrestationKeywords">
+                        		<option value=''></option>
+                        		<%=ScreenHelper.writeSelect(request,"prestation.keyword",checkString(prestation.getKeywords()),sWebLanguage,80) %>
+                        	</select>
+                        </td>
+                    </tr>
                        	<%	if(MedwanQuery.getInstance().getConfigInt("enableDHIS2",0)==1){ %>
 		                    <tr>
 		                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","dhis2code",sWebLanguage)%></td>
@@ -390,7 +408,7 @@
 		                        	<%	if(MedwanQuery.getInstance().getConfigInt("enableBurundi",0)==1){ %>
 			                        	<select class="text" name="EditPrestationDHIS2Code">
 			                        		<option value=''></option>
-			                        		<%=ScreenHelper.writeSelect(request,"dhis2nomenclature",checkString(prestation.getDhis2code()),sWebLanguage) %>
+			                        		<%=ScreenHelper.writeSelect(request,"dhis2nomenclature",checkString(prestation.getDhis2code()),sWebLanguage,80) %>
 			                        	</select>
 			                        <%	}
 		                        		else {
@@ -454,7 +472,7 @@
                     <tr>
                         <td class="admin"><%=getTran(request,"web","description",sWebLanguage)%>&nbsp;*&nbsp;</td>
                         <td class="admin2">
-                            <input type="text" class="text" name="EditPrestationDescr" size="80" maxlength="80" value="<%=checkString(prestation.getDescription())%>">
+                            <textarea  onKeyup="resizeTextarea(this,10);limitChars(this,255);" class="text" name="EditPrestationDescr" cols="80" rows="2" maxlength="255"><%=checkString(prestation.getDescription())%></textarea>
                         </td>
                     </tr>
                     <tr>
@@ -518,6 +536,7 @@
                         <td class="admin"><%=getTran(request,"web","costcenter",sWebLanguage)%></td>
                         <td class="admin2">
                             <select class="text" name="EditPrestationCostcenter">
+                            	<option/>
                                 <%=ScreenHelper.writeSelect(request,"costcenter",checkString(prestation.getCostCenter()),sWebLanguage,false,true)%>
                             </select>
                         </td>

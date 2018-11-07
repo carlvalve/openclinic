@@ -32,7 +32,7 @@
             debet.setInsurarInvoiceUid(rs2.getString("OC_DEBET_INSURARINVOICEUID"));
             debet.setComment(rs2.getString("OC_DEBET_COMMENT"));
             debet.setCredited(rs2.getInt("OC_DEBET_CREDITED"));
-            debet.setQuantity(rs2.getInt("OC_DEBET_QUANTITY"));
+            debet.setQuantity(rs2.getDouble("OC_DEBET_QUANTITY"));
             debet.setExtraInsurarUid(rs2.getString("OC_DEBET_EXTRAINSURARUID"));
             debet.setExtraInsurarInvoiceUid(rs2.getString("OC_DEBET_EXTRAINSURARINVOICEUID"));
             debet.setExtraInsurarAmount(rs2.getDouble("OC_DEBET_EXTRAINSURARAMOUNT"));

@@ -1,3 +1,4 @@
+<%@page import="be.mxs.common.util.system.Pointer"%>
 <%@page import="org.dom4j.io.SAXReader,
 				java.awt.*,java.awt.image.*,be.openclinic.adt.*,
                 java.net.URL,
@@ -9,6 +10,26 @@
                 be.openclinic.knowledge.*"%>
 
 <%!
+	String serializeSptSigns(Hashtable signs){
+		String s="";
+		Enumeration eS = signs.keys();
+		while(eS.hasMoreElements()){
+			String key = (String)eS.nextElement();
+			s+=(key+"="+signs.get(key)+";");
+		}
+		return s;
+	}
+	
+	Hashtable unSerializeSigns(String signs){
+		Hashtable st = new Hashtable();
+		for(int n=0;n<signs.split(";").length;n++){
+			if(signs.split(";")[n].split("=").length>1){
+				st.put(signs.split(";")[n].split("=")[0],signs.split(";")[n].split("=")[1]);
+			}
+		}
+		return st;
+	}
+	
 	class Sheet {
 		String id;
 		String href;
@@ -81,7 +102,6 @@
 			}
 			else if(e.getName().equalsIgnoreCase("argument")){
 				Element eArgument = e;
-				System.out.println(e.attributeValue("id")+" - "+e.attributeValue("value"));
 				boolean bCheck=false;
 				if(eArgument.attributeValue("type").equalsIgnoreCase("ikirezi")){
 					Hashtable hSigns = (Hashtable)signs.get("ikirezi");
@@ -458,8 +478,14 @@
 	<body>
 		<table width='100%'>
 			<tr>
-				<td style='font-size:8vw;text-align: left'></td>
-				<td style='font-size:8vw;text-align: right'>
+				<td id='toptable' style='font-size:5vw;text-align: left'>
+					<%
+						if(activePatient!=null && activePatient.lastname.length()>0){
+							out.println("["+activePatient.personid+"] "+activePatient.getFullName());
+						}
+					%>
+				</td>
+				<td style='font-size:8vw;text-align: right' nowrap>
 					<img onclick="window.location.reload()" src='<%=sCONTEXTPATH%>/_img/icons/mobile/refresh.png'/>
 					<img onclick="window.location.href='../html5/welcome.jsp'" src='<%=sCONTEXTPATH%>/_img/icons/mobile/home.png'/>
 				</td>
@@ -474,6 +500,13 @@
 			session.setAttribute(sAPPTITLE+"WebLanguage","fr");
 			//Initialize sptconcepts
 			Hashtable sptSigns = (Hashtable)session.getAttribute("sptconcepts");
+			System.out.println("doreset="+((Hashtable)session.getAttribute("sptconcepts")).size());
+			Hashtable rt = (Hashtable)session.getAttribute("sptconcepts");
+			Enumeration te = rt.keys();
+			while(te.hasMoreElements()){
+				String key = (String)te.nextElement();
+				System.out.println(key+"="+rt.get(key));
+			}
 			long timestamp = new java.util.Date().getTime();
 			//Add selected spt concepts
 			Enumeration parameters = request.getParameterNames();
@@ -547,7 +580,15 @@
 				cleanedSptSigns.put(key,value.split(";")[0]);
 			}
 			Hashtable signs = new Hashtable();
-			signs.put("patient",session.getAttribute("sptpatient"));
+			if(activePatient==null){
+				signs.put("patient",session.getAttribute("sptpatient"));
+			}
+			else{
+				Hashtable patientSigns = new Hashtable();
+				patientSigns.put("ageinmonths",activePatient.getAgeInMonths());
+				patientSigns.put("gender",activePatient.gender);
+				signs.put("patient",patientSigns);
+			}
 			if(cleanedSptSigns.get("drh.3")!=null && cleanedSptSigns.get("drhe.3")==null){
 				cleanedSptSigns.put("drhe.3",sptSigns.get("drh.3"));
 			}
@@ -555,6 +596,10 @@
 				cleanedSptSigns.put("drh.3",cleanedSptSigns.get("drhe.3"));
 			}
 			signs.put("spt",cleanedSptSigns);
+			if(activePatient!=null && cleanedSptSigns!=null){
+				Pointer.deletePointers("activespt."+activePatient.personid);
+				Pointer.storePointer("activespt."+activePatient.personid,serializeSptSigns(sptSigns));
+			}
 			
 			//Run through all clinical pathways in order to check which ones are applicable
 			String[] pathwayFiles = MedwanQuery.getInstance().getConfigString("clinicalPathwayFiles","pathways.bi.xml").split(",");
@@ -754,7 +799,7 @@
 												if(treatment!=null){
 													sTreatment=treatment.text;
 													if(!treatment.id.contains(".")){
-														sTreatment+=" ("+treatment.id.toUpperCase()+") ";
+														sTreatment+="<br/><span style='font-size:4vw;color: red;font-weight: bolder'>"+getTranNoLink("web","spt.result",sWebLanguage)+": ["+treatment.id.toUpperCase()+"]</span> ";
 													}
 												}
 												out.println("<font style='font-size:4vw;color: red'>"+sTreatment+"</font></td></tr>");
@@ -785,7 +830,7 @@
 													for(int q=0;q<treatment.sheets.size();q++){
 														Sheet sheet = (Sheet)sheets.get(treatment.sheets.elementAt(q));
 														if(sheet!=null){
-															out.println("<td nowrap style='border: 1px solid black;'><font style='font-size:4vw;color: grey'><a href='javascript:showSheet(\""+sheet.href+"\")'>"+checkString(sheet.text)+"</a></font></td>");
+															out.println("<td nowrap style='border: 1px solid black;'><font style='font-size:4vw;color: grey'><a style='font-size:4vw;color: grey' href='javascript:showSheet(\""+sheet.href+"\")'>"+checkString(sheet.text)+"</a></font></td>");
 														}
 													}
 													out.println("</tr></table></td></tr>");
@@ -804,14 +849,18 @@
 			}
 		%>
 			</table>
+			
 		</form>
+		<IFRAME style="display:none" name="hidden-form"></IFRAME>
 		
 		<script>
+			var mywin;
 			function showComplaints(doc){
 			    window.location.href="sptcomplaints.jsp?doc="+doc+"&ts=<%=getTs()%>";
 			}
 			function showSheet(doc){
-			    window.open("<c:url value="/"/>documents/"+doc,"Document","toolbar=no,status=yes,scrollbars=yes,resizable=yes,width=1,height=1,menubar=no").resizeTo(800,600).focus();
+			    mywin=window.open("<c:url value="/"/>documents/"+doc,"_system","location=no");
+			    window.setTimeout("if(mywin.location.href.indexOf('pdf')<0){mywin.close();}",5000);
 			}
 			function updateAll(id,value){
 				for(n=0;n<document.getElementsByName(id).length;n++){
@@ -824,3 +873,6 @@
 		</script>
 	</body>
 </html>
+<script>
+document.getElementById("toptable").scrollIntoView();
+</script>

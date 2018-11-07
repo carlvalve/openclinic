@@ -2,7 +2,7 @@
                 java.text.*,
                 java.util.*,
                 be.mxs.common.util.system.*,
-                be.mxs.common.util.db.*,be.openclinic.reporting.*,pe.gob.sis.*"%>
+                be.mxs.common.util.db.*,be.openclinic.reporting.*,pe.gob.sis.*,be.openclinic.finance.*"%>
 <%@include file="/includes/validateUser.jsp"%>
 <%
 	String sMonth = new SimpleDateFormat("yyyyMM").format(new java.util.Date());	
@@ -22,13 +22,8 @@
 		Debug.println("language   : "+language+"\n");
 	}
 	///////////////////////////////////////////////////////////////////////////////////////////////
-	
-	if(ScreenHelper.checkString(request.getParameter("forceautorization")).length()>0){
-		//TODO: get SIS authorization number
-		ResultQueryAsegurado insurance = SIS.getAffiliationInformation(Integer.parseInt(activePatient.personid));
-    	Pointer.storePointer("AUTH."+insuraruid+"."+personid+"."+new SimpleDateFormat("yyyyMM").format(new java.util.Date()), new SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date(new java.util.Date().getTime()+24*3600*1000))+";90;"+insurance.getResultado()+";"+insurance.getContrato()+";"+insurance.getDescTipoSeguro()+";"+insurance.getEstado()+";"+insurance.getFecAfiliacion()+";"+insurance.getFecCaducidad()+";"+insurance.getIdNumReg()+";"+insurance.getIdPlan());
-	}
-	
+	String accreditationresult="",accreditationmechanism="",accreditationwarning="";
+
 	Vector pointers = Pointer.getPointers("AUTH."+insuraruid+"."+personid+"."+sMonth);
 	boolean bValid = false;
 	SimpleDateFormat deci = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -38,19 +33,20 @@
 		
 		java.util.Date dValidUntil = deci.parse(pointer.split(";")[0]);
 		if(dValidUntil.after(new java.util.Date())){
+			bValid = true;
+		}
+		else if(MedwanQuery.getInstance().getConfigInt("enableAccreditationValidityPerEncounter",0)==1){
+			Encounter activeEncounter = Encounter.getActiveEncounter(activePatient.personid);
+			if(activeEncounter!=null){
+				bValid = dValidUntil.after(activeEncounter.getBegin());
+			}
+		}
+		if(bValid){
 			// Still valid
 			User user = User.get(Integer.parseInt(pointer.split(";")[1]));
 			String username = user!=null?user.person.getFullName():"?";
-			if(MedwanQuery.getInstance().getConfigInt("peruEnabled",0)==1){
-				out.print(HTMLEntities.htmlentities("<td class='admin'><input type='hidden' id='authorized' value='1'/>"+ScreenHelper.getTran(request,"web","insurance.authorization",language)+"</td>"+
-                        "<td class='admin2'>"+ScreenHelper.getTran(request,"web","authorized.by",language)+": <b>SIS</b> "+ScreenHelper.getTran(request,"web","withauthorizationnumber",language)+" <b><a href='javascript:showdetails(\""+"AUTH."+insuraruid+"."+personid+"."+sMonth+"\")' title='"+getTranNoLink("web","details",sWebLanguage)+"'>"+pointer.split(";")[2]+"</b></td>"));
-				
-			}
-			else{
-				out.print(HTMLEntities.htmlentities("<td class='admin'>"+ScreenHelper.getTran(request,"web","insurance.agent.authorization",language)+"</td>"+
+			out.print(HTMLEntities.htmlentities("<td class='admin'>"+ScreenHelper.getTran(request,"web","insurance.agent.authorization",language)+"</td>"+
 				                                    "<td class='admin2'>"+ScreenHelper.getTran(request,"web","authorized.by",language)+": "+username+" "+ScreenHelper.getTran(request,"web","until",language)+" <b>"+ScreenHelper.fullDateFormatSS.format(dValidUntil)+"</b></td>"));
-			}
-			bValid = true;
 		}
 	}
 	
@@ -62,9 +58,23 @@
 				out.print(HTMLEntities.htmlentities("<td class='admin'>"+ScreenHelper.getTran(request,"web","insurance.agent.authorize",language)+"</td>"+
 				                                    "<td class='admin2'><input type='checkbox' class='text' name='EditAuthorization' id='EditAuthorization' value='"+new SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date())+";"+userid+"'>"+ScreenHelper.getTran(request,"web","authorize.until",language)+" <b>"+ScreenHelper.fullDateFormatSS.format(new java.util.Date(new java.util.Date().getTime()+24*3600*1000))+"</b></td>"));
 			}
+			else{
+				if(accreditationresult.length()>0){
+					out.print(HTMLEntities.htmlentities("<td class='admin'><input type='hidden' id='authorized' value='0'/>"+ScreenHelper.getTran(request,"web","insurance.authorization",language)+"</td>"+
+	                        "<td class='admin2'><img src='"+sCONTEXTPATH+"/_img/icons/icon_forbidden.png'/> <b>"+ScreenHelper.getTran(request,"web","not.authorized",language)+" "+getTran(request,"web","by",sWebLanguage)+" "+accreditationmechanism+" <font color='red'>["+getTran(request,"accreditationerrors",accreditationresult,sWebLanguage)+"]"+"</font></b></td>"));
+				}
+				else if(accreditationwarning.length()>0){
+					out.print(HTMLEntities.htmlentities("<td class='admin'><input type='hidden' id='authorized' value='0'/>"+ScreenHelper.getTran(request,"web","insurance.authorization",language)+"</td>"+
+	                        "<td class='admin2'><img src='"+sCONTEXTPATH+"/_img/icons/icon_info.gif'/> <b>"+ScreenHelper.getTran(request,"web","warning",language)+": <br/>"+accreditationwarning+" <input type='button' class='button' value='"+getTranNoLink("web","ignorewarning",sWebLanguage)+"' onclick='checkInsuranceAuthorization(true,true);'/></b></td>"));
+				}
+				else{
+					out.print(HTMLEntities.htmlentities("<td class='admin'><input type='hidden' id='authorized' value='0'/>"+ScreenHelper.getTran(request,"web","insurance.authorization",language)+"</td>"+
+	                        "<td class='admin2'></b>"+ScreenHelper.getTran(request,"web","not.authorized",language)+"</b></td>"));
+				}
+			}
 		}
 		else{
-			out.print("<td colapsn='2'><input type='hidden' id='authorized' value='1'/></td>");
+			out.print("<td colspan='2'><input type='hidden' id='authorized' value='1'/></td>");
 		}
 	}
 %>

@@ -6,7 +6,7 @@
 			out.println("<script>window.location.href='getPatient.jsp?searchpersonid="+request.getParameter("findid")+"'</script>");
 			out.flush();
 		}
-		else if(checkString(request.getParameter("findlastname")).length()>0 || checkString(request.getParameter("findfirstname")).length()>0 || checkString(request.getParameter("findlastnamedateofbirth")).length()>0 || checkString(request.getParameter("findservice")).length()>0){
+		else if(checkString(request.getParameter("findlastname")).length()>0 || checkString(request.getParameter("findfirstname")).length()>0 || checkString(request.getParameter("finddateofbirth")).length()>0 || checkString(request.getParameter("findservice")).length()>0){
 			out.println("<script>window.location.href='listPatients.jsp?findlastname="+request.getParameter("findlastname")+"&findfirstname="+request.getParameter("findfirstname")+"&finddateofbirth="+request.getParameter("finddateofbirth")+"&findservice="+request.getParameter("findservice")+"'</script>");
 			out.flush();
 		}
@@ -36,7 +36,13 @@
 				<tr>
 					<td style='font-size:8vw;text-align: left'></td>
 					<td style='font-size:8vw;text-align: right'>
+					<%
+						if(!MedwanQuery.getInstance().getConfigString("mobile.edition","").equalsIgnoreCase("spt")){
+					%>
 						<img onclick="initBarcode2();" src='<%=sCONTEXTPATH%>/_img/icons/mobile/qr.png'/>
+					<%
+						}
+					%>
 						<img onclick="window.location.reload()" src='<%=sCONTEXTPATH%>/_img/icons/mobile/refresh.png'/>
 						<img onclick="window.location.href='../html5/welcome.jsp'" src='<%=sCONTEXTPATH%>/_img/icons/mobile/home.png'/>
 					</td>
@@ -95,7 +101,10 @@
 				</tr>
 				<tr>
 					<td width='30%'></td>
-					<td width='70%'><input style='font-size: 5vw;padding=10px;font-family: Raleway, Geneva, sans-serif;' type='submit' name='find' value='<%=getTranNoLink("web","find",sWebLanguage) %>'/></td>
+					<td width='70%'>
+						<input style='font-size: 5vw;padding=10px;font-family: Raleway, Geneva, sans-serif;' type='submit' name='find' value='<%=getTranNoLink("web","find",sWebLanguage) %>'/>
+						<input style='font-size: 5vw;padding=10px;font-family: Raleway, Geneva, sans-serif;' type='button' name='new' value='<%=getTranNoLink("web","new",sWebLanguage) %>' onclick='window.location.href="newPatient.jsp";'/>
+					</td>
 				</tr>
 			</table>
 			<br/><br/>
@@ -117,8 +126,8 @@
 		        		AdminPerson patient = AdminPerson.getAdminPerson(patientid);
 		        		if(patient!=null && patient.lastname!=null && patient.lastname.length()>0){
 		            		counter++;
-			        		out.println("<tr onclick='window.location.href=\""+sCONTEXTPATH+"/html5/getPatient.jsp?searchpersonid="+patient.personid+"\"'><td class='mobileadmin2' style='font-size:5vw'>"+patient.personid+"</td>");
-			        		out.println("<td class='mobileadmin2' style='font-size:5vw'>"+patient.getFullName()+"<span style='font-size: 4vw'><br>"+patient.dateOfBirth+" - "+getTranNoLink("gender",patient.gender.toLowerCase(),sWebLanguage)+"</span></td></tr>");
+			        		out.println("<tr><td class='mobileadmin2' style='font-size:5vw'>"+patient.personid+"<br/><img onclick='window.location.href=\"../html5/editPatient.jsp?personid="+patient.personid+"\"' src='"+sCONTEXTPATH+"/_img/icons/mobile/edit.png'/></td>");
+			        		out.println("<td onclick='window.location.href=\""+sCONTEXTPATH+"/html5/getPatient.jsp?searchpersonid="+patient.personid+"\"' class='mobileadmin2' style='font-size:5vw'>"+patient.getFullName()+"<span style='font-size: 4vw'><br>"+patient.dateOfBirth+" - "+getTranNoLink("gender",patient.gender.toLowerCase(),sWebLanguage)+"</span></td></tr>");
 		        		}
 		        	}
 				}

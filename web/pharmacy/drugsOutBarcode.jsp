@@ -118,7 +118,7 @@
 	                <input type='button' class="button" name='deliverbutton' id='deliverbutton' value='<%=getTranNoLink("web","deliver",sWebLanguage)%>' onclick="doDeliver('');"/>
                 <%} %>
             	<%if(activeUser.getAccessRight("financial.patientinvoice.add")){ %>
-	                <input type='button' class="button" name='invoicebutton' id='invoicebutton' value='<%=getTranNoLink("web","invoice",sWebLanguage)%>' onclick='window.opener.location.href="<c:url value="main.do?Page=financial/patientInvoiceEdit.jsp"/>";window.close();'/>
+	                <input type='button' class="button" name='invoicebutton' id='invoicebutton' value='<%=getTranNoLink("web","invoice",sWebLanguage)%>' onclick='window.opener.location.href="<c:url value="main.do?Page=financial/patientInvoiceEdit.jsp&autopharmacylist="/>"+document.getElementById("servicestock").value;window.close();'/>
                 <%} %>
             	<%if(activeUser.getAccessRight("prescriptions.drugs.select")){ %>
 	                <input type='button' class="button" name='prescriptionbutton' id='prescriptionbutton' value='<%=getTranNoLink("web","prescription",sWebLanguage)%>' onclick='printPaperPrescription();'/>

@@ -1,3 +1,4 @@
+<%@page import="be.openclinic.pharmacy.ProductStock"%>
 <%@page import="java.awt.ActiveEvent"%>
 <%@ page import="be.openclinic.finance.*,be.openclinic.adt.Encounter,java.text.*,be.mxs.common.util.system.*" %>
 <%@page errorPage="/includes/error.jsp"%>
@@ -46,6 +47,95 @@
     }
 %>
 <%
+	System.out.println("do==================="+request.getParameter("discardautopharmacylist"));
+	if(checkString(request.getParameter("discardautopharmacylist")).length()==0 && checkString(request.getParameter("autopharmacylist")).length()>0){
+    	Debug.println(">>>>>>>>>>>>>>>>autopharmacylist="+request.getParameter("autopharmacylist"));
+		//Automatically invoice the list of pharmaceutical products
+		String stockuid = request.getParameter("autopharmacylist");
+		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+		PreparedStatement ps = conn.prepareStatement("SELECT * FROM OC_DRUGSOUTLIST,OC_PRODUCTSTOCKS WHERE oc_stock_objectid=replace(oc_list_productstockuid,'"+MedwanQuery.getInstance().getServerId()+".','') and OC_LIST_PATIENTUID=? AND OC_stock_servicestockuid=?");
+		ps.setString(1,activePatient.personid);
+		ps.setString(2,stockuid);
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()){
+			ProductStock stock = ProductStock.get(rs.getString("oc_list_productstockuid"));
+        	Debug.println("Facturation automatique");
+			if(stock!=null & stock.getProduct()!=null && stock.getProduct().getPrestationcode()!=null){
+            	Prestation prestation = Prestation.get(stock.getProduct().getPrestationcode());
+            	//D'abord voir si la prestation n'est pas déjà en attente
+            	boolean bExists = false;
+            	Vector todaydebets = Debet.getPatientDebetsToInvoice(activePatient.personid);
+            	for(int n=0;!bExists && n<todaydebets.size();n++){
+            		Debet debet = (Debet)todaydebets.elementAt(n);
+            		if(debet.getPrestationUid().equals(stock.getProduct().getPrestationcode()) && checkString(debet.getPatientInvoiceUid()).length()==0){
+            			bExists=true;
+            		}
+            	}
+            	if(bExists){
+            		continue;
+            	}
+            	Encounter activeEncounter = Encounter.getActiveEncounter(activePatient.personid);
+            	if(prestation!=null && activePatient!=null && activeEncounter!=null){
+                	Debug.println("Prestation existe, patient existe, contact existe");
+            		Debet debet = new Debet();
+            		debet.setCreateDateTime(new java.util.Date());
+            		debet.setUpdateDateTime(new java.util.Date());
+            		debet.setUpdateUser(activeUser.userid);
+            		debet.setDate(new java.util.Date());
+            		debet.setEncounter(activeEncounter);
+            		debet.setPrestation(prestation);
+            		debet.setQuantity(stock.getProduct().getPrestationquantity()*stock.getProduct().getPrestationquantity());
+            		debet.setComment("");
+            		debet.setSupplierUid("");
+            		debet.setCredited(0);
+            		debet.setVersion(1);
+            		
+            		double patientamount = prestation.getPrice();
+            		
+            		//Insurance & insurar
+            		Insurance insurance = Insurance.getMostInterestingInsuranceForPatient(activePatient.personid);
+            		double insuraramount=0;
+            		if(insurance!=null && insurance.getInsurar()!=null && prestation.isVisibleFor(insurance.getInsurar(),activeEncounter.getService())){
+                    	Debug.println("Assurance existe et est visible");
+            			patientamount = prestation.getPrice(insurance.getType());
+	            		debet.setInsurance(insurance);
+	            		debet.setInsuranceUid(insurance.getUid());
+	            		//First find out if there is a fixed tariff for this prestation
+	            		insuraramount = prestation.getInsuranceTariff(insurance.getInsurarUid(), insurance.getInsuranceCategoryLetter());
+		                if(activeEncounter.getType().equalsIgnoreCase("admission") && prestation.getMfpAdmissionPercentage()>0){
+		                	insuraramount = prestation.getInsuranceTariff(insurance.getInsurar().getUid(),"*H");
+		                }
+	            		if(insuraramount==-1){
+	            			//Calculate the insuranceamount based on reimbursementpercentage
+	            			insuraramount=patientamount*(100-insurance.getPatientShare())/100;
+	            		}
+	            		patientamount=patientamount-insuraramount;
+	            		//If there are any supplements, then we have to add them to the patient price
+	            		patientamount+=prestation.getSupplement();
+	            		//Extrainsurar
+	            		double extrainsuraramount=0;
+	            		if(!MedwanQuery.getInstance().getConfigString("defaultExtraInsurar","-1").equalsIgnoreCase("-1")){
+	            			Insurar extrainsurar = Insurar.get(MedwanQuery.getInstance().getConfigString("defaultExtraInsurar","-1"));
+	            			if(extrainsurar!=null){
+	            				extrainsuraramount=patientamount;
+	            				patientamount=0;
+	            				debet.setExtraInsurarUid(extrainsurar.getUid());
+	            			}
+	            		}
+	            		debet.setAmount(Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(patientamount).replaceAll(",", "."))*debet.getQuantity());
+	            		debet.setInsurarAmount(Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(insuraramount).replaceAll(",", "."))*debet.getQuantity());
+	            		debet.setExtraInsurarAmount(Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(extrainsuraramount).replaceAll(",", "."))*debet.getQuantity());
+                    	Debug.println("Sauvegarde de la prestation");
+                    	debet.store();
+	            		MedwanQuery.getInstance().getObjectCache().removeObject("debet", debet.getUid());
+            		}
+            	}
+			}
+		}
+		rs.close();
+		ps.close();
+		conn.close();
+	}
 	boolean isInsuranceAgent=false;
 	if(activeUser!=null && activeUser.getParameter("insuranceagent")!=null && activeUser.getParameter("insuranceagent").length()>0 && MedwanQuery.getInstance().getConfigString("InsuranceAgentAcceptationNeededFor","").indexOf("*"+activeUser.getParameter("insuranceagent")+"*")>-1){
 		//This is an insurance agent, limit the functionalities
@@ -189,6 +279,7 @@
 
 	%>
 	<form name='FindForm' id="FindForm" method='POST'>
+		<input type='hidden' name='discardautopharmacylist' value='<%=checkString(request.getParameter("autopharmacylist")).length()>0?"1":""%>'/>
 		<input type='hidden' name='mandatoryReferenceInsurers' id='mandatoryReferenceInsurers' value='<%=mandatoryReferenceInsurers %>'/>
 		<input type='hidden' name='mandatoryOtherReferenceInsurers' id='mandatoryOtherReferenceInsurers' value='<%=mandatoryOtherReferenceInsurers %>'/>
 	    <%=writeTableHeader("web","patientInvoiceEdit",sWebLanguage,"")%>
@@ -481,7 +572,7 @@
         <tr>
             <td class='admin' nowrap><%=getTran(request,"web.finance","balance",sWebLanguage)%></td>
             <td class='admin2'>
-                <input class='text' readonly type='text' name='EditBalance' id='EditBalance' value='<%=checkString(Double.toString(patientInvoice.getBalance())).length()>0?new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat")).format(dBalance):""%>' size='20'> <%=MedwanQuery.getInstance().getConfigParam("currency","â‚¬")%>
+                <input class='text' readonly type='text' name='EditBalance' id='EditBalance' value='<%=checkString(Double.toString(patientInvoice.getBalance())).length()>0?new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat")).format(dBalance):""%>' size='20'> <%=MedwanQuery.getInstance().getConfigParam("currency","EUR")%>
                 <input type='hidden' name='EditBalanceDetailed' id='EditBalanceDetailed' value='<%=""+dBalance%>' size='20'>
                 &nbsp;<%=getTran(request,"web","total",sWebLanguage) %>: <label id='invoiceValue'></label> <%=MedwanQuery.getInstance().getConfigString("currency","EUR") %>
                 &nbsp;<%=getTran(request,"web","paid",sWebLanguage) %>: <label id='invoicePaid'></label> <%=MedwanQuery.getInstance().getConfigString("currency","EUR") %>
@@ -1242,8 +1333,8 @@
 					}
 		    	}
 			}
-	    	document.getElementById('EditBalance').value = (total-paid-(total*reduction/100)).toFixed(<%=MedwanQuery.getInstance().getConfigInt("currencyDecimals",2)%>);
-	    	document.getElementById('EditBalanceDetailed').value = (total-paid-(total*reduction/100)).toFixed(2);
+	    	document.getElementById('EditBalance').value = (total-paid-(total*reduction/100)).toFixed(<%=MedwanQuery.getInstance().getConfigInt("currencyDecimals",2)%>)*1;
+	    	document.getElementById('EditBalanceDetailed').value = (total-paid-(total*reduction/100)).toFixed(2)*1;
 	    }
 	
 	    function doPrintPdf(invoiceUid){

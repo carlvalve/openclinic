@@ -130,10 +130,10 @@
 	            	         "<td "+(oneGroup.size()>1?"":" style='cursor:pointer'")+">"+HTMLEntities.htmlentities(sEncounterName)+" ("+user+")</td>"+
 	                         "<td "+(oneGroup.size()>1?"":" style='cursor:pointer'")+">"+HTMLEntities.htmlentities(sPrestationDescription)+" ("+(String)groupInfo.get("quantity")+"x)</td>"+
   	                         "<td style='padding-left:5px;'>"+HTMLEntities.htmlentities(sInsurer)+"</td>"+
-	                         "<td "+(oneGroup.size()>1?"":" style='cursor:pointer'")+">"+(Double.parseDouble((String)groupInfo.get("amount"))+Double.parseDouble((String)groupInfo.get("insurarAmount"))+Double.parseDouble((String)groupInfo.get("extraInsurarAmount")))+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"+
-	                         "<td "+(oneGroup.size()>1?"":" style='cursor:pointer'")+" "+(checkString(mostRecentDebet.getExtraInsurarUid2()).length()>0?"style='text-decoration:line-through'":"")+">"+(String)groupInfo.get("amount")+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"+
-	                         "<td "+(oneGroup.size()>1?"":" style='cursor:pointer'")+">"+(String)groupInfo.get("insurarAmount")+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"+
-	                         "<td "+(oneGroup.size()>1?"":" style='cursor:pointer'")+">"+(String)groupInfo.get("extraInsurarAmount")+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"+
+	                         "<td "+(oneGroup.size()>1?"":" style='cursor:pointer'")+">"+(Double.parseDouble((String)groupInfo.get("amount"))+Double.parseDouble((String)groupInfo.get("insurarAmount"))+Double.parseDouble((String)groupInfo.get("extraInsurarAmount")))+" "+MedwanQuery.getInstance().getConfigParam("currency","EUR")+"</td>"+
+	                         "<td "+(oneGroup.size()>1?"":" style='cursor:pointer'")+" "+(checkString(mostRecentDebet.getExtraInsurarUid2()).length()>0?"style='text-decoration:line-through'":"")+">"+(String)groupInfo.get("amount")+" "+MedwanQuery.getInstance().getConfigParam("currency","EUR")+"</td>"+
+	                         "<td "+(oneGroup.size()>1?"":" style='cursor:pointer'")+">"+(String)groupInfo.get("insurarAmount")+" "+MedwanQuery.getInstance().getConfigParam("currency","EUR")+"</td>"+
+	                         "<td "+(oneGroup.size()>1?"":" style='cursor:pointer'")+">"+(String)groupInfo.get("extraInsurarAmount")+" "+MedwanQuery.getInstance().getConfigParam("currency","EUR")+"</td>"+
 	                         "<td "+(oneGroup.size()>1?"":" style='cursor:pointer'")+">"+(String)groupInfo.get("credited")+"</td>"+
 	                        "</tr>";
 
@@ -161,7 +161,7 @@
     	Hashtable info = new Hashtable(4);
     	
     	Debet debet;    	
-    	int quantity = 0;
+    	double quantity = 0;
     	double credited = 0, amount = 0, insurarAmount = 0, extraInsurarAmount = 0;
 
     	for(int i=0; i<oneGroup.size(); i++){
@@ -177,11 +177,12 @@
     		}
     	}
 
+        DecimalFormat priceFormat = new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#,##0.00"));
     	// put sums in hash
-    	info.put("quantity",Integer.toString(quantity));
-    	info.put("amount",Double.toString(amount));
-    	info.put("insurarAmount",Double.toString(insurarAmount));
-    	info.put("extraInsurarAmount",Double.toString(extraInsurarAmount));
+    	info.put("quantity",Double.toString(quantity));
+    	info.put("amount",priceFormat.format(amount));
+    	info.put("insurarAmount",priceFormat.format(insurarAmount));
+    	info.put("extraInsurarAmount",priceFormat.format(extraInsurarAmount));
     	
    	    info.put("credited",""); // empty string
 
@@ -278,10 +279,10 @@
 	                        +"<td style='padding-left:5px;'>"+HTMLEntities.htmlentities(sEncounterName)+" ("+user+")</td>"
 	                        +"<td style='padding-left:5px;'>"+HTMLEntities.htmlentities(sPrestationDescription)+" ("+debet.getQuantity()+"x)</td>"
   	                        +"<td style='padding-left:5px;'>"+HTMLEntities.htmlentities(sInsurer)+"</td>"
-   	                        +"<td style='padding-left:5px;'>"+(debet.getAmount()+debet.getInsurarAmount()+dExtraInsurarAmount)+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"
-	                        +"<td style='padding-left:5px;' "+(checkString(debet.getExtraInsurarUid2()).length()>0?"style='text-decoration:line-through'":"")+">"+debet.getAmount()+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"
-	                        +"<td style='padding-left:5px;'>"+debet.getInsurarAmount()+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"
-	                        +"<td style='padding-left:5px;'>"+dExtraInsurarAmount+" "+MedwanQuery.getInstance().getConfigParam("currency","€")+"</td>"
+   	                        +"<td style='padding-left:5px;'>"+(debet.getAmount()+debet.getInsurarAmount()+dExtraInsurarAmount)+" "+MedwanQuery.getInstance().getConfigParam("currency","EUR")+"</td>"
+	                        +"<td style='padding-left:5px;' "+(checkString(debet.getExtraInsurarUid2()).length()>0?"style='text-decoration:line-through'":"")+">"+debet.getAmount()+" "+MedwanQuery.getInstance().getConfigParam("currency","EUR")+"</td>"
+	                        +"<td style='padding-left:5px;'>"+debet.getInsurarAmount()+" "+MedwanQuery.getInstance().getConfigParam("currency","EUR")+"</td>"
+	                        +"<td style='padding-left:5px;'>"+dExtraInsurarAmount+" "+MedwanQuery.getInstance().getConfigParam("currency","EUR")+"</td>"
 	                        +"<td style='padding-left:5px;'>"+sCredited+"</td>");
 				}
             }

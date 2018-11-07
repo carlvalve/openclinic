@@ -53,7 +53,7 @@
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
 %>
-<form name="SearchForm" method="POST" onkeyup="if(enterEvent(event,13)){searchPrestations();}">
+<form name="SearchForm" method="POST" >
     <%-- hidden fields --%>
     <input type="hidden" name="Action">
     <input type="hidden" name="ReturnFieldUid" value="<%=sReturnFieldUid%>">
@@ -71,9 +71,17 @@
         %>
         <%-- CODE --%>
         <tr>
+            <td class="admin2" width="120" nowrap><%=getTran(request,"web","keywords",sWebLanguage)%></td>
+            <td class="admin2" width="380" nowrap>
+            	<%=ScreenHelper.writeAutocompleteLabelField("keywords", 60, "prestation.keyword", "searchPrestations()") %>
+            </td>
+        </tr>
+        
+        <%-- CODE --%>
+        <tr>
             <td class="admin2" width="120" nowrap><%=getTran(request,"web","code",sWebLanguage)%></td>
             <td class="admin2" width="380" nowrap>
-                <input type="text" class="text" name="FindPrestationCode" size="20" maxlength="20" value="<%=sFindPrestationCode%>">
+                <input onkeyup="if(enterEvent(event,13)){searchPrestations();}" type="text" class="text" name="FindPrestationCode" size="20" maxlength="20" value="<%=sFindPrestationCode%>">
             </td>
         </tr>
         
@@ -81,7 +89,7 @@
         <tr>
             <td class="admin2"><%=getTran(request,"web","description",sWebLanguage)%></td>
             <td class="admin2">
-                <input type="text" class="text" name="FindPrestationDescr" size="60" maxlength="60" value="<%=sFindPrestationDescr%>">
+                <input  onkeyup="if(enterEvent(event,13)){searchPrestations();}" type="text" class="text" name="FindPrestationDescr" size="60" maxlength="60" value="<%=sFindPrestationDescr%>">
             </td>
         </tr>
         
@@ -100,7 +108,7 @@
         <tr>
             <td class="admin2"><%=getTran(request,"web","price",sWebLanguage)%></td>
             <td class="admin2">
-                <input type="text" class="text" name="FindPrestationPrice" size="10" maxlength="8" onKeyUp="if(!isNumber(this)){this.value='';}" value="<%=sFindPrestationPrice%>">&nbsp;<%=sCurrency%>
+                <input  onkeyup="if(enterEvent(event,13)){searchPrestations();}" type="text" class="text" name="FindPrestationPrice" size="10" maxlength="8" onKeyUp="if(!isNumber(this)){this.value='';}" value="<%=sFindPrestationPrice%>">&nbsp;<%=sCurrency%>
             </td>
         </tr>
         
@@ -141,7 +149,6 @@
 
 <script>
   window.resizeTo(800,600);
-  window.setTimeout("SearchForm.FindPrestationDescr.focus();",300);
 
   <%-- CLEAR FIELDS --%>
   function clearFields(){
@@ -169,6 +176,10 @@
       window.opener.document.getElementsByName("<%=sReturnFieldCode%>")[0].value = code;
     }
     if("<%=sReturnFieldDescr%>".length > 0){
+        window.opener.document.getElementsByName("<%=sReturnFieldDescr%>")[0].title = descr;
+    	if(descr.length>57){
+    		descr=descr.substring(0,57)+"...";
+    	}
       window.opener.document.getElementsByName("<%=sReturnFieldDescr%>")[0].value = descr;
     }
     if("<%=sReturnFieldDescrHtml%>".length > 0){
@@ -214,9 +225,15 @@
 	      window.opener.document.getElementsByName("<%=sReturnFieldCode%>")[0].value = code;
 	    }
 	    if("<%=sReturnFieldDescr%>".length > 0){
+	    	if(descr.length>77){
+	    		descr=descr.substring(0,77)+"...";
+	    	}
 	      window.opener.document.getElementsByName("<%=sReturnFieldDescr%>")[0].value = descr;
 	    }
 	    if("<%=sReturnFieldDescrHtml%>".length > 0){
+	    	if(descr.length>77){
+	    		descr=descr.substring(0,77)+"...";
+	    	}
 	      window.opener.document.getElementById("<%=sReturnFieldDescrHtml%>").innerHTML = descr;
 	    }
 	    if("<%=sReturnFieldType%>".length > 0){
@@ -234,6 +251,7 @@
 	    window.close();
   	}
   }
+
     
-  window.setTimeout("document.getElementsByName('FindPrestationDescr')[0].focus();",300);
+  window.setTimeout("document.getElementsByName('<%=MedwanQuery.getInstance().getConfigString("defaultPrestationSearchField","FindPrestationDescr")%>')[0].focus();",300);
 </script>
